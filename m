@@ -1,134 +1,107 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C5C7CA9EC1
-	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 16:20:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9363CA9EBE
+	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 16:20:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4E61A40759;
-	Sat, 10 Oct 2026 16:20:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 95BB881010;
+	Sat, 10 Oct 2026 16:20:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ojrXSUhcwdSO; Sat, 10 Oct 2026 16:20:30 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 1C4554075C
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791649230;
-	b=RjCdZRicpN3R8arvhRvQg/6elLYHFG98a5xbUP5Lu0XWtNCLI8tFLLxIDi3LkayqSTxT
-	 SNE9HSCiGYrN4U55O4HVQtjfnCfT64Na/X4Rb3LQGUNVA/Ha4zD6zi4waoYcB/g7oJRlA
-	 YWo/4f64VNUEQN6YybRrs+iD0Z/hn0d5zfA+oNPSiIh2cdiCLx6j8Y0rD5JlBU1kdN5NC
-	 PWI+2sGe2GXmY1jeBwHbXY3YpoobIgbwt4Z3nsh6P5rqDkiQ64Z2+ykTH04HuVJQwU4Wn
-	 6vIxnkj+/2But5Bwd3c9Hyp50HE9oKfWfGi40+1CJou9BUa5Fr1zKFmS2h5g3vk7kvw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id E4iooHp1tGkh; Sat, 10 Oct 2026 16:20:43 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 5675C80FB2
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791649243;
+	b=KnvtDxhS2alxhhx85MDj+lCVA0fvDFa9x+Uc0A4BNEvbfsxnhf5SAFs2f/NnMDJmzvAB
+	 k8lIokFeWuMUCRpUTIUQO6Y1CArCsuwrg3AU6tH3R7+y31HT5ifbyRkHMdyvd7IP/rdp6
+	 JqJWJh0VRdcroypwqt3QTfyNu0KVbyDyPRhnR6NVzvzDbeoO54/X9VgSKjy2Q7TNk42Gj
+	 +QBBCyYEYnwDQb3LY7SF6KTwFGKn3/ZAzNb9L3cz1u38BbR/HT7h7+SVET2O3KytNOHxB
+	 KG7k5wVd2eN55p2CGsSy2jb78nvP1PVjlQtAfqIqEcCZXcVBrB61RfGDhoi2TUxL/Yw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791649230;
+	c=relaxed/relaxed; t=1791649243;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:Received:From:To:
-	 Cc:In-Reply-To:References:Date:Message-ID:User-Agent:MIME-Version:
-	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=Ow0vgEaC/MTlsaaH0+wzVU0gLVyx8Rq5YbjgHScUBzo=;
-	b=LutxXGN+ELLQji42i4zs4mrO5kiNdqKtaAJoFAKHiPQ0yXkXQLk+OQVJyshY1eixnRpY
-	 xrvoJamhFkSpSDakaXzyNMQO9ZQ5/8lt8Euz1ROUKvs9pZLy3/7VyTxqjLdB3Ged6ZaFI
-	 T9Ffl7WxJaUteQpPsK5A7ok0neBcNeDY+A4YDRkH/lJSWYztEb31gK4+V3PRTHXDLPsOC
-	 3mrF7Eg4gwQ6ygYAuLruOCSWn2oOvVY59miVphl7rkNjcjhSTASr5fuzTRHK5p9VmdvsZ
-	 roCrVjVJMhNvzK1AmMnb8iN1OQ4S5k/RtqR8BVriV5/2rcAj/8jEpi2OmvFMD7B90Ig==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:From:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 Errors-To:Sender;
+	bh=EWCubGhkl3+dLXKDQ8DDvb5F42qAH+yxbFXVZb1//D4=;
+	b=KBfSa/Q9eAs5eUJZwl4rRXZXb7NKE7joBviI5VSoZ4VuMHI8F6bi+RMavbOn9ooklbUk
+	 zXISyzFacTYTR7brIuGMfdGZzvDmtFtdOSexxKTOy2X3drCVrjXGaBw1VBxFfpGV2LDka
+	 d8Kp6B3u8jQf7V9tIPhm8MbxOlvTo8cChhK/MaqG6yR4N127ZNo4Mo4Esgarh7qeMgja9
+	 LUYKVyW4QoV9Q4SNggQKAkDt5SDA2pENOBvFDTBe3qzWWe8eI+LRZNQDOWFi1aSV+0Qx4
+	 lB8wujzhN1Itr/XN0/8R6jn0JxhgeO+947qYXtTpoHUSgNoTd2yGKJs6vYSrRx1PZMg==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791649230;
-	bh=Ow0vgEaC/MTlsaaH0+wzVU0gLVyx8Rq5YbjgHScUBzo=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=Vw35I/uiijnrnPUtLupPY37+PNXRK5fkGHu2PcSMFelLn/IjlStwXoRmE9H+mdcNn
-	 QcISnTe0Z9PI3Xv6KPSPpoeDviUVnrvbuSoBa/iyfNaqlZX/O5Pev1QvXe+TpHl/vc
-	 fV4jrNWueHMdQ+/uP7AD3S0H7X/QInogAXDe1KrF0a3VXQQHnrE4m5yNdjmaiXjBjE
-	 mZhu8SqNT/zICpSZIdymhQvRodfoelCupxuTRmogTztU/ZMbWFhXtcByBAPQPr3MHx
-	 gK3PeDRTCQYBKE5s3qSVwaK2Lurs8Gshq8w1Adf8O3dHlG1DiM+IW2mZFPJ/vY5qa7
-	 zSHYVzee2OrSw==
+	s=default; t=1791649243;
+	bh=EWCubGhkl3+dLXKDQ8DDvb5F42qAH+yxbFXVZb1//D4=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=aFW9OgPaIeoeyymBmepx3NjDvquil2ElE6NPtpFpvjzx1JmfKaIZVfy2lq+B4URAR
+	 ByHKWBNQra5yln8BwUELVxwU9yjqJMD2YE6+F/1Z07V7CeUGGk3jZ1J3lRl/j4IpYZ
+	 hN4a+DBvl30kX9zZL+SsLniiSKfNC+IqQFyXukAxEIxhKSs0Ad4X5Ji6ylOWtmuufV
+	 e3aGdu3xii9ObdhGby3YMcukGaNcem7shzVbEarlS+fZi1nTvAtZb8NgcWrolq+A3U
+	 C5nW6mA6N+zM6etD9odZryG99PLsk4ntlgXN0hoUgGwOspUFl3eJpj96rZM3t2iwhB
+	 6KUpQHxq/aGxw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1C4554075C;
-	Sat, 10 Oct 2026 16:20:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6F640105
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 16:20:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5675C80FB2;
+	Sat, 10 Oct 2026 16:20:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B95E3156
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 16:20:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6C6CE60638
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 16:20:29 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AACDC4080F
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 16:20:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5HD7sBEFr9-8 for <buildroot@buildroot.org>;
- Sat, 10 Oct 2026 16:20:28 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 652E060632
-Authentication-Results: smtp3.osuosl.org;
- arc=none smtp.remote-ip=34.202.193.197
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791649228;
- b=aMSFCi1PWJnhw0GY+qTJRl+SHZD+kiAF93MI11inU13VazTck77U41gT8BwpeHIuz8AN
- CNk38sVrFu7ZSCquB5fW3wsxJXndSoz0PxlcNAMq8C3D8u0RIkjvNfuywV1u/zJMVMn43
- DWeAh7brF5mvkrbTRpDZMCZfocvUBbnTLRKtVc1iq2EM1SwCLJtbMsMT6SV6zvF4hszxh
- wBtNEuAIjxhKF0HGB7NWcDPgEH++t88n8Qr1/qyEtDCQSbmNZ6KLYBnAyQnT7fPZ117QO
- 9Rr1JbZudd/98ZOcOZUD1NbqNWJh12/mWuEYvFXEW6EVAPoooOPeE1GjlnKfCgo209Q==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gYqh8oMV-2v3 for <buildroot@buildroot.org>;
+ Sat, 10 Oct 2026 16:20:40 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org C6D3E40759
+Authentication-Results: smtp4.osuosl.org;
+ arc=none smtp.remote-ip=140.211.167.122
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791649240;
+ b=NSMkPr13JFAaTuf/CBQK+odGPubRd5yNihVj2hUrDWqFLzYXgo0+5WPbqsT/yw2MISD8
+ QYyfSc5ZitXRrEIjkufQHBPnYGrawKr1DCISxbZJkm8Xf1px1lCnQu7gJLcEIjgps9MmH
+ xslQAG+dbfMGm9exNKi7EwdyZKRxTJQU3uFJsyc8XX+vkxgTkT/vchMKxKEz+H0qnOyWr
+ ICfgELgY9kGVV4e1J/z7KX8Var4UCIXnDEykN2QgScnRVGEE5LNxBNNiFAGt3TPXAP908
+ B+fC/36Ctg19Og2uwVVUGXhjOWgror7CePLXQPbn9kyjo09ZASN+cRX0qq/j357sjlw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791649228;
- h=Received-SPF:DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:
- Received:From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
- User-Agent:MIME-Version:Content-Type;
- bh=dU5AXLPe4AP9ni9Cur+i8FZy9n90/9ug5MkW5ZhGgMg=;
- b=ZddFgmcZEr4RUaOX/gOPXook9di6JeyHRtHn8oO+VTGB0Na/rnApkaXsn2yAJIXQZmNH
- 78Wocg5250vCa24vKrhpYgzVEi3j+6tVknmNiRrhD/At9Cxg4eF0Hw363n9RQjukpW5qH
- oCWQh3ZJiBrHXD7jbCzEBYTDil8v3d4PMB/zFeW+2+w+UWSAla2fNEPY/3wrqhsPJWWn+
- 0CTOOPplcHrLMCe2FkO7dnZXBV2b/A1lpPI8l5nDzp8EMOLBhwO0JzYcPMSnj/qUu00YP
- d9zfGE0iKuBtloOgmD9Yj8wWIl5c+6Cvp0GibTqvnOlScAo3vgsrjjtfhyLDzETMoiQ==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
- dmarc=none header.from=korsgaard.com;
- dkim=pass header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256
- header.s=purelymail2 header.b="IcSy/Ujg"; 
- arc=none smtp.remote-ip=34.202.193.197
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ c=relaxed/relaxed; t=1791649240;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=o2nd6sZkcxBFay7V/Z3qhQgKQQQwQdctytH5kHEVfAY=;
+ b=fvMm9M880fVYo5DDRxy1r68wYYLCxgxNd694NEspbRbdySbyucg+ZYQ4K/EmrPRC1yI2
+ nyJI3HHu3+KryUJaPkmSBD5dMENp2987A6kDkJD9zvi3xp9MiNEj5BvXMkjCJgsKDWkw4
+ ovgJFymsFCa/7TLWG/xsa5VnASgVxpECQt2PBpbKcfsZfnNlhvQw4vLs+mCBLNj+12WRb
+ KIKNgBRoZ5zBE6vcdQhTptM3xkkchjnTPRbUJIrflP+6d9Hc0ClxWJVFZm1cklAs/SHrK
+ o0rmANKJafX9bttM1x0Ai8SHfC+YvpTP1f/Ew42wMkjBLvpLrbyV9PNcDSDJYRd0GMw==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none) header.from=korsgaard.com
-Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=IcSy/Ujg
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 652E060632
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 16:20:27 +0000 (UTC)
-DKIM-Signature: a=rsa-sha256;
- b=IcSy/UjgIa5jBb3YmB5Oykj4lCDFoB+rOgtpv4QhhheVU5n++P2wnXGP20WuGdHpojEizGIFUFfLgA6LrOqszF7glMzjp5Z5zQJoXr40zAjdD8wc8cBAIqW4S/77cqKLqpaeeYHcnLBMJbOoN9zE6PRQOg7akblk+W344soI4RNvhQMKOXNSb4JwWs24ysTfp3hBFeTjQ+nuG3Haa0gWas52AujWwhMqpQczjDRRQ0j6vH7Z1ood+/IBV31P+nplTYkOsZMtrApam26AtlcDVwTPnoUpIvGNSYdt1dk9KEqRn0ZzEf465xlXdR3F8sc8lI+74bMGzco6pfKY+U1PIQ==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=+LYrT8zMahvsFuxSub9QC4/aZVBpDh2d51pu+pOlNqI=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Authentication-Results: purelymail.com; auth=pass
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1777414184; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sat, 10 Oct 2026 16:20:22 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1xFZo4-00000001usI-2KyW;
- Sat, 10 Oct 2026 18:20:20 +0200
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id C6D3E40759
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 16:20:40 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8CF34923A2; Sat, 10 Oct 2026 16:19:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20261006162106.3439373-68-bernd@kuhls.net> (Bernd Kuhls's
- message of "Tue, 6 Oct 2026 18:20:48 +0200")
-References: <20261006162106.3439373-1-bernd@kuhls.net>
- <20261006162106.3439373-68-bernd@kuhls.net>
-Date: Sat, 10 Oct 2026 18:20:20 +0200
-Message-ID: <87jynpfry3.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v8 67/84] package/libplatform: remove package
+To: buildroot@buildroot.org
+Date: Sat, 10 Oct 2026 18:19:27 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c66fe59ddc32d5d1543fc3936d3ef36e23861b55
+X-Git-Newrev: d7fa5c2d0183ba400d18bceb28a7aec49468d8cd
+X-Patchwork-Hint: ignore
+Message-Id: <20261010161922.8CF34923A2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libplatform: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -140,51 +113,121 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d7fa5c2d0183ba400d18bceb28a7aec49468d8cd
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
- > The last package depending on libplatform, libcec, removed its
- > dependency:
- > https://github.com/Pulse-Eight/libcec/commit/332bca975a71d8e876b66dc6a7fca938b49b1831
+The last package depending on libplatform, libcec, removed its
+dependency:
+https://github.com/Pulse-Eight/libcec/commit/332bca975a71d8e876b66dc6a7fca938b49b1831
 
- > The maintainer of both libcec and libplatform has put libplatform into
- > maintenance mode: "Don't use this library in new projects."
+The maintainer of both libcec and libplatform has put libplatform into
+maintenance mode: "Don't use this library in new projects."
 
- > https://github.com/Pulse-Eight/platform/commit/97332651ddfb3df9240dfd4227ac35484f8c4341
+https://github.com/Pulse-Eight/platform/commit/97332651ddfb3df9240dfd4227ac35484f8c4341
 
- > so we can safely remove the package from buildroot.
+so we can safely remove the package from buildroot.
 
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- > ---
- >  Config.in.legacy                     |  7 +++++++
- >  DEVELOPERS                           |  1 -
- >  package/Config.in                    |  1 -
- >  package/libplatform/Config.in        |  7 -------
- >  package/libplatform/libplatform.hash |  3 ---
- >  package/libplatform/libplatform.mk   | 13 -------------
- >  6 files changed, 7 insertions(+), 25 deletions(-)
- >  delete mode 100644 package/libplatform/Config.in
- >  delete mode 100644 package/libplatform/libplatform.hash
- >  delete mode 100644 package/libplatform/libplatform.mk
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Peter: move the COnfig.in.legacy entry under 2026.11]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ Config.in.legacy                     |  7 +++++++
+ DEVELOPERS                           |  1 -
+ package/Config.in                    |  1 -
+ package/libplatform/Config.in        |  7 -------
+ package/libplatform/libplatform.hash |  3 ---
+ package/libplatform/libplatform.mk   | 13 -------------
+ 6 files changed, 7 insertions(+), 25 deletions(-)
 
- > diff --git a/Config.in.legacy b/Config.in.legacy
- > index 16d530e273..552cc1a890 100644
- > --- a/Config.in.legacy
- > +++ b/Config.in.legacy
- > @@ -286,6 +286,13 @@ config BR2_PACKAGE_WESTON_SHELL_FULLSCREEN
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 9ba6ab243e..25eb19468a 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -227,6 +227,13 @@ config BR2_PACKAGE_WESTON_SHELL_FULLSCREEN
+ 	help
+ 	  Weston fullscreen shell option was removed in v16.0.0.
  
- >  comment "Legacy options removed in 2026.08"
++config BR2_PACKAGE_LIBPLATFORM
++	bool "libplatform removed"
++	select BR2_LEGACY
++	help
++	  libplatform was no longer maintained upstream, so it has
++	  been dropped.
++
+ comment "Legacy options removed in 2026.08"
  
- > +config BR2_PACKAGE_LIBPLATFORM
-
-Moved under the 2026.11 heading and committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+ config BR2_PACKAGE_FLUIDSYNTH_SDL2
+diff --git a/DEVELOPERS b/DEVELOPERS
+index e7e5af92ae..c6ac972854 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -450,7 +450,6 @@ F:	package/libogg/
+ F:	package/libopenh264/
+ F:	package/libpciaccess/
+ F:	package/libplacebo/
+-F:	package/libplatform/
+ F:	package/libpng/
+ F:	package/libsidplay2/
+ F:	package/libsilk/
+diff --git a/package/Config.in b/package/Config.in
+index 25bf81ec52..fb84adf4ff 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2236,7 +2236,6 @@ menu "Other"
+ 	source "package/libosmium/Config.in"
+ 	source "package/libpeas/Config.in"
+ 	source "package/libpfm4/Config.in"
+-	source "package/libplatform/Config.in"
+ 	source "package/libplist/Config.in"
+ 	source "package/libpthread-stubs/Config.in"
+ 	source "package/libpthsem/Config.in"
+diff --git a/package/libplatform/Config.in b/package/libplatform/Config.in
+deleted file mode 100644
+index ade6baf2c2..0000000000
+--- a/package/libplatform/Config.in
++++ /dev/null
+@@ -1,7 +0,0 @@
+-config BR2_PACKAGE_LIBPLATFORM
+-	bool
+-	help
+-	  Platform support library used by libCEC and binary add-ons for
+-	  Kodi
+-
+-	  https://github.com/Pulse-Eight/platform
+diff --git a/package/libplatform/libplatform.hash b/package/libplatform/libplatform.hash
+deleted file mode 100644
+index 5fead5eb95..0000000000
+--- a/package/libplatform/libplatform.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed
+-sha256  2ab98ba486b28dd9c31e9f0f8a04eddad12c09ad1951c359fdef475baafba296  libplatform-2748be52ae27e6007ef548b697d4a03ff7de4291.tar.gz
+-sha256  0137261d24ce001fc5237aacddd267533e0f150ac23cf21acffea599f7358f7a  LICENSE.md
+diff --git a/package/libplatform/libplatform.mk b/package/libplatform/libplatform.mk
+deleted file mode 100644
+index aeded5e9a7..0000000000
+--- a/package/libplatform/libplatform.mk
++++ /dev/null
+@@ -1,13 +0,0 @@
+-################################################################################
+-#
+-# libplatform
+-#
+-################################################################################
+-
+-LIBPLATFORM_VERSION = 2748be52ae27e6007ef548b697d4a03ff7de4291
+-LIBPLATFORM_SITE = $(call github,Pulse-Eight,platform,$(LIBPLATFORM_VERSION))
+-LIBPLATFORM_LICENSE = GPL-2.0+
+-LIBPLATFORM_LICENSE_FILES = LICENSE.md
+-LIBPLATFORM_INSTALL_STAGING = YES
+-
+-$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
