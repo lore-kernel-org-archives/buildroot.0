@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF436CA9EC7
-	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 15:11:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BB95CA9EBE
+	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 15:12:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 76CDC81138;
-	Sat, 10 Oct 2026 15:11:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 209D9608ED;
+	Sat, 10 Oct 2026 15:12:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7ioS9AKUZHuz; Sat, 10 Oct 2026 15:11:57 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 4BDC681128
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791645117;
-	b=ZUU7UOdUDe6ZMAAdn92UysRavQArFu33KuWfjcCDykm0DPlS4Lh+KSADXfNsg7563myw
-	 mzhCitXKo5Su2e3YW9kJyoDuVxGxXlbAlIKbSh1rvLCxAzSFKfcpFZfx9pXC9oYBFoi4g
-	 wHjA6qBA6CqJwvXkZiX5VFF+DVN35MUExY6nAy0LgLvqXqv0GfXVk7SLPqVWJ/Zx14CFh
-	 hMpY1vEHzkfErDKBksoegEzCtoW7S04DKgOjJ4mNgITGpqrNrGrGhwKmG1+rHjF2LTBYJ
-	 blrrP2d9HN34+KhyQrmJpYOTVI8MrE2S1ejbYROWdG8e7+O8LkzdnVDIa3AUgGjdpjQ==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lr_tx6F8STPD; Sat, 10 Oct 2026 15:12:00 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org F26B16067B
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791645120;
+	b=KiallcOWmHfK3p2Ks2+btn6Twfv37LM9VZgDSfhTcxjR1Mk5SxseVqIgiChTUgUDLl1Q
+	 EFIQZelA4xRKp//kdJf/q0a+3Zh/uvtQgymKz2wHTytw8vae6tjp9hninTDWYuNPt+Wj8
+	 ipj/l7Ez9rWftrUBiwqtAcEiqSDkz4khQueOXmY524N4XynsQu205NsXqS7H8eFhvgIAe
+	 PeHRjDYsj9Usrx2dFk8F8/kkIrr09Rq7QOf5/hIyoDagdhj6mNlncJpDFysUcSPiDBxnb
+	 Mg2TGImQiV8QPFcbO3ouIqAZ7rS/kCNZmszy9wiYGZyUflEIIkjVpoA8NO89h9j8q8w==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791645117;
+	c=relaxed/relaxed; t=1791645120;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,117 +31,117 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Cc:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=8jcLqyFVXXXOHnV1TLoNNexa5EMvOPOhIl1d6lI6les=;
-	b=WleNrstxZYHHTcrdc8HxXhOTrO7Obqub1f15rbZmTm0dOD4quKQnvoDxBqRO34/r9jrK
-	 lYOzPcLE7f5nkGeLZC2VDrFh5qHqWR0dA2HHXgq3TzG8F5f4ONLq0I7gNyc0vGnqYW9Bl
-	 XRLec+U0K/6fRWK/extZANsF7xZSCNHdoIBiWztIg+iaMRkCf+Q8+F2yFZGYMjYiqnOCS
-	 UWDR4fZo4U0oArNN5cQzMy8J5WiccGFPjr+9Jmdako0n2zi7JVtSpvb6Nu5+Tu0E8c2H8
-	 s7dSGx81ynZwzLoN3dpR+OroaxtsHhTI5NlufEOMJ3+GeWlxRxNyqGp5SCIHyTXG6yg==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	bh=FIx8+oAOuwlK+61l8UplmHJyO2eP3ZGoKVe+avZGlN0=;
+	b=ducwwzMt3eTRos0W2GeG1PiD+hvwgKlaY5JPUtrzn+lDAAH17r/4y7kRa6nfUjOGTy7K
+	 SZvySzmU8gBGw2/M4bKaTkeCYwKB7lywAILMjAAvfcVa8D+Y2Irypzol0vcJarqAe5jkj
+	 OzmsaqdqhBzBQK5rA6siOtvQBj8zlOjb5akJ1YoCOLyitnbwJ1g/TaRjns10oHR7G5pm2
+	 T9R+U4Gop4LbqcRjubKDY8B4cXFGRR8TwYwMsGN3nosvCnirSZFwBrCex3VmgQ4CPgdii
+	 o1b0VShTO9lMOLaiVahSMlNTJsRna56QZ0HOboIi1V0OxCbt6cli3xjwxI9JU023PyQ==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791645117;
-	bh=8jcLqyFVXXXOHnV1TLoNNexa5EMvOPOhIl1d6lI6les=;
+	s=default; t=1791645120;
+	bh=FIx8+oAOuwlK+61l8UplmHJyO2eP3ZGoKVe+avZGlN0=;
 	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=ZE8OhjmXIUvuGcDveTuiDsFFloVcXMqXh5/+KNfouyuFx28JtbiLwuxSqX3QfErru
-	 b2mEtR11GjNZ4Xe66fwZuzTUGyMQZVhrz78Mhty6i17SjWa35EIe/+gbe+fllBosr2
-	 tNmYjeUhjud6YXWd3unNCUW3YpLEhijSxJSIWWL1VkwtaSoxtRnkTlBjjs2GLu5yyH
-	 zdnFdjU5Tm6rSELfCe9NzZ/Ll5SQldjplSOLaBaS88EbDZibRh46DPzM0JLSfRYeWY
-	 N4D37za+w6P8HAE7erMiXXBxs/S48sve+6qPdDd6eYV+IcoG5FQUBHINQWncNdAk7G
-	 bdJwwu6PZ84AA==
+	b=B8M8gNsTNne6VdhrcFmB0O+Vusc6vNK7D+HBmvPfGgpeWEfn0SUDo3tU8aep0nbdl
+	 0zmzSb53LrerT9rkj95lR13O/CCCxJmPcC5u5NAlFlOUDRgTGmC1AzoHj9cwk0jGZv
+	 AHjinw1BUUVFyLdoPjuMfygUb9CXAxb3uwaLjfBgpa+nDmCQyEXZ6q9s45I8cTIrWc
+	 JluhRKqA1WwLbgzg9U0Ru/R+6aSmMhjJRCNtmoI1jheC+HDGaLIlbsk6dVYftVUXUv
+	 EVHzXEvpN98aid69LTj9j8KX96TsJ/0QGEhNb1O/bEZzdVfImHVngrCJUY9R8fZG1g
+	 jUvlcwgiPED3Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4BDC681128;
-	Sat, 10 Oct 2026 15:11:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6939E317
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 15:11:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F26B16067B;
+	Sat, 10 Oct 2026 15:11:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9433A317
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 15:11:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4FAC86064F
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 15:11:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7A9E481173
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 15:11:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F0db3dRvgcr2 for <buildroot@buildroot.org>;
- Sat, 10 Oct 2026 15:11:52 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org E7C136065F
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791645112;
- b=TlIQ9H4I3dso6DAa/h4JExWP/orgj0ulFBmkbYLpvbOFAH7Vd2bl8o8C645I8k7mJgqj
- cDo7lGGGLpiLiEwe6xKz/AewdcjNKaXB6jF98neU5wRtB6a1Ir/jxQLXukaJN6SwIUe/d
- Bw3yrBfDCFl1NZp9BufMMAOeCpFPQncXElTbmenjev1Isoa1LcTDFW9J6Xx/bef7JZCYD
- DR7YLTF7QoW36sAkjacb4Erj9BlIuxx5/TCf0EODn8haVG/fJ+CSt2mbLtXxW3dvgYc7B
- 24RIgZfup+HVlSQK6ohIl8zeb+w7DT6zvXw1yG+CSSBG0H9pNV+kQlpXVqzjMJkCFIA==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id r09J9i_rGhZo for <buildroot@buildroot.org>;
+ Sat, 10 Oct 2026 15:11:55 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 43E7681128
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791645115;
+ b=lK9WcVOKfaMemW8SU3OHUHp2uMuLDkI/WEQzJ8dvtrjgozxDPVrLVxnIWD+rTPOcvOsd
+ n1h0N5KbmvQrNIBHN0F4OPLGj8RUFMZmnHIW70htkVeBwBPpIsOSC7kHT2kZUSf2J2Urk
+ Nc3NfCoEsDP26hV8BIErzQ6cwo7bNFJxkCn8NQJ82+Dfk+XKiWyfFxfJO80MZ6mP493s5
+ NEIca+PElyQhMt/gqLt4knTO0PHfabf6MxEbl2dAFnvtkzJDADExmmwwcngZFyWMsoS7d
+ z4nStnXa+OfvdC72iPHf74JLGqQk8n4OWAqbPcl3K6Fqlo+1Rp4GzFzCalKdZoYijKQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791645112;
+ c=relaxed/relaxed; t=1791645115;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=R0aY+3sUdhFkUVZkNltmRumW9biHjTlIt0pf41tc9c4=;
- b=AfEJot7eUtaLv3KAL9wJg2AkXNTEWSlmRqUE7yBqlEPtJ6ak0Kios02iAIWPJiYNCoyP
- ucdfsD9MYBgLpF3XcUPrsfG+fFvVjFAU9DpI3Vxy/8NulUaTozxuoL76ucqHbh0xA481Q
- 0vv0wqIKaMLY/XayTKkVBH5TxUNgdbDfUeuaWaVwrL99mxBA7kkxpyfhTm1D5DWaPOXeF
- 2NJ2hkPs4WqhqX+IjCm8q/kETrMa3DKoK8+BevHDznTTnOfD1fVivAWO8tkkvy9b+9MgU
- lWrRvHb4wpyI889m4AcpkmJihsAkAB8u+WoIi9qYssYzo9tniOyCWWXZKjwyJWMGjXQ==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ bh=g9Xsjc/W3+MKCCJPYbqqjqzjLmTsVgrW4JoqjM1PydE=;
+ b=WQF6KR6+jXPotY1tZjoJX3WdaoemRO4EHtFjf7CH8CDdAzvrCZxvZWj3Me2VTwrChokR
+ HYYBhW5K3bZn6iDx9BHoLvL1itB3238j4lmDi5JGHoqfNyarsQWWZ/Ha3reiRb+9EtLi0
+ +NGRjUB+tVh9L+1yWVDgf576tYfXq86TusKWbj1CXVicvvtd2xmqm4OENT+C5wIKs1Pg6
+ D8ktwez76MKdmVY1helgomoPx48N0pMPiXE7niad1EJlmKLgOuVY1LDHblg9U7bVk9I34
+ 7r/hexXii9OOft/95Z1CQZ6EMMEKBMLjQqgKlbBuKZp0/GA2cR68PHo7zgpoGWLoSeA==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  dmarc=pass header.from=mind.be;
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=O30qx8oc; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::32c"
+ header.s=google header.b="X2mpfA/b"; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::435"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
  envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E7C136065F
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 15:11:51 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-4a021c809e3so6778305e9.0
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 08:11:51 -0700 (PDT)
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 43E7681128
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 15:11:54 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-48c45111bebso351022f8f.0
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 08:11:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1791645109; x=1792249909;
+ d=1e100.net; s=20260707; t=1791645113; x=1792249913;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=R0aY+3sUdhFkUVZkNltmRumW9biHjTlIt0pf41tc9c4=;
- b=h4nTyFmyYYdtZt0R9sVJ5xOuqY4d2DGYXRtmEuuAryJ60V1F0n1flcamBMkdJ03hLK
- Qv3HiupbC5kKA4I7YByL5pvtNTS899xH7W4dYvRceXIhKlwMCmgl4+y43WIBgW0KOM18
- QmWWzCrzzI/rOLz+ySilNcvDWiz/XACFAAgxxwNIaLmF3t6GlBdBLv2VPy/hkYobquia
- mti9R10ScIDaFAtT1/b47Q84QjCqhgAaPa2XOo9eOUe0j3GoAz3hwa/aEy9BZ62EAtTW
- PqGawOPUzywvbuPPnYm2dGiM9TTdUsGqSxM7HoSiBdeytJQdNj1aOLn5ZRuokDoSdZd5
- 80cg==
-X-Gm-Message-State: AFq9FYI8Glg2Z+RtnhMuKjlyp5agU0cGaFB+CtY3AndGj18PllVZO9bd
- cm3h5wtLDmQdreaddWwFUs001gqQXcdeX6CLEU4Q0vFGIb8okct+sQ5c/6AgR8iaCXl0pgLZQuz
- bipcCsLU=
-X-Gm-Gg: AYBFou36pjjvyKGAUvPQFHhnEo4a56jBEy5b/oyuevCshSTBaVfwiwkssE+uW1c1jah
- GyBbj2DEO2KVuvdyzYY8yoI4G8x8srWNP3vHdQSJDGnw0h7UHzT4HMIAEwZqWyM2PwOhC/FA71u
- m4x57h9PIZcNh0TR+nhum+UZBy9HebJmOFdKCVPQ8iwD8QhFuiGBSKeq0Hqitu1rGkZTNowW6zd
- 6Pf385Qgf8yYh9z5TzXZkaPSzl/z8fODVNDDeBkzCMpw6+dsZqcXToyOK9ZmilIETyzjYXEpalL
- UULlhizNvlZmWhvhFBLrXSFF8DW/xBCI4+PXS/Acz7KlNhQrsF44BboC3V0ZACTvZTVrKpie9lB
- jRGDEn46X8k8kbFwp6F2Dwqpk8bN5H2Y1BLYNuPCZPORNN6DyxsKGsla7le4ZcIJIoI5eFOT6kY
- ETBl9kUwlxieF6Ac2/g2tWSZdgxM/jhy9RNSAS0SOHBOJRcHTTwvKDR6kI13+CIKKu2iGTV/iGP
- a6rZiAkuOLzxA8q0bYo79UBgyyoYPL+SwW09O+WNXoal2ouUUVHiSvqmyfXE+2Wdzvp8WF0Ng==
-X-Received: by 2002:a05:600c:3b0a:b0:4a1:6fa9:48ad with SMTP id
- 5b1f17b1804b1-4a18e4a9b9amr96983865e9.26.1791645109258; 
- Sat, 10 Oct 2026 08:11:49 -0700 (PDT)
+ bh=g9Xsjc/W3+MKCCJPYbqqjqzjLmTsVgrW4JoqjM1PydE=;
+ b=Dd5bChVb8cKPSWbmeVVBUwKbpg+4t3pzT64xx+F3YxxRBFnTxXvvk/kvkhr5u+7ciC
+ 7pXx8P/gw1DsQs+xCU3q24RFtLVLWr9tU0MywT7h7dfCKvuVEAqM41G8y/UDnn/6jZ4B
+ Cu86cBAs5RQfcUriHsbMHI0XMkgUc/b+AbRqpklZ8ZVpJu4q4nRgfFAQ4qnOJKh+nHkT
+ /hAGmVB6ve2ahVS2IqTFG7DML7JB7aRD+3VwFu2ShRuaStrwg5C4bCqcU2IvmZHk7Wl2
+ 8H7l5WPkE9UcNRgUb5LXkt6WMiH/1jodRT59AK+b0tnpa+Q3qRLMuB2e7Rv78o4kWRPf
+ Osog==
+X-Gm-Message-State: AFq9FYJu79w5HYebGMvRoGm9KVxjwa6r5Ep3GxJdE1o8DaurEYgCOlBe
+ ENf+do1KdC+p0T9TwZwkGHXWtVk7GCW4faY+lCYSb+A2brLNAUL1/HVATuaGhrLjVKaEyMTfqVc
+ jauUFO5U=
+X-Gm-Gg: AYBFou3/We+FmZiZPkcHF/Og+NRoV2NS4loFCiIahGtmfpm4sR1olnTwdgwTT3kYst2
+ DmUtFs+HJAW6NpH60+rFrP++AlUW4nBpUPI5QVRF7icfTRDXAbwcjgZhTxAqoIfp3+oYG9WfJdw
+ ja3/lg2LdzGcweExUoQj47ryam/rPSwjex0M10I/2V48SpjzywC+Vto4xgIgjJRH1t+eP5rG4aP
+ xK63hXtMMRYmfr0AdM/iqXRlb2ku9Pn/RxsZ6qoF0SIBOOMWVZYZA8NWmLEns2TsM3FnLGIbBjx
+ HzTA83ncRQ9O39ENsa1GNESY6uZuCGvNYQ1r2dxeUaNoX4J9Nm7mgW1NKsqZkZFN4G2rJIQs9of
+ bGYLU6OVoaul34hOjWj7Z60inbHbbESzCii7D/G064SLh62tredEXS2bgxDJHnelMQhOTY9w+EQ
+ Eb36BEc7U9FFkGgijNiFpd0LL83jY4IBCrmNdYlKwpu+LTLkI6+3pqNfzdG5HdsYwfOwVrRC/Vc
+ c3ZL0bgFpFWbdfefkxM+/CY69Zg+4jAiewTv2rPfTRsebI1pJGRsZHzE0xT+fKfcdCONmxttQ==
+X-Received: by 2002:a05:600c:3146:b0:49d:1fd8:b874 with SMTP id
+ 5b1f17b1804b1-4a18e4af3a8mr101841535e9.19.1791645112648; 
+ Sat, 10 Oct 2026 08:11:52 -0700 (PDT)
 Received: from dragon.telekom.ip
  (2001-1aeb-401-dd00-a87-9755-c250-f5ef.ip6.tmcz.cz.
  [2001:1aeb:401:dd00:a87:9755:c250:f5ef])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4a18bb6b3cbsm115104125e9.0.2026.10.10.08.11.48
+ 5b1f17b1804b1-4a18bb6b3cbsm115104125e9.0.2026.10.10.08.11.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 10 Oct 2026 08:11:49 -0700 (PDT)
+ Sat, 10 Oct 2026 08:11:52 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Sat, 10 Oct 2026 17:11:15 +0200
-Message-ID: <20261010151121.876133-4-titouan.christophe@mind.be>
+Date: Sat, 10 Oct 2026 17:11:17 +0200
+Message-ID: <20261010151121.876133-6-titouan.christophe@mind.be>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261010151121.876133-1-titouan.christophe@mind.be>
 References: <20261010151121.876133-1-titouan.christophe@mind.be>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 3/7] */Config.in: replace bool entries with
- prompt within all choices
+Subject: [Buildroot] [PATCH 5/7] package/openssl: move libopenssl/libressl
+ options out of the choice
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -162,234 +162,115 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since Linux commit bea2c5ef78 [1], first released in v6.13, the prompt of a
-choice must be given with "prompt" instead of "bool".
+The libopenssl and libressl sub-options are currently defined from
+package/{libopenssl,libressl}/Config.in, which are sourced from within
+the "ssl library" choice block, each wrapped in an "if" on its own
+choice entry.
 
-[1] bea2c5ef78: kconfig: remove support for "bool" prompt for choice entries
-    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bea2c5ef789a37bace99f2f45eeef3be4559b228
+With the old kconfig, these entries were reparented below the choice
+member they depend on, and so were not considered choice members
+themselves. Since Linux commit 7e3465f63a0a [1], first released in v6.10,
+this is no longer the case: every config entry inside a choice block is
+a member of that choice. Combined with the stricter checks introduced by
+commits 700e7a8d05ea [2] and fde192511bdb [3], parsing now fails with:
+
+  package/libopenssl/Config.in:5: error: choice member must have a prompt
+  package/libopenssl/Config.in:15: error: choice member must have a prompt
+  package/libopenssl/Config.in:15: error: choice member must be bool
+
+Fix that by sourcing package/{libopenssl,libressl}/Config.in after the
+endchoice, guarded by the corresponding choice entry, and drop the now
+redundant "if" blocks from those files.
+
+The openssl providers from br2-external trees are still sourced inside
+the choice, as they define additional entries of that choice. This
+relies on 'source' still being allowed inside a 'choice', which is
+provided by our kconfig patch
+24-kconfig-allow-source-inside-choice.patch.
+
+This does not change the generated configuration: all the in-tree
+defconfigs produce the same .config as before.
+
+[1] 7e3465f63a0a: kconfig: do not reparent the menu inside a choice block
+    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7e3465f63a0a70641ed8e49f9d40ee613f7da586
+[2] 700e7a8d05ea: kconfig: turn missing prompt for choice members into error
+    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=700e7a8d05ea690308131f69ffc597dfab6db838
+[3] fde192511bdb: kconfig: remove tristate choice support
+    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fde192511bdbff554320b31574bb8a9cb3275522
 
 Assisted-by: Claude:claude-opus-5-5
 Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 ---
- Config.in                                                 | 8 ++++----
- boot/xilinx-prebuilt/Config.in                            | 2 +-
- fs/ext2/Config.in                                         | 2 +-
- package/docker-engine/Config.in                           | 2 +-
- package/efl/Config.in                                     | 2 +-
- package/freescale-imx/firmware-imx/Config.in              | 2 +-
- package/linux-headers/Config.in.host                      | 2 +-
- package/podman/Config.in                                  | 4 ++--
- package/xenomai/Config.in                                 | 2 +-
- system/Config.in                                          | 6 +++---
- .../toolchain-external-custom/Config.in.options           | 4 ++--
- 11 files changed, 18 insertions(+), 18 deletions(-)
+ package/libopenssl/Config.in |  4 ----
+ package/libressl/Config.in   |  4 ----
+ package/openssl/Config.in    | 12 ++++++++----
+ 3 files changed, 8 insertions(+), 12 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index 1fa7ea3ca7..7a2de62a2e 100644
---- a/Config.in
-+++ b/Config.in
-@@ -643,7 +643,7 @@ config BR2_GOOGLE_BREAKPAD_INCLUDE_FILES
- endif
- 
- choice
--	bool "libraries"
-+	prompt "libraries"
- 	default BR2_SHARED_LIBS if BR2_BINFMT_SUPPORTS_SHARED
- 	default BR2_STATIC_LIBS if !BR2_BINFMT_SUPPORTS_SHARED
+diff --git a/package/libopenssl/Config.in b/package/libopenssl/Config.in
+index 03d3def802..a76def1470 100644
+--- a/package/libopenssl/Config.in
++++ b/package/libopenssl/Config.in
+@@ -1,5 +1,3 @@
+-if BR2_PACKAGE_LIBOPENSSL
+-
+ # 4xx PowerPC cores seem to have trouble with openssl's ASM
+ # optimizations
+ config BR2_PACKAGE_LIBOPENSSL_TARGET_ARCH_LINUX_PPC
+@@ -228,5 +226,3 @@ config BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL_TRACE
  	help
-@@ -823,7 +823,7 @@ comment "PIC/PIE needs a toolchain w/ PIE"
- 	depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
+ 	  Build with SSL Trace support. Disabling this option may
+ 	  provide a small reduction in libssl binary size.
+-
+-endif # BR2_PACKAGE_LIBOPENSSL
+diff --git a/package/libressl/Config.in b/package/libressl/Config.in
+index 600829cb9e..2146481faa 100644
+--- a/package/libressl/Config.in
++++ b/package/libressl/Config.in
+@@ -1,9 +1,5 @@
+-if BR2_PACKAGE_LIBRESSL
+-
+ config BR2_PACKAGE_LIBRESSL_BIN
+ 	bool "openssl binary"
+ 	help
+ 	  Install the openssl binary to the target file system. This is
+ 	  a command line tool for doing various cryptographic stuff.
+-
+-endif
+diff --git a/package/openssl/Config.in b/package/openssl/Config.in
+index ca9d1a7e50..cae1b049fb 100644
+--- a/package/openssl/Config.in
++++ b/package/openssl/Config.in
+@@ -39,8 +39,6 @@ config BR2_PACKAGE_LIBOPENSSL
  
- choice
--	bool "Stack Smashing Protection"
-+	prompt "Stack Smashing Protection"
- 	default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
- 	default BR2_SSP_STRONG if BR2_TOOLCHAIN_HAS_SSP_STRONG
- 	default BR2_SSP_REGULAR
-@@ -887,7 +887,7 @@ comment "Stack Smashing Protection needs a toolchain w/ SSP"
- 	depends on !BR2_TOOLCHAIN_HAS_SSP
+ 	  Note: Some helper scripts need perl.
  
- choice
--	bool "RELRO Protection"
-+	prompt "RELRO Protection"
- 	default BR2_RELRO_FULL if BR2_TOOLCHAIN_SUPPORTS_PIE
- 	default BR2_RELRO_PARTIAL
- 	depends on BR2_SHARED_LIBS
-@@ -933,7 +933,7 @@ config BR2_FORTIFY_SOURCE_ARCH_SUPPORTS
- 	depends on !BR2_microblaze
+-source "package/libopenssl/Config.in"
+-
+ config BR2_PACKAGE_LIBRESSL
+ 	bool "libressl"
+ 	depends on BR2_PACKAGE_LIBRESSL_ARCH_SUPPORTS
+@@ -56,13 +54,19 @@ config BR2_PACKAGE_LIBRESSL
  
- choice
--	bool "Buffer-overflow Detection (FORTIFY_SOURCE)"
-+	prompt "Buffer-overflow Detection (FORTIFY_SOURCE)"
- 	default BR2_FORTIFY_SOURCE_1
- 	depends on BR2_FORTIFY_SOURCE_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/boot/xilinx-prebuilt/Config.in b/boot/xilinx-prebuilt/Config.in
-index ff129ed5b5..4cd4d75561 100644
---- a/boot/xilinx-prebuilt/Config.in
-+++ b/boot/xilinx-prebuilt/Config.in
-@@ -23,7 +23,7 @@ config BR2_TARGET_XILINX_PREBUILT_VERSION
- 	  Must be xilinx_v2023.1 or newer.
+ 	  http://www.libressl.org/
  
- choice
--	bool "family variant"
-+	prompt "family variant"
- 	default BR2_TARGET_XILINX_PREBUILT_VERSAL if BR2_PACKAGE_VERSAL_FIRMWARE  # legacy
- 	default BR2_TARGET_XILINX_PREBUILT_VERSAL if BR2_cortex_a72
- 	default BR2_TARGET_XILINX_PREBUILT_VERSAL2 if BR2_cortex_a78
-diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
-index c50f22626a..c1a943435e 100644
---- a/fs/ext2/Config.in
-+++ b/fs/ext2/Config.in
-@@ -10,7 +10,7 @@ config BR2_TARGET_ROOTFS_EXT2_2
+-source "package/libressl/Config.in"
+-
+ # openssl from br2-external trees, if any
+ source "$(BASE_DIR)/.br2-external.in.openssl"
+ 
+ endchoice
+ 
++if BR2_PACKAGE_LIBOPENSSL
++source "package/libopenssl/Config.in"
++endif
++
++if BR2_PACKAGE_LIBRESSL
++source "package/libressl/Config.in"
++endif
++
+ config BR2_PACKAGE_HAS_OPENSSL
  	bool
  
- choice
--	bool "ext2/3/4 variant"
-+	prompt "ext2/3/4 variant"
- 	default BR2_TARGET_ROOTFS_EXT2_2r1
- 
- config BR2_TARGET_ROOTFS_EXT2_2r1
-diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
-index 541472d957..a5464b772f 100644
---- a/package/docker-engine/Config.in
-+++ b/package/docker-engine/Config.in
-@@ -45,7 +45,7 @@ config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS
- 	  Build the vfs filesystem driver for Docker.
- 
- choice
--	bool "support docker-init"
-+	prompt "support docker-init"
- 	default BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_TINI if BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT  # legacy
- 	help
- 	  Support providing a minimal init process for containers.
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index c4f82b92e3..583c1c6f52 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -200,7 +200,7 @@ comment "Wayland support needs udev /dev management, OpenGL ES w/ EGL, threads,
- 		|| !BR2_ENABLE_LOCALE
- 
- choice
--	bool "OpenGL support"
-+	prompt "OpenGL support"
- 	help
- 	  libevas can be configured to use HW acceleration with OpenGL
- 	  or OpenGL ES.
-diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
-index 0acc235e0a..96220cfe66 100644
---- a/package/freescale-imx/firmware-imx/Config.in
-+++ b/package/freescale-imx/firmware-imx/Config.in
-@@ -65,7 +65,7 @@ config BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW_IMX9
- if BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW || BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW_IMX9
- 
- choice
--	bool "DDR training binaries"
-+	prompt "DDR training binaries"
- 	default BR2_PACKAGE_FIRMWARE_IMX_LPDDR4
- 	help
- 	  Choose the DDR training binaries to be used depending on the
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index b11db18379..8b0069a7df 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -116,7 +116,7 @@ config BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION
- endif
- 
- choice
--	bool "Custom kernel headers series"
-+	prompt "Custom kernel headers series"
- 	default BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_REALLY_OLD
- 	depends on !BR2_LINUX_KERNEL_LATEST_VERSION || !BR2_KERNEL_HEADERS_AS_KERNEL
- 	depends on !BR2_LINUX_KERNEL_LATEST_CIP_VERSION || !BR2_KERNEL_HEADERS_AS_KERNEL
-diff --git a/package/podman/Config.in b/package/podman/Config.in
-index bbcb15691d..97d0a0270a 100644
---- a/package/podman/Config.in
-+++ b/package/podman/Config.in
-@@ -35,7 +35,7 @@ config BR2_PACKAGE_PODMAN
- if BR2_PACKAGE_PODMAN
- 
- choice
--	bool "support podman-init"
-+	prompt "support podman-init"
- 	default BR2_PACKAGE_PODMAN_INIT_CATATONIT
- 	help
- 	  Support providing a minimal init process for containers.
-@@ -68,7 +68,7 @@ config BR2_PACKAGE_PODMAN_INIT_NAME
- 	default "catatonit" if BR2_PACKAGE_PODMAN_INIT_CATATONIT
- 
- choice
--	bool "Network backend"
-+	prompt "Network backend"
- 
- config BR2_PACKAGE_PODMAN_NET_PASST
- 	bool "passt/pasta"
-diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
-index 13a273a960..e2fcd90669 100644
---- a/package/xenomai/Config.in
-+++ b/package/xenomai/Config.in
-@@ -43,7 +43,7 @@ config BR2_PACKAGE_XENOMAI
- if BR2_PACKAGE_XENOMAI
- 
- choice
--	bool "Xenomai version"
-+	prompt "Xenomai version"
- 	help
- 	  Make sure that the selected version has a patch for your
- 	  selected Linux kernel. If it does not, download and select a
-diff --git a/system/Config.in b/system/Config.in
-index 46a1cf5d59..4e575e461d 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -56,7 +56,7 @@ config BR2_TARGET_GENERIC_ISSUE
- endif
- 
- choice
--	bool "Passwords encoding"
-+	prompt "Passwords encoding"
- 	default BR2_TARGET_GENERIC_PASSWD_SHA256
- 	help
- 	  Choose the password encoding scheme to use when Buildroot
-@@ -196,7 +196,7 @@ endchoice
- if BR2_INIT_SYSTEMD
- 
- choice
--	bool "/var management"
-+	prompt "/var management"
- 	default BR2_INIT_SYSTEMD_VAR_FACTORY  # legacy
- 	depends on !BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
- 	help
-@@ -398,7 +398,7 @@ config BR2_TARGET_GENERIC_ROOT_PASSWD
- 	  password!
- 
- choice
--	bool "/bin/sh"
-+	prompt "/bin/sh"
- 	default BR2_SYSTEM_BIN_SH_BASH if !BR2_PACKAGE_BUSYBOX
- 	help
- 	  Select which shell will provide /bin/sh.
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index 92c1d6a37d..68acc0a1a6 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -41,7 +41,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
- 	  as external toolchain.
- 
- choice
--	bool "External toolchain gcc version"
-+	prompt "External toolchain gcc version"
- 	help
- 	  Set to the gcc version that is used by your external
- 	  toolchain.
-@@ -159,7 +159,7 @@ comment "GCC older than 4.8 is not tested by Buildroot. Use at your own risk."
- 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 
- choice
--	bool "External toolchain kernel headers series"
-+	prompt "External toolchain kernel headers series"
- 	default BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
- 	help
- 	  Set to the kernel headers version that were used to build
 -- 
 2.55.0
 
