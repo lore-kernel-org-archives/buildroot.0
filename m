@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D610CA9EC7
-	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 15:19:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8295ACA9EBE
+	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 15:19:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D7492608F0;
-	Sat, 10 Oct 2026 15:19:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4804D811C8;
+	Sat, 10 Oct 2026 15:19:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sh0B4rYmytJj; Sat, 10 Oct 2026 15:19:04 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 0C94E60672
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791645544;
-	b=YuRNgXLbrl9NMr3F3Bt6YlE101uAtveo/Tp9YE2vuOVU0NVg3jblOCPR4BNBJg84FtTq
-	 DHP1SEW3ir9aIPovgtfEjogVI9erh0gkNNiowZFll5KYiarCTyMIvStffiQwpzrerahKA
-	 q0LYd2rQkUnse7ehkMdRReZqFo6haHLEKgS6eogFVofna8I7mpNQMsPZfiBHHIiX+3Q7s
-	 k0wQFLP7Z/d9XDBkdNv4eo3r+2RGzDZETjUk1QwdQcuUn639a9QBCxD56xrZVjrZXd6wn
-	 kVbdRAOhJzEpqnk8hMsbBP9sKMi3fzLYrgvjiz4iAchZ7CJwdwQGit0abSP93HUu76w==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eybpdNj22wDa; Sat, 10 Oct 2026 15:19:05 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 636C981126
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791645545;
+	b=L3mDR8QXQ5DgbxsDkV9HIMzQzIrxDFtjx3P1Kv4aitS9Z7h2CaY7PlcK59Ho5rQm5WR+
+	 mcxdUTIVufm/VwE7I1FDLRihNQ9owyFVYDx+1pTZcwXasx0RPBm2GugGHuMxjNzKsj6d+
+	 FWoJypYJm6GoXBzJXJ/seTVN+gCOcea/CJq+v10+LuSrCvUTyKFrdbuEKuTrIsR4ANn/V
+	 0aN96mitF3X4YDq7GkrDwsv+Jw/2yAz8k1qzNRTvP/EYPmSTMIvJ28JBGOSMk1HMrcexW
+	 4NZerKKoFztxxMVLLmMlpAHyIDEni7S4gvjNEYwZ7uRv3NGJ7ZbD0FwwS9xe3oLvgIw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791645544;
+	c=relaxed/relaxed; t=1791645545;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=Tu6wEUnvB8FIzDYQVxqUPDmuDj2vd3ASwDq5vzdLY+E=;
-	b=huZfsh4Oo3763jr2/ieDM+ckxmcQvWmVcrL8e0XxdB1ey4u4e8Q3DK5cYISiVCaRitit
-	 zyONMDM9uz/toHS3p1UhCi/MsqiTD47A+LCJZjhXMzNav3HtTq9GCeN+i+rdlagIRdkW0
-	 6DFK261dojvIom3TAbmxn79h1OAB+YHj6sr0yM5LIJJq0NBdQHu/IU8yzKugTEuYV0lI9
-	 IBmeH+J3Gnf103O0NYkIHvcbyGOExfxHDYg/Cbjlhxjl7emaPH98p0OE5Um3nGGtaxBDp
-	 GV6yr6fgCRFW9AFky99AzrgzaiScw1cE/Ut9n6p80mYZ8BiMgNRnxrdKe+HdC9P848A==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	bh=mBbpDxjAVkm74G5GSlPrrelbnLfx8AcqJZiv3HG1aT0=;
+	b=JDxE/JiJVkruB/ect5Vvoh0WMxL2PMvHz0ywqQ3l87jyfpxEseqA94m1yGRL9Z4ZcPBd
+	 rJXK7NBXsOOBcfcmkXljN7u/Nvtv/PQ6B/TI1Iao5gjMSvgjXBTmQ2tZ12jwmIOKX1vkk
+	 M6hNrQhP6vCgp5jRG3FsTiRjwS51RUOYKiaTy9DmtrfuWhRerD/QJTOkj9R3zl1S3XmUV
+	 WG8yS+9E7/hnR2w9b6MNDZha1u6r4DJRtw/d5M7jZWYSGiOy4hd3vpV8K7IlY7iqz795U
+	 4l7BWHqRo6P+5jBkJS7Qw+U48YvKXXOPh8yr59qIMnXuWKvG+13XrQn3En4HTTVQx2A==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791645544;
-	bh=Tu6wEUnvB8FIzDYQVxqUPDmuDj2vd3ASwDq5vzdLY+E=;
+	s=default; t=1791645545;
+	bh=mBbpDxjAVkm74G5GSlPrrelbnLfx8AcqJZiv3HG1aT0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=dPwRxrG0nYAHx/osJ6yZb+48eVB9tCVjtkeqFI3UhTW+U9fIWwTAGXplOabzvOOiS
-	 IG7QrvIux2vKJWRMHbKFS2TKgIYcRiv6nTE4Wt/7SvMzP23DyMALnlNN/4AlEN9aMq
-	 Ytfyq8VC484nQ2tjyrDYr8hQYN/jEEYpUtdC29CVbNQ+wYIVpRUechxcBG3t3n9Rrp
-	 bW3MyAmfWJl9Al34f8OzrEF1V5u29yf6EKIlbH4TujmMkD6u2MajY/IMUroEloZ1wE
-	 lQpDdKsx3yIuPO+oOq4b721IRWtLGmy1UgyGDEGC+ieFvluNO2KJfJTDkuCq86sDk+
-	 ZS90DjwA/Kn4w==
+	b=pNYlurs5DtCiqkxLqvA86Mhdi+FM6aY/dIm4dEYXduDiH8PsntR6qfPawicH93hd3
+	 ko0rt6eyAX0c/zepzBXl+36w4Inhtl7qv4o5kM4ZA7N9OiyWSQl5UzVYZUF0yEl8tD
+	 Zvy99kO6iuGyYMvn/BGY3JA9vNBb/DumhU+L/riHgI7cX0Sg11Zngwd+OiJ97nn5sl
+	 eCTPyZNkpDkpsLCyIex0fdB+3rh+AqEtLjfMC2i10uvGF9C+zam/VGCWeB2pJExxcL
+	 g+LBGkoDuzWr+APRClVClcGt3QvaDuQ/ti94lGtBwimzQ2+0aB73RJPUEul2TBGjIa
+	 DGS/TKGJWtgQA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0C94E60672;
-	Sat, 10 Oct 2026 15:19:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id CA1FBDE1
+	by smtp1.osuosl.org (Postfix) with ESMTP id 636C981126;
+	Sat, 10 Oct 2026 15:19:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id CD4FFDE2
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 15:18:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A90A18115F
+ by smtp4.osuosl.org (Postfix) with ESMTP id A661D4093F
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 15:18:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GXN-TMsqf4mX for <buildroot@buildroot.org>;
- Sat, 10 Oct 2026 15:18:53 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org ED59C8112C
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791645533;
- b=Wr5iB8C5LRZV1auBbK0PtdzemMQBc/IZu1UFCKTaOrXObr+KnNnIBU8J8epJzivV195L
- hICAe0BblHdwvhsUaM/FX6binPvDM0d0aAB6u7qeBm5e7nDO7ENi+U5d25oyjcM+D1QVN
- T+DSPpSzSpzVpjEjlO2thniCfoqXLMvQGje2ckTCJbHR+LCyMlupt0+rQ97JWu0HmjkNF
- vnOs8NVViyaU1Hbcm2h+ctOpXbcTT3UQFw78lrbi8LdOjS4ertDDSqD0g0/GFj4ceMstP
- vf4HkxL40T3FyTpHural7wFq6vuchpex+3MLzfkdjURu3/1rklmPo79r+rHXs54cnMQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id N_oeB3VKy9ly for <buildroot@buildroot.org>;
+ Sat, 10 Oct 2026 15:18:52 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org DB74F408AC
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791645532;
+ b=Xqip5ScuC3seLY+ejrAa9OKYMP7PG9Tr6mLI5ZFbUCvqekhQS7aBknE78btn0GJHtXAa
+ UEEIWMNB1Bz/WgLagB7L8Dhej64expHEBAeCKzWViCpZt1oaWLc4mBXVFSCVVvbg2RHb0
+ AyX97clc2h1EWYxoWngT4iKqbq6+7efvxg+j3YY0v1WuL2LNRtKosI/JFbMZIrgV6uwcC
+ XVHSVwBs8c+Tebz5Bc0vZlCT0gp4fm6/hxpeVGF7YENqc3BYMYnjTAKSRzSPxbi93kO9q
+ zdC8+iSw7ecHXUYCKDSN/S9epwXCkooXU3E+JnISZj0cYhBr6vcDtcT18vrulHP9J+g==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791645533;
+ c=relaxed/relaxed; t=1791645532;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=TpsYMS5snt+CG4qMyByVdS2Ff45cEhdxmHkoAMYuBjk=;
- b=n+KFlDSwMCfBmBGiluj34K4Zcxjgr2Eekm41TkIud5WLzOsqqqCkajqzwPTzyYqRPwVl
- 2dm2NVThZYGJ+bJF38MIpADzyOrikj+e2XnoO1JlmtH7jeNwfbZqN9ff2+gb/bHiPrV64
- rYqh4Sff3kliaVPC+r6iObyIDXF4t75GMga5ftU5b4BkYxJpVPC7B3LlFOHsOjZu8scxW
- evU+Iprr/cPGTmnb9K3Sq9Yy0mX0b7iPJS6Wl4jkCwmimDLguPZqGVl7UNqxUCnP3fw8Y
- 5q2k7+wTBOS67iBc0+lYP6V+Os8kGIirSPxR5UR2cZe3Xud7+PLpUp35etSU67V6fVA==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ bh=enmPIHU4RQ8BxryeSrO02NOja53M8yJXemReSP5nCEw=;
+ b=MqKlQnABrfvO5wje9gIijNFx53+pMOoydHRE8p/wSGJk790kj1qBWW+xef6FehRFLB5e
+ O1oJ32dU6DxwpjnlH6nd4bHFLIh2FVGfquibMV4Up2V64bhSjlcZAAd+C8ujhjzH0pxVs
+ VBsvYj0Ot7RZh9HXOtrQf6MTrfTrcLfe2j1dJSTSQwYsfJCNTIfTjXclaLfpiREp1f3/L
+ mBPfkuF340UOz0tYrwn1vwOLZ/zmq3ZWQRbbPmDtFpThIaXHaSeOZKBH3KIlwnC2i3lXP
+ 48zC9FfvFCWYdNt5ekd0e0xhibY/JmOrZFqruknZ5mCt3QoglWA87sNDG4gIiVl7UWQ==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id ED59C8112C
+ by smtp4.osuosl.org (Postfix) with ESMTP id DB74F408AC
  for <buildroot@buildroot.org>; Sat, 10 Oct 2026 15:18:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B917F9222A; Sat, 10 Oct 2026 15:17:34 +0000 (UTC)
+ id 9AADD9222D; Sat, 10 Oct 2026 15:17:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 10 Oct 2026 17:17:30 +0200
+Date: Sat, 10 Oct 2026 17:17:27 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 93df82900d7774672f8d37bc8d967dbf2798c195
-X-Git-Newrev: 7fa4b3c8b4eb62fb0e997cb3cde1d43756719d5c
+X-Git-Oldrev: 2ee591714dec4ea3921e2da33c8022447492f0bc
+X-Git-Newrev: 32d08d194509a454c80fdffa7657c9564fdddec7
 X-Patchwork-Hint: ignore
-Message-Id: <20261010151734.B917F9222A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/m4: add CPE
+Message-Id: <20261010151734.9AADD9222D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gcc/gcc-initial: add CPE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,33 +118,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7fa4b3c8b4eb62fb0e997cb3cde1d43756719d5c
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/32d08d194509a454c80fdffa7657c9564fdddec7
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+gcc-final already had a CPE.
 
 The resulting CPE ID is:
 
-cpe:2.3:a:gnu:m4:1.4.21:-:*:*:*:*:*:*
+cpe:2.3:a:gnu:gcc:15.3.0:-:*:*:*:*:*:*
 
 The vendor and product are valid, see e.g.
-https://nvd.nist.gov/vuln/detail/CVE-2008-1687
+https://nvd.nist.gov/vuln/detail/CVE-2019-15847
 
 Signed-off-by: Sebastien Guillaume <sebastien.guillaume@vendeeconcept.com>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/m4/m4.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/gcc/gcc-initial/gcc-initial.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/m4/m4.mk b/package/m4/m4.mk
-index d498754b35..da739a5f0c 100644
---- a/package/m4/m4.mk
-+++ b/package/m4/m4.mk
-@@ -9,5 +9,6 @@ M4_SOURCE = m4-$(M4_VERSION).tar.xz
- M4_SITE = $(BR2_GNU_MIRROR)/m4
- M4_LICENSE = GPL-3.0+
- M4_LICENSE_FILES = COPYING
-+M4_CPE_ID_VENDOR = gnu
+diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
+index 18d5cef0f8..3c484c901f 100644
+--- a/package/gcc/gcc-initial/gcc-initial.mk
++++ b/package/gcc/gcc-initial/gcc-initial.mk
+@@ -10,6 +10,9 @@ GCC_INITIAL_SOURCE = $(GCC_SOURCE)
+ HOST_GCC_INITIAL_LICENSE = $(HOST_GCC_LICENSE)
+ HOST_GCC_INITIAL_LICENSE_FILES = $(HOST_GCC_LICENSE_FILES)
  
- $(eval $(host-autotools-package))
++GCC_INITIAL_CPE_ID_VENDOR = gnu
++GCC_INITIAL_CPE_ID_PRODUCT = gcc
++
+ # We do not have a 'gcc' package per-se; we only have two incarnations,
+ # gcc-initial and gcc-final. gcc-initial is just an internal step that
+ # users should not care about, while gcc-final is the one they shall see.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
