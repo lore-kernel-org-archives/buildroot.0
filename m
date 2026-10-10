@@ -1,104 +1,115 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D444DCA6017
-	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 20:48:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 159BDCA6017
+	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 20:49:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 89118407FE;
-	Sat, 10 Oct 2026 20:48:54 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YXEWpIZ4C2gW; Sat, 10 Oct 2026 20:48:53 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 82F5D40871
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791665333;
-	b=k2R9ugpX0SXGU1tJVAQ6gQ70UHphE6pFuUpTUGuCuKG2RjKqSnK8ZwIF4dxKeX6f4WRc
-	 D4+9NRxQmYlNZXI/7jdk95GZ5rV1Xv0vNdLXaSmiS2bvHZUObVEsKUZnfunz51Qm/XlkB
-	 JGgGZgEvnXCJPIBPJGc3nQyuZX+JBdmhTmx7fL1tohfirqQsOVmvhJqkPysRp2YSbWJZS
-	 zyjEBnbGc3NJsllhZ5tpeVywWeJD8Wm2uE4U/o/8Mg4kwkMqRU6YO/w+6GxcqcrGlCNE1
-	 XQv3gbj4jXfyKe9iVb1xRusngOU1hirUgE2MB/usftycw0EcfxeVPWnCdfKi7xW7CMQ==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791665333;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=2tBhP8vdN6I/RIWOkJ3NUJXDT5aYn0kO8fQzGsE/pQs=;
-	b=PEaALfVhl+/Y5AADQf3075Pq+4NcAyMf+jGUmq138BtJwv4N7atbU5nTFVrSPWW1u3rG
-	 3FrvOM+Z5EjuhxRReRE9gsOC5rGr4w/koUW/jD1fhEYtSFBagrg6j6ww2x920V7jp4lct
-	 fqrq+wciHkgx3dJPnm90BOvNeBaqfdrzY/7lHv4d3+F+r+74o470kfdEh7y0dHJgoexP0
-	 mXIOmk9v42D6yVELyuJzS5RddGJqMkK6LEZHe6aKC8nbnFdvzgdWNHF7WeUxYRF29EMJg
-	 gLFD6uKr98GloOVSH4cfsIdWI0BXu1GNMLlFZCPQlCmye2m++D/klyt7FkImQ3lZltQ==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
-	arc=fail smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791665333;
-	bh=2tBhP8vdN6I/RIWOkJ3NUJXDT5aYn0kO8fQzGsE/pQs=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=W2fQnf2bsuYmNPd344xbJR/OLeFo8wIiRZflESVVs+cNQp1BBbJ4IYLbEGZ+qwfWg
-	 tzE0yJ+Hbqc+F/rjdcXropTBCDa/iP5AIf9ETR7QdfqEAGUGtyjL6nQPewJKghSYdf
-	 xRI7uTBa1HAfULTghG75aeLw5MpDb7sqBI/GYcgkL3yOX6Mg8QUFJFDwen4TC7NWKJ
-	 IkPk+6fFUTwC2bK2WLpmc1sm8rPoUIGzY/FT/DwBMvh7ryF6z98lyoADDIulDqbvYi
-	 2IOVOmREOxpg49GhBxutRuNXbCNDFtKVTWLUg6GpPmHnmtIA0QwkxYjnpnx95fvqkS
-	 HVEaavfOjwxCg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 82F5D40871;
-	Sat, 10 Oct 2026 20:48:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id A9739235
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 20:48:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 900DA810DC
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 20:48:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C7D7C810E3;
+	Sat, 10 Oct 2026 20:48:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qGlvDUjx9kAd for <buildroot@buildroot.org>;
- Sat, 10 Oct 2026 20:48:50 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 82ACE810D0
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791665330;
- b=n9gJLgTFWtI1PY9vzhdQrAtskhaSdIg1jMebjZxwCaZtV1ypdKS5xG9D1C7FPCnQadQZ
- 741qhk8tXbpt3VL7aFSwyR4mWyLvMs2ErcJty4biOk9TDWxDCWOcYzIbU8cmwoZVTVkNp
- xvmiNPRIw1rfw1ONH/JEWxksw3/1IfPhfYAIUyKg/xUVRuxGFnJ8xTamXwsYQNpP9VKaW
- okHVoCLsVJR+Z3usxZ4sR0l8KmjGocLAHlmy9Tj8oSm88oh6LYX1BV/525UoTTQdxD45r
- KEM0EEvqnKt0Q6EKk2QGPh2F5pOcNwmqOzXEFTIVszQCyc55S76zwkc3smvNUAEAm5A==
+ id TbyudLpT87tb; Sat, 10 Oct 2026 20:48:59 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org DD11B810E0
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791665339;
+	b=Sd0+QJzsGNlc/ohovXSgML/uJFNUMH1sUE4sp1mMVM5ChP2R3GQ1h1ZM96Wh6BmwF+wS
+	 7j9juMyZg+DGddqpP7F1ljfGr3mqLpb7hatMDsluxsHVyLTODtkdAzf0bZE+WQjlAjHc2
+	 xjVNaYjzUoW8R3Yil5KFnT5va023fTf4CKR0HfMCpewQiZSQXYjuZqeDg39ATXJZauoRt
+	 CIzA+WDIFcrbeyBQctVutISghP5rS9/RCsGpi8WHopjX0BHxyEWyHPjt3g9DlQWzJyS0J
+	 8ncFig8dtKZedSuZm08hb9CCeBfE25k68z//jNLVYMutJ+FXyhARhF/BWmoAYgh4s0w==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1791665339;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:To:Cc:References:
+	 Content-Language:In-Reply-To:X-Last-TLS-Session-Version:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 Content-Transfer-Encoding:Content-Type:Errors-To:Sender;
+	bh=YE3pU/OmYdsECD1FVXqf91bMz9VFcgH1IxE2fq9pPRU=;
+	b=nKsVAQ5v307tC/ro9eVIfQD+A6l7yaUBM7KKPskUOUOjVczM5Tnv4+WOUQxTIIPO3I1/
+	 +kGNe0/xfoD69VcNA5vfBahU8Y3QLPt9/uXyrnX+pZfMoHK3XoOoeeWJ8xrN+jZy588w5
+	 bWwlH7c9LSwHn6sJQCeqGapDN2TgQMewjwHk1N3Zm7CfLN9hVnklG1GJdbNt/iSmiO8/T
+	 vOpOsYU4j6hxUmlv7BjjvObwKzM/hijyUfQh46GEbMagriEFjqUo1Il8dTwNJ9GR930T3
+	 Cj0iFx2WRLdcMa8UvmhrZErobhuUvnI8uenKECrmaXlvHJeRRD1XehDb6vJ1SZ1/ttw==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	arc=fail smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1791665339;
+	bh=YE3pU/OmYdsECD1FVXqf91bMz9VFcgH1IxE2fq9pPRU=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=R54B1cs/epzxstkfWCyrHlvDJYg2OkZM8SFSJfFwFMiAwGv7f0O8vy4dvhcLxHSvU
+	 L4gL7v1k4sCtUFYB3YTR1wmkMyM0rTFAYGSKDMHLigyf5TcaYiQu33vMH/EOMvUHwA
+	 cT6d0vRc8d74FqomEwMmYdchj3PtYurdHFlu4anG+MdrgW1lyplenYeekMnkZ0WmKB
+	 pfbZV0qe7e7GhhCT+aCyEsOZX7ZhcOt3EQrQzNyavvGbvJnRM+Of3fc5ilOo24viup
+	 AETQ8yHORh8pbKyssI2eKL9mflj7JOYwxs0OrX2L0kjAfonCP7Gbu5p3YRCg6Qaua2
+	 EHgtM+qgAX+0g==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD11B810E0;
+	Sat, 10 Oct 2026 20:48:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8FC49235
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 20:48:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7373F606DA
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 20:48:57 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zJWLE12sNFCR for <buildroot@buildroot.org>;
+ Sat, 10 Oct 2026 20:48:57 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 8ABED60677
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791665336;
+ b=DH8HPMgWyeGY8IKFpG/B4VZzO+KcQukafLVMe1eEyrSv/KE+Ms4NV1hT8Rm0txhusQZc
+ WzWY738hFWnxTMOkjdpqfm1TzoyroAoGfhCM9TdT1kHR0WQ8ODT4s6raQ3TzSVU12A1S7
+ LqguTF46BC8yi94xD4A0Icrghin4kWq1JH8IFaMoNm/ptc9uRYxl59504GvTuXCfs496o
+ 3MRwapNp+zB9OXA2pzX0/QsAg+xZNs3Hz9neSBi6nD24sNRec8ckuCGswb/tTy9bAX3lV
+ Wn7sIze08WmU5xsqxa266lvJYmeRF4TKMnfjR60/fyubuVeZuCtHFawX/6VVsY09Q9g==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791665330;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=y+Xr8J3ii1jnCwdliDCXPZ9ow1xIYvMkJy2MloJrp4A=;
- b=efeS321HUnpf96XUUiRgdz8iihbzCdCW1KDekNgvp/apYH9i+gfsm92GzOqcr8CDi8qo
- 08+QaXP9Q2Rd8F7mrOq25xxSoJ3hJKnFiFeQxSgSjGDbf3zYZwPgBEphY5eXsiAbdtLN8
- fbdnoByqeypBpsJfVgFHvr4tpPHWrlL/Hddk/yH7lGZ1YYvHnLPjXOyp2tvW9Yz+mKCXN
- SGI0XwCc+t3Xjf1ax+L4WEHpuCo00eJ+uukgoYGxaCxDtAFToohvwSHOEJ35PhDHjQxO7
- +jz4IHgxes43xybCAneoDkmaPp3ccEha7pK9D2c+PyHEvbuYQBC4IBcNdTdJEUt/MXA==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 82ACE810D0
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 20:48:50 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 15E4093561; Sat, 10 Oct 2026 20:47:32 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 10 Oct 2026 22:47:38 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 725cea53c7aca562de0869ecf1c89467b3e4bc2f
-X-Git-Newrev: 0c198828a636c07273cc46e8a82413ef464507c3
-X-Patchwork-Hint: ignore
-Message-Id: <20261010204732.15E4093561@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-serialx: new package
+ c=relaxed/relaxed; t=1791665336;
+ h=Received-SPF:Received:DKIM-Signature:Message-ID:Date:MIME-Version:
+ User-Agent:Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+ Content-Type:Content-Transfer-Encoding:X-Last-TLS-Session-Version;
+ bh=THCS6LBf+GkrGypur8IFxrpdLmGI/XjL9Qh3++2M4Ck=;
+ b=PETedy+wBR+eW/T6f0VcOM7qjZG572K1CkLpbvkKU5m+VM5nYbrzxYQE89+S+Pb/3Hvd
+ JL1MGGqGFfqmDeupE+WJIBnX8kUOTbS6YrukluJFxVHoAsSX3WKoUBMu245JH3Fix/IGf
+ d98gRrvEUr8wdTed0V5f5ng94n7Aryq6oa2PO026fs0Xdpn3I51YFU27breY6UynMgpac
+ xNoPBwwwsytwioGzfSU1PN0p95l4r648bKwaicTAc94nD1hZ5vg0dqfR0WO6MomAkyOXI
+ I1jUzHOG8FuOUxQI5GBHknxTgYNkH65IvIRQeKLf7lmhj51GlNPDKPxupZRunZH61/g==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ dmarc=pass header.from=rnout.be;
+ dkim=pass header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=kXShyVKC; 
+ arc=none smtp.remote-ip=79.99.201.12
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
+ helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+Received: from mail.nubo.coop (mail.nubo.coop [79.99.201.12])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8ABED60677
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 20:48:55 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 0779FB979FC1; Sat, 10 Oct 2026 22:48:52 +0200 (CEST)
+Message-ID: <0650bb08-e03a-47e4-a05b-bee0ce525e25@rnout.be>
+Date: Sat, 10 Oct 2026 22:48:47 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
+Cc: Quentin Schulz <quentin.schulz@cherry.de>
+References: <20260624101340.80670-1-thomas.perale@mind.be>
+ <20260624101340.80670-9-thomas.perale@mind.be>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <20260624101340.80670-9-thomas.perale@mind.be>
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH 9/9]
+ testing/tests/utils/test_generate_cyclonedx.py: test vuln with different
+ analysis
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,85 +121,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0c198828a636c07273cc46e8a82413ef464507c3
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/Config.in                          |  1 +
- package/python-serialx/Config.in           |  8 ++++++++
- package/python-serialx/python-serialx.hash |  5 +++++
- package/python-serialx/python-serialx.mk   | 16 ++++++++++++++++
- 4 files changed, 30 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index fb84adf4ff..a768b6b7b3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1422,6 +1422,7 @@ menu "External python modules"
- 	source "package/python-sentry-sdk/Config.in"
- 	source "package/python-serial/Config.in"
- 	source "package/python-serial-asyncio/Config.in"
-+	source "package/python-serialx/Config.in"
- 	source "package/python-servestatic/Config.in"
- 	source "package/python-service-identity/Config.in"
- 	source "package/python-setproctitle/Config.in"
-diff --git a/package/python-serialx/Config.in b/package/python-serialx/Config.in
-new file mode 100644
-index 0000000000..bfe2f72cea
---- /dev/null
-+++ b/package/python-serialx/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_PYTHON_SERIALX
-+	bool "python-serialx"
-+	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
-+	help
-+	  Serial library with native synchronous and asynchronous
-+	  support for Linux and other platforms.
-+
-+	  https://github.com/puddly/serialx
-diff --git a/package/python-serialx/python-serialx.hash b/package/python-serialx/python-serialx.hash
-new file mode 100644
-index 0000000000..36ef9681f7
---- /dev/null
-+++ b/package/python-serialx/python-serialx.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/serialx/json
-+md5  e9646009ff5c2b7149cb7ef63df94c65  serialx-1.11.0.tar.gz
-+sha256  38a4b60212d994449c9f3314c523ec629f1ccf629f4767b3867c7a5381366ab9  serialx-1.11.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/python-serialx/python-serialx.mk b/package/python-serialx/python-serialx.mk
-new file mode 100644
-index 0000000000..b0bfd48a61
---- /dev/null
-+++ b/package/python-serialx/python-serialx.mk
-@@ -0,0 +1,16 @@
-+################################################################################
-+#
-+# python-serialx
-+#
-+################################################################################
-+
-+PYTHON_SERIALX_VERSION = 1.11.0
-+PYTHON_SERIALX_SOURCE = serialx-$(PYTHON_SERIALX_VERSION).tar.gz
-+PYTHON_SERIALX_SITE = https://files.pythonhosted.org/packages/9b/c5/8c3f3e7985ca108fab641cc453ae015e1f6f15344064b99f115281c8bbdc
-+PYTHON_SERIALX_SETUP_TYPE = setuptools
-+PYTHON_SERIALX_LICENSE = Apache-2.0
-+PYTHON_SERIALX_LICENSE_FILES = LICENSE
-+PYTHON_SERIALX_DEPENDENCIES = host-python-setuptools-scm
-+PYTHON_SERIALX_BUILD_OPTS = --skip-dependency-check
-+
-+$(eval $(python-package))
+On 24/06/2026 12:13, Thomas Perale via buildroot wrote:
+> Add test for CycloneDX vulnerability generation.
+> 
+> If multiple packages ignore the same vulnerability but provide different
+> analyses, the generator must produce multiple vulnerability entries with
+> the same vulnerability ID but different analysis information.
+> 
+> This situation can occur when generating a CycloneDX SBOM from the
+> output of 'make show-info-all'. The resulting SBOM includes packages
+> that exist in multiple versions within Buildroot (gnupg for instance).
+> 
+> In such a case, one package version may ignore a vulnerability because
+> it is not affected, while another package version may address it through
+> a patch.
+> 
+> Therefore, multiple vulnerability entries must be generated, each with
+> its own analysis and reference information.
+> 
+> This add test case for such scenario.
+> 
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> ---
+>   .../tests/utils/test_generate_cyclonedx.py    | 69 ++++++++++++++++++-
+>   1 file changed, 66 insertions(+), 3 deletions(-)
+> 
+> diff --git a/support/testing/tests/utils/test_generate_cyclonedx.py b/support/testing/tests/utils/test_generate_cyclonedx.py
+> index b91add2349..2f1109b178 100644
+> --- a/support/testing/tests/utils/test_generate_cyclonedx.py
+> +++ b/support/testing/tests/utils/test_generate_cyclonedx.py
+> @@ -6,6 +6,7 @@ import subprocess
+>   import tempfile
+>   import unittest
+>   from pathlib import Path
+> +from collections import defaultdict
+
+  Darn, I missed this one.
+
+>   
+>   import infra
+>   
+
+[snip]> +
+> +        result = self._run_script(show_info=info)
+> +        self.assertEqual(len(result["vulnerabilities"]), 2)
+> +
+> +        vulnerabilities = self._map_vulnerabilities(result)
+> +
+> +        self.assertEqual(len(vulnerabilities["CVE-2025-0001"]), 2)
+> +
+> +        ignored = next(v for v in vulnerabilities["CVE-2025-0001"] if v["analysis"]["state"] == "in_triage")
+
+  The next() doesn't return None if the set is empty, it raises StopIteration. 
+That does make the test fail, but it makes the assertion below  useless.
+next() can take a second argument for the default, so I added that.
+  > +        self.assertTrue(ignored is not None)
+
+  This should be assertIsNotNone().
+
+
+  Regards,
+  Arnout
+
+> +        self.assertEqual(len(ignored["affects"]), 1)
+> +        self.assertEqual(ignored["affects"][0]["ref"], "gnupg")
+> +
+> +        resolved = next(v for v in vulnerabilities["CVE-2025-0001"] if v["analysis"]["state"] == "resolved_with_pedigree")
+> +        self.assertTrue(resolved is not None)
+> +        self.assertEqual(len(resolved["affects"]), 1)
+> +        self.assertEqual(resolved["affects"][0]["ref"], "gnupg2")
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
