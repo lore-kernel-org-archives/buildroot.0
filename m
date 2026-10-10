@@ -4,102 +4,116 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D84CACA9EBE
-	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 08:06:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E321CA6017
+	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 08:09:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 959B76060C;
-	Sat, 10 Oct 2026 08:06:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C9E7B60650;
+	Sat, 10 Oct 2026 08:09:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MqyYfjwjQHlu; Sat, 10 Oct 2026 08:06:30 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 7EB1560616
+ id z1q-JYeM8A1a; Sat, 10 Oct 2026 08:09:17 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 1D1D46061E
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791619590;
-	b=doTwkFEo52bOv/+JXSR4BL+U/uni3vbNkbdYWlfUa/BD0eOuue8qV8IHGnRlbNy8nS3j
-	 cjAulRsc7bSYEAFf/6k0VroVNiJ0Hx7zh2PGxT/DluQUUaUEN1iQueBhPfS6iC/BM5F62
-	 TiV8yNAreZrdaST7+tlKOuA5MckR1iMwJEMEQChKkN0EPGAjwRSPK1oUZ80kyrb6MjKsg
-	 I9Y6TuFWtEH3vR8Em1PVcQ3YiK2Uwv4Q4t3NPceJYFWtAyOJDt5mU23Jf1GNo3ABzsQJr
-	 F+KIGLFBYMOFKk/+9jvv+3DBtH7ErgzDxLNcvCPjpKI6p1jmvhGEtOycI0JW+YEniCg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791619757;
+	b=lq+H6txq4OYszCsL/4+A7mXkE9KjyP9cXdzul66wvMpCkpBIMNv69PXYNTg9Zf94nBKt
+	 2BasFmxQPHRLtTQSrs8rhsjFMg24dQna9z1m6VY6y6K+UqFmZbn0NCYAOMSnNi43qiz7V
+	 /1w1fBHiVEom0IVbTGOe9xCGsq45HZbQeP5e27e+nlnJoZh0WcctoeQMvSfuGYT31lHxn
+	 kltOl8XXSFSV0cHYd5rxLzoXwkNXT5DUPZRdr0Q2iV3TwTthdEpb7Er73VSqvgzjeCtsX
+	 PRHtwtHqVVVKES8gIM26Miz1HFLnYtsywLvLoAiqzNhu0lZ7nFgcI00m8auLg0ZGnwg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791619590;
+	c=relaxed/relaxed; t=1791619757;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=Ah8B6D/6WTzfLBIM4m1ksaogLdStnU8PvGE26edC3nI=;
-	b=cR5mfC3fLx+mYMCGiRSIvtDJTjdPs2Tl2ngsUxb3/QCGXcwJYMKt4XgZ7GrblNU1PSp2
-	 foWd9tY6/924buf25Q7r4Oq1Jt6JLIzpJmM/kNs3hWZ8gdvZFQs2OQWQq9PWUHfNx42Z2
-	 x1l1zEywzkIf1t/bkKtkQSxj4hK/e38lnIiyOjEwsKS4MiEsny5gfEtPXSc8Ml6umfkPI
-	 nFNHMkVf8UASzwgn1G/ZL605DJX9W+4Bl1LBUdQgwukVqcWaOFN/lsTwrzoCguYyE5WRm
-	 HGpGhJcoO1LSLEcBamgcmyofyH9SRQEb/0J9/wKh5KD9sHMMb/SmqqHd8Pdja34Qq/A==
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
+	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
+	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
+	 Errors-To:Sender;
+	bh=Djv+xxBynJB94zJTcnVuawtGumWEYR5oJ3p28wadEzQ=;
+	b=av2ehmigs6v7Yi3zzBOKxhk6ZvLCZ5Va+PPsmPfO5LG9KiG8e7eEzuKR/MIMeKvoV3UA
+	 Ky9fJkpXm72qrYuu/1eCXoefoWjrhEKQMLLdTSJq4UAKG3DiVstSGQYOeVV7cISzfh4Xk
+	 8qVh9bbYnYcEbIRim+lvcWGJQWIJ8++c4tQifCtg6t+1pVNrbAjPSnhhdde5kE/e/QKZ8
+	 BmN6oFzX6QjCy9osOtQ0anlyU3URvRcymeLO6tBXr2nhOUxFTgVWJFBfkLZqTik6jEA/Z
+	 y/jy80axRbg1sBKLXjxl1GnSjKfk6uboPY5ya20PmNvyv6NsN1iu91sQa14B0/K/Olw==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791619590;
-	bh=Ah8B6D/6WTzfLBIM4m1ksaogLdStnU8PvGE26edC3nI=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=dZGq7beCRC51O2A2qosx9tNJYxpg6DVB0pEnurFp7Mp3p8tS+yK1+UAipcbTigdAh
-	 2+Qbv9pSRGDJiuqP3PyKVtrlG3DwQbM6kuPl1Xc2CPRFxEbsA82PQ1HJGEHhhK0whc
-	 SYV9k0YGB3tYJetwqqxneHRLo0CrF/TK3ZpRLks5ZhZTiHTaeKD74E5FOHhU86Exr2
-	 5ezNjBzrq9zTQkhbLVT2ft5siWsuOU2Oa4NdwCwPdA0QI9QmEpSmvKFMojnT0GmVs5
-	 MGj7+62e/zfJo8Z07et8oELO9JLszBpDLB6CQgfmel4Et+lREwjy5wpSWvmDg3Cz6/
-	 XQb6NrdEVehsA==
+	s=default; t=1791619757;
+	bh=Djv+xxBynJB94zJTcnVuawtGumWEYR5oJ3p28wadEzQ=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=DSkcXn8bzqe9rrnYRZWD+buikjl4kJSOHMJM6X1TPVgQL9SShOFZY/r8wUPJCnKya
+	 VuyakYUqOyDWCjUGSiMAvX/3VIwIRaBq25iWKQiKtW8tqp6ByvhkGNubc6UwVolhLt
+	 64uOlPFkGqcQAmfKqAgKix6IxHgYuWZx1flae88XcxCDcRO5SSliwYy89GdC9jHuNe
+	 cH/OscYeXKIAiEVdtZdpXjlt2gGnm5mQMGPMhCME4vxPhp50LZiQb+lO22mxRaTksq
+	 c5/Y7mVaI3NeGj0zGVrzIzTVMLIBkBGv7NN5NDSbCaE65CUr8zUm7u6Jo8u0DLDIXo
+	 i2sBRIiyU5pdw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7EB1560616;
-	Sat, 10 Oct 2026 08:06:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D1D46061E;
+	Sat, 10 Oct 2026 08:09:17 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0F9EB111
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 08:06:29 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B370A9D1
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 08:09:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E8FCE60616
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 08:06:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 991F76061E
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 08:09:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u7k5iUQHlMSg for <buildroot@buildroot.org>;
- Sat, 10 Oct 2026 08:06:28 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 125946060C
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791619588;
- b=owpIN3NYaRyiM7AYpSkfig+ONZhQY4z5pFDKegHp8z5QFl+HSWzGe3qpH2dSR5+c+qik
- r8b3+UtjRkmeVKPYz9LLz309/5vlcos8Cxutw0VR36ahnriY/2+pLoWp3Ra10/xuFMpOE
- O4ASBrU7MYNbHlQcN5rOdHDwYQkxCj2Ep5iSi3LagauqRU0yVVao0Sj8aZ20sxplXy7sY
- gx5DgS6rDEDuk1Z3Qq6HsALc33YFEKd6Kr8OuHicMvkqi2nNjQpPiSqF5T9uKQ/nuWOp6
- ms2BwRZy++NbpIf19md32O6yY60YPxNi1tmQs0qbVbuH9pkyLmP/bqP4qJmcLnM+F4Q==
+ id t_r2ehTf2z_d for <buildroot@buildroot.org>;
+ Sat, 10 Oct 2026 08:09:14 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 8EDF36061A
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791619754;
+ b=KNsEpXG8OvWeKHzMthFFc6w/XoLOCfn2Uah/hxxBcKEINF6LajSsSb5HJpg3NkBYaYey
+ /Tgj8gqDxqyc6uRRkluP09ZZS/KYVm4o9NqWg0TEd1z02US0JPKHWmulzSLxietBLI65V
+ DscDowC4jCIL45wLPds1qpN6dOKhYg6YcosgpnP5aIYPpZ8Mdlv+casXkAmrSeDkbIgS1
+ f3hyQcg69TQufIOP9P+XIRI/3VisNTn3F87j6IhWUmlCdBj6FsstgTSZBj9SeLgHJ2VCR
+ qpZVhi/NGE501tAOzCIapEtxSaGHAM/5yWPmag0dylHoQSXKeVjKL4UcFrGYbPFtowA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791619588;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=zirY5jdTnh1+bp9eVOy1c/1vX3Tr7HL3c2V/qPyivuw=;
- b=WldxVxerk/2c8x5RhQeKsb8ObzCQ4n3dGMfBmMUygWD0XyHmI58bcH+T7tn2eqT/KzW6
- ye6L4EuTb0MFaSOui0/Mid37Gy33BIMer7YMqTPH5Q+bLAhKkNWjIWbsPyyyy9ECoNi2X
- zIoR3BvYNc6k7wxuo11FdNsozks/idcvL/RRPYZ9WiZ9fSbpqjXJfKObnKB3sqoHr7vRT
- lqQIDh998JlFIxnGQJ4MihJG0ZNJND4zdn4iqYJZU+QmyCot47se15kWOtFDl2YQMEBk4
- OMGSO0FsqXjaa+CIl5jf2psjUfVNAdVt9bTaSMgenEIq8Jfm43V9lsJN5V6cJPq8iyg==
+ c=relaxed/relaxed; t=1791619754;
+ h=Received-SPF:Received:DKIM-Signature:Received:MIME-Version:Date:From:
+ To:Cc:Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
+ Content-Type:Content-Transfer-Encoding;
+ bh=zmojgH5SHQcYxLF2isAvuoPsqJeDSfhMwQaLiAFOPpc=;
+ b=sgtixyC9nI6kI+Q1DQqfN5MNeeDMBY6YnHlhvkjxDorexb2ZUxKKeiiGtKWJ1zwc4s3p
+ dWyCoK1i0igZxOuafjnLxJ7n974usVRlRGNgLF1ohEA7ss02N7Dd0GRaE3dV81sgbsRGu
+ XMwkakXEPVF4e9qixMtmVCFY5M5ML8dgpj0ufwnC00HOjhEwogmnGvTbzk7CgIZ2pr7iD
+ fUJZvRghffg+b1z/p+psJD81jZqlzGh/XzOAlyC+C18IM0QsSwzonbkAOy4Ovk8C1CLM9
+ x95RT9/A8cat9dK2S9ygtgco34fd6o0PTsALggKPvfLJPzX7r5VjAj5vWZi2SuPr/lQ==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 125946060C
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 08:06:28 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EEF7D8EE24; Sat, 10 Oct 2026 08:05:09 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 10 Oct 2026 10:06:08 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 197dedbd0af29e3a407d082cd5b9cbc7fb79cacd
-X-Git-Newrev: 8df2ad69de03c61378a85dc08daa1e9a2fa46920
-X-Patchwork-Hint: ignore
-Message-Id: <20261010080509.EEF7D8EE24@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/clamav: fix build with OpenSSL
- 4.0.0
+ dmarc=pass header.from=free.fr;
+ dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=GDjbjNhV; 
+ arc=none smtp.remote-ip="2a01:e0c:1:1599::14"
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8EDF36061A
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 08:09:13 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 382615FFBA;
+ Sat, 10 Oct 2026 10:09:10 +0200 (CEST)
+Received: from 2001-1aeb-401-dd00-38bd-f619-d5ce-575f.ip6.tmcz.cz
+ (2001:1aeb:401:dd00:38bd:f619:d5ce:575f)
+ via 2001-1aeb-401-dd00-38bd-f619-d5ce-575f.ip6.tmcz.cz
+ (2001:1aeb:401:dd00:38bd:f619:d5ce:575f) by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sat, 10 Oct 2026 10:09:10 +0200
+MIME-Version: 1.0
+Date: Sat, 10 Oct 2026 10:09:10 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20261003233333.754602-1-james.hilliard1@gmail.com>
+References: <20261003233333.754602-1-james.hilliard1@gmail.com>
+User-Agent: Webmail Free/1.6.19
+Message-ID: <91334089142351f225f150290f3c6a40@free.fr>
+X-Sender: ju.o@free.fr
+Subject: Re: [Buildroot] [PATCH 1/2] package/python-engineio: bump to
+ version 4.14.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,165 +125,17 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8df2ad69de03c61378a85dc08daa1e9a2fa46920
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 04/10/2026 01:33, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...lamav-crypto-Remove-cl_ASN1_GetTimeT-1731.patch | 136 +++++++++++++++++++++
- 1 file changed, 136 insertions(+)
-
-diff --git a/package/clamav/0001-libclamav-crypto-Remove-cl_ASN1_GetTimeT-1731.patch b/package/clamav/0001-libclamav-crypto-Remove-cl_ASN1_GetTimeT-1731.patch
-new file mode 100644
-index 0000000000..60e29a1fdb
---- /dev/null
-+++ b/package/clamav/0001-libclamav-crypto-Remove-cl_ASN1_GetTimeT-1731.patch
-@@ -0,0 +1,136 @@
-+From 0097a6f99d9f6b78381e12b677a38fb62242c41a Mon Sep 17 00:00:00 2001
-+From: sebastianas <sebastianas@users.noreply.github.com>
-+Date: Sat, 1 Aug 2026 00:13:13 +0200
-+Subject: [PATCH] libclamav/crypto: Remove cl_ASN1_GetTimeT() (#1731)
-+
-+The last user has been removed in commit fa15aa98c7d5e ("bb11594 - allow
-+for compilation against openssl 1.1.0"). This function is only exported
-+under CLAMAV_PRIVATE to be used within clamav, not by external users.
-+
-+Removing the function will not cause an ABI break since it was not part
-+of the officially exported ABI. As a side effect it will compile against
-+OpenSSL 4.0 where the ASN1_TIME type has been made opaque.
-+
-+Remove cl_ASN1_GetTimeT().
-+
-+Signed-off-by: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
-+
-+Upstream: https://github.com/Cisco-Talos/clamav/commit/0097a6f99d9f6b78381e12b677a38fb62242c41a
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ libclamav/clamav.h      |  8 -----
-+ libclamav/crypto.c      | 65 -----------------------------------------
-+ libclamav/libclamav.map |  1 -
-+ 3 files changed, 74 deletions(-)
-+
-+diff --git a/libclamav/clamav.h b/libclamav/clamav.h
-+index 8a3767f78..fa75677ad 100644
-+--- a/libclamav/clamav.h
-++++ b/libclamav/clamav.h
-+@@ -2413,14 +2413,6 @@ extern int cl_validate_certificate_chain(char **authorities, char *crlpath, char
-+  */
-+ extern X509 *cl_load_cert(const char *certpath);
-+ 
-+-/**
-+- * @brief Parse an ASN1_TIME object.
-+- *
-+- * @param timeobj   The ASN1_TIME object.
-+- * @return          A pointer to a (struct tm). Adjusted for time zone and daylight savings time.
-+- */
-+-extern struct tm *cl_ASN1_GetTimeT(ASN1_TIME *timeobj);
-+-
-+ /**
-+  * @brief Load a CRL file into an X509_CRL object.
-+  *
-+diff --git a/libclamav/crypto.c b/libclamav/crypto.c
-+index 8b398e402..968264811 100644
-+--- a/libclamav/crypto.c
-++++ b/libclamav/crypto.c
-+@@ -1746,71 +1746,6 @@ X509 *cl_load_cert(const char *certpath)
-+     return cert;
-+ }
-+ 
-+-struct tm *cl_ASN1_GetTimeT(ASN1_TIME *timeobj)
-+-{
-+-    struct tm *t;
-+-    char *str;
-+-    const char *fmt = NULL;
-+-    time_t localt;
-+-#ifdef _WIN32
-+-    struct tm localtm, *ltm;
-+-#else
-+-    struct tm localtm;
-+-#endif
-+-
-+-    if (!(timeobj) || !(timeobj->data))
-+-        return NULL;
-+-
-+-    str = (char *)(timeobj->data);
-+-    if (strlen(str) < 12)
-+-        return NULL;
-+-
-+-    t = (struct tm *)calloc(1, sizeof(struct tm));
-+-    if (!(t))
-+-        return NULL;
-+-
-+-    if (timeobj->type == V_ASN1_UTCTIME) {
-+-        /* two digit year */
-+-        fmt = "%y%m%d%H%M%S";
-+-        if (str[3] == '0') {
-+-            str[2] = '0';
-+-            str[3] = '9';
-+-        } else {
-+-            str[3]--;
-+-        }
-+-    } else if (timeobj->type == V_ASN1_GENERALIZEDTIME) {
-+-        /* four digit year */
-+-        fmt = "%Y%m%d%H%M%S";
-+-        if (str[5] == '0') {
-+-            str[4] = '0';
-+-            str[5] = '9';
-+-        } else {
-+-            str[5]--;
-+-        }
-+-    }
-+-
-+-    if (!(fmt)) {
-+-        free(t);
-+-        return NULL;
-+-    }
-+-
-+-    if (!strptime(str, fmt, t)) {
-+-        free(t);
-+-        return NULL;
-+-    }
-+-
-+-    /* Convert to local time */
-+-    localt = time(NULL);
-+-#ifdef _WIN32
-+-    ltm = localtime(&localt);
-+-    memcpy((void *)(&localtm), (void *)ltm, sizeof(struct tm));
-+-#else
-+-    localtime_r(&localt, &localtm);
-+-#endif
-+-    t->tm_isdst = localtm.tm_isdst;
-+-    return t;
-+-}
-+-
-+ X509_CRL *cl_load_crl(const char *file)
-+ {
-+     X509_CRL *x = NULL;
-+diff --git a/libclamav/libclamav.map b/libclamav/libclamav.map
-+index 809341f42..f3efe1a33 100644
-+--- a/libclamav/libclamav.map
-++++ b/libclamav/libclamav.map
-+@@ -271,7 +271,6 @@ CLAMAV_PRIVATE {
-+     cl_verify_signature_hash_x509;
-+     cl_verify_signature_hash_x509_keyfile;
-+     cl_load_cert;
-+-    cl_ASN1_GetTimeT;
-+     cl_load_crl;
-+     cl_sign_data_keyfile;
-+     cl_sign_data;
-+-- 
-+2.47.3
-+
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
