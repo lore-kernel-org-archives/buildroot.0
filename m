@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9602DCA9EBE
-	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 06:39:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1EA2CA6017
+	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 06:54:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C0DB360675;
-	Sat, 10 Oct 2026 06:39:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 62086408F4;
+	Sat, 10 Oct 2026 06:54:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9qnRAlpvZvtH; Sat, 10 Oct 2026 06:39:37 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 0AAA560662
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791614377;
-	b=FFsrscJMNtF0aDMAP8UfisFE5q6nLx1G4vNmCFCUxaF75Hmoa4hg6eNvjQL6LiEn7Ctn
-	 KYHheqkDrmSGJ4Zn2VZrXuI56zrvVg5ooyTnRiUe2go/ag0X9iILekhaTrbbu3YCvocjA
-	 24WCYBRX6PNx9axwHb35Q0V9goRszvCxsNUZ5yHq0IdRgaDTx3pwcrmzHrUBZnXRQcUUP
-	 uady+C8CfUyvZ/J+tVoi/krXeZqeJi5e3IwQKX1Hoi+r3iqQ4skGcxoiuEC/R4WC4CGWw
-	 8SRGhar2KhrMGjkq9KMLgIu1PK2LBBWKlxyhcAHOSrMgxTc3cg5KeJWTcBXEkrfmGww==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MzIaVKsjSD1Z; Sat, 10 Oct 2026 06:54:02 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 7FA0740931
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791615242;
+	b=RxJcr7y4xdg2QY+vo2OiJYzQomp8vAhhko5ipo4Ejy6M1u8WrydtxHgQrTj203OCn0MF
+	 v/1V6swdo/g2bTBGVEqRSOYls0cZoX+oiFYCGIBWnXbuXOAI0Y0gk7glODBK7z0Jp3Zeq
+	 89f+ArQ9nNXogousUdB5ps8IwGN2lD7J0atfald1Tfu8VjOeECO1MXXKZdinzJ4VEgYWr
+	 gh7ZRK5ZgHRqFGmK0pHN/Ld97sLeSIdFC2nLcDomfEcEcu+WwMTFik3hAgfNsPNbyPChh
+	 Uj+BMy3E9brljoiAXVWFbgn9Cjku3FFCe+FtZy5SBzlqck5Zm9VjEp4C8TALiyS8xpg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791614377;
+	c=relaxed/relaxed; t=1791615242;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=OYqvA+8NjTBMmFWnLWHLs6/xquQQkql171bcrUkf7XM=;
-	b=pDi2xH/DTY+EDdkWrX0xQjRLjMDBncvKn+jK75onOHIu4pfT5r1ZI9cki7PGi8zIT4xj
-	 vM1+0jqRv3SY5cwzJYp7chCLrHNkTLfJl/zkSj21jWU1gRPV0Bu/A8XqBmIDlavLgEs4O
-	 J9G1JAdvQ3zwfNsGrsrlxVG2LohWSsl2OdugyOcGGrVWcdAgoq0dCFv2Ol70JK98uLIUj
-	 I/JWZFyFiyQmIXVFZAdUNobnFYM9DkCpNyEiUX3Ne3MBSi91KZ/iqDbivGswA/ePT5/Ge
-	 jRhWbVbVVBY5HEYlpdyLyFxE+pBeNFtUFfU8TGBBdy7S0RJpjji8GBsM4bL16bXSTQw==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	bh=PspSIjotmDHjkJmS1unADfl0mIJFkMwndMDJzvAmQJc=;
+	b=dRf06pqUs01od9vLp6AZaEfRBSsjlS7xQjVsRDrAcHNiFdipymP5p96ApkQX82tnw+gh
+	 XNVihJ+SPUzlofsaOnhfnp1zgMQRcCG061inxLLNftev8bZOBjKlIG3+pWeHmkQUdLi5i
+	 Bb3WgLU3KkeYy03pj2b3VcVGkbppRjG/Zed61/ZBUSobemd2omRmLGriy6BR5LwvfSOdT
+	 pb7/zJbo33SGvNJWXJ3UVXDicBHa1EwGOGQnAC6qkJ7GeJqIJuM63QqmPcU6bbWXiwksa
+	 9/ncUPiT1BvPnubOI7ClO21h9MTAKgvYP8i5CcVg54B9LGFa7SK9uydEZE4gNRxUR/A==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791614377;
-	bh=OYqvA+8NjTBMmFWnLWHLs6/xquQQkql171bcrUkf7XM=;
+	s=default; t=1791615242;
+	bh=PspSIjotmDHjkJmS1unADfl0mIJFkMwndMDJzvAmQJc=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Fvne3++uh+LavIrWNr/mWvxXaZEQD/bjbikmSmSf9GkCinZuMh0R10GORO0iFE94C
-	 WzISoVhADBFledLEcEadFK7RqCIs9myc+4OXNq3trpJ0t9INSWOUY3DRYHaJxL29b6
-	 HPfF9E0myBlelVSc14Trij/fEsadCntXcTBPMYw9h3m0i7hmMOgbyaqlESpKXEb8uE
-	 +jd+e9H5v5InpFjQaAAx9rf3cdWDAbanPmJ/6CNiErx5+ilA67GIRssHvEvdJGMjOm
-	 6hdtTCFxYhhdrdH46zG0J1sBjJVccnhV7mjlyQHhu/wC/mCTUxRKJ8x7Y5g+TJSGmp
-	 yWziwpY8pos7w==
+	b=j2ONUIRCF2rjsIOALuEhsI3S7ScQF5fH9M4EiHcXKKzFk72w5LPQ+GRGMo2yzOM+I
+	 OfHLypWvoyfdc3VGXH8SlxNtDQ+lysdcNvpxTRJln1K7ohbIrXGLF+KGxxbOggf7NO
+	 ACjyJ0+UvIM1DnxsVRIv0tbdxmmARkS4SLjzlqRfxiBr9E2DoJSnmEBe9xXTeAsFCF
+	 SQMQwgA28B0tC5x1ryChv1hhEW+xpRe+ymNofL/+nZkR1DYh2F3nAmDsu2MshfgqyV
+	 GbnYbvrBQoSEKKyuy8T+6aCZPNdWh7ImvltDXfagpteeRm0v4gGxvaLOp/Ga3sgHbK
+	 u+WLbDKkAZA6A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0AAA560662;
-	Sat, 10 Oct 2026 06:39:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 88F88111
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 06:39:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7FA0740931;
+	Sat, 10 Oct 2026 06:54:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B9A8C75
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 06:54:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6ECC540931
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 06:39:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 996CC81138
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 06:54:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Wv1zCO9Ly1JK for <buildroot@buildroot.org>;
- Sat, 10 Oct 2026 06:39:34 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 8CE24408D1
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791614374;
- b=TnjAVMiDxWJK+DvXPuFK/d302WUGx3s0duXOfooJRVJZUE2Xxbt6gyFIMDN/IF9hsiyt
- 8BZ8516mXlVaLj7AErpbr4HvW/8bi9qlptJWOKy83IXsONqSiduGl5bpEsWgHXP3X1pO0
- Xyw8iLl3Fu5GRnPaYXcJWunaRjYzjfHrDbwhO000qqsV/YBO2QGc2E2D84ksOyGU1SOQJ
- RlxbwftPYXbSt4D838hwNV7/oJSoWd/cBVm6G3PTXBEAZjyP+zKh40cdEQrCeJ7TPYIe4
- DK3/RorZMXuV55yVVOldzmU/GgSdaC0jGMbqS7SeQiYANERKr0XR+Mxg0E+lLIPjJ5A==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jvIp6CjX4jOV for <buildroot@buildroot.org>;
+ Sat, 10 Oct 2026 06:54:00 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org D84B881112
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791615240;
+ b=iul/+N0ZlDnodQ127Sv0AjHSzTw/9h4w4PLDZP8+sPgAtx9o9okpu7wP8H6wLvjxMrJQ
+ IG9/9/P0WQxNQyoyu6s/iYN1VuFBjggLpxjlPQYZhowjuGDcAu9+mdRVGUZ2NIk9ltnsw
+ nR3PPXP9M7R2PR5B4PikSZwZL3bwso0OWggpBYDY8XGwaY5zFWZElBA4V8pHdp9fJ9odb
+ GmFWY4msPK0SFnb1n5dsQV9EtPKmq776q3qq9k4zMOB4p0L5tJUeq86BOfZxdaLo98DxE
+ 3QMbtytcE0Zq0Ph5BhN/LIi8WWPWlfikgV+FFIWudrsvt5ZPBKSDplJ1L/naZ2oPjwQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791614374;
+ c=relaxed/relaxed; t=1791615240;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=sKMIxQMdz4K0nH3ysjNCj/Qd9lmpkpBoHXv+O9BT2d0=;
- b=c431rB3lfjQOJQFgt/exuKuODpodIZJsHyPfRXR916YpA7xV4il0jB0JWCnGZ+5GnGFr
- EC6337vjHtzcukdKsL7HeWCptPGPdAcGEBItaEped1efOQ+UCg67NTu71AVzJSQI53Nj3
- CmBKqUKkBxIKH1YV/rl0A/1N3yh6zq6AfvXlI1F5I6Xg46cNbhs6kY1PtXamGHgx16nmr
- 0a3WBrE2aP6nCnHonQIRr7OhyRDYZJAf4yFprnoQ7GrNhBI6IiH10yseGGkA/TyCHfKol
- W4VM4r/vNpSVDe65EOlc77FTAVvXhfg+Yak+J+CNIzXp2skjY6CZipey9oMpLX7YCXw==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ bh=VPz5YuQ9PpixuGqjlYtdQi1TbFzxDtUObOeI6BBNhvo=;
+ b=ksY/+OpLLQx92QRAMPxq8I6xif59He9ppqKP9uyf2AS8KYVrjQQFjd3LKpJajp1SrCGA
+ OWwDpf+4u00kg70E3e0OfWROeX64v1ISuVb1BM4sNKNnKjuuxEQb/ViqeStxwgfl1yOpO
+ lmAzMlLmvnmnMcTdGKlfCAfZcywE4n084S8WkC58U3bC3OWdlGYVc+mN5uaGQuP/W4FW3
+ YJnlXJhHS5yNBsFEmfwrXkSewD+43DYjpAK+84N5SAmcWh0VL+m6T83/09drycLhWnYyG
+ Vf/urdEoebyn/7aVjj/+JLR+tT7LD4PtSC9zG7C8Y3b4CrxZP+JO/F5tJ7YfEDXZvHg==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8CE24408D1
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 06:39:34 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D84B881112
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 06:54:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6EEF48E4AD; Sat, 10 Oct 2026 06:38:16 +0000 (UTC)
+ id B6DDE8E5E2; Sat, 10 Oct 2026 06:52:42 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 10 Oct 2026 08:38:48 +0200
+Date: Sat, 10 Oct 2026 08:44:06 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e48f425409acb1bcd68a8de1f4dbf0efb386e644
-X-Git-Newrev: 9e5609cf61077193b00b159ef6327f019db89545
+X-Git-Oldrev: 9e5609cf61077193b00b159ef6327f019db89545
+X-Git-Newrev: 743365acd53797309018137e19b24be4cb68353e
 X-Patchwork-Hint: ignore
-Message-Id: <20261010063816.6EEF48E4AD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kmsxx: python bindings need
- python-pybind
+Message-Id: <20261010065242.B6DDE8E5E2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openvmtools: bump version to 13.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,49 +118,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9e5609cf61077193b00b159ef6327f019db89545
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/743365acd53797309018137e19b24be4cb68353e
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Fixes configure error
+Rebased patch set in two steps:
+1.: downloaded patch set from home-assistant
+    https://github.com/home-assistant/buildroot/tree/2025.02.x-haos/package/openvmtools
+    which is based on 13.0.0
+2.: rebased again on 13.1.0 (no changes needed)
 
-Run-time dependency python3 found: YES 3.14
-pybind11-config found: NO
-Found CMake: /usr/bin/cmake (4.3.4)
-Run-time dependency pybind11 found: NO  (tried pkg-config, config-tool and cmake)
-Looking for a fallback subproject for the dependency pybind11
-ERROR: Subproject pybind11 is buildable: NO
+Added patches 0011 to fix build errors with glibc 2.43.
+Renumbered patches.
 
-using this defconfig
+Added tarball hash provided by upstream.
 
-BR2_x86_64=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PER_PACKAGE_DIRECTORIES=y
-BR2_INIT_NONE=y
-BR2_PACKAGE_PYTHON3=y
-BR2_PACKAGE_KMSXX=y
-BR2_PACKAGE_KMSXX_PYKMS=y
+Removed CVE entries in openvmtools.mk due to patches 0013 and 0014
+being added to upstream release.
 
-Fixes: 0710da403def5df6219c2b6a3f4cdfa5930b2a89
+Ported various configure options from home-assistant commit
+https://github.com/home-assistant/buildroot/commit/3206b3fa58a636c7a98ff7a65f76fcf23a4302ee
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Reviewed-by: Paul Elder <paul.elder@ideasonboard.com>
+Cc: Karoly Kasza <kaszak@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kmsxx/kmsxx.mk | 1 +
- 1 file changed, 1 insertion(+)
+ .checkpackageignore                                |   9 +-
+ .../0001-configure.ac-disable-Werror.patch         |  32 +
+ package/openvmtools/0001-no_cflags_werror.patch    |  18 -
+ package/openvmtools/0002-dont-force-cppflags.patch |  21 -
+ ...m4-do-not-force-I-usr-include-in-CPPFLAGS.patch |  36 +
+ ...to-vm_poll-h-to-fix-build-failure-on-musl.patch | 813 ---------------------
+ ....h-into-vm_poll.h-to-fix-build-failure-on.patch | 133 ++++
+ ...mptions-about-glibc-being-only-libc-imple.patch |  27 +-
+ ...05-Use-configure-test-for-struct-timespec.patch |  31 +-
+ ...ix-definition-of-ALLPERMS-and-ACCESSPERMS.patch |  35 +-
+ ...re-to-test-for-feature-instead-of-platfor.patch |  74 +-
+ ...Use-configure-test-for-sys-stat.h-include.patch |  21 +-
+ ...s-vmhgfs-fuse-fsutils.h-fix-build-on-mus.patch} |   8 +-
+ ...nvertFromNtTimeNsec-aware-of-64-bit-time_.patch |  51 ++
+ ...ization-discards-const-qualifier-from-poi.patch | 148 ++++
+ ...nvertFromNtTimeNsec-aware-of-64-bit-time_.patch |  80 --
+ ...void-GLib-g_free-macro-redefinition-erro.patch} |  11 +-
+ ...eck-authorization-on-incoming-guestOps-re.patch |  41 --
+ ...4-CVE-2025-22247-1100-1225-VGAuth-updates.patch | 383 ----------
+ package/openvmtools/openvmtools.hash               |   3 +-
+ package/openvmtools/openvmtools.mk                 |  22 +-
+ 21 files changed, 535 insertions(+), 1462 deletions(-)
 
-diff --git a/package/kmsxx/kmsxx.mk b/package/kmsxx/kmsxx.mk
-index 0678b50540..f52a104701 100644
---- a/package/kmsxx/kmsxx.mk
-+++ b/package/kmsxx/kmsxx.mk
-@@ -20,6 +20,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_KMSXX_PYKMS),y)
- KMSXX_CONF_OPTS += -Dpykms=enabled
-+KMSXX_DEPENDENCIES += python3 python-pybind
- else
- KMSXX_CONF_OPTS += -Dpykms=disabled
- endif
+Patch is too large, so refusing to show it
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
