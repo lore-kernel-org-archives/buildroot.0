@@ -4,144 +4,131 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C2900CA9EC1
-	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 20:15:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13E54CA6017
+	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 20:16:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1117A60703;
-	Sat, 10 Oct 2026 20:15:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D7E4D6061D;
+	Sat, 10 Oct 2026 20:16:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id smu_JHLVqUkG; Sat, 10 Oct 2026 20:15:47 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org B0FA2606D6
+ id uKdNrv2k-uKV; Sat, 10 Oct 2026 20:15:59 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org CCF9E60674
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791663347;
-	b=Ybc05ZJUyhRqqjriEvZzovpp9m3VldVUkLpw0HGjE5DuF47+wvizXo2b7DRFfSsISWgg
-	 I1QqtKJWpxjtb7PU6eE7aptduMg2OmuEEpX1NEIDEaOgZ6rakfg72fx1fsLdFVHbyNnMS
-	 7y1AXGoq0HW54tXHESa/hqC012/jdxXWifKoYaaW+rQNf3viGulpeMAs6PGzL6OONUxOd
-	 7/fMA4ZxRNYH0PIxhMO4TtWgGoz7hWf4rsC/4NmFFbC/jdV/9FddXb5YK8Djvzo9KmLX8
-	 6hFCvUbZW2le3zBn4M0kkUFuG1BnUZRlQOpvumfO4qw3OjwGjO0eMuvD56YmOJYCA0g==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791663354;
+	b=Y1SDh4Dzar08fSmS8T6+RkJTCpB35sXTkgp+IyE38lnl24paphC6xrZUpM8vSkoj6jvS
+	 y2AF9GwTvLA7T1ouQhE3JL4It5NWfFy+W2IHSYWM8Sh29cmnShXlxdJmM6ovzmm+2WpcM
+	 ul2qkkn/jmbyyB13PR8RxLVEsHdmZaev7e/w7BKViD6k+YHiodV0JfS9sIbO+dAQplJyd
+	 8tKbVfCdGB+0rsWao402i2TakUFqCzWADzYKyBaApqukCp5rutBRSYm9sKNYJtyqFamaz
+	 5f7doOnlDFSjWsqYw+eXw4oLdO0lM9qQrSfGugaQRAmjSSGun8vTO3iS7PA4lIU9TZg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791663347;
+	c=relaxed/relaxed; t=1791663354;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 Received:To:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
-	 Reply-To:Cc:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=RsJzpX6kuy4hRmvwJOZoEWw/0TpP993TTYVoa44MjMw=;
-	b=Imw1KV4zqhDOfu2wgt2WSxGhZ87Z8P8tcqrRKBKVqJuT5faA4d3CwYsIul+Hnxqu6bbU
-	 qKbTQLBBOaU4G0V7oA2n351XST6STIhk5nCVBcz7VtllLYGW2VSzVSxrW61cpjC46Vt9H
-	 8bUZxHGi4ideHU7/JaEy3bYRSz3etx05ufrq5JcvnzTCIs0q3wG1gUuI058axm/fRlCFl
-	 8jQoxltO794wiBokSYG0envdfW3Y+03NXQlJsgUSeKj+3+K5LPVcQdIQKxUOIzGT3fljh
-	 FX1l9ImraNItl0LF2IeMvgMSt314/5WTLtgoRos72NG1VXMFHCUfRhhgaC1BRXV/dTw==
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:Received:From:To:
+	 Cc:In-Reply-To:References:Date:Message-ID:User-Agent:MIME-Version:
+	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=j7zntYZ3tx/VYDwopNHsYUMiD3tcWIN9600I3dnPIQk=;
+	b=AS4o4kb+m1gJBGWxgJ0lobN6pdVvZkdgts7HGhHzf7pC2a6kq2aeFbu3TWKPZ1QR2/fr
+	 T4209mFMmtlEjw4oyyj6H0cYRwsCmevx6l+sPCNPCILMP0tKEp9jzr9jbjIpHqO4YLuPK
+	 jdYw2MZkeqplkFqA7Y4zqzLNLZZbTKn6vxF2rlwvDbDq2RdEqaa8REng7NQO28gWIlVBa
+	 f9hyLpUfrD9+ONmo94mzBRiW6piAB12HZqmFQPT/zDXRzqJs0X1FWz/cGHoxaCNYOrCpX
+	 c+9jFva+thOaYXKS6ymcTnOjyTS+DQG+wOPPL0P9MkWzY+I3Spa0AWhSYsx746bOWlg==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791663346;
-	bh=RsJzpX6kuy4hRmvwJOZoEWw/0TpP993TTYVoa44MjMw=;
-	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	s=default; t=1791663353;
+	bh=j7zntYZ3tx/VYDwopNHsYUMiD3tcWIN9600I3dnPIQk=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=dfSUyGXrLgaiPmxE1Z+kV8YdVmjI96gf6np1Vy1J7vu8fwdFOorzky6061NUWfRba
-	 WtDzD7S+9VcaXaapU3uGLRJnD4hVm4PXOkl0r684786aciWSpoLje/P5lWGyQhoNe7
-	 Unu08QQ/Nqg73WdVaH6RH7DAKkL1hMJpbaDEgITjT6O1R4KcrYLeP0MfNoN7VwBpXa
-	 csY+Emljiq8k+njZcCRhhSz7CHL4ykkYSIbovE1I92YIYdm+e1QEKottrUFiX2MxWE
-	 tw3LRZBDwF6zFdDlc+kiVlfWCCixs+rbbFF8dQSXFUS+lhYSoBUo4LanGPMlLW9p1W
-	 r79AGVuh2onbA==
+	b=K6Ibq3bQGPdbJs0h/Op3RfgubZ6DhtvIoiyVA9h6WWJvmG8okrZk7e3JzYtm52aKT
+	 T+hj2FEvpzGSUc//sq3k67akaBg1xx0nX28hhZPEF3wcLamwNUBmp+l2lD8GlVYafb
+	 GXL8nnA4W9kuM5J77978o2XFV7bjWf6lChNjmeRLFQuX/cprchiVSC7BXqTmeO8Dpm
+	 VRl5dPTEIQlQT+N/XtBhDuJULcs7A23+yYE0Td5UoDaiqHdhP5ghfdxccwPemzu5qj
+	 B7QOu8UfT4nqlpmVG6jL6zv24J6wK2rBXe+HAs6YDSO6LifSv8rkzfhfe9DnVDJ//F
+	 PtiCRG/ZF+jYQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B0FA2606D6;
-	Sat, 10 Oct 2026 20:15:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 793DC105
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 20:15:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CCF9E60674;
+	Sat, 10 Oct 2026 20:15:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C2262105
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 20:15:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6B0EF8108D
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 20:15:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BFCF5407D8
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 20:15:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PrrvS0srl8IR for <buildroot@buildroot.org>;
- Sat, 10 Oct 2026 20:15:39 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 4705A8108E
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791663339;
- b=KmaiCqXEWu5aWAglbYnUG+8RLSH9IXp4/e+YJ9RQCU67LO3s9fg7Kq0F+07yC2GWQL41
- br8fEjjfRSd5Bq8BlG0ZKvPLc67Atcx/RXGhOv8RuP8JaDvZu1HE/w7rxzlVanga5UX5q
- nhS/F/Aohh6YODJUePL1pPBQ6I1dtXGK1zEcMH/a7taPMbdYCyqmtjJcaoVZ8YQi7cO7W
- Qk0pDkFMVsCSvL/vpE+vM8OI8HbxblWnyXQPFZxPuzboohBbY/AjNiVCzGNZXYWgnS064
- P2SaUPs3ASoMnzdcUnxn34A5d2Gkv1Xg34OLiD7Ks2RcccDalOSAD3LjMpwilo6oo0w==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3312g96Ib897 for <buildroot@buildroot.org>;
+ Sat, 10 Oct 2026 20:15:50 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 7BAF7407CF
+Authentication-Results: smtp4.osuosl.org;
+ arc=none smtp.remote-ip=34.202.193.197
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791663348;
+ b=svvw4qWMFZd8lwa0pkrrUODvvhx+F6WGi3wyosxPaSumWcPkuk8SVcggk+xJCsaY5xE9
+ iXCsL3ksFU+DJ278pIxX7dD7DmvwYJgyAI8o8z1VzN6JwTeQhXYXSUWUlO4y8hTna7ucw
+ /7yM5GfsxbmNUH+eIzqjC7S2K99A3P2COsboozZYWoIpYDtPi5Ybnm47J+j7uq31rgqVI
+ XfismkiGuk+xveHcSKz13T4B69prY6qPK4Rdn9Waf3L380jm6wb+jnlXRx2u9sMYYysbW
+ d7g9+R1kvDRtcpq3TRXu088YSKh7W1COOI//NnJVPV3/t4L9mdKpoxYqg8Zr7HkHKMQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791663339;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
- Content-Transfer-Encoding;
- bh=UoL/4BYLxyGiLFcVXRGfxURI/KRW9QK2cQfFGDUeGbU=;
- b=Ur9cDyHrg/N1TzV9/RFZYmbZ0WANSSUZnlM3kHCmoUh5yLnhGWX6SHvCxVfjf3piujAL
- d1tHt+b6njdhMEQjZBY2OLGxkiQNdW9UnEvB41FS/TNN8AgXNRc9Py8Gb9RYiSSJBts7t
- q8o7VBuVYLem1qt2pFl3qrhnwLmAWzox7UhEzHbmSFfn47DPOOPafP7Wfxdvmad+5KzDQ
- 7rvJ5CFDW/ZBp7tI/+HX+6z2K1bnyUmT2+OxhaCP5w61Qn8J4axP4jj2E/+97qL/qiF3K
- jaLTBGQMUSKsZ51BtYfFm/p4P5/JBZ1o9oblkFyKN75xtFs8oIEAElRzJqbDynRqPbw==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
- dmarc=pass header.from=mind.be;
- dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=VQFoQFyP; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::434"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4705A8108E
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 20:15:38 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id
- ffacd0b85a97d-48c4207ac26so733495f8f.0
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 13:15:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1791663337; x=1792268137;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=UoL/4BYLxyGiLFcVXRGfxURI/KRW9QK2cQfFGDUeGbU=;
- b=A+jVxEJH2OJTy+4bx+/H/BuHZDE/ghF9BALbkvbU9wkr0i4QaENyMTvglit0abVXl0
- ses29lehKzjW0/B3u92hDpdUFtCr1xEq/mK3ouQM+8xgpFBlTrYoYHwNx8XPA3ASLLz5
- YiU9u2azj8bj/umGZGv+33Txl7NswBEZCAnfnGkUt0wpmSdKKHwppuYddKapQIvlCHT6
- s3dh7ZSACldtaoCgcFRv5rMwcELKxKGugZqoU/iFcY/+VmeLNSYQUoGeI1rqINMOtG1g
- nRRPt2O5Eof+xX5MxF60UxQXbvg3t0Z4JB4sYFQBvOglvtlTdhocDZ6fbf7Yg6OX7DCS
- jjjA==
-X-Gm-Message-State: AFq9FYJEqch6JgvxL0tCBUUuw8uhraCS2rDIL1wlzcftSkO/4PWs7ed8
- Qmkh8FHNb+MtGCL+kg1djvA7jU9XMdX95eCTU/fZm7BTadlJogT0AaNvA+rCXsIlI99yAWYwub1
- Xr69upMc=
-X-Gm-Gg: AYBFou0OJKkyPF/63PsWsegH5rv2HPmxawfXKcgmJYgSoA69y2/GvhDPBGLYcl8TzYv
- 0xY9SrAgXtYeXBkkYABmwGc0XF/apnIwTOsekOs5FR+0bkWqVGP2ms7lEM0BHIAU7L5aAEXLgdT
- nl6C1lypyCpoYAGrlK3A+hh/zGHWs5ZYEkVP0bKVCdsaKBT8uBtsIC5bxjCGuf0rneLO/7N4+lA
- 98BNqQKRRiJzbWeHnX6cEtDdw8/AHF+eFMrNSHlUG2MQNkMKvtMHqPiftq3zIYZL8LHncqfq1QS
- y6PcfarWB5cUXoOrWgah51sbiYwIRepcVM4ChFGGfCW6XAinoKpa2WCGHcRnYqedNMVHE19jGkT
- nKXSeJL/ZXWxH2N8QNDfYLTcZcKXTfAoNfYwKPtlvGpKYOjYxBEFuQXiRh0lH2VQlXPWAeWXxAK
- LFcaG2T5Kkg7DbDdb1uR3YpYgaLbUr5Bz26/AlEUMoMFx541UFpzWdeu1moWmO9vbzY/R4wr9gw
- Q4Y8Mv3eYWMsUaseJqvRWa8h8w06QxPCbk8QNKSxFRqRmji3K3D1tQPEwdrrtFl3EKCx89CaQ==
-X-Received: by 2002:a05:6000:98d:b0:48c:4a62:9af7 with SMTP id
- ffacd0b85a97d-48dbaae9e03mr8487944f8f.28.1791663336424; 
- Sat, 10 Oct 2026 13:15:36 -0700 (PDT)
-Received: from dragon.telekom.ip
- (2001-1aeb-401-dd00-a87-9755-c250-f5ef.ip6.tmcz.cz.
- [2001:1aeb:401:dd00:a87:9755:c250:f5ef])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48db99b800asm10225432f8f.22.2026.10.10.13.15.35
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 10 Oct 2026 13:15:35 -0700 (PDT)
-To: buildroot@buildroot.org
-Date: Sat, 10 Oct 2026 22:15:07 +0200
-Message-ID: <20261010201508.963412-3-titouan.christophe@mind.be>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261010201508.963412-1-titouan.christophe@mind.be>
-References: <20261010201508.963412-1-titouan.christophe@mind.be>
+ c=relaxed/relaxed; t=1791663348;
+ h=Received-SPF:DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:
+ Received:From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+ User-Agent:MIME-Version:Content-Type;
+ bh=+7akJVKNbSkk/8vG/8V9GJ1oVxt6J1o+xffrrqU+TZg=;
+ b=a5BQtIxQXhpV+6dZ3mEs6wcvxRfemfenQK5ph2/+G2BqstXGMEYzvLXpKzLaar83P0mC
+ re7GvQ/6foFt3iEObNEkCDXNR5KlWHYiyDoq977QsfazzYSTTksh1NedwtKVukPdeH3CP
+ cgiWZrwhTP7c1ov989JOu5iDAkB9ITCdd4U/8E59lqPT5HkydQnn96n7TeSS9p7Xt4d2k
+ sWi2PlRzdMD4IN8CAfxUGKjcyCo8jYIZSYOY5qo2yxYMtUQ3xf/CIOe9IkMtOGU1n2/rG
+ L8APXJZiFs3o+5Qi1j5oiMioJpWlV4vhxGzUVT8bkJxvY4PxUQS07qSykXdSGCfO9Gg==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ dmarc=none header.from=korsgaard.com;
+ dkim=pass header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256
+ header.s=purelymail2 header.b=YpVQXeWU; 
+ arc=none smtp.remote-ip=34.202.193.197
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=korsgaard.com
+Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail2 header.b=YpVQXeWU
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7BAF7407CF
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 20:15:46 +0000 (UTC)
+DKIM-Signature: a=rsa-sha256;
+ b=YpVQXeWUSQpQePNDmd9CTmvPWsFeJeoAKOG3yeVavnXEYic3KOByyIRwtiwPtvUSzHHwic9VDFpQZGsOuyCLyqASmotkUymasYOJrqFad/4Ukl89netFrD14MbXfIwYWYcOHOxjWOyFEfB/eg9Zm35ao860fm39zJx9rJRonsi9nzM+jxp7hGT4oBZ/14p5Bv237SzsXG+e+keu5eZYLtBF7cj4HigAmxIFoWHoGj4caeRNeoF9UTc1TN3lqiYK6bc9onDCImZrrgD/ZR/mtGrTR8rYOhR9hNTAahB8m613AXYhKuy90UtNJY6u2A5rcZO/PDwjSjpqNIvIOA8enMA==;
+ s=purelymail2; d=purelymail.com; v=1;
+ bh=UFuGywYocBmZLnxcwaJ0iyWG1l2/TGXV3iB3q/HH/7U=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Authentication-Results: purelymail.com; auth=pass
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1764597091; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Sat, 10 Oct 2026 20:15:44 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1xFdTq-00000004e50-2Wuu;
+ Sat, 10 Oct 2026 22:15:42 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Stefan Ott via buildroot <buildroot@buildroot.org>
+Cc: Stefan Ott <stefan@ott.net>,  Bernd Kuhls <bernd@kuhls.net>
+In-Reply-To: <20260629020636.4066911-1-stefan@ott.net> (Stefan Ott via
+ buildroot's message of "Mon, 29 Jun 2026 04:06:36 +0200")
+References: <20260629020636.4066911-1-stefan@ott.net>
+Date: Sat, 10 Oct 2026 22:15:42 +0200
+Message-ID: <87se2d9us1.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/3] linux: add first-class support for all
- upstream linux versions
+Subject: Re: [Buildroot] [PATCH 1/1] package/libcec: Add option to use
+ kernel framework
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -153,149 +140,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
-Cc: ju.o@free.fr, thomas.petazzoni@bootlin.com, arnout@rnout.be,
- git@jdknight.me, thomas.perale@mind.be
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add new KConfig symbols for all actively supported longterm versions of the
-Linux kernel. This makes it easier for individual configs to follow updates
-of their kernels, without having to frequently update them. This should
-generally improve the security of the target systems, which receive frequent
-security updates while preserving a stable feature set.
+>>>>> "Stefan" == Stefan Ott via buildroot <buildroot@buildroot.org> writes:
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
----
- linux/Config.in                      | 49 ++++++++++++++++++++++++++--
- linux/linux.mk                       |  2 +-
- package/linux-headers/Config.in.host |  4 +--
- 3 files changed, 48 insertions(+), 7 deletions(-)
+Hi,
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 3521fe5cd5..717c964dcd 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -32,15 +32,53 @@ config BR2_LINUX_NEEDS_MODULES
- choice
- 	prompt "Kernel version"
- 
-+config BR2_LINUX_KERNEL_LATEST_SERIES
-+	# Helper symbol to indicate if one of the "latest" kernel
-+	# (either the very latest one or from a longterm supported series)
-+	# has been selected
-+	bool
-+
- config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (7.2)"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_2 if BR2_KERNEL_HEADERS_AS_KERNEL
-+	select BR2_LINUX_KERNEL_LATEST_SERIES
-+
-+config BR2_LINUX_KERNEL_LATEST_6_18
-+	bool "Long term 6.18"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_18 if BR2_KERNEL_HEADERS_AS_KERNEL
-+	select BR2_LINUX_KERNEL_LATEST_SERIES
-+
-+config BR2_LINUX_KERNEL_LATEST_6_12
-+	bool "Long term 6.12"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_12 if BR2_KERNEL_HEADERS_AS_KERNEL
-+	select BR2_LINUX_KERNEL_LATEST_SERIES
-+
-+config BR2_LINUX_KERNEL_LATEST_6_6
-+	bool "Long term 6.6"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_12 if BR2_KERNEL_HEADERS_AS_KERNEL
-+	select BR2_LINUX_KERNEL_LATEST_SERIES
-+
-+config BR2_LINUX_KERNEL_LATEST_6_1
-+	bool "Long term 6.1"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1 if BR2_KERNEL_HEADERS_AS_KERNEL
-+	select BR2_LINUX_KERNEL_LATEST_SERIES
-+
-+config BR2_LINUX_KERNEL_LATEST_5_15
-+	bool "Long term 5.15"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15 if BR2_KERNEL_HEADERS_AS_KERNEL
-+	select BR2_LINUX_KERNEL_LATEST_SERIES
-+
-+config BR2_LINUX_KERNEL_LATEST_5_10
-+	bool "Long term 5.10"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10 if BR2_KERNEL_HEADERS_AS_KERNEL
-+	select BR2_LINUX_KERNEL_LATEST_SERIES
- 
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	bool "Latest CIP SLTS version (5.10.254-cip72)"
- 	# Support was introduced in Linux 5.19
- 	depends on !BR2_loongarch64
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10 if BR2_KERNEL_HEADERS_AS_KERNEL
-+	select BR2_LINUX_KERNEL_LATEST_SERIES
- 	help
- 	  CIP launched in the spring of 2016 to address the needs of
- 	  organizations in industries such as power generation and
-@@ -63,6 +101,7 @@ config BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	# Support was introduced in Linux 5.19
- 	depends on !BR2_loongarch64
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10 if BR2_KERNEL_HEADERS_AS_KERNEL
-+	select BR2_LINUX_KERNEL_LATEST_SERIES
- 	help
- 	  Same as the CIP version, but this is the PREEMPT_RT realtime
- 	  variant.
-@@ -144,6 +183,12 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
- config BR2_LINUX_KERNEL_VERSION
- 	string
- 	default "7.2.9" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.18.55" if BR2_LINUX_KERNEL_LATEST_6_18
-+	default "6.12.112" if BR2_LINUX_KERNEL_LATEST_6_12
-+	default "6.6.158" if BR2_LINUX_KERNEL_LATEST_6_6
-+	default "6.1.189" if BR2_LINUX_KERNEL_LATEST_6_1
-+	default "5.15.222" if BR2_LINUX_KERNEL_LATEST_5_15
-+	default "5.10.271" if BR2_LINUX_KERNEL_LATEST_5_10
- 	default "5.10.254-cip72" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.254-cip72-rt32" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-@@ -189,9 +234,7 @@ config BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG
- 	# requires host-openssl, so select it for the latest kernel
- 	# version and the latest CIP version.
- 	# This is mainly needed to fix autobuilder testing.
--	select BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL if \
--	       BR2_LINUX_KERNEL_LATEST_VERSION || \
--	       BR2_LINUX_KERNEL_LATEST_CIP_VERSION
-+	select BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL if BR2_LINUX_KERNEL_LATEST_SERIES
- 	help
- 	  This option will use the default configuration for the
- 	  selected architecture. I.e, it is equivalent to running
-diff --git a/linux/linux.mk b/linux/linux.mk
-index cd80904113..75294cff18 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -45,7 +45,7 @@ LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v$(firstword $(subst ., ,$(LINUX_
- endif
- endif
- 
--ifeq ($(BR2_LINUX_KERNEL)$(BR2_LINUX_KERNEL_LATEST_VERSION),y)
-+ifeq ($(BR2_LINUX_KERNEL)$(BR2_LINUX_KERNEL_LATEST_SERIES),y)
- BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
- endif
- 
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index b11db18379..3cf2cdd4f4 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -118,9 +118,7 @@ endif
- choice
- 	bool "Custom kernel headers series"
- 	default BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_REALLY_OLD
--	depends on !BR2_LINUX_KERNEL_LATEST_VERSION || !BR2_KERNEL_HEADERS_AS_KERNEL
--	depends on !BR2_LINUX_KERNEL_LATEST_CIP_VERSION || !BR2_KERNEL_HEADERS_AS_KERNEL
--	depends on !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION || !BR2_KERNEL_HEADERS_AS_KERNEL
-+	depends on !BR2_LINUX_KERNEL_LATEST_SERIES || !BR2_KERNEL_HEADERS_AS_KERNEL
- 	depends on BR2_KERNEL_HEADERS_VERSION || BR2_KERNEL_HEADERS_AS_KERNEL || \
- 		   BR2_KERNEL_HEADERS_CUSTOM_TARBALL || BR2_KERNEL_HEADERS_CUSTOM_GIT
- 	help
+ > As explained in libcec's README.raspberrypi.md:
+ >   On a recent Raspberry Pi that's using the vc4_kms_3d dtoverlay,
+ >   you have to use the Linux Kernel driver and disable the Raspberry Pi
+ >   driver with -DHAVE_RPI_API=0 to use CEC.
+
+ > This patch adds an option to do just that to the libcec package.
+
+..
+
+ > +ifeq ($(BR2_PACKAGE_LIBCEC_LINUX_API),y)
+ > +LIBCEC_CONF_OPTS += \
+ > +	-DHAVE_RPI_API=0 \
+ > +	-DHAVE_LINUX_API=1
+
+HAVE_RPI_API defaults to off, so no need to explicitly set it 0. The
+Linux API needs the linux/cec.h header which was added in 4.10, so we
+need a dependency on >= 4.10 headers.
+
+The Linux API support only adds around ~3% to the build size, so I
+think it makes most sense to automatically enable it if the kernel
+headers are new enough rather than an option:
+
+-rwxr-xr-x 1 peko peko 594K Oct 10 18:53 target/usr/lib/libcec.so.8.1.7.without
+-rwxr-xr-x 1 peko peko 614K Oct 10 18:53 target/usr/lib/libcec.so.8.1.7.with
+
+Committed with that changed, thanks.
+
 -- 
-2.55.0
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
