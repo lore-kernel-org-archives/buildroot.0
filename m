@@ -4,153 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E48D7CA6017
-	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 13:01:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18929CA6017
+	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 13:51:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EB604608D9;
-	Sat, 10 Oct 2026 13:01:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B81E760648;
+	Sat, 10 Oct 2026 13:51:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id seWTYTJC_ujG; Sat, 10 Oct 2026 13:01:04 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 3BE81606F8
+ id vJIhf7DPQgoT; Sat, 10 Oct 2026 13:51:26 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org AC6DD60649
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791637264;
-	b=QPpTSHbDQSLH14Q307KuyzNcC8VPtIqqKIoLfbJhLzgpMYABusjymmH+SrGZqDnxDh21
-	 2KlOvwiR/FeT1sFRRO6MRXuZBd9TV/iPJQD9CQbgM+6269nO4ZYTEmdwtFiG+hhst6zVt
-	 F4BhD5NVtgIHukivZLjeWs0P4dUzdj59AsSy9dtCPH1tfhRUxs+eROkTYpSiH4b2IRxSE
-	 OwnORlJGAjti1TgTggbwiLlh7n0titKDsRSyr5NneoqK9ixt5VIJOaAkyYcNrCeOqgGfi
-	 QaHzvCH8kKaW7tPvUzxEYT/Nd8CgV20t7acFm+zKE/0LdZx3CutkY4GfC7xoSB8c8uQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791640286;
+	b=sn1WdfELFkphbv/oQpiBIv5RWNxzg8NMyEYcI55SuGTFHCZdIhGWCOYWd1QLfUhqrKOO
+	 7EcMATAYinoIqDQJ1OZOEI4forxbIGp3rG7jiJYbs1PY4YhG4U8RYtvG8C90WGZbphUod
+	 S3Z9BUv1tKJOVLken+BX8Cpg+bAte3g1kTyU/yZAybF1kdfKvZlfMn6RFdKMywSQkSkWH
+	 icecy8vZGhcnCdwby76Y6sWG/ylismvDpDrsWGCRwysNThe4TNvPcGsCEPXLri1xKBJRW
+	 CLNC1QZC4SRRni0wwqQ7uCXsGPEH3Hyyu86oDdWZEJEC+LVjckea46O+l7BugS4fkkQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791637264;
+	c=relaxed/relaxed; t=1791640286;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 X-Google-DKIM-Signature:X-Forwarded-Encrypted:X-Gm-Message-State:
-	 X-Gm-Gg:X-Received:Received:Message-ID:Date:MIME-Version:User-Agent:
-	 To:Cc:References:Content-Language:In-Reply-To:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 Content-Transfer-Encoding:Content-Type:Errors-To:Sender;
-	bh=TJ2obxqGhicdXOV9SjlRZq/IRrQQ693RSiWh4EhigZE=;
-	b=FejXdYU8+bU8V1BuRVDCmyInIPg9d7RSH/mJeCp3nxdXAnmoHTBh+TYun9zVmdqAh1K1
-	 Tc/0mGZ9BcamFnPalAkJ3G37YbK+rvQeCNpNyvF6O/4qkwqQjeyLSJgdjMFeINaY7uwwL
-	 zKY4LWSn3TlODNFZSpIblwSDNuWWL1vVbEFvNx8/0biTYP6ijhcGSvE8hyTHd7piE+9EJ
-	 E/Hxc4Ri4DIgRqe7bZHapnMllwiU/h+mdrGUTPOch7McjAVd8Oy+HoX2xO7LmHuxBYgfW
-	 DK9pSgsKKla74dzg7C3hbwGX3R5x6K7e1VIEBPkySJQ6QbCHqJAHftLRiNQ73+t1ObQ==
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=OEvxN+5XI77T1r3UaMinIz6qrjl0hluNq59C9pJCkrY=;
+	b=Lwd6eeiA2tSKwpbJFdR431Oe7Uan+ElUbhybG1eNpjzVCm+9fKwWSVE7ZFCpr5tp7MjB
+	 3SqASMJWcb39+XiJRqkmWoV3Bj6EjVa1BmRAwJkilu9qk3BhjA/5JxkKP8LQINNe0Vh5y
+	 BECr/+zIKhim8m1CEvwO6tY7dYF9WWPJgnSJ3NVbckVhDtFUG6BG2SsfAeYMS35uZJ1gp
+	 jILiszWro9RRNNB8LTUurXGUgwitCXKE8AfpJMPIQuU0lzQ7HzUlI8SJ7i21xUZWEBAj2
+	 1PfNMYU+PXg01ZG4nXvusn24lAd/8Z74PXfb+pE7648EhuNmD004dII5oVGO6lNVcZg==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791637264;
-	bh=TJ2obxqGhicdXOV9SjlRZq/IRrQQ693RSiWh4EhigZE=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=hl16k+wiYOBziGFFMIdFUFCzPUabz3k9mGQTqzKIlJlqqPMg9U16dm+B0XKdDIoM4
-	 D0FH0CbVxIdMIQRg6bjwgboc1QtXrDgaQPIhV2zRG9305YYqg5bZASVcVfQGNDj4Sz
-	 nAkrgp70xgxqatzvmjNdkg9XbO9MRq9P8o9HULnNFjI3REHuADN4/9xrFzQ+2MEHKX
-	 2rs3kA7hB2X60IAG983kmSrKU6+bK7ywuZLiHy/WanPnxwiRsjXQFIeuyvcjrAB8+y
-	 BnfzuAxEGFh0ois+FLNIsIVKLgjU216BGE/ZYF8jUTccsyz6ZEvy+n8/nSfMQEjtJA
-	 QHK0enR7SYRlg==
+	s=default; t=1791640286;
+	bh=OEvxN+5XI77T1r3UaMinIz6qrjl0hluNq59C9pJCkrY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=U333N1wKAMfJWdL2YjeAzNWekYG+x+ut3ixitvdqYrLYnh0fBglUem2u7QkD/04dV
+	 3m8rxMTDeJVgojjsvoXE5GWx3AlLepWjga7y3ME6I1G3R+Y0zu9X/hwl/VK7g+F7Dk
+	 UAzhiC7neEZWrOwpiUPyLGhDijsTkDliCA9s58gVz5+tA3ymh1JN3zvbzyq2bRCyZ+
+	 fNIHM8gbh8FmR/QKJPS/rXQhQ4o9Mmmm3c+xScrE6ezN1LYE6fD3CD9XSUkfniuc5W
+	 URM2CGCDn+GVqkWjq3Ig6yJcSnvUhKDk9RsC0PCMEQX2E/UjqDp+cF3Ya7Tvme4Ytv
+	 L40D7w/Fovvsw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3BE81606F8;
-	Sat, 10 Oct 2026 13:01:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id EE6D1156
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 13:01:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AC6DD60649;
+	Sat, 10 Oct 2026 13:51:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D58F9105
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 13:51:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D411C40098
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 13:01:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BB5DD60649
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 13:51:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mt8E_6H0_xiq for <buildroot@buildroot.org>;
- Sat, 10 Oct 2026 13:01:01 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org A8A0C40004
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791637261;
- b=DNn6zyeS8kwmJlNR1d5gIUYDlhglThJOUE9qxvcuMNSpZRnR0gWyLseUwgOZq8+9CsZs
- e7aoiIL+uZEs5ko53k+CUyd28m4eI+GWqJkDKmyk86ye6yDpvp9iR21zbN3XpaNfisMwP
- XWcrFjvxYf16DlU3vsVXGMcimdGb4UyKRclDfDiwm2hgZYuIID31di2Q06v1SsFTguEVV
- Yi86dGKzB1mEsq9XAMR7Vqt3hR3HpmT1tz5OohjgXbNIdDMsL4O3PbfDml0V6NIQRu3bs
- m587AT6omeISyFz1NvuN3wSi8Hc878Z9u+CRy3kcp0t7wVOAB1BMB059+F/WW89Mrgw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qfsX6aMddqZm for <buildroot@buildroot.org>;
+ Sat, 10 Oct 2026 13:51:24 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org C647D60648
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791640284;
+ b=Wgf0JnDwjqoOFeCUXuDSqYNGXCILjfmsqidBBWmMAccWB/e+Vtye+Nfy0dKA+bSnphTg
+ AZorN7upgvUk8tSWmwyLC/V74MqT3v/p8HqinWym84iQfIL//szAWvfJfIzqST2WlbgJh
+ WKTxJOWBaXiy3PoSuu3Layrui1oLr8I4jm5WgUGkme/sha+GO35PMRuc4rXR+wBubW/Nz
+ ieijQvTbF1gJgP1g2kfKoWicxKrddz5Q/Y8Vq3SE7oYgkodi16BbdvnXonDTjZQfrUaWE
+ /AxCi4qslOPjWTviNLOg9m0JOqXId41EHvCya8JgNhRzwX6FS4SElapPypMRlQUt+Og==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791637261;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
- Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
- Content-Language:From:In-Reply-To:Content-Type:
- Content-Transfer-Encoding;
- bh=w6dxNsXq/x8/NQMeVnD4Ts8plnSOyC/gXilhcmJ76Zg=;
- b=noqbyfOOqU9XeasLVzoKzzv9mKHO7LOmLegTKKLYlSF6AEAIRqOT18PZOQtIkPXa/5Z/
- kGMAlVcRzG7d+X3xHyev2y86rUVqXT3PE87weeX9fKd0hDNSOpaLCtp38zZY+KRCpwhcR
- V67GsCb6w/AE32c8MM15BbiU2qn4WnCXTCzEWcfdXawI9OrMg91Ofkyx6creM9czeqKfn
- w+pv32SjDB5HED+u8/9gJDcyJwfFSCsdZMdWWRKabbgYFx8EIxankHqJgdaGkNs0fWgZZ
- fcv2qPrtoVdCWb8Jpq8mprpLIUXk2p+BrbBDXTD3J8vXAMFju5Qpm/mJ9TOwWP9a94w==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
- dmarc=pass header.from=mind.be;
- dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=EFjlROlJ; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::329"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A8A0C40004
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 13:00:59 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-4a0286c981dso5559765e9.2
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 06:00:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1791637258; x=1792242058;
- h=content-transfer-encoding:content-type:in-reply-to:from
- :content-language:references:cc:to:subject:user-agent:mime-version
- :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=w6dxNsXq/x8/NQMeVnD4Ts8plnSOyC/gXilhcmJ76Zg=;
- b=PRgawkcDdRAqRb7SlCJHSDTrla10dMpPbA617xCI5OVuerf41SABDXVirgqVxCufgr
- sSxkpTTO/1kWH5VItYGB4fkmZmjT1hI06xbUwJOc9OXPG2lv8Poj17wzvu6XmYh0nUz+
- wbhZj1dlqSJlfxiHh4QaUpJelwEYxb1YRNwIyNf2wRyDR37cTUPd5ezjftFrI8AI3b9J
- jIe6GCH45gjkKWD8aYG0DKrNYFVQl3/2p4UQw331RJRoUMRI7h/W5raj/PslWdEQAmxb
- uNsfe5xeUZwHZPQFKuDRZfh/L0pw6tvHrzjmhmZWZrXlKnLHNqzNyxLhtjiKpG8oqQWN
- +5cQ==
-X-Forwarded-Encrypted: i=1;
- AKwUvBzIwffuM4nYEnpW6uIZdVUm17XB3GPPRVH3QqtmTLorD4tBGCn1ydeCNWb/wubaaN4gj0Ni1hEgo3M=@buildroot.org
-X-Gm-Message-State: AFq9FYLFljyPQaLgdzL5tmI1JZ/acOEU4WP5fC4ZrtstHCyCRsp1C+ib
- Et6jGN4wAflccq3M6r0tpHA7876G2DUYaLzlZSq6fmDCtzD1bEOx1N14bIkLtpbwM5/otzSfAtJ
- rK3/8w2o=
-X-Gm-Gg: AYBFou1NZdd/GrdgpxZvdVSUC0vBCZfL6MN7btaEeOGXU6kXnwYkgng048cLsTjDf/j
- jku23bQuv4Go18ltGTLLonH8ZE36W/YGHd6hpB7Uo93YFNO0odnn6Fz2fPnv0mU6novK6/44rnf
- +Qtf179VuzUGPOITFIGBDb9j7vCDLBBIISAFi1mmtVLWwluyZYvH3lgJZv0sqnUEQV1zwo2kJ9j
- MXInOt1o9OoknUWybLw926M5aSDLFDRjWYPQCEjKepmFLGSQKaUbhoj6BWKOKBWa5WWTCau45Ck
- cpNMXnZRufa66OpDt9iVMdOduVCmbB1bYCw2MsV/hCinflBlXLdUenv/r+wfY/HQap89oDfaNFM
- CGk5MPWdAdL/U6YKojnAr1/gZ+kf777U+Cp9mA/IGKB2dI5K/ZqWPdXRPTQaJ8sPZdFzZenaG09
- Hh8q5iKbHIecJVQP/8md+7qGj3yNklj0mHtQSDv/psf8gM+YSvveUoKVmVlt22zvgS28mZg2BcX
- i+vHXiby1sgW1gZS6/9j+XHu7iumvlHbAQJI/15ajIJNLI07Z8zgz+dApvyrgjwdS7XpE4rEPeQ
- Cp+LLXzHb+bQ7ZHU2ChEBPTuHBc6Ken6JjmHs6iSY6ll
-X-Received: by 2002:a05:600d:1:b0:4a1:9438:71a8 with SMTP id
- 5b1f17b1804b1-4a1943873cfmr29538365e9.26.1791637257335; 
- Sat, 10 Oct 2026 06:00:57 -0700 (PDT)
-Received: from ?IPV6:2001:1aeb:401:dd00:a87:9755:c250:f5ef?
- (2001-1aeb-401-dd00-a87-9755-c250-f5ef.ip6.tmcz.cz.
- [2001:1aeb:401:dd00:a87:9755:c250:f5ef])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48db9aba3e5sm8831829f8f.31.2026.10.10.06.00.56
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sat, 10 Oct 2026 06:00:56 -0700 (PDT)
-Message-ID: <89620126-19cc-4954-bc29-ca6ca5e0b33e@mind.be>
-Date: Sat, 10 Oct 2026 15:00:56 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
-Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
-References: <20260918091142.62239-1-thomas.perale@mind.be>
- <20260918091142.62239-3-thomas.perale@mind.be>
-Content-Language: en-US
-In-Reply-To: <20260918091142.62239-3-thomas.perale@mind.be>
-Subject: Re: [Buildroot] [PATCH 3/3] utils/checkpackagelib: check
- IGNORE_CVES identifiers match patch trailers
+ c=relaxed/relaxed; t=1791640284;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=C7awn4+2FjY+dnvOzlOMhXtf9EPkFknRNFEAJNebW1k=;
+ b=VTflWtJGZMHcT9p/iiDyxyz96dc6UJOLKGQnhl6HubuLpzekUXlz1syPOF5oLJJoax+1
+ JNn3xLJ03bPxX+w4AVqQNlGF9iW/na5oar+OlbvbjMVH2Nx7sSI3+JP5fkBwtJZtzBq0N
+ O85giNS/ZFmjytKvOn/iHRkRRwsNFrpAhY50SMlQc1dPpEVf/U11hg/vvZ7KnyKqSw0hO
+ ZxM1tqAWaxUrUyxdx9CkTE2SLhYLSDm8IJsaMyBNX0AeQYPRwcW4HWV1/qeFnWdn7pZdJ
+ lROedJrd+YbHzGetGttvXAlpfIcqc/yJVQm2SiK2C0CFTFTb0L2Q2D4CnMUWHXAqu9w==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C647D60648
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 13:51:24 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 889AA9038E; Sat, 10 Oct 2026 13:50:06 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 10 Oct 2026 15:02:18 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f2449daf08cc4ba7b659b314cd8adbcc4a11d291
+X-Git-Newrev: 67cb61bea5876227226603e58d3f74e5032b734d
+X-Patchwork-Hint: ignore
+Message-Id: <20261010135006.889AA9038E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/network-manager: bump version to
+ 1.58.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -162,145 +111,110 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas and all,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/67cb61bea5876227226603e58d3f74e5032b734d
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-On 18/09/26 11:11, Thomas Perale wrote:
-> The ability to check with `make check-package` the 'IGNORE_CVES'
-> variable content reference an existing patches was added in commit [1].
->
-> This commit extend it to actually check that the entries that are
-> referenced in the 'IGNORE_CVES' variable are matching the trailers in
-> the referenced patch.
->
-> With this change the following `foo.mk` content:
->
-> ```
-> FOO_IGNORE_CVES += CVE-2000-1234
-> ```
->
-> Running `make check-package` will output an error if the content of the
-> patch is the following:
->
-> ```
-> CVE: CVE-2001-1234
-> ```
->
-> [1] b00ac4e346 utils/checkpackagelib: add new check MissingCVEPatch
->
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Acked-by: Titouan Christophe <titouan.christophe@mind.be>
-> ---
->   utils/checkpackagelib/lib_mk.py      | 25 +++++++++++++++++++---
->   utils/checkpackagelib/test_lib_mk.py | 32 ++++++++++++++++++++++++++++
->   2 files changed, 54 insertions(+), 3 deletions(-)
->
-> diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-> index c5b85bcda9..33988cab8b 100644
-> --- a/utils/checkpackagelib/lib_mk.py
-> +++ b/utils/checkpackagelib/lib_mk.py
-> @@ -120,12 +120,14 @@ class Indent(_CheckFunction):
->   
->   class MissingCVEPatch(_CheckFunction):
->       PATCH_COMMENT = re.compile(r"^#\s*(\S+\.patch)\s*$")
-> -    IGNORE_CVES = re.compile(r"^[A-Z0-9_]+_IGNORE_CVES\s*\+?=")
-> +    IGNORE_CVES = re.compile(r"^[A-Z0-9_]+_IGNORE_CVES\s*\+?=\s*(.*)$")
->       CVE_TAG_IN_PATCH = "CVE: "
->   
->       def before(self):
->           self.pending_patches = []
-> +        self.pending_cves = []
->           self.package_dir = Path(self.filename).parent
-> +        self.line_continuation = False
->   
->       def check_patch_files(self):
->           for patch_lineno, patch_name, patch_text in self.pending_patches:
-> @@ -146,6 +148,11 @@ class MissingCVEPatch(_CheckFunction):
->                           .format(self.filename, patch_name),
->                           patch_text]
->   
-> +            if set(self.pending_cves) != set(trailers):
-> +                return ["{}: patch file '{}' 'CVE:' tag(s) '{}' does not match the ignored identifier(s) '{}'"
-> +                        .format(self.filename, patch_name, ", ".join(trailers), ", ".join(self.pending_cves)),
-> +                        patch_text]
-> +
->       def check_line(self, lineno, text):
->           m = self.PATCH_COMMENT.match(text.rstrip())
->           if m:
-> @@ -157,9 +164,21 @@ class MissingCVEPatch(_CheckFunction):
->           if text.lstrip().startswith("#"):
->               return
->   
-> -        if self.IGNORE_CVES.search(text):
-> -            return self.check_patch_files()
-> +        m = self.IGNORE_CVES.search(text)
-> +        if m or self.line_continuation:
-> +            value = (m.group(1) if m else text).rstrip()
-> +            self.line_continuation = value.endswith("\\")
-> +            if self.line_continuation:
-> +                value = value[:-1]
-> +            self.pending_cves += value.split()
-> +            if self.line_continuation:
-> +                return
-> +            result = self.check_patch_files()
-> +            self.pending_cves = []
-> +            self.pending_patches = []
-> +            return result
->   
-> +        self.pending_cves = []
->           self.pending_patches = []
->   
->   
-> diff --git a/utils/checkpackagelib/test_lib_mk.py b/utils/checkpackagelib/test_lib_mk.py
-> index ba9dbd6aea..7152b40e2b 100644
-> --- a/utils/checkpackagelib/test_lib_mk.py
-> +++ b/utils/checkpackagelib/test_lib_mk.py
-> @@ -244,6 +244,38 @@ MissingCVEPatch = [
->        '# 0001-some-fix.patch\n'
->        'FOO_IGNORE_CVES += GHSA-abcd-1234-efgh\n',
->        []),
-> +    ('CVE tag does not match ignored identifier',
-> +     {'0001-some-fix.patch': 'CVE: CVE-2000-1234'},
-> +     '# 0001-some-fix.patch\n'
-> +     'FOO_IGNORE_CVES += CVE-2001-1234\n',
-> +     [['{}: patch file \'0001-some-fix.patch\' \'CVE:\' tag(s) \'CVE-2000-1234\' '
-> +       'does not match the ignored identifier(s) \'CVE-2001-1234\'',
-> +       '# 0001-some-fix.patch\n']]),
-> +    ('multiple ignored identifiers, patch matches one',
-> +     {'0001-some-fix.patch': 'CVE: CVE-2000-1234'},
-> +     '# 0001-some-fix.patch\n'
-> +     'FOO_IGNORE_CVES += CVE-2000-1234 CVE-2001-1234\n',
-> +     [['{}: patch file \'0001-some-fix.patch\' \'CVE:\' tag(s) \'CVE-2000-1234\' '
-> +       'does not match the ignored identifier(s) \'CVE-2000-1234, CVE-2001-1234\'',
-> +       '# 0001-some-fix.patch\n']]),
-> +    ('multiple ignored identifiers, all referenced across patch',
-> +     {'0001-some-fix.patch': 'CVE: CVE-2000-1234\nCVE: CVE-2001-1234\n'},
-> +     '# 0001-some-fix.patch\n'
-> +     'FOO_IGNORE_CVES += CVE-2000-1234 CVE-2001-1234\n',
-> +     []),
-> +    ('multiple ignored identifiers, all referenced across multiple patches',
-> +     {'0001-some-fix.patch': 'CVE: CVE-2000-1234\nCVE: CVE-2001-1234',
-> +      '0002-other-fix.patch': 'CVE: CVE-2000-1234\nCVE: CVE-2001-1234'},
-> +     '# 0001-some-fix.patch\n'
-> +     '# 0002-other-fix.patch\n'
-> +     'FOO_IGNORE_CVES += CVE-2000-1234 CVE-2001-1234\n',
-> +     []),
-> +    ('ignored identifiers split across continuation lines',
-> +     {'0001-some-fix.patch': 'CVE: CVE-2000-1234\nCVE: CVE-2001-1234\n'},
-> +     '# 0001-some-fix.patch\n'
-> +     'FOO_IGNORE_CVES += CVE-2000-1234 \\\n'
-> +     '\tCVE-2001-1234\n',
-> +     []),
->       ]
->   
->   
+Upstream changelog:
+https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/blob/1.58.1/NEWS?ref_type=tags
 
+Changes relevant for Buildroot build:
+
+* Support for dhclient has been removed, drop the conditional block
+  for BR2_PACKAGE_DHCP_CLIENT=y.
+
+* NetworkManager now installs a systemd generator to manage its initrd
+  units, disable it if building without systemd or for systemd without
+  initrd support by setting the target system generator directory to
+  "no" [1]. Note that the current upstream main branch adds a build
+  option for initrd support, likely to be released with 1.60.x, which
+  should supersede removing the initrd units and disabling the
+  generator when building with systemd.
+
+* Contrary to what the NEWS file states, the new "clat" build option
+  is enabled by default. Disable it, (optionally) enabling would
+  require libbpf and a suitable BPF compiler.
+
+[1] https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/blob/1.58.1/meson.build?ref_type=tags#L416-417
+
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/network-manager/network-manager.hash |  4 ++--
+ package/network-manager/network-manager.mk   | 13 ++++++-------
+ 2 files changed, 8 insertions(+), 9 deletions(-)
+
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index fe2f2ae262..ff2748ff72 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
+@@ -1,5 +1,5 @@
+-# From https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/1.56.0/downloads/NetworkManager-1.56.0.tar.xz.sha256sum
+-sha256  59a32d385cc1e7ae26e43798c6f12d07ff6198abd041ec0620b3a08cfc021ccc  NetworkManager-1.56.0.tar.xz
++# From https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/1.58.1/downloads/NetworkManager-1.58.1.tar.xz.sha256sum
++sha256  262864cfd198123d3e5dbe91937441b97ee9059d6d712e1a5bfbb1c54668d14d  NetworkManager-1.58.1.tar.xz
+ # Locally computed
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index c96f613831..5071546c27 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-NETWORK_MANAGER_VERSION_MAJOR = 1.56
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
++NETWORK_MANAGER_VERSION_MAJOR = 1.58
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).1
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/$(NETWORK_MANAGER_VERSION)/downloads
+ NETWORK_MANAGER_INSTALL_STAGING = YES
+@@ -34,7 +34,8 @@ NETWORK_MANAGER_CONF_OPTS = \
+ 	-Dmodprobe=/sbin/modprobe \
+ 	-Difupdown=false \
+ 	-Dnm_cloud_setup=false \
+-	-Dsession_tracking_consolekit=false
++	-Dsession_tracking_consolekit=false \
++	-Dclat=false
+ 
+ ifeq ($(BR2_PACKAGE_AUDIT),y)
+ NETWORK_MANAGER_DEPENDENCIES += audit
+@@ -43,10 +44,6 @@ else
+ NETWORK_MANAGER_CONF_OPTS += -Dlibaudit=no
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_DHCP_CLIENT),y)
+-NETWORK_MANAGER_CONF_OPTS += -Ddhclient=/sbin/dhclient
+-endif
+-
+ ifeq ($(BR2_PACKAGE_DHCPCD),y)
+ NETWORK_MANAGER_CONF_OPTS += -Ddhcpcd=/sbin/dhcpcd
+ endif
+@@ -153,6 +150,7 @@ NETWORK_MANAGER_CONF_OPTS += \
+ 	-Dsession_tracking=systemd \
+ 	-Dsuspend_resume=systemd
+ ifneq ($(BR2_PACKAGE_SYSTEMD_INITRD),y)
++NETWORK_MANAGER_CONF_OPTS += -Dsystemdsystemgeneratordir=no
+ define NETWORK_MANAGER_CLEAN_INITRD
+ 	rm -f $(TARGET_DIR)/usr/lib/systemd/system/NetworkManager-*initrd.service
+ endef
+@@ -164,6 +162,7 @@ NETWORK_MANAGER_CONF_OPTS += \
+ 	-Dconfig_logging_backend_default=syslog \
+ 	-Dsession_tracking=no \
+ 	-Dsuspend_resume=consolekit \
++	-Dsystemdsystemgeneratordir=no \
+ 	-Dsystemdsystemunitdir=no
+ endif
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
