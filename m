@@ -4,111 +4,134 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBC74CA9ECA
-	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 16:01:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAC14CA9EBE
+	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 16:17:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7A54E6068C;
-	Sat, 10 Oct 2026 16:01:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5B34D6064A;
+	Sat, 10 Oct 2026 16:17:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s-9iHqLSWDuQ; Sat, 10 Oct 2026 16:01:31 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 606FC60632
+ id hQi-cd7oq2BM; Sat, 10 Oct 2026 16:17:07 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 8567060638
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791648091;
-	b=mhZ5FxVea+S5tek8GIg0Xar40587bsLHAKyRGT4cdi3cVeWcOItrUPawLg5YNGmMajNF
-	 vGB+ri/3ar8w5Ro+GoIYdWbKAAq1ZnuUdatRoQRVEJdZHeM8Mxkb+u9bOLKbofXt60uVO
-	 aQumn2ALEejpxsJGHxNd5Ycb8+MfO7h1TyhAMyvmoglRMjU2EGzBpk7sH+apPFbCkCx25
-	 E/xSSuwDa+jPZnn9pYpqzSazy8mp80C511l1F8u36qC+F6KXFPg4OvA+Gg5N7m24lCtp6
-	 GtQvB1J1RK00Xp+XFuKJcB7lLDwK3IUwhuZDJ8D6/OIJ6OuzmR4hMjoLEGhD32O8k0A==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791649027;
+	b=G2DujAZQdGLXI5s1DLb1JriREZSd/zilgk7ogNSj1CNDUR7QHmpICe2dqB2AJwMmY2s0
+	 GkB6zZtmOEICZYT3a4S7nmKF2XLw0ijrGGEMhoRwlBVKWqO5JKFYrJCazt/0tUR7ReisO
+	 tGfiRJBpw+LzsP/G4lQUwOwcbBRpk4YFnBDUPQCWBSEtwYChg6Tkm0vt+zzUY/nLNCNBu
+	 w3W7CWUSwBNjTcbHb7dTve9JxCthZaCT01ICjTmb/7gCyAmoiH/yMEt++3z+FLzTBpuS3
+	 hQWdFps6Ft89LK5kzahGy3TJtqbxEsyNNb5Si21W1gw0m2/sXPibdazHW/wxPBWy0zg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791648091;
+	c=relaxed/relaxed; t=1791649027;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:To:Cc:References:
-	 Content-Language:In-Reply-To:X-Last-TLS-Session-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 Content-Transfer-Encoding:Content-Type:Errors-To:Sender;
-	bh=PiGB9zUUsPqQtqL+H9c+XT22cwCAHfiea4SBp+TIcJI=;
-	b=EsEDvex+mje8xbT0tVVFOSu9/U/sSdog4gSjN8RYth8Zf3wwo+w0b5l5YejFFVAMgK0i
-	 r7M9DzxSwWqGEMppdS/npPw6UPYexgcnqPaZVsj/KSg2+/AfW1Hv9LG46fwFonDvVhKH1
-	 +sOYIw34n05s1YzOXQPgIfl1cfYSNJEMEiE7j+R8n405WL40SRjqwzYmDPDAL0j7KWkf7
-	 rV+OmcT1J5mxGMKFvs/GpfDZHH+Xr6O0k9PHzqtaq64cZHnKPKpkb5ia4RR6IIMTaC+Ol
-	 NU1U5cG1oVpCK388Mz+dyJn9gGo8RsayewK4EWVnt1/mZ79SmusvfikB2eHxWJ052pw==
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:Received:From:To:
+	 Cc:In-Reply-To:References:Date:Message-ID:User-Agent:MIME-Version:
+	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=fnuX/33XKkNzf8xt2RFTjCuUeh4oJBhwsWBq6AwD/Do=;
+	b=rVTDRo03rspM1vg0TTBjs8v8OwLClF/TsGLxgbMFROH4pAlQnD/UHEyDnbNEpk+/HZyC
+	 5mgucfXYNY0c244uMmbEQ8O96xBW2yb0FaF1TjMHVpt2O5KBxcBn2cVh8y8Y50uQgKwt3
+	 zCJlwsed1BXn3gSIPXPUP/cUcCPAOR7K9gIcpvoGuXvWxHzsmrTmlZ0blcZtjxq2SkDjc
+	 razgKb638R5nilRpeJiFBITTXUJPQiua4/ynWb7f1A6VCIgBsJRNEl6XLXjyNYE7HOpXc
+	 zVEHao4n6K4MGPClOt56K8RslZM9pbvXFjCgTFUp0G8OmjrEkTIg02FQeMPk7twRGrw==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	dmarc=none header.from=korsgaard.com;
+	dkim=pass header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256 header.s=purelymail2 header.b=Of3BNEcm;
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791648091;
-	bh=PiGB9zUUsPqQtqL+H9c+XT22cwCAHfiea4SBp+TIcJI=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	s=default; t=1791649027;
+	bh=fnuX/33XKkNzf8xt2RFTjCuUeh4oJBhwsWBq6AwD/Do=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=km5g7f+k2WRhOxxBnjyXXACNNP4UZW7YXASDJe2OdpG2J4QRDUpH3GJZpLb7GtI4w
-	 LYS4sjZ1gpMwuSoE7c7G2SICyTMSmctxeQ+kpSETI55k3tGyKAJqGZYb9hHnouH4cg
-	 iDRoh5lkzSt1icGqtcf5mj84hqZzetlR+UKewUHhnASmaUju/EEzNZNWVlR1wcp/Ot
-	 blZJ77ZaoplH/hwcBbEfdpgHPlMPWxJ6gtdoUN+FEFs8k3xTT3hrgeBaAF9953T0gv
-	 op/JYBlHIVTCowoSGZIa24p4sv7PPrgjDR0EF4ErovJzO2KwVAKVTmnn3u8wCcDx4N
-	 r2A9lWA+kI7fA==
+	 From;
+	b=UWoSS+bzUo2f/t4vM18r9F/geZ6Ke7OribXQyiZSdMWURFDep/jRWuIfrofD7Gu1+
+	 lnm9zO6FxruFZYP+R3ILlmK7DHoG2QS7Nmr24UQ540A0YUX3XrORzFWX4HQQ1CSqz9
+	 JXVSLp9oPWkmP3Uf2QtLMDcAifWmZ2kqrJnSZgJDx+m9VF3MgnnzCNJzunTv0DEcjF
+	 tecH0X4G4hsjXuUwjx9Xq6QIekedDfFkSatX1z/8wBav6mK2jev1Qh8Icyqgr3VWIu
+	 Gcx+wv+M2vS9PuUo3SBVyW47GNk7/sNCNxAQX/DBwJ/LmtD+SQ8ntiCIMtSJ8TkPQc
+	 HTP2Z7gtuzzxw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 606FC60632;
-	Sat, 10 Oct 2026 16:01:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4E890317
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 16:01:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8567060638;
+	Sat, 10 Oct 2026 16:17:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D5E96235
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 16:17:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0F98E60632
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 16:01:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BB78060639
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 16:17:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RpTqhglsc0dU for <buildroot@buildroot.org>;
- Sat, 10 Oct 2026 16:01:28 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org B60116062D
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791648088;
- b=FteiNYnTCOiYM52ptMaHGaxVe8Dy75a16rtQ77XHSSlyXuD15ulMXhqvf8NU9s4fw4Dy
- r+oI6nCHnIc3os8RcXNawGEeLE6KUNp2gTF1qCA2NbnYBCzDdjJyu9EW/sm/H+ibUeV6D
- XefOE7WgYNtDRH6P3sfAsjWmj9iqYQyqp72OQ0q0AtN/1sU4z9tS/e44gSSatJFS0k0JJ
- yJk7DsoruMWyoN0a7DEYQDE+n/145Bl1JMGUjnTl1kCdK9CQ6+Dnk6C7yC3QBNEswXBP8
- ZoFaQDmkKSfO/XwURiuXjtdMxGYtSs9J8HqCXxzmp92tkvMLj7VhPhBfOemlbR2nNEw==
+ id zus1DYy6FxCA for <buildroot@buildroot.org>;
+ Sat, 10 Oct 2026 16:17:04 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org A79CA60632
+Authentication-Results: smtp3.osuosl.org;
+ arc=none smtp.remote-ip=34.202.193.197
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791649024;
+ b=O4kwnnvlUU9fK2qZApvh+uED4mdBL5bxXFBydl3ecRb6wKT/2UvYZAhHMOQL7wHWUtAP
+ ylNdKKLZBJKCDXybJL8SuOrO38Moc6aHfUjAiyFZC5CzGLB2loBX99VIL8jcIxsbwrNIu
+ n3V9U18CUlKbVZlcavrsvrlnbMhRmfetnMUMuK9stGY0EJpJixRjMMoWTtATceD+3vNF3
+ MFh2hXxeXv1NbmV3XcpAhZSOVQdRgb/gKXThHNONy2lI4MFnYpmAfARIY38ftbzq0nIJV
+ pkFiBJwVLfq4Oo3N1xuBr5akwQO7Px4MW9p8LG+5Bd7HtNomYJ5gNsZVnv+AHge6s0w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791648088;
- h=Received-SPF:Received:DKIM-Signature:Message-ID:Date:MIME-Version:
- User-Agent:Subject:To:Cc:References:From:Content-Language:In-Reply-To:
- Content-Type:Content-Transfer-Encoding:X-Last-TLS-Session-Version;
- bh=jbtVeM2irz4d8rG4PTJI2xWFBobE5UsnloV+pg1BqRw=;
- b=efV8oG1UnwStfAAzdXVVdu0fUQA3KW2XZr1A3i6yjLIncwvlNUIS/OwXrypnZqPEOy6P
- yIrm3QBc1kR75EDvi8w0sdpnmkb32ugpS3udjfJTgETuPT7514LhaZrv1haHY4VczV+uQ
- lbaTxs0mQocj29QJjSh+TMsUxeJzSgKdbrmnmO+2+dmXDsW9qXuDeAoxCLXlYNmhEnJ4r
- NSWpdr/p7WfGGbxhYopBTMNmZduv84IoeUvJAqjh7MkhjtaWTmkykF43i6FGa5qerR6nm
- rzixo9BGbIQ8n0Wd4Ii5m1WfsatAd/10ujxbb/IvO1qMmWKryMcwO/VcYPn4BcCXT+w==
+ c=relaxed/relaxed; t=1791649024;
+ h=Received-SPF:DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:
+ Received:From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+ User-Agent:MIME-Version:Content-Type;
+ bh=YQ3l/59zM93Cuo3v+HzbJYWqeAeNULPhBMa5HstSSO8=;
+ b=d6+LWZmunRsNRKllYmzrtzDCs5SfihwOOOEqVEFHuzOJQG+JYmKWaaUvGqzvcBTQytn8
+ I90QlZlqXQS97DvfMaChGK9cuyZ+RnGPI2O2e4AA5PneHO3kUErqdtQ8NpGfVo+pMATfa
+ HnR6RmgEya9ueQJo39C/5y2ueunR+iBor2sZ8U70ScUiA6Fa+9NXZZzRzhuwwalZJXW/Y
+ k4fpKtEfDSW9fB+xAL6PEfnHHIelIVER4pNeK6+4r7yEKceYZUdtV2mz+k3l+yqbspYaJ
+ JpQmE+Mi9l5GoqG1/jaL93XnAs5Gt/zbwhcsyA3Tz1AuvxFzycYcY5C/utt36brIbzA==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
- dmarc=pass header.from=rnout.be;
- dkim=pass header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=MStUtRJ4; 
- arc=none smtp.remote-ip=79.99.201.12
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-Received: from mail.nubo.coop (mail.nubo.coop [79.99.201.12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B60116062D
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 16:01:27 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id BD5C0B979F97; Sat, 10 Oct 2026 18:01:19 +0200 (CEST)
-Message-ID: <0f7abd2e-c14e-45c1-9189-f872d2f46da3@rnout.be>
-Date: Sat, 10 Oct 2026 18:01:17 +0200
+ dmarc=none header.from=korsgaard.com;
+ dkim=pass header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256
+ header.s=purelymail2 header.b=Of3BNEcm; 
+ arc=none smtp.remote-ip=34.202.193.197
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=korsgaard.com
+Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail2 header.b=Of3BNEcm
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A79CA60632
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 16:17:02 +0000 (UTC)
+DKIM-Signature: a=rsa-sha256;
+ b=Of3BNEcmAEbab166aJV4ojiS9i7ZatcDbB8DW7KjlOkYp2xWNvXgzY9SIw+yGUUyYqVBlTQr2V17lGxcsLLs+qi9C9ABnBFPqTKkMZg2ZpxB0SHr9HGQaigqBke1Mcv6LJij/J/aFCuJja+j0XI7enxmYzIhqZcVS+tbUrF+j2HSEzm07i8r+GT1AA4ZD7PkRMCKsWNRaGnxa+o7WOuihB2ml3WKY95dS/oQE2vNYutUURz8uTN/WL9L88MTjEr7s5MUi1z8X3H3dTiQ86P1edzmkbvBgk3r+ArvF//C8ydxjPbnVzuiwPT6zU7Hn5ON83RYCt/XTnmlv97hkebPKg==;
+ s=purelymail2; d=purelymail.com; v=1;
+ bh=5Dzzg8y2vzZGWb0g2lO5yVPzbakNxb4ZPjsljSTxc9E=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Authentication-Results: purelymail.com; auth=pass
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1646814515; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Sat, 10 Oct 2026 16:16:58 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1xFZkm-00000001uVb-3Ogs;
+ Sat, 10 Oct 2026 18:16:56 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20261006162106.3439373-67-bernd@kuhls.net> (Bernd Kuhls's
+ message of "Tue, 6 Oct 2026 18:20:47 +0200")
+References: <20261006162106.3439373-1-bernd@kuhls.net>
+ <20261006162106.3439373-67-bernd@kuhls.net>
+Date: Sat, 10 Oct 2026 18:16:56 +0200
+Message-ID: <87o6d1fs3r.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Andrei Cherniaev <dungeonlords789@naver.com>, buildroot@buildroot.org
-Cc: hi@senzilla.io, romain.naour@gmail.com, kory.maincent@bootlin.com,
- vincent.stehle@arm.com, ju.o@free.fr, jiaxun.yang@flygoat.com,
- fancp2007@gmail.com, fiona.klute@gmx.de
-References: <20260518015612.2280292-1-dungeonlords789@naver.com>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <20260518015612.2280292-1-dungeonlords789@naver.com>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH 1/1] boot/edk2: fix description
+Subject: Re: [Buildroot] [PATCH v8 66/84] package/libcec: bump version to
+ 8.1.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -120,116 +143,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Andrei,
+>>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
 
-On 18/05/2026 03:56, Andrei Cherniaev wrote:
-> 1) usually user should not try to find OVMF.fd somewhere manually
-> 2) board/qemu/x86_64-efi/readme.txt is trying to be duplicate of board/pc/readme.txt. We should not duplicate info
-> 
-> Signed-off-by: Andrei Cherniaev <dungeonlords789@naver.com>
-> ---
->   board/pc/readme.txt              | 10 +++++-----
->   board/qemu/x86_64-efi/readme.txt | 17 +++--------------
->   boot/edk2/Config.in              |  4 +++-
+ > https://github.com/Pulse-Eight/libcec/blob/libcec-8.1.7/debian/changelog.in
+ > Removed patches which are included in this release.
 
-  I applied only the help text change to master.
+ > Removed dependency to libplatform due to upstream commit:
+ > https://github.com/Pulse-Eight/libcec/commit/332bca975a71d8e876b66dc6a7fca938b49b1831
 
-  For the readme's, I think it should be resolved in the other direction, see below.
+ > Updated license hash due to upstream commits:
+ > https://github.com/Pulse-Eight/libcec/commits/libcec-8.1.7/LICENSE.md
 
->   3 files changed, 11 insertions(+), 20 deletions(-)
-> 
-> diff --git a/board/pc/readme.txt b/board/pc/readme.txt
-> index 18b1e3dcf0..31ca5357e9 100644
-> --- a/board/pc/readme.txt
-> +++ b/board/pc/readme.txt
-> @@ -63,12 +63,12 @@ Run the emulation with:
->   
->   qemu-system-x86_64 \
->   	-M pc \
-> -	-bios </path/to/OVMF_CODE.fd> \
-> +	-bios output/images/OVMF.fd \
->   	-drive file=output/images/disk.img,if=virtio,format=raw \
->   	-net nic,model=virtio \
->   	-net user
+ > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-  I think it's better to remove this option entirely and instead point to the 
-qemu readme, with the additional note that the OVMF.fd may be found on your host 
-already so you don't need to build EDK2.
+Committed, thanks.
 
->   
-> -Note that </path/to/OVMF.fd> needs to point to a valid x86_64 UEFI
-> -firmware image for qemu. It may be provided by your distribution as a
-> -edk2 or OVMF package, in path such as
-> -/usr/share/edk2/ovmf/OVMF_CODE.fd .
-> +Note that OVMF.fd needs to be a valid x86_64 UEFI firmware image for qemu. The
-> +easiest way is to generate it during the Buildroot build by set
-> +BR2_TARGET_EDK2. Alternatively it may be provided by your distribution as a
-> +edk2 or OVMF package, in path such as /usr/share/edk2/ovmf/OVMF_CODE.fd .
-> diff --git a/board/qemu/x86_64-efi/readme.txt b/board/qemu/x86_64-efi/readme.txt
-> index 7f69be065f..036239819a 100644
-> --- a/board/qemu/x86_64-efi/readme.txt
-> +++ b/board/qemu/x86_64-efi/readme.txt
-> @@ -12,17 +12,6 @@ Build
->   Emulation
->   =========
->   
-> -Run the emulation with:
-> -
-> -    qemu-system-x86_64 \
-> -        -M pc \
-> -        -m 1024 \
-> -        -serial stdio \
-> -        -bios output/images/OVMF.fd \
-> -        -drive file=output/images/disk.img,format=raw \
-> -        -netdev user,id=net0 \
-> -        -device virtio-net-pci,netdev=net0 # qemu_x86_64_efi_defconfig
-
-  This is actually used by the a CI script to boot the defconfig. That's why the 
-comment is there at the end. See support/scripts/boot-qemu-image.py for details.
-So this _definitely_ can't be removed.
-
-> -
-> -Optionally add -smp N to emulate a SMP system with N CPUs.
-> -
-> -The login prompt will appear in the graphical window.
-> +    output/images/start-qemu.sh
-> +or
-> +    output/images/start-qemu.sh --serial-only --use-system-qemu
-> diff --git a/boot/edk2/Config.in b/boot/edk2/Config.in
-> index 2620c79076..7d170fde3b 100644
-> --- a/boot/edk2/Config.in
-> +++ b/boot/edk2/Config.in
-> @@ -14,7 +14,9 @@ config BR2_TARGET_EDK2
->   	help
->   	  EDK II is a modern, feature-rich, cross-platform firmware
->   	  development environment for the UEFI and PI specifications.
-> -
-> +	  Select this to build EDK II (and OVMF) to be able to boot
-> +	  Buildroot in QEMU (UEFI mode).
-
-  This is the part that was applied so no need to resend it.
-
-  Anyway the two changes are pretty much independent so should have been 
-separate patches.
-
-  Thanks again!
-
-
-  Regards,
-  Arnout
-
-> +	
->   	  https://github.com/tianocore/tianocore.github.io/wiki/EDK-II
->   
->   if BR2_TARGET_EDK2
-
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
