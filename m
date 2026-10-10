@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10E8ECA9EC1
-	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 20:40:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2442ACA6017
+	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 20:43:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ACDA160720;
-	Sat, 10 Oct 2026 20:40:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DCC7D60638;
+	Sat, 10 Oct 2026 20:43:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JK-xKpF7tl_A; Sat, 10 Oct 2026 20:40:26 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org CF99960639
+ id 9ouczYREhqmu; Sat, 10 Oct 2026 20:43:45 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org B436B60648
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791664826;
-	b=g7UquRVHrYnp3tOcvXSrBdq+C5ciS75G+S7OanhnifNnxR4qR7kLHmDsomrlQUEECkLW
-	 Ox0GEgkveLBBLbtYYEqLNS67xMcDTRuPZ2hswjh6tO7BbpsvTvJLI8AVMeAjm+h2Zte7t
-	 New7anANtdhAkeP/8YL7ySoxGA1QRTPmRPw3CF0qW3uDZJUo26sOJx/LC5vVEKVgtWp8U
-	 5MiLIn/5n0brb3MYN6MzTOZf24dp1yt0+mIDIVSp9Bz2ro7sL9St0X+THFdtEUwmsno5U
-	 Xw8zJ6RmcvSgSSbBGvjfHn+nR7yy9Lo3NJRWmCf/xLBXySQ4HIHAOPpo0KcZBtsYv0w==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791665025;
+	b=EgURsVbVZC6Ignh46fjLXM+s8i3qEoB7NupLQcpBzPS2Qeqh2I1HYKHSxYZHLaO8fnKd
+	 P+h2tAIGKZz4ZvwrqSkwRkfwLkxpMN2MWVfGYM8G0Sb2DXaeLmhbaz4Q34gjhIL4AzVsD
+	 /ls2onXocEmc980XhtlnL72Mva6KxiS90oUcHs+HD0Ktm5szuVN9ZMm4c8D4VK80XLZcJ
+	 nxwkYMJ9BS0JuBbtkFFk61zFRYnKZurQiqUObxjxPmlvbJe/rMe32QctxO+bZNcgXompZ
+	 K5E+6rkkHzImYurKVbC4WSDxXE4Qmcn6D4TGpm6XGyquCGBBpbfEAsiixV23EH5I8Zw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791664826;
+	c=relaxed/relaxed; t=1791665025;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,84 +31,84 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 Content-Transfer-Encoding:Content-Type:Errors-To:Sender;
-	bh=7tcTA07XKh2uxZZeHGmmLVEvj9TqDrOUdJHM7bBEEkU=;
-	b=jHi95UsD3cqnToJy7HWYLWQMyRb4ppanQ0o635K5M4urLOuc3N8+8csYA7DpTy8pCXrg
-	 9qAX6vGA2YNtIHuj8K0pCOT82LpoP8OSXPBeS3sScgVltbt7z3Z2gb6xLvtLO5k5uTmmc
-	 D1QN8B0qh4CFCPaN016p9ezpn/f/4xA9rDSFF9bjeLB8nBd5vT3OHTiQYXReVeNeyvlVF
-	 VIvzvI39Ap5A04XkVxJjH+W+3B+m3LgcAOhxog8aGchCeK9DKpeyY6IayiE41APED/y9S
-	 WvN+GJhJ4bQc0GmMJwz1PWmHdegwp1z4shtohsFPD+NTP/aG+VYoEkUF8dVkOzoUHLQ==
+	bh=pPIwkECJuFOR+cS0XavyvMifYV6d+9xWWA2xfe3wl6E=;
+	b=d0N0it17DC8fqJAfrOA165jU15AjOkCR3y/7CaRKTcU0ADPD6uyrxjoPrnMfNL4KX7id
+	 JlhL7mOn6RxLsHPbyzaXasiUuHqKW0JuCBU7VfMc+/bVYwmHu6faMaFDdVu2p6u+Z1XFo
+	 NFwXufiCwWb6/0D68VebLJUjME6tQXSvQnYu+4qD0DyLUe9wCCDF/JeOIjd/JWqEdw6of
+	 qpzrTV4eohSwvVQG4qbnnzk9rUuvYUlTqdqk9VxmwSacBHrGYvIEZo4jmmw/SD0uSqHvq
+	 ibD0LfjfNUZqLeMNjjJPQFTjshKEqEVvqmhdulwd2XwSBhbkqQ3aGFhOrLdSiHUcqDw==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791664825;
-	bh=7tcTA07XKh2uxZZeHGmmLVEvj9TqDrOUdJHM7bBEEkU=;
+	s=default; t=1791665025;
+	bh=pPIwkECJuFOR+cS0XavyvMifYV6d+9xWWA2xfe3wl6E=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Dfzy0n6bkE2vqaRnlS8Ch4eDvH8ok5dHgdvixIHS1MVPQe4Cs7TNC27hvm5HRk0BM
-	 5XgVza7mCihMyX2HELokKSP0I5+aevSbewoaOzyJTS3cVxJhb+Zg5AQ1ymJSc2eqER
-	 pbooWX4mfhn8W25HGoz0rlWom88ymsMb3oUtsWVLgGFZSEsoO57840g6XlkNDPlbg+
-	 8eZPHSrbDjckPXs7JFn6k9rp8D4y4Fsyo5BNMVb/KxPijTms7AqRMZpTm23zeoukZR
-	 c3ZN52W8DWS+K1gMjweg0+fJK41OZ1wQszzylH7ldhsBqc4cFLpau7JVfgVo4feR54
-	 8l5S86LuDGbXg==
+	b=OSXjBPMCbxRumJTgWLEuNUT5ZIxTb6PrH52SI5tPdb2FumbOKBJCk6C0Z0fikN538
+	 T5EfL8YvrwEDKAv4rEJl6RjWKVKWlzXb/7heVVzOjji2yz2W90rb6U+/aXQVQ1ydzE
+	 oOIXIVhl8QEbHJb+DxA9lMqiklKMwxEIIjTOB9qrJeluOuT2lv/jlCeg8+wg6ziDpG
+	 07dKjUAk2WjkE/YULrdA3lyi8bpdUCkQVaigiuJqZQIoq6+6aQ68rgIu57mqVm6w5d
+	 pIeSyGxp2abV3OxG/dytUXUMDDl+N2wGDCSnCStu1vdARTfjYvuUOtjU0cjuKqDog6
+	 b5mbFARILxpUg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CF99960639;
-	Sat, 10 Oct 2026 20:40:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 33BD8156
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 20:40:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B436B60648;
+	Sat, 10 Oct 2026 20:43:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7926A156
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 20:43:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 30B6A40878
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 20:40:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6AF2840068
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 20:43:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BZsxPL3ygmlf for <buildroot@buildroot.org>;
- Sat, 10 Oct 2026 20:40:22 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org A5D8740872
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791664821;
- b=s+Z3XaoXiJxdcc/3rt6saBQMLuMpL7EkY84Al4UWuMq2+sngCfCFt8zXYM34u3yrh+8c
- v4aNSc5ab06jcH1ex2OTfJFF3zoiSKeYWIKPzueDIgC0zvvB5ZlS7an8uND7afGB+vC0z
- B5F8/0AspWidfqQojUTbceri9L0X2gN9HMWXsKQRv2XhwjPI3a255fLRtXJu/xP1AKRnh
- cfB9lkczeJrVg5jhH9SxcRcasZ8TyavGHCcZ9qu03Zr7aAElU0gmQqLl2324uoQhx948t
- tEQIGCEorSlH5dSxwhuoyDaqyaPdeyQjGe+2TsTfUeiorPB2VqIlj3e6pxP6WS3SQrg==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hYkzF5OR5wgO for <buildroot@buildroot.org>;
+ Sat, 10 Oct 2026 20:43:43 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 1E8F540004
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791665023;
+ b=KJSmLMrXbu7ZQW/aT0Xp1ZApaxc8aOtbV+5m4JHGnlJ8vB0SwM6YTD/qY+CjxH/6Wvyc
+ VsiESIOiOtHrMCp/vMdZyxBYtBxViuRCJi9xTmDTBqLWl68ZHtdqUmwO2upXhIctHd64m
+ Lu4ft7Esz20YVrlb0npkosL/8UujETsFD3sLNHBPSJCTB0G37EEov3Nv6tSwIRVFkMcra
+ j1GNe4yG7Jo1addTzsaciB5/d9k9XQjZA9aV3C+vkdZsSLeXQUyd4XR68MTR6vW8k4rKb
+ 5z5C4ll0utDAYplTdfWtacKDo/FqP5gfdW+zyGCkVo/R0+B1/suGLM03g/FMAJ1iY7w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791664821;
+ c=relaxed/relaxed; t=1791665023;
  h=Received-SPF:Received:DKIM-Signature:Message-ID:Date:MIME-Version:
  User-Agent:Subject:To:Cc:References:From:Content-Language:In-Reply-To:
  Content-Type:Content-Transfer-Encoding:X-Last-TLS-Session-Version;
- bh=ipAvN4Iquxgyqs3gj8L3/562ixKb8pkIcKiRAjkPNQk=;
- b=RKIWhaSPDJc3odYE2mMqffvbMBUlXFGhcR0EqhkbwFzjKZHJ8DJt5I1kKqlWsd3LxCgm
- Z+0xCGT98Q44vE5vWunZVQw1n2bnLnG51S8AUzq7eJnMJJYK4AE8VeEM2ngsnLDS8vS+4
- Ef1mKJjuATm7f6JX5IM3IRgnlfK+1Y9/bPmnFvRKufbEB3k/fGSnDA2r/hDBvuGP5pl6v
- RB1UpGK043+VTsfmkOQ8ck6PATqpss2uldneK92hJS99DU+0Ml/cnYeOkaWJqFMLfgakT
- pr2JKCZrwKo9DYLvO2pxm7ZkxibJK3luayYVknavDwTX/CqQh6uknBJTYDA9Al3TueQ==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ bh=H7i6RUG7a8484tGA+FtlzmJvPvNiy1YIuZ3lyd5eWVk=;
+ b=kYCn9eFQNNQ1EZPTVsm5m8HuBbsofo4cuYsyD47tjuaqEn9Udqa5Rks+0A3ImSH44zVk
+ 6RHRedg8UDYohdpjF2KqdVXs6B0XM1i/iqBc1ei2diggstLprLaswBSiqBYHuwRNpyTSD
+ I7aMtOuYL/VymYO+TV6Y8mtnjHRA9ywl2tIIg+KF1TbgXU6hav9j/33AXftlnrJKA0hIV
+ Vq3t2fExqCB41gl+yZD/khWHwbPdLvn9Zjj0piOz6G7oWw7qBc263hS8C7DcfB0RB/hn7
+ 12jPtTP59XNbRbH1ISQyAOrNzhSM5AjSXkbp68Z07hdGM/UrHX7KHY5jLnZu187SpWQ==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  dmarc=pass header.from=rnout.be;
  dkim=pass header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=nhETRYZp; 
+ header.s=dkim header.b=CDO6f0SB; 
  arc=none smtp.remote-ip=79.99.201.12
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
 Received: from mail.nubo.coop (mail.nubo.coop [79.99.201.12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A5D8740872
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 20:40:21 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1E8F540004
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 20:43:42 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 2AD15B979FA9; Sat, 10 Oct 2026 22:40:17 +0200 (CEST)
-Message-ID: <5853e85d-141e-47d1-b12b-6d65d760a8a2@rnout.be>
-Date: Sat, 10 Oct 2026 22:40:13 +0200
+ with ESMTPSA id AE0A2B978F6F; Sat, 10 Oct 2026 22:43:39 +0200 (CEST)
+Message-ID: <888d878b-2a06-45c9-b162-e8e786aa8025@rnout.be>
+Date: Sat, 10 Oct 2026 22:43:37 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
 Cc: Quentin Schulz <quentin.schulz@cherry.de>
 References: <20260624101340.80670-1-thomas.perale@mind.be>
- <20260624101340.80670-6-thomas.perale@mind.be>
+ <20260624101340.80670-8-thomas.perale@mind.be>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20260624101340.80670-6-thomas.perale@mind.be>
+In-Reply-To: <20260624101340.80670-8-thomas.perale@mind.be>
 X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH 6/9] utils/generate-cyclonedx: support
- custom version
+Subject: Re: [Buildroot] [PATCH 8/9] utils/generate-cyclonedx: split
+ vulnerabilities per state
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,78 +130,162 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 
 On 24/06/2026 12:13, Thomas Perale via buildroot wrote:
-> Support using minor revision for CycloneDX 1.6 by passing the version
-> from the command line. Currently supported:
+> If a vulnerability is present in multiple components and only one of
+> them has a patch that addresses that vulnerability, all components will
+> currently have that vulnerability marked as `resolved_with_pedigree`.
 > 
-> - 1.6
-> - 1.6.1 [1]
-> - 1.6.2 (default) [2]
+> Right now, this issue does not affect any packages, but in the future it
+> might affect packages that provide multiple version options (e.g.
+> gnupg and gnupg2).
 > 
-> This is used to fetch the latest SPDX license list available upstream.
+> There is a small chance this happens in a real-world use case, but it
+> may occur in the context of maintenance when running
+> `make show-info-all`.
 > 
-> [1] https://github.com/CycloneDX/specification/releases/tag/1.6.1
-> [2] https://github.com/CycloneDX/specification/releases/tag/1.6.2
+> This commit changes how vulnerabilities fixed by a patch are stored.
+> Instead of placing all vulnerabilities into a single set, it now keeps an
+> index of the component for which the patch has been applied.
+> 
+> When generating the vulnerability list, the component reference is
+> checked instead of only the vulnerability ID. If a vulnerability ID has
+> multiple states for different references, multiple vulnerability
+> entries are created with distinct analyses.
+> 
+> Consider the hypothetical case where gnupg ignores a vulnerability
+> because it was introduced in a later version, while gnupg2 has patched
+> that vulnerability. This would result in the following JSON:
+> 
+> ```json
+> [
+>      {
+>          "id": "CVE-1234-1234",
+>          "analysis": {
+>              "state": "in_triage",
+>              "detail": "The CVE 'CVE-1234-1234' has been marked as ignored by Buildroot"
+>          },
+>          "affects": [
+>              {"ref": "gnupg"}
+>          ]
+>      },
+>      {
+>          "id": "CVE-1234-1234",
+>          "analysis": {
+>              "state": "resolved_with_pedigree",
+>              "detail": "The CVE 'CVE-1234-1234' has been marked as ignored by Buildroot"
+>          },
+>          "affects": [
+>              {"ref": "gnupg2"}
+>          ]
+>      }
+> ]
+> ```
 > 
 > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 > ---
->   utils/generate-cyclonedx | 12 ++++++++----
->   1 file changed, 8 insertions(+), 4 deletions(-)
+>   utils/generate-cyclonedx | 21 +++++++++++++--------
+>   1 file changed, 13 insertions(+), 8 deletions(-)
 > 
 > diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-> index 9738db71d6..8d055c3bbd 100755
+> index 672e7ed815..e12a9a4629 100755
 > --- a/utils/generate-cyclonedx
 > +++ b/utils/generate-cyclonedx
-> @@ -22,7 +22,7 @@ import sys
->   import re
->   
->   
-> -CYCLONEDX_VERSION = "1.6"
-> +DEFAULT_CYCLONEDX_VERSION = "1.6.2"
+> @@ -14,6 +14,7 @@ import json
+>   import os
+>   from pathlib import Path
+>   from typing import Iterator
+> +from collections import defaultdict
 
-  The test was still using version 1.6. This doesn't break the test because it's 
-only to generate a dummy file that avoids having to download it - so it just 
-means that the test actually downloads the file, which fails when it is run 
-without network. Not critical but I fixed it anyway.
+  Alphabetic ordering again.
+
+>   import urllib.parse
+>   import urllib.request
+>   import urllib.error
+> @@ -39,7 +40,7 @@ BR2_VERSION_FULL = (
+>   # Set of vulnerabilities that were addressed by a patch present in buildroot
+>   # tree. This set is used to set the analysis of the ignored CVEs to
+>   # 'resolved_with_pedigree'.
+
+  The comment didn't correspond to the code anymore (it's not a set).
+
+> -VULN_WITH_PEDIGREE = set()
+> +VULN_WITH_PEDIGREE = defaultdict(set)
+>   
+>   SPDX_LICENSES = []
+>   
+> @@ -218,11 +219,12 @@ def read_patch_file(patch_path: Path) -> str:
+>           return f.read()
+>   
+>   
+> -def cyclonedx_patches(patch_list: list[str]):
+> +def cyclonedx_patches(comp_ref: str, patch_list: list[str]):
+>       """Translate a list of patches from the show-info JSON to a list of
+>       patches in CycloneDX format.
+>   
+>       Args:
+> +        comp_ref (str): Reference of the component the patches are part of.
+>           patch_list (list): Array of patch relative paths for a given component.
+>   
+>       Returns:
+> @@ -245,7 +247,7 @@ def cyclonedx_patches(patch_list: list[str]):
+>               issue = {}
+>               cves = extract_cves_from_header(header)
+>               if cves:
+> -                VULN_WITH_PEDIGREE.update(cves)
+> +                VULN_WITH_PEDIGREE[comp_ref].update(cves)
+>                   issue = {
+>                       "resolves": [
+>                           {
+> @@ -402,7 +404,7 @@ def cyclonedx_component(name, comp):
+>               "cpe": comp["cpe-id"],
+>           } if "cpe-id" in comp else {}),
+>           **cyclonedx_external_refs(comp),
+> -        **(cyclonedx_patches(comp["patches"]) if comp.get("patches") else {}),
+> +        **(cyclonedx_patches(name, comp["patches"]) if comp.get("patches") else {}),
+>           "properties": [{
+>               "name": "BR_TYPE",
+>               "value": comp["type"],
+> @@ -437,11 +439,14 @@ def cyclonedx_vulnerabilities(show_info_dict):
+>       Returns:
+>           list: Solved vulnerabilities list in CycloneDX format.
+>       """
+> -    cves = {}
+> +    cves = defaultdict(list)
+>   
+>       for name, comp in show_info_dict.items():
+>           for cve in comp.get('ignore_cves', []):
+> -            cves.setdefault(cve, []).append(name)
+> +            state = "in_triage"
+> +            if cve in VULN_WITH_PEDIGREE.get(name, {}):
+
+  Since VULN_WITH_PEDIGREE is a defaultdict of sets, it makes more sense to use 
+an empty set instead of an empty dict as default of the get(). Doesn't make any 
+actual difference of course but if we'd ever do type checks this would trigger.
+
 
   Regards,
   Arnout
 
+> +                state = "resolved_with_pedigree"
+> +            cves[(cve, state)].append(name)
 >   
->   brpath = Path(__file__).parent.parent
+>       return [{
+>           "id": cve,
+> @@ -450,13 +455,13 @@ def cyclonedx_vulnerabilities(show_info_dict):
+>               "url": "https://nvd.nist.gov/vuln/detail/" + cve
+>           },
+>           "analysis": {
+> -            "state": "resolved_with_pedigree" if cve in VULN_WITH_PEDIGREE else "in_triage",
+> +            "state": state,
+>               "detail": f"The CVE '{cve}' has been marked as ignored by Buildroot"
+>           },
+>           "affects": [
+>               {"ref": bomref} for bomref in components
+>           ]
+> -    } for cve, components in cves.items()]
+> +    } for (cve, state), components in cves.items()]
 >   
-> @@ -538,6 +538,9 @@ def main():
->                           help="Specify the project name to use in the SBOM metadata (default:'buildroot')")
->       parser.add_argument("--project-version", type=str, default=f"{BR2_VERSION_FULL}",
->                           help="Specify the project version to use in the SBOM metadata (default: builroot version)")
-> +    parser.add_argument("--cdx-version", type=str, default=DEFAULT_CYCLONEDX_VERSION,
-> +                        choices=["1.6", "1.6.1", "1.6.2"],
-> +                        help=f"Set CycloneDX version (default: {DEFAULT_CYCLONEDX_VERSION})")
 >   
->       args = parser.parse_args()
->   
-> @@ -545,7 +548,7 @@ def main():
->           parser.print_help()
->           sys.exit(1)
->   
-> -    SPDX_LICENSES.extend(br2_retrieve_spdx_licenses(CYCLONEDX_VERSION))
-> +    SPDX_LICENSES.extend(br2_retrieve_spdx_licenses(args.cdx_version))
->       show_info_dict = json.load(args.in_file)
->   
->       # Remove rootfs and virtual packages if not explicitly included
-> @@ -553,10 +556,11 @@ def main():
->       filtered_show_info_dict = {k: v for k, v in show_info_dict.items()
->                                  if ("rootfs" not in v["type"]) and (args.virtual or v["virtual"] is False)}
->   
-> +    cdx_spec_version = ".".join(args.cdx_version.split(".")[:2])
->       cyclonedx_dict = {
->           "bomFormat": "CycloneDX",
-> -        "$schema": f"http://cyclonedx.org/schema/bom-{CYCLONEDX_VERSION}.schema.json",
-> -        "specVersion": f"{CYCLONEDX_VERSION}",
-> +        "$schema": f"http://cyclonedx.org/schema/bom-{cdx_spec_version}.schema.json",
-> +        "specVersion": cdx_spec_version,
->           "metadata": {
->               "component": {
->                   "bom-ref": args.project_name,
+>   def br2_virtual_is_provided_by(ref, show_info_dict) -> list:
 
 _______________________________________________
 buildroot mailing list
