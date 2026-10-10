@@ -1,142 +1,147 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAB61CA9EC1
-	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 15:11:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF436CA9EC7
+	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 15:11:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3EC306064F;
-	Sat, 10 Oct 2026 15:11:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 76CDC81138;
+	Sat, 10 Oct 2026 15:11:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1QY23JpISBxJ; Sat, 10 Oct 2026 15:11:56 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 076F46065F
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791645116;
-	b=Bn/hAnFYyJV3szaNSQJOoeBM6uoOm2JYzgB2+LEP/ei/gd48CW3fsXH89doxnu5JsG9J
-	 yq2q6FXvwG5Zz4HOCnUbNefsBiiGW9T3bMw1P2sn8bkzJKvZAGlqpxfFQvRybQCSzOAFA
-	 lOvfCeEneeW1ggeBpGPCNBgnUlue02nT1EQscbwpHKoIm89mys/CxFMKqfdW48yMoMO0E
-	 desXveVbgHUNdqtr1OedHcT7cJbiVCNPrEy9OXUu93tBJZFs53fGxeRicbDTaC2FNe3l5
-	 BMDVX6Kyh8HcK8x3EGQctwlyitHW7kPcI3IxvDMndVF0rr0v/sH5awLdcwG1WGfRF3Q==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7ioS9AKUZHuz; Sat, 10 Oct 2026 15:11:57 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 4BDC681128
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791645117;
+	b=ZUU7UOdUDe6ZMAAdn92UysRavQArFu33KuWfjcCDykm0DPlS4Lh+KSADXfNsg7563myw
+	 mzhCitXKo5Su2e3YW9kJyoDuVxGxXlbAlIKbSh1rvLCxAzSFKfcpFZfx9pXC9oYBFoi4g
+	 wHjA6qBA6CqJwvXkZiX5VFF+DVN35MUExY6nAy0LgLvqXqv0GfXVk7SLPqVWJ/Zx14CFh
+	 hMpY1vEHzkfErDKBksoegEzCtoW7S04DKgOjJ4mNgITGpqrNrGrGhwKmG1+rHjF2LTBYJ
+	 blrrP2d9HN34+KhyQrmJpYOTVI8MrE2S1ejbYROWdG8e7+O8LkzdnVDIa3AUgGjdpjQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791645116;
+	c=relaxed/relaxed; t=1791645117;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
 	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 Received:To:Date:Message-ID:X-Mailer:MIME-Version:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=x30SuiwfKobFxixS3EhokhMB7oo2kPuIYi14qzLYNuI=;
-	b=baFU+TXfR/ft1C/BAo2hsdsbh2CrzLTHXo03Orw+KHsuW5gl5mZB+Qgp9o6nh7oB1U8O
-	 o3IS2WktWJokTiPt3b/aemmkzXXdNdBYWFhhIkbiaBohxJYaqr9zUQMk/P/JKsKzC8mSi
-	 uIvitn+0Q9x0VJJjg/cUH3FHFSZYTyMANCWwMNhs3tEutmHuGrJtqQWjXY0cJGvwzNsfo
-	 xeRIeZ0Wk09nmXbXsuanqV26enAqeoBivAdWaDzpq+UbkjbbPeHr9kTG2Td/OtefNC824
-	 gVAOqYqbM+RZUcR6cBf5XJWPkChb22arODP6a5MoN8dAVHU2lAge5ijUql7pYSHdh9A==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	 Received:To:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
+	 Reply-To:Cc:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=8jcLqyFVXXXOHnV1TLoNNexa5EMvOPOhIl1d6lI6les=;
+	b=WleNrstxZYHHTcrdc8HxXhOTrO7Obqub1f15rbZmTm0dOD4quKQnvoDxBqRO34/r9jrK
+	 lYOzPcLE7f5nkGeLZC2VDrFh5qHqWR0dA2HHXgq3TzG8F5f4ONLq0I7gNyc0vGnqYW9Bl
+	 XRLec+U0K/6fRWK/extZANsF7xZSCNHdoIBiWztIg+iaMRkCf+Q8+F2yFZGYMjYiqnOCS
+	 UWDR4fZo4U0oArNN5cQzMy8J5WiccGFPjr+9Jmdako0n2zi7JVtSpvb6Nu5+Tu0E8c2H8
+	 s7dSGx81ynZwzLoN3dpR+OroaxtsHhTI5NlufEOMJ3+GeWlxRxNyqGp5SCIHyTXG6yg==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791645116;
-	bh=x30SuiwfKobFxixS3EhokhMB7oo2kPuIYi14qzLYNuI=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=NF4V3H34tQM8XVDMTuXEB2OsNcsLh7tKi9gk+6szc7tebbCFY+rsjQM4NYhqLLuj/
-	 vvKLSNZeZQgSoAwLcSRvOKDcZ+UD+9B/SR7gIoR4PCvb3x0v9eZSCDWKHMOXvVka97
-	 oPpGF93Dkp8yVeNE1n9UlIgt2rJmZomI3AgeKIAf2112pShZgBYKSeXAdD39A+2p6Z
-	 iG6bGAmXfhqEQ22fHJ4xPIz3CAMVYaSa2uEId96DMv3Fd2Aub6zrxNKvZsuqwozvU2
-	 twe+4tfqYPAvk7+TOoaGr0APwaLSC6QHnhwnXfypRgSHk/W9x7RWMt5AYQxugopJRS
-	 YNxw0F16sa5gw==
+	s=default; t=1791645117;
+	bh=8jcLqyFVXXXOHnV1TLoNNexa5EMvOPOhIl1d6lI6les=;
+	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=ZE8OhjmXIUvuGcDveTuiDsFFloVcXMqXh5/+KNfouyuFx28JtbiLwuxSqX3QfErru
+	 b2mEtR11GjNZ4Xe66fwZuzTUGyMQZVhrz78Mhty6i17SjWa35EIe/+gbe+fllBosr2
+	 tNmYjeUhjud6YXWd3unNCUW3YpLEhijSxJSIWWL1VkwtaSoxtRnkTlBjjs2GLu5yyH
+	 zdnFdjU5Tm6rSELfCe9NzZ/Ll5SQldjplSOLaBaS88EbDZibRh46DPzM0JLSfRYeWY
+	 N4D37za+w6P8HAE7erMiXXBxs/S48sve+6qPdDd6eYV+IcoG5FQUBHINQWncNdAk7G
+	 bdJwwu6PZ84AA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 076F46065F;
-	Sat, 10 Oct 2026 15:11:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id A3D2E105
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 15:11:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4BDC681128;
+	Sat, 10 Oct 2026 15:11:57 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6939E317
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 15:11:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 95DC660662
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 15:11:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4FAC86064F
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 15:11:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N1jgUstgEx9S for <buildroot@buildroot.org>;
- Sat, 10 Oct 2026 15:11:51 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org EB8836064F
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791645111;
- b=PCbwCJmq21Sua9YDqLd6SP34zWo5C1pHbeUx126Zlsw0mYjdnCXpImOb27BzTNBgCJdP
- 3IwIRRC36u1Sf4H8hL4pHYMsOoRwBF5cycsp9GyXulyoBvQxytfXaZbB/C/S4YEatDGIq
- 83TVsOIa9/TZ4+9ZvhdooGyqZMhFDajpenmioV+WFIz1n7x0RYHZR+2S6fuwGUxAYLqEn
- 12iWWChd+g9Bxs0IhycYbHb5m05eiHwQVSXWsTKYcss7ADSrSKlEIsxQUAyGNm/2DTsal
- eW77qM818idl+W1Ta4wVt8wbF5iDAu/XS1EM9i8IM4qB4unYCnaT4g+M778uRavSWYw==
+ id F0db3dRvgcr2 for <buildroot@buildroot.org>;
+ Sat, 10 Oct 2026 15:11:52 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org E7C136065F
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791645112;
+ b=TlIQ9H4I3dso6DAa/h4JExWP/orgj0ulFBmkbYLpvbOFAH7Vd2bl8o8C645I8k7mJgqj
+ cDo7lGGGLpiLiEwe6xKz/AewdcjNKaXB6jF98neU5wRtB6a1Ir/jxQLXukaJN6SwIUe/d
+ Bw3yrBfDCFl1NZp9BufMMAOeCpFPQncXElTbmenjev1Isoa1LcTDFW9J6Xx/bef7JZCYD
+ DR7YLTF7QoW36sAkjacb4Erj9BlIuxx5/TCf0EODn8haVG/fJ+CSt2mbLtXxW3dvgYc7B
+ 24RIgZfup+HVlSQK6ohIl8zeb+w7DT6zvXw1yG+CSSBG0H9pNV+kQlpXVqzjMJkCFIA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791645111;
+ c=relaxed/relaxed; t=1791645112;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
- bh=3OsgArpfmcz9LhkJ+2TKmxA2BDuMBoVNYf2XzQrtvPM=;
- b=DPeAHUkTHjYZ4xbbBa+hftGUyKV3If4lt+rbycUnZ7n0AeRU9fHqu/8eWZkKv3PXrb9t
- 1xuYgHOcCh8TRtWXStBJ60y8Um47zRMxhyESyZviijkgCCJoruZg6SvfvPDbE572jZRw7
- KPqoNvUC/2Ebl1C+9jDkK/Xq3D7TfFYlDlCy1k6RK//CLDlkpcxocYQKk3JzmPyYOMYJo
- CijlMj8PJSBd3JO8eVAn57wyI16RsNrwxKxWMjlreh9DTi3PNKz6/O9h0LKeIbJCxL13i
- qwT4MCnSN3ndmBU9sM0R4YozdOoxBGKJkxe989K7Qu7lQBo0MljUpRr+Q23r/2Wsfnw==
+ Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+ Content-Transfer-Encoding;
+ bh=R0aY+3sUdhFkUVZkNltmRumW9biHjTlIt0pf41tc9c4=;
+ b=AfEJot7eUtaLv3KAL9wJg2AkXNTEWSlmRqUE7yBqlEPtJ6ak0Kios02iAIWPJiYNCoyP
+ ucdfsD9MYBgLpF3XcUPrsfG+fFvVjFAU9DpI3Vxy/8NulUaTozxuoL76ucqHbh0xA481Q
+ 0vv0wqIKaMLY/XayTKkVBH5TxUNgdbDfUeuaWaVwrL99mxBA7kkxpyfhTm1D5DWaPOXeF
+ 2NJ2hkPs4WqhqX+IjCm8q/kETrMa3DKoK8+BevHDznTTnOfD1fVivAWO8tkkvy9b+9MgU
+ lWrRvHb4wpyI889m4AcpkmJihsAkAB8u+WoIi9qYssYzo9tniOyCWWXZKjwyJWMGjXQ==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
  dmarc=pass header.from=mind.be;
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=MXt+N19K; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::32a"
+ header.s=google header.b=O30qx8oc; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::32c"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
  envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EB8836064F
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 15:11:49 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-4a1682bff3cso3025585e9.1
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 08:11:49 -0700 (PDT)
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E7C136065F
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 15:11:51 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-4a021c809e3so6778305e9.0
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 08:11:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1791645107; x=1792249907;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=3OsgArpfmcz9LhkJ+2TKmxA2BDuMBoVNYf2XzQrtvPM=;
- b=pauO9bB6D333qyOl1LoPdUVZCFQnPcka4PBaTeyhndqrG1oEP7SAdOhDWTQQ4s+sW2
- YpXN2LOt4y3NmiGcZLus8V4m5iXaAV8hn7vucKz7mT4WqJVvSLD+9mtb4kR987HpxLuF
- fh//395tEioY9jzmyt9CXtY3CBpbv8aSVOxJ96hHBduC+Q4N8GD4pVbNi4rNprVkPGUp
- aTSsO3l5T6Fp7Sn4TnmLbdFR5EU3MxPvk0nRRc/LwQ+Oxh7zZX8NT3Z7MurSA07ul7p+
- vmPvchfVtnqSwuwyP18r4a0+raqJqIFQCJi66s624mPW/Z8nVbjA49dR6SzCAWpa396N
- JSQg==
-X-Gm-Message-State: AFq9FYJiJlIkGerCz7uZXlnYjozSXVgU4j0YB0CuItlPy6V08SFOu/Uz
- zG7GR/0lrmuUChoKRPx+lhWnMuNVrfxNSiDD5CwBp+BXYO1TDIq1EVhZ09sj3DwNTqnV64lE1VB
- uHS4Q9iI=
-X-Gm-Gg: AYBFou2Gb/gFKNkxWhypyVUNgJGtCDkij3rJBEF5gAQpe8hJMhiaGkBsuGTkOPQOzKH
- x8Ot1BkCHyqsSwF9vd/jNMaQEfGEESrNjs2Zv2qoPRvSw8unDoRI0yn/KxUfgMvCH0svpZcUSC9
- T5Bxgxe0FSm2gvbLCbkufREAQegyyEPxGVl3dUe32kUkuaXR5AFtX97dTPb3uS3bi+JYcoMqFi3
- +ocNEsp077XmRMT0MrrRoWJLYVXgWvBc6qHvWe5iZMoVfKxeeN3p13QIOr2D1yeLJAp38tl5Z2G
- ognvwTT09wPf+2s4XlyvePEyo8HwCX4XXCoeQiYwRn+rigpYptkE/CZzPIhzzHlH+7bbVLBWA6L
- aLihydr7GI8YdjYDi9MmMu+dbCFGrfMjh7FdcYgRIx7eeflbOvTq85hCm8S/PI8Z5arJHNwqH/N
- LG09D7KMmJotHhde24K2sYpenkYLgWuQ+6/crwLRGMohca+FBKuNszzWMxP+ZeZJGTvKKLo0FHG
- Ubn71bIlqugQZEBNmYwEFWjf2vFz+o9PsNJqKRTi4OIcqns0c/g43S9pX5UvILMlPTJZVMlNQ==
-X-Received: by 2002:a05:600c:609a:b0:4a1:717b:7976 with SMTP id
- 5b1f17b1804b1-4a18e4b15e5mr95890355e9.35.1791645107054; 
- Sat, 10 Oct 2026 08:11:47 -0700 (PDT)
+ d=1e100.net; s=20260707; t=1791645109; x=1792249909;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to:content-type;
+ bh=R0aY+3sUdhFkUVZkNltmRumW9biHjTlIt0pf41tc9c4=;
+ b=h4nTyFmyYYdtZt0R9sVJ5xOuqY4d2DGYXRtmEuuAryJ60V1F0n1flcamBMkdJ03hLK
+ Qv3HiupbC5kKA4I7YByL5pvtNTS899xH7W4dYvRceXIhKlwMCmgl4+y43WIBgW0KOM18
+ QmWWzCrzzI/rOLz+ySilNcvDWiz/XACFAAgxxwNIaLmF3t6GlBdBLv2VPy/hkYobquia
+ mti9R10ScIDaFAtT1/b47Q84QjCqhgAaPa2XOo9eOUe0j3GoAz3hwa/aEy9BZ62EAtTW
+ PqGawOPUzywvbuPPnYm2dGiM9TTdUsGqSxM7HoSiBdeytJQdNj1aOLn5ZRuokDoSdZd5
+ 80cg==
+X-Gm-Message-State: AFq9FYI8Glg2Z+RtnhMuKjlyp5agU0cGaFB+CtY3AndGj18PllVZO9bd
+ cm3h5wtLDmQdreaddWwFUs001gqQXcdeX6CLEU4Q0vFGIb8okct+sQ5c/6AgR8iaCXl0pgLZQuz
+ bipcCsLU=
+X-Gm-Gg: AYBFou36pjjvyKGAUvPQFHhnEo4a56jBEy5b/oyuevCshSTBaVfwiwkssE+uW1c1jah
+ GyBbj2DEO2KVuvdyzYY8yoI4G8x8srWNP3vHdQSJDGnw0h7UHzT4HMIAEwZqWyM2PwOhC/FA71u
+ m4x57h9PIZcNh0TR+nhum+UZBy9HebJmOFdKCVPQ8iwD8QhFuiGBSKeq0Hqitu1rGkZTNowW6zd
+ 6Pf385Qgf8yYh9z5TzXZkaPSzl/z8fODVNDDeBkzCMpw6+dsZqcXToyOK9ZmilIETyzjYXEpalL
+ UULlhizNvlZmWhvhFBLrXSFF8DW/xBCI4+PXS/Acz7KlNhQrsF44BboC3V0ZACTvZTVrKpie9lB
+ jRGDEn46X8k8kbFwp6F2Dwqpk8bN5H2Y1BLYNuPCZPORNN6DyxsKGsla7le4ZcIJIoI5eFOT6kY
+ ETBl9kUwlxieF6Ac2/g2tWSZdgxM/jhy9RNSAS0SOHBOJRcHTTwvKDR6kI13+CIKKu2iGTV/iGP
+ a6rZiAkuOLzxA8q0bYo79UBgyyoYPL+SwW09O+WNXoal2ouUUVHiSvqmyfXE+2Wdzvp8WF0Ng==
+X-Received: by 2002:a05:600c:3b0a:b0:4a1:6fa9:48ad with SMTP id
+ 5b1f17b1804b1-4a18e4a9b9amr96983865e9.26.1791645109258; 
+ Sat, 10 Oct 2026 08:11:49 -0700 (PDT)
 Received: from dragon.telekom.ip
  (2001-1aeb-401-dd00-a87-9755-c250-f5ef.ip6.tmcz.cz.
  [2001:1aeb:401:dd00:a87:9755:c250:f5ef])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4a18bb6b3cbsm115104125e9.0.2026.10.10.08.11.46
+ 5b1f17b1804b1-4a18bb6b3cbsm115104125e9.0.2026.10.10.08.11.48
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 10 Oct 2026 08:11:46 -0700 (PDT)
+ Sat, 10 Oct 2026 08:11:49 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Sat, 10 Oct 2026 17:11:12 +0200
-Message-ID: <20261010151121.876133-1-titouan.christophe@mind.be>
+Date: Sat, 10 Oct 2026 17:11:15 +0200
+Message-ID: <20261010151121.876133-4-titouan.christophe@mind.be>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261010151121.876133-1-titouan.christophe@mind.be>
+References: <20261010151121.876133-1-titouan.christophe@mind.be>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 0/7] Update kconfig inrastructure to Linux 7.2.9
+Subject: [Buildroot] [PATCH 3/7] */Config.in: replace bool entries with
+ prompt within all choices
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -157,246 +162,234 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The following commits update the kconfig infrastructure to a recent version,
-and add support for Zephyr's kconfiglib, thanks to the update that make
-our Config.in files syntactically compatible.
+Since Linux commit bea2c5ef78 [1], first released in v6.13, the prompt of a
+choice must be given with "prompt" instead of "bool".
 
-This is a major overhaul to the previous attempt at updating Buildroot's
-kconfig infrastructure [1]. Compared to the previous iteration, this series
-targets the latest kernel version to date (7.2.9), instead of 6.9 at the time.
-Since more changes have happened upstream inbetween those versions, more
-changes have had to be applied here.
+[1] bea2c5ef78: kconfig: remove support for "bool" prompt for choice entries
+    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=bea2c5ef789a37bace99f2f45eeef3be4559b228
 
-Given all these changes, I re-started the series from scratch, while keeping
-in mind the reviews that were made in the previous attempts. 
-- Patch 0001 has been taken as-is from the former series
-- Patch 0007 has been slightly updated from the former series
-- All the other patches are new
-Hence why it is posted a brand new series rather than a new version of it.
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+---
+ Config.in                                                 | 8 ++++----
+ boot/xilinx-prebuilt/Config.in                            | 2 +-
+ fs/ext2/Config.in                                         | 2 +-
+ package/docker-engine/Config.in                           | 2 +-
+ package/efl/Config.in                                     | 2 +-
+ package/freescale-imx/firmware-imx/Config.in              | 2 +-
+ package/linux-headers/Config.in.host                      | 2 +-
+ package/podman/Config.in                                  | 4 ++--
+ package/xenomai/Config.in                                 | 2 +-
+ system/Config.in                                          | 6 +++---
+ .../toolchain-external-custom/Config.in.options           | 4 ++--
+ 11 files changed, 18 insertions(+), 18 deletions(-)
 
-As a disclaimer, I made heavy use of AI for this new iteration.
-
-[1] https://patchwork.buildroot.org/project/buildroot/list/?series=13&state=*
-
-Titouan Christophe (7):
-  Makefile: always use a base config file for defconfig
-  */Config.in: use the new $(VAR) syntax
-  */Config.in: replace bool entries with prompt within all choices
-  support/kconfig: update to kconfig from Linux 7.2.9
-  package/openssl: move libopenssl/libressl options out of the choice
-  docs/manual: add migration notes for changes in the kconfig syntax
-  Makefile: add new target "yellowconfig" based on kconfiglib
-
- Config.in                                     |   71 +-
- Config.in.legacy                              |    6 +-
- Makefile                                      |    8 +-
- boot/xilinx-prebuilt/Config.in                |    2 +-
- docs/manual/customize-outside-br.adoc         |   12 +-
- docs/manual/migrating.adoc                    |   13 +
- docs/manual/quickstart.adoc                   |    7 +
- fs/ext2/Config.in                             |    2 +-
- linux/Config.ext.in                           |    2 +-
- package/amlogic-boot-fip/Config.in.host       |    2 +-
- package/arm-gnu-toolchain/Config.in.host      |    4 +-
- package/docker-engine/Config.in               |    2 +-
- package/efl/Config.in                         |    2 +-
- package/erlang/Config.in                      |    6 +-
- package/flutter-sdk-bin/Config.in.host        |    2 +-
- package/freescale-imx/firmware-imx/Config.in  |    2 +-
- package/go/Config.in.host                     |    4 +-
- package/go/go-bin/Config.in.host              |   12 +-
- package/go/go-bootstrap-stage1/Config.in.host |    6 +-
- package/google-breakpad/Config.in.host        |   12 +-
- package/jpeg/Config.in                        |    2 +-
- package/kvm-unit-tests/Config.in              |    2 +-
- package/libopenssl/Config.in                  |    4 -
- package/libressl/Config.in                    |    4 -
- package/linux-headers/Config.in.host          |    2 +-
- package/luajit/Config.in                      |    4 +-
- package/mono/Config.in                        |    4 +-
- package/nodejs/Config.in.host                 |    8 +-
- package/openjdk/Config.in                     |    4 +-
- package/openssl/Config.in                     |   14 +-
- package/podman/Config.in                      |    4 +-
- package/protobuf/Config.in                    |   22 +-
- package/qt5/qt5webengine/Config.in            |    2 +-
- package/rustc/Config.in.host                  |   16 +-
- package/sam-ba/Config.in.host                 |    2 +-
- package/supertuxkart/Config.in                |    4 +-
- package/ti-cgt-pru/Config.in.host             |    2 +-
- package/ti-gfx/Config.in                      |    2 +-
- package/wine/Config.in                        |    6 +-
- package/xenomai/Config.in                     |    2 +-
- support/kconfig/Makefile                      |  382 +-
- support/kconfig/Makefile.br                   |   80 +-
- support/kconfig/POTFILES.in                   |   12 -
- support/kconfig/README.buildroot              |   14 +-
- support/kconfig/check.sh                      |   14 -
- support/kconfig/conf.c                        |  587 ++-
- support/kconfig/confdata.c                    | 1621 ++++---
- support/kconfig/expr.c                        |  641 +--
- support/kconfig/expr.h                        |  119 +-
- support/kconfig/foo.h                         |   12 -
- support/kconfig/gconf-cfg.sh                  |   28 +
- support/kconfig/gconf.c                       | 1837 ++++----
- support/kconfig/{gconf.glade => gconf.ui}     |  361 +-
- support/kconfig/icons/back.xpm                |   29 +
- support/kconfig/icons/choice_no.xpm           |   18 +
- support/kconfig/icons/choice_yes.xpm          |   18 +
- support/kconfig/icons/load.xpm                |   31 +
- support/kconfig/icons/menu.xpm                |   18 +
- support/kconfig/icons/menuback.xpm            |   18 +
- support/kconfig/icons/save.xpm                |   31 +
- support/kconfig/icons/single_view.xpm         |   28 +
- support/kconfig/icons/split_view.xpm          |   28 +
- support/kconfig/icons/symbol_mod.xpm          |   18 +
- support/kconfig/icons/symbol_no.xpm           |   18 +
- support/kconfig/icons/symbol_yes.xpm          |   18 +
- support/kconfig/icons/tree_view.xpm           |   28 +
- support/kconfig/images.c                      |  326 --
- support/kconfig/include/array_size.h          |   11 +
- support/kconfig/include/hash.h                |   28 +
- support/kconfig/include/hashtable.h           |   98 +
- support/kconfig/include/list.h                |  428 ++
- support/kconfig/include/list_types.h          |   17 +
- support/kconfig/include/xalloc.h              |   53 +
- support/kconfig/internal.h                    |   27 +
- support/kconfig/kconf_id.c                    |   53 -
- support/kconfig/kconfig-sym-check.pl          |  132 +
- support/kconfig/kxgettext.c                   |  235 -
- support/kconfig/lexer.l                       |  461 ++
- support/kconfig/lexer.lex.c_shipped           | 4130 +++++++++++++++++
- support/kconfig/list.h                        |  132 -
- support/kconfig/lkc.h                         |  159 +-
- support/kconfig/lkc_proto.h                   |   47 +-
- support/kconfig/lxdialog/.gitignore           |    4 -
- support/kconfig/lxdialog/BIG.FAT.WARNING      |    2 +-
- support/kconfig/lxdialog/check-lxdialog.sh    |   93 -
- support/kconfig/lxdialog/checklist.c          |   26 +-
- support/kconfig/lxdialog/dialog.h             |   76 +-
- support/kconfig/lxdialog/inputbox.c           |   27 +-
- support/kconfig/lxdialog/menubox.c            |   35 +-
- support/kconfig/lxdialog/textbox.c            |  330 +-
- support/kconfig/lxdialog/util.c               |   53 +-
- support/kconfig/lxdialog/yesno.c              |   21 +-
- support/kconfig/mconf-cfg.sh                  |   57 +
- support/kconfig/mconf.c                       |  641 ++-
- support/kconfig/menu.c                        |  573 +--
- support/kconfig/merge_config.sh               |  311 +-
- support/kconfig/mnconf-common.c               |   53 +
- support/kconfig/mnconf-common.h               |   20 +
- support/kconfig/nconf-cfg.sh                  |   56 +
- support/kconfig/nconf.c                       |  417 +-
- support/kconfig/nconf.gui.c                   |  345 +-
- support/kconfig/nconf.h                       |   62 +-
- support/kconfig/parser.tab.c_shipped          | 2248 +++++++++
- support/kconfig/parser.tab.h_shipped          |  134 +
- support/kconfig/parser.y                      |  798 ++++
- .../01-kconfig-kernel-to-buildroot.patch      |  101 +-
- .../06-br-build-system-integration.patch      |   74 -
- .../kconfig/patches/10-br-build-system.patch  |  108 +-
- .../patches/11-use-mktemp-for-lxdialog.patch  |   17 -
- .../patches/12-fix-glade-file-path.patch      |   46 +-
- .../14-support-out-of-tree-config.patch       |  207 -
- .../16-fix-space-to-de-select-options.patch   |   41 -
- .../kconfig/patches/17-backport-kecho.patch   |   26 -
- ...fig.sh-create-temporary-files-in-tmp.patch |    6 +-
- ...e_config.sh-add-br2-external-support.patch |   20 +-
- ...fig.sh-Allow-to-define-config-prefix.patch |   31 -
- ...-positive-matches-from-comment-lines.patch |   32 -
- ...config-lxdialog-fix-check-with-GCC14.patch |   43 -
- ...onfig-mn-conf-handle-backspace-H-key.patch |   62 -
- ...4-kconfig-allow-source-inside-choice.patch |   28 +
- support/kconfig/patches/series                |   10 +-
- support/kconfig/preprocess.c                  |  581 +++
- support/kconfig/preprocess.h                  |   19 +
- support/kconfig/qconf-cfg.sh                  |   42 +
- support/kconfig/qconf.cc                      | 1305 +++---
- support/kconfig/qconf.h                       |  183 +-
- support/kconfig/streamline_config.pl          |  124 +-
- support/kconfig/symbol.c                      |  790 ++--
- support/kconfig/util.c                        |  162 +-
- support/kconfig/zconf.l                       |  372 --
- support/kconfig/zconf.lex.c_shipped           | 2500 ----------
- support/kconfig/zconf.tab.c_shipped           | 2488 ----------
- support/kconfig/zconf.y                       |  782 ----
- support/scripts/gen-bootlin-toolchains        |    2 +-
- .../br2-external/detect-bad-arch/Config.in    |    2 +-
- .../br2-external/flat-stacksize/Config.in     |    2 +-
- .../core/test_selinux/br2_external/Config.in  |    2 +-
- .../br2-external/clang-compiler-rt/Config.in  |    2 +-
- .../br2-external/gumbo-parser/Config.in       |    2 +-
- .../package/br2-external/openjdk/Config.in    |    4 +-
- .../package/br2-external/polkit/Config.in     |    2 +-
- .../br2-external/python-pybind/Config.in      |    2 +-
- system/Config.in                              |   10 +-
- toolchain/toolchain-external/Config.in        |    2 +-
- .../Config.in                                 |    2 +-
- .../toolchain-external-arm-aarch64/Config.in  |    2 +-
- .../toolchain-external-arm-arm/Config.in      |    2 +-
- .../toolchain-external-bootlin/Config.in      |    2 +-
- .../Config.in.options                         |    2 +-
- .../Config.in.options                         |    6 +-
- 150 files changed, 15366 insertions(+), 13897 deletions(-)
- delete mode 100644 support/kconfig/POTFILES.in
- delete mode 100755 support/kconfig/check.sh
- delete mode 100644 support/kconfig/foo.h
- create mode 100755 support/kconfig/gconf-cfg.sh
- rename support/kconfig/{gconf.glade => gconf.ui} (57%)
- create mode 100644 support/kconfig/icons/back.xpm
- create mode 100644 support/kconfig/icons/choice_no.xpm
- create mode 100644 support/kconfig/icons/choice_yes.xpm
- create mode 100644 support/kconfig/icons/load.xpm
- create mode 100644 support/kconfig/icons/menu.xpm
- create mode 100644 support/kconfig/icons/menuback.xpm
- create mode 100644 support/kconfig/icons/save.xpm
- create mode 100644 support/kconfig/icons/single_view.xpm
- create mode 100644 support/kconfig/icons/split_view.xpm
- create mode 100644 support/kconfig/icons/symbol_mod.xpm
- create mode 100644 support/kconfig/icons/symbol_no.xpm
- create mode 100644 support/kconfig/icons/symbol_yes.xpm
- create mode 100644 support/kconfig/icons/tree_view.xpm
- delete mode 100644 support/kconfig/images.c
- create mode 100644 support/kconfig/include/array_size.h
- create mode 100644 support/kconfig/include/hash.h
- create mode 100644 support/kconfig/include/hashtable.h
- create mode 100644 support/kconfig/include/list.h
- create mode 100644 support/kconfig/include/list_types.h
- create mode 100644 support/kconfig/include/xalloc.h
- create mode 100644 support/kconfig/internal.h
- delete mode 100644 support/kconfig/kconf_id.c
- create mode 100755 support/kconfig/kconfig-sym-check.pl
- delete mode 100644 support/kconfig/kxgettext.c
- create mode 100644 support/kconfig/lexer.l
- create mode 100644 support/kconfig/lexer.lex.c_shipped
- delete mode 100644 support/kconfig/list.h
- delete mode 100644 support/kconfig/lxdialog/.gitignore
- delete mode 100755 support/kconfig/lxdialog/check-lxdialog.sh
- create mode 100755 support/kconfig/mconf-cfg.sh
- create mode 100644 support/kconfig/mnconf-common.c
- create mode 100644 support/kconfig/mnconf-common.h
- create mode 100755 support/kconfig/nconf-cfg.sh
- create mode 100644 support/kconfig/parser.tab.c_shipped
- create mode 100644 support/kconfig/parser.tab.h_shipped
- create mode 100644 support/kconfig/parser.y
- delete mode 100644 support/kconfig/patches/06-br-build-system-integration.patch
- delete mode 100644 support/kconfig/patches/11-use-mktemp-for-lxdialog.patch
- delete mode 100644 support/kconfig/patches/14-support-out-of-tree-config.patch
- delete mode 100644 support/kconfig/patches/16-fix-space-to-de-select-options.patch
- delete mode 100644 support/kconfig/patches/17-backport-kecho.patch
- delete mode 100644 support/kconfig/patches/20-merge_config.sh-Allow-to-define-config-prefix.patch
- delete mode 100644 support/kconfig/patches/21-Avoid-false-positive-matches-from-comment-lines.patch
- delete mode 100644 support/kconfig/patches/22-kconfig-lxdialog-fix-check-with-GCC14.patch
- delete mode 100644 support/kconfig/patches/23-kconfig-mn-conf-handle-backspace-H-key.patch
- create mode 100644 support/kconfig/patches/24-kconfig-allow-source-inside-choice.patch
- create mode 100644 support/kconfig/preprocess.c
- create mode 100644 support/kconfig/preprocess.h
- create mode 100755 support/kconfig/qconf-cfg.sh
- delete mode 100644 support/kconfig/zconf.l
- delete mode 100644 support/kconfig/zconf.lex.c_shipped
- delete mode 100644 support/kconfig/zconf.tab.c_shipped
- delete mode 100644 support/kconfig/zconf.y
-
+diff --git a/Config.in b/Config.in
+index 1fa7ea3ca7..7a2de62a2e 100644
+--- a/Config.in
++++ b/Config.in
+@@ -643,7 +643,7 @@ config BR2_GOOGLE_BREAKPAD_INCLUDE_FILES
+ endif
+ 
+ choice
+-	bool "libraries"
++	prompt "libraries"
+ 	default BR2_SHARED_LIBS if BR2_BINFMT_SUPPORTS_SHARED
+ 	default BR2_STATIC_LIBS if !BR2_BINFMT_SUPPORTS_SHARED
+ 	help
+@@ -823,7 +823,7 @@ comment "PIC/PIE needs a toolchain w/ PIE"
+ 	depends on !BR2_TOOLCHAIN_SUPPORTS_PIE
+ 
+ choice
+-	bool "Stack Smashing Protection"
++	prompt "Stack Smashing Protection"
+ 	default BR2_SSP_ALL if BR2_ENABLE_SSP # legacy
+ 	default BR2_SSP_STRONG if BR2_TOOLCHAIN_HAS_SSP_STRONG
+ 	default BR2_SSP_REGULAR
+@@ -887,7 +887,7 @@ comment "Stack Smashing Protection needs a toolchain w/ SSP"
+ 	depends on !BR2_TOOLCHAIN_HAS_SSP
+ 
+ choice
+-	bool "RELRO Protection"
++	prompt "RELRO Protection"
+ 	default BR2_RELRO_FULL if BR2_TOOLCHAIN_SUPPORTS_PIE
+ 	default BR2_RELRO_PARTIAL
+ 	depends on BR2_SHARED_LIBS
+@@ -933,7 +933,7 @@ config BR2_FORTIFY_SOURCE_ARCH_SUPPORTS
+ 	depends on !BR2_microblaze
+ 
+ choice
+-	bool "Buffer-overflow Detection (FORTIFY_SOURCE)"
++	prompt "Buffer-overflow Detection (FORTIFY_SOURCE)"
+ 	default BR2_FORTIFY_SOURCE_1
+ 	depends on BR2_FORTIFY_SOURCE_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+diff --git a/boot/xilinx-prebuilt/Config.in b/boot/xilinx-prebuilt/Config.in
+index ff129ed5b5..4cd4d75561 100644
+--- a/boot/xilinx-prebuilt/Config.in
++++ b/boot/xilinx-prebuilt/Config.in
+@@ -23,7 +23,7 @@ config BR2_TARGET_XILINX_PREBUILT_VERSION
+ 	  Must be xilinx_v2023.1 or newer.
+ 
+ choice
+-	bool "family variant"
++	prompt "family variant"
+ 	default BR2_TARGET_XILINX_PREBUILT_VERSAL if BR2_PACKAGE_VERSAL_FIRMWARE  # legacy
+ 	default BR2_TARGET_XILINX_PREBUILT_VERSAL if BR2_cortex_a72
+ 	default BR2_TARGET_XILINX_PREBUILT_VERSAL2 if BR2_cortex_a78
+diff --git a/fs/ext2/Config.in b/fs/ext2/Config.in
+index c50f22626a..c1a943435e 100644
+--- a/fs/ext2/Config.in
++++ b/fs/ext2/Config.in
+@@ -10,7 +10,7 @@ config BR2_TARGET_ROOTFS_EXT2_2
+ 	bool
+ 
+ choice
+-	bool "ext2/3/4 variant"
++	prompt "ext2/3/4 variant"
+ 	default BR2_TARGET_ROOTFS_EXT2_2r1
+ 
+ config BR2_TARGET_ROOTFS_EXT2_2r1
+diff --git a/package/docker-engine/Config.in b/package/docker-engine/Config.in
+index 541472d957..a5464b772f 100644
+--- a/package/docker-engine/Config.in
++++ b/package/docker-engine/Config.in
+@@ -45,7 +45,7 @@ config BR2_PACKAGE_DOCKER_ENGINE_DRIVER_VFS
+ 	  Build the vfs filesystem driver for Docker.
+ 
+ choice
+-	bool "support docker-init"
++	prompt "support docker-init"
+ 	default BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT_TINI if BR2_PACKAGE_DOCKER_ENGINE_DOCKER_INIT  # legacy
+ 	help
+ 	  Support providing a minimal init process for containers.
+diff --git a/package/efl/Config.in b/package/efl/Config.in
+index c4f82b92e3..583c1c6f52 100644
+--- a/package/efl/Config.in
++++ b/package/efl/Config.in
+@@ -200,7 +200,7 @@ comment "Wayland support needs udev /dev management, OpenGL ES w/ EGL, threads,
+ 		|| !BR2_ENABLE_LOCALE
+ 
+ choice
+-	bool "OpenGL support"
++	prompt "OpenGL support"
+ 	help
+ 	  libevas can be configured to use HW acceleration with OpenGL
+ 	  or OpenGL ES.
+diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
+index 0acc235e0a..96220cfe66 100644
+--- a/package/freescale-imx/firmware-imx/Config.in
++++ b/package/freescale-imx/firmware-imx/Config.in
+@@ -65,7 +65,7 @@ config BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW_IMX9
+ if BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW || BR2_PACKAGE_FIRMWARE_IMX_NEEDS_DDR_FW_IMX9
+ 
+ choice
+-	bool "DDR training binaries"
++	prompt "DDR training binaries"
+ 	default BR2_PACKAGE_FIRMWARE_IMX_LPDDR4
+ 	help
+ 	  Choose the DDR training binaries to be used depending on the
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index b11db18379..8b0069a7df 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -116,7 +116,7 @@ config BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION
+ endif
+ 
+ choice
+-	bool "Custom kernel headers series"
++	prompt "Custom kernel headers series"
+ 	default BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_REALLY_OLD
+ 	depends on !BR2_LINUX_KERNEL_LATEST_VERSION || !BR2_KERNEL_HEADERS_AS_KERNEL
+ 	depends on !BR2_LINUX_KERNEL_LATEST_CIP_VERSION || !BR2_KERNEL_HEADERS_AS_KERNEL
+diff --git a/package/podman/Config.in b/package/podman/Config.in
+index bbcb15691d..97d0a0270a 100644
+--- a/package/podman/Config.in
++++ b/package/podman/Config.in
+@@ -35,7 +35,7 @@ config BR2_PACKAGE_PODMAN
+ if BR2_PACKAGE_PODMAN
+ 
+ choice
+-	bool "support podman-init"
++	prompt "support podman-init"
+ 	default BR2_PACKAGE_PODMAN_INIT_CATATONIT
+ 	help
+ 	  Support providing a minimal init process for containers.
+@@ -68,7 +68,7 @@ config BR2_PACKAGE_PODMAN_INIT_NAME
+ 	default "catatonit" if BR2_PACKAGE_PODMAN_INIT_CATATONIT
+ 
+ choice
+-	bool "Network backend"
++	prompt "Network backend"
+ 
+ config BR2_PACKAGE_PODMAN_NET_PASST
+ 	bool "passt/pasta"
+diff --git a/package/xenomai/Config.in b/package/xenomai/Config.in
+index 13a273a960..e2fcd90669 100644
+--- a/package/xenomai/Config.in
++++ b/package/xenomai/Config.in
+@@ -43,7 +43,7 @@ config BR2_PACKAGE_XENOMAI
+ if BR2_PACKAGE_XENOMAI
+ 
+ choice
+-	bool "Xenomai version"
++	prompt "Xenomai version"
+ 	help
+ 	  Make sure that the selected version has a patch for your
+ 	  selected Linux kernel. If it does not, download and select a
+diff --git a/system/Config.in b/system/Config.in
+index 46a1cf5d59..4e575e461d 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -56,7 +56,7 @@ config BR2_TARGET_GENERIC_ISSUE
+ endif
+ 
+ choice
+-	bool "Passwords encoding"
++	prompt "Passwords encoding"
+ 	default BR2_TARGET_GENERIC_PASSWD_SHA256
+ 	help
+ 	  Choose the password encoding scheme to use when Buildroot
+@@ -196,7 +196,7 @@ endchoice
+ if BR2_INIT_SYSTEMD
+ 
+ choice
+-	bool "/var management"
++	prompt "/var management"
+ 	default BR2_INIT_SYSTEMD_VAR_FACTORY  # legacy
+ 	depends on !BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
+ 	help
+@@ -398,7 +398,7 @@ config BR2_TARGET_GENERIC_ROOT_PASSWD
+ 	  password!
+ 
+ choice
+-	bool "/bin/sh"
++	prompt "/bin/sh"
+ 	default BR2_SYSTEM_BIN_SH_BASH if !BR2_PACKAGE_BUSYBOX
+ 	help
+ 	  Select which shell will provide /bin/sh.
+diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+index 92c1d6a37d..68acc0a1a6 100644
+--- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
++++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
+@@ -41,7 +41,7 @@ config BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX
+ 	  as external toolchain.
+ 
+ choice
+-	bool "External toolchain gcc version"
++	prompt "External toolchain gcc version"
+ 	help
+ 	  Set to the gcc version that is used by your external
+ 	  toolchain.
+@@ -159,7 +159,7 @@ comment "GCC older than 4.8 is not tested by Buildroot. Use at your own risk."
+ 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 
+ choice
+-	bool "External toolchain kernel headers series"
++	prompt "External toolchain kernel headers series"
+ 	default BR2_TOOLCHAIN_EXTERNAL_HEADERS_REALLY_OLD
+ 	help
+ 	  Set to the kernel headers version that were used to build
 -- 
 2.55.0
 
