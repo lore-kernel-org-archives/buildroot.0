@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8295ACA9EBE
-	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 15:19:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3B67CA9EC1
+	for <buildroot@archiver.kernel.org>; Sat, 10 Oct 2026 15:19:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4804D811C8;
-	Sat, 10 Oct 2026 15:19:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF70140955;
+	Sat, 10 Oct 2026 15:19:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eybpdNj22wDa; Sat, 10 Oct 2026 15:19:05 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 636C981126
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791645545;
-	b=L3mDR8QXQ5DgbxsDkV9HIMzQzIrxDFtjx3P1Kv4aitS9Z7h2CaY7PlcK59Ho5rQm5WR+
-	 mcxdUTIVufm/VwE7I1FDLRihNQ9owyFVYDx+1pTZcwXasx0RPBm2GugGHuMxjNzKsj6d+
-	 FWoJypYJm6GoXBzJXJ/seTVN+gCOcea/CJq+v10+LuSrCvUTyKFrdbuEKuTrIsR4ANn/V
-	 0aN96mitF3X4YDq7GkrDwsv+Jw/2yAz8k1qzNRTvP/EYPmSTMIvJ28JBGOSMk1HMrcexW
-	 4NZerKKoFztxxMVLLmMlpAHyIDEni7S4gvjNEYwZ7uRv3NGJ7ZbD0FwwS9xe3oLvgIw==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CFKi8wWx78Xq; Sat, 10 Oct 2026 15:19:07 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org D83A34095D
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791645547;
+	b=N5V6smExQeknwlM5JOUpbGtQP7jNT8qmYS0b9vGN2OBnQ44F83HBoHpjwAhpo4muG1V5
+	 Lrem0j5U2z2WYYQPTIOA++uiwm4FLN+aQZ7pQYj9b1LgUCiydtTHtoANu/ASj0oPsU5bB
+	 0Q/EvYXdicBcRh6IE0H/5nhMrKgh0aVrTvFZIP4lkuUt0EmaUNLH1Gtqin3Sm7yF0lMfc
+	 TJMd+DqrAACEj9lkNxPUtyQGNBDVtRkgxQUdBmrb2Ks4cUI3foNjOqRCbt3P/KjUu7vjJ
+	 yNRITA/5OUVBRwF+Te3+wxD5C2YYLktRpy24X1QGHZ8OnxlKe0gOshKQYbGbpHHM6Cg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791645545;
+	c=relaxed/relaxed; t=1791645547;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=mBbpDxjAVkm74G5GSlPrrelbnLfx8AcqJZiv3HG1aT0=;
-	b=JDxE/JiJVkruB/ect5Vvoh0WMxL2PMvHz0ywqQ3l87jyfpxEseqA94m1yGRL9Z4ZcPBd
-	 rJXK7NBXsOOBcfcmkXljN7u/Nvtv/PQ6B/TI1Iao5gjMSvgjXBTmQ2tZ12jwmIOKX1vkk
-	 M6hNrQhP6vCgp5jRG3FsTiRjwS51RUOYKiaTy9DmtrfuWhRerD/QJTOkj9R3zl1S3XmUV
-	 WG8yS+9E7/hnR2w9b6MNDZha1u6r4DJRtw/d5M7jZWYSGiOy4hd3vpV8K7IlY7iqz795U
-	 4l7BWHqRo6P+5jBkJS7Qw+U48YvKXXOPh8yr59qIMnXuWKvG+13XrQn3En4HTTVQx2A==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	bh=DkQvPnn7lqzy0Q+Kasd96FJyIhOEoo+j18UjeUm2iFU=;
+	b=GSHt1tk3YoEXS2phNNtDiGKQIPl8PNNp0CEeX+4lxx4U9P/GjIPxS33gjaYbHdDvYSI/
+	 sAzNTyi1PLd5gA15EX58nUBvUUJ8twwwrpGXlE4+4wQhn+w/YR+wAdIhpjKEhFbcg3Mb1
+	 L3iOdiMT4DSRHJ54Mtbb6rZolDPZe04iV0eK445MdpKt3cw7OZyMXhfJwPRYt8wNiyneW
+	 R8fj5l1NZRY2k0aCUO+nf4muY4uHqhzzJnE5+wtLpMCVlZNH0VonL6koD4KIHcIbBjqpN
+	 pGaAk+cIwLIROEI4JJfwlDVTSU99I0aa4kzhpt5rsB/yiW3nl/ZstnjtkIIWqq+Zq3Q==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791645545;
-	bh=mBbpDxjAVkm74G5GSlPrrelbnLfx8AcqJZiv3HG1aT0=;
+	s=default; t=1791645546;
+	bh=DkQvPnn7lqzy0Q+Kasd96FJyIhOEoo+j18UjeUm2iFU=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=pNYlurs5DtCiqkxLqvA86Mhdi+FM6aY/dIm4dEYXduDiH8PsntR6qfPawicH93hd3
-	 ko0rt6eyAX0c/zepzBXl+36w4Inhtl7qv4o5kM4ZA7N9OiyWSQl5UzVYZUF0yEl8tD
-	 Zvy99kO6iuGyYMvn/BGY3JA9vNBb/DumhU+L/riHgI7cX0Sg11Zngwd+OiJ97nn5sl
-	 eCTPyZNkpDkpsLCyIex0fdB+3rh+AqEtLjfMC2i10uvGF9C+zam/VGCWeB2pJExxcL
-	 g+LBGkoDuzWr+APRClVClcGt3QvaDuQ/ti94lGtBwimzQ2+0aB73RJPUEul2TBGjIa
-	 DGS/TKGJWtgQA==
+	b=BiK6hLUuTKFlbBNP//2O0h9++bN67hgt4aRCE1itm/5Sne9ZbpmZqUyTVA7STjW2G
+	 QZzEoafm252SlEc9ZYv72p9sgSAaxK3CCVZJg4k/lqVBl/r2JRCUTFrLcKTOo8nE9G
+	 +h3bzwglCimd4JMVnpEGbGYAjLbkmtEK4zIfXMLIRaFIpR/i5nK9qNDTSXPzpdn25j
+	 ranHuc5Gw/oPSDlifS1124j0ky3LT6xISVK0nn79MqgRXJXlfGZmL5daRBRbaLt2wM
+	 1FS6Ev/fJxpdALQl/eVbEIUy+mndJYc7SzcQVrehNTsuL3lXvkOXWd/BNfWQlqS66z
+	 WemOLarfuWmew==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 636C981126;
-	Sat, 10 Oct 2026 15:19:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id CD4FFDE2
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 15:18:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D83A34095D;
+	Sat, 10 Oct 2026 15:19:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1AD8E317
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 15:18:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A661D4093F
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 15:18:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 18AFB8111D
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 15:18:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N_oeB3VKy9ly for <buildroot@buildroot.org>;
- Sat, 10 Oct 2026 15:18:52 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org DB74F408AC
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791645532;
- b=Xqip5ScuC3seLY+ejrAa9OKYMP7PG9Tr6mLI5ZFbUCvqekhQS7aBknE78btn0GJHtXAa
- UEEIWMNB1Bz/WgLagB7L8Dhej64expHEBAeCKzWViCpZt1oaWLc4mBXVFSCVVvbg2RHb0
- AyX97clc2h1EWYxoWngT4iKqbq6+7efvxg+j3YY0v1WuL2LNRtKosI/JFbMZIrgV6uwcC
- XVHSVwBs8c+Tebz5Bc0vZlCT0gp4fm6/hxpeVGF7YENqc3BYMYnjTAKSRzSPxbi93kO9q
- zdC8+iSw7ecHXUYCKDSN/S9epwXCkooXU3E+JnISZj0cYhBr6vcDtcT18vrulHP9J+g==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XrHvV7V30tnn for <buildroot@buildroot.org>;
+ Sat, 10 Oct 2026 15:18:53 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 193EF81158
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791645533;
+ b=BE5+g3uMV7YGVGAUagv5TcHhmKfzutv3q6Jhh0XLYsroHZ2qQ2rT+VblqKNcWokSqnWv
+ wXrhxqavWsvMoZOKa9jFswgyiZ4zCq+Fx+FO45nZuq/AoRcuorCZKY/DrqJhYpy4dlkzB
+ fOVcOepYhTqRPpVPqsMqIYA/lV+HnavwepQldqSXtiNyXXf9dMMSlzaq0UHg3yXYXpWlb
+ 9DbZ2UWLBGwSnYuBM9cCGGcdU2IprvChLcdALSEmc0Ktmth7LybboKH/rsyjA7hmGMMS0
+ EKRO2OB/M9Bbvhu3104ixii17wNtlzV/Bg4LOM+w2NaQVxofMa34z+OIkTYvyDyvKQw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791645532;
+ c=relaxed/relaxed; t=1791645533;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=enmPIHU4RQ8BxryeSrO02NOja53M8yJXemReSP5nCEw=;
- b=MqKlQnABrfvO5wje9gIijNFx53+pMOoydHRE8p/wSGJk790kj1qBWW+xef6FehRFLB5e
- O1oJ32dU6DxwpjnlH6nd4bHFLIh2FVGfquibMV4Up2V64bhSjlcZAAd+C8ujhjzH0pxVs
- VBsvYj0Ot7RZh9HXOtrQf6MTrfTrcLfe2j1dJSTSQwYsfJCNTIfTjXclaLfpiREp1f3/L
- mBPfkuF340UOz0tYrwn1vwOLZ/zmq3ZWQRbbPmDtFpThIaXHaSeOZKBH3KIlwnC2i3lXP
- 48zC9FfvFCWYdNt5ekd0e0xhibY/JmOrZFqruknZ5mCt3QoglWA87sNDG4gIiVl7UWQ==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ bh=kBm9Gl9mhT8ZEdSZgbx2AHI9+Vu2SDdIH6xK5VAaXwE=;
+ b=Ru4eaJKgn2KVTVqzg2ZOBzlA4URfiE6b9Hmqu6hdHyUxbBGLrN9B5hTU2iaUVNrkYxol
+ lWy3airEizyadDMdA/7CkQyCtdiOk9sWwJvSN3NNbu0+wOHUDbPOQXMXvRrQSxXRKYhGH
+ g95Uw/Yp3zwa5ziIXB0yr/0BthYWX1Qg62te+c5wGBoRD+5M1MEHB8nKABw4xOWI/5bkC
+ Evb1aVI7j82ozWRdkaVZhm+suAHs8SBaDhst+xyPTNToubLIM7oM5rluZE5UiQzohZ50t
+ A1zG2trJhZQD1f7T+6Cle9exWU2dLOfBBKmm3vC5radnnAkGZfczpGKtt57/PvDUCHg==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DB74F408AC
- for <buildroot@buildroot.org>; Sat, 10 Oct 2026 15:18:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 193EF81158
+ for <buildroot@buildroot.org>; Sat, 10 Oct 2026 15:18:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9AADD9222D; Sat, 10 Oct 2026 15:17:34 +0000 (UTC)
+ id DA51B9223A; Sat, 10 Oct 2026 15:17:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 10 Oct 2026 17:17:27 +0200
+Date: Sat, 10 Oct 2026 17:17:33 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2ee591714dec4ea3921e2da33c8022447492f0bc
-X-Git-Newrev: 32d08d194509a454c80fdffa7657c9564fdddec7
+X-Git-Oldrev: ef0f032677d8013db9782029026b63938a6eb275
+X-Git-Newrev: 6d335ea39f8630b75c1563ea0a2e676616e25bdb
 X-Patchwork-Hint: ignore
-Message-Id: <20261010151734.9AADD9222D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gcc/gcc-initial: add CPE
+Message-Id: <20261010151734.DA51B9223A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt6/qt6svg: add CPE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,38 +118,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/32d08d194509a454c80fdffa7657c9564fdddec7
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6d335ea39f8630b75c1563ea0a2e676616e25bdb
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-gcc-final already had a CPE.
 
 The resulting CPE ID is:
 
-cpe:2.3:a:gnu:gcc:15.3.0:-:*:*:*:*:*:*
+cpe:2.3:a:qt:qtsvg:6.11.2:-:*:*:*:*:*:*
 
 The vendor and product are valid, see e.g.
-https://nvd.nist.gov/vuln/detail/CVE-2019-15847
+https://nvd.nist.gov/vuln/detail/CVE-2021-45930
 
 Signed-off-by: Sebastien Guillaume <sebastien.guillaume@vendeeconcept.com>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
 ---
- package/gcc/gcc-initial/gcc-initial.mk | 3 +++
+ package/qt6/qt6svg/qt6svg.mk | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/package/gcc/gcc-initial/gcc-initial.mk b/package/gcc/gcc-initial/gcc-initial.mk
-index 18d5cef0f8..3c484c901f 100644
---- a/package/gcc/gcc-initial/gcc-initial.mk
-+++ b/package/gcc/gcc-initial/gcc-initial.mk
-@@ -10,6 +10,9 @@ GCC_INITIAL_SOURCE = $(GCC_SOURCE)
- HOST_GCC_INITIAL_LICENSE = $(HOST_GCC_LICENSE)
- HOST_GCC_INITIAL_LICENSE_FILES = $(HOST_GCC_LICENSE_FILES)
+diff --git a/package/qt6/qt6svg/qt6svg.mk b/package/qt6/qt6svg/qt6svg.mk
+index c8d5e8fd17..6fbb492a36 100644
+--- a/package/qt6/qt6svg/qt6svg.mk
++++ b/package/qt6/qt6svg/qt6svg.mk
+@@ -12,6 +12,9 @@ QT6SVG_SUPPORTS_IN_SOURCE_BUILD = NO
  
-+GCC_INITIAL_CPE_ID_VENDOR = gnu
-+GCC_INITIAL_CPE_ID_PRODUCT = gcc
+ QT6SVG_CMAKE_BACKEND = ninja
+ 
++QT6SVG_CPE_ID_VENDOR = qt
++QT6SVG_CPE_ID_PRODUCT = qtsvg
 +
- # We do not have a 'gcc' package per-se; we only have two incarnations,
- # gcc-initial and gcc-final. gcc-initial is just an internal step that
- # users should not care about, while gcc-final is the one they shall see.
+ QT6SVG_LICENSE = \
+ 	GPL-2.0+ or LGPL-3.0, \
+ 	GPL-3.0 with exception (tools), \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
