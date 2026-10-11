@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79201CA9EC7
-	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 13:42:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D140CA9EBD
+	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 13:42:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 208BE4059A;
-	Sun, 11 Oct 2026 13:42:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 39E9D406F9;
+	Sun, 11 Oct 2026 13:42:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nTZjJNm50Tc2; Sun, 11 Oct 2026 13:42:43 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 1DF29405A2
+ id DKpJzcQMJqew; Sun, 11 Oct 2026 13:42:45 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 2B3DD4065F
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791726163;
-	b=ELIqIuMLFdgxXYR4akNhRnK78XlnomdjTeMdxxA7we7XmSGSCj6VdG2smuD7uFHKnHtW
-	 A+Wt9nFe0Ib89js34MVECwXn58O0vL1cXO+h+tSmL7Vcr/z71FZo5x6ro9sqphfcwscbL
-	 8rJS4IyegbF6keJZKSA7TARg+7tO01DsWHxb4+KQVt+R1KHZvr1jSe0DDXQUI39WF2+LF
-	 DK1CASj98CZQYgIYAglhddL04Juc9nQYCm6/Zcdq3czSBiDErngla3tzYvYSz6c1bwCaU
-	 Fnp5loF0avdz9/9wP8kBPmmT64/gHZ1wUZC7VF3d/OuvdoiYEWXh1T1V38ByRkR0Cpg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791726165;
+	b=mNEDK3/bDpz9hjslZCZlUtF9rNWZ3D8b3vViq2nBLwBVNhy+fsvTpf8BtwdSikR5sys6
+	 t7MLDKMSxTji0xlIGUKN1AB/lIbZqg8/Fk5NOIPNEN0hqwNgQ2hOupOLa6Zl0yrOd9Wsr
+	 bcAe5dLBGd1I7/4+sd5BHABn2x+NUZZxe2enQXmFu5wvSlD64veGAsGRm69yB+gpvDkIF
+	 tTci6ilWyBX/5qqeVVHdR+Av0FYqoWiaUQ7aonDBf8V7uUXUw/vwC52gpn+7ObqazNeQG
+	 h1ehKClwi9rA4V48Cb/c985I4qO3pyOK51hyM2MVOKfkg3bnkLwJyvuFUo1CwS09d/A==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791726163;
+	c=relaxed/relaxed; t=1791726165;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=6yE/vDeL/P0RhwUq7HxK46CDTtdVneFzUpHm83ZHeNo=;
-	b=ok9q7Uh3i6EzPvA0gd3WTFOiB67uLtZGO58L0Xi5PJL992xPowN4fIHMzkItrE/HV869
-	 U+hDHhpl6dTERBYD1lk86SAMr9K+rwduWMwlwxbdq3kovkQOmccJZPsGK/PELUvYFKHKb
-	 jDefmdQ+yugfQWgmJGpbSpvBcRQxOLfhyK0wAYoRreYyz1MIHdnnjfb5cNdUBpoqf0Zj1
-	 Ri4Ht96ub6cc7ORxi5KW8KI1dIj7Z+X5Z9XG11slcVgizicOYOsua9sWbSmRn+xocahqN
-	 en7aOIDZCNGj89jHoznCXGf3UmXx6XctdYNMN0tlBl7vLbrPxDzg5JgZStvu//7LWKA==
+	bh=GvYvM7p6G8fGXtgaUPP7t5qNKoE/cVVYguVK9Cw6A1I=;
+	b=M9pn6TQV6aaRUa5BiK82YHGTscu7SQCV420ASK+iSn5YHFSfP6luvbrcDRP7Gp8RF9Ns
+	 MWdGWgX51WPHL7rEMQcdf+btpTniMB6RCX4wQb+eq+1bFWDzWYo2CPaB6XSg6vdN/Y9QM
+	 J+3SWHIA3KOycHk6URXL0KLdkOBr4Awxhvw8fFn2KJksQge7EZ7Irr2bmWTstkgZ7u2sq
+	 tmpObE5tVOWR0fyDVF1/1nM753HyxkX8gB9CrcxDXfXXNJQG0uDLORmnxBEHYCfUCdxXl
+	 QiN9CNkD+VEF5Bh7pN4v5YVxj31LHdj+Zv1TqjZWBeRPiQA3Wz8Z4I/UecoNXBLY3Cw==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791726163;
-	bh=6yE/vDeL/P0RhwUq7HxK46CDTtdVneFzUpHm83ZHeNo=;
+	s=default; t=1791726165;
+	bh=GvYvM7p6G8fGXtgaUPP7t5qNKoE/cVVYguVK9Cw6A1I=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Hv15ZXiuboMeaas1Dul6Hq6xYv/Z5DqMECc5IAlGiHLXH2eM4fNCl/8Kiw3Yvts4P
-	 S36wwJmBvaf5WCswUfQ8DSLvhEA9iJ0uvBlQ7dhJOpzVUyXhUZ94lGYdTolX+O7Idu
-	 5WuHTTOtJ+2BhVz/gX5tMvdOkqnXeemJLEP6LEqyU/4Hn048sm3fMtrhO9LZv2l17a
-	 IoMcVD3Q2NHbCMKmckp2Hxodd8W+0UUbbWpjz2cU8g5n0cWFEOM1R2bNBSqIgKWFgK
-	 1Qn6VMMXpP7gaFq8rHMY1NKVpgg49XIn1yXiGPVZR5p1/+6DOf4hs/c8FC5HFxSGyD
-	 Wd92VlMPwRSFw==
+	b=WAuInzwBy2QJTEmainnHbo2u33Usoav1tkzvZidz8qL4Cs37tpm+o05polPtd863R
+	 pfKjWZium0RJCoqt1n+T1h2gJsj6rcaN8OWU8qwBCe0hbd6vhoBA6CbITUiW38uoKR
+	 WjRld/yh8lt0M8FaJ7BMIX8/tiKcYHY8cRje8efz4yy/Kdoxk5rCN8R5Xo9uCu5f6Y
+	 +J9VsI9Yg6cRmxNRgJEHQE5o5fNan9SiU0MaWCi3F4Qe55/eeTSJIrBN4vFbeBWSed
+	 u38IJ3Mc9H23TzFfTNp/SQNL1UF80jaiyrQoeH5hLnMMk1JPLqWTa9wzFrARhZtK2I
+	 i5QRLWvfxbR6g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1DF29405A2;
-	Sun, 11 Oct 2026 13:42:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 718631A6
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B3DD4065F;
+	Sun, 11 Oct 2026 13:42:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7ECBDD5E
  for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:42:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 582DB60622
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6DA0840071
  for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:42:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ax5uq2bIZSM7 for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 93xBmfs4Jai5 for <buildroot@buildroot.org>;
  Sun, 11 Oct 2026 13:42:39 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 952596060B
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 9F5954002B
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791726159;
- b=m8Oq8E6go9oC5+0HFr+wCD57pAggpNcySogbVZzszPwG3PBB5DOwWVAEUAHg0CTZzbgm
- 8TKBM9/kfI6NNzFRPy9gq+/eJI3bygW7mXCMSnbELKW9o4/892fInITw4Ws1N4zEOUrQV
- zqcKfoHXQTlNd7tGstncq9krIzHWn6WuIcMALZZLzkvlXU2I7Ikzm9qDIxnacIsDhg07C
- t/MlyHVeqzTnJHB2C4e2Q5mTPWyG1xwS/AETkWti64mF123P++kMN0v+uHoGk4QWPjrdc
- LN7z+IsV2uRcIADxI4wDcKYfKEd3rEfvZMBLhR7f5iYP4mejRu/DvtpaiuZvCo3JJfw==
+ b=tMPO6BiILCu0dJFFxZdtTPzmJwSYQFu4uUSiV4zGJHMz5aLz9L2yDQMMNKt7RxCTTDbq
+ rdfPsCYKIkYglhF9vEAiXS7ZHIXCoCAl5rOhU2fAuzaBoSOHHq88CKyi2purI1d/HJzMA
+ 2tovkIgZyyK493/HTaxYseXkTOTk8Wwycfd1owPcJ9htSwCY1fJTNWR81riBz4ByQt1iH
+ p/6cylCW2Targwj/jt70czD1waKLQLDysFAYAfeTbEAm0mnBJaD6Adu3B7DrPLU/BhvhW
+ i6QpSd/ewMsU7iLN+ACILQ14BN2vGVZBxEaChxG7ZlqCbOttHEqvGz0tv6mbdp5JnDA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1791726159;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=AqKP848ptTmH1JADnEjriQ1XLMK4IEni1wRJvbCc+3s=;
- b=Sa7eHDm3vtnPlhbipxR4hRIbpYeaesFr61GJkfShALsas+88WvQAM6tgExUhFo3If3IH
- QsclxslWwY6Mel4WefRo+JEmBFAeD5bT+8RecEVfjMgXpo2OAJgEz4cnknwehzFDpuCvZ
- esfkzNFXPSO01Ga1TRLxDaaFINcA3RnwzCbPrk5pqusCvTlNsXsA/7WUKRtVQ86SmnBhj
- U/GQY06d5pyTq2mZe9KpPtrE95yMvJrEjvOaD9hxf8vtlmivD/I6I4IV7INmYMzajgsS+
- EvDu3WDOf/WTy95MiuY3BlqrPHZu4MjQ9cngLLRum5cPqQCpalfzdVuWYR41ljLJGHA==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ bh=0ROTcV67LCuEoO+yy6Gnrd/qjOSk/B97gd1hjS70TSA=;
+ b=TR6z5CvgVBYmut4QRzT3isiavNvjmCKQLP/kP+Pi83kLjRoWsn/55XU6fK7w9Gff5LEm
+ mRe0H8nP47+m+eo0dRl1xv0MHZpMg7L7Msfk60s6OOncxL/4//9+OX1uakn8dcZMs5Nx9
+ HvW0MLH0LhK/aEb+l5AR/xDHaibtI2poniJ8Dh0jg8OaapixyygjutDE/Z1w6FAzXFtNv
+ T7m4risnGSujklc3cMdPkSmNM1amp+Y/3QHqn1m/C+LvZMhS/YHg1gMMtgVykkSerIQjo
+ lt50qdYv8ltszopYq/EbfxoLzts9hMO0ZFoGSijZs9S6J8i0bxt5Ht8V73rSoPnJ6tg==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 952596060B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9F5954002B
  for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:42:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D0DA9937B6; Sun, 11 Oct 2026 13:41:20 +0000 (UTC)
+ id DE88C94C6E; Sun, 11 Oct 2026 13:41:20 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 11 Oct 2026 15:41:49 +0200
+Date: Sun, 11 Oct 2026 15:41:50 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 68a0b32df9f62fe4ee0ea2cc0225029af5a2f05e
-X-Git-Newrev: 31fd7de7a84f3859b007b5b6a20a72e74238a9e7
+X-Git-Oldrev: 31fd7de7a84f3859b007b5b6a20a72e74238a9e7
+X-Git-Newrev: 3eec85390148ed896c844ee9d6cdc183fe92acfd
 X-Patchwork-Hint: ignore
-Message-Id: <20261011134120.D0DA9937B6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-uv-dynamic-versioning: new
- host package
+Message-Id: <20261011134120.DE88C94C6E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-truststore: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,51 +118,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/31fd7de7a84f3859b007b5b6a20a72e74238a9e7
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3eec85390148ed896c844ee9d6cdc183fe92acfd
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../python-uv-dynamic-versioning.hash                  |  5 +++++
- .../python-uv-dynamic-versioning.mk                    | 18 ++++++++++++++++++
- 2 files changed, 23 insertions(+)
+ package/Config.in                                |  1 +
+ package/python-truststore/Config.in              |  8 ++++++++
+ package/python-truststore/python-truststore.hash |  5 +++++
+ package/python-truststore/python-truststore.mk   | 14 ++++++++++++++
+ 4 files changed, 28 insertions(+)
 
-diff --git a/package/python-uv-dynamic-versioning/python-uv-dynamic-versioning.hash b/package/python-uv-dynamic-versioning/python-uv-dynamic-versioning.hash
+diff --git a/package/Config.in b/package/Config.in
+index 740872a0d2..407ba05d4b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1488,6 +1488,7 @@ menu "External python modules"
+ 	source "package/python-treq/Config.in"
+ 	source "package/python-trio/Config.in"
+ 	source "package/python-trio-websocket/Config.in"
++	source "package/python-truststore/Config.in"
+ 	source "package/python-twisted/Config.in"
+ 	source "package/python-txaio/Config.in"
+ 	source "package/python-txdbus/Config.in"
+diff --git a/package/python-truststore/Config.in b/package/python-truststore/Config.in
 new file mode 100644
-index 0000000000..75589ba4d2
+index 0000000000..48fa79eaef
 --- /dev/null
-+++ b/package/python-uv-dynamic-versioning/python-uv-dynamic-versioning.hash
++++ b/package/python-truststore/Config.in
+@@ -0,0 +1,8 @@
++config BR2_PACKAGE_PYTHON_TRUSTSTORE
++	bool "python-truststore"
++	select BR2_PACKAGE_CA_CERTIFICATES # runtime
++	select BR2_PACKAGE_PYTHON3_SSL # runtime
++	help
++	  Verify certificates using native system trust stores.
++
++	  https://github.com/sethmlarson/truststore
+diff --git a/package/python-truststore/python-truststore.hash b/package/python-truststore/python-truststore.hash
+new file mode 100644
+index 0000000000..6c18984eeb
+--- /dev/null
++++ b/package/python-truststore/python-truststore.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/uv-dynamic-versioning/json
-+md5  31b72e92d7109418ce8cfbcdf0abb042  uv_dynamic_versioning-0.14.1.tar.gz
-+sha256  8642db686ce5c50417035e7a257ac73b7e5c3a7a32c33e45bd7e36ba22eeb648  uv_dynamic_versioning-0.14.1.tar.gz
++# md5, sha256 from https://pypi.org/pypi/truststore/json
++md5  d66211e2bd37f6852bd6009728170313  truststore-0.10.4.tar.gz
++sha256  9d91bd436463ad5e4ee4aba766628dd6cd7010cf3e2461756b3303710eebc301  truststore-0.10.4.tar.gz
 +# Locally computed sha256 checksums
-+sha256  42de23e93562f776f8cfd25fd5ef60f1637504133e4eef42c3a120b4e7e07163  LICENSE
-diff --git a/package/python-uv-dynamic-versioning/python-uv-dynamic-versioning.mk b/package/python-uv-dynamic-versioning/python-uv-dynamic-versioning.mk
++sha256  33be7b7e8fa4fd19b1760e1a8ed8a668bdab852c91b692dd41424bcb725a9fca  LICENSE
+diff --git a/package/python-truststore/python-truststore.mk b/package/python-truststore/python-truststore.mk
 new file mode 100644
-index 0000000000..f9e07de4a3
+index 0000000000..5ac2a6b563
 --- /dev/null
-+++ b/package/python-uv-dynamic-versioning/python-uv-dynamic-versioning.mk
-@@ -0,0 +1,18 @@
++++ b/package/python-truststore/python-truststore.mk
+@@ -0,0 +1,14 @@
 +################################################################################
 +#
-+# python-uv-dynamic-versioning
++# python-truststore
 +#
 +################################################################################
 +
-+PYTHON_UV_DYNAMIC_VERSIONING_VERSION = 0.14.1
-+PYTHON_UV_DYNAMIC_VERSIONING_SOURCE = uv_dynamic_versioning-$(PYTHON_UV_DYNAMIC_VERSIONING_VERSION).tar.gz
-+PYTHON_UV_DYNAMIC_VERSIONING_SITE = https://files.pythonhosted.org/packages/6f/c8/fa500ee29af69cfeeea5ff6d6597919f1989b2e3f1a236c3006bdb21d320
-+PYTHON_UV_DYNAMIC_VERSIONING_SETUP_TYPE = hatch
-+PYTHON_UV_DYNAMIC_VERSIONING_LICENSE = MIT
-+PYTHON_UV_DYNAMIC_VERSIONING_LICENSE_FILES = LICENSE
-+HOST_PYTHON_UV_DYNAMIC_VERSIONING_DEPENDENCIES = \
-+	host-python-dunamai \
-+	host-python-jinja2 \
-+	host-python-tomlkit
++PYTHON_TRUSTSTORE_VERSION = 0.10.4
++PYTHON_TRUSTSTORE_SOURCE = truststore-$(PYTHON_TRUSTSTORE_VERSION).tar.gz
++PYTHON_TRUSTSTORE_SITE = https://files.pythonhosted.org/packages/53/a3/1585216310e344e8102c22482f6060c7a6ea0322b63e026372e6dcefcfd6
++PYTHON_TRUSTSTORE_SETUP_TYPE = flit
++PYTHON_TRUSTSTORE_LICENSE = MIT
++PYTHON_TRUSTSTORE_LICENSE_FILES = LICENSE
 +
-+$(eval $(host-python-package))
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
