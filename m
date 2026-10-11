@@ -1,115 +1,148 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1227ECA9ECA
-	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 08:35:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 332E3CA9EC7
+	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 08:43:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C34BA4084E;
-	Sun, 11 Oct 2026 08:35:45 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CmtKZ2EOzu32; Sun, 11 Oct 2026 08:35:43 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 80EBE4079A
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791707743;
-	b=fb+vv0nwOgTPZmwUfP8YoiAPObwZfOBUXafvadbjvbDxCHMpFku2bnh4Nhml+KGR5gaK
-	 bKP9YAs3inkBwU7yibNAMIe4BEDwRfvKm4kRzAbrQSTJ6L65qraPz6dBOiqvxp4Dzr0I4
-	 u/lQLJyYyoGxbui/BFvRxURf0/J28nrXptGCcowCebAnwMCQFO33Tcgzi+1sSWT8M4o9T
-	 7kwAG9d7kMzcYqYBIw4x1s3y2N1lX2Sv15o7tCXsI/4I2wlq7tAiW0ZgufbMlA8eH1AtH
-	 W6wd0jKYCxv+tKHLutRKEMuHbv+vF5BVL7JPpN6jt0J1Yz6ZLORzO274OHxCv67VGcQ==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791707743;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:To:
-	 Cc:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 X-Last-TLS-Session-Version:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:Content-Type:Content-Transfer-Encoding:
-	 Errors-To:Sender;
-	bh=Bm+2GFP47Pc1bob2Hlx+GGFBhJmvgCyvswJS8kzCLIs=;
-	b=DBy/ayprEooUNNnh3kSLLA7hYU7W+ACV4q6uT+4fsebmQk34WdlxTuyG9Rn6r5gTMPNM
-	 hGT7qYvkYecvJLLRhgzgBOmKJYbrJ5UGls5EocUqe7C0FOUJRW2pszLPABKW0gXJU9lRA
-	 Y8oyzPfkTSpGq1isjM9r6EiIerIO812kdaV7EepwSbyUfnUXF4C/OJI2dGFX0mgqBCbnU
-	 LYUZX8hGyf5kwTuSGXdvGvIomNIZ6yarg9yh1TaXJCHRRtEcLZ8sisoD4Izdy+i+omVSF
-	 +RIbSGqvazOmcTr+2mu5vwWrC2SOmXKeGRgXKN+RjCHmPjePwceDcrLSViiC6cOyMlg==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
-	arc=fail smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791707743;
-	bh=Bm+2GFP47Pc1bob2Hlx+GGFBhJmvgCyvswJS8kzCLIs=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=WUhp/swo7Z8Gx+4tLexihbtzp3qnEYbeG35Jb/VjCPNreYRq2IDKF2BfkCIS2rYhS
-	 QgpNeRAEIUl205fNwwBlNFmhdwLnQ8+ebLPM3vuPu9KaHsaI+HIWXAGt2ZuMiMK8Xx
-	 AGdq+bvtpTQeNILEHgpE8xw4Tq8RzYFhQQx5mJ1toILfbZTsg6q3imgo38S2AKtBpt
-	 Amo0HnyLhTB16DKQiiV6t/XmkTjaWtGJzaCC+pcRSg9IJq7MZuIBZ8OTuF+N9z62eB
-	 zk5xKMErAB38oswTFhZ+aUZn4zi3oxt28HNlAI4t88kL0l8TEvsSDZOqslJbXPSU8P
-	 upYoLZLw65mVg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 80EBE4079A;
-	Sun, 11 Oct 2026 08:35:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id AEDC0235
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 08:35:41 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A0E8580EC7
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 08:35:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E37BE80ED9;
+	Sun, 11 Oct 2026 08:43:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 739Umd3UN9Mc for <buildroot@buildroot.org>;
- Sun, 11 Oct 2026 08:35:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 8D95580EC6
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791707741;
- b=aRQXVckwMi5umKX0w4EJAYxAuQnl34Vni2cfVDGkY9sjCmLhFZXURnjZH2zAXopcic5s
- bSjmYMqBIkq+GJkwJaJFgGHganYjYMICNBtHg6O/fQgBHBIFm035k/33ifVijLOWlAx+W
- 4RCfGSOyr5a9BnjeKeOoA0b54aEL58k56dWRQhSmmwHGkNSAHRnTT+V+Lpz5sacUYBbW4
- 1KTn5+on5H8mWHcMScCtriEOUKJuM7XMJJBCHNSHrhimtrngyOohR62S2rl33ORkH816o
- 7s8QFs38H/5Rxi1CUTgPUPNWJdWu0h8WB0+LJpPNgyyogHoJVKuVY8jQHivZK7aPwBg==
+ id AkfLwh1_hWNM; Sun, 11 Oct 2026 08:43:42 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org EF3A980ED3
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791708222;
+	b=H+aJ8WJRxSkcj3/OdOmULKbMM/RuEfMRWerEb64nCmQ/L0hnA1tzwVCHahUt5fw8If+L
+	 6nrOdL5QMCFnPWPn19lE2yD/djIE36CyTm2rEg9bWJHAVOOHf64bx4VwQKjzJRnrfepBO
+	 rtCIGniHyBPj0Ycr2G/sRFI7YKV7FXKiDvNOWAnqn1O6+9CniIc8GEKYmbhFITKnvp8N1
+	 is7dDkgJhnh0+exMhcTl9vFKqeGUVufsw77MtXO78H+PsGdRzfGpN7W05bFzkcUqcXKB5
+	 iA0LUVJLcic+ivkeqmVZdXqlyesg5uqtT4lf0e/7JBDUs23Zut4AMubtjLYSZMAlJjA==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1791708222;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 Received:To:Cc:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
+	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=NaDErWE/7o5v+IF1NuKOUCV4YFSb0S7DC5RLqxg8k4g=;
+	b=InPVkzJBq9MFkagLFHZXgyXLzCzeqXI9ezEWs/W0EVaWDZ6IW7dtigxMYAd4ejF4nGH8
+	 cqUKYALAFMHmG7DH/NilLwlxnBQ1V0HA7kliYH5/WIPi7sQMNmm4X2qKtH9aj5c595P4i
+	 cEFu1zFmYMiu+RKa927Z9YbN/Sq2VgvJcD5VeuEilegCOgDwm5QJ10x5Kiwd77Itx+kZI
+	 PBksSct59Ulfl8dvjN9yqRJsL8RHym0E8+rV1rLZGZDER26V+r8ujNyssxp5qpLvba2G6
+	 VPG1cmtmFfMKcYy35MzI5ugy6tmciWT+EWZ6krWKKRpTQXt2X9BiezUSkdtN8TaWiZw==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	arc=fail smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1791708222;
+	bh=NaDErWE/7o5v+IF1NuKOUCV4YFSb0S7DC5RLqxg8k4g=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=o/3IzEc8jY67TCxoucKHc8IHdzJATSZXEOKQeNGsZQoWXjHKw4t4r8xjIlpfoTsw9
+	 ttoHKQsZkqnL80cNcSjgzjNWWfQMzkhzYlxO1WWo4iGNN+ZpbwDtbgPa9wZPgBJX04
+	 Osac5jP4oOy9DMBRYigjvwGIRGnqE8ji4DFMjh9pnZ77zFU0Ouk8mUkfK/cpes/i2V
+	 U/zjcNm7dUTszOvZIXKRgRfq8MOnv/Rt/7i3ErOf/mVjryASGMX2xP8VR1FjSZ3mhj
+	 tOxT2326+9Oz5lg43opHZwSOrlpd/EskwdNfo56KYxEVwQhygn2f+lQ3HUkhimgXNO
+	 du7yvDbi7JoPw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id EF3A980ED3;
+	Sun, 11 Oct 2026 08:43:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6AD7F9DF
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 08:43:40 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5CC8A40042
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 08:43:40 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1f-5YQxyxUS2 for <buildroot@buildroot.org>;
+ Sun, 11 Oct 2026 08:43:40 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 7D8114002B
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791708219;
+ b=Xfvb0MECEBDalyxw5poD/gHDgrakjJsvZ01Q7WnRWDAbIrsuaocb9auRbcd1Lk8vSufS
+ xVD2Mm/hEVERsMXY/n8SG70Ll+iXEj/jytE27f2hHjawyhDDyfJznW5K9M2vlcRf0j6Sn
+ Hy41UaVxBeTbUrReHXXJbHEac9zEheG7jwGmXhPQPfQ1lTGmx96cmkNTGq49fPkFmtgbw
+ zZCZ8FGjs7dyRYudwcKU629IMNApR5Prj0mL7/54ezowdyujpTlVVDqEtChNRJdtFGT+F
+ Cof3fASY1b7Zh+VPTtVQ85twZ+kcotxAcQ6on8OXh4XNjwfhO2cqXK4y7PQbi2jsfAw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791707741;
- h=Received-SPF:Received:DKIM-Signature:From:To:Cc:Subject:Date:
- Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:Content-Type:
- Content-Transfer-Encoding:X-Last-TLS-Session-Version;
- bh=hz2y8FTsD8IyZJvs2R9kms6nqFsbxJAdqR5f604F558=;
- b=FVcCGklsyp7nzav7ii2kN22WEdp0FesIMXO6kkZhrrS7JbAicEG+WaXlWqGusVed7A4+
- 3BOsBK9sAkZ2cplIhzp61qyO9afwN6h1jSMriQgj7LIHqjtZeUtCTlVfYX2Jm/7WGheLT
- 6dNz5A6R3moOckJY4Oe6f7C6J+VciP+oa+qtW+8SScrnQrKp4BG9p4NTDL/euaRLpPCw5
- M0tqN+0y8jrPJFdsDqkrkdRFvxSDHPNYiXthDNI/CR/7jPAE7jZUcfZzhbg4U0aF6zUqF
- x6zL50Re/WE/twoRSph4bsQVb52d8YLgCW4CSbAiVlHOylfK9Sm47i0DNgru0WVsyWA==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
- dmarc=pass header.from=rnout.be;
- dkim=pass header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=Y8hn1CTL; 
- arc=none smtp.remote-ip=79.99.201.12
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-Received: from mail.nubo.coop (mail.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8D95580EC6
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 08:35:40 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 00B2AB978F6F; Sun, 11 Oct 2026 10:35:36 +0200 (CEST)
-To: buildroot@buildroot.org,
-	Thomas Perale <thomas.perale@mind.be>
-Cc: Arnout Vandecappelle <arnout@rnout.be>,
- Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
- Titouan Christophe <titouan.christophe@mind.be>
-Date: Sun, 11 Oct 2026 10:35:12 +0200
-Message-ID: <179170717083.143633.10167585922356281103.b4-ty@b4>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20260918091142.62239-3-thomas.perale@mind.be>
-References: <20260918091142.62239-3-thomas.perale@mind.be>
+ c=relaxed/relaxed; t=1791708219;
+ h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
+ X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+ Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+ Content-Transfer-Encoding;
+ bh=pQ6GktA2bLpSYojlb9N0DOxX97TCcfMjq4D567xuquc=;
+ b=Rqq5yNVO7jm4NZMm4M8cCblm68kWWZBk0s+iarL58ILX8ZFtEP/b6kW5Zrm+F9ezWEGS
+ juhWXDrxmsMb6Sx8eydD8dA/7vWsljA0pGxidtzrdBABKUnbVddprK8MuI8Laf0WYNlk0
+ vxuiRuBi3WtfLznGZbYVc3QtkA+ISmS5xYHEshyUF8f/AsTCYdmwNO7DMHvFfN08jcSi5
+ 8m7pE4JH7nA02iY6mJe+cCkoPDQ6X5nVItMIs+BneTrliBp5B9XSdQV2M304eiitdmiG+
+ OlGvRu94i8cJvovPZtFrkucctEiHFV7IkRD+arv/ykSJPNt1pakA8CVEfr24cke0nYw==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ dmarc=pass header.from=mind.be;
+ dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=MiMwdauf; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::32f"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7D8114002B
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 08:43:38 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-49e73611928so18961225e9.1
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 01:43:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1791708217; x=1792313017;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to:content-type;
+ bh=pQ6GktA2bLpSYojlb9N0DOxX97TCcfMjq4D567xuquc=;
+ b=USnM51cfjzGztheYjdZiX7mxkLHTpfYxSp86eyACeBBkJhh12zexnwGX6kPYHuxUrM
+ WADbkQHe5VdX2Eo+goDiYFL7aAPDjUt9z2OjIyJd54fWBwcXkDmhawII8Qah88L/4iUR
+ YVD9caQg39xejFrsAlg43q/VMli/2Cp/JieLBtVUTXl5ItckgwGWpGQNhQGKjgVpfQw4
+ nhRidc/Ueyq8GrDxdqMCFrTebMn4GoFW3IDw60EXTwEv/wwRiiDt0sveQbR8WNROjRAM
+ 5NoM+1+OcIvrzMARzwJs4+6LGvowuKNEK9Ghs11YhX4iFTfJZCdhuvHtiK0KG7PsD4QS
+ rypA==
+X-Gm-Message-State: AFq9FYI8/m2XPBCH/XYlgI2fnAwb0VXH2TlEtR4DUh6zR9hs0fDV7Nrt
+ YihvQPcmPqpelWOBLkQJCQ2HW1jyyuCJL+Wx+AR1f3OHBFbJ0ETaqWhLKBcpzcJrUBJ7H04cSrc
+ uCkB2Xdc=
+X-Gm-Gg: AYBFou0CLB1cGHGsOLXHF8p3TkR/3VX+32uUOaw4Uu5GmCpjrQtzpNyU4u9Jt6mkwmT
+ UoFL+5paMJxjHg3iGsSxTy8A/q6pwcbdgxXVFnkbenZIAcOR3HZcOMFEeZw+vXiWClwsfprCR7I
+ 2X3aTcp6HYW9VtSge6JGWtAjhyqOCbUZfQamE/Ci9pT07C3t7wv3gkyEkwEEg5hm15xhh81Bft9
+ z34U1Alwux/oP61EcVMiMvMdMF5WLR6XjaeBA9NEYLgEtLKEVnuLc2ZJMmc1MAXDBCubuSBqDkc
+ 1QxdaKBkT1gWPlwb49GmBtiHCZkYVUVxHNevqw/k7+kCBMvqeBFiW86wl/fiuP6bNjah9kE+p/f
+ N+vPgYVKWW1mp2Rzwiq27jaFUrE1pUrqfNExP4sPd7YsEdOhrgBEqV7zpvFhruzAec8eMYeHljp
+ YnWedS+Q3t30F1GFgAERH7IP0GOkIiST+Z4SdyLEqsHfYxhDuHcjXXYU+Iw41/TUoCTazvWnm5Z
+ /NcGuWp/qVKtpvXe8EHKmQM//2PzDjFaHdgvb6tckoHQNxS19fBWBv0
+X-Received: by 2002:a05:600c:3e0b:b0:49f:fbad:29ae with SMTP id
+ 5b1f17b1804b1-4a18e4b1311mr114411535e9.17.1791708216206; 
+ Sun, 11 Oct 2026 01:43:36 -0700 (PDT)
+Received: from mindpad (2001-1aeb-401-dd00-f938-e455-e8cc-7064.ip6.tmcz.cz.
+ [2001:1aeb:401:dd00:f938:e455:e8cc:7064])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4a19471edd5sm197720645e9.11.2026.10.11.01.43.35
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 11 Oct 2026 01:43:35 -0700 (PDT)
+To: buildroot@buildroot.org
+Cc: Thomas Perale <thomas.perale@mind.be>,
+ Arnout Vandecappelle <arnout@rnout.be>
+Date: Sun, 11 Oct 2026 10:43:34 +0200
+Message-ID: <20261011084334.667976-2-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261011084334.667976-1-thomas.perale@mind.be>
+References: <20261011084334.667976-1-thomas.perale@mind.be>
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH 3/3] utils/checkpackagelib: check
- IGNORE_CVES identifiers match patch trailers
+Subject: [Buildroot] [PATCH 2/2] utils/generate-cyclonedx: add comment to
+ explain spec_version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -121,149 +154,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 18 Sep 2026 11:11:42 +0200, Thomas Perale via buildroot wrote:
-> The ability to check with `make check-package` the 'IGNORE_CVES'
-> variable content reference an existing patches was added in commit [1].
->
-> This commit extend it to actually check that the entries that are
-> referenced in the 'IGNORE_CVES' variable are matching the trailers in
-> the referenced patch.
->
-> With this change the following `foo.mk` content:
->
-> ```
-> FOO_IGNORE_CVES += CVE-2000-1234
-> ```
->
-> Running `make check-package` will output an error if the content of the
-> patch is the following:
->
-> ```
-> CVE: CVE-2001-1234
-> ```
->
-> [1] b00ac4e346 utils/checkpackagelib: add new check MissingCVEPatch
->
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+The commit [1] introduced the `cdx_spec_version` variable.
+The reason for that variable is not immediately clear. Only the license
+schema can use patch revision while the spec version should always
+exclude the patch revision.
 
- Applied to master, thanks!
+This commit adds a comment clarifying this.
 
- Regards,
- Arnout
+[1] 504bb61bc6 utils/generate-cyclonedx: support custom schema version
 
-> ---
->  utils/checkpackagelib/lib_mk.py      | 25 +++++++++++++++++++---
->  utils/checkpackagelib/test_lib_mk.py | 32 ++++++++++++++++++++++++++++
->  2 files changed, 54 insertions(+), 3 deletions(-)
->
-> diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-> index c5b85bcda9..33988cab8b 100644
-> --- a/utils/checkpackagelib/lib_mk.py
-> +++ b/utils/checkpackagelib/lib_mk.py
-> @@ -120,12 +120,14 @@ class Indent(_CheckFunction):
->  
->  class MissingCVEPatch(_CheckFunction):
->      PATCH_COMMENT = re.compile(r"^#\s*(\S+\.patch)\s*$")
-> -    IGNORE_CVES = re.compile(r"^[A-Z0-9_]+_IGNORE_CVES\s*\+?=")
-> +    IGNORE_CVES = re.compile(r"^[A-Z0-9_]+_IGNORE_CVES\s*\+?=\s*(.*)$")
->      CVE_TAG_IN_PATCH = "CVE: "
->  
->      def before(self):
->          self.pending_patches = []
-> +        self.pending_cves = []
->          self.package_dir = Path(self.filename).parent
-> +        self.line_continuation = False
->  
->      def check_patch_files(self):
->          for patch_lineno, patch_name, patch_text in self.pending_patches:
-> @@ -146,6 +148,11 @@ class MissingCVEPatch(_CheckFunction):
->                          .format(self.filename, patch_name),
->                          patch_text]
->  
-> +            if set(self.pending_cves) != set(trailers):
-> +                return ["{}: patch file '{}' 'CVE:' tag(s) '{}' does not match the ignored identifier(s) '{}'"
-> +                        .format(self.filename, patch_name, ", ".join(trailers), ", ".join(self.pending_cves)),
-> +                        patch_text]
-> +
->      def check_line(self, lineno, text):
->          m = self.PATCH_COMMENT.match(text.rstrip())
->          if m:
-> @@ -157,9 +164,21 @@ class MissingCVEPatch(_CheckFunction):
->          if text.lstrip().startswith("#"):
->              return
->  
-> -        if self.IGNORE_CVES.search(text):
-> -            return self.check_patch_files()
-> +        m = self.IGNORE_CVES.search(text)
-> +        if m or self.line_continuation:
-> +            value = (m.group(1) if m else text).rstrip()
-> +            self.line_continuation = value.endswith("\\")
-> +            if self.line_continuation:
-> +                value = value[:-1]
-> +            self.pending_cves += value.split()
-> +            if self.line_continuation:
-> +                return
-> +            result = self.check_patch_files()
-> +            self.pending_cves = []
-> +            self.pending_patches = []
-> +            return result
->  
-> +        self.pending_cves = []
->          self.pending_patches = []
->  
->  
-> diff --git a/utils/checkpackagelib/test_lib_mk.py b/utils/checkpackagelib/test_lib_mk.py
-> index ba9dbd6aea..7152b40e2b 100644
-> --- a/utils/checkpackagelib/test_lib_mk.py
-> +++ b/utils/checkpackagelib/test_lib_mk.py
-> @@ -244,6 +244,38 @@ MissingCVEPatch = [
->       '# 0001-some-fix.patch\n'
->       'FOO_IGNORE_CVES += GHSA-abcd-1234-efgh\n',
->       []),
-> +    ('CVE tag does not match ignored identifier',
-> +     {'0001-some-fix.patch': 'CVE: CVE-2000-1234'},
-> +     '# 0001-some-fix.patch\n'
-> +     'FOO_IGNORE_CVES += CVE-2001-1234\n',
-> +     [['{}: patch file \'0001-some-fix.patch\' \'CVE:\' tag(s) \'CVE-2000-1234\' '
-> +       'does not match the ignored identifier(s) \'CVE-2001-1234\'',
-> +       '# 0001-some-fix.patch\n']]),
-> +    ('multiple ignored identifiers, patch matches one',
-> +     {'0001-some-fix.patch': 'CVE: CVE-2000-1234'},
-> +     '# 0001-some-fix.patch\n'
-> +     'FOO_IGNORE_CVES += CVE-2000-1234 CVE-2001-1234\n',
-> +     [['{}: patch file \'0001-some-fix.patch\' \'CVE:\' tag(s) \'CVE-2000-1234\' '
-> +       'does not match the ignored identifier(s) \'CVE-2000-1234, CVE-2001-1234\'',
-> +       '# 0001-some-fix.patch\n']]),
-> +    ('multiple ignored identifiers, all referenced across patch',
-> +     {'0001-some-fix.patch': 'CVE: CVE-2000-1234\nCVE: CVE-2001-1234\n'},
-> +     '# 0001-some-fix.patch\n'
-> +     'FOO_IGNORE_CVES += CVE-2000-1234 CVE-2001-1234\n',
-> +     []),
-> +    ('multiple ignored identifiers, all referenced across multiple patches',
-> +     {'0001-some-fix.patch': 'CVE: CVE-2000-1234\nCVE: CVE-2001-1234',
-> +      '0002-other-fix.patch': 'CVE: CVE-2000-1234\nCVE: CVE-2001-1234'},
-> +     '# 0001-some-fix.patch\n'
-> +     '# 0002-other-fix.patch\n'
-> +     'FOO_IGNORE_CVES += CVE-2000-1234 CVE-2001-1234\n',
-> +     []),
-> +    ('ignored identifiers split across continuation lines',
-> +     {'0001-some-fix.patch': 'CVE: CVE-2000-1234\nCVE: CVE-2001-1234\n'},
-> +     '# 0001-some-fix.patch\n'
-> +     'FOO_IGNORE_CVES += CVE-2000-1234 \\\n'
-> +     '\tCVE-2001-1234\n',
-> +     []),
->      ]
->  
->  
-> -- 
-> 2.55.0
+Suggested-by: Quentin Schulz <quentin.schulz@cherry.de>
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ utils/generate-cyclonedx | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
+index e8dcfa8518..77b813fb49 100755
+--- a/utils/generate-cyclonedx
++++ b/utils/generate-cyclonedx
+@@ -561,6 +561,10 @@ def main():
+     filtered_show_info_dict = {k: v for k, v in show_info_dict.items()
+                                if ("rootfs" not in v["type"]) and (args.virtual or v["virtual"] is False)}
+ 
++    # Only keep the first two numbers of the 'cdx-version' argument.
++    # While the patch revision (e.g. 1.6.2) can be used for the license list,
++    # only the first two numbers (e.g. 1.6) are valid in the schema and the
++    # 'specVersion'.
+     cdx_spec_version = ".".join(args.cdx_version.split(".")[:2])
+     cyclonedx_dict = {
+         "bomFormat": "CycloneDX",
+-- 
+2.55.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
