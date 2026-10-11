@@ -1,105 +1,157 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DD64CA9EC7
-	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 22:01:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 315BDCA9ECF
+	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 22:02:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E078F6067C;
-	Sun, 11 Oct 2026 22:01:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 376B380C68;
+	Sun, 11 Oct 2026 22:01:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DevlBYDHzNdo; Sun, 11 Oct 2026 22:01:53 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 1CE4D60612
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791756113;
-	b=gbza1sNLAN2S5HktUXkgyIrI+nCotKvz2HsEIVUDCkJxWu+BT9v2NIBMOV4HxYUykaSy
-	 EpDaNpIe4kJNbfPhli/gN+OcJxsd9prpaGV0o5KhJ40x2jwW/0g5EzghcWsXAk7H+etJ2
-	 5x1ofM9aGkf2LHMgnO1bTEys6ya5y7x1WwTlB71AeuLPoUEyDCdrAntQjOxgzZPsb7bYO
-	 XSJFULN2aLOt9ZajmuohfanFaSTENxERaibVu/fulcl1WcM6KuEAkpZ3SZ4h5Pu3HQpo+
-	 Oqpxb89gOYcyfFAu5wj5Oik6vXJgOCSdE+C4oi3EwAtD1rmJ1an0K2gPQ278cwdLF1A==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EtPE2NfNnpEA; Sun, 11 Oct 2026 22:01:57 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 4DE3B80C5C
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791756117;
+	b=UHCOO3ixq6jtvHIHkP773/X43saIMOOxnkAYAn6m87ZgvdMGx3KXRgYYvKurG7v0kTON
+	 N+YnEpANhcQYIROrpj1wrqX96sfU4OJHZ3RUn7FK6Gv4uZFUGYmpAYyWUhoMqYJ+ibr16
+	 0O4uVqx8NEpBky/Req1C8qpiuNx3BXowBPpd2ltDeXenblV57Z+smA0ogLB8PPhVkQU+Z
+	 nOr0tjzRlfHBpUGHDH4cf7aklGIg+WD2xVL1J1GQiAqTihVhQj0V3+zaNJhJEAteufIkl
+	 1JtxNot2aQ1kYGgM96WsHDOBLjnlYat4dSRSCSFTvknjyXqg6kfBikVnvm+9R3ZqDTQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791756113;
+	c=relaxed/relaxed; t=1791756117;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=K78ZyWIr7r34drHePX/Hn3lHpENz7Te4llkRELYVblI=;
-	b=bNPTU4AK+ZSC1qi0Zi5vB6Ws67ynU3/bjFH6F34cvmFMmp9mYXnXrDxaCNfMojisxXyt
-	 1IzfrxKAtUu+5faSa3s57xUUhib9JCCDJHLF3ttqpIvVPhjuWykR0HnzCHSGMAvMXgspT
-	 CGLqvOl3SkoPUtAbR+O9U/21L9eL5mTZmJJxlk/BpbyzepH/cU0FHp87VS2jjZyLAuyu4
-	 TECNTz9FVC2FTMpo3DZs37BX5ReYEKS2Wn5LDAfc2fLnyxgdNyBI0i16RVC7BLHuzxgQo
-	 PNuja9+NSu/ey4g9IIqdeMMzWKlhERDDMybqTOBgQsCTvGz0DKbGe+NLulHzGZl0wKQ==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 X-Google-DKIM-Signature:X-Forwarded-Encrypted:X-Gm-Message-State:
+	 X-Gm-Gg:X-Received:Received:Message-ID:Date:MIME-Version:User-Agent:
+	 To:Cc:References:Content-Language:In-Reply-To:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 Content-Transfer-Encoding:Content-Type:Errors-To:Sender;
+	bh=yqevp01MuASXdVUOUvGyTvrL0fc6GZkmvrIPol+BY+8=;
+	b=Vw7QQ2450N0m0jxD2rgSU0SIU8sUvh6uQmIYexzFFcatPwlWRD7LuIPb4LrUf3K7cv6Y
+	 6yehNoYstdDgEGyO+jUApivzCkvopIgSFEvte3ZrVoIhoTVNXngTEfb6+XM4ZTIj1Dyqf
+	 h4WMuRmiT/O0gXb1Z8TVG70HpGDIz7+602sx5shd5GQOvRlj602+a/Nny2VfFYgffFyW2
+	 kNlDb+SlU5v/tQm8oo07pFQws3EIgjg1IbQnksT/af8EdWYBX+aNNMzuvTLwo+dtkCGcr
+	 pHkTu1FcczZpSd/dxWRKhojIjpclF24ZL1vE88Xefr7AHVSxH/un+YbX3aoTL443G6Q==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791756113;
-	bh=K78ZyWIr7r34drHePX/Hn3lHpENz7Te4llkRELYVblI=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=hVvKlplt713YKjiAqbFAaVepikXsqnMdXRg9as2uIxD+jLgU3tOALtAYLv85c3m0N
-	 MvES0RBv/cQqDUGGKpTJyj9aqFPGNZORFVRdV9VR12oRXMGJdOk9afx3aATWNaUYKc
-	 OldsQFnkIxJwK1k6+9K1gxexwhjkj89UMDRtTCeuiiRFGNL/bSy6OEDkUw/v81P4p2
-	 5ePrJ5jpCzAZzEf+QxPxE9aLSjm+kJiCMya2vTrxc1nIovXOklAbSGw8uTNwGZnGrs
-	 hZRiwWyDfeINmLOLEX/G7qX0x0ICN5fewixGyxNKQlShuxha9WxZo+hxo6HQWSoI4P
-	 xnuKRinzkXm/Q==
+	s=default; t=1791756117;
+	bh=yqevp01MuASXdVUOUvGyTvrL0fc6GZkmvrIPol+BY+8=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=lpXa5QmSc9ghqMzdkDBosZ7nNarfpYt6YwT+HLnR072o6jLgZmbD4WsMmDRcZwGLw
+	 5EYb65vUO7+cl3W4skFOEx1pAAKXXZ+2F7i1pICxlslW9hMTIvq50iWk/JUYn1/HUj
+	 zytcd9fQJiRCsKiVNf86fexMLCp0r2YQfJ5zIHCPJbDxruPa2Uh5Le2tRlxm1IjPJ9
+	 86998XfCZbk5ZL3ypZGTxn5M8CLWnSXtPaK4Xj/xe6hmZaHZ6+yT9CbJ136lnwjDwV
+	 0AjIT9VaYML56Xz75nyeywmkETLBM6UrLzPSBs7K4XngJYkwirNzrUUEDwl3QBpV3C
+	 Vk9cV4hEuX8QQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1CE4D60612;
-	Sun, 11 Oct 2026 22:01:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 21B3275
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 22:01:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4DE3B80C5C;
+	Sun, 11 Oct 2026 22:01:57 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AFD59380
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 22:01:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 138E1605ED
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 22:01:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A206C80C5C
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 22:01:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eWr-MowAzTBh for <buildroot@buildroot.org>;
- Sun, 11 Oct 2026 22:01:49 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org B7E20605FF
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791756109;
- b=eub/pwkJ7r5s/T/sqWIDn7SPK2Tx+KYELs0YbvVqzj/VWybFfd3jjZGxOjhl118YvFtV
- Wki/AfDw2tOym+e8swhK+Np4W8D3VvVJ7Zkc+u3zkSNqjiIa4zsXcPSVGDxjbjx2v2sMX
- IBh+yzNz3hq9r4q6H95IyYayHFLRSf9eQK1Dd8uQIR9LcTYOqMtPf2vbvIJWakielL9QP
- xrzxdRjVZXuosoKn+wLNVm29+VL1B1HXV9P0ntoBZLKMZ8Vb/HVtOG+gbaZV1R/Ro3uyN
- y6hU70ESYProiBSF3CuGXfXPHUHmhq+xX2DzbwA2vjkWgm4UE900fgtrL/9h3eWK1AA==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UD8cPZIoy6CW for <buildroot@buildroot.org>;
+ Sun, 11 Oct 2026 22:01:56 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 8D90580BB7
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791756115;
+ b=VGg1wMI1kjQ0rFEVpoVY7IAQ0U0KxDYsTMNfy7MFV1JfeSBRx2F4FYY6h0PAGfVC7Qn4
+ rJutasOP0tf1LoHcx3eFhW7YGwYHelIM7wWG7gwzeJ42rmZh62af/XuIJR+ovhAPmQo+1
+ s3CVh5PxZtaMnCVNaAtk0qrHT16cA2ifKXz718y1qGiT3xotNAXA0mDuYaZRmVFq/eWbg
+ nM6JLeXzAwHJEd/64RUqWWWzfO+Ao+DuIrH/QOK+QKbykBU5tU5ZCjSwCB6ezQRGvvsXM
+ Sx7sFr6gd6oscb39IvWwKwzk7Q2FHWdO9wx8KOGwWC5V4bT8IyJai2KMRKoypLpPV5A==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791756109;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=tnOLwS9tCCYVkV0qTEI8i2sv35XGO4jwfwIBP+doo8o=;
- b=oEUXS2LyAx2QItNBwKvIhyHxueLrxdlS9mvtvFXMucnyozgBMtJKxjXTBwBiajo9MJ1c
- wNOuTy38dMQrBVStJ2xSuzkg8VUmNQ5TGD67ukAvZjgTFNMGqD046wLDNRnFByoJC4UFv
- 5CpJIll/+37P8qA+hE0Au/1UKw0zSrb3EYuoCr/jLg93+Z6kzA0a5FiOQQudGGdW7xZUk
- 8QTxX/9bIRt25HQjrDDu4ovOmc6Y38zfxTmS4SRmjVRA6Nlz+m9AuzqPJhKraDDjaBq6D
- 4Z/3S4Dau2wiSamFC674nPTLMnQKzIRvOLPCY5KnzyCeK+J+c1/H3oOHFNj5T+q2XoQ==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B7E20605FF
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 22:01:49 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D5C2D952BF; Sun, 11 Oct 2026 22:00:30 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 11 Oct 2026 23:49:29 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1468b63006b2577842035fa69573dc9438239c78
-X-Git-Newrev: a2142664e94e87a2aa90c70ebe14a932b4e357bc
-X-Patchwork-Hint: ignore
-Message-Id: <20261011220030.D5C2D952BF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 7.2.x,
- 6.18.x series
+ c=relaxed/relaxed; t=1791756115;
+ h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
+ X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+ Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+ Content-Language:From:In-Reply-To:Content-Type:
+ Content-Transfer-Encoding;
+ bh=oemWxtGwpr/TPZ243W9ZL5UW4h7pZ2EEo3tczmsmhjA=;
+ b=UeoWGKUu+wsRzYaUsJWEBtnvL34lm/2hRvPBxbyV2GgbaG0Eyg2qB/SS9oLnnrdO+6GX
+ BjwDGoa/UAtWnFozslmUlLntBYAwqzOPinWxqoOsHp+U+bxgMgeDfbCmxtQPLc6bbBWi4
+ 72RFKFZOSMV8W08sBPG4Eagn9xv6/xLyOA1OoDnlwjZU2OpkdqiRpZ2So+NQxUDhN86W6
+ 6NB6f0BywFpUdwDc34ZFG35pcGB1tAzh2TWHzk9P9Wwv4BWmsU1wK8tLIZ2zqUxzeQ9gT
+ UU6u96VHX9KvwkFDEmE646vLYtXwEtfCREXO0kVwiJ6z5U8F5sE0CGX+OyANGWYnPPA==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ dmarc=pass header.from=mind.be;
+ dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=IhrgatBP; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::42b"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8D90580BB7
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 22:01:54 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-48af4d4e61fso783466f8f.2
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 15:01:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1791756113; x=1792360913;
+ h=content-transfer-encoding:content-type:in-reply-to:from
+ :content-language:references:cc:to:subject:user-agent:mime-version
+ :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=oemWxtGwpr/TPZ243W9ZL5UW4h7pZ2EEo3tczmsmhjA=;
+ b=12edUGJkr/hVWsOKDjExr1bLqbjHq1YRtEIhyHCzlbLwdZS2ICDstTRKFhZR8OyRaf
+ AjsLcmMzH0E5mhZS0j/vt0Tk7Cu7XYEdcAHR6tYzn/n+fN0rzxc3BD5ZthgV7PlWzsIZ
+ XKPttUbQAoy+GCl1kSzV0Yd9pAdyvio4r0Tfuc8IJ3H+iWOx7F40hPP8IfGDmupMtK7I
+ k5tJpPQu78A53WWAaybab02zluvmMuYrv0pgqDoNDMO/QQ0MKLsfRo6bMdD+dmxqECLa
+ wrUxkrfroXHUUsWGpMwO0O8KMm5l+QYBxXTs8KRQjsrFQk5oI9mOCC5MF5n3AGQgNjHO
+ TZZQ==
+X-Forwarded-Encrypted: i=1;
+ AKwUvBwIqmnBCS6xul664T9ky0dRpxV6Hj/geEsXL5Xu6zlwY6HbYUkX0s3Vr62Ltd3PeCtCyU+H+3arKAY=@buildroot.org
+X-Gm-Message-State: AFq9FYKATSFjQI/1wxYAXHoKW+egmRvRiSCNwEyqdu+y9F40/hjhl0US
+ w+yU71sc6hY6hIMriQFObQYR3utR81raJ5UMkJrxZcy2Ac7M4BXovmep4RGVEyAwaC0=
+X-Gm-Gg: AYBFou1Us3FDufqJGgx16Axifj6wFQhu68L3VvrT5XENI8rIqnmb73ivAbl8TEtYrza
+ oUbf65wVeHgquJcKw0ehIUhU5cL2SX2gOGFLASiBjoZz/0RD/pFVhwtzga7yRyoY0oxg2TSh/eH
+ n7XcOgtXeTNtarUh7Q1lToLGWPWgOHYIuQ5DwdRNcM2izfVLc65C3prUxq0QDR8duhFxvdiksRk
+ CGwrJDXYMYtPMmWk5WErhtJABk1mbRhKLNIiJPPkzumDXiqScWXzJwXcRw3J9bdeTM0ZvUIjQJP
+ e/I11oPNiKX2rn3qPrm8NqApdeIHY+D7F+54FIrqYafSFO3An7aAC9cVkbRRAGQ86sKIBZ6aV7E
+ NZIfSXcFFno40+s65HXZN3bXDj/lUwkSyHHOGVom7FphS5BdDrCl1a+/mtB9ngUfC3m6Sx7MpSD
+ d7gLdZ7TRs3IL4ueP+q4u5stinRIntQImMgTlAWNWh8q4t5SVHNdDV+ey2mphj1dyPO0cR7MaBq
+ PX9WVX5W4lQf+1BXe94TY4sZgkcwbqq1jFDuml7x7d3
+X-Received: by 2002:a05:6000:2303:b0:48b:58e:6cd9 with SMTP id
+ ffacd0b85a97d-48dbacea01fmr17388958f8f.14.1791756112157; 
+ Sun, 11 Oct 2026 15:01:52 -0700 (PDT)
+Received: from [10.20.174.153] (ptr-94-109-36-182.dyn.orange.be.
+ [94.109.36.182]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-48db94e4018sm16193815f8f.11.2026.10.11.15.01.50
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 11 Oct 2026 15:01:51 -0700 (PDT)
+Message-ID: <ff2b41ff-0c2a-44c9-8938-cb39cfb5ca7a@mind.be>
+Date: Mon, 12 Oct 2026 00:01:49 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Neal Frager <neal.frager@amd.com>, buildroot@buildroot.org
+Cc: alistair@alistair23.me, stefano.stabellini@amd.com,
+ ibai.erkiaga-elorza@amd.com, luca.ceresoli@bootlin.com,
+ micheal.saleab@amd.com, yann.morin@orange.com, matthew.l.weber3@boeing.com,
+ Matthew Weber <mathew.l.weber3@boeing.com>, brandon.maier@collins.com,
+ john.ernberg@actia.se, brian.j.wood2@boeing.com, ju.o@free.fr,
+ stewart.hildebrand@amd.com, thomas.petazzoni@bootlin.com, arnout@rnout.be,
+ romain.naour@smile.fr, michal.simek@amd.com, romain.naour@gmail.com
+References: <20261001124057.1941988-1-neal.frager@amd.com>
+Content-Language: en-US
+In-Reply-To: <20261001124057.1941988-1-neal.frager@amd.com>
+Subject: Re: [Buildroot] [PATCH v6 1/3] package/xen: add custom version
+ support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,94 +163,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a2142664e94e87a2aa90c70ebe14a932b4e357bc
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+Hello Neal and all,
 
-Update the latest kernel releases to:
- - 7.2.9 -> 7.2.10
- - 6.18.55 -> 6.18.56
+(replying to this first patch, but the comments apply to the whole series)
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
----
- linux/{6.18.55 => 6.18.56}                 | 0
- linux/{7.2.9 => 7.2.10}                    | 0
- linux/Config.in                            | 4 ++--
- linux/from-6.17/linux.hash                 | 4 ++--
- package/linux-headers/{6.18.55 => 6.18.56} | 0
- package/linux-headers/{7.2.9 => 7.2.10}    | 0
- package/linux-headers/Config.in.host       | 4 ++--
- 7 files changed, 6 insertions(+), 6 deletions(-)
+On 1/10/26 14:40, Neal Frager via buildroot wrote:
+> Add the ability to configure specific Xen versions while leaving the default
+> version unchanged to avoid breaking any builds already using Xen 4.22.0.
 
-diff --git a/linux/6.18.55 b/linux/6.18.56
-similarity index 100%
-rename from linux/6.18.55
-rename to linux/6.18.56
-diff --git a/linux/7.2.9 b/linux/7.2.10
-similarity index 100%
-rename from linux/7.2.9
-rename to linux/7.2.10
-diff --git a/linux/Config.in b/linux/Config.in
-index ec705b0bb0..a942d7c56b 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -182,8 +182,8 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "7.2.9" if BR2_LINUX_KERNEL_LATEST_VERSION
--	default "6.18.55" if BR2_LINUX_KERNEL_LATEST_6_18
-+	default "7.2.10" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.18.56" if BR2_LINUX_KERNEL_LATEST_6_18
- 	default "6.12.112" if BR2_LINUX_KERNEL_LATEST_6_12
- 	default "6.6.158" if BR2_LINUX_KERNEL_LATEST_6_6
- 	default "6.1.189" if BR2_LINUX_KERNEL_LATEST_6_1
-diff --git a/linux/from-6.17/linux.hash b/linux/from-6.17/linux.hash
-index d2556506e2..3554a93713 100644
---- a/linux/from-6.17/linux.hash
-+++ b/linux/from-6.17/linux.hash
-@@ -1,8 +1,8 @@
- # From https://www.kernel.org/pub/linux/kernel/v7.x/sha256sums.asc
--sha256  b4c5dfbe51a364a6c7f03869200f88c8e1f77403539005f14b7fc6bc91b8d8ba  linux-7.2.9.tar.xz
-+sha256  2feaa70453e91f541be6a5c9078d8168e081af45a3d9718054850538cff2ebf3  linux-7.2.10.tar.xz
- 
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  f410638061a165c12f42ab871d2f3fcd525515359b5faeee80969cff84524df9  linux-6.18.55.tar.xz
-+sha256  4633bbda2ab95eaf2a7af4041236451d6759c72e6946265531af4b3aacefbf89  linux-6.18.56.tar.xz
- 
- # Licenses hashes
- sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
-diff --git a/package/linux-headers/6.18.55 b/package/linux-headers/6.18.56
-similarity index 100%
-rename from package/linux-headers/6.18.55
-rename to package/linux-headers/6.18.56
-diff --git a/package/linux-headers/7.2.9 b/package/linux-headers/7.2.10
-similarity index 100%
-rename from package/linux-headers/7.2.9
-rename to package/linux-headers/7.2.10
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 3cf2cdd4f4..f21f543f7f 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -479,8 +479,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "6.1.189"	if BR2_KERNEL_HEADERS_6_1
- 	default "6.6.158"	if BR2_KERNEL_HEADERS_6_6
- 	default "6.12.112"	if BR2_KERNEL_HEADERS_6_12
--	default "6.18.55"	if BR2_KERNEL_HEADERS_6_18
--	default "7.2.9"		if BR2_KERNEL_HEADERS_7_2
-+	default "6.18.56"	if BR2_KERNEL_HEADERS_6_18
-+	default "7.2.10"		if BR2_KERNEL_HEADERS_7_2
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+We brought this topic to the Buildroot developers meeting this week-end 
+after ELC. While there was no strong argument against merging this, 
+there wasn't any in favor either.
+
+What was agreed upon is that it misses a justification for doing so, ie. 
+what is the actual reason prompting for this feature ? An alternative 
+could be to package these alternative Xen trees in a br2-external, or to 
+use OVERRIDE_SRCDIR but there might be a good reason for not doing that ?
+
+Moreover, Xen has a track record of regularly breaking the build and 
+requiring manual tweaks to xen.mk. For example, since Xen 4.20 no longer 
+bundles qemu-xen in its release tarball, the bump to 4.21.1 required 
+adding a separate qemu-xen package to avoid downloading submodules from 
+the internet during the build.
+
+> To test:
+> BR2_aarch64=y
+> BR2_TOOLCHAIN_EXTERNAL=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+> BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+> BR2_PACKAGE_XEN=y
+> BR2_PACKAGE_XEN_CUSTOM_VERSION=y
+> BR2_PACKAGE_XEN_CUSTOM_VERSION_VALUE="4.21.2"
+>
+> Add to package/xen/xen.hash:
+> sha256  9c5c2ad0b4ab86ddd378f60ecc5b1ed53d36b436249ba27c86831003e1281fa3  xen-4.21.2.tar.gz
+
+Additionally, all your patches mention manually editing xen.hash to add 
+a new entry, which somewhat defeats the purpose of the custom version: 
+users could as well edit xen.mk to chose an alternate version.
+
+Finally, in the discussion of v4 [1] Matt touched on qemu-xen that could 
+fall out of sync with Xen itself, and I would stress that this is even 
+more of a problem if selecting an older version, predating the rework 
+for Xen 4.21.
+
+[1] 
+https://lore.kernel.org/buildroot/BN0P110MB20672AF5339439D6D7AD3013F3D5A@BN0P110MB2067.NAMP110.PROD.OUTLOOK.COM/
+
+Kind regards,
+Titouan
+
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
