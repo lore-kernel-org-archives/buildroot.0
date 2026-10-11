@@ -1,148 +1,146 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EF06CA9EC7
-	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 13:07:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0DD89CA9EC7
+	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 13:07:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1336440683;
-	Sun, 11 Oct 2026 13:07:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C7D1B6060E;
+	Sun, 11 Oct 2026 13:07:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wNZakDqLQUEL; Sun, 11 Oct 2026 13:06:59 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 2461640663
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791724019;
-	b=jG/qhqLsmImgb2NszHZOU+zION5lL1Toy6zPJi/FjQqnlg7hcKnw1Z1IogogxqsQzCHc
-	 LiULFrTGPtzjKgZHWiVTaWSGr1HyXIVsusNCYSro7BHKacD5KluqWL0MqrF7GRWbHxW1G
-	 EgkMCb6hM6Z+ymHdlKl8T2zcf1ZNT7IqFAengmlmJthHdtmM5+Y7nHZ5WGwLkS7IncvjP
-	 MNNrq4kaNd67SssHsXIt4vpmiMO1oaVtESfocknfZoA+Tisy7G872CPo7SzA+C1eKscND
-	 Zu2gEYR7aph3GiJTIv1fVGg8Ipgkjmrqpw4Zn3m9VlgxoZzlwYZzEID9qqy4VgMvNvg==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id odvaLLwa5OQX; Sun, 11 Oct 2026 13:07:12 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 8E5D260616
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791724032;
+	b=lmA1giwTmkK246mipNrueSHSJw82T1oKkw+sFD7vHXpdeT4fBPk/a7nuothkM3A53lFP
+	 flpXU7AymQodaphS6SwdsEbHGEMc1bacUvKSZjthM3FNlN/ZbflsHQ0AAzrP5U4a3JxTN
+	 Ev7ZQ4VCRCu6xov2BMmx0Gl/axGLY8XwyCutgE8/JhbjI8zYf5oY5MJSarYeXGwPrXfMS
+	 cDcxb8hqHO+5SleM/NWYuRpzA8eihPYfhrxm2aUYWuva3VHVAVYqIlN6UIcwPr71bQbsI
+	 yUlR+LCjiTDrkWMNN0ArjKfMWLIZT1G12nLE+Ho1k//LATg/DhTvsuoguFT8MAsFGhA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791724019;
+	c=relaxed/relaxed; t=1791724032;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:Date:Message-ID:
+	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:X-Spamd-Bar:Subject:
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=/wvqTOJHzzadmzDP3eCuPRYvoNRqRPuUxJHk3d54lRk=;
-	b=htsVXTRCuKZoTlebkEF7TMGLgG0x9xLJ++h9KH21yua+njkTki1ykd56Ewv2O2GM/s2C
-	 aZTrOi24QR3alvwnAQgmLnbGuRpiBpqzwQ50UVYVb0df4NoAa9Relwjh+dBvTdBJFeyiA
-	 d6ckkL+VlK6A8n1JzhJweDTTmTmP0ivk2iuXuFF9FbkMYh0smNU+v267Hn3Iv+ZUbx3rV
-	 0QHJsxz7fy+IUF9IYFCps3sFJAdw/ndJlYMhjJes+Az3Qzpv6+kwXG0uDYOZUeMnBsTQz
-	 U90xecl34V2Ii44ktYUcFQFv4IAeReoNcv/8TnZ5W/av2CXvnRJnj9zubM6IccU8KkQ==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=XwNPeYKpP+AK0NUMsck39/Ks6c7We4C2o/kP3/tPb8w=;
+	b=VqzQrwCH60KcmiSQt9u8nq8jcDCMBteNq0noH0qcUT6xsvofyYO7u8yRwV2+oDe67hNn
+	 7vrPpQAsZniyDqX08NNxG/vsU4MyBIoi6iKZ2XszIBhOZovXnETOAe4NvT4HrXvqNt/+1
+	 BodUtnvFA0L3+iTn/yJJB93NfakQ5fnTVQX7Dxy1Zc3PKxn2nSWSOpd+mWkf/qG4hE58t
+	 bCBb4hk2Geugu6ln3CggC0PKQjloMSDdIav6sNwCP+QfkbBmg87lyu2lw3g45RHokg5Ro
+	 hbLp9Z5JOKclBn0kv1MF/MNlGwf4pYF6wiHaymNdrEw3bnw1SIXyl0j4D1f0n8+yZVg==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791724019;
-	bh=/wvqTOJHzzadmzDP3eCuPRYvoNRqRPuUxJHk3d54lRk=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1791724032;
+	bh=XwNPeYKpP+AK0NUMsck39/Ks6c7We4C2o/kP3/tPb8w=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=qu469W6EShsFF6Dt+qWyHJcygBN0YKJPQA4wfylI7ntfYG7ODiVaOcWYb7g9e0HBV
-	 goM+XjSxUSsNjXgh6qoZ5F+/zM8YFwZFJ1JJq1IdvKkBUnKNSZHygCPyUdY/Jd8sl8
-	 WMzgEeWh7XHJct1zE1bkCYU7B2gTVGLVuygMrtk6ax6hh8lqyXbcq+8R+lJVytRtPO
-	 +/NBkaMXeDl+/Q2iFkavE+GH0d3PFiFxm/RCU+DJHAvNmQKEQU/cg2aPv36AJc5rpa
-	 TWtIAB17RVk4sfExAw/6E/6bWoEtUqX0ex1bdbCcDX11ETji+H1MREsluBVFw9vsUk
-	 /4LHspVR9V2lA==
+	b=p2XxPtqMyGgyvK2+MUcwBDbjijCeIXdE5e2hoWld+QAuhHu97fCwuCd2dm3Fengy5
+	 t09z1Hlpy8qoQ3ViK7LwZC+trMWf3ebyGO22Ur+ouBi7o+fOnR8734UV7WVqxEIN4e
+	 Z7pBx+RmJx0KGIVJE1P9A90zg8R2PkbKksw1211hmlAEutuTeszvdKLyBwL5g3DHYZ
+	 DpBU1QSbVycOstWXdcWKrkxUE82+ielXW1tuzRhI1rkqERemMTcpRRGxAtY6+YVqlV
+	 0upSbK0RuDwVf7q7WrlQ9pYloyMes2rgwK2gTpP6M4HLHitPCAehjyOG7zrkUQ9+qA
+	 eHQF6XF6cPqbw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2461640663;
-	Sun, 11 Oct 2026 13:06:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A0715111
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:06:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8E5D260616;
+	Sun, 11 Oct 2026 13:07:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 19BC81A6
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:07:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 86CD780D93
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:06:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 178A140663
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:07:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hE2UBszY8KHs for <buildroot@buildroot.org>;
- Sun, 11 Oct 2026 13:06:56 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 895D780D91
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791724016;
- b=jjlQFELuY8g1NUVrmhuuSGiPQaefD4/sr9gXIZsVdTzJbN/tGO77RL0EL19K0ZBNbyrz
- 83h+HLCVgYfncCdSvwS8+qsSqAfVs/P8jEqbnCL/WmFZJiHDuncg5/P2h23v2tTEUK1rC
- dp6uPLU8VklTfsw/5t+lP7IO1sqG28UWzXIb9iJVyTr5umKHuF7cPg/gos4y4e9b0MWx2
- IICc2rCVtuprowveoq1SeOvF+2M2CRvdrXyKzYykL+4uHm5n+W/o381Tnr2MCIhK3duZe
- REAMul0xD36/mvarvrru3XC5Jgu07kRTZSjO4daYIjKggmNl49EAngL9zUJ+sDMbjNQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pypBQckUGhzV for <buildroot@buildroot.org>;
+ Sun, 11 Oct 2026 13:07:09 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org EC84440585
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791724029;
+ b=Q5N+RSH+ZZLdHsaytHab29ZlDOWtPF9jRdwElZ23te0cyts23ySAct50zuSyiSDqdLyK
+ 25NMl0IbEu6hQCr8XW3PEkgF/ZVRjrlZkj6Zf4gYp4j8CwjJtSZPhsC5U+y0Mmc6i1MgT
+ AmYpWogBFIrMLpnhYGUs0Vr2mB/+VCzR5VUe3iTkBSVebsq3hC2lPAm2Q1tU8i9YjlBED
+ WH8ipkJyukAU+eHh86R6WP4wE97+iyIBVS1LgpdUvI5PC5yXfbkuq1llgj1CRzH+UCOso
+ S4C7CEhG5GCqqVduEhq6lDONjm32JVbGCIGpJg/28+yZUBdmqALLClZd2aI9Jd6+OUQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791724016;
- h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
+ c=relaxed/relaxed; t=1791724029;
+ h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=x3vfAW92qdIcoqpv6PVbL3hB5HfNKRdn5r5MN1njYy4=;
- b=SA2MviXPM0XznhffDT1A6+hEsQwVBFZGf/Wa9w3SLfxbyVpZrA1P62FsZ4VhhD+0ln5K
- RDs8xQKBvX8sD4jpPlOKx7hTBGi1Q8Dl+4kfLxFq0X9CugOtEpQwdoLwg3k++gNJx+kdL
- ZIm2caOC5gpNSokhbdQxamnMp3+cbDnbNR+9wQ7ctiew/nmqovD7e6Ezv+P6jWJymCoHX
- rpUDGM8zwTDw0SAZ+tEzXKBo4P9vux+O04pNGN+SmCJcdTWDEjQoiBRXVuRwid1YJC0Lp
- z8YmvCv0XBWqS5IBchYkn827C8YYnmh0/B7x9lAuaPpogG8NXCKwyDjmw7zeBRKBQ0w==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ bh=Tb6X/KeDpAF3SMxo548xiAPIL9Xd7QLq4PlScn8iqq8=;
+ b=VYnPwLx77O2HhFmfSXfD8dhMfIbohQXrmwyBsZ+m6Q3UPaEHyM3fgFIVuCuB0WUCXlu4
+ q5j79eAZZlvDfdC2TUyl+xMpPQjOk3Bub65yE+5il7HP3FRrYwzZcWAK9mKuAzkWE3W+I
+ 0u3IN7zPpPZz6OtMH6noLdLCnwq+3jn2RpnCgdnFZQpU7JlLeKkfD/4x1aA2bHq+90TQe
+ omJ8YxDQSrZg+/gWOkaAF8dgYzxGWMEVXxnB+byJ5tJniQ0/o6ab4QJBDjaS9M3b4el5+
+ V5DPzdIHkkSGBbdsTyTPWGUHgqt+0ztLzU7jPb8o27iOsu3n/00lnVC3L7BKVdGnM5A==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
  dmarc=pass header.from=kuhls.net;
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=mgefphx4; 
+ header.s=kas202605290044 header.b=nEKyGCXA; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=mgefphx4
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=nEKyGCXA
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 895D780D91
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:06:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EC84440585
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:07:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
  s=kas202605290044; t=1791723663;
- bh=x3vfAW92qdIcoqpv6PVbL3hB5HfNKRdn5r5MN1njYy4=;
- h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=mgefphx4cSZndShZYztdu58Es12d/kE9fwYJ2V7enbfXFOwfKs4YYn2DVSe4YMlVv
- y0E/yk2hzRt3+YWxgdagbf43f2QlvzYkVEyf3iNsxq86rPTyEhnGJoZlFVCGYMY3bD
- Er3PzCLkga1aSfo/qK8EbBLNRZ+S12hOCzA2X2QBChFNFHJkX/4QYxKbKHR0fjTXt6
- vpCaK+WuIROnsEq9Y6h6L3LWg8DZAut0w8vtj5sw7I7o7d8ygXJ1ZKrqForbIizKkg
- NLM0A5tVIq+Lk7CMRwer4MGv+gmTOhPJ9hAI/zCks1lVdbsNA+bxRvyAFS/YTtnyyD
- W8vMSs65te7sA==
+ bh=Tb6X/KeDpAF3SMxo548xiAPIL9Xd7QLq4PlScn8iqq8=;
+ h=From:To:Subject:Date:In-Reply-To:From;
+ b=nEKyGCXAYQgFqVbvj334suxdbHcVd0ACB5nW4GifcBTI8bcfSjO9F7JEPTzuoWhI/
+ COpXARc9EDhoahH/f0vnbKzoNaFj/7AdS8M8QnGkRfxo3kmrdYHCtch+34J/JCv8gp
+ ZjF7tc4kki4xhGitn/iuVhC5Zz/49Fb23s7fs4X1QaaRxFeMFhy9zX22gZOklOJAbt
+ u1Of32TbhRlQGIkX+28YilPbdGYUQn0HPp23aUCqhBKRbY9WG8JaxSqYvhUz4H2Rff
+ YV9c8YFCtSlf/oG//22asq+k5xBctAVPFDIilGB7WNtWb/TMULxfEGMxdevB0UuVQb
+ S4zwrnyyX7hgw==
 X-KAS-Sym: v3:f51bdf72230551df:Ox5mmHqwgIvMyI1QgKEa7Ro2UqoiVPYwa1ib8hnsjjQqD
  25s8M2vwFrIHsd3K5yBRCNR9KcmhbTBGk0Z/UIeFpf8wsnVNojbXdjCN1xVotleGBWWjjzHBgEE
  74kL4L+STMwD/l3tPdkNjVc2aEcTg5E+9kq3JIuVVgKZUkyGnD/Kyv1FD6YSp7FcFjV40N/5gBQ
  c1a8pSNeJlBzzKSDlvrm7tStdZZURMMjpShUwTVAm3ujJrgLAxVichT90dl6Ye+LoRN+5NYuoCq
  FrxKp8YCAl4Fk1rds2RrRz+55Ma6FGhELkZkdxRcDOeNbj/YZtgaek8wOz/3DQCuSXG5FAKA==:
- bUEjOlr8hgNn0anKRibwpzYJvl1bzKz1hnsfsUES705Sg0h9vYIowJEA16Ff2l//va9bHhyGuol
- WDiht16eYJemvJC4SoZ2ayLOTMQ/Dorc8C/lYllZ8rCiF/0/sLojt4JW0DPROZHQiXWZjjDVFap
- fjhomK2y8ppAmr0UVFtP7gmix/cM3wtiMeFA3gs0SrcedZF1N8w2RG4g99QFjQzwdr8V2gqKYzB
- UxLne1dv3BTZKUj1u/loUleKI5znhDcyAER13mwt4QVw4lZjmpy7FqP8htwd5u4qf+XynGVC0W0
- TW/8P0tHbB79P9OtTk55/EzVUI+QxscCCGj3G+iE3aW8ASHz3WfTfyf3JkyJYIpTwiq5TLAqcj4
- 86Kb0UHVSURQsevx7jPi1LbFhDWJQX7YGgC/QsYH9IgaDFFwc6i4jpNJoyOTD/EJHRzCqa5kRe5
- sODSi32cSPiGCdrDWVzreA1mTEIsoUjoWcZ4e764xfmBCzuanGiIBS6GiJLRw6/NKGwYpMgcnAw
- rCU2OF1QDMpqbkh+GyguNbvLHtQWpyMe9Y1htwlbxpSPPsQO7kxovLhqAk9CiRXKQcFa1/qb4nk
- sT4sEbdUMSS9HGIgfBuei1pvQGBcFE5EsIPv79e0mCEqXssHqaGB2e5g5Fh2Zg==
+ vhouw2Um45yVI4NnkL5lg+NJBhIW93bNBrTrXM35UzHW6A9FrL9O2CYUs2tJsRZmCNKWFLWrurC
+ 8zRC5zJHMdw0wsD0/xc6/yCu995Sj8EfCxfub5D4+NP2agkSXbnfDLGkoFqQ0PActyuEcnJpnH3
+ Qj6hzA+m3ov/M88406JnctA4eDeejbFslvI/qVYGWJRHJAE0J3D6vvbpKTbgoogp/9NkU7hr1k4
+ GiIryPa/QfJ2bm+JdQLtgGyYMqnC26xtW/K8rkWK+p4SI+p5bGfF864W0RYN1Y51/pmR0wDzMcQ
+ C9kCMuWlgoh+nmjcjEcfUD2YPwbP5HeSLLJUBoRnzpP9GTgLMYeG0kI3yPrNUUAG9+/Ujx6jkKT
+ aLSuAcyhkptt6mSOP3WNvr3v3A+Jtd5D4DyjxjCz1qxpiy2T0yB/zfpQmPvB13XPPOe4Msi+aJ0
+ tVKy0d82zU8jyVRkqqgkPjChU4C9Pg+v9YfkMSMz3hsDTuc+tQF9h4ev4SwNdle8WjhMc2tTr9+
+ SrW4OXHfZ0w/Yxt2ZGMunZeg0wBx3JHtlN0/KgpVcXKBjX6D1p/E6e6roXACRsziA7kjB/zVRje
+ T+iRYaA=
 Received: from fli4l.lan.fli4l (p5b3a0ea9.dip0.t-ipconnect.de [91.58.14.169])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 95071A4C5872;
- Sun, 11 Oct 2026 15:01:03 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id BF7E2A4C587D
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 15:01:03 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:52426)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xFtAk-000000007Fz-3TjQ;
- Sun, 11 Oct 2026 13:01:02 +0000
+ (envelope-from <bernd@kuhls.net>) id 1xFtAl-000000007Fz-0CQf
+ for buildroot@buildroot.org; Sun, 11 Oct 2026 13:01:03 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Sun, 11 Oct 2026 15:00:32 +0200
-Message-ID: <20261011130058.3443432-28-bernd@kuhls.net>
+Date: Sun, 11 Oct 2026 15:00:34 +0200
+Message-ID: <20261011130058.3443432-30-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261011130058.3443432-1-bernd@kuhls.net>
 References: <20261011130058.3443432-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: --
-Subject: [Buildroot] [PATCH v9 27/52] package/gerbera: fix build with ffmpeg
- 7.0
+Subject: [Buildroot] [PATCH v9 29/52] package/kodi: support ffmpeg 7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -159,76 +157,848 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...-transcode-fix-build-with-ffmpeg-7.0.patch | 60 +++++++++++++++++++
- 1 file changed, 60 insertions(+)
- create mode 100644 package/gerbera/0001-transcode-fix-build-with-ffmpeg-7.0.patch
+For details see upstream PR 24972 from which these patches were taken
+during its development from a force-push which took place May 29, 2024,
+8:13 GMT+2.
 
-diff --git a/package/gerbera/0001-transcode-fix-build-with-ffmpeg-7.0.patch b/package/gerbera/0001-transcode-fix-build-with-ffmpeg-7.0.patch
+Please note that the later patches in this PR for ffmpeg 7.1 are not
+compatible with Kodi 21.3. We need to use the 7.0 branch of ffmpeg in
+order to prepare for the bump of Kodi to 22.0 which supports ffmpeg
+versions >= 7.0:
+https://github.com/xbmc/xbmc/commit/72fe098c8436c96763f677b4c65d32988b931b5b
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/kodi/0007-Update-to-7.0.patch         | 338 ++++++++++++++++++
+ ...cated-use-of-FF_API_INTERLACED_FRAME.patch |  98 +++++
+ ...move-deprecated-use-of-avcodec_close.patch |  30 ++
+ ...precated-use-av_stream_get_side_data.patch | 113 ++++++
+ ...ve-CrystalHD-hw-acceleration-strings.patch |  47 +++
+ ...layerignoredtsinwav-advanced-setting.patch |  51 +++
+ ...Use-new-audio-DTS-and-ATMOS-profiles.patch |  98 +++++
+ 7 files changed, 775 insertions(+)
+ create mode 100644 package/kodi/0007-Update-to-7.0.patch
+ create mode 100644 package/kodi/0008-Remove-deprecated-use-of-FF_API_INTERLACED_FRAME.patch
+ create mode 100644 package/kodi/0009-Remove-deprecated-use-of-avcodec_close.patch
+ create mode 100644 package/kodi/0010-Remove-deprecated-use-av_stream_get_side_data.patch
+ create mode 100644 package/kodi/0011-Remove-CrystalHD-hw-acceleration-strings.patch
+ create mode 100644 package/kodi/0012-Remove-VideoPlayerignoredtsinwav-advanced-setting.patch
+ create mode 100644 package/kodi/0013-Use-new-audio-DTS-and-ATMOS-profiles.patch
+
+diff --git a/package/kodi/0007-Update-to-7.0.patch b/package/kodi/0007-Update-to-7.0.patch
 new file mode 100644
-index 0000000000..903987ede1
+index 0000000000..cc9cbe0960
 --- /dev/null
-+++ b/package/gerbera/0001-transcode-fix-build-with-ffmpeg-7.0.patch
-@@ -0,0 +1,60 @@
-+From 56bb6e877794c1209e1930e851b8b8642b4b26ba Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Sat, 10 Oct 2026 23:37:15 +0200
-+Subject: [PATCH] transcode: fix build with ffmpeg 7.0
++++ b/package/kodi/0007-Update-to-7.0.patch
+@@ -0,0 +1,338 @@
++From fd9fdfd70e4b9e4783de1b6ca11f1925217af559 Mon Sep 17 00:00:00 2001
++From: Stephan Sundermann <stephansundermann@gmail.com>
++Date: Thu, 11 Apr 2024 17:11:32 +0200
++Subject: [PATCH] Update to 7.0
 +
-+Fixes build error with ffmpeg 7.0.3:
++Upstream: https://github.com/xbmc/xbmc/pull/24972#event-12966390666
 +
-+src/transcoding/transcode_int_util.cc: In member function
-+ 'int StreamContext::createEncoder(AVStream*, AVFormatContext*)':
-+src/transcoding/transcode_int_util.cc:608:17: error:
-+ 'AV_CODEC_CONFIG_PIX_FORMAT' was not declared in this scope
-+src/transcoding/transcode_int_util.cc:607:19: error:
-+ 'avcodec_get_supported_config' was not declared in this scope;
-+ did you mean 'avcodec_get_hw_config'?
-+src/transcoding/transcode_int_util.cc:638:17: error:
-+ 'AV_CODEC_CONFIG_SAMPLE_FORMAT' was not declared in this scope
-+src/transcoding/transcode_int_util.cc:637:19: error:
-+ 'avcodec_get_supported_config' was not declared in this scope;
-+ did you mean 'avcodec_get_hw_config'?
++Patch was cherry-picked from upstream tree:
++https://github.com/xbmc/xbmc/commits/0e935f9edb30fd905f14230af653930b5fe139e8/
 +
-+Adjust the version check according to ffmpeg docs:
++[Bernd: removed fixes in xbmc/cdrip/, they are incompatible with ffmpeg
++        6.1, they will be re-added with the bump of ffmpeg to 7.0]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ cmake/modules/FindFFMPEG.cmake                |  16 +--
++ tools/buildsteps/windows/ffmpeg_options.txt   |   1 -
++ tools/depends/target/ffmpeg/CMakeLists.txt    |   6 +-
++ tools/depends/target/ffmpeg/FFMPEG-VERSION    |   4 +-
++ .../ActiveAE/ActiveAEResampleFFMPEG.cpp       | 110 +++++++++---------
++ .../DVDDemuxers/DVDDemuxFFmpeg.cpp            |  71 +----------
++ 6 files changed, 67 insertions(+), 141 deletions(-)
 +
-+https://code.ffmpeg.org/FFmpeg/FFmpeg/src/tag/n9.0.2/doc/APIchanges#L446
-+"2024-09-08 - 3305767560a - lavc 61.13.100 - avcodec.h
-+  Add avcodec_get_supported_config() and enum AVCodecConfig; deprecate
-+  AVCodec.pix_fmts, AVCodec.sample_fmts, AVCodec.supported_framerates,
-+  AVCodec.supported_samplerates and AVCodec.ch_layouts."
++diff --git a/cmake/modules/FindFFMPEG.cmake b/cmake/modules/FindFFMPEG.cmake
++index 6c6bf973de..6bd05e9f3d 100644
++--- a/cmake/modules/FindFFMPEG.cmake
+++++ b/cmake/modules/FindFFMPEG.cmake
++@@ -163,14 +163,14 @@ if(WITH_FFMPEG)
++   set(REQUIRED_FFMPEG_VERSION undef)
++ else()
++   # required ffmpeg library versions
++-  set(REQUIRED_FFMPEG_VERSION 6.0.0)
++-  set(_avcodec_ver ">=60.2.100")
++-  set(_avfilter_ver ">=9.3.100")
++-  set(_avformat_ver ">=60.3.100")
++-  set(_avutil_ver ">=58.2.100")
++-  set(_postproc_ver ">=57.1.100")
++-  set(_swresample_ver ">=4.10.100")
++-  set(_swscale_ver ">=7.1.100")
+++  set(REQUIRED_FFMPEG_VERSION 7.0.0)
+++  set(_avcodec_ver ">=61.3.100")
+++  set(_avfilter_ver ">=10.1.100")
+++  set(_avformat_ver ">=61.1.100")
+++  set(_avutil_ver ">=59.8.100")
+++  set(_postproc_ver ">=58.1.100")
+++  set(_swresample_ver ">=5.1.100")
+++  set(_swscale_ver ">=8.1.100")
++ endif()
++ 
++ # Allows building with external ffmpeg not found in system paths,
++diff --git a/tools/buildsteps/windows/ffmpeg_options.txt b/tools/buildsteps/windows/ffmpeg_options.txt
++index 5034ff26c4..776c0b4b35 100644
++--- a/tools/buildsteps/windows/ffmpeg_options.txt
+++++ b/tools/buildsteps/windows/ffmpeg_options.txt
++@@ -1,5 +1,4 @@
++ --disable-avdevice
++---disable-crystalhd
++ --disable-cuda
++ --disable-cuvid
++ --disable-devices
++diff --git a/tools/depends/target/ffmpeg/CMakeLists.txt b/tools/depends/target/ffmpeg/CMakeLists.txt
++index 0bbc23540a..86d7db1bba 100644
++--- a/tools/depends/target/ffmpeg/CMakeLists.txt
+++++ b/tools/depends/target/ffmpeg/CMakeLists.txt
++@@ -92,14 +92,12 @@ elseif(CORE_SYSTEM_NAME STREQUAL android)
++     list(APPEND ffmpeg_conf --extra-cflags=-mno-stackrealign)
++   endif()
++ elseif(CORE_SYSTEM_NAME STREQUAL darwin_embedded)
++-  list(APPEND ffmpeg_conf --disable-crystalhd
++-                          --enable-videotoolbox
+++  list(APPEND ffmpeg_conf --enable-videotoolbox
++                           --disable-filter=yadif_videotoolbox
++                           --target-os=darwin
++               )
++ elseif(CORE_SYSTEM_NAME STREQUAL osx)
++-  list(APPEND ffmpeg_conf --disable-crystalhd
++-                          --enable-videotoolbox
+++  list(APPEND ffmpeg_conf --enable-videotoolbox
++                           --target-os=darwin
++                           --disable-securetransport
++               )
++diff --git a/tools/depends/target/ffmpeg/FFMPEG-VERSION b/tools/depends/target/ffmpeg/FFMPEG-VERSION
++index f2ba09402e..60b8887de3 100644
++--- a/tools/depends/target/ffmpeg/FFMPEG-VERSION
+++++ b/tools/depends/target/ffmpeg/FFMPEG-VERSION
++@@ -1,5 +1,5 @@
++ LIBNAME=ffmpeg
++-VERSION=6.0.1
+++VERSION=7.0.1
++ ARCHIVE=$(LIBNAME)-$(VERSION).tar.gz
++-SHA512=945e34840092dc0fd3824eb1af2be79868af2afb4fe13159b19a9bcfc464cc4d53243c13ff065199290e9393ddbf4b1c5c8abccf83a31a31d6c7490e499fd1fc
+++SHA512=43b639b0bc0597e95dea2dce3e925f4b71ca8c4d9eadaef614941053e287f2d5c2e78d95413f0f7142da0f6ea1dbf443457e4fa1c2296cd8cf4081c185ed9c04
++ 
++diff --git a/xbmc/cores/AudioEngine/Engines/ActiveAE/ActiveAEResampleFFMPEG.cpp b/xbmc/cores/AudioEngine/Engines/ActiveAE/ActiveAEResampleFFMPEG.cpp
++index e897cbd3ea..6fce0af981 100644
++--- a/xbmc/cores/AudioEngine/Engines/ActiveAE/ActiveAEResampleFFMPEG.cpp
+++++ b/xbmc/cores/AudioEngine/Engines/ActiveAE/ActiveAEResampleFFMPEG.cpp
++@@ -66,51 +66,7 @@ bool CActiveAEResampleFFMPEG::Init(SampleConfig dstConfig, SampleConfig srcConfi
++   AVChannelLayout dstChLayout = {};
++   AVChannelLayout srcChLayout = {};
++ 
++-  av_channel_layout_from_mask(&dstChLayout, m_dst_chan_layout);
++-  av_channel_layout_from_mask(&srcChLayout, m_src_chan_layout);
++-
++-  int ret = swr_alloc_set_opts2(&m_pContext, &dstChLayout, m_dst_fmt, m_dst_rate, &srcChLayout,
++-                                m_src_fmt, m_src_rate, 0, NULL);
++-
++-  if (ret)
++-  {
++-    CLog::Log(LOGERROR, "CActiveAEResampleFFMPEG::Init - create context failed");
++-    return false;
++-  }
++-
++-  if(quality == AE_QUALITY_HIGH)
++-  {
++-    av_opt_set_double(m_pContext, "cutoff", 1.0, 0);
++-    av_opt_set_int(m_pContext,"filter_size", 256, 0);
++-  }
++-  else if(quality == AE_QUALITY_MID)
++-  {
++-    // 0.97 is default cutoff so use (1.0 - 0.97) / 2.0 + 0.97
++-    av_opt_set_double(m_pContext, "cutoff", 0.985, 0);
++-    av_opt_set_int(m_pContext,"filter_size", 64, 0);
++-  }
++-  else if(quality == AE_QUALITY_LOW)
++-  {
++-    av_opt_set_double(m_pContext, "cutoff", 0.97, 0);
++-    av_opt_set_int(m_pContext,"filter_size", 32, 0);
++-  }
++-
++-  if (m_dst_fmt == AV_SAMPLE_FMT_S32 || m_dst_fmt == AV_SAMPLE_FMT_S32P)
++-  {
++-    av_opt_set_int(m_pContext, "output_sample_bits", m_dst_bits, 0);
++-  }
++-
++-  // tell resampler to clamp float values
++-  // not required for sink stage (remapLayout == true)
++-  if ((m_dst_fmt == AV_SAMPLE_FMT_FLT || m_dst_fmt == AV_SAMPLE_FMT_FLTP) &&
++-      (m_src_fmt == AV_SAMPLE_FMT_FLT || m_src_fmt == AV_SAMPLE_FMT_FLTP) &&
++-      !remapLayout && normalize)
++-  {
++-     av_opt_set_double(m_pContext, "rematrix_maxval", 1.0, 0);
++-  }
++-
++-  av_opt_set_double(m_pContext, "center_mix_level", centerMix, 0);
++-
+++  bool hasMatrix = false;
++   if (remapLayout)
++   {
++     // one-to-one mapping of channels
++@@ -120,28 +76,19 @@ bool CActiveAEResampleFFMPEG::Init(SampleConfig dstConfig, SampleConfig srcConfi
++     m_dst_chan_layout = 0;
++     for (unsigned int out=0; out<remapLayout->Count(); out++)
++     {
++-      m_dst_chan_layout += ((uint64_t)1) << out;
+++      m_dst_chan_layout += static_cast<uint64_t>(1) << out;
++       int idx = CAEUtil::GetAVChannelIndex((*remapLayout)[out], m_src_chan_layout);
++       if (idx >= 0)
++       {
++         m_rematrix[out][idx] = 1.0;
++       }
++     }
++-
++-    av_opt_set_int(m_pContext, "out_channel_count", m_dst_channels, 0);
++-    av_opt_set_int(m_pContext, "out_channel_layout", m_dst_chan_layout, 0);
++-
++-    if (swr_set_matrix(m_pContext, (const double*)m_rematrix, AE_CH_MAX) < 0)
++-    {
++-      CLog::Log(LOGERROR, "CActiveAEResampleFFMPEG::Init - setting channel matrix failed");
++-      return false;
++-    }
+++    hasMatrix = true;
++   }
++   // stereo upmix
++   else if (upmix && m_src_channels == 2 && m_dst_channels > 2)
++   {
++     memset(m_rematrix, 0, sizeof(m_rematrix));
++-    av_channel_layout_uninit(&dstChLayout);
++     av_channel_layout_from_mask(&dstChLayout, m_dst_chan_layout);
++     for (int out=0; out<m_dst_channels; out++)
++     {
++@@ -171,15 +118,64 @@ bool CActiveAEResampleFFMPEG::Init(SampleConfig dstConfig, SampleConfig srcConfi
++       }
++     }
++ 
+++    hasMatrix = true;
++     av_channel_layout_uninit(&dstChLayout);
+++  }
+++
+++  av_channel_layout_from_mask(&dstChLayout, m_dst_chan_layout);
+++  av_channel_layout_from_mask(&srcChLayout, m_src_chan_layout);
+++
+++  int ret = swr_alloc_set_opts2(&m_pContext, &dstChLayout, m_dst_fmt, m_dst_rate, &srcChLayout,
+++                                m_src_fmt, m_src_rate, 0, NULL);
+++
+++  if (ret)
+++  {
+++    CLog::Log(LOGERROR, "CActiveAEResampleFFMPEG::Init - create context failed");
+++    return false;
+++  }
++ 
++-    if (swr_set_matrix(m_pContext, (const double*)m_rematrix, AE_CH_MAX) < 0)
+++  if (hasMatrix)
+++  {
+++    if (swr_set_matrix(m_pContext, reinterpret_cast<const double*>(m_rematrix), AE_CH_MAX) < 0)
++     {
++       CLog::Log(LOGERROR, "CActiveAEResampleFFMPEG::Init - setting channel matrix failed");
++       return false;
++     }
++   }
++ 
+++  if (quality == AE_QUALITY_HIGH)
+++  {
+++    av_opt_set_double(m_pContext, "cutoff", 1.0, 0);
+++    av_opt_set_int(m_pContext, "filter_size", 256, 0);
+++  }
+++  else if (quality == AE_QUALITY_MID)
+++  {
+++    // 0.97 is default cutoff so use (1.0 - 0.97) / 2.0 + 0.97
+++    av_opt_set_double(m_pContext, "cutoff", 0.985, 0);
+++    av_opt_set_int(m_pContext, "filter_size", 64, 0);
+++  }
+++  else if (quality == AE_QUALITY_LOW)
+++  {
+++    av_opt_set_double(m_pContext, "cutoff", 0.97, 0);
+++    av_opt_set_int(m_pContext, "filter_size", 32, 0);
+++  }
+++
+++  if (m_dst_fmt == AV_SAMPLE_FMT_S32 || m_dst_fmt == AV_SAMPLE_FMT_S32P)
+++  {
+++    av_opt_set_int(m_pContext, "output_sample_bits", m_dst_bits, 0);
+++  }
+++
+++  // tell resampler to clamp float values
+++  // not required for sink stage (remapLayout == true)
+++  if ((m_dst_fmt == AV_SAMPLE_FMT_FLT || m_dst_fmt == AV_SAMPLE_FMT_FLTP) &&
+++      (m_src_fmt == AV_SAMPLE_FMT_FLT || m_src_fmt == AV_SAMPLE_FMT_FLTP) && !remapLayout &&
+++      normalize)
+++  {
+++    av_opt_set_double(m_pContext, "rematrix_maxval", 1.0, 0);
+++  }
+++
+++  av_opt_set_double(m_pContext, "center_mix_level", centerMix, 0);
+++
++   if(swr_init(m_pContext) < 0)
++   {
++     CLog::Log(LOGERROR, "CActiveAEResampleFFMPEG::Init - init resampler failed");
++diff --git a/xbmc/cores/VideoPlayer/DVDDemuxers/DVDDemuxFFmpeg.cpp b/xbmc/cores/VideoPlayer/DVDDemuxers/DVDDemuxFFmpeg.cpp
++index 1aebc3dcbc..174df53f16 100644
++--- a/xbmc/cores/VideoPlayer/DVDDemuxers/DVDDemuxFFmpeg.cpp
+++++ b/xbmc/cores/VideoPlayer/DVDDemuxers/DVDDemuxFFmpeg.cpp
++@@ -376,74 +376,7 @@ bool CDVDDemuxFFmpeg::Open(const std::shared_ptr<CDVDInputStream>& pInput, bool
++     if (iformat == nullptr)
++     {
++       // let ffmpeg decide which demuxer we have to open
++-      bool trySPDIFonly = (m_pInput->GetContent() == "audio/x-spdif-compressed");
++-
++-      if (!trySPDIFonly)
++-        av_probe_input_buffer(m_ioContext, &iformat, strFile.c_str(), NULL, 0, 0);
++-
++-      // Use the more low-level code in case we have been built against an old
++-      // FFmpeg without the above av_probe_input_buffer(), or in case we only
++-      // want to probe for spdif (DTS or IEC 61937) compressed audio
++-      // specifically, or in case the file is a wav which may contain DTS or
++-      // IEC 61937 (e.g. ac3-in-wav) and we want to check for those formats.
++-      if (trySPDIFonly || (iformat && strcmp(iformat->name, "wav") == 0))
++-      {
++-        AVProbeData pd;
++-        int probeBufferSize = 32768;
++-        std::unique_ptr<uint8_t[]> probe_buffer (new uint8_t[probeBufferSize + AVPROBE_PADDING_SIZE]);
++-
++-        // init probe data
++-        pd.buf = probe_buffer.get();
++-        pd.filename = strFile.c_str();
++-
++-        // read data using avformat's buffers
++-        pd.buf_size = avio_read(m_ioContext, pd.buf, probeBufferSize);
++-        if (pd.buf_size <= 0)
++-        {
++-          CLog::Log(LOGERROR, "{} - error reading from input stream, {}", __FUNCTION__,
++-                    CURL::GetRedacted(strFile));
++-          return false;
++-        }
++-        memset(pd.buf + pd.buf_size, 0, AVPROBE_PADDING_SIZE);
++-
++-        // restore position again
++-        avio_seek(m_ioContext , 0, SEEK_SET);
++-
++-        // the advancedsetting is for allowing the user to force outputting the
++-        // 44.1 kHz DTS wav file as PCM, so that an A/V receiver can decode
++-        // it (this is temporary until we handle 44.1 kHz passthrough properly)
++-        if (trySPDIFonly || (iformat && strcmp(iformat->name, "wav") == 0 && !CServiceBroker::GetSettingsComponent()->GetAdvancedSettings()->m_VideoPlayerIgnoreDTSinWAV))
++-        {
++-          // check for spdif and dts
++-          // This is used with wav files and audio CDs that may contain
++-          // a DTS or AC3 track padded for S/PDIF playback. If neither of those
++-          // is present, we assume it is PCM audio.
++-          // AC3 is always wrapped in iec61937 (ffmpeg "spdif"), while DTS
++-          // may be just padded.
++-          const AVInputFormat* iformat2 = av_find_input_format("spdif");
++-          if (iformat2 && iformat2->read_probe(&pd) > AVPROBE_SCORE_MAX / 4)
++-          {
++-            iformat = iformat2;
++-          }
++-          else
++-          {
++-            // not spdif or no spdif demuxer, try dts
++-            iformat2 = av_find_input_format("dts");
++-
++-            if (iformat2 && iformat2->read_probe(&pd) > AVPROBE_SCORE_MAX / 4)
++-            {
++-              iformat = iformat2;
++-            }
++-            else if (trySPDIFonly)
++-            {
++-              // not dts either, return false in case we were explicitly
++-              // requested to only check for S/PDIF padded compressed audio
++-              CLog::Log(LOGDEBUG, "{} - not spdif or dts file, falling back", __FUNCTION__);
++-              return false;
++-            }
++-          }
++-        }
++-      }
+++      av_probe_input_buffer(m_ioContext, &iformat, strFile.c_str(), NULL, 0, 0);
++ 
++       if (!iformat)
++       {
++@@ -1353,7 +1286,7 @@ bool CDVDDemuxFFmpeg::SeekTime(double time, bool backwards, double* startpts)
++ 
++     if (ret >= 0)
++     {
++-      if (m_pFormatContext->iformat->read_seek)
+++      if (!(m_pFormatContext->iformat->flags & AVFMT_NOTIMESTAMPS))
++         m_seekToKeyFrame = true;
++       m_currentPts = DVD_NOPTS_VALUE;
++     }
++-- 
++2.47.3
 +
-+Upstream: https://github.com/gerbera/gerbera/commit/73fa1638958fae7db0579b694983164b10946b8d
+diff --git a/package/kodi/0008-Remove-deprecated-use-of-FF_API_INTERLACED_FRAME.patch b/package/kodi/0008-Remove-deprecated-use-of-FF_API_INTERLACED_FRAME.patch
+new file mode 100644
+index 0000000000..401681fcbe
+--- /dev/null
++++ b/package/kodi/0008-Remove-deprecated-use-of-FF_API_INTERLACED_FRAME.patch
+@@ -0,0 +1,98 @@
++From 8ab7d9781db412374796d80966828f35037d995c Mon Sep 17 00:00:00 2001
++From: Stephan Sundermann <stephansundermann@gmail.com>
++Date: Thu, 11 Apr 2024 17:13:36 +0200
++Subject: [PATCH] Remove deprecated use of FF_API_INTERLACED_FRAME
++
++Upstream: https://github.com/xbmc/xbmc/pull/24972#event-12966390666
++
++Patch was cherry-picked from upstream tree:
++https://github.com/xbmc/xbmc/commits/0e935f9edb30fd905f14230af653930b5fe139e8/
 +
 +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 +---
-+ src/transcoding/transcode_int_util.cc | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
++ .../DVDCodecs/Video/DVDVideoCodecDRMPRIME.cpp            | 5 +++--
++ .../VideoPlayer/DVDCodecs/Video/DVDVideoCodecFFmpeg.cpp  | 9 +++++----
++ xbmc/cores/VideoPlayer/DVDCodecs/Video/VAAPI.cpp         | 6 ++++--
++ xbmc/cores/VideoPlayer/DVDCodecs/Video/VTB.cpp           | 2 +-
++ 4 files changed, 13 insertions(+), 9 deletions(-)
 +
-+diff --git a/src/transcoding/transcode_int_util.cc b/src/transcoding/transcode_int_util.cc
-+index 014942ab9..89964615c 100644
-+--- a/src/transcoding/transcode_int_util.cc
-++++ b/src/transcoding/transcode_int_util.cc
-+@@ -619,7 +619,7 @@ int StreamContext::createEncoder(
-+             enc_ctx->sample_aspect_ratio = settings.aspectRatio;
++diff --git a/xbmc/cores/VideoPlayer/DVDCodecs/Video/DVDVideoCodecDRMPRIME.cpp b/xbmc/cores/VideoPlayer/DVDCodecs/Video/DVDVideoCodecDRMPRIME.cpp
++index eb2943bb8c..4da0722d5c 100644
++--- a/xbmc/cores/VideoPlayer/DVDCodecs/Video/DVDVideoCodecDRMPRIME.cpp
+++++ b/xbmc/cores/VideoPlayer/DVDCodecs/Video/DVDVideoCodecDRMPRIME.cpp
++@@ -582,8 +582,9 @@ void CDVDVideoCodecDRMPRIME::SetPictureParams(VideoPicture* pVideoPicture)
 + 
-+             // Set first supported pixel format
-+-#if (LIBAVCODEC_VERSION_INT < AV_VERSION_INT(61, 0, 0))
-++#if (LIBAVCODEC_VERSION_INT < AV_VERSION_INT(61, 13, 100))
-+             /* take first format from list of supported formats */
-+             if (encoder->pix_fmts)
-+                 enc_ctx->pix_fmt = encoder->pix_fmts[0];
-+@@ -652,7 +652,7 @@ int StreamContext::createEncoder(
-+ #endif
++   pVideoPicture->iRepeatPicture = 0;
++   pVideoPicture->iFlags = 0;
++-  pVideoPicture->iFlags |= m_pFrame->interlaced_frame ? DVP_FLAG_INTERLACED : 0;
++-  pVideoPicture->iFlags |= m_pFrame->top_field_first ? DVP_FLAG_TOP_FIELD_FIRST : 0;
+++  pVideoPicture->iFlags |= m_pFrame->flags & AV_FRAME_FLAG_INTERLACED ? DVP_FLAG_INTERLACED : 0;
+++  pVideoPicture->iFlags |=
+++      m_pFrame->flags & AV_FRAME_FLAG_TOP_FIELD_FIRST ? DVP_FLAG_TOP_FIELD_FIRST : 0;
++   pVideoPicture->iFlags |= m_pFrame->data[0] ? 0 : DVP_FLAG_DROPPED;
 + 
-+             // Set first supported sample format
-+-#if (LIBAVCODEC_VERSION_INT < AV_VERSION_INT(61, 0, 0))
-++#if (LIBAVCODEC_VERSION_INT < AV_VERSION_INT(61, 13, 100))
-+             if (encoder->sample_fmts)
-+                 enc_ctx->sample_fmt = encoder->sample_fmts[0];
-+ #else
++   if (m_codecControlFlags & DVD_CODEC_CTRL_DROP)
++diff --git a/xbmc/cores/VideoPlayer/DVDCodecs/Video/DVDVideoCodecFFmpeg.cpp b/xbmc/cores/VideoPlayer/DVDCodecs/Video/DVDVideoCodecFFmpeg.cpp
++index d66378fa07..9586d211e9 100644
++--- a/xbmc/cores/VideoPlayer/DVDCodecs/Video/DVDVideoCodecFFmpeg.cpp
+++++ b/xbmc/cores/VideoPlayer/DVDCodecs/Video/DVDVideoCodecFFmpeg.cpp
++@@ -792,12 +792,12 @@ CDVDVideoCodec::VCReturn CDVDVideoCodecFFmpeg::GetPicture(VideoPicture* pVideoPi
++   }
++   m_dropCtrl.Process(framePTS, m_pCodecContext->skip_frame > AVDISCARD_DEFAULT);
++ 
++-  if (m_pDecodedFrame->key_frame)
+++  if (m_pDecodedFrame->flags & AV_FRAME_FLAG_KEY)
++   {
++     m_started = true;
++     m_iLastKeyframe = m_pCodecContext->has_b_frames + 2;
++   }
++-  if (m_pDecodedFrame->interlaced_frame)
+++  if (m_pDecodedFrame->flags & AV_FRAME_FLAG_INTERLACED)
++     m_interlaced = true;
++   else
++     m_interlaced = false;
++@@ -1013,8 +1013,9 @@ bool CDVDVideoCodecFFmpeg::GetPictureCommon(VideoPicture* pVideoPicture)
++ 
++   pVideoPicture->iRepeatPicture = 0.5 * m_pFrame->repeat_pict;
++   pVideoPicture->iFlags = 0;
++-  pVideoPicture->iFlags |= m_pFrame->interlaced_frame ? DVP_FLAG_INTERLACED : 0;
++-  pVideoPicture->iFlags |= m_pFrame->top_field_first ? DVP_FLAG_TOP_FIELD_FIRST: 0;
+++  pVideoPicture->iFlags |= m_pFrame->flags & AV_FRAME_FLAG_INTERLACED ? DVP_FLAG_INTERLACED : 0;
+++  pVideoPicture->iFlags |=
+++      m_pFrame->flags & AV_FRAME_FLAG_TOP_FIELD_FIRST ? DVP_FLAG_TOP_FIELD_FIRST : 0;
++ 
++   if (m_codecControlFlags & DVD_CODEC_CTRL_DROP)
++   {
++diff --git a/xbmc/cores/VideoPlayer/DVDCodecs/Video/VAAPI.cpp b/xbmc/cores/VideoPlayer/DVDCodecs/Video/VAAPI.cpp
++index fb7606e0d0..a62fa6273d 100644
++--- a/xbmc/cores/VideoPlayer/DVDCodecs/Video/VAAPI.cpp
+++++ b/xbmc/cores/VideoPlayer/DVDCodecs/Video/VAAPI.cpp
++@@ -3068,8 +3068,10 @@ bool CFFmpegPostproc::AddPicture(CVaapiDecodedPicture &inPic)
++   m_pFilterFrameIn->height = m_config.vidHeight;
++   m_pFilterFrameIn->linesize[0] = image.pitches[0];
++   m_pFilterFrameIn->linesize[1] = image.pitches[1];
++-  m_pFilterFrameIn->interlaced_frame = (inPic.DVDPic.iFlags & DVP_FLAG_INTERLACED) ? 1 : 0;
++-  m_pFilterFrameIn->top_field_first = (inPic.DVDPic.iFlags & DVP_FLAG_TOP_FIELD_FIRST) ? 1 : 0;
+++  if (inPic.DVDPic.iFlags & DVP_FLAG_INTERLACED)
+++    m_pFilterFrameIn->flags |= AV_FRAME_FLAG_INTERLACED;
+++  if (inPic.DVDPic.iFlags & DVP_FLAG_TOP_FIELD_FIRST)
+++    m_pFilterFrameIn->flags |= AV_FRAME_FLAG_TOP_FIELD_FIRST;
++ 
++   if (inPic.DVDPic.pts == DVD_NOPTS_VALUE)
++     m_pFilterFrameIn->pts = AV_NOPTS_VALUE;
++diff --git a/xbmc/cores/VideoPlayer/DVDCodecs/Video/VTB.cpp b/xbmc/cores/VideoPlayer/DVDCodecs/Video/VTB.cpp
++index 1f71f643d2..567d63559d 100644
++--- a/xbmc/cores/VideoPlayer/DVDCodecs/Video/VTB.cpp
+++++ b/xbmc/cores/VideoPlayer/DVDCodecs/Video/VTB.cpp
++@@ -196,7 +196,7 @@ CDVDVideoCodec::VCReturn CDecoder::Decode(AVCodecContext* avctx, AVFrame* frame)
++ 
++   if(frame)
++   {
++-    if (frame->interlaced_frame)
+++    if (frame->flags & AV_FRAME_FLAG_INTERLACED)
++       return CDVDVideoCodec::VC_FATAL;
++ 
++     if (m_renderBuffer)
++-- 
++2.47.3
++
+diff --git a/package/kodi/0009-Remove-deprecated-use-of-avcodec_close.patch b/package/kodi/0009-Remove-deprecated-use-of-avcodec_close.patch
+new file mode 100644
+index 0000000000..97b957c001
+--- /dev/null
++++ b/package/kodi/0009-Remove-deprecated-use-of-avcodec_close.patch
+@@ -0,0 +1,30 @@
++From 31bcf3a0c4b041ca04f710c5cf731b2ab8fe3ae0 Mon Sep 17 00:00:00 2001
++From: Stephan Sundermann <stephansundermann@gmail.com>
++Date: Thu, 11 Apr 2024 17:14:48 +0200
++Subject: [PATCH] Remove deprecated use of avcodec_close
++
++Upstream: https://github.com/xbmc/xbmc/pull/24972#event-12966390666
++
++Patch was cherry-picked from upstream tree:
++https://github.com/xbmc/xbmc/commits/0e935f9edb30fd905f14230af653930b5fe139e8/
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ xbmc/cores/VideoPlayer/DVDDemuxers/DVDDemuxClient.cpp | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/xbmc/cores/VideoPlayer/DVDDemuxers/DVDDemuxClient.cpp b/xbmc/cores/VideoPlayer/DVDDemuxers/DVDDemuxClient.cpp
++index 0cdf8c3864..477a2e82ec 100644
++--- a/xbmc/cores/VideoPlayer/DVDDemuxers/DVDDemuxClient.cpp
+++++ b/xbmc/cores/VideoPlayer/DVDDemuxers/DVDDemuxClient.cpp
++@@ -188,7 +188,6 @@ bool CDVDDemuxClient::ParsePacket(DemuxPacket* pkt)
++       if (!avcodec_open2(stream->m_context, stream->m_context->codec, nullptr))
++       {
++         avcodec_send_packet(stream->m_context, avpkt);
++-        avcodec_close(stream->m_context);
++       }
++     }
++     av_packet_free(&avpkt);
++-- 
++2.47.3
++
+diff --git a/package/kodi/0010-Remove-deprecated-use-av_stream_get_side_data.patch b/package/kodi/0010-Remove-deprecated-use-av_stream_get_side_data.patch
+new file mode 100644
+index 0000000000..ce8a37e200
+--- /dev/null
++++ b/package/kodi/0010-Remove-deprecated-use-av_stream_get_side_data.patch
+@@ -0,0 +1,113 @@
++From c1ef1c6851c01f8435b66eb7b605feae83089f28 Mon Sep 17 00:00:00 2001
++From: Stephan Sundermann <stephansundermann@gmail.com>
++Date: Thu, 11 Apr 2024 17:15:16 +0200
++Subject: [PATCH] Remove deprecated use av_stream_get_side_data
++
++Upstream: https://github.com/xbmc/xbmc/pull/24972#event-12966390666
++
++Patch was cherry-picked from upstream tree:
++https://github.com/xbmc/xbmc/commits/0e935f9edb30fd905f14230af653930b5fe139e8/
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ .../DVDDemuxers/DVDDemuxFFmpeg.cpp            | 53 +++++++++++--------
++ 1 file changed, 32 insertions(+), 21 deletions(-)
++
++diff --git a/xbmc/cores/VideoPlayer/DVDDemuxers/DVDDemuxFFmpeg.cpp b/xbmc/cores/VideoPlayer/DVDDemuxers/DVDDemuxFFmpeg.cpp
++index 174df53f16..f917bf719f 100644
++--- a/xbmc/cores/VideoPlayer/DVDDemuxers/DVDDemuxFFmpeg.cpp
+++++ b/xbmc/cores/VideoPlayer/DVDDemuxers/DVDDemuxFFmpeg.cpp
++@@ -1630,42 +1630,49 @@ CDemuxStream* CDVDDemuxFFmpeg::AddStream(int streamIdx)
++         st->colorRange = pStream->codecpar->color_range;
++         st->hdr_type = DetermineHdrType(pStream);
++ 
++-        // https://github.com/FFmpeg/FFmpeg/blob/release/5.0/doc/APIchanges
++-        size_t size = 0;
++-        uint8_t* side_data = nullptr;
+++        // https://github.com/FFmpeg/FFmpeg/blob/release/7.0/doc/APIchanges
+++        const AVPacketSideData* sideData = nullptr;
++ 
++         if (st->hdr_type == StreamHdrType::HDR_TYPE_DOLBYVISION)
++         {
++-          side_data = av_stream_get_side_data(pStream, AV_PKT_DATA_DOVI_CONF, &size);
++-          if (side_data && size)
+++
+++          sideData =
+++              av_packet_side_data_get(pStream->codecpar->coded_side_data,
+++                                      pStream->codecpar->nb_coded_side_data, AV_PKT_DATA_DOVI_CONF);
+++          if (sideData && sideData->size)
++           {
++-            st->dovi = *reinterpret_cast<AVDOVIDecoderConfigurationRecord*>(side_data);
+++            st->dovi = *reinterpret_cast<const AVDOVIDecoderConfigurationRecord*>(sideData->data);
++           }
++         }
++ 
++-        side_data = av_stream_get_side_data(pStream, AV_PKT_DATA_MASTERING_DISPLAY_METADATA, &size);
++-        if (side_data && size)
+++        sideData = av_packet_side_data_get(pStream->codecpar->coded_side_data,
+++                                           pStream->codecpar->nb_coded_side_data,
+++                                           AV_PKT_DATA_MASTERING_DISPLAY_METADATA);
+++        if (sideData && sideData->size)
++         {
++           st->masteringMetaData = std::make_shared<AVMasteringDisplayMetadata>(
++-              *reinterpret_cast<AVMasteringDisplayMetadata*>(side_data));
+++              *reinterpret_cast<const AVMasteringDisplayMetadata*>(sideData->data));
++         }
++ 
++-        side_data = av_stream_get_side_data(pStream, AV_PKT_DATA_CONTENT_LIGHT_LEVEL, &size);
++-        if (side_data && size)
+++        sideData = av_packet_side_data_get(pStream->codecpar->coded_side_data,
+++                                           pStream->codecpar->nb_coded_side_data,
+++                                           AV_PKT_DATA_CONTENT_LIGHT_LEVEL);
+++        if (sideData && sideData->size)
++         {
++           st->contentLightMetaData = std::make_shared<AVContentLightMetadata>(
++-              *reinterpret_cast<AVContentLightMetadata*>(side_data));
+++              *reinterpret_cast<const AVContentLightMetadata*>(sideData->data));
++         }
++ 
++-        uint8_t* displayMatrixSideData =
++-            av_stream_get_side_data(pStream, AV_PKT_DATA_DISPLAYMATRIX, nullptr);
++-        if (displayMatrixSideData)
+++        sideData = av_packet_side_data_get(pStream->codecpar->coded_side_data,
+++                                           pStream->codecpar->nb_coded_side_data,
+++                                           AV_PKT_DATA_DISPLAYMATRIX);
+++        if (sideData)
++         {
++-          const double tetha =
++-              av_display_rotation_get(reinterpret_cast<int32_t*>(displayMatrixSideData));
++-          if (!std::isnan(tetha))
+++          const double theta =
+++              av_display_rotation_get(reinterpret_cast<const int32_t*>(sideData->data));
+++          if (!std::isnan(theta))
++           {
++-            st->iOrientation = ((static_cast<int>(-tetha) % 360) + 360) % 360;
+++            st->iOrientation = ((static_cast<int>(-theta) % 360) + 360) % 360;
++           }
++         }
++ 
++@@ -2488,7 +2495,9 @@ StreamHdrType CDVDDemuxFFmpeg::DetermineHdrType(AVStream* pStream)
++ {
++   StreamHdrType hdrType = StreamHdrType::HDR_TYPE_NONE;
++ 
++-  if (av_stream_get_side_data(pStream, AV_PKT_DATA_DOVI_CONF, nullptr)) // DoVi
+++  if (av_packet_side_data_get(pStream->codecpar->coded_side_data,
+++                              pStream->codecpar->nb_coded_side_data,
+++                              AV_PKT_DATA_DOVI_CONF)) // DoVi
++     hdrType = StreamHdrType::HDR_TYPE_DOLBYVISION;
++   else if (pStream->codecpar->color_trc == AVCOL_TRC_SMPTE2084) // HDR10
++     hdrType = StreamHdrType::HDR_TYPE_HDR10;
++@@ -2496,7 +2505,9 @@ StreamHdrType CDVDDemuxFFmpeg::DetermineHdrType(AVStream* pStream)
++     hdrType = StreamHdrType::HDR_TYPE_HLG;
++   // file could be SMPTE2086 which FFmpeg currently returns as unknown
++   // so use the presence of static metadata to detect it
++-  else if (av_stream_get_side_data(pStream, AV_PKT_DATA_MASTERING_DISPLAY_METADATA, nullptr))
+++  else if (av_packet_side_data_get(pStream->codecpar->coded_side_data,
+++                                   pStream->codecpar->nb_coded_side_data,
+++                                   AV_PKT_DATA_MASTERING_DISPLAY_METADATA))
++     hdrType = StreamHdrType::HDR_TYPE_HDR10;
++ 
++   return hdrType;
++-- 
++2.47.3
++
+diff --git a/package/kodi/0011-Remove-CrystalHD-hw-acceleration-strings.patch b/package/kodi/0011-Remove-CrystalHD-hw-acceleration-strings.patch
+new file mode 100644
+index 0000000000..583bd1dbd5
+--- /dev/null
++++ b/package/kodi/0011-Remove-CrystalHD-hw-acceleration-strings.patch
+@@ -0,0 +1,47 @@
++From a186fedb05fa90ffa2c0a97115f756a213631575 Mon Sep 17 00:00:00 2001
++From: Stephan Sundermann <stephansundermann@gmail.com>
++Date: Thu, 11 Apr 2024 17:15:43 +0200
++Subject: [PATCH] Remove CrystalHD hw acceleration strings
++
++Upstream: https://github.com/xbmc/xbmc/pull/24972#event-12966390666
++
++Patch was cherry-picked from upstream tree:
++https://github.com/xbmc/xbmc/commits/0e935f9edb30fd905f14230af653930b5fe139e8/
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ addons/resource.language.en_gb/resources/strings.po | 11 ++---------
++ 1 file changed, 2 insertions(+), 9 deletions(-)
++
++diff --git a/addons/resource.language.en_gb/resources/strings.po b/addons/resource.language.en_gb/resources/strings.po
++index 98eb7f64b7..b9a680fd93 100644
++--- a/addons/resource.language.en_gb/resources/strings.po
+++++ b/addons/resource.language.en_gb/resources/strings.po
++@@ -7359,10 +7359,7 @@ msgctxt "#13427"
++ msgid "Allow hardware acceleration - DXVA2"
++ msgstr ""
++ 
++-#: system/settings/settings.xml
++-msgctxt "#13428"
++-msgid "Allow hardware acceleration - CrystalHD"
++-msgstr ""
+++#empty string with id 13428
++ 
++ #: system/settings/settings.xml
++ msgctxt "#13429"
++@@ -19518,11 +19515,7 @@ msgctxt "#36158"
++ msgid "Enable DXVA2 hardware decoding of video files."
++ msgstr ""
++ 
++-#. Description of setting with label #13428 "Allow hardware acceleration (CrystalHD)"
++-#: system/settings/settings.xml
++-msgctxt "#36159"
++-msgid "Enable CrystalHD decoding of video files."
++-msgstr ""
+++#empty string with id 36159
++ 
++ #. Description of setting with label #13429 "Allow hardware acceleration (VDADecoder)"
++ #: system/settings/settings.xml
++-- 
++2.47.3
++
+diff --git a/package/kodi/0012-Remove-VideoPlayerignoredtsinwav-advanced-setting.patch b/package/kodi/0012-Remove-VideoPlayerignoredtsinwav-advanced-setting.patch
+new file mode 100644
+index 0000000000..9dec6ae8cf
+--- /dev/null
++++ b/package/kodi/0012-Remove-VideoPlayerignoredtsinwav-advanced-setting.patch
+@@ -0,0 +1,51 @@
++From 463dd7fdc97fdfbe93b1145b6fd8e5bfaceaaa0c Mon Sep 17 00:00:00 2001
++From: Stephan Sundermann <stephansundermann@gmail.com>
++Date: Sat, 13 Apr 2024 10:31:36 +0200
++Subject: [PATCH] Remove VideoPlayerignoredtsinwav advanced setting
++
++Upstream: https://github.com/xbmc/xbmc/pull/24972#event-12966390666
++
++Patch was cherry-picked from upstream tree:
++https://github.com/xbmc/xbmc/commits/0e935f9edb30fd905f14230af653930b5fe139e8/
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ xbmc/settings/AdvancedSettings.cpp | 2 --
++ xbmc/settings/AdvancedSettings.h   | 1 -
++ 2 files changed, 3 deletions(-)
++
++diff --git a/xbmc/settings/AdvancedSettings.cpp b/xbmc/settings/AdvancedSettings.cpp
++index cc06244799..4e2d6badd6 100644
++--- a/xbmc/settings/AdvancedSettings.cpp
+++++ b/xbmc/settings/AdvancedSettings.cpp
++@@ -129,7 +129,6 @@ void CAdvancedSettings::Initialize()
++     return;
++ 
++   m_audioApplyDrc = -1.0f;
++-  m_VideoPlayerIgnoreDTSinWAV = false;
++ 
++   //default hold time of 25 ms, this allows a 20 hertz sine to pass undistorted
++   m_limiterHold = 0.025f;
++@@ -579,7 +578,6 @@ void CAdvancedSettings::ParseSettingsFile(const std::string &file)
++       GetCustomRegexps(pAudioExcludes, m_audioExcludeFromScanRegExps);
++ 
++     XMLUtils::GetFloat(pElement, "applydrc", m_audioApplyDrc);
++-    XMLUtils::GetBoolean(pElement, "VideoPlayerignoredtsinwav", m_VideoPlayerIgnoreDTSinWAV);
++ 
++     XMLUtils::GetFloat(pElement, "limiterhold", m_limiterHold, 0.0f, 100.0f);
++     XMLUtils::GetFloat(pElement, "limiterrelease", m_limiterRelease, 0.001f, 100.0f);
++diff --git a/xbmc/settings/AdvancedSettings.h b/xbmc/settings/AdvancedSettings.h
++index 5abbed2486..a0bc209dce 100644
++--- a/xbmc/settings/AdvancedSettings.h
+++++ b/xbmc/settings/AdvancedSettings.h
++@@ -121,7 +121,6 @@ class CAdvancedSettings : public ISettingCallback, public ISettingsHandler
++ 
++     std::string m_audioDefaultPlayer;
++     float m_audioPlayCountMinimumPercent;
++-    bool m_VideoPlayerIgnoreDTSinWAV;
++     float m_limiterHold;
++     float m_limiterRelease;
++ 
++-- 
++2.47.3
++
+diff --git a/package/kodi/0013-Use-new-audio-DTS-and-ATMOS-profiles.patch b/package/kodi/0013-Use-new-audio-DTS-and-ATMOS-profiles.patch
+new file mode 100644
+index 0000000000..be3abbed20
+--- /dev/null
++++ b/package/kodi/0013-Use-new-audio-DTS-and-ATMOS-profiles.patch
+@@ -0,0 +1,98 @@
++From a088ac3ab28e55a5fa7f3de13ab9c59cbb1f9601 Mon Sep 17 00:00:00 2001
++From: Stephan Sundermann <stephansundermann@gmail.com>
++Date: Sat, 13 Apr 2024 13:07:58 +0200
++Subject: [PATCH] Use new audio DTS and ATMOS profiles
++
++Upstream: https://github.com/xbmc/xbmc/pull/24972#event-12966390666
++
++Patch was cherry-picked from upstream tree:
++https://github.com/xbmc/xbmc/commits/0e935f9edb30fd905f14230af653930b5fe139e8/
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ .../VideoPlayer/DVDDemuxers/DVDDemux.cpp      | 20 +++++++++++++------
++ .../DVDInputStreams/InputStreamAddon.cpp      |  9 +++------
++ 2 files changed, 17 insertions(+), 12 deletions(-)
++
++diff --git a/xbmc/cores/VideoPlayer/DVDDemuxers/DVDDemux.cpp b/xbmc/cores/VideoPlayer/DVDDemuxers/DVDDemux.cpp
++index 63fb9264a8..22fe7ba751 100644
++--- a/xbmc/cores/VideoPlayer/DVDDemuxers/DVDDemux.cpp
+++++ b/xbmc/cores/VideoPlayer/DVDDemuxers/DVDDemux.cpp
++@@ -15,15 +15,15 @@ std::string CDemuxStreamAudio::GetStreamType()
++   std::string strInfo;
++   switch (codec)
++   {
++-    //! @todo: With ffmpeg >= 6.1 add new AC4 codec
++     case AV_CODEC_ID_AC3:
++       strInfo = "AC3 ";
++       break;
+++    case AV_CODEC_ID_AC4:
+++      strInfo = "AC4 ";
+++      break;
++     case AV_CODEC_ID_EAC3:
++     {
++-      //! @todo: With ffmpeg >= 6.1 add new atmos profile case
++-      // "JOC" its EAC3 Atmos underlying profile, there is no standard codec name string
++-      if (StringUtils::Contains(codecName, "JOC"))
+++      if (profile == FF_PROFILE_EAC3_DDP_ATMOS)
++         strInfo = "DD+ ATMOS ";
++       else
++         strInfo = "DD+ ";
++@@ -31,7 +31,6 @@ std::string CDemuxStreamAudio::GetStreamType()
++     }
++     case AV_CODEC_ID_DTS:
++     {
++-      //! @todo: With ffmpeg >= 6.1 add new DTSX profile cases
++       switch (profile)
++       {
++         case FF_PROFILE_DTS_96_24:
++@@ -49,6 +48,12 @@ std::string CDemuxStreamAudio::GetStreamType()
++         case FF_PROFILE_DTS_HD_HRA:
++           strInfo = "DTS-HD HRA ";
++           break;
+++        case FF_PROFILE_DTS_HD_MA_X:
+++          strInfo = "DTS-HD MA X ";
+++          break;
+++        case FF_PROFILE_DTS_HD_MA_X_IMAX:
+++          strInfo = "DTS-HD MA X (IMAX) ";
+++        break;
++         default:
++           strInfo = "DTS ";
++           break;
++@@ -62,7 +67,10 @@ std::string CDemuxStreamAudio::GetStreamType()
++       strInfo = "MP3 ";
++       break;
++     case AV_CODEC_ID_TRUEHD:
++-      strInfo = "TrueHD ";
+++      if (profile == FF_PROFILE_TRUEHD_ATMOS)
+++        strInfo = "TrueHD ATMOS ";
+++      else
+++        strInfo = "TrueHD ";
++       break;
++     case AV_CODEC_ID_AAC:
++     {
++diff --git a/xbmc/cores/VideoPlayer/DVDInputStreams/InputStreamAddon.cpp b/xbmc/cores/VideoPlayer/DVDInputStreams/InputStreamAddon.cpp
++index daf66ce0cd..902f38ade2 100644
++--- a/xbmc/cores/VideoPlayer/DVDInputStreams/InputStreamAddon.cpp
+++++ b/xbmc/cores/VideoPlayer/DVDInputStreams/InputStreamAddon.cpp
++@@ -762,14 +762,11 @@ int CInputStreamAddon::ConvertAudioCodecProfile(STREAMCODEC_PROFILE profile)
++     case DTSCodecProfileHDExpress:
++       return FF_PROFILE_DTS_EXPRESS;
++     case DTSCodecProfileHDMAX:
++-      //! @todo: with ffmpeg >= 6.1 set the appropriate profile
++-      return FF_PROFILE_UNKNOWN; // FF_PROFILE_DTS_HD_MA_X
+++      return FF_PROFILE_DTS_HD_MA_X;
++     case DTSCodecProfileHDMAIMAX:
++-      //! @todo: with ffmpeg >= 6.1 set the appropriate profile
++-      return FF_PROFILE_UNKNOWN; // FF_PROFILE_DTS_HD_MA_X_IMAX
+++      return FF_PROFILE_DTS_HD_MA_X_IMAX;
++     case DDPlusCodecProfileAtmos:
++-      //! @todo: with ffmpeg >= 6.1 set the appropriate profile
++-      return FF_PROFILE_UNKNOWN; // FF_PROFILE_EAC3_DDP_ATMOS
+++      return FF_PROFILE_EAC3_DDP_ATMOS;
++     default:
++       return FF_PROFILE_UNKNOWN;
++   }
 +-- 
 +2.47.3
 +
