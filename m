@@ -4,145 +4,144 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 582ACCA9EBD
-	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 13:02:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92FE0CA9EC7
+	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 13:02:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1E6AA40581;
-	Sun, 11 Oct 2026 13:02:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A8A340581;
+	Sun, 11 Oct 2026 13:02:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nPOj9GPMeVK2; Sun, 11 Oct 2026 13:02:00 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 1B0F040585
+ id sG0BPoNyKGau; Sun, 11 Oct 2026 13:02:15 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 69A2240585
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791723720;
-	b=YMjNon33yfcOMlaMAFom7TSsANYMeXgC/ZfbBo+Z1qua24GqF1BjP+Ic298tns/D7BYh
-	 Z3fGc9ZTIDleF2CqxGVLQL0Wktgve6lQ56d0NaHrg842K4iJh6tg0czmq5kfq9VgTXax2
-	 eMt2BBR4KlUyL8NYJO339c6bBiEC7DTTecg2L3BgQZaOjqvO3FnclUrQ2J0PPYEZkSBiE
-	 4xlVHocT5FVCG2RaOFn4raG44mQ4J5fSpW6F7dNWkryeDPTioSvkw8HK5arDkmIgCt6Mw
-	 erX3qdbjerNb3LeKw7YUoaX5oK2L9kkBl4L0xGWiR+K3AakvgWCM6LtWJLl4Rh40u6A==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791723735;
+	b=ZelM/zPd/vjrbWmBZlAefaMEyfcgz9NtL1l8YiZ9W9UEjcaiS7KVa7JS344iN+FK3DUk
+	 SlMmjIoV3tbesFlnmZM29t2utQIgix6kunUjFrygU2IXrBCl1+ObAOTG3vt519n2qLpXZ
+	 EkdvK7IFUavJaz+m3Yw6XEDqz0uTq595d/JjaxSwcEghbd99tb7rdjzJx+84EAQW3AYAI
+	 SfCIMEQTGezJ6jvc0MeYOh2yuVtLt3CSzFD+3x+HEruDZGLb3Txq39gpYJuIcje58zE0T
+	 EZC8OWv7AvlIh54N/Ns337wifIQupZp778UZ2pNIIJhB0AbxMu4tbinlbmd4yO31uQQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791723720;
+	c=relaxed/relaxed; t=1791723735;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:Date:Message-ID:
+	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:X-Spamd-Bar:Subject:
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=rlbP3eH7qzGqaU8UCXjfqbxU2CQq5jsPrQJzPtAfuig=;
-	b=D9EfEavI6u0W6Zd2sTxrcaPIJzuaKzTLQ7D9HA4DU8DfkH1i5aZM5d5xI2Bzb9OAhr4i
-	 9dlwpayJw6o26pGNzJa8MQzPC8KUVVSqDjE2cE8Eo639+1+9uuifnlE2KMHK//VrAWuCl
-	 7UjSVPFpiat/vhoryhk7Puz3wMNVPH/3pFLq1mpvKRvC0xCxlOyy7X/jMmf0+qV9nsLrP
-	 Dbb8IN2bylzHfDntd4ZOS1OYdAmTGpoYBN3S/Gx2H4O6zOjV4OXceS/Nkgdz56TsbBzJT
-	 jOzGRfnKm4UwrnI96HMcDtVdoFNUTjOtOM+VoG3pmeaqlDoOfdOM5rdA7xq0XB6Ekow==
+	bh=D7FFb97c0EcP3JaWcu8VVUUFL4Ij3WQTEnb2DNmfLuA=;
+	b=APjfQLK4JH/aJxpBEkESQyJj8QaFs16enJ+HRZpJ7Pz/kOCjTmKr7mu4mUqKa42aL/kw
+	 idO+v2PxTMNtXw3qIOv4X8IM8EKXK8YVlGWwXLg8CkG7ot0qFfz+24Z0tdtGyEWxaxxkI
+	 rhusj/+qCVV7k/qe3SHKRpR6g7ihueiZG1GRMgSt2Arwk9AUFdz5VbSTs9h954i4dCj/F
+	 PEmZD5ErTBuxIZ+0bLgsdBJtRAW3K9w6pULvAK6XFqAdNiTsnd8UQVAKSIpqn7kvyFUSc
+	 6pfdQl+Nx8j5ionpfHQpbTMYbjWCK+pmUcpN6X6qquxwqZkkGxyjOiZ9sh/Ykn9XK5Q==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791723720;
-	bh=rlbP3eH7qzGqaU8UCXjfqbxU2CQq5jsPrQJzPtAfuig=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1791723735;
+	bh=D7FFb97c0EcP3JaWcu8VVUUFL4Ij3WQTEnb2DNmfLuA=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=oa3Orgswq348q5He+egxunrGxuWWvVUsYR/+H8QpAXLZ23ScSP3+KKKaYYn3Z/kmj
-	 QJ2ad2rkNZ2STYR0zEnlGH/bwl03yIX7lHp3PJasfHn76VZ0rG7zBXzSE7WzxAq12B
-	 9ySeqepzmdVM0za9zhyHF1PE925KJD3cfLnU2cXcr7ERnCQJH3fKVC+iBAoWG4k7NF
-	 iaYCw6JiUAi2Q/hpjx9YYQf42DhQ/1yWEFfvSJRWQJzE31lglem6t0hcrAvxWXpGpO
-	 IT133RfFtqjFVzhkh7BXMXHDIC4ocYhiwui26SoEYi1G3CzigBlWsVbL3swcy5mm08
-	 QKQdi8Ot6Z7ww==
+	b=kTsVtNHeh922jxrAud/YgeYDa+Qj6KqAeq2VeeuPh7pPrhtWOgo6jgzdVE/WFPBSd
+	 jJWiEpZZg01gNIJNxgNVZyQqHKq/2UFHxRSa9cL4qZX1FW9zvPmKnm3cBmeYmKI8o5
+	 uqoqY+b1GXOFoRRuf2phozx369twbV83TWExnkNhSsLiRYZK/oxRcvvijlOq2/2Xir
+	 qsW2ap7Tmc7t1c0gELgV3YU6dFEpuH6ncrkJkWE+oYNokM+GrC2stUFXydoCO5j2b+
+	 VMlmwVX8Tp6Lx3YPaHbbbks6LX9gVibTBZj3RhCUKcoBOf0s9dX0AP6Bdu2sr+K+1N
+	 ROT2AbR8ptvYw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1B0F040585;
-	Sun, 11 Oct 2026 13:02:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id C9529194
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:01:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 69A2240585;
+	Sun, 11 Oct 2026 13:02:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6C96D111
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:02:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AF90960612
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:01:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5E97040071
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:02:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uNsMPyiQpgcE for <buildroot@buildroot.org>;
- Sun, 11 Oct 2026 13:01:58 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 842916060C
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791723717;
- b=sZlBKjF8AdRHZoOvPu1SUbvwm10DIXh+1GF3dkw7aZHh20loyYPrVScVaODTslKnBHcz
- fszqklLdghHV8qv19jsv8Vl7BJ977EzZOww0yeC+ZT+nB0ikqTRO5RZ45Li6geMrVaEzJ
- hlvgq1T1nGrw+JNHDFfAGOxUjRwhlPcqD1CcKFlll7FzD6XXDG2JVWHSOdOcmdH1Q7xtn
- q4WriOrbnMmKy2t5LIsmZ3E9osAJjERwilu0ZzApUSU1lWt5jqDoNkFS3kO62IiaX49wD
- 2hXm9/9Q2XEhS3khEX/EQrG4yMl+61CLIJPw1oIHqXXRW+5U6xc/nMKc1warGRkgPMg==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wmlLGznqE40t for <buildroot@buildroot.org>;
+ Sun, 11 Oct 2026 13:02:12 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 741074002B
+Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791723732;
+ b=TfLjd1iJMStSxEfwZN5zMmNubj/JDkBWQKJX9QhwZ4u/patYvN4h33rPrsbCRa/NPgit
+ ATDZGYDAHOslEsYak0K+dUuS7UTpAhLfRrhjYGKXRg/Gxs/Us06zptd+2Bq48eX4cSwxT
+ bptvWi2E3MZpJyJh6cARN0WuEzFx7jWh1lMFecdHu/oF4TUjjfdhkhredhJtu7gpsaVFZ
+ svtwjQ1of+Y31rs0yoWdz+KMutFgIvh2lCWhRsFUKQF0PWLlXC4bYLBnGOkhcLsAQvkNy
+ UGhMM+J/fvYjGhvpTNJHfv29UoIOgZrcLDJnYbhqckQ/LwYYiSLAt4YkvIQdy50Rx7w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791723717;
+ c=relaxed/relaxed; t=1791723732;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=RC43+ccXOQO6Oa3XT5MoZtFOQfQWdDcT1A9ynKKAZms=;
- b=Wow9fq9VV0jj6PEalnTTYRGyNhOqXpyXgLNfqkaICbZjWPB8Esy7xy3NHfOxRtt4kM+k
- e5QVZSPhvlcPEGSHmrEz3rSc3W5ckBdZfnS7DV5MPgPJJk9Ihj6alH//+75q1+uaGao4N
- 2gGLdSBFuykFD31OC7HyjaMi6pI98twZsis180ZBF3q2RH9zGb4RMY4aRSKCNb0SN3Vzv
- 1o4WZizQ9zVNXAtfHBhqDbP4e97m+algVJQUjMlEtW7+3R/z6XO6FrUwb+CarHTE6iDry
- PmFZByW7zGMNv61XkjySi9m9cor+8wkAqx1Ki/9i2AhkGWvAM60r7W82SNjhmvSnhfw==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ bh=Ut/pk0gcY4RnO2BEwl0uS8lJrnhv6IpoIDTNG+ESVi8=;
+ b=nquu07OQ64FpvAurW0QHVe3usZ2RPaerxDmSG7+fdWrPNML0x9eHW8Y/xXYs9U24h8VO
+ v6K6WmikBIfVdPPesjL3LS/4nYi9vCd4xA4shFI1cnTKBpVOaCfyxm3V5hlF7k2iHauKk
+ zFvFhkJo6VeTLUNnSFUS+W10yTUPzvBRc1eB93bzQ/PNjIIIODH8BRlbGySgDJbgUG8Gr
+ KrmHaVY9ib+ElL08Vr1bAYwc49wTwMG+nC30wpmwfNb8WS10MGyMAkwlLqTmNUMWzvfbD
+ gVE3zwp0didkbfi4fcNebdEXgezZHY/CeYPMJ7rEQeHb9K2vtEUKtGFUom3jZzAxnVA==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  dmarc=pass header.from=kuhls.net;
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=sswGfdho; 
+ header.s=kas202605290044 header.b=aX2MPacg; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
+Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=sswGfdho
+Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=aX2MPacg
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 842916060C
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:01:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 741074002B
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:02:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1791723660;
- bh=RC43+ccXOQO6Oa3XT5MoZtFOQfQWdDcT1A9ynKKAZms=;
+ s=kas202605290044; t=1791723661;
+ bh=Ut/pk0gcY4RnO2BEwl0uS8lJrnhv6IpoIDTNG+ESVi8=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=sswGfdhohnkH9GBy+D/IwfHBCYsuulrkVONpGeNxViOs5iX3XQJ4mzehtah1YC8Vf
- L8+j/9dhmy+HvgxuapZae52dI74kWsdubMABeJ38NMOAm0Z+Tp8IEBRBX+eS2i0ygq
- ryYSLkZBKtjufV85RMnNH91deg8h6a6QlK+waSWTt6ktdQN4JxSw7TGkXv4gnh8531
- s6GeNzmV02wksSkqTB00v4qf+m9AzaQELw5+JHLojUtOoHqaUvHVYeacKDoQKX8wNA
- Uhs9wL/DpFVR9OjrweFeqAvyseYo5hm/vJ6u+Ams4hr68+opYOchHBalk1EhO9ufV9
- OIsMhuG4JNLKA==
+ b=aX2MPacg6N42OZhOqIzmJ46Xo/9GJgXLzRjbl3gAlrT6HopQbg8BTqSDvPS+PNLne
+ PLez2CMjJ801Wh+l4Ut66/0fVfRlGV72Ki7MWGZn7uPYEbPexyX9Yb3pdca5JAFCBf
+ DGzSJcsV0x6Zpwqh5C6Bnx8AbX2wKL3CwcpU8edqA44ohzbnqs7DGC1g00ZrVFfq7k
+ U2pop4e33exb+dmCwbXS1cYovrsZwPDP3MLC0e3sCJmNA75ngSOjDC1K5soUMEowbK
+ qch3C//x2ojiIfr1Oyx2a1yATjsqY5ygFlKBDzFbRArI6NncVc55+re7r/yjG8ehaO
+ FUl49Kx86wwOQ==
 X-KAS-Sym: v3:f51bdf72230551df:Ox5mmHqwgIvMyI1QgKEa7Ro2UqoiVPYwa1ib8hnsjjQqD
  25s8M2vwFrIHsd3K5yBRCNR9KcmhbTBGk0Z/UIeFpf8wsnVNojbXdjCN1xVotleGBWWjjzHBgEE
  74kL4L+STMwD/l3tPdkNjVc2aEcTg5E+9kq3JIuVVgKZUkyGnD/Kyv1FD6YSp7FcFjV40N/5gBQ
  c1a8pSNeJlBzzKSDlvrm7tStdZZURMMjpShUwTVAm3ujJrgLAxVichT90dl6Ye+LoRN+5NYuoCq
  FrxKp8YCAl4Fk1rds2RrRz+55Ma6FGhELkZkdxRcDOeNbj/YZtgaek8wOz/3DQCuSXG5FAKA==:
- R1/kyEWF67cuLjmmpwuvfPmse5LhtGa51BGdZVsY2/YxMNrtBVEz4EgZIdvzELzCDTfWG4XlARC
- P4M0VQ8+f5v6eTGb/UWVYnkqvzWPfMkl8FOjsnbA/wkjDZsGeOH/udcyhIoYZub7ZLqwDKtUz81
- mZ8bQLc5hBLltaDlGfr/bLA+qUbFA4vHdKZpgL81lOgVhrJ94KFRaD/cX1p8Me3EoPN+KyvAtkG
- 0FI8lpFR9eW6O+yOxh7TYaPepcii3ITBjdb90rl2Vg6L1zw4LDYpvSU60mbV9ta9guEOuQ1B43y
- l7sUSsh7xo5sCWl5qGb1MZuf8hWs3OSqAgNgAmRgvSEIaMM/mOiWrQgDtwBSgFWZAIRyBgV368S
- bbN9smt7SZ7hVD1gqwafxG+akb/CTd7+EQynvWT2NmWCqyzkauYBNeKfUOFQts+0WD/n6uJ/56A
- OvlIAo8lgPvnUh7XoTgaH17jYEqk0z915xCCvcPYX8+/t3HJDyiGzdxQZDPu3juUcO5OwylkNui
- qroRZb6hGSHY8TkbHMtmFMeIOoOOAnRcuUkKx/OukRwtoXTJFStmqgB2F2/eoL0r+NEMyOd0mpa
- ArvmZB3W+Xbu5qWGrjqJtoRahjcw/O/EW91Q8QuApPp2WHQ=
+ noOGQcXIJZWu4rlKIHdRN1BObtpvvj2Ip0IBb0wXPCxq9a5Bk19pbeZofW+cCqLaH94jO/ePJZr
+ Avx5SvqKaApykv7zEoDllrg+JrC/yNgvIcB6Awd1Fj3Etl0m7jO7PV1m2849qJJuEzrf4eTji5w
+ yipJbc7951KRSu7esq3S8MQ6er7CwZXNULs0frikwBHcABQiiwAEDd8UucYdDYb8kH4QqptUSy8
+ kcx++oq1geOCEgCgCtnWpCQ3Du/OSEmfBknw3U9VIc5pP6SHAl2WlCKbho3omQXzcQotivou6Zn
+ XcBkRos38tPMb4pMWhQXS2N9zH4lnkn2dFPawJz6YzX8ccMiZt8C8C1IapXWKORDmHW+r1z8gEX
+ jrpyo30moLFlqvMCepHqK5U9Sk+Rl3O/58MMVK9+6SYXg+2N6cRjpqxbath8JnS4oWO7BTHdlul
+ uu/snAI8BcAUXLF7Cb3Ij0lWtVmGobujm4SCv2Ly/l5+37ELDrbq/eb5d+g9Wx5PWqdhwqaVk6A
+ PmEWChOoxwUaEFiSmUAArEu36b4cclienCPzj1RZEJ+jvbSh20gLDKtPaleK5ESQe16XyebpVSm
+ pqTuI8vCLHqfzl1jodDkolFBGO43sk0i2lHijtNsoAbAt3k=
 Received: from fli4l.lan.fli4l (p5b3a0ea9.dip0.t-ipconnect.de [91.58.14.169])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 90115A4C5849;
- Sun, 11 Oct 2026 15:01:00 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 1292DA4C584B;
+ Sun, 11 Oct 2026 15:01:01 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:52426)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xFtAi-000000007Fz-1mhV;
+ (envelope-from <bernd@kuhls.net>) id 1xFtAi-000000007Fz-3qjr;
  Sun, 11 Oct 2026 13:01:00 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fabrice.fontaine@orange.com>
-Date: Sun, 11 Oct 2026 15:00:09 +0200
-Message-ID: <20261011130058.3443432-5-bernd@kuhls.net>
+Date: Sun, 11 Oct 2026 15:00:11 +0200
+Message-ID: <20261011130058.3443432-7-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261011130058.3443432-1-bernd@kuhls.net>
 References: <20261011130058.3443432-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: -
-Subject: [Buildroot] [PATCH v9 04/52] package/domoticz: bump version to
- 2026.3
+X-Spamd-Bar: /
+Subject: [Buildroot] [PATCH v9 06/52] package/boost: add new charconv and
+ cobalt library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -159,148 +158,95 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Added new dependency jwt-cpp needed since 2025.1:
-https://github.com/domoticz/domoticz/commit/b30d9e9436ad428a2cbfd1fbb273461bdbf50a82
+From: Michael Nosthoff <buildroot@heine.tech>
 
-Added _EXTRA_DOWNLOAD for libwebem after its split from domoticz:
-https://github.com/domoticz/domoticz/commit/7de4834e9959e8a9a21a2b82bb7700ea5af6e618
-to avoid fetching git submodules. Use version number from upstream repo:
-https://github.com/domoticz/domoticz/tree/2026.3/extern
-
-Raised minimum gcc version because libwebem depends on c++17:
-https://github.com/domoticz/libwebem/blob/master/README.md
-
-Removed configure option USE_BUILTIN_MQTT due to its upstream removal:
-https://github.com/domoticz/domoticz/commit/be95eec094bf524c1ab011eebcd797d3b19b17fc
-
-Link to libatomic to fix a build error
-
-output/per-package/domoticz/host/opt/ext-toolchain/bin/../lib/gcc/arc-buildroot-linux-uclibc/15.3.0/../../../../arc-buildroot-linux-uclibc/bin/ld:
- CMakeFiles/domoticz.dir/hardware/Matter.cpp.o:
- undefined reference to symbol '__atomic_load_8@@LIBATOMIC_1.0'
-
-detected by the Gitlab pipelines which is introduced by upstream
-commit
-https://github.com/domoticz/domoticz/commit/ec5488a7df963af4b260a92bfecea53edc20b136
-that added hardware/Matter.cpp in version 2026.2.
-
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Cc: Fabrice Fontaine <fabrice.fontaine@orange.com>
+Cc: Michael Nosthoff <buildroot@heine.tech>
+Cc: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/domoticz/Config.in     |  7 ++++---
- package/domoticz/domoticz.hash |  3 ++-
- package/domoticz/domoticz.mk   | 27 +++++++++++++++++++++++----
- 3 files changed, 29 insertions(+), 8 deletions(-)
+ package/boost/Config.in | 29 +++++++++++++++++++++++++++++
+ package/boost/boost.mk  |  6 +++++-
+ 2 files changed, 34 insertions(+), 1 deletion(-)
 
-diff --git a/package/domoticz/Config.in b/package/domoticz/Config.in
-index a0e69a7601..2af63baecf 100644
---- a/package/domoticz/Config.in
-+++ b/package/domoticz/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_DOMOTICZ
- 	bool "domoticz"
- 	depends on BR2_USE_MMU # fork()
- 	depends on !BR2_STATIC_LIBS
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # C++14
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
- 	# pthread_condattr_setclock
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # mosquitto
- 	depends on BR2_INSTALL_LIBSTDCPP
-@@ -17,6 +17,7 @@ config BR2_PACKAGE_DOMOTICZ
- 	select BR2_PACKAGE_BOOST_THREAD
- 	select BR2_PACKAGE_CEREAL
- 	select BR2_PACKAGE_JSONCPP
-+	select BR2_PACKAGE_JWT_CPP
- 	select BR2_PACKAGE_LIBCURL
- 	select BR2_PACKAGE_MINIZIP_ZLIB
- 	select BR2_PACKAGE_MOSQUITTO
-@@ -32,11 +33,11 @@ config BR2_PACKAGE_DOMOTICZ
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index da213dd2d3..45b98ec0a2 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -22,11 +22,40 @@ config BR2_PACKAGE_BOOST_ATOMIC
+ 	help
+ 	  C++11-style atomic<>.
  
- 	  http://domoticz.com
- 
--comment "domoticz needs lua 5.3 and a toolchain w/ C++, gcc >= 6, NPTL, wchar, dynamic library"
-+comment "domoticz needs lua 5.3 and a toolchain w/ C++, gcc >= 7, NPTL, wchar, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_6 || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
- 		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
- 		!BR2_PACKAGE_LUA_5_3
-diff --git a/package/domoticz/domoticz.hash b/package/domoticz/domoticz.hash
-index ae86a67b79..fc3904ade7 100644
---- a/package/domoticz/domoticz.hash
-+++ b/package/domoticz/domoticz.hash
-@@ -1,3 +1,4 @@
- # Locally computed:
--sha256  d87113d7cacd0b52b9126fcc1ef24e140a4f7042d5bc6262e86e4b4752f5cf38  domoticz-2024.4.tar.gz
-+sha256  10053191b4f6becdf244d2a416b9e655c91d357b51dd8280832c6e36f7d5d5c7  domoticz-2026.3.tar.gz
-+sha256  937e31bfb4b414bb33e70cad1403afd023dfff6cebba3213ec62a9c91525dcab  libwebem-9126af0ce3456c24b936dfb20d1b5a8bdb797104.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  License.txt
-diff --git a/package/domoticz/domoticz.mk b/package/domoticz/domoticz.mk
-index 95d3335adb..5387076b97 100644
---- a/package/domoticz/domoticz.mk
-+++ b/package/domoticz/domoticz.mk
-@@ -4,16 +4,30 @@
- #
- ################################################################################
- 
--DOMOTICZ_VERSION = 2024.4
-+DOMOTICZ_VERSION = 2026.3
- DOMOTICZ_SITE = $(call github,domoticz,domoticz,$(DOMOTICZ_VERSION))
- DOMOTICZ_LICENSE = GPL-3.0
- DOMOTICZ_LICENSE_FILES = License.txt
- DOMOTICZ_CPE_ID_VENDOR = domoticz
++config BR2_PACKAGE_BOOST_CHARCONV
++	bool "boost-charconv"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
++	help
++	  An Implementation of <charconv> in C++11.
 +
-+DOMOTICZ_LIBWEBEM_VERSION = 9126af0ce3456c24b936dfb20d1b5a8bdb797104
-+DOMOTICZ_EXTRA_DOWNLOADS = \
-+	$(call github,domoticz,libwebem,$(DOMOTICZ_LIBWEBEM_VERSION))/libwebem-$(DOMOTICZ_LIBWEBEM_VERSION).tar.gz
++comment "boost-charconv needs a toolchain w/ C++11, gcc>=4.9"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
 +
-+define DOMOTICZ_INSTALL_SUBPROJECTS
-+	rm -rf $(@D)/extern/libwebem
-+	mkdir -p $(@D)/extern/libwebem
-+	$(TAR) --strip-components=1 -C $(@D)/extern/libwebem \
-+		-xf $(DOMOTICZ_DL_DIR)/libwebem-$(DOMOTICZ_LIBWEBEM_VERSION).tar.gz
-+endef
-+DOMOTICZ_POST_EXTRACT_HOOKS += DOMOTICZ_INSTALL_SUBPROJECTS
+ config BR2_PACKAGE_BOOST_CHRONO
+ 	bool "boost-chrono"
+ 	help
+ 	  Useful time utilities. C++11.
+ 
++config BR2_PACKAGE_BOOST_COBALT
++	bool "boost-cobalt"
++	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # C++20
++	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-context
++	select BR2_PACKAGE_BOOST_CONTEXT
++	select BR2_PACKAGE_BOOST_CONTAINER
++	select BR2_PACKAGE_BOOST_DATE_TIME
++	select BR2_PACKAGE_BOOST_EXCEPTION
++	help
++	  Basic algorithms and types for C++20 coroutines.
 +
- DOMOTICZ_DEPENDENCIES = \
- 	boost \
- 	cereal \
- 	host-pkgconf \
- 	jsoncpp \
-+	jwt-cpp \
- 	libcurl \
- 	lua \
- 	minizip-zlib \
-@@ -25,6 +39,11 @@ DOMOTICZ_DEPENDENCIES = \
- # Disable precompiled header as it needs cmake >= 3.16
- DOMOTICZ_CONF_OPTS = -DUSE_PRECOMPILED_HEADER=OFF
- 
-+# Uses __atomic_load_8
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+DOMOTICZ_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
-+endif
++comment "boost-cobalt needs a toolchain w/ C++20, gcc>=10"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_10
 +
- # Due to the dependency on mosquitto, domoticz depends on
- # !BR2_STATIC_LIBS so set USE_STATIC_BOOST and USE_OPENSSL_STATIC to OFF
- DOMOTICZ_CONF_OPTS += \
-@@ -32,12 +51,12 @@ DOMOTICZ_CONF_OPTS += \
- 	-DUSE_OPENSSL_STATIC=OFF
++comment "boost-cobalt needs a toolchain not affected by GCC bug 64735"
++	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
++
++
+ config BR2_PACKAGE_BOOST_CONTAINER
+ 	bool "boost-container"
+ 	help
+diff --git a/package/boost/boost.mk b/package/boost/boost.mk
+index ed63a608ac..87a576f277 100644
+--- a/package/boost/boost.mk
++++ b/package/boost/boost.mk
+@@ -40,7 +40,9 @@ endif
+ HOST_BOOST_FLAGS = --without-icu --with-toolset=gcc \
+ 	--without-libraries=$(subst $(space),$(comma),\
+ 	atomic \
++	charconv \
+ 	chrono \
++	cobalt \
+ 	container \
+ 	context \
+ 	contract \
+@@ -68,7 +70,7 @@ HOST_BOOST_FLAGS = --without-icu --with-toolset=gcc \
+ 	timer \
+ 	type_erasure \
+ 	url \
+-	wave\
++	wave \
+ 	)
  
- # Do not use any built-in libraries which are enabled by default for
--# jsoncpp, fmt, minizip, sqlite and mqtt
-+# jsoncpp, jwt-cpp, minizip and sqlite
- DOMOTICZ_CONF_OPTS += \
- 	-DUSE_BUILTIN_JSONCPP=OFF \
-+	-DUSE_BUILTIN_JWTCPP=OFF \
- 	-DUSE_BUILTIN_MINIZIP=OFF \
--	-DUSE_BUILTIN_SQLITE=OFF \
--	-DUSE_BUILTIN_MQTT=OFF
-+	-DUSE_BUILTIN_SQLITE=OFF
+ HOST_BOOST_OPTS += toolset=gcc threading=multi \
+@@ -120,7 +122,9 @@ BOOST_DEPENDENCIES += $(if $(BR2_ENABLE_LOCALE),,libiconv)
+ endif
  
- ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
- DOMOTICZ_DEPENDENCIES += libexecinfo
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_ATOMIC),,atomic)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHARCONV),,charconv)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
++BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_COBALT),,cobalt)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTAINER),,container)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTEXT),,context)
+ BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CONTRACT),,contract)
 -- 
 2.47.3
 
