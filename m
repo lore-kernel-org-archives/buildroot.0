@@ -1,107 +1,115 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 693A8CA9EBD
-	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 16:21:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DFD2BCA9EBD
+	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 16:45:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 92FEE40620;
-	Sun, 11 Oct 2026 16:21:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3752680DBA;
+	Sun, 11 Oct 2026 16:45:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AJkC-LCHwH1T; Sun, 11 Oct 2026 16:21:56 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 9B76B40613
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791735716;
-	b=ZysKJxvCdxQzCPfNSD81+xAAkJj6XH4sP66SVT09N3bTGItzTWtSjSAJwMDMfzdbPPmV
-	 fg3iVx791RJyQIVJepGP6Aw9/hUazhwPe4OlTARh9Oc3iUu/B06Sm4/92iM3jKqIByUHY
-	 l+n1EBSXu2Wog3YLL2dTBI5rgvHyrjnA01Q0amVxdnMEWqIxYocRgvz+vNDOzjXHrKeJy
-	 hNCDje00NIXywxOkm2NVk8yBv3mojlJdlJiGAyYKkMw/whocZYCUV0kOj/bcnCySdvboz
-	 6ASjqQqJv7tvKriNMGkABLbLsgrBhYktk9JEmXJFSsvW6kvGiHgn8wuucuIZ8lIosWw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eff0NBsuXk6Z; Sun, 11 Oct 2026 16:45:28 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org D322480D59
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791737128;
+	b=QVwtCPWMX3/AL+W5gLXigG1oAH9s5sTAspAu8MsWp/s46Fxco12ycxwcRJwFKlYcceyX
+	 xNRCu0w7CRfHmgWGgKqRB/XPQPaSGsfsBPFwt6CK665zo7V6Ln5163oRqTsPMH8M2x0KA
+	 GzNYHhmm53BW67XBHH/zjE8VulInIJsj0g9TyUrZiCqBuLMfyk2RIzgqQkBOjjQzHG0EH
+	 lBk+Qm3Mx9vYdQS/qUc4qDsdKiSZUiGsRITlh+nxasNHGO7WCsD+PKCoPP/P3FEIznDYL
+	 G4q7j9A+EwjvmCXANGhj4rJixzch5CE7SmGqSedFUobYwOpr4yWdPC5GW8N8qRCWkVA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791735716;
+	c=relaxed/relaxed; t=1791737128;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:From:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 Errors-To:Sender;
-	bh=SYIQu0NcRoLjQVbVGKwueGBXI9vmWVARx4XyzQENn0c=;
-	b=rVzWEogYYeJL9vEHhs+9/ZYrqu2ZZVufWOzzDKSOnqgeir5flhX4BWt1x6KueCpBKlWq
-	 VFFpBR+oW36QFZPHJj3frys/PIZ+xh/K9iUDjg8rsIisF8aQU+gdBMf3Ft0eL8hihdmrN
-	 tFGG3IDgSP95oKlbuTOBgoYEZV0NBZmR88FJ5hT0FKnXCVF4puDc5rrbVBaJ2M05/9dwZ
-	 XU1wPWOMIGUnRYbMiInWDVp2Sc4foH85WHPR12qX7DqFnvaJYG4z4dbqXddKjekizXIph
-	 6wWSpKTDVROvy3cGYajhMKtLR+rN0Yu47v9LgIa7UVz99GfPYfoVyW/IDicdUOqqyHw==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:To:
+	 Cc:In-Reply-To:References:User-Agent:Date:Message-ID:MIME-Version:
+	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
+	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=ClA0T94JE2LZLbVCe0gyr2hr8Xg/tc3P7fu5hhl6L2M=;
+	b=ecl6H0kv+FKuQ0GPMJvW8+Fxd6vYbnYLSYdjGlM53/Hb/CE0/5mD/0N85bafPGpnjWIf
+	 NzbA3eD7n5fQU9ZThXCEBfIxfZoixv6h0Mwb7jok1+5UiMNX0oNMaScMXjDHnp9zkRUBC
+	 AhMIyyUPnsrbaCZhZ/rjsusT95YtmdIHljB1CWFdgn3THS5UEl9gXn/lbquH0+gTUKEjT
+	 a6e6DkUhlBOUwTALrWeitnZfyfhdz3nLPzvlrQ0VAJF2siC9QLAQDCDbTAW2tZbTejbjb
+	 wGqdmszwn6KMollsnhICafCqWguGmYXKGVe1gAGiUbe0oQ052pPNj60moGj3+D5wAkw==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791735716;
-	bh=SYIQu0NcRoLjQVbVGKwueGBXI9vmWVARx4XyzQENn0c=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=mHXG5smfF9ddEcjxSc9mF7/PV2uvoy8jazHmPX9xwioDgxIFYRDB07Th+EBBwxpWQ
-	 C/5t6jiIIzhROdqOeyXAU4ihJBE3C3KNDaRN2TgxoYC6vIgj4v+y/Ff0cNmvPDuHXJ
-	 47fvnpYudkEVKjvfOHNpYHx3zvXlipb3qTSGDPC8C1HPTbSwabcMbI3Dld65wPy5u3
-	 Fo71RC1b321B3Sh+etyZa5VEjjlk2T3HGTYeqC1n26mrPp1D+77EMPRTJYszcCbtOk
-	 UWzb9rv6oeFnbYT/+EkKLvzrPK7ANizPU0M/Kqg6C72/7kg+zyQfq5owwnBX8aDtGR
-	 wIAfagrNmBHjQ==
+	s=default; t=1791737127;
+	bh=ClA0T94JE2LZLbVCe0gyr2hr8Xg/tc3P7fu5hhl6L2M=;
+	h=To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=lJumcPsnw8n31xcWlsP21O21fmyNkCIJKYoK+klrUkUYKPOuU196ALfOMheLKuOZa
+	 Q9dJ9Jj5e2IvngInuESxoKepg0TvKOSYneifAEOqAq+J+b6WFW2D11o5NSBR55RYe3
+	 75Y9Tp+249KImXzY0hbL4lVU8cfKa+NOzN4ncgaLIQNVaeYzXpIS8YHoArIOifWr7d
+	 v5TlLP4IjR0L4PESrVvGK91YrIkyF8uY2qDgJbCgX8VfqmvQLYeR8N0jFMihJdjlRg
+	 eCeY7OAWlnSH/jYNAAFsimZg26+Jj3fu0QteQyqEBOyQlDQn5b3UE0Mn1BUf3XuBzN
+	 JPiMep2nyNTSw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9B76B40613;
-	Sun, 11 Oct 2026 16:21:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 552AB2E0
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 16:21:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D322480D59;
+	Sun, 11 Oct 2026 16:45:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D5E36111
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 16:45:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 44BC840061
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 16:21:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C80AD80D59
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 16:45:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R8ki7KIpIBRs for <buildroot@buildroot.org>;
- Sun, 11 Oct 2026 16:21:53 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 4CBB34002B
-Authentication-Results: smtp2.osuosl.org;
- arc=none smtp.remote-ip=140.211.167.122
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791735713;
- b=YN2abtpQCCK5W6jWWCvVyIYgy2e7ZgOGiWBgWy/zxvQQKj7PxfJCZHsJd+DwS/+d28EH
- MlVw+9wpWEGIaDfibzr+FXcoQBrpm/NmJX4Gts1yke5eWf8S8vpbHdOzNCi8OlhjubxK0
- sIxl2FoGatdebKs4y9u6su7FPM/b1ZjhpRmH5qin7xDd3XjT6eJQG5Lom3anidiE2cE0J
- fmMM3kno91g/PaY0ECVM82ZwJd7BiNpe148O8sAZN1789p9dFljvCE6IokuZPDEkxRlEf
- wmU8LuElahRR2LEFIp6uwGkb5Ni6WLwCOoy641XaTJPPn7c000nAKJVytRlWIIZAFpg==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id S_wRVO1nFPEZ for <buildroot@buildroot.org>;
+ Sun, 11 Oct 2026 16:45:24 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 572C180D47
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791737124;
+ b=VNyCWrerJbaZhQXWnuJt76EK+41F1me2AbHaf072JI5LPOAUU3HqiP9mYUbRpHhM90yR
+ sC5rBe+6Jv8yHRQaC0HlVEhZPXsCfCENDXUBIqAgOSLezina+jQbT3TCZpJXnT60k3Xcr
+ 1PU3Oz4dE0Bvt4Rcl9OpaSsqnGMcQp6qyIXUAhW4gDueWkBMq9pk5WSW9i80+I8Fd0pDl
+ +4c90RxDwqCIX+mFSSx3D5cWG0m/MeMk1v7a58RU4DpLvYKyTcOgOGUUhbSmHmR+PlzFV
+ cpPnuqTM0iWpNZa4WPFEMSPiuEN+Nnm8BqpRjGuiMFsZ1Yxfrt3U5Exl/rBJDgnlEXQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791735713;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=vJ5hWf8hsGu4JrGACgDiwa3K+wg0dWByXpJseycGbqg=;
- b=klWZ3mBTOSzDhaN1ZuP+6TEaHgI2ZUYEWLmZ126qxb21jmiPlUdRWGxbY3Y5liPwouNk
- Jlh5c624JMuhqMz6/rzL6v37t09FBFXlf3TnhZ+TuWeGq70VG7qMi1VWOtjqdBxWM03f6
- YKN9IjkTrwAVU2vOBq8OAkFEAALdCEOW+r+8CvL5H17bNJfmNUaEwwVeF/Xv+HZEAzczN
- dmKqqnOHtp9LgfzLC9UNh1gAf0PLOD/QS2A4wwKufAJTMbezPwkfN9dunWj6icfbznqQI
- /PRd6y6Rbn35ERuD74EGoWWb/ypiumWXota698A09VcH89kAG3NZO2QqBBNMHMwBF2w==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4CBB34002B
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 16:21:53 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D8D3594EB4; Sun, 11 Oct 2026 16:20:33 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 11 Oct 2026 18:20:53 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 60f60962a6c60fff37d5b754a6331e8b85ebda77
-X-Git-Newrev: 6d7636eb72822d244ddd994af61461910d1155b4
-X-Patchwork-Hint: ignore
-Message-Id: <20261011162033.D8D3594EB4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ifenslave: remove package
+ c=relaxed/relaxed; t=1791737124;
+ h=Received-SPF:Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:
+ References:User-Agent:Date:Message-ID:MIME-Version:Content-Type;
+ bh=4scEWgW+QIwVwAj7EP6TBmHtPZNVrMKpvEZf6eBQqUE=;
+ b=MYTnQMYx1TmkZQ3aBAJdcD40YpFwkuqINaD4ySbx/JmChtQhG2uEcnn5at1rgKGnRh0g
+ LGK1HKEOT1v/aCdUvRRdM7Kn3xf4d6f8Dviryemcy/8kVKbuQ10h4QyCjfxBTxpwKc8jt
+ ipOBI+4wc7t3dtOWusV08e1AEMSFTPaI8b2g3pNtlfJIXJeGBvp+yNyI473yafg0rXrZ8
+ 4h1wAoW0wOw1r2taNHHIEil+i2SNAkciLtNLh4f6m6idixuNx35KVWmowoz2qTUtz3Oyw
+ q8tWGJta+7i4PLEjqmOandWszLnTeIhUz95lcOcaf4INHiyg8s2dae39y+QIrnGHc4g==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ dmarc=pass header.from=tkos.co.il;
+ dkim=pass header.d=tkos.co.il header.i=@tkos.co.il header.a=rsa-sha256
+ header.s=default header.b=w1BzFytI; 
+ arc=none smtp.remote-ip=84.110.109.230
+Received-SPF: Permerror (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
+ helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
+Received: from mail.tkos.co.il (wiki.tkos.co.il [84.110.109.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 572C180D47
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 16:45:22 +0000 (UTC)
+Received: from localhost (unknown [10.0.8.2])
+ by mail.tkos.co.il (Postfix) with ESMTP id 2B01F44045F;
+ Sun, 11 Oct 2026 19:44:10 +0300 (IDT)
+To: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Cc: Titouan Christophe <titouan.christophe@mind.be>,  ju.o@free.fr,
+ thomas.petazzoni@bootlin.com,  arnout@rnout.be,  git@jdknight.me,
+ thomas.perale@mind.be
+In-Reply-To: <20261010201508.963412-4-titouan.christophe@mind.be> (Titouan
+ Christophe via buildroot's message of "Sat, 10 Oct 2026 22:15:08
+ +0200")
+References: <20261010201508.963412-1-titouan.christophe@mind.be>
+ <20261010201508.963412-4-titouan.christophe@mind.be>
+User-Agent: mu4e 1.14.2; emacs 30.2
+Date: Sun, 11 Oct 2026 19:45:17 +0300
+Message-ID: <877bjo425e.fsf@tarshish>
+MIME-Version: 1.0
+Subject: Re: [Buildroot] [PATCH 3/3] configs: update defconfigs with custom
+ versions to BR2_LINUX_KERNEL_LATEST_X_Y
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,129 +121,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6d7636eb72822d244ddd994af61461910d1155b4
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+Hi Titouan,
 
-ifenslave has not received any recent update, has no Buildroot DEVELOPER
-and its upstream NEWS [1] states the following:
+On Sat, Oct 10 2026, Titouan Christophe via buildroot wrote:
+> Update all defconfigs that are using a custom Linux version based on a
+> longterm supported Linux version so they use the newly introduced symbols.
 
-  This version of the ifenslave package no longer provides /sbin/ifenslave. The
-  /sbin/ip command from the iproute2 package supports creating bonding masters
-  and enslaving other interfaces to it.
+This is a significant policy change for Buildroot. The configs/
+directory is meant to carry configurations that are "known to work",
+according to adding-board-support section in Buildroot manual
+(docs/manual/adding-board-support.adoc).
 
-Its feature is available either in iproute or in Busybox, so we can
-simply remove it from Buildroot.
+Automatic update of the kernel component without actual hardware test
+risks introducing regressions that make the system unbootable.
 
-[1] https://salsa.debian.org/debian/ifenslave/-/blob/main/debian/NEWS
+For this reason adding-board-support section also says:
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- Config.in.legacy                 |  7 +++++++
- package/Config.in                |  1 -
- package/busybox/busybox.mk       |  1 -
- package/ifenslave/Config.in      |  7 -------
- package/ifenslave/ifenslave.hash |  5 -----
- package/ifenslave/ifenslave.mk   | 19 -------------------
- 6 files changed, 7 insertions(+), 33 deletions(-)
+> Always use fixed versions or commit hashes for the different
+> components, not the "latest" version.
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 97824f701f..db320ea981 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2026.11"
- 
-+config BR2_PACKAGE_IFENSLAVE
-+	bool "ifenslave"
-+	select BR2_LEGACY
-+	help
-+	  ifenslave has been removed. Its feature is otherwise
-+	  available from iproute2 or as a Busybox applet
-+
- config BR2_PACKAGE_SZIP
- 	bool "szip has been removed"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index ec29cc9459..2a85456034 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2501,7 +2501,6 @@ endif
- 	source "package/iana-assignments/Config.in"
- 	source "package/ibrdtn-tools/Config.in"
- 	source "package/ibrdtnd/Config.in"
--	source "package/ifenslave/Config.in"
- 	source "package/ifmetric/Config.in"
- 	source "package/ifplugd/Config.in"
- 	source "package/iftop/Config.in"
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index 855d553360..7bb40ee298 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -53,7 +53,6 @@ BUSYBOX_DEPENDENCIES = \
- 	$(if $(BR2_PACKAGE_GREP),grep) \
- 	$(if $(BR2_PACKAGE_GZIP),gzip) \
- 	$(if $(BR2_PACKAGE_I2C_TOOLS),i2c-tools) \
--	$(if $(BR2_PACKAGE_IFENSLAVE),ifenslave) \
- 	$(if $(BR2_PACKAGE_IFPLUGD),ifplugd) \
- 	$(if $(BR2_PACKAGE_IFUPDOWN),ifupdown) \
- 	$(if $(BR2_PACKAGE_IPCALC),ipcalc) \
-diff --git a/package/ifenslave/Config.in b/package/ifenslave/Config.in
-deleted file mode 100644
-index d28e0f7c29..0000000000
---- a/package/ifenslave/Config.in
-+++ /dev/null
-@@ -1,7 +0,0 @@
--config BR2_PACKAGE_IFENSLAVE
--	bool "ifenslave"
--	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
--	help
--	  Configure network interfaces for parallel routing (bonding)
--
--	  https://salsa.debian.org/debian/ifenslave
-diff --git a/package/ifenslave/ifenslave.hash b/package/ifenslave/ifenslave.hash
-deleted file mode 100644
-index 825f2d6f2a..0000000000
---- a/package/ifenslave/ifenslave.hash
-+++ /dev/null
-@@ -1,5 +0,0 @@
--# From http://snapshot.debian.org/archive/debian/20170102T091407Z/pool/main/i/ifenslave/ifenslave_2.9.dsc
--sha1  a17e88fa298ef337e872c8aa5d7a390921239d1a  ifenslave_2.9.tar.xz
--sha256  e5666c0b61347bd06f2394c16eca6895fcb5e5cc83d0a1c596a975274de5a3c9  ifenslave_2.9.tar.xz
--# Locally computed
--sha256  299e00f3afc0e6ea0685340df73ad444e58e6fe0229989ba0983f5f33e275c41  debian/copyright
-diff --git a/package/ifenslave/ifenslave.mk b/package/ifenslave/ifenslave.mk
-deleted file mode 100644
-index b51aa72051..0000000000
---- a/package/ifenslave/ifenslave.mk
-+++ /dev/null
-@@ -1,19 +0,0 @@
--################################################################################
--#
--# ifenslave
--#
--################################################################################
--
--IFENSLAVE_VERSION = 2.9
--IFENSLAVE_SOURCE = ifenslave_$(IFENSLAVE_VERSION).tar.xz
--IFENSLAVE_SITE = http://snapshot.debian.org/archive/debian/20170102T091407Z/pool/main/i/ifenslave
--IFENSLAVE_LICENSE = GPL-3.0+
--IFENSLAVE_LICENSE_FILES = debian/copyright
--
--# shell script, so nothing to build
--
--define IFENSLAVE_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/ifenslave $(TARGET_DIR)/sbin/ifenslave
--endef
--
--$(eval $(generic-package))
+If we intend to change this policy I think we should discuss the
+motivation on the list. In case such discussion did take place, this
+comment should reference that discussion. In any case, the manual should
+also update to reflect the current policy.
+
+baruch
+
+-- 
+                                                     ~. .~   Tk Open Systems
+=}------------------------------------------------ooO--U--Ooo------------{=
+   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
