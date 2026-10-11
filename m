@@ -1,142 +1,148 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44E62CA9EBD
-	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 13:01:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 513EDCA9EBD
+	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 13:01:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DD6FC40581;
-	Sun, 11 Oct 2026 13:01:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6015C60616;
+	Sun, 11 Oct 2026 13:01:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fdz-V1-wFrfS; Sun, 11 Oct 2026 13:01:08 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 81DDC40585
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791723668;
-	b=IjecwQfVrIK2cwsRfWkO9gCquRoBxrXC20WirATzUn6cYXn0FnLgP0Yd4lozo2X+S8w5
-	 bcuImMdw1Lat2WmCElel16uHJD9fdmw38OhhjB95rYWucNE/4iboBebLBHgPsczjRsV/a
-	 ayFIZCmBC+qe9E+sKgZZ/wRZxopKyHUVwCMW8DgRCCz9esKBuBZPAT0DqxZWg67WevVUT
-	 bkzN844my6e8AGOSpoKFZn+2ZKcIb9lMO7Ym/bGuj3HVYATDmmxtliizsEN4707D3meTF
-	 86tAILFIeaqDIIMqSTfkQUngJn21nOjxfpd3IhMovRWJqNTzq1CCJewcU5rRFsaskgQ==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BJe8QqviErcq; Sun, 11 Oct 2026 13:01:22 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org CDB006060B
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791723681;
+	b=e7mN0NOHGY7fSF5+CRJhPZCfvlp0/LYpv0IUx8bsy3bycobLISd65D63YzDBQ+4fl6jk
+	 BnDaKeouHU2MNx+4Dh2aL7LHEnX6AFgbkjluscnB3PmC82IYdXeaaBFJgNWMC64V597K+
+	 koLNYxEWEwr2dextcme7urYmmL3TotpZMpjO7ZIZ/3iaWtOf6Ry9rYXRMzLSww3QCdnbv
+	 eoj8O9oo2YYOX+sUED1jkcwxJS+Y5k1he7LlfarF7Tx/tZTMJZ/UHCLr+6PtCEL+P96t8
+	 1CoHeVWKY0kkFmfzL72TkR6ZNSbi3Y9cyM/YUnLN8W46a4eS2qpLnPIw6TbiT7k+B2A==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791723668;
+	c=relaxed/relaxed; t=1791723681;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Date:Message-ID:
-	 X-Mailer:MIME-Version:X-Spamd-Bar:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Content-Type:
+	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:Date:Message-ID:
+	 X-Mailer:In-Reply-To:References:MIME-Version:X-Spamd-Bar:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=diiygodyNMo6vdLYGb8SyYS/DO9sI+YGZcSioooNRUc=;
-	b=JAXwxz7TjBARSlGxTkyFfuH0r4TVVg9vYC0FH9YPGktWXeETPEn2IzUpmV00wExHWUwB
-	 +VHa2pUkP5FgOxuv6bgpQJOPde/QdstiAF9p2A0ppzbDwVkl8jJRluLl+JZekliVhMSAZ
-	 nvcWZgNcfZuFVTW7xBO578n3iPKAVBRDGMAddT4KLIE05zBh17sJGTtOLdDHQEzw9Gt8c
-	 c5UBEKkc7Y8Rfr68KDC7xVCSJwka9e9SCxTQA8+QggFWbBZKU++vTtvywiDFrZ39rOosF
-	 NM5VnwahTmZbJ/ZMbqDg7DbOSMAScjnDBYmxkDg8b7pvHfzkpV6mfFh0k4jbvDLmC0A==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=jR7VGcVsGAheU5PIFFvpHj2t9GG/XzbII0zORbJZ6c8=;
+	b=NOWuFLF4jJiP1F3KwzyhCPTBKvKPGWR8HaIng+MbXpOwWOELTFefMw+DyYsFeQyHK6Ca
+	 vBkf4sx0qUzbVPqYincUTLYKsSzEQLAxpAA8W6mS6EuBzjpkyGllsNYoZ9R5p6LkCa17H
+	 FOLtKMY0Bbt5r2KQlfWKoQnL/dBegOI7NvVQFqCipjw37/2FPpZzxipkc3WOdqUqgICoT
+	 rllzynuWpL8JAQdR0eMPG1uF953Q4I8+R9+kaHEEVxnidDeNErs7rZ0U0U6jynX71BpGf
+	 f3UnuUKaFh7qjwcRAgkZa9XOnPf9/xT2hqmf7baz5VdZC9tEdSysOCKV6F3L0u9pnow==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791723668;
-	bh=diiygodyNMo6vdLYGb8SyYS/DO9sI+YGZcSioooNRUc=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=MfJIaOyI12+u/pCQypkbLEIPsX1YPpir1o1v5KcKpl8wC0OenjTvnyb5QWMiVrOne
-	 i3JybndTH+NBPLuSr+dp7jx9Ze0iNRlKNJVBOidpWi6Y0xnItBuGl3uEmfOssGFdBl
-	 y4QUXtDPG8sn3lxK01SJzaJp8rQW6WNRdGgII6klSxdapJdh+DzPg11jAKVpw67VtS
-	 HW5HkoDkm9z9WKXNP0w/5Il8cpNcrwvTK6LJbzYn7fqxpgtTEXZ2OmLH7TNdYdhhJs
-	 Xgcz4Tbu1J0XXnRQk4tjF8k/O4/hiLjQU/EciHwrojirZwsWqCuuAt0xuDVoEOObCB
-	 yVMf/DmyPizPg==
+	s=default; t=1791723681;
+	bh=jR7VGcVsGAheU5PIFFvpHj2t9GG/XzbII0zORbJZ6c8=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=GShWV+sP3nvYjVguRIU+Ye7A+s3RIJRg9zuT9yXccI+HCKeOeviok9wVvlqeeQ8sk
+	 I1vSdsXr5Lw00gzQ018TvNEfFKQsv1sDPP/gVoxMM+g9eSsKZ06OBPutL91rlYbBrD
+	 n/49eE2epFViR8tJ3KIYsIk1y+xUXiszPnTpgvBtZ0JC3Z/Av+jjqjfqJT+0GGxZqZ
+	 VMUPeApnHdQklG1wriFxOS8TbgGeOCvOC0wgWIV95E8Yfelwxm6jT6IphrDWUC0fWw
+	 1SuWmF4RB0CAXoY2RiYFkl77rydQUEuv0y3leQIGuQtmwJkirgtk5HxPwD52nzYvcJ
+	 kIiOWdT47+0Dg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 81DDC40585;
-	Sun, 11 Oct 2026 13:01:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CDB006060B;
+	Sun, 11 Oct 2026 13:01:21 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id A6508111
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:01:07 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1A769111
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:01:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A26C880C84
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:01:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 002FA80C84
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:01:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Od_OocIZwEov for <buildroot@buildroot.org>;
- Sun, 11 Oct 2026 13:01:05 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 76EE680C7E
+ id jOSs0Quy3xRA for <buildroot@buildroot.org>;
+ Sun, 11 Oct 2026 13:01:19 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org D088380C7E
 Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791723665;
- b=cuvPYsUaS3WL8hJ/laiOdyRmHbgtelETzqbcvnHAsoE8O7rpYl0H8i5C7/d7dbnyhi50
- /GYwzKLUSF5e5MFAleATOJ9RrBcmBJE57J44nPkprykUHpX4HOjeHgOCACUzv/QskSczI
- g5sAzzscsYX5yFYrGk5iy5cbrMzJjzH847VQYNtWfBYabijv6ubNWDEi+h3aAsRKgjNOY
- KWmXHJpjCM8RyrJrMpPkZad5AizHp0rkRQC7g2IXf+6liRsw2umjkp2baOQhBr/BU+oSm
- KME/93st0tWCrthq0LhFPKkPhGa2U6o7Z+k4WLO1WhXDA26FAH8GNp5vhMWLkm/tXNg==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791723679;
+ b=Nm7XYlxEO9A9hkFhSCxG6jPTvRgNFzt/nNzj3b0Cp4ZWeduJW7fnRGAp0WEZ9q8G5o6x
+ KQj2slMXcLflGrl9K6em/M5WpV5N/P27VDaHJ7fbMzgxMu0xhCbfzVKwgYVLIQcg1+yDg
+ nuow+paUrjcnaK+q1ttO308eZn+mx5rvi9aplRfMM6Ps8dvXDecG0en4Na5xhCGFW3uEd
+ Cl8K3w1xmzkPlXZ63M9iQlWKM+sj20h6yFvF/vx7sBg6kE+ht1frG8/GTeT2AawNCb2Or
+ A2HlyB9NcijdK7nBH+ZyDSyiLKVNuxnG6YZ9t9yFxe1SfAJvdw24PSlK0teyLRkYKqw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791723665;
- h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:
- Subject:Date:Message-ID:X-Mailer:MIME-Version:Content-Type:
+ c=relaxed/relaxed; t=1791723679;
+ h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
+ Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=pfKC3P6dhjfTdzV0U7y9rHX3s0IqcxB4YEZf0SZvGks=;
- b=f8DteN8pBQdSjF5+KdDA4ZFxaGnUT/i3fJwUf0nOxRsdUjjiJEHGRlo9//Tb+U9RBZJX
- aYRyeGLvxaXrck2dU8HWWZvUjchAGnTgzhwAUlqkA/3ZhdLbv1aK99VtHXPKZbJUe3qkY
- 5+vaawtvKeqVwWFax9Ade+Wm4aZX+dcFgvAAxd37obSAHgBN8L/mFDmWUQkeALzQUgVPN
- i7LDENvhHKWroFd+iUckVb60uBPq+FQHxM2jU0EENKK0V9O+lYJWYdASeICdDS58XO8tC
- SYLId+hiqaOgvaZG2eh9f5OxDOxPgaGcG5xPDKGrUqiMQk6QzR6/buMkhG+2J/9Gx9Q==
+ bh=/tEb1odY2MhZTFTiesMjT/D3EI6T3+mIQ05Q4Vx4rlQ=;
+ b=TZojhsBfKlxi3/04eRcQgu3rFoQZPscqQDTOlzFIUN98hFCvHP9A0FImEM0s2fum2weF
+ OVQ+JXpds836Kn8g1SE0Qu9+46srYpI8EZWpWVDvgop3c7p/9EzttAwFbo5JHLsF60T/Z
+ c41tEjU2y4/HbMiRE94I8vK/B4IHj3XCjamoSES5M6f9udXagD1CBlUYb7MtAnpKee5Ct
+ PupgE+fh5ZPCc4Zqv5xtJ2k0dPI7hRLKqCkwN2an32YNEUZbEbOtDCFlKgpG7b2l1Raht
+ V8p9pImwCfDY7t4EGdoeTtShT8YdYdOlzMltxiQO7ZnytMAZxephpSEVlP4QcaAuBHQ==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  dmarc=pass header.from=kuhls.net;
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=txS7RGyC; 
+ header.s=kas202605290044 header.b=gZ8MTTvV; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
 Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=txS7RGyC
+Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=gZ8MTTvV
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 76EE680C7E
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:01:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D088380C7E
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:01:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1791723659;
- bh=pfKC3P6dhjfTdzV0U7y9rHX3s0IqcxB4YEZf0SZvGks=;
- h=From:To:Subject:Date:From;
- b=txS7RGyCWa6yDYiKBd+UrK1JjUrtFADo/1dFgVTKRpV9VeL4qdnhzPazAJtLVE81p
- HfFjB5f3K2Uv64HmBCxipIEhst2Z/cIXx5Ojn/9kPLCrwHqQB1yONgQ3xMBMqvUssn
- tALEb9TYGMQ/eVoN5dbNl2RqOJKpZASnWCxRNdi0sGxXcQ487ViIqUq1LiRf1XXMmc
- Yo5tnIKtt1um2FyhjIyLA1CX/KGeOHeriRAe7+KgX6Vn6xHMFW2vJg7T1IFzZ/6+Rm
- E5qS1ncR+e6xE+C7E7rBSAvvxILL3og+2W2vb5MjhXVQmWBgP0HpGycC7gDoO19Cl5
- 6vatMseOVD+wQ==
+ s=kas202605290044; t=1791723660;
+ bh=/tEb1odY2MhZTFTiesMjT/D3EI6T3+mIQ05Q4Vx4rlQ=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:From;
+ b=gZ8MTTvV552Ro6kNc5K6oT8PBncG3jpHftePbm9Dh00YzYWQyiVMCULuy3kCNbxFf
+ 5v6S5hVnJwpdcYbAZCPc1KDzJLcHTcnjJYvqOE0tEw7T+EZW+Mg2vtxtTKgalrUb5g
+ QN47w0gN0iQgzaptPk22YskUtogs4QnMQKWRhB5vreU3INlRr3kLwvmB90mRaj7yLd
+ F2SqR3ITp2I8gX5adfwmR5AOYd/g88kyH1RbCP7Bi6d9YOPhedW+JgDCpkTX4KezEs
+ ILE+L3QiYqpWx9nxNh1JESSpBgBRG5sykrfXuUCmGOyFZs89U5sY4V4ZGLLGUP1xbq
+ UzBjpmqGt9uAA==
 X-KAS-Sym: v3:f51bdf72230551df:Ox5mmHqwgIvMyI1QgKEa7Ro2UqoiVPYwa1ib8hnsjjQqD
  25s8M2vwFrIHsd3K5yBRCNR9KcmhbTBGk0Z/UIeFpf8wsnVNojbXdjCN1xVotleGBWWjjzHBgEE
  74kL4L+STMwD/l3tPdkNjVc2aEcTg5E+9kq3JIuVVgKZUkyGnD/Kyv1FD6YSp7FcFjV40N/5gBQ
  c1a8pSNeJlBzzKSDlvrm7tStdZZURMMjpShUwTVAm3ujJrgLAxVichT90dl6Ye+LoRN+5NYuoCq
  FrxKp8YCAl4Fk1rds2RrRz+55Ma6FGhELkZkdxRcDOeNbj/YZtgaek8wOz/3DQCuSXG5FAKA==:
- dtABNsTZKpDN3H8e3ZDBMpmOlqViRUohDljHEYLOIfaWzjRG1cDNQTufvq8CFNc0wWL/lCoK9CO
- EirIwn+yXIx6gJddH+xystRUPbweOdx+GhBfX44OA8zQDp+N2+aL5Xpyk0N9/uJkpUo5P1bE8HM
- QQamBTFKG43ZzzFuG2tqdCPAWLCRYbG5POmd3QYq9ucdsP7C6LIbMZPxrBeFq5ZxOibadKHGBEm
- VXalUBCsrGONf3zaofXczQhITgZhJNT1S8fhuONTq+MofMTPUYgrYywcbuah+V6GX1GpCt/FM0+
- YN0noI4knLOiZ5thb7v+PlWEJuWb/qazn32Auew5Ijqr+4GfhPe/oXGa9Wa44fq1fZcPZutWWRK
- A5OEC77T4VvjTyyY7CPDzp99IdPSJ10lUvVdUAxqUxe97oRjJik21LpPJhHrUuXvRBG7TMfYTTt
- k3LQwb5liVFEdZMrfcFS/mw3Z/1/hwL0iXUcVkINK8/XSp/JqdU5Tfdm3snK7OPOBth6I+DRESX
- /HfhqATlwnhNnND2VlwgbMH5PPmuGAd9Utq4OducR25aAJUviM=
+ biyuEKZkt5fHQ3hC1v1+JuUEEFzimqu9/yllFu7S1RSL1dp8lX2a7KI8xdyv3gpwqVyAp+vBY8J
+ V+Zkq7YKmFrArDfzsNhZmTVVM+dkfSrJ3fnKijLO7IBjRtM2HABAEGcymx834AzEumQP5aCbypN
+ ZNlcMIbtmVMdwGMALiDtkn0Jl8SjR1jCTagTn/bOJP/GxVdiuXZe2EDJfx+g4mFZDo6TMW2v9q1
+ QWg8ePYzC587d5CYOOm60HzUSylZxqqS5Fbt8zGcjXKePZWK04Hh6lGEPiXhL4LLYdojwg83tny
+ grz61YOUcckvf7lIrCYIsan4v3ljF99Nr7usDQrcWLZQOsjvqUc+0achY83AKwPid0VwqNwIVnC
+ eHvVaX6Xg+TujRIpmOGshKJqfuVGw8qHML8o10iV+8MVPx6lzyzwg9UkAXDWZyi0jJTRnRkB3px
+ tIX9rVSmpYVDqT1K1kekhouwH9yEC5x6osTceeYJryKm6iGa6NVYYS/SnbRP5r4CBxDNn0UZ+rr
+ N301L6ctWexJZxTXARIhXtpmk/vmJppcVOwdSNSN7BmwWYV9+TcIHWvp/qX+d44abUkKStl58Gr
+ E9ZZL/dL9UZVtx6Shi4uc7tKeV6Nj/eT4FEO3MG23DECSbumRIe/VVAFDsTeXCnOCgvzPySq+JS
+ Zk/VH+w7/OCxZyg4HZX7ABzMAMe8=
 Received: from fli4l.lan.fli4l (p5b3a0ea9.dip0.t-ipconnect.de [91.58.14.169])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 7844BA4C5328
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 15:00:59 +0200 (CEST)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 2DA42A4C5846;
+ Sun, 11 Oct 2026 15:01:00 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:52426)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xFtAg-000000007Fz-43ml
- for buildroot@buildroot.org; Sun, 11 Oct 2026 13:00:59 +0000
+ (envelope-from <bernd@kuhls.net>) id 1xFtAi-000000007Fz-06GJ;
+ Sun, 11 Oct 2026 13:00:59 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 11 Oct 2026 15:00:05 +0200
-Message-ID: <20261011130058.3443432-1-bernd@kuhls.net>
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Sun, 11 Oct 2026 15:00:06 +0200
+Message-ID: <20261011130058.3443432-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20261011130058.3443432-1-bernd@kuhls.net>
+References: <20261011130058.3443432-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: ---
-Subject: [Buildroot] [PATCH v9 00/52] Bump libopenssl, python3, kodi, ffmpeg
+X-Spamd-Bar: --
+Subject: [Buildroot] [PATCH v9 01/52] package/qt5/qt5knx: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -153,422 +159,131 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+Build is broken with the upcoming bump of OpenSSL to 4.0.3:
 
-this series bumps libopenssl to version 4.0.3 and ffmpeg to 9.0.2.
-It also includes as RFC the bumps of python3 to 3.15.0rc3 and kodi to
-22.0rc1.
+ssl/qsslsocket_openssl_symbols.cpp: In function 'QDateTime QKnxPrivate::q_getTimeFromASN1(const ASN1_TIME*)':
+ssl/qsslsocket_openssl_symbols.cpp:1352:31: error: invalid use of incomplete type 'const ASN1_TIME' {aka 'const struct asn1_string_st'}
+ 1352 |     size_t lTimeLength = aTime->length;
 
-The decision to remove the 9000+ lines long patch to build python3
-3.14.8 with libopenssl 4.0.3 was made due to the many bumps to python
-packages in preparation for the upcoming release of python 3.15.0.
-The series was tested with all patches James sent but were not yet
-applied to buildroot.
+ssl/qsslsocket_openssl_symbols.cpp:1353:35: error: invalid use of incomplete type 'const ASN1_TIME' {aka 'const struct asn1_string_st'}
+ 1353 |     char *pString = (char *) aTime->data;
 
-Please be aware of the following depencies:
-The current kodi version 21.3 is incompatible with python 3.15 and no
-updates to this kodi version are expected, kodi tagged 22.0rc1 which
-adds compatibility with python 3.15 but also needs ffmpeg >= 7.0 which
-in turn needs some fixes for current packages.
+ssl/qsslsocket_openssl_symbols.cpp:1355:14: error: invalid use of incomplete type 'const ASN1_TIME' {aka 'const struct asn1_string_st'}
+ 1355 |     if (aTime->type == V_ASN1_UTCTIME) {
 
-This series consists of the following parts:
+ssl/qsslsocket_openssl_symbols.cpp:1415:21: error: invalid use of incomplete type 'const ASN1_TIME' {aka 'const struct asn1_string_st'}
+ 1415 |     } else if (aTime->type == V_ASN1_GENERALIZEDTIME) {
 
-0001-0003: package removals
+Last update of the package dates back to 2020:
+https://github.com/qt/qtknx/branches/all
 
-0004-0026: - version bumps that provide compatibility with OpenSSL 4.x
-           - upstream fixes for packages without a released version that
-             provides compatibility with OpenSSL 4.x
-           0005-0020 belong to the boost patch series
-
-Until here this is the latest version of the libopenssl bump series.
-None of the patches 0001-0026 depend on the libopenssl bump, they all
-build fine with libopenssl 3.6.x.
-
-0027-0030: build fixes for ffmpeg 7.0.3
-0031:      bump ffmpeg to 7.0.3
-
-0032-0049: bump kodi to 22.0rc1
-
-0050-0051: bump python3 to 3.15.0
-           This bump depends on the ncurses fix
-
-0052:      bump libopenssl to 4.0.3
-
-Regards, Bernd
-
-
-v9:
-- rebased
-- bumped python3 to 3.15.0 release version
-- bumped ffmpeg to 7.0.3 as common version for kodi 21.3 and the
-  upcoming kodi bump to 22.0 to maintain bisectability, removed
-  ffmpeg bump 9.x from series
-
-v8:
-- rebased
-- changed libopenssl fix for freeswitch to upstream patches instead of
-  tweaking autoconf variables
-- replaced libopenssl fix for python 3.14.8 with bump to 3.15.0rc3
-- added kodi & ffmpeg bumps to series
-
-v7:
-- rebased
-- added output of 'utils/get-developers --cc' to individual patches to
-  avoid sending the whole series to all devs (Thomas)
-- bumped libopenssl to 4.0.3
-- removed qt6/qt6opcua as well (to-do from v3)
-- please note that this series depends on the security bump of
-  libopenssl to 3.6.5:
-  https://patchwork.buildroot.org/project/buildroot/patch/20260929175300.1838821-1-bernd-NSqj7jyE675eoWH0uzbU5w-XMD5yJDbdMReXY1tMh2IBg@public.gmane.org/
-
-v6:
-- rebased
-- created PR for package/squid/0001*.patch
-- added OpenSSL fix for mender-artifact
-- added Michael's boost series:
-  https://lists.buildroot.org/pipermail/buildroot/2026-September/810503.html
-
-v5:
-- rebased
-- fixed mender build by using an Ubuntu patch
-
-v4, only minor changes, not sent CC to all maintainers:
-- renumbered patches in cover letter
-- added Upstream: tag to patch package/resiprocate/0001
-- mentioned resiprocate changes in v3
-
-v3:
-- rebased
-  the current tree, also containing unrelated build fixes, can be found
-  here:
-  https://gitlab.com/bkuhls/buildroot/-/commits/c60dc5542041aef205b874e875a3da582ebb6811
-- added systemd fix
-- removed resiprocate removal, bumped to 1.14.0 and added OpenSSL fixes
-- removed mender removal for the time being from the series
-  the tree mentioned above still contains the removal, then the revert
-  of the removal and Adam's bump to 5.1.0 which is broken with the bump
-  to OpenSSL 4.0.2:
-  https://lists.buildroot.org/pipermail/buildroot/2026-September/810147.html
-
-v2:
-- squashed BR2_TOOLCHAIN_HAS_GCC_BUG_101916 removal into
-  heirloom-mailx removal patch
-- added qt6 bump which also fixes build with OpenSSL 4.0
-
-
-Bernd Kuhls (37):
-  package/qt5/qt5knx: remove package
-  package/qt5/qt5opcua: remove package
-  package/qt6/qt6opcua: remove package
-  package/domoticz: bump version to 2026.3
-  package/boost: bump version to 1.92.0
-  package/xtables-addons: use kernel-module infra
-  package/xtables-addons: bump version to 3.31
-  package/redis: Fix build with OpenSSL 4.0.0
-  package/uboot-tools: Fix build with OpenSSL 4.0.0
-  package/xmrig: Add support for OpenSSL 4.0.0
-  package/znc: Fix build with OpenSSL 4.0.0
-  package/gerbera: fix build with ffmpeg 7.0
-  package/libcamera-apps: fix build with ffmpeg 7.0
-  package/kodi: support ffmpeg 7.0
-  package/kodi-inputstream-ffmpegdirect: Fix build with ffmpeg-7.0
-  package/ffmpeg: bump version to 7.0.3
-  package/bento4: bump version to 1.6.0-641-6-Piers
-  package/kodi: bump to 22.0rc1-Piers
-  package/kodi-audiodecoder-*: mass version bump to Piers
-  package/kodi-audioencoder-*: mass version bump to Piers
-  package/kodi-imagedecoder-*: mass version bump to Piers
-  package/kodi-inputstream-ffmpegdirect: bump version to 22.2.10-Piers
-  package/kodi-inputstream-*: mass version bump to Piers
-  package/kodi-peripheral-*: mass version bump to Piers
-  package/kodi-pvr-hts: bump version to 22.9.2-Piers
-  package/kodi-pvr-plutotv: bump version to 22.3.1-Piers
-  package/kodi-pvr-waipu: bump version to 22.10.0-Piers
-  package/kodi-pvr-zattoo: bump version to 22.2.3-Piers
-  package/kodi-pvr-*: mass version bump to Piers
-  package/kodi-screensaver-rsxs: bump version to 22.0.5-Piers
-  package/kodi-screensaver-*: mass version bump to Piers
-  package/kodi-skin-confluence: bump version
-  package/kodi-vfs-*: mass version bump to Piers
-  package/kodi-visualisation-*: mass version bump to Piers
-  package/ncurses: install wide-char headers in usr/include/ncursesw/
-  package/python3: bump version to 3.15.0
-  package/libopenssl: bump version to 4.0.3
-
-Michael Nosthoff (15):
-  package/boost: add new charconv and cobalt library
-  package/boost: add switch for boost-process
-  package/boost: program_options needs container
-  package/boost: thread needs more dependencies
-  package/boost: contract needs thread
-  package/boost: fix coroutine dependencies
-  package/boost: fiber needs exception
-  package/boost: update graph dependencies
-  package/boost: math needs container
-  package/boost: log needs serialization
-  package/boost: test needs exception
-  package/boost: wave needs thread
-  package/boost: update locale dependencies
-  package/boost: update C++ version dependencies
-  package/boost: system: update description
-
- Config.in.legacy                              |  57 ++
- DEVELOPERS                                    |   3 -
- package/apr-util/Config.in                    |   1 -
- package/bento4/bento4.hash                    |   2 +-
- package/bento4/bento4.mk                      |   4 +-
- ...xit_code-guard-static_asserts-on-MIP.patch |  59 +++
- .../0001-unordered-fix-copy-assign.patch      |  22 -
- ...-for-duplicate-definition-of-SIGLOST.patch |  30 ++
- package/boost/0003-Fix-build.patch            |  39 ++
- package/boost/0004-Fix-build.patch            |  40 ++
- package/boost/0005-Fix-build.patch            |  64 +++
- package/boost/Config.in                       | 190 ++++++-
- package/boost/boost.hash                      |   4 +-
- package/boost/boost.mk                        |  10 +-
- package/domoticz/Config.in                    |   7 +-
- package/domoticz/domoticz.hash                |   3 +-
- package/domoticz/domoticz.mk                  |  27 +-
- package/dovecot/Config.in                     |   1 -
- ...0005-avcodec-mmaldec-Fix-build-error.patch |  32 --
- ...ay-dvd-Use-correct-pointer-types-on-.patch |  52 --
- ...hwcontext-vaapi-use-the-correct-type.patch |  28 -
- package/ffmpeg/ffmpeg.hash                    |   2 +-
- package/ffmpeg/ffmpeg.mk                      |   3 +-
- package/fluent-bit/Config.in                  |   1 -
- ...-transcode-fix-build-with-ffmpeg-7.0.patch |  60 +++
- .../kodi-audiodecoder-modplug.hash            |   2 +-
- .../kodi-audiodecoder-modplug.mk              |   2 +-
- .../kodi-audiodecoder-nosefart.hash           |   2 +-
- .../kodi-audiodecoder-nosefart.mk             |   2 +-
- .../kodi-audiodecoder-sidplay.hash            |   2 +-
- .../kodi-audiodecoder-sidplay.mk              |   2 +-
- .../kodi-audiodecoder-snesapu.hash            |   2 +-
- .../kodi-audiodecoder-snesapu.mk              |   2 +-
- .../kodi-audiodecoder-stsound.hash            |   2 +-
- .../kodi-audiodecoder-stsound.mk              |   2 +-
- .../kodi-audiodecoder-timidity.hash           |   2 +-
- .../kodi-audiodecoder-timidity.mk             |   2 +-
- .../kodi-audiodecoder-vgmstream.hash          |   2 +-
- .../kodi-audiodecoder-vgmstream.mk            |   2 +-
- .../kodi-audioencoder-flac.hash               |   2 +-
- .../kodi-audioencoder-flac.mk                 |   2 +-
- .../kodi-audioencoder-lame.hash               |   2 +-
- .../kodi-audioencoder-lame.mk                 |   2 +-
- .../kodi-audioencoder-vorbis.hash             |   2 +-
- .../kodi-audioencoder-vorbis.mk               |   2 +-
- .../kodi-audioencoder-wav.hash                |   2 +-
- .../kodi-audioencoder-wav.mk                  |   2 +-
- .../kodi-imagedecoder-heif.hash               |   2 +-
- .../kodi-imagedecoder-heif.mk                 |   2 +-
- .../kodi-imagedecoder-raw.hash                |   2 +-
- .../kodi-imagedecoder-raw.mk                  |   2 +-
- .../kodi-inputstream-adaptive.hash            |   2 +-
- .../kodi-inputstream-adaptive.mk              |   2 +-
- .../kodi-inputstream-ffmpegdirect.hash        |   2 +-
- .../kodi-inputstream-ffmpegdirect.mk          |   2 +-
- .../kodi-inputstream-rtmp.hash                |   2 +-
- .../kodi-inputstream-rtmp.mk                  |   2 +-
- .../kodi-jsonschemabuilder.mk                 |   2 +-
- .../kodi-peripheral-joystick.hash             |   2 +-
- .../kodi-peripheral-joystick.mk               |   2 +-
- .../kodi-peripheral-xarcade.hash              |   2 +-
- .../kodi-peripheral-xarcade.mk                |   2 +-
- .../kodi-pvr-argustv/kodi-pvr-argustv.hash    |   2 +-
- package/kodi-pvr-argustv/kodi-pvr-argustv.mk  |   2 +-
- .../kodi-pvr-dvblink/kodi-pvr-dvblink.hash    |   2 +-
- package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk  |   2 +-
- .../kodi-pvr-dvbviewer.hash                   |   2 +-
- .../kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk  |   2 +-
- package/kodi-pvr-filmon/kodi-pvr-filmon.hash  |   2 +-
- package/kodi-pvr-filmon/kodi-pvr-filmon.mk    |   2 +-
- package/kodi-pvr-hts/0001-gcc15.patch         |  26 -
- package/kodi-pvr-hts/kodi-pvr-hts.hash        |   2 +-
- package/kodi-pvr-hts/kodi-pvr-hts.mk          |   2 +-
- .../kodi-pvr-iptvsimple.hash                  |   2 +-
- .../kodi-pvr-iptvsimple.mk                    |   2 +-
- .../kodi-pvr-mediaportal-tvserver.hash        |   2 +-
- .../kodi-pvr-mediaportal-tvserver.mk          |   2 +-
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash  |   2 +-
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk    |   2 +-
- .../kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash    |   2 +-
- package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk  |   2 +-
- package/kodi-pvr-njoy/kodi-pvr-njoy.hash      |   2 +-
- package/kodi-pvr-njoy/kodi-pvr-njoy.mk        |   2 +-
- .../kodi-pvr-octonet/kodi-pvr-octonet.hash    |   2 +-
- package/kodi-pvr-octonet/kodi-pvr-octonet.mk  |   2 +-
- package/kodi-pvr-pctv/kodi-pvr-pctv.hash      |   2 +-
- package/kodi-pvr-pctv/kodi-pvr-pctv.mk        |   2 +-
- package/kodi-pvr-plutotv/Config.in            |   2 +-
- .../kodi-pvr-plutotv/kodi-pvr-plutotv.hash    |   2 +-
- package/kodi-pvr-plutotv/kodi-pvr-plutotv.mk  |   4 +-
- .../kodi-pvr-stalker/kodi-pvr-stalker.hash    |   2 +-
- package/kodi-pvr-stalker/kodi-pvr-stalker.mk  |   2 +-
- package/kodi-pvr-vbox/kodi-pvr-vbox.hash      |   2 +-
- package/kodi-pvr-vbox/kodi-pvr-vbox.mk        |   2 +-
- .../kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash  |   2 +-
- .../kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk    |   2 +-
- package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash  |   2 +-
- package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk    |   2 +-
- package/kodi-pvr-waipu/Config.in              |   2 +-
- package/kodi-pvr-waipu/kodi-pvr-waipu.hash    |   2 +-
- package/kodi-pvr-waipu/kodi-pvr-waipu.mk      |   4 +-
- package/kodi-pvr-wmc/kodi-pvr-wmc.hash        |   2 +-
- package/kodi-pvr-wmc/kodi-pvr-wmc.mk          |   2 +-
- package/kodi-pvr-zattoo/Config.in             |   2 +-
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.hash  |   2 +-
- package/kodi-pvr-zattoo/kodi-pvr-zattoo.mk    |   4 +-
- .../kodi-screensaver-asteroids.hash           |   2 +-
- .../kodi-screensaver-asteroids.mk             |   2 +-
- .../kodi-screensaver-asterwave.hash           |   2 +-
- .../kodi-screensaver-asterwave.mk             |   2 +-
- .../kodi-screensaver-biogenesis.hash          |   2 +-
- .../kodi-screensaver-biogenesis.mk            |   2 +-
- .../kodi-screensaver-cpblobs.hash             |   2 +-
- .../kodi-screensaver-cpblobs.mk               |   2 +-
- .../kodi-screensaver-greynetic.hash           |   2 +-
- .../kodi-screensaver-greynetic.mk             |   2 +-
- .../kodi-screensaver-matrixtrails.hash        |   2 +-
- .../kodi-screensaver-matrixtrails.mk          |   2 +-
- .../kodi-screensaver-pingpong.hash            |   2 +-
- .../kodi-screensaver-pingpong.mk              |   2 +-
- .../kodi-screensaver-pyro.hash                |   2 +-
- .../kodi-screensaver-pyro.mk                  |   2 +-
- .../0001-Fix-build-with-CMake-4.x.patch       | 346 -------------
- .../kodi-screensaver-rsxs.hash                |   2 +-
- .../kodi-screensaver-rsxs.mk                  |   2 +-
- .../kodi-screensaver-stars.hash               |   2 +-
- .../kodi-screensaver-stars.mk                 |   2 +-
- .../kodi-skin-confluence.hash                 |   2 +-
- .../kodi-skin-confluence.mk                   |   2 +-
- ...rePacker-allow-build-with-giflib-6.x.patch |  71 ---
- .../kodi-texturepacker/kodi-texturepacker.mk  |   3 +-
- .../kodi-vfs-libarchive.hash                  |   2 +-
- .../kodi-vfs-libarchive.mk                    |   2 +-
- package/kodi-vfs-rar/kodi-vfs-rar.hash        |   2 +-
- package/kodi-vfs-rar/kodi-vfs-rar.mk          |   2 +-
- package/kodi-vfs-sftp/kodi-vfs-sftp.hash      |   2 +-
- package/kodi-vfs-sftp/kodi-vfs-sftp.mk        |   2 +-
- .../kodi-visualisation-fishbmc.hash           |   2 +-
- .../kodi-visualisation-fishbmc.mk             |   2 +-
- .../kodi-visualisation-goom.hash              |   2 +-
- .../kodi-visualisation-goom.mk                |   2 +-
- .../kodi-visualisation-matrix.hash            |   2 +-
- .../kodi-visualisation-matrix.mk              |   2 +-
- .../kodi-visualisation-shadertoy.hash         |   2 +-
- .../kodi-visualisation-shadertoy.mk           |   2 +-
- .../kodi-visualisation-spectrum.hash          |   2 +-
- .../kodi-visualisation-spectrum.mk            |   2 +-
- .../kodi-visualisation-starburst.hash         |   2 +-
- .../kodi-visualisation-starburst.mk           |   2 +-
- .../kodi-visualisation-waveform.hash          |   2 +-
- .../kodi-visualisation-waveform.mk            |   2 +-
- ...rePacker-allow-build-with-giflib-6.x.patch |  71 ---
- ...02-VAAPI-fix-build-with-ffmpeg-7.1.5.patch | 117 +++++
- ...erFFmpeg-fix-build-with-ffmpeg-7.0.3.patch |  67 +++
- .../0003-RegExp-remove-unused-methods.patch   | 127 -----
- ...eamAddon-fix-build-with-ffmpeg-7.0.3.patch |  49 ++
- .../0004-Introduce-PCRE2-dependency.patch     | 192 -------
- ...igrate-PCRE-to-PCRE2-and-remove-PCRE.patch | 486 ------------------
- ...006-cmake-Set-ARCH-to-CPU-by-default.patch |  41 --
- package/kodi/Config.in                        |   8 +-
- package/kodi/kodi.hash                        |  15 +-
- package/kodi/kodi.mk                          |  52 +-
- ...ncoder-libav-Updates-for-ffmpeg-v7.1.patch |  48 ++
- ...oder-libav-fix-build-with-ffmpeg-7.0.patch |  37 ++
- package/libcoap/Config.in                     |   1 -
- package/libks/Config.in                       |   1 -
- package/libldns/libldns.mk                    |   8 +-
- package/libopenssl/Config.in                  |  34 --
- package/libopenssl/libopenssl.hash            |   4 +-
- package/libopenssl/libopenssl.mk              |  18 +-
- package/libp11/Config.in                      |   1 -
- package/libp11/libp11.mk                      |   3 +-
- package/librelp/Config.in                     |   1 -
- package/libssh/Config.in                      |   1 -
- package/log4cxx/Config.in                     |   5 +
- package/luvi/Config.in                        |   1 -
- package/mender/Config.in                      |   1 -
- package/mtd/Config.in                         |   1 -
- package/ncurses/ncurses.mk                    |   7 +
- package/openssh/openssh.mk                    |   8 +-
- package/python-libconfig/Config.in            |   5 +-
- ...e-the-build-of-pyc-files-conditional.patch |  14 +-
- .../0002-Add-an-option-to-disable-pydoc.patch |  24 +-
- .../0003-Add-an-option-to-disable-IDLE.patch  |  18 +-
- ...move-PY_STDLIB_MOD_SET_NA-further-up.patch |   8 +-
- ...option-to-disable-the-sqlite3-module.patch |  16 +-
- ...d-an-option-to-disable-the-tk-module.patch |  18 +-
- ...-option-to-disable-the-curses-module.patch |  14 +-
- .../0008-Add-an-option-to-disable-expat.patch |  14 +-
- ...ac-detect-unusable-termio-operations.patch |  16 +-
- ...mpilation-of-Modules-_remote_debuggi.patch |  55 --
- package/python3/python3.hash                  |   4 +-
- package/python3/python3.mk                    |   4 +-
- package/qt5/Config.in                         |   2 -
- package/qt5/qt5knx/Config.in                  |  12 -
- package/qt5/qt5knx/qt5knx.hash                |   6 -
- package/qt5/qt5knx/qt5knx.mk                  |  15 -
- package/qt5/qt5opcua/Config.in                |   9 -
- package/qt5/qt5opcua/qt5opcua.hash            |  10 -
- package/qt5/qt5opcua/qt5opcua.mk              |  19 -
- package/qt6/Config.in                         |   1 -
- package/qt6/qt6opcua/Config.in                |  14 -
- package/qt6/qt6opcua/qt6opcua.hash            |  10 -
- package/qt6/qt6opcua/qt6opcua.mk              |  40 --
- package/rauc/Config.in                        |   2 -
- package/rauc/rauc.mk                          |   3 +-
- ...ecated-X509_NAME_get_text_by_NID-API.patch | 101 ++++
- package/resiprocate/Config.in                 |   4 +
- package/softhsm2/Config.in                    |   1 -
- ...Add-support-for-OpenSSL-Provider-API.patch | 304 +++++++++++
- package/unbound/Config.in                     |   1 -
- package/unbound/unbound.mk                    |   1 +
- .../0001-Fix-build-with-OpenSSL-4.0.0.patch   |  40 ++
- package/xtables-addons/Config.in              |   2 +-
- package/xtables-addons/xtables-addons.hash    |   2 +-
- package/xtables-addons/xtables-addons.mk      |   9 +-
- package/zmqpp/Config.in                       |   5 +-
- ...-Fix-build-error-with-OpenSSL-4-2024.patch |  57 ++
- 218 files changed, 1654 insertions(+), 2068 deletions(-)
- create mode 100644 package/boost/0001-fix-process-v2-exit_code-guard-static_asserts-on-MIP.patch
- delete mode 100644 package/boost/0001-unordered-fix-copy-assign.patch
- create mode 100644 package/boost/0002-Add-check-for-duplicate-definition-of-SIGLOST.patch
- create mode 100644 package/boost/0003-Fix-build.patch
- create mode 100644 package/boost/0004-Fix-build.patch
- create mode 100644 package/boost/0005-Fix-build.patch
- delete mode 100644 package/ffmpeg/0005-avcodec-mmaldec-Fix-build-error.patch
- delete mode 100644 package/ffmpeg/0006-avcodec-pcm-bluray-dvd-Use-correct-pointer-types-on-.patch
- delete mode 100644 package/ffmpeg/0007-avutil-hwcontext-vaapi-use-the-correct-type.patch
- create mode 100644 package/gerbera/0001-transcode-fix-build-with-ffmpeg-7.0.patch
- delete mode 100644 package/kodi-pvr-hts/0001-gcc15.patch
- delete mode 100644 package/kodi-screensaver-rsxs/0001-Fix-build-with-CMake-4.x.patch
- delete mode 100644 package/kodi-texturepacker/0001-TexturePacker-allow-build-with-giflib-6.x.patch
- delete mode 100644 package/kodi/0002-TexturePacker-allow-build-with-giflib-6.x.patch
- create mode 100644 package/kodi/0002-VAAPI-fix-build-with-ffmpeg-7.1.5.patch
- create mode 100644 package/kodi/0003-AEEncoderFFmpeg-fix-build-with-ffmpeg-7.0.3.patch
- delete mode 100644 package/kodi/0003-RegExp-remove-unused-methods.patch
- create mode 100644 package/kodi/0004-InputStreamAddon-fix-build-with-ffmpeg-7.0.3.patch
- delete mode 100644 package/kodi/0004-Introduce-PCRE2-dependency.patch
- delete mode 100644 package/kodi/0005-Migrate-PCRE-to-PCRE2-and-remove-PCRE.patch
- delete mode 100644 package/kodi/0006-cmake-Set-ARCH-to-CPU-by-default.patch
- create mode 100644 package/libcamera-apps/0003-encoder-libav-Updates-for-ffmpeg-v7.1.patch
- create mode 100644 package/libcamera-apps/0004-encoder-libav-fix-build-with-ffmpeg-7.0.patch
- delete mode 100644 package/python3/0010-gh-139275-Fix-compilation-of-Modules-_remote_debuggi.patch
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+ Config.in.legacy               |  7 +++++++
+ DEVELOPERS                     |  1 -
+ package/qt5/Config.in          |  1 -
+ package/qt5/qt5knx/Config.in   | 12 ------------
+ package/qt5/qt5knx/qt5knx.hash |  6 ------
+ package/qt5/qt5knx/qt5knx.mk   | 15 ---------------
+ 6 files changed, 7 insertions(+), 35 deletions(-)
  delete mode 100644 package/qt5/qt5knx/Config.in
  delete mode 100644 package/qt5/qt5knx/qt5knx.hash
  delete mode 100644 package/qt5/qt5knx/qt5knx.mk
- delete mode 100644 package/qt5/qt5opcua/Config.in
- delete mode 100644 package/qt5/qt5opcua/qt5opcua.hash
- delete mode 100644 package/qt5/qt5opcua/qt5opcua.mk
- delete mode 100644 package/qt6/qt6opcua/Config.in
- delete mode 100644 package/qt6/qt6opcua/qt6opcua.hash
- delete mode 100644 package/qt6/qt6opcua/qt6opcua.mk
- create mode 100644 package/redis/0004-tls-replace-deprecated-X509_NAME_get_text_by_NID-API.patch
- create mode 100644 package/uboot-tools/0003-Add-support-for-OpenSSL-Provider-API.patch
- create mode 100644 package/xmrig/0001-Fix-build-with-OpenSSL-4.0.0.patch
- create mode 100644 package/znc/0001-Fix-build-error-with-OpenSSL-4-2024.patch
 
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 97824f701f..846e3c8f04 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2026.11"
+ 
++config BR2_PACKAGE_QT5KNX
++	bool "qt5knx has been removed"
++	select BR2_LEGACY
++	help
++	  The qt5knx package has been removed because it is
++	  incompatible with OpenSSL >= 4.x
++
+ config BR2_PACKAGE_SZIP
+ 	bool "szip has been removed"
+ 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 01d98f8698..64e0371cd4 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -254,7 +254,6 @@ F:	package/python-spidev/
+ F:	package/python-web2py/
+ F:	package/qpdf/
+ F:	package/qt5/qt5coap/
+-F:	package/qt5/qt5knx/
+ F:	package/qt5/qt5mqtt/
+ F:	package/rtl8723ds/
+ F:	package/rtl8723ds-bt/
+diff --git a/package/qt5/Config.in b/package/qt5/Config.in
+index f1b16ff39b..b837601dc6 100644
+--- a/package/qt5/Config.in
++++ b/package/qt5/Config.in
+@@ -44,7 +44,6 @@ source "package/qt5/qt5doc/Config.in"
+ source "package/qt5/qt5enginio/Config.in"
+ source "package/qt5/qt5graphicaleffects/Config.in"
+ source "package/qt5/qt5imageformats/Config.in"
+-source "package/qt5/qt5knx/Config.in"
+ source "package/qt5/qt5location/Config.in"
+ source "package/qt5/qt5lottie/Config.in"
+ source "package/qt5/qt5mqtt/Config.in"
+diff --git a/package/qt5/qt5knx/Config.in b/package/qt5/qt5knx/Config.in
+deleted file mode 100644
+index 991e93c8cb..0000000000
+--- a/package/qt5/qt5knx/Config.in
++++ /dev/null
+@@ -1,12 +0,0 @@
+-config BR2_PACKAGE_QT5KNX
+-	bool "qt5knx"
+-	help
+-	  Qt is a cross-platform application and UI framework for
+-	  developers using C++.
+-
+-	  The Qt KNX module implements the client side of a connection
+-	  between a client and a KNXnet/IP server. This connection
+-	  can be used to send messages to the KNX bus and to control
+-	  the functionalities of the KNX devices.
+-
+-	  https://doc.qt.io/QtKNX/index.html
+diff --git a/package/qt5/qt5knx/qt5knx.hash b/package/qt5/qt5knx/qt5knx.hash
+deleted file mode 100644
+index 2600a739bc..0000000000
+--- a/package/qt5/qt5knx/qt5knx.hash
++++ /dev/null
+@@ -1,6 +0,0 @@
+-# Hash locally calculated
+-sha256  1648bd6d7e5d8fc91aaa6db1bf9d2744d0385a087ba78a00080f99f1d5027c8b  qt5knx-5.15.2-git4.tar.gz
+-
+-# Hashes for license files:
+-sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
+-sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
+diff --git a/package/qt5/qt5knx/qt5knx.mk b/package/qt5/qt5knx/qt5knx.mk
+deleted file mode 100644
+index 91b99aaa87..0000000000
+--- a/package/qt5/qt5knx/qt5knx.mk
++++ /dev/null
+@@ -1,15 +0,0 @@
+-################################################################################
+-#
+-# qt5knx
+-#
+-################################################################################
+-
+-QT5KNX_VERSION = 5.15.2
+-QT5KNX_SITE = https://code.qt.io/qt/qtknx.git
+-QT5KNX_SITE_METHOD = git
+-QT5KNX_INSTALL_STAGING = YES
+-QT5KNX_LICENSE = GPL-3.0 with exception
+-QT5KNX_LICENSE_FILES = LICENSE.GPL3 LICENSE.GPL3-EXCEPT
+-QT5KNX_SYNC_QT_HEADERS = YES
+-
+-$(eval $(qmake-package))
 -- 
 2.47.3
 
