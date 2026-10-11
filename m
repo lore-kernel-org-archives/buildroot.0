@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AC67CA9EC7
-	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 13:09:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44EF7CA9EBD
+	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 13:09:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4328A406EA;
-	Sun, 11 Oct 2026 13:09:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1216340595;
+	Sun, 11 Oct 2026 13:09:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id svYFuoTeGb0p; Sun, 11 Oct 2026 13:09:15 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 64DF2406CD
+ id BU4Mul1o2_Fi; Sun, 11 Oct 2026 13:09:28 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 326CD406D8
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791724155;
-	b=De2KI+ngxZlkuE6I1OQqYnYmdHtVp0y2zOSgmkMBsi3Mnk8hzBTyD5wtqByJKst1b5yx
-	 kXaxUOMYTt7hZ3i4XhcuF7VOot3dDYAmfNBkmlVegRxx+5BftjURXKmh8Mov/Decwi3Dk
-	 69gh3yNucjLfwclJHidU50I3qxENGWwBGIrBKj5gl0felLlYnlvBu4idLsRp7XsiF1NMH
-	 +Tcnm1EFJf3tzwn62MQlBtvm1ix930S0RbBBGkuxqW5gcERoZYYLgVUizodQcNTGnfIa1
-	 xVKZJrM6XIxSfe6LD2kXR7t4ya9X1p0gnCuddpZLBZu98qQzpNE6UoCpTMXMIW4L50w==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791724168;
+	b=ldtHU7ft8IXszF1vmeyhyNIU09YD/PlUVFUPJKVtMigtqRuDF/71twXWzSyJKRveTfKG
+	 AJq3Y3atWUj/qtQGA8nHyPmjCTZLywvILscq3rB16NYVfLT1//dYSDZhWiWfdxKoq/i/K
+	 PoqA9RcHW9aCCnde5DFmbv6TskXwl6YxLffUKEyBUmZ3fnE4gfdv39JyRLNQ0Bm8FD8FJ
+	 wTGxqqP8Kd/LH61wHNfSNTocJBH6sSf8r8KGbFrxikcobW3itzLZNVf2AWI4+2KlMAaF/
+	 1KJluJfL/fLx6NKnxBI5tU5eEgWFcnC+W4I+TRjrN6VdxoxW1GFltaOYgPU5UqNMDwQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791724155;
+	c=relaxed/relaxed; t=1791724168;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,116 +31,116 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=YM9ph6jPO1va4bIZKlOjpEVM9FPcGtuu0uxwFFwS55M=;
-	b=nkuEjlXN0vQEJ3n16JkNS6n4NZlXZ1mmiZmtk/GNOjMEWIp2vL/BPPDtAPcbF8DP803f
-	 F63GOy24ZyVAPPx28ashf3d4BLb+LDZlAOdvmJM4tTohqPVw1gwKL1n0/zSvBkYVGUs7h
-	 HVFQFQSQjmKtCQRN9KCHk6Xw7SZbq5mCR0dyhHVjo8pbvQ5cqHtqIwHlXcvh9aLluNSbR
-	 Z9YfRDMYIVYsRU0UYYv8JfVZvI+RGcAPNb36IhsZ4y5cciXHcvb0lk0AT5iygYVRvIoWK
-	 hnLLI7pnRORXKxz2yOqecE7Xq/Ygu5Pq6lOAaDC2uUTyr83KmjTvMim2LOAR4V2j9ig==
+	bh=Vq471Sp1KZ5m7PCBni7WpMNrTzKsZrLxF1MSnT4KCkE=;
+	b=llGen/JCaHQricy7SKiOiDQK0w16YeMya7HfHiYm6trCAhlAZFrO1rO4dT+enIqV+yjD
+	 zN93gouNMYrwz4yQ24p9bmA3uNqyvBkH1q3xLxWQ/GwMtE8K67ey62QD/kFeW06ngsmlG
+	 pw7R74tevS8ajbrCKMHwpEEqR7oiPgKVQFLZs85qy7ucXqaQbiWk7zSkVpSkQRy6Rzogq
+	 X2ryVQJQzdWA/9Xg1Do0e/yDAJkNtRX9S3LlrlOSMpH0x/R9BFgOe62HHVLiQ3UTJ4Quj
+	 SXcprDlahilfM0jAzPMRzCcZW1FVeFIXmebxdc5f3n0UwXbxgCExtwh/NiFSUgM40vg==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791724155;
-	bh=YM9ph6jPO1va4bIZKlOjpEVM9FPcGtuu0uxwFFwS55M=;
+	s=default; t=1791724168;
+	bh=Vq471Sp1KZ5m7PCBni7WpMNrTzKsZrLxF1MSnT4KCkE=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=GzTmQd50J3fmKOFbx2iqIVFafO1GA9pL79uLegGXvvu61m5sUshyxecA5pfp8BXxM
-	 AomRvVUU/z1KpG50gaeSpoGvybcakZy3csX89eQxPyansdvmDGAkxJZ4sKU4eeC6UT
-	 y4WaLDak3OJEgSdbQxs1nBPQBYO/zxjYRinh0usVJzXMVa1YZY02qxY//0nqnbccLw
-	 1hxqHpD/2LKXOph2V2s3vVXPyaDRJXDFhrl8s6I9FtCFeYl7rbHxF+bRZlcT3eb5Ss
-	 Pg1I45b6ydBmilydFhjeKFvnic/MI6G5wa66x4uXJb/JHVtVkpV+TAvCj0/FXhnXTL
-	 ddCxNSKk3F6hg==
+	b=IaooWgfbdekaUEEwSGQ2fJwjuoln/lhXm4+hAp3JEwctAg6LyojkzIzhE14Ytif1n
+	 Azz6Hl1XlOsX51iZTzK019+oKgbIysGQBQebIYOjTIMsgk7x1XdsO9vIKisX+3KNkK
+	 FKSEBNuwZAdjrpk6VS/CMF7kGPeALPt1nkx3kF4HyOwcz9GN7DbXE/hLc579XCnc51
+	 Lg0zuy5ahl9TWEPEv0qysGW03eNMZUAeJ2Gpa/pMnyzvACnNzwpQWtVLMb6lWN9bmx
+	 78gBA4mFvf0DkmGTtWhyN7LNrbh0wsf73/S/bzJimVw9EPCYDGdEbf2Qw38fnt+BaS
+	 6liwFHbYx4VXA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 64DF2406CD;
-	Sun, 11 Oct 2026 13:09:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8CCC62E0
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:09:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 326CD406D8;
+	Sun, 11 Oct 2026 13:09:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5C716D5E
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:09:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7E19C60622
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:09:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 42998400CC
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:09:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ncyt3_Ydic8h for <buildroot@buildroot.org>;
- Sun, 11 Oct 2026 13:09:14 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org AD814605F1
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791724153;
- b=faLNqSDDBp3tArjqShLx+qLobd5D4xzOypCVS7LIx6jKDFbAk71hcelxdJBu2vqtGOB/
- C4YDQ/CIpmOboQlL+oYS/TgxJ9zoG1FHENNkuyb6f4yW300D9rA8WX14NyxNX4kNEwvPu
- W7kxi7T+4W2MnAFEKU+MBnvn4zEMvrdffUhDL/CEkX/5PQKrdUzjTRdV/motO/vPmOAys
- N/Pm/cJpqwAkPM9PEDrPBknAf6foWowQ6RSJg/VfdF963wquAi6PzNWbcKydrFO2JwCiM
- sTxP2SczvdsBMwV1ubaxUC6KVzQYhCsRFYziQqcqOQXyWzkjaRtZ0rzno0LVj7VUaDQ==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 54HCMP7eb5gD for <buildroot@buildroot.org>;
+ Sun, 11 Oct 2026 13:09:26 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 69FE1400D1
+Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791724166;
+ b=WSJvvNv2xAyUvNsSn7cv+t5kzVP9eJJvQMXvB6ulBVP8gTIZ7sPTRQKgWVaHIOCGC/Q8
+ zr7tc1uwJVtKgKZjbc+fzoHUSlCoaX9PuEe6T0rENV1KU0Yv2mpynNHQrMLdFF4rAGrIF
+ YRWP6146lDvxCKp+mCs0Ao2ZMBlMAq1mcewFmhqFSOp8inSs+2/CFhsgZd752KO0LlBoD
+ 5kNqjz1RV8SiqIq8dZZcavCVYqCqzHTeDdYyBttJF0YLNE6eSvwdfhjy9BvjZ9m3FjlHk
+ NnrT8QEIWJqU0emAZ4RAssTCrMqJP/0H2NQ7za8GLVoqTaBbZPyfbXRy7M9dDQYq+KQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791724153;
+ c=relaxed/relaxed; t=1791724166;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=UXrOvtSgBrpTtgpED7/7DJpgwVG5punLuF8xfZxyedw=;
- b=EjLGql3hSOU0RqeNcIpW6wD0vC7GWm/Iz4AFLqNE+ejxP1upgz4NwSQRzkej87VyKFjX
- 0ER8EU9Papfan9JpmPMOInudHpETs0QyLGQ/f2KbK1wfBRuvG+mQH2vs3zZKb3OIaAuEH
- uIfzCz2nzYCm/v2v2VKX/0i6CWnDjVN3/ovu4DDf+ISEMPCFRQHXTH+uI+Tx0NtXTuc0q
- HGlhTUao6KhtJn0EDQD9+ASiurIJlshiWMu8/DBuRuJdY9qh5Pi3OLPrNJgiFFw56tMTr
- DQKp6ys+d9qRr6JjZH2Wkm5Cz8FDMjxObaD/P7N06hfIv7Y7qJVNFERComrmF+LE8yQ==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ bh=tGL5W8+oc0rH9OWSnDl0NPgBOotSh6RUubZxmRqLbfw=;
+ b=gktVydVArDFsDUrmUD2T9/lFWgdDehafi2mo2ibJlDU3ac3jTyaRODQCiBbMa6YVlXZq
+ khwLmnCQ+9CSevyl3TCruwEcFbSlsIugPjlLGePXQqtccA8Daf8ZYEsRqg50nMDF3Exgw
+ fZX1wF4ULLyybvVN5wRsIBWfORHagniZ3pZkgl/n4u/0/+OArqe/GrYnLHLfVCgbhxVVx
+ uJu3GCrabqa27s/o8Iq8Z8rdsbU2g6HovKJAGfCKyxjHUDBHi9xoAAnLA8CPkfbsa0DYR
+ SnG/0A5SeGERzwQmZNyvy8dHCJqBXvxtulyxDEhsLxkpohGKGF1MC3G/6n4yaIaxvXQ==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  dmarc=pass header.from=kuhls.net;
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=Ytcr810t; 
+ header.s=kas202605290044 header.b=Unt6dt3Z; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
+Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp3.osuosl.org;
+Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=Ytcr810t
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=Unt6dt3Z
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AD814605F1
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:09:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 69FE1400D1
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:09:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
  s=kas202605290044; t=1791723683;
- bh=UXrOvtSgBrpTtgpED7/7DJpgwVG5punLuF8xfZxyedw=;
+ bh=tGL5W8+oc0rH9OWSnDl0NPgBOotSh6RUubZxmRqLbfw=;
  h=From:To:Subject:Date:In-Reply-To:From;
- b=Ytcr810tmP7tXHo97qvN3QjY6t/LpBFglwzVyucZoDoqBIFJMAoSCUrkroqqRY0M8
- fNuFuBomjURDtkSoXznaCWGKwa9hPcnrkNEr/X2g8TK+K14w+GO8mISOx7FAZoKhwl
- xNuRkDhtUfRaHWqLT/Oh3AQNsUBVHhvYuPYiXt9AtClFMtDM12TlSFPcF/mDnYPtjH
- XsGJfPeDKwVmRRSrGvjuy5yxs1+1GzaiL9V0qp01Psu2CPsDphYTX6Cdzq9/zCrOXZ
- 2+FzbF5+QJfvGxiGLw87NlgonwBS+EgYgZD2jvO2YBlQKvV+64z74/DmZORneHPV3Z
- +TId11WDRBl8g==
+ b=Unt6dt3ZpfLR2xkey+e7zSKf2WV7bJNYsp5CyYTHS95o3JFwaK1aWea1llPFTHb9L
+ Mr6fClZVjieHpZoPvzV3gM8f3lRFt+yTE5ePHgz8z3oVZ9oAbQWCzUAQgHA3YtMrJH
+ TUx0TcFO3BVU0k4Z1it3SPu7e48j22QjfaHqTZytQdXxKsv6X3C/OpM3BXAX0MA1vn
+ UUYkxd/4pcxlqUMNYVRuT1yPlfDrJrzNsme0HgcUsVFdeFKkRbPnifaeegh2n7YlpG
+ GRIfAuwpx1oPp35J26nk2uxWNB7YU4u69Sysg2kjdJjYRq5y1nvAFn6/g/ktALV552
+ ctTbGGEsh/Ksg==
 X-KAS-Sym: v3:f51bdf72230551df:Ox5mmHqwgIvMyI1QgKEa7Ro2UqoiVPYwa1ib8hnsjjQqD
  25s8M2vwFrIHsd3K5yBRCNR9KcmhbTBGk0Z/UIeFpf8wsnVNojbXdjCN1xVotleGBWWjjzHBgEE
  74kL4L+STMwD/l3tPdkNjVc2aEcTg5E+9kq3JIuVVgKZUkyGnD/Kyv1FD6YSp7FcFjV40N/5gBQ
  c1a8pSNeJlBzzKSDlvrm7tStdZZURMMjpShUwTVAm3ujJrgLAxVichT90dl6Ye+LoRN+5NYuoCq
  FrxKp8YCAl4Fk1rds2RrRz+55Ma6FGhELkZkdxRcDOeNbj/YZtgaek8wOz/3DQCuSXG5FAKA==:
- z00admZBxIjlfWw0leWtV/9mwrXdNWaGlk1bicq/mLg/p/0wJ4CWS334o9ywwHL4o+/yr0Q0RIe
- pGqyBRVu9roblpmQbcC2lH2JjK0+8OP1bhl8mS2t56cWSYbt9oADM7QlnvdBXvWcf2dEusrB4Cd
- EaS7xIClwFkcbXbhrGQDS1Z8Ek2hX1ePzkR2lJGTNfLtf4yvwep8BgfjdtODRz4P32pYKpZ4hE/
- fyAlYQC6Gbc9fwVJHfCmUN+2HPGgs6Bsp+t4aarnVr1iPFPT+UwUzfs1NOl9bqDg+eL25butYD7
- OPmL0NC/yD4DA15nWTZWA5G0WJI4e2+swNYZ7iNw8RdLCLXQC9TxaJ9HjnLgq3hZKhlhTRyl/gv
- 1PREu1Lw/d+riY3kyDRgKTs0LMO2R3+fmxExywQAh6phqRxm4n1B5gShRIlyVXtSXJ0O0J7wbv/
- qo6rUTuFD6dZB4ejneJsMnXPF7h21o9DRiVmHF+GMWk6at5HMY2la9k+en9VZre++x7Qpeleibq
- nGLWtohr5VvY4M82Ff31DZIQA9ZFYIZO9cQvEJ9jvOWhOyRljQk5+y/cwGAWjX6ZReWz5PHYstr
- 3V3EXRA=
+ 2l7BmlV87AXb7qBMHY2wkJj6YNJtEf5Sc8gXPGn9vaOFoU6jhGTQnbgfk435rOPXQuHckW1mN/2
+ p0ZCi9IqQ13YnCZkF+UDM8Cx4W6Qg/zB0flU1Ls+Di+p2G0b+hLOgThfh/FG7U7mnzD1I3b1hiL
+ 4+gpRnY/RkIR1or2sLKWGXeQW37u5x8tP6/RposT6bKrjT1tW7CoAGBn+NolfACNZVepYj2541U
+ sFVQNM4H+odsGZ9q5lR6+GdOcCNCrWkYI0KUgMlHZprgOV1Kd5mC55oltEEsE9sRnbvvWDwRKy9
+ c5eukUd2mJAwZKz9lhl8Jft9X/7jXFDqc5ohGI+5YICvL0Z5IdLKss+O8XldVMElx0tNCmNI56u
+ LqjtqtCVN8Zq1Cwf/d9XTyi+PfYLrBk0f6UUZaW6AWi9IYDFEu50j2M+gqKKcS2OMCSveXfW5sN
+ DyO9IRaVJw7j+0smOAs3HRLfFFEe7IIGDZjfoOupEYpUTeQSSuVnPVtAkQrz71zgocA14vQFfhu
+ qR/uy1C35GPk3AtTpRrlIxKlm4eynZp+gStaBXBV3bFtmu1hr8tPAPKElZAdoL9s3QB6KFXYiws
+ XbzPTUE=
 Received: from fli4l.lan.fli4l (p5b3a0ea9.dip0.t-ipconnect.de [91.58.14.169])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 7743FA4C5846
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 921C6A4C5896
  for <buildroot@buildroot.org>; Sun, 11 Oct 2026 15:01:23 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:52426)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xFtAn-000000007Fz-1pLs
+ (envelope-from <bernd@kuhls.net>) id 1xFtAn-000000007Fz-2EwO
  for buildroot@buildroot.org; Sun, 11 Oct 2026 13:01:05 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 11 Oct 2026 15:00:43 +0200
-Message-ID: <20261011130058.3443432-39-bernd@kuhls.net>
+Date: Sun, 11 Oct 2026 15:00:44 +0200
+Message-ID: <20261011130058.3443432-40-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261011130058.3443432-1-bernd@kuhls.net>
 References: <20261011130058.3443432-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: --
-Subject: [Buildroot] [PATCH v9 38/52] package/kodi-inputstream-*: mass
+Subject: [Buildroot] [PATCH v9 39/52] package/kodi-peripheral-*: mass
  version bump to Piers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -160,58 +160,56 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash    | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 2 +-
- package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash        | 2 +-
- package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk          | 2 +-
+ package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash | 2 +-
+ package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk   | 2 +-
+ package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash   | 2 +-
+ package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk     | 2 +-
  4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index cfd0b62fe6..8844714a85 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  c4a458045bf4edfe51a1f9f03ac777c7101c9b00e0e72c76ac51a2b3f530779a  kodi-inputstream-adaptive-21.5.25-Omega.tar.gz
-+sha256  efc7841f949ae0c3f5eaba3f8066f7edfc162619dc0b56e53a18911011263d75  kodi-inputstream-adaptive-22.3.22-Piers.tar.gz
- sha256  48632d57fbb6ab8f50cbf4deced5c91e733fa7ff292687c4816b77f28e483df9  LICENSE.md
- sha256  02f864f3e07456785625968022ce811c5640301bfd2ae70963efea89d306790a  LICENSES/README.md
- sha256  0b7f5dcb3d2c28ff78d999786028930e762df0baa2f52955782e378ec5b636a8  LICENSES/BSD-2-Clause-Views
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index 8aab0c88e8..eea32fd154 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.5.25-Omega
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 22.3.22-Piers
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = \
- 	BSD-2-Clause-Views \
-diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
-index 497efef7cf..c19949135f 100644
---- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
-+++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
+diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
+index 3be4eef39b..541507704c 100644
+--- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
++++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  b7223a30d2774e4c7cbd6c4f8a266bf4d186d160590077be627bd0490d80645c  kodi-inputstream-rtmp-21.1.2-Omega.tar.gz
-+sha256  4980297ade011d9c9f34c668702d5ae9528650bb4dbeff34cfa640d3a86f57ec  kodi-inputstream-rtmp-22.1.3-Piers.tar.gz
+-sha256  7392c30a9e49b0cd219cdca14f5b20ffce9f4a52c349c2cdf37cb603dd21f516  kodi-peripheral-joystick-21.1.23-Omega.tar.gz
++sha256  d4b2d2ed3276053d2da5f198fca248243a55d7b50730ca9e274d84636765e048  kodi-peripheral-joystick-22.0.11-Piers.tar.gz
  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
-index 7aef9c815d..7b487564b8 100644
---- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
-+++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+diff --git a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
+index 698b918266..0625dba460 100644
+--- a/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
++++ b/package/kodi-peripheral-joystick/kodi-peripheral-joystick.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_INPUTSTREAM_RTMP_VERSION = 21.1.2-Omega
-+KODI_INPUTSTREAM_RTMP_VERSION = 22.1.3-Piers
- KODI_INPUTSTREAM_RTMP_SITE = $(call github,xbmc,inputstream.rtmp,$(KODI_INPUTSTREAM_RTMP_VERSION))
- KODI_INPUTSTREAM_RTMP_LICENSE = GPL-2.0+
- KODI_INPUTSTREAM_RTMP_LICENSE_FILES = LICENSE.md
+-KODI_PERIPHERAL_JOYSTICK_VERSION = 21.1.23-Omega
++KODI_PERIPHERAL_JOYSTICK_VERSION = 22.0.11-Piers
+ KODI_PERIPHERAL_JOYSTICK_SITE = $(call github,xbmc,peripheral.joystick,$(KODI_PERIPHERAL_JOYSTICK_VERSION))
+ KODI_PERIPHERAL_JOYSTICK_LICENSE = GPL-2.0+
+ KODI_PERIPHERAL_JOYSTICK_LICENSE_FILES = LICENSE.md
+diff --git a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
+index 833905b9a3..2791ce3074 100644
+--- a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
++++ b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  5f74b0493e0f17e297f271b0befd01406dcaae121305bc7cb9d0ece6200cc675  kodi-peripheral-xarcade-21.0.2-Omega.tar.gz
++sha256  ca391349b0184083ee76918ae37359f2df541597812476c4a18b0c5e0b3d62d1  kodi-peripheral-xarcade-22.0.3-Piers.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
+index a46c616323..0fda4dbdfa 100644
+--- a/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
++++ b/package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PERIPHERAL_XARCADE_VERSION = 21.0.2-Omega
++KODI_PERIPHERAL_XARCADE_VERSION = 22.0.3-Piers
+ KODI_PERIPHERAL_XARCADE_SITE = $(call github,kodi-game,peripheral.xarcade,$(KODI_PERIPHERAL_XARCADE_VERSION))
+ KODI_PERIPHERAL_XARCADE_LICENSE = GPL-2.0+
+ KODI_PERIPHERAL_XARCADE_LICENSE_FILES = LICENSE.md
 -- 
 2.47.3
 
