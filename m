@@ -4,136 +4,105 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9693CA9EBD
-	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 13:12:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E210BCA9EBD
+	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 13:13:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9B85F40648;
-	Sun, 11 Oct 2026 13:12:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A9694405BD;
+	Sun, 11 Oct 2026 13:13:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id viZXpsr6y0mT; Sun, 11 Oct 2026 13:12:46 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org C1E5B405A2
+ id iFDU0lMp4Xh0; Sun, 11 Oct 2026 13:13:11 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org AEEC740676
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791724366;
-	b=O1ZMn43iRld77U6KYz+S5aYoKD9kNEFDKsdc54ItEg1GfPyXIndFeizCVSHdkMvTWEfH
-	 Zdk2y49VyFue+6DzFeAC/61/EHmFuM6c3Gbl0sZtY7FewNqMau4TQNhz5RbkFcmjElB3B
-	 L8a5rcQXAlmSNXXRhmyXmT6fuiRlc2VBWx9De1IwWlu2CUDROpFX6xRmxOyXJfnrfMFft
-	 gQPtiQwlYPNUVsDnB9dAMNdFhWYpyoFpFaTawQCq2nCuEnZaNhcb3CTGGamqgrzGuCwtc
-	 1M5lyUF08IDS2NKeKlAqxFgX3tWHJXCQYM1xW/5I7omd0J9Hv4RV/n9ewgPatEKzPmg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791724391;
+	b=iGZqvcqFVvp7EFuHSaa6lFUj9fRJMA0uJjJgj2olNNPmF2DlbCakMUpvfZjhhe1rZB+F
+	 x9HGchmzOWYR89VZmsDil4I/JB9gXVTOZiFmhipfoFf78eZiLDCxnCZBZrt6o9TKVPL28
+	 iWgy5IPOVQAALPma9SbLQlE1dwwd2FKD8joAgvK8HeQnax2M7o9Ydbmb0jZokW+cQDXy8
+	 CvhXs0BkNp7D5Q2rDiHr9EJBubY6tD5ijJRCNjsiJ+ODiaWERC0mqzh+VMhoNpjScxb9s
+	 //XA/h8SwPq7NNI5mMBrrKWdRk3s3a23HX4zuGrnDWURYF5eVAXoAvsylAPFGdOGiVA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791724366;
+	c=relaxed/relaxed; t=1791724391;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:Received:From:To:
-	 Cc:In-Reply-To:References:Date:Message-ID:User-Agent:MIME-Version:
-	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=v4SoeFnfbuuwuJsT0MjHQUvBOSh5Nlxx/5ghbneUNqA=;
-	b=b31iVlYy17AaCSUCbu7sgpJWv75tZ94BoMK3tN4FRuVjZyL2CUzx+ag74aS7zL0Cmt58
-	 /g3xqLFi6tmSc8WeFGNP+trj//4kPiXYEHg5WAcSer2U/wZRcRVNRQdLLyDZrmH6H9BII
-	 /GoU28Xo8k8cl8p6fnfSXTALAmM2XFKyXzzBxw3yEPQ7ck7LkGdwU5QEoXcmw+SHDUKaC
-	 o3Elh10p1QJ0eZaLi8JX4wxnW5riwZkJhX3b40q7sRORZZlkRCSDn8KLIIhgg1jXBxLof
-	 saBjr3gIgLRPN9XaiVKZdZarg4XbIxTmPf41t2NOzNajElCXlwleBE36kNub+HC39ZA==
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:From:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 Errors-To:Sender;
+	bh=c2MV5jW/mBHOayYx1VekMVf4Vb7AglXqLIYYRk5zfGg=;
+	b=jsTr2PEic1Tgv3woqYYtYKISG5g2PKE3o0BbR5DuYnPNBR9ZY0qRXIxQcpQaqtwp73L0
+	 DyhFjGyi4/QxbEC+78p9+4MqaZRqiOzFuqzS+RkWtMkZFpzc4kjgQYSot1dDT7e0+cOcX
+	 K/aDA0/SlOSaoDM9ODHx5mzZJSA78KRou/QmRzjouFDpHblqs3jKnSTqNjCSOObDHWFa4
+	 vL4Me7tzJB51k+tRKqTT7x2QbXnJYJ7E+wMWvRqyCj5m2IsDNXT7E9RlWpdy+nA83IS70
+	 TjVbd+uJx4OV1KJhk7bHoBR4o3fr8lUyYwhkeXeH1RAG0akLPmHtiCjAPLAF0M3c/zw==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
-	dmarc=none header.from=korsgaard.com;
-	dkim=pass header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256 header.s=purelymail2 header.b=cQUwfP1G;
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791724366;
-	bh=v4SoeFnfbuuwuJsT0MjHQUvBOSh5Nlxx/5ghbneUNqA=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=GQAdliTEziuJR5kIvgD8xK3t6mMtpsjd1HorECNM1DyfsYB/V0Z2aYuUOQ7zZROvi
-	 Mg/hpNuEh8g5LJRFzi9R2ch7YB4K/+LdpfkLXvv3QhG3yZeRNUZ9wAPerrUhHkeeii
-	 eNINo7arU9HqsVwKB2hUmI2v9E7ElhheaMq1DrLK03Em0gxOzDpviDUN91d7DDOPh6
-	 ShWM9obqb0y7cgvm7oTI0tpFjvQRxqfOcw0roYk4flupCW9mGlM0P4BLXJR9ea+pGg
-	 /68fvp/k7ud+hkOxE9wMzOILMM8oa1TUH9OWTH1UA/WCXYAcgHC71j6x6lSooCqrSK
-	 tV3B0qEYC28Uw==
+	s=default; t=1791724391;
+	bh=c2MV5jW/mBHOayYx1VekMVf4Vb7AglXqLIYYRk5zfGg=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=Nd+S4J+BN1esMBOyk+BSZQ1cp2DNobA/Z/jOKCFCDslIB6fInIIFB3r8SuVgeOwvX
+	 8Szp+rB0M2nb6zhat+/aw/7SfIV6w+ysHe0qv4g9tra1b1ABgGE6ZojGyVxAmDyj1h
+	 cjTydgevulB4pLqVhgbonjY86N+mlp82tpPgSi9RogfjKIJWOzO8PzYdvdXWmQNqFA
+	 lEHCbRc6T9Nj93T9WXzi/gMWK+P1MfCsqfVJaloyewTgK8w7fWI9wRil3+XrDteuLO
+	 9Rbe52VisdQ4j4N7KnIMNw6Mk0BblpLRxlB0B+BghrQTBDb1U67kIT3Ii8kgC6Y3tT
+	 KTWfa9iD+bA6g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C1E5B405A2;
-	Sun, 11 Oct 2026 13:12:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 616441A6
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:12:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AEEC740676;
+	Sun, 11 Oct 2026 13:13:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D39F0194
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:13:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 475FE40581
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:12:45 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C595760612
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:13:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KEyFDNRdd2Wn for <buildroot@buildroot.org>;
- Sun, 11 Oct 2026 13:12:44 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 77187405A2
-Authentication-Results: smtp4.osuosl.org;
- arc=none smtp.remote-ip=34.202.193.197
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791724364;
- b=m6HC42S0PGJcMERV2VobJrmQmc9beZ7onpWMe905AbvfewgJ3OA4ZtNkstwA1ojuXKMq
- y6McXLm8YDR2vAN2G1S+7vS227YfRANL8QyB/D66mI7e8Hzbv0+neJtuRqChcl1QTizJf
- OdCRk5KIKeZYIW1sRm/kBm3EQeF4hhUsB41NT49MM4PNx/a1wG8/aLHO/xmnsniyrrcYq
- uPQA4da0JeirkDqEn5e2vnNGgz+2L1moz460Aylnxt0m2o3CU11dNzVAc3VrDNPAiHFba
- fhliCk2aWq4oaLv5z/cG2IRGxVfbA/XIJoJZnMhgFXvHJlMNTM9uT+3G+Cg72Db/rCw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Nu2uXRoYwFzS for <buildroot@buildroot.org>;
+ Sun, 11 Oct 2026 13:13:09 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 25E506060E
+Authentication-Results: smtp3.osuosl.org;
+ arc=none smtp.remote-ip=140.211.167.122
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791724389;
+ b=oPgxN06fPDmauEFRUsXdNiz+lWiSKlOl5klzqQU6bPRTSpNBaMCrHGFdRACv0D+H8lJO
+ fSFOQm9lMTGK0lWTbknV1oTExFpZIwDWqFTZzvzA+MC6ySZZoriguUPQuXZHcMD0WwkQ+
+ GjBpCnpjKPU5OKcuhRa+f62Dp1VLZWpLYWxFP6MKUqCyNqZ9iwWzeCEbUZhIWVCnlg7Br
+ o24Lnl8g9CBjwnYcvoA2J27SJirvRBdx1kASTCZsFkn8se1lApvSL9rHCU2Bc09hgVFY2
+ 8aun/wLITLwru6uEJggqggpCS4LYJ5o3CXWyr47KjgF0Ip1geV0NOrqc7JdV04l/wdA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791724364;
- h=Received-SPF:DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:
- Received:From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
- User-Agent:MIME-Version:Content-Type;
- bh=27vduSz5X4iD6E7RzB/lTivh46zNBhqIdoh4OlhAgM8=;
- b=Wg7TxxlVLX065ay6egfXvUV+dw6ERBXeqFVTINvt7XGxPoohtFKVroO2CgPKcMbu5sI9
- kZmBaHyNtgD/xTvg2a8V4GfPxLAB/aAlydIwes2+BY2NMgeLqzq18rCCNx6NH5RAL+Z8+
- JF+nhamchRTJ/VAZJwPlaWRMZCSNdHqSfswVlmnzrSya6Kl514EcBVnuYucUQycs2qBc9
- VG51BQ/mSESAf7x57G25BTbtq0Pjf8TqRTyK+euLxqV9zk6ePLY3hHkKN3QqNJPzPRPCa
- CqGfk4yPDUcNeufdbnjJ8q4vnfDCWBdFw2FAg1Ke4g8Vh4XQLr2axBZeIGUM+NOiliw==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
- dmarc=none header.from=korsgaard.com;
- dkim=pass header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256
- header.s=purelymail2 header.b=cQUwfP1G; 
- arc=none smtp.remote-ip=34.202.193.197
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ c=relaxed/relaxed; t=1791724389;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=NEc5UEnyz0J5Wx+xjnPuIeKuLxKo0GxIzqHFNX4OfO0=;
+ b=aJPWPwLQOqpjpvnZmVmE9t7+o3FIuMBif3QQ77gwBWFMtYsngC5hH6EQKTrgCUfkM7mp
+ Jc2/FOWtP3MXWa/B1sCrzxnJBozDNtahzPFb/YGe2S/x+5ap3BQ+pKXBDcZCdRCiJhsLd
+ hxJL59USzmPPsrmN9+HfzMv6BbdfGvseNbpFzEWhyeG1Ar7zuf4vl/sgxowUP8YRQJT+i
+ LV9nnwKywCpMpGOrmMLqZHRt/tfs2TVal93JU9434dbfkH1gbt+1AmeShTqdKFzWGmzoU
+ e79jxjTQc3D/VcAcths/W0WnE00uRhfzGcAeJM21UL+i0r+GvMXjGGYxEvRd1zWc1cA==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none) header.from=korsgaard.com
-Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=cQUwfP1G
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 77187405A2
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:12:43 +0000 (UTC)
-DKIM-Signature: a=rsa-sha256;
- b=cQUwfP1GD6CbjZUglDawq/4CooGWh6LgshoKhWh43ShbB0WZkIJYXPgefKOGu0tCLq+4x9VUinClVWzVQ3PdfwI6vSpx/jU03iWXxmqpn7s8k+ThOyNf4/ijPD/MvSag6pUEm+FhevLiZx+8UlvX8M3ZXCXJUtqZA2Juw0hv8seEoXA82JwRa+04yR4gGgvS01BWEDsIk64MOrtoj1SiSJbBU0S11OE/w1FvgOXaPv4oRz6kkWouXWfuz9o1AXgbQ0ijf+kGrE7XtT4AQBzscyDZZgtE/Jn5rURKZj7O/gkQBTpF0niVRlC/h8on1r2Xw6BiPN+1DSM/WEB+PVD6Ew==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=0gYZFPPfOss2yZrYPiKHwtPCklYPp+7kvwLaTYx98zc=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date; 
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Authentication-Results: purelymail.com; auth=pass
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1240455180; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sun, 11 Oct 2026 13:12:41 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1xFtLz-000000098zd-2I2Y;
- Sun, 11 Oct 2026 15:12:39 +0200
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 25E506060E
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:13:09 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 64B8F947D3; Sun, 11 Oct 2026 13:11:50 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Titouan Christophe <titouan.christophe@mind.be>
-Cc: buildroot@buildroot.org,  git@jdknight.me,
- thomas.petazzoni@bootlin.com,  arnout@rnout.be,  thomas.perale@mind.be,
- ju.o@free.fr
-In-Reply-To: <20261010201508.963412-3-titouan.christophe@mind.be> (Titouan
- Christophe's message of "Sat, 10 Oct 2026 22:15:07 +0200")
-References: <20261010201508.963412-1-titouan.christophe@mind.be>
- <20261010201508.963412-3-titouan.christophe@mind.be>
-Date: Sun, 11 Oct 2026 15:12:39 +0200
-Message-ID: <87se2ccreg.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/3] linux: add first-class support for all
- upstream linux versions
+To: buildroot@buildroot.org
+Date: Sun, 11 Oct 2026 15:12:48 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f350991abf13bce2a0d21a69b08f0e7a6a579b1d
+X-Git-Newrev: 0f7c08d8fb36e6e12522ce6f8012c91ace520204
+X-Patchwork-Hint: ignore
+Message-Id: <20261011131150.64B8F947D3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] linux: always select host-uboot-tools for
+ mips
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -145,41 +114,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Titouan" == Titouan Christophe <titouan.christophe@mind.be> writes:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0f7c08d8fb36e6e12522ce6f8012c91ace520204
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-One more thing:
+Since Buildroot commit 40e266ccb9 [1], host-uboot-tools was always selected
+for the latest Linux kernel. This change is intended for autobuilders, and
+was introduced in Buildroot while the latest kernel was 6.12.
 
- > Add new KConfig symbols for all actively supported longterm versions of the
- > Linux kernel. This makes it easier for individual configs to follow updates
- > of their kernels, without having to frequently update them. This should
- > generally improve the security of the target systems, which receive frequent
- > security updates while preserving a stable feature set.
+However, further investigation seem to indicate that itb images were
+generated for mips for a much longer time. Linux commit eed0eabd12 [2]
+seem to enable that image format, and was released in Linux 4.9.
 
- > Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+This version being EOL for quite some time, we can therefore assume
+any "not so old" Linux for mips will need host-uboot-tools to finalize
+this image, and therefore we should select it when building Linux.
 
- > -ifeq ($(BR2_LINUX_KERNEL)$(BR2_LINUX_KERNEL_LATEST_VERSION),y)
- > +ifeq ($(BR2_LINUX_KERNEL)$(BR2_LINUX_KERNEL_LATEST_SERIES),y)
- >  BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
- >  endif
+[1] linux: select host-uboot-tools with FIT on mips
+    https://gitlab.com/buildroot.org/buildroot/-/commit/40e266ccb9
+[2] MIPS: generic: Introduce generic DT-based board support
+    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=eed0eabd12ef061821cbfa20d903476e07645320
 
-When we do this then we also need to ensure the hashes for all these
-versions are available, so I added the version symlinks like we have for
-the linux-headers package:
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ linux/Config.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-lrwxrwxrwx 1 peko peko    11 Oct 11 15:08 5.10.271 -> before-6.17
-lrwxrwxrwx 1 peko peko    11 Oct 11 15:08 5.15.222 -> before-6.17
-lrwxrwxrwx 1 peko peko    11 Oct 11 15:07 6.1.189 -> before-6.17
-lrwxrwxrwx 1 peko peko    11 Oct 11 15:07 6.12.112 -> before-6.17
-lrwxrwxrwx 1 peko peko     9 Oct 11 15:07 6.18.55 -> from-6.17
-lrwxrwxrwx 1 peko peko    11 Oct 11 15:07 6.6.158 -> before-6.17
-
--- 
-Bye, Peter Korsgaard
+diff --git a/linux/Config.in b/linux/Config.in
+index 99efb56b49..3521fe5cd5 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -4,6 +4,9 @@ config BR2_LINUX_KERNEL
+ 	bool "Linux Kernel"
+ 	select BR2_PACKAGE_HOST_KMOD # Unconditional, even if modules not enabled
+ 	select BR2_PACKAGE_HOST_IMAGEMAGICK if BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH != ""
++	# mips always generates an ITB image
++	select BR2_PACKAGE_HOST_UBOOT_TOOLS if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
++	select BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ 	help
+ 	  Enable this option if you want to build a Linux kernel for
+ 	  your embedded device
+@@ -32,9 +35,6 @@ choice
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+ 	bool "Latest version (7.2)"
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_2 if BR2_KERNEL_HEADERS_AS_KERNEL
+-	# mips always generates an ITB image
+-	select BR2_PACKAGE_HOST_UBOOT_TOOLS if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+-	select BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+ 
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	bool "Latest CIP SLTS version (5.10.254-cip72)"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
