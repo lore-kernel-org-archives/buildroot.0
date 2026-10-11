@@ -4,109 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2F85CA9EC7
-	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 21:24:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DD64CA9EC7
+	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 22:01:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5BAAA605E4;
-	Sun, 11 Oct 2026 21:24:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E078F6067C;
+	Sun, 11 Oct 2026 22:01:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dEh4cvGVKLlB; Sun, 11 Oct 2026 21:24:25 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 6F74C6060B
+ id DevlBYDHzNdo; Sun, 11 Oct 2026 22:01:53 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 1CE4D60612
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791753865;
-	b=tScA80B4nmkLDFNdeBzWowrF9QPLhe4ViElplVN+/WN5dLXLcmQ2cIToHqnQGmc2Ij5Y
-	 AGtvdzR7Eoe//kz5Olc7O99mfaYVESePUmGwfQl+JKVGtKly6FDDq2YQKSAyUOeJf2BQV
-	 038eTPj7FhU+b1gp3fLmTNArsCBOZIf9vM0zo4me0ucDls9eV+8JU6Np3zQg/Xyq5Bv7X
-	 8g365FHFDZUaDqFiT/oaCxJJB79tEL+yy5RtrJ7V+zijojEcKS5fitEfTlrJF1Hdutgrv
-	 HJHYggYzKuMRq/3+it9ZMFo9I//3ek3WrH0VF2UL6QjHFnyFFl1KeVYWNra4SswyQng==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791756113;
+	b=gbza1sNLAN2S5HktUXkgyIrI+nCotKvz2HsEIVUDCkJxWu+BT9v2NIBMOV4HxYUykaSy
+	 EpDaNpIe4kJNbfPhli/gN+OcJxsd9prpaGV0o5KhJ40x2jwW/0g5EzghcWsXAk7H+etJ2
+	 5x1ofM9aGkf2LHMgnO1bTEys6ya5y7x1WwTlB71AeuLPoUEyDCdrAntQjOxgzZPsb7bYO
+	 XSJFULN2aLOt9ZajmuohfanFaSTENxERaibVu/fulcl1WcM6KuEAkpZ3SZ4h5Pu3HQpo+
+	 Oqpxb89gOYcyfFAu5wj5Oik6vXJgOCSdE+C4oi3EwAtD1rmJ1an0K2gPQ278cwdLF1A==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791753865;
+	c=relaxed/relaxed; t=1791756113;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:To:References:
-	 Content-Language:In-Reply-To:X-Last-TLS-Session-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 Content-Transfer-Encoding:Content-Type:Errors-To:Sender;
-	bh=2kwyn/zhf1LEMMrHB7xtCnYInoVcnmCWMtrPxtunUj4=;
-	b=qyQ+EkuI8Lb6odY/RHUIE9eqnVTnO98f4TETmTYlALcaaYJEkFDbL5vWVyBEvkqw44oT
-	 fA0oP4+rqUgGu/WYse1czYK70pmKjW+123oKlqPBYnMw7Q7jsnxsbb9BVUtNFjyv23hqI
-	 pb00YqLOXVvsQRp1BEk1RNHFPR5w+XcKPirm3qC63D6PKiiP/cgiBi1Elw9kqt30RgW2I
-	 Igov0hiri8RVjcOANUbPI2gvl7wekeOu6PvjYmR6psJskEHlDzCjvQeSekwkj+lL29FK+
-	 wSoaUTRnrHLvjnXCneWT5OfOQrfGxtj5CN3qSgMv7tYWFWaiee76wO3ySGoqDs08mMw==
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=K78ZyWIr7r34drHePX/Hn3lHpENz7Te4llkRELYVblI=;
+	b=bNPTU4AK+ZSC1qi0Zi5vB6Ws67ynU3/bjFH6F34cvmFMmp9mYXnXrDxaCNfMojisxXyt
+	 1IzfrxKAtUu+5faSa3s57xUUhib9JCCDJHLF3ttqpIvVPhjuWykR0HnzCHSGMAvMXgspT
+	 CGLqvOl3SkoPUtAbR+O9U/21L9eL5mTZmJJxlk/BpbyzepH/cU0FHp87VS2jjZyLAuyu4
+	 TECNTz9FVC2FTMpo3DZs37BX5ReYEKS2Wn5LDAfc2fLnyxgdNyBI0i16RVC7BLHuzxgQo
+	 PNuja9+NSu/ey4g9IIqdeMMzWKlhERDDMybqTOBgQsCTvGz0DKbGe+NLulHzGZl0wKQ==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791753865;
-	bh=2kwyn/zhf1LEMMrHB7xtCnYInoVcnmCWMtrPxtunUj4=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=PuIKTdFbmuCQtbp4W+8bS/16p7tn72X1eiHhnBObo3O25eL5s6HGjj+QkKk+3eF5/
-	 A9norPWLx1Qci78sYoW1ckFU6mKY1YIbEWsX6rSfq+hE/ojX2EwNq3td2yYZzabenB
-	 M8VvsANxd4+XFzBf/xbsSOr7t5GszAPQELSnYsTk0TA92806lgJ1gYGNZkpbmg6+WM
-	 pOYjwVAJTi4H8/qhKhvpba8Sfbjp8ZJoKjdtLZ5ycnIbQpzP+vRF9/mm/4HXYjElJJ
-	 DyeBoMGFTf0qEqTxVeYseAbNHHW7+hgS8TmTI2Ow77l+qUvWINo+YAmi0HC/79Z/t2
-	 pkENpq6bBjxVA==
+	s=default; t=1791756113;
+	bh=K78ZyWIr7r34drHePX/Hn3lHpENz7Te4llkRELYVblI=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=hVvKlplt713YKjiAqbFAaVepikXsqnMdXRg9as2uIxD+jLgU3tOALtAYLv85c3m0N
+	 MvES0RBv/cQqDUGGKpTJyj9aqFPGNZORFVRdV9VR12oRXMGJdOk9afx3aATWNaUYKc
+	 OldsQFnkIxJwK1k6+9K1gxexwhjkj89UMDRtTCeuiiRFGNL/bSy6OEDkUw/v81P4p2
+	 5ePrJ5jpCzAZzEf+QxPxE9aLSjm+kJiCMya2vTrxc1nIovXOklAbSGw8uTNwGZnGrs
+	 hZRiwWyDfeINmLOLEX/G7qX0x0ICN5fewixGyxNKQlShuxha9WxZo+hxo6HQWSoI4P
+	 xnuKRinzkXm/Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F74C6060B;
-	Sun, 11 Oct 2026 21:24:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id E81EF2E0
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 21:24:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1CE4D60612;
+	Sun, 11 Oct 2026 22:01:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 21B3275
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 22:01:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D981980C1C
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 21:24:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 138E1605ED
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 22:01:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rMyx-8g5BQBT for <buildroot@buildroot.org>;
- Sun, 11 Oct 2026 21:24:24 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 1B89680C1A
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791753864;
- b=aJXmFB4S3pnuLMHsqxgDVwXFsQ0IY+HnrMTqgwCxq7+C7v4CrMJ+MDXIPt/GQLItdsXz
- 9fA5RqKrtain7Bsu8uP8lstEypyLy3djBCfhvCuH0La+i6hdMfliNWBCn11+9CoJ433LV
- iMKJspHyHGYvsEG+AQp6o+CtzYQ/J5R77UTJqWEbWDHe2hiwoHoSnyDiZjhxfVgG+jwY4
- V8pw3Sals8NVzofupqhCKOWufXP/Aub/W60ee72/1G7Qexptoubi/ugXc1TvEQrl//iS/
- hR6wIMBl8+XhDranF9RivfQ8YYWIXUE30KCrXKzyKTq8QhBZ4DU2697r9OQMoTDlYbw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eWr-MowAzTBh for <buildroot@buildroot.org>;
+ Sun, 11 Oct 2026 22:01:49 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org B7E20605FF
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791756109;
+ b=eub/pwkJ7r5s/T/sqWIDn7SPK2Tx+KYELs0YbvVqzj/VWybFfd3jjZGxOjhl118YvFtV
+ Wki/AfDw2tOym+e8swhK+Np4W8D3VvVJ7Zkc+u3zkSNqjiIa4zsXcPSVGDxjbjx2v2sMX
+ IBh+yzNz3hq9r4q6H95IyYayHFLRSf9eQK1Dd8uQIR9LcTYOqMtPf2vbvIJWakielL9QP
+ xrzxdRjVZXuosoKn+wLNVm29+VL1B1HXV9P0ntoBZLKMZ8Vb/HVtOG+gbaZV1R/Ro3uyN
+ y6hU70ESYProiBSF3CuGXfXPHUHmhq+xX2DzbwA2vjkWgm4UE900fgtrL/9h3eWK1AA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791753864;
- h=Received-SPF:Received:DKIM-Signature:Message-ID:Date:MIME-Version:
- User-Agent:Subject:To:References:From:Content-Language:In-Reply-To:
- Content-Type:Content-Transfer-Encoding:X-Last-TLS-Session-Version;
- bh=3Cxbq3eZatzqCJ4LHrYEVpCwmkRrThjZgp6ov5dmzdM=;
- b=M6uC/zhPhsdE//zuaPchpmfQRA0DyE3pQDkIF9fDGz/FgI6z8rKQOC+DyXgK5V7nNZry
- DhVoNE44xD5TRnwntCk0af2szyed3fOr1gMTJCjvJYPzBwBIRNVAc1+xTypVDvxuIEUAC
- E7W+EmAIYQYpPz/RZWzxU5tMnirrRGZT+TaWek2tMSPsD+0duRMjcBHIMVF0RfUzVX0Nx
- RQuzdaaXl782fdihlhh9WmBsSK3VeqGuU1SuGmHyy/Sg9C5rSF8SFgNfljST/RzakJGKV
- klv2bz7VQ9Kj11RMNl86UQuqmBHjW/SN0k9W6TJelF9OeRNSlfxK4tkLdIIIcTyt7Og==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
- dmarc=pass header.from=rnout.be;
- dkim=pass header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=Xujcaxsr; 
- arc=none smtp.remote-ip=79.99.201.12
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-Received: from mail.nubo.coop (mail.nubo.coop [79.99.201.12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1B89680C1A
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 21:24:23 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 51D0CB97A0DA; Sun, 11 Oct 2026 23:24:20 +0200 (CEST)
-Message-ID: <7ddf4fe5-15d2-4c02-8a42-34c132a68ce4@rnout.be>
-Date: Sun, 11 Oct 2026 23:24:17 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>, buildroot@buildroot.org
-References: <20260602114732.1957638-1-roykollensvendsen@gmail.com>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <20260602114732.1957638-1-roykollensvendsen@gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH] package/readline: link host shared library
- against ncurses
+ c=relaxed/relaxed; t=1791756109;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=tnOLwS9tCCYVkV0qTEI8i2sv35XGO4jwfwIBP+doo8o=;
+ b=oEUXS2LyAx2QItNBwKvIhyHxueLrxdlS9mvtvFXMucnyozgBMtJKxjXTBwBiajo9MJ1c
+ wNOuTy38dMQrBVStJ2xSuzkg8VUmNQ5TGD67ukAvZjgTFNMGqD046wLDNRnFByoJC4UFv
+ 5CpJIll/+37P8qA+hE0Au/1UKw0zSrb3EYuoCr/jLg93+Z6kzA0a5FiOQQudGGdW7xZUk
+ 8QTxX/9bIRt25HQjrDDu4ovOmc6Y38zfxTmS4SRmjVRA6Nlz+m9AuzqPJhKraDDjaBq6D
+ 4Z/3S4Dau2wiSamFC674nPTLMnQKzIRvOLPCY5KnzyCeK+J+c1/H3oOHFNj5T+q2XoQ==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B7E20605FF
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 22:01:49 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D5C2D952BF; Sun, 11 Oct 2026 22:00:30 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 11 Oct 2026 23:49:29 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1468b63006b2577842035fa69573dc9438239c78
+X-Git-Newrev: a2142664e94e87a2aa90c70ebe14a932b4e357bc
+X-Patchwork-Hint: ignore
+Message-Id: <20261011220030.D5C2D952BF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 7.2.x,
+ 6.18.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,74 +111,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Roy,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a2142664e94e87a2aa90c70ebe14a932b4e357bc
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-On 02/06/2026 13:47, Roy Kollen Svendsen wrote:
-> readline builds its shared library without linking the curses/termcap
-> library, so termcap symbols (UP, BC, PC) are left undefined.
+Update the latest kernel releases to:
+ - 7.2.9 -> 7.2.10
+ - 6.18.55 -> 6.18.56
 
-  We can achieve the same, I think, by setting
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+---
+ linux/{6.18.55 => 6.18.56}                 | 0
+ linux/{7.2.9 => 7.2.10}                    | 0
+ linux/Config.in                            | 4 ++--
+ linux/from-6.17/linux.hash                 | 4 ++--
+ package/linux-headers/{6.18.55 => 6.18.56} | 0
+ package/linux-headers/{7.2.9 => 7.2.10}    | 0
+ package/linux-headers/Config.in.host       | 4 ++--
+ 7 files changed, 6 insertions(+), 6 deletions(-)
 
-HOST_READLINE_CONF_OPTS = --with-curses --with-shared-termcap-library
-
-(which is what we do on the target). That would be much simpler and more 
-understandle.
-
-  Regards,
-  Arnout
-
-> host-gdb pulls in host-readline, installing this libreadline.so into the
-> host directory. buildroot runs its fakeroot finalization script with
-> /bin/sh, and fakeroot puts $(HOST_DIR)/lib in LD_LIBRARY_PATH; so when
-> /bin/sh is linked against readline (e.g. bash) it loads this host
-> libreadline.so rather than the system one, and because UP is a data
-> symbol the loader aborts before /bin/sh can start:
-> 
->    /bin/sh: symbol lookup error: libreadline.so.8: undefined symbol: UP
-> 
-> This only happens when the host's /bin/sh links readline and host-gdb is
-> enabled; otherwise the host libreadline.so is never loaded, which is why
-> it is not seen on every build host.
-> 
-> Pass SHLIB_LIBS so readline's own build links the host shared library
-> against the libncursesw that host-ncurses already provides (it carries
-> the termcap symbols), making the host libreadline.so self-contained.
-> Only the host library is changed: the target library is never loaded
-> during the build, so it cannot break image generation.
-> 
-> Fixes: d98e15a3639d ("package/gdb: really fix build with GCC 15.x by using external readline")
-> Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-> ---
->   package/readline/readline.mk | 9 +++++++++
->   1 file changed, 9 insertions(+)
-> 
-> diff --git a/package/readline/readline.mk b/package/readline/readline.mk
-> index f69cbe45e2..99d3711e7b 100644
-> --- a/package/readline/readline.mk
-> +++ b/package/readline/readline.mk
-> @@ -30,5 +30,14 @@ define READLINE_INSTALL_INPUTRC
->   endef
->   READLINE_POST_INSTALL_TARGET_HOOKS += READLINE_INSTALL_INPUTRC
->   
-> +# readline does not link its shared library against the curses/termcap
-> +# library, leaving termcap symbols (UP, BC, PC) undefined. fakeroot runs
-> +# its finalization script with $(HOST_DIR)/lib in LD_LIBRARY_PATH, so a
-> +# readline-linked /bin/sh loads this host libreadline.so during root
-> +# filesystem generation and aborts on the undefined symbols. Link it
-> +# against the libncursesw that host-ncurses provides (it carries those
-> +# symbols) via readline's SHLIB_LIBS.
-> +HOST_READLINE_MAKE_OPTS += SHLIB_LIBS="-L$(HOST_DIR)/lib -lncursesw"
-> +
->   $(eval $(autotools-package))
->   $(eval $(host-autotools-package))
-
+diff --git a/linux/6.18.55 b/linux/6.18.56
+similarity index 100%
+rename from linux/6.18.55
+rename to linux/6.18.56
+diff --git a/linux/7.2.9 b/linux/7.2.10
+similarity index 100%
+rename from linux/7.2.9
+rename to linux/7.2.10
+diff --git a/linux/Config.in b/linux/Config.in
+index ec705b0bb0..a942d7c56b 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -182,8 +182,8 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "7.2.9" if BR2_LINUX_KERNEL_LATEST_VERSION
+-	default "6.18.55" if BR2_LINUX_KERNEL_LATEST_6_18
++	default "7.2.10" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.18.56" if BR2_LINUX_KERNEL_LATEST_6_18
+ 	default "6.12.112" if BR2_LINUX_KERNEL_LATEST_6_12
+ 	default "6.6.158" if BR2_LINUX_KERNEL_LATEST_6_6
+ 	default "6.1.189" if BR2_LINUX_KERNEL_LATEST_6_1
+diff --git a/linux/from-6.17/linux.hash b/linux/from-6.17/linux.hash
+index d2556506e2..3554a93713 100644
+--- a/linux/from-6.17/linux.hash
++++ b/linux/from-6.17/linux.hash
+@@ -1,8 +1,8 @@
+ # From https://www.kernel.org/pub/linux/kernel/v7.x/sha256sums.asc
+-sha256  b4c5dfbe51a364a6c7f03869200f88c8e1f77403539005f14b7fc6bc91b8d8ba  linux-7.2.9.tar.xz
++sha256  2feaa70453e91f541be6a5c9078d8168e081af45a3d9718054850538cff2ebf3  linux-7.2.10.tar.xz
+ 
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  f410638061a165c12f42ab871d2f3fcd525515359b5faeee80969cff84524df9  linux-6.18.55.tar.xz
++sha256  4633bbda2ab95eaf2a7af4041236451d6759c72e6946265531af4b3aacefbf89  linux-6.18.56.tar.xz
+ 
+ # Licenses hashes
+ sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
+diff --git a/package/linux-headers/6.18.55 b/package/linux-headers/6.18.56
+similarity index 100%
+rename from package/linux-headers/6.18.55
+rename to package/linux-headers/6.18.56
+diff --git a/package/linux-headers/7.2.9 b/package/linux-headers/7.2.10
+similarity index 100%
+rename from package/linux-headers/7.2.9
+rename to package/linux-headers/7.2.10
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 3cf2cdd4f4..f21f543f7f 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -479,8 +479,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "6.1.189"	if BR2_KERNEL_HEADERS_6_1
+ 	default "6.6.158"	if BR2_KERNEL_HEADERS_6_6
+ 	default "6.12.112"	if BR2_KERNEL_HEADERS_6_12
+-	default "6.18.55"	if BR2_KERNEL_HEADERS_6_18
+-	default "7.2.9"		if BR2_KERNEL_HEADERS_7_2
++	default "6.18.56"	if BR2_KERNEL_HEADERS_6_18
++	default "7.2.10"		if BR2_KERNEL_HEADERS_7_2
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
