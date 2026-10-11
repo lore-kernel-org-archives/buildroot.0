@@ -1,151 +1,154 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E265CA9EC7
-	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 08:47:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 969DFCA9EBD
+	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 08:58:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 23A09605F9;
-	Sun, 11 Oct 2026 08:47:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3CE7040683;
+	Sun, 11 Oct 2026 08:58:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bu0jHFUY6AiR; Sun, 11 Oct 2026 08:47:51 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 1798B60616
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791708471;
-	b=CxWwqH/wUZVlxTKqS14Qw+cGLU+QitlU039hWfv6UsVMpWiQNfne8UD1xPhN+O1vdiPq
-	 nNCYKf5b0sDd4i42a4bvCGGyIVg2rfgRcnIWCj4ADfeCygSJb0bppVR0w7/6/xNs3iJFY
-	 BGjN3fMl/kX783XTylCuE1TQobhUCb6ojWNft4srMRfE18kiyHvQh+9FGRfCahbHJrOTy
-	 DAH81Q+m3REtAAThxCOxe1yve1tXn5DcGAcIT2gcqohJeGQRPuMyVqNTI2Kq/rLjPsjVJ
-	 kYimYE+rTK713/lZotjWySbNYB7GNSyPheHfdlK0eHtjviZSa6lzkumSilEX/KJe3fg==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id scKHygc9KReV; Sun, 11 Oct 2026 08:58:37 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 5CDA140656
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791709117;
+	b=c80KKZKHmSkUOLj71uRzuJ3dIdEMsEzNMuKoVQ+h611e307yPKMZpmG69q7CDBOzDxXv
+	 J/LnKRKgg+hSpEWG/w3lZW1yezuMza27zivSR0s54fOZs2PwqK9SOzy3FhhL/6DPzjgG5
+	 Qi/h+Xxwwqq4rosepEcURpMzvVDEPLVCx4VVi2BYuZFpEtL8JeGMTis9jTDcSHt1YEPz7
+	 EagOzZd7M2F2tauCEB2QHdxrf0iyshMYI/dfq1imP4iNfZzmR3hOFiY0EbDP/8k6oJIcL
+	 sZGxgBh7qtQkxU0sbd5Md8wQ1rZEzQntDZ6OwjE54/7A3Ed7TpvXI2VqZLDwWKekk3Q==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791708471;
+	c=relaxed/relaxed; t=1791709117;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
 	 X-Google-DKIM-Signature:X-Forwarded-Encrypted:X-Gm-Message-State:
-	 X-Gm-Gg:X-Received:Received:To:Cc:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Subject:X-BeenThere:
+	 X-Gm-Gg:X-Received:Received:Message-ID:Date:MIME-Version:User-Agent:
+	 To:Cc:References:Content-Language:In-Reply-To:Subject:X-BeenThere:
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=HqOi7iA0RAVQ0mZh6D3JhgWBVxds+rH+NuDLNnQ0fas=;
-	b=lqGBJTuJNLwaevf4MWNz7svberk2DrQ8wOd4D/12WIlEWlm5bQfYE6bqesWJm8RbYQFq
-	 QvdEyOmFo/SWmHY7AzuRn+9QnbTg6L80bzncgPhQNxVp7TYgw/dggWBR2MwonQLSStzrG
-	 RfEj6TZ6bieoTdvdO+ARkZW7xBQyF25Pe6eWCp/Izn4IIWangSuDwsk37GeAuJffEVwyr
-	 C7XwBYPRbsnbnqNwKxOKnZO7qTlr/G0D9LwWV+7fHQnTsydKjTPnt+fnUVcrl6y5iNiO3
-	 pUsOsv9GThqJAvc03KwOq/Z2MnDrOGK+KO/7pJlLg3PwY27HVR5Qzt4oKqUHz7bnT8A==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 Content-Transfer-Encoding:Content-Type:Errors-To:Sender;
+	bh=GUGkjMcHU1RYY5/r6OO3g17qJp8PKKdIJv2AW4KTJxI=;
+	b=cEPPxHVOZWNm2+pDrWJQFg8rMcuFDTjqojT6ZrKdV1z1M6yrP3I9QgkbHj9DTY+buHP+
+	 2QMn2h7tj01jSx9o3HWTK4k/VvpEYrqZiLOUQGlyXQ2qo8YnKADe4vZKhHC8woH6ZW7St
+	 6OAkJSRe/8hYHHZjluTrasGSdkvbOMVYIXAR8hCt6Dtu0XDsYyNmITp29cbLLbx+0z0F6
+	 STPdxIhNSj900upTo829dHYpiuNrqvGHH6QAabfPwsn1OSHS3f+80etp1qPWoOR8UBDVm
+	 M9ygtySRI+Y5R/UT6Bn8j6MacvaUnCD+SAn45rJPHyVeAjVFbuZBpwe21SOeUK4L2hw==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791708471;
-	bh=HqOi7iA0RAVQ0mZh6D3JhgWBVxds+rH+NuDLNnQ0fas=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1791709117;
+	bh=GUGkjMcHU1RYY5/r6OO3g17qJp8PKKdIJv2AW4KTJxI=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=V582xxCBoPiHnNPFrWacRnibK/gZLyNdie3V/rh1bfzP6d/o1H5vKN3cmstTOLD79
-	 5tjNguN+QpHRBmoMsvMvdZG6xrNBQCHJb1Xn5+bLODwXs2NUZ+RLtRo08pJ9iVix17
-	 aKF39yHd5BLuTDbvF0tHimctQTXu8K1mfcJO3TJs9WTJ2Q5wWnUJ13G6igqBJ5FWJ1
-	 tbcgSQcqs3OFgDLiz3noJWrEUjzAEsDQ8p0OMOwSQeG6RWDz00PcBEGGSBWGqNYPfb
-	 8EPnHzVQ/uKovBGIQtrZkDkH8QbV2EKqlHpU3M9tCgiW3nf+0n/hhITwFQdYEw+caw
-	 qs+b02ASUV8ng==
+	b=FjYVPeOAckaADAlD749mOrydtJ3AjV54K9QwnW+oqVH+CuhDBb3dPDfNAoSV9D5ds
+	 8ardJQXvnRiXFQw5ZMtLV6J7Clld1pqaG9/rMZwBR8RTKFDGNYVa8WjZV0YTsYAkLU
+	 ox+tqqKKeu+MIQ7MbDBMt2+HHDTCOeUiJ1iCMfyyK7mlN1verrHW1dPis0nPCLf7bN
+	 Yc6RxsC9DV5zXrJekllmcKCjr8L/pRHtEle0/mNPgrS8RxJtUkHYZuTsQyGwW27XYy
+	 24FqGUnzKcdIoW1FNNLAxI8tD7JPu1b0JmkpSQP4047/FE5UHeIAiduknG3Yu1Z+Kw
+	 6ro35My4QmnrA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1798B60616;
-	Sun, 11 Oct 2026 08:47:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 44D09235
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 08:47:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5CDA140656;
+	Sun, 11 Oct 2026 08:58:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 14DF3235
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 08:58:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2967C40042
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 08:47:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 064AD40042
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 08:58:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K9EQ0Opac-QE for <buildroot@buildroot.org>;
- Sun, 11 Oct 2026 08:47:48 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org EEC1A4002B
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791708468;
- b=ejq/Ge3Ioz0ygld7XjQD3Wnwelpv5/+ODu5UPe2/Cfy4jfymnlWABRWL0AlLyZ8WUmf0
- V6VoT3Ic6JqIgHpp2qL17OWXJ24OfdMZO95VbFnvANMyG8FDOJDhU+R3PhrY5LLp9XxTf
- A6yQCPfx4t5JZO/niC/qhrZWUPX+M8Mw500OvLdda8fnOxw30Z4+vNRoF2//Md6Thq0h2
- Blnf3mKpV7vW8bwGYDdF5Sp9QjuG1YHfOxddQS78xz/4aFy3hTVSzdac1OU0ehkyGEyFl
- Q7nrD78tatn9oD+hkBmJBVTwkspodq1hZel8luDU3lMHeKLXOwsGUxqKNrLBtKpjc+A==
+ id tXWaGriNZf3x for <buildroot@buildroot.org>;
+ Sun, 11 Oct 2026 08:58:35 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org C7E904002B
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791709115;
+ b=DutlGygO7pWZe5xEDgfw42weCSB22LlPtC+VqqI8a4bcauvFDXgah8KoFyWXWoQ3g7j0
+ +CqPaTEr0gMn0yOk2VBL58agqyYuw09W+vdSVzkqDGqmT2oGgZSgNRSnDdQBNsrXjd/ag
+ +NIt7J/KW5mkWpd0K1UXNFK7suUmB7wg0FcbecIsaoYRNh9AnhR4CgXjQkgEMSvcAfopz
+ tRL5KElsyI337T3jyjkCNPAfcXfYcXQRyhLdDrVn7SS0t2Tctufr0fwdmLeaSfMaKTojf
+ 07tW65UOzxCmxTgeMyXv4S0ilWPZPGOCaylWevNP4VSg3yd08RYZRqIzvP6/CC/FYPA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791708468;
+ c=relaxed/relaxed; t=1791709115;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
- From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
- MIME-Version:Content-Transfer-Encoding;
- bh=3fDVMAfVoJAQQDdgIXU1I/I+/R7wOu1TVdXODLZCV9c=;
- b=F35wqFOJ4uNelgfFl4qnvFrHcqxOIPqnbVfKmF+EtdNvA/FTl3RrXNqozNHO51sDlDuG
- dhiHxdZmgWo+SBVI+f6WWDef8FurEBZEd55ZcFGfWugksl0fs4mZzOxHHOeSa5LK6CCOI
- +3He9Zw7XbTaKxZ8wcs8ePj50YquR5ct4pJfU8cGTXhCVplNKj4FEJIMOMYFjGuSlLYk+
- 5ahjKG3UVhZzfnwP71Wf0TZnSWx2f5rr5UNrxBm/f/91MJ6nG5SuRuYV6L+eLZzSkemAi
- mvX6mgtJadVpnygbUf9CgqkuVFm0LSjfLiEL8t5fOjY4v8OkDFrkcf7iaEFEJ79eQAg==
+ Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+ Content-Language:From:In-Reply-To:Content-Type:
+ Content-Transfer-Encoding;
+ bh=CVY1l5jcaNAEkNh62hS/BfazdvoFHSOguNHZLu4NwzU=;
+ b=cRhQYiiY9U9sJz3Q06bw0HIwVdBcrD5n1+pTXmpdItz6U5+3Dw2grJ9EqQTpsKRSs/GH
+ BmR5o0GhethfKUtiXC2zFcAdHvw28SCNOZI9c4nqZHRP/bpiuKy8UJRKpRrLfLFQZojUT
+ ZZ3ufM7sKDidrwA2EC7iZxBEKH7stUpPw87fDHZ00MX8sDBVoJwWye9WgKwLrIziOwqxj
+ hITp/I3+p84iBsg18Zhf81x4ESdW0Telbc00BQWqG86TVxKOYGuCgJwYyKBbKpe4z3Igt
+ 5A35PBprmRWGdpcUdilFCtbtnmz4xC9zUsAHq7Qgu4t3UqKVhAEtkfgzZnTXkJbzbLg==
 ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  dmarc=pass header.from=mind.be;
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=HTu05+5Y; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::42a"
+ header.s=google header.b="ORfl/QxR"; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::336"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EEC1A4002B
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 08:47:47 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-48b0ef9c76eso782247f8f.0
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 01:47:47 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C7E904002B
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 08:58:34 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-4a018dc1f98so7766375e9.3
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 01:58:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1791708466; x=1792313266;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=3fDVMAfVoJAQQDdgIXU1I/I+/R7wOu1TVdXODLZCV9c=;
- b=EvkSNu5v8SeXoZN9wZ7/3IOSFFqW5D1EhcfAzoIsexb4bKFIJN7/AgY8MDAdQIrLtA
- p3Qa1ZGhBzumN4IjqAq51l4wNmOW3cnhI5xt8IWEoGOIgpni+1woMs8bzF83bodN2ceF
- WmltOKJyVCAr4bdW4qV+/6dS8KFwMHDyhU0MeXtonJpc07mHeEhBNAPEUyOYHYbGeJ58
- CEdhXwu/0Ex6k0kH5TPsZLST9yugxGhY4IqXqAwiiUZGZpLiUvwo4aPlrhiVk1YFft3P
- ou6INr8PH5i3sQw20drsUkb6sOtUNvb4/5gZ9f1ZNRjUu6CcPA7Rt5SmY72saRKEjd/L
- bhDg==
+ d=1e100.net; s=20260707; t=1791709112; x=1792313912;
+ h=content-transfer-encoding:content-type:in-reply-to:from
+ :content-language:references:cc:to:subject:user-agent:mime-version
+ :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=CVY1l5jcaNAEkNh62hS/BfazdvoFHSOguNHZLu4NwzU=;
+ b=lktgh0bF5BmQ23kTL6VD2n8dho8SclwUaa/eazXskFpXHq590niOzLa9IJqIivMfso
+ cCToQHcJnX3M3FAXZN55Th8ANjiaz+B1jPYolBzZQ5TIQ00DRsi9RA0iyt0PWLBh/llc
+ GQupul8a9V7+Pu5CRxsXaBozPfuJn6lW0QUsN8JPvvoSYvk1asUYd61zfvOB15Ap0tAs
+ /I9tCFTYjF6YoaP9WVDV9EtkQhmitUtIcUhh+NWZULZR2R+L3+3w4l3j1e/rJsHZ28Lk
+ OBjiV0aN2GHyEIomdaDxz25epw1Tiuv4rtNtyK1W0ofOMnGhmv1TWio7YWD3ZeTmIcuQ
+ mmCw==
 X-Forwarded-Encrypted: i=1;
- AKwUvBwnnqMbDBoKpuu+tRdBIcfLIwaRzpObGRzUQOZuPyqSCLjdu27EjM7wnIgQXv8k0DT5gMXBukKJsFE=@buildroot.org
-X-Gm-Message-State: AFq9FYK7Jn1jF31omAKf8Njzt6RH4h/IuZsVjvax/9JaxhxbgYuhGNqM
- KlVdtb4SzX+16FI7M45x4MJHZBE8mNtMpG4oTBvEM81DcAWtoPjF41kjMiSuSKkcy/0apDoZyZj
- 7V/XpHhc=
-X-Gm-Gg: AYBFou3SR6hg5qk8VsmcdDQPQEI00sVnLG5e15nMveR3KWCKBEIiq8eUwNLsj+W27cm
- vByJfY5zoekZaP2kmq4XuR3mDrjG0jcDBVucewfkzGyExdkEGb4MrubymnHUdqIvBGgn4tDqsQE
- 7pzX+79jhQ3sP4sJyAyXltUd9HQer3zw1+/o6yJvxXQ9s3JzOyQkyHiZ23guu90TMkjBeSN79Xp
- XaucmhBn9r1dEYaplemKsFai/m3G4Zj2Qq2BDbQ/STucgAOVV7hA70GMNjHBxhuE915v/KRJOK/
- AOH6P5+CXyojI6shb9D2Q1XZbEv6nWs9W8q0BoKjVYfFkoj+mufSSZkR3+JPRgvPTbiFQBwyMKn
- eMlzAg6kimpCOcYBSNOvNuoDDWzf5nlVUQadLjMtpgCqj9HCBCSBj1/Bi/ZNz2xKyKqWy7CrFod
- hkiTv59rG7fPWztDNu/WMXsnWG1Ioq+io4Hkf+n/SECPz3XkgZoS6xcSnlSVFvq7PWYL49knNht
- tc1XYIGcMxoYHTGaGiYkUtgUSHzjl1ThFQFkghJc4SMAHNjjIhlcE5q
-X-Received: by 2002:a05:600c:8b64:b0:49d:174e:2a1e with SMTP id
- 5b1f17b1804b1-4a18e498851mr123927485e9.19.1791708465535; 
- Sun, 11 Oct 2026 01:47:45 -0700 (PDT)
-Received: from mindpad (2001-1aeb-401-dd00-f938-e455-e8cc-7064.ip6.tmcz.cz.
- [2001:1aeb:401:dd00:f938:e455:e8cc:7064])
+ AKwUvBw7c6v2IXmOSmMeWUMw3CPstnSadBYMtHRdd+fOkRsqlt0ZXSKrdq0cSMHe3oFMOWla/Q4NL74Xt28=@buildroot.org
+X-Gm-Message-State: AFq9FYJhjlWIZlPsFVp8BsB2NzvXRdhG2AHBBHkglfzUJSatII+HN3Td
+ TgEIwLUTAy3kc355dKSpZpn7HEBWPxQnkIE7o9JH1gLv0+HzmRxS8FRaNDLG8Bk3iSY=
+X-Gm-Gg: AYBFou1M17kadmY5qdTc4m2f6W43125Up4esLG0tL7N56PPnVIvxCKPLYWyXbeFHrMh
+ UNIE8OVvHLEOjo+F2OnsL0mWoT8CjHYIHf1qnefUea78uRWXnToyglmqw34ZAX8NFSeaT3XpVCY
+ 98mZg5CecoDsRBwi0BfgPB23a3OgQQ/jsNrH5+wTima857HqoyzvrnQjymEo5cuy4cpAteYIpo0
+ 1SlTKcvuPby4M6OBYCe0MMT0eqPGNbm5c8J/RzbQhnt4q6tmxcnglmWpbosz5i5WP1xDy+2++36
+ UxhoD/z6pEaWzRHP3onYALwIG3t17R2fGX24BvJC4pqY95+e4/mtjMcIC0mVJXBxJ25EDFknY0a
+ EucfTIF9bHewT9DE4vuxnhuRmIyxGK1Bj4MwvcDtkKE1mMOh2JBecZl3T58S83Ekg/0qcIuHLWM
+ TQQl0GQ8LCI1uj8EM3/RVmiuikNXRNIiTCSvSBR/xZ315Bap3ROIed6hyOvhXR0RD5S5R7ip03N
+ l0VwyLnAFPvi/d/BCjR7EQBUGxq6RACUEBCArk+lL2A7FNIf85HLs7OaPJRxFnulLyR64DSWOfR
+ DmIK5Vdoeqn5D+Tv9UGxfr/114vSrcPFMQ==
+X-Received: by 2002:a05:600c:8a08:b0:4a1:96cd:2f72 with SMTP id
+ 5b1f17b1804b1-4a196cd3235mr41126595e9.2.1791709110670; 
+ Sun, 11 Oct 2026 01:58:30 -0700 (PDT)
+Received: from ?IPV6:2001:1aeb:401:dd00:a87:9755:c250:f5ef?
+ (2001-1aeb-401-dd00-a87-9755-c250-f5ef.ip6.tmcz.cz.
+ [2001:1aeb:401:dd00:a87:9755:c250:f5ef])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4a19471edd5sm198081775e9.11.2026.10.11.01.47.45
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 11 Oct 2026 01:47:45 -0700 (PDT)
-To: Quentin Schulz <quentin.schulz@cherry.de>
-Cc: Thomas Perale <thomas.perale@mind.be>,
-	buildroot@buildroot.org
-Date: Sun, 11 Oct 2026 10:47:44 +0200
-Message-ID: <20261011084744.668954-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <85581630-8fb7-471a-8ebf-6dab79d0d7e2@cherry.de>
-References: <85581630-8fb7-471a-8ebf-6dab79d0d7e2@cherry.de>
+ 5b1f17b1804b1-4a18f3b43efsm232633335e9.1.2026.10.11.01.58.30
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Sun, 11 Oct 2026 01:58:30 -0700 (PDT)
+Message-ID: <4e851ec0-2e10-44cd-9232-1a52c1a4341c@mind.be>
+Date: Sun, 11 Oct 2026 10:58:29 +0200
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 6/9] utils/generate-cyclonedx: support
- custom version
+User-Agent: Mozilla Thunderbird
+To: Thomas Perale <thomas.perale@mind.be>, buildroot@buildroot.org
+Cc: Arnout Vandecappelle <arnout@rnout.be>
+References: <20261011084334.667976-1-thomas.perale@mind.be>
+Content-Language: en-US
+In-Reply-To: <20261011084334.667976-1-thomas.perale@mind.be>
+Subject: Re: [Buildroot] [PATCH 1/2] utils/generate-cyclonedx: avoid
+ f-string usage
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -157,89 +160,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
-Content-Type: text/plain; charset="us-ascii"
+From: Titouan Christophe via buildroot <buildroot@buildroot.org>
+Reply-To: Titouan Christophe <titouan.christophe@mind.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Quentin,
+Hi Thomas, Quentin and everyone,
 
-Coming back to you a bit late but I want to thank you for the thorough review.
+On 11/10/26 10:43, Thomas Perale via buildroot wrote:
+> The argparse library documentation [1] suggest the usage of
+> '%(default)s' in the help text to refer to the default value of the
+> argument.
+>
+> This has the benefit of making it not mandatory to update the help text
+> if the default value of the argument change.
+>
+> [1] https://docs.python.org/3/library/argparse.html#help
+Even better, we could use //argparse.ArgumentDefaultsHelpFormatter, see 
+https://docs.python.org/3/library/argparse.html#formatter-class
 
-We forgot to address those two comments before applying but I've sent a
-follow-up patch [1] to address your comments.
+So, slightly earlier in the file, we would have:
 
-[1] https://lore.kernel.org/all/20261011084334.667976-1-thomas.perale@mind.be/
+parser = 
+argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-Best regards,
-PERALE Thomas
+Which automatically inserts the default value to the help text, without 
+having to add it by ourselves
 
-In reply of:
-> Hi Thomas,
-> 
-> On 6/24/26 12:13 PM, Thomas Perale wrote:
-> > Support using minor revision for CycloneDX 1.6 by passing the version
-> > from the command line. Currently supported:
-> > > - 1.6
-> > - 1.6.1 [1]
-> > - 1.6.2 (default) [2]
-> > > This is used to fetch the latest SPDX license list available upstream.
-> > 
-> Yeah it's kinda confusing to use the CycloneDX version to fetch something that's very little related to it (SPDX license list). I'm not even sure if it is actually required by the CycloneDX spec to use a specific version of the SPDX license list? Like I wouldn't understand why it needs to be a specific version, it's a list of SPDX-supported license, there's nothing that should break backward/forward-compatibility no?
-> 
-> > [1] https://github.com/CycloneDX/specification/releases/tag/1.6.1
-> > [2] https://github.com/CycloneDX/specification/releases/tag/1.6.2
-> > > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> > ---
-> >   utils/generate-cyclonedx | 12 ++++++++----
-> >   1 file changed, 8 insertions(+), 4 deletions(-)
-> > > diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-> > index 9738db71d6..8d055c3bbd 100755
-> > --- a/utils/generate-cyclonedx
-> > +++ b/utils/generate-cyclonedx
-> > @@ -22,7 +22,7 @@ import sys
-> >   import re
-> >   >   > -CYCLONEDX_VERSION = "1.6"
-> > +DEFAULT_CYCLONEDX_VERSION = "1.6.2"
-> >   >   brpath = Path(__file__).parent.parent
-> >   > @@ -538,6 +538,9 @@ def main():
-> >                           help="Specify the project name to use in the SBOM metadata (default:'buildroot')")
-> >       parser.add_argument("--project-version", type=str, default=f"{BR2_VERSION_FULL}",
-> >                           help="Specify the project version to use in the SBOM metadata (default: builroot version)")
-> > +    parser.add_argument("--cdx-version", type=str, default=DEFAULT_CYCLONEDX_VERSION,
-> > +                        choices=["1.6", "1.6.1", "1.6.2"],
-> > +                        help=f"Set CycloneDX version (default: {DEFAULT_CYCLONEDX_VERSION})")
-> 
-> Simply use %(default)s in lieu of {DEFAULT_CYCLONEDX_VERSION} (and remove the f that makes the string an f-string). c.f. https://docs.python.org/3/library/argparse.html#help
-> 
-> I could nitpick here and say you should first add support for picking a version, and then another commit to modify the default version.
-> 
-> >   >       args = parser.parse_args()
-> >   > @@ -545,7 +548,7 @@ def main():
-> >           parser.print_help()
-> >           sys.exit(1)
-> >   > -    SPDX_LICENSES.extend(br2_retrieve_spdx_licenses(CYCLONEDX_VERSION))
-> > +    SPDX_LICENSES.extend(br2_retrieve_spdx_licenses(args.cdx_version))
-> >       show_info_dict = json.load(args.in_file)
-> >   >       # Remove rootfs and virtual packages if not explicitly included
-> > @@ -553,10 +556,11 @@ def main():
-> >       filtered_show_info_dict = {k: v for k, v in show_info_dict.items()
-> >                                  if ("rootfs" not in v["type"]) and (args.virtual or v["virtual"] is False)}
-> >   > +    cdx_spec_version = ".".join(args.cdx_version.split(".")[:2])
-> 
-> Please add a comment here to explain why we're doing this.
-> 
-> Looks good to me otherwise.
-> 
-> Cheers,
-> Quentin
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+Kind regards,
+Titouan
+>
+> Suggested-by: Quentin Schulz <quentin.schulz@cherry.de>
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> ---
+>   utils/generate-cyclonedx | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
+> index 98009cef98..e8dcfa8518 100755
+> --- a/utils/generate-cyclonedx
+> +++ b/utils/generate-cyclonedx
+> @@ -545,7 +545,7 @@ def main():
+>                           help="Specify the project version to use in the SBOM metadata (default: builroot version)")
+>       parser.add_argument("--cdx-version", type=str, default=DEFAULT_CYCLONEDX_VERSION,
+>                           choices=["1.6", "1.6.1", "1.6.2", "1.7", "1.7.1"],
+> -                        help=f"Set CycloneDX version (default: {DEFAULT_CYCLONEDX_VERSION})")
+> +                        help="Set CycloneDX version (default: %(default)s)")
+>   
+>       args = parser.parse_args()
+>   
 
 _______________________________________________
 buildroot mailing list
