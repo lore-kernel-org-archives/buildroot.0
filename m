@@ -4,101 +4,118 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 371BBCA9ECE
-	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 07:06:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55DA0CA9EC9
+	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 07:07:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 75148810AC;
-	Sun, 11 Oct 2026 07:06:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0872A80F74;
+	Sun, 11 Oct 2026 07:07:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id t4oBUY2L6Gcf; Sun, 11 Oct 2026 07:06:42 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 0880281089
+ id cV7qxMFnqgvW; Sun, 11 Oct 2026 07:07:30 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 706EC80CB2
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791702402;
-	b=mCbJjwB7vr9IHBgqy/8Rxan02nd208aMiAQVfhlO9c9JyG1WjvrDF4fB5I/+FbNxx4GW
-	 JQfpIBGCRaNHi9h5Sn8rVoiVZLvOq60hZwoFIiUXgEjjwQBZoQb2WGWExqGXlH4CF36iW
-	 KYd+R7eaZhF+hov/UIF6FyPavkpPkgxxpCDhyZhRfeibBc/gsRwyo9dKqePQPxXwW1LAY
-	 CKV6fkaaT6pugD+fR+fYtD7akl+ISwqd7De52ocTTKgVwJ4SGR7uQd2gqTqIDuywguk5G
-	 uL21NRlKovy7DQg85tNyeKsLpIkjkZuecsbGkNZrNpAXKeDgKdbhaiPjZwbSfH9+mHw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791702450;
+	b=Qa1GaFQzNDtuS+9xMb+69DUwJzwMjAVACtBsNenKaxm4y26eOlsgj9bh+wVfFFT9q8AY
+	 Mh7zflgjCSWiyoPBmbrK86XHGR860kDxo9+PRZmrYJqQteKlwhM/O8359I2dOsmPISeVw
+	 3ijIo/Iu8EgogR9RlpZa98Z45+ez8u7T63lOpwV2YvYBPlwn8a121DAnkK5HnXQHRw9QX
+	 BMmebeto68gn3IGASG+TQwbfcaVFYkyHDGh3IUrmv/t6fG9SMDX0rl+SB9d+B1uQiNDNE
+	 tgm7nnqsOAgoS2wv5wsWKeTT1JBZAWRY3gYrIXuLdoLnU5Y9VmiCbJeMZXmkYlhUFpg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791702402;
+	c=relaxed/relaxed; t=1791702450;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=oAfHV+Gj2nyIth1tyMcU/AE1q9V6kduMJ/PySTijYmA=;
-	b=jJu7EwWH9haMmo0c022yS01Sc1bFDetcY+Z4hnqTkHyDis/GjeXfCm9FJGCZBx/SishK
-	 gq1JU8QzWliWdv0dWIJ5y783MMfefWmWvsL8IRu+1oJvBArulnWLSWFktRrEpLFqJs8pr
-	 8zzLJS0eVvHih4LWGBx5fSMAVzJCatzuolFMWPXcgPjHxw8PMNyi47IGljQmQ8u6PvU9a
-	 4JErHU0Ruo/bsDJO3glwu4btomnB/4NUQBVwTQf24B5bcD2R8bg0bVakDpgX4RKgI1ysi
-	 GCAbnFd3UD51pGbVW+RbpqQQubWu6iCqa2jIFT60Gh3fu7GfglIK5iF9Iu3Fb8g7wrA==
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
+	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=TaPn6aor7VP1inLBWiM01RHc68BYVUNfZX93BUuHDIk=;
+	b=Ki5BJmrMvXuWUdQd6gsWJvZXsI059hIfqOKO9CVaK9fP2DD21Hi9FFDQnWcmyD2p5KpX
+	 h3P5/82nUOtWYylTTDbppUzW9ZbFwBWZBztjXIslE3knLqiZ1+DsgvlyhS0WpMLgGiHHE
+	 LnqJKhF1AYctqYKF/xQR7Z3RiOmfeJwMW8hDxF+wrx6+7re0hlKCTThdOn3ZCyzlBV8V0
+	 gt0mWUTcnT0L9ohvDfulIzdv6gqzbxisYL3SjDqoX7a2JvVelTX8qPF5wANJJK2oGdj00
+	 oIuH3/gTi50CXTcswYSvs3K/2Q5wc9wMuWXVp/DcDP6lsVJnL8X9kZtIOr0nu6lmIng==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791702402;
-	bh=oAfHV+Gj2nyIth1tyMcU/AE1q9V6kduMJ/PySTijYmA=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=DO6W7HYpmE8UMYevcFO4bE6+nyamiIaiVT/jLky19JgMMXkurn01D2OhjtLs1EB7z
-	 9DS5M9gbmVb797a0EKrw/lQu3yvOsasqK70sP9Jr8WXyGnLyHvUbK4CLlCtc7gtrbU
-	 tkH1gA63dwvxEEY8r2/2t+OZUp5LntNYy3H/cNbsudH5qvJcsQhv29VY7yqRPzm5xO
-	 QC8AIBiFU6A4/oCRopuGtN7RN319XMcUfqpgtZr9rxffcj7G+ETucrIvOXB5z8jwkZ
-	 mzeUsQzgspXNhtbDzJox52eY4e3H7n0ZAdFnYqDMQxeQXs2GhiO6aBQRjTbbmtckzU
-	 XFQGtwKj92kWg==
+	s=default; t=1791702450;
+	bh=TaPn6aor7VP1inLBWiM01RHc68BYVUNfZX93BUuHDIk=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=A4m1qQhEsboFBZpoPCg07ClLyEoCCq1QrJwlJ4AHWt9m0ELQYh64BNfWaAw9QLRvY
+	 kmn/NN9o6cFY/KJSpMsUsaZTH9cZ5smeqaaCQjFA6lTY8zxm5mraXdt6WtPCHaWzw2
+	 DF9KeLlY3RioLLI+M+q3Vl3qN/6QcsjP8stLjagJsZNbFVz+/wvH784X1WQanPt7aW
+	 3ZYNVIgwRgvgmaE/T/iBK0WFgYQ95mDJYKydRW0l6iKd9EQ5FeR6+UVsxEjjc6PE7z
+	 ECZz7eAJGL2XJ0MoqVBPIRuQvXCEUToj3ZJka86lMn/dOoVJ7I+Wk4+xiYRLAokm6O
+	 ZL7qyICElsaCQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0880281089;
-	Sun, 11 Oct 2026 07:06:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 466221DE
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 07:06:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 706EC80CB2;
+	Sun, 11 Oct 2026 07:07:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 602161DE
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 07:07:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 28EF8606EF
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 07:06:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 30E6B40556
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 07:07:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OIXFlyv4kA8n for <buildroot@buildroot.org>;
- Sun, 11 Oct 2026 07:06:38 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org C24E060720
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791702396;
- b=mJCo8QjZD1v2kcaHD1mwd2UOF5JAa/x2ZkCiPDNaRatOEA8oggGHR019oR5KqLPfEOc6
- 5tMiG6s+XtQLmZ1j8C8rTXwzQ9RLS5PiwFHBvpemGfEyaB1eymOt4AlRLdqN+w+uFHgKH
- 4F88ojVatpKeT3iM7F+Jn++YyEUZaFVkjmeQN4ELguLBqmkZvxX4zsZ9aa8cFgKjpWqPT
- 8YnHcf2ZqW7BjXF9m7YSG3uoNEfzgmH1m4UpMStuWBgju5GtZXVTKNB9iUlktx0VGFSQ0
- 575/+eLuAi7H3fNIdjmrJ1ARWUZ+J3KrKQ5xEiw4wDuDGgG+MAnyuJMfsntMxVMMvDQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9IYJ16xos7R1 for <buildroot@buildroot.org>;
+ Sun, 11 Oct 2026 07:07:28 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org B51244062A
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791702448;
+ b=bF6ZRGDxbRLWc0lMqYg872wT+pgMcP8y+xGEKAh1aTVrpM3A5FNiItNxKb/mk6v2l1KD
+ hhkPOpVaFz7/GjwQ3bTjb6nmh8U6+CCMP41yWqhECWbRRfbtqpm5qCEWV0KjB55STQDBX
+ EWqRSxzG6zgH5xbIb8OuySvAuD6vr+oBQz6z8zyvSAM8sDmFxsfnwX8ch6vvZvxroYmTE
+ 0MEmKxv+MfA6cF5aJ4X8BvZ7OJD4Mx2XmcnwEtExGcwipwfSLPxa6gCUuvlo0ZFAYZoF5
+ j2sujN6gbnhGFfze5JyAzkgZ4qG/rIxzyWuk2Zx3cYQ9pignywnKqYlQGzkQxfDwzUA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791702396;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=GBMT62lJp8dA1+/F2rtwTjGX/6+OzrVdI5wvMmpwrWU=;
- b=dB80IJ7ppGMr1ehLqDP/vLCjQZ7Nrs3SHe+93eWorUK4istDmWBbP+FpejISrDM+oy1I
- qAdkIgptV+6NqFp0zd5DfDR5MjUyuWoQO2YYkQODqZoYZpVkMyNndkgPv9bkk0azaBzBa
- huKbupQfCivAVepFQzVfNLpt2VsDQRuoCT1Dc5FhruWHTK1DmXm2pKn2tCBdOC5DXioyT
- 3NkuyLn9G2OECwRk7BWLvhbhb+pggMNmeUKqJZ4zW2whNE3floTK7wlNPBMRgUUhgTyZ6
- w/hB5QEBYkXBJmhPI2HCqKZAmlmbsVm2UR/juTeGgf3asbIdhTgj8Tslv+cLvmrUvFQ==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ c=relaxed/relaxed; t=1791702448;
+ h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
+ Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+ Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
+ bh=+qo6WQ8BVEdwm3MuuJvMJWfHmtAaMw9iZ72gjR0T8e8=;
+ b=C91qX+9sCDxjUatV6xNCr2VI9Ac9UjmxtgBGSNFotBLY+doMkzWie0+F0YEtiLtk6e1Y
+ 852NSfaHx3WiiGUPgrIMj0iIDvOAP1ElH8lEUzdBCWtmDek+XP77aRmzUdQZpoI5ChSL1
+ t1twUdpQ3S+dbjZdtv6J4Xs/uGzMdewerx0+K5pv6Up3XWRjRiDgEEMN/z1aOpG3AHEGl
+ Bd9K24XamkXlRY4zJ8HPda5D1Yz3eadkQK22vuGOOwmZG4v+GZQBku0VOgnmzknrPhQlK
+ I7vsb5MxEilkrcNV64XcL17vcWaGhsJLrfVY/uZSFS67Rb3uzcNIuQjMTYGTRBROzoA==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ dmarc=pass header.from=bootlin.com;
+ dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=uJbZmfCf; 
+ arc=none smtp.remote-ip=185.246.85.4
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C24E060720
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 07:06:36 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1A1AF8DFFA; Sun, 11 Oct 2026 07:05:18 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 11 Oct 2026 09:06:21 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7e05cbe06e50dad5c0271a9b384c997aea445e95
-X-Git-Newrev: 470faf4e6d75b1b55b766379f94912a493877948
-X-Patchwork-Hint: ignore
-Message-Id: <20261011070518.1A1AF8DFFA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/szip: remove package
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B51244062A
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 07:07:26 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id AE21C4E410F6;
+ Sun, 11 Oct 2026 07:07:24 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 826A2605CC;
+ Sun, 11 Oct 2026 07:07:24 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 6A35F11D70215; 
+ Sun, 11 Oct 2026 09:07:23 +0200 (CEST)
+Date: Sun, 11 Oct 2026 09:07:21 +0200
+To: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: buildroot@buildroot.org, 
+ Shubham Chakraborty <chakrabortyshubham66@gmail.com>,
+ "Ernesto L . Williams Jr" <realcontrols@gmail.com>
+Message-ID: <ass1mzSJdj9Jaow6@windsurf>
+References: <20261006110714.3242851-1-yegorslists@gmail.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20261006110714.3242851-1-yegorslists@gmail.com>
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH 0/2] package/szip: replace with libaec
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,140 +129,24 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/470faf4e6d75b1b55b766379f94912a493877948
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On Tue, Oct 06, 2026 at 01:07:12PM +0200, Yegor Yefremov via buildroot wrote:
 
-szip is not maintained upstream anymore: 2.1.1 is the last release,
-there is no public repository, and the source is only available from
-the HDF Group archive. Its license is not a standard open source one,
-and the HDF Group itself recommends libaec as a replacement.
+> Yegor Yefremov (2):
+>   package/libaec: new package
+>   package/szip: remove package
 
-The package also fails to build with GCC >= 15 on non-glibc
-toolchains, as only linux-gnu hosts get -ansi from szip's configure
-and the code relies on pre-C23 empty parameter lists:
+Thanks, series applied!
 
-  rice.c:1323:15: error: too many arguments to function 'winner_ref_function'; expected 0, have 2
-
-libaec provides libsz, a drop-in replacement with the same API and
-soname, so select it through the legacy option.
-
-Fixes:
-  https://autobuild.buildroot.org/results/5e400d0e13480c58e8b1b0178bf7e5537dd31751
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- Config.in.legacy       |  9 +++++++++
- DEVELOPERS             |  3 ---
- package/Config.in      |  1 -
- package/szip/Config.in | 16 ----------------
- package/szip/szip.hash |  3 ---
- package/szip/szip.mk   | 13 -------------
- 6 files changed, 9 insertions(+), 36 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 25eb19468a..97824f701f 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,15 @@ endif
- 
- comment "Legacy options removed in 2026.11"
- 
-+config BR2_PACKAGE_SZIP
-+	bool "szip has been removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_LIBAEC
-+	help
-+	  The szip package has been removed, as it is no longer
-+	  maintained upstream. libaec, which provides a drop-in
-+	  replacement libsz library, has been selected instead.
-+
- config BR2_PACKAGE_PYTHON3_2TO3
- 	bool "python module 2to3 has been removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 0c03a503aa..657264a672 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -973,9 +973,6 @@ F:	package/imx-mkimage/
- N:	Erik Stromdahl <erik.stromdahl@gmail.com>
- F:	package/mxsldr/
- 
--N:	Ernesto L. Williams Jr <realcontrols@gmail.com>
--F:	package/szip/
--
- N:	Esben Haabendal <esben@haabendal.dk>
- F:	package/python-kiwisolver/
- 
-diff --git a/package/Config.in b/package/Config.in
-index c5806ad2a4..5773f33316 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1633,7 +1633,6 @@ menu "Compression and decompression"
- 	source "package/minizip/Config.in"
- 	source "package/minizip-zlib/Config.in"
- 	source "package/snappy/Config.in"
--	source "package/szip/Config.in"
- 	source "package/zchunk/Config.in"
- 	source "package/zlib/Config.in"
- 	source "package/zziplib/Config.in"
-diff --git a/package/szip/Config.in b/package/szip/Config.in
-deleted file mode 100644
-index 5a24362f29..0000000000
---- a/package/szip/Config.in
-+++ /dev/null
-@@ -1,16 +0,0 @@
--config BR2_PACKAGE_SZIP
--	bool "szip"
--	help
--	  Szip is an implementation of the extended-Rice lossless
--	  compression algorithm.
--
--	  The Consultative Committee on Space Data Systems (CCSDS) has
--	  adopted the extended-Rice algorithm for international
--	  standards for space applications[1,6,7]. Szip is reported to
--	  provide fast and effective compression, specifically for the
--	  EOS data generated by the NASA Earth Observatory System
--	  (EOS)[1]. It was originally developed at University of New
--	  Mexico (UNM) and integrated with HDF4 by UNM researchers and
--	  developers.
--
--	  http://www.hdfgroup.org/doc_resource/SZIP
-diff --git a/package/szip/szip.hash b/package/szip/szip.hash
-deleted file mode 100644
-index 5d3ee042f9..0000000000
---- a/package/szip/szip.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally computed
--sha256  21ee958b4f2d4be2c9cabfa5e1a94877043609ce86fde5f286f105f7ff84d412  szip-2.1.1.tar.gz
--sha256  98cc66747133b26563fefc4630ad4c8c7848c722c7b8a60ecd4afbc4c7d7eb01  COPYING
-diff --git a/package/szip/szip.mk b/package/szip/szip.mk
-deleted file mode 100644
-index 869fc9c358..0000000000
---- a/package/szip/szip.mk
-+++ /dev/null
-@@ -1,13 +0,0 @@
--################################################################################
--#
--# szip
--#
--################################################################################
--
--SZIP_VERSION = 2.1.1
--SZIP_SITE = https://docs.hdfgroup.org/archive/support/ftp/lib-external/szip/$(SZIP_VERSION)/src
--SZIP_LICENSE = szip license
--SZIP_LICENSE_FILES = COPYING
--SZIP_INSTALL_STAGING = YES
--
--$(eval $(autotools-package))
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
