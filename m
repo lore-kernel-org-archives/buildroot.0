@@ -1,96 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FA8DCA9EC7
-	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 13:11:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D4F9FCA9EBD
+	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 13:11:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D0CB740704;
-	Sun, 11 Oct 2026 13:11:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A0B47605F1;
+	Sun, 11 Oct 2026 13:11:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 88c0qabZuOhb; Sun, 11 Oct 2026 13:11:22 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 8723F40744
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791724282;
-	b=lh83xS6jcpdrzXIgFxI0uXiJNbGKDtwaghQ97mmZsd/rsHw5+w+PUynCoHuZ+kTa2l4d
-	 bpHXj9/6Pl3d+WS8TwS/oI1sd0CC0TSiuCwkfSQ6IRixzqiNTY9+6D2cFhRUJoy+kdfgF
-	 5nQk3O1ZlPkqrRmOfi5RcYI8iSip0rVRx95C0iW+ktrWZtzddUcgOzY6L1En9cawCBK08
-	 xdxf8h0G2Ig1m+pjzoI9lyPgDyS93rGgwlDqNeDKCqoWdpx9mb0QZR4yAAbFzYAWj7EbD
-	 eWc85OvrHGQbSG8H/qkpYVP5EIOn+AtZHRy8h8neJvtt1eYWbm4cUxY/fTK1NVwsU8Q==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7iMY7PJAgs1D; Sun, 11 Oct 2026 13:11:33 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org EE4226060E
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791724293;
+	b=K8NUoJ6lRTgQp3jZCWC6dkITeqX0q9zNgd20AYoIqm8K0i1ppUGKSOiZ6Vztr6r5pRHy
+	 nuq0TZUGiMcljeoDBLMiauFbqyg9+fo2POJ9zKSvivBtMYtNIPJy+hmjvPra1zR6xZHpt
+	 BePNAZV9HNOXeuvA3lsk0IyP168Kz0qLI106GwVIc8RKZln2Ae0mo98oX0NqYT9e3glaz
+	 9Bz+wjdquk9UnnN7vDk80H9LK+OVb27e5pneK2aXRydDp2eF9g/L8/D9BDN7x/jbzQLBL
+	 366kWxOrXKGQ4a+E2GvKRDHIYixo0H4pGs+TSlnkmXeDblRiOnr6+WLM+aY3tTWAZXA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791724282;
+	c=relaxed/relaxed; t=1791724293;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Date:Message-ID:
+	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:X-Spamd-Bar:Subject:
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
+	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=6hjXnt4c/eb9Sg4VmE4OoC6XWVW1CC/iSkrCgIdHvhU=;
-	b=OwTmXIrYBuNWwIRTjO3JPlBb+LRblkW2EVSSMdemUHeIG8iUFsjW/97+j890McyOotcA
-	 mO0D2rS8de6siCsXnwuEW0R1n5YkvA8S0GwBxFS/n/0Jj4c6+wghkLu3EWvqK3D/4+WOX
-	 EiEbOIG9ZhUzCWSCWEJF/9XCBE9BQ/ovNTygcYyeVy6snonhK3InVJWZfSdtLYxtF43AP
-	 XxUV+sLIGRhYYKlDOLRuR4CHjCZKFPn1MKp6RsBLs77AczujywjjI7D0KHZfsy0V7khHO
-	 yHdsKPvpq0ATFZqNpFuGrKsiCiXIOqjjOIjApkEXe1JVlhguXgxHSbMdazSOkJE88jA==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
-	dmarc=pass header.from=kuhls.net;
-	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=ZjVCQUq0;
+	bh=ApmPDqEl5WRnu9JxFMaFgawhKTRuX2SZqaJKg0UtzrI=;
+	b=g+/Kj8tJyBpTpJOCxFR+YM0ezVbg+IFT4jIaEMjSjVJteX7oEo3HPckOhw0HK+y+1nvd
+	 LQhR0O5LChl+P96lqqcaEwtwLJPzGJ4gSKn3Elrs/X7N5gR3pmd45+79rGdbdMeSX1DsT
+	 4n4kcsd1ZPR6kSKoCK6nhGomK+1h9ISjWuNoRxsWWI5vMSlcyksFFMFFrHYzxUuluvCzV
+	 Yb3CIcNqMx4OkSz8jqu2gL3gNhr1lrNHQKRNAylCYBUCASZClAffwMWhYZT5T3NK23OFt
+	 sK0ME2ggfFOBavXyipSUI36IX1irSrjBJaRhUkwn1IH9/D+wmuWR23cVrnYCkW9295w==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791724282;
-	bh=6hjXnt4c/eb9Sg4VmE4OoC6XWVW1CC/iSkrCgIdHvhU=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1791724293;
+	bh=ApmPDqEl5WRnu9JxFMaFgawhKTRuX2SZqaJKg0UtzrI=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=GJ0fTNtl2anJjf7zn0UfAQqH5TY567WnEAPDs4/+bn9WIUd1vQM1OLu4d1K4FLS9W
-	 sS80wXk2T6xcwx79VzVU0Yhn5S93q3v2crso+kTF6WrWxlmlGeXNcyqfWDB+qIgtNQ
-	 sXG/O9xBqAaUgQGi5skrxVnjFqAfsYgZ2LAXsjjKahjX0u3cjWCDxcwaoX890oOc4g
-	 KVDl1luokjn7l8TmioOHKn33A+U/iQs6AL4GFCu0D5egaJO0oqCRVhUtrddD/kUNdP
-	 2McjYo5o457II2ZwsUo33ZiwAlcuz/IkgHRzpwWvBWUuVS1+ixtT6Y89QiSC/Lhj+z
-	 kemSSWXKNVegA==
+	 From;
+	b=dB4WMEwPqRsZsy/PbWCOs9/QP7BFbRYiPqpR1gDz2fMcfaaMl8/MKqVNQoYtE22yt
+	 96KlkJix/Ks2817q7ltceR2nEWIedpZ0lFto6Bpyr+/v6wt3wt3D9xlSEezHjX868l
+	 IZfAmrjIoAt+cUSA+oKOO7viuK4i9tvY/Cpa8mf1teaYbEqDIxgot7QX3BbIRzn0xd
+	 udNOWG0pBYXYHcwqzg98saVMX8M0xkJHMcycn0R+63v5SfrtHQM57dySK7YCdNJvIv
+	 riJV+aeR5dcUaJ/Wq0l0TOlpuLRaLZpjCUAUrg+TiL810DcYzWSpabDtXN4LpzkQlm
+	 042OdFW4nI9KQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8723F40744;
-	Sun, 11 Oct 2026 13:11:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EE4226060E;
+	Sun, 11 Oct 2026 13:11:32 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id C37FE75
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:11:20 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id B292F75
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:11:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 822F140754
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:11:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A431940783
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:11:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g0laL5lHmbqC for <buildroot@buildroot.org>;
- Sun, 11 Oct 2026 13:11:18 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 66CDD40704
+ id skYKogezFyZ3 for <buildroot@buildroot.org>;
+ Sun, 11 Oct 2026 13:11:30 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org F033640737
 Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791724278;
- b=NdWjDdi+BCNf3JDiMjVmDikYwArDWzCO0ZoCGJAyU7BewTGAfLpyXuhC2AjE0SEPhuuC
- GofXp5Ze8HJTNWpBLWRYl4gLskkXMre/G1UGrvF6ukTJT5CEfPDUAqPGR3yiw0cEg2i14
- MxMNeWTOp6BVhWU2LR1RwKlwrE3cHuMmtIrMQhGIrSYfR3J4fvw4aQl9/+oYFi6SsLP7e
- ZR38FeDXZbNdzrA951uksG1kwP/XCXADRmKuv/eciQgEUGXCcf1UjFuv5I48mtCYQYo2F
- 8waX6eF/nVkX45VcbVNZx83G4kNo0Ihy/z+sZ+XMUvKTklLToO7jTHg1FbPagGq1ILg==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791724290;
+ b=SzhEGDavD/bYAbayofST/K5B3ESYWjGTnU/HyeGJ4R0Qtdggw5NZhSRjx6iv7dhpc6B3
+ 8z9diaN5KgdZSzHjDxRivkrKQUsZ8CN7e+3ubYlhGe2Bky0NYB4sb70ockQq9kWoKPDSP
+ IklbVJYMNKxFwxlowgtIvIYWQhC9etQdhMDwL2z9WSP1r/AJTrsXomZiLvIKQM2F9N3rr
+ ZaNfY7ZSwLEG2WE43rmhEeGDCkt1od+RU2hdBtPnP28qaIV59aKGlUdU87rSTTjoOAxJL
+ VADC/cMVS+nb1zio7bWaPhVr4YF0xAgBNKYAEr54WFJM2maZDFMoDYYPnTWgV6iWhEA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791724278;
+ c=relaxed/relaxed; t=1791724290;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=SYI/4m66Xmx7Wyvk2VyBnHKEMzdEGu4DTPdAk8Bs88c=;
- b=gePZUjvwH7TidGjxHCc97kPyYJznltcguN13edDp9OWiNVWzAPEECpLbKLB9gxPLvoT+
- +wVN5K0+vrZURZLYhOaysIR+XtX02b2KCpIYdjE0GAnnnoidiYLS1naEJkxQZo4LG90hX
- gN6AsmQFqw/i4Xgu7j1XEHer/aS277p0R0D/56rsE7Y8M6JiC9BJsABBfeLwu9cuwplMM
- /+1ew8MYHHrN8QVAzcss0RIwqDOevhGsMcvwbzQu8R+qc4i3eaQxjQXThRReDfyp2oGXC
- S08nlAVXISE9XJ3Mmm1CGKdcxufI55pvbINjHgTu9RjpiKMgfounxg9rJcowvkCKKhg==
+ bh=cYHHaefitDsmqgN0GFPNv64xE19oLKqRsjAINBtG/Tk=;
+ b=I0FbO35zxLbSkwHv9rBzviVlIzc7TNKH3lbJIU174XYHCWOwi/q4CnwW3vIsL3VyxQvL
+ 7lh+l0bXcb3AOy7JY8gQJOsk3pRgQvq8RGsTaAYbm3tQOjxP8GhN/niXPgSzfiWyYOaTZ
+ uYTFzf52OyUj51JILxgVZOegPpxDR5u1fLz3qS/glWWk2gcGgJNPJ+sR/a1wkj7zvcscT
+ s+0ImqSdBPyyGkSlHryM1eyOFggslBzTxALPtoh61zIlumNZfsvfPkenK+urQExcMDoPT
+ pDLCdACvaMxZKzjkgDDYcb91Yo6MXoJ4NUbyBOnQQylQPNlG8mp9m87LK81AFCOFLNg==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
  dmarc=pass header.from=kuhls.net;
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=ZjVCQUq0; 
+ header.s=kas202605290044 header.b=K9WCUNzn; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
@@ -98,52 +96,59 @@ Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
 Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=ZjVCQUq0
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=K9WCUNzn
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 66CDD40704
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:11:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F033640737
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 13:11:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
  s=kas202605290044; t=1791723685;
- bh=SYI/4m66Xmx7Wyvk2VyBnHKEMzdEGu4DTPdAk8Bs88c=;
+ bh=cYHHaefitDsmqgN0GFPNv64xE19oLKqRsjAINBtG/Tk=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=ZjVCQUq09oJoRB8eC6Fc+IRrMDXqx7XDAA8fHj0px4rgZdvSouUICydXVnx7eClbq
- tn4lD1Nm6jLZPtkcp5HPoU5UTw/GsOY3LCI3a5T5cn9e1BCgHz5FJ3CsCSFFFnU+/1
- bFJ4unhxQxQ8OoWhqy4EkXhc2d/LwJVPKSbLmhPSnF01L0ou4dQwDJvqGoRMtf0iiK
- l4EQrge+C4Mb+jTvIxBFexIbdw5tA8lANVWShHTEyIMitnR2J2dPdio2Cl14EnSToR
- PAlEn1hGttfqTQek3ZKoR+1bwBm3hRuRtDVq/0h8P8CfInKO3810DnU3cny6Io++P/
- PLP2NDpSKKchw==
+ b=K9WCUNzn21LWqRqI2q4YVlC7mVDYl23gNQsHG4XK0MQ5jE0XZvxU8cj5q88e4FJAD
+ lP0iIx7gl1uViTy0DKWZ0jI09Ty/A/y+7BV1W15ywgxkYuq2sR0afMc42BYkBYprkr
+ iejV/xEFk7v9o/m22SdQ6qGBQKYPNPWQa/gafNXBE3bArGP04b0rBpYxnPbArFH+S4
+ ijPyGH7BUD9DOzl3TXtaPy87wLDiwPVRB2BB/G0v280/0w6kNuGHteA5angSg/Mn5p
+ l9TxvdFqL8pa90E0lZ7wGpYts1+e0E4PfvT7oIw6DigFBIZCv4YwzgTicwOs1xeeka
+ Nnts61Dvs2TwQ==
 X-KAS-Sym: v3:f51bdf72230551df:Ox5mmHqwgIvMyI1QgKEa7Ro2UqoiVPYwa1ib8hnsjjQqD
  25s8M2vwFrIHsd3K5yBRCNR9KcmhbTBGk0Z/UIeFpf8wsnVNojbXdjCN1xVotleGBWWjjzHBgEE
  74kL4L+STMwD/l3tPdkNjVc2aEcTg5E+9kq3JIuVVgKZUkyGnD/Kyv1FD6YSp7FcFjV40N/5gBQ
  c1a8pSNeJlBzzKSDlvrm7tStdZZURMMjpShUwTVAm3ujJrgLAxVichT90dl6Ye+LoRN+5NYuoCq
  FrxKp8YCAl4Fk1rds2RrRz+55Ma6FGhELkZkdxRcDOeNbj/YZtgaek8wOz/3DQCuSXG5FAKA==:
- pG8MNZ5WFG8aOc0PrqlXElE9envEju2AW1CkmghHdbRwAubzbhDcNPO/CdtCBZy+GAROseXDQMm
- iC+L+GbFAIMi3duzjZOKKdTf2UP33DjhZ/j/wUf/fubWCJTrQWt1278nljoTqeMy0CznHwAz6dr
- pdYzs1IyTdU12lKBoLjuxhlztw1zmuJ7rPmNo6EKWocVdgUN6Y/UfxovAE+MyeZMBO8t0Se7oaE
- Ifyfaetp9lEPCZKJt7qG3U1sOPzdyF2oOYonKHLQ1Mpx3tM/V8a/s47VFFQcUTMxTFTO5nAVfNb
- oZWe/c0SIQpGGjNvYJGn5KcpjI91VOZ9j2ylcAeNB4C22Fk8SZzALgUKKUWgrUCqyTQDKgoVEJI
- ZZVD1/hWzd+//zpkpZfMyJLAHJeTt53PZeEToivfW78tNfV5l7s4OEPK4EX6W3E9g80OQqRPWix
- qEOpLwy6pUI/6OTKGAwu3xye9bz/UlXth9/tj15aJKpwPLImVmin1VRikevA5qmrt16TcFUkdEQ
- n6w1JF2QebDBRBeBzaMrTvXAITDWFSVpxUm1bVN0S+bQbcJCxB5baFPH4evXksqOI/gmRZCD1da
- Qngi1OSOIMpi+atPtOBufLxBNRS4JegDWtnWQrPuslS+HpyXYFmzDrYS51F68H1KlMaiClx0mRc
- ATGBEfTXkuqPNyde0XjYy4+IZJdB8Ba8acVzz3/8bMvHn4IzKzPVLzkGIuexn
+ 5eN54rsrUYPNsANJopy92VZbSYpxZWNIiyNyVE6pySl1B4ytn1JBECrvBaLAJJZXaLUeR7f8RPz
+ T1tHybTSjwxv7f1V83BjbowgQjEKcinAr/GIPRzL/GYw7f02Mp8vBjv59P4cu9dY1GY2gCWCpf7
+ U8moV4OyHCqyFtYyRw5C4i1eiR6To6bnCejyvqSJNXJTdtLH3wr38aVy1XvLabyEorI7/iYFDxL
+ 8W3JHk7ybJHMqZf0kl+jg1JFkzomEZC5Er5L56iCeNzAPzr0X9gjVr8K4D4IuHenZwVm3c4/fuA
+ WKO4djW5nLVnESeEHhofDhFT+o2fvUnK2yHurV9YH670KgMkHU8TsEW0ltrrV6gcBBLQuWWpvnv
+ z+vumQ90Q2w5mwQWpM1ZadO14gTBUBNfupVV8CG4hxLjhDKxhcAZYlj10edmnlerIa6PhVy5P38
+ qPnXgaqiEXeVjaGWQIkAWKso6EYV+Z8poQ0284EZq4i4K8qx3A8q2LPgcedpi8iSdSbegZmZAHv
+ Nnn7ryl+BJ0Aqy8s4mbFuo1MmPH/9fxFOOW8m47ALERZZhpj5orjJ9bkccWtrcOLnUeHiXWiHgu
+ /f2SZ52vhCYkBFpYnaWHUAcT53BFMKYtwY7EzhSF/h6avlgaq6DvCNjw3SGoC/ecF8PJpemW8Ts
+ 27wmmnkPg9ZcYHCrsDVXjeZnd2GId0BhZm2brAetj/I2xQ43hFuFrMZPPu749
 Received: from fli4l.lan.fli4l (p5b3a0ea9.dip0.t-ipconnect.de [91.58.14.169])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 5F7BCA4C58B5;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id D5E8FA4C58BE;
  Sun, 11 Oct 2026 15:01:25 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:52426)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xFtAp-000000007Fz-1KOP;
+ (envelope-from <bernd@kuhls.net>) id 1xFtAp-000000007Fz-3O8Z;
  Sun, 11 Oct 2026 13:01:07 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 11 Oct 2026 15:00:56 +0200
-Message-ID: <20261011130058.3443432-52-bernd@kuhls.net>
+Cc: Andrey Yurovsky <yurovsky@gmail.com>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Brandon Maier <brandon.maier@collins.com>,
+ David GOUARIN <dgouarin@gmail.com>, Heiko Thiery <heiko.thiery@gmail.com>,
+ Joris Lijssens <joris.lijssens@gmail.com>, Stefan Ott <stefan@ott.net>,
+ Thomas Devoogdt <thomas@devoogdt.com>
+Date: Sun, 11 Oct 2026 15:00:57 +0200
+Message-ID: <20261011130058.3443432-53-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261011130058.3443432-1-bernd@kuhls.net>
 References: <20261011130058.3443432-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: -
-Subject: [Buildroot] [PATCH v9 51/52] package/python3: bump version to 3.15.0
+Subject: [Buildroot] [PATCH v9 52/52] package/libopenssl: bump version to
+ 4.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -155,663 +160,536 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://www.python.org/downloads/release/python-3150/
+https://openssl-library.org/post/2026-04-14-openssl-40-final-release/
+https://github.com/openssl/openssl/blob/openssl-4.0.3/CHANGES.md#openssl-40
 
-Rebased patches using --zero-commit option for easier updates in the
-future.
+The following section results in updates to many packages:
+" * `ASN1_STRING` has been made opaque.
+
+  * Signatures of numerous API functions, including those that are related
+    to X509 processing, are changed to include `const` qualifiers for argument
+    and return types, where suitable."
+
+More infos can be found here:
+https://openssl-library.org/post/2026-04-13-asn1_string/
+
+The following section resulted in new legacy options and changes to
+many packages to maintain bisectability:
+" * Removed support for SSLv3.  SSLv3 has been deprecated since 2015,
+    and OpenSSL had it disabled by default since version 1.1.0 (2016).
+
+  * Removed support for engines.  The `no-engine` build option
+    and the `OPENSSL_NO_ENGINE` macro are always present."
+
+More infos can be found here:
+https://openssl-library.org/post/2026-04-07-ssl3/index.html
+https://openssl-library.org/post/2025-12-18-remove-engines/index.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: Andrey Yurovsky <yurovsky@gmail.com>
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Cc: Brandon Maier <brandon.maier@collins.com>
+Cc: David GOUARIN <dgouarin@gmail.com>
+Cc: Heiko Thiery <heiko.thiery@gmail.com>
+Cc: Joris Lijssens <joris.lijssens@gmail.com>
+Cc: Stefan Ott <stefan@ott.net>
+Cc: Thomas Devoogdt <thomas@devoogdt.com>
 ---
- ...e-the-build-of-pyc-files-conditional.patch | 14 ++---
- .../0002-Add-an-option-to-disable-pydoc.patch | 24 ++++----
- .../0003-Add-an-option-to-disable-IDLE.patch  | 18 +++---
- ...move-PY_STDLIB_MOD_SET_NA-further-up.patch |  8 +--
- ...option-to-disable-the-sqlite3-module.patch | 16 +++---
- ...d-an-option-to-disable-the-tk-module.patch | 18 +++---
- ...-option-to-disable-the-curses-module.patch | 14 ++---
- .../0008-Add-an-option-to-disable-expat.patch | 14 ++---
- ...ac-detect-unusable-termio-operations.patch | 16 +++---
- ...mpilation-of-Modules-_remote_debuggi.patch | 55 -------------------
- package/python3/python3.hash                  |  4 +-
- package/python3/python3.mk                    |  4 +-
- 12 files changed, 75 insertions(+), 130 deletions(-)
- delete mode 100644 package/python3/0010-gh-139275-Fix-compilation-of-Modules-_remote_debuggi.patch
+ Config.in.legacy                   | 36 ++++++++++++++++++++++++++++++
+ package/apr-util/Config.in         |  1 -
+ package/dovecot/Config.in          |  1 -
+ package/fluent-bit/Config.in       |  1 -
+ package/libcoap/Config.in          |  1 -
+ package/libks/Config.in            |  1 -
+ package/libldns/libldns.mk         |  8 +------
+ package/libopenssl/Config.in       | 34 ----------------------------
+ package/libopenssl/libopenssl.hash |  4 ++--
+ package/libopenssl/libopenssl.mk   | 18 +--------------
+ package/libp11/Config.in           |  1 -
+ package/libp11/libp11.mk           |  3 +--
+ package/librelp/Config.in          |  1 -
+ package/libssh/Config.in           |  1 -
+ package/luvi/Config.in             |  1 -
+ package/mender/Config.in           |  1 -
+ package/mtd/Config.in              |  1 -
+ package/openssh/openssh.mk         |  8 +------
+ package/rauc/Config.in             |  2 --
+ package/rauc/rauc.mk               |  3 ++-
+ package/softhsm2/Config.in         |  1 -
+ package/unbound/Config.in          |  1 -
+ package/unbound/unbound.mk         |  1 +
+ 23 files changed, 45 insertions(+), 85 deletions(-)
 
-diff --git a/package/python3/0001-Make-the-build-of-pyc-files-conditional.patch b/package/python3/0001-Make-the-build-of-pyc-files-conditional.patch
-index dbc3c60d87..3dc6ddadb2 100644
---- a/package/python3/0001-Make-the-build-of-pyc-files-conditional.patch
-+++ b/package/python3/0001-Make-the-build-of-pyc-files-conditional.patch
-@@ -1,4 +1,4 @@
--From 52bb6f2a3ef352cda16d95a588a0356da562de8e Mon Sep 17 00:00:00 2001
-+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Date: Wed, 22 Feb 2017 16:21:31 -0800
- Subject: [PATCH] Make the build of pyc files conditional
-@@ -15,7 +15,7 @@ Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
- Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
- [ Vincent Fazio: ported to Python 3.13.2 ]
- Signed-off-by: Vincent Fazio <vfazio@gmail.com>
--[ Bernd Kuhls: ported to Python 3.14.2]
-+[ Bernd Kuhls: ported to Python 3.15.0]
- Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- ---
-  Makefile.pre.in | 2 ++
-@@ -23,10 +23,10 @@ Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-  2 files changed, 9 insertions(+)
+diff --git a/Config.in.legacy b/Config.in.legacy
+index f3ed49bd57..39182de76d 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,42 @@ endif
  
- diff --git a/Makefile.pre.in b/Makefile.pre.in
--index 08ad5f4921d..486a35ed99b 100644
-+index 965244d8d2d..00b8828e222 100644
- --- a/Makefile.pre.in
- +++ b/Makefile.pre.in
--@@ -2812,6 +2812,7 @@ libinstall:	all $(srcdir)/Modules/xxmodule.c
-+@@ -2915,6 +2915,7 @@ libinstall:	all $(srcdir)/Modules/xxmodule.c
-  		patch --force --reject-file "$(abs_builddir)/app-store-compliance.rej" --strip 2 --directory "$(DESTDIR)$(LIBDEST)" --input "$(abs_srcdir)/$(APP_STORE_COMPLIANCE_PATCH)" || true ; \
-  	fi
-  	@ # Build PYC files for the 3 optimization levels (0, 1, 2)
-@@ -34,7 +34,7 @@ index 08ad5f4921d..486a35ed99b 100644
-  	-PYTHONPATH=$(DESTDIR)$(LIBDEST) $(RUNSHARED) \
-  		$(PYTHON_FOR_BUILD) -Wi $(DESTDIR)$(LIBDEST)/compileall.py \
-  		-o 0 -o 1 -o 2 $(COMPILEALL_OPTS) -d $(LIBDEST) -f \
--@@ -2821,6 +2822,7 @@ libinstall:	all $(srcdir)/Modules/xxmodule.c
-+@@ -2924,6 +2925,7 @@ libinstall:	all $(srcdir)/Modules/xxmodule.c
-  		$(PYTHON_FOR_BUILD) -Wi $(DESTDIR)$(LIBDEST)/compileall.py \
-  		-o 0 -o 1 -o 2 $(COMPILEALL_OPTS) -d $(LIBDEST)/site-packages -f \
-  		-x badsyntax $(DESTDIR)$(LIBDEST)/site-packages
-@@ -43,10 +43,10 @@ index 08ad5f4921d..486a35ed99b 100644
-  # bpo-21536: Misc/python-config.sh is generated in the build directory
-  # from $(srcdir)Misc/python-config.sh.in.
- diff --git a/configure.ac b/configure.ac
--index bd4446e9488..ad0781f9ee6 100644
-+index ed8b53dd3a4..38615380f11 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -1533,6 +1533,13 @@ fi
-+@@ -1567,6 +1567,13 @@ fi
-  
-  AC_MSG_CHECKING([LDLIBRARY])
-  
-diff --git a/package/python3/0002-Add-an-option-to-disable-pydoc.patch b/package/python3/0002-Add-an-option-to-disable-pydoc.patch
-index 294520f815..bdb779763b 100644
---- a/package/python3/0002-Add-an-option-to-disable-pydoc.patch
-+++ b/package/python3/0002-Add-an-option-to-disable-pydoc.patch
-@@ -1,4 +1,4 @@
--From 8ba9dc9a12687d37454dd949409599f108f1ce44 Mon Sep 17 00:00:00 2001
-+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Date: Wed, 22 Feb 2017 17:07:56 -0800
- Subject: [PATCH] Add an option to disable pydoc
-@@ -18,7 +18,7 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
- Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
- [ Vincent Fazio: ported to Python 3.13.2 ]
- Signed-off-by: Vincent Fazio <vfazio@gmail.com>
--[ Bernd Kuhls: ported to Python 3.14.2]
-+[ Bernd Kuhls: ported to Python 3.15.0]
- Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- ---
-  Makefile.pre.in | 9 ++++++++-
-@@ -26,10 +26,10 @@ Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-  2 files changed, 14 insertions(+), 1 deletion(-)
+ comment "Legacy options removed in 2026.11"
  
- diff --git a/Makefile.pre.in b/Makefile.pre.in
--index 486a35ed99b..c3732bedb30 100644
-+index 00b8828e222..aedc2d55814 100644
- --- a/Makefile.pre.in
- +++ b/Makefile.pre.in
--@@ -2513,7 +2513,9 @@ bininstall: commoninstall altbininstall
-+@@ -2581,7 +2581,9 @@ bininstall: commoninstall altbininstall
-  	-rm -f $(DESTDIR)$(BINDIR)/idle3
-  	(cd $(DESTDIR)$(BINDIR); $(LN) -s idle$(VERSION) idle3)
-  	-rm -f $(DESTDIR)$(BINDIR)/pydoc3
-@@ -39,15 +39,15 @@ index 486a35ed99b..c3732bedb30 100644
-  	if test "x$(LIPO_32BIT_FLAGS)" != "x" ; then \
-  		rm -f $(DESTDIR)$(BINDIR)/python3-32$(EXE); \
-  		(cd $(DESTDIR)$(BINDIR); $(LN) -s python$(VERSION)-32$(EXE) python3-32$(EXE)) \
--@@ -2564,7 +2566,6 @@ LIBSUBDIRS=	asyncio \
-- 		logging \
-- 		multiprocessing multiprocessing/dummy \
-- 		pathlib \
-+@@ -2641,7 +2643,6 @@ LIBSUBDIRS=	asyncio \
-+ 		profiling/sampling/live_collector \
-+ 		profiling/sampling/_vendor/d3/7.8.5 \
-+ 		profiling/sampling/_vendor/d3-flame-graph/4.1.3 \
- -		pydoc_data \
-  		re \
-  		site-packages \
-  		sqlite3 \
--@@ -2731,6 +2732,10 @@ TESTSUBDIRS=	idlelib/idle_test \
-+@@ -2834,6 +2835,10 @@ TESTSUBDIRS=	idlelib/idle_test \
-  
-  COMPILEALL_OPTS=-j0
-  
-@@ -58,7 +58,7 @@ index 486a35ed99b..c3732bedb30 100644
-  TEST_MODULES=@TEST_MODULES@
-  
-  .PHONY: libinstall
--@@ -2959,7 +2964,9 @@ libainstall: all scripts
-+@@ -3062,7 +3067,9 @@ libainstall: all scripts
-  	$(INSTALL_SCRIPT) python-config.py $(DESTDIR)$(LIBPL)/python-config.py
-  	$(INSTALL_SCRIPT) python-config $(DESTDIR)$(BINDIR)/python$(LDVERSION)-config
-  	$(INSTALL_SCRIPT) $(SCRIPT_IDLE) $(DESTDIR)$(BINDIR)/idle$(VERSION)
-@@ -69,10 +69,10 @@ index 486a35ed99b..c3732bedb30 100644
-  		"`echo $(MACHDEP) | sed 's/^\(...\).*/\1/'`" = "aix" ]; then \
-  		echo; echo "Installing support files for building shared extension modules on AIX:"; \
- diff --git a/configure.ac b/configure.ac
--index ad0781f9ee6..00d2b54ead5 100644
-+index 38615380f11..7405aae5f5e 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -4789,6 +4789,12 @@ AS_VAR_IF([posix_threads], [stub], [
-+@@ -4975,6 +4975,12 @@ AS_VAR_IF([posix_threads], [stub], [
-    AC_DEFINE([HAVE_PTHREAD_STUBS], [1], [Define if platform requires stubbed pthreads support])
-  ])
-  
-diff --git a/package/python3/0003-Add-an-option-to-disable-IDLE.patch b/package/python3/0003-Add-an-option-to-disable-IDLE.patch
-index 3a386b7a29..4af0f7242d 100644
---- a/package/python3/0003-Add-an-option-to-disable-IDLE.patch
-+++ b/package/python3/0003-Add-an-option-to-disable-IDLE.patch
-@@ -1,4 +1,4 @@
--From 463c64020b288b8ddfd32a63c4a23ab7369b9669 Mon Sep 17 00:00:00 2001
-+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
- From: Maxime Ripard <maxime.ripard@free-electrons.com>
- Date: Wed, 22 Feb 2017 17:45:14 -0800
- Subject: [PATCH] Add an option to disable IDLE
-@@ -17,7 +17,7 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
- Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
- [ Vincent Fazio: ported to Python 3.13.2 ]
- Signed-off-by: Vincent Fazio <vfazio@gmail.com>
--[ Bernd Kuhls: ported to Python 3.14.2]
-+[ Bernd Kuhls: ported to Python 3.15.0]
- Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- ---
-  Makefile.pre.in | 9 ++++++++-
-@@ -25,10 +25,10 @@ Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-  2 files changed, 14 insertions(+), 1 deletion(-)
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL
++	bool "OpenSSL SSL support has been removed"
++	select BR2_LEGACY
++	help
++	  OpenSSL 4.x removed SSL support
++
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL3
++	bool "OpenSSL SSL3 support has been removed"
++	select BR2_LEGACY
++	help
++	  OpenSSL 4.x removed SSL3 support
++
++config BR2_PACKAGE_LIBOPENSSL_ENGINES
++	bool "OpenSSL additional engines has been removed"
++	select BR2_LEGACY
++	help
++	  OpenSSL 4.x removed engines support
++
++config BR2_PACKAGE_LIBOPENSSL_DYNAMIC_ENGINE
++	bool "OpenSSL dynamic engine has been removed"
++	select BR2_LEGACY
++	help
++	  OpenSSL 4.x removed engines support
++
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_LOADER_ENGINE
++	bool "OpenSSL 'loader_attic' engine has been removed"
++	select BR2_LEGACY
++	help
++	  OpenSSL 4.x removed engines support
++
++config BR2_PACKAGE_LIBOPENSSL_ENABLE_PADLOCK_ENGINE
++	bool "OpenSSL padlock engine has been removed"
++	select BR2_LEGACY
++	help
++	  OpenSSL 4.x removed engines support
++
+ config BR2_PACKAGE_QT6OPCUA
+ 	bool "qt6opcua has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/apr-util/Config.in b/package/apr-util/Config.in
+index 06b6c2684c..2a28d5f5aa 100644
+--- a/package/apr-util/Config.in
++++ b/package/apr-util/Config.in
+@@ -6,7 +6,6 @@ config BR2_PACKAGE_APR_UTIL
+ 	select BR2_PACKAGE_APR
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+-	select BR2_PACKAGE_LIBOPENSSL_ENGINES if BR2_PACKAGE_LIBOPENSSL
+ 	help
+ 	  The utility library for the apache runtime project
  
- diff --git a/Makefile.pre.in b/Makefile.pre.in
--index c3732bedb30..2197bb18434 100644
-+index aedc2d55814..827bc608c1a 100644
- --- a/Makefile.pre.in
- +++ b/Makefile.pre.in
--@@ -2511,7 +2511,9 @@ bininstall: commoninstall altbininstall
-+@@ -2579,7 +2579,9 @@ bininstall: commoninstall altbininstall
-  	-rm -f $(DESTDIR)$(LIBPC)/python3-embed.pc
-  	(cd $(DESTDIR)$(LIBPC); $(LN) -s python-$(VERSION)-embed.pc python3-embed.pc)
-  	-rm -f $(DESTDIR)$(BINDIR)/idle3
-@@ -38,7 +38,7 @@ index c3732bedb30..2197bb18434 100644
-  	-rm -f $(DESTDIR)$(BINDIR)/pydoc3
-  ifeq (@PYDOC@,yes)
-  	(cd $(DESTDIR)$(BINDIR); $(LN) -s pydoc$(VERSION) pydoc3)
--@@ -2560,7 +2562,6 @@ LIBSUBDIRS=	asyncio \
-+@@ -2628,7 +2630,6 @@ LIBSUBDIRS=	asyncio \
-  		ensurepip ensurepip/_bundled \
-  		html \
-  		http \
-@@ -46,7 +46,7 @@ index c3732bedb30..2197bb18434 100644
-  		importlib importlib/resources importlib/metadata \
-  		json \
-  		logging \
--@@ -2736,6 +2737,10 @@ ifeq (@PYDOC@,yes)
-+@@ -2839,6 +2840,10 @@ ifeq (@PYDOC@,yes)
-  LIBSUBDIRS += pydoc_data
-  endif
-  
-@@ -57,7 +57,7 @@ index c3732bedb30..2197bb18434 100644
-  TEST_MODULES=@TEST_MODULES@
-  
-  .PHONY: libinstall
--@@ -2963,7 +2968,9 @@ libainstall: all scripts
-+@@ -3066,7 +3071,9 @@ libainstall: all scripts
-  	$(INSTALL_SCRIPT) $(srcdir)/install-sh $(DESTDIR)$(LIBPL)/install-sh
-  	$(INSTALL_SCRIPT) python-config.py $(DESTDIR)$(LIBPL)/python-config.py
-  	$(INSTALL_SCRIPT) python-config $(DESTDIR)$(BINDIR)/python$(LDVERSION)-config
-@@ -68,10 +68,10 @@ index c3732bedb30..2197bb18434 100644
-  	$(INSTALL_SCRIPT) $(SCRIPT_PYDOC) $(DESTDIR)$(BINDIR)/pydoc$(VERSION)
-  endif
- diff --git a/configure.ac b/configure.ac
--index 00d2b54ead5..5395e82384b 100644
-+index 7405aae5f5e..9752d431cba 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -8189,6 +8189,12 @@ PY_STDLIB_MOD([xxlimited_35], [test "$TEST_MODULES" = yes], [test "$ac_cv_func_d
-+@@ -8644,6 +8644,12 @@ AC_SUBST([JIT_SHIM_BUILD_O])
-  # substitute multiline block, must come after last PY_STDLIB_MOD()
-  AC_SUBST([MODULE_BLOCK])
-  
-diff --git a/package/python3/0004-configure.ac-move-PY_STDLIB_MOD_SET_NA-further-up.patch b/package/python3/0004-configure.ac-move-PY_STDLIB_MOD_SET_NA-further-up.patch
-index faf990430c..3cd20d883b 100644
---- a/package/python3/0004-configure.ac-move-PY_STDLIB_MOD_SET_NA-further-up.patch
-+++ b/package/python3/0004-configure.ac-move-PY_STDLIB_MOD_SET_NA-further-up.patch
-@@ -1,4 +1,4 @@
--From 930c4763ac46d180880615eceeb68698e9b35e85 Mon Sep 17 00:00:00 2001
-+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- Date: Tue, 6 Feb 2024 22:46:59 +0100
- Subject: [PATCH] configure.ac: move PY_STDLIB_MOD_SET_NA further up
-@@ -11,14 +11,14 @@ Upstream: N/A
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- [ Vincent Fazio: ported to Python 3.13.2 ]
- Signed-off-by: Vincent Fazio <vfazio@gmail.com>
--[ Bernd Kuhls: ported to Python 3.14.2]
-+[ Bernd Kuhls: ported to Python 3.15.0]
- Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- ---
-  configure.ac | 13 ++++++-------
-  1 file changed, 6 insertions(+), 7 deletions(-)
+diff --git a/package/dovecot/Config.in b/package/dovecot/Config.in
+index 6753160c27..e6c1f92d07 100644
+--- a/package/dovecot/Config.in
++++ b/package/dovecot/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_DOVECOT
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+-	select BR2_PACKAGE_LIBOPENSSL_ENGINES if BR2_PACKAGE_LIBOPENSSL
+ 	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
+ 	select BR2_PACKAGE_PCRE2_32 if BR2_PACKAGE_PCRE2
+ 	select BR2_PACKAGE_OPENSSL
+diff --git a/package/fluent-bit/Config.in b/package/fluent-bit/Config.in
+index 2af6279744..51655f9a2f 100644
+--- a/package/fluent-bit/Config.in
++++ b/package/fluent-bit/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_FLUENT_BIT
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	select BR2_PACKAGE_C_ARES
+-	select BR2_PACKAGE_LIBOPENSSL_ENGINES # needed by bundled librdkafka
+ 	select BR2_PACKAGE_LIBYAML
+ 	select BR2_PACKAGE_MSGPACK_C
+ 	select BR2_PACKAGE_MUSL_FTS if !BR2_TOOLCHAIN_USES_GLIBC
+diff --git a/package/libcoap/Config.in b/package/libcoap/Config.in
+index 2bd6b742e9..7fb6ad8533 100644
+--- a/package/libcoap/Config.in
++++ b/package/libcoap/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_LIBCOAP
+ 	bool "libcoap"
+ 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_PSK if BR2_PACKAGE_LIBOPENSSL
+-	select BR2_PACKAGE_LIBOPENSSL_ENGINES if BR2_PACKAGE_LIBOPENSSL
+ 	help
+ 	  libcoap is a C implementation of a lightweight
+ 	  application-protocol for devices that are constrained their
+diff --git a/package/libks/Config.in b/package/libks/Config.in
+index 17a008d7a0..4781d188bf 100644
+--- a/package/libks/Config.in
++++ b/package/libks/Config.in
+@@ -4,7 +4,6 @@ config BR2_PACKAGE_LIBKS
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # pthread_setname_np()
+ 	select BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_LIBOPENSSL_ENGINES if BR2_PACKAGE_LIBOPENSSL
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 	help
+diff --git a/package/libldns/libldns.mk b/package/libldns/libldns.mk
+index 13fe854460..49cb44d51c 100644
+--- a/package/libldns/libldns.mk
++++ b/package/libldns/libldns.mk
+@@ -24,17 +24,11 @@ LIBLDNS_CONF_OPTS = \
+ 	--without-pyldnsx
  
- diff --git a/configure.ac b/configure.ac
--index 5395e82384b..ec9a24c5311 100644
-+index 9752d431cba..25a40069fa2 100644
- --- a/configure.ac
- +++ b/configure.ac
- @@ -95,6 +95,12 @@ AC_DEFUN([PY_CHECK_EMSCRIPTEN_PORT], [
-@@ -34,7 +34,7 @@ index 5395e82384b..ec9a24c5311 100644
-  AC_SUBST([BASECPPFLAGS])
-  if test "$srcdir" != . -a "$srcdir" != "$(pwd)"; then
-      # If we're building out-of-tree, we need to make sure the following
--@@ -7701,13 +7707,6 @@ if test -n "$_PYTHREAD_NAME_MAXLEN"; then
-+@@ -8092,13 +8098,6 @@ if test -n "$_PYTHREAD_NAME_MAXLEN"; then
-  fi
-  AC_SUBST([_PYTHREAD_NAME_MAXLEN])
-  
-diff --git a/package/python3/0005-Add-option-to-disable-the-sqlite3-module.patch b/package/python3/0005-Add-option-to-disable-the-sqlite3-module.patch
-index 77c2f22bc5..3283d27a32 100644
---- a/package/python3/0005-Add-option-to-disable-the-sqlite3-module.patch
-+++ b/package/python3/0005-Add-option-to-disable-the-sqlite3-module.patch
-@@ -1,4 +1,4 @@
--From 8f6beca556599479705444af7cc7c49b2b964af8 Mon Sep 17 00:00:00 2001
-+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- Date: Tue, 6 Feb 2024 22:12:20 +0100
- Subject: [PATCH] Add option to disable the sqlite3 module
-@@ -14,7 +14,7 @@ Signed-off-by: Adam Duskett <aduskett@gmail.com>
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- [ Vincent Fazio: ported to Python 3.13.2 ]
- Signed-off-by: Vincent Fazio <vfazio@gmail.com>
--[ Bernd Kuhls: ported to Python 3.14.2]
-+[ Bernd Kuhls: ported to Python 3.15.0]
- Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- ---
-  Makefile.pre.in | 5 ++++-
-@@ -22,18 +22,18 @@ Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-  2 files changed, 11 insertions(+), 1 deletion(-)
+ ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
+-LIBLDNS_CONF_OPTS += --enable-dane-verify
++LIBLDNS_CONF_OPTS += --enable-dane-verify --disable-gost
+ else
+ LIBLDNS_CONF_OPTS += --disable-dane-verify
+ endif
  
- diff --git a/Makefile.pre.in b/Makefile.pre.in
--index 2197bb18434..c8f7ab1e6a9 100644
-+index 827bc608c1a..334a05ecbcf 100644
- --- a/Makefile.pre.in
- +++ b/Makefile.pre.in
--@@ -2569,7 +2569,6 @@ LIBSUBDIRS=	asyncio \
-- 		pathlib \
-+@@ -2646,7 +2646,6 @@ LIBSUBDIRS=	asyncio \
-+ 		profiling/sampling/_vendor/d3-flame-graph/4.1.3 \
-  		re \
-  		site-packages \
- -		sqlite3 \
-  		string \
-  		sysconfig \
-  		tkinter \
--@@ -2741,6 +2740,10 @@ ifeq (@IDLE@,yes)
-+@@ -2844,6 +2843,10 @@ ifeq (@IDLE@,yes)
-  LIBSUBDIRS += idlelib idlelib/Icons
-  endif
-  
-@@ -45,10 +45,10 @@ index 2197bb18434..c8f7ab1e6a9 100644
-  
-  .PHONY: libinstall
- diff --git a/configure.ac b/configure.ac
--index ec9a24c5311..e8e201206bc 100644
-+index 25a40069fa2..22ff89256bd 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -4795,6 +4795,13 @@ AS_VAR_IF([posix_threads], [stub], [
-+@@ -4981,6 +4981,13 @@ AS_VAR_IF([posix_threads], [stub], [
-    AC_DEFINE([HAVE_PTHREAD_STUBS], [1], [Define if platform requires stubbed pthreads support])
-  ])
-  
-diff --git a/package/python3/0006-Add-an-option-to-disable-the-tk-module.patch b/package/python3/0006-Add-an-option-to-disable-the-tk-module.patch
-index b928cd9435..9b8230555a 100644
---- a/package/python3/0006-Add-an-option-to-disable-the-tk-module.patch
-+++ b/package/python3/0006-Add-an-option-to-disable-the-tk-module.patch
-@@ -1,4 +1,4 @@
--From b53a2758ac431bc2493a460e6c886561e2397518 Mon Sep 17 00:00:00 2001
-+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Date: Wed, 22 Feb 2017 17:23:42 -0800
- Subject: [PATCH] Add an option to disable the tk module
-@@ -11,7 +11,7 @@ Signed-off-by: Samuel Martin <s.martin49@gmail.com>
- Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
- [ Adam Duskett: ported to Python 3.10.0 ]
- Signed-off-by: Adam Duskett <aduskett@gmail.com>
--[ Bernd Kuhls: ported to Python 3.14.2]
-+[ Bernd Kuhls: ported to Python 3.15.0]
- Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- [ Adam Duskett: ported to Python 3.12.1 ]
- Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-@@ -25,10 +25,10 @@ Signed-off-by: Vincent Fazio <vfazio@xes-inc.com>
-  2 files changed, 12 insertions(+), 3 deletions(-)
- 
- diff --git a/Makefile.pre.in b/Makefile.pre.in
--index c8f7ab1e6a9..2c91d0dda71 100644
-+index 334a05ecbcf..7e9eef79b06 100644
- --- a/Makefile.pre.in
- +++ b/Makefile.pre.in
--@@ -2571,7 +2571,6 @@ LIBSUBDIRS=	asyncio \
-+@@ -2648,7 +2648,6 @@ LIBSUBDIRS=	asyncio \
-  		site-packages \
-  		string \
-  		sysconfig \
-@@ -36,7 +36,7 @@ index c8f7ab1e6a9..2c91d0dda71 100644
-  		tomllib \
-  		turtledemo \
-  		unittest \
--@@ -2681,7 +2680,6 @@ TESTSUBDIRS=	idlelib/idle_test \
-+@@ -2783,7 +2782,6 @@ TESTSUBDIRS=	idlelib/idle_test \
-  		test/test_pyrepl \
-  		test/test_string \
-  		test/test_sqlite3 \
-@@ -44,7 +44,7 @@ index c8f7ab1e6a9..2c91d0dda71 100644
-  		test/test_tomllib \
-  		test/test_tomllib/data \
-  		test/test_tomllib/data/invalid \
--@@ -2703,7 +2701,6 @@ TESTSUBDIRS=	idlelib/idle_test \
-+@@ -2806,7 +2804,6 @@ TESTSUBDIRS=	idlelib/idle_test \
-  		test/test_tools \
-  		test/test_tools/i18n_data \
-  		test/test_tools/msgfmt_data \
-@@ -52,7 +52,7 @@ index c8f7ab1e6a9..2c91d0dda71 100644
-  		test/test_unittest \
-  		test/test_unittest/namespace_test_pkg \
-  		test/test_unittest/namespace_test_pkg/bar \
--@@ -2730,6 +2727,11 @@ TESTSUBDIRS=	idlelib/idle_test \
-+@@ -2833,6 +2830,11 @@ TESTSUBDIRS=	idlelib/idle_test \
-  		test/xmltestdata/c14n-20 \
-  		test/zipimport_data
-  
-@@ -65,10 +65,10 @@ index c8f7ab1e6a9..2c91d0dda71 100644
-  
-  ifeq (@PYDOC@,yes)
- diff --git a/configure.ac b/configure.ac
--index e8e201206bc..840976ec1bd 100644
-+index 22ff89256bd..be9428dc2cb 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -4808,6 +4808,13 @@ AC_ARG_ENABLE(pydoc,
-+@@ -4994,6 +4994,13 @@ AC_ARG_ENABLE(pydoc,
-  	AS_HELP_STRING([--disable-pydoc], [disable pydoc]),
-  	[ PYDOC="${enableval}" ], [ PYDOC=yes ])
-  
-diff --git a/package/python3/0007-Add-an-option-to-disable-the-curses-module.patch b/package/python3/0007-Add-an-option-to-disable-the-curses-module.patch
-index 729cb5d624..bfb3f25b79 100644
---- a/package/python3/0007-Add-an-option-to-disable-the-curses-module.patch
-+++ b/package/python3/0007-Add-an-option-to-disable-the-curses-module.patch
-@@ -1,4 +1,4 @@
--From baef276faa676d1b0faf64a91fa627b5f8fcc5e0 Mon Sep 17 00:00:00 2001
-+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Date: Wed, 22 Feb 2017 17:31:51 -0800
- Subject: [PATCH] Add an option to disable the curses module
-@@ -13,7 +13,7 @@ Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
- Signed-off-by: Adam Duskett <aduskett@gmail.com>
- [ Vincent Fazio: ported to Python 3.13.2 ]
- Signed-off-by: Vincent Fazio <vfazio@gmail.com>
--[ Bernd Kuhls: ported to Python 3.14.2]
-+[ Bernd Kuhls: ported to Python 3.15.0]
- Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- ---
-  Makefile.pre.in | 5 ++++-
-@@ -21,10 +21,10 @@ Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-  2 files changed, 11 insertions(+), 1 deletion(-)
- 
- diff --git a/Makefile.pre.in b/Makefile.pre.in
--index 2c91d0dda71..fb11e416731 100644
-+index 7e9eef79b06..174164142c0 100644
- --- a/Makefile.pre.in
- +++ b/Makefile.pre.in
--@@ -2555,7 +2555,6 @@ LIBSUBDIRS=	asyncio \
-+@@ -2623,7 +2623,6 @@ LIBSUBDIRS=	asyncio \
-  		concurrent concurrent/futures concurrent/interpreters \
-  		csv \
-  		ctypes ctypes/macholib \
-@@ -32,7 +32,7 @@ index 2c91d0dda71..fb11e416731 100644
-  		dbm \
-  		email email/mime \
-  		encodings \
--@@ -2732,6 +2731,10 @@ LIBSUBDIRS += tkinter
-+@@ -2835,6 +2834,10 @@ LIBSUBDIRS += tkinter
-  TESTSUBDIRS += test/test_tkinter test/test_ttk
-  endif
-  
-@@ -44,10 +44,10 @@ index 2c91d0dda71..fb11e416731 100644
-  
-  ifeq (@PYDOC@,yes)
- diff --git a/configure.ac b/configure.ac
--index 840976ec1bd..1d7ba91ccc9 100644
-+index be9428dc2cb..1f28a1de74d 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -4802,6 +4802,13 @@ AC_ARG_ENABLE(sqlite3,
-+@@ -4988,6 +4988,13 @@ AC_ARG_ENABLE(sqlite3,
-  AS_IF([test "$SQLITE3" = "no"],
-        [PY_STDLIB_MOD_SET_NA([_sqlite3])])
-  
-diff --git a/package/python3/0008-Add-an-option-to-disable-expat.patch b/package/python3/0008-Add-an-option-to-disable-expat.patch
-index 4093d6fa76..046a1dd7b5 100644
---- a/package/python3/0008-Add-an-option-to-disable-expat.patch
-+++ b/package/python3/0008-Add-an-option-to-disable-expat.patch
-@@ -1,4 +1,4 @@
--From 2a7412e43554830ffbc831454de8df903e765b73 Mon Sep 17 00:00:00 2001
-+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- Date: Wed, 22 Feb 2017 17:40:45 -0800
- Subject: [PATCH] Add an option to disable expat
-@@ -19,7 +19,7 @@ Signed-off-by: Andrey Smirnov <andrew.smirnov@gmail.com>
- Signed-off-by: Adam Duskett <aduskett@gmail.com>
- [ Vincent Fazio: ported to Python 3.13.2 ]
- Signed-off-by: Vincent Fazio <vfazio@gmail.com>
--[ Bernd Kuhls: ported to Python 3.14.2]
-+[ Bernd Kuhls: ported to Python 3.15.0]
- Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- ---
-  Makefile.pre.in |  5 ++++-
-@@ -27,10 +27,10 @@ Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-  2 files changed, 17 insertions(+), 12 deletions(-)
- 
- diff --git a/Makefile.pre.in b/Makefile.pre.in
--index fb11e416731..c261b3f9cd7 100644
-+index 174164142c0..e0b46d2fe3a 100644
- --- a/Makefile.pre.in
- +++ b/Makefile.pre.in
--@@ -2576,7 +2576,6 @@ LIBSUBDIRS=	asyncio \
-+@@ -2653,7 +2653,6 @@ LIBSUBDIRS=	asyncio \
-  		urllib \
-  		venv venv/scripts venv/scripts/common venv/scripts/posix \
-  		wsgiref \
-@@ -38,7 +38,7 @@ index fb11e416731..c261b3f9cd7 100644
-  		xmlrpc \
-  		zipfile zipfile/_path \
-  		zoneinfo \
--@@ -2749,6 +2748,10 @@ ifeq (@SQLITE3@,yes)
-+@@ -2852,6 +2851,10 @@ ifeq (@SQLITE3@,yes)
-  LIBSUBDIRS += sqlite3
-  endif
-  
-@@ -50,10 +50,10 @@ index fb11e416731..c261b3f9cd7 100644
-  
-  .PHONY: libinstall
- diff --git a/configure.ac b/configure.ac
--index 1d7ba91ccc9..3980548b253 100644
-+index 1f28a1de74d..021d8a6df5a 100644
- --- a/configure.ac
- +++ b/configure.ac
--@@ -4065,17 +4065,19 @@ LIBS="$withval $LIBS"
-+@@ -4260,17 +4260,19 @@ LIBS="$withval $LIBS"
-  [AC_MSG_RESULT([no])])
-  
-  # Check for use of the system expat library
-diff --git a/package/python3/0009-configure.ac-detect-unusable-termio-operations.patch b/package/python3/0009-configure.ac-detect-unusable-termio-operations.patch
-index 78c0fe057c..83fd1435c8 100644
---- a/package/python3/0009-configure.ac-detect-unusable-termio-operations.patch
-+++ b/package/python3/0009-configure.ac-detect-unusable-termio-operations.patch
-@@ -1,4 +1,4 @@
--From 2d336d1fedb692350a1e4f131246f60a1195cd93 Mon Sep 17 00:00:00 2001
-+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- Date: Sun, 7 Dec 2025 13:57:06 +0100
- Subject: [PATCH] configure.ac: detect unusable termio operations
-@@ -15,7 +15,7 @@ done using a new m4 macro PY_CHECK_IOCTL.
- 
- Upstream: https://github.com/python/cpython/pull/142380
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--[ Bernd Kuhls: ported to Python 3.14.2]
-+[ Bernd Kuhls: ported to Python 3.15.0]
- Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- ---
-  Modules/termios.c |  8 ++++----
-@@ -23,10 +23,10 @@ Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-  2 files changed, 30 insertions(+), 4 deletions(-)
- 
- diff --git a/Modules/termios.c b/Modules/termios.c
--index efb5fcc17fa..3177cb0747a 100644
-+index 38743e176f0..a2defe4b270 100644
- --- a/Modules/termios.c
- +++ b/Modules/termios.c
--@@ -1115,7 +1115,7 @@ static struct constant {
-+@@ -1122,7 +1122,7 @@ static struct constant {
-  #ifdef TCFLSH
-      {"TCFLSH", TCFLSH},
-  #endif
-@@ -35,7 +35,7 @@ index efb5fcc17fa..3177cb0747a 100644
-      {"TCGETA", TCGETA},
-  #endif
-  #ifdef TCGETS
--@@ -1127,13 +1127,13 @@ static struct constant {
-+@@ -1134,13 +1134,13 @@ static struct constant {
-  #ifdef TCSBRKP
-      {"TCSBRKP", TCSBRKP},
-  #endif
-@@ -53,7 +53,7 @@ index efb5fcc17fa..3177cb0747a 100644
-  #endif
-  #ifdef TCSETS
- diff --git a/configure.ac b/configure.ac
--index 3980548b253..48604024fcf 100644
-+index 021d8a6df5a..b87ebaa79a8 100644
- --- a/configure.ac
- +++ b/configure.ac
- @@ -101,6 +101,26 @@ AC_DEFUN([PY_STDLIB_MOD_SET_NA], [
-@@ -83,7 +83,7 @@ index 3980548b253..48604024fcf 100644
-  AC_SUBST([BASECPPFLAGS])
-  if test "$srcdir" != . -a "$srcdir" != "$(pwd)"; then
-      # If we're building out-of-tree, we need to make sure the following
--@@ -8217,6 +8237,12 @@ AC_ARG_ENABLE(idle3,
-+@@ -8672,6 +8692,12 @@ AC_ARG_ENABLE(idle3,
-  	AS_HELP_STRING([--disable-idle3], [disable idle3 IDE]),
-  	[ IDLE="${enableval}" ], [ IDLE=yes ])
-  
-@@ -97,5 +97,5 @@ index 3980548b253..48604024fcf 100644
-  AC_CONFIG_FILES(m4_normalize([
-    Makefile.pre
- -- 
--2.51.1
-+2.47.3
- 
-diff --git a/package/python3/0010-gh-139275-Fix-compilation-of-Modules-_remote_debuggi.patch b/package/python3/0010-gh-139275-Fix-compilation-of-Modules-_remote_debuggi.patch
-deleted file mode 100644
-index 833bcc9cc8..0000000000
---- a/package/python3/0010-gh-139275-Fix-compilation-of-Modules-_remote_debuggi.patch
-+++ /dev/null
-@@ -1,55 +0,0 @@
--From 528429e329047ee572248da0e1212f7cc1ef7d11 Mon Sep 17 00:00:00 2001
--From: Pablo Galindo Salgado <Pablogsal@gmail.com>
--Date: Thu, 25 Sep 2025 00:16:44 +0100
--Subject: [PATCH] gh-139275: Fix compilation of
-- Modules/_remote_debugging_module.c when the system doesn't have
-- process_vm_readv (#139307)
+-ifeq ($(BR2_PACKAGE_LIBOPENSSL_ENGINES),y)
+-LIBLDNS_CONF_OPTS += --enable-gost
+-else
+-LIBLDNS_CONF_OPTS += --disable-gost
+-endif
 -
--Upstream: https://github.com/python/cpython/commit/1963e701001839389cfb1b11d803b0743f4705d7
+ ifeq ($(BR2_STATIC_LIBS),y)
+ LIBLDNS_DEPENDENCIES += host-pkgconf
+ # missing -lz breaks configure, add it using pkgconf
+diff --git a/package/libopenssl/Config.in b/package/libopenssl/Config.in
+index 03d3def802..69ad0b9875 100644
+--- a/package/libopenssl/Config.in
++++ b/package/libopenssl/Config.in
+@@ -40,11 +40,6 @@ config BR2_PACKAGE_LIBOPENSSL_BIN
+ 	  to the target file system. This is a command line tool for
+ 	  doing various cryptographic stuff.
+ 
+-config BR2_PACKAGE_LIBOPENSSL_ENGINES
+-	bool "openssl additional engines"
+-	help
+-	  Install additional encryption engine libraries.
 -
--[ Bernd Kuhls: ported to Python 3.14.7]
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- .../2025-09-24-17-32-52.gh-issue-139275.novrqf.rst              | 2 ++
-- Modules/_remote_debugging_module.c                              | 2 +-
-- Python/remote_debug.h                                           | 2 +-
-- 3 files changed, 4 insertions(+), 2 deletions(-)
-- create mode 100644 Misc/NEWS.d/next/Core_and_Builtins/2025-09-24-17-32-52.gh-issue-139275.novrqf.rst
+ config BR2_PACKAGE_LIBOPENSSL_ENABLE_CHACHA
+ 	bool "enable CHACHA"
+ 	default y
+@@ -98,14 +93,6 @@ config BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH
+ 	bool "enable BLOWFISH"
+ 	default y
+ 
+-config BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL
+-	bool "enable SSL"
+-	default y
 -
--diff --git a/Misc/NEWS.d/next/Core_and_Builtins/2025-09-24-17-32-52.gh-issue-139275.novrqf.rst b/Misc/NEWS.d/next/Core_and_Builtins/2025-09-24-17-32-52.gh-issue-139275.novrqf.rst
--new file mode 100644
--index 00000000000..8cb4b972ad6
----- /dev/null
--+++ b/Misc/NEWS.d/next/Core_and_Builtins/2025-09-24-17-32-52.gh-issue-139275.novrqf.rst
--@@ -0,0 +1,2 @@
--+Fix compilation problems in ``_remote_debugging_module.c`` when the system
--+doesn't have ``process_vm_readv``. Patch by Pablo Galindo
--diff --git a/Modules/_remote_debugging_module.c b/Modules/_remote_debugging_module.c
--index b46538b76df..e86a27d5812 100644
----- a/Modules/_remote_debugging_module.c
--+++ b/Modules/_remote_debugging_module.c
--@@ -1329,7 +1329,7 @@ _Py_RemoteDebug_GetAsyncioDebugAddress(proc_handle_t* handle)
--             _PyErr_ChainExceptions1(exc);
--         }
--     }
---#elif defined(__linux__)
--+#elif defined(__linux__) && HAVE_PROCESS_VM_READV
--     // On Linux, search for asyncio debug in executable or DLL
--     address = search_linux_map_for_section(handle, "AsyncioDebug", "_asyncio.cpython", NULL);
--     if (address == 0) {
--diff --git a/Python/remote_debug.h b/Python/remote_debug.h
--index 8f9b6cd4c49..b7d17a0f345 100644
----- a/Python/remote_debug.h
--+++ b/Python/remote_debug.h
--@@ -1174,7 +1174,7 @@
--             _PyErr_ChainExceptions1(exc);
--         }
--     }
---#elif defined(__linux__)
--+#elif defined(__linux__) && HAVE_PROCESS_VM_READV
--     // On Linux, search for 'python' in executable or DLL
--     address = search_linux_map_for_section(handle, "PyRuntime", "python",
--                                            _Py_RemoteDebug_ValidatePyRuntimeCookie);
---- 
--2.47.3
+-config BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL3
+-	bool "enable SSL3"
+-	default y
 -
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index ae4a00c319..2546b249c9 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,4 +1,4 @@
--# From https://www.python.org/downloads/release/python-3148/
--sha256  c2215904f02b175596dc49351585104f4bc20341e1c47378b26a2c274360ce73  Python-3.14.8.tar.xz
-+# From https://www.python.org/downloads/release/python-3150/
-+sha256  ba4bed1ba346b916890b76d9e320451420aa69f6408997d33c66482eeae3d575  Python-3.15.0.tar.xz
- # Locally computed
- sha256  b0e25a78cffb43f4d92de8b61ccfa1f1f98ecbc22330b54b5251e7b6ba010231  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index b86453f145..0c5fd19d78 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -4,8 +4,8 @@
+ config BR2_PACKAGE_LIBOPENSSL_ENABLE_WEAK_SSL
+ 	bool "enable WEAK_SSL"
+ 	default y
+@@ -125,10 +112,6 @@ config BR2_PACKAGE_LIBOPENSSL_UNSECURE
+ 	  Enable unit-test crypto-mdebug-backtrace
+ 	  crypto-mdebug autoerrinit mode.
+ 
+-config BR2_PACKAGE_LIBOPENSSL_DYNAMIC_ENGINE
+-	bool "enable dynamic engine"
+-	default y
+-
+ config BR2_PACKAGE_LIBOPENSSL_ENABLE_COMP
+ 	bool "enable compression"
+ 	default y
+@@ -173,23 +156,6 @@ config BR2_PACKAGE_LIBOPENSSL_ENABLE_ECX
+ 	  Build with ECX support. Disabling this option can be used
+ 	  to disable support for X25519, X448, and EdDSA.
+ 
+-config BR2_PACKAGE_LIBOPENSSL_ENABLE_LOADER_ENGINE
+-	bool "enable 'loader_attic' engine"
+-	default y
+-	depends on BR2_PACKAGE_LIBOPENSSL_DYNAMIC_ENGINE
+-	help
+-	  Build with 'loader_attic' engine support, which is meant
+-	  just for internal OpenSSL testing purposes and supports
+-	  loading keys, parameters, certificates, and CRLs from files.
+-	  When this engine is used, files with such credentials are
+-	  read via this engine.
+-
+-config BR2_PACKAGE_LIBOPENSSL_ENABLE_PADLOCK_ENGINE
+-	bool "enable padlock engine"
+-	default y
+-	help
+-	  Build the padlock engine.
+-
+ config BR2_PACKAGE_LIBOPENSSL_ENABLE_MODULE
+ 	bool "enable modules"
+ 	default y
+diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
+index b7083cc3d7..bafce77d80 100644
+--- a/package/libopenssl/libopenssl.hash
++++ b/package/libopenssl/libopenssl.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/openssl/openssl/releases/download/openssl-3.6.5/openssl-3.6.5.tar.gz.sha256
+-sha256  a2157c2830efdec3788939b00c9b0638306d3f0bbb76dc4832ee503bb397df98  openssl-3.6.5.tar.gz
++# From https://github.com/openssl/openssl/releases/download/openssl-4.0.3/openssl-4.0.3.tar.gz.sha256
++sha256  325b5c806167c13b40b1ffeadfe0248197c00eccc4cf123ec1e28d2d2fd216d9  openssl-4.0.3.tar.gz
+ 
+ # License files
+ sha256  7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a  LICENSE.txt
+diff --git a/package/libopenssl/libopenssl.mk b/package/libopenssl/libopenssl.mk
+index 4aad749eec..7c22d2b41c 100644
+--- a/package/libopenssl/libopenssl.mk
++++ b/package/libopenssl/libopenssl.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON3_VERSION_MAJOR = 3.14
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).8
-+PYTHON3_VERSION_MAJOR = 3.15
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).0
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
+-LIBOPENSSL_VERSION = 3.6.5
++LIBOPENSSL_VERSION = 4.0.3
+ LIBOPENSSL_SITE = https://github.com/openssl/openssl/releases/download/openssl-$(LIBOPENSSL_VERSION)
+ LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
+ LIBOPENSSL_LICENSE = Apache-2.0
+@@ -80,16 +80,13 @@ define LIBOPENSSL_CONFIGURE_CMDS
+ 			--openssldir=/etc/ssl \
+ 			$(if $(BR2_TOOLCHAIN_HAS_THREADS),threads,no-threads) \
+ 			$(if $(BR2_STATIC_LIBS),no-shared,shared) \
+-			$(if $(BR2_PACKAGE_CRYPTODEV_LINUX),enable-devcryptoeng) \
+ 			no-rc5 \
+ 			enable-camellia \
+ 			no-docs \
+ 			no-tests \
+ 			no-fuzz-libfuzzer \
+ 			no-fuzz-afl \
+-			no-afalgeng \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_BIN),,no-apps) \
+-			$(if $(BR2_PACKAGE_LIBOPENSSL_ENGINES),,no-engine) \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_CHACHA),,no-chacha) \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_RC2),,no-rc2) \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_RC4),,no-rc4) \
+@@ -103,21 +100,16 @@ define LIBOPENSSL_CONFIGURE_CMDS
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160),,no-rmd160) \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_WHIRLPOOL),,no-whirlpool) \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH),,no-bf) \
+-			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL),,no-ssl) \
+-			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_SSL3),,no-ssl3) \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_WEAK_SSL),,no-weak-ssl-ciphers) \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_PSK),,no-psk) \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_CAST),,no-cast) \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_UNSECURE),,no-unit-test no-crypto-mdebug no-autoerrinit) \
+-			$(if $(BR2_PACKAGE_LIBOPENSSL_DYNAMIC_ENGINE),,no-dynamic-engine ) \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_COMP),,no-comp) \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_ARGON2),,no-argon2) \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_CACHED_FETCH),,no-cached-fetch) \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_CMP),,no-cmp) \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_THREAD_POOL),,no-thread-pool no-default-thread-pool) \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_ECX),,no-ecx) \
+-			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_LOADER_ENGINE),,no-loadereng) \
+-			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_PADLOCK_ENGINE),,no-padlockeng) \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_MODULE),,no-module) \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_ENABLE_QUIC),,no-quic) \
+ 			$(if $(BR2_PACKAGE_LIBOPENSSL_SECURE_MEMORY),,no-secure-memory) \
+@@ -155,7 +147,6 @@ endef
+ define LIBOPENSSL_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) install
+ 	$(RM) -rf $(TARGET_DIR)/usr/lib/ssl
+-	$(RM) -f $(TARGET_DIR)/usr/bin/c_rehash
+ endef
+ 
+ # libdl has no business in a static build
+@@ -175,12 +166,5 @@ endef
+ LIBOPENSSL_POST_INSTALL_TARGET_HOOKS += LIBOPENSSL_REMOVE_PERL_SCRIPTS
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBOPENSSL_ENGINES),)
+-define LIBOPENSSL_REMOVE_LIBOPENSSL_ENGINES
+-	$(RM) -rf $(TARGET_DIR)/usr/lib/engines-3
+-endef
+-LIBOPENSSL_POST_INSTALL_TARGET_HOOKS += LIBOPENSSL_REMOVE_LIBOPENSSL_ENGINES
+-endif
+-
+ $(eval $(generic-package))
+ $(eval $(host-generic-package))
+diff --git a/package/libp11/Config.in b/package/libp11/Config.in
+index 3bf13a6051..3c7ccdee27 100644
+--- a/package/libp11/Config.in
++++ b/package/libp11/Config.in
+@@ -2,7 +2,6 @@ config BR2_PACKAGE_LIBP11
+ 	bool "libp11"
+ 	depends on !BR2_STATIC_LIBS # dlopen
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_LIBOPENSSL_ENGINES
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+ 	help
+diff --git a/package/libp11/libp11.mk b/package/libp11/libp11.mk
+index 38cc1c2e6d..e8c56b9db5 100644
+--- a/package/libp11/libp11.mk
++++ b/package/libp11/libp11.mk
+@@ -11,10 +11,9 @@ LIBP11_INSTALL_STAGING = YES
+ LIBP11_LICENSE = LGPL-2.1+
+ LIBP11_LICENSE_FILES = COPYING
+ 
+-# pkg-config returns a libcrypto enginesdir prefixed with the sysroot,
++# pkg-config returns a libcrypto modulesdir prefixed with the sysroot,
+ # so let's rip it out.
+ LIBP11_CONF_OPTS = \
+-	--with-enginesdir=`$(PKG_CONFIG_HOST_BINARY) --variable enginesdir libcrypto | xargs readlink -f | sed 's%^$(STAGING_DIR)%%'` \
+ 	--with-modulesdir=`$(PKG_CONFIG_HOST_BINARY) --variable modulesdir libcrypto | xargs readlink -f | sed 's%^$(STAGING_DIR)%%'`
+ 
+ ifeq ($(BR2_PACKAGE_P11_KIT),y)
+diff --git a/package/librelp/Config.in b/package/librelp/Config.in
+index f1744bb60c..c0ae5fbe89 100644
+--- a/package/librelp/Config.in
++++ b/package/librelp/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_LIBRELP
+ 	bool "librelp"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_LIBOPENSSL_ENGINES if BR2_PACKAGE_LIBOPENSSL
+ 	help
+ 	  Reliable Event Logging Protocol library
+ 
+diff --git a/package/libssh/Config.in b/package/libssh/Config.in
+index bc9a02d9b0..1f271a692e 100644
+--- a/package/libssh/Config.in
++++ b/package/libssh/Config.in
+@@ -36,7 +36,6 @@ config BR2_PACKAGE_LIBSSH_LIBGCRYPT
+ config BR2_PACKAGE_LIBSSH_OPENSSL
+ 	bool "openssl"
+ 	depends on BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_LIBOPENSSL_ENGINES if BR2_PACKAGE_LIBOPENSSL
+ 
+ endchoice
+ 
+diff --git a/package/luvi/Config.in b/package/luvi/Config.in
+index 04163141b0..bf366f020d 100644
+--- a/package/luvi/Config.in
++++ b/package/luvi/Config.in
+@@ -9,7 +9,6 @@ config BR2_PACKAGE_LUVI
+ 	select BR2_PACKAGE_LIBUV
+ 	select BR2_PACKAGE_LUV
+ 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+-	select BR2_PACKAGE_LIBOPENSSL_ENGINES if BR2_PACKAGE_LIBOPENSSL
+ 	help
+ 	  A project in-between luv and luvit. The goal of this is to
+ 	  make building luvit and derivatives much easier.
+diff --git a/package/mender/Config.in b/package/mender/Config.in
+index c9b9d0b757..4831548f76 100644
+--- a/package/mender/Config.in
++++ b/package/mender/Config.in
+@@ -6,7 +6,6 @@ config BR2_PACKAGE_MENDER
+ 	select BR2_PACKAGE_HOST_GO
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+-	select BR2_PACKAGE_LIBOPENSSL_ENGINES
+ 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_MD4
+ 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_RMD160
+ 	help
+diff --git a/package/mtd/Config.in b/package/mtd/Config.in
+index 1054106f81..f8a9badaf6 100644
+--- a/package/mtd/Config.in
++++ b/package/mtd/Config.in
+@@ -15,7 +15,6 @@ config BR2_PACKAGE_MTD_JFFS_UTILS
+ 
+ config BR2_PACKAGE_MTD_UBIFS_UTILS
+ 	bool
+-	select BR2_PACKAGE_LIBOPENSSL_ENGINES if BR2_PACKAGE_LIBOPENSSL
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 6808db9962..a150afb323 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
+@@ -23,6 +23,7 @@ OPENSSH_CONF_OPTS = \
+ 	--with-pid-dir=/var/run \
+ 	--with-default-path=$(BR2_SYSTEM_DEFAULT_PATH) \
+ 	$(if $(BR2_PACKAGE_OPENSSH_SANDBOX),--with-sandbox,--without-sandbox) \
++	--without-ssl-engine \
+ 	--disable-lastlog \
+ 	--disable-utmp \
+ 	--disable-utmpx \
+@@ -55,13 +56,6 @@ ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
+ OPENSSH_DEPENDENCIES += libxcrypt
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_CRYPTODEV_LINUX),y)
+-OPENSSH_DEPENDENCIES += cryptodev-linux
+-OPENSSH_CONF_OPTS += --with-ssl-engine
+-else
+-OPENSSH_CONF_OPTS += --without-ssl-engine
+-endif
+-
+ ifeq ($(BR2_PACKAGE_AUDIT),y)
+ OPENSSH_DEPENDENCIES += audit
+ OPENSSH_CONF_OPTS += --with-audit=linux
+diff --git a/package/rauc/Config.in b/package/rauc/Config.in
+index 9a910963a3..76e9e8a651 100644
+--- a/package/rauc/Config.in
++++ b/package/rauc/Config.in
+@@ -6,8 +6,6 @@ config BR2_PACKAGE_RAUC
+ 	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL # uses X509_PURPOSE_get_by_id
+-	# uses ENGINE_* API
+-	select BR2_PACKAGE_LIBOPENSSL_ENGINES
+ 	select BR2_PACKAGE_SQUASHFS # run-time dependency
+ 	help
+ 	  RAUC is the Robust Auto-Update Controller developed by
+diff --git a/package/rauc/rauc.mk b/package/rauc/rauc.mk
+index 54974abc09..748da90f38 100644
+--- a/package/rauc/rauc.mk
++++ b/package/rauc/rauc.mk
+@@ -11,7 +11,7 @@ RAUC_LICENSE = LGPL-2.1
+ RAUC_LICENSE_FILES = COPYING
+ RAUC_CPE_ID_VENDOR = pengutronix
+ RAUC_DEPENDENCIES = host-pkgconf openssl libglib2
+-RAUC_CONF_OPTS += -Dtests=false
++RAUC_CONF_OPTS += -Dtests=false -Dpkcs11_engine=false
+ 
+ ifeq ($(BR2_PACKAGE_RAUC_DBUS),y)
+ RAUC_CONF_OPTS += -Dservice=true
+@@ -71,6 +71,7 @@ HOST_RAUC_DEPENDENCIES = \
+ HOST_RAUC_CONF_OPTS += \
+ 	-Djson=enabled \
+ 	-Dnetwork=false \
++	-Dpkcs11_engine=false \
+ 	-Dstreaming=false \
+ 	-Dservice=false \
+ 	-Dtests=false
+diff --git a/package/softhsm2/Config.in b/package/softhsm2/Config.in
+index c790e7a2b0..c22a371cba 100644
+--- a/package/softhsm2/Config.in
++++ b/package/softhsm2/Config.in
+@@ -7,7 +7,6 @@ config BR2_PACKAGE_SOFTHSM2
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+ 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES
+-	select BR2_PACKAGE_LIBOPENSSL_ENGINES
+ 	help
+ 	  SoftHSM is an implementation of a cryptographic store
+ 	  accessible through a PKCS#11 interface. You can use it
+diff --git a/package/unbound/Config.in b/package/unbound/Config.in
+index c8d697113c..ae2ebfd975 100644
+--- a/package/unbound/Config.in
++++ b/package/unbound/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_UNBOUND
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_LIBEVENT
+-	select BR2_PACKAGE_LIBOPENSSL_ENGINES if BR2_PACKAGE_LIBOPENSSL
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  Unbound is a validating, recursive, and caching DNS resolver.
+diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
+index d6886d4a5d..938f656e94 100644
+--- a/package/unbound/unbound.mk
++++ b/package/unbound/unbound.mk
+@@ -12,6 +12,7 @@ UNBOUND_LICENSE = BSD-3-Clause
+ UNBOUND_LICENSE_FILES = LICENSE
+ UNBOUND_CPE_ID_VENDOR = nlnetlabs
+ UNBOUND_CONF_OPTS = \
++	--disable-gost \
+ 	--disable-rpath \
+ 	--disable-debug \
+ 	--with-conf-file=/etc/unbound/unbound.conf \
 -- 
 2.47.3
 
