@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E66ECA9ECC
-	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 20:33:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E166CA9EBD
+	for <buildroot@archiver.kernel.org>; Sun, 11 Oct 2026 20:33:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1AE0B4058C;
-	Sun, 11 Oct 2026 20:33:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CA11160603;
+	Sun, 11 Oct 2026 20:33:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YTcnDdPT8N3b; Sun, 11 Oct 2026 20:33:04 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org E7B084057D
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791750784;
-	b=cTd9oV/TlDus+rVFFMptAYjrz/Dzfw3JlLn6OVqMbYF9S01Wwvc7SFuYyF91DKHTFLRt
-	 G85nWg4cqE99N9XQspCK7lfSo/k96dKgtCOFtW3XLQeMYu6zUVky2cvBxzvcJLAYmU7Kg
-	 MddW4XYzNb6kBlUi7mGW/8vu3jIho1LNVChmwK0/l+FtH3cdBkMzdD8TZVLdEOLOgEVdP
-	 v4/RoW22bwPC2EyGLoxuAnKa2j5/OHrzgGOVMNMopEx0J8PWgQ7swyVnVhkcjeCWOfSg/
-	 ueP+p0Rjckt+aJzgG9N1lEuS0D778YNuIcajgNT/+GzudR+yz9tZnYBEPNUovibqyqg==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8pvm9AMJ0OMD; Sun, 11 Oct 2026 20:33:07 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org D8E9F605D7
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791750787;
+	b=QZyGr0ctgx5L2DgrId2+4ByBm/Fgx77qyWHNxP3i5UuRknPMoV6UQR4L8lcIBNCW382E
+	 GrE5o3SI8BVEoIxs+f3pgQLK7VmJjVknxhyo2+7FYw1XHY1AwIYNV21E0dDyfL+5s/pew
+	 xFx55BOpXvr1XKmtWSrwaKR6nEPN6PKkp0UcZgnZzsHrEtds111M/5AAaUcwsspA3AQiO
+	 Xt69pR8IrRH8jC8FS8zhbpOAFZmnQaNOuC75ScViK1tfuXFNn0LYXakGqyDSv2tGEe0tk
+	 vhyx9Z1RotlNOeiGgKeN8LLz9YMHr3940bdnx1CHquyiw3MtD0yH9rCL8yDJeA9QFuA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791750784;
+	c=relaxed/relaxed; t=1791750787;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -31,182 +31,182 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=4tE8F6jSUXrLHRCqd0gE+FJYfqkSVLnU0qtrK2Aen/U=;
-	b=XAJ5/ZX7VWu1MY8eJTQoWm/pP0n56WU80iSZrnYB1ATU3avtLfzP+TM29G1tMw+GMm9A
-	 ZdW0IvIWzXWC/SrzlRwk2gOcj9aoxDhMFTh0JRyFkxW0jqK1RrR66fZUZ8y35JIZE9dIG
-	 bj4KbVYEmSyNy92+7BC9KAyM2dbsCmMiRIzYz5qqRRFG1jJ04LYZhgUkrXx4pu06K1mEv
-	 19HVGf0e72qgkqiXdGJ5xj8WSG7TfkCUyp94lnVwpWdQ47ToFtti0V8C4PAN3tjO5h7Sc
-	 HIAtkwa5mGsFvtoB1VkAa2YtJ5R5vYjf7DYd54gqPN3wjKZlyuUelA+OP89EScX9lkA==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=i0Bdr8vWnd8kgXAn6GKhD1RyfjBRYoR6NLAaTCSLUxU=;
+	b=R0aDK/+QLr8RAkOjSL+6215jfkIwu9Z8aIVSwCgPC0dVUD/r7O5zA+jt9dLKGb0fQYyB
+	 NJY2nqNmIU6ktyCz2uLoZzKkgSsMPST0vWmmyf2lKjyTUpxgQciXKUZipOaDNuFHSR+NW
+	 btjmcIZqHkCgpQXovHDDm/p6xth6cnu1DTCXdYwSXvPYMCQyuCCn3TNNgsXbBQMoBh9hf
+	 3eeVLL7aOsWC4sC/M8i0yvwsG+mqwjnyfZf1dZDSkQCoV0mB4yNyZsXI3E5LV2JyJB+Ty
+	 s3nnzOi3NJ2BrAkgLh+jWQArsMN8DEFll5OSmVOXMpW4pUpYZsasUv9xDmR8MdgkFGQ==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791750784;
-	bh=4tE8F6jSUXrLHRCqd0gE+FJYfqkSVLnU0qtrK2Aen/U=;
+	s=default; t=1791750786;
+	bh=i0Bdr8vWnd8kgXAn6GKhD1RyfjBRYoR6NLAaTCSLUxU=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=OkkxxaVBvIo7uRTNy5hfuF7aO9d0gTlJ2Lny65dDMNfYaoe7BbCsNiR/QLD0YSAVV
-	 7dFJ3AlRdcnI5yse4HO7RJRVPLB0ccySY7vP8XAIYGybkmANNliLVI0Evriqc/pca2
-	 Rg1yeE0mD3nPQJTMmnZMNCSJhEeV0K5dsgNYNx3W6pcZykDpyUFltcu3msJVnvpG4l
-	 XQQ67xKMgF+Q9L+YDJk/qmpNPvSPBV14d5p235gX5IwdE9CyjmDsTc5VxZq12asGpV
-	 NCTRNP6kV8JYVwHVfF5316y8VfsZienQb8xFvXnNwXky5Mduj9YTAHe9OTPf4+zLuh
-	 bVAzR5bnQvIEw==
+	b=VIaF5FFa4DkjzAbgJdXb90iXVvi6Gwqw0/Hm5biIFwmcBhPmngzOEKvE3X2gJkqCe
+	 +WWVYYY+izqYHJRnqOGcrjm0RP495GdPYZAIL8PWxKHk7aifv53oLXtVyQwAMy65zg
+	 4Xr3V1lsHe54RVru69i6bGiRFJXH1mdB6y17zmYVueet4Mk9Mjx9WvYNHYqdRAQDep
+	 XEZps2VD0LPy0BZnTRRcOCHWNkMfIOYliV7RaIOvuOWKlf2ZpC6yMlID0opAgwl3tb
+	 gf+6T5htvWn/eqasXHNYSEFR1NdjBcMBh3zA0x4cI2OOa4qXynOJL/DXbca4ThFsBn
+	 EVqdJDWqkb7kA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E7B084057D;
-	Sun, 11 Oct 2026 20:33:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id B2774380
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 20:33:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D8E9F605D7;
+	Sun, 11 Oct 2026 20:33:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 62084380
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 20:33:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A4B344056B
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 20:33:01 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 53D3080A84
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 20:33:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R1j6sUSDOA05 for <buildroot@buildroot.org>;
- Sun, 11 Oct 2026 20:33:01 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 4A4F24047C
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791750781;
- b=ZxHGk5oUzAp2Zf/ti4FPaRdPUvY4+CFYVM74awjhQzWBKhMyy472r9dML68+blAENkEi
- DiXmzbT3NZ06nUWkjfpq9M4eDac5FepgPp9lj/VvR4oVc5zJgJM/PRX4D2X4A2+LxaJuN
- ba6T2CoFn/r/Eh1x5OXzEemrOzatgibQaf7Y/l7k7WBA5aSJ9KGSy6rxSq5lgbXmAmNrY
- 15kDFYxs6174qFkWx2PvjRquTzdjrkEIkOKt28ymq6OzBrXWwu7t8zJXM83dmmI1rJGv7
- E6Kgb9HGw3plMBoxX105I306u81fdmJEDVJ0ZYMQP3Xnonp6jDmC+7mkAB5/iKSEDdQ==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6PbahiX-lSfp for <buildroot@buildroot.org>;
+ Sun, 11 Oct 2026 20:33:02 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org B11AC80A68
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791750782;
+ b=XL53Z5zlmisNNj0MQQuT3e6u4dFokLEKoBFXK658y/ntuz6TmGysQmRhAjCCjE+IV2ti
+ BsMnOsbxrFhWaFO3k4TETMzK2tuffpSXkfpxU+UjprGX01u7tj8aljdLQBJRVC7/4AkYC
+ 6tq+3N63U5k7abA3zv/SbdvYjnXEey+rDKA7Ka8lM22SZwAeXbdkALqe3ImWOK+aUlze3
+ 2H3W9sDv/ZKmMCKD4KPEv1542xA0DZuOi9UQSclSLyjFfW8XwEm8q2rjKfM22hVezLOvl
+ 4ZYSx4BeqUQsZtYOv2YW1An5PoGVXoM1VBoDPI37o6Z3QaZtT0WQHruGOohs98AoucA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791750781;
+ c=relaxed/relaxed; t=1791750782;
  h=Received-SPF:DKIM-Signature:X-UI-Sender-Class:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Provags-ID:X-Spam-Flag:UI-OutboundReport;
- bh=ExRRLaowh9JRFpRbbDKD/VokvFETlfP+D7wF5GIJuZQ=;
- b=D116qOutwav9OBU5bZxIYT4DQ0OPljTdETgc74FMnEoI4z8P6HA46YQMrZxYeXIbJul7
- hc84cGAYWgKnWD0BsHA7tsUGm0lZOqy+7aKuscxbhzfksTZ2NHRnd7PGqMbx0Gk2fbieL
- 5v9rDQgdH+i2hWM6TQc8vOPPh0Tfm5tYcsK7oL9JJWPi+FWx0LZfO/J/XwNvqOrEN4Nq3
- BQK2ramvFRGBo7k+YwgJKqiDlPAkW+Fsap6zGdm3Ae8hbLUR7e+owpdS9xUf5WSQojPgK
- X13slB7ZnGyIhIVgiflOi2VuIF1AZoecyhhcFEqFrhhvYu4CLN0ZSFBi7uiW3MLy+Bw==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ bh=OR/mqWzKdDK6w70RQXlkvSRH5Sw5afmtMAnNHTmOgSw=;
+ b=ZaJ1F4Nyplu2Mlu5E87hy20Zs7r5UVNbURKgTNuLidwiwT8qmsWyQKc849Dg+8CCYDI9
+ KOqdSQpqGVzbaza9IxdKtV9Iew7NYsJICz/QUqxm3AyfDFIyo7rz9iR2o29C75RV7hr0c
+ Km0FsJGacB4n5xep8Nh7/u96ILyI/Ap8QKoI0anbIFxG6nQp2z0IiEa+EjgF2+VIU4/fQ
+ NU0Y20Fn8DAkeRftRc/S3wlL0/gYGLqlasOrB0FFTpLj5pCANMm6CsQu+Xy52mkebNRZg
+ KWbXKdT9WjoFkTTcd8+JV8eh8+j6KZ2Ms55Whx2lFPzJ6S59bwQZD4KIDMRdePDfbVA==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  dmarc=pass header.from=gmx.de;
  dkim=pass header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=UNDxU3G6; 
- arc=none smtp.remote-ip=212.227.17.21
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
+ header.s=s31663417 header.b=lXvlV+JX; 
+ arc=none smtp.remote-ip=212.227.17.22
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4A4F24047C
- for <buildroot@buildroot.org>; Sun, 11 Oct 2026 20:32:59 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B11AC80A68
+ for <buildroot@buildroot.org>; Sun, 11 Oct 2026 20:33:00 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Md6R1-1wfqGJ0geh-00cDV4; Sun, 11
- Oct 2026 22:32:56 +0200
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MYNJq-1xAvj11mBG-00XpiF; Sun, 11
+ Oct 2026 22:32:57 +0200
 To: buildroot@buildroot.org
 Cc: Thomas Perale <thomas.perale@mind.be>,
  "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
-Date: Sun, 11 Oct 2026 22:32:29 +0200
-Message-ID: <20261011203230.2072127-2-fiona.klute@gmx.de>
+Date: Sun, 11 Oct 2026 22:32:30 +0200
+Message-ID: <20261011203230.2072127-3-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261011203230.2072127-1-fiona.klute@gmx.de>
 References: <20261011203230.2072127-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:4+lQDyeogGrpJHh6L2B3AIVEg3drUbo3mgTyWz4jU0FJkDG5spO
- RV+nt56nF4FkcbVCIjGlPf1o9MmoWXxWQj/zvR6lXMRvXlJ/8Ye/JBziSPYkU88nSVO7Ct6
- jzyZ/9TUwHHBmcQii2piO58O67txnrm7fO3dBP8GeGE7bqgVkBaFFYD8B0FtN/57spSDjW2
- PbYPf2g3bCOkGvU9IY0Lg==
-UI-OutboundReport: notjunk:1;M01:P0:2AKtw1NK+y4=;GOArpYMne5Eath4Zlaw33Jk9lpy
- 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
-Subject: [Buildroot] [PATCH v5 1/2] package/pkg-utils.mk: include external
- tree info in show-info output
+X-Provags-ID: V03:K1:bgeajMoZkY9LBpSS/NT0J7zsNrDgFH8Fo6uio6tWZ6X6k7117MT
+ GD6QWgXI8gAxR/4imVFimrzDQIW9DZj+er+VB4J2cjZxhkiljv8aiaTKDTL4xPA47KQ4OGw
+ P812UBV+oV+7c6jpgLBoMMf+uymf8QCwBdrVr2rMlJxjvgpwqFTAwixX3FKBJuxt02QbS6R
+ 64jysG7jqo/ygkR9MBMbQ==
+UI-OutboundReport: notjunk:1;M01:P0:xw+m/lnlWpg=;s58N7mCYQGnf4lwzGHY7ZR6hGwa
+ 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
+ =
+Subject: [Buildroot] [PATCH v5 2/2] utils/generate-cyclonedx: include
+ external tree information
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -227,11 +227,18 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-This allows identifying packages from external trees, and the external
-tree version allows identifying the precise version of the packaging
-code independent of the package version. If needed, the location of
-the external tree can be derived from package_dir and further
-information loaded from there.
+External tree information may be important for interpreting SBOM
+information, especially if the SBOM lists packages (components) that
+do not exist in the listed version of Buildroot itself. External trees
+mentioned in the show-info data of any package are listed in the
+metadata.component.components list of the SBOM.
+
+For packages from external trees, the bom-ref of the external tree is
+listed in the BR_EXTERNAL_TREE property.
+
+Note that this implies external trees that do not provide packages
+used in the build (e.g. only defconfigs or overlays) will not be
+listed.
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
@@ -240,46 +247,156 @@ Double SOB line is because initial development was sponsored, but the
 current revision wasn't.
 
 Changes v4 -> v5:
+* Rebase on changes in master
 * Name package property in show-info output "external-tree" instead of
   "external" for clarity
 
 Changes v3 -> v4:
-* Add an "external" mapping with external tree name and version to
-  show-info output for packages from external trees (this patch).
+* Use "external" and "package_dir" from per-package information to
+  derive external tree information. This removes the need for a
+  separate input file with external tree info (restructuring of former
+  patches 1 and 3).
 
- package/pkg-utils.mk | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ utils/generate-cyclonedx | 91 ++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 87 insertions(+), 4 deletions(-)
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index 17b0aa1760..454ae376c0 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -111,6 +111,17 @@ define json-info
- 	}
- endef
+diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
+index 1fbf020a3d..acbc10c433 100755
+--- a/utils/generate-cyclonedx
++++ b/utils/generate-cyclonedx
+@@ -9,6 +9,7 @@
  
-+define json-external-tree
-+	$(foreach name,$(BR2_EXTERNAL_NAMES),\
-+		$(if $(findstring $(BR2_EXTERNAL_$(name)_PATH),$(1)),\
-+			"external-tree": {\
-+				"name": $(call mk-json-str,$(strip $(name)))$(comma)\
-+				"version": $(call mk-json-str,$(strip $(BR2_EXTERNAL_$(name)_VERSION)))\
-+			}$(comma)\
-+		)\
-+	)
-+endef
+ 
+ import argparse
++from dataclasses import dataclass
+ import importlib.util
+ import json
+ import os
+@@ -21,6 +22,7 @@ import urllib.request
+ import subprocess
+ import sys
+ import re
++from typing import Any, ClassVar
+ 
+ 
+ DEFAULT_CYCLONEDX_VERSION = "1.6.2"
+@@ -87,6 +89,74 @@ def br2_retrieve_spdx_licenses(version: str):
+     return ret
+ 
+ 
++@dataclass
++class ExternalTree:
++    name: str
++    path: Path
++    version: str
++    bom_ref_prefix: ClassVar[str] = "buildroot-external"
 +
- # _json-info-pkg, _json-info-pkg-details, _json-info-fs: private helpers
- # for json-info, above
- define _json-info-pkg
-@@ -121,6 +132,7 @@ define _json-info-pkg
- 		$(call _json-info-pkg-details,$(1)) \
- 	)
- 	"package_dir": $(call mk-json-str,$(patsubst $(CURDIR)/%,%,$($(1)_PKGDIR))),
-+	$(call json-external-tree,$(patsubst $(CURDIR)/%,%,$($(1)_PKGDIR)))
- 	"stamp_dir": $(call mk-json-str,$(patsubst $(CONFIG_DIR)/%,%,$($(1)_DIR))),
- 	"source_dir": $(call mk-json-str,$(patsubst $(CONFIG_DIR)/%,%,$($(1)_DIR))),
- 	"build_dir": $(call mk-json-str,$(patsubst $(CONFIG_DIR)/%,%,$($(1)_BUILDDIR))),
++    def __post_init__(self) -> None:
++        """self.path may have been initialized with any subdirectory
++        of the external tree. Search for the external.desc file to
++        find the root of the external tree.
++
++        """
++        for p in (self.path, *self.path.parents):
++            if (p / "external.desc").is_file():
++                self.path = p
++                break
++        if not (self.path / "external.desc").is_file():
++            raise Exception(
++                f"No external.desc file found in any ancestor of {self.path}")
++
++    @classmethod
++    def from_show_info(cls, show_info_dict: dict[str, Any]) -> dict[str, 'ExternalTree']:
++        external_trees = dict()
++        for pkg_name, pkg_info in show_info_dict.items():
++            if "external-tree" not in pkg_info:
++                continue
++            name = pkg_info["external-tree"]["name"]
++            if name in external_trees:
++                # already recorded
++                continue
++            external_trees[name] = cls(
++                name=name,
++                path=Path(pkg_info["package_dir"]),
++                version=pkg_info["external-tree"]["version"],
++            )
++        return external_trees
++
++    @property
++    def bom_ref(self) -> str:
++        return f"{self.bom_ref_prefix}:{self.name}"
++
++    @property
++    def description(self) -> str:
++        external_desc = self.path / "external.desc"
++        with external_desc.open() as fh:
++            for line in fh:
++                try:
++                    k, v = [s.strip() for s in line.split(":", maxsplit=1)]
++                except IndexError:
++                    # invalid line, ignore
++                    continue
++                if k == "desc":
++                    return v
++        raise ValueError(f'No description ("desc") in {external_desc}')
++
++    def as_component(self) -> dict[str, str]:
++        """Format self as a component dict ready to be included in
++        CycloneDX JSON output."""
++        return {
++            "bom-ref": self.bom_ref,
++            "name": self.name,
++            "type": "firmware",
++            "description": self.description,
++            "version": self.version,
++        }
++
++
+ def split_top_level_comma(subj):
+     """Split a string at comma's, but do not split at comma's in between parentheses.
+ 
+@@ -405,10 +475,16 @@ def cyclonedx_component(name, comp):
+         } if "cpe-id" in comp else {}),
+         **cyclonedx_external_refs(comp),
+         **(cyclonedx_patches(name, comp["patches"]) if comp.get("patches") else {}),
+-        "properties": [{
+-            "name": "BR_TYPE",
+-            "value": comp["type"],
+-        }],
++        "properties": [
++            {
++                "name": "BR_TYPE",
++                "value": comp["type"],
++            },
++            *(({
++                "name": "BR_EXTERNAL_TREE",
++                "value": f"{ExternalTree.bom_ref_prefix}:{comp['external-tree']['name']}",
++            },) if "external-tree" in comp else ()),
++        ],
+     }
+ 
+ 
+@@ -567,6 +643,9 @@ def main():
+     # only the first two numbers (e.g. 1.6) are valid in the schema and the
+     # 'specVersion'.
+     cdx_spec_version = ".".join(args.cdx_version.split(".")[:2])
++
++    external_trees = ExternalTree.from_show_info(filtered_show_info_dict)
++
+     cyclonedx_dict = {
+         "bomFormat": "CycloneDX",
+         "$schema": f"http://cyclonedx.org/schema/bom-{cdx_spec_version}.schema.json",
+@@ -577,6 +656,10 @@ def main():
+                 "name": args.project_name,
+                 "version": args.project_version,
+                 "type": "firmware",
++                **(
++                    {"components": [ext.as_component() for ext in external_trees.values()]}
++                    if external_trees else {}
++                )
+             },
+             "tools": {
+                 "components": [
 -- 
 2.55.0
 
