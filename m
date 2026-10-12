@@ -4,113 +4,157 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5CD1CA9EC5
-	for <buildroot@archiver.kernel.org>; Mon, 12 Oct 2026 06:04:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46729CA9EC5
+	for <buildroot@archiver.kernel.org>; Mon, 12 Oct 2026 06:25:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 165C340575;
-	Mon, 12 Oct 2026 06:04:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BBE41405E2;
+	Mon, 12 Oct 2026 06:25:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FRwC01w_lAcv; Mon, 12 Oct 2026 06:04:47 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org A60E7405E8
+ id EJIF1V-re5_8; Mon, 12 Oct 2026 06:25:49 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org D050840596
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791785087;
-	b=GVKWb0wxe1LYt2qRZFjVgKqKTYgvMeuG8p0UunnUQna7bBxXM6IVVtVHvsQIzxJVMCpr
-	 vhWylYOF2bu7NPRgfENLq+w+m9/WivRyOTjUAtK3HK6RM4M0LbrwvIS9FN212zdxvd0cc
-	 /MBbRiDrQLTOKXgYARiYptZiASiOwHPOExv1SRmOtS+MvVVhaQgtenuNKSDlmAMsHL01B
-	 DHmvh8TCRUnqfOtXcS5HcoAa1WtkoD0fEpRlVlRMx6d9iEzQeqfeVbFqQIw0s7Jnup4Eh
-	 zasofv/g7V2cJXajWoy/cUf9V40xGVI1gm4IEfeNjqRk5G6uNXGLf3RdLRSvUB0VwBA==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791786348;
+	b=UHckqtqHN8wplLtjtFWOj4C2fvDvzekaBCkydWApJN34uFOHt85PtF+fUYEo6hsY5EWu
+	 JZwrcCHG0XBIp4i2qlnkvynPhNOUKSrM5W8eTipb/r9fCJo7Z2PFT3zK7JFzP/BHegYQI
+	 P2itgfMXVsuBr+PRqq+CSHDC5f/5L9v1gJHp0Mt6k5V/zT0zUJVAqaFAn31HXXx5l5zya
+	 698yyKIUnhXBqhbzmtcKoBb4X1gyOEnyZv8erV8gtoVdhZhty9D80bMoGaA3glJlilnrT
+	 aFYuRRHf6T4G4oKkNJvTEjObYeAI84ihh7y0VRJ4NQBNgwWPjms+jMN/sW4XB0FIV4w==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791785087;
+	c=relaxed/relaxed; t=1791786348;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:To:
-	 Cc:In-Reply-To:References:User-Agent:Date:Message-ID:MIME-Version:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
 	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
-	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=rYvW8XSm9RNAFFDt+kXRoS68eyaOSAYOCOAeEXUEUm4=;
-	b=CFpZUu7CKV1eolMXlL1HvAaZk8Vk4zTW5IrjcGvp+CvjjfnzRd0Sfgyn7yggDjyxN/QJ
-	 cDN+e/3iqVWkZILGF4VeuxJJyERY2RRA76XfmgXHtodOhijspJC58yA0mqFjqCLhioG9N
-	 1TxS4EI0MlyOaomz7v0kHxnGdqU8oOdlZUAEtEze3qOsXfsYNQpPjgYqfowgPCxBqxctw
-	 L0adntf6X329bg6ncqC28e78uXx71HqbcGAquFoWLspP2e/H57yvtwkwpKs6qPpOk1Zjc
-	 gXdZNQbHDThwqO4rmgSCi5OGLlnKluRoRuOfWF11EtAr0VTJvxf1A7GMn5V6YMF4GOg==
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=3fy7/p7sgJ31xNv5CHLMwekCuHupkmSdKIeV5dfWbno=;
+	b=GORqL5SPu3IrySBvL/1Y4oqZks260fnDp84xTaWWdpG68wkELXVCYQF0qHQZ7lX72KZM
+	 fBosU9wCYgGVZzFjvxk/u7DRmyxP0qkbu5rmUi7wgH6LMaz42bwHMHvzMPAcqIseUD15I
+	 Hxp1VXT+L5Zgy1iVik7BJDyiDktY/cWDAJK8KY0h1ZGiGOpEwEY5ydk/uczqonI2v9dan
+	 rvfseNn4jvwBOgjf1g4v6LcITfb1pcLUDiIItRSeP7wGuc6+LM3UWnKyYOZ1sSeaBgUcL
+	 Dp3reJPEIr1ONoYg0G3wQdkI/hkEvskUlqfO6vrURCy68yAMqa3iq+DQqMrhvgLs9Ww==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791785087;
-	bh=rYvW8XSm9RNAFFDt+kXRoS68eyaOSAYOCOAeEXUEUm4=;
-	h=To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=SBCqQqEt8DEb5L1PyoUDrKNgvEU+EVkrV+QTReoMXEnEcNlHLOh6BifHJNEMzzz5I
-	 Dmo2UbAqYVkLZmHS2LOSt3MoE6dqOlfr0J2TTEAKmAykvlo71I/D0NhlA1elUisrht
-	 vDEBRGCmjLasGs8FkKCiXUN0gZBfi7pI6fN6Sshk1MJXoFwzd8zRfdZqAk9GE3OmDY
-	 HGD38UkIAEfCyV4pK2cjmVCWl4Y9uPLsLXt7Bqe2t1Bkz1pLWL+E3y8IyrSZjc3j0+
-	 LpQUR+zaJB9HBPtsl97gHFGfnEKsBQmYSbhXNxmZXScxAHYRLRqP8eX9gATXqnL+ck
-	 nlirPadtCaAqA==
+	s=default; t=1791786348;
+	bh=3fy7/p7sgJ31xNv5CHLMwekCuHupkmSdKIeV5dfWbno=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=HDymlt7Gjo9WoQpmd9/juWKKLC25Myd5jbj7s8PWpLXAveNzbmsg3me9BpNtyo0v3
+	 leqN8E//yxNn+1XGvchBUOG4YGMYCcytOw2r4ndunLLR/tQRR1u5GoJ9sCdOHZADc3
+	 1UzRLiDqSP8gLBW1givbeQX6H9SIslF45UvEA0smypXK8qfBlpj/NgFi+Ggs16z41C
+	 TrTUXXbSeiaHYXXPTiDK+nez4HNvyQ5TvB5OnvN1lYEJzg4GiH2ZhyKLhl/y5y8xKC
+	 lJh2SRThhMHbwyI1KgCc6aT1McjkHDjjRPVmzwcPGwmrGFc5UYpF8E/vaD/NjY/2P6
+	 JU/xVAqF2UShw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A60E7405E8;
-	Mon, 12 Oct 2026 06:04:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 555D91DE
- for <buildroot@buildroot.org>; Mon, 12 Oct 2026 06:04:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D050840596;
+	Mon, 12 Oct 2026 06:25:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id BE0149CF
+ for <buildroot@buildroot.org>; Mon, 12 Oct 2026 06:25:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 46786400A8
- for <buildroot@buildroot.org>; Mon, 12 Oct 2026 06:04:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9682D80CF0
+ for <buildroot@buildroot.org>; Mon, 12 Oct 2026 06:25:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2cAnRO9xn21E for <buildroot@buildroot.org>;
- Mon, 12 Oct 2026 06:04:44 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 29EE64002B
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791785084;
- b=gyzQMS5Lwo3x3G7FpTIcqGnyIRvxlveTDlRR0FM3dH8WngkYkXisiVPTNPRkpDx9I649
- 5WEV6N2AKqjyn+JJXL1DzrQFVD6vq2+sa9x/h19dQ0/QF1tMhw2v5AtYWB6jbrkvkn19c
- OivTn1JWM+0ZLFubti58vwayqNnJ1Tle9VHLpteSGEZQXVmHtF1+Uc2a4LCIMKadkYp1M
- uap+PsVDvgzKNkpO2Fpf2NDp2+FrN2SVpainSzfOL/8eH3hCVUqB1G//fX8Tfk02E2ZNk
- n9QrGxeVxGzjBDFvJu61hC0lvjbRKCZPNDzIMNnfWN8H/xNfOPVoAP82zaQy4am6HIQ==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id d5qX2vU1WzOh for <buildroot@buildroot.org>;
+ Mon, 12 Oct 2026 06:25:47 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 8FA2C80CEC
+Authentication-Results: smtp1.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::331"
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791786346;
+ b=Tagjh3Wxut0c9qe6FkDF1LBfWrFQn3Fb/1W5ANtSFtZkCSYUXSnWvjQGAMWJ7EgtlPkp
+ j2SB+5PO6Nb3u5UnRhQspGTMQt1UpiYTjKusGPBjZpwcplXcpkOuzHWqrx7vSxKiBrxWu
+ 96A+XA6fPJCuKy/+LhnwyLO1I25BAOUIsW/iV5B/vdhjvVN3Qm0KIV/wte3SXzBlpAup5
+ GfSrqu6ZqepR+HRGOIo2Lvl8wKhKvQXyLkJyQzUzmTxQ1usQ1w2uneCe7zeVlFaJRI+kv
+ gZEuVTrN2LHm985CbNZQFHzbeggaQgkwtLbAfsw1E9eMpxFkr5cet0QSlvqJlU6Bk5g==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791785084;
- h=Received-SPF:Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:
- References:User-Agent:Date:Message-ID:MIME-Version:Content-Type;
- bh=BKljGOvyjj5b/uSvX89cgGRLw+r/xG4r3Uyhs4ErhK4=;
- b=FM1NdZCK3la+fznMllGzmDBv3a+v8wlFCLuY9zn1KR1utSYinlLckTOfvdqNJDy7VDP7
- unW0SAG9CEX5sQcdUWzg+yd2evJkibdx1nNImiPGRvETDFyLBPQc4Ejr1/+mr6V4nLawl
- wZotIUXd1cXBSPvlHFRtkwaFrwn9Zi8fX8aObSl1bxV4BRLzA+AlQYwSkPCvn5EZ9aXRr
- awnqDd/oQVvUjEYVNn1n5R5O+Vj7crnkFXZMQbo9tpJRCWF6K9qHPo6RD+G3NSjEyiz6Y
- gbBze4KPP5O6/NBNEr1It5Mkjy80VUHdGA7Eu7TQXqnuUf3z2At5j3rc7hvGk3f52bQ==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
- dmarc=pass header.from=tkos.co.il;
- dkim=pass header.d=tkos.co.il header.i=@tkos.co.il header.a=rsa-sha256
- header.s=default header.b=hEIhpVk9; 
- arc=none smtp.remote-ip=84.110.109.230
-Received-SPF: Permerror (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
- helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
-Received: from mail.tkos.co.il (unknown [84.110.109.230])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 29EE64002B
- for <buildroot@buildroot.org>; Mon, 12 Oct 2026 06:04:43 +0000 (UTC)
-Received: from localhost (unknown [10.0.8.2])
- by mail.tkos.co.il (Postfix) with ESMTP id A3D0D44046D;
- Mon, 12 Oct 2026 09:03:28 +0300 (IDT)
-To: Titouan Christophe <titouan.christophe@mind.be>
-Cc: Titouan Christophe via buildroot <buildroot@buildroot.org>,
- ju.o@free.fr,  thomas.petazzoni@bootlin.com,  arnout@rnout.be,
- git@jdknight.me,  thomas.perale@mind.be
-In-Reply-To: <58a1eb0e-91e4-4810-a13f-26cc2f1bc625@mind.be> (Titouan
- Christophe's message of "Sun, 11 Oct 2026 21:10:11 +0200")
-References: <20261010201508.963412-1-titouan.christophe@mind.be>
- <20261010201508.963412-4-titouan.christophe@mind.be>
- <877bjo425e.fsf@tarshish>
- <58a1eb0e-91e4-4810-a13f-26cc2f1bc625@mind.be>
-User-Agent: mu4e 1.14.2; emacs 30.2
-Date: Mon, 12 Oct 2026 09:04:38 +0300
-Message-ID: <871p9v4fpl.fsf@tarshish>
+ c=relaxed/relaxed; t=1791786346;
+ h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
+ X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+ Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+ bh=X7fXBkpWgW22DPkh5xit8qbb1GQ8WYcuzPq02jzicPQ=;
+ b=I9SBKbrU5z36+G3qRinL/q8UuGj1wXEkQhtQCbxLnmMCeP4m0ya+hiWyWI4bW+P6cAgl
+ DVa2a02V66oexeqx+yve+arkdwG0KSJerfkKPeFF4+27kdl8CvYPnJnih1uUU+5h2Vfm+
+ C3+To85XgLBfqh436GaWbCNbwdAHtfbWsfxPa8S+Ms1iyQdC1lXjX0mou7Mu58tT2E/4A
+ B7+f4gc5QIL2qV8RTy7kpIOkR7i7/PJ9U+Wv53MSJdG9axDr5IhTemsJrAUodFWEoJynx
+ p1adNhCshpIbDh6bwQcruAb5g8+TFtlZYVLAZMT1u19Ug0IH9aubVfSZBVxL5fIQSuQ==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ dmarc=pass header.from=gmail.com;
+ dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=QgZ+Wdqd; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::331"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ envelope-from=francois.perrad.86@gmail.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=QgZ+Wdqd
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8FA2C80CEC
+ for <buildroot@busybox.net>; Mon, 12 Oct 2026 06:25:46 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-49fbb2acc90so10699455e9.2
+ for <buildroot@busybox.net>; Sun, 11 Oct 2026 23:25:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20251104; t=1791786344; x=1792391144; darn=busybox.net;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=X7fXBkpWgW22DPkh5xit8qbb1GQ8WYcuzPq02jzicPQ=;
+ b=QgZ+WdqdRP2ZK3nrSEOItLYSB5WPlkINzDCuV6DUyeXOyLRW1I2x00rMRhMdRYVSym
+ RM9hfbw93O/ek04d6uKGKKtgYA7iL7ZC9SAZcMjLO69ipH26l7yNW+W1f9XlvOanGlTG
+ NC364rw5BmEDCm9WsEW3UuQ5pLseX5bXnT3QnyUjGfvqb/T/66qAniSyIYqHfPYEa9Kx
+ rs/DtCsTlb2qQZI6xNgxgjGQOXCNnraVyVJ/H50xMiHh85OjiZzR+Y6fW3n41UadarKL
+ GS+KIMAxuUASI0/654t3Y28R0ERoIeMGE2WpvwKZrJ7H1FOD7GuwQzMpyGcZ7kUqCRir
+ j0AQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1791786344; x=1792391144;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=X7fXBkpWgW22DPkh5xit8qbb1GQ8WYcuzPq02jzicPQ=;
+ b=Resi0lUbV9g6K8Bq+oIY+yxtIvt1W5/gnE5/F7vLAR/wNoKa5HJmwE2Zqrgu+5lotq
+ sKFXIXHD6+9+x/xVGbBl9hbCPd6zUZgqf6X+wNCBzzYKeP9UuUAwUwUHWnhZrnUseRQs
+ UGpQX24oNSEtfg8iC8mVm/L++jPZGRZMoJjfH+XKjK6Bz/qPzJHMaFAuAbfxXMOXAzdf
+ KAxhbF58q48/pGB4hArEnC6iINhZUDXRJDjriGn8Dk3Cg/YRB/+ZtX2+gutGzooS8qKM
+ 1UzzcZQAwUIYmCPmhJk/6SSl3LQ/xq1D9XY7i8hurK9H57Z0RQr1h9QRoHoYENzqz04t
+ +LsA==
+X-Gm-Message-State: AFq9FYITVxVrgPgpm65Jp/fgAn4vJiO/G9qSxnusLdFlZTP26RLvEFFh
+ DNbUq6RgiOAtPzd9ZfC0mEcpA2OSfp3Ziu0oQs5xNPoljgO2AFuflZCZ4Ky0nA==
+X-Gm-Gg: AYBFou31W7h29YnblfBT2EKly0pPFFu2BlAm0AomVdZLY2Q285j+UTJTggveRipF4dh
+ cPKCi0ZrQo0OuXgQEUBUXy1uYBnmQCxfzXXe8+HTGM/TPgUAz7wNEZFBaVTownZJUCS38xjXIyX
+ ocn6txu3p4zaHA0GXzfYA9tIZpPcZnv29gU0hB5t+r4ugDeoD8yINXZMcPdh+VnYbYOjVHghCwF
+ rIr0fK4czp3z/QMQp1eIjBKf2L/bi1NgpSVwJOEYbT2rQrv9Tsks/3mNywWX1dCWobQ3ktZguWw
+ VSmuGS33jZnrkdtXNJywdVGO70rfG8NdO9ESh9uPY49/QLisfuQMl4x3ljpBCyMm4tvCgyFo061
+ UTnMfMYApx5kJIZMIBGA9W5YtG8U/f02vON2Jh3iLVasEudkDE510SWRbLCcCmfD6xPzwEY88KW
+ On3klAWpEdeUcB2hLaJUXeWIK/lBFfu4PQnIUW+iu5YJaAdaJ4lFZR0nQ0sLp4TbJ8sqmNVMavM
+ 2PLbf6BQdGpF6hAUgZlPdEwNldErPNoBb/lV+Hw
+X-Received: by 2002:a05:600c:4689:b0:4a0:1cfd:321 with SMTP id
+ 5b1f17b1804b1-4a18e4a9b31mr175179535e9.12.1791786344060; 
+ Sun, 11 Oct 2026 23:25:44 -0700 (PDT)
+Received: from vm-2404.. (51.186.66.37.rev.sfr.net. [37.66.186.51])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4a18e49792bsm421486625e9.4.2026.10.11.23.25.43
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 11 Oct 2026 23:25:43 -0700 (PDT)
+From: Francois Perrad <francois.perrad.86@gmail.com>
+To: buildroot@busybox.net
+Cc: Francois Perrad <francois.perrad.86@gmail.com>
+Date: Mon, 12 Oct 2026 08:25:26 +0200
+Message-ID: <20261012062536.78874-1-francois.perrad.86@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 3/3] configs: update defconfigs with custom
- versions to BR2_LINUX_KERNEL_LATEST_X_Y
+Subject: [Buildroot] [PATCH 01/10] package/perl-date-manip: bump to version
+ 7.00
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,116 +166,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Titouan,
+Signed-off-by: Francois Perrad <francois.perrad.86@gmail.com>
+---
+ package/perl-date-manip/perl-date-manip.hash | 4 ++--
+ package/perl-date-manip/perl-date-manip.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-On Sun, Oct 11 2026, Titouan Christophe wrote:
-> On 11/10/26 18:45, Baruch Siach wrote:
->> On Sat, Oct 10 2026, Titouan Christophe via buildroot wrote:
->>> Update all defconfigs that are using a custom Linux version based on a
->>> longterm supported Linux version so they use the newly introduced symbols.
->> This is a significant policy change for Buildroot. The configs/
->> directory is meant to carry configurations that are "known to work",
->> according to adding-board-support section in Buildroot manual
->> (docs/manual/adding-board-support.adoc).
->
-> Thank you for raising that concern ! I am currently preparing a v2 of this
-> patch (with many other fixups), and I will update the manual accordingly.
->> Automatic update of the kernel component without actual hardware test
->> risks introducing regressions that make the system unbootable.
->
-> This is a tradeoff, really.
-> On one hand (A), there is the risk of breaking the functionality of a board by
-> bumping from one patch version to another.
-> On the other (B), any new Linux patch version brings a handful of security
-> fixes, and this happens on a weekly basis.
-
-The basic question is what are these deconfigs meant to achieve? My
-understanding is that defconfigs demonstrate hardware working with a Buildroot
-generated image. For many users this is the first Buildroot step. Hardware
-bring-up is non trivial, and defconfigs preserve a known working state for a
-given target system. defconfig is only an enabler for new users.
-
-> Now onto practical considerations and my opinions:
-> - From my understanding, (A) is not very frequent when bumping from one patch
->   version to another. It can certainly happen on a specific board from time to
->   time, but this is definitely far from the general case. If you (or anyone
->   else) have some recent examples of such situations, I'd be glad to read
->   about them. On the contrary bugs in core components that would affect all
->   boards, such as the ext4 corruption introduced in linux 6.1.64, would be
->  more easily controllable tree-wise with such a mechanism.
-
-I have seen cases where trivial changes broke essential functionality. In one
-case I remember a removed print broke two different network PHYs on the same
-board because of missing proper initialization delay.
-
-The current suggestion does not even preserve the original user tested
-kernel version. By the time a defconfig reaches master branch, the
-kernel is different. If this commit is accepted, I think we should
-provide a way to preserve somehow the information of user tested kernel
-version.
-
-> - We see that many boards in the Buildroot tree are updated very infrequently,
->   and are using old kernel versions, sometimes lagging more than 200 versions
->   behind (see for example configs/minnowboard_max_defconfig). This is not a
->  good sign for newcomers.
-
-I agree we should remove unmaintained defconfigs after a given time of
-inactivity. But I'm not sure blind kernel version updates make the state of
-these platforms much better.
-
-> - Each kernel version bump for a single board is a patch that has to be
->   reviewed and applied by a maintainer. I believe their time is better
->   invested into patches that need actual effort, especially given the current
->  patchwork backlog
-
-This commit only saves stable kernel version updates. These patches are
-trivial. We can think of a fast track mechanism that allows contributor to
-assert some newer kernel version works on a given hardware, and automatically
-generate a matching commit.
-
-The point here is to preserve the vital information contributors provide
-of tested software.
-
-> - From my LTS steward perspective, it is practically unfeasible to apply linux
->   version bumps on the maintained branches, because their minor kernel
->   versions differ from master. On the other hand we try to deliver on the
->   premise of improved security, hence getting security updates in due time.
->
-> With all that being said:
-> - Linux kernel versions are still stated explicitly in Buildroot and are
->   bumped with patches that follow the usual review process. They would only be
->  declared in a central place.
-> - It is still possible to pin a particular linux kernel version to a board
->  with BR2_LINUX_KERNEL_CUSTOM_VERSION if needed
->>
->> For this reason adding-board-support section also says:
->>
->>> Always use fixed versions or commit hashes for the different
->>> components, not the "latest" version.
->> If we intend to change this policy I think we should discuss the
->> motivation on the list. In case such discussion did take place, this
->> comment should reference that discussion. In any case, the manual should
->> also update to reflect the current policy.
->
-> I indeed brought the discussion in person with the maintainers that were
-> present at the Buildroot Developers meeting after ELC, but I should be more
-> verbose in writing, I will pay more attention to that in v2. If you have
-> anything else to bring to the discussion, please let me know as well.
-
-Thanks,
-baruch
-
+diff --git a/package/perl-date-manip/perl-date-manip.hash b/package/perl-date-manip/perl-date-manip.hash
+index e9f686891..2d00767ae 100644
+--- a/package/perl-date-manip/perl-date-manip.hash
++++ b/package/perl-date-manip/perl-date-manip.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from https://cpan.metacpan.org/
+-md5  322b14e69dc35106b9df4f45a4f520f0  Date-Manip-6.98.tar.gz
+-sha256  acfd8a60519ba4cd181c8a67a83d7f029c6d9ab4e8b0212dc47e41d6210fda49  Date-Manip-6.98.tar.gz
++md5  58ab5bfd0b0f96fc80f49805e4b10265  Date-Manip-7.00.tar.gz
++sha256  37133eeb09d36da6d461546cc216b8f6a2297a43331c680a6848f3fff925975c  Date-Manip-7.00.tar.gz
+ 
+ # computed by scancpan
+ sha256  8ba2a138654f8b59b7e1e3ad0d4c81918b9148ff95078b172ccbb45fa241431d  LICENSE
+diff --git a/package/perl-date-manip/perl-date-manip.mk b/package/perl-date-manip/perl-date-manip.mk
+index a82fcc0a2..c4629b5c6 100644
+--- a/package/perl-date-manip/perl-date-manip.mk
++++ b/package/perl-date-manip/perl-date-manip.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_DATE_MANIP_VERSION = 6.98
++PERL_DATE_MANIP_VERSION = 7.00
+ PERL_DATE_MANIP_SOURCE = Date-Manip-$(PERL_DATE_MANIP_VERSION).tar.gz
+ PERL_DATE_MANIP_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SB/SBECK
+ PERL_DATE_MANIP_LICENSE = Artistic or GPL-1.0+
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
