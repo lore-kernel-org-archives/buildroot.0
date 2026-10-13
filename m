@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6530FCC6B0E
-	for <buildroot@archiver.kernel.org>; Tue, 13 Oct 2026 07:45:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BC06CC6B03
+	for <buildroot@archiver.kernel.org>; Tue, 13 Oct 2026 07:45:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B225D60751;
-	Tue, 13 Oct 2026 07:45:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 77E70606EB;
+	Tue, 13 Oct 2026 07:45:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gAKTPXTooyxM; Tue, 13 Oct 2026 07:45:54 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 0CEEE606C1
+ id o7r407DyG2HN; Tue, 13 Oct 2026 07:45:55 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 5D2EC6073B
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791877554;
-	b=g9r/nlrzbyTirNFZIlK8YGt7Vwcxt8m1J5iDKOqW7j7pGeUr+nNzbEwi1fVKLbfeXPOh
-	 3fin/JFH8iNIoTpHVghJUQLhzt7M1sctxWxsEY2wQBgLxuWb1nI5LC3+2NBxy5cFa+QIo
-	 iFXCKH2AZHn/vgzgZUvpBaLgpJ1U3uC1czN16eFPT9Rf00VmfJy8mPwI85QcKgaz1BO24
-	 RyEo9e7xh4o1cOyiO8ghTlVCPWcLDe+m5slBPAZwOKy3UHpG6Y0wkSrWS5qkYex+ztbNO
-	 Mb5Np00F0OXKMkB6MfldnRcM/YTBKzROhGOowzXAnuY1o8cX8GscuqntxS6/7Rg3wzQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791877555;
+	b=s9T34iV7E2NHlXlqQsqYCRvVLn8FEhZvJoijtblRjYjvOfmukW/n1HNLv1xoyPg1WzDl
+	 S5RjNj3uS3/87oXeH7UoG3QfyEFJyBZ/Wq5pe8SRGKdojN9EbpwqIzLKTRo0jTiP0D3yG
+	 HgL0XCiq7oa6Bc1qe4SNzmE07wjyUGyKDssdzZ3zjzlBVQvl7u8kUFGizouPSB/sQnuzh
+	 aOMTD/9uuYhQB50QitBhsuLJ8l/YTVSYNNH0DZVeeZKTc4D9MHB+c/wULpusqUb7WYngI
+	 4tFUIcsN2tW0gH9GwVDsAWLq8Dk3/S2dCtqnna1CyN4Mvi21aO5ILQJm/Jg0m72C3OQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791877554;
+	c=relaxed/relaxed; t=1791877555;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=4v9iaPuLEMi0fos0lesHU4CAKjeGsfz1a/9g2tRib5I=;
-	b=VH9P31dJcwtg1xW5RjIyS2Q+qKzndMb9bOVE3E4iJFdTnsOnwUvzJvnq1Nh+SrJcJVr0
-	 BWTyz1RogJw9uqsFvGT6DZzPSni9S+zgUwWbqJmTpyOjEckI9bRzweH1QXtrq/dovANwg
-	 USXjx/n0cwTv2gO3RKkGpyvtagMfDNPQrKCQIhxVqKGtOdm8vo/VUolrFPAHluVgEaKS7
-	 +LQuW5utGrbCgmtVnhJFI0Yc1qfh4H0HoE8j6itgIler7CVm0iFTHS3ct01cfqVtuFcI5
-	 87SJn2jf/zFTTNto+W4MXbP7qLGsHrSqrjTso3K2MqG6++dhihXfM91u3fNMt6gyjVQ==
+	bh=1l1QFyQ8JTs2VbyZ+llxetv+47y6MUDSKz516vSzk6c=;
+	b=UT6khiGcP3wICvseOfRFsbRpQ+jIaPWiTXDKyEcfNDyGjVehf1/7penW2AflKanFXsK4
+	 ccLqw1VZFZPs7NTA5q/mMIBWuqHTXydu0YOYCdi7MwhyMhbXeud1Jf87j2JD9ep5S+HCD
+	 jPQCHG6RuTuvMc4Mo5X13hhCMfDzoSdWGiuV883fwWrguQh/0HDAEbTQoq+D8va6kfRa9
+	 w2DYswduXg8MNDjmBvWiZV6CKJbbGl/hmLbcTryN8IDjUvAdOCU9MUBx4W3epGT3umLyv
+	 XK+bzOPTde6xPcYwLtggn5GskE9Osh0RfsWtW3Xw12qtlIdn0osYx5cGyFH20eRGPEA==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791877554;
-	bh=4v9iaPuLEMi0fos0lesHU4CAKjeGsfz1a/9g2tRib5I=;
+	s=default; t=1791877555;
+	bh=1l1QFyQ8JTs2VbyZ+llxetv+47y6MUDSKz516vSzk6c=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=eTmnCgXZGeBEtTDPbRXWmr5NXcMd7bbP7j5/qIc5vzEn2RvQKJ1337Chfq0Obf7so
-	 HoN9Kl1jeVz4jfhWor/LVgNbyPEIuuDnm9F2HwduTbiUETvdznIEsLG36Qfj9QF4cg
-	 NVQkWas0c15y7dsWQZePulYmu6ZRXoAfIq2XV7R1riWeApbIcU7U0bkt8Dmer/7mFc
-	 KvZXHmIUs/1jpFykVtToUmdeimIjYza/HS3DXbsvbwzAgVGqmptcAu2jEyY9Y+dKt1
-	 Wea4gAgPpikpZsjKoZ5CzwaP5AHthjTKiZslvzjN1IFrEZ8f92bvdrtAZgaFZaBPgG
-	 ySWoM7A1pvWqA==
+	b=jfX1RbioMXi4SWIsQRwcjA+MT7PKlKJMvn5pRrLYnH216fOVrJMNEi6LR2/DmrI6H
+	 yQixGDKxSfXd9XYzi7P62dcrxyYRgUqi0tvCnUsAVQUg34MqwT6PAZBygG02UKgNJM
+	 QlBifmxCaYq6zRkVjP5gqX857ah76KqM3hBvaAFi/991tcFRrA2ef3MpS/4GGOViG3
+	 mloT6hXu4g8iwmFzoIWD6pthfcSANjT+Gbz2sLzwpwP29b3B0l0ZY+B7aoSlItlSXD
+	 UCkkL90d4Iu9Hh6fME718YTtQWIPRQxgp/h0ThrMX9/3SonBMNpJGCaMR2753CF6st
+	 chprKA7+61UFQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0CEEE606C1;
-	Tue, 13 Oct 2026 07:45:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0E441788
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5D2EC6073B;
+	Tue, 13 Oct 2026 07:45:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1C853129B
  for <buildroot@buildroot.org>; Tue, 13 Oct 2026 07:45:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0C24980C3D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0C639606C1
  for <buildroot@buildroot.org>; Tue, 13 Oct 2026 07:45:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w4hJzBWG8YFV for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0Yeau67DNRXN for <buildroot@buildroot.org>;
  Tue, 13 Oct 2026 07:45:51 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 58CE080BE9
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 556F0605DA
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791877551;
- b=m6V08m1lHs76LlpzNd3U0Hm8s1OcPgY4TaFvKF7zjFosHPivRD6MbJFRfFkbWsq+WBlb
- Ar5+d3vBR3TIzeZWMej0xODdGUjC86CAhRVuhkCyMIlnvlgF52cq8cHn/3O2CCKbw7odN
- Xx+6AevpenxqmFIuW0BDS9Mlo5sZx/1yWuFRFTq1+evU+FYY1hpJWgvD+NA0uPGyHuLTO
- OXr0yVwPsp4ckSGbVYI1os6Q6GNKmK5/al4NSPJtTTcRUdiOI/I/5zaW3PBvxf0F0CnoY
- tNyQF2tDwDEgHwQHFq3Nh7NGxeivXD/rIZwhoVloxOc7dXsWtaU3NFlnyha6uxfMoCg==
+ b=rJoI0k0YZXhO2KEWqgN35Wqm0sDXddGEP7r2JQjhlEAB64bxzCKFJEOJj0JZrgaQzMEs
+ CuIy1zqD69m2Cj75o//r0glYLy1ze4iw0pdpJjDs6nwgrCpsD4sw1giN9LCk59lRC244a
+ EmEodGzkypL1Y75glOQqJglDznvGDymH/HHxdkAVXGEx3pLkrT+zfl/Hz45ucRx0oQ8Ej
+ RGg2bNuxE90A8y24Q8tL6+pMJhRTbDuYGEy11qW5a3gULYo8l8iEnnDpt3WLR/LPQHO1O
+ y641HmSwqdMj18mrm8VZLWitbZtCJpbLC8vHJZQH1XdEZyumGezDcYxVHk93yFwfMEw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1791877551;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=zr61luvGXvAzNDdDIYfCf19NdP+kFc7UGK7ApUti/2U=;
- b=XuiFLB5VypwKOkS+N2f0E643jmoqkcrZilI680RWVUaawov9qHWT/Al/W1w7uzbENuam
- 0dHcoxIi8emV2+PsSwg1JWolojFaDR6Oa/jqn+cvOx3Ow3b9tL9YJlMNTcJzwbUp3LUAo
- U7tppX7OlRBQX5uOwf/R8t22tsP5BtOu1hk8+xj+GWJDzGpOgvkJPOoH/u2RAzjWXDw/T
- n5aDIEyEGFUGJOBLEFjGIPI4RuwXPYlGBYZJBvZn9EeRGeksyNExFMGfXjlBpojJL+PrN
- v2PafC2ExarMnpKSwraxEnHZqkz5ivalwbNw6ldTGz4DRqv8fErFNKzRbFbsHEKS1Rg==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ bh=Ja074II93zIogj8P0bbws86ohJ9RkNPF1bQE/Jpp4gQ=;
+ b=P2u5nNp1TFNp1+HLWdutXN2cBkWo23rvuxTo3sGBj1JvGOxmGwAJGmKIVO/mQDuVFKen
+ yWkbviwaDEpPwbIUacRnJ4xNfujD8lBsnz/saLxTvK1rgddQs2wax5JSnlkYkYRY0gtVm
+ EnPgiueu3kVOPH+whEO+oy/3Q7orMYKGwR3mZs9EjoRZgC7LecuY0T/ovRPX1gz2QlKbr
+ cTskFybaJH9vWNmgtFbtHLCrmZPKYK3ks7wsCFPelgurnadW0dTx40Uc74TG2IeQr3QV4
+ Wo5PkkfLZESYwR52XASSZoMKsg+goR9yvAm43XKZSYYy5OSg3WPACrv9B6M4gd1HMvg==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 58CE080BE9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 556F0605DA
  for <buildroot@buildroot.org>; Tue, 13 Oct 2026 07:45:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D021395443; Tue, 13 Oct 2026 07:44:31 +0000 (UTC)
+ id BC0F395441; Tue, 13 Oct 2026 07:44:31 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 13 Oct 2026 08:41:54 +0200
+Date: Tue, 13 Oct 2026 08:41:48 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8424f5c956826aafb286b660885ae7d7d7e61baf
-X-Git-Newrev: 6d1d80b796c024cea88acac2e6b8616cea9074c3
+X-Git-Oldrev: e17cfc9b3b728059d97f9f8c4d890b4444125d1e
+X-Git-Newrev: a380ee2a164027259cb62c6911912cb93985fe16
 X-Patchwork-Hint: ignore
-Message-Id: <20261013074431.D021395443@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-devel-size: bump to version
- 0.87
+Message-Id: <20261013074431.BC0F395441@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-date-manip: bump to version
+ 7.00
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,42 +119,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6d1d80b796c024cea88acac2e6b8616cea9074c3
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a380ee2a164027259cb62c6911912cb93985fe16
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
 Signed-off-by: Francois Perrad <francois.perrad.86@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-devel-size/perl-devel-size.hash | 4 ++--
- package/perl-devel-size/perl-devel-size.mk   | 2 +-
+ package/perl-date-manip/perl-date-manip.hash | 4 ++--
+ package/perl-date-manip/perl-date-manip.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-devel-size/perl-devel-size.hash b/package/perl-devel-size/perl-devel-size.hash
-index 8bf9d5d4d1..1c1011c101 100644
---- a/package/perl-devel-size/perl-devel-size.hash
-+++ b/package/perl-devel-size/perl-devel-size.hash
+diff --git a/package/perl-date-manip/perl-date-manip.hash b/package/perl-date-manip/perl-date-manip.hash
+index e9f686891a..2d00767aec 100644
+--- a/package/perl-date-manip/perl-date-manip.hash
++++ b/package/perl-date-manip/perl-date-manip.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from https://cpan.metacpan.org/
--md5  1a7023c3c595a50443f9201a3081a0eb  Devel-Size-0.85.tar.gz
--sha256  292f98b13edd1aa4a544e3a5cf1d9f2d7019f75c7364d2e8fa8a35ea5451e73e  Devel-Size-0.85.tar.gz
-+md5  ee4589a77f854fc582380063dd3d2d0a  Devel-Size-0.87.tar.gz
-+sha256  c89fe04c9d0e5ced6c1d334311d576de609f3c8a41220919d4551e9eb0191f47  Devel-Size-0.87.tar.gz
+-md5  322b14e69dc35106b9df4f45a4f520f0  Date-Manip-6.98.tar.gz
+-sha256  acfd8a60519ba4cd181c8a67a83d7f029c6d9ab4e8b0212dc47e41d6210fda49  Date-Manip-6.98.tar.gz
++md5  58ab5bfd0b0f96fc80f49805e4b10265  Date-Manip-7.00.tar.gz
++sha256  37133eeb09d36da6d461546cc216b8f6a2297a43331c680a6848f3fff925975c  Date-Manip-7.00.tar.gz
  
  # computed by scancpan
- sha256  fca4ebe3a1f329aa33a4d259c0a5b136a15a40b987c60c2dd6f1007bb01a1513  README
-diff --git a/package/perl-devel-size/perl-devel-size.mk b/package/perl-devel-size/perl-devel-size.mk
-index 7bab097c04..9b4dab1ec1 100644
---- a/package/perl-devel-size/perl-devel-size.mk
-+++ b/package/perl-devel-size/perl-devel-size.mk
+ sha256  8ba2a138654f8b59b7e1e3ad0d4c81918b9148ff95078b172ccbb45fa241431d  LICENSE
+diff --git a/package/perl-date-manip/perl-date-manip.mk b/package/perl-date-manip/perl-date-manip.mk
+index a82fcc0a20..c4629b5c61 100644
+--- a/package/perl-date-manip/perl-date-manip.mk
++++ b/package/perl-date-manip/perl-date-manip.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_DEVEL_SIZE_VERSION = 0.85
-+PERL_DEVEL_SIZE_VERSION = 0.87
- PERL_DEVEL_SIZE_SOURCE = Devel-Size-$(PERL_DEVEL_SIZE_VERSION).tar.gz
- PERL_DEVEL_SIZE_SITE = $(BR2_CPAN_MIRROR)/authors/id/N/NW/NWCLARK
- PERL_DEVEL_SIZE_LICENSE = Artistic or GPL-1.0+
+-PERL_DATE_MANIP_VERSION = 6.98
++PERL_DATE_MANIP_VERSION = 7.00
+ PERL_DATE_MANIP_SOURCE = Date-Manip-$(PERL_DATE_MANIP_VERSION).tar.gz
+ PERL_DATE_MANIP_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SB/SBECK
+ PERL_DATE_MANIP_LICENSE = Artistic or GPL-1.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
