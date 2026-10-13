@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BDCBCA9ED2
-	for <buildroot@archiver.kernel.org>; Tue, 13 Oct 2026 11:57:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E0BFCC6B0F
+	for <buildroot@archiver.kernel.org>; Tue, 13 Oct 2026 11:57:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 57BE3404A1;
-	Tue, 13 Oct 2026 11:57:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 544F74050A;
+	Tue, 13 Oct 2026 11:57:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uG4JlzEkG-D8; Tue, 13 Oct 2026 11:57:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org D64A940334
+ id 5VTkNwS8G1wK; Tue, 13 Oct 2026 11:57:44 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 5B82640475
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791892661;
-	b=sdYJ9PxA1mVkobzq2T7FNSQHqwlNdM4sgQ6pfPiXDEGbDlk6xUwChR4d4pvEiLqA6DML
-	 kGqgZfklpeCDFo7bCIFj9CP/hFgGSwEtvcqiF6gN0L4c2V8Fm0etQFF0wREGMboYygDM2
-	 EoeGiRYLTPKjOl3uWp78Hz2kKnCb8+ta1+SAODpRmAOhlRPEAdYyWPtrHEcHhRwNJ9XZD
-	 X5rW7UCyVXJwexLiMGJncqqVb+lyzvZlKmsx9YA/QJVPmu9xkYuZJaGwDc0CeMwxf+FWw
-	 /rsnj5h0R30kYRNAwEii+RwxyHJGicMVzK1gLvG8metrEvleiJAgxTDY94/b5pV2/1g==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791892664;
+	b=On5Fly4FrZFg50oXbrg642WtEov70bLZ6Gtp3w4XmMUSvdT8EQTcblZL9CbuKNDVigau
+	 gtFr9iPbzlGZDaqFbXYS7WVjS1xORcLYOiXh9HcPGoTm1jdKZ3bnmGaOL+VyNjOaNF/KB
+	 NMfAYISzd2qlpZgxJbemwA/l5tO8CjVHXSmDW9QAO/O2jR+wK8NoZQl0B9e8Nz0Eza6sS
+	 YIz3KDUK8KP7kLzufFoONYC/vAwH3B4/soLWS5TPhFp3pQ/oxH9qrIZltEDFpQ7jDINSX
+	 Cq1g4dozIQDFOLRy3r0gULYdD4yzhgHPK1tVmFlNNu/XiCOmacvyh+bxDXLFFiY3nsA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791892661;
+	c=relaxed/relaxed; t=1791892664;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=yXPUJpaUp/8JMP1bdNQtnf/PI9uPPV95ioaYKfHgIWY=;
-	b=aAulH3UzOZ3Rr0kUsOc3Q8kqXk1LYn6Bn/RfY/xnWh7ofqmqcuSKMALHdJqH3fZTQCHx
-	 WLLbS5px1Fzfq3xj/voeD0N8mPuYmh8I2UYKWVxmgWJ0ffUsOgtlqKH+nNr5FRzKZwfMM
-	 c/0mWDti8ki9wM7p3wbfwsxu8WSa01gh+lNqYiVgzOw2vU6M7l1joo0MJ/qrstj1Y7jP8
-	 7863EEWmcwLr29Xh/m4YZxT70k1D6o4Z0aCacqWS0GH2wa9MHNbIsy0iAOi6cQXI6WPfO
-	 EXZSRwEgRZFmUrCThNqheoPFPJfcaCpopg0X5vvmGlbJYMj6jy4EdH6p2bt/lN5c87w==
+	bh=P8MOujoNZgy8Q95gI11NfBEtgI+bFDj4SG3I5sQPdmA=;
+	b=ccPzijJeoDm+0xpee4mv7K5I+NKRGPgWZyM5mNMda511rcGWBA2rFG4gSn/UctKoOJvs
+	 yUghkLB05jHD3z7MoAJOBwTlQ6rI7WdovHqNwuWGL4Li+zo+rmMnGpFEsikOf+ZCD1g+B
+	 5WogsBjGR2vigSfBr5xc+LUAqI7tGlQQdwzs+FF94BxRm/iPcH79xPHLcw1T89ooe21mj
+	 UW85ohDbItFp+sJFs0DLm6hnaupjEP0rq+YznFHQGfbPXeq8hdhjGLLLBKPOMmdVQOAK2
+	 D9eLs5d313Hax5Cn3nS5WaKZsRPKlbVvYVsMHVHH36oJlLckK5zFyxnPWXhML/JK15g==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791892661;
-	bh=yXPUJpaUp/8JMP1bdNQtnf/PI9uPPV95ioaYKfHgIWY=;
+	s=default; t=1791892664;
+	bh=P8MOujoNZgy8Q95gI11NfBEtgI+bFDj4SG3I5sQPdmA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=U3lZ5AbDJ/t41T4z8Yr0kmpzvegM3FwEA6q23OocrrVOy734++evPSvbhZIM/pDCU
-	 El/Nq05BKdyWgfrwo9TzN7fxRrzdsaYsyCFnR00qu/aTyd2ZIsfj5Fm6X1m+fLiIjz
-	 /X3M9in1GDOme4ndJdEQrfFIU/0UqrbWMsssJHzu1vkXCx/3ZEMYd08/4Zozp0HCK6
-	 TvTSTloPZH10LovWp4jg/+N5K2agAAT1EbJMFGsrb0LV7rLb7lEUIi0LGGP4kY2Ipn
-	 mj2Q+jx1QCpr1DeEfqQru3ByDVBZ2d2FPk+ck/LTMlAzFN9lwRDPiI6RmQ3Z5emjpz
-	 TW3P7qZp4nE9Q==
+	b=Q9bDLTP2D+MUHFGriaNqFRCj4zeVki9osPnEtem3Y9rseZUVCkPtNXpTjtb+SZ0nv
+	 HmPxQrWDVwsMEObDJtxfFrIuzOv7KQE6hkyG/8QEHaQmOmtCBRyjQfdsP5jmttYEBM
+	 kSQjuPcI3EjuFHKhyJwaTANUkQbNW8KMJMDG1beP0GgqWfLSoFeuiQKtC/8vxc/6ev
+	 IXk4R3a7bV8fUWtnUpsiyS5TiPvwWu2isz6Gh8zXjC3ZilyQq5kqTqr4+aZrB6gC9p
+	 2gkgO116zgh8hwUa7zYG2dsZw0JH3Ky/FeLrn7W+IxqkMFxlBmKixNRzN1fyh1GOAP
+	 LJ6zfdhubNrcg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D64A940334;
-	Tue, 13 Oct 2026 11:57:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3A9354DD
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5B82640475;
+	Tue, 13 Oct 2026 11:57:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4F7C31399
  for <buildroot@buildroot.org>; Tue, 13 Oct 2026 11:57:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 29D8A60667
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2D60A40296
  for <buildroot@buildroot.org>; Tue, 13 Oct 2026 11:57:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wQgwiIrAPPTQ for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h9Sa9reZy3zk for <buildroot@buildroot.org>;
  Tue, 13 Oct 2026 11:57:37 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 76641605CC
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 6EC8240297
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791892657;
- b=Q+m7H7y8ZGqD41hUnXMTCO9eLTUxizfYdnRy9azTVFbG6BvYVvqsech8/LoQEoztieAv
- dTcBbfJp5xnsLsZGnCQXQtMGwyD/sbiP2zIFHLU5SJIpMnlQloRmLbkWr6J2DXhdK0pp4
- 6GivWZ2ESs6CaYcOtlfd4isuB7pp2ywClQuZoE9P+8fxufU+qg8SbHnOFnz7mA2AS6sh6
- adc2fQ5YoZ2Gijno5lxjaaa806Gn0flkDMSWJzkkmSDWnhbeHyK7mA1+ozNrJucx4Cjtm
- 0Vu68pVctySb3Bes2lPxfC+8HMgH7Th03LLdilWVza20SPJC+qnE1HexFGRz2dcJQcQ==
+ b=jfvwXYpQaaipDZmY3dPrj0ZjRjVsiram91R88GfYhqTsdsVroveSP1VMEyecBnfWDmq+
+ UfxI9wx1oMvTYWTVmkdH0OfFVuDX5u2zxjFS+xgxShJwR7b/UsCfW3jnKw41iQjcgyBL9
+ +ud5Zj7qK8W59F2tMwY/bX1FBrbGqhs/8TGUSak+90EvPuWG9EwyLkmpIe6Mm2ixNxJwB
+ BEyf46D9y83d+eME8QkjvoMw5r+D/g1kxrOb1Vk6/7ewnfrzLvt3aXQPeZaG7yg/NE3w3
+ PXtOMGbEPFsWEc1feAxp10XJewQGr0fpDdrlvhgCIVCbq3Tqf6gyVCGFAnpd0xhHLJg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1791892657;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=yn7LPQ3TAZlTVoGflm88FxmvXlfrh2tNxJrTItj3gqU=;
- b=J7Le9K9rhjzWJMRMyAnXqcDeBpPEvUsiD/1luNax2jUDbyNLZG2x0j/oKxeKo7RcaBX8
- cimFIjTuS8UhO4x0MmGN6S8AGEmannfljGMpzqu4bJ3uKHNA6VtbSXchVb3ueU7oekw7H
- z+jhSXzYdodlSwVleu/m4Ph66YCgi5GkGoVKbZ64IrlYfU9hsYHrC/JEfAGupFOtejkRS
- pBMBBz8mlaHPmSqQMuzuK/01TnHzkptd306PZgWANTTV7qacAf2rVCVFwwD1HCAzqnGJ2
- YDDhBxwpZhcVQNDZcM2IhsmDzh4N5truyMYBBjDrDWWXs0ImGJOScFMPiDP0Nniusxw==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ bh=Km9GRJriCun+zVrRXCVtC1cIl0cBa6z+CLnSJTrrQGg=;
+ b=G+ENG2fcd1xjw7kDKThxb47mJjQVSEhzf2z/DLRtHqExe9uHUFFvlHc4H3O6PWQVM0v6
+ 0jjtrEuctBorFAXDwDvTY+T619TSrtBjdRFETqi4/vrYXklKUtQRiGRdGoFKU1ZytXdK9
+ bmnH/TzGzjL6m8uP5Y2rlq9x5h1jFPWkXzKoWIfEhPGh3vvmUgpwcnbKh8wK4ACS5FwCr
+ K+Wvq6p6GRI4xIjJ5qvx3KaMGNGhVsyzEIIWwFgqABUF62sG+b4paim280IW80FRxoYQd
+ ZaL7xPGKikMu3oG+p9RDF+lwViUTGQnRzN8mCKWItB4WZpUJ/TBuleOlL9+r1pY8EvQ==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 76641605CC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6EC8240297
  for <buildroot@buildroot.org>; Tue, 13 Oct 2026 11:57:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CAC72956A5; Tue, 13 Oct 2026 11:56:17 +0000 (UTC)
+ id AA40D9565F; Tue, 13 Oct 2026 11:56:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 13 Oct 2026 11:55:57 +0200
+Date: Tue, 13 Oct 2026 11:55:52 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d2699b79baa9c7dd39334f021c09a477cc6ee622
-X-Git-Newrev: 0c54043a9020ca5f6e71d6c4e3be271aa9a99d7b
+X-Git-Oldrev: 1de1477752be6330f78db14c02456dad2c2bf473
+X-Git-Newrev: 9077096abd6bdf9a1fbe9d205d997ebcc8f9ec41
 X-Patchwork-Hint: ignore
-Message-Id: <20261013115617.CAC72956A5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-http-daemon: bump to version
- 6.17
+Message-Id: <20261013115617.AA40D9565F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-clone: bump to version 0.51
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,46 +118,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0c54043a9020ca5f6e71d6c4e3be271aa9a99d7b
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9077096abd6bdf9a1fbe9d205d997ebcc8f9ec41
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-diff LICENSE:
-see https://metacpan.org/release/OALDERS/HTTP-Daemon-6.17/diff/OALDERS/HTTP-Daemon-6.16#LICENCE
 
 Signed-off-by: Francois Perrad <francois.perrad.86@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-http-daemon/perl-http-daemon.hash | 7 ++++---
- package/perl-http-daemon/perl-http-daemon.mk   | 2 +-
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/perl-clone/perl-clone.hash | 6 +++---
+ package/perl-clone/perl-clone.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-http-daemon/perl-http-daemon.hash b/package/perl-http-daemon/perl-http-daemon.hash
-index b1d92ad8e6..c7b6799587 100644
---- a/package/perl-http-daemon/perl-http-daemon.hash
-+++ b/package/perl-http-daemon/perl-http-daemon.hash
-@@ -1,5 +1,6 @@
--# retrieved by scancpan from http://cpan.metacpan.org/
--sha256  b38d092725e6fa4e0c4dc2a47e157070491bafa0dbe16c78a358e806aa7e173d  HTTP-Daemon-6.16.tar.gz
-+# retrieved by scancpan from https://cpan.metacpan.org/
-+md5  14f98fd61159ec4740a21781b787944e  HTTP-Daemon-6.17.tar.gz
-+sha256  16281580c40e23108d028434698b5d7d53637bf904c9df822481e253cbec920c  HTTP-Daemon-6.17.tar.gz
+diff --git a/package/perl-clone/perl-clone.hash b/package/perl-clone/perl-clone.hash
+index 2cd62648a8..0a75d5afc2 100644
+--- a/package/perl-clone/perl-clone.hash
++++ b/package/perl-clone/perl-clone.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from https://cpan.metacpan.org/
+-md5  62ff032a4df0c4abb74f76adf519361e  Clone-0.47.tar.gz
+-sha256  4c2c0cb9a483efbf970cb1a75b2ca75b0e18cb84bcb5c09624f86e26b09c211d  Clone-0.47.tar.gz
++md5  dfd3f7bffd1c2725f0d114c2ee2880a5  Clone-0.51.tar.gz
++sha256  f17f66fec97dacca67ac9585701d2d079cfc80539fe6e8160c201c4e55f67507  Clone-0.51.tar.gz
  
  # computed by scancpan
--sha256  311f168ba9a7819ffab4fea19858f9e880737baf6d112929d11530205035a4cc  LICENCE
-+sha256  994ab45a4f8ef43f47b7baabc48d100838c42d226d8d161d6ac1f49c5f9d7c84  LICENCE
-diff --git a/package/perl-http-daemon/perl-http-daemon.mk b/package/perl-http-daemon/perl-http-daemon.mk
-index c017c4e099..835a6cc496 100644
---- a/package/perl-http-daemon/perl-http-daemon.mk
-+++ b/package/perl-http-daemon/perl-http-daemon.mk
+-sha256  40aa7eb133e97b075024380640528760a54aefc344781741ed02539a375db5ac  README.md
++sha256  ef9ff0dfbd1bda7c74ad764a806ddafc976f2d5b6568b16a3ede8bdd2e8469e2  README.md
+diff --git a/package/perl-clone/perl-clone.mk b/package/perl-clone/perl-clone.mk
+index a5d18558bc..43a038188f 100644
+--- a/package/perl-clone/perl-clone.mk
++++ b/package/perl-clone/perl-clone.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_HTTP_DAEMON_VERSION = 6.16
-+PERL_HTTP_DAEMON_VERSION = 6.17
- PERL_HTTP_DAEMON_SOURCE = HTTP-Daemon-$(PERL_HTTP_DAEMON_VERSION).tar.gz
- PERL_HTTP_DAEMON_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_HTTP_DAEMON_DEPENDENCIES = host-perl-module-build-tiny
+-PERL_CLONE_VERSION = 0.47
++PERL_CLONE_VERSION = 0.51
+ PERL_CLONE_SOURCE = Clone-$(PERL_CLONE_VERSION).tar.gz
+ PERL_CLONE_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AT/ATOOMIC
+ PERL_CLONE_LICENSE = Artistic or GPL-1.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
