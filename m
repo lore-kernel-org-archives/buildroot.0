@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84319CC6B0E
-	for <buildroot@archiver.kernel.org>; Tue, 13 Oct 2026 08:24:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90B0BCC6B0E
+	for <buildroot@archiver.kernel.org>; Tue, 13 Oct 2026 08:28:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5119E406A7;
-	Tue, 13 Oct 2026 08:24:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5233B403A9;
+	Tue, 13 Oct 2026 08:28:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wW8zx4yJ_KVa; Tue, 13 Oct 2026 08:24:18 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 5F9E940640
+ id 4dNBuIzJkzxQ; Tue, 13 Oct 2026 08:28:13 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 4C65F403AA
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791879858;
-	b=iTAPKA13CTHLbDaMmnL9Yq2cGXQE25MjcPqP2ElIf6+boU9uQOw09zCgV6Wonk+6+dLj
-	 31oQEsB9vKd3y6HHU8Kupd6SYUu+WxtYICREsrIvxzCgVNVPeLNBnFDW5SAUn1obFIiIi
-	 4zV0Y7FZu3XcOztN3qLcDBC67us2Y+lzfyymaWkMEdBl1FqAENjRSchP9T/9RyCu+jctP
-	 VgqT2Qhb4y1k6/rcis8I2o9wxnbWCkOozglsEB6NLUy8Lns5zzfMhyj7H3yibkd5JIZjc
-	 oyRh6xUyMRFs+vomYXPde5IQuiZWAQ3sdakTIHpCdSYZfB6Flp0gJ4Stx3ZxLnYUj3A==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791880093;
+	b=YvCxgS9+4rwrk2VG64cIiVy+8tTHdrTNkEz3eKDaErA2GVYaf9QK4SMo9dfA8IBi9OgH
+	 RByBAAh52P9rm3cLuDWFkQl/j+uYin/rSmjAIaX7cXUGu8mN7B9B3wtQDuw2yjxQYs9xI
+	 fEn9KmwHTEsY/Pef8I3ej8Wew8IsgGj6t22NrPcCU5iiWVmFLYX9Agq1yu4eKjcUcraD2
+	 65XaZbLKIVr9zJ4w5MDEbcnPEmHVeRo98Ar43CM249aaAposEsePjtYMtkZmxAhu/XFL5
+	 RH1Yv9ncpxOpEcHlzpECGvclBqEX8+xqHYGNVJEpIFmN6NIAH+9AFr7rprfHfuQBaHg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791879858;
+	c=relaxed/relaxed; t=1791880093;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,93 +31,90 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=Re4rdlOsLArWU0dAIG7WpyM/q0D0dWwHmmrdeqQXOIA=;
-	b=oZ3RT88cMaFB8yAaq37e7HWr8Y/F0R7iuaxZSxbNiAZbzTCcyleNDKZ5dxr8BWuzNF9M
-	 0eBRniga2dj7pWLZ4U5IhbhoF4vVFBTAn2qXhFngqOimjxduBa+/B0RLEgTR8O90mLxSp
-	 0a9FWPNDW2tJmvU/341V3nts0FgTnpjPiW/WrBWcVV7RJZFDMugYkyW2Jo31bsN0A/N0N
-	 XsPiZRlbzePiZsZvO+0yNsrz1EC2m7Z82tw7s/UkKt3l5Mc4Bwp96LhDoyJ/cB5lAx42s
-	 87mr2jGYQrD+mT2MoF8VJiZXE6jgjROmII4DT3J7OI3XRpCxrzuzWssGjOHkIZHYdOA==
+	bh=i89uKXekC1nGzlliVVppOjuDrMSVc6h2LT0LBRA8/qs=;
+	b=bY8h6G36yaAsWwljtmJlWxkAved/0ey037uzODd0QK5jjn97Qxj+knDS0KDxFe5kOOkT
+	 3/mRFxPytUupcbljFxirk1Y++QHTWxZaozBozRwk7uYdVjHrikMKBJSWj7DwoafyMJPiq
+	 HMEGzEEVStBadp4gHtu2366TDsi1z56dEfq4hBkI6IaVksnnGtRvNy7ctsa61JnCIJ9/P
+	 qdBp0UKtKHeRvsV67hlfwg406jrE6LYCUl9x58i1I4ZueFWJY2hP4TRlaBX86HcdZX8bE
+	 sCOdXAyE2UZpwmkpNfMezmvUPavFTLKy35hybce2l2CCQpptGFl1UcJXCDdUxTk0k2w==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791879858;
-	bh=Re4rdlOsLArWU0dAIG7WpyM/q0D0dWwHmmrdeqQXOIA=;
+	s=default; t=1791880093;
+	bh=i89uKXekC1nGzlliVVppOjuDrMSVc6h2LT0LBRA8/qs=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=UYqCIGbV5rbSDIoUQ2i0kSmnUB8x9fJJRNy9LRLlV7QA+NXlp9sEp6KsSEtv5QekJ
-	 sK17WyvSuQKMh35XaEKLP/WB8HWbrC2iWMxIm4EC9jX9y2SuaWdrEe/Yhn7fbL5LdH
-	 DU9mo/Pc2evSsxVsqOtatL1rwg4XfBLXw1D2notNfSirpCyVuuD1gF8ZR58VdwW5R3
-	 RXkxe0KwWp1HATv/5xWNE+jvP9iiGJT0PCwx3+Ov+2Y3iyx2FJORlyUMtGu2HyoLCW
-	 t9BxxVzs+3yqHp5SrmNHaE2X404MdDdwZFOr7zDdRP9P/RYkNSPAE63GiYq5XHygEh
-	 VvNB3XbPW1UHA==
+	b=HwY8kHgl9Y5RAY4DT9VGYvN2R+R+RcfjyKRheFcaurrz4BB9vIMdFJqblTduJKG20
+	 0e5UQUv3yujJMjlkKYsKCGoL3/nTM28j15ASUxiSETUDVZX+9wSO+z3kIJ7Wdg8jt1
+	 a+ovItpacsqAXyA9ppCtQyAWXW2M5+gapJ9r+H3XwrZxsGx2ObZzTfJ/y3bVOXwkca
+	 qVm5ylDGJaxh7qkxtE2G7vBOnfr3K4oGxwkVf0DykoeMHa4exmtKqhz0KTcOE+2NXb
+	 5cQAs1BGDEIMFlbycHstofKD9MRC1tMxWAuiW2RqkNoqm/J6v+wJEA2LwzRjj70fEU
+	 FevcvBVDWC95A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5F9E940640;
-	Tue, 13 Oct 2026 08:24:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C65F403AA;
+	Tue, 13 Oct 2026 08:28:13 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 92E38788
- for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:24:17 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 6698D1E9
+ for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:28:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 84C044026E
- for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:24:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 48328401EC
+ for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:28:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iLJkGpoTJCsM for <buildroot@buildroot.org>;
- Tue, 13 Oct 2026 08:24:16 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 0B383401EC
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791879856;
- b=Oms3sUZmk4LKiKw3x0pCzOTTvhcc8FEAI67bvdUVZqqpAflRjeZRMm8IZeSIr4xC5CgR
- S3ynyQd6ygUNBo1NTjdJUa1SKsEkliQ7ApGWElRWkagR6TK/XD+EkV6Pqjm3lLjkbv6D1
- 97KIHXfsmyqoTCjPBrV4+ciC72UhD4Gv0IbOPk4taK/HC5bMHlZcHGja3N3jT+5mLXGOr
- UtMnThgt0h+VM12/JZ7Z1COnUJH2oe4jWNkmCiIxU2byPuhCViLlNRr9FMQoqlKr2Pwp4
- kZqfrBb+dlshrf/Lpb4BghRhj+mNuNB9lXQmq844IO0o2xCipm3rJS2YWkfIMyquRhw==
+ id j7Jzm_MwssJU for <buildroot@buildroot.org>;
+ Tue, 13 Oct 2026 08:28:10 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 377D14005F
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791880090;
+ b=U/nSbXcpeOEM5ouUFuv9OIlhio+GeOzk2QKzAgPfeozZKkSBs4TokWTOPbfPL5l7lpbp
+ ko6khWq2CG7ZjGqdc7cG9xpH+4OzcQnJ/Gn6CXfbr6mi/BbLYYPFJePI41ePazngttsYC
+ PpMuV1j9mIkrjdynArc+qucXVKQg4CwDAkyWRy6Y+whH4pzHbDf2StikAa+r23MCwNd6g
+ lj5Lhedk8yUWi6h0fHjwo8v6UTo3ExcVEquRBXDjtf7Ul/IqTPgHkXsvcaVRq5ciMve6/
+ jO96NP9IywH4DWKWyXyM8epzVHpZkupxUx/ST3l0W/m4kl5Xew0VBGcWmVw2hbNG87g==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791879856;
+ c=relaxed/relaxed; t=1791880090;
  h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
  Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
- Content-Disposition:Content-Transfer-Encoding:In-Reply-To:
- X-Last-TLS-Session-Version;
- bh=pQMM3MXjwfpBVUJn58GuJFB48eoK4eJRKscvC/hE9hM=;
- b=PGJ2F7tCCW4fZc+fZFJbCLk9qldQHgs7MaCU5jB/rlk8krs+s5XaX9Gxq/SoY7sPbayR
- nIUWqEIBcPOIkTiPU01EWK+PILts9DghZoWTVUV5JW+8FvV8jduNW2sBF66rf3VpI+3JI
- b/knajePfRMXQ7OoQRTcUXw/By2K9YX2xuQeROgygu1R2s1W+co01jXLbYVv6cWOfaDoZ
- NAqUcRXAYbary1K7I/U+i0I6hcRzrwGmqpy0TAriyvXdzP8bumdm9LtPIJRNEP/pM8pxr
- GGcO2sYw8uaI/VS9eRPpb/WNWJU0reNrs7tZ4RiEFfh2fR7KalIg4XIAPTUVlf+3TMA==
+ Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
+ bh=5vgC6pfBh5HQiER503DpHLeFtrvt09Ftu/49LVF2jyQ=;
+ b=smnBh8WZJlO5NKvdgGJ9oomCo2uHSNRvysiR8g4ncsCQJBY8CsTfWkr/djmrgWGMZDxy
+ KJB2GilZbcfT17phSA00iYGM+pnEuj7ew7rR2IB5hXpi4DjOjnBEvSGqbVfmmoYyeMYw+
+ TOUoRRDBpcmfjynFb0e/QVnVmmj457P3nLhdVlp1jZSKIgH87zCg4fN+OLlgZM0NlmWi2
+ uO9LBqtgyAcEE/C5V4uSYlWwlxTJyRQ8lHqeG0YVG5EXHNPWhawynJtbqGeFT6b+hBilA
+ swjt+Kuc50CMUsAJLQTuhXHCZ/dGfFfjMUZHxyu3pBVFq0PAvSHopA/gSYL9Ti5WIjg==
 ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  dmarc=pass header.from=bootlin.com;
  dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=h2SSlZ1M; 
- arc=none smtp.remote-ip=185.246.85.4
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ header.s=dkim header.b=j1o2Gcmz; 
+ arc=none smtp.remote-ip=185.246.84.56
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0B383401EC
- for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:24:14 +0000 (UTC)
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 377D14005F
+ for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:28:10 +0000 (UTC)
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 47CBD4E411D2
- for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:24:13 +0000 (UTC)
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 01BAE1A1145;
+ Tue, 13 Oct 2026 08:28:08 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 1BCF160362;
- Tue, 13 Oct 2026 08:24:13 +0000 (UTC)
+ by smtpout-01.galae.net (Postfix) with ESMTPS id B41F560362;
+ Tue, 13 Oct 2026 08:28:07 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 1FA0A11D70D46; 
- Tue, 13 Oct 2026 10:24:11 +0200 (CEST)
-Date: Tue, 13 Oct 2026 10:24:11 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, 
- =?utf-8?Q?C=C3=A9dric_Ch=C3=A9pied?= <cedric.chepied@gmail.com>
-Message-ID: <as3qqJ2csRIWgRGq@windsurf>
-References: <20261011130058.3443432-1-bernd@kuhls.net>
- <20261011130058.3443432-27-bernd@kuhls.net>
+ with ESMTPSA id AFF2D11D70D9A; 
+ Tue, 13 Oct 2026 10:28:06 +0200 (CEST)
+Date: Tue, 13 Oct 2026 10:28:06 +0200
+To: Evgueni Tarassov <eugene@largest.net>
+Cc: buildroot@buildroot.org, nolange79@gmail.com
+Message-ID: <as3rNa_yKJD-VFSA@windsurf>
+References: <b4dd6ba1-b7a8-4948-b58d-f768b651b0af@largest.net>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20261011130058.3443432-27-bernd@kuhls.net>
+In-Reply-To: <b4dd6ba1-b7a8-4948-b58d-f768b651b0af@largest.net>
 X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH v9 26/52] package/znc: Fix build with
- OpenSSL 4.0.0
+Subject: Re: [Buildroot] [PATCH 1/1] package/tcf-agent: bump to version
+ 1.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,22 +128,87 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, Oct 11, 2026 at 03:00:31PM +0200, Bernd Kuhls wrote:
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> Cc: C=E9dric Ch=E9pied <cedric.chepied@gmail.com>
+Hello,
 
-Applied to master, thanks!
+Thanks for your patch, sorry for the delay in getting back to you. See
+below for some comments.
 
-Best regards,
+On Tue, Jun 16, 2026 at 09:35:37AM -1000, Evgueni Tarassov wrote:
+> Signed-off-by: Eugene Tarassov <eugene@largest.net>
 
-Thomas Petazzoni
--- =
+Your commit log is empty, but the commit does more than bumping the
+version, could you add some details are about the changes being done
+(why is the patch removed, RISC-V support added, etc.).
 
+> ---
+>  ...tcf-services-tcf_elf.c-fix-x86-build.patch | 60 -------------------
+>  package/tcf-agent/Config.in                   |  4 +-
+>  package/tcf-agent/tcf-agent.hash              |  2 +-
+>  package/tcf-agent/tcf-agent.mk                |  6 +-
+>  4 files changed, 6 insertions(+), 66 deletions(-)
+>  delete mode 100644 package/tcf-agent/0001-agent-tcf-services-tcf_elf.c-fix-x86-build.patch
+> 
+> diff --git a/package/tcf-agent/0001-agent-tcf-services-tcf_elf.c-fix-x86-build.patch b/package/tcf-agent/0001-agent-tcf-services-tcf_elf.c-fix-x86-build.patch
+> deleted file mode 100644
+> index 5f08fa485e..0000000000
+> --- a/package/tcf-agent/0001-agent-tcf-services-tcf_elf.c-fix-x86-build.patch
+> +++ /dev/null
+> @@ -1,60 +0,0 @@
+> -From 0a847ca035113540ee44d17f364bf4701fe78355 Mon Sep 17 00:00:00 2001
+> -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> -Date: Fri, 1 Mar 2024 22:31:05 +0100
+> -Subject: [PATCH] agent/tcf/services/tcf_elf.c: fix x86 build
+> -
+> -Fix the following x86 build failure raised since version 1.8.0 and
+> -https://gitlab.eclipse.org/eclipse/tcf/tcf.agent/-/commit/8df5540c53b862d516ac25f908c2fff4a547b4a6:
+> -
+> -/home/buildroot/autobuild/run/instance-1/output-1/build/tcf-agent-1.8.0/agent/tcf/services/tcf_elf.c: In function 'unpack_elf_symbol_info':
+> -/home/buildroot/autobuild/run/instance-1/output-1/build/tcf-agent-1.8.0/agent/tcf/services/tcf_elf.c:2079:27: error: 'STT_ARM_16BIT' undeclared (first use in this function)
+> - 2079 |         if (info->type == STT_ARM_16BIT) {
+> -      |                           ^~~~~~~~~~~~~
+> -/home/buildroot/autobuild/run/instance-1/output-1/build/tcf-agent-1.8.0/agent/tcf/services/tcf_elf.c:2079:27: note: each undeclared identifier is reported only once for each function it appears in
+> -/home/buildroot/autobuild/run/instance-1/output-1/build/tcf-agent-1.8.0/agent/tcf/services/tcf_elf.c: In function 'create_symbol_addr_search_index':
+> -/home/buildroot/autobuild/run/instance-1/output-1/build/tcf-agent-1.8.0/agent/tcf/services/tcf_elf.c:2228:78: error: 'STT_ARM_16BIT' undeclared (first use in this function)
+> - 2228 |                     if (type == STT_FUNC || type == STT_ARM_TFUNC || type == STT_ARM_16BIT) {
+> -      |                                                                              ^~~~~~~~~~~~~
+> -
+> -Fixes:
+> - - http://autobuild.buildroot.org/results/8388acf59689ed7e621bdf158483e3df1cf9bef7
+> -
+> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> -Upstream: https://gitlab.eclipse.org/eclipse/tcf/tcf.agent/-/merge_requests/1
+
+This merge request doesn't seem to have been merged, so why is patch
+removed?
+
+> diff --git a/package/tcf-agent/Config.in b/package/tcf-agent/Config.in
+> index a016871e6d..7281e62377 100644
+> --- a/package/tcf-agent/Config.in
+> +++ b/package/tcf-agent/Config.in
+> @@ -27,9 +27,9 @@ config BR2_PACKAGE_TCF_AGENT_ARCH
+>  	default "i686"       if BR2_i386 && BR2_ARCH="i686"
+>  	default "i386"       if BR2_i386 && !BR2_ARCH="i686"
+>  	default "x86_64"     if BR2_x86_64
+> -	default "powerpc"    if BR2_powerpc || BR2_powerpc64 || \
+> -		BR2_powerpc64le
+> +	default "powerpc"    if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
+
+That seems like an unrelated/unneeded change?
+
+>  	default "microblaze" if BR2_microblaze || BR2_microblazeel
+> +	default "riscv64"    if BR2_riscv && BR2_RISCV_64
+
+Could you have a look at those minor comments and submit a v2?
+
+Thanks a lot!
+
+Thomas
+-- 
 Thomas Petazzoni, co-owner and CEO, Bootlin
 Embedded Linux and Kernel engineering and training
 https://bootlin.com
