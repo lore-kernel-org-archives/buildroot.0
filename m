@@ -1,104 +1,120 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D112CC6B03
-	for <buildroot@archiver.kernel.org>; Tue, 13 Oct 2026 08:12:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 371F6CC6B0E
+	for <buildroot@archiver.kernel.org>; Tue, 13 Oct 2026 08:14:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E41DF40607;
-	Tue, 13 Oct 2026 08:12:54 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c8xteSPc2lI3; Tue, 13 Oct 2026 08:12:54 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 0054940609
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791879174;
-	b=jP75tHPgpvDIc5hcSQqzhsifH6sRN1+0sTLMcTow5gjV95SkFA7teMBSZThfuUlX1GJv
-	 Qg4dZHbCCxgXxFnPPEXmrCgbkCE7oR1xobQTJiFFfF8LG1odvWPU5bwxHmgy23MRl9Jo9
-	 SFyDiqYnJ6buy5c6idtYAXT/4ZiocSdL1WTpX7g9EXgER4x6Qyruz7SfgLAFrLwarPz8z
-	 P7j2ZIUxp123hUzTDtr1RROKQ2scpjxP+WbxXUNCFOfyorKIVh73DBDxkEazCtExCs0Gc
-	 NpOMm/uhpKSUOk6qaveD2cxJVd4M5MJ3XYiDeHhULXjMycJpwlKW1z2Ep61WAbMUP6w==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791879174;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=51ciTdmtl1qZDbvClCbHO8CkxSik2BFD0xMtnTevZQU=;
-	b=ouARYTfFldT3dBDlQQkbcA30aiXAk188hObF4LjxYiP5HidImaC75rk3T0VlmwB0Yxu/
-	 hsQCPeZxnkIlHg99Og3durkZWrPDv2iSZ7hjStlSrktrcfMnZ6C9PEPRpjvNDJr9k9pDY
-	 rp4boTtRElH8SQ02lon5wjHIe7eqnUKIwta0HcxoUNSOM23yrEFbNnK0IeUoMW3DNnwGF
-	 LRYEfe2AvOWo3fDkm+V/Aspa3m8LzBIMr1voz/vmfjKpCeq6/vDAOsBJvJF3QM+Gs+bcn
-	 6d+9vGuk6T6nfmXDIw/OFZss06olHNA5cMn3q772UQjOwQU5lz1rNNLRPZ7da3F/6Zg==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
-	arc=fail smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791879174;
-	bh=51ciTdmtl1qZDbvClCbHO8CkxSik2BFD0xMtnTevZQU=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=EqKv2+BtqqAHudSOVB37oF4uaH+wZg6AwFaUpb7sjxiSbqFvIAP9aJHoAD0k7kc2H
-	 SIFCYzPTNGgicEf6TtUIOIDxluuPPh7vE7Oe2WavSWP/5AkaqEh0BeS3X42o3AtXaN
-	 cELpVMpm2ogqPs/BNywGxCHuOnA1UBts/OOa4QTNwvGHK9YY1DU8lldpcNCwnTlwDY
-	 W81UhT9hm97raLYBJvZNjyK7NNgN/p3a50ELyOXevOq6FuHVGiIRDMUVwna0VtEAcj
-	 xEg5z9Zn5/0n0GHpSp6R9b6GN4dGuJVis6lq5X4Qk9JAVTQgdzigLn4LdMBLnzZ6lt
-	 xVVjRS2I30V8g==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0054940609;
-	Tue, 13 Oct 2026 08:12:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D6C3A105
- for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:12:52 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BC0946074D
- for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:12:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F1E3E60760;
+	Tue, 13 Oct 2026 08:14:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UpnJ-NHW8fJ2 for <buildroot@buildroot.org>;
- Tue, 13 Oct 2026 08:12:52 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 0B10A6073C
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791879172;
- b=DkhDH5YKk85kzmSmYyLsImv0551WAd9BHvR4V+dtKjvPlvpwvgJ4WGdMioDtZ1CalWjW
- 2OSzfvuc/1UIGqJ5xIx/lPn0HOgo0QMiuQGbo4uPjvpGgoowy93H875b0E2t9tLt00a2A
- Dvb3CzEqBEQ7lkUgDpbpHlTjDJRncI9v+O/84Pt8Ykd8OpDfDNg0zv84lr332N31I8Vwe
- Pem6ujSORZzYy2GHBo8/PHl8UC9OtcEaWwQNTNBIImqPsZDauhrlUTzWjuCzG+GIFx5BH
- 6uoOeUcbyt0AW3i9PZLBbBihmVFkK1Woc0vEzZJF8GsNi3DbEgt4JFN0mcYpTP2WKKA==
+ id bhrsQU4ezwLF; Tue, 13 Oct 2026 08:14:01 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 75F7D6074D
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791879241;
+	b=stTSwq/8ZY60ke1CRDfa69Od3fAsD2szyutqm7SNYWTt3wvtgKJ72d2RqCb/yR8h5Nt8
+	 uZ4xhE8B0zekG0JBFL+kllDG8tkizRcqiwI0lYBhvCRKd6ig4494rD8kScL5hmqdPgXAa
+	 boiSK1IwbqtpE3FZUt6FOL9pwr7iEa+HWmHJxjDdcumhuLWLBLZNy4CvdGMDRbuaW1W8K
+	 h6rPSFSZhyP/1c5pUruQ9q/UHzLh1kCcnw2YK8VGnP5dzrTRZ3U+ZqIpRWKrQbT9mFQVG
+	 jb2swp+tm1PGnnJY438knVEDNbMBx00O1Jf1iWhWoYx4Sf8HoSep4RJGBoaWJhfu+JQ==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1791879241;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
+	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=vb16IjtH/d2b/38knNcTqXEg5lTzVBkeM+W5xm6H6f0=;
+	b=Y+aph4+AZwCZXj1klB+RhLFTs6fuZBU/eLP9OhnCDC/yb6cmAYDl6fP1bn8EqAIBmRMG
+	 zdC/qVZxfzXOvnzg4/W8kDmzpYpLATHj5oCryd6FB0f449RyfFRvDglQfBPby1pap4V6B
+	 uK7Ljqp67EOG2JkwRhxz4UX8QsglxecWHWunuG3bVWCqZuliGOl10OLPIvFvqnMyQ3utf
+	 TzZ3KFc81fnnDEG7x+zRa40npi0+QeKzifoXwC0U1+7HF+UuYlzQ979hnM115lJBesAjN
+	 B6y/KxREDKOK4tgB6QkGZVdqrusBMiHx022PqvLo9AFFDfabLxlqKvrSURwuNOPaMqA==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	arc=fail smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1791879241;
+	bh=vb16IjtH/d2b/38knNcTqXEg5lTzVBkeM+W5xm6H6f0=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=k7t7S/It7laScpGAPXxifjNaiTshGOQtSkszOnf9CbClPQrFE2urOGEJbF2XfkdN2
+	 lKfxrrzhJBL2TKwL/QtLo0Uz7rehDQqR2v84WSKgyfW1shHv1Da5wkDXuzdwsLd63c
+	 hflnUBQF4mz0aIpvOqS1kxkz21VL9n1JynERHlsec+rhdpknvHHwLyTRx6aow4tiMQ
+	 cRal23KOU2mPAD1gznYN7LOl6j3rXCI7A3ccTLa51zBOSYup76Jk59uUNoUefGI3xo
+	 Oelwm5jnNddAvpVnmgvCEyFDsl39GXvTj7efqjbf95s2evoG4+Se0Dd3qlFPFeTT09
+	 xr79aAMYOh97Q==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 75F7D6074D;
+	Tue, 13 Oct 2026 08:14:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 830A7105
+ for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:13:59 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 751E440627
+ for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:13:59 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fk7oyDiLJVaY for <buildroot@buildroot.org>;
+ Tue, 13 Oct 2026 08:13:58 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 0E65F40613
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791879238;
+ b=eQtBTeiBjWZYqXvWnJB5cLd1/B8rA/7J2tNe73l7bB5KnOoOokL9KGt4DhqwG8fYqUE6
+ MUapgUD29EHd7WuH4x2dI4+o76bPgjbAVydy0WLxH+Omtk4Aay8qsDt94xCtWdO7TyEPt
+ mV5QCoDgUyHekuqi8i5J+wxPzE40in5r1KpA57NfL+ZEa/SdKjVHHGjSXgk5rE091iV/s
+ PXtUtXcgeTO4JIy5zhPHtLfwxJlQsx0ADwwNOlivItzkN3DVEl0g8Hck/KyJqnImDcyc2
+ lCr3S5h4bI8YLRwUfICoh6qBT4GPNzEzHxXO8ZsrWD8FZZHkB8U1obdO5QrbbOqqQBg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791879172;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=M1xqaxIBPAU8ZGsAQQaNvkD6ih83W3nKmsDUNgeHxe0=;
- b=Zz3KJ1aKXs6FuU97hooolcEEHxar3jMx8LMgb9cijlANPgB+shn0dulbYTVlRLWJyUoW
- wre1x5f2lLl2iWfkm3Il9os2ThcpmGpLdbiND4je2Yt2Zc+/wuCtnsK6z1NxLfFZTJTAo
- PWxEOxlTc3EiEMQOGAaAo+ZjTtAqstjV2VHvL0keiOWte+BZz7LgEDH3uT4phkFxRPkMG
- dFv9SSxVBIeGOqZJmbhD/wnHl5KN0aWOFQQzbq+SKH7swVhdD9UBvQZRcmkqsjwHVYYI5
- vZ8ElV/WzGn/lmOA9pkpeAGN1dy38W8oVnUrswBWGDT3mqlvsK1R1syEI0SpLQ7P+GQ==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ c=relaxed/relaxed; t=1791879238;
+ h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
+ Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+ Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
+ bh=tf16GuSNVioWOS0/9MR01rjWV+nGBAyO/gmiS8M9mNM=;
+ b=E2m33ZtLWSv76KDQl2OA5iqLo2ySSzbYu7TsnMw4zTbYiEy8DhvcKD3X4vSJjwyUOIMn
+ Sdp8aQmMHw1ZAMzIHI3H7IRW7MT8wA+lAWiSToyy/+9YSUGqCcf2EsaV+DyfXT/foYSoa
+ D/RlvqrnOk65bqDW0rNMH5nh0575MslA23MI5xzt72g7r7Qx+GY76uUwHsUnivaUDugmw
+ dsZI/0+8bhJsW6ZnqMb42lsqAWALw2OdHVTm6zqgz3VFGE7FgQFfwc2Yq8JOk7qCkze6K
+ FGWYBJvvynOlyBL2FC9bikHLcaUovTqB9P7KLWyo91Tski4ClBINWXf+0eIrB666vUw==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ dmarc=pass header.from=bootlin.com;
+ dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=vDu1CnEs; 
+ arc=none smtp.remote-ip=185.246.85.4
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0B10A6073C
- for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:12:51 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6007595474; Tue, 13 Oct 2026 08:11:32 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 13 Oct 2026 10:10:00 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9fde910991a14e492f391faf02c61f7f88d4f265
-X-Git-Newrev: 747aa911f6a471558a5fb2a9e1b133d13104cae8
-X-Patchwork-Hint: ignore
-Message-Id: <20261013081132.6007595474@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/uboot: bump to version 2026.10
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0E65F40613
+ for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:13:56 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 27E5A4E411D2
+ for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:13:54 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id E8C7960362;
+ Tue, 13 Oct 2026 08:13:53 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 50C9D11D70160; 
+ Tue, 13 Oct 2026 10:13:53 +0200 (CEST)
+Date: Tue, 13 Oct 2026 10:13:52 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Cc: buildroot@buildroot.org
+Message-ID: <as3oPchAfpXrbWsA@windsurf>
+References: <as2y5-1HltXrXKyP@waldemar-brodkorb.de>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <as2y5-1HltXrXKyP@waldemar-brodkorb.de>
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH] package/uclibc: add missing sys/auxv.h for
+ static builds
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,85 +128,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/747aa911f6a471558a5fb2a9e1b133d13104cae8
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On Tue, Oct 13, 2026 at 06:26:15AM +0200, Waldemar Brodkorb wrote:
+> getauxval() works fine for static builds. This was already fixed
+> a while ago, see the commit message of the patch for more details.
+> 
+> Fixes:
+>  - https://autobuild.buildroot.net/results/f03/f03380ef48cea232e4958084eae419d5516f4ef4
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-Release announcement:
-https://lists.u-boot-project.org/pipermail/u-boot/2026-October/634075.html
+Applied to master, thanks!
 
-As described in the announcement, release archives are now published
-on https://git.u-boot-project.org/, so update UBOOT_SITE
-accordingly. Note that old releases have been added there, too, so
-downloading old U-Boot releases should still work with the new
-UBOOT_SITE.
+Best regards,
 
-Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- boot/uboot/Config.in  | 6 +++---
- boot/uboot/uboot.hash | 2 +-
- boot/uboot/uboot.mk   | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index 1eabd10407..d4e77fd0f8 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -41,7 +41,7 @@ choice
- 	  Select the specific U-Boot version you want to use
- 
- config BR2_TARGET_UBOOT_LATEST_VERSION
--	bool "2026.07"
-+	bool "2026.10"
- 
- config BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	bool "Custom version"
-@@ -85,7 +85,7 @@ endif
- 
- config BR2_TARGET_UBOOT_VERSION
- 	string
--	default "2026.07"	if BR2_TARGET_UBOOT_LATEST_VERSION
-+	default "2026.10"	if BR2_TARGET_UBOOT_LATEST_VERSION
- 	default BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE \
- 		if BR2_TARGET_UBOOT_CUSTOM_VERSION
- 	default "custom"	if BR2_TARGET_UBOOT_CUSTOM_TARBALL
-@@ -368,7 +368,7 @@ config BR2_TARGET_UBOOT_USE_BINMAN
- 	help
- 	  Use binman tool for generation and signing of boot images.
- 
--	  https://docs.u-boot.org/en/v2026.07/develop/package/binman.html
-+	  https://docs.u-boot.org/en/v2026.10/develop/package/binman.html
- 
- menu "U-Boot binary format"
- 
-diff --git a/boot/uboot/uboot.hash b/boot/uboot/uboot.hash
-index e992835582..2142f0c67c 100644
---- a/boot/uboot/uboot.hash
-+++ b/boot/uboot/uboot.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  78e8bfc382fe388f9b55aa1daf8c563522a037779b5d4c349d1415e381f1243e  u-boot-2026.07.tar.bz2
-+sha256  3f856da3cbbc93af51ff95fde18588a348b4a26723b01d9841e999d988481015  u-boot-2026.10.tar.bz2
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Licenses/gpl-2.0.txt
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 5b3f46ac74..96b8cd0d2e 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -34,7 +34,7 @@ UBOOT_SITE = $(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_REPO_URL))
- UBOOT_SITE_METHOD = svn
- else
- # Handle stable official U-Boot versions
--UBOOT_SITE = https://ftp.denx.de/pub/u-boot
-+UBOOT_SITE = https://git.u-boot-project.org/u-boot/u-boot/-/releases/v$(UBOOT_VERSION)/downloads
- UBOOT_SOURCE = u-boot-$(UBOOT_VERSION).tar.bz2
- endif
- 
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
