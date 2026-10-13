@@ -1,105 +1,120 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7EE82CC6B03
-	for <buildroot@archiver.kernel.org>; Tue, 13 Oct 2026 08:06:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 677E5CC6B03
+	for <buildroot@archiver.kernel.org>; Tue, 13 Oct 2026 08:07:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4125C6075F;
-	Tue, 13 Oct 2026 08:06:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 327AA403AA;
+	Tue, 13 Oct 2026 08:07:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fGzvT-JfIHR8; Tue, 13 Oct 2026 08:06:16 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 40AF860763
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791878776;
-	b=Gb0okyKj/pw8IEEg23v5aL3qeNJTh9Am4j/hFQpPQwEd+P4oVsQMVmNx94CA9QDicUIB
-	 fqMPNNEgyKQ/zxfq3te1idUUR+cxa96aNu09hX6Zp/JnwwGGffrwptf7mUsEfHwJvfJmu
-	 WRHuZuKC1itOMzDd/WSm76q5V81hV/qjpfJGoGafQSyJkYL3AFpdBCqhwYSdLMvU8ScaW
-	 11ey65bFRJKA+z3eTdGZWzolyQSQckG+43sTXb+dlJeOVViU3m7BAZCoPesRbN0Gu5JJf
-	 hkGa4LZHQI4wPLRTX2T3ku70+alBL7WbqFv9rASAmo9NDpv+A9Zk9pQipjV8+nSndrA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Wv22brEPKI7S; Tue, 13 Oct 2026 08:07:25 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 4793B40435
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791878845;
+	b=l3Qh2eDregyq7X00srarKAEIQIRHPlNDFHvlYbjKT3U8Dx7JpeeA6QZ2EfkXHRjlP/tG
+	 hNfZlEk4mKwv3sjmTOnwQRNNDSW29QdfHWQPL7Srwja1fuuAkL8pgW7XNtcDHvot7Csy+
+	 flPCpwyTocq/gI4J3EdGDwjHysoAvCGPcctl55pGtKrvjRKdrxR1hP/npWgc0+LbFX4te
+	 vMJWy+wZi/Ba5RcsQyp+qtdmcvlF4SxwP+w6kz3eGJ9LCC8vGzZDl5Tp1T4ennmIxrmU5
+	 PW0qWbgpoBcMFyVR8a4dUUugQUzKx6FAB2jyHmTlRBzGDc6fGHCdlqXhVP0pa38DKuQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791878776;
+	c=relaxed/relaxed; t=1791878845;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=w8v/ixllucRPk+CvaMoxTm2KP/wcaaibunF+hWr0q4o=;
-	b=sSmk8S1sffFGzGZiWij6vRSvtFdFhmUZs+6puD2K91QdIwT5z2ms8c5ImzlCsmnowM30
-	 Qadi0y2VfR8rRXu41a6jSscF2/Yj5mT+4aiNwge9t2AikaDrDLHFi1SMjkMLZv6vW/h8q
-	 /LcXWqXE9K7duX5tZtGz3u519IEs65lg2Vt7NEzdmOFvLSP408BYQWzoczwS2h2//+n3s
-	 nzENLfeE3m4SJ8qntdrQqywLiHkC+7aDfHJmhg4lPNDe7I5hffn2EVndtcMcQQyLekf3G
-	 x5IwJRU+zRn0Vm92kibtuRmQi8eQips5qTBDnRIaVQjHWigOncvnxOtHqu1+L4z5QSA==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
+	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=F03JUfD5gpB+J5aKedAbgQ7C9beXBNVdUpMJcIWYSbI=;
+	b=qnBaA7X2MShpApxnDX/4QuTRrMUdMqkXUHMqepPytjoYDnIztDZqznvHmNVr11i1LVoh
+	 95qSiWuVWN34w+t3US9rusYBv3k1+ftmdLs1vz43knWjeezsAFwE9dSPGvx0yf0FKgnha
+	 0fs64IugUwgfWj5zIapCf3uETndGL3zL6Irhys6Pld3MxBfaow+y2OjqaLvqZ/cm99oVf
+	 +SsZuzecvschJHRyAmNIUvHQ8QwPUGFVnt1ksFJvZgLIIvZood2TX1qaweiQylC0sr0xp
+	 p36uxmqyag/A/Se7bjLRBjV45KRFOHle7Z2ptbecI2s9bAyC7vzzJrWjXT0ne2TeNcQ==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791878776;
-	bh=w8v/ixllucRPk+CvaMoxTm2KP/wcaaibunF+hWr0q4o=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=NlnK/18CGz7wUxDK69GhCF/7vt1GWz9ItUOGDz+GyMeQBHv/jctXhMoJykrbVCCR1
-	 AZsED1pkdDfCufvboVTtEbRMs4dIc+c2/u/gcDyvasA2dDF3MCTfT3/NYyeqk5cr+H
-	 ckTrFej4Seqi/a6F1Y+EJOgRcEhcd/dAUiMPQXrQjuBhnhb2UEppoFTtJ8XnsrSkEN
-	 lYAO3CNUv5UATDvDNDZWXUI8PrbLW0qzaXJoxHWSZfWrnUTNEqAmAj7ttZy/m99Pi7
-	 GLPBVD9dyYf6BB6r93vgBIARmrH6+LBq8VEffvuXMMVj9hnTmTm+JaNSM1ZLZRGba1
-	 g61sWbgpwGAjQ==
+	s=default; t=1791878845;
+	bh=F03JUfD5gpB+J5aKedAbgQ7C9beXBNVdUpMJcIWYSbI=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=cNxXVFQPdQ8PyPJBoXRU06OvLc2wU/wNcfeOUH+HDisN8arSyvw+M921JE+ZU9aCz
+	 ATmLFv5BxOE/JYvSoApgOXjblE2K/9YgzR0AmyME9hoCUTYu+YzQaF+WTeDmOloY7O
+	 /iLixbh5yNlOXGjxz5BBEV3pkTnacSWPlRyrSJKEWDyd4GKCpB2Q4ZRXohO/QQNjp0
+	 2vKimjooO86v3/XgsJ7WsnbGo3DGJ823dv4FwahoKhW09DEsSF4umHg8FJ+evHP+sq
+	 YYPrFrEcG96e9xDXZYldOUK2LaZocqQQ7sNP0o9YqPfNEnvYHCORoHB1tZRHusHsEy
+	 CvBXW8x/mjuMg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 40AF860763;
-	Tue, 13 Oct 2026 08:06:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 72CB0788
- for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:06:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4793B40435;
+	Tue, 13 Oct 2026 08:07:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C981F788
+ for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:07:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 707F080C92
- for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:06:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BAEA26075F
+ for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:07:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oVtmNDM-ERLm for <buildroot@buildroot.org>;
- Tue, 13 Oct 2026 08:06:13 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org A500980C93
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791878773;
- b=aQz5ABBrnUXyzH0g2MohAXGKHmbvwovUuxha34PY0B30RexTZQzLMrPzb+bFzFEtPDCq
- S3tvurSyN1w0j7B5CnVTvk96j4dBnqBKHtoRCqApb4tXqmuVFWmtAUdnJMdQJXWRp6Lx2
- VRiRcI0TZ4HI+ljmE/ow767dTW9INRbSufr+EoQrtcNmZKyC07ngvagCmD8AyKbcJjBDB
- 7WxXlMfa1I9gx3gKvIEYrQgFFu02ucXUBS3WTRthr7y9zWEI3tHBBQYojEAjBW1o5+VAn
- Jzx7ROHn+DYx9hfysJ8FZuM+C+k3TMeWxos/BKD+kLU4PJvpxJjk0LRUjChsy6WMFEA==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id acxBFDWPtnlh for <buildroot@buildroot.org>;
+ Tue, 13 Oct 2026 08:07:23 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org EAE0160755
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791878843;
+ b=qKRzjaNhppLa5HSzeRbDtKFzUF1LZspaVmL0B2HIeI9aDYZLCg+HLKcLt7TMAud7smx4
+ oyQxqav6KfvXoNt8f+qwF5HT73yCMNm+iFDO6gmDUvcrWDQQj9ZJbYq53ObOGGDEzmO4R
+ Ilc6DE1dP7ZJW3U3T8uua1wWqufsEPB4/kSCpXSylN8+l+pi63IaZOyDepct8Q8MZsPWQ
+ ayBBjC9/LGZmbR8C+dpkEkpINXLhVJVzbgSq0JJTr4s0RgVHeXN3dgdEbU+mRWyum7JGI
+ 0afdeGGHIwK97f6TUyU12KF8HJB+5kmiE2oJDoOOiyy/OHmf8lq+NTyrETpevYSgNfw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791878773;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=wU5sXmeqnLSHGsIFm/VFZZNU22Nm6Okw1EMgKxP66b8=;
- b=QcpCz3shc02Vn62eSnUQFL53rGvGP3K5jaGNld97FGbO19Mpq5j846t+NwRztZv5MShQ
- 6ZMgJqjKRVkcWrbKAKvCwbWkivi4DiKLFTmVbrQ6lHsWh6Ft33LjzX3oqqYYwN9qkfwz9
- ZrzIQXA2+Xt6kd8EbQGeCLsfF0t7N4JLbzSaRDRyATvN2FV2ef2pVK0poN8nLEfcicxMG
- QFnyRMajLR0b1VsQBCHJp1CMiTy0lp8d52SASI13dZ15Sf3VoX1jWXNESXmUr9+zlRWdB
- OV1QFAZVmwUCr6pOl7Lh7Dx4LcKnZvKP/fcDCGpNLlqS3BuNLdeszPiKc63qYAwg6ww==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ c=relaxed/relaxed; t=1791878843;
+ h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
+ Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+ Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
+ bh=QZrME+xR230dOXb0ZQoymv7EK/69Hw5uRpHpuxPlLuo=;
+ b=o52LmAJAz7oqWiOQeQ/LGJrKg+w40fttC5pcuYBO6YUyyN7Tg06ybJaD27rILfhgPV4o
+ fwVlfqkV53g9rUljBqRNYSRrXgGF4hhDvXNHhA5PwGpb6orCGMJ801xeeMEFH61EexIyY
+ ukpxHGR1w4GmZIGo+O4bDNDhmtHrzXsGBG+Wnfy5jk4HDftmKbAM57vp0RWAYWs4G2C5Z
+ 02z5xGemBCCRw7Kz3vY9s4bQAoAq5DqUrqBcstEqxtDLb29bqSPfSYTznRDmY8UJfq5UV
+ mgsZezI9k5i3NmHRGfpmvxa+/F5K/lEgBALm5o76vNkHyeghucQTLlUDayenJAXuyYA==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ dmarc=pass header.from=bootlin.com;
+ dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=00rXjIl7; 
+ arc=none smtp.remote-ip=185.246.84.56
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A500980C93
- for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:06:13 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1033195466; Tue, 13 Oct 2026 08:04:54 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 13 Oct 2026 10:05:50 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a498c7cbf61089f154e9f53a033e77bb25089340
-X-Git-Newrev: 260b6ad8f02f44695a4be6848f24f7557e7c6b84
-X-Patchwork-Hint: ignore
-Message-Id: <20261013080454.1033195466@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: add python-httpx2 runtime
- test
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EAE0160755
+ for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:07:20 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id D4E811A11FF
+ for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:07:18 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id A9B7660362;
+ Tue, 13 Oct 2026 08:07:18 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 008AE11D70160; 
+ Tue, 13 Oct 2026 10:07:17 +0200 (CEST)
+Date: Tue, 13 Oct 2026 10:07:17 +0200
+To: Fiona Klute <fiona.klute@gmx.de>
+Cc: buildroot@buildroot.org
+Message-ID: <as3msWBsGW2dIrrT@windsurf>
+References: <20261012182345.2187315-1-fiona.klute@gmx.de>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20261012182345.2187315-1-fiona.klute@gmx.de>
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH 1/1] package/iwd: do not enable
+ CONFIG_CRYPTO_MD4 for kernel
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,106 +128,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/260b6ad8f02f44695a4be6848f24f7557e7c6b84
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On Mon, Oct 12, 2026 at 08:23:45PM +0200, Fiona Klute via buildroot wrote:
+> This was added in 8c12a6bf51bc4b166948b4392e96344259a64778
+> "package/iwd: enable required kernel dependencies". The iwd code
+> referenced there did not check for MD4 then (iwd version 1.20), nor
+> does it now (3.12), so remove the Kconfig fixup. It did and does check
+> for MD5, which remains enabled.
+> 
+> Fixes: 8c12a6bf51bc4b166948b4392e96344259a64778
+> 
+> Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 
-Exercise synchronous and asynchronous HTTP requests with python-httpx2
-against a local HTTP server, checking the response status and JSON body.
-This covers the httpcore2 socket transports and the AnyIO asyncio backend
-used by the asynchronous client.
+Applied to master, thanks!
 
-Bind the server to an ephemeral loopback port so the test does not depend
-on external services, and shut it down when the sample finishes.
+Best regards,
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                         |  2 ++
- .../testing/tests/package/sample_python_httpx2.py  | 37 ++++++++++++++++++++++
- .../testing/tests/package/test_python_httpx2.py    | 12 +++++++
- 3 files changed, 51 insertions(+)
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d731d5a0ba..349fb1d26a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1562,7 +1562,9 @@ F:	package/superiotool/
- F:	package/tailscale/
- F:	package/uefisettings/
- F:	package/zchunk/
-+F:	support/testing/tests/package/sample_python_httpx2.py
- F:	support/testing/tests/package/sample_python_rtoml.py
-+F:	support/testing/tests/package/test_python_httpx2.py
- F:	support/testing/tests/package/test_python_rtoml.py
- 
- N:	James Knight <james.knight@collins.com>
-diff --git a/support/testing/tests/package/sample_python_httpx2.py b/support/testing/tests/package/sample_python_httpx2.py
-new file mode 100644
-index 0000000000..645ceb97f8
---- /dev/null
-+++ b/support/testing/tests/package/sample_python_httpx2.py
-@@ -0,0 +1,37 @@
-+import asyncio
-+from http.server import BaseHTTPRequestHandler, HTTPServer
-+from threading import Thread
-+
-+import httpx2
-+
-+
-+class RequestHandler(BaseHTTPRequestHandler):
-+    def do_GET(self):
-+        body = b'{"message": "Hello, Buildroot!"}'
-+        self.send_response(200)
-+        self.send_header("Content-Type", "application/json")
-+        self.send_header("Content-Length", str(len(body)))
-+        self.end_headers()
-+        self.wfile.write(body)
-+
-+
-+async def test_async(url):
-+    async with httpx2.AsyncClient(trust_env=False) as client:
-+        response = await client.get(url)
-+        assert response.status_code == 200
-+        assert response.json() == {"message": "Hello, Buildroot!"}
-+
-+
-+with HTTPServer(("127.0.0.1", 0), RequestHandler) as server:
-+    thread = Thread(target=server.serve_forever)
-+    thread.start()
-+    try:
-+        url = f"http://127.0.0.1:{server.server_port}/"
-+        with httpx2.Client(trust_env=False) as client:
-+            response = client.get(url)
-+            assert response.status_code == 200
-+            assert response.json() == {"message": "Hello, Buildroot!"}
-+        asyncio.run(test_async(url))
-+    finally:
-+        server.shutdown()
-+        thread.join()
-diff --git a/support/testing/tests/package/test_python_httpx2.py b/support/testing/tests/package/test_python_httpx2.py
-new file mode 100644
-index 0000000000..d3865ea8f2
---- /dev/null
-+++ b/support/testing/tests/package/test_python_httpx2.py
-@@ -0,0 +1,12 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy3Httpx2(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_HTTPX2=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_httpx2.py"]
-+    timeout = 30
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
