@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34513CC6B0F
-	for <buildroot@archiver.kernel.org>; Tue, 13 Oct 2026 09:43:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26A2FCC6B03
+	for <buildroot@archiver.kernel.org>; Tue, 13 Oct 2026 09:43:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA568606CF;
-	Tue, 13 Oct 2026 09:43:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D48456075D;
+	Tue, 13 Oct 2026 09:43:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rLtRsZviyiHI; Tue, 13 Oct 2026 09:43:21 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org F06406075D
+ id XUhTYlOX0-FH; Tue, 13 Oct 2026 09:43:22 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 8A9CC607B5
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791884601;
-	b=eBmU28Zu9wayuiNa8vOwrBHu75qzxS7hVO4ZdGWq6uUMH1TicBhLaY9UZjruYpTgtl/j
-	 io+imNmprZ6fwpkSkbHpHzKu+ZpkpToSzyB3Kw0kGWkl9IPvpypH6nJYgyeHiQ+vmnR6U
-	 v/ApDBsdUmjNzPEgV6Ohl07TrW/Ye58jB2GGWbZzpnR2fvzHzVAC0pan54rBE1/F5yHvR
-	 RxQswwzBPndYmIYcW9Uj2Vgwr8aHQOex2UFHlVGEb/uNu+W90vElSzg7SJrZOw/tyZ3mY
-	 lOkGU7auKxazeT3qv8NgOaxnOHbb0rWOqq+FvCnEqEWmGqITGR3ZODH586BAuA4R9SQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791884602;
+	b=cfgjKT+ZwmX1+LbLoLCCUxlRD/RAgAclvhmO4cJdsy6b+Iqs+G0Lui+looAE/+342d3J
+	 n8KS6gxh1qf4bQBZwlSz9rjGGzd8yZA1+HXtYakrU5OYdD4vBoWrI2dPvc3av1IhZxxWB
+	 S2p0fLXi/SNHiWUvuKpbBiiK0Qvocpz1G6QYVkJAHqwMUcQ5fQeeWb67f4tkSA3WhAVPd
+	 AyrCORNbq/TxpH+/LA+cWmbM0dxQmtQhn/JFYhpfou9gzAz8oC9/IIuRoi/PPc3LRojdj
+	 VVJdgfHeLtfsdL/J6xRgbMTDQwtXdXoq47ewNesfjgXZ857TrpukcLlv923snuCQXTQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791884601;
+	c=relaxed/relaxed; t=1791884602;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -32,135 +32,135 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
 	 Sender;
-	bh=ozIls+H5GqQ25NBvKP2FecTMiO52VEbh24WiClpkXlo=;
-	b=D7YHrSSRIssjSs3ZxHWK+aUnGJp/urhlHZbgUX5OgZKUYn7hjEqtPJcEKkD6R4vka+m3
-	 FvFwaPsdOBCq5vnSzpYDCQvMXN/SiKwnF/193gGyMjraOKwXicrhzSwo2h6Xo4yn0MmgI
-	 Of/XTbhK3aIPghWLAFequDoptJ+6l3/MuAQjkCa+4W7DrMbtTKdz5RKXbNbEqGjbHIe0i
-	 IlSlLc/RlktHskGN17OKojrQLiMiIgGVRDnpPb78q6aDBYDrv58U8a2XdOACl0e/XFFha
-	 DbbzvW5itGxyHwlbAwzYAQz/DhGy9htSlelLswtTVmELoPfceO7Mj153ISTyzTcnccw==
+	bh=Kjeo9Wl0AGGgScE0amrnnwAi+4kAPL+H2uWnLo8HRdA=;
+	b=aSRpWCyBmDQa4jOnQK/Xfd5znoqaj51ilVXzt6m5CdfuS6IT4KDVZpHUQ884/59Ov1TK
+	 VBhQJXfqjvxevtiMuRf9VUFM4r7XuFukxlVMrsTL4YjCu8j6SjswZiR+wO5kDCRrWzFSL
+	 iXRfOBVHx9GFensFkTPk5ccoXishI1+ADOCOUTGg2psXooPg1ZqZmUxRSlohu1tLUb3cF
+	 7CAgLWNRafojIYvgwZlgirZpqLg2Vt/C0HFDvYVejfDtq1JugaDJM/wR6YCn/r6J095LV
+	 c0BNTukfMZstsrd95dxV044nnm7i+cEZ10jxcVl8SkA4ycO/PxG5BQAeLqB2CPwEtDA==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791884601;
-	bh=ozIls+H5GqQ25NBvKP2FecTMiO52VEbh24WiClpkXlo=;
+	s=default; t=1791884602;
+	bh=Kjeo9Wl0AGGgScE0amrnnwAi+4kAPL+H2uWnLo8HRdA=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=JeU52DcLKfhZjS/RnFBBuaGZHjHFbLexCB5QMHfx5NQqh/c5HMIvmumSpWLjN2Mla
-	 HNRMsXTegYwOFjPnFxpplRzL7CBBK5zHznZANjBv1vgnemPZnfHDeGVT0w9AfkOiFz
-	 ouEmf76tFnVuavHCUETJNd3zW++Z/cYltOkVGURi/LBy6BeRjtMm7hL9jueyVTrL24
-	 V335I2ox2bbWdr6LdQHvZ+Jjwjc3A3V04xdk9Y1oWxYF19QuuqmaR/iNakffhLhysf
-	 S4Xb+I5BdONBExV3EBz4oJXST1hl7QcltEy/0DNIu64O2sOOM8/xJadjVSHqdKLu/g
-	 /Imng7A+2eSRQ==
+	b=Th1ECGblBwxSjvtwb/yXkX7ZuiCKv93pFrRgciiAns39aaP4bK7KqZ82Ibwc0cJoz
+	 abPyNUFiRYMLOHN0o9bBwkvAqgOoZPDoyDqFAksbIpALu2MTtHm7PeldWO1b8d1vTb
+	 ng3weQlTF3IpbfQjHntWy5U4iSb8JPKTLJKYDXySIBs0ompIcqhIhxOxQRSxpqjZen
+	 QNNA1lZlf+eBpnxRcI5hnS3fyOjGYga3/tC1V36RX5t1T7r+7vVKSsO5vymuUmMTy4
+	 W8jJiEraZxha2FsYfKDufFkpFHP0/tZoWIgHOZBvEeVRJaC35j+r93FSqv+8epMrpc
+	 PAK2W5Rnjw68g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F06406075D;
-	Tue, 13 Oct 2026 09:43:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id AB4FB362
- for <buildroot@buildroot.org>; Tue, 13 Oct 2026 09:43:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A9CC607B5;
+	Tue, 13 Oct 2026 09:43:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 98A8F75
+ for <buildroot@buildroot.org>; Tue, 13 Oct 2026 09:43:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A761980BB8
- for <buildroot@buildroot.org>; Tue, 13 Oct 2026 09:43:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7E56480C72
+ for <buildroot@buildroot.org>; Tue, 13 Oct 2026 09:43:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 55p0xFYa89w3 for <buildroot@buildroot.org>;
+ id j9sFvCFWmAvx for <buildroot@buildroot.org>;
  Tue, 13 Oct 2026 09:43:06 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 877CD80C8F
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 1E21780C8A
 Authentication-Results: smtp1.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::334"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791884585;
- b=HRk14pUM7BH1V25hpyIzf5jLZYzWxv6VN9TCaj96nipMaknib2PUh8/etzU9j0kwcg4b
- FQHeSYe3h6llbeSJ9euKs+jkrKJzEeBEYpzm5Twl5vztRMg5bYgxs0EGg8hIG8IZgBHWv
- sXlSVDjjd1k8SojwcihV1gWKSdrKq/WXYakhnZyG+0OVwd+kz6IoHSszn8/uDh/biAWCg
- ZPdPktr8+pE+c7bpHjxFnfGLQXBNyOfRamUVjjQ7ESwvaCEb2/4yKVRJtaXwzrkbrIWIl
- 4WLKdIHkWIurfBNKN9dgijQ4E+xVXyq2ojknXsRGGA8JGK716Cdr+aSAV1t6dM1/MQA==
+ arc=none smtp.remote-ip="2a00:1450:4864:20::32b"
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791884586;
+ b=ey0TQRULWrcBI2Mb8Aanhk/MPe3Gd1nnQZXqymekGx9UHfkYm+maT4gqUnDjQ/mf1Pw3
+ oXe8HLqimJu4DaX1ACrr7S0y75sTWUdOsk/g6UrZOlU6weEnixBI2Ikt3o/PZZB8/L+Nm
+ zYO7f5+DrzM6po2B5YqHPeyUpGrjGB4QZ8fqowtpfZHA16kJYWnzYZ8gyBxNvr3RXPg7F
+ VzHRKQ3ygaMqpKdbWPKkI46MELVGVISusKsjVzV2cpfMguk9a8iKo1Ajb0P7fPXcSHGlb
+ K9mR9vRDGfmo/C5RgZW9081IGD2ozJcjjgewUqiuqryKzXsnBfKXpOHUQ9tatwppa1w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791884585;
+ c=relaxed/relaxed; t=1791884586;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=oNKB/Rg3jTKc9P7FePOx80G6jdFBC375GGoeapJnkeY=;
- b=R1tjW6q0tNkxs3tRnRpzqVvkZDgIk3QPGrA35sWecSIzQNlZsAX6DHo1in89zJA79KL0
- PdMGwEAB5LgKPXmPQSYLqkaiGiw1bQFq2uAcP1SGEJEJFadf0TIbqJikDAhTqvq3hXQyH
- /Odidbbeb454VfgFYCtp/Y4kvcubVh0NvEFxibu5RqPkKVaeQfR0BLGfZfoo08p+FJWAM
- SNnj//m9W1K5ftE0b/imLK6SQ+jyrRpyL6FSNNpLPuQdYw0x7WnQiKtOOdxVI4bfP55BW
- 8uq7L2Qduyo/D+t0OLAYIbZva9A2zHavkKkNpnQEu653/RoTXE630l+QCUIbXWjGUCg==
+ bh=mFJhG5ozzrly5DVB60hIa9Aq+a/XnZKjvGcuFsdAj/I=;
+ b=M/laBIKtqElFk0DCeoxNyj1Ao5pwFmeTa6KkCKkjsyU2SNSEYGPrEcU9hpyrlsxN7Js4
+ lsTx5/ZZnGImdRw5epiXQz6pCAdWSBhTyrvibXEzEH9EHQo9ciUSdoi+Rw9UBaFQ1Yr7I
+ CIbRXTNDyKVcbGLvBvAimm1G7VXNsPYRWjlUrf9tqnZd8+DZFRYzDw5NxSC+BkJlwTn1u
+ /ywC+z3JxuhlNQsmYDhnTgIBfG5AjvCIylslnrByjpKi/lRVENs5VibvgXkYNaZdGE2bZ
+ H+S5LI0DScCDXutGpwoTyktM3+YjQMTpPaNMyPr5zd7g/EDjZp/sy9ZWM2/vzsVMsFw==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  dmarc=pass header.from=gmail.com;
  dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=O5NLymSc; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::334"
+ header.s=20251104 header.b=G0x3ZK2i; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::32b"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
  envelope-from=francois.perrad.86@gmail.com; receiver=<UNKNOWN> 
 Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=O5NLymSc
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 877CD80C8F
+ header.a=rsa-sha256 header.s=20251104 header.b=G0x3ZK2i
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1E21780C8A
  for <buildroot@busybox.net>; Tue, 13 Oct 2026 09:43:05 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-4a022fee0caso24849385e9.1
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-4a061a13884so23655565e9.3
  for <buildroot@busybox.net>; Tue, 13 Oct 2026 02:43:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1791884583; x=1792489383; darn=busybox.net;
+ d=gmail.com; s=20251104; t=1791884584; x=1792489384; darn=busybox.net;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=oNKB/Rg3jTKc9P7FePOx80G6jdFBC375GGoeapJnkeY=;
- b=O5NLymScG5YjXK0ePISETv++4z7famGFD+s2+jnW8fs1gOi/nXQ+R3DlfiJ8XVHhvY
- kTG+vwPsdhJjmLkEp2LS1GmM2uDVz03xFmUF4BUrYke41RIxm6tFiJoAX6OPO4nCAvHF
- 71QYULSfe9VMOTtUwpM/b6U5zSNmlC4i92z+4qP6jn/BKBChkLkIYUesUNy7ttd42qLC
- xooxyMZBswWJUvV7h9/qnGzaRIwlUDrxWa/y1/kSHI9+J1roRDqmCDxxeS5Mf+7DeoOl
- 35nnn19foSPIxjI4G/Vac74nAzLInSYGeiaCv21F7SXFyLXUp2mB8OEqTs/FYy6XxdVc
- 7Yog==
+ bh=mFJhG5ozzrly5DVB60hIa9Aq+a/XnZKjvGcuFsdAj/I=;
+ b=G0x3ZK2ibz6BiJvnuE2UVNkQoZz3RrrEb+2cbccrKxTJuVg6EOx37fAMo4cOgsLIO3
+ XB2wCwSRWNBTZ1d6per5TFHVVBFSxvAm1JFWQtZafoameO8ZsUrq81tdi1D0R1G8bSUY
+ nyMQpKfFpySyO0U+peDcdUKfPMHS1HkkWyIyfaMC46XauGgqLoARNku7XocPLpvESpoI
+ iZbCb7yXt38dKoLcHifuLDt1gDSS/C0fek+Wz9J+MxTKOGDmMhjrEsZKlew91oHs5/N8
+ p7ERfT5V4eFENGToluPL38vh6kxhpkYQXnfeLGMM15k0jXh6Gkj/LO9j5oCsFix8eD8e
+ VBSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1791884583; x=1792489383;
+ d=1e100.net; s=20260707; t=1791884584; x=1792489384;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=oNKB/Rg3jTKc9P7FePOx80G6jdFBC375GGoeapJnkeY=;
- b=E0tplMe+0LlhUDINPoetW3nFSasW6cz3Ee7i871Q8nOmVCK93sgP6EBsf92r++G9vN
- hYRtATGUUF8lIDFAL/xponkGTwaAuaVqEslP1Shx25HX0gD6331NCW7QJxQYAn5TctOL
- qQEXiP17t6d+olfUdgXFgCxYEUTo6EvBvxnJevp6FRXWqFA6NU+fgbLl4tk58j8cRWa+
- zOlrLPMdpkPXWgUcMG+L6tJvBJL158q69trtFZAgNoavOq/tjS1wuReaqvzVz4K0nmOj
- +Gk0W+UkM34lNbrTzSd5lrkRqhAVWEtzuhQ+7yYYDJBeGi214aG9HfAq3uwpUtB+rayD
- vJgw==
-X-Gm-Message-State: AFq9FYIkftdYvXqwVDvQisb1+PcZsrDzOsjtB9/zmAsP+H0e6pJkkhvh
- gQmPlO1mjR/ohStNzatFPO68RhWoi0AGmf1jGq+xWPpoNvZYGhxf+lCHSvFbjA==
-X-Gm-Gg: AYBFou18z6+ChPasjD5OgD8dVN6f++BcSyHyf2kA+X5kUdVMr1d4chf7TMK7Nrkenb+
- fKhyjiv6tjMr1Vm6uZfiTH2WHxxsGVL9s9SepoyoghTNC30POnWm1jY//uDfSJPpUpLfDuI75fT
- 47Qu9Q6YWzzoveR49P8gSZrgESxdYPPD2i7PJ7MwVLJXMR5nZLD5WVHlLPeeH5623F0QvuQ6sVL
- +SuEZMnDCAB89UxbNYpS6Lfuh1VSojicWqZgVRmVbJOyX/r3ld1CezymjH4i/oOOzaHWdXHb8S7
- VHeBvNzmjnE3QZB1/8EmMajnkP7artCNy5lGlGNYZfeQSczFpHDkC4GhhJRaEn/h2JNRHyhASLB
- nlOei/IBCUrFKdyeTQymKk1eF6ZKDd9ugsr1DwtUWfLqX5hdNOEd8uoyf+rUuaVTpqiUw/yOsjn
- 20Io7IkwQ0SY1QP2mN2YG3EfxXLQQTrj6t2Wt43GFhz0Er+oujqNOklr7cdpu1T84DkWj+xnmL2
- yEPiqSup6jydgSx9qCQf1ZWF+eIpL1zUn79vZC7
-X-Received: by 2002:a05:600c:c104:b0:4a1:96cd:2f67 with SMTP id
- 5b1f17b1804b1-4a196cd3240mr114014195e9.4.1791884582996; 
- Tue, 13 Oct 2026 02:43:02 -0700 (PDT)
+ bh=mFJhG5ozzrly5DVB60hIa9Aq+a/XnZKjvGcuFsdAj/I=;
+ b=wIb6cH1EQdLf3QSJjSVTkWL/BhCjjgW8I8EW1VRlpaq3vDXqlRhY/zuG2hi/UnmmvT
+ Ecaw3PuTnfBnCMBQ4XmmbHgSVD05RRoWlaDz0caEuHn4b+cnfCjfkqaqHAXmfZb2Cg1g
+ AVq7ocGXtJiGqU6Lw1UKCGu2blh3oUD1ttd2Ucpfic2eCta1NzgLv9IzFgctjOFKUL8P
+ rnKE1xL3C2jBpEXsbukQMvwjiWYK8PurfaGW/JENYP6+H7VRXBwggw8NQs2CgdbKavAg
+ +AGCoPlEY8MRazqVPKbENUYEqFfG5mMg93EH7Z9CigP6bd3ZACgihPCuDZXoD/UtBohG
+ JHDQ==
+X-Gm-Message-State: AFq9FYKOBHBzsbC+qV2wVjvKLSiiSjFCDIU6EGNXr2JxnZfBdOmOkEx+
+ UMCbhAVXOuqSahV1+KuvwhlPJJtlK2Egmj1o3+OEozqfU3YEsMb1GUUMYxDQ1Q==
+X-Gm-Gg: AYBFou2FaFrwExk14Z7dHXs/4loOykXmXVdZ4BwpOlbueu6b89S0ud9ZcznOzam598Z
+ 7tnUviPvhBTeiNQS3SvCvjtzGkB0uk/FqGnHYR17NQRfS4LrdTP/Vd1ptEzkgn3b3HUYkN7XS6o
+ RtF5Jht9sQWD7hrdlxwSENDq4XmkgkfoM+neOlPiLA5rJTkP/Chv55iFszms7Nt6ptq7bFY6pnF
+ t1UOv7UvuE9wOTrbAI/YZwLiTK+dYvjl4GAehy1ONYcQLGmW8v7CJdxgg7PCdeaOWkzvEj5F3mu
+ OSlCtzSar9iYTMuUkvJ55lOtnZyAzs8MHx+9mxkegolJSbUX0y2UvlWIE2TKsNliLtIcguNVzdl
+ SIp0YWf9og2Y+Z4WW2OoLrknp2tUJhfvWUoU7eEJ2B16qizvxUqANywUEAbKLRuWFv/aWSuyCYc
+ +ik9lk39DlObCvu9/2j3Ssbm+5FC9+s/kZ97aKjbq5F8FyKyIG+fKXU8xmljbN59qoDAVXYii46
+ qNbErE76p6fn4syI//ODCsWyCNyn1ARxN/IXJyQ
+X-Received: by 2002:a05:600c:34c4:b0:4a1:b027:99dc with SMTP id
+ 5b1f17b1804b1-4a1b027a161mr3654765e9.18.1791884583579; 
+ Tue, 13 Oct 2026 02:43:03 -0700 (PDT)
 Received: from vm-2404.. (51.186.66.37.rev.sfr.net. [37.66.186.51])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4a1972eaed8sm238665595e9.1.2026.10.13.02.43.02
+ 5b1f17b1804b1-4a1972eaed8sm238665595e9.1.2026.10.13.02.43.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 13 Oct 2026 02:43:02 -0700 (PDT)
+ Tue, 13 Oct 2026 02:43:03 -0700 (PDT)
 From: Francois Perrad <francois.perrad.86@gmail.com>
 To: buildroot@busybox.net
 Cc: Francois Perrad <francois.perrad.86@gmail.com>
-Date: Tue, 13 Oct 2026 11:42:48 +0200
-Message-ID: <20261013094252.96761-10-francois.perrad.86@gmail.com>
+Date: Tue, 13 Oct 2026 11:42:49 +0200
+Message-ID: <20261013094252.96761-11-francois.perrad.86@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261013094252.96761-1-francois.perrad.86@gmail.com>
 References: <20261013094252.96761-1-francois.perrad.86@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 10/14] package/perl-role-tiny: bump to version
- 2.002005
+Subject: [Buildroot] [PATCH 11/14] package/perl-time-parsedate: bump to
+ version 2026.033
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -177,43 +177,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-diff LICENSE:
-see https://metacpan.org/release/HAARG/Role-Tiny-2.002005/diff/HAARG/Role-Tiny-2.002004#LICENSE
+Update the custom license to "same as Perl" for all
+see https://metacpan.org/release/BPS/Time-ParseDate-2026.033/diff/MUIR/Time-ParseDate-2015.103#Changes
 
 Signed-off-by: Francois Perrad <francois.perrad.86@gmail.com>
 ---
- package/perl-role-tiny/perl-role-tiny.hash | 8 ++++----
- package/perl-role-tiny/perl-role-tiny.mk   | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/perl-time-parsedate/Config.in                |  2 +-
+ package/perl-time-parsedate/perl-time-parsedate.hash | 11 +++++------
+ package/perl-time-parsedate/perl-time-parsedate.mk   |  8 ++++----
+ 3 files changed, 10 insertions(+), 11 deletions(-)
 
-diff --git a/package/perl-role-tiny/perl-role-tiny.hash b/package/perl-role-tiny/perl-role-tiny.hash
-index 33de6a53f..a7ed8863c 100644
---- a/package/perl-role-tiny/perl-role-tiny.hash
-+++ b/package/perl-role-tiny/perl-role-tiny.hash
+diff --git a/package/perl-time-parsedate/Config.in b/package/perl-time-parsedate/Config.in
+index bd5957d91..02ad47145 100644
+--- a/package/perl-time-parsedate/Config.in
++++ b/package/perl-time-parsedate/Config.in
 @@ -1,6 +1,6 @@
--# retrieved by scancpan from http://cpan.metacpan.org/
--md5  9ee45591befa3d0b1094ac75d282b6ba  Role-Tiny-2.002004.tar.gz
--sha256  d7bdee9e138a4f83aa52d0a981625644bda87ff16642dfa845dcb44d9a242b45  Role-Tiny-2.002004.tar.gz
-+# retrieved by scancpan from https://cpan.metacpan.org/
-+md5  b3d6525e0c802aeff6b26ef5a928a6b1  Role-Tiny-2.002005.tar.gz
-+sha256  4618ec524618c104dc28a8cc86af129a00cad282aea7f4c75060ba05d4c8f4d7  Role-Tiny-2.002005.tar.gz
+ config BR2_PACKAGE_PERL_TIME_PARSEDATE
+ 	bool "perl-time-parsedate"
+ 	help
+-	  Parse and format time values.
++	  date parsing both relative and absolute.
  
- # computed by scancpan
--sha256  a8a1595c2347f7d10e896809d4f3dea85ccc10ac5644b8073111233cd120b14a  LICENSE
-+sha256  ffea2963f1483cccd3b52fa6f1f137bc093715c64c8d97a01b31da411d43bc25  LICENSE
-diff --git a/package/perl-role-tiny/perl-role-tiny.mk b/package/perl-role-tiny/perl-role-tiny.mk
-index 64d5085fa..3377f685e 100644
---- a/package/perl-role-tiny/perl-role-tiny.mk
-+++ b/package/perl-role-tiny/perl-role-tiny.mk
-@@ -4,7 +4,7 @@
+ 	  https://metacpan.org/release/Time-ParseDate
+diff --git a/package/perl-time-parsedate/perl-time-parsedate.hash b/package/perl-time-parsedate/perl-time-parsedate.hash
+index 0e5199809..9aebd541e 100644
+--- a/package/perl-time-parsedate/perl-time-parsedate.hash
++++ b/package/perl-time-parsedate/perl-time-parsedate.hash
+@@ -1,7 +1,6 @@
+-# retrieved by scancpan from http://cpan.metacpan.org/
+-md5  9143d075278857d21c77467d26f1603b  Time-ParseDate-2015.103.tar.gz
+-sha256  2c1a06235bf811813caac9eaa9daa71af758667cdf7b082cb59863220fcaeed1  Time-ParseDate-2015.103.tar.gz
++# retrieved by scancpan from https://cpan.metacpan.org/
++md5  31e4fb54f3e047255285fc3f9d73d559  Time-ParseDate-2026.033.tar.gz
++sha256  8465c8146bd129d3be4a402b45e1b9f9c306f42b0f58a1e507bbdbd653f253b7  Time-ParseDate-2026.033.tar.gz
+ 
+-# locally calculated
+-sha256  6d8de888d0662f75cfa3bf21b261741d5634ac9cdd8604d6173850546a3d40a9  lib/Time/JulianDay.pm
+-sha256  9ae411fbaf87add414e7357417032dfedce652c393643bc5cb5b7698041a1dca  lib/Time/Timezone.pm
++# computed by scancpan
++sha256  e8694831e3fcbba2e01b09f77f3e638cf98c7af57cd6d9498452aad1f6cb7f12  README
+diff --git a/package/perl-time-parsedate/perl-time-parsedate.mk b/package/perl-time-parsedate/perl-time-parsedate.mk
+index cba8c7b6b..bc2cfe1f1 100644
+--- a/package/perl-time-parsedate/perl-time-parsedate.mk
++++ b/package/perl-time-parsedate/perl-time-parsedate.mk
+@@ -4,11 +4,11 @@
  #
  ################################################################################
  
--PERL_ROLE_TINY_VERSION = 2.002004
-+PERL_ROLE_TINY_VERSION = 2.002005
- PERL_ROLE_TINY_SOURCE = Role-Tiny-$(PERL_ROLE_TINY_VERSION).tar.gz
- PERL_ROLE_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/H/HA/HAARG
- PERL_ROLE_TINY_LICENSE = Artistic or GPL-1.0+
+-PERL_TIME_PARSEDATE_VERSION = 2015.103
++PERL_TIME_PARSEDATE_VERSION = 2026.033
+ PERL_TIME_PARSEDATE_SOURCE = Time-ParseDate-$(PERL_TIME_PARSEDATE_VERSION).tar.gz
+-PERL_TIME_PARSEDATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/M/MU/MUIR/modules
+-PERL_TIME_PARSEDATE_LICENSE = Time Parse Date License, Public Domain
+-PERL_TIME_PARSEDATE_LICENSE_FILES = lib/Time/JulianDay.pm lib/Time/Timezone.pm
++PERL_TIME_PARSEDATE_SITE = $(BR2_CPAN_MIRROR)/authors/id/B/BP/BPS
++PERL_TIME_PARSEDATE_LICENSE = Artistic or GPL-1.0+
++PERL_TIME_PARSEDATE_LICENSE_FILES = README
+ PERL_TIME_PARSEDATE_DISTNAME = Time-ParseDate
+ 
+ $(eval $(perl-package))
 -- 
 2.43.0
 
