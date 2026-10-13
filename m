@@ -1,104 +1,122 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA432CC6B03
-	for <buildroot@archiver.kernel.org>; Tue, 13 Oct 2026 08:19:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 334DECC6B0E
+	for <buildroot@archiver.kernel.org>; Tue, 13 Oct 2026 08:19:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C1A9808A8;
-	Tue, 13 Oct 2026 08:19:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E1FA7404C8;
+	Tue, 13 Oct 2026 08:19:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1l4rhrq6NsEj; Tue, 13 Oct 2026 08:19:08 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 65B19808C1
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791879548;
-	b=VVq4SQKLFDTIuDB4Qg6pzokrhCZkleq+7xgKf8IBCfTQCSZzaNYyI/EgUTtHwO/7tvL9
-	 aQcgDAmdEcsOukQZJMdV5eZWUwUmQlyvQAGq9+4gB6tS5dk20lQOwLCIPFGZ+G5qY12Se
-	 NOsaLNJeskL0pPMmuZ247TZZ92CAyqPvd40nP4K21YL3iLCNihDfdnimKQ6B8z9eZkeKp
-	 N8Qp2zWO8SBe9G+0k0SYzgvsuopTQRyTZkx/l6PSx+9KN5dMmooMSeK0kGLTLvR6NpwRV
-	 tbZ2SSoRZ4iCQF8DP8zuuNwPOC+6wqgiBjb621L02Aklgod9DfP1G+TJMg9R328UeLg==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 87c8sC1-rIUn; Tue, 13 Oct 2026 08:19:17 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org B6685404E9
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791879557;
+	b=pTUw16cFMsudPgZrdDSTpZC+dU0OQ8blJ6Lax83IWvtR4IVQ5VaSbMLnF0iNM9qOS2TR
+	 r0KVwPSSXFQWQxtWd+KK711Hwkt/Q5K1DWy1GtrzQ+yeN3GBQMESbVLJRQ6mEQ4XXQhSs
+	 p5ThISoPHSO1JBGqhAwLtCFY4oUo459hJcqhxn4wu8y7na4NjPOJa/YM3MAkvRop8t7Uq
+	 DT8UcFZjF4H9xSJRBDZFps2cRio+SASRccAhKkONyxIIxJm7tedduAOuvrVqpYlyZXX23
+	 ehdsw7wC9CXeezNfSLCBXhAaBPu1cniWpprSZc346xZ8V+m3zcWI3ysLGJllwa2xKwA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791879548;
+	c=relaxed/relaxed; t=1791879557;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=Ib7+DIiDjC5A7NyO/xnV4UzBFH7R2u0OS551hlsctaw=;
-	b=rTCw42vqFwaavGGXeIkEVTsZpEjrLxo6EXlZ6Hh8xeivno7fVCrOAZ2VjTSD19//bSNc
-	 VwFiC0Q9HlHWeGa8ZMN8juA0FWx7NXwMwh4HOYVbrBHT4Xv4zl5itd/cu3mvDa+TTvTE8
-	 kJ4BTbsW4vgzj+UFmhUut+es4QA/FN7ZnUviem7tCu97aAijVDvORWLsDmEaB8AYBSFqZ
-	 OrOQXrc5cW3kY3kdBmA2P2aUwRfo3v6Ru1aebxyXscZYRs3su6ilvO8wT+1jlEMZireEs
-	 ZFams99Ki4n1sOLNmJ9u7ZnHIcKo4crGBmVsTME0uRWpMaXJ8UkJyHcW9Jq2mNJCHWA==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
+	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=FgEgrGapW7kGy5ezPSJtdx4HMksU8eV0ZHH8jKUgQXs=;
+	b=nMyaxv0ZE8J3GVevsqZw2EpmhM3qBfo795JeWM1JZmBgTt/BLHQiLbYGPLvJiaR4gOVP
+	 t7y7mrz8H3l5oJrZjcee1lspcmfgOTX+kW4ksBmVMsvnmbb4nJP5Nx59V3yMHqDZcnLom
+	 gp99eVchOFWFZJc7fmji5CK9zYxbep1rKeoeki8YMn7/CU7sLkLikKqsELUyfzNaF0L2k
+	 CUOIJGGLhitVuYG8VDTU58MuaNFwp3ow+pyceTcuaw+WynPIGf1bamMdijQa3H0KGi5wf
+	 mJnap75P38Wh2CHrx0eA03WbuzSLzqG7jsIC11AqS8NZZCUi9dMkUBmq4w8W/vI0BFw==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791879548;
-	bh=Ib7+DIiDjC5A7NyO/xnV4UzBFH7R2u0OS551hlsctaw=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=jE6cSey7bZfl+rGKYYnUppFoh/ge5AffzmQ1nEvKGgIPiUxDoyp45LBRp7kDxVE2k
-	 8zplTIUqv7F0qBgDM1PsDc1uLQgZlpxaoYISIAm9sqxmjp6xyEcMYph7hrD9qaQHP1
-	 tFFlhxj/1w5amAY4o2D5XP6qnquE3e3X6OjBgWsDX4ddxCLVxrzaBj+sao3VowInT/
-	 uZUWnm8LYif5+qdbrpjqa6pbFEUvFHouKVscL0qChzhPDYTNduvwBbGjaSRWOI2cOP
-	 y1KIU/XmZV+sMXCIn7xzSClSe9n4BNS/RrQE6BYg7iMFPwGg8J2W2owDwuM0yf3QVE
-	 5uRZ24AQ+U36w==
+	s=default; t=1791879557;
+	bh=FgEgrGapW7kGy5ezPSJtdx4HMksU8eV0ZHH8jKUgQXs=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=BzoiEYbvwTD2V6qj/S+V6WitrOmF5f0mkrNoBP3B4jVnOWYTxMRHBImbDLsUspkgS
+	 Vslz07FqYgLHMfCZHQ92y7kSibhpoQu3HmHqKuqWnZbNE/zZcTLSSMz8snnWKk3nUL
+	 aVYRywdkrdhEDe/1xfb0BrVyK6MI/ns4nb3cE4uPjO6iPi3Ah/X9sDAiV9/Umt6wqQ
+	 Q0GUQidRqAvFL9OYL9SEtQYKC3q3YnPWjPtqwY06w3fWLDASGHY1UrYwf+ajEqUbv1
+	 lnu9VZ+6B453z4LmTJwtVXR3KMVRMT8ZqFIzSasbbQ2sO/K+4Ztob0Eu6Thz1V89SV
+	 /VJHsLfGSx/gw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 65B19808C1;
-	Tue, 13 Oct 2026 08:19:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3F4B9788
- for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:19:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B6685404E9;
+	Tue, 13 Oct 2026 08:19:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4DC4DDE0
+ for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:19:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3D19D808A8
- for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:19:06 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3FA8E40068
+ for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:19:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BU6XGXsRxxyb for <buildroot@buildroot.org>;
- Tue, 13 Oct 2026 08:19:05 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 6E0CC808C1
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791879545;
- b=F7tw6ZOt9e5F5e5nmN+WUiJlvjPycLFQX9ne9UIsRVB3JcYRqjObFZS5R7549eWwUfZ4
- lv602DK3aKEKWgOs61gYR8Ngo3s6pN2jRstQ3WYzXmrm8q+GN46gThSQfG3G3F9I4WNIi
- MdUxmQGHwCcNXz4FfDoMBxsZ+sufov+NqnezvyWiv3MZrAZsGllVaUikfZsfqFz0kQjci
- KD2L/Zh48v6MP3Xc11LgNZH+/kgKTel4/P23/RYSR67KwwNcTv4mF+kZAoO984UgUKUGV
- F2T5atM4G5i3IhClk+znOT1B1agcsiKnOYgFT1FoVJY0+YpmopIeo1sKbInLkiwBlFw==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qLIp_-X_8f9x for <buildroot@buildroot.org>;
+ Tue, 13 Oct 2026 08:19:15 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org EC4714005F
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791879555;
+ b=ifUrj7OVRZs5PT7AbeGPniUGL72KQTvWvdZJuv99T47A9oPIgRdUZFWjlP1+x9Fo+Dxj
+ L0IpP9vFwuJirb8DRopAFGJ7WnFKc4v8kn3/fgODRwhxR/Pc1UlSrH17GFyKxobRtbbvW
+ Ui0RNoX37Vpm3INY9PmMf9pqUDWjxMu656BXZcEebspBblaT3fhOnHtzU5R+t/23Wo6y7
+ swnPtI5iiJggLQ+0n+jYwXjX/uEYBmGYe1pNQ/LY9HjsLnmC4+lUzB9QzsGCIOl6B29dN
+ r+H9TkeEfexU2hMt2gUkg8PCGzI+RyB3C8qAb5T5G3tzvvtj1fvFSv/y3ccmcanwolg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791879545;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=qWzQ+CUEC6jbdPKV6uewHn5PCnaTt0YPhrC3DDbQMXE=;
- b=KS9jGfeMsCAe4qJzYbD9snRDkkGXYkonyO4whv5kPxHSqZM0ZaizJPnTPZD3eN8HxhMd
- 5PgpfL86uch9oV/UANc4dftJs3oGsGVzxxI6bI8Gmda+RRA9/kV+4btwhZ3sY2Ce6xE0I
- JiCn+qSS9WH7WKkWicY+CaI+Y8kLDUp9yirXJtec2nnwp92y0mGDkEDC4q1BBRG4/evQw
- HWX7H7YPp+ZM5+UYh+mMYIh0AGjA3Jsedk20IARr0rYaXikA79F36rwqBpfpn37ebwplg
- lv2i7600/EQBSGeeSKNFpHk46InBuBDL4CS3qKGjVbRcW0Rl4NttfwDrG32HKJPF61g==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ c=relaxed/relaxed; t=1791879555;
+ h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
+ Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+ Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
+ bh=BAtjJMyl8mOr6LVxEq2PGWsZ6rdNQ+BzD0HwKX2a/hQ=;
+ b=qA5kOqpQGFx9qlDi6ks7aZYyQHikQpcf73ix9pXkTNXDTfIqenxGH15saEb0pW0BTwZZ
+ Zwy4IaKJ/KLeayAnWdRvg5QwBScTv59d8/4Y1t4CQIqjA/egzbwIAJdBS5xjEYW4nkkso
+ x+d3SUoH2mQa5QQPHVRUsYlatKfybTfgdUP/aT4MbVhbUa88aBDYfi/H1GfkV1e39DARl
+ lrWleYuGVLk75VjIcoEH0gbEnpp0exbCghRTuP/mEaF8ZpTb5pqwNzc+e0R3M1kXpSxV6
+ Ieh46qJac83FIk8nCwuGiY5/kYY2F3WPITNCsmilpwuOhrULKV9KSS8FsRPj2plL+Hw==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ dmarc=pass header.from=bootlin.com;
+ dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=ZNrT0bqg; 
+ arc=none smtp.remote-ip=185.246.84.56
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6E0CC808C1
- for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:19:05 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D4A26953AC; Tue, 13 Oct 2026 08:17:45 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 13 Oct 2026 10:14:13 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 471feacb2d9c13190d635721208b9d31e995d04e
-X-Git-Newrev: b68c9948881ad9fa3414bdf021ed1ad97d4a0128
-X-Patchwork-Hint: ignore
-Message-Id: <20261013081745.D4A26953AC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/redis: Fix build with OpenSSL 4.0.0
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EC4714005F
+ for <buildroot@buildroot.org>; Tue, 13 Oct 2026 08:19:13 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 3515B1A11FB;
+ Tue, 13 Oct 2026 08:19:11 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 0827A60362;
+ Tue, 13 Oct 2026 08:19:11 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 91AFB11D703EF; 
+ Tue, 13 Oct 2026 10:19:09 +0200 (CEST)
+Date: Tue, 13 Oct 2026 10:19:08 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Daniel Price <daniel.price@gmail.com>, 
+ Titouan Christophe <titouan.christophe@mind.be>
+Message-ID: <as3pef0o-P3R7P56@windsurf>
+References: <20261011130058.3443432-1-bernd@kuhls.net>
+ <20261011130058.3443432-24-bernd@kuhls.net>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20261011130058.3443432-24-bernd@kuhls.net>
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH v9 23/52] package/redis: Fix build with
+ OpenSSL 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -112,130 +130,25 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b68c9948881ad9fa3414bdf021ed1ad97d4a0128
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On Sun, Oct 11, 2026 at 03:00:28PM +0200, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Cc: Daniel Price <daniel.price@gmail.com>
+> Cc: Titouan Christophe <titouan.christophe@mind.be>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Cc: Daniel Price <daniel.price@gmail.com>
-Cc: Titouan Christophe <titouan.christophe@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...-deprecated-X509_NAME_get_text_by_NID-API.patch | 101 +++++++++++++++++++++
- 1 file changed, 101 insertions(+)
+Applied to master, thanks!
 
-diff --git a/package/redis/0004-tls-replace-deprecated-X509_NAME_get_text_by_NID-API.patch b/package/redis/0004-tls-replace-deprecated-X509_NAME_get_text_by_NID-API.patch
-new file mode 100644
-index 0000000000..1b9238279d
---- /dev/null
-+++ b/package/redis/0004-tls-replace-deprecated-X509_NAME_get_text_by_NID-API.patch
-@@ -0,0 +1,101 @@
-+From 8bc1c4e147761e7c9d6ff1bb92248b9d4dda43ab Mon Sep 17 00:00:00 2001
-+From: Arpit Jaswal <iamarpitjaswal@gmail.com>
-+Date: Wed, 30 Sep 2026 07:56:36 -0400
-+Subject: [PATCH] tls: replace deprecated X509_NAME_get_text_by_NID API
-+ (#15227)
-+
-+Fixes #15221
-+
-+OpenSSL 4.0 deprecates `X509_NAME_get_text_by_NID()`. With our
-+`-Werror=deprecated-declarations`, a `BUILD_TLS=yes` build against
-+OpenSSL 4
-+headers fails:
-+
-+tls.c:713: error: 'X509_NAME_get_text_by_NID' is deprecated: Since
-+OpenSSL 4.0
-+
-+Homebrew's `openssl` formula points at `openssl@4` since 2026-09-28, so
-+this is
-+now the default macOS build.
-+
-+## Fix
-+
-+Extract the certificate subject field with
-+`X509_NAME_get_index_by_NID()`,
-+`X509_NAME_get_entry()`, `X509_NAME_ENTRY_get_data()` and
-+`ASN1_STRING_to_UTF8()` instead.
-+
-+* The value is still built with `sdstrynewlen()` from the returned
-+length, so
-+the embedded-NUL CN fix (d22066d09) is preserved and empty fields are
-+still
-+  rejected.
-+* BMPString/UniversalString names are now decoded to UTF-8 instead of
-+copied
-+as raw bytes, and the fixed 256-byte buffer that silently truncated
-+longer
-+  names is gone.
-+* The intermediate OpenSSL objects (subject, entry, value) are not held
-+in
-+typed locals: OpenSSL 1.0.2/1.1.1 take non-const `X509_NAME` parameters,
-+while OpenSSL 4.0 returns const pointers from `X509_get_subject_name()`,
-+  `X509_NAME_get_entry()` and `X509_NAME_ENTRY_get_data()`. No single
-+declaration is warning-free on both ends, so the calls are chained;
-+within
-+  any one version each return type matches the next parameter type.
-+
-+Upstream: https://github.com/redis/redis/commit/8bc1c4e147761e7c9d6ff1bb92248b9d4dda43ab
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ src/tls.c | 32 ++++++++++++++++++++++++--------
-+ 1 file changed, 24 insertions(+), 8 deletions(-)
-+
-+diff --git a/src/tls.c b/src/tls.c
-+index 4e7d91510..18b780be7 100644
-+--- a/src/tls.c
-++++ b/src/tls.c
-+@@ -704,16 +704,32 @@ static sds getCertFieldByName(X509 *cert, const char *field) {
-+ 
-+     if (nid == -1) return NULL;
-+ 
-+-    X509_NAME *subject = X509_get_subject_name(cert);
-+-    if (!subject) return NULL;
-+-
-+-    /* The name may contain embedded NULs, so use the returned length, not
-++    /* The subject (e.g. "CN=alice, O=redis"), its entries and their values
-++     * are all owned by the cert, don't free them. They are deliberately not
-++     * held in typed locals: the const-ness of these accessors differs between
-++     * OpenSSL 1.0.2, 3.x and 4.0, and chaining the calls keeps every version
-++     * warning-free. */
-++    if (!X509_get_subject_name(cert)) return NULL;
-++
-++    /* Find the first entry of type nid (e.g. CN), searching from the start
-++     * (-1). Returns its index, or -1 if not found. */
-++    int index = X509_NAME_get_index_by_NID(X509_get_subject_name(cert), nid, -1);
-++    if (index < 0) return NULL;
-++
-++    /* Decode the entry's ASN.1 string (UTF8String, BMPString, ...) into UTF-8.
-++     * The name may contain embedded NULs, so use the returned length, not
-+      * strlen, to build the proper binary-safe string. */
-+-    char buf[256];
-+-    int len = X509_NAME_get_text_by_NID(subject, nid, buf, sizeof(buf));
-+-    if (len <= 0) return NULL;
-++    unsigned char *utf8 = NULL;
-++    int len = ASN1_STRING_to_UTF8(&utf8,
-++        X509_NAME_ENTRY_get_data(X509_NAME_get_entry(X509_get_subject_name(cert), index)));
-++    if (len <= 0) {
-++        OPENSSL_free(utf8);
-++        return NULL;
-++    }
-+ 
-+-    return sdstrynewlen(buf, len);
-++    sds result = sdstrynewlen(utf8, len);
-++    OPENSSL_free(utf8);
-++    return result;
-+ }
-+ 
-+ sds tlsGetPeerUsername(connection *conn_) {
-+-- 
-+2.47.3
-+
+Best regards,
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
