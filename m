@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D7C7CC6B2F
-	for <buildroot@archiver.kernel.org>; Wed, 14 Oct 2026 21:10:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB16ECC6B2D
+	for <buildroot@archiver.kernel.org>; Wed, 14 Oct 2026 21:11:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 58D9240352;
-	Wed, 14 Oct 2026 21:10:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CF4254067C;
+	Wed, 14 Oct 2026 21:11:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s6Ms_FKmyXNb; Wed, 14 Oct 2026 21:10:57 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 4F2DB407E7
+ id kOR58fnp-u72; Wed, 14 Oct 2026 21:10:59 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org A4B1D406BF
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792012257;
-	b=SQUrXJIjUK1MoCxqqOsLgmw8cURGFb4N3oxP9jHlhjvL0HS/Pd9Mqm84W2Eg39YFyB8R
-	 oqYYK3F0xBSQYReUDwdIpQRej8oWd1pHfSme2qGlR37m4Zlz5Uaj61XAFfqK4zA3z9D3e
-	 WOguVKkZGl28gGJCCshTVb8uLqKJx3qFwKam6e/IqIZ72neL/hHjm0/BnbA7ZhfnHpaM4
-	 cu5cJzrqho5+msbW1rf+C54vIIJpo43nrZYOId31KmdAbL3FMTd0FmWt1PHFa21m+LFlu
-	 GHJFo0LzJR83sWbXuBjC+1Itmw7GFz7UYfPShuQItEB0J3/lB8SbZiHsAeD7GAkSCWA==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792012259;
+	b=jvqQqTj9lkBgxRG4JmPEowwbMPC5/9xUQUzIhgp9gZIvJrJJjehhXO4hdSxV0AQa1lD3
+	 qPx8zC3BFVNqkSLru614qMRH5wQh7Ex106TYKllPa2nKyah3vwHTAqSYZMn3hpfk7gv7N
+	 ERPKfoiIwCAjKuG9B4FZ8UUm4Yry9SKgL8TdrPUavzXVX6cO4ic+D+BW5DYgNvpA0vU16
+	 gAvy+GjXpC59VHmeyAU1aBB3L1jx1VDxbVPCwt4SC5p7V8oJHGWImPRbhKQ0h9/yZR/m1
+	 p51KVQDUkmylNEdAWyyYgb8Boq8Yb9GODB1anMIScnSQHne4eobQDarAX4zSoN+Z3Kg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792012257;
+	c=relaxed/relaxed; t=1792012259;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -32,135 +32,135 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=MlBwb+/cizoZ+By6wpPDWoOUJ5KdN4V3RkX1WXVFIq0=;
-	b=W7Hlam6IQWQbzaR5rYlvxXWsd2PGzaEqqx3+6BFJwWj1MXr1dQ/xzvKVfUTHbXraPTMQ
-	 IuHpWfyk/S466lj671675uF79dhWBP65NZ6abdVz0t3O/DQXgonC7feKTlit6GEChKaoO
-	 jrcS5XydQUXmEivAAHYCgZmnmRVdGGJPHJMrtZZ+HKYtp+IPc/QZpUiC3SIQI+GbrRcn8
-	 izC8AC72z7neRPN75KSlTXlU+OSbpr1R4lkmJ5hjUlMjYw6BcsbQqXgJ3vSDLsnwBOywO
-	 wX3Yhe9wfwX1pt7sM0/V2XaLSKh2pgr4W0WR7+8Jmt9cqzX7Y5+9HAwak580pJj2VBA==
+	bh=LLwKhbqLknqcMl4sYm4/0PePAe6/07cKkRbf6chojRc=;
+	b=mPL0nc0RzFMzeQytJ4ovJtZMK1X+1W7ZlEOICsrvkbEyWuEZRp+yCv1RpkSaJ/+iDFZL
+	 X8PGCSmvz0qxXB38pbNgI4w5mAgc6vzUabzgfkmlJgCrCB3RXAwCMDZiXNNh7KBBdDYVD
+	 RKrruGcn1k8MDJHx4jnduynHBEbs0Zw9Dpe1uQeOnL7JtBd7FcU2PqELoVMf/cFBaNHn/
+	 ovXqrVkgm5PJP1wiDn+t65WLe7EoqCN3LftQV3TlMNKAd/yIcFnx7qevw+LlCMJG6tclG
+	 QbLhKSanEoGjYf+rwbWmW8GPx6O3gLstCtdx7DAGtsSh3M0xA/k+XpZ+8+mu4uLbx/A==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792012257;
-	bh=MlBwb+/cizoZ+By6wpPDWoOUJ5KdN4V3RkX1WXVFIq0=;
+	s=default; t=1792012259;
+	bh=LLwKhbqLknqcMl4sYm4/0PePAe6/07cKkRbf6chojRc=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=kU9xGSkRebiDgXW61zCahTywBhM0PMqBlDuMuIQvTTBGqHyk1Q5RnIDev1AceviHI
-	 59vojCXQNfEZN2dmsEH51tUxwPz0TAyP/JX0wxCW9yrB62MLwegHS6KB5LQ/fNUEiK
-	 qSG9kornWqWjMF/qNm4+MLiz+IBFpRMAySGobaYWYMLLc5x4Cot40ztjuvKSyncNCC
-	 ivyZi6VwhufUsDIl/9V0phwIo7z+PR3CzEUUD52pGEXv/Qrfv46AimA8NKYoSiEOtp
-	 rRMXoxmH+QLRq9muA2nl2awIqhEbLEyQY4gUlPw+rDhVqU737VA6kqIQpsawk5MLqN
-	 CyLUnfiIcRVGg==
+	b=pImK48mqVJdgoMkvt/Z+xjznDYX8CS8iMPDKmmY2BSzFajgqJwFvJV6e0ZNPcblOh
+	 SK2TIjAuA7YCSThJo/lzN675iNc5ToWPAG8tK6UbskTn/wX8BY+vvcFe1uQy0z2tOY
+	 oXV6zd6rdGaLnG2hkF08piRM1m+3ld6yWFFmDbOXZY3L995CBb4U+TXXGThIoYgHgw
+	 SZOh6UFx7bE+kCD4bTU2FeR60QmZRI3XqTC5h7lE2vEYXWcieuapZgCsfMaBiOEVXv
+	 JZQVRJ10cYC+4t9WkinNjUZi3/YkA9K7SrDn+gL/W6X38yq+riVQlpP6BZogPNZJLq
+	 SgTdI2h0HgjPA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4F2DB407E7;
-	Wed, 14 Oct 2026 21:10:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 417F51DE
+	by smtp4.osuosl.org (Postfix) with ESMTP id A4B1D406BF;
+	Wed, 14 Oct 2026 21:10:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id BD581A58
  for <buildroot@buildroot.org>; Wed, 14 Oct 2026 21:10:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3F83A80772
+ by smtp3.osuosl.org (Postfix) with ESMTP id A3E116089D
  for <buildroot@buildroot.org>; Wed, 14 Oct 2026 21:10:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1wF8MBVkyX_J for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PQLim3mX-PYa for <buildroot@buildroot.org>;
  Wed, 14 Oct 2026 21:10:55 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 146BD80741
-Authentication-Results: smtp1.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::62d"
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 6C6E96077F
+Authentication-Results: smtp3.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::634"
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792012255;
- b=KulwHCEaNtcAy2d5psfgMeBBp6R8EeGvbJ60vT8dE0P9WvrbOnO0Xe7L6pzYcvw16jfl
- cSIh8t0xgJf+wOvEpAO5APJiK21qbs6bxypQGsPGlgNjVPYhDDmtdRsl8YcNox5oFUq/k
- 8+ZRzSQRd6PqbXM8VSrmGAZsxnOJVAX4hW/O2eE16zNIhWb7psYDJyW57Bw1zuL9PP9+/
- JIvMp4yWFQyIScdtyC8WZoQ3OtFJNPLderotmBF5bMfItEiE7ls1F/reFSzlD6XA8LEYC
- gjzAxQpCxedFcw1wXJv+l6a/Iaf6Pn5YkxNgl0mQparM8s/BpRRDO4j3Zh3h2ZdofwA==
+ b=TmNsjJvk2a5IRLmNIAKeEJIvkhCAMvSjfNq2j/N2b1oaStsJre0rlwK7kuiHv4ZMKHZF
+ Lhc/Mikn4FVsqumgiQ5HlSwcDsYI/3+csktbiHHVvFw7TqWyQnbw1N7Z5S/wo8gDDveNu
+ /2TE6VU2IzoFeX4JdiVbzTvfZLAIjom0E0QRPr1qDm7RchSL0uRRTZK93BVAvQVF9o61M
+ CzLp1JOYgb622M1gSs41aQnJqKqC94IGXLGuDlg0MllBdRL4la4lq0mw1R+SiZh1K659i
+ ZEOFBmNrMmgJeslWV4wa20hQ/DhFljRjj9+cCvfLehJQaTkygKiPlX0rdlKIJ9u3Xyg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1792012255;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:
  X-Google-Original-From:To:Cc:Subject:Date:Message-Id:X-Mailer:
  In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
- bh=fYFdePi3cDHimbadWu23kprj7h5iLXt/l8A6vkoEkIs=;
- b=hBllfTzY6S8Zd5vRiHw8CaqT9P86lwiLBKCKRXDZ6S/K+G35FO260zz+F297RiOt7wP9
- u2cJ9AUFkgLRWO6DkuIkbec/ffaonMggzNKYRsoEBXMX8koTuGAmJkfQGm/fd+4uyoHQQ
- 60kbd/WRaz/Ygpz8EI+j1doW0bPTrIOZzHjzPXqC29i08Ot31iag1pVS1rUlaehm/gYrG
- IG5obhiFnPaLa3A2PvpOUzA0TVIbY+7R+tQIKLMNdIWEN88fL2XIUWPitez2qBLpinzz3
- 50/aPPwNS42oj3sOfTZRc+YAU7BO8YqPZ6nEbp4DTwIPfVwo6LLpNMnhU70e0a7/nuA==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ bh=iu9WyQN7IlWelsIvsGA0MzHBincud+7U3clCsQEh2xE=;
+ b=WcNLB9/jD2ZzOeTJqnRnjWqaMj/VgagPpkZupJ1vD5cJTrDjIONjzwo/Qox4nLrDYPRO
+ wbVcfFHG+pg0kpu08RkFhQds4vUbkk2hNel4Dsi0kZN9QrCHIYq36gY43/g/0xOmi9Nzk
+ 8vepDhfd5ZqvxxVyNZUNWqtv7Ziiq+jF33y0FVrE42pphk3ql8c0TH91GzC5DGCYExyds
+ 7tfNUmU7zHBoMDIPXF556SHgvWjgxnw0a/2eemhCgfxU6xmnklmIfAVaPE2Lcsypg3ysg
+ WKGq/vRXrOADtbt8BHsRB9fe0rB/8ATGnf/e+IbpHQ2kw/1QnGAVPBqJiHtTAzMhnZw==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
  dmarc=pass header.from=googlemail.com;
  dkim=pass header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256
- header.s=20251104 header.b=pJ87FV+I; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::62d"
+ header.s=20251104 header.b=lwkuhM55; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::634"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62d; helo=mail-ej1-x62d.google.com;
+ client-ip=2a00:1450:4864:20::634; helo=mail-ej1-x634.google.com;
  envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org; dmarc=pass (p=quarantine dis=none)
+Authentication-Results: smtp3.osuosl.org; dmarc=pass (p=quarantine dis=none)
  header.from=googlemail.com
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20251104 header.b=pJ87FV+I
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 146BD80741
+ header.a=rsa-sha256 header.s=20251104 header.b=lwkuhM55
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
+ [IPv6:2a00:1450:4864:20::634])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6C6E96077F
  for <buildroot@buildroot.org>; Wed, 14 Oct 2026 21:10:54 +0000 (UTC)
-Received: by mail-ej1-x62d.google.com with SMTP id
- a640c23a62f3a-c247f6687dcso702504466b.2
+Received: by mail-ej1-x634.google.com with SMTP id
+ a640c23a62f3a-c2e5f8fe879so733268566b.3
  for <buildroot@buildroot.org>; Wed, 14 Oct 2026 14:10:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20251104; t=1792012252; x=1792617052; darn=buildroot.org; 
+ d=googlemail.com; s=20251104; t=1792012253; x=1792617053; darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=fYFdePi3cDHimbadWu23kprj7h5iLXt/l8A6vkoEkIs=;
- b=pJ87FV+IofkXM8LH86H6fr3f4rvMD4aIG7Z+jOdczelXrmJZRvqNLDZVIOAXewfDgo
- 1MVojE+VmGPbQ9GCIC5KOZnvp1LNstHsw1OyxA+T9P7B3E4J/QrulJYm5xBznlZDC6SE
- j5ayY8/c047lLz9JRjYoKCkkeKRGBiSaJ5ao38lSzzw1HcjyAG9laQ2COWBU8C8aplu6
- 8wb8Bws2aAEu7m5e/OFGb/S6ZjnmKsynDFwPDddz17dzvkdx+cZgUKRbu5vXmBxyFfLE
- ps9LxaBRJiX0MF5Rt4LHDB+MZCCiBfHNoxapVewHyyF0kp9wk4+RH43jyEWp+XHH5Vvs
- bpHQ==
+ bh=iu9WyQN7IlWelsIvsGA0MzHBincud+7U3clCsQEh2xE=;
+ b=lwkuhM55iAwj7jlABzLx68tOS994S38KgObnbQbXOeAjmFWgBbv3StY347lXCUuLVC
+ 20l3IqsXhkqey8ryic7dZhWlLJ6yOIv7t4LI6+6FtOFF5ewZSCU/T59cV3Ic304xS9Wc
+ rEmWWctrxCV1We2HkMCKynScTq1Wfz2hhMB01CVG8xXbaZVV3IjI6fSiCf4NYpOOYPBf
+ vX2xzC6lVwpWeweo/Hl19jWHF/UHQeyKGiQ9uLaXSvn3vqj2dL0PjE/isluo/6BuBPgV
+ GXo+h7ADe6zj9A+GFw9HbIkv7vBPoet3ti0TPEMKyuZKyaYEk0MO4uSfcPxKe/WLLmxm
+ UaeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1792012252; x=1792617052;
+ d=1e100.net; s=20260707; t=1792012253; x=1792617053;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=fYFdePi3cDHimbadWu23kprj7h5iLXt/l8A6vkoEkIs=;
- b=VuEebHdyzmRrZTlt24Pf+5qe5Uoo8Kqt0VbGh7JmdnV+Ay9dLhEzXUorCc1PWH+HR6
- ok1x/NMZ91xxIEYNOCIPZ2ZSMwncwN0Oyp17IpzDvPf5OizX2KsAzxvCeM/IA09vA5GD
- YLAVWCHvCurBB4CQjolY/whtFiQsOMchg23q192Wm4WfBVgwqqJqBsM5xB+hAnUoFXCw
- lxIHfkUVieFp2n7QzQsWieYvqjryxMKJ+RfmXlLBjZzkUX4uwQRatRBo5GAMQf8WJpmO
- mJzBhJ4TCr1yfNBoYGvmiap5l/Zg5z2oXZbFZBncMOQv5AyLKxhSIoAB2OPEs8KTjJof
- /NYQ==
-X-Gm-Message-State: AFq9FYLzAgRVPb5ZRqgmE1uFMepVEUDtsSmeIoyvyEPZ4J/znLt513xG
- +jiGOFl8KVHa3T0IFFcma9Oe4vvk0LL7i6no9wb8n1mp5RhemdW0PhkHkxRq+g==
-X-Gm-Gg: AYBFou3Jjc6Kw6BWUkf5Eug5TflbVLv1Tef4nuC0sfT/aBeWLkXaSXUEat3BArN1H8F
- j2hlyJuQQ5c3/bWupBEPvtb9iMwBloVDDG0bFvoQW16hZdwgFWvjsas6AR5HQjOw1M9lofED+nH
- WypOQH0/Xg+ff6bSclqjTCZAe3fXksAcfwXvUlfkhXP/PhqO141znPc9BXoHrAVs6zBQpfFGgOc
- 5zpy9MO9oRTVTBfe73M93CeXkLlXDV/9D4K8kIyzd27qNIWufg9JKBjBseY3z5MQDK0gio5jHIl
- x8L5Msy6zkdrNNWagR5hdp06j1aBmQochp5JGKPqzY91hRMNiQjEWIlBGbao4VgW1oZjV5KOWrh
- NQjGqjrcJyZzKqukM8ufAvhhDZZQpP/Xr4aSr8selY7KpJ1R+6nXt4qS6RgdiTvLUyJUS3d8pHX
- Mf0muEHNQfgeeAaakNjWD8jsMV5l50lHXZSPrzwmUCDmCxRe8+5R6HT0tPjenTZCnqPuF16FH6o
- PNujmR3GKZ2kK3NlG2kcdSNPoCsiVuOMV+nha6m69K4plSa
-X-Received: by 2002:a17:907:9686:b0:c1f:983f:d8a with SMTP id
- a640c23a62f3a-c31aa017261mr1735866866b.24.1792012252308; 
+ bh=iu9WyQN7IlWelsIvsGA0MzHBincud+7U3clCsQEh2xE=;
+ b=uXQmIQ4La3z/eRnRAlrOGr1r32tdwipUPW9rQ0rSQwX2u9i3ois0q5lEs0NCDj5MD4
+ C/X/7qJHi+B4h13Ee4bR4b/43a5P3ZZX5n7qUU/V2/OhvTYJHQcHGLwiJQj41rO8vVZj
+ XJmPyb0v0ZPS06kxIcdCfDQr3sYL74RwAZQDeJYjdDfvr1qw/tnGSi16pPuBNHanaVoS
+ vUDmYUnwg/B5fpYmnMIYNiUL+Gu0it96bhDsrKE5in6UYxjoXkfTFFImF87kIyS8ecZq
+ Ymd7X8mx0Sde4X1lUd4gwk2DgUY2VufL7mp00s6sIiVrBcEGYIcHFsTzkYkQ2xbEdMXP
+ WgDg==
+X-Gm-Message-State: AFq9FYIVbRH/h3fYjTx3AnNjHZEWGCdVKbmTDaLfuVmrrOsU+dcURyyq
+ iUfGIrE07Iib8M1EYhiJB1PRlZ4U3JJActajGthKcpWzxQ987Wz16ltIvQVJ9A==
+X-Gm-Gg: AYBFou29vv1iCAIIDEwDXiBYZmS3JIiCg97wFm2zWtQgPTGImMJ+gTOJtQHwr9clHaZ
+ KRW+N7QyNJCpzpFG00l7Nvdb1Ov07+ll1B1jsvZXv9N9aEIT2AylnuhmA/SCAofcBRLJbNzb2vm
+ UtTLQCNBEQo5jWEyQx1gNwV/R/0Nv1t34TQI1LGNAvL57POIqXySY9Z9pamg0aGg4DFbzGeh9++
+ H3ROG2Qo0fgluvdqI8Xe48FG2L6MXFxe4Qav9QRqyWOR5JRNu5Hx2JBgnBhxRhvtzsDzgqCcAn7
+ rI/xilxg+PnVwZVHOWpXhkGrDINxKnAT8MFsX8Xjxd5NoZ/hlPGZ0DQc9rxyvrsFsN6KiQZoZrK
+ cjBnlRoIHQ4QoRF8ADJWMVL57iQfzGJaVUta4YHJtXGjGoxTRJO6M6HyBXfdKByTY+xbwirgc/t
+ CRHIq9DqymbGxToMQpATBxmTS6e8LgshlyfY3PB5n3tu1+iOnYGbhqQ34rqJAfaud9fDUhX4inI
+ BfeAuMmaolgmhwpKGazHrRn0blq531zADgtEsY97QMV/pY=
+X-Received: by 2002:a17:907:9720:b0:c2d:f050:ad4a with SMTP id
+ a640c23a62f3a-c31a9a33cb3mr1500235966b.5.1792012252894; 
  Wed, 14 Oct 2026 14:10:52 -0700 (PDT)
 Received: from development2.visionsystems.local (mail.visionsystems.de.
  [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c3ed9f479b7sm31857166b.46.2026.10.14.14.10.51
+ a640c23a62f3a-c3ed9f479b7sm31857166b.46.2026.10.14.14.10.52
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 14 Oct 2026 14:10:51 -0700 (PDT)
+ Wed, 14 Oct 2026 14:10:52 -0700 (PDT)
 From: Yegor Yefremov <yegorslists@googlemail.com>
 X-Google-Original-From: Yegor Yefremov <yegorslists@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 14 Oct 2026 23:10:48 +0200
-Message-Id: <20261014211049.490297-2-yegorslists@gmail.com>
+Date: Wed, 14 Oct 2026 23:10:49 +0200
+Message-Id: <20261014211049.490297-3-yegorslists@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20261014211049.490297-1-yegorslists@gmail.com>
 References: <20261014211049.490297-1-yegorslists@gmail.com>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 2/3] package/python-zlmdb: don't install the
- vendored flatbuffers package
+Subject: [Buildroot] [PATCH v2 3/3] package/python-zlmdb: bump to version
+ 26.7.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -180,77 +180,131 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Yegor Yefremov <yegorslists@googlemail.com>
 
-zlmdb installs a copy of the flatbuffers runtime as a top-level
-"flatbuffers" package, which conflicts with python-flatbuffers that
-python-zlmdb selects:
+Since version 25.12.1 zlmdb no longer installs a top-level flatbuffers
+package: the flatbuffers runtime is vendored as zlmdb.flatbuffers. So
+the patch that drops the vendored copy is no longer needed. py-lmdb
+plus a patched LMDB are vendored as zlmdb._lmdb_vendor, built as a CFFI
+extension. Thus drop the python-flatbuffers and python-lmdb selects.
 
-  FileExistsError: File already exists: .../target/usr/lib/python3.14/site-packages/flatbuffers/__init__.py
+The build system switched to hatchling. The build hook needs host cffi
+and setuptools to compile the LMDB extension and uses cmake to build
+the bundled flatc compiler.
 
-The overlap has been there since the package was added, but it became
-fatal when setuptools packages were migrated to the pep517 installer,
-which refuses to overwrite files.
+Update the license information to cover the bundled LMDB, py-lmdb and
+flatbuffers code.
 
-Add a patch so that zlmdb doesn't install its copy and uses
-python-flatbuffers instead.
-
-Fixes: https://autobuild.buildroot.org/results/e3b026cb48f41ec531e5bdae9e07b8e581f1a06b
-Fixes: 8937db8dd595 ("package/pkg-python.mk: migrate setuptools to pep517")
+Changelog: https://github.com/crossbario/zlmdb/blob/master/docs/changelog.rst
 
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Assisted-by: Claude:claude-opus-5-5
 ---
 Changes v1 -> v2:
-  - new patch: minimal fix for the flatbuffers conflict that can be
-    backported to the LTS branches instead of the version bump
-    (suggested by Thomas). Tested on master and 2025.02.x.
+  - drop the patch added in the previous commit
+  - move the autobuild Fixes: tag to the previous commit
 
- ...all-the-vendored-flatbuffers-package.patch | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/python-zlmdb/0001-setup.py-don-t-install-the-vendored-flatbuffers-package.patch
+ ...all-the-vendored-flatbuffers-package.patch | 37 -------------------
+ package/python-zlmdb/Config.in                |  2 -
+ package/python-zlmdb/python-zlmdb.hash        |  7 ++--
+ package/python-zlmdb/python-zlmdb.mk          | 15 +++++---
+ 4 files changed, 14 insertions(+), 47 deletions(-)
+ delete mode 100644 package/python-zlmdb/0001-setup.py-don-t-install-the-vendored-flatbuffers-package.patch
 
 diff --git a/package/python-zlmdb/0001-setup.py-don-t-install-the-vendored-flatbuffers-package.patch b/package/python-zlmdb/0001-setup.py-don-t-install-the-vendored-flatbuffers-package.patch
-new file mode 100644
-index 0000000000..608074ea51
---- /dev/null
-+++ b/package/python-zlmdb/0001-setup.py-don-t-install-the-vendored-flatbuffers-package.patch
-@@ -0,0 +1,37 @@
-+From 18c4d2d3c7c0c3104e9280ea717c68a5d8f1368d Mon Sep 17 00:00:00 2001
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Wed, 14 Oct 2026 17:52:45 +0200
-+Subject: [PATCH] setup.py: don't install the vendored flatbuffers package
-+
-+zlmdb installs a copy of the flatbuffers runtime as a top-level
-+"flatbuffers" package, although it also depends on the flatbuffers
-+package (install_requires). Both install
-+site-packages/flatbuffers/__init__.py, so installing zlmdb on top of
-+flatbuffers fails with a pep517 installer:
-+
-+  FileExistsError: File already exists: .../site-packages/flatbuffers/__init__.py
-+
-+Don't install the vendored copy and use the flatbuffers package
-+instead. zlmdb.flatbuffers (the reflection code) is not affected.
-+
-+Upstream: N/A, since version 25.12.1 upstream no longer installs a
-+top-level flatbuffers package (the runtime is vendored as
-+zlmdb.flatbuffers).
-+
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ setup.py | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/setup.py b/setup.py
-+index 16ed0cb..571615a 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -67,7 +67,6 @@ with open('requirements-dev.txt') as f:
-+ test_requirements = ['pytest', 'pytest-runner']
-+ 
-+ packages = [
-+-    'flatbuffers',
-+     'zlmdb',
-+     'zlmdb.flatbuffers',
-+     'zlmdb.flatbuffers.reflection',
+deleted file mode 100644
+index 608074ea51..0000000000
+--- a/package/python-zlmdb/0001-setup.py-don-t-install-the-vendored-flatbuffers-package.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 18c4d2d3c7c0c3104e9280ea717c68a5d8f1368d Mon Sep 17 00:00:00 2001
+-From: Yegor Yefremov <yegorslists@googlemail.com>
+-Date: Wed, 14 Oct 2026 17:52:45 +0200
+-Subject: [PATCH] setup.py: don't install the vendored flatbuffers package
+-
+-zlmdb installs a copy of the flatbuffers runtime as a top-level
+-"flatbuffers" package, although it also depends on the flatbuffers
+-package (install_requires). Both install
+-site-packages/flatbuffers/__init__.py, so installing zlmdb on top of
+-flatbuffers fails with a pep517 installer:
+-
+-  FileExistsError: File already exists: .../site-packages/flatbuffers/__init__.py
+-
+-Don't install the vendored copy and use the flatbuffers package
+-instead. zlmdb.flatbuffers (the reflection code) is not affected.
+-
+-Upstream: N/A, since version 25.12.1 upstream no longer installs a
+-top-level flatbuffers package (the runtime is vendored as
+-zlmdb.flatbuffers).
+-
+-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+----
+- setup.py | 1 -
+- 1 file changed, 1 deletion(-)
+-
+-diff --git a/setup.py b/setup.py
+-index 16ed0cb..571615a 100644
+---- a/setup.py
+-+++ b/setup.py
+-@@ -67,7 +67,6 @@ with open('requirements-dev.txt') as f:
+- test_requirements = ['pytest', 'pytest-runner']
+- 
+- packages = [
+--    'flatbuffers',
+-     'zlmdb',
+-     'zlmdb.flatbuffers',
+-     'zlmdb.flatbuffers.reflection',
+diff --git a/package/python-zlmdb/Config.in b/package/python-zlmdb/Config.in
+index 1edf993ecd..f6b8caebcb 100644
+--- a/package/python-zlmdb/Config.in
++++ b/package/python-zlmdb/Config.in
+@@ -9,8 +9,6 @@ config BR2_PACKAGE_PYTHON_ZLMDB
+ 	select BR2_PACKAGE_PYTHON_CBOR2 # runtime
+ 	select BR2_PACKAGE_PYTHON_CFFI # runtime
+ 	select BR2_PACKAGE_PYTHON_CLICK # runtime
+-	select BR2_PACKAGE_PYTHON_FLATBUFFERS # runtime
+-	select BR2_PACKAGE_PYTHON_LMDB # runtime
+ 	select BR2_PACKAGE_PYTHON_NUMPY # runtime
+ 	select BR2_PACKAGE_PYTHON_PYNACL # runtime
+ 	select BR2_PACKAGE_PYTHON_PYYAML # runtime
+diff --git a/package/python-zlmdb/python-zlmdb.hash b/package/python-zlmdb/python-zlmdb.hash
+index ed1b6db8c2..e29bbea280 100644
+--- a/package/python-zlmdb/python-zlmdb.hash
++++ b/package/python-zlmdb/python-zlmdb.hash
+@@ -1,5 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/zlmdb/json
+-md5  4d96b46d1724b9d4cb6961874e5b4a9a  zlmdb-23.1.1.tar.gz
+-sha256  ddcf680bf49352cabe35bfb5bfe3acbd5d6b8d481cafa508c423e0b18d654d05  zlmdb-23.1.1.tar.gz
++md5  186642d7df261a781631a734244f785e  zlmdb-26.7.1.tar.gz
++sha256  3cbc9447cfbf3b33dad0a30f7e671d467d72b41e5bc4e999b4f41914eff5fcb9  zlmdb-26.7.1.tar.gz
+ # Locally computed sha256 checksums
+-sha256  8a139bf325dcca11e0e476ce537bf791a6cfbeed8899a9b6ddc55238e180d230  LICENSE
++sha256  0ba0c0c595fd01ee19478ca417f210b75740f9b84ca937ebf783154e1cc01174  LICENSE
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  deps/flatbuffers/LICENSE
+diff --git a/package/python-zlmdb/python-zlmdb.mk b/package/python-zlmdb/python-zlmdb.mk
+index 70538ce63c..da625f9777 100644
+--- a/package/python-zlmdb/python-zlmdb.mk
++++ b/package/python-zlmdb/python-zlmdb.mk
+@@ -4,11 +4,16 @@
+ #
+ ################################################################################
+ 
+-PYTHON_ZLMDB_VERSION = 23.1.1
++PYTHON_ZLMDB_VERSION = 26.7.1
+ PYTHON_ZLMDB_SOURCE = zlmdb-$(PYTHON_ZLMDB_VERSION).tar.gz
+-PYTHON_ZLMDB_SITE = https://files.pythonhosted.org/packages/56/b2/abaeb5419435a6224a0beb2b5edad621ec975fe4802297963ecf1728b883
+-PYTHON_ZLMDB_SETUP_TYPE = setuptools
+-PYTHON_ZLMDB_LICENSE = MIT
+-PYTHON_ZLMDB_LICENSE_FILES = LICENSE
++PYTHON_ZLMDB_SITE = https://files.pythonhosted.org/packages/87/21/5b877e438d652f78bcf88aec83474b373f8ab1b98b6c0c5d47db3481d6b0
++PYTHON_ZLMDB_SETUP_TYPE = hatch
++PYTHON_ZLMDB_LICENSE = MIT, OLDAP-2.8 (bundled lmdb, py-lmdb), Apache-2.0 (bundled flatbuffers)
++PYTHON_ZLMDB_LICENSE_FILES = LICENSE deps/flatbuffers/LICENSE
++# cmake is used to build the bundled flatc compiler
++PYTHON_ZLMDB_DEPENDENCIES = \
++	$(BR2_CMAKE_HOST_DEPENDENCY) \
++	host-python-cffi \
++	host-python-setuptools
+ 
+ $(eval $(python-package))
 -- 
 2.34.1
 
