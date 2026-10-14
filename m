@@ -1,108 +1,259 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56B05CC6B2D
-	for <buildroot@archiver.kernel.org>; Wed, 14 Oct 2026 20:46:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBDDBCC6B2D
+	for <buildroot@archiver.kernel.org>; Wed, 14 Oct 2026 20:53:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C95DB80F70;
-	Wed, 14 Oct 2026 20:46:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 78D9E6077F;
+	Wed, 14 Oct 2026 20:53:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I4t_GSUPbsOv; Wed, 14 Oct 2026 20:46:50 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org B0EBD8104C
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792010810;
-	b=P2LkObm5VXtjRvSu2eKisVYRvNHZbjHJYoMexIRwSlA7RVi+I54aGjdjYS4kIuFsY3qD
-	 gQXqPX5ZzMuBvtq/IRGdT3kWVquhuWCSYfsQeBdPgINF33vI6yEroA5JcXGIC0oZPSE7m
-	 g0w2uOZNxrq8iY3QGyL9OlRx/3u1P5BRzWbmgOTWWkaOSXqAxabPle1V2Fq7NX/wka+md
-	 NB2ImrmAaDr/zxjVO3RdrYEPFn+LNSRd4/d6cjvQWII8aYZ5jb5XH44Vtganxba7jd/fR
-	 buXegbhlmzbKXl5GspMy/CVu0A6UJ9BwTQ1lrjCb1Ms2wkBROxWazMFuBk8YeQ0WeRw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h71uN9j14QKU; Wed, 14 Oct 2026 20:53:07 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 8801360896
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792011187;
+	b=FMM25TxskunsPVAzRE8478uZEV8AwE+zCwbUH8TumOv+B8Jyvdmom7lU0pQs48afRiwx
+	 2iyGKDWA5uQisazV4IqhyqzIbWcuvA81lY7E36NTZBYEraUnp9jvtnkhEKWuR4vGPg5EL
+	 Z3sFZlglzLy58CxJ2T++f+jyQqrKZbxLWDPSoeK5gMuMNki2KqKmaG2Sa4Yd9u9pcBX3G
+	 E7A/2qth4Z9CqzYmE9iOGaacDABEIuHIOFTVZ9vZ1u5LEA7Ul1FvN0RVnbRJ7znBe9PAR
+	 vGZ8d8Jjwa96tglIQd0+hFNLiA9jxSlSFFdRFTQTeRH/r0jLJ8ae0wTcXXb8WirZcgw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792010810;
+	c=relaxed/relaxed; t=1792011187;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:From:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 X-UI-Sender-Class:Received:Message-ID:Date:MIME-Version:User-Agent:To:
+	 Cc:References:Content-Language:Autocrypt:In-Reply-To:X-Provags-ID:
+	 UI-OutboundReport:Subject:X-BeenThere:X-Mailman-Version:Precedence:
+	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
 	 Errors-To:Sender;
-	bh=netnBPf/cHfv/EEABu1dBbfFgond7Z4cug2qVsuVt2Q=;
-	b=myFFTcskVbnGSrY38NTyzJwFq8ojlZbwpaao507e+/1tF7H4CVycl00TvxooiEr3uEMA
-	 m4YfT+7MnhvWOMCKMZIhuvOXvdasZ/gWHqgUkmUBglSzhdk/CY/gbkcKK/JR/6DWZBbOw
-	 VzJ7DeJP8EpJrHkzj5Uxi4MbIcGimsOnAmGfWInJiDPwFEdo/9aZiwCUtTPytSq1LbCzJ
-	 NeFMqpmAElhZ0l6mAJi2IcsyXNf7mqezgDp8MnZDhAJOJLFO+u8rAYSBFHYaEMprIL459
-	 ak1f4R5mbSWTHDfMSX5VDKfcFYRocKZ7O4LLVjUFpny1mFOrJo08XrzwRoFPenYF9HA==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	bh=4HnotRyyjk/dICjBZtRB9SD87gz0e4sD6zH4XnCh+0g=;
+	b=DcaiLvMp94EMez8sJIlo1i4UU4ebrW3mQEoy8jbZdhMO+XD6UvSRfZa2yY1SswvRy5Z4
+	 B7g8sOURAtoQcNscsT1RdWIWGWJ2fiIAs+vgSc5U7K1mijNJWl3/0LAvisQZZljJsHCjB
+	 kdkMQMvSFr1jo08isPenGrg+JTaJx5xfw3YPKVOXmeSWZOYzSi39eJphZ6xaCjAcbfPJr
+	 Q8CO8hXKCnAPhcfx1A1sIA11xuZsMyXB6IIiMA+TRkHtfxJMNFmWd8/Yak8PSSQOZlHLv
+	 y68YCyjRYsr+Qb9cowAiv019a4NmBpFQylv5N3MLX+9M+/PUqOT6zZEDHVKW6q25QUw==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792010810;
-	bh=netnBPf/cHfv/EEABu1dBbfFgond7Z4cug2qVsuVt2Q=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=ZBnSOlrSaPtWSQPAle4VCUi2Sp/OKIPiLokJWG5SQye3pra+peuzBO60CzKAMdcb/
-	 KLlHhcFJqo4bJe/KWPNE7EvzWuYNQANKidakVKSfkVmO/7QSDEBVfLBd+PUnK2tyZs
-	 4ci51SMOe5ek5alBUM7xt/OaLywJFE1BwVn4NtcynDhonKQsTSc8+h0yVLp/hux43N
-	 KKjbFwNpBOsHOgD7bG3CcqplNJPzQfqIZ/i0jhID5IFCHG1MVkVRakytvmuuAFpnaw
-	 cNLGhh3avGnLmtv3nUoxuy6iIoxeR21fqqTSCSEe5UPFizvduv8s/ckuB5hlpb/Wyi
-	 FamW9bBsGWwJw==
+	s=default; t=1792011187;
+	bh=4HnotRyyjk/dICjBZtRB9SD87gz0e4sD6zH4XnCh+0g=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=kLX3WlIOMUsJIjv0icscU/2ZuKHPfnRiwE+FDB0uk26g4qNEam0emXxiyyD/k7ZO4
+	 MZzv0wok+rEuaNIQek3z8jcJOo2cRXGsIB0CpqDohBeHqsefhnKq0EwDw6/5Vrrz0K
+	 HM4o+qTNW5fqAunD8Fila0HND50oyIpbdgzayOxE/n4yw9k1YEh31YKXgyNjh9AuEX
+	 AVCRbO5U5Exa0H5wRT0m1Rdq0Tx++vTsxBND+QZzk4+K0elwL5lnPck5MbcFwqf4+4
+	 RCDetLenTX1vQRzFWOmJAM5RjT+8HzpjqFI+sQU/+j77n8RNmlf6rvlcAADXLknf4u
+	 DlSoUDvgyeqMQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B0EBD8104C;
-	Wed, 14 Oct 2026 20:46:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id D8C78769
- for <buildroot@buildroot.org>; Wed, 14 Oct 2026 20:46:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8801360896;
+	Wed, 14 Oct 2026 20:53:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C1F80E4D
+ for <buildroot@buildroot.org>; Wed, 14 Oct 2026 20:53:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C875E8104C
- for <buildroot@buildroot.org>; Wed, 14 Oct 2026 20:46:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BC5EC40223
+ for <buildroot@buildroot.org>; Wed, 14 Oct 2026 20:53:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mlqjJfU27dwu for <buildroot@buildroot.org>;
- Wed, 14 Oct 2026 20:46:47 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org DDC6380F70
-Authentication-Results: smtp1.osuosl.org;
- arc=none smtp.remote-ip=140.211.167.122
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792010807;
- b=PmkpSpaUnmoHwdxII6rymcMkbFp6nwY2RaK7cIZANaULry/iMUp1LdiQTUtyApKVaaFH
- tYqcRX6YIrMrkHvzn8z4HMXmW5ASFiShcTe1Qp834lOac7grBytFRXpxHazNJA8dX1CPt
- zK2aw/w34OoDKfiu/8fJ3quKdnw1l+8lRdUiLhcwiJcE9w1fzk05UuP/EUjFJ+DEGbXpy
- zpQbHaobp7j8dxfbki3MkYtsMyRqWSX0PObzeX1Wh7jxu0vqSbKVSO0j60ax2his0g/qj
- tCbUbdfB9vzQWo5gwaVaOwehZNXQRcj0NveazI22zWUPSlVg76KxIeWeP0Qp03W2xrg==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QbmbJ1fYASiJ for <buildroot@buildroot.org>;
+ Wed, 14 Oct 2026 20:53:05 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 9DC1C401A4
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792011185;
+ b=gMQEbWSyqb+ZL3JGPMvjjo0l6wzr5ZFmPBGdMIFTiw6tB4n4no3zRRKTPy9JWGcx3u9p
+ 3+CS9v3ynB2uFyCYiMYan7GzccOYxnJqfvsRJiwZk6v1rD53iGzmHiJnl/XoUCalOmjM0
+ 1ONP8GNAClwRryQgo5gcf7g1WEvttDX0XWAl9wuBBTCXAOlBTJLwaTQnFgV/40bgnvMxT
+ qmWqCrjcCRsqUuwXJN3IaV1kY8emg7hf7/5MOR92BOoVefN7TOWK5yeH30FzowXvAgXKi
+ mTmD7Elu4jrDbmyrvuQyiM8p5k/1Fxed/cO0Z85ZZ1EVEgzXAyA4thxwKicS/utn++w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792010807;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=1P/XOp9HsEA3G1c1VChCpZUA5NiIj3nkWsJYxgYqAZU=;
- b=AbwyQzBM+vvMKbfHAhMRfckz5ZelUDF2MV4TbCd4ZuwHhLyewo+A8QldBI94TEDjaWWU
- KFQPvtCBtPwDVkDC3LMCSByoQ/SRutTU6jRR4MwtjrqQQrBS2PRu4jMJHEiHsCvcSYTcE
- 518ALFEVFOrAeh5IGqL5j3uzmys71DgBGUOSlR1pYYQVD7vs0zr0Mt6WoHr4ZAY829SKi
- IGU1jXxqqNzSG/L+3RzWnWtvzyLQgXh7hBZ3REyG3vpFp/y2p8OHnq4uItJLiaedWnFhB
- qBeqnGHFGjdq5jW7lVP7Bm+/3g9SU2JanKyAWGelQdGPHht1SYmHUyoy39Wa2MR2i7g==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DDC6380F70
- for <buildroot@buildroot.org>; Wed, 14 Oct 2026 20:46:47 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8C0BB95C65; Wed, 14 Oct 2026 20:45:27 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 14 Oct 2026 22:29:18 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 57f40e5f6e9838d1da8882d0f18996e83ac856e9
-X-Git-Newrev: 0e61ae3b5afa6c10179761bb8874379a41ea0b06
-X-Patchwork-Hint: ignore
-Message-Id: <20261014204527.8C0BB95C65@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gcc: add microblaze frame
- unwinding fix to v14
+ c=relaxed/relaxed; t=1792011185;
+ h=Received-SPF:DKIM-Signature:X-UI-Sender-Class:Received:Message-ID:
+ Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+ Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
+ Content-Transfer-Encoding:X-Provags-ID:X-Spam-Flag:UI-OutboundReport;
+ bh=h+OP6N0RLADA2khF0xv6N9O7b5fDPpobse/hk37EAqE=;
+ b=IpZO7s8Z4guQ0URv+5CDRyhGlZIFEm76/teS6jMcd6G6Osf8TKgt4OXcHYWHR1BMxsw1
+ 7Zg++ikpAnAGxpRqIu3sCsWymCdYe95YaWKVHJSW5K3HY8l5NIEnYQKhubSsEn95ns+uO
+ NxwluQ/S9szHgcVr32FoVNnsZHFnhGXUfYD74nU0WNdUXdFkJEmZ4tDYdiXtwRXjV7E+m
+ uJ2IZQvGFDwr4f2CE/NlUw7dwWOR+YNcXU+0ncQFnO0S7hlC+/Z7VzxQbSWzyAJH5QjuG
+ VSVuLN11olr+NJbFOtdmREAnKNrxY9Ztt0FNFnqoZdfKZykPw+feHOZdx2bfN9jZzRQ==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ dmarc=pass header.from=gmx.de;
+ dkim=pass header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=amv30eBm; 
+ arc=none smtp.remote-ip=212.227.15.15
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9DC1C401A4
+ for <buildroot@buildroot.org>; Wed, 14 Oct 2026 20:53:03 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MF3DW-1xS4K73CLA-006kOp; Wed, 14
+ Oct 2026 22:52:55 +0200
+Message-ID: <b6a925a4-9eae-4193-b3aa-06f9755aeb89@gmx.de>
+Date: Wed, 14 Oct 2026 22:52:53 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Jarkko Sakkinen <jarkko@kernel.org>, stefanb@linux.ibm.com
+Cc: buildroot@buildroot.org
+References: <20261014164625.1474866-1-fiona.klute@gmx.de>
+ <as_oRSUUVH8SQG-m@kernel.org>
+Content-Language: en-US, de-DE-1901, de-DE
+Autocrypt: addr=fiona.klute@gmx.de; keydata=
+ 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
+In-Reply-To: <as_oRSUUVH8SQG-m@kernel.org>
+X-Provags-ID: V03:K1:p2smskRYG3S/59/ib7gXeucKnqVyu1F+sGssTa+ipuN/u0fwZBP
+ vIhSRmat+vDLUnXv6u+mAHwuKwX+X5FtFHvMADL7q10wwR+bLEPWXijuzsu+IcX3plu9PM1
+ cI+QeZ2OJPMyrPTUwszncauxtGMAmXrDKyXGsIiz6AZ/BZbEd9SrBfdHlib6jNvArzQOWTc
+ uL8JYpyQ6F2a+zATnmNXg==
+UI-OutboundReport: notjunk:1;M01:P0:/4vjGsZkhZA=;xC2sV0uwYcSNXV71mWrRsDARZQU
+ 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
+ mfpZgLzXQlfA6ZFwHvDyABx82mpPMU1m
+Subject: Re: [Buildroot] [PATCH 1/3] package/libtpms: fix typo in
+ HOST_LIBTPMS_CONF_OPTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,227 +265,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0e61ae3b5afa6c10179761bb8874379a41ea0b06
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+Am 14.10.26 um 22:38 schrieb Jarkko Sakkinen:
+> On Wed, Oct 14, 2026 at 06:46:23PM +0200, Fiona Klute wrote:
+>> From: "Fiona Klute (othermo GmbH)" <fiona.klute@gmx.de>
+>>
+>> --with-... arguments need two dashes.
+>>
+>> Fixes: b2eec8c6265a38cdba1afadf7f60e0fd00f3b448
+>>
+> 
+> By defacto there's no new line here, and it's 12 most significant
+> bytes of the hash and short summary in parentheses. This is at
+> least how it has always been in Linux but not 100% sure about
+> Buildroot. It just looks weird to me.
+> 
+> E.g., I would instead:
+> 
+> Fixes: b2eec8c6265a ("package/libtpms: add host package")
+> 
+> And wold not add the newline. Since this is not kernel, take
+> with a grain of salt.
 
-Add microblaze signal-frame unwinding fix back port to gcc 14.4.0.
+In Buildroot we don't have a defined style for this, but use a newline 
+more often then not. Personally I find shortened commit IDs irritating, 
+anyway.
 
-Upstream: https://gcc.gnu.org/cgit/gcc/commit/?id=4ef64ad1aa9bbbe9471610e2de6ef0c8afed8b1f
+>> Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
+>> ---
+>>   package/libtpms/libtpms.mk | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/package/libtpms/libtpms.mk b/package/libtpms/libtpms.mk
+>> index 7bc69a50d6..0ece84ae04 100644
+>> --- a/package/libtpms/libtpms.mk
+>> +++ b/package/libtpms/libtpms.mk
+>> @@ -13,6 +13,6 @@ LIBTPMS_INSTALL_STAGING = YES
+>>   # Required because a plain Git clone is used:
+>>   HOST_LIBTPMS_AUTORECONF = YES
+>>   HOST_LIBTPMS_DEPENDENCIES = host-pkgconf host-openssl
+>> -HOST_LIBTPMS_CONF_OPTS = --with-openssl  -with-tpm2
+>> +HOST_LIBTPMS_CONF_OPTS = --with-openssl --with-tpm2
+>>   
+>>   $(eval $(host-autotools-package))
+>> -- 
+>> 2.55.0
+>>
+> 
+> I'm not saying this is not right but I'm neither sure whether this
+> is bug fix or not.
+> 
+> This is a weird because I've used this almost on a daily basis for
+> Linux kernel QA since I contributed this... Stefan can you help out
+> resolving the mystery?
+I assume it wasn't noticeable because tpm2 support being enabled is the 
+default anyway. But we like setting options explicitly in Buildroot. ;-)
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-add-Linux-signal-frame-unwinding-support.patch | 196 +++++++++++++++++++++
- 1 file changed, 196 insertions(+)
+Best regards,
+Fiona
 
-diff --git a/package/gcc/14.4.0/0003-microblaze-add-Linux-signal-frame-unwinding-support.patch b/package/gcc/14.4.0/0003-microblaze-add-Linux-signal-frame-unwinding-support.patch
-new file mode 100644
-index 0000000000..762a1e09bb
---- /dev/null
-+++ b/package/gcc/14.4.0/0003-microblaze-add-Linux-signal-frame-unwinding-support.patch
-@@ -0,0 +1,196 @@
-+From 4ef64ad1aa9bbbe9471610e2de6ef0c8afed8b1f Mon Sep 17 00:00:00 2001
-+From: Ramin Moussavi <lordrasmus@gmail.com>
-+Date: Wed, 3 Jun 2026 00:00:00 +0200
-+Subject: [PATCH] microblaze: add Linux signal frame unwinding support
-+
-+libgcc has no MD_FALLBACK_FRAME_STATE_FOR for microblaze*-linux*, so the
-+DWARF unwinder cannot step through signal frames at all.  Anything that
-+unwinds out of a signal handler -- most prominently NPTL asynchronous
-+pthread cancellation (SIGCANCEL) -- either stops early with
-+_URC_END_OF_STACK (cleanup handlers below the signal frame never run) or
-+misinterprets the on-stack signal trampoline and crashes with SIGSEGV.
-+
-+Add the standard fallback: recognize the two-instruction trampoline the
-+kernel writes into struct rt_sigframe on the stack
-+
-+	addik r12, r0, __NR_rt_sigreturn
-+	brki  r14, 0x8
-+
-+and rebuild the frame state from the sigcontext's pt_regs.  The ucontext
-+is anchored relative to the trampoline (its last member) rather than to
-+the CFA, so the layout of the frame head does not matter.
-+
-+The interrupted PC is recorded in DWARF column 36, one past the hard
-+registers, because column 15 must keep the interrupted r15 (unrelated to
-+the resume address of a signal frame).  Declaring it as
-+DWARF_ALT_FRAME_RETURN_COLUMN makes init_dwarf_reg_size_table size the
-+column; without that _Unwind_GetGR reads a zero size and aborts.
-+
-+Tested with a microblazeel-linux-uclibc cross compiler against uClibc-ng
-+git, running its NPTL test suite under qemu-system-microblazeel -M
-+petalogix-s3adsp1800.  Without the fix 17 tests fail (tst-cancel{1..5,7,
-+9,16,20,x4,x7}, tst-cleanup{1..3}, tst-cond{16,17}) by SIGSEGV or by
-+hanging in the unwinder; with it all 17 pass and the rest of the suite
-+is unchanged.  The implementation follows the mips/aarch64
-+linux-unwind.h pattern.
-+
-+gcc/ChangeLog:
-+
-+	* config/microblaze/microblaze.h (DWARF_ALT_FRAME_RETURN_COLUMN):
-+	Define.
-+
-+libgcc/ChangeLog:
-+
-+	* config.host (microblaze*-linux*): Set md_unwind_header.
-+	* config/microblaze/linux-unwind.h: New file.
-+
-+Upstream: https://gcc.gnu.org/cgit/gcc/commit/?id=4ef64ad1aa9bbbe9471610e2de6ef0c8afed8b1f
-+
-+Signed-off-by: Ramin Moussavi <ramin.moussavi@yacoub.de>
-+Signed-off-by: Neal Frager <neal.frager@amd.com>
-+---
-+ gcc/config/microblaze/microblaze.h      |   8 ++
-+ libgcc/config.host                      |   1 +
-+ libgcc/config/microblaze/linux-unwind.h | 102 ++++++++++++++++++++++++
-+ 3 files changed, 111 insertions(+)
-+ create mode 100644 libgcc/config/microblaze/linux-unwind.h
-+
-+diff --git a/gcc/config/microblaze/microblaze.h b/gcc/config/microblaze/microblaze.h
-+index 2b5bd52040f7f..fc8c4b8717545 100644
-+--- a/gcc/config/microblaze/microblaze.h
-++++ b/gcc/config/microblaze/microblaze.h
-+@@ -176,6 +176,14 @@ extern enum pipeline_type microblaze_pipe;
-+ #define DWARF_FRAME_RETURN_COLUMN \
-+ 	(GP_REG_FIRST + MB_ABI_SUB_RETURN_ADDR_REGNUM)
-+ 
-++/* Signal frames (config/microblaze/linux-unwind.h) record the
-++   interrupted PC in DWARF column 36, one past the hard registers,
-++   because column 15 must keep the interrupted r15.  Declaring it as
-++   the alternate return column makes init_dwarf_reg_size_table size
-++   it; otherwise _Unwind_GetGR aborts when unwinding through a signal
-++   frame, such as during pthread cancellation.  */
-++#define DWARF_ALT_FRAME_RETURN_COLUMN 36
-++
-+ /* Initial state of return address on entry to func = R15.
-+    Actually, the RA is at R15+8, but gcc doesn't know how 
-+    to generate this. 
-+diff --git a/libgcc/config.host b/libgcc/config.host
-+index 046156fa5e786..a685d5da7a107 100644
-+--- a/libgcc/config.host
-++++ b/libgcc/config.host
-+@@ -1050,6 +1050,7 @@ mcore-*-elf)
-+ 	;;
-+ microblaze*-linux*)
-+ 	tmake_file="${tmake_file} microblaze/t-microblaze t-fdpbit t-slibgcc-libgcc"
-++	md_unwind_header=microblaze/linux-unwind.h
-+ 	;;
-+ microblaze*-*-elf)
-+ 	tmake_file="${tmake_file} microblaze/t-microblaze t-fdpbit"
-+diff --git a/libgcc/config/microblaze/linux-unwind.h b/libgcc/config/microblaze/linux-unwind.h
-+new file mode 100644
-+index 0000000000000..b54704a065198
-+--- /dev/null
-++++ b/libgcc/config/microblaze/linux-unwind.h
-+@@ -0,0 +1,102 @@
-++/* DWARF2 EH unwinding support for MicroBlaze Linux.
-++   Copyright (C) 2026 Free Software Foundation, Inc.
-++
-++   This file is part of GCC.
-++
-++   GCC is free software; you can redistribute it and/or modify
-++   it under the terms of the GNU General Public License as published by
-++   the Free Software Foundation; either version 3, or (at your option)
-++   any later version.
-++
-++   GCC is distributed in the hope that it will be useful,
-++   but WITHOUT ANY WARRANTY; without even the implied warranty of
-++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-++   GNU General Public License for more details.
-++
-++   Under Section 7 of GPL version 3, you are granted additional
-++   permissions described in the GCC Runtime Library Exception, version
-++   3.1, as published by the Free Software Foundation.
-++
-++   You should have received a copy of the GNU General Public License and
-++   a copy of the GCC Runtime Library Exception along with this program;
-++   see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
-++   <http://www.gnu.org/licenses/>.  */
-++
-++#ifndef inhibit_libc
-++
-++/* Do code reading to identify a signal frame, and set the frame state
-++   data appropriately.  See unwind-dw2.c for the structs.  */
-++
-++#include <signal.h>
-++#include <sys/ucontext.h>
-++#include <asm/unistd.h>
-++
-++#define MD_FALLBACK_FRAME_STATE_FOR microblaze_fallback_frame_state
-++
-++static _Unwind_Reason_Code
-++microblaze_fallback_frame_state (struct _Unwind_Context *context,
-++				 _Unwind_FrameState *fs)
-++{
-++  const unsigned int *pc = (const unsigned int *) context->ra;
-++  struct sigcontext *sc;
-++  _Unwind_Ptr new_cfa;
-++  int i;
-++
-++  /* The outermost frame of a thread may leave a null or near-null
-++     return address; do not dereference it looking for the
-++     trampoline.  */
-++  if ((unsigned long) pc < 4096)
-++    return _URC_END_OF_STACK;
-++
-++  /* The kernel writes the signal trampoline onto the stack
-++     (struct rt_sigframe.tramp):
-++
-++	addik r12, r0, __NR_rt_sigreturn
-++	brki  r14, 0x8
-++
-++     and sets the saved r15 to the trampoline address minus 8 (the
-++     handler returns with "rtsd r15, 8"), so the unwound return
-++     address points 8 bytes before the trampoline.  */
-++  if (pc[0] == (0x31800000 | __NR_rt_sigreturn) && pc[1] == 0xb9cc0008)
-++    ;
-++  else if (pc[2] == (0x31800000 | __NR_rt_sigreturn) && pc[3] == 0xb9cc0008)
-++    pc += 2;
-++  else
-++    return _URC_END_OF_STACK;
-++
-++  /* The trampoline is the last member of the kernel's rt_sigframe and
-++     the ucontext sits directly in front of it.  Anchor there rather
-++     than at the CFA so the layout of the frame head does not matter
-++     (the kernel may insert an ABI argument-home gap at the front).
-++     uClibc's ucontext_t matches the kernel's struct ucontext.  */
-++  ucontext_t *uc = (ucontext_t *) ((_Unwind_Ptr) pc - sizeof (ucontext_t));
-++
-++  sc = (struct sigcontext *) &uc->uc_mcontext;
-++
-++  new_cfa = sc->regs.r1;
-++  fs->regs.cfa_how = CFA_REG_OFFSET;
-++  fs->regs.cfa_reg = 1;		/* r1, the stack pointer.  */
-++  fs->regs.cfa_offset = new_cfa - (_Unwind_Ptr) context->cfa;
-++
-++  /* pt_regs holds r0..r31 consecutively.  */
-++  for (i = 0; i < 32; i++)
-++    {
-++      fs->regs.how[i] = REG_SAVED_OFFSET;
-++      fs->regs.reg[i].loc.offset
-++	= (_Unwind_Ptr) &sc->regs.r0 + i * sizeof (unsigned long) - new_cfa;
-++    }
-++
-++  /* The interrupted PC goes into the alternate return column
-++     (DWARF_ALT_FRAME_RETURN_COLUMN, defined as 36 in
-++     gcc/config/microblaze/microblaze.h), one past the hard registers;
-++     column 15 above keeps the interrupted r15.  */
-++  fs->regs.how[__LIBGCC_DWARF_ALT_FRAME_RETURN_COLUMN__] = REG_SAVED_OFFSET;
-++  fs->regs.reg[__LIBGCC_DWARF_ALT_FRAME_RETURN_COLUMN__].loc.offset
-++    = (_Unwind_Ptr) &sc->regs.pc - new_cfa;
-++  fs->retaddr_column = __LIBGCC_DWARF_ALT_FRAME_RETURN_COLUMN__;
-++  fs->signal_frame = 1;
-++
-++  return _URC_NO_REASON;
-++}
-++
-++#endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
