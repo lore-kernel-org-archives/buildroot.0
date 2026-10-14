@@ -1,165 +1,258 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 797FACC6B1D
-	for <buildroot@archiver.kernel.org>; Wed, 14 Oct 2026 10:07:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A018CC6B1D
+	for <buildroot@archiver.kernel.org>; Wed, 14 Oct 2026 10:25:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2625A406A3;
-	Wed, 14 Oct 2026 10:07:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ADF5660783;
+	Wed, 14 Oct 2026 10:25:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UfF33ApGI-Wp; Wed, 14 Oct 2026 10:07:28 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 57579406B0
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791972448;
-	b=TLePQPYRdmEpXFIxGGUtG6cqJWGKBQk1YluY5INvwHPHFupPn9CaeRj2qHbx7/K03wrV
-	 tS5SAjqNr/zJigXMN1HLD0K25+4p3CkWt7Hds/J8fs76IthQpyNHiUhmMXWnneWtHeCI8
-	 0Fr4bDUsFeDRGM9CibSt1lE7+oQKHIcRv8woVTwhyn2rZmkL/m1qx+NqDRWWq19hBFqsi
-	 HBQU1Bs6V8jYME7psl9iKnrGUfiedZ2am/bltsRoiyOI7oCbet9l/8gwZAWbEk0HyuUjf
-	 uIRMT0v+YhPcM95eRvQWRsW8124vFR4aL/+Ee+FnltYrneMnYfv22bSEzyhrsBgFIGA==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id S0qCbBKIKedF; Wed, 14 Oct 2026 10:25:33 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org A46486078C
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791973533;
+	b=hBFWZDFKexv3l7883tVclOczaJzreVrLw3DBCMNYtI8YhOwgq5AAUmFwb5TV+zKLezqu
+	 c3CwrxbviGIsER1EwWVxXna20D2kKJ3SvLnouZEgoDnaiwQnN8swYe9qhI6ANaA1cYxM5
+	 vjhrEzrhhXXrSGFSe6W3xfdkBLren7e1nukeSFEeF1IUsQQwmEhMXpbeQI0Dr19kmpMUP
+	 WdhPu2HmETXPlcT2tJn/NFKy+dPUcKMboz2CDXrOeYsHdBvRSvdH52/ySk/oz0AzMbyae
+	 zH8xakrZRnISX7ka+PHMlzAu3U4hVSxi86gwpI+9mCx8klTDrcSYYHi/8EX6X2doz/w==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791972448;
+	c=relaxed/relaxed; t=1791973533;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:From:X-Google-Original-From:Date:To:Cc:Message-ID:
-	 MIME-Version:Content-Disposition:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=jryhAS/fRG8sY3cSs91/wyPjPjXgPg/9t3AnMpkFMuI=;
-	b=aYKdzUXMoqkdadhwPvXd2QD+m/aA1AKnCGnoE+4XtbcY9mA8kIHWOL4xuRlOeUPrzqKh
-	 phRWAPRtUX/aRqPynzxyMp2rkOemsFQrv05w01IpOQtO+AuSdIIh1DAOTzQuXgYT9i5c7
-	 3gcczU451E39oNpbRmbKbCfZCqXnRV0t0sVQqZu5MvZQdCpj6t4JsqRhnMGuZ6dzJGSJP
-	 ZtoXAgpL6na1ZAJixOfTQueMLiInLzrs9laOcy+9Jerlaul9kCa/1EtQeNZQTuudFpodx
-	 bp8v6TBBmGXq9SyNtgl9vQpuXqTpzIGWGTubmfdNQfr7xsZokYrMZgbREyQ0T1LaZSw==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 X-UI-Sender-Class:Received:Message-ID:Date:MIME-Version:User-Agent:To:
+	 References:Content-Language:Autocrypt:In-Reply-To:X-Provags-ID:
+	 UI-OutboundReport:Subject:X-BeenThere:X-Mailman-Version:Precedence:
+	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:Cc:Content-Transfer-Encoding:
+	 Content-Type:Errors-To:Sender;
+	bh=YrOfLtPSk4wdtXaTM28pMK3HyyCSpZBIQEmxoOYfpUE=;
+	b=rQJMJAqRkUZT8u2uLtlxGmNIM0xaBAOj9fNdsjcQlkD94O36JbAl/eaFe8uTKCPc/AXe
+	 eSiBM+F5q0e/Ud9eliBVzCcY6xv5oFj9UWAni8TZzk7BPHBBWdWtKQDxDnMTBL1q2UlqA
+	 DRkMkwzPbnFyk4WF6ZzcWWILcV4fwzM1gT1DFKRlRD5tikWyQWz4US23yhxECoUCwrcz+
+	 e9bxjsfQnM5bJK23b3cAvWBGhfnnGvJbBqjBOtGa8P4fIxb2tPBdvkK5E43odsWKGU7Ht
+	 wyVvg9f0V9ZeLvavgVNMVY3oeitHb4hZ+JNU3hh0Zt02zBTVf9ACFkV4Ot7Mitjzu3Q==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791972448;
-	bh=jryhAS/fRG8sY3cSs91/wyPjPjXgPg/9t3AnMpkFMuI=;
-	h=From:Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=NTeNsF+eIwPwc91WEuikq8Ooa5STrEvHJMy33+cpX1RAsOB2C9UDLHEvLiGhVyWZZ
-	 Dq0bdtx2UT0GsFa5cz2Il574vEVkRws77w0R6fV7eS0ixIVCPa4VmhciWwa0TEv137
-	 sL/GrVgZsewOv7o+UFaiobqeZ5zV69deuJoKv7E0+M6lfM9DNu/w4JZrj4BlCy5KNi
-	 1hKpLW7Bu4HPJcpx62efEre4wus0U9Uex94GNOz2oHSNdcNM2teBxHSeZAahfvSwug
-	 dU1xKu34cVYK6dWKAcb5V4FEKA1QC8wWo3Eh9QrDCuqcZxyo3EVeLCS7Oiz0MeRPca
-	 B/OLhkBnOP2eQ==
+	s=default; t=1791973533;
+	bh=YrOfLtPSk4wdtXaTM28pMK3HyyCSpZBIQEmxoOYfpUE=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=Dz4ikPXUBBh2RkqLvS8PAlr0oxqPB48VEKLNY582aX+tysYKNZyIH1PDaG9zqH+xE
+	 b1yyRsvLIwmrPyKVwSxIccbZroCiXy3BwSUirAne+/1TCkwXEr08N1HPuGodcLc3O+
+	 p2EX825JPZGEUKlXKhZgn5LkvH18FV5TKNtjBDzPDNYkcXQHkh7hlYNN4mdCmVyXsi
+	 QSz8HVmTQCaz5M90IGKkU1VcOkyWe10sCZNCY9oSDPHT1i3qsnw25IiJHhzLxk9xRO
+	 Yp+59xno2DmbyJzW8V0EqRk7+x4FZXrgrzBw33a73VZ6a3HE99F7vCFLSGYgWgVby+
+	 2ZfBH3xLQE0fg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 57579406B0;
-	Wed, 14 Oct 2026 10:07:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 43CAA2AC
- for <buildroot@buildroot.org>; Wed, 14 Oct 2026 10:07:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A46486078C;
+	Wed, 14 Oct 2026 10:25:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E95482AC
+ for <buildroot@buildroot.org>; Wed, 14 Oct 2026 10:25:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4118F40308
- for <buildroot@buildroot.org>; Wed, 14 Oct 2026 10:07:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CEF4E6078C
+ for <buildroot@buildroot.org>; Wed, 14 Oct 2026 10:25:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BLoWRjxK0ASc for <buildroot@buildroot.org>;
- Wed, 14 Oct 2026 10:07:25 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 5AEE9400E5
-Authentication-Results: smtp2.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::429"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791972445;
- b=BHq7JFnYbzZ6JinwbpsGShEJNpBAti9EIZ1gTJ+at1Hj9onQxrnyq5KIBPVPrxKINGVq
- d3175J849D6+2GR+xG4RnVa6S0z1GiE5W+sKuR12KvZy89yW99tyn0GemfWYBYoL8F1do
- LfINjyI1FLWC1+vSpaVdAVEjnYqPu2OSpsAZw2Ow7YSfhxKMBOxFU/dVCREPLabSmQeqP
- tkGCWINBC2s3uLqRrHqfk/MLnKtSfyXf0gKYXoy3QZI+ZzdRUKpZID5KmVLet5HtBqHrM
- msdOmRIsFYcgNtLLo8EbvOLWcyVwr9mEN4x+PcgHaotFnBKvJ7di0IPBa6ro7tJtgSA==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AOpaxY2Y_ULT for <buildroot@buildroot.org>;
+ Wed, 14 Oct 2026 10:25:32 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org DFDE36076B
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791973532;
+ b=li8WFdDQ7RaLSeDUzwCzE6jn6vyOlPd18RV7De6pMk0SYg7jEYG4i38P+Ofb4CY1kPFn
+ O6N5tcBg+/iVidSoJdIzjg4HxQAh4pcDADKuE407mfnFKCCUKTsNAeh/BtbYXfjT8fJGb
+ pl3gZEz54xRjMrch3d0dsQ0SYK6OrOZ7/JCakgPixzMuMT2og5zl4EJaP8RXC9zrzbOb8
+ SIdchbXBQsQkeotiBbhVqQWj3IqfffGXLPJkhnaAUgJjqZps2XGWIVUABJ2aytcv3teaG
+ E0NKqUiy/2pOySgcezAmNO9SdkQqiZq5bu/avYa2KC9tijr6V2WAV2MZtFj4j9KIdAg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791972445;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:
- X-Google-Original-From:Date:To:Cc:Subject:Message-ID:MIME-Version:
- Content-Type:Content-Disposition:Content-Transfer-Encoding;
- bh=IidrEU/1jSBJNKKRIM9LOzlZ8UcEoO5+6PILME1TXi4=;
- b=bpdmCSblS2nmIt/2MMMrNoBUHfIwQklEGve8NQOXkoqkeSDFLhrd0iXpnbWGAewb6gP5
- cryIHfcdJBsbMuRby6O3kWIJ4ODRo9/0YY3qMz/lgWWJcY+ejqv9Nmqc35x/pi3COn6eB
- p3xJdDkCc/X4pKq3/XuJnN+KO7Cf1bn4n1ogNGp25Tdd4ifUJ9LVEotW6dvAxCAA/2NRT
- LaT0CRLDgIRLkTnSTtiWW1MNAtWuuoeYXSD+bzvD1F9or4sD+9ggI9VKg1gX8bGwwz/H+
- AmprdRBk0d6RzKMogfCeO9TQJuelPpQ0aKswEkMu7vwK1Ge/DlqKTcKNtAIxB9HxdbA==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
- dmarc=pass header.from=gmail.com;
- dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=LZBC7299; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::429"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
- envelope-from=leo.denieul.yoshino@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=LZBC7299
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5AEE9400E5
- for <buildroot@buildroot.org>; Wed, 14 Oct 2026 10:07:25 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-48af4d4e61fso2818237f8f.2
- for <buildroot@buildroot.org>; Wed, 14 Oct 2026 03:07:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1791972443; x=1792577243; darn=buildroot.org;
- h=content-transfer-encoding:content-disposition:content-type
- :mime-version:message-id:subject:cc:to:date:from:from:to:cc:subject
- :date:message-id:reply-to:content-type;
- bh=IidrEU/1jSBJNKKRIM9LOzlZ8UcEoO5+6PILME1TXi4=;
- b=LZBC7299fYwXVS4/lbGChuFlCFuNWUfLgvFxLiIe82FiaF5ay5+LFld2BJOZuChft2
- K/v3+4G+7+XpmkZveGpIAjYi4Es+5+DqE7Vvj3C+5CdPfaqsc3pNRj+yLoVxPomSo3hU
- iRSiiU9ZbVESYCuIFr2nYvLNtODteC395vQPfv25ZiU3etv4AUzLKmVZaCwYPruRojsS
- i8tLFsh9Zaiq0zWmSsEcl2Gh+GlLyqkzUkZbpPTRJPRe2Qdj/YMsOYrk9yhVyoKGr92Q
- 3nKRF3iRRs7OCTTDAVOY3JCx7KnfrdImfS9T6Y1gY6X0EXWcLxtsDnzSzcciMSBNvB+4
- t3Dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1791972443; x=1792577243;
- h=content-transfer-encoding:content-disposition:content-type
- :mime-version:message-id:subject:cc:to:date:from:x-gm-gg
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
- :content-type;
- bh=IidrEU/1jSBJNKKRIM9LOzlZ8UcEoO5+6PILME1TXi4=;
- b=pNSUq4O2SfD8PVv35kLWFaneZb29fye20vSSfpDp27AfdL0IZRsjtDm3HsiNIhADTy
- ITHtfdsZXnE0v4c6VNeXaonxawUYttZLSXowM+InqFm3y0m0GRNXTDFh1bQOkSO5ArOe
- QbkObDigwdbpRlXQ522yNdLKiYC1TzumepD+n683IZu8zZm8FcrWGFV/6CntVy4bAviS
- 8s0k8C9EJtRoeoKoylNREkXcwObqQ3yxSKsPD9lWOoCFy9L9kO11hMvLO3ufuWypzPJG
- Uo7eBBvf/sYltWESPI2qdC2mCYdK7Ocq+xznHV++Zpc7iOFpeRA4vspv6zzUtx2dMK4I
- Rp2w==
-X-Gm-Message-State: AFq9FYIEFeXy0gvlrXFJAkTcS7A6LfSkNsQtMZ+dVXeB9UKvd8LWlkEs
- SJvJv/T/Ij0ar6RJoq+FhN4T0EEZnGmfD+8BIVnhDV5V1Fnk91btWDKNg7OJfQ==
-X-Gm-Gg: AYBFou2vzas+CZK3y0JJLqKmV8oBf2XbFLhIoQB6Notynd6phb9hISgCUKUscdEHWIG
- kHML9U41HHNhsuWARauvU3JPnO9IUOAmtFzu7+ZQ7Llw02VRY3qi6pyUhfLWStU7BI1u9FebKE8
- ZXg+76h9Srov3LTn7iDwT+LHHiYQTdRGkdF3D7vN95BQLfqh3h/rQvGXIqh/pU/XobGqGOMFYRc
- b40s1c8wsZqR8c7tP5yzt1XqJylQl1+6R7BlJF81qjH4GtSv0lU/bJ1mxgyi/lZuznrPb343vSI
- hqTdwW3WIA6tVAWveZQyMwqjXDbeWY13GEq/dG140xWNaCbNEQGTAaGbx4Njzb2dKRontq6UFuL
- ooZn8w+aqSXjtaXM8ihdaFUz9qn/w2FwYxJnIoaa6OGiQKndADc0b5Zq+u3CDmX7S1jgBtGL/4C
- YBh8ccuWBLBhZsihTpCf2Fhf1HyQajFUhDWWpK9F0OxvMuPj8lHrDrYn5gntPESlZYh5fnbTGOj
- sstjoswq5+ncZKGJz+iILWTK7cLhk3c9MbY6Kw3mnXjqDJmI6JyGcLL02mD4fQkQREMpD4mZaAR
- j15I
-X-Received: by 2002:a05:6000:29d1:b0:48d:c178:f6e9 with SMTP id
- ffacd0b85a97d-48dc178f70emr17882656f8f.20.1791972442619; 
- Wed, 14 Oct 2026 03:07:22 -0700 (PDT)
-Received: from leo-ThinkPad-P16s-Gen-4-AMD (free-mobile.vlq16.iliad.fr.
- [213.36.7.11]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48ded3874c6sm2220798f8f.18.2026.10.14.03.07.21
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 14 Oct 2026 03:07:21 -0700 (PDT)
-From: "=?iso-8859-1?B?TOlv?= Denieul" <leo.denieul.yoshino@gmail.com>
-X-Google-Original-From: =?iso-8859-1?B?TOlv?= Denieul <ldenieul@iliad-free.fr>
-Date: Wed, 14 Oct 2026 12:07:20 +0200
-To: buildroot@buildroot.org
-Cc: vjardin@free.fr
-Message-ID: <as9UWNi-ZHqXq6Sl@leo-ThinkPad-P16s-Gen-4-AMD>
+ c=relaxed/relaxed; t=1791973532;
+ h=Received-SPF:DKIM-Signature:X-UI-Sender-Class:Received:Message-ID:
+ Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+ Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
+ Content-Transfer-Encoding:X-Provags-ID:X-Spam-Flag:UI-OutboundReport;
+ bh=it9Tpq1E4/NLMmmJZDnYMUsu+vHkydpeojPMgbpZQIk=;
+ b=pWj491r6LIeYgZu2jmc9QD5za9Ffd/cXUb1kmRi+NFEiZ1hcDRGzfAlkNrmBOj1vGmdf
+ bIwxWvpRgJSumRFw8NJaAx/SccIDKUQoBokEFqjq2FK8ERD3TzAyJV3daaFAhWC4Tw7VE
+ 54J5hivdnJGRnYqLPjPxqS8kGMl40qtEcRO3sPtBQ3trd65R6dTGXziWtuzpIt5HcwOrv
+ cMbt731hWOltPEpnaAZ33jCgDKj9aU10c/PcpJfTkBCBL+sn+av+0GV7SlQN4OJ3NRAz9
+ LTuDCwpbALXPvU8C39H32G3Pr4EAy1OuFPThRy/otggyH07EaXG9snfxawG0RIw8RvQ==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ dmarc=pass header.from=gmx.de;
+ dkim=pass header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b="MFYe/Qg8"; 
+ arc=none smtp.remote-ip=212.227.15.15
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DFDE36076B
+ for <buildroot@buildroot.org>; Wed, 14 Oct 2026 10:25:28 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MxlzI-1wQjvM1c9W-017xqv; Wed, 14
+ Oct 2026 12:25:26 +0200
+Message-ID: <a84c070e-1798-41c2-9d7e-2d4748476629@gmx.de>
+Date: Wed, 14 Oct 2026 12:25:25 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-Subject: [Buildroot] [PATCH v3] package/qoriq-cst: new package
+User-Agent: Mozilla Thunderbird
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+References: <20261013232940.2690456-1-james.hilliard1@gmail.com>
+ <20261013232940.2690456-9-james.hilliard1@gmail.com>
+Content-Language: en-US, de-DE-1901, de-DE
+Autocrypt: addr=fiona.klute@gmx.de; keydata=
+ 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
+In-Reply-To: <20261013232940.2690456-9-james.hilliard1@gmail.com>
+X-Provags-ID: V03:K1:mR75W/EtwSKkhM2C30fKVimulBRPgtNphL408xMtxkDDH/DLcVY
+ 50Zpzf7PZAwV06GHKTe+aG8Rst0KlAEv1TIX/DfnubWVzE2Y2+isJeCC1gyjsKbuJHxomrc
+ vELtUeRayuhSPtvnbBcc21OHCbIp2bpjPaEVOO5/5UxTYYZLU0CbkQljWzc/ERGT+KUlua/
+ /8HfyXeS1X9ft2lWt4ofg==
+UI-OutboundReport: notjunk:1;M01:P0:990pTw54PbA=;q5UM3pq/7xPvieO9diUu0MBw/pe
+ 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
+ Ax9bhHMIIrPSaHCJ9dXmwUKZBWNILQ38
+Subject: Re: [Buildroot] [PATCH 9/9] boot/uboot: add
+ host-python-pkg-resources dependency for binman
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -171,689 +264,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-NXP Code Signing Tool (CST) for QorIQ and Layerscape secure boot.
+Hi James,
 
-Signed-off-by: L=E9o Denieul <leo.denieul.yoshino@gmail.com>
----
-Changes v2 -> v3:
- - rename to qoriq-cst, to avoid confusion with the unrelated i.MX
-   CST
+thank you for looking at this problem!
 
-Changes v1 -> v2:
- - bump to lf-6.18.37-2.1.0
- - replace the OpenSSL 3 patch by the commit merged upstream, as no
-   release tag includes it yet
----
- DEVELOPERS                                    |   3 +
- package/Config.in                             |   1 +
- package/Config.in.host                        |   1 +
- ...0001-common-port-to-openssl3-evp-api.patch | 438 ++++++++++++++++++
- package/qoriq-cst/Config.in                   |  12 +
- package/qoriq-cst/Config.in.host              |   8 +
- package/qoriq-cst/qoriq-cst.hash              |   2 +
- package/qoriq-cst/qoriq-cst.mk                |  45 ++
- 8 files changed, 510 insertions(+)
- create mode 100644 package/qoriq-cst/0001-common-port-to-openssl3-evp-api.=
-patch
- create mode 100644 package/qoriq-cst/Config.in
- create mode 100644 package/qoriq-cst/Config.in.host
- create mode 100644 package/qoriq-cst/qoriq-cst.hash
- create mode 100644 package/qoriq-cst/qoriq-cst.mk
+Am 14.10.26 um 01:29 schrieb James Hilliard:
+> Binman in older U-Boot versions imports pkg_resources to find entry
+> modules and read the missing-blob help text. Setuptools 82 no longer
+> provides this module.
+> 
+> Depend on the standalone host package when Binman is enabled, so older
+> U-Boot releases and vendor trees continue to work after setuptools is
+> updated.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 32ac338dc8..e1bf2a877b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2162,6 +2162,9 @@ F:	package/petitboot/
- N:	Lee Jones <lee.jones@linaro.org>
- F:	boot/afboot-stm32/
- =
+I'd rather have this optional (like the existing 
+BR2_TARGET_UBOOT_NEEDS_* options, unless you can find a simple way to 
+make it conditional on U-Boot version < 2025.10). Sure, with a config 
+option defconfigs with old U-Boot would have to be fixed, but otherwise 
+recent U-Boot versions have to pull in pkg_resources and its 
+dependencies even though they don't need it (if using binman).
 
-+N:	Leo DENIEUL <leo.denieul.yoshino@gmail.com>
-+F:	package/qoriq-cst
-+
- N:	Leon Anavi <leon.anavi@konsulko.com>
- F:	board/olimex/a10_olinuxino
- F:	configs/olimex_a10_olinuxino_lime_defconfig
-diff --git a/package/Config.in b/package/Config.in
-index a82e369aff..4c5e241a7c 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2730,6 +2730,7 @@ menu "Security"
- 	source "package/optee-test/Config.in"
- 	source "package/paxtest/Config.in"
- 	source "package/policycoreutils/Config.in"
-+	source "package/qoriq-cst/Config.in"
- 	source "package/refpolicy/Config.in"
- 	source "package/restorecond/Config.in"
- 	source "package/selinux-python/Config.in"
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 595caf9e7f..6a27a6cd4d 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -100,6 +100,7 @@ menu "Host utilities"
- 	source "package/python-xlrd/Config.in.host"
- 	source "package/python3/Config.in.host"
- 	source "package/qemu/Config.in.host"
-+	source "package/qoriq-cst/Config.in.host"
- 	source "package/qoriq-rcw/Config.in.host"
- 	source "package/qt6/Config.in.host"
- 	source "package/raspberrypi-usbboot/Config.in.host"
-diff --git a/package/qoriq-cst/0001-common-port-to-openssl3-evp-api.patch b=
-/package/qoriq-cst/0001-common-port-to-openssl3-evp-api.patch
-new file mode 100644
-index 0000000000..3477896a85
---- /dev/null
-+++ b/package/qoriq-cst/0001-common-port-to-openssl3-evp-api.patch
-@@ -0,0 +1,438 @@
-+From ef3aa97df6d2378eeb2dc53f6097ba79b04884db Mon Sep 17 00:00:00 2001
-+From: Vincent <vjardin@free.fr>
-+Date: Sat, 5 Sep 2026 01:41:20 +0200
-+Subject: [PATCH] common: port to the OpenSSL 3 EVP API
-+
-+Fix compilation: upgrade to OpenSSL 3.0.
-+
-+Side benefits: it gains the support of "RSA PUBLIC KEY" (PKCS#1)
-+and "PUBLIC KEY" (SubjectPublicKeyInfo) PEM files.
-+
-+Older toolchain and openssl kept "build"able.
-+
-+Signed-off-by: Vincent Jardin <vjardin@free.fr>
-+Upstream: https://github.com/nxp-qoriq/cst/commit/ef3aa97df6d2378eeb2dc53f=
-6097ba79b04884db
-+Signed-off-by: L=E9o Denieul <ldenieul@iliad-free.fr>
-+---
-+ common/crypto_utils.c           | 127 ++++++++++++++++++++++++-------
-+ tools/key_generation/gen_keys.c | 131 +++++++++++++++++++-------------
-+ 2 files changed, 178 insertions(+), 80 deletions(-)
-+
-+diff --git a/common/crypto_utils.c b/common/crypto_utils.c
-+index 9a83411..0882cd0 100644
-+--- a/common/crypto_utils.c
-++++ b/common/crypto_utils.c
-+@@ -34,36 +34,65 @@
-+  */
-+ =
+Best regards,
+Fiona
 
-+ #include <crypto_utils.h>
-+-#include <openssl/ssl.h>
-++#include <openssl/evp.h>
-++#include <openssl/pem.h>
-++#include <openssl/bn.h>
-++#include <openssl/rsa.h>
-++#if OPENSSL_VERSION_NUMBER >=3D 0x30000000L
-++#include <openssl/core_names.h>
-++#endif
-++
-++#if OPENSSL_VERSION_NUMBER < 0x10100000L
-++#define EVP_MD_CTX_new		EVP_MD_CTX_create
-++#define EVP_MD_CTX_free		EVP_MD_CTX_destroy
-++#endif
-++
-++static EVP_MD_CTX **hash_ctx(void *ctx)
-++{
-++	return (EVP_MD_CTX **)ctx;
-++}
-+ =
-
-+ /************************************************************************=
-***
-+  * Function	:	crypto_hash_init
-+- * Description	:	Wrapper function for SHA256_Init
-++ * Description	:	Wrapper function for EVP SHA256 init
-+  ************************************************************************=
-***/
-+ void crypto_hash_init(void *ctx)
-+ {
-+-	SHA256_CTX *c =3D (SHA256_CTX *)ctx;
-+-	SHA256_Init(c);
-++	EVP_MD_CTX *c =3D EVP_MD_CTX_new();
-++
-++	*hash_ctx(ctx) =3D c;
-++	if (c =3D=3D NULL || EVP_DigestInit_ex(c, EVP_sha256(), NULL) !=3D 1) {
-++		fprintf(stderr, "Error in initialising SHA256\n");
-++		exit(EXIT_FAILURE);
-++	}
-+ }
-+ =
-
-+ /************************************************************************=
-***
-+  * Function	:	crypto_hash_update
-+- * Description	:	Wrapper function for SHA256_Update
-++ * Description	:	Wrapper function for EVP SHA256 update
-+  ************************************************************************=
-***/
-+ void crypto_hash_update(void *ctx, void *data, uint32_t len)
-+ {
-+-	SHA256_CTX *c =3D (SHA256_CTX *)ctx;
-+-	SHA256_Update(c, data, len);
-++	if (EVP_DigestUpdate(*hash_ctx(ctx), data, len) !=3D 1) {
-++		fprintf(stderr, "Error in updating SHA256\n");
-++		exit(EXIT_FAILURE);
-++	}
-+ }
-+ =
-
-+ /************************************************************************=
-***
-+  * Function	:	crypto_hash_final
-+- * Description	:	Wrapper function for SHA256_Final
-++ * Description	:	Wrapper function for EVP SHA256 final
-+  ************************************************************************=
-***/
-+ void crypto_hash_final(void *hash, void *ctx)
-+ {
-+-	SHA256_CTX *c =3D (SHA256_CTX *)ctx;
-+-	SHA256_Final(hash, c);
-++	EVP_MD_CTX *c =3D *hash_ctx(ctx);
-++
-++	if (EVP_DigestFinal_ex(c, hash, NULL) !=3D 1) {
-++		fprintf(stderr, "Error in finalising SHA256\n");
-++		exit(EXIT_FAILURE);
-++	}
-++	EVP_MD_CTX_free(c);
-++	*hash_ctx(ctx) =3D NULL;
-+ }
-+ =
-
-+ /************************************************************************=
-***
-+@@ -79,7 +108,6 @@ int crypto_hash_update_file(void *ctx, char *fname)
-+ 	FILE *fp;
-+ 	unsigned char buf[IOBLOCK];
-+ 	size_t bytes =3D 0;
-+-	SHA256_CTX *c =3D (SHA256_CTX *)ctx;
-+ =
-
-+ 	/* open the file */
-+ 	fp =3D fopen(fname, "rb");
-+@@ -102,7 +130,7 @@ int crypto_hash_update_file(void *ctx, char *fname)
-+ 			break;
-+ 		}
-+ =
-
-+-		SHA256_Update(c, buf, bytes);
-++		crypto_hash_update(ctx, buf, bytes);
-+ 	}
-+ =
-
-+ 	fclose(fp);
-+@@ -112,14 +140,16 @@ int crypto_hash_update_file(void *ctx, char *fname)
-+ =
-
-+ /************************************************************************=
-***
-+  * Function	:	crypto_rsa_sign
-+- * Description	:	Wrapper function for RSA_sign
-++ * Description	:	Wrapper function for EVP_PKEY_sign
-+  ************************************************************************=
-***/
-+ int crypto_rsa_sign(void *img_hash, uint32_t len, void *rsa_sign,
-+ 			uint32_t *rsa_len, char *key_name)
-+ {
-+-	int ret;
-++	int ret =3D FAILURE;
-+ 	FILE *fpriv;
-+-	RSA *priv_key;
-++	EVP_PKEY *priv_key;
-++	EVP_PKEY_CTX *pctx =3D NULL;
-++	size_t sign_len;
-+ =
-
-+ 	/* Open the private Key */
-+ 	fpriv =3D fopen(key_name, "r");
-+@@ -128,7 +158,7 @@ int crypto_rsa_sign(void *img_hash, uint32_t len, void=
- *rsa_sign,
-+ 		return FAILURE;
-+ 	}
-+ =
-
-+-	priv_key =3D PEM_read_RSAPrivateKey(fpriv, NULL, NULL, NULL);
-++	priv_key =3D PEM_read_PrivateKey(fpriv, NULL, NULL, NULL);
-+ 	fclose(fpriv);
-+ 	if (priv_key =3D=3D NULL) {
-+ 		printf("Error in key reading %s:\n", key_name);
-+@@ -136,14 +166,23 @@ int crypto_rsa_sign(void *img_hash, uint32_t len, vo=
-id *rsa_sign,
-+ 	}
-+ =
-
-+ 	/* Sign the Image Hash with Private Key */
-+-	ret =3D RSA_sign(NID_sha256, img_hash, len,
-+-			rsa_sign, rsa_len,
-+-			priv_key);
-+-	if (ret !=3D 1) {
-++	sign_len =3D EVP_PKEY_size(priv_key);
-++	pctx =3D EVP_PKEY_CTX_new(priv_key, NULL);
-++	if (pctx =3D=3D NULL ||
-++	    EVP_PKEY_sign_init(pctx) !=3D 1 ||
-++	    EVP_PKEY_CTX_set_rsa_padding(pctx, RSA_PKCS1_PADDING) !=3D 1 ||
-++	    EVP_PKEY_CTX_set_signature_md(pctx, EVP_sha256()) !=3D 1 ||
-++	    EVP_PKEY_sign(pctx, rsa_sign, &sign_len, img_hash, len) !=3D 1) {
-+ 		printf("Error in Signing\n");
-+-		return FAILURE;
-++		goto out;
-+ 	}
-+-	return SUCCESS;
-++
-++	*rsa_len =3D sign_len;
-++	ret =3D SUCCESS;
-++out:
-++	EVP_PKEY_CTX_free(pctx);
-++	EVP_PKEY_free(priv_key);
-++	return ret;
-+ }
-+ =
-
-+ /************************************************************************=
-***
-+@@ -158,9 +197,15 @@ int crypto_rsa_sign(void *img_hash, uint32_t len, voi=
-d *rsa_sign,
-+ int crypto_extract_pub_key(char *fname_pub, uint32_t *len, uint8_t *key_p=
-tr)
-+ {
-+ 	FILE *fp;
-+-	RSA *pub_key;
-+ 	uint32_t key_len;
-++	int ret =3D FAILURE;
-++#if OPENSSL_VERSION_NUMBER >=3D 0x30000000L
-++	EVP_PKEY *pub_key;
-++	BIGNUM *modulus =3D NULL, *exponent =3D NULL;
-++#else
-++	RSA *pub_key;
-+ 	const BIGNUM *modulus, *exponent;
-++#endif
-+ =
-
-+ 	fp =3D fopen(fname_pub, "r");
-+ 	if (fp =3D=3D NULL) {
-+@@ -169,7 +214,11 @@ int crypto_extract_pub_key(char *fname_pub, uint32_t =
-*len, uint8_t *key_ptr)
-+ 		return FAILURE;
-+ 	}
-+ =
-
-++#if OPENSSL_VERSION_NUMBER >=3D 0x30000000L
-++	pub_key =3D PEM_read_PUBKEY(fp, NULL, NULL, NULL);
-++#else
-+ 	pub_key =3D PEM_read_RSAPublicKey(fp, NULL, NULL, NULL);
-++#endif
-+ 	fclose(fp);
-+ 	if (pub_key =3D=3D NULL) {
-+ 		fprintf(stderr, "Error in key reading %s:\n",
-+@@ -177,17 +226,32 @@ int crypto_extract_pub_key(char *fname_pub, uint32_t=
- *len, uint8_t *key_ptr)
-+ 		return FAILURE;
-+ 	}
-+ =
-
-++#if OPENSSL_VERSION_NUMBER >=3D 0x30000000L
-++	key_len =3D EVP_PKEY_size(pub_key);
-++
-++	/* get N and E */
-++	if (EVP_PKEY_get_bn_param(pub_key, OSSL_PKEY_PARAM_RSA_N,
-++				  &modulus) !=3D 1 ||
-++	    EVP_PKEY_get_bn_param(pub_key, OSSL_PKEY_PARAM_RSA_E,
-++				  &exponent) !=3D 1) {
-++		fprintf(stderr, "Error: %s is not an RSA public key\n",
-++			fname_pub);
-++		goto out;
-++	}
-++#else
-+ 	key_len =3D RSA_size(pub_key);
-+-	*len =3D 2 * key_len;
-+ =
-
-+ #if OPENSSL_VERSION_NUMBER < 0x10100000L
-+ 	/* copy N and E */
-+-        modulus =3D (BIGNUM *)pub_key->n;
-+-        exponent =3D (BIGNUM *)pub_key->e;
-++	modulus =3D (BIGNUM *)pub_key->n;
-++	exponent =3D (BIGNUM *)pub_key->e;
-+ #else
-+ 	/* get N and E */
-+ 	RSA_get0_key(pub_key, &modulus, &exponent, NULL);
-+ #endif
-++#endif
-++	*len =3D 2 * key_len;
-++
-+ 	/* Copy N component */
-+ 	BN_bn2bin(modulus, key_ptr);
-+ =
-
-+@@ -202,7 +266,16 @@ int crypto_extract_pub_key(char *fname_pub, uint32_t =
-*len, uint8_t *key_ptr)
-+ 	 */
-+ 	BN_bn2bin(exponent, key_ptr + key_len - BN_num_bytes(exponent));
-+ =
-
-+-	return SUCCESS;
-++	ret =3D SUCCESS;
-++#if OPENSSL_VERSION_NUMBER >=3D 0x30000000L
-++out:
-++	BN_free(modulus);
-++	BN_free(exponent);
-++	EVP_PKEY_free(pub_key);
-++#else
-++	RSA_free(pub_key);
-++#endif
-++	return ret;
-+ }
-+ =
-
-+ /************************************************************************=
-***
-+diff --git a/tools/key_generation/gen_keys.c b/tools/key_generation/gen_ke=
-ys.c
-+index da74cc7..c4f7495 100644
-+--- a/tools/key_generation/gen_keys.c
-++++ b/tools/key_generation/gen_keys.c
-+@@ -37,13 +37,18 @@
-+  *     Eric Young (eay@cryptsoft.com)"
-+  */
-+ =
-
-+-#define OPENSSL_NO_KRB5
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-+-#include <openssl/ssl.h>
-+ #include <unistd.h>
-+ #include <getopt.h>
-++#include <openssl/evp.h>
-++#include <openssl/pem.h>
-++#include <openssl/rsa.h>
-++#include <openssl/bio.h>
-++#if OPENSSL_VERSION_NUMBER >=3D 0x30000000L
-++#include <openssl/encoder.h>
-++#endif
-+ =
-
-+ #define RSA_LEN1	1024
-+ #define RSA_LEN2	2048	=
-
-+@@ -52,79 +57,99 @@
-+ #define PRI_KEY_FILE "srk.pri"
-+ #define PUB_KEY_FILE "srk.pub"
-+ =
-
-+-static int generate_rsa_keys(const unsigned int n, FILE *fpri, FILE *fpub)
-++#if OPENSSL_VERSION_NUMBER >=3D 0x30000000L
-++static int write_key_pem(EVP_PKEY *pkey, int selection, FILE *fp)
-+ {
-+-	RSA *srk =3D NULL;
-+-	BIGNUM *public_exponent =3D NULL;
-+-	int ret =3D 0;
-+-
-+-	/* Allocate space for RSA structure */
-+-	srk =3D RSA_new();
-++	OSSL_ENCODER_CTX *ectx;
-++	int ok;
-+ =
-
-+-	if (srk =3D=3D NULL) {
-++	ectx =3D OSSL_ENCODER_CTX_new_for_pkey(pkey, selection, "PEM",
-++					     "type-specific", NULL);
-++	if (ectx =3D=3D NULL)
-+ 		return -1;
-+-	}
-+ =
-
-+-	public_exponent =3D BN_new();
-+-	if (public_exponent =3D=3D NULL || !BN_set_word(public_exponent, RSA_F4)=
-) {
-+-		BN_free(public_exponent);
-+-		return -1;
-+-	}
-++	ok =3D OSSL_ENCODER_to_fp(ectx, fp);
-++	OSSL_ENCODER_CTX_free(ectx);
-+ =
-
-+-	ret =3D RSA_generate_key_ex(srk, n, public_exponent, NULL);
-+-	if (!ret) {
-+-		RSA_free(srk);
-+-		BN_free(public_exponent);
-+-		return -1;
-+-	}
-++	return (ok =3D=3D 1) ? 0 : -1;
-++}
-++
-++static int write_private_key(EVP_PKEY *pkey, FILE *fp)
-++{
-++	return write_key_pem(pkey, EVP_PKEY_KEYPAIR, fp);
-++}
-+ =
-
-+-	ret =3D PEM_write_RSAPrivateKey(fpri, srk, NULL, NULL, 0, 0, NULL);
-++static int write_public_key(EVP_PKEY *pkey, FILE *fp)
-++{
-++	return write_key_pem(pkey, EVP_PKEY_PUBLIC_KEY, fp);
-++}
-++#else
-++static int write_private_key(EVP_PKEY *pkey, FILE *fp)
-++{
-++	RSA *rsa =3D EVP_PKEY_get1_RSA(pkey);
-++	int ok;
-+ =
-
-+-	if (!ret) {
-+-		RSA_free(srk);
-+-		BN_free(public_exponent);
-++	if (rsa =3D=3D NULL)
-+ 		return -1;
-+-	}
-++	ok =3D PEM_write_RSAPrivateKey(fp, rsa, NULL, NULL, 0, 0, NULL);
-++	RSA_free(rsa);
-++
-++	return (ok =3D=3D 1) ? 0 : -1;
-++}
-+ =
-
-+-	ret =3D PEM_write_RSAPublicKey(fpub, srk);
-++static int write_public_key(EVP_PKEY *pkey, FILE *fp)
-++{
-++	RSA *rsa =3D EVP_PKEY_get1_RSA(pkey);
-++	int ok;
-+ =
-
-+-	if (!ret) {
-+-		RSA_free(srk);
-+-		BN_free(public_exponent);
-++	if (rsa =3D=3D NULL)
-+ 		return -1;
-+-	}
-++	ok =3D PEM_write_RSAPublicKey(fp, rsa);
-++	RSA_free(rsa);
-+ =
-
-+-#ifdef DEBUG
-+-	printf("public modulus (n):\n");
-+-	printf("%s\n", BN_bn2hex(srk->n));
-++	return (ok =3D=3D 1) ? 0 : -1;
-++}
-++#endif
-+ =
-
-+-	printf("public exponent (e):\n");
-+-	printf("%s\n", BN_bn2hex(srk->e));
-++static int generate_rsa_keys(const unsigned int n, FILE *fpri, FILE *fpub)
-++{
-++	EVP_PKEY *srk =3D NULL;
-++	EVP_PKEY_CTX *ctx;
-++	int ret =3D -1;
-+ =
-
-+-	printf("private exponent (d):\n");
-+-	printf("%s\n", BN_bn2hex(srk->d));
-++	ctx =3D EVP_PKEY_CTX_new_id(EVP_PKEY_RSA, NULL);
-++	if (ctx =3D=3D NULL)
-++		return -1;
-+ =
-
-+-	printf("secret prime factor (p):\n");
-+-	printf("%s\n", BN_bn2hex(srk->p));
-+-	printf("secret prime factor (q):\n");
-+-	printf("%s\n", BN_bn2hex(srk->q));
-++	if (EVP_PKEY_keygen_init(ctx) !=3D 1 ||
-++	    EVP_PKEY_CTX_set_rsa_keygen_bits(ctx, n) !=3D 1 ||
-++	    EVP_PKEY_keygen(ctx, &srk) !=3D 1)
-++		goto out;
-+ =
-
-+-	printf("dmp1 [ d mod (p-1) ]:\n");
-+-	printf("%s\n", BN_bn2hex(srk->dmp1));
-+-	printf("dmq1 [ d mod (q-1) ]:\n");
-+-	printf("%s\n", BN_bn2hex(srk->dmq1));
-++	if (write_private_key(srk, fpri) !=3D 0)
-++		goto out;
-+ =
-
-+-	printf("iqmp [ q^-1 mod p ]:\n");
-+-	printf("%s\n", BN_bn2hex(srk->iqmp));
-++	if (write_public_key(srk, fpub) !=3D 0)
-++		goto out;
-+ =
-
-+-	printf("RSA SIZE: %d\n", RSA_size(srk));
-++#ifdef DEBUG
-++	{
-++		BIO *out =3D BIO_new_fp(stdout, BIO_NOCLOSE);
-+ =
-
-++		if (out !=3D NULL) {
-++			EVP_PKEY_print_private(out, srk, 0, NULL);
-++			BIO_free(out);
-++		}
-++		printf("RSA SIZE: %d\n", EVP_PKEY_size(srk));
-++	}
-+ #endif
-+ =
-
-+-	RSA_free(srk);
-+-	BN_free(public_exponent);
-++	ret =3D 0;
-++out:
-++	EVP_PKEY_free(srk);
-++	EVP_PKEY_CTX_free(ctx);
-+ =
-
-+-	return 0;
-++	return ret;
-+ }
-+ =
-
-+ void usage(void)
-+-- =
-
-+2.53.0
-+
-diff --git a/package/qoriq-cst/Config.in b/package/qoriq-cst/Config.in
-new file mode 100644
-index 0000000000..9a12564d07
---- /dev/null
-+++ b/package/qoriq-cst/Config.in
-@@ -0,0 +1,12 @@
-+config BR2_PACKAGE_QORIQ_CST
-+	bool "qoriq-cst"
-+	select BR2_PACKAGE_OPENSSL
-+	help
-+	  NXP Code Signing Tool for QorIQ and Layerscape secure boot.
-+
-+	  The purpose of this variant is to verify the signatures of
-+	  the bootloader directly on the target before an update and
-+	  not to generate keys. It prevents the target from bricking
-+	  the board by verifying the signatures.
-+
-+	  https://github.com/nxp-qoriq/cst
-diff --git a/package/qoriq-cst/Config.in.host b/package/qoriq-cst/Config.in=
-.host
-new file mode 100644
-index 0000000000..c1e5d36e1f
---- /dev/null
-+++ b/package/qoriq-cst/Config.in.host
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_HOST_QORIQ_CST
-+	bool "host qoriq-cst"
-+	help
-+	  NXP Code Signing Tool for QorIQ and Layerscape secure boot.
-+	  Provides tools to generate keys, create security headers and
-+	  sign firmware images, especially the bootloader.
-+
-+	  https://github.com/nxp-qoriq/cst
-diff --git a/package/qoriq-cst/qoriq-cst.hash b/package/qoriq-cst/qoriq-cst=
-.hash
-new file mode 100644
-index 0000000000..70da431658
---- /dev/null
-+++ b/package/qoriq-cst/qoriq-cst.hash
-@@ -0,0 +1,2 @@
-+sha256  6a4febf221c894cd0566d4c35722b8df753b386b8871deedfed5b5f4d52e09c3  =
-qoriq-cst-lf-6.18.37-2.1.0.tar.gz
-+sha256  7c8437ed27fc42fb35a90e3be5f1dfbe1b877058df1784eeb59057ceb5acc8cc  =
-LICENSE
-diff --git a/package/qoriq-cst/qoriq-cst.mk b/package/qoriq-cst/qoriq-cst.mk
-new file mode 100644
-index 0000000000..0ce3a68fde
---- /dev/null
-+++ b/package/qoriq-cst/qoriq-cst.mk
-@@ -0,0 +1,45 @@
-+##########################################################################=
-######
-+#
-+# qoriq-cst
-+#
-+##########################################################################=
-######
-+
-+QORIQ_CST_VERSION =3D lf-6.18.37-2.1.0
-+QORIQ_CST_SITE =3D $(call github,nxp-qoriq,cst,$(QORIQ_CST_VERSION))
-+QORIQ_CST_LICENSE =3D BSD-3-Clause
-+QORIQ_CST_LICENSE_FILES =3D LICENSE
-+
-+QORIQ_CST_DEPENDENCIES =3D openssl
-+HOST_QORIQ_CST_DEPENDENCIES =3D host-openssl
-+
-+define QORIQ_CST_BUILD_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		CC=3D"$(TARGET_CC)" \
-+		LD=3D"$(TARGET_CC)" \
-+		CROSS_COMPILE=3D"$(TARGET_CROSS)"
-+endef
-+
-+define QORIQ_CST_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) \
-+		MANPAGE=3D"" DESTDIR=3D$(TARGET_DIR) \
-+		prefix=3D/usr install
-+endef
-+
-+define HOST_QORIQ_CST_BUILD_CMDS
-+	$(HOST_MAKE_ENV) \
-+	CFLAGS=3D"$(HOST_CFLAGS)" \
-+	LDFLAGS=3D"$(HOST_LDFLAGS)" \
-+	$(MAKE) -C $(@D) \
-+		CC=3D"$(HOSTCC)" \
-+		LD=3D"$(HOSTCC)" \
-+		CROSS_COMPILE=3D""
-+endef
-+
-+define HOST_QORIQ_CST_INSTALL_CMDS
-+	$(HOST_MAKE_ENV) $(MAKE) -C $(@D) \
-+		MANPAGE=3D"" DESTDIR=3D$(HOST_DIR) \
-+		prefix=3D/usr install
-+endef
-+
-+$(eval $(generic-package))
-+$(eval $(host-generic-package))
--- =
-
-2.53.0
-
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>   boot/uboot/uboot.mk | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+> index 96b8cd0d2e..1f98f1b268 100644
+> --- a/boot/uboot/uboot.mk
+> +++ b/boot/uboot/uboot.mk
+> @@ -304,6 +304,7 @@ ifeq ($(BR2_TARGET_UBOOT_USE_BINMAN),y)
+>   # https://source.denx.de/u-boot/u-boot/-/blob/v2024.04/tools/buildman/requirements.txt
+>   UBOOT_DEPENDENCIES += \
+>   	host-python-jsonschema \
+> +	host-python-pkg-resources \
+>   	host-python-pyyaml \
+>   	host-python-yamllint
+>   UBOOT_MAKE_OPTS += BINMAN_INDIRS=$(BINARIES_DIR)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
