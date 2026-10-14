@@ -1,211 +1,261 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B596CCC6B1A
-	for <buildroot@archiver.kernel.org>; Wed, 14 Oct 2026 16:46:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7067C3DA7A
+	for <buildroot@archiver.kernel.org>; Wed, 14 Oct 2026 17:10:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4F1AE407B2;
-	Wed, 14 Oct 2026 16:46:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7A55F60791;
+	Wed, 14 Oct 2026 17:10:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tbUlwAbXivmR; Wed, 14 Oct 2026 16:46:57 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 5F87A40560
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791996417;
-	b=obB8HyHEk3KQpUnIOT77fjC9aHW8lLoUIjLIjk227FSZRH/hjZ72CryIAfa6g7CFOfaV
-	 8lkSzfgz+tTPhhgBXGfPyhZf3tAUuQL8XhHacPStQ7DHdokGVOYm9R1NzKgdOcMUeLwgv
-	 4PpbkOL0h98aEuCfDYqjCYOsRigogyCApb6WFbTxv+M8E3xp8YXzaBr62e3pgvs3b95I3
-	 rbtUSlzjIPap2bLYoYz9yWUTBbimh6AQbbOgoLL70bLwNy+9ggCQT7Xtul42di4xpabgE
-	 SNMsViLeHtcHlPcihss1XRk86wpHyJZCldVO8T+qVjy0/Q+1uZ1gXO5p7CA+CD92hKQ==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1791996417;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9UDpaCCO_Gga; Wed, 14 Oct 2026 17:10:56 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 66A2F607CF
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=3; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1791997856;
+	b=nyckWRCqAnwuHYD12Y3LD58/dmzm+CCq11+SkQlnXvIWg3HoY9RyCwhjbGAAxZNknxjF
+	 VpP777Wt5jj0iBlVyUvRPPlzqRRFbkCZ1MeCc0yVoebcN57k2qep97QR8TCtoJcCMYDO9
+	 9OYdGSD74QtvAF/u+Yg3S4zxQXNdA3IuzxAfgt/y47Iz6HQIeWN0UNQK/uRKlNvQNG9aq
+	 9TBObyAWMFBjciibL5MlH7GZXL6bfFssaquY44BFHhySbSlljeMcMAzufuXzz3bAVZVpo
+	 /9fG/ZPU7FXVU0BpfUqeO/QzzeEyXdDuqdfQ8Lf/vHhzAQer2VemEJqWr3yx2F1nXrw==
+ARC-Message-Signature: i=3; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1791997856;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 X-UI-Sender-Class:Received:To:Cc:Date:Message-ID:X-Mailer:In-Reply-To:
-	 References:MIME-Version:X-Provags-ID:UI-OutboundReport:Subject:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:Received:Received:X-MS-Exchange-Authentication-Results:
+	 Received-SPF:Received:Received:Received:Received:Received:Date:
+	 Message-ID:MIME-Version:X-B4-Tracking:X-Change-ID:To:CC:X-Mailer:
+	 X-EOPAttributedMessage:X-MS-PublicTrafficType:
+	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
+	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-Exchange-RoutingPolicyChecked:
+	 X-OriginatorOrg:X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-Id:
+	 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:
+	 X-Authority-Analysis:X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Info:
+	 X-Proofpoint-GUID:X-Proofpoint-Spam-Details-Enc:
+	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details:Subject:
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=My2ypKjS1k+miMVHnMNfzkasqpEEGl5OQP2kCge0xO0=;
-	b=aNFTy1ZQgQFTfeqOnfIZSDEfDyfSup3EdmT2VmyqCmspe8RdVBBuXkjbToUJx9JJ3Ocq
-	 Ss1MZt5L3usBmbX/vmUcW4flV/FCcUXSEK4QZdZ5SbDbQN3bW/V2QZWmVSvsrQH5N8s2p
-	 kP2cm1TQkoyttk+n6creIxeMvYiAUyfF3weZyI2VPAITdLOXuYd+AmkjWgqKY0JtxqTl1
-	 Qj9+Co/29aZQ1VxOoM4yp+O0LX1kpmixxpDfshW5tajNfGDyB3X4b9X+jaTnFy3WRp3T/
-	 B07uRmRw46WFXsZRXjk6rLA8cQ0sWspwcfesppLHf7R0XLEpObtht+TITix8fov2uWA==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=WENZOb72QlsSQ1/KvAXHlUi7SOnTu/JInlFFD8c9K7o=;
+	b=P+eQR0zpCC+eStl5eTxmtV1MTRWZf08Zzcu+wvdrCmauiuBdLHQUmdlsnu2+UueKBNCU
+	 p/ns2RdoFVt91g6cEobO5I0lI8vs8tAT0wbDYD1oo2nGwCM7onSMR+RMroDZotVVSJKd4
+	 CH8KiUi1JfiFzcV9uBojKHLTZVrlwvt4R8S16pMCXemnqkNbpnuQBD/pj5adAG0Ib9TW5
+	 yz3gjddc/Oy6s3lHfDAkyGGJc3nY/RMorsdAMrdNQKG/kvfwN5ke7jZKWPKMVIyRw8kTd
+	 r1ESODeI5abmCw0U9lIw1xNabcWAFvWtj7s+hJF5ZZWzmtpIdYOSiU/KRBJah8ehhHw==
+ARC-Authentication-Results: i=3; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1791996417;
-	bh=My2ypKjS1k+miMVHnMNfzkasqpEEGl5OQP2kCge0xO0=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=GagVOjG6PnFqvh1qlfx8oDlAR7thSl+4GaCiaYTD/2Hg7CnkGkrSp0S6RJMMJfCRN
-	 QZQWcbaDczjfiv/0LlwTJUNqHGSug0p9EMzj3GMnrs+/LHHptNPZw7mcmui7+bAQpR
-	 mpmYEYOPg84b0w/L8O1E6vpZdoA9H7moHL1aN/2qoj515ASnAfsLHP+KMiA/9SzOXc
-	 yLpR+kh61lFJttYv8qSDf5PhCYUNQfH9Cdtq8x4oa6yy4gpcDubwKx/tI9lLf8ZPDe
-	 vL1+AGib1lFxMHfGrbSWoBNBgGe/5d+lLO6WIQC4+b+B80IVI9QLcycvkC+NobuSKi
-	 ByeRWmGuFqsQg==
+	s=default; t=1791997856;
+	bh=WENZOb72QlsSQ1/KvAXHlUi7SOnTu/JInlFFD8c9K7o=;
+	h=Date:To:CC:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=YltpDL366MlCjUdnCDTY1HC7I9Q02MDwpy0wFmNcxAqFFT6bJBqV1ESgIll3tebYz
+	 WnaXmybHCuQovCmCTJKtWvnOb8aqrrggpX7rzTYyQk0aY+wND1LieXt9HINIzM0u+9
+	 +XDrq/Q2PBgIfcmljeT7GkM6RHT8H9EqCJiJ4aaR8qpRefrxpWBil6BjTfOMZuUmSH
+	 KPPpx5R6Qg+713ZQ36DCKKQhpUMsCkXSEqY/imeuujRB29j0zDdT8KTFTF6/WXPHWH
+	 CeCutYzXUGtH250eFEgGuKxd/MhGLqE2mhrlSmyrcjd8NfSkcQxArQTKQOKjP95vG9
+	 uUIoCfkXFq8kQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5F87A40560;
-	Wed, 14 Oct 2026 16:46:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1CBB8A58
- for <buildroot@buildroot.org>; Wed, 14 Oct 2026 16:46:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 66A2F607CF;
+	Wed, 14 Oct 2026 17:10:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C961CA58
+ for <buildroot@buildroot.org>; Wed, 14 Oct 2026 17:10:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0E1EC80E25
- for <buildroot@buildroot.org>; Wed, 14 Oct 2026 16:46:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BB22B40363
+ for <buildroot@buildroot.org>; Wed, 14 Oct 2026 17:10:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Tg4kHcfKP2jq for <buildroot@buildroot.org>;
- Wed, 14 Oct 2026 16:46:54 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 9750D80E15
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1791996414;
- b=fXDOsUtzlLBdvG02NMLYAJA9eItlmniQ6LWDicH6/P8tAgnTIgRFHmJ49PXEXYSi1NZ2
- vulaIAJQFFoT+Bjqnce+4sfi9v+TWUl9ZYDp1BZWQaOuNz8Iw53RnbTmmpiNqTBIh0g7W
- iDS8D3PIIb+wehN6UVZnCtmgQWIAZlFHgqG9QOZE4eKCT7yt4kL6zozKlxleywttFFHLx
- 2fseq7SspW2X3+3HxepG18QED1W3iK1C/+kz67YDltq/3oyohgege1piaN5TmL3YLmL/G
- L55u7rVuMGgVAsfolUvNN0qJAC1n5eWZe/NMrbWZb16wwRDfmzd1/NpXa9q8WzNQrKQ==
-ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1791996414;
- h=Received-SPF:DKIM-Signature:X-UI-Sender-Class:Received:From:To:Cc:
- Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
- Content-Transfer-Encoding:X-Provags-ID:X-Spam-Flag:UI-OutboundReport;
- bh=2FuuJU2A1WoOZgH9V1v41WD74sy549RPh7lLkiqXFG8=;
- b=ruUarjP2XVx/3ZiL+eeq+Wn8UZnjIv2LuaeoKFQQb2YTOan1cxa6TmHMQIhagP5k8AKX
- 9wZUG9GutIlYwscfx7LHByecTCcY2ThFw4RfOAClOKhkwwdboVJz0bBjTj5BXOeFFBv0U
- DuZWvaGWOuVtMHdkUgYZ9Y8iUsaCMcPpvaRVzReZKevp6FVY+tYxyf8SG4IRH4Ftft579
- N396S80A1jV+tWF44Pd2hbRbRItHDkOOc0nHRelHunVJ02x+cbdd7ehgQFygHvxIRIrDG
- ytCmZa7pJQIF34IQEJmMleCOAiJLWJdP1CQs5Dbj0qiohQ6WzMmJ+UOmcpKy0o/LVNw==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
- dmarc=pass header.from=gmx.de;
- dkim=pass header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b="hTI3LX/Z"; 
- arc=none smtp.remote-ip=212.227.17.22
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9750D80E15
- for <buildroot@buildroot.org>; Wed, 14 Oct 2026 16:46:52 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MVvPJ-1x6tcY0U7x-00P55G; Wed, 14
- Oct 2026 18:46:47 +0200
-To: buildroot@buildroot.org
-Cc: Jarkko Sakkinen <jarkko@kernel.org>,
- "Fiona Klute (othermo GmbH)" <fiona.klute@gmx.de>
-Date: Wed, 14 Oct 2026 18:46:24 +0200
-Message-ID: <20261014164625.1474866-2-fiona.klute@gmx.de>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261014164625.1474866-1-fiona.klute@gmx.de>
-References: <20261014164625.1474866-1-fiona.klute@gmx.de>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GNDD55FYAqp5 for <buildroot@buildroot.org>;
+ Wed, 14 Oct 2026 17:10:54 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 38B06401A3
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=pass; t=1791997854;
+ b=F3tqrqGagW8PgnDqYe56wE5DzJsQ/Ndzv9jqcYMzv0ve+XTedrzvqVzYXEBLFywibzsv
+ xCz2FXWcM291EopeDenixUILr2mLuORV8OZ+7S7/15kMHKpmjcfsGd/zeS1NwBT7RbETK
+ pSoP/VOUfyaPP4M0S8uAGb7+dFua1OXoKgU1EixMqJeYWmTZYDLn/NEAxNMuZcrYk1/zo
+ NhJM0P496cM/BNyz8YEXhZsAmFNXILKSvZeeZvOt1b/kmqPfdMpNXp0NOkAT/4u+44pqF
+ FJ/wDqfxeOd3bOV8pGhpaIIQKnRSNkg7e5HY4uy0kP6SqU9eGPRzm3vvtPTfQcZog1A==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+ c=relaxed/relaxed; t=1791997854;
+ h=Received-SPF:Received:DKIM-Signature:Received:DKIM-Signature:
+ Received:Received:X-MS-Exchange-Authentication-Results:Received-SPF:
+ Received:Received:Received:Received:Received:From:Subject:Date:
+ Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:
+ X-B4-Tracking:X-Change-ID:To:CC:X-Mailer:X-EOPAttributedMessage:
+ X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+ X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+ X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
+ X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+ X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+ X-MS-Exchange-AntiSpam-MessageData-0:X-Exchange-RoutingPolicyChecked:
+ X-OriginatorOrg:X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+ X-MS-Exchange-CrossTenant-Network-Message-Id:
+ X-MS-Exchange-CrossTenant-Id:
+ X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp:
+ X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+ X-MS-Exchange-CrossTenant-FromEntityHeader:
+ X-MS-Exchange-Transport-CrossTenantHeadersStamped:
+ X-Authority-Analysis:X-Proofpoint-ORIG-GUID:X-Proofpoint-Spam-Info:
+ X-Proofpoint-GUID:X-Proofpoint-Spam-Details-Enc:
+ X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
+ bh=h2Ai8xBygr+iz5zTyOy/MRoOwprjEWV9JS1N5Rbr5pM=;
+ b=h4wG/BIwTe5pbLKdNvBbpaI9AC5D8Me2u8nw1MB9187P5SAtf5VMp1oZdBnWzoZSYQrZ
+ EB0LV2MY7sLvNz9dC6F5V4uq7BTnKGbSPeEi95M5RLlXoL8qj5GLn3bogIy2IkAKBjYIn
+ r8G/iT3PQn8vZitqDuh8wkkI4Fe+jdezi4s4B/7TIzrxvtV/UJlUyWRU4boHBz9nkAtbJ
+ w2c8lwnkrM7puDxp2oCiHnL1SQEjVmWTCeA7TZZuiWIkJ81jOzPgZ5B7NtOFjBK7z/iU0
+ A/V+hUlfi/kzaCkPkZRx/QISCZRiciFNa52GVHtjwJpuy3IEk+iSZyN3MscRb3mAbCw==
+ARC-Authentication-Results: i=2; smtp2.osuosl.org; 
+ dmarc=pass header.from=ti.com;
+ dkim=pass header.d=ti.com header.i=@ti.com header.a=rsa-sha256
+ header.s=proofpoint-05-2026 header.b="Kai79/l1"; 
+ dkim=pass header.d=ticloud.onmicrosoft.com header.i=@ticloud.onmicrosoft.com
+ header.a=rsa-sha256 header.s=selector1-ticloud-onmicrosoft-com
+ header.b=is9+IETG; 
+ arc=pass header.oldest-pass=0 smtp.remote-ip=148.163.154.28
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=148.163.154.28;
+ helo=mx0b-0002e601.pphosted.com; envelope-from=bb@ti.com; receiver=<UNKNOWN> 
+Received: from mx0b-0002e601.pphosted.com (mx0b-0002e601.pphosted.com
+ [148.163.154.28])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 38B06401A3
+ for <buildroot@buildroot.org>; Wed, 14 Oct 2026 17:10:52 +0000 (UTC)
+Received: from pps.filterd (m0374955.ppops.net [127.0.0.1])
+ by mx0b-0002e601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id
+ 69EEauQt3893206; Wed, 14 Oct 2026 12:10:51 -0500
+Received: from bn1pr04cu002.outbound.protection.outlook.com
+ (mail-eastus2azon11010071.outbound.protection.outlook.com [52.101.56.71])
+ by mx0b-0002e601.pphosted.com (PPS) with ESMTPS id 4h9ys5573j-1
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+ Wed, 14 Oct 2026 12:10:51 -0500 (CDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=OWw7cuK6tLV6nKBc0A4V0YGBdZCYAr1aq71qHDF2dE7kzdn3xfEY4yTaQ0zbA87Hw4PTjr5OLBEMJZo8f3/0ygTfqTteYIZO76u/oRfGEazgbkZ0BjZ2JX52WUx5v4ZqFKniBkv31yKBJexzAlpqBIbCfgJ8ihikzhh5jsRjUY2TzJYKVqtGlzKlA0RNDSpnFV4ne8FniOS/9fY1byPy8Xog3HzRXLE4AEHNSWNfVeeZMXu766YQ5GR+jhifLigoZwsngM1vaHvJRseDkR4r9Kd48hhFy/XNx5EB1BUJU/V2Lc4DIdoA+X0Tl07lyABcH4gLJD6fUlftBV3y18GxlQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=h2Ai8xBygr+iz5zTyOy/MRoOwprjEWV9JS1N5Rbr5pM=;
+ b=SONEqQsUqulZFhSBUjKurNNA14jP+mesHFxWHVVpZA4Um3LxLoGDyGdA+Zu5Ik0sOnIJUYxGHBveEJPam3GLK7pYxtdvpDJ5i5wnd0TjcFSMiB2npgQaiUbGOWbbAKquBZqj9ZmdprYmj2URZmDedB98dBlcCm7VtlRTt/MS0unCMSUCLTRVxYVf6eU8nwyUQKXTVwJnYeCs5QXEG2Zrd2yFB3WKrF9DfZ1wsFHWI0BB6LsfwNMWGWzMhaOIgDiJqeTFkkVTZjqu3NQEgQ1hqWTDgLrIl3vVvCMAgxP0+Mnq41rHaVDf4JV2xFsuCVc0JhpJtY0JU1KGenZZHI/c0A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 198.47.23.194) smtp.rcpttodomain=gmail.com smtp.mailfrom=ti.com; dmarc=pass
+ (p=quarantine sp=none pct=100) action=none header.from=ti.com; dkim=none
+ (message not signed); arc=none (0)
+Received: from MW4P222CA0011.NAMP222.PROD.OUTLOOK.COM (2603:10b6:303:114::16)
+ by PH0PR10MB4757.namprd10.prod.outlook.com (2603:10b6:510:3f::17)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.496.23; Wed, 14 Oct
+ 2026 17:10:48 +0000
+Received: from SJ1PEPF000026C8.namprd04.prod.outlook.com
+ (2603:10b6:303:114:cafe::98) by MW4P222CA0011.outlook.office365.com
+ (2603:10b6:303:114::16) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.496.5 via Frontend Transport; Wed, 14
+ Oct 2026 17:10:48 +0000
+X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
+ is 198.47.23.194) smtp.mailfrom=ti.com;
+ dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=ti.com;
+Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
+ 198.47.23.194 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.23.194; helo=lewvzet200.ext.ti.com; pr=C
+Received: from lewvzet200.ext.ti.com (198.47.23.194) by
+ SJ1PEPF000026C8.mail.protection.outlook.com (10.167.244.105) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.522.6 via Frontend Transport; Wed, 14 Oct 2026 17:10:47 +0000
+Received: from DLEE215.ent.ti.com (157.170.170.118) by lewvzet200.ext.ti.com
+ (10.4.14.103) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Wed, 14 Oct
+ 2026 12:10:15 -0500
+Received: from DLEE203.ent.ti.com (157.170.170.78) by DLEE215.ent.ti.com
+ (157.170.170.118) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Wed, 14 Oct
+ 2026 12:10:15 -0500
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DLEE203.ent.ti.com
+ (157.170.170.78) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45 via Frontend
+ Transport; Wed, 14 Oct 2026 12:10:15 -0500
+Received: from localhost (bb.dhcp.ti.com [128.247.75.137])
+ by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 69EHAF5T1775690;
+ Wed, 14 Oct 2026 12:10:15 -0500
+Date: Wed, 14 Oct 2026 12:10:10 -0500
+Message-ID: <20261014-uboot-fixes-v1-0-2676fd37a97a@ti.com>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:oQFhPbdeM5h8kTPP9+EuKdv8rIMvvtJAsTxxVy8wfZL5mcnrNtY
- FquHxy7xSBGLMuDfbWY9OaqjSDtHIpZzPbv7vJ+mL2YOGDcfWEPrsB43Sb57euHe0FBY6Ea
- rRSzHOv3kA0EJdE6ukzcglQLPC2u13Hk9W5icbPTBpmWO+NijtyGdnMo+5tkF2WPEa1ZCra
- x1J6o3T4C8pd0cNp2O6hA==
-UI-OutboundReport: notjunk:1;M01:P0:xniJ8w3qXTM=;eKlEWkJYC+hemzcA0l3HxjWcRXH
- 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
- =
-Subject: [Buildroot] [PATCH 2/3] package/libtpms: disable building manpages
+X-B4-Tracking: v=1; b=H4sIAHK3z2oC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzNDA0ND3dKk/PwS3bTMitRiXWNjUyNjE/NUo1RDQyWgjoKiVLAEUEN0LIR
+ fXJqUlZpcAjJCqbYWAD4+721vAAAA
+X-Change-ID: 20261011-uboot-fixes-3352347e2e11
+To: <buildroot@buildroot.org>
+CC: Anand Gadiyar <gadiyar@ti.com>, Xuanhao Shi <X15000177@gmail.com>, "Bryan
+ Brattlof" <bb@ti.com>
+X-Mailer: b4 0.15.2
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF000026C8:EE_|PH0PR10MB4757:EE_
+X-MS-Office365-Filtering-Correlation-Id: d31dcebb-94ab-4b07-7f4e-08df2a16175e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+ ARA:13230040|23010399003|82310400026|376014|36860700016|1800799024|10067099003|18002099003|261009221227099003|261009223027099003|56012099006;
+X-Microsoft-Antispam-Message-Info: wO4cHYwSigLOEX04hMFoNhG/TEt9ZUPxViHZynay/dCyseOO3Uq3nFOu0h6YitoiogBOnNIitaPr9RRX6+Mi//+fFqZW7DitltS+z3xC2P5qpbHUO8tJGcS4hbcqV9bVGtTEol7qhX4rPhdWUALu98kMvyVJWiZHHeKa49KcNs1wYVNbhr5GMxlKCEh45cuBBAoWXTwqOcgeE6FQENU7dHdMsuO/HOx8FW0UXKVjMQ8gHdInTqF2yC9zSjUvGsKY6sHXYmvzl/mKvGldDpCZwsDHw6cZ16iX+TsW/YQGO0ZYsTud0ynTt74duzr7JPqhP9PvI0sItFahd9d2WhmbsAhgkqXgsbJQxOxO6seXTSvh+peWgQacefn/VgXHB3UbSx/fCnqLD4RpLHZFiYcwkas3xSLM6W9O3pPTtvff21v8hWsg4ZzoUyQAS4cpUY36Q2aykEY6BhVsb+DWa8o0mjrFlu1I2DsDSyXpx8Zef7azkfsj2kxbUyT4TtFsocoOeovzgo2kgneDfhBWjfkLuQCqR/16Gvwj5imPVqOXEUL/9EMuk+9li0NgYbYXK3+SRgDACkRsRKCywIqU6j8KwWNscd+NeDoHkMO9g7huThQWVmntEEA6Iso7O4HzIpPSgKaWz1XcQ/J5vr1h5RRE6awTOhHVfqQpt/iuDGnYhA/cpITjKBnXp56ckL7q0MKz/pN0rr19qbzaCNKp2NQnOQ==
+X-Forefront-Antispam-Report: CIP:198.47.23.194; CTRY:US; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:lewvzet200.ext.ti.com; PTR:InfoDomainNonexistent;
+ CAT:NONE;
+ SFS:(13230040)(23010399003)(82310400026)(376014)(36860700016)(1800799024)(10067099003)(18002099003)(261009221227099003)(261009223027099003)(56012099006);
+ DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: jXtf2KbUxojg/MaXjiRgh8gHkKgf7snraUVN1T1HHRotpJ+a3FHqRGPJ8hNIj8TK6IZu9T8t3IcU9SZP8eIXl5UdZCPw8oUqv6NCDtqizG5jt5OO3rJaUHxioq1QTS+8Af03C+9ec0SbWy4HVUoskF4e9+qHiZXSQKaHRfQsh0SeTSIXoYahPlRzUIEiGxm/fiULlAdvIs0foaXo+90OQJhc/yjnwdcaBgnBMztrJew7pzgHhYA9n90JMLdCBkzT0J7c7sbhERLFOJpTXh4Xn7B/TvKy/opEQHm1vmSNoZG51ZyUa6JGyDLmTsxwmV2e2pgT2zFv95hELhs9fMtYFBMGFTuKX/JWZiVTLBNp2XrCm/4BV+4/DtH+KcUHPj6UTvgmd4reDspX1l3GmxdcNszyFDm4GqPbcKivfjHfN/i3ulUHTS8Q4m40+ptoS/Lm
+X-Exchange-RoutingPolicyChecked: bVXi9N+Ohng/eZWYRXQy+vuZI9pYJYjBSOv7e7shkCpooK8zl6pBjJU+0IhrWNt1Ronew0prIUkboUwxespFQ13uHvrWMSnSTg2dJtXNdufANNNI6703ONvuKTzU5KSYX7M2N+jPgVQ1dIq9+W33lnmetaBLC+vE6d4E74nORLXcYkx47jKGKFnU8LqVixGtfutoh8qrmWSeh8HucTmShvFcx0XxuzAEmo9D1sjpV6xJb0ITwRWx3FfikliL++8fFDzaD84pOgUWua7DaTm7yBloJo+3UErFjluOyTekwsmszheXjXL4y/zsvH7whedwTtf+aQQmNx4ttAYhQV5GNA==
+X-OriginatorOrg: ti.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2026 17:10:47.8324 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d31dcebb-94ab-4b07-7f4e-08df2a16175e
+X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7; Ip=[198.47.23.194];
+ Helo=[lewvzet200.ext.ti.com]
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PEPF000026C8.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4757
+X-Authority-Analysis: v=2.4 cv=ANGCXYlm c=1 sm=1 tr=0 ts=6acfb79b cx=c_pps
+ a=ht+bKkBNmLq2ln/DE6MnYA==:117 a=WotqVVQAdb04rnGuttW3Kw==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10
+ a=s63m1ICgrNkA:10 a=AlMIdn_sM9wA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Z8NIEmU8O1QQgoT56wFK:22 a=fPAWb5peG099m5CrUpKH:22 a=sozttTNsAAAA:8
+ a=olwg2ZC89XoP5fOhcdUA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: S0V3AlZZ6oH_gfzQe_SvQrmmJ1cmTVUH
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDE0MDA2OCBTYWx0ZWRfXxH/bs5WauJmC
+ KjeRqOXJKfLUieJcofVb8abBkSx4YGnUJ9FRNRlJBOESh8UhsfpKK/XAReVqhwh5J/B2wlXfDhq
+ YiJZQaI5xQP0+lrauPPup7BSNoxZ/HU=
+X-Proofpoint-GUID: S0V3AlZZ6oH_gfzQe_SvQrmmJ1cmTVUH
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDE0MDA2OCBTYWx0ZWRfX6RQTzepb270r
+ XqBgWsI+Kzlc23z6fvE9MMl9yJwNM4OZoVfJryqj0s9phc+erVndYitF09C5DlkDhXZXn47fi20
+ y88ltr+akXpJQr/FaOvHxlxoNvcgHsjA17Gfveasu76xvi3p7e3K9J2r61YCIsLI06MXMnboF4T
+ NclhQnNK8NMubX8rpxuexe+edvDNOd4G3WlrCaMPu3VpYiY7Vg7pMlqhcIePwkvmgJspk6x6b3/
+ kjQFerM9OB/Y/yjWq5gK+V1eLNpE689KEN+t51YC2lcm9PMt4kY/j6jgw/SyPpKsXaSshjBp5Sj
+ ojYYp07IwRbvu9kHjeDWwALt2y6fgoHmO7LhvVq7M3wa9y62wdZgAKdQMNrz1G85V7lgyBjkkhm
+ YuYDBcaZwc8d+UfYKLaheGeJIxGhYqVjVPXkZh+PWDZRaJtdhG8hqCRlkv4jyFuFL2vpEkvUEtV
+ cxZg1cTHDZi3sCmnIqw==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-10-13_01,2026-10-14_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 spamscore=0 suspectscore=0 adultscore=0 phishscore=0
+ clxscore=1011 impostorscore=0 priorityscore=1501 malwarescore=0
+ lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2610080000
+ definitions=main-2610140068
+Subject: [Buildroot] [PATCH 0/4] Version bump for TI reference boards and
+ beagleplay
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -217,97 +267,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
+From: Bryan Brattlof via buildroot <buildroot@buildroot.org>
+Reply-To: Bryan Brattlof <bb@ti.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Fiona Klute (othermo GmbH)" <fiona.klute@gmx.de>
+Hello Everyone!
 
-Libtpms builds manpages using pod2man, and fails if it is not
-available. The patch adds support for --disable-docs, which Buildroot
-passes by default. Found while building in a container with minimal
-dependencies.
+This small series bumps the baseport versions to their stable releases
+for TI's K3 boards along with the beagleplay.
 
-Fixes: b2eec8c6265a38cdba1afadf7f60e0fd00f3b448
+There is a patch we need to backport in U-Boot to remove the Python 2
+macros it's still using to be able to generate the final images using
+U-Boot's binman system. I'm not sure this is the best way to do this but
+I'm open to suggestions :)
 
-Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
+Happy Hacking
+~Bryan
+
+Signed-off-by: Bryan Brattlof <bb@ti.com>
 ---
- ...ld-sys-Allow-disabling-manpage-build.patch | 61 +++++++++++++++++++
- 1 file changed, 61 insertions(+)
- create mode 100644 package/libtpms/0002-build-sys-Allow-disabling-manpage-build.patch
+Bryan Brattlof (4):
+      configs/ti_am62ax_sk: bump tfa, linux and uboot versions
+      configs/ti_am62px_sk: bump tfa, linux and uboot versions
+      configs/ti_am64x_sk: bump tfa, linux and uboot versions
+      configs/beagleplay: bump tfa, linux and uboot versions
 
-diff --git a/package/libtpms/0002-build-sys-Allow-disabling-manpage-build.patch b/package/libtpms/0002-build-sys-Allow-disabling-manpage-build.patch
-new file mode 100644
-index 0000000000..20849db49d
---- /dev/null
-+++ b/package/libtpms/0002-build-sys-Allow-disabling-manpage-build.patch
-@@ -0,0 +1,61 @@
-+From 6e688d2bd1e6e1545fdb25bcfeee28f78240cbfb Mon Sep 17 00:00:00 2001
-+From: Fiona Klute <fiona.klute@gmx.de>
-+Date: Wed, 14 Oct 2026 17:31:09 +0200
-+Subject: [PATCH] build-sys: Allow disabling manpage build
-+
-+In builds for embedded systems (e.g. Buildroot) manpages are not
-+needed, and building them adds a dependency on pod2man. Allow passing
-+"--disable-docs" to configure to disable building manpages.
-+
-+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-+Upstream: https://github.com/stefanberger/libtpms/pull/641
-+---
-+ Makefile.am  | 5 ++++-
-+ configure.ac | 6 ++++++
-+ 2 files changed, 10 insertions(+), 1 deletion(-)
-+
-+diff --git a/Makefile.am b/Makefile.am
-+index 03ed7e65..9d0ea053 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -23,10 +23,13 @@
-+ 
-+ SUBDIRS   = \
-+ 	include \
-+-	man \
-+ 	src \
-+ 	tests
-+ 
-++if ENABLE_DOCS
-++SUBDIRS += man
-++endif # ENABLE_DOCS
-++
-+ ACLOCAL_AMFLAGS = -I m4
-+ 
-+ EXTRA_DIST = \
-+diff --git a/configure.ac b/configure.ac
-+index b19db106..0fc928c8 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -282,6 +282,11 @@ AC_ARG_ENABLE([test-coverage],
-+   ]
-+ )
-+ 
-++AC_ARG_ENABLE([docs],
-++    [AS_HELP_STRING([--disable-docs], [Disable building documentation])],,
-++    [enable_docs=yes])
-++AM_CONDITIONAL(ENABLE_DOCS, [test "$enable_docs" = "yes"])
-++
-+ LT_INIT
-+ AC_PROG_CC
-+ AC_PROG_CXX
-+@@ -392,5 +397,6 @@ echo "Use openssl crypto for  : $use_openssl_functions_for"
-+ echo "Test coverage           : $enable_test_coverage"
-+ echo "Static build            : $enable_static"
-+ echo "Statically linked tests : $enable_static_tests"
-++echo "Build documentation     : $enable_docs"
-+ echo
-+ echo
-+-- 
-+2.55.0
-+
--- 
-2.55.0
+ .../arm-trusted-firmware/arm-trusted-firmware.hash |  2 +
+ .../beagleplay/patches/linux/linux.hash            |  4 +-
+ ...place-removed-SWIG-Python-2-compatibility.patch | 65 ++++++++++++++++++++++
+ ...place-removed-SWIG-Python-2-compatibility.patch | 65 ++++++++++++++++++++++
+ .../beagleplay/patches/uboot/uboot.hash            |  2 +-
+ .../arm-trusted-firmware/arm-trusted-firmware.hash |  2 +-
+ board/ti/am62ax-sk/patches/linux/linux.hash        |  2 +-
+ ...place-removed-SWIG-Python-2-compatibility.patch | 65 ++++++++++++++++++++++
+ ...place-removed-SWIG-Python-2-compatibility.patch | 65 ++++++++++++++++++++++
+ board/ti/am62ax-sk/patches/uboot/uboot.hash        |  2 +-
+ .../arm-trusted-firmware/arm-trusted-firmware.hash |  2 +-
+ board/ti/am62px-sk/patches/linux/linux.hash        |  2 +-
+ ...place-removed-SWIG-Python-2-compatibility.patch | 65 ++++++++++++++++++++++
+ ...place-removed-SWIG-Python-2-compatibility.patch | 65 ++++++++++++++++++++++
+ board/ti/am62px-sk/patches/uboot/uboot.hash        |  2 +-
+ .../arm-trusted-firmware/arm-trusted-firmware.hash |  2 +-
+ board/ti/am64x-sk/patches/linux/linux.hash         |  2 +-
+ ...place-removed-SWIG-Python-2-compatibility.patch | 65 ++++++++++++++++++++++
+ ...place-removed-SWIG-Python-2-compatibility.patch | 65 ++++++++++++++++++++++
+ board/ti/am64x-sk/patches/uboot/uboot.hash         |  2 +-
+ configs/beagleplay_defconfig                       |  9 +--
+ configs/ti_am62ax_sk_defconfig                     |  8 +--
+ configs/ti_am62px_sk_defconfig                     |  8 +--
+ configs/ti_am64x_sk_defconfig                      | 10 ++--
+ 24 files changed, 552 insertions(+), 29 deletions(-)
+---
+base-commit: acbcc911b71f93bb7ea9400aa19713f3464c8e69
+change-id: 20261011-uboot-fixes-3352347e2e11
+
+Best regards,
+--  
+Bryan Brattlof <bb@ti.com>
 
 _______________________________________________
 buildroot mailing list
