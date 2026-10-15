@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 328B8CCF2C1
-	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 13:11:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE336CCF2C2
+	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 13:11:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C9658610AF;
-	Fri, 16 Oct 2026 13:11:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ED508610B8;
+	Fri, 16 Oct 2026 13:11:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8hNo-51rGFS7; Fri, 16 Oct 2026 13:11:48 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org BA505610A7
+ id JjuralWMgMsx; Fri, 16 Oct 2026 13:11:50 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org B1C6861164
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792156296;
-	b=rMcpgtmEqr2ppqjIvDArvT3LG4Tusecu2+JNFLlW5mQauhihV/tLbTdpS+bL8amCZW85
-	 pQYgEZB1cjrZou1Ltf50YmWzyzmfUn26mX+Bm6Ull7p7UITxpk/kjVs0uwmOuzATx0dr6
-	 5t66xV5k3ApnC7H6Jd4QUMKfQTljo1RLvhNWvfFkQYNStLXT2pVOFxglFuPhIpiHYXHVK
-	 KgN0ax8faDKvYAU7fPam6sfOI/+wr4ZLy+Z9SiiRvDYcZtV5EJT918pH4lXAcLEPWAjDB
-	 p8Zj80xwXlZWnhD7DI1eQEKWzDtE4cYzFDbSzhaP6ta666t957dtPzOFPhXWzOhX4lw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792156299;
+	b=sDAJLOVuKUh+T2z4kfPPjGGv5T4hVaD9xG60pAKjzh2m9OcGfULSD9g/Ew5oTYqqlZ0W
+	 lGzpkBeSVLLDxxGaHDRa/8jFjMN2HvnOL1dlWO2s46qyOSNtk5xL8wrvzg7+cK/0GRv0y
+	 QuQEemECva+WGdljY40QW1MXY/UBQlKmtsxYlCjl+d6Rdb10GsEQOqjH6TBcJ8aQWBBXl
+	 0lUYPKSo6IWeF2tPy9wgJHbL1IRSRr4SRHpfNrQkJG0YJgQVc9tkvm6af6qoyk3M6Zsx1
+	 qkWfOWsCb+o1qCZ9yH0UPgDNA6roJZuBDkLnlijdCI37o9MGgLV3Dh0VpeT/JvCRdDQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792156296;
+	c=relaxed/relaxed; t=1792156299;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=hG9QzRNPWB0YzFCYp9G/Ptcg6l+HHI6J1McHKAfnjBM=;
-	b=X47rWx0UODMEo1/wKNafyHnWHnSxO9bDheAMhkfaXQSnkQrDCCzkhB6ImRgr+mX63obm
-	 W+FZeRaaq9TO4YEafJISxnb/dXqMGF3jdJ6blgeE98+/tpqNzL+Lwp4bDoM37RfklLdRj
-	 xqCWQXgRcciQshrx1kMuk8SXomMZvor83cGE5rbt3xuWZIbr3glf0C6Yi9itN0VAWlDIk
-	 vcFSYL11fgWT9Aj/of5llZ3KWRaxD3CZetBy1EJnTphMBnQHXfAZJKjEY6G7jQaJaFI96
-	 b2UVU9NnxuZGa115Nt6pUgR/H6pJRHF+JR9CLOqR9MHIvRo4E22MIRiwLLwzPQ6l98Q==
+	bh=OUnM9BCvGnJre3FgMKbYt0b/KWS1o+sm98KgCQQCXQY=;
+	b=QskdsQpNJD6PmNOeThGaIWin2742+1mXhpIsxIfPzXE9Y9v8sI4RB5WPNPbu3iBRpclO
+	 I3qMMF2bWN44KoQwcrIYXPcphg9RU78InrfmziZHBgdBKc3bbuxxNbOnpLVsGzAlnRzTR
+	 9a4Cd3gzMEZTtoa1EVWX7mbIaBUbAKMtGduEMyyki1I2u4SITlyn7iNlgf9E3qGb2te03
+	 0wncnMcYBJ9wnCmcrTNkNo7BQYnfxQi+j4tkK0ULMzy6GvK50nFj0XuPoY3MrtRVHKLUC
+	 9QDzBaCkekH5nJ66KnnshXRuw5KSMIh8ATn2LAQh+8VrdfWWDa3+dgqNEXgU/3GTs0Q==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792156296;
-	bh=hG9QzRNPWB0YzFCYp9G/Ptcg6l+HHI6J1McHKAfnjBM=;
+	s=default; t=1792156299;
+	bh=OUnM9BCvGnJre3FgMKbYt0b/KWS1o+sm98KgCQQCXQY=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=jPIQkOnGpfXyu/hj8d+y0T1SBl/m6/2XoGZ/ZR9ARc35EwYFlpZOhFx1dbz7yMXSE
-	 0QaojCGW4oDZn9ywEWqzHrVbo+M4LaN0CYwJpsZWXTb+owXgK43DpI2DeTolC3xB+O
-	 remXkqiANOBhY39L3bSSFlaUSSW5Zh20+olSaTOIwyOlD6cAUJye4ufl62+eH3VUx5
-	 0uTO8ZgN/tsWSVsX7tWkt4JEnpAQL4ZAuPTXKhmWV0lucncRxWI/yHMOQt0P0+WCtN
-	 YAEk3wEUFTQSZQx4x/JYuS8qNTlm1qbiNoCPqWreCUvpNrau8yHvw4wl8JZP1DRLiZ
-	 VfTAvVRGIS0zg==
+	b=D6MJ1WqbxX8I9RO77LXGKKiguQ0x2+UwXbrSBA8KsaaDsrB3n1YjF1ft1x3wxpuoY
+	 hLnPscsiiJQ4JjjDgsEXP49OTqVKlZdMUtaTztg0SrUQ5w2XeUGhcHppbaPcFV1T0K
+	 +WN2AxbbO+WDAkO3tLOsngtnx9CRGfRpkLJTuE3G3JBJvlUdEX/PCGt5Kl77xs58zj
+	 fuq7nJEBxwLV5Iu66tOvmzB1gOaNTjnAmEOM1h/YDhSiiv0s3YTvBZRBkRNHeTDAMb
+	 MyyyImWqTQyH43DE9G+ftBnKa9znPmI82uxGcbYmv0niIHwqyW9pRvGI5iley5lPuh
+	 6j+3etCr500iQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BA505610A7;
-	Fri, 16 Oct 2026 13:11:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B1C6861164;
+	Fri, 16 Oct 2026 13:11:38 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 077E3105
+ by lists1.osuosl.org (Postfix) with ESMTP id 206F2105
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:09:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E1DDA40474
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:09:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 060664016B
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:09:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6giBgp1XGsZ8 for <buildroot@buildroot.org>;
+ id AO9wQCsjE-_C for <buildroot@buildroot.org>;
  Fri, 16 Oct 2026 13:09:53 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 2D51D4016B
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 50EEF4016D
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792156193;
- b=sx0ZM5JvYrH/2EJml8O2QX1pRMq1Rgk04Dai55YVqrIdp5UPohsd1AYLEA7qLmEzzjWX
- H3f/iRbh2DV87s2KwHYc8/a6F+C5mkKBPHMwIxE7KYnK+g5HlhRyCB+M5g6IsiIjjMLVg
- b+b9jFYnFyiaPT18xKGxNdNAwSJWSlX6DyC1ACCDeTTLbOjzp8pTbMQ5Ajo0HED9fxPev
- ycd+sN5uvKOvo6PdOwTN3uRceOEuYnPNP1cbh79YxxnDCAoRBLTq3r14hvBARjOFiSwha
- OJ4LDVewTmlwL3ljyj7XA8BTQIbKJej9BVZMWQu6PDE6OWZfhgGlBEggxwLH+ZKgDNw==
+ b=UrAtYjG/G4CHc3kKSMO5tYJbS5q96lra8I7hXEkBehAJ8S0FfsfcSdt9TPYGcoYp82Xp
+ 6N8KxfSvAN5RMv/b6dhmQD52bpdrQKBIJMoQGkMU5b2YDLEbY+dR4sO83MfNh1H4zWU5+
+ mBQWYnLohMQCKbjtrZy+uGzUTwmjrtF9pPTxVkdZrDIyOX4A/2mhKseB5sfvoE3zNPsmN
+ L5Hlq070iZw3m6xF9oj0c7vh+wFjmQu3sK3AayyNZHxpf6l+veQUDNwTHiA1vl7SMP3mR
+ ug1gGNQzGDGP3wmYY/ju4mqxKOArVT3W+ICaYsxLB4vKZKQAIdvOPrj/vewbtlQ5Big==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1792156193;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=2GGIWFCbNEeJcnl7EXlahRKnnTDmSFdcoHA3DpWJgyk=;
- b=YlC/Y5kHHbwMQlFmK12sy3OTmuJp4tbNfffFATuD3jxtHIEGuwXGzCDNZEPyZAaKP+ag
- N0NxeDicD6WGPnoWIAuSLsoZuqugib3HCEyCW/rLbbw9aO1iIiZISr4Y9La8mAIxNHT27
- QZ/9QwvX2mWmathIXcnK0bkWgqdTqaxmPiD8PkH/6zdpMWa1wYwYclfnYZe4b/A91zSDR
- UryqlMVHUPcyxiY+aYir8oUvyb+x/TQkQAeiKYV2cENlplV/MYKu3CTJa+uObPSL/XO2g
- RhyB3ciFgNJNi0gAP80hSP7BuX10qRXEfe20r5ZFudBDLOqrIdPmC15kpWpPVuT/pqQ==
+ bh=Q4eqeoCXsCyJ6nF4IY3cK74rj6nqbio1tEwF+YJWQp0=;
+ b=Y8zs/LW2HNRz5nv00QNqj2BWdcz+kIWaCzVFrstQYTT+wZeXwQDjP3u4end6wZAGK6yT
+ eadH6VZT91Isujf+w295W15jeyaXIrD7VVSVd/cWkptxsi+R6Gg+VreInlH67kyfml4tJ
+ BwZFTVk3y5/SaqdNUit6pr9rj9NIENU95in/Nl4Nq/Yke7SrXCNMvQctxkfVwOj60RU9w
+ bg0NQRuMMU/lZqKsxGynBxMvNIbdy7jj0HgOIRRMowh57VriPGLeFWk/0N6LfKT4YBgZD
+ VBEsy/ciiGKvZAs7sE/Jcjj+Jf02JJR994vytOwJgu10k891ila/alTZxjON3LSTW+Q==
 ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2D51D4016B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 50EEF4016D
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:09:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1D3EA960D9; Fri, 16 Oct 2026 13:08:32 +0000 (UTC)
+ id 40E5895BD2; Fri, 16 Oct 2026 13:08:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 Oct 2026 15:14:44 +0200
+Date: Thu, 15 Oct 2026 15:14:52 +0200
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: dce16261bdc05431e3d9be75c97eb6e37cb16ae6
-X-Git-Newrev: 3ac0f22f90ed9a132d3568d6926a76df38ddeee0
+X-Git-Oldrev: 500860e2f0cd5363ed8473f8ff17f8a829e5093d
+X-Git-Newrev: 941072daedb73650ae2c59069c8efc79291951af
 X-Patchwork-Hint: ignore
-Message-Id: <20261016130832.1D3EA960D9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/cpp-httplib: link
- with libatomic if needed
+Message-Id: <20261016130832.40E5895BD2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/nnn: add
+ BR2_TOOLCHAIN_HAS_THREADS dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,75 +115,56 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0998096238094241239=="
+Content-Type: multipart/mixed; boundary="===============1496255656164481656=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0998096238094241239==
+--===============1496255656164481656==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3ac0f22f90ed9a132d3568d6926a76df38ddeee0
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/941072daedb73650ae2c59069c8efc79291951af
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-Buildroot commit 8dad17ea06260ef0bd23eebc47c95a8510310bf5 bumped the
-package from 0.27.0 to 0.37.2. This bump includes upstream commit
-https://github.com/yhirose/cpp-httplib/commit/464867a9cedef2b6185e25e3e912d3f796fe58fd
-which added WebSocket support to version 0.33.0 and causes a build error
-detected by the Gitlab pipelines for bootlin-sparc-uclibc:
+nnn links against pthread. Specify the dependency to avoid
+unexpected build failures on toolchains lacking thread support (e.g.
+br-arm-full-nothread).
 
-/builds/bkuhls/buildroot/br-test-pkg/bootlin-sparc-uclibc/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/14.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld:
- /tmp/cciyXsAR.ltrans6.ltrans.o: in function
- `httplib::ws::WebSocket::close(httplib::ws::CloseStatus,
- std::__cxx11::basic_string<char, std::char_traits<char>,
- std::allocator<char> > const&)':
-<artificial>:(.text+0x6408): undefined reference to `__atomic_exchange_1'
+Fixes:
 
-To fix the problem we add -latomic to LDFLAGS when needed.
+  https://autobuild.buildroot.net/results/5cd2b7a288a1681068448de6715e731580908206/
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Fixes: 7856e41685a179fdda7b21a10455e52fe5fa5cb0 ("package/nnn: new package")
+Signed-off-by: Alexander Shirokov <shirokovalexs@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit eedb2067d8660b31a376ccdc05dc0ae2ba3ba4c5)
+(cherry picked from commit 1b8cd6665bdb6d8f67b71b859a0d78e3a2584875)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/cpp-httplib/Config.in      | 2 ++
- package/cpp-httplib/cpp-httplib.mk | 6 ++++++
- 2 files changed, 8 insertions(+)
+ package/nnn/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/cpp-httplib/Config.in b/package/cpp-httplib/Config.in
-index 9bd93ee0af..83251e8eeb 100644
---- a/package/cpp-httplib/Config.in
-+++ b/package/cpp-httplib/Config.in
-@@ -1,9 +1,11 @@
- comment "cpp-httplib needs a toolchain w/ C++, wchar, threads"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/nnn/Config.in b/package/nnn/Config.in
+index 64cfa8e0a5..555ab864d9 100644
+--- a/package/nnn/Config.in
++++ b/package/nnn/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_NNN
+ 	bool "nnn"
+ 	depends on BR2_USE_MMU # fork
++	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	# Building nnn without widechar/UTF support is theoretically
+ 	# possible, but in practice it leads to unstable builds.
+ 	# That’s why the WCHAR dependency is here.
+@@ -15,6 +16,6 @@ config BR2_PACKAGE_NNN
  
- config BR2_PACKAGE_CPP_HTTPLIB
- 	bool "cpp-httplib"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_WCHAR
- 	help
-diff --git a/package/cpp-httplib/cpp-httplib.mk b/package/cpp-httplib/cpp-httplib.mk
-index 94f270df94..c9649936e4 100644
---- a/package/cpp-httplib/cpp-httplib.mk
-+++ b/package/cpp-httplib/cpp-httplib.mk
-@@ -13,6 +13,12 @@ CPP_HTTPLIB_INSTALL_STAGING = YES
- CPP_HTTPLIB_CONF_OPTS = \
- 	-Dtest=false
+ 	  https://github.com/jarun/nnn
  
-+CPP_HTTPLIB_LDFLAGS = $(TARGET_LDFLAGS)
-+
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+CPP_HTTPLIB_LDFLAGS += -latomic
-+endif
-+
- ifeq ($(BR2_PACKAGE_CPP_HTTPLIB_COMPILE),y)
- CPP_HTTPLIB_CONF_OPTS += -Dcompile=true
- CPP_HTTPLIB_DEPENDENCIES += host-python3
+-comment "nnn needs a toolchain with wchar"
++comment "nnn needs a toolchain with wchar, threads"
+ 	depends on BR2_USE_MMU # fork
+-	depends on !BR2_USE_WCHAR
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
 
---===============0998096238094241239==
+--===============1496255656164481656==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -194,4 +175,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0998096238094241239==--
+--===============1496255656164481656==--
