@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECE82CCA462
-	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 13:13:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45299CCF2C1
+	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 13:13:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B1A256133B;
-	Fri, 16 Oct 2026 13:13:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D4DAA61327;
+	Fri, 16 Oct 2026 13:13:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eKSPwYo8GEUA; Fri, 16 Oct 2026 13:13:21 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 5A9926134F
+ id RNTZmPrM4xlJ; Fri, 16 Oct 2026 13:13:23 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 6D6576134F
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792156401;
-	b=qmi4M7K+Mbau0Jtdizb8qVCzcGjV70VoTt3cG4XB7bXZKvGSH7iWV0nctu81AzUPcp2+
-	 t1craiYQk3hh9eFQ+evdxRQ6Ka/pcTSaiWaMWwZAHjthyHj8WXeRiXNQznwR0PnhaO54Z
-	 bH0JNVZ2iUUPF0TAMuoKvRKRDAAba4qiu7vJSuxsyo1E9TiDI8M7acIH79xtuRwQzEenw
-	 LUnr7N7agZkYppPvzMGDEvMCavuuYMgmMElnu+bqThO1IWryaxLpi1p0vDYXorQendhIo
-	 cfUFU0RXRsaQKwhSykA8VEtlOjzXIkrJrFev2U2yka2y8pqL43k+4J9MtEFihEKUjHQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792156403;
+	b=pkQrq4NTvZm/ALxVHTygFzGaMSd2SeROZNa3VuSgSJs8JIqSW4WEVhxZqAkxp17DOQ4T
+	 UMVlGKkohAYY4Lc/ugqv5gZwoAu7ngb/mNFSPEz6yEyDCxPg5QlnYHzz1dQOX6lpuOcL3
+	 4BZsWAcLTt33KDDCCG2HQvk6rvnCZ+hCSEZLR5OKx4nHrdM+7RErennXlAxWvNk2ZvQ7I
+	 WR/HRLYTflAySg4vHqy9FJrBhp+o0gYfSFyCqoABOdmg/1kvv7yXk+VeZjJSLCa9vzb4F
+	 i/pipZ4nzuuAjC54GpaF70Rftw+q7RCfKUv/IaCW4t+0YwzSbQ64YQSLmqHHGw013ig==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792156401;
+	c=relaxed/relaxed; t=1792156403;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=mk+ZR8sm0jNdB3tpgPoZ/o1wRsyqC5dJJD36dLe/vI4=;
-	b=NJqzFx0TNcIp6nBDbfVMkmS/BzOcA0yRL5EPuDMWiYaFfVPXUoXJbjIdopHcM0xRKKPi
-	 78coubOQeu7EXh7Sh/Fbu6s5nmblNS74usEeB2WSTySseMsRQrkoRQcldI7TPG5ZFEFC9
-	 wOQNWdjx1DuxAk/Pjob7cDAzUV0rAyVLNdhFza4Rt+rvs6rpvtM58oNushFFpuT9UzOBy
-	 vrBLK6L4vJ/LTG21qXCyGdnrrQGHK9c8R9Mkgwpb2jWLJLYBFEsLkMI7ViPuEeSNM091T
-	 gncxGPs6n3F3mqsptNWguKoW9DwEuFhsaHrZ5LpePDm9ZM6QTImsP5t7MAa3aDOyxGQ==
+	bh=A0C1NpJ2zWfv1BVAW9mzMp3pbSK4RVn+ub5W8l7qrPc=;
+	b=ZJdC/8a9nFDYqAnRXWH0bG1B1v0UlATPv4RCHBFZiHf7qcdoY6Bc2nGF+plUh6ZFPRXd
+	 KbyJsTwDeJg6rY/qlbUEDUvzW67jXDmcu9xqGsbkNOjAN7ALH4O7DG3sQi7FI+110rWB8
+	 dHHAt/AcwlDcXLINuX6TfpHnhZzMY2+F/etGDxaDv0x8e+V2z+vSzV+Lo/J4v6sD3UVt9
+	 BT3g3zHo6Ssfurm7Z3BjOku5BAYqLPRqbvnyb06ZucBEkupNjXEmrQmwl6y1cCrw0NJ5U
+	 a5c7tWltgZ8l9m4kItt4S2T17bvd6dMBOweqiSamkbRBtfbljTVXuGTqv0ZQWVavZRA==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792156401;
-	bh=mk+ZR8sm0jNdB3tpgPoZ/o1wRsyqC5dJJD36dLe/vI4=;
+	s=default; t=1792156403;
+	bh=A0C1NpJ2zWfv1BVAW9mzMp3pbSK4RVn+ub5W8l7qrPc=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=k8Z4aD5toek5WkcXn+rzqRUok532mLSemfRX5hKreGNUDgbTeba1yQAj42drwhZi/
-	 I2WCORLzTsSgqRVtOw5JMUV6AaJDhq/ozrLAJi643Z9BcZE6UXeZjb/67nQWR6VNWX
-	 apYq7akcS6bRHdGIkY7vUwAR6yzNOioYl+HZrITKEHYrakA411rioV7juf9s0StWx3
-	 CzSF6fPwMjRGwt1P+GDPJo0BhY+7ohxydSgJPItWt/feYTRdyIu3/336d3f+5LyIuD
-	 YovYS3zmT1no0k0oHuHTX1xdefStMhQMsRNDP8Bgy9NXHfwuB1FjZCCcoZLiXFWvqo
-	 yBCrrANIbBANQ==
+	b=a3UOttxec+K32d1pAVY1OMbgy7INjzStbSW5o4ze5bHKA/NUGnxDKdDdyWVOgSS96
+	 fQ8165gRwp3+BePCJc3pRhOKGr7fHAu0r6edODJb46/BQT4avYRIcAFxKpUrjYRun0
+	 /+ayv+MP8X3nOvHHaSuzo+qfFXGyGXb6aZmgD5a0LGC/DNei7w5Gb/gA7jFjWOgBGc
+	 4GOVbw6TalIECnbHPgDJ//iQUOw+X4Am2Wz6YiKcdBSK8m/LqNO6i/JkKHyZ+OwERh
+	 92xQeibGEdK8+wRZf+22HLmICr/1FUHEQudZsW8iNmiGr6ajTdiS+Ym/9T3S2TDiWv
+	 H1a6IUlCldtRQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5A9926134F;
-	Fri, 16 Oct 2026 13:13:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6D6576134F;
+	Fri, 16 Oct 2026 13:13:23 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5A978769
+ by lists1.osuosl.org (Postfix) with ESMTP id B22ED105
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:10:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3BCB160B3C
+ by smtp3.osuosl.org (Postfix) with ESMTP id A116560B3C
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:10:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 39-EKuEfxYUd for <buildroot@buildroot.org>;
- Fri, 16 Oct 2026 13:09:59 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 1C5AF60F2E
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792156192;
- b=kV+TtyutOr21EhNc5wtEsdz1XSkh7kzXXUpqCbtzpgnEpsYW8fEoPliWzro3lZb3kj3y
- rQ3TC2t0WFJLr79gvl23EcP2/NN3ZVmICsvbHmvyKlbUTsllakhTDv2j9FIScnfLIQArV
- rpWKA7+CQStK8C6nrIga7BNgf9uXgniDVjGUgJ3ChP3DFtwyGnWYTz+p2Zr5aF8yIz7JF
- 5x3b/UZua8NjZyjA6XgKiuGe6b1a5GXSvJmstE3D0hnuu4y6hsS3FStG4bvFWXWZ3Fn4J
- l5flf3s5I9xqt/M7x78zdaAKSId5Q6ds7JlGXtjaEzLdqb9asYD7MDJiNKKwLjQInCg==
+ id Cw8PosCLXdok for <buildroot@buildroot.org>;
+ Fri, 16 Oct 2026 13:10:00 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 0367260F39
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792156193;
+ b=XRhhoqGr5+n5apLUBW0KTGkDTjjnJvsUdrQnzaNldxPVAuDXeiXCV7/sQjkb5wRTGTdl
+ FMGECo3f8/eSrvSci3806y9C1GCU7rsKuPVL52F8F3BRxn0462YB0ZI4y7M31Hdl8Do++
+ 00lnlhE/JzI0qE+qYbIoxFIOJzG8fjgRziBo/bkAEgwOb1VXm2BPhBi7/KmjkNAQ/65gw
+ M5DWgG2UoMppJ05nLp39ocQC5S1HS5Zhh5qaOa5uQiTymE9uKAfAuce0kmaF+IlRnjMWb
+ 1Nu5583thI+bHKhrUH1AB4Krh0wCMyR7c0R/qjcJZBO4cZMF3VsLH0WCjsnS0llv0hA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792156192;
+ c=relaxed/relaxed; t=1792156193;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=NVLx7HPvDqdq1yi8GpgjsswoAWIqijB3fQ86qmymfyE=;
- b=KC4w0G7GrDPmF3KkpyVMXc14uUi2k6wcyX6tiV/1EPtxzUgGTdg3VbxPEIxcfU1sfkBC
- MTQv69yK8NFvCKM95Fa1Y+8hvncmC4zhveRZesqGZYtt9KCReh8jtQGGzks9ZR/n847TD
- 7XUWY7SzsCNCKUPMGTcKRT4F+3S/zVqKrzTXb23r3VTrAP8wBzN70fqTcBBUa1XaQbWU2
- T3SDhA1YRq97kPK+49gbbIYxiVEXuKXwfZm6bm9PDp8nSzDpPQXIHFm/VVBDH5Pux5L9k
- 7NNIAd1RKUvVQAfxElwC+KeQGkTJV46FGB4qjna89RA0Emdmif1ScvdchUOWQ88t0Rg==
+ bh=eIQN+9OKmtZeT6UIBS8hyx6IVg3kwaEl4eM1CfAAHlo=;
+ b=bmN/L2iH+zCtVP8xZM0N1xlTBiI4yL8kNt4pfrNohiWMnaTVbFYooGWfebnMmRqISwBf
+ LgHXs36GdltwbQj6LgsutlqUc+uv5QDeHsjZWwKz5ddW06SEux74JNpNnosVqei+GXgzv
+ TriUTr00Zf2o5Wc5BMhyVwk4qi//1RSKxSMgQE8pHdOF7FTe2F6RBqrj9gVgn0YmSqNl+
+ SmiotW4Sf+Z3gXqRDsccZmmjb9H08QbrCQBZqbmDuxu+ff6bex3TmF8jQUW9Vs+o7l6hJ
+ oOHzUqXHW2y+VZK1cqMrqvi0ZXIzDnpgL/vtPcUFxE8rMUSaAOuYn4zlxCxU507Uk2g==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1C5AF60F2E
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:09:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0367260F39
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:09:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0C0DC960D7; Fri, 16 Oct 2026 13:08:31 +0000 (UTC)
+ id E698D960D7; Fri, 16 Oct 2026 13:08:31 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 Oct 2026 14:11:55 +0200
+Date: Thu, 15 Oct 2026 14:36:19 +0200
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: 23e6fb3ef2e8d67ed474b867fb9a8cbf7606dfae
-X-Git-Newrev: 265e33686b3ba3cca69dd08ba78fa211aa865d76
+X-Git-Oldrev: 7baaf34fa5aea2a50d0e92a47b3de435b9a5af19
+X-Git-Newrev: 66eaacb941092a8a83fa9db34b79a994a1d5b8a9
 X-Patchwork-Hint: ignore
-Message-Id: <20261016130831.0C0DC960D7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/pkg-autotools.mk:
- also handle libtool 2.6.x
+Message-Id: <20261016130831.E698D960D7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/atop: fix musl
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,170 +115,120 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5490079557635875783=="
+Content-Type: multipart/mixed; boundary="===============2887135773672207835=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5490079557635875783==
+--===============2887135773672207835==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/265e33686b3ba3cca69dd08ba78fa211aa865d76
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/66eaacb941092a8a83fa9db34b79a994a1d5b8a9
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
+Since the bump to version 2.13.0 in Buildroot commit [1],
+atop fails to build with musl:
+
+drawbar.c:2336:33: error: implicit declaration of function 'waddwstr'; did you mean 'waddstr'? [-Wimplicit-function-declaration]
+
+(Before 2.13.0, the same configurations already failed earlier on
+uClibc because _POSIX_C_SOURCE was defined without a value. Upstream
+fixed that in 2.13.0 by giving it an explicit value, but the same
+pattern remains for _XOPEN_SOURCE.)
+
+ncurses only declares its wide-character API, including waddwstr(),
+when NCURSES_WIDECHAR is set. If the application does not set it,
+curses.h derives it from the feature test macros:
+
+  #if defined(_XOPEN_SOURCE_EXTENDED) || \
+      (defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE - 0 >= 500))
+
+drawbar.c defines _XOPEN_SOURCE with an empty value, which makes the
+check evaluate as 0 >= 500 and fail.
+
+This only breaks with musl because of the C library's <features.h>,
+which curses.h pulls in through <stdio.h> before doing the check.
+glibc and uClibc both redefine _XOPEN_SOURCE to 700 and define
+_XOPEN_SOURCE_EXTENDED whenever _GNU_SOURCE is set, which drawbar.c
+does, so the empty definition gets fixed up. musl never modifies the
+application's feature test macros, so the empty value reaches
+curses.h and the wide-character prototypes are left out.
+
+Add a patch that defines _XOPEN_SOURCE as 700, matching the
+_POSIX_C_SOURCE value of 200809L that is already used.
+
 Fixes:
-https://autobuild.buildroot.org/results/e6159cee14f84569c85a61f77824b2b58d68a4bc/
+ - https://autobuild.buildroot.org/results/914c1d8fa0fc8bbef64e4a64d58e5941d0077a3e
+ - https://autobuild.buildroot.org/results/b91ea0722202de0d1fdeeaeea167fd1b21b6d5d6
 
-Libtool 2.6.x is starting to be used by upstreams when generating
-release tarballs (e.g. cryptsetup-2.8.8). As LIBTOOL_PATCH_HOOK does
-not know about it, ltmain.sh is left unpatched, so libtool relinks
-libraries at install time and adds -L/usr/lib, which is rejected by
-the toolchain wrapper:
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/2110131cab2a613567c99491ba540bb33440e46c
 
-i686-buildroot-linux-gnu-gcc: ERROR: unsafe header/library path used in cross-compilation: '-L/usr/lib'
-
-The v2.4.4 patch no longer applies cleanly, so add a v2.6 variant,
-rebased on libtool 2.6.2, and use it for 2.6.x versions.
-
+Assisted-by: Claude:claude-opus-5-5
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Assisted-by: Claude:claude-opus-5
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5dbba2616f287cf6d333a0849ef870b0ce49f24f)
+Tested-By: Thomas Perale <thomas.perale@mind.be>
+[Julien: add link to Buildroot commit introducing the issue]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 99909a8a955dc6ba89aaa72e488e8c262ad2f469)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- .checkpackageignore                          |  1 +
- package/pkg-autotools.mk                     |  2 +
- support/libtool/buildroot-libtool-v2.6.patch | 96 ++++++++++++++++++++++++++++
- 3 files changed, 99 insertions(+)
+ ...ine-explicit-value-for-_XOPEN_SOURCE-macr.patch | 48 ++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 298cd65838..1f2c67ae4a 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -986,6 +986,7 @@ support/libtool/buildroot-libtool-v1.5.patch lib_patch.ApplyOrder lib_patch.Sob
- support/libtool/buildroot-libtool-v2.2.patch lib_patch.ApplyOrder lib_patch.Sob lib_patch.Upstream
- support/libtool/buildroot-libtool-v2.4.4.patch lib_patch.ApplyOrder lib_patch.Upstream
- support/libtool/buildroot-libtool-v2.4.patch lib_patch.ApplyOrder lib_patch.Sob lib_patch.Upstream
-+support/libtool/buildroot-libtool-v2.6.patch lib_patch.ApplyOrder lib_patch.Upstream
- support/misc/relocate-sdk.sh Shellcheck
- support/scripts/apply-patches.sh Shellcheck
- support/scripts/check-bin-arch Shellcheck
-diff --git a/package/pkg-autotools.mk b/package/pkg-autotools.mk
-index 16b21acb6d..da33909881 100644
---- a/package/pkg-autotools.mk
-+++ b/package/pkg-autotools.mk
-@@ -76,6 +76,8 @@ define LIBTOOL_PATCH_HOOK
- 			fi \
- 		elif test $${ltmain_version} = "2.5"; then\
- 			patch -i support/libtool/buildroot-libtool-v2.4.4.patch $${i}; \
-+		elif test $${ltmain_version} = "2.6"; then\
-+			patch -i support/libtool/buildroot-libtool-v2.6.patch $${i}; \
- 		fi \
- 	done
- endef
-diff --git a/support/libtool/buildroot-libtool-v2.6.patch b/support/libtool/buildroot-libtool-v2.6.patch
+diff --git a/package/atop/0001-drawbar-define-explicit-value-for-_XOPEN_SOURCE-macr.patch b/package/atop/0001-drawbar-define-explicit-value-for-_XOPEN_SOURCE-macr.patch
 new file mode 100644
-index 0000000000..b3968b1289
+index 0000000000..d526d58433
 --- /dev/null
-+++ b/support/libtool/buildroot-libtool-v2.6.patch
-@@ -0,0 +1,96 @@
-+Libtool fixes for cross-compilation, many past contributors/authors.
-+Update based on libtool-2.6.2.
++++ b/package/atop/0001-drawbar-define-explicit-value-for-_XOPEN_SOURCE-macr.patch
+@@ -0,0 +1,48 @@
++From 54799216beac63a195cd6d34b22476fc15a80295 Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Wed, 30 Sep 2026 10:59:49 +0200
++Subject: [PATCH] drawbar: define explicit value for _XOPEN_SOURCE macro
++
++drawbar.c uses the wide-character curses function waddwstr(). ncurses
++only declares its wide-character API when NCURSES_WIDECHAR is set,
++which curses.h derives from the feature test macros:
++
++  #if defined(_XOPEN_SOURCE_EXTENDED) || \
++      (defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE - 0 >= 500))
++
++drawbar.c defines _XOPEN_SOURCE without a value, so _XOPEN_SOURCE - 0
++evaluates to 0 and the check fails.
++
++With glibc and uClibc this goes unnoticed, because their <features.h>
++redefines _XOPEN_SOURCE to 700 (and defines _XOPEN_SOURCE_EXTENDED)
++whenever _GNU_SOURCE is set. musl does not touch the application's
++feature test macros, so the empty definition reaches curses.h
++unchanged and the build fails:
++
++drawbar.c:2336:33: error: implicit declaration of function 'waddwstr'; did you mean 'waddstr'? [-Wimplicit-function-declaration]
++
++Define _XOPEN_SOURCE as 700, which matches the already explicit
++_POSIX_C_SOURCE value of 200809L (both refer to POSIX.1-2008).
 +
 +Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++Upstream: https://github.com/Atoptool/atop/pull/415
++---
++ drawbar.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+--- a/ltmain.sh
-++++ b/ltmain.sh
-+@@ -3008,9 +3008,8 @@
-+ 	# was found and let the user know that the "--tag" command
-+ 	# line option must be used.
-+ 	if test -z "$tagname"; then
-+-	  func_echo "unable to infer tagged configuration with compiler."
-+-	  func_echo "Possible use of unsupported compiler."
-+-	  func_fatal_error "specify a tag with '--tag'. For more information, try '$progname --help'."
-++	  func_echo "defaulting to \`CC'"
-++	  func_echo "if this is not correct, specify a tag with \`--tag'"
-+ #	else
-+ #	  func_verbose "using $tagname tagged configuration"
-+ 	fi
-+@@ -4746,8 +4745,12 @@
-+ 	  # At present, this check doesn't affect windows .dll's that
-+ 	  # are installed into $libdir/../bin (currently, that works fine)
-+ 	  # but it's something to keep an eye on.
-+-	  test "$inst_prefix_dir" = "$destdir" && \
-+-	    func_fatal_error "error: cannot install '$file' to a directory not ending in $libdir"
-++
-++	  #
-++	  # This breaks install into our staging area.  -PB
-++	  #
-++	  #test "$inst_prefix_dir" = "$destdir" && \
-++	  #  func_fatal_error "error: cannot install '$file' to a directory not ending in $libdir"
++diff --git a/drawbar.c b/drawbar.c
++index 651a81e..e4db0d6 100644
++--- a/drawbar.c
+++++ b/drawbar.c
++@@ -104,7 +104,7 @@
++ // the other.
++ /////////////////////////////////////////////////////////////////////////////
++ #define _POSIX_C_SOURCE	200809L
++-#define _XOPEN_SOURCE
+++#define _XOPEN_SOURCE	700
++ #define _GNU_SOURCE
++ #define _DEFAULT_SOURCE
 + 
-+ 	  if test -n "$inst_prefix_dir"; then
-+ 	    # Stick the inst_prefix_dir data into the link command.
-+@@ -7063,7 +7066,8 @@
-+ 	;;
-+       -all-static | -static | -static-libtool-libs | --static | -Bstatic)
-+ 	case $arg in
-+-	-all-static)
-++	# Make -static behave like -all-static -GZ
-++	-all-static | -static)
-+ 	  if test yes = "$build_libtool_libs" && test -z "$link_static_flag"; then
-+ 	    func_warning "complete static linking is impossible in this configuration"
-+ 	  fi
-+@@ -7072,12 +7076,6 @@
-+ 	  fi
-+ 	  prefer_static_libs=yes
-+ 	  ;;
-+-	-static)
-+-	  if test -z "$pic_flag" && test -n "$link_static_flag"; then
-+-	    dlopen_self=$dlopen_self_static
-+-	  fi
-+-	  prefer_static_libs=built
-+-	  ;;
-+ 	-static-libtool-libs | --static | -Bstatic)
-+ 	  if test -z "$pic_flag" && test -n "$link_static_flag"; then
-+ 	    dlopen_self=$dlopen_self_static
-+@@ -7393,7 +7391,8 @@
-+       prevarg=$arg
-+ 
-+       case $arg in
-+-      -all-static)
-++      # Make -static behave like -all-static -GZ
-++      -all-static | -static)
-+ 	if test -n "$link_static_flag"; then
-+ 	  # See comment for -static flag below, for more details.
-+ 	  func_append compile_command " $link_static_flag"
-+@@ -7695,7 +7694,7 @@
-+ 	continue
-+ 	;;
-+ 
-+-      -static | -static-libtool-libs)
-++      -static-libtool-libs)
-+ 	# The effects of -static are defined in a previous loop.
-+ 	# We used to do the same as -all-static on platforms that
-+ 	# didn't have a PIC flag, but the assumption that the effects
-+@@ -8755,7 +8754,7 @@
-+ 	  *)
-+ 	    if test no = "$installed"; then
-+ 	      func_append notinst_deplibs " $lib"
-+-	      need_relink=yes
-++	      need_relink=no
-+ 	    fi
-+ 	    ;;
-+ 	  esac
-+@@ -11296,6 +11295,10 @@
-+ 	    # Replace all uninstalled libtool libraries with the installed ones
-+ 	    newdependency_libs=
-+ 	    for deplib in $dependency_libs; do
-++	      # Replacing uninstalled with installed can easily break crosscompilation,
-++	      # since the installed path is generally the wrong architecture.  -CL
-++	      newdependency_libs="$newdependency_libs $deplib"
-++	      continue
-+ 	      case $deplib in
-+ 	      *.la)
-+ 		func_basename "$deplib"
++-- 
++2.34.1
++
 
---===============5490079557635875783==
+--===============2887135773672207835==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -289,4 +239,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============5490079557635875783==--
+--===============2887135773672207835==--
