@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 828DECC6B30
-	for <buildroot@archiver.kernel.org>; Thu, 15 Oct 2026 03:02:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A78DCC6B30
+	for <buildroot@archiver.kernel.org>; Thu, 15 Oct 2026 03:10:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 56310608BA;
-	Thu, 15 Oct 2026 03:02:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 16A37608E7;
+	Thu, 15 Oct 2026 03:10:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kU73HSKkr4n8; Thu, 15 Oct 2026 03:02:44 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 80378607E2
+ id S7Zo9c0VXY7L; Thu, 15 Oct 2026 03:10:03 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 699A96084C
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792033364;
-	b=sERTcahUNTJjA7cZhaqycMhVsqNTCZ8tA/cuaTHuk0e56ahfBzem/IgmZCP71jclRHe5
-	 8Zx/ZRcSz85MoPuONr4FtssujBt1XbglR46TtYgBxFtbQj3xckrA6XGwKSGmFasujCwy2
-	 SdeDIzEziKP8N+dIA0oxwzLj1k6D4HWgwz9QDbKdTopN6EukcCpUftG+VZ+KKqd44uIIQ
-	 nvG0tqMpTEeJyqkRFFt1v8YKeMEQUd+ggiSjH7cMx4kmjDt8DYjApETjmGPk8SUntlTeS
-	 OS3m6t7XTMSVDGbwM8+t91UdhUGqYuf3/Ki4np6IOU0lACoILx3bPWiDvpl6fPY6aDg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792033803;
+	b=UrgYcZHBBbcZKWV8I/FCG74u0OQimvp5Ltk8CNvJ8IKJIPdAHrjOciUga1dPIMMmToAA
+	 kc8+t7NyufszINqTKVv9wDhKN0cs1c3mivTRHmX1BA05etm1kK6LNWbAXULIAyDxZ8lDc
+	 WZzqugHtXgxsi16KEURgwE/oKurvoinUbO+At/OZ5gScm5n+qmKY3TJzsRjEoYjPV74zE
+	 natRc+DdTFhqQkobPlkd5gPqFly2G9acBD6BMUk+VPcr3fbxVQ68VPMRpct2p6LyZXpZ8
+	 jIcxsUbTVYwI+M2U0hsmWv/R0VYG9Slhk3nPP5tkNyT4prf8x71QRHUihZCDSx+TM3w==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792033364;
+	c=relaxed/relaxed; t=1792033803;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,88 +31,86 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:Content-Type:Content-Transfer-Encoding:
 	 Errors-To:Sender;
-	bh=/zz678+09Be6xwt7+hFknu0t0asPoZATHW2lZ8yOGck=;
-	b=GlmLz5asR1ax2Myqi1Kwn6xG1Bf0h3f12ort+RyWki2mCR03fO6o00qDhKZULrCF5P1r
-	 k15WYGUkoIHyZlbbgHkFDgV9IqIFRSdHNRo60p+XUUVUu16KBAwXCk5aQrp3ATiJauv6D
-	 3qrQGQmY7d262QYGOfqkQP755FhDRlkqeNUSea9ToAZdnlAzfLfCCDQm9JRyYdboy3EIz
-	 JXEsgQzWcjeVd3Jk6jIcUTQPECv92wVm5Zqsxib3V1HWmod5s+G2ACaNzw+yiwPe+Zl/3
-	 4QJAfaBfijI6bOVfXAby2d/HKJhpeQtsGOsjsEPxgICY7ssu4IfHCvlD7SCWbjZ2z3g==
+	bh=dmg2P07J1MiqBhHu5a2tdTR858U9hYsSw030CV2HL7s=;
+	b=GnYUenDjIIDAy3joW0SfW4mYMSWSpVcGSOGh6wRtDCb+ThjIiHuhVhGadcPXLJ4QIAVD
+	 8DJkmA1783FrAp8CKxPZrFnvtzUHNFE2nhvqg0+2RAAYjocxD/DtJF+5sbx1HY7gcicyM
+	 9AMsjRlUvOhLkDHTyTtcDcCS8Ab4CZU69ntASaLZvyX2nLEJ2SdoEGPQ54/oc8wLJM1jk
+	 Id+BMtpI8OXwrxnarSc2yGa1swRdzRz5PYdgl6kQilepFU90auy/475+SaWBk2e61KuGl
+	 n7JdXa+6xr5DuTd7BPxI2kgmKtj16neH6adusoF56KKde06ECZgPRtP21M+y1d80gqQ==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792033364;
-	bh=/zz678+09Be6xwt7+hFknu0t0asPoZATHW2lZ8yOGck=;
+	s=default; t=1792033803;
+	bh=dmg2P07J1MiqBhHu5a2tdTR858U9hYsSw030CV2HL7s=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Xt2eY802/wfmO+SyW/GiLOorULD3doSMZd29jC9Q1jW1M0sa7nXmfm7qcaSw4rYfx
-	 rg9sgbmaUGA8JI/6FK2Sbxld+O4Aqj26nWzSIIsO1bf2X9ByrVNOUQ8YHiMfZl8dVy
-	 xo9WqDP2cNCjatfPwUzurRlZbafLgkC9qNZwHwAkKJ1ai0fOuylZ6MbGItS6f7dbJ1
-	 E59z53Q6ZumdkQR/qdZIzQOWASdAX5cy+ld8JRgEvvt3LFhCOlmoY3JHo0NOFHfm+b
-	 YlmONo8wGqmUv2SCJbFqx7DQSlLg9y9exk6PttXZJLezTK9RycrTv7narSHy67rupu
-	 KbXf04E0WONCw==
+	b=DbnPB46Me2tWQozKQzHmFbbjof/bpWLcsygmqyZoEAA0kRy/D1s9ckyRb4URpWhi+
+	 vit4UKhIumJQPH7NkS2LZuoybopCJ2umvChZ/bWyNjTE3NgKs8IwY8D6mXLZh7Lx8E
+	 Jt6jhw3dc/gs+WLFlZxccRhXQx+xW3ycVZOPYNsFc+IZuLSvo6GoZdctRzjnkAwDQ3
+	 GJI3KVsluHyoEDX6W7yWYWz9bLfsDfpIn5eJYlmxN52x+oW9H9i+jtuHir6LEKRrSB
+	 Z7bHqKrA7AHF7wiXXZv+++USuloH/1gaUU1zT3u1Va8mDhzSlvEj4ZrLBjtds6qkb7
+	 7xOXdcsutKMtg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80378607E2;
-	Thu, 15 Oct 2026 03:02:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 699A96084C;
+	Thu, 15 Oct 2026 03:10:03 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with UTF8SMTP id 3A6C3E4D
- for <buildroot@buildroot.org>; Thu, 15 Oct 2026 03:02:42 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with UTF8SMTP id C82B7E4D
+ for <buildroot@buildroot.org>; Thu, 15 Oct 2026 03:10:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with UTF8SMTP id 0694240223
- for <buildroot@buildroot.org>; Thu, 15 Oct 2026 03:02:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with UTF8SMTP id C5FFD40223
+ for <buildroot@buildroot.org>; Thu, 15 Oct 2026 03:10:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024)
- with UTF8SMTP id toqPf2FhJRUA for <buildroot@buildroot.org>;
- Thu, 15 Oct 2026 03:02:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 494D640053
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792033361;
- b=o+pjfF0/AxSBmyG5JbU1vaP66u4apLdr/l1d0pQMwxQJVYI00seQqYgTF//vj2yRNfMO
- v5RT5By7X8s2vNVikTdDtA6hWteQI1WmTv3M+5OtLU2DrYDimWHTkeoOz5+Wgz0XcPknD
- 7H+fI3Tk2GxLsLHVKybhhRmzfQ8dyy2/VIIBIEbT3PbmgDy9TUCSAZc1eB/68alKO7Iv3
- GVt2eDyBK/RfM4f1byROjVgzO2zLOjsDIOA4t4sBCTsjNwyitwDzni0ggg6ErGZiM4eqq
- h8UYqjfKA754QUS/cgaRRtx+WHathj5ZAdcBe8lUxVQ27bepQC4h1ue6ae8+Ef9SLmw==
+ with UTF8SMTP id LJeinboJ4dJr for <buildroot@buildroot.org>;
+ Thu, 15 Oct 2026 03:10:01 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 54EE640053
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792033801;
+ b=KZObI7Wj0Ei3WLJ3YEPZwdEt1MIA08Juc3ILdo7s6Db05pIXzD2wLQaQYWWVm/mUHJh8
+ sw+1N89BN6tT4QkJwlE0ZAuuNMI5AxE2Q76GU4X+tHuaRyb6rpkFguisp3Y4cApXwsEEy
+ PFT6jzFEsRbEtmU8KYHgKhc3848CbTkXQsVJ+xVoh7pkfBu0kY7cBHB+juJsTH2AMK3Yn
+ ugiddP4/96agnAHZeYgjkwNi7ZWqbP9GSOaz2pKz26nsruWmEpufdsjy6K7SR6ppLi4wC
+ YwSIspQx1vx82qzoTMuY9LLqL2zqsac43II2cE2WGztleBvltVZvO8XlxPmYFm+OmqQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792033361;
+ c=relaxed/relaxed; t=1792033801;
  h=Received-SPF:Received:Received:DKIM-Signature:Date:From:To:Cc:
  Subject:Message-ID:References:MIME-Version:Content-Type:
  Content-Disposition:In-Reply-To;
- bh=+bcltG09jSpk/tjN8mToyPE6Hi/EIq1A5ekotdnEUJk=;
- b=WBlY1eAn5GfSzMqQ3V0Ed5OmAWX6qEbqrGbFbgwlscDtbt8aXBBbg/9KbachQG9p7/bi
- YiGc6mp+/RNY+Qu8t3n5c89vvgJRJsjgm1+GOhl82p4beBmQH/ZXWSCz27mXpKf1nYYYI
- l7buJ6E3U08r/mWPOObtM7uvd4lB/L/1RzDRSuhGksjgK+SD2xivSGxqYeYfiAKEhVpcn
- ppq4KPlqO+iWiZSh2m9saZv6Zw5iPUGHUTVHSRNzIfQbk3Pr/yUYqwLc6Vl/mivAkTFKX
- GplYNN74220IzCGcZJvRdZYNvmZaW/MaU4ImBFZAdbeRdB4MrCLqogrjks2ket4wUgA==
+ bh=N8/q9eD97fj0hnWCvXaGcliKdJ8Cc5/mG5qwAD5O+FE=;
+ b=Q6xCKTtQmzB+iErxpGRnIHLzEgyJmqirGW7mDNePjmpIKkMH/Ws64EQUETl2VxPscDXk
+ /GOcoM5lj9IDZOW7xhSd+o7xXuujjZtWZMLwRWl3Bc1uHojXhzDwhSdqDEOnPbNPQVmxW
+ PwC3SZetWGCznPeMr0wOookTrAJ26Z26qlFIQl0RYbPlUaq5/iKPDkJAi0XMzrwE3jG7D
+ b0f8SmqqW7Uw/aCBGwzA7pKT23F5JMK3GlnoZ4O7hSQNPWWTuW0xtp9IgYfKe7rJKZAWD
+ QS9FkO89MYOb7gpp2sytcAuhato4Zby4AJyQ737oe5tpcZU05ATW6rfZaQxLIxCqKeg==
 ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  dmarc=pass header.from=kernel.org;
  dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256
- header.s=k20260515 header.b=C1N2uz3W; 
- arc=none smtp.remote-ip="2600:3c0a:e001:78e:0:1991:8:25"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2600:3c0a:e001:78e:0:1991:8:25; helo=sea.source.kernel.org;
- envelope-from=jarkko@kernel.org; receiver=<UNKNOWN> 
-Received: from sea.source.kernel.org (sea.source.kernel.org
- [IPv6:2600:3c0a:e001:78e:0:1991:8:25])
- by smtp2.osuosl.org (Postfix) with UTF8SMTPS id 494D640053
- for <buildroot@buildroot.org>; Thu, 15 Oct 2026 03:02:40 +0000 (UTC)
+ header.s=k20260515 header.b=ZjBCDEvz; 
+ arc=none smtp.remote-ip=172.234.252.31
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=172.234.252.31;
+ helo=sea.source.kernel.org; envelope-from=jarkko@kernel.org;
+ receiver=<UNKNOWN> 
+Received: from sea.source.kernel.org (sea.source.kernel.org [172.234.252.31])
+ by smtp2.osuosl.org (Postfix) with UTF8SMTPS id 54EE640053
+ for <buildroot@buildroot.org>; Thu, 15 Oct 2026 03:10:00 +0000 (UTC)
 Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
- by sea.source.kernel.org (Postfix) with UTF8SMTP id 144A2436BA;
- Thu, 15 Oct 2026 03:02:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 694471F000C4;
- Thu, 15 Oct 2026 03:02:39 +0000 (UTC)
-Date: Thu, 15 Oct 2026 06:02:36 +0300
+ by sea.source.kernel.org (Postfix) with UTF8SMTP id A941143B6A;
+ Thu, 15 Oct 2026 03:10:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 0B8DA1F000C5;
+ Thu, 15 Oct 2026 03:09:59 +0000 (UTC)
+Date: Thu, 15 Oct 2026 06:09:56 +0300
 To: Fiona Klute <fiona.klute@gmx.de>
-Cc: stefanb@linux.ibm.com, buildroot@buildroot.org
-Message-ID: <atBCTG3NFPdhhIDr@kernel.org>
+Cc: buildroot@buildroot.org
+Message-ID: <atBEBB1x4WI-GRh8@kernel.org>
 References: <20261014164625.1474866-1-fiona.klute@gmx.de>
- <as_oRSUUVH8SQG-m@kernel.org>
- <b6a925a4-9eae-4193-b3aa-06f9755aeb89@gmx.de>
+ <20261014164625.1474866-2-fiona.klute@gmx.de>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <b6a925a4-9eae-4193-b3aa-06f9755aeb89@gmx.de>
-Subject: Re: [Buildroot] [PATCH 1/3] package/libtpms: fix typo in
- HOST_LIBTPMS_CONF_OPTS
+In-Reply-To: <20261014164625.1474866-2-fiona.klute@gmx.de>
+Subject: Re: [Buildroot] [PATCH 2/3] package/libtpms: disable building
+ manpages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -131,76 +129,95 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, Oct 14, 2026 at 10:52:53PM +0200, Fiona Klute wrote:
-> Am 14.10.26 um 22:38 schrieb Jarkko Sakkinen:
-> > On Wed, Oct 14, 2026 at 06:46:23PM +0200, Fiona Klute wrote:
-> > > From: "Fiona Klute (othermo GmbH)" <fiona.klute@gmx.de>
-> > > 
-> > > --with-... arguments need two dashes.
-> > > 
-> > > Fixes: b2eec8c6265a38cdba1afadf7f60e0fd00f3b448
-> > > 
-> > 
-> > By defacto there's no new line here, and it's 12 most significant
-> > bytes of the hash and short summary in parentheses. This is at
-> > least how it has always been in Linux but not 100% sure about
-> > Buildroot. It just looks weird to me.
-> > 
-> > E.g., I would instead:
-> > 
-> > Fixes: b2eec8c6265a ("package/libtpms: add host package")
-> > 
-> > And wold not add the newline. Since this is not kernel, take
-> > with a grain of salt.
+On Wed, Oct 14, 2026 at 06:46:24PM +0200, Fiona Klute wrote:
+> From: "Fiona Klute (othermo GmbH)" <fiona.klute@gmx.de>
 > 
-> In Buildroot we don't have a defined style for this, but use a newline more
-> often then not. Personally I find shortened commit IDs irritating, anyway.
-
-Not recall challenging any particular convention. Listing what you know
-and what you don't know and underlining that your facts could be wrong
-does not go into that basket.
-
-I.e. if you like how you do it, I'm not standing in the way, or have
-not been.
-
+> Libtpms builds manpages using pod2man, and fails if it is not
+> available. The patch adds support for --disable-docs, which Buildroot
+> passes by default. Found while building in a container with minimal
+> dependencies.
 > 
-> > > Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
-> > > ---
-> > >   package/libtpms/libtpms.mk | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/package/libtpms/libtpms.mk b/package/libtpms/libtpms.mk
-> > > index 7bc69a50d6..0ece84ae04 100644
-> > > --- a/package/libtpms/libtpms.mk
-> > > +++ b/package/libtpms/libtpms.mk
-> > > @@ -13,6 +13,6 @@ LIBTPMS_INSTALL_STAGING = YES
-> > >   # Required because a plain Git clone is used:
-> > >   HOST_LIBTPMS_AUTORECONF = YES
-> > >   HOST_LIBTPMS_DEPENDENCIES = host-pkgconf host-openssl
-> > > -HOST_LIBTPMS_CONF_OPTS = --with-openssl  -with-tpm2
-> > > +HOST_LIBTPMS_CONF_OPTS = --with-openssl --with-tpm2
-> > >   $(eval $(host-autotools-package))
-> > > -- 
-> > > 2.55.0
-> > > 
-> > 
-> > I'm not saying this is not right but I'm neither sure whether this
-> > is bug fix or not.
-> > 
-> > This is a weird because I've used this almost on a daily basis for
-> > Linux kernel QA since I contributed this... Stefan can you help out
-> > resolving the mystery?
-> I assume it wasn't noticeable because tpm2 support being enabled is the
-> default anyway. But we like setting options explicitly in Buildroot. ;-)
-
-It was unnoticeable because you did not write it to the commit message.
-
-Honestly: I do not care what you think about Buildroot options because
-I do not have an opinion. Please stop framing me. Thank you.
-
+> Fixes: b2eec8c6265a38cdba1afadf7f60e0fd00f3b448
 > 
-> Best regards,
-> Fiona
+> Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
+> ---
+>  ...ld-sys-Allow-disabling-manpage-build.patch | 61 +++++++++++++++++++
+>  1 file changed, 61 insertions(+)
+>  create mode 100644 package/libtpms/0002-build-sys-Allow-disabling-manpage-build.patch
+> 
+> diff --git a/package/libtpms/0002-build-sys-Allow-disabling-manpage-build.patch b/package/libtpms/0002-build-sys-Allow-disabling-manpage-build.patch
+> new file mode 100644
+> index 0000000000..20849db49d
+> --- /dev/null
+> +++ b/package/libtpms/0002-build-sys-Allow-disabling-manpage-build.patch
+> @@ -0,0 +1,61 @@
+> +From 6e688d2bd1e6e1545fdb25bcfeee28f78240cbfb Mon Sep 17 00:00:00 2001
+> +From: Fiona Klute <fiona.klute@gmx.de>
+> +Date: Wed, 14 Oct 2026 17:31:09 +0200
+> +Subject: [PATCH] build-sys: Allow disabling manpage build
+> +
+> +In builds for embedded systems (e.g. Buildroot) manpages are not
+> +needed, and building them adds a dependency on pod2man. Allow passing
+> +"--disable-docs" to configure to disable building manpages.
+> +
+> +Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+> +Upstream: https://github.com/stefanberger/libtpms/pull/641
+> +---
+> + Makefile.am  | 5 ++++-
+> + configure.ac | 6 ++++++
+> + 2 files changed, 10 insertions(+), 1 deletion(-)
+> +
+> +diff --git a/Makefile.am b/Makefile.am
+> +index 03ed7e65..9d0ea053 100644
+> +--- a/Makefile.am
+> ++++ b/Makefile.am
+> +@@ -23,10 +23,13 @@
+> + 
+> + SUBDIRS   = \
+> + 	include \
+> +-	man \
+> + 	src \
+> + 	tests
+> + 
+> ++if ENABLE_DOCS
+> ++SUBDIRS += man
+> ++endif # ENABLE_DOCS
+> ++
+> + ACLOCAL_AMFLAGS = -I m4
+> + 
+> + EXTRA_DIST = \
+> +diff --git a/configure.ac b/configure.ac
+> +index b19db106..0fc928c8 100644
+> +--- a/configure.ac
+> ++++ b/configure.ac
+> +@@ -282,6 +282,11 @@ AC_ARG_ENABLE([test-coverage],
+> +   ]
+> + )
+> + 
+> ++AC_ARG_ENABLE([docs],
+> ++    [AS_HELP_STRING([--disable-docs], [Disable building documentation])],,
+> ++    [enable_docs=yes])
+> ++AM_CONDITIONAL(ENABLE_DOCS, [test "$enable_docs" = "yes"])
+> ++
+> + LT_INIT
+> + AC_PROG_CC
+> + AC_PROG_CXX
+> +@@ -392,5 +397,6 @@ echo "Use openssl crypto for  : $use_openssl_functions_for"
+> + echo "Test coverage           : $enable_test_coverage"
+> + echo "Static build            : $enable_static"
+> + echo "Statically linked tests : $enable_static_tests"
+> ++echo "Build documentation     : $enable_docs"
+> + echo
+> + echo
+> +-- 
+> +2.55.0
+> +
+> -- 
+> 2.55.0
+> 
+
+
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
 Br, Jarkko
 _______________________________________________
