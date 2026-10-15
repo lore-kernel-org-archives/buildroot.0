@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 338F8CCF2C1
-	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 13:13:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3940FCCA462
+	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 13:13:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F3692613AA;
-	Fri, 16 Oct 2026 13:13:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F28FE61398;
+	Fri, 16 Oct 2026 13:13:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UNvd7pPoxx8P; Fri, 16 Oct 2026 13:13:34 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org DC5C8613A5
+ id JPO4UF5eF90b; Fri, 16 Oct 2026 13:13:36 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org E5843613AB
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792156414;
-	b=jC4dKwTsPrFi0NnB8jXe0zzhWYPwbWRsx5tLdWSEvIR+UaDnrt4l2wMUpz8bM7RFTDGU
-	 05W+T9KKed/plFB6T2x+jviFNXq3lOPli/X0nsOxAN7+pNHJApgo6pps/Qvz5fXyyyr/J
-	 XIuZa4oukor20viP7bHQ5lBFc4QJzyJynyOmRa+qhy5zlIzXEhR/GVtJYTRnyFonoynpo
-	 emZAqWo5iREjtT6DZZRt6XD56nTHtCy/lAwld8eIjteHtae6CH/dmI4bju8UPXc7Eo1xg
-	 8DoJRz3TA1ECwTo2E4YsMYtSdy2Zdppy4VusRIz4qw1S3ZFJlsPuubxiuJ1g/HVdXRQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792156416;
+	b=U7nM9OVwBNXOuCaDk7/xJy+wCrLR1Ef3mXDks04yuS0JHH8zulnV/+xj88NIQ2krbw6l
+	 PpleSIUn469qskKC2pdFSwlxmoWC1Fg+Q3eMberO6nKzTYYxZxQM4AsuJwkADPyD06tTp
+	 OXtJH8AInSNJDJu6UTQJJvB4PPCoZtFi27vpmiRWRDUmrQZjGeDpH1Yu3ffcCNawUT5ZV
+	 +HCq7lv6banhJPQqH8jgo2JqqgsIgy4Ep0MRblTmjXhV3asw2Dvgi5KBsgnEnjwRSxJpH
+	 GjPd3TlsWYP+/HfMgDRv9Q0y/feNxQMMlzx36uUrOuvpdsc0+ylutaQPsfrbOyb+a3A==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792156414;
+	c=relaxed/relaxed; t=1792156416;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=F/rdfveNG6G/n4VskqAzPjS78L6WTm8cCev2ialQ2ns=;
-	b=UivRATdPkDpjrUQ3mQPM92dD84zmx0yC76a4V5t0Ac83qqNJStbzTU75nr8HbhHj5b0O
-	 agoTITLCoU2JjSMCr6CbS4EAGBYr5ABUYgSn4zV+sIw3Pr7VO++bNv0oU5RCGf4iuKzTD
-	 Swo28iAEmvF19lswtaYZU6SxKpfVxtpr8IufFEhKmAkdmS4kdKdD4lKPItxLeCB23WTWv
-	 tA/oBMJqPFDHn/yFZOMGARKSnTZnlyzmpbHoJgQWKQLuZbwFT63ng1bmjPN2Mot0toVdB
-	 zNc5zkc1+zHnfCuTNs/qPHrlJrWcujDLYNUxF92FoAGzcUT/s8DV4MPrLhWRzK2W2zA==
+	bh=ERu4iIudfHYAeHvx6JIhPeNiLnLwfXOgkrepypKXkt0=;
+	b=SJKCoZpDGqOGLa1KToJcUO2isHMbPJoIRaWTCTUMh+hkZVo+V3sSdn1RPXf+Ewimu3Az
+	 3E7L6P2SKNWczQAyNXf5OYsMo8OOhAtoLMEtvnv8gOF9EMLLasJ7L8pwLqh13C6+H51Yp
+	 qzbZyPKzogo1XjNoVhu7x75gTeRDeKnb6q7ABqw5fEXnKB9vneV62+pjrXPVPNAuU6EEO
+	 GrTS+uvjXXnOcRktkZHnITNjDsDNqtfwJKxGCf+FGcwH087qrDtbonIONGJIDX/L58Tk2
+	 ubdNX/bKy5DAArzsA1vmdZQO6MMitHp+i0RkEE6kwMI1Kc9N4jZrllZLTXOKUYWtGcg==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792156414;
-	bh=F/rdfveNG6G/n4VskqAzPjS78L6WTm8cCev2ialQ2ns=;
+	s=default; t=1792156416;
+	bh=ERu4iIudfHYAeHvx6JIhPeNiLnLwfXOgkrepypKXkt0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=grbGJhsN8cXh7QVa2/46x15zgtTzJ8gSHNKc0IT4RS/SzgUagDHoHDN6UOz9pA57a
-	 3/hcGVVagyVizhGgL12hsPPQkeYN4WVs0xQpU0V/iEULTD8DWLgRWZ6sLeEXYBFj25
-	 MoKJ15bujBOqgL4hOp1MCAKnRpzhvVfWlQhZV/yw8BG5ZM+U2OnVfPohIdzX1jzJmD
-	 8WML50hxiz4pyzVLnxWBsECprwEq3nybbJPh7UveQCP+fV8ds60lmDyyGITfRqXbvL
-	 BWCOIanrLCQjy7Q2a8q81JaJKetYjM/tefu2GB0yJ7BTDoy0M/dpT+amVz2XShjlJ2
-	 daUNIolqTwLWQ==
+	b=EtrPHJ5O7PQgQtNdsItDqSj1e39etWpwWPKOhuDdyhN1q0AhE4R10Dy6CKklTwGV0
+	 LHp2XNIYZ6pzcJK8shk509IxTEa14Mvk8OmvjQbWshnTifeJarZJQ5oRI83pFYw0Iz
+	 Q0hbs4RU+7cl/Mg6QPSIl56Ssb5jxWbJymlfDffHHiAOkU9zbyOqp1HJ9OuGOatbl1
+	 CxR9nL42sFwcqh9jBvot6+UMi3LUIo57DJX8Q1pzmK3ycb9LLziNPcQQE1Iq594OLP
+	 DNO/I2hGeHlYkmzbZUwgH52jhBJQCGEkjKHJ9ExfndvrS7L5gla0AT2rcsQRGpkg42
+	 stNv/MHvu7YXQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DC5C8613A5;
-	Fri, 16 Oct 2026 13:13:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 50E02920
+	by smtp3.osuosl.org (Postfix) with ESMTP id E5843613AB;
+	Fri, 16 Oct 2026 13:13:35 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 80E15920
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:10:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 358A860F02
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5A2ED60EFC
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:10:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jFLIMPa_cgfF for <buildroot@buildroot.org>;
+ id mra38Yb_h60M for <buildroot@buildroot.org>;
  Fri, 16 Oct 2026 13:10:01 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 38FD660F3F
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 461A460F40
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792156193;
- b=ra5aeXCh3LWIUZV5RiDLoouDeLoIW1yiyO7jUI1dtnQrB8lHwjzejGsZ4UbqcGewDQMn
- evdZJq9oAlQYQSX6vwP3VrBf19nIzHPDv6N+icyrn1BsaJ4qUclnGVkBBXpyP6a8jhTBL
- fze4Z9QqN7BMY5vfwJ6VDRE7ftP6KI6NeggKMHaIF5sPu9FZNrl0OFRlYu+vT6zxVeQQC
- RuD0oWFWwQ59Nl2s/D81Dq3p+xf6oeWhaH+D13TVjvncy8W6WeT+eaUMDx6lmVvxK7ZTi
- to9HlHkAFNLyMCo26jUuMClSaioTe8OlpDnZdNFoq63ajdsfk+1kgbpl56vfsIZT9Vw==
+ b=OTMSBzZGO7WMD0PXULAQTUEI1YgcWYiWjbfws3GI0Duf+aLzpWKFOfPtYhoF2tiA5gHS
+ aNjYpbOwAF9feJnqRzLx9ae6Xns7B2SRSKo9CYCq/IbEg7/6J0OFbSpKT98ENLIV4T1X9
+ Sw54QNC9Irm4rGS6HVGCH/7RB5aKe4fDRH32r0WZK4razhMUkyHIM0Pie52wYmOOK2Bj6
+ Atd19t69SKURjMSDRl7sTbKZUUitiLEehuZ+QsFT8di10ayxGoLBDiitBIBiyT2of9LGc
+ EQ6y3hSk2229wRbW5dtKX3fKCdwR3WSF5jTolHdvnrhnL46TmntxQyDV132x9L8qe2g==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1792156193;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=82JoRqAdr4E9T+8pZJxJDCOSvOgeDY+PpvsI/ijQ3zw=;
- b=LlnFnsHg7DWVLxufKGI9QrTN9bGegqimU4x74ZSjC+2WIRf4OHWitWUKaRYZr28QPDPO
- o0nrrup80eZTiHAF/qhVRLpfU7fW7CFn6zUAhyFP8VXcQLHBB0olxUGdGV4lNuUKvo7y3
- cqrfMVar+dnuZpkiDv3JyO/48Vd6sujYub6FMW2HgsSLfX4Tgw72Yn0B+/6DLtFCt6NJa
- p4cAmmb+YOgWvUGJVfCJOtRm+RVMWuxCH03uat0njgLXFGA59vfkVUHTFx3bROzMO7ocx
- 8AlxPy4Fyzk+yjBIrCFK/FoaJ52OXXn+N/yI2yL3/kQxCH14c4gKrpUcgy1aX6pknng==
+ bh=mxeytqTQxfDY4gWpK9/FWolvNq7oObsqWVLDh67cYw4=;
+ b=hChU3iJmci6GER80N9I8H3p6kG/GyMHVjHYugjoT7n0csVr5VD6D5bVl9in7FwrkdyFQ
+ TRCoqfq8kUvZJFfJxcg+Mzp9R49hjzIJVSj17VfH1FAU6+fyPysfIF7Qgnp4csVXrMoG7
+ hV7nCC3wu9GsPt1L9UtFE+8rPLXGSMweAHRGDwDCCPp4wJPGpuepvj7ui9D8T4DnGft4m
+ wWbEcKzlJRJQNa66pBcg5tzMmdQaJoSVu/NDxHd6eEO/xipxZH88ohOu15/x0Zct2y327
+ 9j04Mytix3PiVnjoAhKk2HE1omoeWiVtWBU/Q+6Ry3P8a7TE2vM0LTbU45VJkRoNu6Q==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 38FD660F3F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 461A460F40
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:09:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 290078D704; Fri, 16 Oct 2026 13:08:32 +0000 (UTC)
+ id 35637960DA; Fri, 16 Oct 2026 13:08:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 Oct 2026 15:14:48 +0200
+Date: Thu, 15 Oct 2026 15:14:50 +0200
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: 3ac0f22f90ed9a132d3568d6926a76df38ddeee0
-X-Git-Newrev: a6a37ba0db759363cb8e4fdc016385234108025c
+X-Git-Oldrev: a6a37ba0db759363cb8e4fdc016385234108025c
+X-Git-Newrev: 500860e2f0cd5363ed8473f8ff17f8a829e5093d
 X-Patchwork-Hint: ignore
-Message-Id: <20261016130832.290078D704@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/iproute2: add
- optional dependency on libtirpc
+Message-Id: <20261016130832.35637960DA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/iproute2: fix
+ build failure due to missing BR2_PACKAGE_LIBTIRPC_RPCDB
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,55 +115,59 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1636415175712059152=="
+Content-Type: multipart/mixed; boundary="===============4757725072163491289=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1636415175712059152==
+--===============4757725072163491289==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a6a37ba0db759363cb8e4fdc016385234108025c
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/500860e2f0cd5363ed8473f8ff17f8a829e5093d
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-iproute2's configure script probes for libtirpc through pkg-config and,
-when found, enables HAVE_RPC and links ss against it. libtirpc was never
-listed in IPROUTE2_DEPENDENCIES though, so whether the feature ends up
-enabled depended on whether libtirpc happened to be built before
-iproute2.
+iproute2's configure script enables HAVE_RPC as soon as libtirpc is
+found, and misc/ss.c then calls getrpcbynumber() from its RPC service
+resolver. Since the bump of libtirpc to version 1.3.7 in Buildroot
+commit 3f3d6e43de9b4aac7df8545fd811171256f878d3, which includes upstream
+commit:
+https://git.linux-nfs.org/?p=steved/libtirpc.git;a=commit;h=7cea8ad66aecc21e6caae330b5d31075af399193
+that symbol is only exported when libtirpc is configured with
+--enable-rpcdb. On non-glibc toolchains there is no libc fallback
+either, so linking ss fails:
 
-Add the missing optional dependency to make the build reproducible.
+  ld: ss.o: in function `init_service_resolver':
+  ss.c:(.text+0x2558): undefined reference to `getrpcbynumber'
 
-iproute2's configure script checks for libtirpc availability since
-v5.18.0 of iproute2, which Buildroot started using in commit
-10990c576b2ddd7636f094f510a2ad1a5a80e50d ("package/iproute2: bump version to 5.18.0")
+Select BR2_PACKAGE_LIBTIRPC_RPCDB when libtirpc is enabled, like lsof
+and other users of these functions already do.
 
-Fixes: 10990c576b2ddd7636f094f510a2ad1a5a80e50d ("package/iproute2: bump version to 5.18.0")
+Fixes:
+https://autobuild.buildroot.org/results/390b7ed00da20c2349fe069ade4a65404834a484/
+
+Fixes: 3f3d6e43de9b4aac7df8545fd811171256f878d3 ("package/libtirpc: bump to version 1.3.7")
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Assisted-by: Claude:claude-opus-5
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2b9d1a8aa671982583864ca050380120ccf6ee53)
+(cherry picked from commit fc23067ac65890428a85f71d604c816f560cb728)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/iproute2/iproute2.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/iproute2/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index fe7a6fc304..344a6fa8e4 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -25,6 +25,10 @@ ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
- IPROUTE2_DEPENDENCIES += libselinux
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
-+IPROUTE2_DEPENDENCIES += libtirpc
-+endif
-+
- ifeq ($(BR2_PACKAGE_IPTABLES)x$(BR2_STATIC_LIBS),yx)
- IPROUTE2_DEPENDENCIES += iptables
- else
+diff --git a/package/iproute2/Config.in b/package/iproute2/Config.in
+index ab9e515eca..106a0aaf2c 100644
+--- a/package/iproute2/Config.in
++++ b/package/iproute2/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_IPROUTE2
+ 	bool "iproute2"
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_4 # __kernel_{u,}long_t
++	select BR2_PACKAGE_LIBTIRPC_RPCDB if BR2_PACKAGE_LIBTIRPC
+ 	help
+ 	  Kernel routing and traffic control utilities. Provides things
+ 	  like ip and tc.
 
---===============1636415175712059152==
+--===============4757725072163491289==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -174,4 +178,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============1636415175712059152==--
+--===============4757725072163491289==--
