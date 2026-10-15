@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE336CCF2C2
-	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 13:11:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D8D7CCF2C1
+	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 13:11:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED508610B8;
-	Fri, 16 Oct 2026 13:11:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 67B7D610BA;
+	Fri, 16 Oct 2026 13:11:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JjuralWMgMsx; Fri, 16 Oct 2026 13:11:50 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org B1C6861164
+ id 66OC4bhPb5Zr; Fri, 16 Oct 2026 13:11:51 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 092B6610C2
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792156299;
-	b=sDAJLOVuKUh+T2z4kfPPjGGv5T4hVaD9xG60pAKjzh2m9OcGfULSD9g/Ew5oTYqqlZ0W
-	 lGzpkBeSVLLDxxGaHDRa/8jFjMN2HvnOL1dlWO2s46qyOSNtk5xL8wrvzg7+cK/0GRv0y
-	 QuQEemECva+WGdljY40QW1MXY/UBQlKmtsxYlCjl+d6Rdb10GsEQOqjH6TBcJ8aQWBBXl
-	 0lUYPKSo6IWeF2tPy9wgJHbL1IRSRr4SRHpfNrQkJG0YJgQVc9tkvm6af6qoyk3M6Zsx1
-	 qkWfOWsCb+o1qCZ9yH0UPgDNA6roJZuBDkLnlijdCI37o9MGgLV3Dh0VpeT/JvCRdDQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792156303;
+	b=EXjZ5rETOgvAqId7crsGb9gpJoFrrTvD3JtBg2Fsi1KZlpY1KKDIZEV+uxkW5Pug8yPQ
+	 kLHSnCbGzTJyzgnkeb8y8UaMa/q71pyOL6+PO3pe8n43pvtlX3ZBEgL6NAYbdN0DSFUOR
+	 3YA4rpCpkklFrpyVVX/OMl3D0ytv/oAsKcA+ONfEQiM66xXBATBn75tG9ACGxEzlDZEC1
+	 EyPqKYJ+w/xdCEJKa1oCmc0/lLzVm5RBUuox6qjqBBzq2qL8zpV0YuSmQsYhi2pqN01yS
+	 OeXnzvGiKjmSZ3thx9FTY7XX/ISfzfVpWsGwl8P4L8pcPlYipkTzktl0BnB8A2MqVDg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792156299;
+	c=relaxed/relaxed; t=1792156303;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=OUnM9BCvGnJre3FgMKbYt0b/KWS1o+sm98KgCQQCXQY=;
-	b=QskdsQpNJD6PmNOeThGaIWin2742+1mXhpIsxIfPzXE9Y9v8sI4RB5WPNPbu3iBRpclO
-	 I3qMMF2bWN44KoQwcrIYXPcphg9RU78InrfmziZHBgdBKc3bbuxxNbOnpLVsGzAlnRzTR
-	 9a4Cd3gzMEZTtoa1EVWX7mbIaBUbAKMtGduEMyyki1I2u4SITlyn7iNlgf9E3qGb2te03
-	 0wncnMcYBJ9wnCmcrTNkNo7BQYnfxQi+j4tkK0ULMzy6GvK50nFj0XuPoY3MrtRVHKLUC
-	 9QDzBaCkekH5nJ66KnnshXRuw5KSMIh8ATn2LAQh+8VrdfWWDa3+dgqNEXgU/3GTs0Q==
+	bh=VZjHwJF+N6A+hpxyJhw4/PW+0Q0fmzhHEgfhKM2x12E=;
+	b=Ss1TU3CYNkKeI+Zt8eRet7zSg3S8g1fu18HrpG5ozJASsPaPZA7OXxLb90eR+4kg+QlH
+	 HOnDrN/QUPE84IFHgP8iD1x/noks+a21hpoKYgfq3dbu+1xwmJL+qo3n7g9NzpGSYIt0H
+	 Vu0ntKB77YKwifDdrJdAGkaBC/Ovxc+kgjHH1ZM57ceXs5keMax8MWAPZsUUvj3JOIXSj
+	 3b4ivE7AHXtfYQGH1ALahXqi76NjzPv/Y9j9/fjidN5NbV1sZ/CMW6XXH/OTfx6XdiNUi
+	 gMRmPUyC2GuusuGYtmg1Km3lUP0z2JlSROlGz3SXAw/90cVjtPfQ027uuc+l+2ZSuiQ==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792156299;
-	bh=OUnM9BCvGnJre3FgMKbYt0b/KWS1o+sm98KgCQQCXQY=;
+	s=default; t=1792156303;
+	bh=VZjHwJF+N6A+hpxyJhw4/PW+0Q0fmzhHEgfhKM2x12E=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=D6MJ1WqbxX8I9RO77LXGKKiguQ0x2+UwXbrSBA8KsaaDsrB3n1YjF1ft1x3wxpuoY
-	 hLnPscsiiJQ4JjjDgsEXP49OTqVKlZdMUtaTztg0SrUQ5w2XeUGhcHppbaPcFV1T0K
-	 +WN2AxbbO+WDAkO3tLOsngtnx9CRGfRpkLJTuE3G3JBJvlUdEX/PCGt5Kl77xs58zj
-	 fuq7nJEBxwLV5Iu66tOvmzB1gOaNTjnAmEOM1h/YDhSiiv0s3YTvBZRBkRNHeTDAMb
-	 MyyyImWqTQyH43DE9G+ftBnKa9znPmI82uxGcbYmv0niIHwqyW9pRvGI5iley5lPuh
-	 6j+3etCr500iQ==
+	b=sBhd3CZepcu4uFee9o7C7Q/ONB+MqqAgakGe3atjVaHT/JIiqNOy6Oau0ahpc3hlH
+	 jw5DEKoth95tf07ihNdqMFU0sXwlVB8s/dDx12TPG6gDnftK79Ur66ibRUczEEsJCq
+	 f+zgN6iP28FB7DWL8Ty0OnXaYhO2WP9sC59SfA6dt4rIz7SYfewPnXNfb2JK8EEayq
+	 kkJ1SomqBeNhj8adZxKHGV+XmxZshd5cpQW5+nnQVRbRpepbuwPmY5MFuqJljMv7hT
+	 8Qi+Ni6F98JFaYVEf8m591m0CbmZGEerKme/jRwHMp7bj0/1TBgtSErTmXcIz42L3D
+	 dTfXy5OUUlYNg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B1C6861164;
-	Fri, 16 Oct 2026 13:11:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 092B6610C2;
+	Fri, 16 Oct 2026 13:11:43 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 206F2105
+ by lists1.osuosl.org (Postfix) with ESMTP id 3A196105
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:09:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 060664016B
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2012840474
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:09:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AO9wQCsjE-_C for <buildroot@buildroot.org>;
+ id 7PXpMqMuh2P1 for <buildroot@buildroot.org>;
  Fri, 16 Oct 2026 13:09:53 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 50EEF4016D
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 6FAE740042
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792156193;
- b=UrAtYjG/G4CHc3kKSMO5tYJbS5q96lra8I7hXEkBehAJ8S0FfsfcSdt9TPYGcoYp82Xp
- 6N8KxfSvAN5RMv/b6dhmQD52bpdrQKBIJMoQGkMU5b2YDLEbY+dR4sO83MfNh1H4zWU5+
- mBQWYnLohMQCKbjtrZy+uGzUTwmjrtF9pPTxVkdZrDIyOX4A/2mhKseB5sfvoE3zNPsmN
- L5Hlq070iZw3m6xF9oj0c7vh+wFjmQu3sK3AayyNZHxpf6l+veQUDNwTHiA1vl7SMP3mR
- ug1gGNQzGDGP3wmYY/ju4mqxKOArVT3W+ICaYsxLB4vKZKQAIdvOPrj/vewbtlQ5Big==
+ b=mqNpf0x2deL2M6Q3HzbU4Kjg4vIvPv9vMgBnvN2SBc002oWLSZ/xDpBFnTTCapZ3H4UY
+ iRam1+hXn/bRSojYdzW9dgJ5c3kP4bFqvCl3v7F93J/gnGKzTdf04zKWG5olq5cUsej+v
+ abhgPjFnYLBMyFl+BMTMNR0dvi6+3V2fPMbqCzMFnLObTzPqqRE6ABxcsqUnSfwfGtSEs
+ nhB5CEJsnFT3AnJ/LSjSjGG7+89bKY5zTNwIGdr3R2fOZgiBdjs+Q3HbXAoEVCSY8YYqL
+ Qul+k5Plb1yJ6sOnrMp3zFZB99h30lxM8xBX3tTo5u4FUbo95zxtt/9f+1ANNn8hYnA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1792156193;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=Q4eqeoCXsCyJ6nF4IY3cK74rj6nqbio1tEwF+YJWQp0=;
- b=Y8zs/LW2HNRz5nv00QNqj2BWdcz+kIWaCzVFrstQYTT+wZeXwQDjP3u4end6wZAGK6yT
- eadH6VZT91Isujf+w295W15jeyaXIrD7VVSVd/cWkptxsi+R6Gg+VreInlH67kyfml4tJ
- BwZFTVk3y5/SaqdNUit6pr9rj9NIENU95in/Nl4Nq/Yke7SrXCNMvQctxkfVwOj60RU9w
- bg0NQRuMMU/lZqKsxGynBxMvNIbdy7jj0HgOIRRMowh57VriPGLeFWk/0N6LfKT4YBgZD
- VBEsy/ciiGKvZAs7sE/Jcjj+Jf02JJR994vytOwJgu10k891ila/alTZxjON3LSTW+Q==
+ bh=F+FvdMOFqYyFb+/t78YbP7kBrNAqEWPFxjGD0swcPAA=;
+ b=pXtivMIylRqWZunBYeSyfDWg/TLygxHHQRfnjyyIVfoVlw7PH4iyLYjFVXdPO16Kquz3
+ 8FR2Eav0qw4gdBbIge1A4MbZ/9ailWb0aSoVCmqg+ZxlLa9nWQEXsyaU2PlJGiO7JhPNZ
+ auh8/+fydO20NyFx0DxhmTPsbPm8LGqhJ/f+E9po9SJcMYpR3hHbpjztWc8g4486cAriX
+ XivWKdCQfNke9uG/FocSceZ8zDWFPjbUx1dbjMnXuPIGe6QcaOwJxtxU6CSqxb3V1N7zc
+ Hh0SbhLW6VjFae0YTGxN4EHxG5j2f+JM1FDR3RmoC1Bmd4Iy1YKd6bNV8NF8zrCE2Yg==
 ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 50EEF4016D
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6FAE740042
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:09:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 40E5895BD2; Fri, 16 Oct 2026 13:08:32 +0000 (UTC)
+ id 5FDD18D3BF; Fri, 16 Oct 2026 13:08:32 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 Oct 2026 15:14:52 +0200
+Date: Thu, 15 Oct 2026 15:15:06 +0200
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: 500860e2f0cd5363ed8473f8ff17f8a829e5093d
-X-Git-Newrev: 941072daedb73650ae2c59069c8efc79291951af
+X-Git-Oldrev: d2e9e37a39befa3f04abe50329251c469c43ff1b
+X-Git-Newrev: 26723c2fd1198d2dd9e370a80a63709b6a6295c5
 X-Patchwork-Hint: ignore
-Message-Id: <20261016130832.40E5895BD2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/nnn: add
- BR2_TOOLCHAIN_HAS_THREADS dependency
+Message-Id: <20261016130832.5FDD18D3BF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] utils/generate-cyclonedx:
+ add "id" property to resolves
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,56 +115,69 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
  <buildroot@buildroot.org>
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1496255656164481656=="
+Content-Type: multipart/mixed; boundary="===============7042686357093221455=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1496255656164481656==
+--===============7042686357093221455==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/941072daedb73650ae2c59069c8efc79291951af
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/26723c2fd1198d2dd9e370a80a63709b6a6295c5
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-nnn links against pthread. Specify the dependency to avoid
-unexpected build failures on toolchains lacking thread support (e.g.
-br-arm-full-nothread).
+The CycloneDX spec defines the "components.pedigree.patches.resolves"
+object [1] as supporting both a "name" & "id" property.
 
-Fixes:
+The definition provided for the "id" property is the following [2]:
 
-  https://autobuild.buildroot.net/results/5cd2b7a288a1681068448de6715e731580908206/
+> The identifier of the issue assigned by the source of the issue
 
-Fixes: 7856e41685a179fdda7b21a10455e52fe5fa5cb0 ("package/nnn: new package")
-Signed-off-by: Alexander Shirokov <shirokovalexs@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1b8cd6665bdb6d8f67b71b859a0d78e3a2584875)
+And for the "name" property [3]:
+
+> The name of the issue
+
+The "resolves" object was introduced in commit [4] and only used the
+"name" property to link to the vulnerability it resolves.
+
+In example [5] provided on the CycloneDX website, both the "name" & "id"
+properties are set in the security example.
+
+In the vulnerability context, and more precisely the CVEs, the "name"
+and the "id" are the same and thus the value can be duplicated across
+the two properties.
+
+This commit replicates the behavior documented in [5] to improve
+compatibility with tools.
+
+[1] https://cyclonedx.org/docs/1.6/json/#components_items_pedigree_patches_items_resolves
+[2] https://cyclonedx.org/docs/1.6/json/#components_items_pedigree_patches_items_resolves_items_id
+[3] https://cyclonedx.org/docs/1.6/json/#components_items_pedigree_patches_items_resolves_items_name
+[4] 9415529923 utils/generate-cyclonedx: add support for 'resolved_with_pedigree'
+[5] https://cyclonedx.org/use-cases/pedigree/
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Reviewed-by: Quentin Schulz <quentin.schulz@cherry.de>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit 074e650219f98357fe051f82e9fbfe007851a865)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/nnn/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ utils/generate-cyclonedx | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/nnn/Config.in b/package/nnn/Config.in
-index 64cfa8e0a5..555ab864d9 100644
---- a/package/nnn/Config.in
-+++ b/package/nnn/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_NNN
- 	bool "nnn"
- 	depends on BR2_USE_MMU # fork
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# Building nnn without widechar/UTF support is theoretically
- 	# possible, but in practice it leads to unstable builds.
- 	# That’s why the WCHAR dependency is here.
-@@ -15,6 +16,6 @@ config BR2_PACKAGE_NNN
- 
- 	  https://github.com/jarun/nnn
- 
--comment "nnn needs a toolchain with wchar"
-+comment "nnn needs a toolchain with wchar, threads"
- 	depends on BR2_USE_MMU # fork
--	depends on !BR2_USE_WCHAR
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
+index 45f9682da6..098f62bf2c 100755
+--- a/utils/generate-cyclonedx
++++ b/utils/generate-cyclonedx
+@@ -233,6 +233,7 @@ def cyclonedx_patches(patch_list: list[str]):
+                     "resolves": [
+                         {
+                             "type": "security",
++                            "id": cve,
+                             "name": cve
+                         } for cve in cves
+                     ]
 
---===============1496255656164481656==
+--===============7042686357093221455==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -175,4 +188,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============1496255656164481656==--
+--===============7042686357093221455==--
