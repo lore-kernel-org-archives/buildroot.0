@@ -1,167 +1,130 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B743DCC6B39
-	for <buildroot@archiver.kernel.org>; Thu, 15 Oct 2026 17:03:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62716CCA464
+	for <buildroot@archiver.kernel.org>; Thu, 15 Oct 2026 19:02:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 676EE81008;
-	Thu, 15 Oct 2026 17:03:54 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J05wfy1HFdkk; Thu, 15 Oct 2026 17:03:53 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 7B33380F7C
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792083833;
-	b=n/pzE2AuOz3DEulrvC4lLmCOC7CNQ0CHMMM7Y4zyG53CRSYFfTSO6oj+ot6ecqt9tk6I
-	 dcCicYa10YCcGpAjUTZIufCUXirFnSLDMpjLsTisjQzcomq6xVy9BwtFCDLKc3vnTavWl
-	 aXL72Pl91yAR/eGe2vwOVPBciKlqMZjg2Ge8cAXXweyKUVxKoemwl95s5BQ7Vu2gZyPtz
-	 rYZx6NKeMoY6iRZW1A9/WmbV0yx7ag7PQwv5Dd9vEqQExJx31/c9sarH9n4X3URXcJca6
-	 XGvaOHmsUfVkRoCcD7oi3ZPmKgqUkyrzuMhUnol0+UQLsZ8/OrCXRh5onUF/l2HKe2A==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792083833;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Forwarded-Encrypted:
-	 X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Date:
-	 Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=F6E7ZE81atBky4Ao1t4LWpJERNQT2COEpqLjuXAIIJQ=;
-	b=QgAw5JLN3CINJH6lr6HzKsUx+Wvd1pDo2ykS273yG4voYpgnthQ5tqG3gAXnKfjWZ7ls
-	 UYTchIJy75GrpP1Ikr2qn6Cw6bja2XdtcYF9JzEjp0MiMNitoYr519djmYY+MNAiyNENE
-	 3V3iKNGBXFZD70TkN/yO5e8QrpluDRZJYpbfQbYC0EEtwLRB7PYCzCKN2+lzHSzJpRZaj
-	 e4otouIHj6vGjYrKOwoseAvc/9ITI/B6EaeONC7vkFNPfxGu15gIc5VszF2EOz/yP+/Q0
-	 R1Y8UNqBEh8+AxdtPqdqdcmWS23D8jEl0Z6zjDqbmyyctMmoE9TxfuIETRRIb/T4O9g==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
-	arc=fail smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792083833;
-	bh=F6E7ZE81atBky4Ao1t4LWpJERNQT2COEpqLjuXAIIJQ=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=WZhY6Vkv5tKl2e1dVObrftcBremrcrU7aadnTERptuGQA81+/H8IhQydLq+nFEbse
-	 2yQ2Zdpctz9l4Jdgb3+L1epcZHedBe3zcEHp1QNy5cdxXUEQN2wrB4Chk2t6eld9kl
-	 vrfw3APlwN4rbLOEvpqXNPFKWBVcfB50R/z/o7l0PbKYZzdoNB5VGmEkvnCEvp9ISL
-	 kp4ReJTh6T3EV8wgeRvo2QhWsStG8YctS5ej0LJOWMul0ViSOHZoduuO7Iosh9VLIu
-	 fhCDaehuUbu+hH7Hif6jUFvtcozr59f81jZlNlTd9wOmPt+lgQf59qqCCJgze6LtTX
-	 xCk0rf5prio/A==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7B33380F7C;
-	Thu, 15 Oct 2026 17:03:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7DC10235
- for <buildroot@buildroot.org>; Thu, 15 Oct 2026 17:03:51 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7B80460821
- for <buildroot@buildroot.org>; Thu, 15 Oct 2026 17:03:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AB416607E4;
+	Thu, 15 Oct 2026 19:02:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Mrw9SVd7e1mf for <buildroot@buildroot.org>;
- Thu, 15 Oct 2026 17:03:50 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 57503606CB
-Authentication-Results: smtp3.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::433"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792083830;
- b=N9Bk1JLXDojMddKYkyAtAw03WDFP4o0JnrDYg3ZZbUM1DyV68me9pfrFyB2unw29lXtG
- Dbiown8w82XDaMFl5vRr7vzZZpwj3tHrbgaAUTftSI+nyq7P8Sw5TgRQM3WEKMlIE8X29
- 0JLcUzOhjecXU7PA8PSOPq7HvFEInrJBxopiM9inoWyI8dSe5AcOwoVdRH8p/FeFEZPEB
- 9s+lfNOZdvmS97FmRb/LqtsJEtmyXv4McgoYKritSYxYoYlh0I7wltITXXW97hF5JYU2Q
- dysoM/cD0ioULHTot5/FdqTyXt92S32NVSCX/8bnF1JuZ/GqYNoH3FP3Vx6SB2G7ISA==
+ id WGKPsGKrprWB; Thu, 15 Oct 2026 19:02:39 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 425EE607EE
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792090959;
+	b=jxDr5SrM2kH76ZMzr6mKvepkrQMWJH/Ee6ohUgTo93/ghWHKfyVfjsTNtsuURDpZ+/jl
+	 uv7SGzyCPglvviqvXGsEDM2WOUZP21SsJJCHNiXaTs2vuVWQaKYgHw5SmcCPaLswaOIJC
+	 TtLDWJ/FWm47LpzOl2Jnpdr2dEd15Xw6Nnu0FihGPehJ5klrjKTE12Em5U0HS81KV90Ma
+	 ZkYaxVTh3i89UYiuauxvvFM5kztuZ22ySWWTLxe87M0Lw8CUIFtp1WOi1fo+1qUTnE7dF
+	 LBspPBWI2wXhkCR73DZgUO6jaa6luxlycxm0P5pmAyJOHDqifm01tbeFWrWrRQg4xyg==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1792090959;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:Received:From:To:
+	 Date:Message-ID:X-Mailer:MIME-Version:X-MIME-Autoconverted:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=gwawkacU+fk0bduiS592kmk5Fnem+xxurHOYY9xbmY4=;
+	b=s0JnUetYnohwszWydC25Q0c06GFQmuFS52mxDsHID3sNvItAFKzWxBKHlyU6Rjj2PhaC
+	 HFzlRiFtrQApQJ0+WUMAyfPiqCB0nMM2cVvtzNvbAPqKrIv5SDzkLBNMzvHTpYRKstAqr
+	 D6OZZ4wR9Lut39G8wvvLtwknYVQmZk7E56st4gbirpiUYLCHUQSUDfpNwOQBLHWQIuy1V
+	 aDP9xaMvPM3Zl1V81zih0iCUVlxH1QWloyxGoq3FFP1iYGSuo/LAKWByymLQF8djjTXtB
+	 LNo85l456rHK2Op6KG98hru29nhNPUjuK6IIhzCjYRQkD7saXd/fRkDW0pr+DVH4fTA==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	arc=fail smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1792090959;
+	bh=gwawkacU+fk0bduiS592kmk5Fnem+xxurHOYY9xbmY4=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=N0ShznbYhB5XYBnlSMO61dhcE9F7TKNyk+2E/UQbojLtNHUQlZzLNM2DJKpQXuGRo
+	 914huh4dhTlslyJHNSMyAF1T91BUOWMx3MXtqrdZferUn36m4Hh1VEaqp8XNkok5aI
+	 lqbQ3l1JHN7vA82xo45PfP8Pg17FistnmmeQ+4zpUbbsdTj2V83TYOm4eEcwpCHUBm
+	 D0zF7sEj35/FDNs7Wo94Qp6AxLVeWTTDdkbb1nl4Fs/4Roj38uo01GxyY1slk8Wfhh
+	 VlofykE+ekAaq3/mbuNSZ5RgBKEMYVGbVsIQLELDVyeAhUkkuRLcqNEpyuUUU1IBhe
+	 S/BUO3vH5dplw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 425EE607EE;
+	Thu, 15 Oct 2026 19:02:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3AE85920
+ for <buildroot@buildroot.org>; Thu, 15 Oct 2026 19:02:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2D0B840433
+ for <buildroot@buildroot.org>; Thu, 15 Oct 2026 19:02:38 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UCDu2BGKDFlZ for <buildroot@buildroot.org>;
+ Thu, 15 Oct 2026 19:02:37 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 0F0E64005E
+Authentication-Results: smtp2.osuosl.org;
+ arc=none smtp.remote-ip=34.202.193.197
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792090957;
+ b=ca0SbOcWLEsCmQjv/QbudJJ/k1XwWoexNwSgOEe50VakwCYcjcmrA6C2gSV/mQCuHMzN
+ /3P/cBhmKwXe6t2DMwWI0miIS+5uZhvpWt33N44WrR+IeLs0WFfv1La3Bh7VEzvKmVVUs
+ sa6s0Mb/RYknpujklb3OxeUqlz/1FF3W3FaFoV1DOj6LznYIbs/C3gkOfLkBIJmsXyVeq
+ xDqZkOxV9gRc0+YEDrufg48hms8Wa/15hMIeFL/NbFRCPn/TIXEPvjt+L6xzADYJ1vidp
+ O/gZk4pWmg8l0QjSoXVLjD8SFSJrIWO2lKRXBN8Hkz4UvQhpMwSFaDuadYdjArgT3lA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792083830;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
- From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
- MIME-Version:Content-Transfer-Encoding;
- bh=gfHMeFE5uAxrdU4QYLbMFtbdLzMl6PB27eUKVK6nMlM=;
- b=Zv/JwOLyCAosbbvFMQhLswAOYFIVzu/hQSdHQfSyFLpJKKwQV4YG5azPTEn9BTsmafOO
- VS2KxfHfhx56ejyjbCtStkDExNPz9MP4Ccc1yW7rQtU5TJyVZGE4eeViSJUgqLMr7lmMq
- JYB2tuSJrDhHJ0g73eq5F6cKbN8NNfJN4Iqg+9z/MXhrY0UqHjITYFFSaaqfNORsj61Jt
- Q2qojRgGiOt7jsPyTDBH00qdlVZdbaTT7o1lsyqymdf9lOX++dMus9nx+eTaV9csilN+r
- 7MCQEQKEBP7rkTS8vIFn7GxTY+mWmU0vuf8fRWn4yFj3prYE5N+mdh0qO8sffJYZePg==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
- dmarc=pass header.from=gmail.com;
- dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=JJzx9q00; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::433"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
- envelope-from=flaviu.nistor@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=JJzx9q00
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 57503606CB
- for <buildroot@buildroot.org>; Thu, 15 Oct 2026 17:03:49 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id
- ffacd0b85a97d-48df0fa43c5so152336f8f.0
- for <buildroot@buildroot.org>; Thu, 15 Oct 2026 10:03:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1792083828; x=1792688628; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=gfHMeFE5uAxrdU4QYLbMFtbdLzMl6PB27eUKVK6nMlM=;
- b=JJzx9q00bW7/StYB9zc2y5cNNMi2W0wf04uT0VahCmIhdRhm6ej7cAazlrJjIKABB+
- q8m8kMStQkBiTlQ65b8ohUzav3nzFHZtLTukfjvrBnNLhPalXRg0MrZqa/3pnLg+WhC9
- jWGGyHlmKKUMHh5g1uo8uHOt/iRQZf1ITpiLT7oQZGhj3yFAEyMPV0xmNT8ICpldw7Bu
- yn004S4gD/raEv8TGJmqdv/oOhadDywHYmuP7w/LmyA58MAgpNYOXFUFlhM7ueG2d3th
- OFGmjCAs+n6Jynyv0TSxBGfvwtG2+cnZU2f8+y6eVm41VoZ5UkiV5mn0B9r3r2lryKIi
- TEGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1792083828; x=1792688628;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=gfHMeFE5uAxrdU4QYLbMFtbdLzMl6PB27eUKVK6nMlM=;
- b=qleTQnB9ui3Lv7z1qn8ZnV47IIE6D+ODBs1rIr3sFYtdJSgHZpKSkhSDzYq5TCYRX+
- 6OiKorg4V6JfwF/8KtlxlaU970YLItIHQs+x5FAFP2OOivztTFtIL4C4QFP8ZCKSAkbb
- KEx8nEHsJkSVM4qctr6zybpTf+GQosM+tfXWFKymI6MfY+SInE8FD7DGcSpBWzGa8gUk
- vP9apNM/uIkt5iYY3TFf4JgtRbrkbrbnzrCFFFQo/gtbMK7iHuw1f+UlOlg8NM3MEB8f
- 7tzTX09z6DVq3lIc+duGkzQtO+f2Pn0dFA4n+h+R4eF7KGzKd8Wkgvwa4UkdEGawXRNF
- fMOw==
-X-Forwarded-Encrypted: i=1;
- AKwUvBx1QYmdxeV5V0CUwKe6MZrJ30TCPR8XqJAKia80R/z9WbUP3l6rjJLGBR3OpzysIowOC3+HHxYs4Ro=@buildroot.org
-X-Gm-Message-State: AFq9FYIpw46XYt5r7BRBZPaQiQbnenwpJd6nwVjujR2f5bV4DGbfcrs9
- 4+hx372gHNxBXSEppvFjHa8NuD612pjhr4r/FIz0TMz3Vol01o1r/0gU
-X-Gm-Gg: AYBFou2PzOXiVgHB2jgIld3RKdgV0B+ZLML5wjNeg/iNMzytvKLB1r+t5SDdKdJ78gb
- X5iO/xKEfaRefZIbagqJkVcACuWUpJZCNe2O8uuFVqoV/vt4kffeaUOACgjORkn1aKbwm4bq0dV
- URteUTt6o20Xnz0PDRMiuteHWQegyTvTIZc0n1tC9h39hJx2Bm7lm35ofuI0BhzYrhp1T/26Rw+
- CQA3cf6fJibJ0NhloE4LI87Y+qnHWpcL1wRmykvTIMwrAip7hIy5TtQ3La9Fub34+yOMSyFFcfW
- 1cPYqYBICmbyWhF+aPgvkXy3NExJI9+II4Lfxh7Q+5uj+K/dh92yZDEmI+cHaoPv27zQ8AQOBcR
- rXPZ6H+WDNMaVtBXppGheQzsMAHWWNf1OPut0O+vwTwM8FmGr3MNnNZiu4TvNss2ciEETI4jJ5+
- qzH6VnRnYX36drIRywxNTd4idxGyioKE4/UaPMq6bZxDsAuiPqDfDd6qvbpatAejhuvWauC7dj2
- t5WzBLpwTvcH/WS4GZpqkuopS28mGRVChaztIwa+4FmS2fQ
-X-Received: by 2002:a05:6000:29d2:b0:48d:7579:1cdf with SMTP id
- ffacd0b85a97d-48dfadfab51mr979108f8f.8.1792083827796; 
- Thu, 15 Oct 2026 10:03:47 -0700 (PDT)
-Received: from flaviu-Aspire-E5-572G.. ([5.15.72.164])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48de0ac52d3sm19690014f8f.43.2026.10.15.10.03.46
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 15 Oct 2026 10:03:47 -0700 (PDT)
-From: Flaviu Nistor <flaviu.nistor@gmail.com>
-To: Peter Korsgaard <peter@korsgaard.com>
-Date: Thu, 15 Oct 2026 20:03:44 +0300
-Message-ID: <20261015170344.5094-1-flaviu.nistor@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <87h5ios04m.fsf@dell.be.48ers.dk>
-References: <87h5ios04m.fsf@dell.be.48ers.dk>
+ c=relaxed/relaxed; t=1792090957;
+ h=Received-SPF:DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:
+ Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+ Content-Transfer-Encoding:X-MIME-Autoconverted:Content-Type;
+ bh=6zNNXw4bFm4qdd30af7gbss/YGH66OG1UHvV7b5onDA=;
+ b=l4f1ZlMw+W5Nr1u5rMYbltkVUT4LXt8LCy056dckZvwaKWM6jn5PErhJOvchojW0YqOi
+ 1ldIHBLiwuB8gawYAGGykQGdtS1xFSPbyYZ4o83O5cdWqhv9i4jDLOKYMyGpQZ5IowdO0
+ ir/8yB/lzDmc4ilCbscX9U/Bew8f1oWmuDF2qJUD+rYoSvB6G+RKOVz3ek85MMyp0OyRW
+ F8Ogll0Qpy9EBjHlqgAJQh9wp3zgPgXSsCrl/cXhq9Xd/sDz173r0OhzeFqtMilcem/rl
+ 0MAeewxJYLDMtBkj0KM2CzSH6iKjayTrjKrGyMt+lBw17oOBlHPp4sHaxTolxjdUOmA==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ dmarc=none header.from=korsgaard.com;
+ dkim=pass header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256
+ header.s=purelymail3 header.b=bC0zJjO5; 
+ arc=none smtp.remote-ip=34.202.193.197
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
+ receiver=<UNKNOWN> 
+Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=korsgaard.com
+Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=bC0zJjO5
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0F0E64005E
+ for <buildroot@buildroot.org>; Thu, 15 Oct 2026 19:02:35 +0000 (UTC)
+DKIM-Signature: a=rsa-sha256;
+ b=bC0zJjO5iYB/3B9AbdeiT+fzNceDO/tU2RiRg2jD4jsV8N3x7otp/P/9RuFlkpBkfg/VZ/iVeYPA2LJ/s2XU3ntOrTxXXn78NoLgPe2Nuy7ZFebg4dnGwSNs4HQY1QEJnu9uwXlQ3oRJ0GJqpIzCXHJ6YRaLDRptHHjIiz1mPExskzDtnAx9K5fsT9RL0+rm5O1RNx8QXXWotGXj7kovkgloZZBbT+EXMuqLnnp2WJalopEcLWCxnSfIaII6bL3mXkRLzKdbobyOM30+LSG0vG7/p8SPci/dyAoORaCoDlyGURxQtBEwfkLR6iwC4fQKOocg6nvEehSl9NdOCM2Ztg==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=jxlSb7gUusz9L30i5fVbDD1q5VGVHxtDQmN4AbL4/5g=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Authentication-Results: purelymail.com; auth=pass
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1988082358; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Thu, 15 Oct 2026 19:02:26 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1xHQib-000000011SN-1pAM;
+ Thu, 15 Oct 2026 21:02:21 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Thu, 15 Oct 2026 21:02:18 +0200
+Message-ID: <20261015190219.243913-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.47.3
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v4 RESEND 2/3] package/python-snappy: bump
- version to 0.7.2
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+Subject: [Buildroot] [PATCH] package/libglib2: backport upstream security
+ fix for CVE-2026-58016
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -173,68 +136,100 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Flaviu Nistor <flaviu.nistor@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>, Julien Olivain <ju.o@free.fr>,
- buildroot@buildroot.org
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, Oct 14, 2026 at 7:44 PM, Peter Korsgaard wrote:
->> On Sun, Oct 11, 2026 at 1:12 PM, Peter Korsgaard wrote:
->>>> Even if there is a 0.7.3 on Pypi, there is no 0.7.3 release
->>>> on the project homepage, hence the bump to 0.7.2.
->>> 
->>> How about contacting the author about the 0.7.3 tag?
->
->> I will try to contact. In previous situations when I send out a bump
->> it was indicated that I should use a Pypi release only if the tag is
->> released also on the repo. I think also in this case is better to have
->> the bump to 0.7.2 until 0.7.3 is released in the maintainer repo. 
->
->Sure, but we can do both, E.G. use 0.7.2 for now but also make 0.7.3
->available for the future.
+Fixes the following vulnerability:
 
-For sure a bump to 0.7.3 will be made once tag available on home page.
+CVE-2026-58016: A flaw was found in GLib.  A state confusion issue exists in
+g_dbus_node_info_new_for_xml() in the gio/gdbusintrospection.c file when
+processing malformed D-Bus introspection XML, specifically with a `node`
+element nested within other elements like `method`, `signal`, `property` or
+`arg`.  This issue can cause an unsigned integer overflow and lead to an
+out-of-bounds read, resulting in a denial of service.
 
->>> It is good that you add yourself to DEVELOPERS, but the
->>> click/rich/smmap2 additions belong in a separate commit.
->>> 
->
->> I just wanted to avoid some "noise" caused by separate patch, but yes,
->> you are right this would be the better approach. I will change this in v5.
->
->Great!
->
->>>> -PYTHON_SNAPPY_VERSION = 0.6.1
->>>> -PYTHON_SNAPPY_SITE =
->>>> https://files.pythonhosted.org/packages/98/7a/44a24bad98335b2c72e4cadcdecf79f50197d1bab9f22f863a274f104b96
->>>> +PYTHON_SNAPPY_VERSION = 0.7.2
->>>> +PYTHON_SNAPPY_SOURCE = python_snappy-$(PYTHON_SNAPPY_VERSION).tar.gz
->>>> +PYTHON_SNAPPY_SITE =
->>>> https://files.pythonhosted.org/packages/cb/52/acd87583175fa930e4385f8a6164eb5909acd683c0e62ee01d41de8195a2
->>>> PYTHON_SNAPPY_SETUP_TYPE = setuptools
->>>> PYTHON_SNAPPY_LICENSE = BSD-3-Clause
->>>> PYTHON_SNAPPY_LICENSE_FILES = LICENSE
->>>> -PYTHON_SNAPPY_DEPENDENCIES = snappy
->>>> +PYTHON_SNAPPY_DEPENDENCIES = host-python-cramjam python-cramjam
->>> 
->>> Why do we need host-python-cramjam? Please describe that in the commit message.
->
->> This is a setup_requires in the setup.py (cramjam>=2.6.0). There is a build fail without it.
->
->OK, why is this? Is something generated at build time?
+https://gitlab.gnome.org/GNOME/glib/-/merge_requests/5156
 
-There is a setup_requires dependency on cramjam>=2.6.0 (file setup.py: setup_requires = ['cramjam>=2.6.0']),
-which is checked in the host Python environment when building the wheel. Without the host dependencie the build
-does fail. I have added the explanation why host-python-cramjam is added in the v5 commit message. 
+Backport the upstream patch (included in 2.89.0), but drop the test addition
+for easier backport:
 
->-- 
->Bye, Peter Korsgaard
+https://gitlab.gnome.org/GNOME/glib/-/commit/c9da977c178fbfc0e4caf99f9fdf5dc433d6fcc2
 
-Thanks,
-Flaviu Nistor
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...on-Fix-XML-parser-state-handling-for.patch | 42 +++++++++++++++++++
+ package/libglib2/libglib2.mk                  |  3 ++
+ 2 files changed, 45 insertions(+)
+ create mode 100644 package/libglib2/0001-gdbusintrospection-Fix-XML-parser-state-handling-for.patch
+
+diff --git a/package/libglib2/0001-gdbusintrospection-Fix-XML-parser-state-handling-for.patch b/package/libglib2/0001-gdbusintrospection-Fix-XML-parser-state-handling-for.patch
+new file mode 100644
+index 0000000000..4582382f80
+--- /dev/null
++++ b/package/libglib2/0001-gdbusintrospection-Fix-XML-parser-state-handling-for.patch
+@@ -0,0 +1,42 @@
++From c9da977c178fbfc0e4caf99f9fdf5dc433d6fcc2 Mon Sep 17 00:00:00 2001
++From: Philip Withnall <pwithnall@gnome.org>
++Date: Thu, 16 Apr 2026 15:27:37 +0100
++Subject: [PATCH] gdbusintrospection: Fix XML parser state handling for <node>
++ element nesting
++
++The check for whether a `<node>` element in D-Bus introspection XML was
++nested correctly was broken. `<node>` elements can only be at the top
++level, or nested immediately within another `<node>` element.
++
++Fix the check and add some unit tests for it.
++
++Spotted by linhlhq as #YWH-PGM9867-204. The fix is mine, and the unit test
++uses example XML strings adapted from their report.
++
++Signed-off-by: Philip Withnall <pwithnall@gnome.org>
++
++Fixes: #3932
++CVE: CVE-2026-58016
++Upstream: https://gitlab.gnome.org/GNOME/glib/-/commit/c9da977c178fbfc0e4caf99f9fdf5dc433d6fcc2
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++[Peter: drop tests]
++---
++ gio/gdbusintrospection.c        |  2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/gio/gdbusintrospection.c b/gio/gdbusintrospection.c
++index 1138ba9d7..4df8e87db 100644
++--- a/gio/gdbusintrospection.c
+++++ b/gio/gdbusintrospection.c
++@@ -1266,7 +1266,7 @@ parser_start_element (GMarkupParseContext  *context,
++   /* ---------------------------------------------------------------------------------------------------- */
++   if (strcmp (element_name, "node") == 0)
++     {
++-      if (!(g_slist_length (stack) >= 1 || strcmp (stack->next->data, "node") != 0))
+++      if (stack->next != NULL && strcmp (stack->next->data, "node") != 0)
++         {
++           g_set_error_literal (error,
++                                G_MARKUP_ERROR,
++-- 
++2.47.3
++
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index 45aa894b81..3770e8671a 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -17,6 +17,9 @@ LIBGLIB2_INSTALL_STAGING = YES
+ LIBGLIB2_CFLAGS = $(TARGET_CFLAGS)
+ LIBGLIB2_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+ 
++# 0001-gdbusintrospection-Fix-XML-parser-state-handling-for.patch
++LIBGLIB2_IGNORE_CVES += CVE-2026-58016
++
+ # glib/valgrind.h contains inline asm not compatible with thumb1
+ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
+ LIBGLIB2_CFLAGS += -marm
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
