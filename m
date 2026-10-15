@@ -1,162 +1,137 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22A6DCC6B34
-	for <buildroot@archiver.kernel.org>; Thu, 15 Oct 2026 08:42:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22D2FCC6B3C
+	for <buildroot@archiver.kernel.org>; Thu, 15 Oct 2026 11:32:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7EAB4081C;
-	Thu, 15 Oct 2026 08:42:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BA31E607C8;
+	Thu, 15 Oct 2026 11:32:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iba6HAaqxy11; Thu, 15 Oct 2026 08:42:09 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org B200340811
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792053729;
-	b=a2oQuRRGaxSv7Ohie3iQu0jLvAKWHhBzVz9qO4iaFgWdSN7gkd4gqlt+ERGxWmSSRmQB
-	 nG9cLI31g3Pii+FRHFYWNVR4OqX7t09VT6hjrtfUXqYHACXYrPH1H+Ad4aed+2oWaNiRN
-	 7V7h0yImHn9TRf5yUIOrkp3q76+ZdNtBAY3DkMFJuD1yjEXXhNuDBTnZiroHdKWvaprAR
-	 /Uxxa1ntRp2pXgVcj+FWDCmMfAiMX/QJaj0YfdSXl2dWYDvA8YP9PWl5a8QPWdRq2O1NE
-	 blKc9zylPhMft0vcZR8ozoNduuD6dvnySR55SbA0DmT6iYsJiNQhfRofQ7OBu/YJtJg==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XqFVlQhvE9YL; Thu, 15 Oct 2026 11:32:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 7D11A6077F
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792063936;
+	b=eoAW92lB0b/rzc4zAqN19eQsPhnK4SSeHoO9CQYBmhCp39DHpSzHoMqlhsRWHWvHqySB
+	 CaDAZ2uVL9OydeFToq5NzQBpaw38ffC0k7SgWOgIPH6v0ojYnQ8i0NshGG0pc/S/gKd3L
+	 qMZ5Zz2797CxC7N8T0J4jdOHO9OqWyCC9P5BbN6AsCByV1bkhVFz1WJdAdoyNtwE3H/PP
+	 Qh0yjmKf7Xa+nOf5dxYeoYbnHFxR2pfxHzmfpr32HL4l23vKVlGqOwjG1ERq4xZ7S4qdj
+	 lQUULSUl3vRSk/fQtw3ny9j4LFfjwDUFi+LN349sAax3HVcJFULOACf1W/qOJluel6g==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792053729;
+	c=relaxed/relaxed; t=1792063936;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:Received:From:To:
+	 Cc:In-Reply-To:References:Date:Message-ID:User-Agent:MIME-Version:
 	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=7Z6do3aB5ey3Ny0hEK+GUoJZ9/JJ5s1kPbJFZf8cXCA=;
-	b=HqALtN+3M8RvSl1ePc2sYl1K5GGUF8fuW8r1aduHWY5RSj7lImAtWDqhQ/a91rJfcaFc
-	 EBfswDKBIhBYsNzPWsg8o3rlRf2v2w+sIzGj2D/1ZzITHOX9zzKIiy+CcuNFEomt3IlQl
-	 Bg0GwJE7tEbtwN80kYcNDPEV/EGhhxv8OqCiqpX0KQXYrxUwmuvYwsTgpfxRfA72KS5Hy
-	 WratZ5uiYi6miLwiQVm/9ddRaQSdb5ho/+y9put83lZ8vF3VDlp7WnmQbmLTu5GyA7XyA
-	 P2AVPUl9XvXrupjwnlsxONuVGh+/9fPdybCH8huhtYhY1j5YUKBMlTmNSDZqJriNMvg==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=QoYi71e2v4nyztGJzp4CKH/N1qdk4xGSOPFaVH5DihI=;
+	b=fMHjgDzvhqXhLfFggJLJdIBbSE/5VsMwjhoVDcPrB3/Ke6EbxFQWV0boO4TdfV5F2H88
+	 PdP/yKWK1ywx8udD6W5A5c/yfvQIJiWNz+xMKqEUK1mnMA9dLTu0mOLsZVfzmqodxtGK7
+	 gf+rxdTTZDC6nXCNbk72+xlmi8b2Gq40cKqP4bTrtyJty1n9Y66o/LqJR23bCeKnEVSV4
+	 MwXbdzF4LinLrE7S3KKD7DHFvNrNB+Eqfye8KsZg4/BJPFptLnSurKcjcsP/JVyslxt6H
+	 Irxi7NvUDIFfdWnbhGJUn1LP6T5iUf3+GX2LlVlLDmNYnEja5mJkqDcXi5oAT+PA7YQ==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792053729;
-	bh=7Z6do3aB5ey3Ny0hEK+GUoJZ9/JJ5s1kPbJFZf8cXCA=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=Gb3WI6qL/fj3V9YjUzjRVeWwba1GwPsj7ruseMTkTb/IJA4APPPe7yqy+7+ZSBRaC
-	 HTfcsnBzVW8TcLRv7bSwI4UL5bonkFGUUFAlc8KfWZ+9Vsj4aBv6EYdryK03Z/kuVU
-	 MUEbxDt+Nr1usj1Y/Ov28I0T3wO9MC7UUdCLl1UrTnywhKtnDDo3Tzky70O9/RTYZQ
-	 TJ1eeq1zmi6TFyPrphDGcyzaKqP96lezretUlRxAh6kBNdDBxyUL753tH1Fs5dmedy
-	 TBhd/u9vR6NKZZfKxSVKbMd2I4j1awMGNo+v2nDj1dn+Iv9krp/RhM0juOLw0cQUTC
-	 zLMEXRgoaVWKw==
+	s=default; t=1792063936;
+	bh=QoYi71e2v4nyztGJzp4CKH/N1qdk4xGSOPFaVH5DihI=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=mTbVzlY+7wTFM+aGmvTcvDrsb7gIZVsWJOVeiNEpvJTkWb+Up/uruTeBThyteWoXp
+	 skxHjqwdOEUFwew7px6Ytz6rM45TqDq3kl2uZ27LwmGgBRU3YYefgNSMCYAqLwxrtO
+	 uKH+xRXiDeDHpqylVfC1+8ryUWvFaLakMICRzUJ/+0e+5J7hbPyC1VPr7V306h3zt9
+	 1gq7PEPaiOc8t414lVfY0f3bNoshAs1dHPl0s6JDwUHIjkndOOK9twQp9g3Ya2l1fL
+	 tkAWcuP8at00hKZ0r9C9ndmGRCTLP8dJ/Fwykt7CJyvs9YXzbj1DNCGVpSp5WgWKC2
+	 ZG2n+d6sj2+hQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B200340811;
-	Thu, 15 Oct 2026 08:42:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3E400A58
- for <buildroot@buildroot.org>; Thu, 15 Oct 2026 08:42:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D11A6077F;
+	Thu, 15 Oct 2026 11:32:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C206F255
+ for <buildroot@buildroot.org>; Thu, 15 Oct 2026 11:32:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2451A81094
- for <buildroot@buildroot.org>; Thu, 15 Oct 2026 08:42:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AB83781105
+ for <buildroot@buildroot.org>; Thu, 15 Oct 2026 11:32:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z6ri-q1KhFXm for <buildroot@buildroot.org>;
- Thu, 15 Oct 2026 08:42:07 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org F2F168108A
+ id tqFgfqs0xJ3D for <buildroot@buildroot.org>;
+ Thu, 15 Oct 2026 11:32:14 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 93F1381101
 Authentication-Results: smtp1.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::42c"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792053727;
- b=jcDz76+hy5AUat1q3HgPdV66NkAaOBF0PqdZcRWmRRoZqlKd+5sCRp6QMmLNT+Cw6i8D
- 5iHHZ42t9pVE1ag0gNclc4GxTItGYHOqdoSHdFTCYKM/iZGlS3zUxyuFx7PONQb6x6oip
- SO2h31u/DSysGeEHL8nxQnGMZUDoHZN1TiDfSQ8HQmF+8vD7pBk4kr3A713Of3Fc1ukZW
- cVF4z8Zd/R027eoxqiSjWQKvTXXCd2dUgpfjVF1c1Bh2sb0DvaO3in3cPfufVtna0rBdu
- ng7aSmkd1bR+WgbL5YUO9OER7EUspr/EN7MaFQwbMoAg+aYmidirCjx74nEpCv+QEhg==
+ arc=none smtp.remote-ip=34.202.193.197
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792063933;
+ b=IeUZkqVe1OJ4uQUEiYzT7tuhHcG9OyXWnKKtUZdWqcJOQB4ygLiV4ICd4arRceyhcIWM
+ w7TQ/5vmibSZxz4tSriD2tcFgffXIMS0vi5wHA6D2Yux8bMOYB5SQelUTmUT5ZoZBRYFN
+ i3+nu/YdXCwfJr4wxdtnjm/OXG5uP8t2YsZwQ7oItE/9fZ8GC4FPDJC2GL5hOYfVmPBgf
+ fQok7SiqMgPH52BqV9IcoS0ufS1sssb583RcwCDoa+/I38Gs/eSD3L3VJG1JBPsnHK92X
+ 3ud/V/Ayzt5r09R3lJ4hvmA+bb6B/bgiSZNQxP4sDBjtg4574GdE9yqQtmg6aqKt7ng==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792053727;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
- bh=/qw7VBm/uAGndH6+moZ1cemgxgNTya8jjk42eUikcl8=;
- b=eO/NXLE/MvrfPuk0TBBASYK6UVRzTCRAGrjV1ILcxMmFyj3KWSFoU0yI+oq+fgq1c20c
- bTLIWim8rhMOdsgJajPw4GPz/rHbiOzqxehg6CfBhp4We5Ac5cRrn1HkXXi6u53iJk77w
- xSynD3el6hyzDRNw0MlGHHAv7cUt7bVfbQcN5BClWbpBWaWazPBV/pO5oJ1DK2DaJkBiK
- RK4zDpRO3c7S5FqG1WWGy2IMn6te/wHTl8JpQfH2uArCmYwf6811W6J1pxW1fukFAi4hK
- LuUpgyGPwbhQV9zcn2dcSmu7cBc/rdLl0EcQ9Z12Cxhhxs1Z3J2f9Zg/uOQGW6mjWkA==
+ c=relaxed/relaxed; t=1792063933;
+ h=Received-SPF:DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:
+ Received:From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+ User-Agent:MIME-Version:Content-Type;
+ bh=EpqMQl/2/qj7C93wqYd1b718KHpL8vhcpSaag0TuKZ4=;
+ b=YILun+y1IqJi2tX8TdeYP+SA8AdXMel6WCHAzob3MHndY4y2Lb05lwdONzdUPRFG/fdF
+ w0YJWwXknJ1QWw+LZ+Z5ib9ARZJh+8KNZ7WBvoWRpWjBZG+N1AXH6UlrCF2izxgWR8rNf
+ ATCCgk8CHCGTviUf7RYOzxT/3jp8bPHDLjIQrjlzBGtAqkj+8IDZi5xIIFqdqSCOmHe7O
+ 51eafeBgL3jFTb/hzP1KN4WncCCXze6b3ER/GC3oVruteaz9k6BpMSFtVmEjqFMDmN0CY
+ 87f43KV9BHvpMQ6w/fzLccIenbmv9BH93T7XdNPIrqxxH3REShRN0dqMwQu54OwzZ8Q==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
- dmarc=pass header.from=amarulasolutions.com;
- dkim=pass header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=M4EAVLSU; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::42c"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org; dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-Authentication-Results: smtp1.osuosl.org; dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=M4EAVLSU
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F2F168108A
- for <buildroot@buildroot.org>; Thu, 15 Oct 2026 08:42:06 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id
- ffacd0b85a97d-48df4e9d2d4so214340f8f.3
- for <buildroot@buildroot.org>; Thu, 15 Oct 2026 01:42:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1792053724; x=1792658524;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=/qw7VBm/uAGndH6+moZ1cemgxgNTya8jjk42eUikcl8=;
- b=M4EAVLSU8eepI9r7IFnl7NdhNjirpI4X37sWlepIUwnEd/NW9cQds18wVzEba85+l0
- IJrBw0ergNgcl8xc9+gI7YcpVRpGV70ysGReYGM1G3RFCM8fzgcQOkQO+svLJe0bwChM
- tuDxYaZNt9X4P0xbj7WR2L26lzP7FDTeAHugw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1792053724; x=1792658524;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=/qw7VBm/uAGndH6+moZ1cemgxgNTya8jjk42eUikcl8=;
- b=ELjRuYsYO82tqraAk48CmlRvupvJo5LnD6pDLyNIuSPrF68lfYgdS+Ayijeo74FmPT
- oCe4G/lKVw6S2G+ZGAw2/iQK3NY0YHFnPcmN0qg8pnD/w9ht+LT3Wk4cRtK8HZvrMe0L
- 3J4hqrZ1EIL2K4QY5XEu5rNZhUoNR6TG1Ncetv3WgwRctjovFKBJRpXgS5sFi7bRQRUq
- MLpAv9Syf3XGCrwUiL+O5pTmYEa7qAM1Q3AeKjWYRWfi/n/OM0N1acEKza3H8WER9nTC
- hSFGJqcWknbr7FULqIPCNyWXu32zQVi/OpQB0kVlRA8ml03jMUb4/Pa0h0Q4wlz/jM5T
- RSYQ==
-X-Gm-Message-State: AFq9FYLng7EqsViFnG6CTMDjMh/Gswc+X0NJiG5SvpcSZFx6h6m/9+8g
- lHMJX1rTcRgO7kpQQinWnHkF0eL2Z2SB5JvLnfb1aS0XEj5D4I+5Am5YQ++SjrFW+TGx1CwOw89
- +E51s
-X-Gm-Gg: AYBFou3tWVm3zWANgcwDq9QDqr/zAVe9rbJxUFSxLAhAAoJxzxNqFfCMrbMKNWcEk5v
- DtRsWpMRlozariehEIIUu9iH+q/0AKNc4jOMRRVMi8HMeFnO84RuN8zOEMDvET8S5RiIBqO0Mt0
- 8594vA9Jf+8dhQr65wFtF9yQwovhjRBvMjoi5tInyo3o737dvtU6qb3Dgo8va5ANChQ0kw14KFy
- V+f0JaIRkpr0QqvOeVIP5oRwW8OL76eeE+9aZLtn66P+fQzWEPpbixAZhQJHIUo1OX+99OQKYpZ
- XhEW7ZoPdYaFtFfJORbe8ATsbOY6DgvxEB9AEKY7bz/YWcpXthh6T1bzM4YmWuwzbVGL8oY3MlR
- 87Zl8i/rRI0NGdyVhICEzbeUz8nEzv7YID0dAJaahFi+9KCD9HWbR0Za5Yh5zz2U0LtEe8XNQlq
- RzeMQ0Rugtxdtdbo7tkQKRlqWFN51c+ojOm+ooePr2fPlxaOcs+uBoKovKs3O72oyUSeQlWUvY8
- tGUKYGVrC4JSD3FXJG/8OP5fCXbjZIjKw+Tb8XOdP1jtuDTrR7QQRCwuX9hUykaF34=
-X-Received: by 2002:a05:600c:4e8a:b0:4a1:78dd:dd28 with SMTP id
- 5b1f17b1804b1-4a18e4d2b31mr373652725e9.27.1792053724206; 
- Thu, 15 Oct 2026 01:42:04 -0700 (PDT)
-Received: from localhost.localdomain ([2001:b07:6474:ebbf:81b2:a12a:b337:b231])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4a1bd98637asm56199695e9.8.2026.10.15.01.42.01
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 15 Oct 2026 01:42:03 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Cc: Bartosz Bilas <b.bilas@grinn-global.com>,
- Marleen Vos <marleen.vos@mind.be>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Thu, 15 Oct 2026 10:41:57 +0200
-Message-ID: <20261015084157.1073663-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+ dmarc=none header.from=korsgaard.com;
+ dkim=pass header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256
+ header.s=purelymail3 header.b=XHWELyKe; 
+ arc=none smtp.remote-ip=34.202.193.197
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=korsgaard.com
+Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=XHWELyKe
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 93F1381101
+ for <buildroot@buildroot.org>; Thu, 15 Oct 2026 11:32:11 +0000 (UTC)
+DKIM-Signature: a=rsa-sha256;
+ b=XHWELyKe0SnNANCTb3zFQvknvzcSXZPWKz8rWA0TWP2tOtHH7sJyfgRgtChqxdZokqIE9klVUnbtXVsCfuXipPq/LmKjprddZbYnrac2DQjANJwtEyYGmKY6n53oFfxxLPQjv8G0E5HHDQ5jG9cfbhtgD5tfLqTf158dQKljZftMumXhj+noQYiDtFzOOrlmX23R5Z5Vst0eX4xekabwNGc9zmJuiXn32DezO5UIhqQEP5rXaYl+BX1RK5qFIQEgGTMl84+8/89me39zIO2euAH78VB0cbdUg3JeMMQ03AIojBlEOoPlAkiQQn50iqLLTM3gKIxY32FEU0gg1Ff8AQ==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=+L3gs4ImJZxIFR33/IfsuergiHKfqxtbXXOiiuX2qgg=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Authentication-Results: purelymail.com; auth=pass
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1019528219; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Thu, 15 Oct 2026 11:32:05 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1xHJgp-00000000OaU-3669;
+ Thu, 15 Oct 2026 13:32:03 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Romain Naour <romain.naour@smile.fr>,  buildroot@buildroot.org,
+ arnout@rnout.be,  Julien Olivain <ju.o@free.fr>
+In-Reply-To: <as3sD0VIZZwk-tXn@windsurf> (Thomas Petazzoni's message of "Tue, 
+ 13 Oct 2026 10:31:33 +0200")
+References: <20260607213030.1509913-1-romain.naour@smile.fr>
+ <20260607213030.1509913-2-romain.naour@smile.fr>
+ <as3sD0VIZZwk-tXn@windsurf>
+Date: Thu, 15 Oct 2026 13:32:03 +0200
+Message-ID: <874iengpxo.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] configs/stm32mp1*_dk*: bump Linux to
- 6.12.112 and U-Boot to 2026.10
+Subject: Re: [Buildroot] [PATCH 2/2] package/glibc: riscv w/ ISA RVV needs
+ gcc >= 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -173,111 +148,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The patch bumps the Linux kernel to version 6.12.112 and U-Boot to
-version 2026.10 for
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-- stm32mp135f_dk_defconfig
-- stm32mp157a_dk1_defconfig
-- stm32mp157c_dk2_defconfig
+Hi,
 
-The removed patches are contained in the new U-Boot version.
+ >> +++ b/package/glibc/Config.in
+ >> @@ -27,6 +27,9 @@ config BR2_PACKAGE_GLIBC_ARCH_SUPPORTS
+ >> # glibc needs atomic instructions, and does not support
+ >> # single-precision floating point ABIs (ilp32f and lp64f)
+ >> depends on (BR2_RISCV_ISA_RVA && !BR2_RISCV_ABI_ILP32F && !BR2_RISCV_ABI_LP64F) || !BR2_riscv
+ >> +	# glibc >= 2.43 needs at gcc >= 15 when Vector
+ >> +	# Instructions (V) are enabled.
+ >> +	depends on (BR2_RISCV_ISA_RVV && BR2_TOOLCHAIN_GCC_AT_LEAST_15) || !BR2_riscv
 
-Tested on STM32MP157C-DK2 Discovery Board.
+ > This will hide glibc if gcc 15.x is not used. I was wondering if it
+ > would make more sense to turn things around and hide gcc 14.x instead
+ > if glibc is used on RISC-V RVV-enabled platforms?
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
- .../common/stm32mp1xx/patches/linux/linux.hash                | 2 +-
- .../common/stm32mp1xx/patches/uboot/uboot.hash                | 2 +-
- configs/stm32mp135f_dk_defconfig                              | 4 ++--
- configs/stm32mp157a_dk1_defconfig                             | 4 ++--
- configs/stm32mp157c_dk2_defconfig                             | 4 ++--
- 5 files changed, 8 insertions(+), 8 deletions(-)
+ > Peter, Arnout, Julien, thoughts?
 
-diff --git a/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash b/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
-index 08483293cf69..e3e6d3913390 100644
---- a/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
-+++ b/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  a9e8c51fcb1e695d1d35dde5886cba579cb6f29c9646c5889f39d63841d4b9f6  linux-6.12.95.tar.xz
-+sha256  164dc9d1f6c93c61a15e1f071c48379b467f2b17c469cce7223471968208ed03  linux-6.12.112.tar.xz
-diff --git a/board/stmicroelectronics/common/stm32mp1xx/patches/uboot/uboot.hash b/board/stmicroelectronics/common/stm32mp1xx/patches/uboot/uboot.hash
-index ff6e4ed2e2f6..66c72d3afd51 100644
---- a/board/stmicroelectronics/common/stm32mp1xx/patches/uboot/uboot.hash
-+++ b/board/stmicroelectronics/common/stm32mp1xx/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  78e8bfc382fe388f9b55aa1daf8c563522a037779b5d4c349d1415e381f1243e  u-boot-2026.07.tar.bz2
-+sha256  3f856da3cbbc93af51ff95fde18588a348b4a26723b01d9841e999d988481015  u-boot-2026.10.tar.bz2
-diff --git a/configs/stm32mp135f_dk_defconfig b/configs/stm32mp135f_dk_defconfig
-index bd1c6ca00a73..cc72d397f3b8 100644
---- a/configs/stm32mp135f_dk_defconfig
-+++ b/configs/stm32mp135f_dk_defconfig
-@@ -10,7 +10,7 @@ BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp135f-dk/overlay"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp1xx/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.95"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.112"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp135f-dk/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -42,7 +42,7 @@ BR2_TARGET_OPTEE_OS_PLATFORM_FLAVOR="135F_DK"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp13"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-diff --git a/configs/stm32mp157a_dk1_defconfig b/configs/stm32mp157a_dk1_defconfig
-index 7f4143fa3285..464b34e0b0d7 100644
---- a/configs/stm32mp157a_dk1_defconfig
-+++ b/configs/stm32mp157a_dk1_defconfig
-@@ -9,7 +9,7 @@ BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157a-dk1/overlay/"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp1xx/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.95"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.112"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157a-dk1/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -32,7 +32,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
-index 10638f226043..2cac66a944a0 100644
---- a/configs/stm32mp157c_dk2_defconfig
-+++ b/configs/stm32mp157c_dk2_defconfig
-@@ -9,7 +9,7 @@ BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157c-dk2/overlay/"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp1xx/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.95"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.12.112"
- BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
- BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32mp157c-dk2/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -32,7 +32,7 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_NEEDS_DTC=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32mp15_trusted"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+Yes, that sounds more sensible and then the logic would also just go away
+when GCC 14.x support is dropped.
+
 -- 
-2.43.0
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
