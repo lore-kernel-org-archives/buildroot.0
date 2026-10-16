@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 541BCCCA46C
-	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 15:06:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA8D5CCA46C
+	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 15:06:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1CF1B817AB;
-	Fri, 16 Oct 2026 15:06:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 75EF140E3E;
+	Fri, 16 Oct 2026 15:06:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2F7h3fQOfzlm; Fri, 16 Oct 2026 15:06:34 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 1B52C81758
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792163194;
-	b=KfHnagq3+mi2GNT3j37TtVLsbzhhSukigtbJ3ovb3NskKWvF//6v+32gUrScDlYKo6OQ
-	 loZzkoBAdCdkpW+auRPSD0FQaEx7FEljI6Znn2cd+lsltT+pJPLN+Cs3RM1tAFBOrqPko
-	 EU5LVZyER3c7HyqqvfRj9kgQabqMFvrXzbkjDw388cV1mJ+UUdHg/6B5EhSE4BEhohpRn
-	 DXEKhKXpqSErJ75zxi/R3xTDYoimW/Wzvr7zmTFedI044C7Mk7F2Yks5kIA99evX5nrOO
-	 FdFpy9slcsQGkkUSL/DGjj0CHBN+9FPBl6TJ8oeovMlSU8WJu3X1DvvUysH2xhCdQbA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EEOMLoduOSyL; Fri, 16 Oct 2026 15:06:37 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 6EA5940E44
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792163197;
+	b=b2Ax7Vh79oEv0R8PmiKsM1eX70e8BIrOfP3M7laSHQjEDM11HGkAsRlLMCgYmmHoV0VI
+	 0mWRD5isgpwMLrdF06+7ACit6JWwqFvXaWmy8T10N2/r8b+duPpa9jvd0GG7B6mvYFLVm
+	 aQx9Jurdg7LYFB5CgM3omvbMcT/d2oR/F4oyJncULm3enXVszASzZYHuZI/LCM5Olub4f
+	 E6T+OCh6z9OfBu3jVqDs4bqqlxUxcyK29W/yHyJYTtJjbjJsM11wria5KGIu9Gjbeu18h
+	 6kx+0FZ5MMbZqAp4LLT36veNyoU6kDvm5vmK+4UeprzolWMzww6iNK4ZXdocQdyly2w==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792163194;
+	c=relaxed/relaxed; t=1792163197;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,117 +31,117 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=YAN0y3QxlVOuXBrQ/D4JWLgOcNHnSgH7XxVgjQILibs=;
-	b=jNbD+/i8HHhG9XSa74naWlqaxjLtBoWkWsqgsGEmwuR9xxGtsAnWHSQadaM5B9KDbTp2
-	 x8MWsbtjW3VD5z577oRnmH0FP5V6bchVrXBVqA15uiK+khpgIgZKrdnZ4XJRSt1J8zdHe
-	 2NJWWTiFA7hcMWXL9ZiAAfKb/ULeNCDeWBVCckIPgUYACd1ALSeCzWd6py2zpLh3TwwYg
-	 QsTzFi0xDtK5j4XmCqTE7xTSW5hMTJSMpfb8YwjG9hE9+NnK272sgLpbyB1UU0xmhiBbk
-	 h8gXdQa2uf1zxJkovLVqH9uGSmgOGFCeAOj6KNGMXiaMJCTGNz9YJ+EdOIQnHZBQ/gg==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	bh=+3FwKHuwW17nHTLLHFbXIYoUw22XxkGxY7TJL1z5+VM=;
+	b=FGRDBAt+JrgIk9x4M4u99aT/0xJXbGA23ZUUMEkx2U7euq7YChGnisiiOq2hGzk1vKBD
+	 8yO06Fv4fmyYfTBpHv52rRVpgGzdZlUwD+Jz9BNL72lALBfSWyS3TCiTZIOlb+n0nrYYo
+	 8/KcXWKqW9hTqDWnRDZEW/7ugys2k82lFNtinVEI1k9I5CvqYWjCCzuI/wL/iggk4QCjn
+	 NZZrUAITs1mpJ9nJzfwFRAfj62xzgauORWBypfosETQG075J2pR0rSm/TteJVnKXygcXJ
+	 inHTSWRzBQ4LUiSHFd8aficFH1TAkHw5kcPDWU1UltuYcop/kyGyt1bY+GdaPYDaxEA==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792163194;
-	bh=YAN0y3QxlVOuXBrQ/D4JWLgOcNHnSgH7XxVgjQILibs=;
+	s=default; t=1792163197;
+	bh=+3FwKHuwW17nHTLLHFbXIYoUw22XxkGxY7TJL1z5+VM=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=CrhnH8lc3qOReBGpVitBhySqu704Gzex5f3LQhiP6jbIuqbQkIdzn/ELbUI7STo3z
-	 qiCChbnyCDG4cwU4omGRP7QVXoWV/0wjycsc10I1oyZgnM/PnDuOMmmFLCop7q7Gzb
-	 Q04M5bexvg60Jn1YsWeoDBDuaPGxmc3RcORBqPd06oQQkIEZxB3Xf7wAZ0lOEbjGst
-	 O+vW6Sznk3W0WJPt0tQBmOXMVa7ZuXObkfL96TnKG6tViQOtkbwg5+BK8JhGEEOVA9
-	 GFNKt+sH+gmcuMgIrWJQ2/KNsX1nWqdtpSNLFp+G7LWWkKYP1I2AMPXG5uN3eh0LmA
-	 OJtwa6bZV8kLg==
+	b=eG9p9F88ret5hp/aUTFUiGYB3Mph3N0Q8GtINSfSwvu2vk9E1BzpG0SKo5iYVuzT2
+	 +bDtm7Fnzn654YlNCWL/HiBzpSBoBjK6qBuaDU+0cvQswuXanp2lOMBzwwT0Kk8jZe
+	 5QqdNLbzX1LW05ki9Cvj0oKaT/dPSLjjVUytOPnzQTykxdZ2J2lpjQ24deQkKuRVVo
+	 AqMOFFaqqTJw2Q+ttrjPVUWyx6ZqyWU8jO+edeE5MEkFv7Zk87IrBcxcvKBa4Py1p0
+	 +q7AH0xiIbAesYdV6CCc4MdAIZ39MFcI9b89alJR5LbWKxZn77JmqDwRVqwn4a1X2x
+	 0Bga7Bsz4N3jQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1B52C81758;
-	Fri, 16 Oct 2026 15:06:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id E4689255
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:06:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6EA5940E44;
+	Fri, 16 Oct 2026 15:06:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 009F4255
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:06:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CA49C817A2
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:06:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E6C70608DC
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:06:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dP-QIDE2wTCm for <buildroot@buildroot.org>;
- Fri, 16 Oct 2026 15:06:30 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org E77B381779
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792163190;
- b=SyD2aETMNzpqE8nElyeIk0PTLhiwIJifycyFISyz+vfpWvohVCMRaP4dXKylB6Mlvz8K
- /Tpf9EwihrDnW+xh8wvDldikVt25j/JtAwSrmrmyCErlkGe1HyqUz1cprpisynEC+2KhE
- 2xSEhNu/isHVZgi2Ich8Ljz8ZtGY2rZRZgNA045awSsudZeLhXdhqPxS8RBPSWQ6T/Owm
- 8CHtg4rk1VwZplmqI6hEuc2ApF4dc7I34XCFjjDpSEbwZIBzf0p1XL9q2nImr1OtnZBOB
- i5NEnFbGXeSZ8PfrrPWGmp8KkiKK972pSPKs22Z+LoKE0MHQHiX7DBdvKAs+Tf8hqLQ==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ViYu2RSNWek7 for <buildroot@buildroot.org>;
+ Fri, 16 Oct 2026 15:06:35 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org A58B560671
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792163194;
+ b=FGFQmFOrDcrlosAg3SJyF/3YSR7AwI76+QxNlrow5x9jx+7G77nakW+Sdxa0ikOBZijm
+ xANt7w4TN2SQninlHJl6b1hKQepNCIienU1R215Ujg9CY94UCO9/Z768tIxajHdsIUyQt
+ UjhN0343UOuL1vt6cdqRaykW2PlL49v7uE4sxnaLyFw7MF6pE4jSZnld07jHLcqZ8uljS
+ lHUMhxA0ZackSh4H+ROoNNOQ9evs9bBpnJmWXZaRnLt6n8m+jExBGCAvX8X3qDjcQCGpq
+ 0tHuvfNtraRNW7Lvd3dP6s0p8Ib0iErfANJfLRvFBzsVcrs1utDCP+U3au5ZtsPAwUA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792163190;
+ c=relaxed/relaxed; t=1792163194;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=6ZCehO3ixq8JQlcyRyTr2KwXWBsN2xIlKd2OGMBVYpg=;
- b=FnzvLHe3KgFj+v1hi2GZHxPMV78n5/2AdVRcZ2f1VRIy92LJSWp1QULuc0za50eygNI6
- l+bk/8qWXnp3RT3hcBuJqHxUC/iIYIthlIEfFxvNgOrz90d3jmd6yKiU+sAT06jMo5kNH
- wrzIroc8rYGz/D4IO/J2slSztoM8vJ4AREZcqm/iqRNhtkMy8rZUV+oMl9h5s3F50xRwW
- K3EXjoGT4AZU7qbayMNLpVLRMlNsMykkfIWqBn33CNz6qDeCAZMcoC8Dl0zpFTV0wjddM
- j7nSZUJa9hwVwlShkgxE1Z6IY3VB8RJbHIOlTs9nDnduJkz3SyI0yhzl2Ed7wyaDIrA==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ bh=5StkTHEXOiCEANa6/HgrdlrZYRHRjZJ7lE2aWKiYxCo=;
+ b=WccF5zUZHNv90OeOVVLSSsnZ378zazmk/KW+1D9NldH8AToP1o2EazqUgflvpm6CuKHy
+ o90y0ODt0JSzkoYztWs/pEhho/MBVdSfveeCITVAKDSn+1336/d+62QdW/3lm9G3s/lIG
+ ckvi7qYtB5/F9JViTIy3s6NDsbbmW2xsZ0XAXUY5W4qix7WMRX3Ttxm9FVUrWz8D0BLZX
+ afHEIHBurLq1hmOABwP1j69iNi/I+POfeyIZq7un+dj+o5JmiAEvatsjkKH6EX1acGRb0
+ Bgch/neGNO+2eUPoB9OqIzo+hX+fk/zuK9Ka6CcvnUKSGgnbmg/iox1uM+FJHoxM5sQ==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
  dmarc=pass header.from=mind.be;
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=MraJD4hu; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::42c"
+ header.s=google header.b=hlCYGaLV; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::335"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E77B381779
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:06:29 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id
- ffacd0b85a97d-48b042c0759so4764100f8f.2
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 08:06:29 -0700 (PDT)
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A58B560671
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:06:34 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-4a018dc1f98so300315e9.3
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 08:06:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1792163188; x=1792767988;
+ d=1e100.net; s=20260707; t=1792163193; x=1792767993;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=6ZCehO3ixq8JQlcyRyTr2KwXWBsN2xIlKd2OGMBVYpg=;
- b=pAGfEqqQp32aAZi98LRLwU2dMJzNkD3DEomrkZA92UCaJ6XX5Moqn8RV4OtamLQUry
- 6uFltX9+o29YPrq8Ee2YLai0SR5vhtbIDLxbQHZ8AeT2UHpc81ygy72bo4woKHQeX6Ns
- 4H9ZVOZi7KWTbubx9BitjGyeW5+b6E1HuiFmdNK95dUvnhPveHxfAmMSZDwJnYDUoHLv
- 95NKjKOGoJUeji1XHtoEHXG39m4WPh5Q2CinYQLul0o3paKQcIEnZGwBtzJ4fLWkWp+W
- 1t4aPVJRE0uYNugWWYnSUwPWjyMldR90JtXKfLJerSmM5sctCg0LGX5g0zcUwXGKitTy
- 9sdA==
-X-Gm-Message-State: AFq9FYIKoLPsulTTZmGJKd9X6Cp0RDpWsjA0cm0THgqdLyFXeKCv2V+h
- +qgI5SpUcjegJOn8ioERUtGoOjqWSF+RLv4kZYZzNitJByGJ02kg6kIf9ZhoO/a6wKwAWWiT6EC
- S8WKMQ1w=
-X-Gm-Gg: AYBFou2hTdHIAmGEZ86Wsf5mjRN2/2n0pLXxY9AhoGmPjyvbpNxLzXufq5XiaiQd8+U
- ZPS/LTkpfe+Q4qxIKY77606l1q2pDBGY99IEXwWfEwyROdPq4WqVZ/PwsH5zyC0YUeaAX2cfucj
- HwL0d+3loJzWUunnYEyb+7OhaGytgNDWnxQm+UeFr98SJb7NYIMnRxFYxQsMl+NCxuDDI6Gj0UD
- xaCY5Nm+ZF43WLfTd8hxaibnZjaXqc9Uel+JKM5A9hlF4LRCcXpf6+Tvb6FxDaLGcmHgD6FfwMk
- i+OnyPKdqtqRPdqhA4cjy7yqkzZ+vtdRT8auHyv2K+wHvTrulnvnyyVvQxzMBcnB0tW26sKO+5e
- EXXueEZyMYT6Y0crsMHIN9bm89F5/RxdZ9+ey09R0YjFtfV90Yox1kI8X+VzOjI73O05eCoB0It
- D129byM0pOdgHij1CG1z8ObsqkUCe+KWYmePcwTC7l5m3FZzVTaWPEp3BZ2ko01c5dS4sqVw2V/
- Dkcv1KeKqQTmA9SyMpjUo0CjKWsATkedPAFr+ahxA==
-X-Received: by 2002:a05:6000:4b16:b0:48d:f957:bca4 with SMTP id
- ffacd0b85a97d-48df957bd0fmr9633447f8f.44.1792163187842; 
- Fri, 16 Oct 2026 08:06:27 -0700 (PDT)
+ bh=5StkTHEXOiCEANa6/HgrdlrZYRHRjZJ7lE2aWKiYxCo=;
+ b=zfZ99CeNKl1M+DxN/W1riZxBxHgecyhmhunPOk2HRw8JNfG2j7cQaT4GhbfbgDitUF
+ N8e+J3ptWf+E039IAjND+Gk5G5frXtegRwqn9q/u4HEXA0q/++gDFMWQL/6wk/k74n5h
+ UOswiWbJTevSm/rJV7zYoimHThXiiEAKb8TzNzib1IsfTojXeZogEnBR4fN0PGsQ9s0n
+ M3R0oNclucVjFhkSpenfzVfwVYugUDBVZjh69ewqTcfh6XQLdj5CAvKVa8pDr7tlE0bx
+ s7YD6riMsFsNYsNfB4YspHCxXaEQR/Fd1e/K6sm2u0XDt4MeHzioUN+XFYUE+2kmYDqf
+ s33Q==
+X-Gm-Message-State: AFq9FYJBrwJqvBfb9fgpi9F/EFjtrjCPs48RTPqMzrbnNGPBdOSe/lSR
+ k3Txlp5FcybsTtNAUF9b2z0lhlfN4+nKHBjQ43IcrNJTgvEtTrfNr0Wind0MIgjOIpsdiPADD0X
+ 0xFl0UbE=
+X-Gm-Gg: AYBFou2+oKsVlHU8V13G/mIny4d8io4IeGqF0XiDwKLwRL3kqbXaAd1DRckGAYBEffT
+ nt1iRSqLBuBTeD868AGKQ76qvMlL4osJlwlAn/x0lYQ4LfMYaOXoPwb+9kaQGD+stS2rK+nrTDa
+ aNi7+EawhvI5hQHd9WUtA1mWecoTrYU85OLaEol5hyIfInrxZoMa7bQr6JD4u37Dvzubn01r/2T
+ tbjlJtgHAdAMXg1ph+pTOs7JyMPQRh7SV8Usu5s3Gn4hLR1vaCtx/3Dfyr0MUMteQyTE9LorZUJ
+ Eq0iWlhw8eipOS4XshILvTgXitPQgIOWs84ZjdOaO4YnRdPE3cLpPWDekACbymWq2VK942a0DHQ
+ rL54VQz9x7jOBHZUv2of1pcXj9N81VZLJE1DBldKoZ6L5seYj9qaZOgJzwHvdWIuHUK+Ud9WGLI
+ JFKX+vpVWniqN1vD8PsXwMh2H5ScUPAGxqbcsT+FVGV7nAknX2gfYOsNHJOuMIQyHQYVOZ1lWVy
+ acCV8Urx98aWv5l8Fbe3RiYi2ZN5azklmEIEW0Zb+Q9YuptcyrG
+X-Received: by 2002:a05:600c:a4e:b0:4a1:80d8:aed5 with SMTP id
+ 5b1f17b1804b1-4a1d75e39b9mr1637925e9.6.1792163191473; 
+ Fri, 16 Oct 2026 08:06:31 -0700 (PDT)
 Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
  [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48dfd4ee183sm5517993f8f.29.2026.10.16.08.06.27
+ 5b1f17b1804b1-4a1bd9b303csm151788365e9.8.2026.10.16.08.06.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 16 Oct 2026 08:06:27 -0700 (PDT)
+ Fri, 16 Oct 2026 08:06:30 -0700 (PDT)
 To: buildroot@buildroot.org,
-	Thomas Perale <thomas.perale@mind.be>
+	yann.morin@orange.com
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 16 Oct 2026 17:06:25 +0200
-Message-ID: <20261016150626.77048-1-raphael.melotte@mind.be>
+Date: Fri, 16 Oct 2026 17:06:28 +0200
+Message-ID: <20261016150629.77126-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261011133348.713816-1-thomas.perale@mind.be>
+In-Reply-To: <2948b55509525f0a19b4bd9ad26757d53261cc00.1791263777.git.yann.morin@orange.com>
 References: 
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] DEVELOPERS: adding myself in packages
- with LTS policies
+Subject: Re: [Buildroot] [PATCH v2] package/gpsd: backport security fixes
+ for CVE-2026-58459
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -162,53 +162,217 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> To better track the version of a package before a Buildroot LTS release
-> is made I'm adding myself to DEVELOPERS file for those one so I receive
-> alerts for this subset of packages.
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+> Cc: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x, 2026.08.x. Thanks
 
 > ---
->  DEVELOPERS | 22 ++++++++++++++++++++--
->  1 file changed, 20 insertions(+), 2 deletions(-)
+> Changes v1 -> v2:
+>   - add proper metadata to patches  (Julien)
+> ---
+>  ...f.py.in-Quote-double-quotes-in-title.patch | 50 ++++++++++++++++
+>  ...prof.py.in-Quote-back-ticks-in-title.patch | 48 +++++++++++++++
+>  ...prof.py.in-Quote-back-ticks-in-title.patch | 60 +++++++++++++++++++
+>  package/gpsd/gpsd.mk                          |  6 ++
+>  4 files changed, 164 insertions(+)
+>  create mode 100644 package/gpsd/0001-clients-gpsprof.py.in-Quote-double-quotes-in-title.patch
+>  create mode 100644 package/gpsd/0002-clients-gpsprof.py.in-Quote-back-ticks-in-title.patch
+>  create mode 100644 package/gpsd/0003-clients-gpsprof.py.in-Quote-back-ticks-in-title.patch
 > 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 01d98f8698..4324774a49 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -3239,10 +3239,28 @@ F:	package/kvm-unit-tests/
->  F:	package/xorcurses/
+> diff --git a/package/gpsd/0001-clients-gpsprof.py.in-Quote-double-quotes-in-title.patch b/package/gpsd/0001-clients-gpsprof.py.in-Quote-double-quotes-in-title.patch
+> new file mode 100644
+> index 0000000000..8be7040fa5
+> --- /dev/null
+> +++ b/package/gpsd/0001-clients-gpsprof.py.in-Quote-double-quotes-in-title.patch
+> @@ -0,0 +1,50 @@
+> +From 5581ba196d826a984fbfaf792b7d58535f9911ce Mon Sep 17 00:00:00 2001
+> +Message-ID: <5581ba196d826a984fbfaf792b7d58535f9911ce.1791178679.git.yann.morin@orange.com>
+> +From: "Gary E. Miller" <gem@rellim.com>
+> +Date: Wed, 1 Jul 2026 17:55:57 -0700
+> +Subject: [PATCH] clients/gpsprof.py.in: Quote double quotes in title.
+> +
+> +Someone could use the double quote to break out of the
+> +string and add gnuplot commnds.
+> +
+> +For issue 404.
+> +Reported by: CuB3y0nd, and Wade Sparks <wsparks@vulncheck.com>
+> +Upstream: https://gitlab.com/gpsd/gpsd/-/commit/5581ba196d826a984fbfaf792b7d58535f9911ce
+> +CVE: CVE-2026-58459
+> +Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+> +
+> +---
+> + clients/gpsprof.py.in | 8 ++++++--
+> + 1 file changed, 6 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/clients/gpsprof.py.in b/clients/gpsprof.py.in
+> +index 5c18f50ff..261e72665 100644
+> +--- a/clients/gpsprof.py.in
+> ++++ b/clients/gpsprof.py.in
+> +@@ -198,6 +198,10 @@ class plotter(object):
+> +         if 'subtype' in self.device:
+> +             desc += "\\n%s" % self.device['subtype']
+> + 
+> ++        # escape ", and \n, for gnuplot, to not break strings
+> ++        desc = desc.replace('"', '\\042')
+> ++        desc = desc.replace('\n', '')
+> ++
+> +         return desc
+> + 
+> +     def collect(self, verb, log_fp=None):
+> +@@ -1262,10 +1266,10 @@ if __name__ == '__main__':
+> +         # Ship the plot to standard output
+> +         if not options.title:
+> +             options.title = plot.whatami()
+> +-            # escape " for gnuplot
+> +-            options.title = options.title.replace('"', '\\"')
+> +         if options.subtitle:
+> +             options.title += '\\n' + options.subtitle
+> ++        # escape " for gnuplot, to not break strings
+> ++        options.title = options.title.replace('"', '\\042')
+> +         term_opts = ""
+> +         truecolor_terms = ['png', 'sixelgd', 'wxt']
+> +         if options.terminal in truecolor_terms:
+> +-- 
+> +2.43.0
+> +
+> diff --git a/package/gpsd/0002-clients-gpsprof.py.in-Quote-back-ticks-in-title.patch b/package/gpsd/0002-clients-gpsprof.py.in-Quote-back-ticks-in-title.patch
+> new file mode 100644
+> index 0000000000..53e1cac1cc
+> --- /dev/null
+> +++ b/package/gpsd/0002-clients-gpsprof.py.in-Quote-back-ticks-in-title.patch
+> @@ -0,0 +1,48 @@
+> +From 1a6bb7bcbdf58aa940132e630870af061dc88537 Mon Sep 17 00:00:00 2001
+> +Message-ID: <1a6bb7bcbdf58aa940132e630870af061dc88537.1791178680.git.yann.morin@orange.com>
+> +From: "Gary E. Miller" <gem@rellim.com>
+> +Date: Tue, 7 Jul 2026 13:41:54 -0700
+> +Subject: [PATCH] clients/gpsprof.py.in: Quote back ticks in title.
+> +
+> +Someone could use the back tick to break out of the string and add
+> +gnuplot commnds.
+> +
+> +For issue 404.
+> +Reported by: CuB3y0nd, and Wade Sparks <wsparks@vulncheck.com>
+> +Upstream: https://gitlab.com/gpsd/gpsd/-/commit/1a6bb7bcbdf58aa940132e630870af061dc88537
+> +CVE: CVE-2026-58459
+> +Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+> +
+> +---
+> + clients/gpsprof.py.in | 6 ++++--
+> + 1 file changed, 4 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/clients/gpsprof.py.in b/clients/gpsprof.py.in
+> +index 261e72665..202214769 100644
+> +--- a/clients/gpsprof.py.in
+> ++++ b/clients/gpsprof.py.in
+> +@@ -198,8 +198,9 @@ class plotter(object):
+> +         if 'subtype' in self.device:
+> +             desc += "\\n%s" % self.device['subtype']
+> + 
+> +-        # escape ", and \n, for gnuplot, to not break strings
+> ++        # escape ", `, and \n, for gnuplot, to not break strings
+> +         desc = desc.replace('"', '\\042')
+> ++        desc = desc.replace('`', '\\140')
+> +         desc = desc.replace('\n', '')
+> + 
+> +         return desc
+> +@@ -1268,8 +1269,9 @@ if __name__ == '__main__':
+> +             options.title = plot.whatami()
+> +         if options.subtitle:
+> +             options.title += '\\n' + options.subtitle
+> +-        # escape " for gnuplot, to not break strings
+> ++        # escape ",  and`, for gnuplot, to not break strings
+> +         options.title = options.title.replace('"', '\\042')
+> ++        options.title = options.title.replace('"', '\\140')
+> +         term_opts = ""
+> +         truecolor_terms = ['png', 'sixelgd', 'wxt']
+> +         if options.terminal in truecolor_terms:
+> +-- 
+> +2.43.0
+> +
+> diff --git a/package/gpsd/0003-clients-gpsprof.py.in-Quote-back-ticks-in-title.patch b/package/gpsd/0003-clients-gpsprof.py.in-Quote-back-ticks-in-title.patch
+> new file mode 100644
+> index 0000000000..f2e875bb02
+> --- /dev/null
+> +++ b/package/gpsd/0003-clients-gpsprof.py.in-Quote-back-ticks-in-title.patch
+> @@ -0,0 +1,60 @@
+> +From 4c06658e988f4ced1a7a574ce082a22ef625df56 Mon Sep 17 00:00:00 2001
+> +Message-ID: <4c06658e988f4ced1a7a574ce082a22ef625df56.1791178681.git.yann.morin@orange.com>
+> +From: "Gary E. Miller" <gem@rellim.com>
+> +Date: Tue, 7 Jul 2026 14:23:56 -0700
+> +Subject: [PATCH] clients/gpsprof.py.in: Quote back ticks in title.
+> +
+> +Second try.  Also quote "terminal".
+> +
+> +Someone could use the back tick to break out of the string and add
+> +gnuplot commnds.
+> +
+> +For issue 404.
+> +Reported by: CuB3y0nd, and Wade Sparks <wsparks@vulncheck.com>
+> +Upstream: https://gitlab.com/gpsd/gpsd/-/commit/4c06658e988f4ced1a7a574ce082a22ef625df56
+> +CVE: CVE-2026-58459
+> +Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+> +
+> +---
+> + clients/gpsprof.py.in | 14 ++++++++++----
+> + 1 file changed, 10 insertions(+), 4 deletions(-)
+> +
+> +diff --git a/clients/gpsprof.py.in b/clients/gpsprof.py.in
+> +index 202214769..e91367ee3 100644
+> +--- a/clients/gpsprof.py.in
+> ++++ b/clients/gpsprof.py.in
+> +@@ -200,7 +200,7 @@ class plotter(object):
+> + 
+> +         # escape ", `, and \n, for gnuplot, to not break strings
+> +         desc = desc.replace('"', '\\042')
+> +-        desc = desc.replace('`', '\\140')
+> ++        desc = desc.replace("\x60", '\\140')
+> +         desc = desc.replace('\n', '')
+> + 
+> +         return desc
+> +@@ -1271,13 +1271,19 @@ if __name__ == '__main__':
+> +             options.title += '\\n' + options.subtitle
+> +         # escape ",  and`, for gnuplot, to not break strings
+> +         options.title = options.title.replace('"', '\\042')
+> +-        options.title = options.title.replace('"', '\\140')
+> ++        options.title = options.title.replace("\x60", '\\140')
+> +         term_opts = ""
+> +         truecolor_terms = ['png', 'sixelgd', 'wxt']
+> +         if options.terminal in truecolor_terms:
+> +             term_opts = 'truecolor'
+> +-        sys.stdout.write("set terminal %s size 800,950 %s\n"
+> +-                         "set termoption enhanced\n"
+> ++
+> ++        # escape ", `, and \n, for gnuplot, to not break strings
+> ++        options.terminal = options.terminal.replace('"', '\\042')
+> ++        options.terminal = options.terminal.replace("\x60", '\\140')
+> ++        options.terminal = options.terminal.replace('\n', '')
+> ++
+> ++        sys.stdout.write('set terminal "%s" size 800,950 %s\n'
+> ++                         'set termoption enhanced\n'
+> +                          % (options.terminal, term_opts))
+> +         # double quotes on title so \n is parsed by gnuplot
+> +         sys.stdout.write('set title noenhanced "%s\\n\\n"\n' % options.title)
+> +-- 
+> +2.43.0
+> +
+> diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
+> index 7fd8cec8ab..b23bc4c065 100644
+> --- a/package/gpsd/gpsd.mk
+> +++ b/package/gpsd/gpsd.mk
+> @@ -9,6 +9,12 @@ GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd
+>  GPSD_LICENSE = BSD-2-Clause
+>  GPSD_LICENSE_FILES = COPYING
+>  GPSD_CPE_ID_VALID = YES
+> +
+> +# 0001-clients-gpsprof.py.in-Quote-double-quotes-in-title.patch
+> +# 0002-clients-gpsprof.py.in-Quote-back-ticks-in-title.patch
+> +# 0003-clients-gpsprof.py.in-Quote-back-ticks-in-title.patch
+> +GPSD_IGNORE_CVES = CVE-2026-58459
+> +
+>  GPSD_SELINUX_MODULES = gpsd
+>  GPSD_INSTALL_STAGING = YES
 >  
->  N:	Thomas Perale <thomas.perale@mind.be>
-> -F:	package/go/
-> -F:	utils/generate-cyclonedx
-> +F:	package/asterisk/
-> +F:	package/bind/
-> +F:	package/clamav/
-> +F:	package/containerd/
-> +F:	package/dpdk/
-> +F:	package/gnupg2/
-> +F:	package/haproxy/
-> +F:	package/libopenssl/
-> +F:	package/lxc/
-> +F:	package/mariadb/
-> +F:	package/mbedtls/
-> +F:	package/nodejs/
-> +F:	package/openjdk/
-> +F:	package/php/
-> +F:	package/python-django/
-> +F:	package/suricata/
-> +F:	package/subversion/
-> +F:	package/tor/
-> +F:	package/zabbix/
->  F:	support/scripts/cve-check
->  F:	support/scripts/cve.py
-> +F:	utils/generate-cyclonedx
->  
->  N:	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
->  F:	arch/Config.in.arm
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
