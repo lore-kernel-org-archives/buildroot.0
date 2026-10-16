@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD027CC6B38
-	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 13:10:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 718E2CCA462
+	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 13:10:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 73F3D60FE5;
-	Fri, 16 Oct 2026 13:10:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 39C8C6100A;
+	Fri, 16 Oct 2026 13:10:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id li6_co360s8z; Fri, 16 Oct 2026 13:10:50 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 4126F60FCF
+ id pI8vbxM3JGZQ; Fri, 16 Oct 2026 13:10:52 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 5699361031
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792156250;
-	b=jYghB5W8rIj2hud4zn0HkVX/bjermQYvKtWLCo1ILbrqD14Q7Rowl2xWyJHCnW+ynu5+
-	 v0EJ3tIqPaTHo7l753kfZvAWJQra20TkCr0lJ/hd2bbqhE7skWpvmshdjI01PHReGdB0m
-	 Jj1WN6hV1iZmQQZJklZVgHO7LcGByUKrAVxqEnycPTDqApY5jfYYtFS0sy0YuldThVtDU
-	 YiIHq5fTkNaUi/PmNPFu1V8B04iTo+u4HBNus78cQfYgwICLglRa199uERxGQmjBXF8mw
-	 wHY5okVXEHlplm0iKyiGaEBHgCZlYe+LxU3oGndgHI5OoRmNMT3Gk1PZvcyicfOzy/w==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792156252;
+	b=rXtOqT63mlhbh+ZQBZMslMd9x1mAFCe9JOJeCiIFq6LqWLS82XmWQuB78ZTTx7PW2l5r
+	 lvmy+/A6zwnxbttOjywAUcpsOmUwTeHoN5dm71OJaRWfNwtxqLnhc9RRFBeha2PP59e+b
+	 EQ6c/AputY6jhkqx2ih2y5mIc5LQpSTNNUSjVuyNKyv4c1Soo0osnnMdY1PS5qU3tHPZF
+	 0D5E4cRf6kTFyFF7za/DqoHqu1JXSpVwSiaxrx0MGnAQjYwjYjmGqDaocnEpW91A/34EF
+	 VLkBn4BlF8xhxAJUBwy5MnQHh+KbLL2fHTl72/RPA5c+tAQ5x6Y8Mxi8dJiFHor9Vww==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792156250;
+	c=relaxed/relaxed; t=1792156252;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=Vs+p8/6Jb0JZqn4q23g4KArOSQZ5kbmFIcllVjIDyaY=;
-	b=ZD8S1jsQ7jCIiG5IDe9TW5JRDeMNgip0DY+RBpzqSo5GtXrrxiIkYt5EbwScKPZIYOv3
-	 4U7Rvobs4FfBc1F/uvKmvobbmrzgtblsLcU3am1HDH05yKvy2vd0PXnAVj/DuaJrjCjhW
-	 sK3JWm/htMycDybt125pgXcHa71Rz1dKc63i+4RnpCBI5klfgXynLys4wnHv6F+ogeGBc
-	 BG1RECJEFql9UrxNj/VtuCaFQ8WmcDvh7Hw9RdCg8YASjLWPLXEMlIn5tWdhL8UbZzhME
-	 iLEflLgRtVaIOeG9QZ6Rml3ROr57zmSBWvIs/bdDpHwL5lGbZ+80T2Ouv+Xbv2xET6A==
+	bh=621JawYL01CsMEPsuFerpbZZl3rButwuMKRgCeZe8pc=;
+	b=KccP7mInUqLn+5YYgRoR95DOE5vwPe5lkzkyuAdkUGnkPa3J49Y1AEqauKHG3oCAmjSH
+	 DwLcF6eTPHTcA+28LfoQoNyUSRmC/KKmZDL+VK67TCEdBueIgNClOE6enrPlzhDNjocvZ
+	 lkmuLiu+oTuKpOQndkPmdw7tygCqUHmGxecVG4XDnm+RB7JswK1SnmFHIw3Gh4n6KNc7e
+	 34O1crlAoG9YJxGDbdAZk5kLfp16kJVMuolg0HxYP04aShda7Fwj4L5+E+695eWnygeMA
+	 xD4H+otdBg3s7Ysndx92renYZkgYrSSdnRuBRVn51f2ZkXL9rL8+raLY3d7yyNxWclw==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792156250;
-	bh=Vs+p8/6Jb0JZqn4q23g4KArOSQZ5kbmFIcllVjIDyaY=;
+	s=default; t=1792156252;
+	bh=621JawYL01CsMEPsuFerpbZZl3rButwuMKRgCeZe8pc=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=V2BrYhQomSvlyrMQn6AVSur4J8osBYWy6fUzDJmh/oC1wFqUXMdrsiCm2sBBbH/Ef
-	 /1e4HRV5Z6/hZyv0wnN2AbZGNcgNbSnL0n+yQ2gKIEFCjlIfYR5PkXdjrlSlKczvp+
-	 LPrkUfhuzjiKedwXg4ib17pqdes6tFGMpMKDYtQwouvqvgTrhA9l6Y2cWYDlQf54uc
-	 Z0AI/eRvUUVyHcG3W+Hs+wU+ghJB0DNaPg6L+jAtbAiZf3faivUPBDAb1eSVdUVJfr
-	 6bEJUd8fRG/E++dEfB3J5kUH4UfLss0XrOnMPxN+JXyjoJNPt/PTwwlwHWYS/7ZVKa
-	 pfTSdFwV+qYCw==
+	b=YLVEfHZB6qLG9isKSSPPhb81LT28pAwYvXhm57YdlS2jr5leo19VmOzUU8sNU2tTF
+	 iNZlRZgDTNp8BBhOIRDas4SWrPUmbEf6Yab6RiA9q4+5+Q6QH8fWY1KnTXJ2+MBZqV
+	 DxUcIm1xwJvVniJkXri6qB5ewnx+KJqYcvx9uo+aoB8b+qvHfWB5B0c3CPybKMRx6j
+	 RsOdL5kk7cXr869DTCgWDBOhBpaEkLdoUs/En/kQplx05U3k1h4YiQoONphJKGDn3H
+	 ADVAdL/YjXXcFvKFeidaNKGBXeHSPhQVh4xjVovjCtyl1xNPq1DqAlqtTwGwpEncbS
+	 2jkH7SGluJcAA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4126F60FCF;
-	Fri, 16 Oct 2026 13:10:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5699361031;
+	Fri, 16 Oct 2026 13:10:52 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 358991C64
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E6F61EE3
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:08:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 310E6814AB
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2482581489
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:08:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8aVMO5kYSVg5 for <buildroot@buildroot.org>;
- Fri, 16 Oct 2026 13:08:30 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org F024D81516
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792156109;
- b=Uhq8HvNVGlCRTkZB5BMisAztnEDlLhmX6i9i+GD9x4zYT40l6AKf62Ngdq1migAq2uYP
- BC5kcPN4uCxZ47AdeEhGIONvd389xm42/ooZKtuggQCK+/nDxqPt3RXPAy1vJ3Fb5fIrk
- gfl5hv7Y/zXnQtoKuICHze6m4fVlPlj1O4+S4hJpysOvEcYsneIDg0TvuAILBeuItEYBz
- JmoAADKUcLPk2MkgXQMiT+TcpqmX2xWoMznWNbsv28Y/phC+ExqRUIhvk29EtnO3+eHsp
- zAAH2l4n0Tb15df61iCusXG47AezBf/MOCX4T8fHQLXJO0gA5ZcOJICCayUzeTU7yGw==
+ id mogPxyUELhcw for <buildroot@buildroot.org>;
+ Fri, 16 Oct 2026 13:08:29 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org BDDF0814BD
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792156108;
+ b=Z2HBNoFQO0NXRY8oLwCW85LQkPfOhtMu1ef2MjguWsXfqPgwoqzcs1jtIgtljQUh2dVM
+ KaGP3CzADNUJ+ILUvL95n/0ju/PmwfLMrh6/dAzH7ur7bl2nDiE7Abxdq9Dtp2JfQR718
+ YfTa1suEwjHhKlxQ9U1zxZOgmc8rSfJYkZoIWR/NDfXrDnoLGqWWaiwqwm83BBIMaf94l
+ qJnIwc94XGzA3zD7PzbiZcml0YTzDezAwsKFlumBaG1vbCw9/2AUvqnH2IuVI2FsXxoaT
+ d5/N3ILubGZSeiI20SAHL5ASHvgIorfzocqqOD8/WcdLROc1AeA6bFfHCjxalsm+EDw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792156109;
+ c=relaxed/relaxed; t=1792156108;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=an18V9PoDhd1on6Sf2sL82M2Mz7Na/57ui4VBWJjH9E=;
- b=OzF62mvS5VCedbFu4qTUMxlQwqLDKVW3a8oxwhbFIb9XDWdKn9bDPq3iIpQ7DeNXiJ2u
- 4Oc/iqjJN8M3neQ7Q726g0o3UTv2nsQzbV4tsOC/XrjDyKdrW1zfR+Svn39elHO46mSXM
- ir1U19phSvyaSYPabGcqZ0fghSGtQ8YpJD5TORvEdxu3ESfpgfkDcKD84RQLT88NSoRLE
- WSz07vDSGD8t+6haPmttldhgnsXTbDGs9hnhvnak7urO7q4p6loFtp4+03VIYxg+Gy4HQ
- p00pqxTdruL3q6A4lTEsJRUknoo8sk6qL3BJEva5IXwVyg+1vmqd/I+RW408M7y053Q==
+ bh=fAu6beVyjRoQP7bnPruhPyifHXi7zJv4LcwsXsgaDVg=;
+ b=byu/S3R/tc8mJ+VFraaeZmCdw74Mso8rhDt7g4mhScnvYuASVidxow39Q1fbqkXLS15B
+ Qe1ADFDEuy2q7o+zhJTd7Nf0Xik/00YhuUo2GeUZBCf4Qsc7R7ngQMp33cTnDucQ1q6nE
+ gDfZfcYU+IEBaKSlPrSV8HvZ9KeOHjwJXtLSDaA/wgd/9yZvdyQzt65dEVVnblT7tb28V
+ a78/j2R7yu/yUp6XWm12bE5zTaHYTZiiaeyMW3S7TzsRdRKzyzs0hnJoHJeOA4iFqSdda
+ zNvAcVlB+pUsRY38eKxzMIJ5OXK5TDspToiMg2XrpL4tYLaKXf9FEonuRZC7SzrYW5g==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id F024D81516
+ by smtp1.osuosl.org (Postfix) with ESMTP id BDDF0814BD
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:08:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DEDC3960D8; Fri, 16 Oct 2026 13:07:07 +0000 (UTC)
+ id AEC9B960D5; Fri, 16 Oct 2026 13:07:07 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 16 Oct 2026 15:07:52 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: f6acb76a5e45b16548474a91497f5edd560e7f34
-X-Git-Newrev: 613db8496ad628b37e97882eac521f3e8c90f255
+X-Git-Oldrev: a2a640807699ad8cb5161b7c574f4d5aca412fc5
+X-Git-Newrev: f8292495ab493ccfe56dbf381223ac71bb04a99e
 X-Patchwork-Hint: ignore
-Message-Id: <20261016130707.DEDC3960D8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- package/qemu/Config.in.host: fix typo in comment dependency
+Message-Id: <20261016130707.AEC9B960D5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/util-linux:
+ adding cfdisk enablement comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,50 +114,57 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7459022855405008148=="
+Content-Type: multipart/mixed; boundary="===============8442681813299968162=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============7459022855405008148==
+--===============8442681813299968162==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/613db8496ad628b37e97882eac521f3e8c90f255
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f8292495ab493ccfe56dbf381223ac71bb04a99e
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-The "host-qemu needs a host gcc >= 8" comment depends on
-BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORT, missing the trailing "S"
-of the actual symbol BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS,
-defined a few lines above and used correctly everywhere else in
-this file.
+This commit introduces a menu comment to users to indicate whether the
+`cfdisk` can be built, even when the basic set binaries option is
+enabled.
 
-Because this typo'd symbol is never defined anywhere, it is always
-considered false by Kconfig, so the comment's "depends on" clause
-silently loses one of its two intended conditions.
+For users wishing to support `fdisks` utilities (cfdisk, fdisk and
+sfdisk) in Buildroot, these utilities are enabled through a
+`BR2_PACKAGE_UTIL_LINUX_BINARIES` option. This option configures
+`all-programs`, which will default enable `fdisks` (along with other
+program options that do not have an explicit configuration). While a
+user can enable "all programs", there is no guarantee that the
+`cfdisk` utility will be built if ncurses is not enabled. Even if an
+explicit Buildroot menu option is added for `cfdisk` (where we can
+force select ncurses), there is no specific configuration option in
+util-linux to toggle the enablement of `cfdisk`.
 
-Assisted-by: LLM
-Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit 280e9755d5241e634b897fc07010b7872fc65eee)
+(alternative to commit f7019acad226cf01c40f278dfebc32dd5e8dfd73)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/qemu/Config.in.host | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/util-linux/Config.in | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
-index 63f1b3fbde..76fb22c557 100644
---- a/package/qemu/Config.in.host
-+++ b/package/qemu/Config.in.host
-@@ -40,7 +40,7 @@ config BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 2fec026362..6e6558e0c8 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -67,6 +67,13 @@ config BR2_PACKAGE_UTIL_LINUX_BINARIES
+ 	  The setarch utility also installs architecture-specific
+ 	  symlinks like linux32, linux64, uname26, i386 and x86_64.
  
- comment "host-qemu needs a host gcc >= 8"
- 	depends on BR2_PACKAGE_HOST_QEMU_SYSTEM_ARCH_SUPPORTS || \
--		BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORT
-+		BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
- 	depends on !BR2_HOST_GCC_AT_LEAST_8
- 
- config BR2_PACKAGE_HOST_QEMU
++if BR2_PACKAGE_UTIL_LINUX_BINARIES
++
++comment "cfdisk needs ncurses"
++	depends on !BR2_PACKAGE_NCURSES
++
++endif
++
+ config BR2_PACKAGE_UTIL_LINUX_AGETTY
+ 	bool "agetty"
+ 	depends on BR2_USE_MMU # fork()
 
---===============7459022855405008148==
+--===============8442681813299968162==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -168,4 +175,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============7459022855405008148==--
+--===============8442681813299968162==--
