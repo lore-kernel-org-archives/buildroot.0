@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3752CCA462
-	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 13:10:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD027CC6B38
+	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 13:10:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5A72B61026;
-	Fri, 16 Oct 2026 13:10:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 73F3D60FE5;
+	Fri, 16 Oct 2026 13:10:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DyFQMh38t9Jo; Fri, 16 Oct 2026 13:10:48 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org EE7306101A
+ id li6_co360s8z; Fri, 16 Oct 2026 13:10:50 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 4126F60FCF
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792156248;
-	b=AMWduWtTHk9Lu0MTNQnMrCFhB3vsMeFc1xc7H9MJX+CP7/eunI0NAwSIO85jQNlsi6ti
-	 drZoDM/ZbLU72sFImBaRWfWNgYcXZ5mf5EqYSeDT869CxsB5J+y7a48yBgf+JoFQ6MQPB
-	 N38inkoyBrAGW+WFnkEY90WFzzxbYwSj5mIyAANOAG7NfHO6c7hoi64zvBnaGBvAQk+95
-	 2Yy7BLsygVw/yOb9wLNdTG50e8vj+u8S/SFIOCGGZcUi5MGUaMq7ImzTi5+dsCZl1JjMQ
-	 KPBCjDtc5wJIErScKNBW3IRzqcUvpR7tttwIoZEdawpc6N60U/nQUy9fGYUgq/4JDag==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792156250;
+	b=jYghB5W8rIj2hud4zn0HkVX/bjermQYvKtWLCo1ILbrqD14Q7Rowl2xWyJHCnW+ynu5+
+	 v0EJ3tIqPaTHo7l753kfZvAWJQra20TkCr0lJ/hd2bbqhE7skWpvmshdjI01PHReGdB0m
+	 Jj1WN6hV1iZmQQZJklZVgHO7LcGByUKrAVxqEnycPTDqApY5jfYYtFS0sy0YuldThVtDU
+	 YiIHq5fTkNaUi/PmNPFu1V8B04iTo+u4HBNus78cQfYgwICLglRa199uERxGQmjBXF8mw
+	 wHY5okVXEHlplm0iKyiGaEBHgCZlYe+LxU3oGndgHI5OoRmNMT3Gk1PZvcyicfOzy/w==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792156248;
+	c=relaxed/relaxed; t=1792156250;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=+ytzVxa91QtuwzMqtRxtJGX8JrieVWMpQFlzysqrHF0=;
-	b=DwJBFf9Iwly5vFoXerko7Go07fynAPfgJA4fy6Em9hs2PPWGLBQ4YyHQcAYsZIXvUz6Q
-	 jyHR3wgaxGcfX8Eh4/l4UPwVYQMbCCRPl/Z+zguQGfe9W22nmPkoxea9cwwL84coNlIIo
-	 Ht+NqdqGDRSD3Xcr9yt4yWjQ7pFyVNBFdgQoh0LtDsgM9k/3Vw5Yw3GPFT8fQ24VLkooV
-	 ixVuy6yZ2hTDrz3rY/7y51bgDNm1jeav71bEuNbUi5nrLCNkbm9AeQkgqJAgOMENimv9t
-	 wv75/5HnGphEbTbuQ9ubFQJ1XAd7yhee2wkQLyl5INr7UDzsiA1D7R1k82BNFUxQ6Fg==
+	bh=Vs+p8/6Jb0JZqn4q23g4KArOSQZ5kbmFIcllVjIDyaY=;
+	b=ZD8S1jsQ7jCIiG5IDe9TW5JRDeMNgip0DY+RBpzqSo5GtXrrxiIkYt5EbwScKPZIYOv3
+	 4U7Rvobs4FfBc1F/uvKmvobbmrzgtblsLcU3am1HDH05yKvy2vd0PXnAVj/DuaJrjCjhW
+	 sK3JWm/htMycDybt125pgXcHa71Rz1dKc63i+4RnpCBI5klfgXynLys4wnHv6F+ogeGBc
+	 BG1RECJEFql9UrxNj/VtuCaFQ8WmcDvh7Hw9RdCg8YASjLWPLXEMlIn5tWdhL8UbZzhME
+	 iLEflLgRtVaIOeG9QZ6Rml3ROr57zmSBWvIs/bdDpHwL5lGbZ+80T2Ouv+Xbv2xET6A==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792156248;
-	bh=+ytzVxa91QtuwzMqtRxtJGX8JrieVWMpQFlzysqrHF0=;
+	s=default; t=1792156250;
+	bh=Vs+p8/6Jb0JZqn4q23g4KArOSQZ5kbmFIcllVjIDyaY=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=LBexe2vfEmCBQ+xKM5Ra8A4x+F2fqvcppgZVq0Rv6yJr9eaz2LpM769Bfh9PmQvmo
-	 jBpNA6lOPfZxRrBz4JFgEvnS7A/LzX8OGP8anuW4HZZCKxpF3BReQezQz2MHJvrfuH
-	 GwTkHeKIRnnMzl+ux42zpui7RC451wwWodsRu3hAD+mlcXJ79JcIrWguIGWh+BtLDn
-	 KYNkjPGvClcbhJzRleTZ/mXp9iEnSg+vAJPlA9qbJSo4JuiQ37dPZleGunkwNhkTZ2
-	 G8EYopUy7KlQjPpX+sF9De7nuF/8ZENP9mFu7bznmpYt6+D794Bsr2LeryDgcRnRJ7
-	 6ju8tHh/BMu0w==
+	b=V2BrYhQomSvlyrMQn6AVSur4J8osBYWy6fUzDJmh/oC1wFqUXMdrsiCm2sBBbH/Ef
+	 /1e4HRV5Z6/hZyv0wnN2AbZGNcgNbSnL0n+yQ2gKIEFCjlIfYR5PkXdjrlSlKczvp+
+	 LPrkUfhuzjiKedwXg4ib17pqdes6tFGMpMKDYtQwouvqvgTrhA9l6Y2cWYDlQf54uc
+	 Z0AI/eRvUUVyHcG3W+Hs+wU+ghJB0DNaPg6L+jAtbAiZf3faivUPBDAb1eSVdUVJfr
+	 6bEJUd8fRG/E++dEfB3J5kUH4UfLss0XrOnMPxN+JXyjoJNPt/PTwwlwHWYS/7ZVKa
+	 pfTSdFwV+qYCw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EE7306101A;
-	Fri, 16 Oct 2026 13:10:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 34E0A151A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4126F60FCF;
+	Fri, 16 Oct 2026 13:10:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 358991C64
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:08:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 24A02814BA
+ by smtp1.osuosl.org (Postfix) with ESMTP id 310E6814AB
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:08:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rqx_5QM1yML1 for <buildroot@buildroot.org>;
- Fri, 16 Oct 2026 13:08:29 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org A56FC814C3
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792156108;
- b=mdgABgwRovP3NKZez31oY/eJKMCzvfEk1kArHlwg0MismP/Vv2GuBM1NIeIZk5b+CT/m
- RSUJouAHKrQ0gJKxiM3OgL5F9Wj5V1HANFptN9gE6ZnY8sDCcs+hLseOtwNHAUXct3sZm
- YfL+qRyqacLILACVNFy9p6vmMWkuC6dJebS87dCZssW3/2C5m0qixSQVR/KfZcP3mNArK
- UAC6lzeJ5ValykIDK80cVv0VUDB1Tw+4S00lOHQOo/qy5l5RzoUMkhpADNkYFvih09IY2
- vpxKtPZKLLabHaNjESXGuKBtSGNS219nz/47pA26tNk66DVuC7IWHfH2VunYz5B5lug==
+ id 8aVMO5kYSVg5 for <buildroot@buildroot.org>;
+ Fri, 16 Oct 2026 13:08:30 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org F024D81516
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792156109;
+ b=Uhq8HvNVGlCRTkZB5BMisAztnEDlLhmX6i9i+GD9x4zYT40l6AKf62Ngdq1migAq2uYP
+ BC5kcPN4uCxZ47AdeEhGIONvd389xm42/ooZKtuggQCK+/nDxqPt3RXPAy1vJ3Fb5fIrk
+ gfl5hv7Y/zXnQtoKuICHze6m4fVlPlj1O4+S4hJpysOvEcYsneIDg0TvuAILBeuItEYBz
+ JmoAADKUcLPk2MkgXQMiT+TcpqmX2xWoMznWNbsv28Y/phC+ExqRUIhvk29EtnO3+eHsp
+ zAAH2l4n0Tb15df61iCusXG47AezBf/MOCX4T8fHQLXJO0gA5ZcOJICCayUzeTU7yGw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792156108;
+ c=relaxed/relaxed; t=1792156109;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=zv0JZzvbAelrIh9ZaTSRhO44sPmNXqY3LojZjgxqbLU=;
- b=SnNDPoX7tGqS7f84a1Pwiv/cxV2vgyIbSwXtAAubP9Se6PI4wVIXdlyROzoSpcMgoNyu
- MDLw8E6EvlrPVhlp9Jx8T7AZPM9YifQIs9h4Ht/YI1IkGTmSCLk8kEyxZLb3p/id6cKDy
- WOSXW5XB5ORh5pYzZMO5eNDw8a/CfLE+68LPqnF4wIBQoq7dT3n31dlbEp68PE8YASo4x
- WBJBuyPES5jEwNpAr7u1/wLHefSmLNIq/U7FVlN7/PRUzBEQ9y1dY3G6fWTwufhKEfnvy
- UY27NIA2+PkRmQtNVYn9RRY7dVTUeSbhFsVwQpMB6gnI4MNIknWy3ApkWJhgLfaolrA==
+ bh=an18V9PoDhd1on6Sf2sL82M2Mz7Na/57ui4VBWJjH9E=;
+ b=OzF62mvS5VCedbFu4qTUMxlQwqLDKVW3a8oxwhbFIb9XDWdKn9bDPq3iIpQ7DeNXiJ2u
+ 4Oc/iqjJN8M3neQ7Q726g0o3UTv2nsQzbV4tsOC/XrjDyKdrW1zfR+Svn39elHO46mSXM
+ ir1U19phSvyaSYPabGcqZ0fghSGtQ8YpJD5TORvEdxu3ESfpgfkDcKD84RQLT88NSoRLE
+ WSz07vDSGD8t+6haPmttldhgnsXTbDGs9hnhvnak7urO7q4p6loFtp4+03VIYxg+Gy4HQ
+ p00pqxTdruL3q6A4lTEsJRUknoo8sk6qL3BJEva5IXwVyg+1vmqd/I+RW408M7y053Q==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A56FC814C3
+ by smtp1.osuosl.org (Postfix) with ESMTP id F024D81516
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:08:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 96825960D5; Fri, 16 Oct 2026 13:07:07 +0000 (UTC)
+ id DEDC3960D8; Fri, 16 Oct 2026 13:07:07 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 16 Oct 2026 15:07:52 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 8d80b2751bc0fde1ea81396008c9757c6d26e318
-X-Git-Newrev: 8c060cf938222f0b06e8ae3c95558b8af4bd572f
+X-Git-Oldrev: f6acb76a5e45b16548474a91497f5edd560e7f34
+X-Git-Newrev: 613db8496ad628b37e97882eac521f3e8c90f255
 X-Patchwork-Hint: ignore
-Message-Id: <20261016130707.96825960D5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] utils/generate-cyclonedx:
- split vulnerabilities per state
+Message-Id: <20261016130707.DEDC3960D8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ package/qemu/Config.in.host: fix typo in comment dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,171 +114,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5166562707864248455=="
+Content-Type: multipart/mixed; boundary="===============7459022855405008148=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5166562707864248455==
+--===============7459022855405008148==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8c060cf938222f0b06e8ae3c95558b8af4bd572f
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/613db8496ad628b37e97882eac521f3e8c90f255
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-If a vulnerability is present in multiple components and only one of
-them has a patch that addresses that vulnerability, all components will
-currently have that vulnerability marked as `resolved_with_pedigree`.
+The "host-qemu needs a host gcc >= 8" comment depends on
+BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORT, missing the trailing "S"
+of the actual symbol BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS,
+defined a few lines above and used correctly everywhere else in
+this file.
 
-Right now, this issue does not affect any packages, but in the future it
-might affect packages that provide multiple version options (e.g.
-gnupg and gnupg2).
+Because this typo'd symbol is never defined anywhere, it is always
+considered false by Kconfig, so the comment's "depends on" clause
+silently loses one of its two intended conditions.
 
-There is a small chance this happens in a real-world use case, but it
-may occur in the context of maintenance when running
-`make show-info-all`.
-
-This commit changes how vulnerabilities fixed by a patch are stored.
-Instead of placing all vulnerabilities into a single set, it now keeps an
-index of the component for which the patch has been applied.
-
-When generating the vulnerability list, the component reference is
-checked instead of only the vulnerability ID. If a vulnerability ID has
-multiple states for different references, multiple vulnerability
-entries are created with distinct analyses.
-
-Consider the hypothetical case where gnupg ignores a vulnerability
-because it was introduced in a later version, while gnupg2 has patched
-that vulnerability. This would result in the following JSON:
-
-```json
-[
-    {
-        "id": "CVE-1234-1234",
-        "analysis": {
-            "state": "in_triage",
-            "detail": "The CVE 'CVE-1234-1234' has been marked as ignored by Buildroot"
-        },
-        "affects": [
-            {"ref": "gnupg"}
-        ]
-    },
-    {
-        "id": "CVE-1234-1234",
-        "analysis": {
-            "state": "resolved_with_pedigree",
-            "detail": "The CVE 'CVE-1234-1234' has been marked as ignored by Buildroot"
-        },
-        "affects": [
-            {"ref": "gnupg2"}
-        ]
-    }
-]
-```
-
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-[Arnout:
- - update the VULN_WITH_PEDIGREE comment to match the code
- - use set() as default instead of {}]
+Assisted-by: LLM
+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit 345c8ffc9693d1880168e2eb704b5fba5d928c42)
+(cherry picked from commit 280e9755d5241e634b897fc07010b7872fc65eee)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- utils/generate-cyclonedx | 27 ++++++++++++++++-----------
- 1 file changed, 16 insertions(+), 11 deletions(-)
+ package/qemu/Config.in.host | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-index fa20f6c1cf..98009cef98 100755
---- a/utils/generate-cyclonedx
-+++ b/utils/generate-cyclonedx
-@@ -12,6 +12,7 @@ import argparse
- import importlib.util
- import json
- import os
-+from collections import defaultdict
- from pathlib import Path
- from typing import Iterator
- import urllib.error
-@@ -36,10 +37,10 @@ BR2_VERSION_FULL = (
-     .strip()
- )
+diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
+index 63f1b3fbde..76fb22c557 100644
+--- a/package/qemu/Config.in.host
++++ b/package/qemu/Config.in.host
+@@ -40,7 +40,7 @@ config BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
  
--# Set of vulnerabilities that were addressed by a patch present in buildroot
--# tree. This set is used to set the analysis of the ignored CVEs to
--# 'resolved_with_pedigree'.
--VULN_WITH_PEDIGREE = set()
-+# Vulnerabilities that were addressed by a patch present in buildroot tree,
-+# as a set per component reference. This is used to set the analysis of the
-+# ignored CVEs of that component to 'resolved_with_pedigree'.
-+VULN_WITH_PEDIGREE = defaultdict(set)
+ comment "host-qemu needs a host gcc >= 8"
+ 	depends on BR2_PACKAGE_HOST_QEMU_SYSTEM_ARCH_SUPPORTS || \
+-		BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORT
++		BR2_PACKAGE_HOST_QEMU_USER_ARCH_SUPPORTS
+ 	depends on !BR2_HOST_GCC_AT_LEAST_8
  
- SPDX_LICENSES = []
- 
-@@ -218,11 +219,12 @@ def read_patch_file(patch_path: Path) -> str:
-         return f.read()
- 
- 
--def cyclonedx_patches(patch_list: list[str]):
-+def cyclonedx_patches(comp_ref: str, patch_list: list[str]):
-     """Translate a list of patches from the show-info JSON to a list of
-     patches in CycloneDX format.
- 
-     Args:
-+        comp_ref (str): Reference of the component the patches are part of.
-         patch_list (list): Array of patch relative paths for a given component.
- 
-     Returns:
-@@ -245,7 +247,7 @@ def cyclonedx_patches(patch_list: list[str]):
-             issue = {}
-             cves = extract_cves_from_header(header)
-             if cves:
--                VULN_WITH_PEDIGREE.update(cves)
-+                VULN_WITH_PEDIGREE[comp_ref].update(cves)
-                 issue = {
-                     "resolves": [
-                         {
-@@ -402,7 +404,7 @@ def cyclonedx_component(name, comp):
-             "cpe": comp["cpe-id"],
-         } if "cpe-id" in comp else {}),
-         **cyclonedx_external_refs(comp),
--        **(cyclonedx_patches(comp["patches"]) if comp.get("patches") else {}),
-+        **(cyclonedx_patches(name, comp["patches"]) if comp.get("patches") else {}),
-         "properties": [{
-             "name": "BR_TYPE",
-             "value": comp["type"],
-@@ -437,11 +439,14 @@ def cyclonedx_vulnerabilities(show_info_dict):
-     Returns:
-         list: Solved vulnerabilities list in CycloneDX format.
-     """
--    cves = {}
-+    cves = defaultdict(list)
- 
-     for name, comp in show_info_dict.items():
-         for cve in comp.get('ignore_cves', []):
--            cves.setdefault(cve, []).append(name)
-+            state = "in_triage"
-+            if cve in VULN_WITH_PEDIGREE.get(name, set()):
-+                state = "resolved_with_pedigree"
-+            cves[(cve, state)].append(name)
- 
-     return [{
-         "id": cve,
-@@ -450,13 +455,13 @@ def cyclonedx_vulnerabilities(show_info_dict):
-             "url": "https://nvd.nist.gov/vuln/detail/" + cve
-         },
-         "analysis": {
--            "state": "resolved_with_pedigree" if cve in VULN_WITH_PEDIGREE else "in_triage",
-+            "state": state,
-             "detail": f"The CVE '{cve}' has been marked as ignored by Buildroot"
-         },
-         "affects": [
-             {"ref": bomref} for bomref in components
-         ]
--    } for cve, components in cves.items()]
-+    } for (cve, state), components in cves.items()]
- 
- 
- def br2_virtual_is_provided_by(ref, show_info_dict) -> list:
+ config BR2_PACKAGE_HOST_QEMU
 
---===============5166562707864248455==
+--===============7459022855405008148==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -289,4 +168,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============5166562707864248455==--
+--===============7459022855405008148==--
