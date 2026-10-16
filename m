@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71E4BCCA46C
-	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 15:05:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FB60CCA46C
+	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 15:05:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 393DE816E7;
-	Fri, 16 Oct 2026 15:05:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 696F440AD8;
+	Fri, 16 Oct 2026 15:05:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fobYQr8IaXCg; Fri, 16 Oct 2026 15:05:03 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 3586C816EF
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792163103;
-	b=qEVEhUsV8lyAqQ5VJmFua7d85uknEVaqostxStGeUZDfdnHeugFm25lw/wMwSp+flOGD
-	 eQO8q7rDP9huQPIo4az3DHP9+/dL9VCyMczEVNt7zJ2p0dqj3mT3Vjs4EiSbyyKAlYgB3
-	 6LYb0of9NYi2PyOS+UrEamvvf/9x7507bWXTQwDcgZZTln+O/mAbDsBYAjhVOMt1NiLur
-	 4BaKs9PW4f1lp46WKDUxHGlOH6sIRLx2JAPP5T/F7uFvZ0pgILjw5YNYE4YbI3b9MWI+p
-	 +oGxjjVS0/Wd5G8L7hME3FUxB2ClrGjRUlGAz/LPVywAPzqa7yFtdW/NczYuOG0p/3Q==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id koDlniOhsnQD; Fri, 16 Oct 2026 15:05:08 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 88A47409F8
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792163108;
+	b=rGZfh3Jf7zfhhAgBWSlf4j4vye7tj5onyU4FH2v1Vpots7R/9q4rtQsPOca/bWlVQCGP
+	 /bSyew70uW0dAyu+OdkNrhs/7oDmDQGhL2MDoNhTEysQWxrmGK53O00WdrJBfzqJj3Nyo
+	 mLOxdiL2ENfEFZ3kz2SpsAgYfWc8KSQiqo+u0uCjx4sq6ep4q0nF8R3j5jIhpEslrkxYy
+	 +larMpZgQ8eIqAmws4mO2QcB/Hf3jnC82M0h93yKzMjU602yTHPACMQS5E/suluNSxrsc
+	 mJKyC30K8gL7f35HTaqedjyDLspzbCXrmSnI39a8HG+r4BYI3Tty8xFfJ4pQFmXQjWw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792163103;
+	c=relaxed/relaxed; t=1792163108;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,117 +31,116 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=hD0dR+WCKjiTcnybBpeEKNG0ZwGOoQdBNjo0ET4Tb3g=;
-	b=mhH5FlwvroKIOdaXW+E/6EW2cNqevy2P2E+cPm9DufExU/El6KXjy6XjlF/2feJ+lFiI
-	 F1pE1ERAYpZsxb0f0eR/hBjZY0DIHrjWbNvNQvyFqwq66D9R5wq8XqyaWHMhdWbr8JrXa
-	 V1pch5U30cMN0sRTCrP9zsii6NTX3Vp/uSts8/R2IqsgW3iLFN//jiqE/OPqiwAB2QLHm
-	 qvBel1HOAQAwEWcBDKadgasRyma5EpYBBakWn2X+b6CwgXj13NfFPEFDylrIRIeRJezE5
-	 T+os7OZjslYtbXCkxSKBNdu57QfbWLuAZ1EEuU3j/dtOWIfyNDUfVzBwuoYzPI6cCMQ==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	bh=HkG9Ls78M7O+WvubfQVhu1BcjmxzOsbN+s3K+pSlAvM=;
+	b=QxlfZIW9izXS0/qWAmdVDLyG2lZFoUFo2vItkDErS6eWor4n7poOpZpvfQja+sS9rvVJ
+	 Ml72l5D2Hlv1eH8Ii6FKGVbLAfH9W9YI7iBNo1N8ss538d9UPf1kO8zy1t9a7/t9HmauF
+	 TXkcHKb1P+dui3YdeBEwezzJDmGCeOJEuuQDRIuLh7XxXGSjCcW6B1w2JYXvVWK1860rn
+	 pjpEHpySupEhAGPp4qJI5yUHb1bC70SGCV/xu3gFaovYesNORa2aMYCVz3G4jf/3CsMqK
+	 I0lg7jcEL6uthNmZCouvIVmpg7CvYuuofkUvKxNiaiuQL9kNDN1Zvo+NWDrSCmkvmIA==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792163103;
-	bh=hD0dR+WCKjiTcnybBpeEKNG0ZwGOoQdBNjo0ET4Tb3g=;
+	s=default; t=1792163108;
+	bh=HkG9Ls78M7O+WvubfQVhu1BcjmxzOsbN+s3K+pSlAvM=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=ndNliBzus7FbpIwh+5KH0OJzCcMLsRrkiuM8SdNFlqc4+c8XAg/1B7XBHIYNQ1ToC
-	 Zna14K6arCE4f+g6+tk6F0EEjMpWvOzUs4nm1Erm0l8SK6xB5Jxi88vt7V3DcJln4p
-	 VXTGLPM3e8werd/Tqw5I89wot/3LJDMOo13O8n1efPfRHLC2uHCS3HGgmDXVWUnIHq
-	 dtNuvCl2tKj8MOlGXs4qEr/z9cepXQECMblBwREVElbzT2kt5sxzs+NMlcbOYCSaCA
-	 KKgc1bnUfi/1NCwFVgBXZBFCw7msq51DF/P2EbiydXxxXyiGSd9tvuIFacGeRGMuLE
-	 tSjNIrSouMfxQ==
+	b=gDE9qnX9xreLcEp0+snQ5lQBWr/K9jX/Hmul+iCP1HHt4pZLKXukICeGHHzArRDFB
+	 h6rl3i4Yb0TOh28cmiPGC/H6aLosWDl7ImGWU8JRWN5fqHVc1oqs3u8hyiKDS92gFC
+	 zhfW0bhfF0DE1S5/oNGGxZZDf81cIroffFokVDRUwV6h8a/yNze3AD9wOG/Z+YQoIh
+	 yRYanb+o0tdmpdTkr1H+/4+h0J3z5HJ7/QU+MmieweBBxCVnJ8rL1NVMI4eVb0y4FH
+	 Aut+1zhMHiLUZgO2UITZ6ZeIobYyf/TkUuKYoyEjM+rYX7Le3hPC4TwHCPeQTJWrOG
+	 jzc4JvKlBxqBw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3586C816EF;
-	Fri, 16 Oct 2026 15:05:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 47BC67AD
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:05:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 88A47409F8;
+	Fri, 16 Oct 2026 15:05:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BF62F255
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:05:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3992B816E7
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:05:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BC7C8409F8
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:05:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wgHoavprCAVv for <buildroot@buildroot.org>;
- Fri, 16 Oct 2026 15:05:00 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 2ABD2816D5
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792163100;
- b=bjTXga3QI8i2znbBIqEVSqqX3+ep8RUSetvxRgoSnFs2JQSGVcSvSjkfUfKkc0wOew9d
- tautVPnAROC0KbiBryB6chxqHExorkGpEP0e/yTU6BEzkYFLp/CmpYsnVXSq9GviMn/00
- zJUFGA2pRwodppm9FOk8DXYO4quCVuW1QC961qWBxcIQqcj8LARfZvQPJlFfSyyDpjXwJ
- /Gdzv8gPOhVTpi0H91bCMP2NatgeCMxfi2hb2RPYiYo2CScUcPZ3zGh7/cGRXZ2Zl79CT
- eg0gG+lVQIDLAx/X8CEkrPokVBI4vuJ7pLf3AybZiKTXp5d+2p41I4Ali5iKLLl+krw==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qfqz85D0YUSk for <buildroot@buildroot.org>;
+ Fri, 16 Oct 2026 15:05:06 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org D622340AC7
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792163106;
+ b=XlmVzToqSP37WxsR4h5cxgXjsOXdAfDioUPs8diUDQIisI5wIwLIIBro7m0LPVjMm00R
+ McjUma2jXzhSy/tsZ15HcRpG8qsw2sxr7inJkRf8rLBjnLc4Q1gUqzTggRO+o7ZRyYlm2
+ xyW6hrfuYCxKD5aL7zzRn2rlbNM3jNJh8/ahhM5XUX20Bo7B/XY3DuWNDNvUTm0S8oVNm
+ BNKh2vnESccX1PlnKOSegR+IBmk1TOz30y8El2qgJ2aPm5j9t8V23xDWen+di3c/lLGlz
+ 8du7N+Qwacr/F2kZGLKvBZ9kFOjyBgY8GX4i0jCmIfK7WDHO5zt+Niqty/mpOJbEefw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792163100;
+ c=relaxed/relaxed; t=1792163106;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=9acd9txjCjvgsCiJqGcaIFszi5rUjOjwKOG3lxZ9UDE=;
- b=TbDzqSGtTjNxdkrmW83qjXY50rIMFZso53Q5oj6h2IFukCrXdt/vVgbCw5Rx9cPh98Ld
- Zrw5FxRHEIJhhsZ2U53eQK+1bjq3SuOqTsVD+atWMigiA5tHZg+M0rmGBwCuhaxrWdRF1
- 8axuNnvmbCa8qj8oYND1hVhnlN/pwD1N1plibtil1B0kRiU9AACxtL8iKvw+S7cMFw+6d
- PYRYxutROvIlgIBvBav0HQlsJZLTKGOK+rCRh4ygW/flwWQyZWCjy+asKCmnl6+Ha3h3J
- dpKdvkFN45jfh2TtZin2/eU/6qZAAu1wkNuoc4bMy8TsqjhTxRdQhPaRCuKPDTWLHHA==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ bh=xv1p1Nv9SGg3vLytGHpb1T1EPtV0+yU7l2OmrPABzVQ=;
+ b=r9YRp17sx0F4wg9WesV25IcJWezd7qjKblIVeJtGtNDtWXmredMT3Rik7jrBXbMhueX9
+ nBnYYYsRonXZUSyZpSmIdaaF1idvAWsFzCE08oS1BJgklvdKDPx0jT0GbJp1NGVmp4hfs
+ OuRbxsPesCQnLBAoksfcUy0EnYX4QuMSbEGxn97J3+mD7ANaWswCF3EUYFt2hXmozgpTh
+ m4V8X2yRXMFTwx7/LhcUszhRqCZtq4s+2+bz9BX0p2qR/tMB7JaBbYSlUcgNXBOMb0oWD
+ hHj+QIn40DTTLy8Eqhlkky9X3Wgg6NdwqBj2zXexd4ijKUyeq4ykjPUB2fLjtXk6L2A==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
  dmarc=pass header.from=mind.be;
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=Ed6+y3f7; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::32a"
+ header.s=google header.b=Cl5yQH5b; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::333"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2ABD2816D5
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:04:59 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-4a1635f7c89so379385e9.2
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 08:04:59 -0700 (PDT)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D622340AC7
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:05:05 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-4a021c809e3so655945e9.0
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 08:05:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1792163098; x=1792767898;
+ d=1e100.net; s=20260707; t=1792163104; x=1792767904;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=9acd9txjCjvgsCiJqGcaIFszi5rUjOjwKOG3lxZ9UDE=;
- b=AUqag5uQtvpJMKAVC5VtIX//9DG3L3zNIkg2QNvmeUFotudch3N4XfDsgf9Dk1oJvi
- +85Nj3nXxmM0Rap12UUqKTw9cr7OCt5ycUugIus68AW3HGE4ccNOQlyAOyof/tb2npWM
- i7IcdGMuRz0b+1PmJSl9F0pN3FQkEq9CUwrR9v/Q+c6ofuIulp0mhjsah3yFdlzgOC4S
- 77bZYGVNTMV/sXbrJo1TrZFwoW2GDWPScWOTsMbrbGR8i0EyQue4OZheDFwq9qLufmQo
- O4mrVhw6olvda6MNgSlJ3Br0/915CjmBTxM7+szPhCT6u10sfVx8/o+KZLcSKiN2CqOB
- mq0g==
-X-Gm-Message-State: AFq9FYKK/JE8NNDoPKUxSCYQbGJv5HTdbYO0D/NeZ445ORiI4KXTZtxZ
- ymiNjrsPQQWEUxEflGJf2YTXD7BNlubAVFCaZiGf2Wp1mN+Bw70+uJlnP7psoqBWGHuY+H5P4Ai
- sj2BBYp4=
-X-Gm-Gg: AYBFou2Fr8XP6t553/X3YHrPt1Jxm6QCq/0zfhNz7Sug4XOD+K5WjAsHIw3c84mZz9H
- S9I/7TdzIqGLpULxWCOwmL9EiyZT/bb/IMr6Tj6XJt14qoGstCGN8mr3XMxWB4DCrhYp7Ly5KvP
- 1wzpTiABxzBdkPmZf9HLHDKyPAVH4aQQ+mck2BttXSEpN/HDJPjW7h1FDO7k2lV2k9b5wheVUFS
- hjvVI4JSs5bjztvTOfhOR+XFUsfphIW+gi71kVbwfstjGv51MPrIzojNMDLgo15CoT1hAugG1TK
- zM24/DkcmRBtwusNwFhpE8pkguY1hBKIQ3W5fEZL5NnUNrH7nb39M79yR9Vp9xo3J1VL6yKUMoV
- GWsobBH+Ki2YKTDL4Gm4ey5uW7X0cnBUnxA3jug+oMc88VRl3Q+iXub1ZNntJJZncJew9bHCDsS
- nxTgscj6IIVNDyAmoJ08yqAL2+t+TwHze8UjYnktLOO21uaKRsjbkln9ptElUKoRHEYNWJR7moA
- V/JwSDHoMhOErv/nnRHH/2BTnhHaiQj+YuSikPK4g==
-X-Received: by 2002:a05:600c:1550:b0:4a1:d38f:cf5d with SMTP id
- 5b1f17b1804b1-4a1d762b892mr1362275e9.28.1792163097886; 
- Fri, 16 Oct 2026 08:04:57 -0700 (PDT)
+ bh=xv1p1Nv9SGg3vLytGHpb1T1EPtV0+yU7l2OmrPABzVQ=;
+ b=Gzujj/ggdZSV4R5M8+5O01aalSr31VsaJ993DGzSd4H6SlWYV4Hu43KtqfTq7HanIU
+ LCBPw0/mrtLS+wW0H1AOSnRok9Ef7HNNjMp0qzocPn2SJRnQMmpAxnrXrzW50cjxhJte
+ Vrn4GtMvrAJMEqFRwgCCbj9rS8pp1Lf/OBt9QKZhJmdrI+r+hxuTZQAL9qLMVCHAjsWv
+ 95a8orQGlgE0PxYJQpO5ojOZUxIkpQPBxs6EJisCN7H7BHAsUntV2a3O09FLmAOA1Tsk
+ WIpkxgN4k3lDV79byg4aSCNDfI3k7E/DcYpOQngaRjyS2kDWYCdReYK2mrIFxU1a8Vja
+ Pq6A==
+X-Gm-Message-State: AFq9FYJt8vm4jh9PWOihdAuOr+iMCh1tKuq9vPBLlyWFNRpBejLYNpaV
+ bMZd3LTn95quZQ/ieBXNyKXfUWdin1RKv2dYfNObjFElkkHSyFAvuynDp677rndU9a5pXqR1gpv
+ JcocJgDQ=
+X-Gm-Gg: AYBFou0iKT17uQ3W9oJQSKBOwUuQNjIneVh4KzodqSM1DuZK8lvLUqwvTX7XP4iu/QD
+ adqsGh1A/lZzfasj9Lc/i+m1ukRH4OPYtkvmiM8u9Brofl+vMpoHpcDzjVBgPfwbexkyG8EyG+b
+ h2VoMHd3y3e16tl67NCqiq0HhX9Fu0PUXJBOd+ED/tyusJTnPCgeeW4OV/5UluHi4hvXqwspB2t
+ wy1ghTWqpuAmEG2QU/ER5/kiPL4Y+TyqGeMLTIO7esQvUu6eTWbDe0zVQwjVpeg970X1daykLx2
+ 9nzQJow/nus1dSFlaaoqw73KwGUnfzFVKG8mW9zSvMGjLHlNn+HB/CX3baxu3Gu/Uj+I7UCr5+2
+ FR1N4FaA1v1ZDCOuGzhc1qags11n9fSEdCkNUJHlRbauD48Fzh0SmrU+0EQQKX5l8UsDUpEDYiJ
+ BILvw6qdh5CQI1EBzRMlhU9mOBvCHeWzPX4iu+rfbCnXpveHBZsJeqRcpvkfCSmucC8cq5AVI9B
+ Vq4sOCMAJD0rf4kRN5rXGX/kOOv0qc3ojDPS38BWQ==
+X-Received: by 2002:a05:600c:4e50:b0:4a0:1ea2:10c6 with SMTP id
+ 5b1f17b1804b1-4a1d7600357mr2109805e9.17.1792163103787; 
+ Fri, 16 Oct 2026 08:05:03 -0700 (PDT)
 Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
  [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4a1bd9b8ebdsm178892695e9.10.2026.10.16.08.04.54
+ 5b1f17b1804b1-4a1cdf2f0d1sm29143485e9.2.2026.10.16.08.05.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 16 Oct 2026 08:04:54 -0700 (PDT)
-To: buildroot@buildroot.org,
-	Bernd Kuhls <bernd@kuhls.net>
+ Fri, 16 Oct 2026 08:05:02 -0700 (PDT)
+To: buildroot@buildroot.org, Maxime Chevallier <maxime.chevallier@bootlin.com>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 16 Oct 2026 17:04:51 +0200
-Message-ID: <20261016150453.72686-1-raphael.melotte@mind.be>
+Date: Fri, 16 Oct 2026 17:04:59 +0200
+Message-ID: <20261016150501.73073-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261004182839.2615667-1-bernd@kuhls.net>
+In-Reply-To: <20261004213116.39415-1-maxime.chevallier@bootlin.com>
 References: 
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/vlc: security bump to version
- 3.0.24
+Subject: Re: [Buildroot] [PATCH v2] package/linux-tools: selftests: Use
+ KHDR_INCLUDES to locate the headers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -162,99 +161,41 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://code.videolan.org/videolan/vlc/-/blob/3.0.24/NEWS
-> https://code.videolan.org/videolan/vlc/-/tags/3.0.24
+> Since v6.7 [1], the KHDR_DIR variable isn't used anymore by the kernel
+> selftest Makefiles to locate the kernel headers. Instead, KHDR_INCLUDES
+> is used to specify their location. It was only available between v6.5
+> and v6.7.
 > 
-> https://www.videolan.org/vlc/releases/3.0.24.html
-> "Over 130 security fixes across VLC and its bundled libraries"
+> Keep KHDR_DIR for compatibility with v6.5 to v6.7 kernels, while
+> KHDR_INCLUDES is used by both pre 6.5 and post 6.7 kernels.
 > 
-> https://www.videolan.org/security/sb-vlc3024.html
-> "VLC 3.0.24 fixes over 50 security issues in VLC itself."
+> Let's pass it with the "-isystem" flag, as is done in the default values
+> used in the selftest makefiles.
 > 
-> Upstream removed unmaintainted libschroediner library:
-> https://code.videolan.org/videolan/vlc/-/commit/614914f7bb7d4098bd5805724c0d8415d7fa32fa
+> [1]: 43e8832fed08 ("Revert "selftests: error out if kernel header files are not yet built"")
 > 
-> Upstream removed support for mfx, which was disabled in buildroot, and
-> replaced it with optional support for libvpl:
-> https://code.videolan.org/videolan/vlc/-/commit/dcd1e9f447323a97ae230b9d86c7b8fd223426fb
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 
 Applied to 2025.02.x, 2026.08.x. Thanks
 
 > ---
-> Gitlab pipelines passed:
-> https://gitlab.com/bkuhls/buildroot/-/commits/14754d73ba95dac50861e6fb609bbc0e8a81cb7e
+>  package/linux-tools/linux-tool-selftests.mk.in | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> with the exception of
-> bootlin-aarch64-glibc-old/build/vlc-3.0.24/.stamp_built which was broken
-> before:
-> https://gitlab.com/bkuhls/buildroot/-/commits/c66a31b0f7840c690de486941aa19b8d4d7b108e
-> 
-> No new build errors are introduced by this bump.
-> 
->  package/vlc/vlc.hash |  7 +++----
->  package/vlc/vlc.mk   | 11 ++++++++---
->  2 files changed, 11 insertions(+), 7 deletions(-)
-> 
-> diff --git a/package/vlc/vlc.hash b/package/vlc/vlc.hash
-> index 9634ba3f1f..4c9e67d1b8 100644
-> --- a/package/vlc/vlc.hash
-> +++ b/package/vlc/vlc.hash
-> @@ -1,7 +1,6 @@
-> -# From https://get.videolan.org/vlc/3.0.23/vlc-3.0.23.tar.xz.sha256
-> -sha256  e891cae6aa3ccda69bf94173d5105cbc55c7a7d9b1d21b9b21666e69eff3e7e0  vlc-3.0.23.tar.xz
-> -# From https://get.videolan.org/vlc/3.0.23/vlc-3.0.23.tar.xz.sha1
-> -sha1  7b8c00a9c5bb879a403d5328c99924eefe01739a  vlc-3.0.23.tar.xz
-> +# From https://get.videolan.org/vlc/3.0.24/vlc-3.0.24.tar.xz.sha{1,256}
-> +sha1  dae683b3939220eac4a5edfc816c44e00659e68f  vlc-3.0.24.tar.xz
-> +sha256  e7cab503d1d7d5849b89d2cf0e1ee60d0ef6d012407791b644b9cfc0cc225fdf  vlc-3.0.24.tar.xz
->  # Locally computed
->  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
->  sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-> diff --git a/package/vlc/vlc.mk b/package/vlc/vlc.mk
-> index 0ce6662353..1f6faa9a57 100644
-> --- a/package/vlc/vlc.mk
-> +++ b/package/vlc/vlc.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> diff --git a/package/linux-tools/linux-tool-selftests.mk.in b/package/linux-tools/linux-tool-selftests.mk.in
+> index db7e4fa1a3..032a71e320 100644
+> --- a/package/linux-tools/linux-tool-selftests.mk.in
+> +++ b/package/linux-tools/linux-tool-selftests.mk.in
+> @@ -24,7 +24,8 @@ SELFTESTS_DEPENDENCIES = \
+>  SELFTESTS_MAKE_FLAGS = \
+>  	$(LINUX_MAKE_FLAGS) \
+>  	ARCH=$(SELFTESTS_ARCH) \
+> -	KHDR_DIR=$(LINUX_DIR)/usr/include
+> +	KHDR_DIR=$(LINUX_DIR)/usr/include \
+> +	KHDR_INCLUDES="-isystem $(LINUX_DIR)/usr/include"
 >  
-> -VLC_VERSION = 3.0.23
-> +VLC_VERSION = 3.0.24
->  VLC_SITE = https://get.videolan.org/vlc/$(VLC_VERSION)
->  VLC_SOURCE = vlc-$(VLC_VERSION).tar.xz
->  VLC_LICENSE = GPL-2.0+, LGPL-2.1+
-> @@ -66,7 +66,6 @@ VLC_CONF_OPTS += \
->  	--disable-kva \
->  	--disable-libplacebo \
->  	--disable-linsys \
-> -	--disable-mfx \
->  	--disable-microdns \
->  	--disable-mmal \
->  	--disable-mtp \
-> @@ -74,7 +73,6 @@ VLC_CONF_OPTS += \
->  	--disable-notify \
->  	--disable-opencv \
->  	--disable-projectm \
-> -	--disable-schroedinger \
->  	--disable-shine \
->  	--disable-shout \
->  	--disable-sndio \
-> @@ -401,6 +399,13 @@ else
->  VLC_CONF_OPTS += --disable-vorbis
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_LIBVPL),y)
-> +VLC_CONF_OPTS += --enable-vpl
-> +VLC_DEPENDENCIES += libvpl
-> +else
-> +VLC_CONF_OPTS += --disable-vpl
-> +endif
-> +
->  ifeq ($(BR2_PACKAGE_LIBV4L),y)
->  VLC_CONF_OPTS += --enable-v4l2
->  VLC_DEPENDENCIES += libv4l
+>  LINUX_TOOLS_BIN_ARCH_EXCLUDE += \
+>  	/usr/lib/kselftests/tc-testing/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
