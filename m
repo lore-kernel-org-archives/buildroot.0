@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A746CCA462
-	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 13:10:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 879FDCC6B38
+	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 13:10:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D8AA660F2E;
-	Fri, 16 Oct 2026 13:10:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2BE8160F0B;
+	Fri, 16 Oct 2026 13:10:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ozwqN64oqlu6; Fri, 16 Oct 2026 13:10:05 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 2A1EF60F0E
+ id UB_KWpodlR2e; Fri, 16 Oct 2026 13:10:06 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org D826660F10
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792156195;
-	b=kBF8n+B51St3KQHrxuh8TiCqejyWcW6avrPbDE/YbN1n704z0BdMzl4yd4WipYRmf1dJ
-	 89JINC6AMcLV+RfsqLzdHe17hOLy0T3AUKMcW4SEEZCKAjkZWA2mD9bOHTdoSi0AABj3a
-	 CgfVULVba5UfMExEkNgrtLITR2rHZvFMm7eppsR/BugBIU4ghKf3uy0DN6kEzHVznx1Tb
-	 URDBzYjvwiozyTc7mDaN1J+gjFUQcGvxTXjmAI8yzBhw4OhxTmBhXh6l0/oZewZCxP0Qi
-	 kkm424hwdfNRPyWiP049QYL+ofB9BTYzQLU3QCjlVLCUampV5T6V46FBPMBSxYh1S3g==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792156197;
+	b=Y1jDKXqe1dGEJ3k4dIphAqC+n+bzEFVf61fJxWaku+BilQ/3ihAdqlCtjOVd5ihUlTwh
+	 6Q5CyaNdPK/JV6GdKYhM2RTkFCEGGlC2J8SQonuCmviNUYDXl2VKtpmCMtJjzkukV98dW
+	 hwBCk4BQsc/N41Q7UmqmA2L0y3oi/si/M986XFXY+nFYabobkv/56Ns6uRwtlpHVVBFSV
+	 Vy6qXCys97Gct/RkPh26zuCHXBzKvpOj8we4KqRASjHId2r3aVwf9imObhMwQJpVidkyC
+	 CeK6J5IxmgZCddhpvYhUovABXARlqi0llb/ZMU9uQLNKjzUxWN7d5UajuHJ05degEhA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792156195;
+	c=relaxed/relaxed; t=1792156197;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=1u0Yx5yxh/jsw3sWBDb/eOP9QYEz/24sAlXoNnwLne8=;
-	b=OidcNeanYAN2MxUZZPGdcBPbT4LNUJaGLS7H9HphCHSAKL6LpOxRXaihBjUX1scr1vxU
-	 AT56Xq7JBjrhNEIXA53OD1AN52DG+jCVieoORAF3oEwv0TqlWoYbN8PJnrHk4nalbvJU7
-	 oP/HKHyJN8h0n21GYWhfrMsqEIq0+gyVdliw9zltUezHdUvlh7zyJPpoUkIKUP56AH79m
-	 td2Ge4RHrCwRVuOVx63aPvkWVgxI0OdRM84fULhxwCBj+HfxJkATds3O+NGjZRBRJ8CjA
-	 iwA4H5tGpH6gzLt413fVZYCZojpdJk3BTbdzxfALGI7QJNDkJ/w0dptlZGXE+ofRM+w==
+	bh=zPkz+kPl9hQ/q+51gJFuhxRksBj3cW6cvZIEjH0WNe0=;
+	b=fF+nnqAi7hmchxNXhunEr2pH6cCsXmQiud2mMva49KPmrjevM9fuQVT5MxR32MMagU3H
+	 kG40m7Vtxw5W9P4AK93AgEoI7NrjCB0vWv0bcnLyss6jrpyYAOv4iaxboK+gZRzFk2aFL
+	 i5F4r66/DLTXVu6Jvt9TytYPfN75NjyOmoL+sFoRPTlS5nA+c1AIbcX/BrB8uTvj4GcMZ
+	 ymOKmP+HGGr+2xDLPJ6SyWCchZYMX97a9j4jZh5uRVKCY7pJXM9hnhNCXEvfEmvbDJFy8
+	 aoQFwzQp7J5cLO34RMR+dZcJ2xjFfh6C+A96jg/unufjOeAtzjD2RgSEOn6t8Lm14cw==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792156195;
-	bh=1u0Yx5yxh/jsw3sWBDb/eOP9QYEz/24sAlXoNnwLne8=;
+	s=default; t=1792156197;
+	bh=zPkz+kPl9hQ/q+51gJFuhxRksBj3cW6cvZIEjH0WNe0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=qV3XNulOx/KPL0OAdUsfUSVzmrFA04NYoRVsknasfGQm9Lt3jN8kWG8TOKql9NXpb
-	 jNqz6kUpFVABYhSWbmnj6OVeV+zE0IcgCiIInwR4PnJ5eGAuuYTl3njZSVz9F3u6a4
-	 VyKe8WuXfn/+5/K3PIgpXqwcWZ09DoCcpwjEh5gOS11q7IYEbQy5jpuNniPqnDde8P
-	 RTP0eUd5ji86PHY50HZs//KpoTOHugotV2aXCbIfjG/lm2CxEz4sxvf0LOySOy7JwR
-	 /kvBdhYC5wy82MJJKvbDS6LTAt3X8+y28+Q7PcXKsHnAv1xotEfWdAoRdrtwvlFl9Q
-	 iKOaw9ZP+N71A==
+	b=KvwEJGyHmc5dkaF6ayRRczPjCZl7z97SonuOAiHHD286UZkPIZEh5ynRgS9QYV5JC
+	 JhHbTyPUeLBvZXaz7S9YxELnwhW/MC1cf8aQ48DG7NwPICdrFVyWLBl37YPtUixD7I
+	 ItVxD13EddlUal8K3Ria3vyaZgg1YZ6VG80Rb8Frj72oSmz2ysFX3cQnyTQOnlm58B
+	 cQMbXaZClmrbOWhhLC2OljKQVzVlypRGAqko10POukrMpE8f0EwXK2L5m9MSKi4ELI
+	 hWGSaBNlKn/dXp/wdIy9PL4FReikjggoKRyUcokVorZcexh6f3xSuqJdKhJ8JkgcOw
+	 YaP/ynPAo+f7g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2A1EF60F0E;
-	Fri, 16 Oct 2026 13:09:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id D6468F45
+	by smtp3.osuosl.org (Postfix) with ESMTP id D826660F10;
+	Fri, 16 Oct 2026 13:09:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D8D231F6C
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:08:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C86EE409F3
+ by smtp1.osuosl.org (Postfix) with ESMTP id C7CEB80772
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:08:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7dlCNweXvkw3 for <buildroot@buildroot.org>;
- Fri, 16 Oct 2026 13:08:29 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 2735D40A01
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792156109;
- b=VTEREsfm3rZTg/fd5/TdQv+HwDVMTaYS2XDfkeR0MHT0dFTnPorr9NtGMhx/LwJ3Z66e
- x7pjdUaxMkNyQM+X7lmr1sCpQJPe/4OHrrudvTKdiz90Igvi8BRrdKq6fBEkch+GwhUqI
- AdCT9MwocNZFvo0/WScZKuv2CHyLSeaIQ/gWC2g2bwWph45XMKOTZV4E8ZCVjnOPuvnxl
- 9o1JQnn7t7/LsjuhxdAi8KBVnsCfO4ENFOJuCuKO07LNk/nAoIecPMJRg5eCLu+8Nr5Fm
- jLV9da6SaRmFPUH8HJwpX+ha8z2RZ4qRp6w43gjNQYfwVE1YrT6iNVX138MmOQrKU0g==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CKuz6v76qIHV for <buildroot@buildroot.org>;
+ Fri, 16 Oct 2026 13:08:28 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 01331814F1
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792156108;
+ b=QE2rAclN9gPu4lNjaooBi4clHHa4xtNONLRk4uconS4n9ctGuhpkHTAywlKc7ZB5AyQs
+ Vt8Q1JOJXs0DKJXwDDzZGbsMfAG522xjs3YDL77nKk+jsXSaBhgchgz3MPELl9FiVjVTL
+ Bt/tE+hZp4OsOixG9/RNZf/wV5ui5TxmGZsmSKbaKthZjyWXJylxW0KmYxv4IhaxvGRRB
+ fgMl8OziigQaFZp2hnQfCkrb+0G8gH91MgXRT2n96CvaxOC6g3KO4eJmhPm+A5an5eMxI
+ dF5sOsgfSO1cvlj34hEr8IBBPKBlQzOwId0sTb4T5hw5zHZvDcJrSUQmcDSdgj6d+4A==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792156109;
+ c=relaxed/relaxed; t=1792156108;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=aso1yAPeitrz712WDzAXLgNmiimT0pI1Fy9ZvFnGTO8=;
- b=AG/MGtglswUARnvNR7+cqRmhuhRWghM31/stk8rqIVgkP9cVe42D000RaOrn5wT7vXec
- BqUdDhkbIn92XodUPcAK+d48AJQ1NIcDguzv3il6YcYbn2mqiwlO7dkEYpz3LwLVqGgQm
- aTTJ7LilR9cIO5Gsq5P3fXM8ThUeQ+5xbAD69xVNnREeb8+3o5XZFL5dXMXa2gQWgdpdX
- 7OMFW5nUuuJ33Owf/JKuxLGkDaxETxWeinrlV5Lyc82qxfqjpxy3mSeKjCi+6c/5CY0A2
- z/I9OtplgVUNGKOJG502rxdxue9SIXYAIBtP4BexgvOMDKDb/gNTRI3Ve5Ir1+pTLMQ==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ bh=uLzJXHdeVsBcZR3E1YRDf2ioV9POPWCAi6iqlYHQBvo=;
+ b=g6i84bQDMfXEaK37i4JHLJdAKOqZDrzNgtrywxlemGLW7TRgQBN2gzuvXnRisGVnqMwH
+ 1Z61xCZ0h6DioVYu3JOXOh9v0CpTktgWarqiiq33kmjWzFkHtN+nJ3fjwmZRpmKetUY4E
+ VceKnbeiKMvQvGPRojrc8zv6M5dgl48uqBIOotEsklIydVZtTykXESmAfPdZY70UsExgr
+ zjQr0c4NH18/afzwjq5kg7Tj2Yro91nkIkf7/B5hN0zPrXbGw1XAuGRyaPG8v8IwlQBwy
+ 1rg8ASsLAnDNDar+Miyw2QwjdBTE/nqW3mzaP1me0ZlRfNeeEwyXHxpld8qHhqpLo1Q==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2735D40A01
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:08:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 01331814F1
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:08:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 187E8960D8; Fri, 16 Oct 2026 13:07:08 +0000 (UTC)
+ id E5A6C960D5; Fri, 16 Oct 2026 13:07:06 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 16 Oct 2026 15:07:52 +0200
+Date: Fri, 16 Oct 2026 15:07:51 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: dc591fd5a9f1c6411b69d0cc9574c0f0e23016d7
-X-Git-Newrev: 93978d91e18c8ae864e9e73b78eca8baf1a01b18
+X-Git-Oldrev: ecad010b3602dddc7aef582ada9350e058dbd99a
+X-Git-Newrev: 053d80d4887ca20fdba3f87d24358495eda8bb16
 X-Patchwork-Hint: ignore
-Message-Id: <20261016130708.187E8960D8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] linux: always select
- host-uboot-tools for mips
+Message-Id: <20261016130706.E5A6C960D5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/qt6/qt6svg: add
+ CPE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,68 +114,47 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1172820685048792270=="
+Content-Type: multipart/mixed; boundary="===============2864823894322075283=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1172820685048792270==
+--===============2864823894322075283==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/93978d91e18c8ae864e9e73b78eca8baf1a01b18
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/053d80d4887ca20fdba3f87d24358495eda8bb16
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Since Buildroot commit 40e266ccb9 [1], host-uboot-tools was always selected
-for the latest Linux kernel. This change is intended for autobuilders, and
-was introduced in Buildroot while the latest kernel was 6.12.
+The resulting CPE ID is:
 
-However, further investigation seem to indicate that itb images were
-generated for mips for a much longer time. Linux commit eed0eabd12 [2]
-seem to enable that image format, and was released in Linux 4.9.
+cpe:2.3:a:qt:qtsvg:6.11.2:-:*:*:*:*:*:*
 
-This version being EOL for quite some time, we can therefore assume
-any "not so old" Linux for mips will need host-uboot-tools to finalize
-this image, and therefore we should select it when building Linux.
+The vendor and product are valid, see e.g.
+https://nvd.nist.gov/vuln/detail/CVE-2021-45930
 
-[1] linux: select host-uboot-tools with FIT on mips
-    https://gitlab.com/buildroot.org/buildroot/-/commit/40e266ccb9
-[2] MIPS: generic: Introduce generic DT-based board support
-    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=eed0eabd12ef061821cbfa20d903476e07645320
-
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 0f7c08d8fb36e6e12522ce6f8012c91ace520204)
-[raphael: resolve conflicts]
+Signed-off-by: Sebastien Guillaume <sebastien.guillaume@vendeeconcept.com>
+Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
+(cherry picked from commit 6d335ea39f8630b75c1563ea0a2e676616e25bdb)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- linux/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/qt6/qt6svg/qt6svg.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 37c8a4e953..d6e4b01617 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -4,6 +4,9 @@ config BR2_LINUX_KERNEL
- 	bool "Linux Kernel"
- 	select BR2_PACKAGE_HOST_KMOD # Unconditional, even if modules not enabled
- 	select BR2_PACKAGE_HOST_IMAGEMAGICK if BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH != ""
-+	# mips always generates an ITB image
-+	select BR2_PACKAGE_HOST_UBOOT_TOOLS if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-+	select BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
- 	help
- 	  Enable this option if you want to build a Linux kernel for
- 	  your embedded device
-@@ -32,9 +35,6 @@ choice
- config BR2_LINUX_KERNEL_LATEST_VERSION
- 	bool "Latest version (6.12)"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_12 if BR2_KERNEL_HEADERS_AS_KERNEL
--	# mips always generates an ITB image
--	select BR2_PACKAGE_HOST_UBOOT_TOOLS if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
--	select BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
+diff --git a/package/qt6/qt6svg/qt6svg.mk b/package/qt6/qt6svg/qt6svg.mk
+index 08570c7f9c..db0b11735a 100644
+--- a/package/qt6/qt6svg/qt6svg.mk
++++ b/package/qt6/qt6svg/qt6svg.mk
+@@ -12,6 +12,9 @@ QT6SVG_SUPPORTS_IN_SOURCE_BUILD = NO
  
- config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	bool "Latest CIP SLTS version (5.10.246-cip66)"
+ QT6SVG_CMAKE_BACKEND = ninja
+ 
++QT6SVG_CPE_ID_VENDOR = qt
++QT6SVG_CPE_ID_PRODUCT = qtsvg
++
+ QT6SVG_LICENSE = \
+ 	GPL-2.0+ or LGPL-3.0, \
+ 	GPL-3.0 with exception (tools), \
 
---===============1172820685048792270==
+--===============2864823894322075283==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -186,4 +165,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============1172820685048792270==--
+--===============2864823894322075283==--
