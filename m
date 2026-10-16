@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E812CCA46C
-	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 15:02:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D90FDCCA46C
+	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 15:02:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1729381514;
-	Fri, 16 Oct 2026 15:02:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A424F40A97;
+	Fri, 16 Oct 2026 15:02:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9ibsWX30JTKv; Fri, 16 Oct 2026 15:02:51 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 1C65D8154E
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792162971;
-	b=QjwjJQ+NphBlF4BvBaJKj8YE3J3BB4gavG/OC/X7ES14p7kfHOQQEBc/DSKT9E4w2LXB
-	 PzBfNm4t/fJ9qG6tRbsrgD+51Wn8T3IM2nP3uyo3GEeTwZ7vXTqiU9wC6XKw9DA8v8JM5
-	 LUGz1elqhh3jdZZxQUfmIOUFz1GkO11er9n0u1DtqmxnA6Qi8z7fVr2uh252+4W68HZIn
-	 62FtKu74TsjBJJMeQLq9dbWLmo7nWVzBSjZGMORP663t9wGQ4M9jnm4V6QkuGxpukt2kF
-	 222pVFTlPuzMntP3tgkWSTWmUiehRiXIPbLsr5N18KiyGIoITBqnGIdSgnJHNPQgvWg==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kBlKOA3GQmPa; Fri, 16 Oct 2026 15:02:54 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 5D60440A61
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792162974;
+	b=NNAkxsQgHuL81GlvAZGUtczQ1ZsDAfVU2WY0wc7FqSU6niT6GR0ls7eIH2MjCwLU0NoC
+	 ouFIaK0TzixWwbXDjtmr1vpusZeJntdqow3yKaiB6zhl8VTeNxbAi0i6lmBwj/GS8n8Kt
+	 aUMBdQeO2jJ3OTQDn5IqDG18WU22RFx2s+7sm0HlMmnxj53PEcDeJkLYBklkOFE38Xtmh
+	 Z/YatIjk1XDMlvmlLGeNJVjkFUJWpOlKYbELUxVJ2HnjJnuj7RLNc/nBNrjJoO/biRvF1
+	 juloNI/YdOg1xqdMSn900YsVssYkhy2SFHpE1zu0msz/W5Q6/S1Huzzhw0TXiCHYxqw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792162971;
+	c=relaxed/relaxed; t=1792162974;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,117 +31,117 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=ZIMEnBbV5CK0Nxm3btHqGXVyb0yQZLmPnM4+GYzxiyQ=;
-	b=WtjNSqNlGVxWSPghhlyZy1xtZLtNAyLQ8bD9XPi5kuR+rx4TZLcyaxyy7FppdGrYy/YF
-	 g2xMNBuDqwvNO/t8fsEMt384dTzM6jHdfQGEqy+iwkV+l+ncoKlL/AbKjvr26MknKOPWZ
-	 YcK6CnVL+d3mEtyVEukDqVFooubgoZEkQsaO3QxN3RcmXdcwrVDdcmzofoUBM6DlzljKx
-	 0puOBmAc0MwHOix64JAzWDNT6lqKwnHgwS3ome2TXERNvAK4z2oylD8j9aThbGIDTSZbU
-	 WEFQqScKCIlGCPUzQNfLzTTiFyEBiNqI1iPkipR9fSyKnJazgeiRHroEqC14P6OORlw==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	bh=IVQVmj8EfRgmiDEqQbdo5dunkq4cIG8/bDK5whmkFd4=;
+	b=rzEezCLGW6DfKDO2M51Zw4j4CHsybhAqRgyzT8FetZKhBF5YBxZbbD9ckISNU8guQyEW
+	 cfULa/z9l66o392ePIZvwD2+pSqh/KGjO1gIviCqNukt11fn6IKLJcCpaYIe9yFEdB2U3
+	 R//RZ3WMgxubJZ8nTgksNXSi+PrINNY9I0hnAv5W582whm/707csLWyFtcys8avsNIthb
+	 SbIOhQUSkI9MvuyEjtQatpaa8SxT+yFPzQRjXmzj/qqQcbrXlZOP2xU0pbROPRljUah08
+	 oVoWChZ3RPfEIHIKnSMc0wHmmGwmTnw/R3URLOfS8lybMX8hZK3jDEYB5aw9RPc8vhg==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792162971;
-	bh=ZIMEnBbV5CK0Nxm3btHqGXVyb0yQZLmPnM4+GYzxiyQ=;
+	s=default; t=1792162974;
+	bh=IVQVmj8EfRgmiDEqQbdo5dunkq4cIG8/bDK5whmkFd4=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=oFOQJB+jIcfg0gDbAMXEjhQ1TkvFufJSOB5NwBEiT4QKjpBni4x7gV2Hhrp06UFnF
-	 9iUHyKfQ34hp24GQq6/zxG+ueCTxhWYs2Bc+ERy9Aa5qUNYI0BVbvCrlOWmONbkMtR
-	 2iLjdM/2aO/w56hi0sIYXK7Jcf4tbkGe73YwEnLcwNKNdpYbuY0xNacyPa2B/u/+m3
-	 IInpqNrqnqpGyqulUei0qWL3Puqt30yRldEyjiC+r31R+ynddY34rU/8FIokCkgGLh
-	 5YGYOxvuaDE6dsObFi8Pt075l7W60+GgJ1VQi2C/4gQVXAtgWGGB2F0NjtAjfQF8Qj
-	 9zy8tA7MAHDFw==
+	b=MwFmscCQ+yTSAVozHR4HBp1wOR6GlTMHaTmVzTKPJ8VXcuUYL0xXyR06R0RWYbBRY
+	 9mlteLs0e4TrGTfIT5jk2cuGGr3rkL9eJyj9t+ju2i0Ov0HNpKbtWklMo06MB8adq+
+	 +6Q2Ns+tchei4iNBv0lQbZgMW6j8lsptjTiEOCh91tjwPa4cu1QR9wUDlF2jGUWwF6
+	 VIexfnKu32TyuCUzyXU++uUNprs6E9BLF/NmtoNJswpz+1D8OOW/M8vlaqC2cs+rkv
+	 GMOq9KkqKEtp/sMeSS+p8UPYhMOQQwk43UWtiBOlcLrTM8Xzp/yRH+IMxEIj7bsdwL
+	 dWcmGZagbFp3g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1C65D8154E;
-	Fri, 16 Oct 2026 15:02:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B1C6F7AD
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:02:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5D60440A61;
+	Fri, 16 Oct 2026 15:02:54 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6C144255
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:02:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 95BD740042
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:02:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5E56C4016D
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:02:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oSa__rSOpldU for <buildroot@buildroot.org>;
- Fri, 16 Oct 2026 15:02:48 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 554364016D
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792162968;
- b=Bcjibz+CR/xp33ow3MgzJsi3ZLhanGGW8Sg91M1vSy5XmEpmNrx3yBq2xddtWO4BFivf
- AjIAx9APA0Z+QTDyqYxR5qhyS73v5xAGkM6RVF5iiy/vQsmFdLGptoZllEetoS374pyj2
- BJMXcJ5M3KzcQIJGJqgrog+KJxKyoN2QE2I7XsKfuZSr/upsYa4DCoW1/VULJHM16Od3s
- EXZVbbagDYCPzWrBsxnfinu+HmgKx4MejMGUQ848p6XZ7iy6YMBs6p5B24j8drQPS3UBE
- 1gCJIrymYzZ6ciuzCn2ADrrz3tJOc7j2xg4eujd4frW5S5rZRuZHgR9Aqs1nCNq9Fpw==
+ id 33f0bBs4eNRZ for <buildroot@buildroot.org>;
+ Fri, 16 Oct 2026 15:02:51 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 3A35C40042
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792162971;
+ b=AzD0Vu4esmR5EhBUCInGg3QyIycVQLxwPi5KT33oXMcEDH1IVYrU6DQeXaHBW5Lw91WM
+ 2pEMxZBhSb4QXkOAEeaPdyQj/+PFKy2IStpldTxShKjVjJQw4/z/LaLNF0W+VhRGc19DJ
+ 9Z8oU4s72E8m548q7sJhA1SXJtsP+Oz1h2XHpfiMpCxeXRXh2jrrg5x3qfL8mLrN5aT6d
+ VIrTB/njJtItg+Kq0h6a9fvuzEj+WrpuPfUO312478dd3epy/FtRcdjwPqnCQ9otmzHw7
+ 8y/Tc8t6tnvEWW6pJOXeS8tGWBPgZGuLuVH4NgUz1cNwycJkFXNoEb6DJIB/u+je4Dg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792162968;
+ c=relaxed/relaxed; t=1792162971;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=tKHT0dY/QMln+Z7RBmX95EVTLvp7uBCiv6ggpFrneBo=;
- b=YGTzxstEN8i5fCiVhg4pBOBh2b9080B9hYoZlj+VXpfatLHHau4RFveztOdKJHrQEZbW
- HlKdZRknJ7KPOjY0AE5QdEa0OstAqUlDOqUCUpAmyyPHCwzY4467dfrDYY2jHawFaIE4f
- VUbWSJbUzBycIr8gVZ7LMZuQdBUoG61CaQHqXfh5285YSIvR9l2933dqHPFB4EC6XDZ+m
- SRnBU41lcU0+HSNi4o6/p4ecBiVMLoNpEHQ2IBPIsw/65wTfzrRvLBNfpOtpo4IK2gjdF
- KSW5/EwXob8QQYf7OKywcXQdH/miJThWYas5m3JaZjeL3yqfdCVq7sYpVt3mugVCXrA==
+ bh=5rXWRwSCkBlIqDYjGl/ThQe2Pf0xH2o87sYcZJhoObc=;
+ b=O8cCv6ARhe8WsLB3o+q8CMoDnp1LUvD4n3KgwXIoMWVksu156t8b9RvhiIwVmBt50OUj
+ 3jbYgDgqiShpTvUL49Frjri+uIetEqWszP3EAJZBPWMpxlvhBBECaOSwQnKfzSmb9CMF2
+ FBv2sBHuzaQD4cfoh5QYwJ/0Bvv79yMhWB0j+pxI6PEx0WfK6bSj41l/twAw3uWzbgp+J
+ Mei4mNql7LQxqTQfY83LbNUeexcK/uLQ6aA1AdQFcsWscT7vIo3L6IK8V5JrF8J5Djqq7
+ 81tsCkfO3zYJXmH9m55aQYZtEPiiNO3/lVwNmbUpYCjYInhOJ9VmDmPfrK1FuCzJfyg==
 ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  dmarc=pass header.from=mind.be;
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=ZgLozE+B; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::629"
+ header.s=google header.b=GOOy2C7Q; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::436"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::629; helo=mail-ej1-x629.google.com;
+ client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 554364016D
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:02:48 +0000 (UTC)
-Received: by mail-ej1-x629.google.com with SMTP id
- a640c23a62f3a-c2dcbcc546fso798001666b.3
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 08:02:48 -0700 (PDT)
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3A35C40042
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:02:50 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id
+ ffacd0b85a97d-48af4d4e61fso4750637f8f.2
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 08:02:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1792162966; x=1792767766;
+ d=1e100.net; s=20260707; t=1792162969; x=1792767769;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=tKHT0dY/QMln+Z7RBmX95EVTLvp7uBCiv6ggpFrneBo=;
- b=X/eUXrwDRJ9WsS+K12MiAWtEiR5pju0cX23QkSwRBRCrgBD3YVhllpeJC447cMz9dZ
- NpA2EEC4cuV3ICeMvZv/NL0Mza6dZwgQ6jnldrYysrtTJMrDwVfDTKrcP+cIyzSx1UTS
- 9xeimwhOFWMpiXU9YG9S6cJ4e5ForcJJVXhNT1cHolJNbPC5nrS9LwpspvEkNzRbdBS7
- vn8xrHC8BPad6rFW6+fTSztkqwSy6ACejRWQWZLuWfyBxEAEh+ZEN9wJBKsW0qpA02ZH
- +eVJSRHmMhCOYnmhM4czqXvrPicsR9X4Hwx7Bb+QHC1rNrNl255dn/LV93bPPhtFhZv8
- eKgQ==
-X-Gm-Message-State: AFq9FYKLKsTl+P2v0Bd2phcXmAmywu0tXjDvQP9Pr/0YgYbInQlrlcXZ
- ECaHc8gJOFoZ0E5j7lPCjyMGHkPBWa5kZsoGk1KtPHnLVuKB/wi+cEZE+SEyVDkDjmpJjrl/PD7
- BKDiCi7I=
-X-Gm-Gg: AYBFou2xvyEu6ZDn2/qbreo7MfU+ROAKvg+16ack2jsFAQR9TbDvfZrr3+vW3nCKvhH
- 6lIUt/wnq80dxD9RyLIwT+/xezc0+F9GUabye0AqlwiPa7RGO3rlMAhNKi4B7GurUk6vWS7SaB6
- w3Ue1BBJ3ezsmxE8Wb/l42TyRDfaTdGOcx5goMCRXfm9Y0A40mbZDcoYDfCw25qcAn8FHuiwPWr
- TG5SSgQg+IstmOg7mcPBS9BCF8ajYPj25R0zIlFyzls0jUmXus7krcz1RHJDrTwvACYs0wLJvmp
- vtpnbMFbM7QWiq7crshyyLhA0JJdiyE8jxwQaBgZR0lFGZtFb+idwuJwMBd7TB8aDB7Bp75bbAs
- YwOq1OhEOymFZleFsKuR/d2aYdvJMeKQyPBhCbrYQRjoev1QQ5a8LKxZ1O2zeyvnr71WMS9C22/
- KROA4e8B99gcVImx2FqiJv5uaEq/KS3BYa21rhSvQgfNwx13s5QHQxazCzE+wwbg2szA3ZxDyxU
- skMnyT+ejnW1tmrkrY/Tjwcm49e04WLSlBvzUb+wA==
-X-Received: by 2002:a17:906:7953:b0:c2e:2252:6ddb with SMTP id
- a640c23a62f3a-c419d540411mr6926866b.10.1792162965777; 
- Fri, 16 Oct 2026 08:02:45 -0700 (PDT)
+ bh=5rXWRwSCkBlIqDYjGl/ThQe2Pf0xH2o87sYcZJhoObc=;
+ b=NIr820Gx1BwFuSXzEXCGPXatU8XfhBytHqzbPd1+HLCCvQw3AsfFWnjOZl8zg04ZT1
+ rLHEQF/I7exV+qX89Qz/LMVWUBMpLnTLRyIEB/bPIYG94OwsGZJqyk6ovU4jLhKvA58z
+ agzjiPjeTfTbwl/5v/dyhbfCPbur8At0xe7GqSMhslWPqtnbtbWF7k2uk67P+FragWuV
+ gVbJrzu35gxZDxwypJhbnhLHBwZFJvE1xNUdENwqy0Zngv8GjtuvygAjEC2Vlex/guNp
+ frmuqXbfN2Zs5AXH9Df+lygPak5KnwzDRewK1+bRBXZgGQq4cg3c29BD+tn6HbAdoDYg
+ jN5w==
+X-Gm-Message-State: AFq9FYIfULEjlZQSk+5KzVDjomQlgNRrn73/MaH08TkeXTVnUp3iuJ4C
+ p/eX5/mNmFyw1lyXSyHfmvH0LevgNF4Va31tbClDqDJykFmAiqlovpTbEal1hz0h8w/7ATo0ya2
+ Lwgn2EkM=
+X-Gm-Gg: AYBFou0fWCRoxUs4r2LN5TTQ0vpUIsjXSpuvbdZbwEGqRCgXAS94EMabq1Z1FldRaAG
+ EiBad53QdzcZzkdlB8ZbsWIDyl+uzQwdi4yNRwVFUrUZ2acPoW1esVvle7Y1TqfBBosWMJk4dkX
+ rDgHuorK/1jl4Bhrz9zwrhgGRhFpfEYEgq66GLrHZ1NfTVs3JkhdhSFIkORYj6JFpuBARqOYi9q
+ b3I7pHjCDg9uYULR5kyE7vUvbcAfb8qaJ6p47iWhjdJ9LTPDXsbdFOniCoIn/tCSAb6e8xz4XBJ
+ GPpEowfP119Jzj9xCIIpEZhZdAPINFLKbAtjY0kGQ1e3/DHT0uWiuLRG68xUIRADOjmwHw/AjuO
+ 6V9jQsSmR/nb4bvElEvG3s48n4aoRE9mWxZZQxxDILfzDLbxNEL6md4x+P1R+umD+B2CisuSXw6
+ 2vN3c77KY9iXiqJKAWB2oQH9gCRhg0HN1AOwIR/SVz8NXX4klV92eekAiMXNMMBJr4svgl0cIFF
+ PgV85tj2v1ajGlyElUql1lLt4JSNNW2CK4L8jBSWQ==
+X-Received: by 2002:a05:6000:2c06:b0:48d:ed3c:4cdd with SMTP id
+ ffacd0b85a97d-48ded3c5789mr17819850f8f.49.1792162968812; 
+ Fri, 16 Oct 2026 08:02:48 -0700 (PDT)
 Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
  [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48dfd50d1bcsm5656524f8f.54.2026.10.16.08.02.45
+ ffacd0b85a97d-48dfd50aafbsm5607677f8f.52.2026.10.16.08.02.48
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 16 Oct 2026 08:02:45 -0700 (PDT)
+ Fri, 16 Oct 2026 08:02:48 -0700 (PDT)
 To: buildroot@buildroot.org,
 	Thomas Perale <thomas.perale@mind.be>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 16 Oct 2026 17:02:42 +0200
-Message-ID: <20261016150244.60699-1-raphael.melotte@mind.be>
+Date: Fri, 16 Oct 2026 17:02:46 +0200
+Message-ID: <20261016150247.60725-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260624101340.80670-5-thomas.perale@mind.be>
+In-Reply-To: <20260624101340.80670-6-thomas.perale@mind.be>
 References: 
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 5/9] utils/generate-cyclonedx: move license
- download in a function
+Subject: Re: [Buildroot] [PATCH 6/9] utils/generate-cyclonedx: support
+ custom version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -162,114 +162,72 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Move the code that retrieve the SPDX licenses into a function instead of
-> doing it top-level.
+> Support using minor revision for CycloneDX 1.6 by passing the version
+> from the command line. Currently supported:
 > 
-> This allows to pass the CycloneDX version as a function argument instead
-> of defining it as a top-level constant.
-> The next commit, introduce support for different CycloneDX spec version.
+> - 1.6
+> - 1.6.1 [1]
+> - 1.6.2 (default) [2]
+> 
+> This is used to fetch the latest SPDX license list available upstream.
+> 
+> [1] https://github.com/CycloneDX/specification/releases/tag/1.6.1
+> [2] https://github.com/CycloneDX/specification/releases/tag/1.6.2
 > 
 > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> Reviewed-by: Quentin Schulz <quentin.schulz@cherry.de>
 
 Applied to 2025.02.x, 2026.08.x. Thanks
 
 > ---
->  utils/generate-cyclonedx | 60 ++++++++++++++++++++++++++--------------
->  1 file changed, 39 insertions(+), 21 deletions(-)
+>  utils/generate-cyclonedx | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
 > 
 > diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
-> index 9e3bc9d4b8..9738db71d6 100755
+> index 9738db71d6..8d055c3bbd 100755
 > --- a/utils/generate-cyclonedx
 > +++ b/utils/generate-cyclonedx
-> @@ -23,12 +23,10 @@ import re
+> @@ -22,7 +22,7 @@ import sys
+>  import re
 >  
 >  
->  CYCLONEDX_VERSION = "1.6"
-> -SPDX_SCHEMA_URL = f"https://raw.githubusercontent.com/CycloneDX/specification/{CYCLONEDX_VERSION}/schema/spdx.schema.json"
+> -CYCLONEDX_VERSION = "1.6"
+> +DEFAULT_CYCLONEDX_VERSION = "1.6.2"
 >  
 >  brpath = Path(__file__).parent.parent
 >  
->  cyclonedxpath = Path(os.getenv("BR2_DL_DIR", brpath / "dl")) / "cyclonedx"
-> -SPDX_SCHEMA_PATH = cyclonedxpath / f"spdx-{CYCLONEDX_VERSION}.schema.json"
+> @@ -538,6 +538,9 @@ def main():
+>                          help="Specify the project name to use in the SBOM metadata (default:'buildroot')")
+>      parser.add_argument("--project-version", type=str, default=f"{BR2_VERSION_FULL}",
+>                          help="Specify the project version to use in the SBOM metadata (default: builroot version)")
+> +    parser.add_argument("--cdx-version", type=str, default=DEFAULT_CYCLONEDX_VERSION,
+> +                        choices=["1.6", "1.6.1", "1.6.2"],
+> +                        help=f"Set CycloneDX version (default: {DEFAULT_CYCLONEDX_VERSION})")
 >  
->  BR2_VERSION_FULL = (
->      subprocess.check_output(
-> @@ -45,28 +43,47 @@ VULN_WITH_PEDIGREE = set()
+>      args = parser.parse_args()
 >  
->  SPDX_LICENSES = []
->  
-> -if not SPDX_SCHEMA_PATH.exists():
-> -    if not importlib.util.find_spec("_ssl"):
-> -        print(f"ssl module required for downloading {SPDX_SCHEMA_URL}. Try enabling BR2_PACKAGE_HOST_PYTHON3_SSL.",
-> -              file=sys.stderr)
-> -        exit(1)
->  
-> -    # Download the CycloneDX SPDX schema JSON, and cache it locally
-> -    cyclonedxpath.mkdir(parents=True, exist_ok=True)
-> +def br2_retrieve_spdx_licenses(version: str):
-> +    """Populate the list of supported SPDX licenses for a given CycloneDX
-> +    version. If the list is not present locally it will be downloaded
-> +    externally.
-> +
-> +    Args:
-> +        version (str): CycloneDX version
-> +
-> +    Returns:
-> +        The SPDX license list supported for the argument version.
-> +    """
-> +    SPDX_SCHEMA_URL = f"https://raw.githubusercontent.com/CycloneDX/specification/{version}/schema/spdx.schema.json"
-> +
-> +    ret = []
-> +    path = cyclonedxpath / f"spdx-{version}.schema.json"
-> +
-> +    if not path.exists():
-> +        # Download the CycloneDX SPDX schema JSON, and cache it locally
-> +        if not importlib.util.find_spec("_ssl"):
-> +            print(f"ssl module required for downloading {SPDX_SCHEMA_URL}. Try enabling BR2_PACKAGE_HOST_PYTHON3_SSL.",
-> +                  file=sys.stderr)
-> +            exit(1)
-> +
-> +        cyclonedxpath.mkdir(parents=True, exist_ok=True)
-> +        try:
-> +            urllib.request.urlretrieve(SPDX_SCHEMA_URL, path)
-> +        except urllib.error.URLError as e:
-> +            if "CERTIFICATE_VERIFY_FAILED" in str(e.reason):
-> +                raise Exception("Couldn't verify certificate. Try enabling BR2_PACKAGE_HOST_CA_CERTIFICATES.")
-> +            raise e
-> +
->      try:
-> -        urllib.request.urlretrieve(SPDX_SCHEMA_URL, SPDX_SCHEMA_PATH)
-> -    except urllib.error.URLError as e:
-> -        if "CERTIFICATE_VERIFY_FAILED" in str(e.reason):
-> -            raise Exception("Couldn't verify certificate. Try enabling BR2_PACKAGE_HOST_CA_CERTIFICATES.")
-> -        raise e
-> +        with path.open() as f:
-> +            ret = json.load(f).get("enum", [])
-> +    except json.JSONDecodeError:
-> +        # In case of error the license will just not be matched to the SPDX names
-> +        # but the SBOM generation still work.
-> +        print(f"Failed to load the SPDX licenses file: {path}", file=sys.stderr)
->  
-> -try:
-> -    with SPDX_SCHEMA_PATH.open() as f:
-> -        SPDX_LICENSES = json.load(f).get("enum", [])
-> -except json.JSONDecodeError:
-> -    # In case of error the license will just not be matched to the SPDX names
-> -    # but the SBOM generation still work.
-> -    print(f"Failed to load the SPDX licenses file: {SPDX_SCHEMA_PATH}", file=sys.stderr)
-> +    return ret
->  
->  
->  def split_top_level_comma(subj):
-> @@ -528,6 +545,7 @@ def main():
+> @@ -545,7 +548,7 @@ def main():
 >          parser.print_help()
 >          sys.exit(1)
 >  
-> +    SPDX_LICENSES.extend(br2_retrieve_spdx_licenses(CYCLONEDX_VERSION))
+> -    SPDX_LICENSES.extend(br2_retrieve_spdx_licenses(CYCLONEDX_VERSION))
+> +    SPDX_LICENSES.extend(br2_retrieve_spdx_licenses(args.cdx_version))
 >      show_info_dict = json.load(args.in_file)
 >  
 >      # Remove rootfs and virtual packages if not explicitly included
+> @@ -553,10 +556,11 @@ def main():
+>      filtered_show_info_dict = {k: v for k, v in show_info_dict.items()
+>                                 if ("rootfs" not in v["type"]) and (args.virtual or v["virtual"] is False)}
+>  
+> +    cdx_spec_version = ".".join(args.cdx_version.split(".")[:2])
+>      cyclonedx_dict = {
+>          "bomFormat": "CycloneDX",
+> -        "$schema": f"http://cyclonedx.org/schema/bom-{CYCLONEDX_VERSION}.schema.json",
+> -        "specVersion": f"{CYCLONEDX_VERSION}",
+> +        "$schema": f"http://cyclonedx.org/schema/bom-{cdx_spec_version}.schema.json",
+> +        "specVersion": cdx_spec_version,
+>          "metadata": {
+>              "component": {
+>                  "bom-ref": args.project_name,
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
