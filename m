@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EADACC6B38
-	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 13:08:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA48ACCF2C1
+	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 13:09:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1757E60B21;
-	Fri, 16 Oct 2026 13:08:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B8FA660B71;
+	Fri, 16 Oct 2026 13:09:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sazN0oTLhGDV; Fri, 16 Oct 2026 13:08:55 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 5B1F560B6C
+ id R6SvRH5Slu7X; Fri, 16 Oct 2026 13:09:00 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 2C33F60B58
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792156135;
-	b=Q8OuhKIWMv1FKT4hQ3Fv2vIt31PSmDpzQYYgUlhahpcRF3jzLbrgridom1UQL6x9OVty
-	 2SiYMt/FUoeaH2H3QzvweXohVJViYoPNXfa8NKj3xAc338gKlx74DuYnvi7jXJvFeh5qW
-	 3cgKYjUTnnl77CsE1bpSfTWQ+FQ7YvUy0wTcMJyF3OJd+0fDxQ3NWJsDNqo9Tu9Q9WcNb
-	 ALQVnlsyrZn3ygnfN2POt5G3Rmoe8L8Vb3aKYXuSNyNhDh0fvllEqD9+kaR5TXRasUdwc
-	 3dSj5oA8Svsn0brvA7qTjZlUAnlSGTzBfwy0Uu4GgR2xqEBQZ0cYM/+alnXJlx2p6vQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792156140;
+	b=GkKQOaPa5hCN3QbH1oRDC3xvsOpyqFSLEmLqpQrA+K9/BHkEq0KAAYBSZqgRnm40Nilf
+	 hGzFFn00D+Mx8dguJWEE+af/2OpbP/zbDnXSAwY5ujOklNF5L4QIi3myspMGj5R9bviL2
+	 Tt0L7tsCw4bKwkuJXQuCa7UBqzKeP/NKZdW6c3HBkEFV0Q6SEl8j6s4XkRJh6fJr+y70u
+	 3bpsn9VfKoaABfB54dDErJjzTi5IvF/YTflj4xqA/heIivAaXLHk/bnkmSiT5rMDxLPu6
+	 b9tvGrO54ABvwQQgna3zW9otXUdQaOwpW28jejVoGDDuN88AwjYQ3XoqSX4vxrBUuyw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792156135;
+	c=relaxed/relaxed; t=1792156140;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=ydm123mGL8fwAKZrVR0TWH7rgYODtU/Y50sJYco2ssE=;
-	b=Z+nw39OhT9vo7otDL9zoIMqP+1JPz/bxWpXdOW24Zbss52qxdAusAOGGIv2JAjdgqmqP
-	 fphXoYAAoHET8YcuWuYzRGf37lcGZLGLq0jTAwrrrUhDxAJ4K/gDdvs0RKtUdC2JPmimR
-	 yCTM6NB3EnvFY6NoxhcSfPBlgiht1VhndvdKkGImbX7SLnOPQ4KR7ekPV8RwyV3UQpAD4
-	 iCK0lP7vkIwR6z2hlXF4ORhuxQMFQbIyyYYREfhRogR2WEOU2D7Iv9rcBmgpusYuKwfNZ
-	 of6ItCxE+X4piKa7GCtpjOd9gDkKaZtXZJhDfG9uyyW1nEemnN8tEr/Oq6CEMzxq39w==
+	bh=aSLilU9il772CcvuLQjOzPFxDJUhxPdWooY1uICMcyk=;
+	b=aTvg4YxtDXlJHdhFiD1r587vY91ZdlaClkCCCKG8WSYTqLE3Dyu/zdnC+V3sX2G0BZQp
+	 GWWKdx8gpN36ztq/Hv0dKgkfxTLaJeOUNIvzG9bpMb1je+RqmVn4ndpp4x7DvveFDfkyx
+	 OZ3UP7LgSGDv7jWz0asAHpceWiotItlL96tpqtEd7O4DAtHL5nadY21tD3WQnjWlHspJ5
+	 YlKHpr4f7aZc9xfdJViV/omSnuQyAtvEMQtaS0kc9yPvXFrcUUSdMWd8lQPcoJvXqDGH1
+	 L94DfW3EY4vnGJCbw3JVcJ1VEqDznbAAqHABFDDvMRulqQuYJYridYR7XhuElvJXQ6g==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792156135;
-	bh=ydm123mGL8fwAKZrVR0TWH7rgYODtU/Y50sJYco2ssE=;
+	s=default; t=1792156140;
+	bh=aSLilU9il772CcvuLQjOzPFxDJUhxPdWooY1uICMcyk=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=CUcJj9Ccg7RYe7sKSf+wTObYbzO8Htdn5QA+o57B1R378Mo6xhGv5SMopng+hwup5
-	 IeYhU+fTCze79gDOOvQENzfx8JdxuswbD235dlqZt9W7PON3Iyx+yNm2gYErR60t5F
-	 8UbB1al65LB95AgMJaykDW/XnKWhCYXrWWzIic3DpsS6VUjbx0GMyII/Vsi13R28fi
-	 3NrR8OfxhrB7ofpfQ5oDjydVmpbD/q2SuHBr9ftJyvywvStjq5W0SuHQ9+/O2Rlktf
-	 lrUxb4fXShAN+buytX39H+eCFYGmOPTtWpcaRFgL6bxRTRQ/1lhqLO6+PA7ilhHqzS
-	 JZTt/YIUXOL6Q==
+	b=mS88mZKWEKNNttX390ZM9DFL8Ef/SUk7QqDeAeDhJNHtIWtA6sspYjqvDjP5Rsogm
+	 c++gnGB8Gl4CYZ2EsYIgrgtZ89a4Jv6obbBUvHywi7/YIq827V/lV5mFZT7SJxtVXT
+	 21QJeEHt0xnbh4CACJIPJ2SdVHfhoIVnyowVN/KQAA+CJejer3JmjIokMdF1VBiEoo
+	 vlyS/CxQj4FDgT5LFxizwVU77/RpZ1RRxYO2anQBnEsxnUcL3Zr0Qj1rvSFIDmfC5l
+	 FHeK9XyOntefxDD4E2Z5Nacax8Yk6pGMC2YPqCbDUbfcjyY9mTSwKzNrppeT3VjNGQ
+	 +TL3ebsu5T9Hw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B1F560B6C;
-	Fri, 16 Oct 2026 13:08:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 5EBEFF45
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2C33F60B58;
+	Fri, 16 Oct 2026 13:09:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A96AD920
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:08:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3E7B3814FE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9B3588150C
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:08:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yayXcz6L_PvT for <buildroot@buildroot.org>;
- Fri, 16 Oct 2026 13:08:26 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org C9B6C81489
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792156106;
- b=Z6MBaYI92K+CZwdaMx9x8ZgTUab+45nY2Asw9bQcP5HAMr2243UC1QkzCwSEpGS1pmmL
- 8OiIpaoRKUEurNIQr9BCTfO0eW1zALNzfoginoYERO4T7XLa8hQCAh6vQT+CpqYEAk1B7
- 7bEACzIrFpC1RQMh6LdeXPLiu1mIVZKBjgFWMfIznHQVjt5e+KklTD82/4E0+5+t+zQt+
- xU1RkqUOiuI5bNCrNeZvbHghaI8pE80Rg18P+qnqjNm9ExKjLEv862pHolNBWNUUQDvIh
- JPSvjDJE03BeYH/8YrffStWfSYzwkEMsBlpBdzlhm5bJc3WzaJzbverGffckt7YH2iw==
+ id kGBt7Cp5_N9k for <buildroot@buildroot.org>;
+ Fri, 16 Oct 2026 13:08:28 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 472F5814C3
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792156107;
+ b=OCc6d8VKiDU8HnLVB/LU74vxLGCXC6IuPOM56ucBNSeajNm9Wio4WPFJzbzJ9tTFTwIh
+ TPcdj3jy6lLTnFeHOsM/L/uzRO2jtr0Njovru9t1U+eJWQdb+iU8dySLAMP+EQcm3lTD5
+ QVQ4uV4pK9XrzpHmJr/xKf5yRCx7XCJ0NXwE1hseAr88XzL0fRhX9q6FYwOphTO6Rwlpq
+ j8d5PrEmYvurakl7ljb19KBrfoxG+/M1AcSd4dCAO0s/Sy2I3Bs19IJaGKPA0zsOyUEhj
+ dyCp0wzPEBpWWdbJvqkoRnzENtyekurz3AFDmUuj6vKeaQIzDjUGaHtMzRdfG3T2/lw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792156106;
+ c=relaxed/relaxed; t=1792156107;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=H7KY0+jjMIuzr3NDeZUxQcFsRTBCQMwfdNJRmDWr/oM=;
- b=aaw7y5kgdLcx4pKlvESEY1a/RCgjztPTDhMNfMhPTUpyKKxxcBeOHIu0FHjRGajPRNym
- 4+oY/TX7Z/QVLS23Pdxp8x3nuBT5vA1kY6n/ysl5G1tyYFp3n9gwj1y4ZvX2sSI89qAHj
- iWYex/V8WJMmUKByAkWZld3GVAVo80RflHi4fB6z/K4qfs1AqgJap/cviZz/PMCbhI5jE
- bjAqvPs8CkXXjEpLXUT/YpGLHCaktDMCeVgrAXOubFMwe9NgZ1gKqdVGhg5Nf+SNiOjnF
- dHMYUdp+OYSasHikGxwShYMwIC0HWhZm55RXh/rEqoZ5mLSg7Ao8RP7ycZVPXy5LR9Q==
+ bh=1CiiXyboLw17UnSJ80g/vF6H54TKqXZ6eKOdi6BTD94=;
+ b=L0wu1LMnTPsG/InHI0foPUPZavyx3ZfZUlYeX4NDcWXVIslIFqFlcYcPpFxu0LTh6MBF
+ pxxDmTWP6fZzLYJpYVaTjGvDLyw2U/OeU4LkTTN1lSVDKvPoZyU6e8GdDMZtX5CZdxV9I
+ UGMnoFnXoKncyJ5kYxbVdBb8Q3LnXPMb9dRv7mWCNfoBgAmhakwLBlyfWrFCV10vV6Xul
+ cpmitE4BOOwcAwBqPbkBF+eB21Cty1q/EgC29eh7WdT7rB92H5wTUG1j4nh7ia8AJTtNo
+ AA63v9828VZDGCww0lAyjKi64THp6S3G6CiVgpoSyWLQbV1PaqdejAlNWUwGO9aGbyw==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C9B6C81489
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:08:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 472F5814C3
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:08:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B8286960DA; Fri, 16 Oct 2026 13:07:05 +0000 (UTC)
+ id 38216960D7; Fri, 16 Oct 2026 13:07:06 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 16 Oct 2026 15:07:51 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 7acb39ec283fe02393ca469c6e8c53f442a7ad91
-X-Git-Newrev: 7d2d6f17772479a4508ac2113696d0d83672fa2d
+X-Git-Oldrev: f3911673339161ddc10edca37bd60c5c1db8be9a
+X-Git-Newrev: 082d4c7d5345067d3b8fdd733b0e0fed9f5f5956
 X-Patchwork-Hint: ignore
-Message-Id: <20261016130705.B8286960DA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/mbedtls: security
- bump to v3.6.7
+Message-Id: <20261016130706.38216960D7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] DEVELOPERS: add Joachim
+ Wiberg for firewalld
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,198 +114,38 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4835153790886487509=="
+Content-Type: multipart/mixed; boundary="===============7222179991935417798=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4835153790886487509==
+--===============7222179991935417798==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7d2d6f17772479a4508ac2113696d0d83672fa2d
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/082d4c7d5345067d3b8fdd733b0e0fed9f5f5956
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-For more information about the release, see:
-
-- https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.7
-- https://github.com/Mbed-TLS/mbedtls/compare/mbedtls-3.6.6..mbedtls-3.6.7
-
-Fixes the following vulnerabilities:
-
-- CVE-2026-50587:
-    Timing side-channel in RSA PKCS#1 v1.5 decryption
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-50587
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-rsa-pkcs1-v15-decryption-timing-side-channel/
-
-- CVE-2026-50581:
-    Extended master secret calculation failure ignored
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-50581
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-extended-master-secret-calculation-failure-ignored/
-
-- CVE-2026-50640:
-    Ignored TLS 1.3 resumption secret derivation error
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-50640
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-ignored-tls13-resumption-secret-derivation-error/
-
-- CVE-2026-50713:
-    Heap corruption with early renegotiation after corrupted record
-    in DTLS
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-50713
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-heap-corruption-early-renegotiation-corrupted-dtls-record/
-
-- CVE-2026-50584:
-    ChaCha20 counter overflow can reuse keystream
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-50584
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-chacha20-counter-overflow-keystream-reuse/
-
-- CVE-2026-73096:
-    TLS 1.3 early data integrity failure due to buffered plaintext
-    across key change
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-73096
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-tls13-early-data-integrity-failure-key-change/
-
-- CVE-2026-35336:
-    Possible buffer overflow in mbedtls_ecdh_calc_secret()
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-35336
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-possible-buffer-overflow-ecdh-calc-secret/
-
-- CVE-2026-50580:
-    Remote buffer overflow in TLS 1.2 ECDHE-PSK client handshake
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-50580
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-tls12-ecdhe-psk-client-buffer-overflow/
-
-- CVE-2026-54435:
-    Side channel leak in ECC optimized modp
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-54435
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-ecc-optimized-modp-side-channel/
-
-- CVE-2026-50586:
-    Information disclosure in TLS 1.2 NewSessionTicket
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-50586
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-tls12-newsessionticket-information-disclosure/
-
-- CVE-2026-50583:
-    Out-of-bounds read when parsing a zero-length ECC public key
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-50583
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-zero-length-ecc-public-key-oob-read/
-
-- CVE-2026-50588:
-    Out-of-bounds read in TLS 1.2 EC J-PAKE ServerKeyExchange
-    parsing
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-50588
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-tls12-ecjpake-serverkeyexchange-oob-read/
-
-- CVE-2026-50579:
-    Use-after-free in mbedtls_pkcs7_free() when reusing a PKCS7
-    context
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-50579
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-use-after-free-pkcs7-free-reused-context/
-
-- CVE-2026-54441:
-    Signature algorithm restrictions not enforced on certificate
-    chain
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-54441
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-signature-algorithm-restrictions-certificate-chain/
-
-- CVE-2026-50585:
-    Incomplete context reset in mbedtls_ssl_session_reset()
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-50585
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-ssl-session-reset-incomplete-context-reset/
-
-- CVE-2026-73064:
-    A random generator fault can compromise TLS data integrity
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-73064
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-random-generator-fault-tls-integrity/
-
-- CVE-2026-25832:
-    TLS 1.3 client accepts HelloRetryRequest selecting an
-    unadvertised group
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-25832
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-tls13-hrr-unadvertised-group/
-
-- CVE-2026-49300:
-    X.509 CA bit forgery via invalid basicConstraints extension
-
-For more information, see:
- - https://www.cve.org/CVERecord?id=CVE-2026-49300
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-x509-ca-bit-forgery-invalid-basicconstraints/
-
-It also fixes the following issue, which has no CVE identifier:
-
-- PKCS7 signed data verification accepts weak hash algorithms
-
-For more information, see:
- - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-pkcs7-weak-hash-algorithms-accepted/
-
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Assisted-by: Claude:claude-opus-5
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 45903c02e328712370b25c756050155c5fbdc5fd)
+(cherry picked from commit 161391871082c9d363d7a4ff25d68b8f6fda9807)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/mbedtls/mbedtls.hash | 4 ++--
- package/mbedtls/mbedtls.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-index f1be074e08..71c5612b48 100644
---- a/package/mbedtls/mbedtls.hash
-+++ b/package/mbedtls/mbedtls.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.6:
--sha256  8fb65fae8dcae5840f793c0a334860a411f884cc537ea290ce1c52bb64ca007a  mbedtls-3.6.6.tar.bz2
-+# From https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.7:
-+sha256  a7e8bcbec0e6f761b4af24f25677626b35f762f68eef79c08677a363212d11f6  mbedtls-3.6.7.tar.bz2
- # Locally calculated
- sha256  9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b  LICENSE
-diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-index 9def876808..3545c42ad0 100644
---- a/package/mbedtls/mbedtls.mk
-+++ b/package/mbedtls/mbedtls.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MBEDTLS_VERSION = 3.6.6
-+MBEDTLS_VERSION = 3.6.7
- MBEDTLS_SITE = https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-$(MBEDTLS_VERSION)
- MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION).tar.bz2
- MBEDTLS_CONF_OPTS = \
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7d24722f58..bebf875499 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1591,6 +1591,7 @@ F:	package/rtty/
+ N:	Joachim Wiberg <troglobit@gmail.com>
+ F:	configs/globalscale_espressobin_defconfig
+ F:	board/globalscale/espressobin/
++F:	package/firewalld/
+ F:	package/inadyn/
+ F:	package/libconfuse/
+ F:	package/libite/
 
---===============4835153790886487509==
+--===============7222179991935417798==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -316,4 +156,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============4835153790886487509==--
+--===============7222179991935417798==--
