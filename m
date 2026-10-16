@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4E93CC6B38
-	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 15:06:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84D36CCF2C1
+	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 15:06:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 66F7C40C46;
-	Fri, 16 Oct 2026 15:06:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3A62D40B17;
+	Fri, 16 Oct 2026 15:06:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cSjkU9vu5u6a; Fri, 16 Oct 2026 15:06:05 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 7D1A540B30
+ id magN0fTAeSgV; Fri, 16 Oct 2026 15:06:07 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org F2FD740C47
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792163165;
-	b=pxCxNEDpg3iqIsJ7dwSxNHQfAZseOUBJZIS2T5yL1Kt84L/8Z/zH1w0m9mhKpPIKrTpJ
-	 b7WfOdIaJeSU9GKjDTkgj9qZg4f3YGdihk9IrUeiW5t+lD7sahJ52T8vvicxtw31Irpjd
-	 +kkNQDjiBvLrO9Z852kS2D0Y8W8MZjsCreb5f04YBUsz3izqaWR5pPrzFyOXk1Lm83aKS
-	 bTYCxYzxNuAHEkYqMV1ePU+f0w6eAFtSdV+xypHX4pTO/hIo/dR2HW1l0TM3V8+LbXGRX
-	 9xRaEfDzgdBSKU4ewL0JwKw0TtBBrPLJG7HtKK5AxZjqYbk+CIz0pN130VTf5CtFc4w==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792163167;
+	b=powWuA4OCYEPQTJNjT8CbznZrL6Z9BS+gq46gbLa16xfS4dUL96HevcdysUkLaI9x6vg
+	 c5/iGBljfmrmX4Iu99SvzJOpUk6Jl1EkHkuUu2i5FqYdys034tcoK2JKuJ9VpohDh53Zb
+	 TesCA2oamq6sk2qk+Z6NBeHtgHnCS0UUVKwXsKPIg3/e4Fl7eYVNu4Zt4IAE+IdtFsjbO
+	 kINz6Vm9dPF8HcdNpOvvEj+hRT647t+1MgjMlfnRIjgKtPbPY6ZsdQgnEw5/gQwhmoT97
+	 NmSNiwEmamyNqD4UtWnTmY7Voz+6714Gr/BLhoi0r4vE22ef3AxBbOy9Vb+E1ndO8mQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792163165;
+	c=relaxed/relaxed; t=1792163167;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,117 +31,117 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=hCc0cWVv4Yjp0LrGZfxaejc5kfDCUyZ58+gnOjN0Axk=;
-	b=b4oGh7RLEAFOw0FHbFR+tqTAIEO/El7kJmldWYWt/PZjpItSgdocEF5exhaYg6NTiJMG
-	 Xo+ZSmHQYy57K9JDSuqHHWBZYRDijyTW9N6HpfF8/AXO/vEzubnAD/MISs2oudODcAGTO
-	 9p9zLQHDlIMM2rlurnEiFeJa195OHK3Izc9TEhd+vaZOoECuJ9XWweaHTSorfOOu5ZpNi
-	 qH5dadKng+Oav35of0Rj1scE8pj9ORFWxVqO9CrvU7dPmD1z0N4yOdH7w0cyn/cTF59ax
-	 YN6dOe1QZkOtS7woQvIkEPQWQRUODRNiIGOG1c3lVmYqRi/ExHNceDqlwFodb7KHlrw==
+	bh=3vechoClie7FCjlzhTM5ALncwYdIcbyp59wOtbbOiq4=;
+	b=kB4BRjbjfOl3v+9uQUNp5eA268yetl7aILar9o/H9O4APp0fism04gCtF+5wnLXqhWYv
+	 xJRz7FygT8aHlkwXyoUgj3fCaLz/g0JhRkpAtc5ARPhPja69XRC1PeLJgNbsON1a6bD+6
+	 O4pQkXB5lTkxBTLyeZU8Lcfs69mYZUoCfHzcAVM1VMwPYA6NS4DrLvTJY0wK4fb2ewatl
+	 h43ccc03SU6EcIb9Ucvs7i+Bko8tfEPOufQ7L/IwFiWzXBz1x0La6/j3kH9DN4a20ETrI
+	 rEc/M84mHfw1C6T2TuQ5gC7X/65CtuUG8cauTn6gGJIpnzRLIf1lmJ8JXLpwVy2zkzQ==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792163165;
-	bh=hCc0cWVv4Yjp0LrGZfxaejc5kfDCUyZ58+gnOjN0Axk=;
+	s=default; t=1792163167;
+	bh=3vechoClie7FCjlzhTM5ALncwYdIcbyp59wOtbbOiq4=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=dHP+PxtbzCxjj0Hq8SxBiddB/Pm8X/5PtPoRwAGdS/Gb9jOwoUUQLGWxG59feCUSA
-	 RQdEGxUxu5bPWok86ACoCF4GEZ6q1jLAQSAaTabEWDCZglI+mXBnmsKxto02pp63pq
-	 fmCb9YMKSw5H+NwKSuJ3uK4L6d8gvKM2AA2yfIIXTVP9hvn+hYcBKHcxwcgr8Ak7SW
-	 ZfUERUJzxTK9wKTmeRYfWokJw7zgzDDvdEqjVnUDl0W4H7bLbcmktJZI8N8Sy0RbEz
-	 NEv8N+k0Jb1t0QwMGg0bESwQpyrWIHD0oEdhlBiA01qeapigsa8fgRYVEG7wBhB2FD
-	 OvQn4zceoLQJQ==
+	b=K4KqxvMexIiGazPWw0a6uwuw9zIjjX2D4DxVm4d4uvSFsGRCZQHkTmUn96YqhUYcp
+	 0iBXdTXLc67AeesJcMZhFsgvT/ewd3esjUqzyY9mNzM3y3xr9vGZysnuO2dqPmvgZV
+	 7q+rLLdsf43E/SmYQOMqfknvNt95CXVQjMYvqR/uCZ+CssoGjqAwrPzYll9HxKCeO6
+	 g7Z01dTdmCeKlFbd+9umpr8NHY3n5nc6EKx/O15z8nFaOWLWzjzZv/z7hIDLK/i5ch
+	 I5t0qBhmVQ+uyET6DE6yewvP7y/ywQNGXF+LL5pyv8ubideJ+Ulm3Fop5k9fefHeYi
+	 FiUFeiX92mxLw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7D1A540B30;
-	Fri, 16 Oct 2026 15:06:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 71D66255
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:06:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F2FD740C47;
+	Fri, 16 Oct 2026 15:06:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 19DDB7AD
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:06:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6252140C42
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:06:01 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0BFC281759
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:06:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8dusEMn3Q3W3 for <buildroot@buildroot.org>;
- Fri, 16 Oct 2026 15:06:00 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org B533540C39
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792163160;
- b=p/DjFHHLhTR78eYTmGmyxiukLdcKlOvTABuYux3Am3HJhGEVpMrIvKesCdL6C1HuaeHx
- F8hO676v0PybZgCohlJ0PUhOz6BU9ZqTe3dUUH+C6tu0z+sbuYuN4uC5hAqXXk5U9QDjs
- gJow90pskk62D32qSH6eOvv2MgSzBzASU7aqRubC8czoYv10jbnp67sc5Tdzd5R3vLeog
- myk+mnfpvY4vKM0Kld8tM+81A4sUPgviRItGAkXOHK9t9biRVvmBIp+RJeXRD80DFEoJx
- ztmfJKb65wLpUjRiuUzMxDHfqwE+JS+PgRXpNei3l+Djk+TLUJQ7Nsa0eo4dC0yofkg==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Q0KDQMLKTVDD for <buildroot@buildroot.org>;
+ Fri, 16 Oct 2026 15:06:03 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org E1E2A8175E
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792163163;
+ b=S7KWsaweEAwrishMcezvx9SiNCygLWGTS31gJQrYGgFbUr2BL2wmwPN2inrS0/kP/bt7
+ lW0o82VzLJcuzhDDC1VS5j3fp7e2vCJt+bwXm+MobsZTQtq/21Llon7e6IEi0J6ZoOtuu
+ bdMluuaPeTsOxYN1od9HvgmtctoYye7KEiAMORoSaQAZcGpfahcI3ILtw8N7eEy+xQHR5
+ XNKe2Rl+94J+H6clkDw97R8AnR4oTvmPAbncJQ3dUf/0xXjmnjdVHKsRO3h0stzXsPC8P
+ 1gU2nDX5ikCKAR/wPaxzeFUtae7l6P4pA9RIop4VAIDwjaNy9b6rZ7HmBQHrWdddiRg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792163160;
+ c=relaxed/relaxed; t=1792163163;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=6Fd4eWXQ6/spWa6FnnSjTqSYiW+dSzc/vORlJpF0Lmo=;
- b=LZN9/kmv8h/ICWvotwYTIGsL4hp9rn6c1zaGu0Xejo2s16Pf3NwKtw6lLIoVaHwJOsTN
- +hU6lX6nU7K0iHd6fDrSaBPBYyQgLmFevdkAfXuvAMAS7qFZ9yDm8GpuW7XGSnPwkG8Dw
- voAh8k8hAmSLgFmzK+cJwLX1asO7fhBJQ1AtUcZZTz8AYjyuECXjxYAyNSHTLPh32y0Vq
- tVFvZ43mgGiu8DQtaHjNBkwnLvU9mK1rKn1hEHhFksXdElUbKiagwI7cgCP4/gP7g5fvI
- ryjKBXIUpLoIk4OgP7VVIMLvpB81F2zQ9xPMCFWLnIGgCo8uCfn7vTV4nAr4rErIUHQ==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ bh=b8262iiwY7bkq8LVyP3sqg6i0RhM0BtZHrZmSrwObdI=;
+ b=rmER6fdXKqv3J3gBiy9u+YyjPnpaBJjVfXmTeHaVsRjPlOMe8eUagonQUgk0lYLapSpR
+ iyvOcyDwmPxR6O3keSE8aKfsra64Fp7opUVhmPwyQfBymr3vXgfetKZugRmQx/fYb6UFD
+ 9Kb8bu4FW42CiAXkVggGIX9m5zvYEAJLgpBeTjUDEqP0rrbeSQy7ZzI74j99YXOM4WPIN
+ 1fLbUFuWl/c7OcGIHxD2M0qPnUqQv+0fhHRZt6HFnOSDMe5bHBqcTClWcEEXZ3eyVe3Cn
+ bua6R2t4mtZ0F16/92s42n7MOc9q6aFQ63KkKA7nJ6u0WcB7ysL9PjiO2VS6GJbbQqg==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  dmarc=pass header.from=mind.be;
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=IcGlkHmr; 
+ header.s=google header.b=Xak8tuKP; 
  arc=none smtp.remote-ip="2a00:1450:4864:20::335"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
 Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
  [IPv6:2a00:1450:4864:20::335])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B533540C39
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:05:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E1E2A8175E
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:06:02 +0000 (UTC)
 Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-4a16af2a232so410015e9.1
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 08:05:59 -0700 (PDT)
+ 5b1f17b1804b1-4a0e1b0681bso335945e9.3
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 08:06:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1792163157; x=1792767957;
+ d=1e100.net; s=20260707; t=1792163161; x=1792767961;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=6Fd4eWXQ6/spWa6FnnSjTqSYiW+dSzc/vORlJpF0Lmo=;
- b=IqqguJ0XFfS1k98hP0sUOLjLaRvucxTTAwYNtOK8roBgHiGxZtXHfeE9XWsDaLi8cb
- nRCEZzZM3nlFxL2OawEom0J0K46yGZhKZaJMddaru77ps2vHlcu7HrdLJUQKdQkJf7Wa
- 6bMFudAcb8/570TEBfLB+CN3pk8K3uhNdCMUlIbKK8aRtsjdP4RPw7TdNJyqgv3Dqw5k
- 89oivyVqqmxxIlKrxDcPCg/t1UIBG8t7AtGYjF5EF9YrwRtKpZ2R/olJ2MOsYKbXRLLz
- vNnStMJX7lxvSepmE7iTIW+ynkvURJYBeSMIeIl3n1QJSWeuD0B0AknRMeOzjHb5JgKG
- VTWw==
-X-Gm-Message-State: AFq9FYIKBGbUUk45G+XV9DEszZfb9W0QsDyVw/zxfRmTWR8EkgfrPMuR
- XT9N2FwMv7MSsgIRbMmXQ/yQJCJO5J//ZfmRlW0wpebDmwgQkm4ZzFeCNzRzAzSjS+aiwy0QIXm
- knO1lOvg=
-X-Gm-Gg: AYBFou0Ct+wXCkDeuefEmzhlYDPJcDxoXvjAw8ZqI7P0gwSVV6A3GYQSMYaMVP3lxQP
- 9+ZZSrYxYNESRZtAWkTRCZoZsXahiusaVvT4FsDWTyBjr/Jozkfjw3qWgZ2S47mojzNFfQBO+1K
- LL2m6k8PaRDnLGtopu8c9ybwt4c8YRvvO8e92OeuM3wRqpyqnhl9NTKj0K/dRWWYrOs9CfEhApV
- nLr7UBnmtoV/AUcbG5bofv0eLV847UZP7GgIO/C6iSnMvvETFwQAvuFmUXWUEOrorGSmZPoS6xg
- OSjjh1vO3BmLwIrKYBq659n5kQl6qwwGyGWYmK5Mm8caN6HsuCHPsgrW/QLgzWMww5BmtoCNZAf
- zl8+xeUGEIbOw8xkF922vwR1lDBdAFRsX8nd8RwpQJvBRqpiyUUAMOjviGka+Nm8GlQGyvXQtXa
- AO81+rlNpP9pCV/YA+QKk/QcuuRTJ/f4tzo1zepGXotcYD6GAg+MrnKM2tWutJn8VVLM6sCgVTq
- ZwibkTblE6ck+Abbz95QYsgZhdfVV9u76I2YSlzNy5qcuhGZAai
-X-Received: by 2002:a05:600c:314f:b0:4a1:d41a:afbc with SMTP id
- 5b1f17b1804b1-4a1d7608492mr1617115e9.23.1792163157498; 
- Fri, 16 Oct 2026 08:05:57 -0700 (PDT)
+ bh=b8262iiwY7bkq8LVyP3sqg6i0RhM0BtZHrZmSrwObdI=;
+ b=JoE8WQQAR3LiXKYtCdgtxLkc8ESj+KN0+FUIKEmouOV5eLZH8NynQbEwetykuh7+mS
+ 75OT32FJgQxoGmkBWVDxEj4Bu+oKfqMs28kNC4In0emiZQ9q9vVo/cafuVBzr8EI+oWc
+ bl9N8cXOntjXNLqHPe6rAijpKJ+iab9dpA77keClE4xciL8uYVyVnk78m414vCXVOfvz
+ bc2FS95LQyBH4QGNoMlZDm5LXhQi2q8/SF7WG8FuXbHiQ6z7e8ToB7lRkBiZ/HafVP7u
+ ab7xv699nOEQddr7l2bXpWqpzTxtEWaVXjqaUt8ZMrad5u4J+qMJQlQx2DUsMH94YmXA
+ hfHQ==
+X-Gm-Message-State: AFq9FYJyq1lPvHwxFROHEn+DcHwyKKosqOxewPHYDoFsomS8uYqIR2HL
+ G5br1NHfK/+06MuBoD2qY8kyWWfLQ43BPMr2kNOkvlh533mEMLEncHOlj2FfIUR41rl3vo7hO/Q
+ WS2jyKc0=
+X-Gm-Gg: AYBFou3G7B+UsvzsF7JbrlSgfjSEyWBkGLaOLun/JQZCaTxoRPg14Ry3a1IZfNO4rOw
+ XO5QewNfEBUdwKeZjg2CJNBUiRQ1vMEEgxDUcdexvQhDZbpH02Wk59nzerArHNvs+JWsfpdzHgP
+ TNfj/sRswhPB/hTKkphM431lWC5jjP0epulYmxl0oNETOQHstie/eUMDk16Edcdtp9pUtg22fJQ
+ hoKndwClcKMP5Tvqm+GaxaElKTqsnkX26lQyXUO+B386yHbfJdxd6kt0PM1A/i9cFuxQxWAhwcE
+ Ah0mF0jdJ8VYXv9uxDtKOS2Kt2UXHKIJug47r673xo/oiNCJv3K3NFODfPmdhk6asPK0Zj5P+2R
+ sAhvYjO5CHK/d7thschYmXVE4K6aQXZUQEafsDWml3H5qIfU0F+9eFglI6aPSF8SzWNjEXIKab5
+ NZ3dMg/akWhN5lGIiFdSoX8peBT1e14Q272D3jT0abSrNRUDnqn+ULg5tvqUY2t91N6Z5zGhA4i
+ 7tvYr1iHWOU55DUSg84RPfRQsA1vVS3KX5TGf6b2g==
+X-Received: by 2002:a05:600c:19cc:b0:4a1:70da:3350 with SMTP id
+ 5b1f17b1804b1-4a1d762386fmr1377215e9.32.1792163160785; 
+ Fri, 16 Oct 2026 08:06:00 -0700 (PDT)
 Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
  [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48dfd4c5932sm5887510f8f.18.2026.10.16.08.05.56
+ 5b1f17b1804b1-4a1c8a81587sm127848575e9.1.2026.10.16.08.06.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 16 Oct 2026 08:05:56 -0700 (PDT)
+ Fri, 16 Oct 2026 08:06:00 -0700 (PDT)
 To: buildroot@buildroot.org,
-	Bernd Kuhls <bernd@kuhls.net>
+	Yegor Yefremov <yegorslists@googlemail.com>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 16 Oct 2026 17:05:54 +0200
-Message-ID: <20261016150556.75542-1-raphael.melotte@mind.be>
+Date: Fri, 16 Oct 2026 17:05:57 +0200
+Message-ID: <20261016150559.75709-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261008204640.3755842-1-bernd@kuhls.net>
+In-Reply-To: <20261009143448.1559850-1-yegorslists@gmail.com>
 References: 
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/go: security bump version to
- 1.27.2
+Subject: Re: [Buildroot] [PATCH] package/shadowsocks-libev: update the site
+ URL to shadowsocks-c
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -162,57 +162,49 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> https://go.dev/doc/devel/release#go1.27.2
-> https://groups.google.com/g/golang-announce/c/U2fTuyDJznI/m/bAPU-QKAAQAJ
+> The upstream repository was renamed from shadowsocks-libev to
+> shadowsocks-c. GitHub still redirects the old URL, but the README names
+> shadowsocks/shadowsocks-c as the canonical repository.
 > 
-> Fixes CVE-2026-56857, CVE-2026-56866, CVE-2026-78659, CVE-2026-78660,
-> CVE-2026-78663, CVE-2026-78667, CVE-2026-78669, CVE-2026-94439,
-> CVE-2026-94440, CVE-2026-94444, CVE-2026-94447, CVE-2026-94448,
-> CVE-2026-97030, CVE-2026-97031 & CVE-2026-97032.
+> The v3.3.6 tag points to the same commit in the renamed repository, so
+> the tarball and its hash are unchanged.
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Assisted-by: Claude:claude-opus-5
 
-Applied to 2025.02.x, 2026.08.x. Thanks
+Applied to 2026.08.x. Thanks
 
 > ---
->  package/go/go.hash | 14 +++++++-------
->  package/go/go.mk   |  2 +-
->  2 files changed, 8 insertions(+), 8 deletions(-)
+>  package/shadowsocks-libev/Config.in            | 2 +-
+>  package/shadowsocks-libev/shadowsocks-libev.mk | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/go/go.hash b/package/go/go.hash
-> index bc6d026a6c..6a4b03ad35 100644
-> --- a/package/go/go.hash
-> +++ b/package/go/go.hash
-> @@ -1,9 +1,9 @@
->  # sha256 checksum from https://go.dev/dl/
-> -sha256  7002403d7cc44529ef6d26f69a44818263395ead7c16c05a5808ae047ebeb0e5  go1.27.0.src.tar.gz
-> -sha256  eac4abaca4113170a1cf261b8bf1d38480e61e99deecbc6a14767deb8b19e8ad  go1.27.0.linux-386.tar.gz
-> -sha256  675c26c449cbb18fc24b74650de1eabbae6e16f64326fd85a283fb3b58280685  go1.27.0.linux-amd64.tar.gz
-> -sha256  51798d2c42d0e1c6ed7fd9f48728b4193abac9e8aad6dbac2fe96a81f5909bda  go1.27.0.linux-arm64.tar.gz
-> -sha256  e337ecd9c321377c0d8832690c2cb10463447c0bd0e65e2e3413dfff63a3435b  go1.27.0.linux-armv6l.tar.gz
-> -sha256  068085e257a6014c036c723ca62943edbf48fd168b8d00a6d39527d10b656255  go1.27.0.linux-ppc64le.tar.gz
-> -sha256  cb5c89fa48cba4123c68aee62b217ca030f281546df0898a0c32889c340b928c  go1.27.0.linux-s390x.tar.gz
-> +sha256  03495da2ba64894d40f5c4992e49454fa78b50690604ff92b6afff5081b76e62  go1.27.2.src.tar.gz
-> +sha256  93dae4b7f463ed1e9c65e05561ce9fc5f7cd5c4ffca5e336248d48f3a2eab5fc  go1.27.2.linux-386.tar.gz
-> +sha256  ecbadb99091a3f46e31f5f934b068b1864eafa7995211b39eaddf76996045fe5  go1.27.2.linux-amd64.tar.gz
-> +sha256  94f3e30b8e374bc285e7dadc11e0865726b9bc6e85b841ccceaabc0214c6b7c8  go1.27.2.linux-arm64.tar.gz
-> +sha256  e25a174051d8675f87ac720aedcd25bf89ac652c4b82f26aa47919524725ed95  go1.27.2.linux-armv6l.tar.gz
-> +sha256  059d5f01b1607a724ea5ae87c5589041a51c577a6f3f20099e49d00f31c803fa  go1.27.2.linux-ppc64le.tar.gz
-> +sha256  dfd01d1e08e4dbece2cd91e259953f87b858752037fd151da2f674c4fa09aeef  go1.27.2.linux-s390x.tar.gz
->  sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  LICENSE
-> diff --git a/package/go/go.mk b/package/go/go.mk
-> index a49dc206cc..df6f0049bf 100644
-> --- a/package/go/go.mk
-> +++ b/package/go/go.mk
-> @@ -4,7 +4,7 @@
->  #
+> diff --git a/package/shadowsocks-libev/Config.in b/package/shadowsocks-libev/Config.in
+> index b5be19f939..939bf5d2bc 100644
+> --- a/package/shadowsocks-libev/Config.in
+> +++ b/package/shadowsocks-libev/Config.in
+> @@ -14,7 +14,7 @@ config BR2_PACKAGE_SHADOWSOCKS_LIBEV
+>  	  Shadowsocks-libev is a lightweight secured SOCKS5 proxy for
+>  	  embedded devices and low-end boxes.
+>  
+> -	  https://github.com/shadowsocks/shadowsocks-libev
+> +	  https://github.com/shadowsocks/shadowsocks-c
+>  
+>  config BR2_PACKAGE_SHADOWSOCKS_LIBEV_CONNMARKTOS
+>  	bool "connmarktos support in ss-server"
+> diff --git a/package/shadowsocks-libev/shadowsocks-libev.mk b/package/shadowsocks-libev/shadowsocks-libev.mk
+> index 778daf37b9..75c0d58be1 100644
+> --- a/package/shadowsocks-libev/shadowsocks-libev.mk
+> +++ b/package/shadowsocks-libev/shadowsocks-libev.mk
+> @@ -5,7 +5,7 @@
 >  ################################################################################
 >  
-> -GO_VERSION = 1.27.0
-> +GO_VERSION = 1.27.2
->  
->  HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
->  HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
+>  SHADOWSOCKS_LIBEV_VERSION = v3.3.6
+> -SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-libev.git
+> +SHADOWSOCKS_LIBEV_SITE = https://github.com/shadowsocks/shadowsocks-c.git
+>  SHADOWSOCKS_LIBEV_SITE_METHOD = git
+>  SHADOWSOCKS_LIBEV_GIT_SUBMODULES = YES
+>  SHADOWSOCKS_LIBEV_LICENSE = GPL-3.0+, BSD-2-Clause (libbloom), BSD-3-Clause (libcork, libipset)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
