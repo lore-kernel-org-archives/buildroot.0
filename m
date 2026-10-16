@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22822CC6B38
-	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 13:08:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4EADACC6B38
+	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 13:08:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C5CB060B6B;
-	Fri, 16 Oct 2026 13:08:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1757E60B21;
+	Fri, 16 Oct 2026 13:08:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tLLasowbwDSs; Fri, 16 Oct 2026 13:08:53 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 5CC6460B64
+ id sazN0oTLhGDV; Fri, 16 Oct 2026 13:08:55 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 5B1F560B6C
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792156133;
-	b=dED/M1MDQrGAehGFYQpmpNRv6Xthjm07XrWS6C24KHuT+slWfuzDcWXjXbJCkzp/4l4h
-	 fEc3pCnkUIT0gZRxSG0TwBAFoLyq8BeVB7/1es144oJr4oZdIYSwkwV5iTFfu008lxTHd
-	 1FhlKq/yiVnWXdOvXe9PVF8SpiWU/LiFQHix1sq5ACggwnwqyU82hCVE7Q/JwgHHQ0wBL
-	 E/C3xuKQmTxFzGNicbFbygeMDK3Kjw5XMWH+U2t5dth5JrKMUzyXQmvfWskjjxiUcgpq5
-	 oi2KNmaMIPMDLoFHyOXhaueLiAvnN5C85uMpRcIeKrM6NVU/ui+szPuVnsnixu1qEXQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792156135;
+	b=Q8OuhKIWMv1FKT4hQ3Fv2vIt31PSmDpzQYYgUlhahpcRF3jzLbrgridom1UQL6x9OVty
+	 2SiYMt/FUoeaH2H3QzvweXohVJViYoPNXfa8NKj3xAc338gKlx74DuYnvi7jXJvFeh5qW
+	 3cgKYjUTnnl77CsE1bpSfTWQ+FQ7YvUy0wTcMJyF3OJd+0fDxQ3NWJsDNqo9Tu9Q9WcNb
+	 ALQVnlsyrZn3ygnfN2POt5G3Rmoe8L8Vb3aKYXuSNyNhDh0fvllEqD9+kaR5TXRasUdwc
+	 3dSj5oA8Svsn0brvA7qTjZlUAnlSGTzBfwy0Uu4GgR2xqEBQZ0cYM/+alnXJlx2p6vQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792156133;
+	c=relaxed/relaxed; t=1792156135;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=OokFdz5itJVbY1jKc2NkOVYaqgg+zzrUrwM4s5e4Z58=;
-	b=rOB7DizxlF7dBaikUzigCLuwcKxBNicMO68xmlA/jdy6FajiIutcdwmPx1hy5hQ0PO8a
-	 YEf/vdhC7sYLZgSU0dmYTdtd0ZuN9ZBqpQ6TV0eAwOrGJjv/2FICh0p1XPOiPGer9MWFf
-	 HGPEflFGOLz4NF3MXQHki+Dm1VKwD7mPloLae28UxwHlaMDAiMdAm7FWCSM6cmjHbsqju
-	 1X+L7lA1Bt4EGPEi/AucaKi+s5ZkeLTfmWiPeJrcp9GQ3zCDO/vmbBILf9FDcuncgXILb
-	 /AfI0QJUpCMXnTgS0OTgYnYRvG6BSlQtkL9TOXwe643tSEdn6+g4GedwfcaGHOhKVrA==
+	bh=ydm123mGL8fwAKZrVR0TWH7rgYODtU/Y50sJYco2ssE=;
+	b=Z+nw39OhT9vo7otDL9zoIMqP+1JPz/bxWpXdOW24Zbss52qxdAusAOGGIv2JAjdgqmqP
+	 fphXoYAAoHET8YcuWuYzRGf37lcGZLGLq0jTAwrrrUhDxAJ4K/gDdvs0RKtUdC2JPmimR
+	 yCTM6NB3EnvFY6NoxhcSfPBlgiht1VhndvdKkGImbX7SLnOPQ4KR7ekPV8RwyV3UQpAD4
+	 iCK0lP7vkIwR6z2hlXF4ORhuxQMFQbIyyYYREfhRogR2WEOU2D7Iv9rcBmgpusYuKwfNZ
+	 of6ItCxE+X4piKa7GCtpjOd9gDkKaZtXZJhDfG9uyyW1nEemnN8tEr/Oq6CEMzxq39w==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792156133;
-	bh=OokFdz5itJVbY1jKc2NkOVYaqgg+zzrUrwM4s5e4Z58=;
+	s=default; t=1792156135;
+	bh=ydm123mGL8fwAKZrVR0TWH7rgYODtU/Y50sJYco2ssE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Ze7XpP9rfn4dM9JT9IDT96nclk6+zzcwPqXeLBz7C5E8DjF6F2NSoVxaBrr3e34ej
-	 uIMvW735P4Z3l7tMciR+VYJkpZzkwg/TJV7rLwQTZ1hsVXDUdOx7UXB3f4kRJHv+is
-	 qKsoRdzik3tLuLZKvDh/OYCbj+xd7d18GXyRp3G8+9C9+7wqVZAKN1YsP3mThZitLQ
-	 6buuTKnB2pysGS2zzTfLlYSXv5TswTH5HB8lM7ed1OpeoSxfAppJP0K2tvVxiZc4Bx
-	 35fQZG2cHrXT6aNfGTiUUMWAHoV65kGc7T1XolEeCthzkwoYqISHIKLfsRbWaNv7+N
-	 bcEXq4G08WzQg==
+	b=CUcJj9Ccg7RYe7sKSf+wTObYbzO8Htdn5QA+o57B1R378Mo6xhGv5SMopng+hwup5
+	 IeYhU+fTCze79gDOOvQENzfx8JdxuswbD235dlqZt9W7PON3Iyx+yNm2gYErR60t5F
+	 8UbB1al65LB95AgMJaykDW/XnKWhCYXrWWzIic3DpsS6VUjbx0GMyII/Vsi13R28fi
+	 3NrR8OfxhrB7ofpfQ5oDjydVmpbD/q2SuHBr9ftJyvywvStjq5W0SuHQ9+/O2Rlktf
+	 lrUxb4fXShAN+buytX39H+eCFYGmOPTtWpcaRFgL6bxRTRQ/1lhqLO6+PA7ilhHqzS
+	 JZTt/YIUXOL6Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5CC6460B64;
-	Fri, 16 Oct 2026 13:08:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5B1F560B6C;
+	Fri, 16 Oct 2026 13:08:55 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 511DE255
+ by lists1.osuosl.org (Postfix) with ESMTP id 5EBEFF45
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:08:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 359E7814F2
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3E7B3814FE
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:08:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6xW29SBHwHnc for <buildroot@buildroot.org>;
+ id yayXcz6L_PvT for <buildroot@buildroot.org>;
  Fri, 16 Oct 2026 13:08:26 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org DA39C814A0
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org C9B6C81489
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792156106;
- b=DO1AMdERPBmOMw9klBPSFGp+fPCpzYWqP1d5M5YrS43yper766lh8pk5MVMn0aiR5+ky
- HV2yrSQEMkeTzUFs09bN8Ctvf0hwmVvMaz/N8ylgXvE8CQk3QBhTQFO7a/Vao0e/GF9yH
- kvCXBSvPFT58UWfFkU8DNE4DU8tLJdrHg+ep7IFG0jkTMyayM8hpDgbYx+QxJRiLBrroo
- eBl2idqjSYh3Umwdw5S0bo4UFchwqRIimk5fRyZ1lxDQegRwy9r2vGUlObRGpAHWJu5oR
- AEIQlP1rCopAOK2chu4cgjCWJQie5gGI0j0VvuuUfADlPce/of62kseYPRDKH7Lf1Gg==
+ b=Z6MBaYI92K+CZwdaMx9x8ZgTUab+45nY2Asw9bQcP5HAMr2243UC1QkzCwSEpGS1pmmL
+ 8OiIpaoRKUEurNIQr9BCTfO0eW1zALNzfoginoYERO4T7XLa8hQCAh6vQT+CpqYEAk1B7
+ 7bEACzIrFpC1RQMh6LdeXPLiu1mIVZKBjgFWMfIznHQVjt5e+KklTD82/4E0+5+t+zQt+
+ xU1RkqUOiuI5bNCrNeZvbHghaI8pE80Rg18P+qnqjNm9ExKjLEv862pHolNBWNUUQDvIh
+ JPSvjDJE03BeYH/8YrffStWfSYzwkEMsBlpBdzlhm5bJc3WzaJzbverGffckt7YH2iw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1792156106;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=usdlfTicA7HlwSj3EPGM+VB2OG2WQ9Iw5ChQglozGJE=;
- b=XFndNTeayhqO1PJNzVsotKc2TrFK8Jp0/M1q6Nzg9ZeC8TDsYfzH4DkuLDtv7ForvDy2
- h0yVeV2sem1DRl8jdmnGo85E6Jua63tsPv4hJyJ0T/5JfPInSSRC18HN0UzyQrlyZuQKY
- dC8x1cW7H9Ev4QePCaDbd8n69Wk3f9GF+1A3EXDnAtKfCjqhiqvtUmcILdFrUI+CUA3TL
- r6vqkDoDfl82R5f1V5+XCCGKtrFA/oeHtOw/ylhxv6dsWzxSeTn0oV+XedWHZZvarN96U
- xMq4boGKTc35Mh6YWu3LYpDMi+iFuYrUseGTFb6wMxn6VKVYxtmJ0IaMfiwFtFwoB0w==
+ bh=H7KY0+jjMIuzr3NDeZUxQcFsRTBCQMwfdNJRmDWr/oM=;
+ b=aaw7y5kgdLcx4pKlvESEY1a/RCgjztPTDhMNfMhPTUpyKKxxcBeOHIu0FHjRGajPRNym
+ 4+oY/TX7Z/QVLS23Pdxp8x3nuBT5vA1kY6n/ysl5G1tyYFp3n9gwj1y4ZvX2sSI89qAHj
+ iWYex/V8WJMmUKByAkWZld3GVAVo80RflHi4fB6z/K4qfs1AqgJap/cviZz/PMCbhI5jE
+ bjAqvPs8CkXXjEpLXUT/YpGLHCaktDMCeVgrAXOubFMwe9NgZ1gKqdVGhg5Nf+SNiOjnF
+ dHMYUdp+OYSasHikGxwShYMwIC0HWhZm55RXh/rEqoZ5mLSg7Ao8RP7ycZVPXy5LR9Q==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DA39C814A0
+ by smtp1.osuosl.org (Postfix) with ESMTP id C9B6C81489
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:08:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CA95F960D5; Fri, 16 Oct 2026 13:07:05 +0000 (UTC)
+ id B8286960DA; Fri, 16 Oct 2026 13:07:05 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 16 Oct 2026 15:07:51 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: d4c72064f96e5a476342d59a3fcd3950c5798741
-X-Git-Newrev: 0c731cc26cd5f50d10504fe91c6440960325a686
+X-Git-Oldrev: 7acb39ec283fe02393ca469c6e8c53f442a7ad91
+X-Git-Newrev: 7d2d6f17772479a4508ac2113696d0d83672fa2d
 X-Patchwork-Hint: ignore
-Message-Id: <20261016130705.CA95F960D5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/gpsd: backport
- security fixes for CVE-2026-58459
+Message-Id: <20261016130705.B8286960DA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/mbedtls: security
+ bump to v3.6.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,223 +114,198 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1437090783959795487=="
+Content-Type: multipart/mixed; boundary="===============4835153790886487509=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1437090783959795487==
+--===============4835153790886487509==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0c731cc26cd5f50d10504fe91c6440960325a686
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7d2d6f17772479a4508ac2113696d0d83672fa2d
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8cfad4f0f4b9fcb616b99b0fc6ae01e460d909d5)
+For more information about the release, see:
+
+- https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.7
+- https://github.com/Mbed-TLS/mbedtls/compare/mbedtls-3.6.6..mbedtls-3.6.7
+
+Fixes the following vulnerabilities:
+
+- CVE-2026-50587:
+    Timing side-channel in RSA PKCS#1 v1.5 decryption
+
+For more information, see:
+ - https://www.cve.org/CVERecord?id=CVE-2026-50587
+ - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-rsa-pkcs1-v15-decryption-timing-side-channel/
+
+- CVE-2026-50581:
+    Extended master secret calculation failure ignored
+
+For more information, see:
+ - https://www.cve.org/CVERecord?id=CVE-2026-50581
+ - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-extended-master-secret-calculation-failure-ignored/
+
+- CVE-2026-50640:
+    Ignored TLS 1.3 resumption secret derivation error
+
+For more information, see:
+ - https://www.cve.org/CVERecord?id=CVE-2026-50640
+ - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-ignored-tls13-resumption-secret-derivation-error/
+
+- CVE-2026-50713:
+    Heap corruption with early renegotiation after corrupted record
+    in DTLS
+
+For more information, see:
+ - https://www.cve.org/CVERecord?id=CVE-2026-50713
+ - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-heap-corruption-early-renegotiation-corrupted-dtls-record/
+
+- CVE-2026-50584:
+    ChaCha20 counter overflow can reuse keystream
+
+For more information, see:
+ - https://www.cve.org/CVERecord?id=CVE-2026-50584
+ - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-chacha20-counter-overflow-keystream-reuse/
+
+- CVE-2026-73096:
+    TLS 1.3 early data integrity failure due to buffered plaintext
+    across key change
+
+For more information, see:
+ - https://www.cve.org/CVERecord?id=CVE-2026-73096
+ - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-tls13-early-data-integrity-failure-key-change/
+
+- CVE-2026-35336:
+    Possible buffer overflow in mbedtls_ecdh_calc_secret()
+
+For more information, see:
+ - https://www.cve.org/CVERecord?id=CVE-2026-35336
+ - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-possible-buffer-overflow-ecdh-calc-secret/
+
+- CVE-2026-50580:
+    Remote buffer overflow in TLS 1.2 ECDHE-PSK client handshake
+
+For more information, see:
+ - https://www.cve.org/CVERecord?id=CVE-2026-50580
+ - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-tls12-ecdhe-psk-client-buffer-overflow/
+
+- CVE-2026-54435:
+    Side channel leak in ECC optimized modp
+
+For more information, see:
+ - https://www.cve.org/CVERecord?id=CVE-2026-54435
+ - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-ecc-optimized-modp-side-channel/
+
+- CVE-2026-50586:
+    Information disclosure in TLS 1.2 NewSessionTicket
+
+For more information, see:
+ - https://www.cve.org/CVERecord?id=CVE-2026-50586
+ - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-tls12-newsessionticket-information-disclosure/
+
+- CVE-2026-50583:
+    Out-of-bounds read when parsing a zero-length ECC public key
+
+For more information, see:
+ - https://www.cve.org/CVERecord?id=CVE-2026-50583
+ - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-zero-length-ecc-public-key-oob-read/
+
+- CVE-2026-50588:
+    Out-of-bounds read in TLS 1.2 EC J-PAKE ServerKeyExchange
+    parsing
+
+For more information, see:
+ - https://www.cve.org/CVERecord?id=CVE-2026-50588
+ - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-tls12-ecjpake-serverkeyexchange-oob-read/
+
+- CVE-2026-50579:
+    Use-after-free in mbedtls_pkcs7_free() when reusing a PKCS7
+    context
+
+For more information, see:
+ - https://www.cve.org/CVERecord?id=CVE-2026-50579
+ - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-use-after-free-pkcs7-free-reused-context/
+
+- CVE-2026-54441:
+    Signature algorithm restrictions not enforced on certificate
+    chain
+
+For more information, see:
+ - https://www.cve.org/CVERecord?id=CVE-2026-54441
+ - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-signature-algorithm-restrictions-certificate-chain/
+
+- CVE-2026-50585:
+    Incomplete context reset in mbedtls_ssl_session_reset()
+
+For more information, see:
+ - https://www.cve.org/CVERecord?id=CVE-2026-50585
+ - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-ssl-session-reset-incomplete-context-reset/
+
+- CVE-2026-73064:
+    A random generator fault can compromise TLS data integrity
+
+For more information, see:
+ - https://www.cve.org/CVERecord?id=CVE-2026-73064
+ - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-random-generator-fault-tls-integrity/
+
+- CVE-2026-25832:
+    TLS 1.3 client accepts HelloRetryRequest selecting an
+    unadvertised group
+
+For more information, see:
+ - https://www.cve.org/CVERecord?id=CVE-2026-25832
+ - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-tls13-hrr-unadvertised-group/
+
+- CVE-2026-49300:
+    X.509 CA bit forgery via invalid basicConstraints extension
+
+For more information, see:
+ - https://www.cve.org/CVERecord?id=CVE-2026-49300
+ - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-x509-ca-bit-forgery-invalid-basicconstraints/
+
+It also fixes the following issue, which has no CVE identifier:
+
+- PKCS7 signed data verification accepts weak hash algorithms
+
+For more information, see:
+ - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-pkcs7-weak-hash-algorithms-accepted/
+
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Assisted-by: Claude:claude-opus-5
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 45903c02e328712370b25c756050155c5fbdc5fd)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- ...psprof.py.in-Quote-double-quotes-in-title.patch | 50 ++++++++++++++++++
- ...s-gpsprof.py.in-Quote-back-ticks-in-title.patch | 48 +++++++++++++++++
- ...s-gpsprof.py.in-Quote-back-ticks-in-title.patch | 60 ++++++++++++++++++++++
- package/gpsd/gpsd.mk                               |  6 +++
- 4 files changed, 164 insertions(+)
+ package/mbedtls/mbedtls.hash | 4 ++--
+ package/mbedtls/mbedtls.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gpsd/0001-clients-gpsprof.py.in-Quote-double-quotes-in-title.patch b/package/gpsd/0001-clients-gpsprof.py.in-Quote-double-quotes-in-title.patch
-new file mode 100644
-index 0000000000..8be7040fa5
---- /dev/null
-+++ b/package/gpsd/0001-clients-gpsprof.py.in-Quote-double-quotes-in-title.patch
-@@ -0,0 +1,50 @@
-+From 5581ba196d826a984fbfaf792b7d58535f9911ce Mon Sep 17 00:00:00 2001
-+Message-ID: <5581ba196d826a984fbfaf792b7d58535f9911ce.1791178679.git.yann.morin@orange.com>
-+From: "Gary E. Miller" <gem@rellim.com>
-+Date: Wed, 1 Jul 2026 17:55:57 -0700
-+Subject: [PATCH] clients/gpsprof.py.in: Quote double quotes in title.
-+
-+Someone could use the double quote to break out of the
-+string and add gnuplot commnds.
-+
-+For issue 404.
-+Reported by: CuB3y0nd, and Wade Sparks <wsparks@vulncheck.com>
-+Upstream: https://gitlab.com/gpsd/gpsd/-/commit/5581ba196d826a984fbfaf792b7d58535f9911ce
-+CVE: CVE-2026-58459
-+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-+
-+---
-+ clients/gpsprof.py.in | 8 ++++++--
-+ 1 file changed, 6 insertions(+), 2 deletions(-)
-+
-+diff --git a/clients/gpsprof.py.in b/clients/gpsprof.py.in
-+index 5c18f50ff..261e72665 100644
-+--- a/clients/gpsprof.py.in
-++++ b/clients/gpsprof.py.in
-+@@ -198,6 +198,10 @@ class plotter(object):
-+         if 'subtype' in self.device:
-+             desc += "\\n%s" % self.device['subtype']
-+ 
-++        # escape ", and \n, for gnuplot, to not break strings
-++        desc = desc.replace('"', '\\042')
-++        desc = desc.replace('\n', '')
-++
-+         return desc
-+ 
-+     def collect(self, verb, log_fp=None):
-+@@ -1262,10 +1266,10 @@ if __name__ == '__main__':
-+         # Ship the plot to standard output
-+         if not options.title:
-+             options.title = plot.whatami()
-+-            # escape " for gnuplot
-+-            options.title = options.title.replace('"', '\\"')
-+         if options.subtitle:
-+             options.title += '\\n' + options.subtitle
-++        # escape " for gnuplot, to not break strings
-++        options.title = options.title.replace('"', '\\042')
-+         term_opts = ""
-+         truecolor_terms = ['png', 'sixelgd', 'wxt']
-+         if options.terminal in truecolor_terms:
-+-- 
-+2.43.0
-+
-diff --git a/package/gpsd/0002-clients-gpsprof.py.in-Quote-back-ticks-in-title.patch b/package/gpsd/0002-clients-gpsprof.py.in-Quote-back-ticks-in-title.patch
-new file mode 100644
-index 0000000000..53e1cac1cc
---- /dev/null
-+++ b/package/gpsd/0002-clients-gpsprof.py.in-Quote-back-ticks-in-title.patch
-@@ -0,0 +1,48 @@
-+From 1a6bb7bcbdf58aa940132e630870af061dc88537 Mon Sep 17 00:00:00 2001
-+Message-ID: <1a6bb7bcbdf58aa940132e630870af061dc88537.1791178680.git.yann.morin@orange.com>
-+From: "Gary E. Miller" <gem@rellim.com>
-+Date: Tue, 7 Jul 2026 13:41:54 -0700
-+Subject: [PATCH] clients/gpsprof.py.in: Quote back ticks in title.
-+
-+Someone could use the back tick to break out of the string and add
-+gnuplot commnds.
-+
-+For issue 404.
-+Reported by: CuB3y0nd, and Wade Sparks <wsparks@vulncheck.com>
-+Upstream: https://gitlab.com/gpsd/gpsd/-/commit/1a6bb7bcbdf58aa940132e630870af061dc88537
-+CVE: CVE-2026-58459
-+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-+
-+---
-+ clients/gpsprof.py.in | 6 ++++--
-+ 1 file changed, 4 insertions(+), 2 deletions(-)
-+
-+diff --git a/clients/gpsprof.py.in b/clients/gpsprof.py.in
-+index 261e72665..202214769 100644
-+--- a/clients/gpsprof.py.in
-++++ b/clients/gpsprof.py.in
-+@@ -198,8 +198,9 @@ class plotter(object):
-+         if 'subtype' in self.device:
-+             desc += "\\n%s" % self.device['subtype']
-+ 
-+-        # escape ", and \n, for gnuplot, to not break strings
-++        # escape ", `, and \n, for gnuplot, to not break strings
-+         desc = desc.replace('"', '\\042')
-++        desc = desc.replace('`', '\\140')
-+         desc = desc.replace('\n', '')
-+ 
-+         return desc
-+@@ -1268,8 +1269,9 @@ if __name__ == '__main__':
-+             options.title = plot.whatami()
-+         if options.subtitle:
-+             options.title += '\\n' + options.subtitle
-+-        # escape " for gnuplot, to not break strings
-++        # escape ",  and`, for gnuplot, to not break strings
-+         options.title = options.title.replace('"', '\\042')
-++        options.title = options.title.replace('"', '\\140')
-+         term_opts = ""
-+         truecolor_terms = ['png', 'sixelgd', 'wxt']
-+         if options.terminal in truecolor_terms:
-+-- 
-+2.43.0
-+
-diff --git a/package/gpsd/0003-clients-gpsprof.py.in-Quote-back-ticks-in-title.patch b/package/gpsd/0003-clients-gpsprof.py.in-Quote-back-ticks-in-title.patch
-new file mode 100644
-index 0000000000..f2e875bb02
---- /dev/null
-+++ b/package/gpsd/0003-clients-gpsprof.py.in-Quote-back-ticks-in-title.patch
-@@ -0,0 +1,60 @@
-+From 4c06658e988f4ced1a7a574ce082a22ef625df56 Mon Sep 17 00:00:00 2001
-+Message-ID: <4c06658e988f4ced1a7a574ce082a22ef625df56.1791178681.git.yann.morin@orange.com>
-+From: "Gary E. Miller" <gem@rellim.com>
-+Date: Tue, 7 Jul 2026 14:23:56 -0700
-+Subject: [PATCH] clients/gpsprof.py.in: Quote back ticks in title.
-+
-+Second try.  Also quote "terminal".
-+
-+Someone could use the back tick to break out of the string and add
-+gnuplot commnds.
-+
-+For issue 404.
-+Reported by: CuB3y0nd, and Wade Sparks <wsparks@vulncheck.com>
-+Upstream: https://gitlab.com/gpsd/gpsd/-/commit/4c06658e988f4ced1a7a574ce082a22ef625df56
-+CVE: CVE-2026-58459
-+Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-+
-+---
-+ clients/gpsprof.py.in | 14 ++++++++++----
-+ 1 file changed, 10 insertions(+), 4 deletions(-)
-+
-+diff --git a/clients/gpsprof.py.in b/clients/gpsprof.py.in
-+index 202214769..e91367ee3 100644
-+--- a/clients/gpsprof.py.in
-++++ b/clients/gpsprof.py.in
-+@@ -200,7 +200,7 @@ class plotter(object):
-+ 
-+         # escape ", `, and \n, for gnuplot, to not break strings
-+         desc = desc.replace('"', '\\042')
-+-        desc = desc.replace('`', '\\140')
-++        desc = desc.replace("\x60", '\\140')
-+         desc = desc.replace('\n', '')
-+ 
-+         return desc
-+@@ -1271,13 +1271,19 @@ if __name__ == '__main__':
-+             options.title += '\\n' + options.subtitle
-+         # escape ",  and`, for gnuplot, to not break strings
-+         options.title = options.title.replace('"', '\\042')
-+-        options.title = options.title.replace('"', '\\140')
-++        options.title = options.title.replace("\x60", '\\140')
-+         term_opts = ""
-+         truecolor_terms = ['png', 'sixelgd', 'wxt']
-+         if options.terminal in truecolor_terms:
-+             term_opts = 'truecolor'
-+-        sys.stdout.write("set terminal %s size 800,950 %s\n"
-+-                         "set termoption enhanced\n"
-++
-++        # escape ", `, and \n, for gnuplot, to not break strings
-++        options.terminal = options.terminal.replace('"', '\\042')
-++        options.terminal = options.terminal.replace("\x60", '\\140')
-++        options.terminal = options.terminal.replace('\n', '')
-++
-++        sys.stdout.write('set terminal "%s" size 800,950 %s\n'
-++                         'set termoption enhanced\n'
-+                          % (options.terminal, term_opts))
-+         # double quotes on title so \n is parsed by gnuplot
-+         sys.stdout.write('set title noenhanced "%s\\n\\n"\n' % options.title)
-+-- 
-+2.43.0
-+
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 62144f46a7..e0428e2c04 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -9,6 +9,12 @@ GPSD_SITE = http://download-mirror.savannah.gnu.org/releases/gpsd
- GPSD_LICENSE = BSD-2-Clause
- GPSD_LICENSE_FILES = COPYING
- GPSD_CPE_ID_VALID = YES
-+
-+# 0001-clients-gpsprof.py.in-Quote-double-quotes-in-title.patch
-+# 0002-clients-gpsprof.py.in-Quote-back-ticks-in-title.patch
-+# 0003-clients-gpsprof.py.in-Quote-back-ticks-in-title.patch
-+GPSD_IGNORE_CVES = CVE-2026-58459
-+
- GPSD_SELINUX_MODULES = gpsd
- GPSD_INSTALL_STAGING = YES
+diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
+index f1be074e08..71c5612b48 100644
+--- a/package/mbedtls/mbedtls.hash
++++ b/package/mbedtls/mbedtls.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.6:
+-sha256  8fb65fae8dcae5840f793c0a334860a411f884cc537ea290ce1c52bb64ca007a  mbedtls-3.6.6.tar.bz2
++# From https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.7:
++sha256  a7e8bcbec0e6f761b4af24f25677626b35f762f68eef79c08677a363212d11f6  mbedtls-3.6.7.tar.bz2
+ # Locally calculated
+ sha256  9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b  LICENSE
+diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
+index 9def876808..3545c42ad0 100644
+--- a/package/mbedtls/mbedtls.mk
++++ b/package/mbedtls/mbedtls.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
+-MBEDTLS_VERSION = 3.6.6
++MBEDTLS_VERSION = 3.6.7
+ MBEDTLS_SITE = https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-$(MBEDTLS_VERSION)
+ MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION).tar.bz2
+ MBEDTLS_CONF_OPTS = \
 
---===============1437090783959795487==
+--===============4835153790886487509==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -341,4 +316,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============1437090783959795487==--
+--===============4835153790886487509==--
