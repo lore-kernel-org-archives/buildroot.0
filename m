@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4121CC6B38
-	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 15:05:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBE37CCA46C
+	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 15:05:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 60DE181697;
-	Fri, 16 Oct 2026 15:05:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7D62E40AD9;
+	Fri, 16 Oct 2026 15:05:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fnHnj6TrBtGz; Fri, 16 Oct 2026 15:05:21 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 31E14816F5
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792163121;
-	b=FwRRwGrJpts6/5WaVXr5h4x4pf8q+azQUxpMeJFf4wFrQRD76q/YcyJWdhc7rtQviM4E
-	 UaoRh8kAl0ldgxzCJGBHyF/MGG1Dy6AYllHpOyDblSPTWHL07DNp/IRH74W2euBKjt3Jl
-	 0RkLGQtPsuJM9GELWaK9nUF8dNaAZXsDvNSIZlAMRBd20QvFl4DwQ7yvaYjHZczdslYlX
-	 AMSR6pBgcdNSY+6/TMzourvaimpe5i8mfGO+x2kx0Pf2eG88/CkPwwib1+OD/zCgbdUBr
-	 te11/FdNE2uXkdbbo6N5gv+oZ+bfvOiCMHGdDIHJuwYP38uRmHGh3wt57HUyTpAilhA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ymiizph_tytA; Fri, 16 Oct 2026 15:05:24 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 7FCF540B1B
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792163124;
+	b=Z5cV5Lym6xQfllGL2VcVDzUU61X2ztVCC2/vpFIXnV4xii0OpTSB79+dKKJN2vn/3c8s
+	 BdJ5uhEFTLuKi6rneBSho9OhL6Ehc/O2qLNX9Gy1nmIMOvmun/fyxObFLNQnLKqAkL0La
+	 qdDiD37UHB0qhxqhAxiwPuHHohVIR/NriR5qnokwfTpC/AKoDhvDOYzmB9J8Rry3hv3K3
+	 B+F7PtIiFMRRQ13V+DWMnf0LK9yqqNyFDl6WyXa2M6RuHALVuUzfmr7AmokTH8gEQuSJD
+	 DTsa5xOOb1dllU38i9diI1jDmO1roR61ZjwPpUvr/i5AppUa6o/L4Nsvo7r9aaPskxw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792163121;
+	c=relaxed/relaxed; t=1792163124;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,116 +31,117 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=WoPYKRag3O4peEg55N9/OYPWS5LaTiS7WIrqBYQzjk4=;
-	b=o6RkD9pXsjBGeGZcbHr+O31hZi6r9trftmIi42cS8ncpd6etJGooCagK16syyvcv49EF
-	 hV4oRP9NJDIczZhufy+rtFtd9OkbPgN1QrdizeZcsK0lX36oaAUNyZ0JVF4jd4id9w/Yq
-	 ygvaoAbEEVsm0EqazbVcWUaGSynhUxs0MKpU9btblSb+1OM7G3gprAk0OHWynB9cgiwCm
-	 rAv9eD6+EUWMrYSi9JKWxKNMPTQfcuVhXX2IvjOA9sccX3sp/n6Pfh8sAhgiaaW4L6Yo4
-	 rJkzOx6Q3SyU0Wj5MSfyle1y+oGxyrVzLozuqIfzMoGtP4jl0e7fxOKO1dFXq9h+iZA==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	bh=q/14Db5Tri0JShnWDOsIUD7l+oj+rTmXTT6G/T5zGQU=;
+	b=fGTlrC7asj43Et10NJVvl046Ce2ivfa4+hL4+WO1RBI9cIdt6hAZI6pCvNYcjp7ZVqG+
+	 qa2CHzowcnExVHkppWFVXuhpX8oMhy9EZHCVhWXTwSOfK0fgaGb9LVCapj424J4Ap54Vx
+	 0WMQvZIs6fLadd2jYgSj6WmA1ViHnl4XaOZjx3dPQd2bO3bfdTy2bLxXn4fVtvDezcNxm
+	 4Xr8pc8EY18AgWivES2c0sVNs2WJx/Gb8SbNZXxtzOsi2VIu4qp1msCpty7baPJ3N4K4S
+	 nT+3ov8DjIYXl5C4qlRt8kK7PClIaaOTygYJ3ywxv0+RLfSAEJ/d+AkCY0/cIdqQ0zw==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792163121;
-	bh=WoPYKRag3O4peEg55N9/OYPWS5LaTiS7WIrqBYQzjk4=;
+	s=default; t=1792163124;
+	bh=q/14Db5Tri0JShnWDOsIUD7l+oj+rTmXTT6G/T5zGQU=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=kXVN0cmkZA+OuwfrIyWHFfBmjbERVJCEBlIkIYpnspNmjIVtscyswK4tyYhhPbxng
-	 smrtaxWP8LEt8n10ViB9L8oj4qS2zZOm1OEUGLD06ySh22C2ypPlOaDpE2KQmRIlyl
-	 kuLN+oP7+Is5hCY6fW9K6OEAzYNMj2hMAUd58G34Om0q7BTaR4QDdkmrflJ3UQrJ0T
-	 WivD+bYoWKLL3ebtux+ynZaPZ9gdLlkoQESOOneJaU+27hS0zXTYpRCOoNFNOA8fS0
-	 vhEFYbP+aBnAGNkUwz2prvR4OXAl7o5e/o2rGSvcPSGjtg79+Mj3z3nN09DtY5gWQ/
-	 FhtPpsyOCs0Og==
+	b=AJXFBHyNV4Ji6/q8M2ZkYXZfTjKg9LalNNzVfiWCbkJ1O1jU/VcdqBHt5HpRpjpTy
+	 hGca/GjOL3Cx2i2fM5h1YaIMxo1lQJf3tPU6oti8SaHakH9cwoxABjtGzKi16q3eC1
+	 xQjLA2ofC1ET1RbNjrMbnT3cESdtNR2PNch7mlNgTEOIfSsOEwpCsj3A8W2FdWxYTD
+	 CbR8C76v4ouUx5iLqO1d+UjdhrYWaDxCV+ALqE9yq3vhQeNzbG9Ju2VMm6E8YsPrCL
+	 ENa1H+y4Ip64luIlOmliX2UBM6AfKy05W5vECWo7TDslEit66ZN7NHzCfa27mF635r
+	 woPCqaCtvjyhg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 31E14816F5;
-	Fri, 16 Oct 2026 15:05:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7FCF540B1B;
+	Fri, 16 Oct 2026 15:05:24 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 51E7B7AD
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:05:19 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 6C83D255
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:05:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3439D40BA3
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:05:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5243F40BA3
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:05:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E0uXwx3ebw1A for <buildroot@buildroot.org>;
- Fri, 16 Oct 2026 15:05:18 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org AB0B440B86
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792163118;
- b=hI1CIzYluN0PBk0/TRe9YVcJpx2GkMPlAIC/PUQWvOVJUNz/nCWZMilDOvaapYhwG1ow
- Y4N4Wcw/ZE0yOibGSAPqqUWILWLgBeg2wDe5FrcE432uIsa/ypNJnZLvUnbVYtaVUiHQE
- NYhR1AjFGTf2HJMWdOQKjGWAwS68Jm2HYFi0E21elw4ChkGLyM3Iwm4BWXDWTZRHzlSr8
- o9oqEqD7b6ld40YLfzPcQDhmLPazuzTR6KLESlpKIQwK8afXwkmXhkNjb5COofoo3OZW9
- NhaJa0B+1OYFDtxChlECHerBJV+E2qf8GkcFH4pb+fBFcEJGFbJtZJHkzLPBPuBsLsw==
+ id iH1OnvwoPrBo for <buildroot@buildroot.org>;
+ Fri, 16 Oct 2026 15:05:22 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 0D5B040AD9
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792163122;
+ b=aQbLCum9Xgho/WijnPMI43odPAKYpxgJ8qHmmDyNhntx4vFqWYwdgfW+kCDj2GiVLIIy
+ w9CXzE4Dl9hSPDqLcIvdenlr0Xrct+2eLmze57tX6C+00OvxVpjYVHCgopewFnMVJEn+L
+ WUu57mrDJz7rG82T7Sys9+xh4b8xsT1uHFZBmVCh8Jq4Br1IOyavOcXC5wZCA+WX1fvDV
+ r/qyoNuYhp9y2/SD/5RPyuiqu9TJFFW9DF9Ii2N0ISLPWOcNNNPbwghYNtwFpeEYneWBJ
+ W0taXCW+gLfXgClQ/bnNozIleorZGcVNU0Mi+iDkZnld38pBsGW6wpu7msjX1wrNOjQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792163118;
+ c=relaxed/relaxed; t=1792163122;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=ApghAdq+LVo/DNKcqzxoRDN/G1/4pRc/aAHP2je0w0g=;
- b=c84aY13kHvZKc6B/KwM32KcWfDv9Y3Q3ZfuyQHcyPynMPGuN78vzZoyGF0gcKufVCoir
- 0Se54vyDl6yY/SNbgC030iEmFsfw18LufTb7v3qzriQyNaleiJGlgVTnlRlej6cnmZpx+
- I6EY64IeQUze/XgLA0HJw0D9IHUo0kL/JrUJvol9Bg2Uzf+VXQa+oy1/Dom0qCyYCI1M9
- ngNqftKHQ+2jRyVktSnr7XME9U6xaYM0YDzUWdaQMXZO3/kxFyNAaF/fEV6yJXWWhxmsu
- hUEFj6YVdizW+ldAgJEt2dNvb/z+oeUqEtMDefldbo7wsrsYvBDNOf/yMjnRI5x6eQA==
+ bh=utDR8RR81mbSfcNv3z5WZC83yEfNMtZZx+4xmABoa5k=;
+ b=XMEilkRwWskO3ydPm9v0N1NiGdMAjefywBRBlHP3aO6b2MD+j/lz/K1aJkERSc6pmbiW
+ QM5uZ1u+wvL6g95fhYHmTyFEu4nvNu/oj38o6ka3UsWvxlF23l2yyzv+Le77HYx18WdfC
+ j7MqkN+ZjVtzaBr4pHUu9fC+RN47bsYt97J32tp508Jon5SCI0ExGhBsP6vLNrF2khvXz
+ U35KD1vjMUylc8KApV8Lf25MQOenHaJPoSELt2XwWglLoZZ+SEJvb99A+mjrwBj5zaGEa
+ wtBizDvuqgSA5zGCUEVERkU70Yafxvc3qhsBgWJp2EngPhNdffEqrFfDNw693Ka3hkQ==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
  dmarc=pass header.from=mind.be;
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=WWxkRA3q; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::32e"
+ header.s=google header.b=LUg1wBoh; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::32c"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AB0B440B86
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:05:17 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-49e73611928so7134605e9.1
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 08:05:17 -0700 (PDT)
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0D5B040AD9
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:05:21 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-4a16c1608faso1095655e9.0
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 08:05:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1792163116; x=1792767916;
+ d=1e100.net; s=20260707; t=1792163120; x=1792767920;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=ApghAdq+LVo/DNKcqzxoRDN/G1/4pRc/aAHP2je0w0g=;
- b=X+NTVHBxpYNFmdSZCpE8qowShVoxbJe0/p2L7SRBoWadtNiC9hL/fk2NBEhNUvKqYp
- 9aijNYc7pMU3FYON2UMCXP0gfTGAH4y1QPqH2K/D4k0V+bgaAAU++hT0hzVBS2EAgecp
- DlrdgU08h9RC7P4NLWH6AbJgGvpe56axQheNkiEwyemGwUwn49pAQq+tjVdvtjkkxitO
- BR+JbxDH9baIFd96IG1GPB1PM7QYo+IM5sjQ1v1aG/Pl1Dy2ah9plPt3oHgiFmG6+kSs
- KEdfLunNe117wxO54I2G11vo0pHMGPbXMKA1q1R6gSCOFkBvATyCDLQ8OGSskIZh+CBP
- aSwg==
-X-Gm-Message-State: AFq9FYLZvDojN6P+5jWb3sQ535ripVxvtACIeV16jch/KOB+9uAp0FyM
- T0mcOKZljBiTaNO6qUtxhr8Ub7QbkKuL3oDi8cCGLrl1fcx7o6vFn+uomgYolT1ah41ioVngzco
- MVjafedo=
-X-Gm-Gg: AYBFou2Na/VtHHHixfLaB7Dpj24lNu+yjErYQ6+lrx7GANXg5/1wz1bpaWq9a+QFKqP
- smTl5DgyIFMHR4fR46Zhhy8To8ID7ADbvz8tJcAOwJWdkfni6+InJbWnq28xEBQNyk60hTZQhr9
- PGAuBNBcmfMUN4U0Jedvx449ZBdHQw7l4oTX+Wnz4i04cd0a+mDU8JUIuAyDy7c0Hv/ig8Iwt/g
- CgF+eKNpPZ37dsIjkoDlKk6xUqAW452Dc4EKAMY6ozA66jzVr7O9m4Pj/2qlAC1pctJbP6aVrbd
- B3YCfL9kzBCk2q8EDq0kgy1RT2myXEYR9h/3wJzQxZQMgwgMXWhAh1qsE3nsbomswbuq9WfQhj4
- 6PtueBcdnU2wr81CTl3BxO3xkpA+vgAKrJSeDMEozLfBUxhm3znTtyXoC6sHbLtUxYJaQomsWHS
- 6XtseimBQrfkZMfqkluEMI01VPeVkwwibbc6zI9a1mbQmqSfR3Ja4BApiVqFH29UW6ZeR9LGAwI
- W1r8S1vnPekkNiyc74KmtA6BYAP1glmN5vYml8lzw==
-X-Received: by 2002:a7b:c842:0:b0:4a1:d291:d863 with SMTP id
- 5b1f17b1804b1-4a1d291da56mr23426515e9.4.1792163114959; 
- Fri, 16 Oct 2026 08:05:14 -0700 (PDT)
+ bh=utDR8RR81mbSfcNv3z5WZC83yEfNMtZZx+4xmABoa5k=;
+ b=tKPGx8yyTDgxXUvbT5T1fw1oy9jYyEJwVz9AaueDbldkAbEs+lXbT7DqSOrGQUhdPC
+ KBXdOwI/b2GastCQfm9gWwX85ly6zaTIsK2EqolIAw/berhA/HI52L/PxEuP/WNyt8PR
+ ixmFPxlpjuSqESptUJmAsHIXKeFHv0reezTzb3HPnbj7EgR5I3KgRFEgkI1WO1gnGHxZ
+ 5XGXwvQqDJGc04zr3ULvsBiax0N1RxKMfmWx4r4o+FL5dDuRwVSo99kCZ2GuxdOa10Cc
+ ohzbpZiiOoQOfTGKYvqG61b8rpvgitKFccoIWoVm254gV/HxjisfYobKfJopLJPHyraH
+ Y8lA==
+X-Gm-Message-State: AFq9FYIUf7hgQ26ZNuJ1BjiLYeVexbECYUwhrRZ2l1cttD/qlP1C7Hr0
+ Id9Q9YbLATDxXkahZbmkxdQ3vuMshVFimwL5dySnymZdKLKZqhuOnv30S0D4LSb0JTwBUufv+cx
+ 1hgm5P6I=
+X-Gm-Gg: AYBFou3PioGwnwyjeSG+GjLJCUdd1dVZYpjakIgBI3x4dtBKQbhEr2yVTyVlgnBn1M+
+ wPHwWWhvu6NRbDDb2926ll3kk0YUm/TBnZODaInaC1lWkIOPluIztxckcaMIwckio5Wahxm3a5Q
+ 2VbKcepbwiVU5giNofeEZEx7nrNCZQw5s/1x9H5pMzfYRr5ZphKRugL2/llpBJTFDTIIECS7crX
+ DT2C30SPvpyXL5od1h39LwGH1vIw38Q/AnZwe1OUMzq9BVFKyJgxUcqx1XskoHYVZMWziV2Rlyu
+ gVmal3Ue+JDogff2/QT1YPdabdirDqWd1U2E8S42rtEB7b9eqRxZh1Uigs8p7cfxnYfQWYzrEFX
+ nA2/NdmrTLFNwZDvPDTzrx3bVShz3OyTp8byZcfnQD7Bq4U/PxfMLMz8nNKcyaY+wx8EtS9si6d
+ Xq4ZJFf4T5uT43RjUEKfQV7Sp3Df8jGyyZVyR1czP0EPr+bMwW5spX1hIcOWEYyk8wde2D2eyk/
+ fKtHWJNya9InuLWQhQrf3gfuSEdCULMdYCI01Elxw==
+X-Received: by 2002:a05:600c:c8d:b0:49e:63cc:6324 with SMTP id
+ 5b1f17b1804b1-4a1d75f2bacmr1654575e9.6.1792163119562; 
+ Fri, 16 Oct 2026 08:05:19 -0700 (PDT)
 Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
  [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48dfd50d1bcsm5669637f8f.54.2026.10.16.08.05.14
+ 5b1f17b1804b1-4a1c9a6787bsm39719075e9.1.2026.10.16.08.05.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 16 Oct 2026 08:05:14 -0700 (PDT)
+ Fri, 16 Oct 2026 08:05:18 -0700 (PDT)
 To: buildroot@buildroot.org,
-	Yegor Yefremov <yegorslists@googlemail.com>
+	Bernd Kuhls <bernd@kuhls.net>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 16 Oct 2026 17:05:10 +0200
-Message-ID: <20261016150513.73502-1-raphael.melotte@mind.be>
+Date: Fri, 16 Oct 2026 17:05:15 +0200
+Message-ID: <20261016150517.73663-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261005135659.758139-1-yegorslists@gmail.com>
+In-Reply-To: <20261006162106.3439373-25-bernd@kuhls.net>
 References: 
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/mbedtls: security bump to v3.6.7
+Subject: Re: [Buildroot] [PATCH v8 24/84] package/snort3: fix build error
+ with numa support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -161,186 +162,113 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> For more information about the release, see:
+> Buildroot commit 5e78c6cf3323b4a45f84bcbc504f511dd268e270 bumped the
+> package from 3.1.40.0 to 3.11.1.0. Upstream commit
+> https://github.com/snort3/snort3/commit/83e9a2dda250a0ced9a105454a5a4fe59c304601
+> added numa support, first included in release 3.1.65.0.
 > 
-> - https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.7
-> - https://github.com/Mbed-TLS/mbedtls/compare/mbedtls-3.6.6..mbedtls-3.6.7
+> This causes a build error due to the numactl package being pulled-in as
+> optional dependency by hwloc, the latter being a hard dependency of
+> snort3.
 > 
-> Fixes the following vulnerabilities:
+> Fixes:
+> https://autobuild.buildroot.net/results/e8a/e8a9d787973fd109c07c185103de1f9f7339d506/
 > 
-> - CVE-2026-50587:
->     Timing side-channel in RSA PKCS#1 v1.5 decryption
-> 
-> For more information, see:
->  - https://www.cve.org/CVERecord?id=CVE-2026-50587
->  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-rsa-pkcs1-v15-decryption-timing-side-channel/
-> 
-> - CVE-2026-50581:
->     Extended master secret calculation failure ignored
-> 
-> For more information, see:
->  - https://www.cve.org/CVERecord?id=CVE-2026-50581
->  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-extended-master-secret-calculation-failure-ignored/
-> 
-> - CVE-2026-50640:
->     Ignored TLS 1.3 resumption secret derivation error
-> 
-> For more information, see:
->  - https://www.cve.org/CVERecord?id=CVE-2026-50640
->  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-ignored-tls13-resumption-secret-derivation-error/
-> 
-> - CVE-2026-50713:
->     Heap corruption with early renegotiation after corrupted record
->     in DTLS
-> 
-> For more information, see:
->  - https://www.cve.org/CVERecord?id=CVE-2026-50713
->  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-heap-corruption-early-renegotiation-corrupted-dtls-record/
-> 
-> - CVE-2026-50584:
->     ChaCha20 counter overflow can reuse keystream
-> 
-> For more information, see:
->  - https://www.cve.org/CVERecord?id=CVE-2026-50584
->  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-chacha20-counter-overflow-keystream-reuse/
-> 
-> - CVE-2026-73096:
->     TLS 1.3 early data integrity failure due to buffered plaintext
->     across key change
-> 
-> For more information, see:
->  - https://www.cve.org/CVERecord?id=CVE-2026-73096
->  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-tls13-early-data-integrity-failure-key-change/
-> 
-> - CVE-2026-35336:
->     Possible buffer overflow in mbedtls_ecdh_calc_secret()
-> 
-> For more information, see:
->  - https://www.cve.org/CVERecord?id=CVE-2026-35336
->  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-possible-buffer-overflow-ecdh-calc-secret/
-> 
-> - CVE-2026-50580:
->     Remote buffer overflow in TLS 1.2 ECDHE-PSK client handshake
-> 
-> For more information, see:
->  - https://www.cve.org/CVERecord?id=CVE-2026-50580
->  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-tls12-ecdhe-psk-client-buffer-overflow/
-> 
-> - CVE-2026-54435:
->     Side channel leak in ECC optimized modp
-> 
-> For more information, see:
->  - https://www.cve.org/CVERecord?id=CVE-2026-54435
->  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-ecc-optimized-modp-side-channel/
-> 
-> - CVE-2026-50586:
->     Information disclosure in TLS 1.2 NewSessionTicket
-> 
-> For more information, see:
->  - https://www.cve.org/CVERecord?id=CVE-2026-50586
->  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-tls12-newsessionticket-information-disclosure/
-> 
-> - CVE-2026-50583:
->     Out-of-bounds read when parsing a zero-length ECC public key
-> 
-> For more information, see:
->  - https://www.cve.org/CVERecord?id=CVE-2026-50583
->  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-zero-length-ecc-public-key-oob-read/
-> 
-> - CVE-2026-50588:
->     Out-of-bounds read in TLS 1.2 EC J-PAKE ServerKeyExchange
->     parsing
-> 
-> For more information, see:
->  - https://www.cve.org/CVERecord?id=CVE-2026-50588
->  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-tls12-ecjpake-serverkeyexchange-oob-read/
-> 
-> - CVE-2026-50579:
->     Use-after-free in mbedtls_pkcs7_free() when reusing a PKCS7
->     context
-> 
-> For more information, see:
->  - https://www.cve.org/CVERecord?id=CVE-2026-50579
->  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-use-after-free-pkcs7-free-reused-context/
-> 
-> - CVE-2026-54441:
->     Signature algorithm restrictions not enforced on certificate
->     chain
-> 
-> For more information, see:
->  - https://www.cve.org/CVERecord?id=CVE-2026-54441
->  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-signature-algorithm-restrictions-certificate-chain/
-> 
-> - CVE-2026-50585:
->     Incomplete context reset in mbedtls_ssl_session_reset()
-> 
-> For more information, see:
->  - https://www.cve.org/CVERecord?id=CVE-2026-50585
->  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-ssl-session-reset-incomplete-context-reset/
-> 
-> - CVE-2026-73064:
->     A random generator fault can compromise TLS data integrity
-> 
-> For more information, see:
->  - https://www.cve.org/CVERecord?id=CVE-2026-73064
->  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-random-generator-fault-tls-integrity/
-> 
-> - CVE-2026-25832:
->     TLS 1.3 client accepts HelloRetryRequest selecting an
->     unadvertised group
-> 
-> For more information, see:
->  - https://www.cve.org/CVERecord?id=CVE-2026-25832
->  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-tls13-hrr-unadvertised-group/
-> 
-> - CVE-2026-49300:
->     X.509 CA bit forgery via invalid basicConstraints extension
-> 
-> For more information, see:
->  - https://www.cve.org/CVERecord?id=CVE-2026-49300
->  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-x509-ca-bit-forgery-invalid-basicconstraints/
-> 
-> It also fixes the following issue, which has no CVE identifier:
-> 
-> - PKCS7 signed data verification accepts weak hash algorithms
-> 
-> For more information, see:
->  - https://mbed-tls.readthedocs.io/en/latest/security-advisories/mbedtls-security-advisory-2026-07-pkcs7-weak-hash-algorithms-accepted/
-> 
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> Assisted-by: Claude:claude-opus-5
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Applied to 2025.02.x, 2026.08.x. Thanks
+Applied to 2026.08.x. Thanks
 
 > ---
->  package/mbedtls/mbedtls.hash | 4 ++--
->  package/mbedtls/mbedtls.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+>  .../0001-Rename-numa.h-to-numa_snort.h.patch  | 79 +++++++++++++++++++
+>  1 file changed, 79 insertions(+)
+>  create mode 100644 package/snort3/0001-Rename-numa.h-to-numa_snort.h.patch
 > 
-> diff --git a/package/mbedtls/mbedtls.hash b/package/mbedtls/mbedtls.hash
-> index f1be074e08..71c5612b48 100644
-> --- a/package/mbedtls/mbedtls.hash
-> +++ b/package/mbedtls/mbedtls.hash
-> @@ -1,4 +1,4 @@
-> -# From https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.6:
-> -sha256  8fb65fae8dcae5840f793c0a334860a411f884cc537ea290ce1c52bb64ca007a  mbedtls-3.6.6.tar.bz2
-> +# From https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.7:
-> +sha256  a7e8bcbec0e6f761b4af24f25677626b35f762f68eef79c08677a363212d11f6  mbedtls-3.6.7.tar.bz2
->  # Locally calculated
->  sha256  9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b  LICENSE
-> diff --git a/package/mbedtls/mbedtls.mk b/package/mbedtls/mbedtls.mk
-> index 9def876808..3545c42ad0 100644
-> --- a/package/mbedtls/mbedtls.mk
-> +++ b/package/mbedtls/mbedtls.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -MBEDTLS_VERSION = 3.6.6
-> +MBEDTLS_VERSION = 3.6.7
->  MBEDTLS_SITE = https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-$(MBEDTLS_VERSION)
->  MBEDTLS_SOURCE = mbedtls-$(MBEDTLS_VERSION).tar.bz2
->  MBEDTLS_CONF_OPTS = \
+> diff --git a/package/snort3/0001-Rename-numa.h-to-numa_snort.h.patch b/package/snort3/0001-Rename-numa.h-to-numa_snort.h.patch
+> new file mode 100644
+> index 0000000000..ca8f7774f1
+> --- /dev/null
+> +++ b/package/snort3/0001-Rename-numa.h-to-numa_snort.h.patch
+> @@ -0,0 +1,79 @@
+> +From 3bb2a8fc1244fcbdf24235e541fa2a06a655dcea Mon Sep 17 00:00:00 2001
+> +From: Bernd Kuhls <bernd@kuhls.net>
+> +Date: Tue, 8 Sep 2026 21:20:04 +0200
+> +Subject: [PATCH] Rename numa.h to numa_snort.h
+> +
+> +Fixes https://github.com/snort3/snort3/issues/368
+> +
+> +and a build error seen with gcc 15.1.0 by the buildroot autobuilders:
+> +https://autobuild.buildroot.net/results/e8a/e8a9d787973fd109c07c185103de1f9f7339d506/build-end.log
+> +
+> +/home/autobuild/autobuild/instance-44/output-1/build/snort3-3.11.1.0/src/main/numa.h:
+> + In member function 'virtual int NumaWrapper::available()':
+> +/home/autobuild/autobuild/instance-44/output-1/build/snort3-3.11.1.0/src/main/numa.h:50:16:
+> + error: 'numa_available' was not declared in this scope; did you mean 'available'?
+> +   50 |         return numa_available();
+> +
+> +/home/autobuild/autobuild/instance-44/output-1/build/snort3-3.11.1.0/src/main/numa.h:
+> + In member function 'virtual int NumaWrapper::max_node()':
+> +/home/autobuild/autobuild/instance-44/output-1/build/snort3-3.11.1.0/src/main/numa.h:54:16:
+> + error: 'numa_max_node' was not declared in this scope; did you mean 'max_node'?
+> +   54 |         return numa_max_node();
+> +
+> +Upstream: https://github.com/snort3/snort3/pull/479
+> +
+> +Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> +---
+> + src/main/CMakeLists.txt           | 2 +-
+> + src/main/numa.cc                  | 2 +-
+> + src/main/{numa.h => numa_snort.h} | 0
+> + src/main/thread_config.h          | 2 +-
+> + 4 files changed, 3 insertions(+), 3 deletions(-)
+> + rename src/main/{numa.h => numa_snort.h} (100%)
+> +
+> +diff --git a/src/main/CMakeLists.txt b/src/main/CMakeLists.txt
+> +index 117612b94..e4e816d15 100644
+> +--- a/src/main/CMakeLists.txt
+> ++++ b/src/main/CMakeLists.txt
+> +@@ -23,7 +23,7 @@ endif ( ENABLE_SHELL )
+> + add_subdirectory(test)
+> + 
+> + if ( HAVE_NUMA )
+> +-    set ( NUMA_SOURCES numa.h numa.cc)
+> ++    set ( NUMA_SOURCES numa_snort.h numa.cc)
+> + endif( HAVE_NUMA )
+> + 
+> + add_library (main OBJECT
+> +diff --git a/src/main/numa.cc b/src/main/numa.cc
+> +index 259f776b7..5cb23e26b 100644
+> +--- a/src/main/numa.cc
+> ++++ b/src/main/numa.cc
+> +@@ -17,7 +17,7 @@
+> + //--------------------------------------------------------------------------
+> + // numa.cc author Denys Zikratyi <dzikraty@cisco.com>
+> + 
+> +-#include "numa.h"
+> ++#include "numa_snort.h"
+> + 
+> + #ifdef HAVE_CONFIG_H
+> + #include "config.h"
+> +diff --git a/src/main/numa.h b/src/main/numa_snort.h
+> +similarity index 100%
+> +rename from src/main/numa.h
+> +rename to src/main/numa_snort.h
+> +diff --git a/src/main/thread_config.h b/src/main/thread_config.h
+> +index 93bfe63d2..8134da8bf 100644
+> +--- a/src/main/thread_config.h
+> ++++ b/src/main/thread_config.h
+> +@@ -26,7 +26,7 @@
+> + #include "main/thread.h"
+> + 
+> + #ifdef HAVE_NUMA
+> +-#include "numa.h"
+> ++#include "numa_snort.h"
+> + #endif
+> + 
+> + struct CpuSet;
+> +-- 
+> +2.47.3
+> +
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
