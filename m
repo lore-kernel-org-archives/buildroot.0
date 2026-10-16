@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9714ECCF2C1
-	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 13:10:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4353CCCA462
+	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 13:10:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4BB4061042;
-	Fri, 16 Oct 2026 13:10:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 119E860BDD;
+	Fri, 16 Oct 2026 13:10:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mNDtY2_ZbGsW; Fri, 16 Oct 2026 13:10:54 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 22EEF61037
+ id oO6k8nrueF56; Fri, 16 Oct 2026 13:10:56 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 2E30661044
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792156254;
-	b=Pn6XzW252jd17Ja9BCUMyG57GQEQP5mI/vBtGIfwpkQgmVDpQMHiOQLWeri+FN4PUjFP
-	 bxQ9YfiNGT8b4n7+fWrsjKwlyx+HiY5Rq/JmTefPrgMQkkCGEK//+Pr4HEant5wnLsWGC
-	 L57vuWFI0gzp4dsjm4SnQqSPizUMJKFu96n/Hc941XRHyv7OD17K0E3ufHv3LpOgASehD
-	 /SGPH8cLbvPoEME6KnxvZPuSlwLrhTmVeINzt/4/vDe6YqVzIayBmiM0GTrE0uk2/rgWo
-	 Pvd7Tf/Wi58h03lnzV59yv4fGNFhoG5OGMLDQXHVJ7KyhP/G1GnWErlhMybyfkwy5Gg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792156256;
+	b=Z0yjz9Q7nGftu4Plh3UXLt2qMNdnGHMwJgxksCjAXVMq+/k9+LPVLihe5S8OW0Z4lqKi
+	 wE80lx3IbbUdi/rAVjeFFvA8NJ7rWJ6KW33RQX0GPI+NpnhTTCi6BOAXYWvrIPe3Mi1gD
+	 0a8vq0VmE9OnZA+woETAiOz2IwnUj68VCUys5OGvTBPr8RBod5WQsdKDJa1ZcY/FkxMRU
+	 6JRGUT/kIBwY2WaeCwyq2HIdmG+9GMDoVqnnOv37/iEG5f9OEoc6kx5f9+H2DX691jYoE
+	 ofqLtKVFLCLMqRYZy3AZNsg4pKSjEiNwFsrh8ZVgqWY9Xn1o0o71BNJQ1YMMuGlRRiA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792156254;
+	c=relaxed/relaxed; t=1792156256;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=/408HZEePkg1Q0CJh2LI6exOqGcQJPjudJ+l5kvU9Hk=;
-	b=jTP8Z5xSYfleYPNebhnI4Dmpot4Ehwqvq+pAsFMI+Sgha8CymUJ8ljwBcCzYFiCWvM00
-	 RjLQ74v9dzko2kzOp6OP511Y7qAxgV4b4ubXlVRGGvVBN9vKOQ9IRfkdvFyGtiUMqxV6Y
-	 9kv4Y2JzCVrrB5ZYt/v+hbc4QxmxYOmfqa9MnLtNbdeK0nEMHGms4qhNkzJ3DLewlSty5
-	 l3s9+2JDGHNLGY1q6DO9W2Uelir5Dz9Gl8tLO/PKCNQOvCy/9PWmAm4TLlMDYxMaYZOrM
-	 IfXKsKNY0300QtFoHAg84PXbGF7DgkC2fBQ8TZ8sRdj/0h2BROGJbjA4LXj6cmLSwxA==
+	bh=kr0xlZgTNf6glHc+FAtA5Ky3ma+I3F7+UeLhOIHaknw=;
+	b=YYFv7l1MpbHmbyO1g2mAgF42FdLCMXQz2CdcJ1nIdTtxoMO8a9aH5niIxC/VgitrlWyi
+	 5gYJOvWEv5zRz/yEcgGJGpE1XZtrnVOjLely0fZdnQYwFC1TdtVqemPmHrYaFI2ifWtP9
+	 ds7YbIm3GosH1UlrxNhKexLX32mTQAywmGYYHTphDa1LabiEraCNBkHYrIrUR9C7GnvXh
+	 7rrEvl0KL2L52N7oyuaX3qtLxggHp5a/E3eysAFL9P0J8+7M/Aa4tVn9nPzrBo9tmwWpO
+	 Z24iXdqFAmDESAI2U1YvqxkLEv5cQktORghnvsiEZNVZpEqRLZdgL8nmkL00VOL1Jcw==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792156254;
-	bh=/408HZEePkg1Q0CJh2LI6exOqGcQJPjudJ+l5kvU9Hk=;
+	s=default; t=1792156256;
+	bh=kr0xlZgTNf6glHc+FAtA5Ky3ma+I3F7+UeLhOIHaknw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=RuyTJXwfnra2lj6iLNGtrbiQXotvCw5jQ3SXE6nxA7xH2qn6cOmWtADE9ovbgv8gG
-	 XEo0LddtwpTlp1gXpiErnyeBB+Y3SxpfaJcIBWabzXmDxD2qG5TkvJrbdgJ5lKnbOH
-	 e7LsiN3s+vcKmv8wKKv4QYwVqbigfszl6htGTK+0jdJcW8Ff3qxkqdJZ/kzcgxSpXi
-	 j48EU+k6XmueXFqC2GeUIO13teBKjYlRQFR14WDw4UNb+noaX4rS3JTeMyuJ2XvTrp
-	 +1Rf1Mw6eid0fMOP34ByxkZvG0jPuUVYFoBnOYclwNwFBF44yiSYCTjrG5h0ag3qFA
-	 5VfHOAjCwPNpg==
+	b=o+N7bGTMvLC5nhOzh5GRThBBtuTrpix83DkvqcJGKEcRceWf3mWhKq/7RxRmEzvde
+	 aT8KnGZYjuCckeQVlyGanmzFZqKh9Pyl4kVcNQxIUBfsQXlYLG3UV0jbZwwW37jeoI
+	 /7RCk18Hs6oi5ZwcOBdAmq3X1KpoYCFo/M4LzaxVXAQV3NdRFw0X5B0yg9HGKtpTWN
+	 xEjQ+0esIWJUFnpXZ0vUubfxHUn79oeEjvQZ/4CNw24R7uzNtuAHmQqK5s/uz8jTCx
+	 RPfE1+t3JMOBAh3Q83hDyfuGDaayWmT5hMK4IsVFlJ6pnBhDUzcRBYDzOAKVVuoB8a
+	 VtMqiPwHOZHHw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 22EEF61037;
-	Fri, 16 Oct 2026 13:10:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 451251F6C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2E30661044;
+	Fri, 16 Oct 2026 13:10:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4FBAF769
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:08:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 43187814A0
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3D4E880772
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:08:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jtIcDBAurKjs for <buildroot@buildroot.org>;
+ id p-mKUr1AVKYU for <buildroot@buildroot.org>;
  Fri, 16 Oct 2026 13:08:30 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 461B3814C8
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 364BA814D4
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792156109;
- b=EVN5GhHHuOXcmDiGFtuTjjbTbJLFMEEGlHzH+52S/aN3j2f0lyW19zyDn3nHyuzksgN2
- ln7Ontt5/Ca3M1pd+rRMzN9jjSHpmyPIyj4rtCpFcyIWXsTYSTPkji3ylcWlxkUC6AtOA
- 4GHaLw6hXv/uh99LgbqcsKCXvxBB6aoA662vNFZSaCVCse02SVePSLoBnMIIs2v560dTO
- t2xExxpgWDCLYBldgs9qn9CmxKAqGL34+Bfp3W9dijQvzY/dJZQ9z90odOTl3u+ngh4FY
- NDwo2xtuRmSesTQBlPFmoeqNzM6alTN0reylhbPj86+xEVSIDvRTP/RpgeMCBRPUmBA==
+ b=AwG5hwVKdjV/7TKFRW8ttwnNrbuSkn883N5rZVfh7VvuZfFmGRlFJ9rXPcWv7z9UGWDo
+ G/9BUWjVR+OijQF0gg8Osoe8AhWIj6osVBeD8IXQmML27eX33TVZwCpim2tsJxSChDXx7
+ 1rW9IkoLC6y2r1ULbzBlGzzZMt97v8tB2nuQmDzQ3BSfRcq0c7I7+LzwePD2FebrjD0vz
+ 9n/3uVxoC2kgWlB8hBRWbki6LsHjuHaxQ1cV0l6LOh0YDqFZKHVTtYUiLEm3w3vaqL7PU
+ rod0QKjvr9NTslStgx46Ev+5zx3HsyxQTu0dc+96cPaA8IB9wigoye8alD8xCc0zj4Q==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1792156109;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=z/F8FqNfeiy9S0yh4uJSN+7gcTw0UPQEsdDGj+91n/4=;
- b=A1qlxxCyPMHOgZVyTnNDBFgGwDQLq1Ghs4Ng/XCQTK6IO6pt6/z6xOl+puonzvMzbT8Y
- G06u6MiuPmNehMB/CIdp3rmxJyJMv521QCaA1GPrrz9i1RWlRd1mwVdZ1DA6er8eD/etz
- cJgzYplrybFa4ZtreeoSIwobvJc8R7Wm65znzrYT1OJ44PvMg7k7+dRUmTnj+NA/4znYh
- GugMCe2q5Rcu4j+VAF/wHGFeYmFsSnR6nRfSxbmuTOdRYXgU6pPACH/tmFUJ62oUbyktT
- pyvRoENJoX0diGEHCLUTUwZhVpV70gmNdBnc14zoMtnMvOlzH4Rn0z90h/+wXl8Rn2w==
+ bh=ei/p/inQXnz0W1LO3wZonk3InId5O8HAty3PHfoF3OU=;
+ b=agXFMC9GS3B4PU8Cit2+z8GOsr55t6/LuTmXfnngJ/LbBdvbnCueetPP8PIbLb/ELI1k
+ uc4hpcXpbgqul4UBV597jIHFtrSR/huxeAYNVUKwyZo3r8oj73ztOFuUoAVoeNIDDctcg
+ gVu27HC5hBBTKEtoVy7ydZTEr5cZj1ciCXumlhDGbl+djeKIjnraPk6aGZRlfK35wCLdS
+ y7mPiTwMZTFJ/DRXaxDdp+Yg2V0fpuOsZORaD34vOyYcfEmM6xN2sTR2DDLUBWyBlRi43
+ ZXZaAMTg1SwGoF44ns3BBnITFEK1pujcyJXJdhy4z5zs6kCCDknTmdAFkv181pp6Gxw==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 461B3814C8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 364BA814D4
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:08:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 374A1960D8; Fri, 16 Oct 2026 13:07:08 +0000 (UTC)
+ id 2772D960D7; Fri, 16 Oct 2026 13:07:08 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 16 Oct 2026 15:07:52 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 4817c8adf2129b1f4c499c53a1612f610160c8ab
-X-Git-Newrev: a0fb500aef58981f72d1c2291c837d32ca49a8c8
+X-Git-Oldrev: c7d027a85889fb972dc9c9c23264ba832b3db59d
+X-Git-Newrev: 450eadcd0ebba7fc7d3daa81bfb3cd20b9df39d7
 X-Patchwork-Hint: ignore
-Message-Id: <20261016130708.374A1960D8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/webkitgtk: also
- disable internal ccache in the build step
+Message-Id: <20261016130708.2772D960D7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] DEVELOPERS: adding myself
+ in packages with LTS policies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,52 +114,65 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6074455492501021289=="
+Content-Type: multipart/mixed; boundary="===============4618751974897016818=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6074455492501021289==
+--===============4618751974897016818==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a0fb500aef58981f72d1c2291c837d32ca49a8c8
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/450eadcd0ebba7fc7d3daa81bfb3cd20b9df39d7
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-WK_USE_CCACHE=NO is only passed to the configure step
-(WEBKITGTK_CONF_ENV). During the build step, ninja can run cmake again
-(e.g. when a cmake input such as toolchainfile.cmake changed), and that
-run does not have WK_USE_CCACHE set. WebKit's WebKitCCache.cmake then
-sets ccache as compiler launcher again.
+To better track the version of a package before a Buildroot LTS release
+is made I'm adding myself to DEVELOPERS file for those one so I receive
+alerts for this subset of packages.
 
-That outer ccache runs without the CCACHE_BASEDIR that the toolchain
-wrapper sets for its own ccache call, so the cache keys and manifests
-contain absolute paths, and the entries only match in the same checkout
-directory.
-
-Pass WK_USE_CCACHE=NO to the build step too.
-
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-Acked-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit 9f0aacb6346083db480478c59711507263455aed)
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 1a72cf3fa83ca85d1aeb17dba6a8986d864906de)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/webkitgtk/webkitgtk.mk | 1 +
- 1 file changed, 1 insertion(+)
+ DEVELOPERS | 22 ++++++++++++++++++++--
+ 1 file changed, 20 insertions(+), 2 deletions(-)
 
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index ee9e707cb5..192a340d0a 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -22,6 +22,7 @@ WEBKITGTK_CMAKE_BACKEND = ninja
- # Buildroot adds support for ccache through its
- # toolchain-wrapper, so tell webkitgtk not to mess with it.
- WEBKITGTK_CONF_ENV = WK_USE_CCACHE=NO
-+WEBKITGTK_BUILD_ENV = WK_USE_CCACHE=NO
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 62cf36f614..56f43de326 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3111,10 +3111,28 @@ F:	package/kvm-unit-tests/
+ F:	package/xorcurses/
  
- WEBKITGTK_CONF_OPTS = \
- 	-DENABLE_API_TESTS=OFF \
+ N:	Thomas Perale <thomas.perale@mind.be>
+-F:	package/go/
+-F:	utils/generate-cyclonedx
++F:	package/asterisk/
++F:	package/bind/
++F:	package/clamav/
++F:	package/containerd/
++F:	package/dpdk/
++F:	package/gnupg2/
++F:	package/haproxy/
++F:	package/libopenssl/
++F:	package/lxc/
++F:	package/mariadb/
++F:	package/mbedtls/
++F:	package/nodejs/
++F:	package/openjdk/
++F:	package/php/
++F:	package/python-django/
++F:	package/suricata/
++F:	package/subversion/
++F:	package/tor/
++F:	package/zabbix/
+ F:	support/scripts/cve-check
+ F:	support/scripts/cve.py
++F:	utils/generate-cyclonedx
+ 
+ N:	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ F:	arch/Config.in.arm
 
---===============6074455492501021289==
+--===============4618751974897016818==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -170,4 +183,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============6074455492501021289==--
+--===============4618751974897016818==--
