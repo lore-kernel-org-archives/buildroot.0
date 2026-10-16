@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 68313CC6B38
-	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 13:10:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53BCDCCF2C1
+	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 13:10:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F055960EC6;
-	Fri, 16 Oct 2026 13:10:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1B8B060F9D;
+	Fri, 16 Oct 2026 13:10:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Dr5qtg2xqs0D; Fri, 16 Oct 2026 13:10:21 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org E3A4760F93
+ id q9p9-TQpPfsk; Fri, 16 Oct 2026 13:10:25 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 1B27860BAF
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792156221;
-	b=sVIVU6h7dQmw7VoNVUiSITRxxv1HpwyzrIz/moPU1OUnk3cug1Jjs3uHyBaEZtxArn4V
-	 GDi4WHdvJgUJVSeLe9Yhvqrqc35bAuyYlydIX19u8HuuFiBwYmcVotdCHVFa5DGZpyW3l
-	 P8NowFl99X0AbcNcvAQQN1KbYh9s/p7RaOGvjKZRdzmEuJxgX4L3mFq2npgqsk30xeL45
-	 hexO22TlY/dwuvm7S3ICmbQ35SxqMCjnnHko2BEvsSnqsV7aU7MJ223rTWs5gW9/Y1lJz
-	 Z58sQ0cQz79ZX4zywJS5NONaWrqNfylMWWNjVwZhgOzmfnLmuOwDX8JP68P2UMRQUzg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792156225;
+	b=pICFtXyAkoBLlyGh9O+M3uT5UJlICV1eH8K614fNSbape08kqrfjIJswAuHHxyjomfOF
+	 X+i3Yapw5gofJciWZLNR9VYfWOEcvMRRS23H267MaKMJBhIg0gDkZd5cM9ifYoHTL8iPn
+	 5pgbKI0Xx0XUJclq4mXrnR/ikXG87ucOvja2DSzxyVM7AV8t73NHfMFVThsjXADUFGz/I
+	 OeenfhTUIUnuYQKydqyX3S++/K810sanxiFVG6YYDqHpwZrAcGp2Jt6vn3zQYPlW6Lzf3
+	 lv/VUH8DGE7DZebF41awVNzEu0F/a3ETmNbycrym1AUWUu48akPrmvYYVOqsaWZjkbg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792156221;
+	c=relaxed/relaxed; t=1792156225;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=eev+YdcmhPc4s+HVNRBUMQmAr1CufXAeM/nstTdLFNA=;
-	b=FfJ+BHoGXjd33fB0T77tEnHbwUMvcg0aB4dya0sjRke6XeRyjn3k8dX6PHgiVEoqSR0K
-	 Q43Il4Li/aEeaY32ezA9RrDBT+r74Ll3ntbQejV1JCzOxvO3zatlKt92T+QUArutyZ99Z
-	 UUIFcjQ84zEY+VeGtQHjbWtnKqOBpMTNEAncep8aDzVWUj9uAAFRActjGKvBhWep3FLme
-	 OYShSOCY4SxtWIuFh/qxnFBo/F9spdrFoG+Wfj9fUKgisFeLagipgiZ3czocLf6yhcScr
-	 Mikr4OzfY9X/l0kMClzdDbreGC2ifgZPAv15HiZh5tSAy3D7jDsYFBiszzfO5fB2CVQ==
+	bh=cktjUTZWwwNyg/0DWdBGdPlZNty3c3fNh3fjtpI9908=;
+	b=RYAi+zPb6UUYPcObRsXtvljV6pUrDxOFxW+ab0gauN0WGhNZQMto6LoLs155ubV+3Vp6
+	 hxqR5yNVS7kARjFXAaL/earqNJDWo/Jw/B5IpjlyQo5+Ug7dXT98QsdU8T6VK/U1xP1Cp
+	 dowYJItlsX22awi7p4MNYFWTbJur4RWKkWvGC9i1p/2frwhmZIhiBK8USWsVAvtdNK3ow
+	 w+D6MWnP1T8A/DeuaTOuMK/wacNgepyJC+w9a3tQgI4CfmoqCr2E6Sr0Z9CwFiA6yIQhn
+	 tBZYDs/dV04myZE8RBGfxsAnLntUF/9bUb9Wov/7Oj52i4rgcv5/6xh7icQw6PXLgLw==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792156221;
-	bh=eev+YdcmhPc4s+HVNRBUMQmAr1CufXAeM/nstTdLFNA=;
+	s=default; t=1792156225;
+	bh=cktjUTZWwwNyg/0DWdBGdPlZNty3c3fNh3fjtpI9908=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=cOEu6jhOGj3apHY+/8hZ91pXRhsmsC9omCgAhnxs+FQAdnS5zQCCarT4hFYfsVCa7
-	 Ne2GmXMkFx0Dj9OsI5UY3abY/AbxM4wdkgyA6b86NdQ4Lh50yx9mSGY0sG+ImB2uJC
-	 q+99wp7GGZnRenxqba3ikgCv1E/fBhYMeapJbmtst2ER2IDG6RBmSaoEvowY7OsstZ
-	 qB2vpDfprFz+dCAfJSwgjzahx+DY8lnJG8RIuTumAlYB83L5+OKY104X4iX0yHAMV5
-	 R2sCeCKyVQVxVlJiQ3BwaGqlkcPkYOwvQKt7S/T0GXCNnK/zk4nHyKLwZcdwW3Ws2H
-	 u8L66oXibVf8Q==
+	b=VwGYItnCXwWDjn+P+2xgK2XDE/F3TzZFWZ0alaUpnxZ15B65P55QUYVmIod5C5KfZ
+	 VoVtdF7A8o9rACLoD4VUrha14itgM0UFT3b3jbgf2zlIhzeqPpOJf+OLkeH1YVP2JI
+	 ZCMZQg2COlQ7dK0Sxl3Nzf+NLNnakAiVPOvKWUGxjdcyQ4vNMIU3eoGbR1JnWEAGBa
+	 ifyMIA8+Wrrbsm/WTo51OTBRGxC3upeoXsPruQAkT2/JjXX9B0933Jmf964u2VHf9d
+	 zmPn9sc9lG/AUkMw2eO8oX0xJkmNXQjkm867TZ54qVBJyf7ysdkzh1iC1wvg+M8e6E
+	 JCRf+PEru5HFw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E3A4760F93;
-	Fri, 16 Oct 2026 13:10:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2DFCE1F6F
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1B27860BAF;
+	Fri, 16 Oct 2026 13:10:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 41843151A
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:08:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1B00281489
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3326980772
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:08:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oqzczmhVKrpJ for <buildroot@buildroot.org>;
- Fri, 16 Oct 2026 13:08:28 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 1ED5E814EE
+ id nMfikro368U5 for <buildroot@buildroot.org>;
+ Fri, 16 Oct 2026 13:08:29 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 675F6814FE
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792156108;
- b=kVJyHJqMrF/iP3UZryRqafA6EwW5kpySEmrPOA13SsRmhLCXW5w0du1UgB7mjCjuNk50
- fZ9IvR4uyzLtumCeh/IX3KadZDd1yh6RAmMzpTYGyQbV5du6WTRNhhJOA/cmZp5xjU3Tx
- x/3uPBzdZSxUCddwWL0ijkFSe9mkCkUFl2Y5CwAZBwqO6C8q45kzkT8kOClTzkv3okt/q
- D9vIjeEveYR21I7rDjpip2zjx8Ka1FV4dw0uV4RHCZnnbhH8Mh+tPfkN7Lum4d7hio4vB
- bPSYud1epUo93ddJTEPQ6EEbah6wIgGP8/sgMVUlXk7hBU9kAcEVg31MAsOX19Qs3iA==
+ b=rN47GtxoiO5/TPpvnpvTvmZKBiGnbTVY7Kp3OFTrK5oX9oDY8l8THHYF/wNm/uMt3eOy
+ 5WZCawprl0+3zC39IRrAJsk+4fensmxGJMlpHnfw274bPukeUcMRZSWIAuXj6SwdDfFfu
+ M48p9vrFj0JU3Tb0J7ZdfgX2YcS4CJ8IP49MrhNgqr0l+E6ZGo5qhqqIJ4Np5dWHiEc/P
+ QqLH0prv9KrxxWHq6JPDyCIryOlQtjIbX05SnrXD8ZFdhHT5ChUUqwsXfMAa3+Hc4y0Gd
+ 7nG39sjwIjFXYOrfyeQnrBVirE+VdvhIkB9rVh/5U+LzopEKhlF67E3wZSBcEVkjLeg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1792156108;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=nzHVc88iGZ8yzFWydRh9it+KYt2GbZFaYCTJwz9vEZ8=;
- b=OmqDTh6mKdbU1AiJSlw54BCKVLTVvvMlLTBfXh5u++2OvNQsZPWnuhmL2ARfk+NvUUP9
- MniF/e8YCVJ+GXY/EM3CP1nP2EVTlFUADixNzMbbIJmutBgtTueGGKhiDk8srGJS2pEgR
- JEjKTgEJLzt+VbDABfvrtosXbd7WBjbCT1cbNsANy3B91vRp5oQozSguNOVXWayzvYPzg
- pX/LIf5GRoxFrCTSXDTOxn6yC8pD0PfvMP/WBDdcha0FNbcF/LrNiOX9EeQkY9bd8cL2c
- NiJ0WXne+3jRtzMYZVpSGdMPC/eXzYy74rWcJ3DLqbFrY0lmScJm2PxWymnicRWe5sA==
+ bh=oxOHvg7edgWjRqOnwMbMO4IuOEnASWee0fazmka8UBs=;
+ b=Ys04YLEn+o2KunrUBKXOb0sYcT4Ew4jf5wtjYi5ARniEOhxMRKGNH9/oePISxJSbAXjz
+ gzGCw96HCyvCjgczp1gzzlP5LVsFDh45CUOQ1z71gxgXKXTFeCjiApWKI/gNTA+JjZ7gD
+ n4OB5l+jpmhLhm/z+/vmmCEFxHxlyRWBYM/pP+qtEhvCyHu+F5xfC6gGHKIGK5I1M9d+c
+ u86EbOkQ2Rdt/4aF2x6RdgsuhnK5zDG/Y4Smqw2flqFHehB1Z0bgcJ7KuBHOvbmC9p2FA
+ evDrd6xwdh77Kmv1gcTR0kNm4yhxGm/Qe8JOgAA1hyUuRoq1tnaxRwoK5hcjAoQ9NoQ==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1ED5E814EE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 675F6814FE
  for <buildroot@buildroot.org>; Fri, 16 Oct 2026 13:08:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0FDD5960D5; Fri, 16 Oct 2026 13:07:07 +0000 (UTC)
+ id 588B7960D7; Fri, 16 Oct 2026 13:07:07 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 16 Oct 2026 15:07:51 +0200
+Date: Fri, 16 Oct 2026 15:07:52 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 33c3f1501ddadb9b118469dee7c8408a1f10e2d4
-X-Git-Newrev: c9e3354ba2bb2a73c86dd4bb25151b2ea8160989
+X-Git-Oldrev: 242795fcc59c3c2bbce0e201572db48dcb446380
+X-Git-Newrev: 9887b3020f3a516adc8cab6d5af9005804ddb1dd
 X-Patchwork-Hint: ignore
-Message-Id: <20261016130707.0FDD5960D5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/haveged: needs
- threads
+Message-Id: <20261016130707.588B7960D7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/iproute2: add
+ optional dependency on libtirpc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,86 +114,55 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3691751668746860667=="
+Content-Type: multipart/mixed; boundary="===============2590382905870232291=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3691751668746860667==
+--===============2590382905870232291==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c9e3354ba2bb2a73c86dd4bb25151b2ea8160989
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9887b3020f3a516adc8cab6d5af9005804ddb1dd
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Since the bump to version 1.9.15 in commit
-2a28d25d0c61 ("package/haveged: bump to version 1.9.15"), haveged
-unconditionally includes <semaphore.h> and uses named semaphores
-(sem_open() and friends) to synchronize command instances. As a
-result, the build fails with toolchains without threads support:
+iproute2's configure script probes for libtirpc through pkg-config and,
+when found, enables HAVE_RPC and links ss against it. libtirpc was never
+listed in IPROUTE2_DEPENDENCIES though, so whether the feature ends up
+enabled depended on whether libtirpc happened to be built before
+iproute2.
 
-haveged.c:37:10: fatal error: semaphore.h: No such file or directory
+Add the missing optional dependency to make the build reproducible.
 
-Add a dependency on BR2_TOOLCHAIN_HAS_THREADS. Since threads are now
-always available, unconditionally pass --enable-threads.
+iproute2's configure script checks for libtirpc availability since
+v5.18.0 of iproute2, which Buildroot started using in commit
+10990c576b2ddd7636f094f510a2ad1a5a80e50d ("package/iproute2: bump version to 5.18.0")
 
-Fixes:
-  https://autobuild.buildroot.org/results/814cb7b5537d8b7b2c23f3d90e37b2b41de7ee3f
-
-Fixes: 2a28d25d0c61 ("package/haveged: bump to version 1.9.15")
+Fixes: 10990c576b2ddd7636f094f510a2ad1a5a80e50d ("package/iproute2: bump version to 5.18.0")
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Assisted-by: Claude:claude-opus-5-5
+Assisted-by: Claude:claude-opus-5
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit cec5f7af80a564b8862aee71e3cf516b325e41f0)
+(cherry picked from commit 2b9d1a8aa671982583864ca050380120ccf6ee53)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/haveged/Config.in  | 5 +++++
- package/haveged/haveged.mk | 7 +------
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/iproute2/iproute2.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/haveged/Config.in b/package/haveged/Config.in
-index 0e49a2db7c..8862792824 100644
---- a/package/haveged/Config.in
-+++ b/package/haveged/Config.in
-@@ -1,9 +1,14 @@
- config BR2_PACKAGE_HAVEGED
- 	bool "haveged"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # semaphore.h
- 	help
- 	  The haveged project is an attempt to provide an easy-to-use,
- 	  unpredictable random number generator based upon an adaptation
- 	  of the HAVEGE algorithm.
- 
- 	  http://www.issihosts.com/haveged/
-+
-+comment "haveged needs a toolchain w/ threads"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/haveged/haveged.mk b/package/haveged/haveged.mk
-index e22712f016..bf3209cfdc 100644
---- a/package/haveged/haveged.mk
-+++ b/package/haveged/haveged.mk
-@@ -18,18 +18,13 @@ HAVEGED_CONF_OPTS = \
- 	--disable-nistest \
- 	--disable-enttest \
- 	--disable-olt \
-+	--enable-threads \
- 	--enable-tune
- 
- ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
- HAVEGED_CONF_OPTS += --enable-clock_gettime
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 3faa2235b8..7760e937fb 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -25,6 +25,10 @@ ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+ IPROUTE2_DEPENDENCIES += libselinux
  endif
  
--ifeq ($(BR2_TOOLCHAIN_HAS_THREADS),y)
--HAVEGED_CONF_OPTS += --enable-threads
--else
--HAVEGED_CONF_OPTS += --disable-threads
--endif
--
- define HAVEGED_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 755 -D package/haveged/S21haveged \
- 		$(TARGET_DIR)/etc/init.d/S21haveged
++ifeq ($(BR2_PACKAGE_LIBTIRPC),y)
++IPROUTE2_DEPENDENCIES += libtirpc
++endif
++
+ ifeq ($(BR2_PACKAGE_IPTABLES)x$(BR2_STATIC_LIBS),yx)
+ IPROUTE2_DEPENDENCIES += iptables
+ else
 
---===============3691751668746860667==
+--===============2590382905870232291==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -204,4 +173,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============3691751668746860667==--
+--===============2590382905870232291==--
