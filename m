@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82474CCF2C1
-	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 15:03:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B478ACC6B38
+	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 15:03:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4CC4840A23;
-	Fri, 16 Oct 2026 15:03:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7DB0E40A21;
+	Fri, 16 Oct 2026 15:03:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yADKtRBvOHzd; Fri, 16 Oct 2026 15:03:05 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 541B340A2C
+ id wjB2nQ8_5siC; Fri, 16 Oct 2026 15:03:11 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org AE0EE40A2C
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792162985;
-	b=kVCDVrv4li3etZt59RfdRWkx/dVZvZfIk5NhEDbnPkPGlRqga0Y7DJ9cs2XaZnHq6nFz
-	 cWI2zzbk/i6m1emQDpYHifTyeGhudncsb8a13Y1gzD7F0zpcJeDXJwFkEC0sOHSq25yAB
-	 xQFm2zVjBcGJ0m1c0GoZ0aEFda8+MYZSm4Oa87TzCoDV49lQyMUOpDh1mAf7zM9lL2l14
-	 64LeswW+ovsyOJAMtcVebEdwZkhIYVkzHoUZd/3MxFk9qcaBSAnM2cvzMYWOVtR7ehBvz
-	 B5zQ5O8sVw5TC9MIoAdhjQTnz7e+RffNCOJQ/ZayTIc0XnO4x0WAhbUbeo3eTE/E8Fw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792162991;
+	b=kRudgBePKf773BDftfRb0c2ZOKjoa0L/0k5Vrj+P5okRkyic+GrRWVlcX3JRJWwT2biL
+	 ZcM8bKsVidzB4wiL3eLfBZo+lRFqXZyRWEQ56Jynkw+n+OvRbXHBgzizCa/pcYk4MfTVq
+	 vu2H6FZy4z3TmlNj7lmJAF/+0iVKBan2M1piuMr60OxmVhMPg7JKjxoK6vELM51P/z+St
+	 G9HyrXwfHS27nlGTOlHN0pvizkU49XGgtEEjnvTt5a+IsDpKv8LqX6UTpPGd2wGgSgtCr
+	 3IZfwzmJ4hZMHHrHgVFqlojV3QSdmLxQrYFnjwQrAApHN+v/FoWxK+IeQIw0UsYj7Ug==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792162985;
+	c=relaxed/relaxed; t=1792162991;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,118 +31,117 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=B6vlt8YzgcELyYKhYXoFcaoRFbemWSRQ6OHbRTgC7D4=;
-	b=HVGjKNd0j5/8XuubYvKJdyM1VDX7Nhe4g9tSAD41tziWQgqNEP/XhRZhPYlg+jI9ZGLG
-	 kMna+Pbur3nOlrc15E4O+0ENd8X76YnLBy66uqF84MTVC6VU7YWbkDJQmsi9wQu4E/T4p
-	 CoYjKZw+yG9/8ydSAmxGQizWvF6ERcGo9P8NK01okdiQ1q/NT9MkRhcmxqkHIlY0KsLPF
-	 SyJeFn5bTE+YhsdG6Dg86FFVJsoViorajl0ZTGVcO2Bls4k6n0t5iHqNvEI0Y+7uLgDNn
-	 KgIKLE5L9gUPLjs173sCxiVeO2JWTPp5aDoTbGdgBAZtJtjqek4m+m//RSGUX0VrLyg==
+	bh=pEeXVy9GG1qMO/OrSlAe5cgjWtoTDprpoE2H6PRJrHE=;
+	b=CErsTjGfCorU6ilPukHwx4KoxMcY+FLc2b6kippIVe9hA9UR2BEJAha6le7eikj50+vQ
+	 6vLbo6BHKy7c9inaoktP4CVL3hiAIQhRQffgg6xnLbGmsm1Uewyz/BQiWDRyR1ifYyhz7
+	 cu+VvbAAypX/8r9jH8f5RWEY7QescSj7qOTzs+tIwQXsQZgc3dGmzQRqZojbOowwt0sPO
+	 LZaSn6CE7dLRyEjD53Qz0vvwcfaSsCAqNZw0UvTgmiQUiYm9sA8OdG1+H/mDF73+Ny1pY
+	 VPItnb1bdzgWGEDQEvvl1Gjo406WCcIc3XkElW02pxHommXp36XkgcjRtjb9RgPSMvg==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792162985;
-	bh=B6vlt8YzgcELyYKhYXoFcaoRFbemWSRQ6OHbRTgC7D4=;
+	s=default; t=1792162991;
+	bh=pEeXVy9GG1qMO/OrSlAe5cgjWtoTDprpoE2H6PRJrHE=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=maZVUy1IKv6K1i/IG+Ox00uux9TKHi2dtLStim39+JjUpOBhv9WAWNoh1G1jbcWDH
-	 FTy9O3wR7ilhV685CBwU/O73wml5vkZpT0qPRY7AxmDjJD6SN0TBTXRyD2TqF8fPsm
-	 9+1H/dvqMYJW7gwz8jWqrCF+Fw3BUECieDO45K/twII7CB6yH/Kqqj1zmj9Ffb/Lc/
-	 Hhbv5JilKofJeiuv8qC+o2ZW0F/dXX9a/OABgwzOX9mYCg6jmVEt9GF4k774A0+8sy
-	 qhLFTReDuQIcFAGC8QCG504/7DVErdwZt7noACCSKgG39NlhyBaF+1E5KbTVORjJHi
-	 e2gvCwJMk0bIw==
+	b=LUovBl9dDlZ8rEoB1bSZrcDK876HJLY4O8Ha9UOzC8+JuGdVebFoagEt+W5En/yWK
+	 VvkepL5+P/4fulMJ2wWpqVENQeR2lvC7GY5a6SrpNA3P0xPx/9foJXb3aEwfLRpxu3
+	 HL18n58nhBC2L4wXe68NvFiBpWf8P7kWV9ar7Swf02SG/DEhkrzXpeUF8UaMPuwJhq
+	 EMo/XJv98/lV12clLwCYphxb3AGq/6r4j0Jpvdl/PskpEP/k2D9xwttW7W+OY3BTaP
+	 WGaC1Lb8OPW1xj78hhaxDII5FSRlSd63d7KauafYVu1XB46bUroDWxdR911240vNOR
+	 syISJHR4cnOKw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 541B340A2C;
-	Fri, 16 Oct 2026 15:03:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 679FA7AD
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:03:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AE0EE40A2C;
+	Fri, 16 Oct 2026 15:03:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C42A07AD
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:03:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4E2134016D
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:03:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B63CD815C1
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:03:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S3ILQ8n3uIMT for <buildroot@buildroot.org>;
- Fri, 16 Oct 2026 15:03:02 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 46A1E40042
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792162982;
- b=snpAgZk4RKKs7Qjd0NGjPB5PfVNIEzF1QVWUrvtxfYORt0wXxPg6zL2rNlRQMxK5wbJC
- OWubRCy/T8iQwzhHH7+kKzABxZDR5k9ZNu5eqzbpBOTDgx9jj8TfzaNJSaZKwvoAASD2j
- MmqsSyXyqKWE0oL8ekIYdT9D1OQzB5OCEh6Aro735QFLLhWwl+QAxi+aTtucu9Al0EKrR
- tGZ9O0HxTt78hftC3NUzZqvKkdfUmEUnSa5+zcn6YdqLBJ/Mkm7tkmiV0t2aTg5pCGmL/
- NsRk0i42jcpqkcVItbqfXiw6skqs716K4XDeelsVZ2C+4Yzzdr7JQRDrUN6FDbEw0iQ==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zoIigs3CiIlr for <buildroot@buildroot.org>;
+ Fri, 16 Oct 2026 15:03:08 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org D245B8156E
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792162988;
+ b=cF7m/GR1mlYIyF+fVfoBWB5Q63WAvplNBgqNOhJF8zEGAVKS4q1LLp6IlG8ypglzHf+C
+ TLPcOpIK8JAudHI8vRWRsY7dFrjiH0NWPTtvX+0jDBn0PwbL7Ts/NI2y+ixTUQRIKqyU3
+ hx6J3Bh0g3yTnRQXycPxz9MJ+uTxboe369MQa/OS4RGO5bPUXoEnCCo6zksgTRZ3Sm1Zl
+ 3lU4qF/tWwHJpnfqKSP6AOhr4vTpotQIXWXXv7MnW7QmuinMWmdjUm1ZZfHSp9j6g0q3Z
+ bvG96UuK0Xe/gDavCjUymhDElpfpRCtx6QSqa1tz88n3R2B2iY007W8tycGuVZUq17Q==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792162982;
+ c=relaxed/relaxed; t=1792162988;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=QIb0+dAHYynFzcxrXqgAuhLi11mEWfuGAiL7/2bQIPE=;
- b=Ez8GfzeRkJkKgXfI4El19waB+DG4XS0Lk1EsLR9AokSwvEJOytMwEn4u2Fw1rdjF37bn
- 3MVdLJlp7rZtMoDPMnVLUSyU5rt49dTpEfEKCRvgBcYLwOAJyOGy1cqYhHzmDwGuu6Qxp
- fWXoYA3oRujQVNGqESaYYZEhH13ZXy5gvwXQCuB8T1DCvt1T6o7f43Fka6KZgBXmIan/3
- vN8Y4FLd+26Ree4JtN8vNfeWGqRyd90DUku1pS0S3qwYAdAjLyIhmFutgKAdI14uAY59Z
- uUTdAlNgSwVrg+V9S0naIqdBULP7kP8/EzohFM8ZSfiXD1MIn1BDQincIBwd6cdg95g==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ bh=ISOmwyCtMmfMCN/j4LJFjxAc6Kn669P1syUffn47os4=;
+ b=l7skXN7agg+VSu+iubsqvj9k41K5HbhFY5oUIVH3Cs0eP7CoZdC7QmsDbApSvQDq/a9O
+ 5kdiPvhJOy93G8Wm6GQJ6/MRpMpxAnTdy2zI+soW8zlbXI9GLe2WOtj1HGKONCMa5oEqu
+ vt+HcyfEoZokRhKH4xE7WxRdh5bA/8DDWMoTVh46h5O0b1k39YmBkkZbgrUAJBcVZ0VGv
+ SSeQvdntRNBfmdHMSiJ5Lmq6mL3duK/6ZLK16OFG79Ot6NhIi782fQfqsC8cU16+0N1v+
+ mWM8diUr2z31iiS1RXFxJMgR0wz25vXBt+oP0UtotJA0+Mzj99/fBkBU9NGBG6Fuwfg==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  dmarc=pass header.from=mind.be;
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b="JJlMf/l8"; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::430"
+ header.s=google header.b=NtNQo5q4; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::431"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
+ client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 46A1E40042
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:03:02 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id
- ffacd0b85a97d-48df0fa43c5so60548f8f.0
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 08:03:01 -0700 (PDT)
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D245B8156E
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:03:07 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id
+ ffacd0b85a97d-48afbd2c386so3913519f8f.3
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 08:03:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1792162980; x=1792767780;
+ d=1e100.net; s=20260707; t=1792162986; x=1792767786;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=QIb0+dAHYynFzcxrXqgAuhLi11mEWfuGAiL7/2bQIPE=;
- b=NFHFkY1uM+T+b6WziWIKTnjVR+EOte3ReHpw1iPkJEcvklvupB3+0OInsate5uKN5L
- AJumItdpqcntX4EvXJtJNlhpl+uZRQkZFSUNoTgCyTsirr/PSBKw0gmla7pv4QIwRTqp
- CxJvmuOfIAMsBvPq1OnRwWd73MuH4B/evuW2bUFk/EiUgf76fVDAZ5RmV51BM+IAaDgh
- OXzRNzHolev6hSHWyYMlTxC7KBiA3K+r9MnLfy86E3NoBsHMP6EqXlztVpuqQVzBl1k9
- kurk8JwCagHQiPz4qcqeDLKDbTbqrlmWTkADGp+8uPkyY1suTcH1vAbW8obidA/Hao6b
- X8bw==
-X-Gm-Message-State: AFq9FYKs3n95YUvCwAnf1HbCy1dV8f8bfcD7/6b9F6+k9IktzG0ayPR9
- gDNm6kTX54sbsIYdcEzDZ+Ss27pDJeH5L6Erde5tX+IjrPltiibSESr0knPtODyzacAA83x8BcP
- 277A4dz4=
-X-Gm-Gg: AYBFou211rK/e+ejPwWjHVeORkiP2rOxk3+QMi1T6wnralEKVB/wsg86DZnlD/hEKlQ
- XEcdIdcBCVD5NKxBITQajQfbMMaZy98dyMrtBCDbQ/oenKUajrvKFHuli3woJN5dWELNP992wnw
- ONjQjDlXAZFXfxonxjg8aZFAE2hIOPVoCoKJTTvCrptTKBWvg8sbG2Dsrgy/i3RvqCcWg1JUknz
- 87t8g0z2FXClgxR8D2OyT+vV+EQnVXaJ+PfwDC5c6VY+lASvf0Cq3Cj0wuF/olh8aCPNGIkwUKF
- y23K4lcVOwY4d2mxt97fhpL1I8VMwZWQGIK11JwXlm7RV0rp7Pca5Q/pLsNTtrSC+/hKu6u0XQj
- hWwP8KDixghCBDG9xv/0T4MnXe7jbiE50f0UDXU8T63R4XwNPSmwehUysnuhQ5Yllf30OhOIb6H
- plr4wWaOD4U6cB0e+Ss3cEd/TiVhkWveoETxpQbvdf8hOBYWtqEOIuWnLsxjq32bt4wrTQuEBp2
- Z/zdOk7r5x/ojzo5XydZekGOh5qBiDIXamsGI7U8A==
-X-Received: by 2002:adf:f0cc:0:b0:48c:58b9:f17c with SMTP id
- ffacd0b85a97d-48dfae645admr5743001f8f.12.1792162980106; 
- Fri, 16 Oct 2026 08:03:00 -0700 (PDT)
+ bh=ISOmwyCtMmfMCN/j4LJFjxAc6Kn669P1syUffn47os4=;
+ b=BYhJ/M3DX/st/jg3oQoX7xZBwEMcTJ1KJM25adJyKGcgCqD/kit4kXAhCIrJihhV0p
+ RN1NZwcw9n4p+ZdUnnlbvBhZJurzbd3w4AT+EeHNT7mvtxqXkK6xOSdzsV6iIkTI4Y5q
+ R3bgZabeciq4u1Lrpue4i5AnekWp2C3uM2CnCtJim6o8Vg/PWqoASibBoXBv7BI+abvU
+ CJYi1d7FcfE3tA0WaUJaCOPso8d0MDKz9z4pwOyI+ZnsrsB9w5pq4cpEB3Hk2afBpmkf
+ cUSGPTTo8vDvBbQ3sq6+peaYff5uFO6uNJxgoOrK4mVxTGAOT+KBEdF7Y/pZWmaKH4Tb
+ +bFQ==
+X-Gm-Message-State: AFq9FYLfqHWvJb6Wz4T2Se7Jg836/yyeL7gtLALHjE1IHhcFZyNQclJ4
+ B6N1kEezLJZJcop0OnNAylCugXqkUOtLZqr36hQA0UsF1SOlgAI+jfQuKv/aFK6tJOasWE5LgWq
+ v8BQ6Xeo=
+X-Gm-Gg: AYBFou257hkgn+WwbUnWkDh6WMT9bv3n32WS78Ttr1SCCHyi0mnLUZoB/hUENv8O/cI
+ zpnyDbf6Xwp/JDY8A7A5n0cEtpREXSqyIQpZj9nvZnyHmKnkJXke7OSJnYYGDdVQRbhhEXaBiZ9
+ jWSjAyI3EybRHFhNGsDacWEK/X0yLiC652xVH4tazcW16+dlD4D1U/UW8RtNMBZGg1Ob6HXAIn2
+ 5e0GqCwFIIjNrJ4ZNE5SrLm8S1yVueb65cjFnEuu5x/fphy51cAZaYSn2Bgpw+xHBrpw6gPaCZM
+ 9RKXLCbQ12imQXuI8aWpNtraU4T2nXiiaJt8eRGcLRmv8hZfBPNxsqS9j7dz0mEb6R7W3IyXBo/
+ fa783TwTqs5dlZje1hd5WFi1Fg43vHpkWgiRB0rj+7prBFjib10HOJF9mwIgWV58/SDp5TTQxoT
+ 5GZdwuf0X5BL/NlJsBmiCX+9aYvjMPy+y7uscEpEMd17QO9a9rGWHlbO2UHsSHkq83Q6IamuI/q
+ x5qvfg7aPJ4OoGr228fPeC+UqEvSShCcEgbw1HoOA==
+X-Received: by 2002:a05:6000:310c:b0:48d:ef7d:4b4c with SMTP id
+ ffacd0b85a97d-48def7d4ea2mr15527688f8f.44.1792162985300; 
+ Fri, 16 Oct 2026 08:03:05 -0700 (PDT)
 Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
  [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48dfd4f8bd9sm5736204f8f.35.2026.10.16.08.02.58
+ ffacd0b85a97d-48dfd4d4dddsm5693729f8f.22.2026.10.16.08.03.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 16 Oct 2026 08:02:59 -0700 (PDT)
+ Fri, 16 Oct 2026 08:03:03 -0700 (PDT)
 To: buildroot@buildroot.org,
-	Thomas Perale <thomas.perale@mind.be>
+	Neal Frager <neal.frager@amd.com>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 16 Oct 2026 17:02:56 +0200
-Message-ID: <20261016150258.60807-1-raphael.melotte@mind.be>
+Date: Fri, 16 Oct 2026 17:03:00 +0200
+Message-ID: <20261016150302.60849-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260624101340.80670-9-thomas.perale@mind.be>
+In-Reply-To: <20260902040121.1583600-1-neal.frager@amd.com>
 References: 
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 9/9]
- testing/tests/utils/test_generate_cyclonedx.py: test vuln with different
- analysis
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/gcc: add microblaze frame
+ unwinding fix to v15 and v16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -163,131 +162,428 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Add test for CycloneDX vulnerability generation.
+> Add microblaze signal-frame unwinding fix back port to gcc 15.3.0 and 16.2.0.
 > 
-> If multiple packages ignore the same vulnerability but provide different
-> analyses, the generator must produce multiple vulnerability entries with
-> the same vulnerability ID but different analysis information.
+> Upstream: https://gcc.gnu.org/cgit/gcc/commit/?id=4ef64ad1aa9bbbe9471610e2de6ef0c8afed8b1f
 > 
-> This situation can occur when generating a CycloneDX SBOM from the
-> output of 'make show-info-all'. The resulting SBOM includes packages
-> that exist in multiple versions within Buildroot (gnupg for instance).
-> 
-> In such a case, one package version may ignore a vulnerability because
-> it is not affected, while another package version may address it through
-> a patch.
-> 
-> Therefore, multiple vulnerability entries must be generated, each with
-> its own analysis and reference information.
-> 
-> This add test case for such scenario.
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> Reviewed-by: Quentin Schulz <quentin.schulz@cherry.de>
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
 
-Applied to 2025.02.x, 2026.08.x. Thanks
+Applied to 2026.08.x. Thanks
 
 > ---
->  .../tests/utils/test_generate_cyclonedx.py    | 69 ++++++++++++++++++-
->  1 file changed, 66 insertions(+), 3 deletions(-)
+> V1->V2:
+> - Added upstream link and sob message to patches
+> ---
+>  ...Linux-signal-frame-unwinding-support.patch | 196 ++++++++++++++++++
+>  ...Linux-signal-frame-unwinding-support.patch | 196 ++++++++++++++++++
+>  2 files changed, 392 insertions(+)
+>  create mode 100644 package/gcc/15.3.0/0004-microblaze-add-Linux-signal-frame-unwinding-support.patch
+>  create mode 100644 package/gcc/16.2.0/0003-microblaze-add-Linux-signal-frame-unwinding-support.patch
 > 
-> diff --git a/support/testing/tests/utils/test_generate_cyclonedx.py b/support/testing/tests/utils/test_generate_cyclonedx.py
-> index b91add2349..2f1109b178 100644
-> --- a/support/testing/tests/utils/test_generate_cyclonedx.py
-> +++ b/support/testing/tests/utils/test_generate_cyclonedx.py
-> @@ -6,6 +6,7 @@ import subprocess
->  import tempfile
->  import unittest
->  from pathlib import Path
-> +from collections import defaultdict
->  
->  import infra
->  
-> @@ -100,15 +101,23 @@ class TestGenerateCycloneDX(unittest.TestCase):
->                  return component
->          self.fail(f"component {name} missing")
->  
-> +    def _map_vulnerabilities(self, result: dict) -> dict:
-> +        vuln_map = defaultdict(list)
-> +        for vuln in result["vulnerabilities"]:
-> +            vuln_map[vuln["id"]].append(vuln)
-> +        return vuln_map
+> diff --git a/package/gcc/15.3.0/0004-microblaze-add-Linux-signal-frame-unwinding-support.patch b/package/gcc/15.3.0/0004-microblaze-add-Linux-signal-frame-unwinding-support.patch
+> new file mode 100644
+> index 0000000000..f7618d6727
+> --- /dev/null
+> +++ b/package/gcc/15.3.0/0004-microblaze-add-Linux-signal-frame-unwinding-support.patch
+> @@ -0,0 +1,196 @@
+> +From 4ef64ad1aa9bbbe9471610e2de6ef0c8afed8b1f Mon Sep 17 00:00:00 2001
+> +From: Ramin Moussavi <lordrasmus@gmail.com>
+> +Date: Wed, 3 Jun 2026 00:00:00 +0200
+> +Subject: [PATCH] microblaze: add Linux signal frame unwinding support
 > +
->      def test_default(self):
->          result = self._run_script()
->  
->          self.assertEqual(len(result["components"]), 4)
->          self.assertIn("vulnerabilities", result)
-> -        vulnerabilities = {v["id"]: v for v in result["vulnerabilities"]}
-> +        vulnerabilities = self._map_vulnerabilities(result)
->          self.assertEqual(len(vulnerabilities), 2)
-> -        self.assertEqual(vulnerabilities["CVE-2025-0001"]["analysis"]["state"], "resolved_with_pedigree")
-> -        self.assertEqual(vulnerabilities["CVE-2025-0002"]["analysis"]["state"], "in_triage")
-> +        self.assertEqual(len(vulnerabilities["CVE-2025-0001"]), 1)
-> +        self.assertEqual(len(vulnerabilities["CVE-2025-0002"]), 1)
-> +        self.assertEqual(vulnerabilities["CVE-2025-0001"][0]["analysis"]["state"], "resolved_with_pedigree")
-> +        self.assertEqual(vulnerabilities["CVE-2025-0002"][0]["analysis"]["state"], "in_triage")
->  
->          foo = self._find_component(result, "package-foo")
->          patch = foo["pedigree"]["patches"][0]
-> @@ -244,3 +253,57 @@ class TestGenerateCycloneDX(unittest.TestCase):
->                  }
->              ],
->          )
+> +libgcc has no MD_FALLBACK_FRAME_STATE_FOR for microblaze*-linux*, so the
+> +DWARF unwinder cannot step through signal frames at all.  Anything that
+> +unwinds out of a signal handler -- most prominently NPTL asynchronous
+> +pthread cancellation (SIGCANCEL) -- either stops early with
+> +_URC_END_OF_STACK (cleanup handlers below the signal frame never run) or
+> +misinterprets the on-stack signal trampoline and crashes with SIGSEGV.
 > +
-> +    def test_vulnerabilities_with_different_analysis(self):
-> +        """
-> +        If multiple packages ignore the same vulnerability but provide
-> +        different analyses, the generator must produce multiple
-> +        vulnerability entries with the same vulnerability ID but different
-> +        analysis information.
+> +Add the standard fallback: recognize the two-instruction trampoline the
+> +kernel writes into struct rt_sigframe on the stack
 > +
-> +        This situation can occur when generating a CycloneDX SBOM from the
-> +        output of 'make show-info-all'. The resulting SBOM includes packages
-> +        that exist in multiple versions within Buildroot (gnupg for instance).
+> +	addik r12, r0, __NR_rt_sigreturn
+> +	brki  r14, 0x8
 > +
-> +        In such a case, one package version may ignore a vulnerability because
-> +        it is not affected, while another package version may address it
-> +        through a patch.
+> +and rebuild the frame state from the sigcontext's pt_regs.  The ucontext
+> +is anchored relative to the trampoline (its last member) rather than to
+> +the CFA, so the layout of the frame head does not matter.
 > +
-> +        Therefore, multiple vulnerability entries must be generated, each with
-> +        its own analysis and reference information.
-> +        """
+> +The interrupted PC is recorded in DWARF column 36, one past the hard
+> +registers, because column 15 must keep the interrupted r15 (unrelated to
+> +the resume address of a signal frame).  Declaring it as
+> +DWARF_ALT_FRAME_RETURN_COLUMN makes init_dwarf_reg_size_table size the
+> +column; without that _Unwind_GetGR reads a zero size and aborts.
 > +
-> +        info = {
-> +            "gnupg": {
-> +                "name": "gnupg",
-> +                "version": "1.4.23",
-> +                "type": "target",
-> +                "ignore_cves": ["CVE-2025-0001"],
-> +                "virtual": False,
-> +            },
-> +            "gnupg2": {
-> +                "name": "gnupg2",
-> +                "version": "2.5.20",
-> +                "type": "target",
-> +                "virtual": False,
-> +                "patches": [PATCH],
-> +                "ignore_cves": ["CVE-2025-0001"],
-> +            },
-> +        }
+> +Tested with a microblazeel-linux-uclibc cross compiler against uClibc-ng
+> +git, running its NPTL test suite under qemu-system-microblazeel -M
+> +petalogix-s3adsp1800.  Without the fix 17 tests fail (tst-cancel{1..5,7,
+> +9,16,20,x4,x7}, tst-cleanup{1..3}, tst-cond{16,17}) by SIGSEGV or by
+> +hanging in the unwinder; with it all 17 pass and the rest of the suite
+> +is unchanged.  The implementation follows the mips/aarch64
+> +linux-unwind.h pattern.
 > +
-> +        result = self._run_script(show_info=info)
-> +        self.assertEqual(len(result["vulnerabilities"]), 2)
+> +gcc/ChangeLog:
 > +
-> +        vulnerabilities = self._map_vulnerabilities(result)
+> +	* config/microblaze/microblaze.h (DWARF_ALT_FRAME_RETURN_COLUMN):
+> +	Define.
 > +
-> +        self.assertEqual(len(vulnerabilities["CVE-2025-0001"]), 2)
+> +libgcc/ChangeLog:
 > +
-> +        ignored = next(v for v in vulnerabilities["CVE-2025-0001"] if v["analysis"]["state"] == "in_triage")
-> +        self.assertTrue(ignored is not None)
-> +        self.assertEqual(len(ignored["affects"]), 1)
-> +        self.assertEqual(ignored["affects"][0]["ref"], "gnupg")
+> +	* config.host (microblaze*-linux*): Set md_unwind_header.
+> +	* config/microblaze/linux-unwind.h: New file.
 > +
-> +        resolved = next(v for v in vulnerabilities["CVE-2025-0001"] if v["analysis"]["state"] == "resolved_with_pedigree")
-> +        self.assertTrue(resolved is not None)
-> +        self.assertEqual(len(resolved["affects"]), 1)
-> +        self.assertEqual(resolved["affects"][0]["ref"], "gnupg2")
+> +Upstream: https://gcc.gnu.org/cgit/gcc/commit/?id=4ef64ad1aa9bbbe9471610e2de6ef0c8afed8b1f
+> +
+> +Signed-off-by: Ramin Moussavi <ramin.moussavi@yacoub.de>
+> +Signed-off-by: Neal Frager <neal.frager@amd.com>
+> +---
+> + gcc/config/microblaze/microblaze.h      |   8 ++
+> + libgcc/config.host                      |   1 +
+> + libgcc/config/microblaze/linux-unwind.h | 102 ++++++++++++++++++++++++
+> + 3 files changed, 111 insertions(+)
+> + create mode 100644 libgcc/config/microblaze/linux-unwind.h
+> +
+> +diff --git a/gcc/config/microblaze/microblaze.h b/gcc/config/microblaze/microblaze.h
+> +index 2b5bd52040f7f..fc8c4b8717545 100644
+> +--- a/gcc/config/microblaze/microblaze.h
+> ++++ b/gcc/config/microblaze/microblaze.h
+> +@@ -176,6 +176,14 @@ extern enum pipeline_type microblaze_pipe;
+> + #define DWARF_FRAME_RETURN_COLUMN \
+> + 	(GP_REG_FIRST + MB_ABI_SUB_RETURN_ADDR_REGNUM)
+> + 
+> ++/* Signal frames (config/microblaze/linux-unwind.h) record the
+> ++   interrupted PC in DWARF column 36, one past the hard registers,
+> ++   because column 15 must keep the interrupted r15.  Declaring it as
+> ++   the alternate return column makes init_dwarf_reg_size_table size
+> ++   it; otherwise _Unwind_GetGR aborts when unwinding through a signal
+> ++   frame, such as during pthread cancellation.  */
+> ++#define DWARF_ALT_FRAME_RETURN_COLUMN 36
+> ++
+> + /* Initial state of return address on entry to func = R15.
+> +    Actually, the RA is at R15+8, but gcc doesn't know how
+> +    to generate this.
+> +diff --git a/libgcc/config.host b/libgcc/config.host
+> +index 046156fa5e786..a685d5da7a107 100644
+> +--- a/libgcc/config.host
+> ++++ b/libgcc/config.host
+> +@@ -1050,6 +1050,7 @@ mcore-*-elf)
+> + 	;;
+> + microblaze*-linux*)
+> + 	tmake_file="${tmake_file} microblaze/t-microblaze t-fdpbit t-slibgcc-libgcc"
+> ++	md_unwind_header=microblaze/linux-unwind.h
+> + 	;;
+> + microblaze*-*-elf)
+> + 	tmake_file="${tmake_file} microblaze/t-microblaze t-fdpbit"
+> +diff --git a/libgcc/config/microblaze/linux-unwind.h b/libgcc/config/microblaze/linux-unwind.h
+> +new file mode 100644
+> +index 0000000000000..b54704a065198
+> +--- /dev/null
+> ++++ b/libgcc/config/microblaze/linux-unwind.h
+> +@@ -0,0 +1,102 @@
+> ++/* DWARF2 EH unwinding support for MicroBlaze Linux.
+> ++   Copyright (C) 2026 Free Software Foundation, Inc.
+> ++
+> ++   This file is part of GCC.
+> ++
+> ++   GCC is free software; you can redistribute it and/or modify
+> ++   it under the terms of the GNU General Public License as published by
+> ++   the Free Software Foundation; either version 3, or (at your option)
+> ++   any later version.
+> ++
+> ++   GCC is distributed in the hope that it will be useful,
+> ++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+> ++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> ++   GNU General Public License for more details.
+> ++
+> ++   Under Section 7 of GPL version 3, you are granted additional
+> ++   permissions described in the GCC Runtime Library Exception, version
+> ++   3.1, as published by the Free Software Foundation.
+> ++
+> ++   You should have received a copy of the GNU General Public License and
+> ++   a copy of the GCC Runtime Library Exception along with this program;
+> ++   see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
+> ++   <http://www.gnu.org/licenses/>.  */
+> ++
+> ++#ifndef inhibit_libc
+> ++
+> ++/* Do code reading to identify a signal frame, and set the frame state
+> ++   data appropriately.  See unwind-dw2.c for the structs.  */
+> ++
+> ++#include <signal.h>
+> ++#include <sys/ucontext.h>
+> ++#include <asm/unistd.h>
+> ++
+> ++#define MD_FALLBACK_FRAME_STATE_FOR microblaze_fallback_frame_state
+> ++
+> ++static _Unwind_Reason_Code
+> ++microblaze_fallback_frame_state (struct _Unwind_Context *context,
+> ++				 _Unwind_FrameState *fs)
+> ++{
+> ++  const unsigned int *pc = (const unsigned int *) context->ra;
+> ++  struct sigcontext *sc;
+> ++  _Unwind_Ptr new_cfa;
+> ++  int i;
+> ++
+> ++  /* The outermost frame of a thread may leave a null or near-null
+> ++     return address; do not dereference it looking for the
+> ++     trampoline.  */
+> ++  if ((unsigned long) pc < 4096)
+> ++    return _URC_END_OF_STACK;
+> ++
+> ++  /* The kernel writes the signal trampoline onto the stack
+> ++     (struct rt_sigframe.tramp):
+> ++
+> ++	addik r12, r0, __NR_rt_sigreturn
+> ++	brki  r14, 0x8
+> ++
+> ++     and sets the saved r15 to the trampoline address minus 8 (the
+> ++     handler returns with "rtsd r15, 8"), so the unwound return
+> ++     address points 8 bytes before the trampoline.  */
+> ++  if (pc[0] == (0x31800000 | __NR_rt_sigreturn) && pc[1] == 0xb9cc0008)
+> ++    ;
+> ++  else if (pc[2] == (0x31800000 | __NR_rt_sigreturn) && pc[3] == 0xb9cc0008)
+> ++    pc += 2;
+> ++  else
+> ++    return _URC_END_OF_STACK;
+> ++
+> ++  /* The trampoline is the last member of the kernel's rt_sigframe and
+> ++     the ucontext sits directly in front of it.  Anchor there rather
+> ++     than at the CFA so the layout of the frame head does not matter
+> ++     (the kernel may insert an ABI argument-home gap at the front).
+> ++     uClibc's ucontext_t matches the kernel's struct ucontext.  */
+> ++  ucontext_t *uc = (ucontext_t *) ((_Unwind_Ptr) pc - sizeof (ucontext_t));
+> ++
+> ++  sc = (struct sigcontext *) &uc->uc_mcontext;
+> ++
+> ++  new_cfa = sc->regs.r1;
+> ++  fs->regs.cfa_how = CFA_REG_OFFSET;
+> ++  fs->regs.cfa_reg = 1;		/* r1, the stack pointer.  */
+> ++  fs->regs.cfa_offset = new_cfa - (_Unwind_Ptr) context->cfa;
+> ++
+> ++  /* pt_regs holds r0..r31 consecutively.  */
+> ++  for (i = 0; i < 32; i++)
+> ++    {
+> ++      fs->regs.how[i] = REG_SAVED_OFFSET;
+> ++      fs->regs.reg[i].loc.offset
+> ++	= (_Unwind_Ptr) &sc->regs.r0 + i * sizeof (unsigned long) - new_cfa;
+> ++    }
+> ++
+> ++  /* The interrupted PC goes into the alternate return column
+> ++     (DWARF_ALT_FRAME_RETURN_COLUMN, defined as 36 in
+> ++     gcc/config/microblaze/microblaze.h), one past the hard registers;
+> ++     column 15 above keeps the interrupted r15.  */
+> ++  fs->regs.how[__LIBGCC_DWARF_ALT_FRAME_RETURN_COLUMN__] = REG_SAVED_OFFSET;
+> ++  fs->regs.reg[__LIBGCC_DWARF_ALT_FRAME_RETURN_COLUMN__].loc.offset
+> ++    = (_Unwind_Ptr) &sc->regs.pc - new_cfa;
+> ++  fs->retaddr_column = __LIBGCC_DWARF_ALT_FRAME_RETURN_COLUMN__;
+> ++  fs->signal_frame = 1;
+> ++
+> ++  return _URC_NO_REASON;
+> ++}
+> ++
+> ++#endif
+> diff --git a/package/gcc/16.2.0/0003-microblaze-add-Linux-signal-frame-unwinding-support.patch b/package/gcc/16.2.0/0003-microblaze-add-Linux-signal-frame-unwinding-support.patch
+> new file mode 100644
+> index 0000000000..f7618d6727
+> --- /dev/null
+> +++ b/package/gcc/16.2.0/0003-microblaze-add-Linux-signal-frame-unwinding-support.patch
+> @@ -0,0 +1,196 @@
+> +From 4ef64ad1aa9bbbe9471610e2de6ef0c8afed8b1f Mon Sep 17 00:00:00 2001
+> +From: Ramin Moussavi <lordrasmus@gmail.com>
+> +Date: Wed, 3 Jun 2026 00:00:00 +0200
+> +Subject: [PATCH] microblaze: add Linux signal frame unwinding support
+> +
+> +libgcc has no MD_FALLBACK_FRAME_STATE_FOR for microblaze*-linux*, so the
+> +DWARF unwinder cannot step through signal frames at all.  Anything that
+> +unwinds out of a signal handler -- most prominently NPTL asynchronous
+> +pthread cancellation (SIGCANCEL) -- either stops early with
+> +_URC_END_OF_STACK (cleanup handlers below the signal frame never run) or
+> +misinterprets the on-stack signal trampoline and crashes with SIGSEGV.
+> +
+> +Add the standard fallback: recognize the two-instruction trampoline the
+> +kernel writes into struct rt_sigframe on the stack
+> +
+> +	addik r12, r0, __NR_rt_sigreturn
+> +	brki  r14, 0x8
+> +
+> +and rebuild the frame state from the sigcontext's pt_regs.  The ucontext
+> +is anchored relative to the trampoline (its last member) rather than to
+> +the CFA, so the layout of the frame head does not matter.
+> +
+> +The interrupted PC is recorded in DWARF column 36, one past the hard
+> +registers, because column 15 must keep the interrupted r15 (unrelated to
+> +the resume address of a signal frame).  Declaring it as
+> +DWARF_ALT_FRAME_RETURN_COLUMN makes init_dwarf_reg_size_table size the
+> +column; without that _Unwind_GetGR reads a zero size and aborts.
+> +
+> +Tested with a microblazeel-linux-uclibc cross compiler against uClibc-ng
+> +git, running its NPTL test suite under qemu-system-microblazeel -M
+> +petalogix-s3adsp1800.  Without the fix 17 tests fail (tst-cancel{1..5,7,
+> +9,16,20,x4,x7}, tst-cleanup{1..3}, tst-cond{16,17}) by SIGSEGV or by
+> +hanging in the unwinder; with it all 17 pass and the rest of the suite
+> +is unchanged.  The implementation follows the mips/aarch64
+> +linux-unwind.h pattern.
+> +
+> +gcc/ChangeLog:
+> +
+> +	* config/microblaze/microblaze.h (DWARF_ALT_FRAME_RETURN_COLUMN):
+> +	Define.
+> +
+> +libgcc/ChangeLog:
+> +
+> +	* config.host (microblaze*-linux*): Set md_unwind_header.
+> +	* config/microblaze/linux-unwind.h: New file.
+> +
+> +Upstream: https://gcc.gnu.org/cgit/gcc/commit/?id=4ef64ad1aa9bbbe9471610e2de6ef0c8afed8b1f
+> +
+> +Signed-off-by: Ramin Moussavi <ramin.moussavi@yacoub.de>
+> +Signed-off-by: Neal Frager <neal.frager@amd.com>
+> +---
+> + gcc/config/microblaze/microblaze.h      |   8 ++
+> + libgcc/config.host                      |   1 +
+> + libgcc/config/microblaze/linux-unwind.h | 102 ++++++++++++++++++++++++
+> + 3 files changed, 111 insertions(+)
+> + create mode 100644 libgcc/config/microblaze/linux-unwind.h
+> +
+> +diff --git a/gcc/config/microblaze/microblaze.h b/gcc/config/microblaze/microblaze.h
+> +index 2b5bd52040f7f..fc8c4b8717545 100644
+> +--- a/gcc/config/microblaze/microblaze.h
+> ++++ b/gcc/config/microblaze/microblaze.h
+> +@@ -176,6 +176,14 @@ extern enum pipeline_type microblaze_pipe;
+> + #define DWARF_FRAME_RETURN_COLUMN \
+> + 	(GP_REG_FIRST + MB_ABI_SUB_RETURN_ADDR_REGNUM)
+> + 
+> ++/* Signal frames (config/microblaze/linux-unwind.h) record the
+> ++   interrupted PC in DWARF column 36, one past the hard registers,
+> ++   because column 15 must keep the interrupted r15.  Declaring it as
+> ++   the alternate return column makes init_dwarf_reg_size_table size
+> ++   it; otherwise _Unwind_GetGR aborts when unwinding through a signal
+> ++   frame, such as during pthread cancellation.  */
+> ++#define DWARF_ALT_FRAME_RETURN_COLUMN 36
+> ++
+> + /* Initial state of return address on entry to func = R15.
+> +    Actually, the RA is at R15+8, but gcc doesn't know how
+> +    to generate this.
+> +diff --git a/libgcc/config.host b/libgcc/config.host
+> +index 046156fa5e786..a685d5da7a107 100644
+> +--- a/libgcc/config.host
+> ++++ b/libgcc/config.host
+> +@@ -1050,6 +1050,7 @@ mcore-*-elf)
+> + 	;;
+> + microblaze*-linux*)
+> + 	tmake_file="${tmake_file} microblaze/t-microblaze t-fdpbit t-slibgcc-libgcc"
+> ++	md_unwind_header=microblaze/linux-unwind.h
+> + 	;;
+> + microblaze*-*-elf)
+> + 	tmake_file="${tmake_file} microblaze/t-microblaze t-fdpbit"
+> +diff --git a/libgcc/config/microblaze/linux-unwind.h b/libgcc/config/microblaze/linux-unwind.h
+> +new file mode 100644
+> +index 0000000000000..b54704a065198
+> +--- /dev/null
+> ++++ b/libgcc/config/microblaze/linux-unwind.h
+> +@@ -0,0 +1,102 @@
+> ++/* DWARF2 EH unwinding support for MicroBlaze Linux.
+> ++   Copyright (C) 2026 Free Software Foundation, Inc.
+> ++
+> ++   This file is part of GCC.
+> ++
+> ++   GCC is free software; you can redistribute it and/or modify
+> ++   it under the terms of the GNU General Public License as published by
+> ++   the Free Software Foundation; either version 3, or (at your option)
+> ++   any later version.
+> ++
+> ++   GCC is distributed in the hope that it will be useful,
+> ++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+> ++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+> ++   GNU General Public License for more details.
+> ++
+> ++   Under Section 7 of GPL version 3, you are granted additional
+> ++   permissions described in the GCC Runtime Library Exception, version
+> ++   3.1, as published by the Free Software Foundation.
+> ++
+> ++   You should have received a copy of the GNU General Public License and
+> ++   a copy of the GCC Runtime Library Exception along with this program;
+> ++   see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
+> ++   <http://www.gnu.org/licenses/>.  */
+> ++
+> ++#ifndef inhibit_libc
+> ++
+> ++/* Do code reading to identify a signal frame, and set the frame state
+> ++   data appropriately.  See unwind-dw2.c for the structs.  */
+> ++
+> ++#include <signal.h>
+> ++#include <sys/ucontext.h>
+> ++#include <asm/unistd.h>
+> ++
+> ++#define MD_FALLBACK_FRAME_STATE_FOR microblaze_fallback_frame_state
+> ++
+> ++static _Unwind_Reason_Code
+> ++microblaze_fallback_frame_state (struct _Unwind_Context *context,
+> ++				 _Unwind_FrameState *fs)
+> ++{
+> ++  const unsigned int *pc = (const unsigned int *) context->ra;
+> ++  struct sigcontext *sc;
+> ++  _Unwind_Ptr new_cfa;
+> ++  int i;
+> ++
+> ++  /* The outermost frame of a thread may leave a null or near-null
+> ++     return address; do not dereference it looking for the
+> ++     trampoline.  */
+> ++  if ((unsigned long) pc < 4096)
+> ++    return _URC_END_OF_STACK;
+> ++
+> ++  /* The kernel writes the signal trampoline onto the stack
+> ++     (struct rt_sigframe.tramp):
+> ++
+> ++	addik r12, r0, __NR_rt_sigreturn
+> ++	brki  r14, 0x8
+> ++
+> ++     and sets the saved r15 to the trampoline address minus 8 (the
+> ++     handler returns with "rtsd r15, 8"), so the unwound return
+> ++     address points 8 bytes before the trampoline.  */
+> ++  if (pc[0] == (0x31800000 | __NR_rt_sigreturn) && pc[1] == 0xb9cc0008)
+> ++    ;
+> ++  else if (pc[2] == (0x31800000 | __NR_rt_sigreturn) && pc[3] == 0xb9cc0008)
+> ++    pc += 2;
+> ++  else
+> ++    return _URC_END_OF_STACK;
+> ++
+> ++  /* The trampoline is the last member of the kernel's rt_sigframe and
+> ++     the ucontext sits directly in front of it.  Anchor there rather
+> ++     than at the CFA so the layout of the frame head does not matter
+> ++     (the kernel may insert an ABI argument-home gap at the front).
+> ++     uClibc's ucontext_t matches the kernel's struct ucontext.  */
+> ++  ucontext_t *uc = (ucontext_t *) ((_Unwind_Ptr) pc - sizeof (ucontext_t));
+> ++
+> ++  sc = (struct sigcontext *) &uc->uc_mcontext;
+> ++
+> ++  new_cfa = sc->regs.r1;
+> ++  fs->regs.cfa_how = CFA_REG_OFFSET;
+> ++  fs->regs.cfa_reg = 1;		/* r1, the stack pointer.  */
+> ++  fs->regs.cfa_offset = new_cfa - (_Unwind_Ptr) context->cfa;
+> ++
+> ++  /* pt_regs holds r0..r31 consecutively.  */
+> ++  for (i = 0; i < 32; i++)
+> ++    {
+> ++      fs->regs.how[i] = REG_SAVED_OFFSET;
+> ++      fs->regs.reg[i].loc.offset
+> ++	= (_Unwind_Ptr) &sc->regs.r0 + i * sizeof (unsigned long) - new_cfa;
+> ++    }
+> ++
+> ++  /* The interrupted PC goes into the alternate return column
+> ++     (DWARF_ALT_FRAME_RETURN_COLUMN, defined as 36 in
+> ++     gcc/config/microblaze/microblaze.h), one past the hard registers;
+> ++     column 15 above keeps the interrupted r15.  */
+> ++  fs->regs.how[__LIBGCC_DWARF_ALT_FRAME_RETURN_COLUMN__] = REG_SAVED_OFFSET;
+> ++  fs->regs.reg[__LIBGCC_DWARF_ALT_FRAME_RETURN_COLUMN__].loc.offset
+> ++    = (_Unwind_Ptr) &sc->regs.pc - new_cfa;
+> ++  fs->retaddr_column = __LIBGCC_DWARF_ALT_FRAME_RETURN_COLUMN__;
+> ++  fs->signal_frame = 1;
+> ++
+> ++  return _URC_NO_REASON;
+> ++}
+> ++
+> ++#endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
