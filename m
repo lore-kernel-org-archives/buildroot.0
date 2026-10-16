@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37715CC6B38
-	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 15:01:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CB16CC6B38
+	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 15:01:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C9D63409FE;
-	Fri, 16 Oct 2026 15:01:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1024040A0C;
+	Fri, 16 Oct 2026 15:01:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PjCVvzZTf6qp; Fri, 16 Oct 2026 15:01:15 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org D2BB640A08
+ id f7YF-aX7hJmg; Fri, 16 Oct 2026 15:01:18 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 2BF7C40A24
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792162875;
-	b=WGgA6gxS8zzMsKAIYuPnj+QH5ovPo1iNyo89zxeojr+tqZWEpL31Iu1DzWQB4fCZQ/aU
-	 jT7scl1gx+lpG4qJnLcuLmYIBiMB6ZW6PN7LR1MNnH2+QkwobuCX63O/atcwaWHpOHAof
-	 dekC6pOdvQh1X1j007b2CsCW5uanLNZUwyoIo7YAXtunEcxF1YG8aV4YL3cpAXpSjOmmM
-	 PXUNyLc7KxzCw5m2pU5mWVpm7G5y2goEaMGgZeZhxrRjYPwkjNJJktCwvnRUBqykFyKto
-	 xTuELqiUPT58ZEUpw/z7oJbtF5TgMWLpNmnpBbCYdvQ5pFppV2q9j074OvLBR4mBpFw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792162878;
+	b=PS/vwjtOUZR+pBP5EJ0PkwNoil7H+wDAaiAhpdIJuV+QjjQkI8o/n8sMHYR01RYluNVB
+	 5c8zPSjUT+IAw8yzb5Q6c74dOVI1AlXv3FRsLtBhqkzb9lcHRCAiVwGvn1zqHS0fbUWwP
+	 uFc3BWMXFTqnoo1n/nBpalFLb1+mDb6ayE2Oo01cmNMH9lOczksu5I9RHQKtMYUUrK8yS
+	 522+suB6NOj5j9ukTC5L0ODj5tJGCbVoGkRu1XItBEGxOYdBNQ/ZHR0Glld13PckmF8fh
+	 M29dZ36ewB/NyQmd6P9lfudIJCgac1T7zRIuHkemBXvYRU+RwgGAtRGRbzLlN6QWrtw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792162875;
+	c=relaxed/relaxed; t=1792162878;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,117 +31,117 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=kBVqwKQORcGxLaEUsRI8mBo1/jh+6hNvjnZm12i6aMY=;
-	b=RGfYMUQUon1NBtcaaN4QDDm63ZN9HPjCgyX0fFnFfwAASmvsd6bSAiLgQa+TzhaAscC0
-	 LNMbukj4VfLGtbnT1uFqcd7rGEN6RaMtgR/nekODBo3cs2+D8ZjtIRwkubsfc2jO//uFe
-	 C8Ie5Q3Qm9Kjt2c73YO0+RaM+WdyJeGc39Ox50de90FyHQjsFCBkTO9qXf/KgSbjX5foE
-	 kqHuHgm6wr8R4Dw9AZ6fOEsFD/Vx8/2rWUqkr4s0p0Nmle7+txq0DsmjYGsAHoAeKe+SV
-	 GgqDpEM2QxqwcKx40qcxoaa7CZaLkk738fU6NVAJ0/U1zf2TLl5zAJ8SjJfTL+pPnVA==
+	bh=YFsSdU4mvvmeOaVwPW+98hd07zZkc2vcs0cbw/f/wvM=;
+	b=mWg3ZvRenk8iesIPEf57j3nnj7IxvVUVQM6iI2J5KhMU0n4RMY7loeqroqNMaHM7+SvR
+	 Sn3g97V4EWedO406tOrHo+PqXywJZmeJ6k74Q3EcLd8bg0cCKS2HWjHC/jufUqTh5qxYJ
+	 31L0rzm7jjRfGNy03lBbmW9gb5w1iqrIGq787fgg03O01Dw46AEA6/cboMeviqpA+siso
+	 Oz2xipZpFpH2nlHSPF9BHddf+oz4gTMv+QHj56Ruql+6IIiM16G+osMbt3UJIa8EoYfxQ
+	 kLTsA7k2CpQW/d2ng+rsxydXjkybaK33MprzXWTr03Gt4KktjM4a5wnmsE454At5IGw==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792162874;
-	bh=kBVqwKQORcGxLaEUsRI8mBo1/jh+6hNvjnZm12i6aMY=;
+	s=default; t=1792162878;
+	bh=YFsSdU4mvvmeOaVwPW+98hd07zZkc2vcs0cbw/f/wvM=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=N8EpcYGC8xtqc7eW1dD3LWanw0ecHkJJOUIqCji55Q2mg/YssZTeLsyyRQeqdcBkk
-	 5A5s2X6qJIz7wkgNFLsf4/4+++h9NtqAbJFqDLwHNZQLxDLEoz3XrxT/J5s9wGRZGh
-	 E5dC6QFKVvm7G9aXfcQnIhxJ9s2gqXGZB2KT8kjkk4Ra0NqHtpg7v/foW4PYlgiQpu
-	 qH/sigk1QQgl88iCPiTF2GuG7ppKY+5C8saC5sNIIy68mXambMYpdh4GrdV9zdEsog
-	 b8iYqbrPlUuBwhHDFIgY6IHFkfUKQ19R7r/u+1MvMMqi3vHteBMpAICG4AMrbjpxdk
-	 iWHj75P6oz/TA==
+	b=TuFY6VGL8klM4TfLzZFQag0IUdgbD6OwWX3RX4Vk6Z2mftAYIYZd9hPnLkm/M5YTr
+	 yHWw7b90cyop1PfOIK0daSDdGpktkqRtawTJqOuKNr2mVDrF8NyRLQEutunj+80nEr
+	 R1E/ChS8vRjnkviCVshu6+doK+tavQL9wR5WLvFgRyylevxJso34+yevhkubKIl0Gg
+	 iy2+Vy9780yY/1OA33k/UzVGc7cfUwLQYahaPqpbFZrCAMgs7Ej706YnSLFeVNEXQV
+	 CvqKx1QCDPVGhi138GobRLUbRa2CRW7POiTgEc4XHAqq1n437TIcrgEfOqaFwmXFJ6
+	 9Mrc+Ttxzjm5g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D2BB640A08;
-	Fri, 16 Oct 2026 15:01:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2BF7C40A24;
+	Fri, 16 Oct 2026 15:01:18 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 62249255
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:01:13 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id A852A255
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:01:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4875940A08
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:01:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9A62F40A08
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:01:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eA345ujASODQ for <buildroot@buildroot.org>;
- Fri, 16 Oct 2026 15:01:12 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 19FD4409FE
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792162872;
- b=n2m1Qqibm4FVrbP8iy6W2bN/qjui0aLlBWSAnXvFe91Ls81OPdZUE0a8yH+YVdkQzEL9
- ZLfbRlA7acgSJ/SiFSy6fYCl9QvsRsacwKw2zALXZeX9wwATsJHCaE8aPfs7R7DkXkMtL
- PqTPRYTjSrFtsEif9rH+/AA8ZTSPkfnPPmrhAGZ3fGNCLZUAf7L8vDSBv/857BGa3fswN
- gs/mbo7oGLu51ZPQMzptdQed3v86DX62F4rTnDK/yhvwL9DSFC5k8opOfdNmvHf72qvLm
- p12j6z9Yx2nVX25WZ2cyxBgn4dJ7zx4pk7wcauC3FrtjFTbHU90lVNu6NnMxfvpUbSA==
+ id pnqiuYUulRKZ for <buildroot@buildroot.org>;
+ Fri, 16 Oct 2026 15:01:13 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 5D035409FE
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792162873;
+ b=QIU04159h9jnYJ3Xpf6W3mB0eExlhNr/AhzgDJN4sPltLAF2ATYaqllPyJJNYhiogEDD
+ mQPYaOsY5v/XmQUb1EbttzNVA3Lw9hAP2gts67vqxsvwubTLg0eVwUni4bmtrJZFlw/km
+ AsZguop0d5KiubYtWlBdQej/BuFLODCKqDGuU/K3zNK0CyEe7cmT4XsUvyQqoejM9eL31
+ DauZtyghP7ZcjQLsYp7blbL0d0XsvEaENxaNfuDFm+6Pi7gc+9E0tlMm+adG/Bk3wN+kR
+ xyr7LIyI57Sx7aODqVgo45nKZmH1VqGiu5Dp1XOuEOEdVuR8ZleTwMsCZSemhmF+mig==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792162872;
+ c=relaxed/relaxed; t=1792162873;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=i56lWoCbjUFV1VyjFv/PfTu1wy+8jqyl5IgL3j4bJ1U=;
- b=ctd/mDkCyoXYfLXllerXIDtl2YP6SaO5YEF46nxTNqK99pSB1b27n26fuA7OSD6CZUBi
- TWDYHwbtGmfKMWc6jRnmddmPu7vVaCWWb/rl3VSLvNwgx0zZYbke3An7ynx8agjF7dCYr
- Gtnq8iN03aULcQ8IqnRYVvwr9IZBLOE++WNXBry0lZkOPW7ty7Gp9VxYacpf46/HM8jry
- rthna7ACx2YuWknISC4vCknosKBOBvhilQVb1LS8PFzR8EfpHSOs6dhJ9nsOsEtxLkNvD
- PYWnaOdjit29vURRM6tiuBj/ThNzzDUiw0qJglnWgU+v92g247aDWDolJIT/+7tCZbg==
+ bh=x08TlKwdT3njWt3LGphoeRCHhF1SBKcRoARSteqDxac=;
+ b=s1rFHf8CCZmK7RaAruYE7dlm/UanO+jfYqdiYYkPmEQgJSxmA+zmJH4O1VaO8JZfcScZ
+ GgUy6JyrVlI8CdULnJPJH8l53a+ZRK4AqKB+DWM+ZV6WoKKajN+9pbbUbiiIOFc0sQw/D
+ oq+p4Ws07MkiIfSknMekDbB5CS72W64gPiLaahaEMFqEJOmql/iKG5pqhjyFlFccqaRdE
+ w8De+wrnJ45HZPlSRDEwqQ6bxHKkjXuJgmq5fF1ZCe+t+BQC5zcFqBuuq1wetltYjGFF/
+ 1oTx9vuXIJyzj50/7jkG8dXYvLFUXhcPLJ4Vk7LAJnrWkYJEkOe5j9NUNIOXdVxBQyw==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
  dmarc=pass header.from=mind.be;
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=QjIu63Qs; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::336"
+ header.s=google header.b="SSz20/x2"; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::32b"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 19FD4409FE
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:01:11 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-49d05d51553so316775e9.2
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 08:01:11 -0700 (PDT)
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5D035409FE
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:01:12 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-4a021c809e3so618825e9.0
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 08:01:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1792162869; x=1792767669;
+ d=1e100.net; s=20260707; t=1792162871; x=1792767671;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=i56lWoCbjUFV1VyjFv/PfTu1wy+8jqyl5IgL3j4bJ1U=;
- b=Sq5aYNq9YLb3pdMCkUoltuzqJI7STYnAJIb7Dmtw2QMIP3Ds7Ib0naJeBPirR8VUrN
- UUbvmTvT2q58FEuj8Do8p/dEEg5KAdD+cX7iM70LlAjBaZ+MMyyd7TvYbx2u1GGwYgaQ
- D8nYuTSzcmGgKYNZemqZRTn3TvctJeH7Nnt5MICchtfjo5ttljk4dx5vIbh3p0NnZfUh
- ZAcSh2qQ1j1bXqj8cORvysc/Hjdd6GJXpSryi+5dPar9Ik/jFRmhizYKbekyL0MYTvn6
- V0QdiK0Wkch/UcHgapy5VJ8gjEGQqS7Ngyt8GsvZqPnwzcyNxNE1vP+Bx98BYriXhfDm
- sNCA==
-X-Gm-Message-State: AFq9FYLUngoThkGW2bUnXj56WEonZ7TH4plSQn27dnVz+7UGNhE+prD0
- rNAP2o3hiHaufRsH/e41imUV6JYKm+BQCJjoXYl+bG6PLOYe57Xh/ucIWwDz73Y1pi8k6lNEgQC
- 5T1bWZpE=
-X-Gm-Gg: AYBFou2yjKrbBvqB3Vj1DB9Q0Bx+ZNxy+p8mdOBSdfBWrvRW2GFagT+wOUNCpo+Mknq
- 9vKBpmTfSKPQ4sLYe1FIasmJL/sgoYzryYOUy/jOQHlQynBnk7Qudx3PybFDeka8+rAD9Yk1KIw
- +2ENJPUnOKDzkTUU81x3yT5tGdRvpXnrlExCL5u7SNZsjTR0G7Mxo3Kb+P3RnRxJS47DW3yppU+
- sCilgjEDFGJkAVjQ4vDdraHHoVJEWIAkkOtfKCOXkTUCOK+j1Y0rHLOaifrTg+OUBqKgyjk2DqL
- +SX6T5WjQKCJnsG2PMzcBa3/ssEgcJQpuPMusszQNy59KagC3BlOF0OVKAKi4oZi9WXKp6tNGr0
- MV2HSmmEeuFSixB1FGjavF6jfT7iMO9DLX0uLkyB+UWAqf0tp4je4wTO51fLUkJ1h1lIq7pPds8
- aWR7b0btXwMX0gYEZDRtuHORV+Qx/p0oLjEbxM/efEzJcRLeQi9MTNHmMtkgDv8JVKRIC6CGxaT
- 5qBZDhl5XH4ZXUCQTXBnwb1T3ry22GF+LOpM9MduFOGfmK0M2kl
-X-Received: by 2002:a05:600c:1f86:b0:4a1:93fd:8f8 with SMTP id
- 5b1f17b1804b1-4a1d75ab363mr2033185e9.4.1792162866573; 
- Fri, 16 Oct 2026 08:01:06 -0700 (PDT)
+ bh=x08TlKwdT3njWt3LGphoeRCHhF1SBKcRoARSteqDxac=;
+ b=RBsaRnsDwIMKL9s36pzf2SM+RzvOsMPBbE4C5RNVG3WTnhilJEaEb+qoCzeT3uyFhd
+ 8nXqHclpThNORBXFC7IjugmuzqLvOswPvV6wPP+lcfyhXn5zp0jfR3RiZWm6ryOWkcSC
+ DGUyKaJY1M6fNTub7U+5TyxyCuEGtoRfTpn6F0iSj899I0BEBexLDScDeqLZPrtaKWnz
+ AYZOqEDRWNKtJRNJ/6OG986lvJssnbcIr63tbRl+lfU/UG246xSUyAl2ZT3fxGv5jrB0
+ dDeQQJDbZ3ndIwxcEqsSj1iBHU8VpBqnSlOJGcjZdQ2Hd1ARCPu//SWjf3Ty0U9e03Jt
+ DR5g==
+X-Gm-Message-State: AFq9FYIv/sAe3qsGZ/IPVm/KGvVU3knT8Mz1/WI+MWtMhvqm0R4gJPyi
+ i5u51iAKb6zq+u8va9sKGnbeKLtIq7sSIP/PIYKeMQLRpZ1bJu6g3qg/1Dj6tY7rbC6tF5ruhic
+ mKfy4vGE=
+X-Gm-Gg: AYBFou3yqPzwURxVcyBR8wF7fRUNmzAhXTyeurMmLkfNe6yEbD7qKDWEuWjQTAtlhcq
+ nDFHscESIKBb6/m0dN0RX6SUjPF5cjLsmSwZ9+sVEZrA1qGA3zgNg57tT3algPgTKTiu68pDqcz
+ wpwLdglVNl/5V5NJRzV8r24fNlx5+iZZdqx1vJsf45DTqnQrJa8Si4WS50Og+taapPJVXtXOFW0
+ YpiTJTyfMPhBU/+dkWIdhPJpTVcCtHnPRLopSp/6ICS6HPmGn1uTq6eI5BrCXszDc7x2io7DM0h
+ e3Qv5BL5tTsqMPygxvRcBJYBtIsMDnWgGuccYNQCh4YpAEgcs6Y7fgh1K22WKSoIIUIAteRUL/I
+ tYh4qpjWk24O93LwVpCXkZJfL9RN0qc0SUE9DKRCLXMqqX+mlqlEOQ3ixsElYLX4/hsNqgQlV50
+ hRrKSytYdhd2owVrQGhWpSyY8sxF4osDYGCKrDJNNQlnrg0VgL+Z8oYrr5fpDQFXLAuU84xf+vW
+ ZvjpRYbpsCJzwRl62WTcresDV+a1Q8PiEFdl5LhOQ==
+X-Received: by 2002:a05:600c:81c8:b0:4a1:9661:14b5 with SMTP id
+ 5b1f17b1804b1-4a1d7616576mr1064675e9.29.1792162870571; 
+ Fri, 16 Oct 2026 08:01:10 -0700 (PDT)
 Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
  [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4a1ce33ad3fsm47051585e9.5.2026.10.16.08.01.05
+ ffacd0b85a97d-48dfd5008e7sm5588160f8f.43.2026.10.16.08.01.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 16 Oct 2026 08:01:05 -0700 (PDT)
+ Fri, 16 Oct 2026 08:01:09 -0700 (PDT)
 To: buildroot@buildroot.org,
-	Brandon Maier <brandon.maier@gmail.com>
+	Nikita Kiryushin <kiryushin@ancud.ru>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 16 Oct 2026 17:01:03 +0200
-Message-ID: <20261016150104.59875-1-raphael.melotte@mind.be>
+Date: Fri, 16 Oct 2026 17:01:07 +0200
+Message-ID: <20261016150109.59904-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20241117-genimage-partition-type-uuid-v2-1-6c5f3f6dfc98@gmail.com>
+In-Reply-To: <20241122174608.12470-1-kiryushin@ancud.ru>
 References: 
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2] docs/manual/writing-rules: align use of
- genimage partition types
+Subject: Re: [Buildroot] [PATCH 1/1] docs/manual/contribute.adoc: mention
+ mailing list subscription requirement
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -162,85 +162,42 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> Buildroot boards use a mixture of the GPT Partition Type "L" (generic
-> Linux filesystem) and "root-x86", "root-arm", etc (UAPI Root
-> Filesystem) for root filesystem partitions.
+> The mail address used to contribute via buildroot mailing list
+> is required to be subscribed to the mailing list. Otherwise,
+> messages sent to the mailing list will be automatically rejected,
+> as server only accepts email from mailing list subscribers.
 > 
-> To have consistent guidance on building disk images with genimage,
-> update the docs to recommend using the UAPI Root Filesystem types. The
-> UAPI Root Filesystem types are part of the UAPI Discoverable Partitions
-> Specification (DPS) which helps set a wider standard for system boot.
+> This behavior is not explicitly stated in the documentation
+> for contributors (aside from recommendation to subscribe
+> as the first thing for contributor to do). This may lead to an
+> unpleasent surprise to developers, who prefer reading mailing
+> lists using archives.
 > 
-> See https://uapi-group.org/specifications/specs/discoverable_partitions_specification/
+> Add mention of mailing list subscription requirement to 'Preparing
+> a patch series' section of contribution manual.
 > 
-> Signed-off-by: Brandon Maier <brandon.maier@gmail.com>
+> Signed-off-by: Nikita Kiryushin <kiryushin@ancud.ru>
 
 Applied to 2025.02.x, 2026.08.x. Thanks
 
 > ---
-> Changes in v2:
-> - Update docs to call out root-* partition type [Niklas, Thomas]
-> - Drop GUID board updates for a later patch series
-> - Link to v1: https://lore.kernel.org/r/20241109-genimage-partition-type-uuid-v1-0-9f23180c7195@gmail.com
-> ---
->  docs/manual/writing-rules.adoc | 37 ++++++++++++++++++++++++++-----------
->  1 file changed, 26 insertions(+), 11 deletions(-)
+>  docs/manual/contribute.adoc | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> 
-> ---
-> base-commit: 0df7dfb804457a62c7751eec6555ad75158e3e3d
-> change-id: 20241109-genimage-partition-type-uuid-8e4c62ee041f
-> 
-> Best regards,
-> 
-> diff --git a/docs/manual/writing-rules.adoc b/docs/manual/writing-rules.adoc
-> index 03e4f2c61cfe4820fe6d06d193b9215d423bf4d7..3964deca867494ca4df70f3c0d92f9982ec6deec 100644
-> --- a/docs/manual/writing-rules.adoc
-> +++ b/docs/manual/writing-rules.adoc
-> @@ -198,17 +198,32 @@ image sdimage.img {
->    chance, the byte count.  In comments instead use +GB+, +MB+, +KB+
->    (not +kb+) in place of +G+, +M+, +K+.
+> diff --git a/docs/manual/contribute.adoc b/docs/manual/contribute.adoc
+> index ffaff6f857..8de0520667 100644
+> --- a/docs/manual/contribute.adoc
+> +++ b/docs/manual/contribute.adoc
+> @@ -375,6 +375,9 @@ $ git send-email origin/master
+>  Note that +git+ should be configured to use your mail account.
+>  To configure +git+, see +man git-send-email+ or https://git-send-email.io/.
 >  
-> -* For GPT partitions, the +partition-type-uuid+ value must be +U+ for
-> -  the EFI System Partition (expanded to
-> -  +c12a7328-f81f-11d2-ba4b-00a0c93ec93b+ by _genimage_), +F+ for a FAT
-> -  partition (expanded to +ebd0a0a2-b9e5-4433-87c0-68b6b72699c7+ by
-> -  _genimage_) or +L+ for the root filesystem or other filesystems
-> -  (expanded to +0fc63daf-8483-4772-8e79-3d69d8477de4+ by
-> -  _genimage_). Even though +L+ is the default value of _genimage_, we
-> -  prefer to have it explicitly specified in our +genimage.cfg+
-> -  files. Finally, these shortcuts should be used without double
-> -  quotes, e.g +partition-type-uuid = U+. If an explicit GUID is
-> -  specified, lower-case letters should be used.
-> +* Every +partition+ of a GPT image (e.g. +partition-table-type = gpt+) must
-> +  explicitly set +partition-type-uuid+.
+> +The mail account used has to be subscribed to the mailing list,
+> +otherwise your message will be automatically rejected.
 > +
-> +** Every +partition-type-uuid+ value must not be double quoted
-> +
-> +** Every +partition-type-uuid+ value must be written with _genimage_ GUID
-> +   shortcuts (for example, use +U+ instead of +c12a7328-...+). For a list of
-> +   GUID shortcuts, see
-> +   https://github.com/pengutronix/genimage/?tab=readme-ov-file#the-image-section
-> +   If a GUID shortcut is not supported by _genimage_, the full GUID must be
-> +   written in lower-case letters.
-> +
-> +** Every +partition-type-uuid+ must use a GUID from the
-> +   https://uapi-group.org/specifications/specs/discoverable_partitions_specification/[UAPI
-> +   Discoverable Partitions Specification] when possible. Some common partition
-> +   types are as follows.
-> +
-> +*** +U+ for the EFI System Partition (expanded to
-> +    +c12a7328-f81f-11d2-ba4b-00a0c93ec93b+ by _genimage_)
-> +
-> +*** +root-\{arch\}+ for the root filesystem partition, where +\{arch\}+ is the
-> +    system architecture (for example +root-x86+, +root-x86-64+, +root-arm+, or
-> +    +root-arm64+)
-> +
-> +*** +L+ for other Linux filesystem partitions (expanded to
-> +    +0fc63daf-8483-4772-8e79-3d69d8477de4+ by _genimage_).
->  
->  The +genimage.cfg+ files are the input for the genimage tool used in
->  Buildroot to generate the final image file(i.e. sdcard.img). For further
+>  If you do not use +git send-email+, make sure posted *patches are not
+>  line-wrapped*, otherwise they cannot easily be applied. In such a case,
+>  fix your e-mail client, or better yet, learn to use +git send-email+.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
