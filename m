@@ -1,146 +1,211 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B60F4CC6B38
-	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 15:06:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18E03CC6B38
+	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 15:28:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7FF83817AF;
-	Fri, 16 Oct 2026 15:06:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4FED340A9E;
+	Fri, 16 Oct 2026 15:28:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o1wIFUrmodqo; Fri, 16 Oct 2026 15:06:44 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 8810A817B0
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792163204;
-	b=BgMEFDNEBR/VhfjxPo46LDvHJYj+krb2QAF+VQx2qk2Kvnr2Lq9EUiWVqLSH30hCGzQo
-	 mmdeyXZr+lMnUC8Jr/nuI5dktphA1n12l/ffJqY8Ul+LWPrACUzEXXVdqAA4RQMEA1Hcp
-	 NaY3xtL8W1Fyu1FiBE8DqKZ1oJQi1OI2LrWze9T+bLfAIDLuw//WQEmHx4VW1EXIuSJfY
-	 v1ACuvn3DAeIWslTXPmV9jpK6bvxmM6CMKRZiJkpWjImX9tynxriG4kpUvRbOzMWkoe8S
-	 vmEcegqamY1ziGXY9/SwHI7qgNB8SIvHf/gJQDu+nLF1cE2GHtKlyKBsTpxs/t38s+w==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3ckP7eBVGlsK; Fri, 16 Oct 2026 15:28:30 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org D578540A91
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792164510;
+	b=Pnr4MWQ1iUwQFA4GxRJZ/euG3tlUKXatlXKpUObjv2wWgxaI+0c548WPeobFAJC4DPek
+	 ymlCxIoow4Nr90Bb4tyozIqon5jVhflXfgvg5KQu5pi5Z0PkeO0FN0/9QA24YgCmHApKW
+	 V/7/6ZwRXWCPERkbD+uX4edBGerN3kND95HUHibw2WGY62La89f0llwikHhWYfeT6enHo
+	 jvZAccsxaAzbqWvhCnRHp1IodMM8VStoI96Mzv5RvQLIOvmFIbaXqyz0cmH5Bbm9LQYeI
+	 LtLevbtx3AMphBSJgAtErpcI2+P3tdjnKrhUrzXJctMqcnpLsdsJA9bVnEeJUTJcCoQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792163204;
+	c=relaxed/relaxed; t=1792164510;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 Received:To:Cc:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
-	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=MeKIIFeMNU9UrAL5WA5iR95CE2rD68z30voAX9Fv6kc=;
-	b=RtpeqgfsThyNTWzLDoORqJ8J1syIvLyPyau9v3W0l8G2WMnQSs/VDoaFLMo4JZt2CIhv
-	 d9IHU3PdyqKjUGw89JCMlIgqblEg5oC61M8wEB/vOc41TZrn5H5Ir8GQ2okelgP/Pjx1O
-	 8/ykr9EPhpoenYYJ74LcbDDdaFE2Vdfz4EWh2ngEuAQWBDMF9502femX+kUlpmqcdHEAK
-	 OtvMs+T9a7bRUcQzoe1QTGGAJg/B8DkDlGC6+0l1Z+bEoX7rJ8tse4h87GPEnUVppYn9f
-	 LHRZPfUer7xFPBWlQmmAdcTbbp+z3BKddf6etNqKJC8PgIy4qUhNemhjv00IBF5gUAw==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 X-UI-Sender-Class:Received:To:Cc:Date:Message-ID:X-Mailer:
+	 MIME-Version:X-Provags-ID:UI-OutboundReport:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=i1wjF3F0j/Bk34lNvQgSY/V23Pv0QUCH4nNndANTcSc=;
+	b=jQ1r/n0mNVRQ+0VAt0c96SveLbupF+b53qz+wRzuNjIU4n1TVf68o2HcFRAqySlES12o
+	 aWAojuURQGdi99wIXMc6yiiruJ2/8Bic/+az5XNgCfOnPLOw+GUSLNhNuYBXzg2xt+CDd
+	 u9ZJlR0mrsi3f/ZsCdLBLiyGgeWZVHeGfwj7W5whsP6dR+av0v2s0cqIzIQ0ZB6CKgYoN
+	 mkrGDSZwjWspPWw7c7F084TlClZs8yFPpaKHYwxfRfqJOkPrIpNUuD2NvsfaWQQsB3BiR
+	 oeN4xBDtvlUwRtZmfHGk5dzPEMEk/rW2OOazgSxmbM0gbDwW7rsF2XCyNiIRE58ytwg==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792163204;
-	bh=MeKIIFeMNU9UrAL5WA5iR95CE2rD68z30voAX9Fv6kc=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=HcOdoM2HE0oi95talSj/UH6806zdDe7ggEFvrlNbhs/MQvAjDy4FRXn7Q9+UV0thF
-	 2vZWBl13URZYxhMlh3rJBSV+t0bbEkbq2hYavo/EJ7ZjXNw2kTPz22wYNIoZ4unBaV
-	 4G4zeVSv/eUIH/SxIx4WBu4Tga12DOGrxq/3+jcTICNXirpoZsvnkhnpojOrJvmHcK
-	 dMjA7CfhUNmqBZ/9TUWqs0193h44TrnY4KVchFX60JcGWpG0g9MCI40UN+rnbZJTTH
-	 ofk5d8vZShBUnP9EHKoJH/EqfF8N/phrhp1I0/RL114+5i87qT+4PXgxdVsmqALGpB
-	 W1EqDQvrywB0A==
+	s=default; t=1792164509;
+	bh=i1wjF3F0j/Bk34lNvQgSY/V23Pv0QUCH4nNndANTcSc=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=kLyximCuC/MmIcpPjaXkxfVQ8oN76iNqiH4CjdcTyvmowAGrWt7+hKgxze2V9OsXR
+	 /zUOapVloI/ngblQERCMhOzmqG0w3DD1mdCwtUyxdVFBBFS+oKtYImBDY3B+/b13Te
+	 GWoEXCF1Fk86sGWsQRzsYyr3CpHkaH5krhGcgrBF8Rxzs7ZvOa9BA7fFkbMjoTnrgW
+	 ssj5qWPkaBFkWIVUPIwcncmKglsGJCqiR3BZFvdjcrg5wPUzq+v9r1EFTXg03kkj4w
+	 UUFCUDxPpj8E+YjnNC67B7iebGQdZOXyFDCk8eTqCF1FsI6cL9AjymsRViJz0P6Lxa
+	 nr1BKEKOmWzJw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8810A817B0;
-	Fri, 16 Oct 2026 15:06:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 37F31255
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:06:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D578540A91;
+	Fri, 16 Oct 2026 15:28:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3DCA8769
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:28:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1E00B817B0
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:06:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2F1EC40A91
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:28:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JHpoe5w17vmI for <buildroot@buildroot.org>;
- Fri, 16 Oct 2026 15:06:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org EDF1E817D3
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792163201;
- b=DqvOisiFFKGrovf9XuSTzE7Ia4jFIElLfSm5gn756W+pIXqAx5k4CWJWq07pToMYj/rK
- GdIN01clSFjqEBAW59ap5r0gvG6ntGB/xO1RUeH2uLvTpjBpuqtl+tcmN1Y41jxQOJqKN
- jPd2VxUMvUj1ioUaz06CWuq5tGKYz6mbeXolB7HjgQBYgLumiMKXUc+mJZ73+QOdhGPtJ
- UyroeVZaBJhTFxXCzhxXxFRqlz/mHzpW4VjZyJhKNuVhiJnsV0t0xZ9/gzteHYu/re/Jc
- wTJ2ErEICMJtlrkB4hMGD2i1wD4yjR8ud9CKhQFETOOzXr4Et7NmhpRkWOL476vJymg==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AjRPq09yexH2 for <buildroot@buildroot.org>;
+ Fri, 16 Oct 2026 15:28:27 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 0626240A94
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792164507;
+ b=XZ0RQ7Wf6oRqlN1pccphtwfS976DN0JvNGywksuofl6UA9gQN70BKbdEHnTNUrD5Fkkt
+ /83Ogh36gSEFX75yDqKxwaBffgYqy0w8SreZDzOvU3VbLQdv89Fvi02GuitrKTh7ENhVy
+ 1+IBpRZ668ly+0IMrVbMipENZa2tSd4wiVT5VZ6KuPDBannXtDDYXViktUjlhxp98DokC
+ yKGSLidlCL8rHaGf1wmE6u7W9x0iAf/NG3dwA+tb6OCUsQmu8jyB5WkH1NfAK+T035Qb0
+ 5WpcrgIZmdTSrFbo/PDKDc8w9NXGQ5//WdD+RJoPY7ushZjIc5pLNc3Fuliq0xq6VMQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792163201;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
- Content-Transfer-Encoding;
- bh=DwMANPB7fbdmMff3l00AyRQyAOtDNleaMVcQLeioNfU=;
- b=l3FoyzDYype9WtfNU1z6xk5J/KYa0yjzKaXKy+TPSKgACpXrgNY4lhW+I+a9yGmuH4rt
- +LK54+izMo2M1bCUAr3iBlS0wElfVI2C1r3Dp/HvUlyMmX1tqfT9jxrzNQIb0BKin4IqP
- aV6dbN2AwVh2mhURKswB53wxE2QZv3IXF6yuNcs/OIN8n10iS3Q8i1hXRZ4YOZvtFUQ1z
- skhtYsb7hnZ5BnsMRSzv3gG+xFVO4FARx2QSNKQ7LE6L4UrX6oVGkIeeUzxAaDa8JzxFa
- mozKH9Daz5eMiRGQverPFjGpRxDNkGdjhqU2Jrl7K6XvMfL3Jl3wOEFbVNkEIrdnnug==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
- dmarc=pass header.from=mind.be;
- dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=UKrs2jWM; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::32c"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
- envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
- [IPv6:2a00:1450:4864:20::32c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EDF1E817D3
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:06:40 +0000 (UTC)
-Received: by mail-wm1-x32c.google.com with SMTP id
- 5b1f17b1804b1-4a1cef0439aso776035e9.0
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 08:06:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1792163199; x=1792767999;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=DwMANPB7fbdmMff3l00AyRQyAOtDNleaMVcQLeioNfU=;
- b=XoKmd0CygEaiTFFU1QPkzkvEBQ/i8NT2B07EYuI6tqC4Sl7v29Z6z0TJgTC+1jV9Vi
- D3pth6j4xYaskvcz6AtE7ejL8WuNMwaIwjwRcWiFTnjIH1tdB4CPeYVazgZdbqhYrMny
- MnwuDCx2ETYURlPx4ii0a2Vi8mhBbx1zfgY0ed97J0IIdnblIHKZ7yJMigFF6MiyW7z3
- csoPRGF8nuRLN+bK5saFMYCGn4LM/CUJ0o1woPyfVLijliiXQSFshseLc2u9SwUwOY6a
- nzepa3DasaI1h4rxRYVsRja4LMAu9oYB5Cou3vxX4dn3cyEPXCCZ0IWpana2VzUEG5cT
- kuWQ==
-X-Gm-Message-State: AFq9FYJiQ9o7TVBcKNYtZWsH9iW49+rBsq1hdePlX2KhdJsLD30WmpQI
- etr7IMvW+1gn3Gik3N5UIbwOa2I76HGwH+ro/NQTV8hVBM3p+BWjnjuB0tLYyDT4oB61DF5LQy8
- 7+Hg3gQg=
-X-Gm-Gg: AYBFou0VWJ2DBwkV9EHWGkDRENBqBrS8zc8VN3d4dD5MeV0N+5CR52ucREu7G/1/r7h
- xWCa8gOKhUQcFpxiLJlT1jMkHS3ywIK41vxBXmYtFxIuK7s9/U8gpcBnkpjDvj3xVDW5HbZZGFz
- pmPdbdcWPsOmDaOqepO2+85GHTNYA91I0iqnwvB1vliHw/MuC3oCoypNrOfsbPQQh8mDGjmRHc9
- fVBL2untiEtiSOfyc+9avcZKvRmbYMUMsGFH9WuNu+HjIJa0/eyS95e7pUoKRPNtEmFnvFdqGqj
- EobR2GFDwHcEbydNonWJe7ei8noUVs7ZlgHcC0s2vjoQ9Aa+fAzRY2kpFZVYeEGfmVXYJeB3N3G
- ZrCHDzMwm2d9h8Hg4GunZz7Pr35psDWP92CCP0790rLzISNddK6p7vJh503RfgQseVtrsi5JhrG
- L/HutjZVMf0F52KvCxObBzk8bCHUus9xegl+s/ZDqQFuNdlYZcwkogGpd9LDUFihuRUUSm3xnaO
- qGU5omqQutEI2LtIBC1yeMFormhb0gEFxQtj/v4jA==
-X-Received: by 2002:a05:600c:5250:b0:4a0:1c0e:b136 with SMTP id
- 5b1f17b1804b1-4a1d7616bfdmr1407965e9.29.1792163198916; 
- Fri, 16 Oct 2026 08:06:38 -0700 (PDT)
-Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
- [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4a1ce02d619sm38211445e9.3.2026.10.16.08.06.37
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 16 Oct 2026 08:06:38 -0700 (PDT)
-To: buildroot@buildroot.org,
-	Christian Stewart <christian@aperture.us>
-Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 16 Oct 2026 17:06:35 +0200
-Message-ID: <20261016150637.77182-1-raphael.melotte@mind.be>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <CA+h8R2pgiSspGVG7w0mSFETY+-HnjSB6B+h+xsu-EdRgLVqMog@mail.gmail.com>
-References: 
+ c=relaxed/relaxed; t=1792164507;
+ h=Received-SPF:DKIM-Signature:X-UI-Sender-Class:Received:From:To:Cc:
+ Subject:Date:Message-ID:X-Mailer:MIME-Version:
+ Content-Transfer-Encoding:X-Provags-ID:X-Spam-Flag:UI-OutboundReport;
+ bh=JxqKcXvIodnMutKkpV4wOvjjb4IppxjcspLlydOWfXI=;
+ b=gk3+EnZYsutILd6C6UX5i1c6xSOW8wUQEkoADf8nY9F8pnw2+566K7rGuMTZ3Vmgwi/E
+ 9Ym3PORkG70BI9Ia1CwdSq4nqtK/4qVyViLxwRd+QNx+nLhuS+DERP8+oa/Z5sJ+9JiTR
+ WT8YvF8VTcnHFeeSlgqPuRhxj8HxE+sYhkpfGmrzXzsqjTq6T7AnOJKVE60OnrGRxkBGu
+ 55eBeF3iHAP/oq2OUwY4vLbwN0/7RFbX48WQo2H0f+KM+AnJ33wfF4Bd0RenxC47Lyixx
+ CPUFQ1MIzqu1TZneRrm7rKyz7KkKi2HxXp/zR2AqA96I+DHh4yxABQNFOloZxC0BWgA==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ dmarc=pass header.from=gmx.de;
+ dkim=pass header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=pRljbEXz; 
+ arc=none smtp.remote-ip=212.227.17.21
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0626240A94
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:28:23 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MTiPl-1xCUgb47A5-00RacV; Fri, 16
+ Oct 2026 17:28:21 +0200
+To: buildroot@buildroot.org
+Cc: Bernd Kuhls <bernd@kuhls.net>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Fiona Klute (othermo GmbH)" <fiona.klute@gmx.de>
+Date: Fri, 16 Oct 2026 17:28:08 +0200
+Message-ID: <20261016152811.2817446-1-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.55.0
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/go: new major version 1.27
+X-Provags-ID: V03:K1:nMbSo/ELZo0n6qG5c1gAlx3JBJZ89DAKLccfGh7ekPasUx9RI5t
+ Etm3v4fJD2q65VavxkX3YjAIARR9NP9c9pU0SP9J/Wo+YrJ8mUAMF1sYTWCGYm2ikjXpyOO
+ hrX1Mmq+nqD3GpQ48DLKOK7XTbLvtbR4cQ/rPsg7/os4U1VqWVAFdjxNhVcCKRSL3A7/WTn
+ f3yex6LJyfXFmYw3saWYw==
+UI-OutboundReport: notjunk:1;M01:P0:ZWtLIsZ6Gfk=;R78oRF9nAYqOyOWbtGVZqzvD2W1
+ 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
+ uMvOyFgFmrY=
+Subject: [Buildroot] [PATCH 1/4] package/uboot-tools: do not require OpenSSL
+ PKCS#11 provider
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -152,103 +217,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Rapha=C3=ABl_M=C3=A9lotte_via_buildroot?=
- <buildroot@buildroot.org>
-Reply-To: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In reply of:
-> Bump to go1.27.0. The go-bootstrap-stage5 package (go1.25.x) still
-> satisfies the bootstrap requirement, so no bootstrap stage changes are
-> needed.
-> 
-> Remove the workaround for https://github.com/golang/go/issues/77436,
-> which the go.mk comment scheduled for removal at this bump: restore the
-> plain CGO_CFLAGS and CGO_CXXFLAGS settings in HOST_GO_TARGET_ENV.
-> 
-> https://go.dev/doc/go1.27#bootstrap
-> 
-> Signed-off-by: Christian Stewart <christian@aperture.us>
+From: "Fiona Klute (othermo GmbH)" <fiona.klute@gmx.de>
 
-Applied to 2025.02.x, 2026.08.x. Thanks
+Patch 0003-Add-support-for-OpenSSL-Provider-API.patch makes
+package/uboot-tools build without the OpenSSL engine API, but it fails
+at runtime if pkcs11-provider [1] is not available. That provider is
+not packaged in Buildroot, and should not be required when not
+actually using PKCS#11 keys.
 
-> ---
->  package/go/go.hash | 14 +++++++-------
->  package/go/go.mk   | 12 +++---------
->  2 files changed, 10 insertions(+), 16 deletions(-)
-> 
-> diff --git a/package/go/go.hash b/package/go/go.hash
-> index 1c43cabf7b6..bc6d026a6c0 100644
-> --- a/package/go/go.hash
-> +++ b/package/go/go.hash
-> @@ -1,9 +1,9 @@
->  # sha256 checksum from https://go.dev/dl/
-> -sha256  a0721c54c688901448d77ad9b3ec7ea7c474730755ff891382e92ecb93ff2cb1
->  go1.26.6.src.tar.gz
-> -sha256  f09a71029fc5cd2940fbe36b0eb1fb2d8f3407cd6adb6b7b4de3eaf04007f8c4
->  go1.26.6.linux-386.tar.gz
-> -sha256  708effb774be8237570d0add163225abbdfaf4fca28b2611df167beba4feef89
->  go1.26.6.linux-amd64.tar.gz
-> -sha256  d0507e9e9d7fe012aae570108cbd76c15de879e17130ab8cb90d4d7445cb1f2e
->  go1.26.6.linux-arm64.tar.gz
-> -sha256  e1379a2fe77bd30fa29833074388247e7c65416e09279f746f20de2d5cf4dfea
->  go1.26.6.linux-armv6l.tar.gz
-> -sha256  232b65543a42eda95df6a63f76235c1795bb535eba5c74e509faec71bc648388
->  go1.26.6.linux-ppc64le.tar.gz
-> -sha256  958757933d38172dd544085d253c8738cf09793d24c8bc0422e5e1e1fffa4fde
->  go1.26.6.linux-s390x.tar.gz
-> +sha256  7002403d7cc44529ef6d26f69a44818263395ead7c16c05a5808ae047ebeb0e5
->  go1.27.0.src.tar.gz
-> +sha256  eac4abaca4113170a1cf261b8bf1d38480e61e99deecbc6a14767deb8b19e8ad
->  go1.27.0.linux-386.tar.gz
-> +sha256  675c26c449cbb18fc24b74650de1eabbae6e16f64326fd85a283fb3b58280685
->  go1.27.0.linux-amd64.tar.gz
-> +sha256  51798d2c42d0e1c6ed7fd9f48728b4193abac9e8aad6dbac2fe96a81f5909bda
->  go1.27.0.linux-arm64.tar.gz
-> +sha256  e337ecd9c321377c0d8832690c2cb10463447c0bd0e65e2e3413dfff63a3435b
->  go1.27.0.linux-armv6l.tar.gz
-> +sha256  068085e257a6014c036c723ca62943edbf48fd168b8d00a6d39527d10b656255
->  go1.27.0.linux-ppc64le.tar.gz
-> +sha256  cb5c89fa48cba4123c68aee62b217ca030f281546df0898a0c32889c340b928c
->  go1.27.0.linux-s390x.tar.gz
->  sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad
->  LICENSE
-> diff --git a/package/go/go.mk b/package/go/go.mk
-> index df1023c19be..a49dc206cc6 100644
-> --- a/package/go/go.mk
-> +++ b/package/go/go.mk
-> @@ -4,10 +4,7 @@
->  #
->  ################################################################################
-> 
-> -# When bumping this to 1.27 (or beyond), remove the workaround for
-> -# upstream issue https://github.com/golang/go/issues/77436, below
-> -# (i.e. revert the commit adding these lines).
-> -GO_VERSION = 1.26.6
-> +GO_VERSION = 1.27.0
-> 
->  HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
->  HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
-> @@ -78,14 +75,11 @@ HOST_GO_TARGET_ENV = \
->  	$(if $(GO_GOARM),GOARM=$(GO_GOARM)) \
->  	CC="$(TARGET_CC)" \
->  	CXX="$(TARGET_CXX)" \
-> +	CGO_CFLAGS="$(TARGET_CFLAGS)" \
-> +	CGO_CXXFLAGS="$(TARGET_CXXFLAGS)" \
->  	CGO_LDFLAGS="$(TARGET_LDFLAGS)" \
->  	GOTOOLDIR="$(HOST_GO_TOOLDIR)"
-> 
-> -# Workaround for https://github.com/golang/go/issues/77436
-> -HOST_GO_TARGET_ENV += \
-> -	CGO_CFLAGS="$(subst -g3,-g2,$(TARGET_CFLAGS))" \
-> -	CGO_CXXFLAGS="$(subst -g3,-g2,$(TARGET_CXXFLAGS))"
-> -
->  # Allow packages to use cgo support if it is available for the target. They
->  # will need the toolchain for cgo support; for convenence, include that
->  # dependency here.
+The problem has been discussed on the U-Boot mailing list [2], and
+part of the reason this patch has not been merged into U-Boot yet. It
+causes tests.package.test_uboot_tools.TestHostUbootTools to fail with:
+
+=== STDOUT/STDERR ===
+At main.c:259:
+- SSL error:12800067:DSO support routines::could not load the shared library: crypto/dso/dso_dlfcn.c:115
+- SSL error:12800067:DSO support routines::could not load the shared library: crypto/dso/dso_lib.c:147
+- SSL error:07880025:common libcrypto routines::reason(37): crypto/provider_core.c:1026
+mkimage: OSSL_PROVIDER_try_load(pkcs11)
+
+This commit adjust the patch as suggested in [2] to continue if the
+PKCS#11 provider fails to load, making the test work. However,
+actually using PKCS#11 keys will not work until pkcs11-provider [1] is
+packaged.
+
+[1] https://github.com/openssl-projects/pkcs11-provider
+[2] https://lists.u-boot-project.org/pipermail/u-boot/2026-August/629348.html
+
+Fixes: f87cf2d6239d676147dec1fef088d81ee873277a ("package/uboot-tools: Fix build with OpenSSL 4.0.0")
+
+Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
+---
+The alternative is to revert f87cf2d6239d676147dec1fef088d81ee873277a
+until a fixed version is available. In any case I think either revert or
+a package for pkcs11-provider are needed before the 2026.11 release,
+support for PKCS#11 is important outside testing.
+
+ .../0003-Add-support-for-OpenSSL-Provider-API.patch         | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/package/uboot-tools/0003-Add-support-for-OpenSSL-Provider-API.patch b/package/uboot-tools/0003-Add-support-for-OpenSSL-Provider-API.patch
+index 9a5071cae3..2403e3ebab 100644
+--- a/package/uboot-tools/0003-Add-support-for-OpenSSL-Provider-API.patch
++++ b/package/uboot-tools/0003-Add-support-for-OpenSSL-Provider-API.patch
+@@ -29,6 +29,8 @@ Signed-off-by: Eddie Kovsky <ewk@edkovsky.org>
+ Upstream: https://github.com/u-boot/u-boot/pull/918
+ 
+ Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++[Fiona: apply fix from https://lists.u-boot-project.org/pipermail/u-boot/2026-August/629348.html to make pkcs11 provider optional]
++Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
+ ---
+  lib/aes/aes-encrypt.c |   4 +-
+  lib/rsa/rsa-sign.c    | 102 +++++++++++++++++++++++++++++++++++++++---
+@@ -149,10 +151,10 @@ index 0e38c9e802f..f456f3c58e6 100644
+ +	EVP_PKEY *private_key = NULL;
+ +	OSSL_STORE_CTX *store;
+ +
+-+	if (!OSSL_PROVIDER_try_load(NULL, "pkcs11", true))
+-+		ERR(1, "OSSL_PROVIDER_try_load(pkcs11)");
+ +	if (!OSSL_PROVIDER_try_load(NULL, "default", true))
+ +		ERR(1, "OSSL_PROVIDER_try_load(default)");
+++	if (!OSSL_PROVIDER_try_load(NULL, "pkcs11", true))
+++		ERR_clear_error();
+ +
+ +	store = OSSL_STORE_open(path, NULL, NULL, NULL, NULL);
+ +	ERR(!store, "OSSL_STORE_open");
+-- 
+2.55.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
