@@ -1,28 +1,28 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5745DCCA46C
-	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 15:03:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC8F0CCA46C
+	for <buildroot@archiver.kernel.org>; Fri, 16 Oct 2026 15:03:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E8D340AC2;
-	Fri, 16 Oct 2026 15:03:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6BCDD8087E;
+	Fri, 16 Oct 2026 15:03:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kIM2GvSq3Vzv; Fri, 16 Oct 2026 15:03:35 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 1070240AB2
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792163015;
-	b=At+qt9dvBzhe/0T+wa707TMBw70aoSQFWVbmQUFBUaVePz0Mfc7rEaF5di6WtxrurtIS
-	 +X6CKDSL2YJehzfn2ZTqqRtJ8R1iXqqMT93/AoABGUrXROd04jgx5sRTP0AIVm1jWytNQ
-	 Ut/PKulu/XW8l+XQNDGwYuQBOvCF4tDLii/YfFxnWlw2dnUw7UwmEsQlLiqhXR1TEua5d
-	 WlPAJjGOp9UkKkb4Cp5foRRVCAnBDH5xBNnd/br7JgxU6vtWGOkv0LBVkY+YDSM74exv+
-	 QS56OmlhvErUjTf2gJ4jIhp/5GAuPyQw9VwIRV9WqbElnenQXJ3Mb8SLFl19M2Fg0iQ==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xvuLCebE6u19; Fri, 16 Oct 2026 15:03:41 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 7FE7880935
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792163021;
+	b=mNUZVRaXniiiKZNzYEME62yNqdWvtRiBHX+AetZ1g1TVg9QxwMMJgidl+lZQN5kHlFbR
+	 x5e2yYglwDQYYzwguLx7t5p0fPH8x5lyvB8jyWIxwWl/QizrfMW6BOOIef7Ho2ltNNhYw
+	 YflLpX/dhbZ/hUYUtMbkGg/BTCSFhNries2qwl9WpiO349bknHQhBM+6mmo3Q6UxNb5+f
+	 9h1xAoPvSGexX3gwD0YGLhLXS0ShSO9iwuPQu+cZW2TOD0VGPoa7rGfk23sNddl9pwCUH
+	 bOZSjaC0/7UrLKzlOpOyYcOHD4W9m4SKTZmU0yt2tr4yzgRb7dhj8LGADVqBZXFMbwA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792163015;
+	c=relaxed/relaxed; t=1792163021;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,117 +31,117 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=I+gMWmeVKPf9JLCRYhTFBFr30Bi9otlFz1E++CmgjGY=;
-	b=gsaJ40GxTO7RS6IqmU6LsGCcX21TSkUdR2gVYzhTyrAlIA1iuZ47A8e1j9jiZfqiRBWY
-	 SSI74krbIZV6FyWMq8ZOVHj2B5nfti7QasrVRiTipvNVCVjjNfXPy6mg4uc9SPeg+tFvg
-	 zJ/iXTeLzLyKwq5JCTtLn5gAH4+NoObuEJZA/l+vCM9Di74NaX8F2zLVfvvExB7xTcYcZ
-	 EJCOWTmYPxKJv2cyM2ZfpAt6oU2l/hC4SHo4YkAzDBIrPtCtqO4vAnUdMwaaWTwD+rkLI
-	 4lfj6Hw1GQ/0/hSLDNbLPTkB6ubcwFnaso9wB5fDUPdBCpTTk/zZEFcPTpk6mmDlLRg==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=AfV+xu79Hn5noqjjETG6zIFhcr0KlhWyrdbetupSnxg=;
+	b=JC5+pOabLCQu3rlXGEYCVMmotiP624HUUwtR9HNuLD5LQKuQYVTrCWflH7+KKYAz9y8v
+	 ZTIFFVcJl+n+eydBSAF/7xyWXOHDhSwnr6BrwC4sDijXa4tOEBJXg+V6+PXgpUfg8lcrb
+	 nanLvPkBJzI3dIHl5NEAnUmDkpnS8Ho8+qk+0LrH1QiewVynwT/HDvGLSWPC2IdCNkUi/
+	 9SzvomlasJ4OqKYUprzCJlW/2xHPJb6t7SOk77bFhwF/qM0qAK2iowTnzyX4gmjDMnGDP
+	 Vr/xecDrnIDTUvQJ9DtuRocOVhYSw25T+IdMtmTguzb6CnXVN7mIZTT3S9YeKFvRqAQ==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792163015;
-	bh=I+gMWmeVKPf9JLCRYhTFBFr30Bi9otlFz1E++CmgjGY=;
+	s=default; t=1792163021;
+	bh=AfV+xu79Hn5noqjjETG6zIFhcr0KlhWyrdbetupSnxg=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=I5cdApBN0UzKXJavOmsRhCu0Y0itsjT21Fw6CCtp2OS7vsMNc44y33AZ2eXHNT1R5
-	 nK6t3Ws+2q9bUGZLcdPLhWDmHt0/LXhoo6b9MIdjGUKJkeRasEy5ferHlOcvSKAP3d
-	 kiYkN07chuT8TpA1cv7xry5DmwpRX3eOB3LAnkgANKTpjafEsHSE8xSa0a3pQMsnwY
-	 njZUqoG+Jp/FR5U6QbWl5JLuWtZxnuWWt7lXPZixcGRo+lma6dFVr4yvPCqrv/fW9e
-	 e7PuzTXqV86/j86HJki45AohmkbBTxWuPMZh6hwiyRP2wgV4vaUknkoVUX3a0ZJukp
-	 KU6w19jXCla2Q==
+	b=csCpa0npIrJcTDcJP77GkWqGN6q18CzppeT2m2vo0iU0Sn2CPbqKP0ykrRAahu5sX
+	 fe/rHYzpPKnVdvtvj4uT8zMuiXTGgrtp7r06WF0+NAoxJFvguPN9+V68UJJcmyPZKO
+	 87rdSKLSK/RWsSE/DlTWUHopmZ4XShSRmNh6atG31lEjOt0cnVAesK48jmkYbC0v7K
+	 H33ju7g7v3sNurg+3VDKCA25gmD+uo82SPuGOe4GpzFae4T8djKhIotUnOmybNj0B7
+	 L7SEzkSs0z2EmH96nbZHE0sSSxHuX6HM4L+w0VSmHT/OiJ82W5Ry7FPnNY/e/uHy0l
+	 3NczSL5pDD6rQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1070240AB2;
-	Fri, 16 Oct 2026 15:03:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 988DC7AD
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:03:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7FE7880935;
+	Fri, 16 Oct 2026 15:03:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 89C71255
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:03:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 89EE3815DB
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:03:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7BF464016D
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:03:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iQMbyeKeV4Fe for <buildroot@buildroot.org>;
- Fri, 16 Oct 2026 15:03:33 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 8D8668150F
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792163013;
- b=e+pOvnwENUwqX42iX6acCJDCAbSFcBDTh48tRcg6iGahsvrI4xb6HJ+fQDT104qBx5xV
- 7QkzdgeI/JPhJIG29uILfoEZ0Jqnxvz5rrCw9J426765QUjj1oLjx6OVXb5nEIJQbCIuM
- hu+cT+nxnEr6g4uosbclucUfiH+8mOR3OPF8RzPgom9RVKLb+KCXB5NodkOsMAZZiKDPk
- 5xoNRQ9z8iTjqxKG4/PT4NUQjhFtEXzoMJTlBxV9/wOK8AaTh32USl5OYa5P+adrVZvSv
- TGmsPZopSpcwUjh85o95EtSOENbZRwhySluGZttpfn26pyI7MrVf9684pHnYHudI6vQ==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jtewXJ9WPsHq for <buildroot@buildroot.org>;
+ Fri, 16 Oct 2026 15:03:38 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 5257140042
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792163018;
+ b=IiATzL/qq76M3glCtyrtUaOa8/07Tr+/Co34//osZBG42SCbjA5CqIseoccMOYH7mCQh
+ b42XzmngIPLq9A/MZTB1hT2me7l1krHq/Qh7owazJ71Q6paM93zUxc+8/v9l5FMi49xsp
+ l9Y6iUjYe2ASZE2GTbg9/8lwJXrkrqbC07o6OmE3biaYQxWs1gBYEVtEIAys58fxqL0BJ
+ fpDK5O9HTjNe6b8lBFGj8zCPXTCHfFv8UsepJ1T+iRzuFoAjdl5Hs3wDTTlAuFFdi9oQ8
+ 29j8hUrJJYIqykchmS36Yma30dKsXh7HJ/ta1aocWIbsN9VbTYugYgCBKkttfN/JWyA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792163013;
+ c=relaxed/relaxed; t=1792163018;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=w/BG3/9GhClluL2vTO56IP2w5ao9DwSE7UzpbhwAL8A=;
- b=XE7ZuzpF2vPdQ5NvcYiNPeBi/U6OGIIT4VlXE8BPW3bNU2UU/Lj7tuLSns5+g8e/lUf6
- 5pYRe8iBqiYBoIbSe9wVpOK4WnTQ/TfOT98N1NoDwPEEm1lgnWGg9KgyvbIFKs5klOZwC
- pJD3MgHdNvU+klPBIf3lgJm6GWLtEDr4XFxpbiokvI59Ryw8m2TIQxd4VtuAR1alW1XfO
- 2U0l0Tb6cLe3tXxf1dudWd6NaOWam/zRwpc2CKzrmRJTZiaFZT0Jezwtm9urpDYpWqMn4
- h03tuKD+anoFglqT7UbhpLBxo5vU9MHr9h6bFQQhBBekwIpVR5o1rhLHDPBD3o9o/6g==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ bh=uqYQfukLJ7EIjwgAaRzz1siwUx41me13Z95+FaPS4JA=;
+ b=DJB9qnqIhAv13W2Bl4wqq3cfYyhHfRa8wv0yPPvby5mQKFxr9/kck6Rj8F4MH0YzW84u
+ +e6ILoNU6kWHqK81ZeFaC0lUAAsCyXhm2agTTCSFIU5LNY19hEokTOrLHU67svrJ8ovqY
+ sEwPWLD2JMs3/6SkiK7wmbQeSMeMBWMfqfszoWomjOgrHOIyryJyZZz+12Ub1sQ8m0/h9
+ o7rooRkGzf3RYhqgtFFWrukwGoLyVyYOFJvJ3dqZkCs9rv5MYAxh1c3FlCVaMZ5ADpXez
+ 33c6Ue4RqSa3V7Wu6poMbGeDL48Nr7YOxPAn8i5mHxVDWCiw8J4ICJmo3U1426tsxuw==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  dmarc=pass header.from=mind.be;
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=TdzFAi98; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::330"
+ header.s=google header.b=avujgCjq; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::32a"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8D8668150F
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:03:32 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-4a1d75f2f11so188435e9.3
- for <buildroot@buildroot.org>; Fri, 16 Oct 2026 08:03:32 -0700 (PDT)
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5257140042
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 15:03:38 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-4a16aaf2067so715615e9.0
+ for <buildroot@buildroot.org>; Fri, 16 Oct 2026 08:03:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1792163010; x=1792767810;
+ d=1e100.net; s=20260707; t=1792163016; x=1792767816;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=w/BG3/9GhClluL2vTO56IP2w5ao9DwSE7UzpbhwAL8A=;
- b=Tz8GUsVSFevNkmHNpxCuzd3YZy01nAQpUU5RW/HiHQMUiTN97n3tsMheqZ0ekUYjOu
- UAwiV+x86TrcDkVBdcxQEguid5KGuOZei82HWIydKTlOQBIhE9X7eUA5GfjRp56KYacg
- odQW26lU9+ugBJOK29KI7IDyMr7X2dnOS+tHcsTx/HdN4rrfRmaEfRZelecbLKLldISj
- TOnfsgyDMUZ/uUCZySaVP+zCKzWatCizAifKh/xtInzfleuPTYZzmCY1g6di3E3IYoD9
- ytP5PSRRTP1v177aK5zITg71a9BtUYXHmsX8xoJ+zNBC5IYR0iyWesEa95+nwmaGYX9U
- 22JQ==
-X-Gm-Message-State: AFq9FYJBNjZxfJLcOsGYhZm+gBZ3kFWIPqtxiQrgVWEeAk5Ga2aLPzn2
- 9zKEd7HvRaL12IoRx+mwHYp0pjdJss/0esVrKdXqVzG/a04EW96E1Sj83F08V4XieuPC8SdyfDB
- AXyDUVs0=
-X-Gm-Gg: AYBFou1nVxuMzBbEEEFddTdu6KCDyrkd8AcdJJhAwqN1aHU9HJrVOynZP7jIkpvoTHJ
- TE3tMA+pLixMxiClFOS8flzHpAioVRYNAlVPFo5kQsFzAZJe2fqUAOeZ31Ydl9zpJsJkkroKnWk
- Vpo8jEPekAj6VDEOiTgDQKH6yJPaeQI3whhSplENPmWNIu5W0P+Ln3eVb6IS2noHWlO2+BxXlO4
- 7PWvyUJk/5wQrUkLctcpRcu8F8a3+0Hje36g/ZVgd5hiGpjImAAnJCQ+P8m2GJWnfZtlnedcBBp
- ejwYARWoog9d463eClVp1NkRB320usod3E69UQgqWQz5V3KkNfutb6hoN7LgUEfSjEoUQ7auq/z
- gW1wK+QITrKa69GGqU9pvq+X0QY5xwI6UMXvT/CeR367cXbWV5vbP/axSL1hy2vrC5AtWQdKy6N
- LJflAKVzFb0IC3gQ9Lv+QYHVQNSz6h0oqBPgS74QtudYqT/P16r7K+zXgZ89RzoWOKBmx5NHh5O
- XyhZck1/h93LbMdeyb0CytNMUhDbMUXaAZAtM+6qw==
-X-Received: by 2002:a05:600c:8883:b0:4a1:80d8:aed0 with SMTP id
- 5b1f17b1804b1-4a1d75fe793mr1289745e9.15.1792163010220; 
- Fri, 16 Oct 2026 08:03:30 -0700 (PDT)
+ bh=uqYQfukLJ7EIjwgAaRzz1siwUx41me13Z95+FaPS4JA=;
+ b=MuGvPMIAOi3NRAico5k+nV5AEXl5zZXFDNtZaEbWSwaxjs0Fbcj5BVXhc8XeKTXYTf
+ JAVDkuEwJ5dBGCXzpW+Mxz50b20+qlwd+PzTkDKFwlUAbYNSKbPqtvg2uaG5/xncUpiM
+ k+XH58EQmBJeiipaD62UUENn6Ji7VezFouK5XbRW4mQH7n22Rq5xni1Ru/jCc38/KQXF
+ UOrC/H1eHbx/XFbgiQxLG6121x7nOhymXjDSRUcySpkk3eqdeeLUGKby/00J7rRW2Byf
+ +glFOqcJ/BzakN/JehqBj472Us9Hq0HeM8UmKHGEnH85Sk7omEktHia4bBShb4hBg2gt
+ pv+A==
+X-Gm-Message-State: AFq9FYLH6yI/YGZxZFtJEV5PpE2cohmbvIJorqxEQvckJBHfWd4m/AEv
+ /IGKqOzye8GlPY/ABmxyOfAJyrR3DCxMBhHoT/kb7TmOL2woCHQsel12DgRNSXee7ziRAEWj3N5
+ h8FS3jho=
+X-Gm-Gg: AYBFou1HVuxXgytGD4AYKRh7NQ+sQrFVVvvOF7lKClOlgXEvjCqZ9ODa0rwaYKjFT7T
+ rCrI7KUqsjSPWB5ua5rOGHeMQ5txHwFW5Q2BPONxWoar98LkruyGOdfMW2RPaM8fGd/foNasB9F
+ JxLM44ZDaKfG08zLEK73cMtqxLBxOG/QYqTXMQ9wgoSQ97cp657np0ApXDKoY2oU69EOmJjspnh
+ GbozRkDQHAyEmqE10z/0dABT7kf05VGjiRQqBWMj16NeMTdOlB+SjX2VowvdwA0id4c/OPrUNdF
+ KrJeLkPU7OH5p6AO30rsQ3P1lT8CvlzQuO29Yu1LarcDTifdrNg0Avhwkgv3rDi7XmosYiFhP9o
+ MK5WVG2+iPm1WOix5Qi7ct65DvzyVZ2oNbSICy5l/2Tmp7g6NH1DiQbqotlsUJStCnWzyqLcE3o
+ 9GQGdI7Qr707SfXHW6+DI9GrKiCVpbGs0e4nwZJVPMJAVdJ8jKU9vSMCF0FEzBN6OZ3X+tai8oS
+ 0kuR2+Zqx3LMFSalxV+sPjm5dVGNR9LyvrwORwW06mn73MMDWko
+X-Received: by 2002:a05:600d:8496:10b0:4a0:159b:d2a2 with SMTP id
+ 5b1f17b1804b1-4a1d762c59cmr845205e9.29.1792163016300; 
+ Fri, 16 Oct 2026 08:03:36 -0700 (PDT)
 Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
  [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4a1c8ae6d2esm65950955e9.6.2026.10.16.08.03.29
+ 5b1f17b1804b1-4a1cca31234sm38188435e9.4.2026.10.16.08.03.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 16 Oct 2026 08:03:29 -0700 (PDT)
+ Fri, 16 Oct 2026 08:03:35 -0700 (PDT)
 To: buildroot@buildroot.org,
-	Thomas Perale <thomas.perale@mind.be>
+	Bernd Kuhls <bernd@kuhls.net>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 16 Oct 2026 17:03:26 +0200
-Message-ID: <20261016150328.65734-1-raphael.melotte@mind.be>
+Date: Fri, 16 Oct 2026 17:03:30 +0200
+Message-ID: <20261016150333.65900-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260918091142.62239-3-thomas.perale@mind.be>
+In-Reply-To: <20260920175043.369725-1-bernd@kuhls.net>
 References: 
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 3/3] utils/checkpackagelib: check
- IGNORE_CVES identifiers match patch trailers
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/cpp-httplib: link with
+ libatomic if needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -162,137 +162,68 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 In reply of:
-> The ability to check with `make check-package` the 'IGNORE_CVES'
-> variable content reference an existing patches was added in commit [1].
+> Buildroot commit 8dad17ea06260ef0bd23eebc47c95a8510310bf5 bumped the
+> package from 0.27.0 to 0.37.2. This bump includes upstream commit
+> https://github.com/yhirose/cpp-httplib/commit/464867a9cedef2b6185e25e3e912d3f796fe58fd
+> which added WebSocket support to version 0.33.0 and causes a build error
+> detected by the Gitlab pipelines for bootlin-sparc-uclibc:
 > 
-> This commit extend it to actually check that the entries that are
-> referenced in the 'IGNORE_CVES' variable are matching the trailers in
-> the referenced patch.
+> /builds/bkuhls/buildroot/br-test-pkg/bootlin-sparc-uclibc/host/opt/ext-toolchain/bin/../lib/gcc/sparc-buildroot-linux-uclibc/14.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld:
+>  /tmp/cciyXsAR.ltrans6.ltrans.o: in function
+>  `httplib::ws::WebSocket::close(httplib::ws::CloseStatus,
+>  std::__cxx11::basic_string<char, std::char_traits<char>,
+>  std::allocator<char> > const&)':
+> <artificial>:(.text+0x6408): undefined reference to `__atomic_exchange_1'
 > 
-> With this change the following `foo.mk` content:
+> To fix the problem we add -latomic to LDFLAGS when needed.
 > 
-> ```
-> FOO_IGNORE_CVES += CVE-2000-1234
-> ```
-> 
-> Running `make check-package` will output an error if the content of the
-> patch is the following:
-> 
-> ```
-> CVE: CVE-2001-1234
-> ```
-> 
-> [1] b00ac4e346 utils/checkpackagelib: add new check MissingCVEPatch
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> Acked-by: Titouan Christophe <titouan.christophe@mind.be>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x, 2026.08.x. Thanks
 
 > ---
->  utils/checkpackagelib/lib_mk.py      | 25 +++++++++++++++++++---
->  utils/checkpackagelib/test_lib_mk.py | 32 ++++++++++++++++++++++++++++
->  2 files changed, 54 insertions(+), 3 deletions(-)
+> v2: Added -latomic to LDFLAGS (Thomas)
 > 
-> diff --git a/utils/checkpackagelib/lib_mk.py b/utils/checkpackagelib/lib_mk.py
-> index c5b85bcda9..33988cab8b 100644
-> --- a/utils/checkpackagelib/lib_mk.py
-> +++ b/utils/checkpackagelib/lib_mk.py
-> @@ -120,12 +120,14 @@ class Indent(_CheckFunction):
+> Gitlab pipelines passed:
+> https://gitlab.com/bkuhls/buildroot/-/commits/2364b86e92f24042ca7f9494b427321527b26adb
+> 
+>  package/cpp-httplib/Config.in      | 2 ++
+>  package/cpp-httplib/cpp-httplib.mk | 6 ++++++
+>  2 files changed, 8 insertions(+)
+> 
+> diff --git a/package/cpp-httplib/Config.in b/package/cpp-httplib/Config.in
+> index 9bd93ee0af..83251e8eeb 100644
+> --- a/package/cpp-httplib/Config.in
+> +++ b/package/cpp-httplib/Config.in
+> @@ -1,9 +1,11 @@
+>  comment "cpp-httplib needs a toolchain w/ C++, wchar, threads"
+> +	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+>  	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
 >  
->  class MissingCVEPatch(_CheckFunction):
->      PATCH_COMMENT = re.compile(r"^#\s*(\S+\.patch)\s*$")
-> -    IGNORE_CVES = re.compile(r"^[A-Z0-9_]+_IGNORE_CVES\s*\+?=")
-> +    IGNORE_CVES = re.compile(r"^[A-Z0-9_]+_IGNORE_CVES\s*\+?=\s*(.*)$")
->      CVE_TAG_IN_PATCH = "CVE: "
+>  config BR2_PACKAGE_CPP_HTTPLIB
+>  	bool "cpp-httplib"
+>  	depends on BR2_INSTALL_LIBSTDCPP
+> +	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+>  	depends on BR2_USE_WCHAR
+>  	help
+> diff --git a/package/cpp-httplib/cpp-httplib.mk b/package/cpp-httplib/cpp-httplib.mk
+> index 94f270df94..c9649936e4 100644
+> --- a/package/cpp-httplib/cpp-httplib.mk
+> +++ b/package/cpp-httplib/cpp-httplib.mk
+> @@ -13,6 +13,12 @@ CPP_HTTPLIB_INSTALL_STAGING = YES
+>  CPP_HTTPLIB_CONF_OPTS = \
+>  	-Dtest=false
 >  
->      def before(self):
->          self.pending_patches = []
-> +        self.pending_cves = []
->          self.package_dir = Path(self.filename).parent
-> +        self.line_continuation = False
->  
->      def check_patch_files(self):
->          for patch_lineno, patch_name, patch_text in self.pending_patches:
-> @@ -146,6 +148,11 @@ class MissingCVEPatch(_CheckFunction):
->                          .format(self.filename, patch_name),
->                          patch_text]
->  
-> +            if set(self.pending_cves) != set(trailers):
-> +                return ["{}: patch file '{}' 'CVE:' tag(s) '{}' does not match the ignored identifier(s) '{}'"
-> +                        .format(self.filename, patch_name, ", ".join(trailers), ", ".join(self.pending_cves)),
-> +                        patch_text]
+> +CPP_HTTPLIB_LDFLAGS = $(TARGET_LDFLAGS)
 > +
->      def check_line(self, lineno, text):
->          m = self.PATCH_COMMENT.match(text.rstrip())
->          if m:
-> @@ -157,9 +164,21 @@ class MissingCVEPatch(_CheckFunction):
->          if text.lstrip().startswith("#"):
->              return
->  
-> -        if self.IGNORE_CVES.search(text):
-> -            return self.check_patch_files()
-> +        m = self.IGNORE_CVES.search(text)
-> +        if m or self.line_continuation:
-> +            value = (m.group(1) if m else text).rstrip()
-> +            self.line_continuation = value.endswith("\\")
-> +            if self.line_continuation:
-> +                value = value[:-1]
-> +            self.pending_cves += value.split()
-> +            if self.line_continuation:
-> +                return
-> +            result = self.check_patch_files()
-> +            self.pending_cves = []
-> +            self.pending_patches = []
-> +            return result
->  
-> +        self.pending_cves = []
->          self.pending_patches = []
->  
->  
-> diff --git a/utils/checkpackagelib/test_lib_mk.py b/utils/checkpackagelib/test_lib_mk.py
-> index ba9dbd6aea..7152b40e2b 100644
-> --- a/utils/checkpackagelib/test_lib_mk.py
-> +++ b/utils/checkpackagelib/test_lib_mk.py
-> @@ -244,6 +244,38 @@ MissingCVEPatch = [
->       '# 0001-some-fix.patch\n'
->       'FOO_IGNORE_CVES += GHSA-abcd-1234-efgh\n',
->       []),
-> +    ('CVE tag does not match ignored identifier',
-> +     {'0001-some-fix.patch': 'CVE: CVE-2000-1234'},
-> +     '# 0001-some-fix.patch\n'
-> +     'FOO_IGNORE_CVES += CVE-2001-1234\n',
-> +     [['{}: patch file \'0001-some-fix.patch\' \'CVE:\' tag(s) \'CVE-2000-1234\' '
-> +       'does not match the ignored identifier(s) \'CVE-2001-1234\'',
-> +       '# 0001-some-fix.patch\n']]),
-> +    ('multiple ignored identifiers, patch matches one',
-> +     {'0001-some-fix.patch': 'CVE: CVE-2000-1234'},
-> +     '# 0001-some-fix.patch\n'
-> +     'FOO_IGNORE_CVES += CVE-2000-1234 CVE-2001-1234\n',
-> +     [['{}: patch file \'0001-some-fix.patch\' \'CVE:\' tag(s) \'CVE-2000-1234\' '
-> +       'does not match the ignored identifier(s) \'CVE-2000-1234, CVE-2001-1234\'',
-> +       '# 0001-some-fix.patch\n']]),
-> +    ('multiple ignored identifiers, all referenced across patch',
-> +     {'0001-some-fix.patch': 'CVE: CVE-2000-1234\nCVE: CVE-2001-1234\n'},
-> +     '# 0001-some-fix.patch\n'
-> +     'FOO_IGNORE_CVES += CVE-2000-1234 CVE-2001-1234\n',
-> +     []),
-> +    ('multiple ignored identifiers, all referenced across multiple patches',
-> +     {'0001-some-fix.patch': 'CVE: CVE-2000-1234\nCVE: CVE-2001-1234',
-> +      '0002-other-fix.patch': 'CVE: CVE-2000-1234\nCVE: CVE-2001-1234'},
-> +     '# 0001-some-fix.patch\n'
-> +     '# 0002-other-fix.patch\n'
-> +     'FOO_IGNORE_CVES += CVE-2000-1234 CVE-2001-1234\n',
-> +     []),
-> +    ('ignored identifiers split across continuation lines',
-> +     {'0001-some-fix.patch': 'CVE: CVE-2000-1234\nCVE: CVE-2001-1234\n'},
-> +     '# 0001-some-fix.patch\n'
-> +     'FOO_IGNORE_CVES += CVE-2000-1234 \\\n'
-> +     '\tCVE-2001-1234\n',
-> +     []),
->      ]
->  
->  
+> +ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+> +CPP_HTTPLIB_LDFLAGS += -latomic
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_CPP_HTTPLIB_COMPILE),y)
+>  CPP_HTTPLIB_CONF_OPTS += -Dcompile=true
+>  CPP_HTTPLIB_DEPENDENCIES += host-python3
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
