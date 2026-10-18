@@ -4,127 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1724CCF2C4
-	for <buildroot@archiver.kernel.org>; Sun, 18 Oct 2026 20:42:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16B09CCF2C4
+	for <buildroot@archiver.kernel.org>; Sun, 18 Oct 2026 20:51:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A867980F6F;
-	Sun, 18 Oct 2026 20:42:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C02D180F9E;
+	Sun, 18 Oct 2026 20:51:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q4HFG1OLW8J6; Sun, 18 Oct 2026 20:42:32 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 72A0880E81
+ id vCaJbYRB1OgT; Sun, 18 Oct 2026 20:51:20 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org E615680F91
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792356152;
-	b=ehTUKDe6Cy4BM/yGFXIZCNnCMLkmizPSjJhi1VV6/yC2Du2iVrKHOTLVLbMeTGTBF1vm
-	 r83naCaAkSLQbc8IC9JjKVfONVF8mz0QOy/pIGt7HkdDGWLzIlpwI6YS+jVK8lERKwciB
-	 vEtd7rd4Fe3NcjiNe+dA9rSp6Biz3p15cZHM8ccBv9NWqIe3wY3+3NCJgJsl2hhreYNO4
-	 Dae9NRDNuBgw4wAaTdog7njdTqEYsyltEjyswP2ZcjuoFkQ7Wl8+6OHLGsxicrjHoLJzH
-	 8wWBV/AsDBWEbwcjh2N9fcG2KIUOnCq14hGOkd7DV9ZunZ/hsyFOtnmVvoikiVubAHQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792356680;
+	b=OT0BjdrAXq7NEk0AlDVAXfja/QVM9owrrOUB8H/EvxFPoibJ71qdNog3UMr4eHo7ynKO
+	 XrB9N7gPRtHVNNKxAdHupndYyDDpVaJd+45is3N8EKfEg6lvNS8ZuU574XIYXDCB26Lwl
+	 fAIcH3nCBfuv8KEOjSz8i14nTSjApIosqM9jBwXYaT1LB83WLAtVR7tpoJrIemMWTjzVu
+	 6v0h2wElVqZgOj+3z3Ri5tO5GcppUBepAUnK48OAnIT1Qk2fkgUzqPKoWOnIiB8aAzbg3
+	 N4zZxq6cL6jvAjJ5dsv7R15W3vXIpR21twau18FbzfSbam0MtUGB8t6rXlHgYMXjD+w==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792356152;
+	c=relaxed/relaxed; t=1792356680;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=04xicFGb7gUh38T139jOUjnbZDBZO5eQFfCs8jVBonc=;
-	b=ShMyBl86cPV5TVlxH/Z9VWHHH4Aimcmf8KudgWMmB0B85BqaY4OwQuJDzzjaJDVDdYo1
-	 MiC4cmg1cUZny9MxVkkyfbAwMr67SEB60oiEXqOhG5BdH4vndhw0PFqP+gxqIBs8Qr9y5
-	 HU3Fonx+zAEvMpvBjNW6ZGMhZW++Pzvy8BSdGiQAp1MSkNT8V9RpWk6f5lVCYERMMW6sd
-	 CC7qKpG3SpzPCUwMupYzFvDmhgxDdfvVMClk2wJJMjBnKckpzrpR63wV58iPk2Tfx4fHh
-	 1gaj1BVNG3e9aF2qhFvgSRX1SMg4OJr0wi2yd8NLo+ebgQFbdYsJWPebUH/pufD76Ug==
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=+6fR46uDJL+dRX+6CMaMRd2SkUzET4p2McqA/Q4K07w=;
+	b=r8mVTy3wPR/C6QgnkW8DeOKYTSYsw1pt+YhNdbP4dG7KZW0S6fNvumfI/tidFsz0HhMn
+	 1O+z83jJz5D8zl4gZ14bPKyO9nahC23pTp2YDYhZ/FukTUPxxEGlyhRHiDj2Cc42zzez4
+	 r4Z2Ym0TnOyexfQmoSubm80m1bahTqyB1ZjCGcCvrOnIEAF4/C0UcP2pxY0lCfUMTsZ9v
+	 Ip9dYfn1EcotilMy6vZ2GyiB3v431J4jky5TWVUZI+cslS8uMY2tmdCK7W9l6IPoSwCK6
+	 bxLV/taaKTnUXVyIdy7iFIwapJXoJRDebCy+0/N13erfEzoUmyUBiwPAvsWMdoExLfg==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792356152;
-	bh=04xicFGb7gUh38T139jOUjnbZDBZO5eQFfCs8jVBonc=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=FlrTBUgd4eopsIuNzV8rMSUvp1ie+WrtlUlzTIHsDZUlO9K853CyEiGmK9GjX8z9F
-	 PZ9/DC1fKsZghEM6pODAZYAvlrinPbZ5XOsEI2+rE4nkwgBbwGnXKiw0YOb4YN7dkF
-	 ZiM/0Y+QxeTysnJffdlR141DLPSs5t0D8gfxASQyLZ32yMj9UCn/z1q1GiBe2U6wE9
-	 N987XPG6Eiy6OdkQzb9ylUMH2Jq3ElMnSbnYgYgNoWJ/kmWUPjzmyAugAEJ2eptcvV
-	 BfrRHDYPSqKdAKmW5kNasu0iNG5ZtuWgMw2PGJRr+4XivIBmdUKqHdpb/yNd2XvwM3
-	 sV4jOisynmAmg==
+	s=default; t=1792356680;
+	bh=+6fR46uDJL+dRX+6CMaMRd2SkUzET4p2McqA/Q4K07w=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=W6upqcx4OBhTOELtXAICdEq082VaxJOdvcuC92R3lGyhmMe4mJQWL0JkQa8MD2KiR
+	 2vSkoWF+zYBTLjflPj+SA1YpeBFB4Rpt9NmHqs33JniC1iDMlV2zWPpKldztvu0RSf
+	 8LhlS9ibTC8qUWAQF/HX4q0mJ9viNgUjPG6fCaNZHwVQVq8v4+jE/WpPFGCdYE29j9
+	 YP7UVz5sqnPvVZzoTh/+oQl3hbcGlMEhmg0RccY5JztUOg/5m95vloPFgfCP86qm8O
+	 lEOj2nY6uuAUtUFYvrPRSrg7duesL9zUGKnnwmOuXrAQKpQbmbfzJ6KNXfQ2lviunR
+	 qAfDkXY+X6keA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 72A0880E81;
-	Sun, 18 Oct 2026 20:42:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 89DDC279
- for <buildroot@buildroot.org>; Sun, 18 Oct 2026 20:42:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E615680F91;
+	Sun, 18 Oct 2026 20:51:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8AC962A8
+ for <buildroot@buildroot.org>; Sun, 18 Oct 2026 20:51:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 705DB406CC
- for <buildroot@buildroot.org>; Sun, 18 Oct 2026 20:42:30 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7C17660732
+ for <buildroot@buildroot.org>; Sun, 18 Oct 2026 20:51:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e96sGgoKSQxo for <buildroot@buildroot.org>;
- Sun, 18 Oct 2026 20:42:29 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 82C2D406CB
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792356149;
- b=a+UCrWb032Z7eloCfTZ6B8nPM6J7LUDALlKmQ2L7C7BxbWFCx/OrvcRX73hGkQkx9Sis
- f/WYcdHtx2HUFnmLmyXLJ3mRES6GJfCnLQ+XFtGTS72KaLe63GV2fpIunylG//W6sqvuZ
- eOSFdFw3qh3pmfeGSEhWmqu2Cxd5vl8Qe8/Lh0i7eKgZ0Nsmb+TR5vNiZeQSmYNNmexbG
- osp22jMJ90vcMJTtz6eT6e//vISwLqiq1f13UyDBpwM2rMW5Cj+u7t4pbnA9qtXYlKJ22
- PVrlSJKnXYlXDsjkhg4bI5wsupTQz/NY4isfwmbqSguqYIuNaDhHx8f0fbFyQaIQm4w==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id R7XFZNtbDAxi for <buildroot@buildroot.org>;
+ Sun, 18 Oct 2026 20:51:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 5A9DD60730
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792356676;
+ b=n8JZEGap3gaONRL1TEnGXSDixzQjoH2WLZuX1VgN0hMXI2pz2cMVHWa8xy3rnnP4OkdJ
+ 1eI1SYHQPWKEujY5j4/FfIj1h0zMtVhlXzajXX7TgfIIYfXYyEmrq2e97oA9/VMHJ+flM
+ o70WlcBa8kl8gjbSwaz9emPBXdU14xg/V7MQvR1TkdnR2UnQ48QQQgVKR1t0iHoT9UoZc
+ 0M3AsdJxeXTL8qwcIircWdc4Kyqm73taupMYxe8+30GHJHgPkhEoWrbWxiKs86HMsdeSB
+ omT/MQbWw5HlE3mNTh3IismXu7umM/3yv6BCiGsAo8d+pw6twpEIjifjSdEZm1T3AxA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792356149;
- h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
- Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
- Content-Disposition:Content-Transfer-Encoding:In-Reply-To:
- X-Last-TLS-Session-Version;
- bh=bEBn95BrmCt0vLSOfQe+hfq8o4vs0wyt3Cdih52+n1s=;
- b=Sg+PeA4kxXWoLeCWRkT0hDFyVGnE6f9/EL6ojjV+tNzIILeDmE+uZHxQkaoaUHpNkN5L
- 4gD3/3sfZ4EgpVXlGZ8ytnaEVvuvK814a2aRstLyQr6uUP+NMBRwx0uX5ZS9E7tjOun0Y
- MZSn8wWHp+SDYxPMu9d9yNpp+hGzVYLse+t0+XKYbYu5oX0TiQDtv4FghST4ORXhl2wDA
- TfFnh8Hq2Lc20dn8hMrCyNxRxsv3l9lcZGSxpalIWJ9wRPJ0Go24Ovj7nMEbV5wdXpuDh
- 0ogd5XHzdKhJah/HcnP4XBuQzbvvBD5WeWyOkV97nbWu0gM/7t5oZkhpNvki9DubmpA==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
- dmarc=pass header.from=bootlin.com;
- dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=VgGKCPYA; 
- arc=none smtp.remote-ip=185.246.85.4
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ c=relaxed/relaxed; t=1792356676;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=3EuIUIzXRBG2httBrzXP+Wx2M1/Du0dyg1fM2Z4eyXk=;
+ b=gcDNvDF3mxsC4vDZNS2Kei3pvq7E3SshXn0MFfEDQppImYiSxheEM7S43OWl5cyGfHpB
+ DMkV9wwxQPSR1TVfxejMKMjDI0Hfk40fN4WO3XtWc4wALMm7u2rMa6rQgFBomcAV/EqHH
+ 6Ax1+zAimoRmFn6zfL7nZKnk3+4nZv/rwAtkJJPHk0G7ZGNmGymRCQTxem3vhX9NlZgnm
+ UUhOqYdivuff/lePqe3xpl3t1JhCmpx0MHwpJYulB6QCI4HciAXHNgAdb4oWJd0ZqG0Yb
+ TCXtJ8uOv0LTrcXmQC++uiBVy8SI0w9bCKVWtX/q+eTvnCbvDS5QzwIqapndRByLqTA==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 82C2D406CB
- for <buildroot@buildroot.org>; Sun, 18 Oct 2026 20:42:29 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 538C44E41218;
- Sun, 18 Oct 2026 20:42:27 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 1FAF660582;
- Sun, 18 Oct 2026 20:42:27 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 940C71032868C; 
- Sun, 18 Oct 2026 22:42:23 +0200 (CEST)
-Date: Sun, 18 Oct 2026 22:42:23 +0200
-To: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
-Cc: buildroot@buildroot.org, James Hilliard <james.hilliard1@gmail.com>, 
- Daniel Lang <dalang@gmx.at>, Joseph Kogut <joseph.kogut@gmail.com>, 
- Romain Naour <romain.naour@gmail.com>,
- Valentin Korenblit <valentinkorenblit@gmail.com>, 
- =?utf-8?Q?Beno=C3=AEt?= Monin <benoit.monin@bootlin.com>,
- Gregory CLEMENT <gregory.clement@bootlin.com>, 
- Jimmy Wesolowski <Jimmy.Wesolowski@mobileye.com>,
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
-Message-ID: <atUvKBNRsqHYsh7r@windsurf>
-References: <20260828-xdp-tools-tleb-v1-0-463c25b5a99b@bootlin.com>
- <20260828-xdp-tools-tleb-v1-1-463c25b5a99b@bootlin.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20260828-xdp-tools-tleb-v1-1-463c25b5a99b@bootlin.com>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH 1/4] package/bpftool: disable feature
- auto-detection for host build
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5A9DD60730
+ for <buildroot@buildroot.org>; Sun, 18 Oct 2026 20:51:16 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 1D7D298439; Sun, 18 Oct 2026 20:49:54 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 18 Oct 2026 22:50:04 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8f2cab663b9ccd2c3b32a0bbe2c0749a3a82b73c
+X-Git-Newrev: a77b6ef16792803505552e01c8210b0f91583f2c
+X-Patchwork-Hint: ignore
+Message-Id: <20261018204954.1D7D298439@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-tomlkit: bump to version
+ 0.15.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -136,60 +111,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, Aug 28, 2026 at 06:46:47PM +0200, Th=E9o Lebrun via buildroot wrote:
-> On my system:
-> =
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a77b6ef16792803505552e01c8210b0f91583f2c
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
->     $ readelf -d host/sbin/bpftool | awk '/NEEDED/ {$1=3D""; print}'
->     (NEEDED) Shared library: [libelf.so.1]     # ACK
->     (NEEDED) Shared library: [libz.so.1]       # ACK
->     (NEEDED) Shared library: [libcap.so.2]     # NACK
->     (NEEDED) Shared library: [libLLVM.so.22.1] # NACK
->     (NEEDED) Shared library: [libc.so.6]       # ACK
-> =
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+---
+ package/python-tomlkit/python-tomlkit.hash | 4 ++--
+ package/python-tomlkit/python-tomlkit.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-> After:
-> =
-
->     $ readelf -d host/sbin/bpftool | awk '/NEEDED/ {$1=3D""; print}'
->     (NEEDED) Shared library: [libelf.so.1]
->     (NEEDED) Shared library: [libz.so.1]
->     (NEEDED) Shared library: [libc.so.6]
-> =
-
-> Host bpftool auto-detects optional features by probing the system.
-> In my case it finds:
->  - libcap which resolves to my system shared object because
->    BR2_PACKAGE_LIBCAP=3Dn.
->  - libLLVM which resolves to the BR2-built one thanks to llvm-config in
->    $PATH. But we don't have that marked as an explicit dependency.
-> =
-
-> Avoid the mechanism by hardcoding FEATURE_TESTS to the empty string.
-> Goal is to make the host-bpftool more hermetic to the host system. If
-> we ever need those features (future xdp-tools package doesn't), then
-> we'll add the dependency explicitly.
-> =
-
-> Signed-off-by: Th=E9o Lebrun <theo.lebrun@bootlin.com>
-
-Applied to master, thanks!
-
-Best regards,
-
-Thomas Petazzoni
--- =
-
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/python-tomlkit/python-tomlkit.hash b/package/python-tomlkit/python-tomlkit.hash
+index d796a1c53d..8411872c4e 100644
+--- a/package/python-tomlkit/python-tomlkit.hash
++++ b/package/python-tomlkit/python-tomlkit.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/tomlkit/json
+-md5  8e5245fd4099c9a6f99774b24a4591ae  tomlkit-0.15.1.tar.gz
+-sha256  e25bbf38843005246210a12982776f27f99cb9be67160e14434d0c0d21ee1e97  tomlkit-0.15.1.tar.gz
++md5  65f5e37b20e3b81a5ba29e8149e01c01  tomlkit-0.15.2.tar.gz
++sha256  83e32755ba1d20d9340bd069ee97e9f6232ba2346b63ffcba425de01f7e327a6  tomlkit-0.15.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  f2f9b460ba719da6626add264d3782f275a4ff7aab677beda08b330911e23adb  LICENSE
+diff --git a/package/python-tomlkit/python-tomlkit.mk b/package/python-tomlkit/python-tomlkit.mk
+index 1466772fd9..5dc015533a 100644
+--- a/package/python-tomlkit/python-tomlkit.mk
++++ b/package/python-tomlkit/python-tomlkit.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_TOMLKIT_VERSION = 0.15.1
++PYTHON_TOMLKIT_VERSION = 0.15.2
+ PYTHON_TOMLKIT_SOURCE = tomlkit-$(PYTHON_TOMLKIT_VERSION).tar.gz
+-PYTHON_TOMLKIT_SITE = https://files.pythonhosted.org/packages/94/96/e07752635b98536177fa1f37671c8f3cdde2e724c6bcf6034b2cfb571565
++PYTHON_TOMLKIT_SITE = https://files.pythonhosted.org/packages/08/72/fc01563df95c189a9f65850096bdc205bc2fe37da6c740cd64afaf18d07e
+ PYTHON_TOMLKIT_SETUP_TYPE = poetry
+ PYTHON_TOMLKIT_LICENSE = MIT
+ PYTHON_TOMLKIT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
