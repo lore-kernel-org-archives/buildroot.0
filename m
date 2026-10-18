@@ -4,167 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C553ECCA490
-	for <buildroot@archiver.kernel.org>; Sun, 18 Oct 2026 17:31:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70325CCF2C4
+	for <buildroot@archiver.kernel.org>; Sun, 18 Oct 2026 17:48:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F813406EF;
-	Sun, 18 Oct 2026 17:31:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2DAD8406EC;
+	Sun, 18 Oct 2026 17:48:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2ICdt4euRIyK; Sun, 18 Oct 2026 17:31:57 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 3D8FC406DB
+ id ymcwMik4xSmm; Sun, 18 Oct 2026 17:48:29 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 0129C406ED
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792344717;
-	b=XCuEyX/quzFcimUcTOaDFbUnrX51b+u0/Z3vPMpgUWWzLhRb2JFwMGxXHAkfB3ptTlwa
-	 pntUEeN3z9PLWCU13d7Pm+/nNcQAZSMJLMUMwIs5RnDFePdCka+kCn6qpUuCoXHEn9Ruj
-	 NPg79FKt/xN5yJpoZ1H3V2n16sJRSCoxG6huoQqbOpy3ySZ6l3M/0WGpvPW4IINWsR+iH
-	 vESMM8SV8UEsVETkYc1yIsrVELd+9KSmupjKv+sDuE1EnfoNFMUKTzv30ww7DuR0ePN5K
-	 OP7c7ialtMXZLAir+pbcnjAHDgmvlOfsieeczBxerxU76C6f9u8xl/MZAfM8tuIG0UA==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792345709;
+	b=fGm3OOt2yIDSZ+kq5jNwPyhcpTJR/bhlePxUpJKFot+u07u6k02XCcB0+OkDiOvO0RQe
+	 bZiVAU8SJYW2HA32eVjhr80QUlFCtauTcH9vxc1jdG8T4On1X5Zu2Dfqk4+0EJSvjd69+
+	 OdTCWv7p5zujjMh/H2wJp2Vuavx739/gjdIP/QkmQ4ZMW6/GODnIGIOsNui5kBVZbTm2l
+	 C75vlU2/SEosOIy3fs/Q3U9s9HGvTHuMUX0HFugEnM5rB1+7AulOnSE4shTt9FMBh/RsE
+	 iCt8BdHP98H/m3dyEkOvd9CT7XUDUvkoQvyOWRhJSxqKjAmZ2uCMEHn/74WHtzGnW5g==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792344717;
+	c=relaxed/relaxed; t=1792345709;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:Date:From:To:Message-ID:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:Subject:X-BeenThere:X-Mailman-Version:
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:Reply-To:Cc:Content-Type:Content-Transfer-Encoding:
-	 Errors-To:Sender;
-	bh=8Z46+I+R+RxtqVft6GviUap8k/OtAmrxi+gleGVxZt8=;
-	b=TPD/eD0iIFYQ/BJkLATSDyksdTWsOaokuO4cLlw7iC9hPKyityRO06PaWNLhcuoqmDGI
-	 crYltGBrPeLBM6v7BvCnvCidMae4hF+hVam5iEicJ68SnLKAV9D3gVCXNR6vDves5ee9n
-	 mERmF3bnkLUlTC9I/y8aFUYv8lCtxajEo9PdJpcQzF893VsViYBOJb0Kx+7YyvqjX5a+h
-	 mGpLCV/5tsTX5jZIXk8XtHA74qYiBRe1Jug6TKdD9yaGyeOGjiBcaoLxoJgwc+mF48Jp7
-	 JUJzi40mzXGJaq8jl2pS7ju/aa0iKr2JRCHYkpqPJoI5DA7sUyfEiOj1d7SOb7aS+ow==
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
+	 Sender;
+	bh=26GY7z76GqxPbkC5vfJMcUl45VjqAHiiWn8lMbXIyrI=;
+	b=AfYUSVDnKgDVz2/FjeA2rO8TXbcA9dLlBd0eF2Mh7g9IsSDVA/9sjssyloWb64FKdf6e
+	 AzUezIPgxa84D3SMvzOC1bIesJcCuYT8jG5tyTaE39qS+It7lzdMUiLWI/CZ3KZmncRx7
+	 mILM4tFFSCfZ0f7uPO6TS/6Rnqg5XTKZU1s19Y1UFo2LOcIM5cOGbwlPWqn0GdRS4zSAy
+	 MO5IWpU94+4A963MSmnWdYGBIzS/u1JMt/uVmMfte7AXMfY2gif63jUUnG7KFfuEtu3SH
+	 V+e8QoW1pCV79z7X73e3iwwWEKEXTsito9shc7+DIKD2WWvIU8FKbFrsq46ufrm/j6Q==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792344717;
-	bh=8Z46+I+R+RxtqVft6GviUap8k/OtAmrxi+gleGVxZt8=;
-	h=Date:From:To:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Reply-To:Cc:From;
-	b=UFObApfRKfUJK6MjYE1PWCbArJ5tJc9mz4/AinLZTK2CjBVWt5OO9cLhnhnTe6FjL
-	 ULS88oc15HdFL08mFiGI8Ez7SZAlOn+9ude04P/UHZ5RlKEkzet7AW3b0JiF/H/a5M
-	 DMCfd6iIWP1qUB86EE5cVOU4FsQAiZv7Ow6xkB1dKv1h/Pl6eE3FeoJCS9A9P0VAIA
-	 0/XO+/6sO7oeTKgDsxeD7LZtdzP/tV/K1Ys8iC4qoph8E56+szmvTHJkwUz2iZAv1H
-	 7GWn0vOLdnqRhudmuEI/04bpe91nOT1gyJ7b1fbH3cbVj+fRE8n0c0zEWR3Kt8FKMW
-	 pQwy8wqqPVgow==
+	s=default; t=1792345709;
+	bh=26GY7z76GqxPbkC5vfJMcUl45VjqAHiiWn8lMbXIyrI=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=pu6DequJ5408+VCL8njpFM9tU8ix/thcVOXq+avn6L0vn907W4kOv8uq3uE406YD3
+	 s24Rfwo/rNOzSdBgv7Gf7ZpCgAHm/3lRn84fxcak87qfMME/7zGut+5V8OmlER6PZm
+	 eYe3BvFmMX1pxqP7CW0ko3sYqcKi8XDw3PtXomes1aTGQ5zewGJ1rBach+2xFoRYO8
+	 oBnk87zFPZO/dWSDaP3F52ICIfnI1ZeCIAUXohqvhJiQUx8+Oybw96AaEbSaREZ6ue
+	 RaLgYsphH/jqOgiMoldJumCPqMMvTLHE8Puz2mUHwWrl+RPKLbjIrX8i4+bOnlxz6W
+	 rL2puKlRCnpJw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3D8FC406DB;
-	Sun, 18 Oct 2026 17:31:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 57F2B1E9
- for <buildroot@buildroot.org>; Sun, 18 Oct 2026 17:31:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0129C406ED;
+	Sun, 18 Oct 2026 17:48:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 976E7769
+ for <buildroot@buildroot.org>; Sun, 18 Oct 2026 17:48:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4D08C4005C
- for <buildroot@buildroot.org>; Sun, 18 Oct 2026 17:31:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9560580F8B
+ for <buildroot@buildroot.org>; Sun, 18 Oct 2026 17:48:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gypRREbwC4w1 for <buildroot@buildroot.org>;
- Sun, 18 Oct 2026 17:31:54 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org E918940049
-Authentication-Results: smtp2.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::330"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792344714;
- b=jH9+58fKj7mebL+cSrSfZBpOtxCYrLPkWld8Rg5e2Xs3hCTkoYcTFnGdqoLGwX7QoSqv
- XB/bsoL9aHaJQi56BArVmHegSEn/uoIMeC+5NC/QbCpxyw1Jfa3FeLztyyjACoGw9Vn8b
- I5EivzWpTA+tK7G4CmaCfupgj7Orb3nw0nPFOO2POD9YC7I8Toqi6t1x5/i570RslSGZE
- 1Enfx/v0rFmBNA26Of/FnI6vsRsov0Xsxs6PNl4r/SF15k8KaaeUpGQQNaWU6rRzIsuPi
- snXvWrGkvH0J2BekfrhUcgr4emK5MOPtrPw7p/490MqVgR0o0IXSY/y4RY1Si785NDQ==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qdwAZtGBBKE5 for <buildroot@buildroot.org>;
+ Sun, 18 Oct 2026 17:48:26 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 6358180F8C
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792345706;
+ b=l932P0y3ooNjJbKciT6O/XkVX52AMu4O6O+J3pC8EMi2MSqC0rz5FRlK/zUipDMOrSkW
+ yWx9l0kN66ngac7b81f91MXo0wfy4KslohBFUvOUlzin8Y60bZA/GU87V3KVTNneDsCXO
+ 4iT2Szz7V+uuxCWh1ms1L9Oi+lRiRVmr7+viR28qVY/PT1pcR3WLtup7HplXfPkb/vv+u
+ X15frXiagp+kssSgQZ0b1iRGZBkJpcthLOvDo2FoGAmNxn8eqd65mgC5EzgCJVb0CaDGY
+ RwKh3mQb8yX6a8l06kRckOsjfcd9R36fyJvPdxkdpgEGDlC5xcJoJZcNU0pkdARcBgg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792344714;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Date:From:To:Cc:
- Subject:Message-ID:Reply-To:References:MIME-Version:Content-Type:
- Content-Disposition:Content-Transfer-Encoding:In-Reply-To;
- bh=b3m+hmjR+7+OWTRyap/ZTdDjRq1Ki3LpNZgWqua7FvA=;
- b=RPVe+gP5tzzV3fxpq/YLXve21U3LPnTS8bdIam2cquoje27ohntZymjU+Iu5z6Dqjhy8
- 5CO2fU+6Qme2zbo9GpzQYyerSZa6etE9J9nPQdyCKFDcbss6ipos3+H/DkYKvLy3gmqph
- Y0zmtVFdI6xWtEBi/NX10rsgSH03/oavJldVytCI3wmyq1twkF1b9n/ubiXTNBd1QJTaP
- GPOM1VYlVqQ9dai+a2ZyFJY7ba+FJFWBEc3nJfCWryQCIRPCqO3kEQLZUN8C1F5VNIvea
- EBtR0o2LcyNfoE4Aydwg5D+E9Hg4C+cxH0Bfz3sKLV3mJ+PVvK0vRLaFWCwmkx5bGhA==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
- dmarc=pass header.from=gmail.com;
- dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b="lp4A/Urr"; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::330"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
- envelope-from=petr.vorel@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=lp4A/Urr
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E918940049
- for <buildroot@buildroot.org>; Sun, 18 Oct 2026 17:31:53 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-4980fe6b3beso15073125e9.0
- for <buildroot@buildroot.org>; Sun, 18 Oct 2026 10:31:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1792344712; x=1792949512; darn=buildroot.org;
- h=in-reply-to:content-transfer-encoding:content-disposition
- :content-type:mime-version:references:reply-to:message-id:subject:cc
- :to:from:date:from:to:cc:subject:date:message-id:reply-to
- :content-type; bh=b3m+hmjR+7+OWTRyap/ZTdDjRq1Ki3LpNZgWqua7FvA=;
- b=lp4A/Urr2hPKisVqhJFOUOZqsgUlyJEfPCXRvZV0YHQZD5RWsXAzwx/ft5I5oUHYEF
- 4FdyzP9RMD6nvQcD93MO/O+LVdBb7sChQpS1JODpOd8i9JZ6qZ1IKhEYTNRpLUrX27pk
- namg+cxr4HrxX1BKTKdSIXHweWpbfB5IU+vs69akaItssjm1prym2R9tWvvznXJ4p5td
- h7KNXznV7e9DEl9zaKoTax7L4OndmtTDffXur4mS9Cu46rKYDTfbgcczRANuRat5rL8i
- WLF2lWNGerEklpR5cRcOLmTmplEBUie1LO8B8iSm1oAssD1PVsy5K4h73ONbPsSGud6D
- r8uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1792344712; x=1792949512;
- h=in-reply-to:content-transfer-encoding:content-disposition
- :content-type:mime-version:references:reply-to:message-id:subject:cc
- :to:from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=b3m+hmjR+7+OWTRyap/ZTdDjRq1Ki3LpNZgWqua7FvA=;
- b=1ayaObGTjmMHc+EJydLVSQ0ipxcnKIotcwqRsoX4Z82Mk8yBYxxpEbkVSMM8bQQrRs
- vzQ9/i7+L48et2DyoNcGsI8qJ0wonWZl8wfHWd/ne8SEgrvXUHvtsHAiFMgThGQKHZnt
- KkoTGEUIPdOggGKSMe5p+wJ49DIDbJRozB+ng5n3zKxG+s/G7ysVfRFViG898hZ1P54j
- 2ZN/T37epoxWL82mbzRydG3ulvukrVquVIlZEwZ1ywM6r+v44pCVSqnxRqN/eFPfi/ma
- lOQyPtzaoVVqJ3kYQHbeUS1mHoVDHQ0hE8ADC2DM6WNFpgrm7+8lsTMn2jGUKuFFJeTd
- jG+Q==
-X-Gm-Message-State: AFq9FYKTLSlEfUujvEVO/eCKIhN/ezttSamSyn1ebKCjR9HQAmx3PPnF
- WFihRav/Uw48SqRkjhPi8SsXYW34d/Md1AbMcz43xj4/SYykeAgNU9jg
-X-Gm-Gg: AYBFou2hyESzpoOLFN06Snaq+rKcXPLlO0szXA6L7IdjT0CA7h5B1UV03hamXmTJDfy
- fgybhz3l7JzEWYaTsYtwb0PXZJf8qOzSx8uq2jejwfBYiY/pXURG5m3THQcGP+Ftatdz/kSiNtB
- ec4AM0tvRvY44MAW8QWoFuVzusdYsgs66zCbk28pRVbBA28Pb5nTctwlgMtrQOu/wSwGeUUiBcC
- lWwCB52nnD4cuzcp7nngKGbWOatmR9QXVuAzP2i3Jn/UC7wLvBYw4iOKxFz2tjxIutJO+nfUMI7
- xfVn/Lss4a0GiRwwb/vv8ocFK/4Ora5v15bK4mvvNa0ihUDBmbg/DUsorS3aODY6Iaiv+lCmXS4
- B63StEDHGwdoaafLMFEUq7OHtH9ngR2ckfnw88yEWmU/xhs6h6/BAXp5o7xuIk/2wZQDDiCl1KU
- 4sj2RTZ36m+GoUvllOBqpGTU9ni2LwftWsAkscB6wxaP82bGcXBM+PcRwYE9mRXP2ot6gVNMxF2
- oHwKw1gwNGhoA45AMhJYgI9PZwfw+EE3QI=
-X-Received: by 2002:a05:600c:4f88:b0:4a1:9c71:9f17 with SMTP id
- 5b1f17b1804b1-4a1d75fe190mr111977775e9.9.1792344711500; 
- Sun, 18 Oct 2026 10:31:51 -0700 (PDT)
-Received: from pevik (gw1.ms-free.net. [185.243.124.10])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4a1dc8ee409sm191444145e9.13.2026.10.18.10.31.45
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 18 Oct 2026 10:31:50 -0700 (PDT)
-Date: Sun, 18 Oct 2026 19:31:37 +0200
-From: Petr Vorel <petr.vorel@gmail.com>
-To: Titouan Christophe <titouan.christophe@mind.be>
-Message-ID: <20261018173137.GA383673@pevik>
-References: <20261010151121.876133-1-titouan.christophe@mind.be>
- <20261011191210.GA129909@pevik>
- <734360bc-1e66-4584-b04f-f5405af3be1b@mind.be>
- <20261016212923.GA331129@pevik>
- <5a67d18f-24f5-4426-9a55-82bdef6f13f3@mind.be>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <5a67d18f-24f5-4426-9a55-82bdef6f13f3@mind.be>
-Subject: Re: [Buildroot] [PATCH 0/7] Update kconfig inrastructure to Linux
- 7.2.9
+ c=relaxed/relaxed; t=1792345706;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=pR6cVbOXMKqrp6LWuH1Vl1AO0NoiQUwLZ44jJqrylaw=;
+ b=c7ztjx2GEzZh4LJOsMiKdT3ozHSlUOsvN5FuLrjp3YUKTtrZgdnKs+xM5wqhQbu2LlyL
+ SW5EI2SoUWXI0mCKyhvmHgPJJkfnhO7Pxf49U8mLNwYzT7JWNZDGHem0G1PgzCbTYflq3
+ LD5KPdmTpdea3r/f0kI/zDjowwqoE4oZc/M50oLkIemPuPq03CiQRP/NQfdSSnJNR59cg
+ wdPy6o4mHc3UKoy+AUF/ujnEvTb56OUuTnzY+by/VRCXF+jrxnWXvQ/IBMXjqchRAoP9I
+ 5SxmbU5lGyZcZ7p8C8J2ku5aX8v4q3wfZ4JgMPtZb8KIEq4NSTW0G+XtI3glRg9zGGw==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6358180F8C
+ for <buildroot@buildroot.org>; Sun, 18 Oct 2026 17:48:26 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 349DF98391; Sun, 18 Oct 2026 17:47:04 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 18 Oct 2026 17:53:13 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c238cc25dcd1cd77c36bfaf09e89b7c1b24a08c6
+X-Git-Newrev: 0b0a04bdca525e91e694b74fcbb72b662f085ad1
+X-Patchwork-Hint: ignore
+Message-Id: <20261018174704.349DF98391@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/beagleplay: bump tfa,
+ linux and uboot versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -176,126 +111,261 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Reply-To: Petr Vorel <petr.vorel@gmail.com>
-Cc: ps.report@gmx.net, yann.morin@orange.com, thomas.petazzoni@bootlin.com,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============0669987838276774455=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-> Hello Petr,
+--===============0669987838276774455==
+Content-Type: text/plain
 
-> First of all, thank you for having looked into this series !
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0b0a04bdca525e91e694b74fcbb72b662f085ad1
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Yw, I wish I had more time for testing (hopefully I find some more time).
-So far I checked only "make {defconfig,nconfig,menuconfig,help}".
-Big thank you to do that update.
+Bump the beagleplay to use the latest stable tfa, uboot and linux kernel
+releases to pull in the latest bug fixes and features.
 
-> On 16/10/26 23:29, Petr Vorel wrote:
-> > Thank you! FYI Now rebasing to current master requires resolve another =
-conflict due
-> > 5177cf9c2f ("package/openssl: move libopenssl/libressl options out of t=
-he choice")
-> > (Not difficult to solve, but if you rebase you make it easier for revie=
-wers.)
-> I rebased on top of latest master, resolving the conflict, and pushed to
-> https://gitlab.com/essensium-mind/buildroot/-/commits/bump-kconfig
+Because swig 4.5.0 removes support for Python 2 compatibility we need to
+backport a patch for U-Boot to remove the Python 2 macros it uses to
+generate the final fimrware images.
 
-Thank you! Maybe once a while rebase and force push until finally merged?
+Signed-off-by: Bryan Brattlof <bb@ti.com>
+[Julien:
+ - add "Upstream:" and "Signed-off-by:" tags in patches
+ - add link to upstream hash source in linux.hash
+]
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ .../arm-trusted-firmware/arm-trusted-firmware.hash |  2 +
+ .../beagleplay/patches/linux/linux.hash            |  4 +-
+ ...place-removed-SWIG-Python-2-compatibility.patch | 67 ++++++++++++++++++++++
+ ...place-removed-SWIG-Python-2-compatibility.patch | 67 ++++++++++++++++++++++
+ .../beagleplay/patches/uboot/uboot.hash            |  2 +-
+ configs/beagleplay_defconfig                       |  9 +--
+ 6 files changed, 144 insertions(+), 7 deletions(-)
 
-> > Slightly problematic is that output/ format changed. Therefore
-> > without 'rm -rf output' make config fails:
+diff --git a/board/beagleboard/beagleplay/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/beagleboard/beagleplay/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+new file mode 100644
+index 0000000000..2e24bcd0de
+--- /dev/null
++++ b/board/beagleboard/beagleplay/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  b807d8bf190b7c46b4260729b4bbe2f7df83cd1086edcb181d66595ae6598d23  arm-trusted-firmware-v2.15.0-git4.tar.gz
+diff --git a/board/beagleboard/beagleplay/patches/linux/linux.hash b/board/beagleboard/beagleplay/patches/linux/linux.hash
+index eb4dcee958..49bf75b924 100644
+--- a/board/beagleboard/beagleplay/patches/linux/linux.hash
++++ b/board/beagleboard/beagleplay/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+-# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  4f21c01f4d04c1d1b3ed794153f8900802c92497be620b07c4869530f2d28ee3  linux-6.18.16.tar.xz
++# From https://www.kernel.org/pub/linux/kernel/v7.x/sha256sums.asc
++sha256  2feaa70453e91f541be6a5c9078d8168e081af45a3d9718054850538cff2ebf3  linux-7.2.10.tar.xz
+diff --git a/board/beagleboard/beagleplay/patches/ti-k3-r5-loader/0001-pylibfdt-Replace-removed-SWIG-Python-2-compatibility.patch b/board/beagleboard/beagleplay/patches/ti-k3-r5-loader/0001-pylibfdt-Replace-removed-SWIG-Python-2-compatibility.patch
+new file mode 100644
+index 0000000000..10968ce876
+--- /dev/null
++++ b/board/beagleboard/beagleplay/patches/ti-k3-r5-loader/0001-pylibfdt-Replace-removed-SWIG-Python-2-compatibility.patch
+@@ -0,0 +1,67 @@
++From 527115ef6783cec49e5610c523c124b399011361 Mon Sep 17 00:00:00 2001
++From: Jaipaul Cheernam <jaipaul.cheernam@est.tech>
++Date: Tue, 11 Aug 2026 15:34:33 +0200
++Subject: [PATCH] pylibfdt: Replace removed SWIG Python 2 compatibility macros
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++SWIG 4.5.0 removed Python 2 compatibility macros (PyInt_*, PyString_*)
++from its runtime header pyhead.swg (see commit 79f7a2b7cb7d). Replace
++them with their Python 3 C API equivalents:
++
++- PyString_FromString -> PyUnicode_FromString
++- PyString_AsString -> PyBytes_AsString
++- PyInt_AsLong -> PyLong_AsLong
++
++The replacements are safe since the macros were already aliased to
++these exact functions in SWIG's Python 3 code path.
++
++This is a backport of dtc commit 5008d1d6a356 ("pylibfdt: Replace
++removed SWIG Python 2 compatibility macros").
++
++Signed-off-by: Jaipaul Cheernam <jaipaul.cheernam@est.tech>
++Reviewed-by: Jérémie Dautheribes <jeremie.dautheribes@bootlin.com>
++Tested-by: Jérémie Dautheribes <jeremie.dautheribes@bootlin.com>
++Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
++Reviewed-by: Peter Robinson <pbrobinson@gmail.com>
++Upstream: https://git.u-boot-project.org/u-boot/u-boot/-/commit/527115ef6783cec49e5610c523c124b399011361
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++---
++ scripts/dtc/pylibfdt/libfdt.i_shipped | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/scripts/dtc/pylibfdt/libfdt.i_shipped b/scripts/dtc/pylibfdt/libfdt.i_shipped
++index e4659489a96ab..326a15c7941e3 100644
++--- a/scripts/dtc/pylibfdt/libfdt.i_shipped
+++++ b/scripts/dtc/pylibfdt/libfdt.i_shipped
++@@ -1033,7 +1033,7 @@ typedef uint32_t fdt32_t;
++ 	PyObject *buff;
++ 
++ 	if ($1) {
++-		resultobj = PyString_FromString(
+++		resultobj = PyUnicode_FromString(
++ 			fdt_string(fdt1, fdt32_to_cpu($1->nameoff)));
++ 		buff = PyByteArray_FromStringAndSize(
++ 			(const char *)($1 + 1), fdt32_to_cpu($1->len));
++@@ -1064,13 +1064,13 @@ typedef uint32_t fdt32_t;
++         }
++         $1 = PyBytes_AsString($input);
++     %#else
++-        $1 = PyString_AsString($input);   /* char *str */
+++        $1 = PyBytes_AsString($input);   /* char *str */
++     %#endif
++ }
++ 
++ /* typemaps used for fdt_next_node() */
++ %typemap(in, numinputs=1) int *depth (int depth) {
++-   depth = (int) PyInt_AsLong($input);
+++   depth = (int) PyLong_AsLong($input);
++    $1 = &depth;
++ }
++ 
++
++base-commit: 1262e50a34a0e01f974e8d909c5b255f8fa7199e
++-- 
++2.55.0
++
+diff --git a/board/beagleboard/beagleplay/patches/uboot/0001-pylibfdt-Replace-removed-SWIG-Python-2-compatibility.patch b/board/beagleboard/beagleplay/patches/uboot/0001-pylibfdt-Replace-removed-SWIG-Python-2-compatibility.patch
+new file mode 100644
+index 0000000000..10968ce876
+--- /dev/null
++++ b/board/beagleboard/beagleplay/patches/uboot/0001-pylibfdt-Replace-removed-SWIG-Python-2-compatibility.patch
+@@ -0,0 +1,67 @@
++From 527115ef6783cec49e5610c523c124b399011361 Mon Sep 17 00:00:00 2001
++From: Jaipaul Cheernam <jaipaul.cheernam@est.tech>
++Date: Tue, 11 Aug 2026 15:34:33 +0200
++Subject: [PATCH] pylibfdt: Replace removed SWIG Python 2 compatibility macros
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++SWIG 4.5.0 removed Python 2 compatibility macros (PyInt_*, PyString_*)
++from its runtime header pyhead.swg (see commit 79f7a2b7cb7d). Replace
++them with their Python 3 C API equivalents:
++
++- PyString_FromString -> PyUnicode_FromString
++- PyString_AsString -> PyBytes_AsString
++- PyInt_AsLong -> PyLong_AsLong
++
++The replacements are safe since the macros were already aliased to
++these exact functions in SWIG's Python 3 code path.
++
++This is a backport of dtc commit 5008d1d6a356 ("pylibfdt: Replace
++removed SWIG Python 2 compatibility macros").
++
++Signed-off-by: Jaipaul Cheernam <jaipaul.cheernam@est.tech>
++Reviewed-by: Jérémie Dautheribes <jeremie.dautheribes@bootlin.com>
++Tested-by: Jérémie Dautheribes <jeremie.dautheribes@bootlin.com>
++Signed-off-by: Peter Robinson <pbrobinson@gmail.com>
++Reviewed-by: Peter Robinson <pbrobinson@gmail.com>
++Upstream: https://git.u-boot-project.org/u-boot/u-boot/-/commit/527115ef6783cec49e5610c523c124b399011361
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++---
++ scripts/dtc/pylibfdt/libfdt.i_shipped | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/scripts/dtc/pylibfdt/libfdt.i_shipped b/scripts/dtc/pylibfdt/libfdt.i_shipped
++index e4659489a96ab..326a15c7941e3 100644
++--- a/scripts/dtc/pylibfdt/libfdt.i_shipped
+++++ b/scripts/dtc/pylibfdt/libfdt.i_shipped
++@@ -1033,7 +1033,7 @@ typedef uint32_t fdt32_t;
++ 	PyObject *buff;
++ 
++ 	if ($1) {
++-		resultobj = PyString_FromString(
+++		resultobj = PyUnicode_FromString(
++ 			fdt_string(fdt1, fdt32_to_cpu($1->nameoff)));
++ 		buff = PyByteArray_FromStringAndSize(
++ 			(const char *)($1 + 1), fdt32_to_cpu($1->len));
++@@ -1064,13 +1064,13 @@ typedef uint32_t fdt32_t;
++         }
++         $1 = PyBytes_AsString($input);
++     %#else
++-        $1 = PyString_AsString($input);   /* char *str */
+++        $1 = PyBytes_AsString($input);   /* char *str */
++     %#endif
++ }
++ 
++ /* typemaps used for fdt_next_node() */
++ %typemap(in, numinputs=1) int *depth (int depth) {
++-   depth = (int) PyInt_AsLong($input);
+++   depth = (int) PyLong_AsLong($input);
++    $1 = &depth;
++ }
++ 
++
++base-commit: 1262e50a34a0e01f974e8d909c5b255f8fa7199e
++-- 
++2.55.0
++
+diff --git a/board/beagleboard/beagleplay/patches/uboot/uboot.hash b/board/beagleboard/beagleplay/patches/uboot/uboot.hash
+index b6a925ea4e..ff6e4ed2e2 100644
+--- a/board/beagleboard/beagleplay/patches/uboot/uboot.hash
++++ b/board/beagleboard/beagleplay/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  b60d5865cefdbc75da8da4156c56c458e00de75a49b80c1a2e58a96e30ad0d54  u-boot-2026.01.tar.bz2
++sha256  78e8bfc382fe388f9b55aa1daf8c563522a037779b5d4c349d1415e381f1243e  u-boot-2026.07.tar.bz2
+diff --git a/configs/beagleplay_defconfig b/configs/beagleplay_defconfig
+index 90212bda44..9e45680c31 100644
+--- a/configs/beagleplay_defconfig
++++ b/configs/beagleplay_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT_ARGS="-c board/beagleboard/beagleplay/genimage.cfg"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.16"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="7.2.10"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/k3-am625-beagleplay"
+@@ -24,7 +24,8 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_LTS_2_12_VERSION=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.15.0"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="k3"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_TARGET_BOARD="lite"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=y
+@@ -32,13 +33,13 @@ BR2_TARGET_OPTEE_OS=y
+ BR2_TARGET_OPTEE_OS_PLATFORM="k3-am62x"
+ BR2_TARGET_TI_K3_R5_LOADER=y
+ BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION=y
+-BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE="2026.01"
++BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE="2026.07"
+ BR2_TARGET_TI_K3_R5_LOADER_BOARD_DEFCONFIG="am62x_beagleplay_r5"
+ BR2_TARGET_TI_K3_R5_LOADER_TIBOOT3_BIN="tiboot3-am62x-gp-evm.bin"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am62x_beagleplay_a53"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
 
-> > $ make defconfig
-> > Config.in:23: can't open file "(BASE_DIR)/.br2-external.in.paths"
-> > make[1]: *** [Makefile:1050: defconfig] Error 1
-> > make: *** [Makefile:83: _all] Error 2
+--===============0669987838276774455==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-> > Obviously this part in Config.in is wrong:
-
-> > # br2-external paths definitions
-> > source "$(BASE_DIR)/.br2-external.in.paths"
-
-> > bisecting shows the first bad commit
-> > 121d3e6800 ("*/Config.in: use the new $(VAR) syntax")
-
-> > With removing output directory first everything works.
-> Actually, only output/build/buildroot-config needs to be removed:
-
-I guess there is no way to avoid people bump into this problem.
-Maybe at least to document the need of removing the file in the git commit
-message.
-
-> =A0 =A0 $ make defconfig
-> =A0 =A0 Config.in:23: can't open file "(BASE_DIR)/.br2-external.in.paths"
-> =A0 =A0 make: *** [Makefile:1050: defconfig] Error 1
-
-> =A0 =A0 $ rm -r output/build/buildroot-config
-> =A0 =A0 $ make defconfig
-> =A0 =A0 [...]
-> =A0 =A0 #
-> =A0 =A0 # configuration written to /home/titou/Code/buildroot/.config
-> =A0 =A0 #
-
-> So there is probably some incorrect build dependency (kconfig source ->
-> binaries).
-> I will look into this.
-
-Could be. Again, thank you for having a look.
-
-And, if you have enough time and motivation, after this is merged, my perso=
-nal
-wish would be to speedup 'make help' (it takes 9 sec on my laptop, kernel's
-target is much faster), but this is not due the update (an old problem).
-
-> > $ rm -rf output/
-> > $ make defconfig
-> > ...
-
-> > # No change to ...buildroot/.config
-
-
-> There *are* some changes though !
-> This is because of upstream commit aff11cd983 [1]. Before this series in
-
-
-> Buildroot there was only the title of a menu in .config, now there is an =
-end
-> marker as well.
-> See this example:
-
-> =A0 =A0 =A0#
-> =A0 =A0 =A0# Database
-> =A0 =A0 @@ -1829,6 +1855,7 @@
-> =A0 =A0 =A0# sqlitecpp needs a toolchain w/ C++, threads, gcc >=3D 4.9
-> =A0 =A0 =A0#
-> =A0 =A0 =A0# BR2_PACKAGE_UNIXODBC is not set
-> =A0 =A0 +# end of Database
-
-Yes, I noticed that during 'make defconfig' output comparison, done by aff1=
-1cd983 [1].
-
-Kind regards,
-Petr
-
-> I checked that this is the only change in .config output:
-
-> =A0 =A0 diff -u .config.old .config | grep -E '^[+-]' | grep -v '# end of'
-> =A0 =A0 --- .config.old 2026-10-18 17:21:54.495007495 +0200
-> =A0 =A0 +++ .config 2026-10-18 17:44:13.970027594 +0200
-> =A0 =A0 -# Buildroot 2026.08-1042-g279f4b6237 Configuration
-> =A0 =A0 +# Buildroot 2026.08-1048-g55ffb69e12 Configuration
-
-
-> Best regards,
-> Titouan
-
-> [1] aff11cd983 ("kconfig: Terminate menu blocks with a comment in the
-> generated config")
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit=
-/scripts/kconfig?id=3Daff11cd983ec0850651ee9b1c2a88b33358cb2f2
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0669987838276774455==--
