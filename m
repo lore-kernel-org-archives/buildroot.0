@@ -1,105 +1,117 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25D10CCF2D1
-	for <buildroot@archiver.kernel.org>; Sun, 18 Oct 2026 09:51:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61C93CCA490
+	for <buildroot@archiver.kernel.org>; Sun, 18 Oct 2026 09:51:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E952C606BB;
-	Sun, 18 Oct 2026 09:51:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 224574096D;
+	Sun, 18 Oct 2026 09:51:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1idsthLJbszl; Sun, 18 Oct 2026 09:51:14 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org CBB7F606F8
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792317073;
-	b=SUtXQE13+WFi8a/GgcaCfktXa3SOxXtZAmBKnRV9DEL/YG3ZupAWdmttgTgaUrDC8Xfd
-	 5QikvxpJcIHuwFntBnKHsGPhYCP58IUnxSG0EQ4ru3wJFsyvZV/OEgKAb69rE9BwTutp0
-	 eZzz6rg+jLOpDmWUCDu/0Gx3LYkHhM3tBt6u7rc2aehg2bl8tasddLuKRUiavRP68C+fj
-	 adf8R4aO67aQZsdcwqGk3kV/xcaoQDw8BTIKcozBhhZjhvbu0mrW0zOmZCfKV7GQKeYyC
-	 aXKBjsZ5vhnHyNx80dqKFOFmtB38oiF7/ZkheT5I+wCS4R4xbN5ZnSNC8IqpUoHPMtQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7d15FVg3EbQi; Sun, 18 Oct 2026 09:51:33 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 568C640937
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792317093;
+	b=Tk3Ds0AUGmf5mVex+fu7vLeLcugifYi7M1w6AybkhYfMZYlpw9TcaXl0zQ0k/2/8G0xw
+	 UXFFkqBNmkPoaBGpHc28oXGmMjMT3EBPqVMNzNDWkSJnKPLCvZABR5pTcGcb4Byy5H0Bi
+	 ZrQvfOXnLnr7wC5+FwGSjzrUR9YFDwnyHH/f0DuwhN9htVnW1iJo3no5eBFqHwv8ciJyM
+	 Gdjm012Osa27+ukVXxb4hYv24yFqDyMe6cVRsSQIRUD8zSfh38BFpBMaX1CsdpJsEL3Xj
+	 qNrW2zTVcPBfmEWzjaYsnSFHkdg0e9pPjLNlRmTNFPzlI7gUg7hWaZDTnjx0zwmrDug==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792317073;
+	c=relaxed/relaxed; t=1792317093;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=3O9ZCa7R5RXyQkVDcXJVkL5N10GjrOwvjGAdUCU8hDM=;
-	b=DKJ9ljcCnfGOsYb+dSjT5v4kvTlngfgirqKDuosS2t8TY8TPOyXjkK7n4gydE1F9rNvW
-	 kxuumy31WbUMIWz+Ya8bhQ6PDqpESPKuATq2scjot17jNrpz+VQb2ElilYOlQbgfXBxTb
-	 ayH+KfG9KV0z5JoQvR8OmllS6L1X7ULT6wCPKhR6GeV2pm3WVa4oq4R4MwnGsbx8vNAc4
-	 mFiYjs6MEgsZgz3qjZqQH1HFGOGb6oZmv8BgSE5orE9ErJrR9NyobscA7um7vzDJLm8+T
-	 LdKlErOS94uLTRa0crJcZMDnu0By/K4EaeF0wtucwoqYXefCvASXmf5eWOfyt2BBQ3A==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
+	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
+	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
+	 Errors-To:Sender;
+	bh=QT4km6nAhObO3VrE6jHqYW678/7xx/pJ06U27ApoU14=;
+	b=LL/WhCK4VlCf4ZtmcF1S1I0YROgm+6tUimFWheisbcmQ04dEC0IU7o0/3zSmI7+SlA2n
+	 fH8n2wmRMUYkneO4J/df0MHp+KX+nU67u2QdyYjdNzhceUJm+To0ZW3sNzXSueWGVOKtj
+	 kV/DowKLfzkL1KpHyk0M23AG0GePIfvFpboCVtYeacIJ+t6EnUmRmdWNoTM0soc0gETkI
+	 bNiVjcVVFqTK14I4EOFVgXwgk7AE6+sLkn+4HwcVYU68PLiFla05R6FluBZpBnWXgNEsl
+	 /U+zKqR1E4GZmx+rli+zEnYNCof1AfqhIy+2iWuEMHVGAaw9DaBugOeczc/J3ZBOLJw==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792317073;
-	bh=3O9ZCa7R5RXyQkVDcXJVkL5N10GjrOwvjGAdUCU8hDM=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=IIGEWkZUi3tkEj07zRXl+QCQmxh6EV4yRnVvTbhdR0d1qMZ+4dPo6MHpFfDJASZjm
-	 5jucHUTQwn4DDI87aL07i0r7dHbty6FHR6Y7d+XOyEI49DgNqhYNGSkLokG9JiSz3/
-	 UzBWTH+isECa0WlTyqHRcFwmbXbwMTLMGktdtn9zVhTkwrfM9RRC6WY2dNxHJwBJWq
-	 O4gPZ1zMKH0SyvIWXMtWzO5szZWZ07BsuPW13MLDsDOqoxSUk1anx64bDHb7jy0CvG
-	 iT0FcDWNdKtxLNhuWowHYeZCDVKN2zc6T0L0E8Fw5KUr3kUN3QlfIDhkw0moCh7v3c
-	 +WgD1tmHCqnpA==
+	s=default; t=1792317093;
+	bh=QT4km6nAhObO3VrE6jHqYW678/7xx/pJ06U27ApoU14=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=P0TaW6yjRQqyHsGKdkROFg2KKQcAoj7hE6pZI9/yRMQPB4sndeegH9/zpo5dEoN6J
+	 pKWym6lNxZhp5/HozwZSDY3bGCLpI9L+ukecU3yEECsUfk26dSPqAki3UWKeSM9qHv
+	 g66jX5RMMnr2KTdm/IcnLZiFeFhOIJ8von/ZE+X+Oz/5smSNP60Hd+uXT8t/2Dh2jC
+	 WwMKVVQlG9nM2p1gb7ll2LxA8u+Wn6hE4+E5n+2ejkSQ8wI8dSAPwqylnSjpNScxn/
+	 3zqxuIvwk6TWZ5Q66TXRY7e2BWyts31ctJfBjRDLSE4jFSBC8iwBO/iFYwy0U4JJgu
+	 5/HkMmr+NbYnQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CBB7F606F8;
-	Sun, 18 Oct 2026 09:51:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4519F23F
- for <buildroot@buildroot.org>; Sun, 18 Oct 2026 09:51:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 568C640937;
+	Sun, 18 Oct 2026 09:51:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2208C23F
+ for <buildroot@buildroot.org>; Sun, 18 Oct 2026 09:51:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 36366606AA
- for <buildroot@buildroot.org>; Sun, 18 Oct 2026 09:51:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 13CAC400D8
+ for <buildroot@buildroot.org>; Sun, 18 Oct 2026 09:51:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hcFWlfmYN4Yo for <buildroot@buildroot.org>;
- Sun, 18 Oct 2026 09:51:02 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org D3380606A7
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792317062;
- b=Yb/wBkG0pdd8PUgLefRV4rqqLqh37ln33lth+uhA02l/NOodovCZoEytfG0sFiCgR6jW
- toP1zBu6DGe7rnC5a0AtXbReu/8TwzZI2y4dMU3YTbHVuH2xUX5XQvCVZWTaseTdKzVB0
- aTcLJx/LdiAzCb7qGGqYhzpsRTNgjgs4D5BSDVPM6Zb5IouVJyUjIjrnOErZOnnYN66I4
- zFypubz/9izBDC6Jq7C2yg7geROOA6X2zHUEkL/hqQY9Ppxpn8EfY4eIqM/x3U+/UG6BV
- b1Fu7slWggvZI+bf6Hu9aF4k2Edz2mW13WcQ0OC7Bk2prYb+xNtJq5PbVB0DhzEWq/g==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mOcinSyxg3Tx for <buildroot@buildroot.org>;
+ Sun, 18 Oct 2026 09:51:31 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 6D6D540060
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792317091;
+ b=leglhqiW8oBjIP5mdS2ux+vk11Lpl+kXk3WI97TPEisKAEqI/dBS4QUL0jxn9KHNKehB
+ Td9xZjMpH4k0UEtm5wxjLzE9m6pZg3kNLHdSMSbD+a76s5dsmB2hlcQ/TMTTnjd00HzMs
+ MZiDxbuLM4tv9Cpm+RYQlOYlK6GE6n52PwKHRb3gtloPvXT+PO9vvTvXNtuecIV1OBC+k
+ XB+OwuiGa0kMz1edwNvjaQjUFAa1LT/q7JbxCYYTZzHYBPDiUdrwnW2TvV6Vn6JklRaZ4
+ wVx9WzKTelxPjLTLpeFaaKGnDu4hgYdm5BBnv7hrvMLTA81DXJdcPzNbT+CHueeoZ0A==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792317062;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=VaVXsHFko2opzvrre5pwc4uCi8b2lIj15PTLajgH0Bs=;
- b=YRhRWDv7hh0/84MqxWHadIzlxg2vlFcOgZP8m/7g7XTI6fwytWnKiLuF1q/zvPWLpTT1
- 8pXo58wWDtoV9zT88RNR4rGer+qPpO1QKLJm8182Ib1gbrBGuq9PCCmvt0qEE3ps0iS3g
- bqDXPNlG69af/yNnzhyLvt6OVwWadoBL+7WTvhzkEOISRIX6AJhAaz0puFVMz2BYSXuoo
- iTPa27kO2oxduzoWBWRRAqRsqCW7Rp20r5S9uLGR8msly3hRHc2SYWZVj8tGe0YZnUPMB
- 6Oc4ziHu6YWyrfQtdeY0geonjapjbAPJyn51jJTiEXwN7uI3gGWz6IHuM6TK6FTYGGg==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D3380606A7
- for <buildroot@buildroot.org>; Sun, 18 Oct 2026 09:51:02 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CBCF296ADA; Sun, 18 Oct 2026 09:49:40 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 18 Oct 2026 11:18:39 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f432a9e625cd1dabc7722e894909d7ae23e5e488
-X-Git-Newrev: 1923f760bbf8ac7ed43f90d2e7df33faebe9afb8
-X-Patchwork-Hint: ignore
-Message-Id: <20261018094940.CBCF296ADA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/p11-kit: switch to meson build
- system
+ c=relaxed/relaxed; t=1792317091;
+ h=Received-SPF:Received:DKIM-Signature:Received:MIME-Version:Date:From:
+ To:Cc:Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
+ Content-Type:Content-Transfer-Encoding;
+ bh=Pu0kO6eM11stDK4aekzuZVrvjOm5iFmHgiJPoeKWkbA=;
+ b=O5UkyhPxFU7i6reYnMVVuhMo46Ul6d26YZPozmB2/wVizrQXWa3KkaPzgWIkhyJXem/Z
+ x+vuv9RwtCgIgk6GIOsv0/xnRiaa6TCcx15teP+ld1T72Wcy9k4swnWBu3gfckAzw1Ict
+ ee8DGnj5WaL/N/z0Ikqw1SG+3QXkMODv9r9uN/8jhnReA+NMOB452M8lOWlkFvx0CeZn4
+ NBVOVgup3B9i+CBUHdE//9eH/m/iEaguaubAreR85Kk1C/LZ/IgpP89ZuslLaIH4pSg7+
+ qyhf7Xpsng773ncuEVPuZ3omKx2lIiHD3oPnvFiA7CGcXmTNoLjoRG9ujfaLQzrcetA==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ dmarc=pass header.from=free.fr;
+ dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=ir1QwiBf; 
+ arc=none smtp.remote-ip=212.27.42.4
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6D6D540060
+ for <buildroot@buildroot.org>; Sun, 18 Oct 2026 09:51:29 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id ED0B419F5B2;
+ Sun, 18 Oct 2026 11:51:25 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492
+ via 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 18 Oct 2026 11:51:25 +0200
+MIME-Version: 1.0
+Date: Sun, 18 Oct 2026 11:51:25 +0200
+To: Fiona Klute <fiona.klute@gmx.de>
+Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>
+In-Reply-To: <20261017140027.697390-1-fiona.klute@gmx.de>
+References: <20261017140027.697390-1-fiona.klute@gmx.de>
+User-Agent: Webmail Free/1.6.19
+Message-ID: <85f8f26ccbc830dfcb6fcfdf3cfc583c@free.fr>
+X-Sender: ju.o@free.fr
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/p11-kit: security bump to
+ version 0.26.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,208 +125,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1923f760bbf8ac7ed43f90d2e7df33faebe9afb8
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 17/10/2026 16:00, Fiona Klute via buildroot wrote:
+> Security fixes by versions:
+> 
+> 0.26.5
+> * CVE-2026-18938: rpc: guard against overflow when decoding nested
+>   attributes
+>   https://github.com/advisories/GHSA-6x8p-h5fj-5ppr
+> 
+> 0.26.3
+> * CVE-2026-13757: server: fixed stack exhaustion via unbounded
+>   recursion in RPC attribute parsing by enforcing a recursion depth
+>   limit
+>   https://github.com/advisories/GHSA-p2wm-69qx-x25w
+> * various memory management fixes (including memory leaks) without
+>   CVE or details on possible security impact
+> 
+> Full upstream changelog:
+> https://github.com/p11-glue/p11-kit/blob/0.26.5/NEWS
+> 
+> Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 
-P11-kit has been offering a meson build since 0.23.17 (see upstream
-NEWS [1]), and it is the build system described in the upstream
-README.
-
-Changes in the switch to meson:
-
-* Explicitly enable/disable NLS.
-* Explicitly enable/disable bash-completion.
-* The meson build has no explicit option for libtasn1, it is required
-  if trust_module is enabled.
-* Add patch for meson configuration to avoid depending on systemd to
-  discover install location for units, which would create a dependency
-  loop.
-* Check for BR2_INIT_SYSTEMD instead of BR2_PACKAGE_SYSTEMD to decide
-  whether to install systemd units.
-
-[1] https://github.com/p11-glue/p11-kit/blob/0.26.5/NEWS#L164
-
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...-setting-systemduserunitdir-to-break-depe.patch | 61 +++++++++++++++++++
- package/p11-kit/p11-kit.mk                         | 70 ++++++++++++----------
- 2 files changed, 100 insertions(+), 31 deletions(-)
-
-diff --git a/package/p11-kit/0001-meson-allow-setting-systemduserunitdir-to-break-depe.patch b/package/p11-kit/0001-meson-allow-setting-systemduserunitdir-to-break-depe.patch
-new file mode 100644
-index 0000000000..050bc3533b
---- /dev/null
-+++ b/package/p11-kit/0001-meson-allow-setting-systemduserunitdir-to-break-depe.patch
-@@ -0,0 +1,61 @@
-+From 709e37f781e50ef981d337249c574a9255691665 Mon Sep 17 00:00:00 2001
-+From: Fiona Klute <fiona.klute@gmx.de>
-+Date: Sat, 17 Oct 2026 14:33:02 +0200
-+Subject: [PATCH] meson: allow setting systemduserunitdir to break dependency
-+ loop
-+
-+The dependency on systemd is only used to retrieve systemduserunitdir,
-+not otherwise needed during build. However, p11-kit is also an
-+(optional) dependency of systemd, creating a dependency loop.
-+
-+This patch allows setting systemduserunitdir directly to break the
-+dependency loop. If set, the given value is used unconditionally
-+without checking for systemd, otherwise systemd is detected as before.
-+
-+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-+Upstream: https://github.com/p11-glue/p11-kit/pull/788
-+---
-+ meson.build       | 11 ++++++++---
-+ meson_options.txt |  4 ++++
-+ 2 files changed, 12 insertions(+), 3 deletions(-)
-+
-+diff --git a/meson.build b/meson.build
-+index 38cf81b..9e76d62 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -456,9 +456,14 @@ conf.set_quoted('TRUST_PATHS', trust_paths)
-+ # systemd
-+ 
-+ with_systemd = false
-+-systemd = dependency('systemd', required: get_option('systemd'))
-+-if systemd.found()
-+-  systemduserunitdir = systemd.get_variable(pkgconfig : 'systemduserunitdir')
-++systemduserunitdir = get_option('systemduserunitdir')
-++if systemduserunitdir == ''
-++  systemd = dependency('systemd', required: get_option('systemd'))
-++  if systemd.found()
-++    systemduserunitdir = systemd.get_variable(pkgconfig : 'systemduserunitdir')
-++    with_systemd = true
-++  endif
-++else
-+   with_systemd = true
-+ endif
-+ 
-+diff --git a/meson_options.txt b/meson_options.txt
-+index c1f2362..a7c0553 100644
-+--- a/meson_options.txt
-++++ b/meson_options.txt
-+@@ -46,6 +46,10 @@ option('systemd', type : 'feature',
-+        value : 'auto',
-+        description : 'Use systemd socket activation')
-+ 
-++option('systemduserunitdir', type : 'string',
-++       value : '',
-++       description : 'Override default location for systemd user units')
-++
-+ option('bashcompdir', type : 'string',
-+        value : '',
-+        description : 'Override default location for bash completion files')
-+-- 
-+2.55.0
-+
-diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
-index b3bb3e1263..17efff7b16 100644
---- a/package/p11-kit/p11-kit.mk
-+++ b/package/p11-kit/p11-kit.mk
-@@ -7,57 +7,65 @@
- P11_KIT_VERSION = 0.26.5
- P11_KIT_SOURCE = p11-kit-$(P11_KIT_VERSION).tar.xz
- P11_KIT_SITE = https://github.com/p11-glue/p11-kit/releases/download/$(P11_KIT_VERSION)
-+P11_KIT_DEPENDENCIES = host-pkgconf
- P11_KIT_INSTALL_STAGING = YES
--P11_KIT_CONF_OPTS = --disable-static
--P11_KIT_CONF_ENV = ac_cv_have_decl_program_invocation_short_name=yes \
--	ac_cv_have_decl___progname=no
- P11_KIT_LICENSE = BSD-3-Clause
- P11_KIT_LICENSE_FILES = COPYING
- P11_KIT_CPE_ID_VALID = YES
--# Needed because the pre-generated ./configure script has an old
--# broken expansion of AC_HEADER_STDBOOL, which incorrectly detects
--# that <stdbool.h> cannot be used, causing breakage down the road.
--P11_KIT_AUTORECONF = YES
--# Needed for autoreconf
--P11_KIT_DEPENDENCIES = host-pkgconf
-+
-+P11_KIT_CONF_OPTS = -Dtest=false
-+
-+ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
-+P11_KIT_CONF_OPTS += -Dnls=true
-+P11_KIT_DEPENDENCIES += $(TARGET_NLS_DEPENDENCIES)
-+else
-+P11_KIT_CONF_OPTS += -Dnls=false
-+endif
- 
- ifeq ($(BR2_PACKAGE_LIBFFI),y)
- P11_KIT_DEPENDENCIES += host-pkgconf libffi
--P11_KIT_CONF_OPTS += --with-libffi
-+P11_KIT_CONF_OPTS += -Dlibffi=enabled
- else
--P11_KIT_CONF_OPTS += --without-libffi
-+P11_KIT_CONF_OPTS += -Dlibffi=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBTASN1),y)
--P11_KIT_DEPENDENCIES += host-pkgconf libtasn1
--P11_KIT_CONF_OPTS += \
--	--enable-trust-module \
--	--with-libtasn1
-+# host-libtasn1 is needed to provide asn1Parser
-+P11_KIT_DEPENDENCIES += host-pkgconf host-libtasn1 libtasn1
-+P11_KIT_CONF_OPTS += -Dtrust_module=enabled
- ifeq ($(BR2_PACKAGE_CA_CERTIFICATES),y)
--P11_KIT_CONF_OPTS += --with-trust-paths=/etc/ssl/certs/ca-certificates.crt
-+P11_KIT_CONF_OPTS += -Dtrust_paths=/etc/ssl/certs/ca-certificates.crt
- else
--P11_KIT_CONF_OPTS += --without-trust-paths
-+P11_KIT_CONF_OPTS += -Dtrust_paths=
- endif
- else
-+P11_KIT_CONF_OPTS += -Dtrust_module=disabled
-+endif
-+
-+ifeq ($(BR2_INIT_SYSTEMD),y)
- P11_KIT_CONF_OPTS += \
--	--disable-trust-module \
--	--without-libtasn1
-+	-Dsystemd=enabled \
-+	-Dsystemduserunitdir=/usr/lib/systemd/user
-+else
-+P11_KIT_CONF_OPTS += -Dsystemd=disabled
- endif
- 
--ifeq ($(BR2_PACKAGE_SYSTEMD),y)
--P11_KIT_CONF_OPTS += --with-systemd
-+ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
-+P11_KIT_DEPENDENCIES += bash-completion
-+P11_KIT_CONF_OPTS += -Dbash_completion=enabled
- else
--P11_KIT_CONF_OPTS += --without-systemd
-+P11_KIT_CONF_OPTS += -Dbash_completion=disabled
- endif
- 
- HOST_P11_KIT_DEPENDENCIES = host-pkgconf
--
- HOST_P11_KIT_CONF_OPTS = \
--	--without-libffi \
--	--without-trust-paths \
--	--disable-trust-module \
--	--without-libtasn1 \
--	--without-systemd
--
--$(eval $(autotools-package))
--$(eval $(host-autotools-package))
-+	-Dtest=false \
-+	-Dnls=false \
-+	-Dlibffi=disabled \
-+	-Dtrust_paths= \
-+	-Dtrust_module=disabled \
-+	-Dsystemd=disabled \
-+	-Dbash_completion=disabled
-+
-+$(eval $(meson-package))
-+$(eval $(host-meson-package))
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
