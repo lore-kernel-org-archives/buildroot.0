@@ -4,114 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A17D6CCF2C9
-	for <buildroot@archiver.kernel.org>; Sun, 18 Oct 2026 09:29:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A35AFCCF2C9
+	for <buildroot@archiver.kernel.org>; Sun, 18 Oct 2026 09:51:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 466CE407DA;
-	Sun, 18 Oct 2026 09:29:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3564B40962;
+	Sun, 18 Oct 2026 09:51:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rW1BDcig8jnG; Sun, 18 Oct 2026 09:29:17 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 76CA740632
+ id OmofQdiBuvaU; Sun, 18 Oct 2026 09:51:05 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 55D9A40937
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792315757;
-	b=ELfUv5CduVP9zEp5E0gU9qRVIkzl952RYWSdjmrjY5m7BunXtDXZ+lqKxwhnXhtUREDo
-	 UdSDEWCRb6p2UaVM/8Xdgcoc+h7y1rmnJoqu3mdDkYeDvf/n8Gf6i8pJ2Tti4VoeFRZ3j
-	 Vb5Pr6RIwjy0US9mv3VOjC1D2QhW164VPad9z8/90nOdiwh00C2Ka6JeXfTN4ZrW2yWnP
-	 T4Hw0r6RG+sJdPg/CodxPVCPnXcv6m/83/I5bz+xH07X1m1fE6assKZMmHyajsPqoWDOX
-	 vdO1mJgRStvu9z5BEQgC7ZibwBpkNRuBCLU07ni0Tv3qMaWjMmzBycwYMGBD4phORsw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792317065;
+	b=gM9NrI3FdamoKjRcGok5IYqvIoi6rF92RFCXC0tNeMKVq9QKZVeOLEiYoFqXkBf9XRAh
+	 kMOS/mD4iT0bGETZE7NxeX5gbr4kqV5qr757nYr/5v3+djjZZjy2gqTbKmU2+wo27tfXS
+	 5ZXMV2ObY764xva1oJD6mmbthyfMjx+RNZEWmBZDgwYXl8oGjMA3xezeRwJs2rXWyjzoX
+	 MBmqMHyTBQFXZAzO6MJsiG5A8mV/Nvxn7kFkKN4UjQwSlD7MnUZzNUOSBN8NGAE1mIC34
+	 GkI88ZwCu6V2qdUmN0Lno1WJ/Jp/GUVF5ncR7h8zqSXRQdxwfW+/1OIQb01jB9CEiNw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792315757;
+	c=relaxed/relaxed; t=1792317065;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:Received:Date:From:To:Message-ID:MIME-Version:
-	 Content-Disposition:X-Operating-System:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Content-Type:
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=f0I6za/Z/uLTLM0Y9G5YRAH0nf8Ioh45/oCdro6C8Z8=;
-	b=VvANSY/+u27+kG1MIIp8WXYtJQM35EprZyiaLCMDGaliwXjM66f9DDFbwbaaCjfZi4Qi
-	 QJ9J12BZyGiRyWyULXbF1vfO9eg3f6mxpg7eT563qptBz9Z7NLjTRwh3A+eF6j92eV/tU
-	 61C9elmRAoG1Su+xLdiO97PMhVMD13btQjUMtx0UPuxBVXQ8m1ijdnSFckgLafTY0tyVB
-	 CfWlPhX3hNJGptesDKpT0CrRz/UQ0HYUu8rsrVHoznHOEnhpGVL+L03EfyJCbwTIp+5+m
-	 KNnmWoEXv+O3J94wLLfxwzeJHdJRCP5eaoKpoDUHxpOKoN60lsz3qaSF+Aqy7S6UZRQ==
+	bh=NnkiVXnLau1Oh4xWFv+bjd+YLnXjAX2bMEQI7WnxDpM=;
+	b=fZZgOKMVS5B2PoeA0QD+BxgYDH8JrINC5M1EDBPpIKEG1uoZFWEbzTXhJYuFNpxamOM7
+	 dfE+BWCeOunOTKU7fzDnaN9qfW5I17+YTr1gIJhtIddrzNtYjxWFnxyaVXhUNa88pvJ23
+	 HiFSOA8KQC+xZsKsF4P+KGpQxrn4baMhR4zJqEMU0BXRrqS6aIhgPsiGD3XR+iiNnLVHy
+	 CgtfzNVwM/iJiSEErePAQSNXn/VGIlkRWwrB0uo8T2Rzh+eMtqT0dYFr3iS6W3fR/mc6n
+	 RcaQRp9hFFW/AbT8IwYzP6x37HCcQ5Vm+syCMRbIk/lM/YD4rZYYOPggI9DtrgQiyig==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792315757;
-	bh=f0I6za/Z/uLTLM0Y9G5YRAH0nf8Ioh45/oCdro6C8Z8=;
-	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=FpyltGahiL8SbIsuN2J/dLowVQnj1fu+eueh+5W+l+ifS1moJgpZraeMoOdzqra7L
-	 LTL7pg7p/WohFv/mif5GlaSo4ssfYoh9IXl2YmWpBx75ONTYcCiadHWEyMYrNqUIeC
-	 hlxzLV/2fVjIoYe5bzrmspTtqqVFeYyDx6oQCFocHVoT064F9QiB/LyYI4Bc9WJ5dx
-	 AGr/D1E5bhBy+sIWqiA6e4nmtGdOUUafHxzyyE0nGksi2PIy6S5JkOjjwNJth5it+q
-	 3HFFIB0FV9de34/sS3WG1RL9j9iu9CjtmsltLPyIzzzOcoH/Kg6e1DXzkN7GiPVWKh
-	 ktfZgmACAAKIw==
+	s=default; t=1792317065;
+	bh=NnkiVXnLau1Oh4xWFv+bjd+YLnXjAX2bMEQI7WnxDpM=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=EgDCvA9bDJ1rZq9ADxxP3cfAIwCRTD4aydan/RgHjzVtrsqn5KZwBF6NebZ9Sn1pz
+	 CXdPe6ZctYWw9wl3hnEQUhd5wpIm1XAeuXJL0QNZwNjyRq2SC0PXOW6jFEfCfglAlJ
+	 AvH73/+KMlrSFe5JhsIszUFx5PyAUxINpFe5V/dhEQksFvyf322a+o7pZ9md3nNXu3
+	 1Pw/mrN0xtS7aGEtRwHyddkNhrw7XmT1f+qiVqUbIVPoyQujPgS8+R2zcni7zD3xgJ
+	 UwOGxrH5IAaHFY63Xqh/g94llwKxrjZid7nQqwYyI+gT7Bs724YZ0Yfuj0sEUtl6YZ
+	 m3JjikBXpOVRw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 76CA740632;
-	Sun, 18 Oct 2026 09:29:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2B032769
- for <buildroot@buildroot.org>; Sun, 18 Oct 2026 09:29:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 55D9A40937;
+	Sun, 18 Oct 2026 09:51:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DE6F723F
+ for <buildroot@buildroot.org>; Sun, 18 Oct 2026 09:51:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1D566606A7
- for <buildroot@buildroot.org>; Sun, 18 Oct 2026 09:29:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CFEFA40952
+ for <buildroot@buildroot.org>; Sun, 18 Oct 2026 09:51:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cXY9bZPoCZbY for <buildroot@buildroot.org>;
- Sun, 18 Oct 2026 09:29:15 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 6549560687
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=89.238.66.15
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792315755;
- b=WlenmxON5k8TujkzkKU7Lnc7F2np1exAo6mPqHj8IQOawZHGv4GrkQcAXHfkRK5nvLs3
- jzaFEY32jp22s3hFbXW7gIPgsGTyI4Dilm73ocODrPNkyZxbyHbI4wVmMNZXwpOTEGcrK
- jxVqCYRSUJr7yXgzOrDh33n9eJlatr2Xu9WBTIxHOkIv1I5mRUeTP+oJ0pGMwGWtZNBZf
- mMQ2ZiwrIm1J5Vrckl1Jb7UWUPLrqxRsvFRh+6lo4NDivenICnsCb+Wg9c6Sot1KyBgRe
- +Zzli0TVPWCZFi2bMqu7lK1JYxd8Q83Wq51NPV9M+le3NR8vLhEK0QvwmKl+Ewhsh3Q==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GYwOqcXrr2sE for <buildroot@buildroot.org>;
+ Sun, 18 Oct 2026 09:51:03 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org E823A40937
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792317062;
+ b=XslcSPYWHveAeHHMhtcJLqw1cBMF3S69oAOeYYlH5xhIVRpba8AXQsIKwTdGasWqZPgp
+ wbjlOal5Bza4fqiw1ZHK52qtwJGmfI8q6wExT/OTDf80ws/uVm4bex/kiyfSzLxnwZiVM
+ CmHtffJNpRvLjnqt1ZTUgLvnE6SeBOw7IW/rIoMMRn/3EKnD3+NhdYwT0H3jD4Gjy7PI4
+ uxMcm55S5JgGkN1PyfmLb5UMDxI5MARbjzOTeVbnUh0JWBl43KJ8T3yg0S3awT/bv8Bmp
+ OT9Lz4jnlXrwxuvwuE6uCvDz4pZwJbgC2Hf8zU71SRlv1V5KcSUYK8UB3YRSG5Z6fzg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792315755;
- h=Received-SPF:DKIM-Signature:Received:Date:From:To:Subject:Message-ID:
- MIME-Version:Content-Type:Content-Disposition:X-Operating-System;
- bh=JWdzPjru/+7pwQk3BQ1PfRRdXJCEITTlUZOy1RHRk6Y=;
- b=gHVfJvpxHvtHimpyAGjWVKB8SP6hfMvf3yFWU9Bcg7hwrQ8uUlNlzegdkanN8FCMjkit
- hGGDPxd9V0tx+t/MHK+UYvBrdTSNmlrNRE0HvFpKDDy3NWATOwRxfXNduHrPJOgB0t1xD
- 7uNNzOmNy3+Pn6nC7V0FKL25xKy0qAERCPPGcp9ckEdoMQoQgSSza5UDLCReWrPt5euj/
- R8tbprJGtdOSDDyofb3mdsy4MRZf7DGmJm1Trsi7LLMXOYtF6GcKyvy+N3Pd4+kttTesl
- tQ2D2nUVzX+nuNSKVI6Yk8h0cip+CkNou2KN8PaMGYeh+aZdOfyuTL6XMyH/Zu78JIg==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
- dmarc=none header.from=openadk.org;
- arc=none smtp.remote-ip=89.238.66.15
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none) header.from=openadk.org
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6549560687
- for <buildroot@buildroot.org>; Sun, 18 Oct 2026 09:29:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=openadk.org; s=2022;
- t=1792315750; bh=sHiU+Ey+rrxXjcr0WY/EWQOV/GR/C7GKhyNqflPC/+I=;
- h=Date:From:To:Subject:From;
- b=YrnrGJ3P/0JGCIaW6hZk71iuW20cHjsRK4RH9d8CVDGErEPGQufdaPRmOcVtABmuA
- 91YWrvCxT2zc9GhB32uLT1ODFbVASwjRAUB1HHmG0G+0zT01BHIxzN6P+2MtdQ4DVr
- 3NHlDaDAwaGvu/6w2JAHPTWSHT1LZIu1pL1TOG2Qv70sLBPL0YYLn3ad9qGSj30I5L
- /GkIwVFzfdT67rtnhkM5e54cooMBhbIoHq4lw7+0Y3h5dMT2dklfATkWHKuaFbI2kk
- 9Ha33fiPUi8v3CXzpuDtcCYa7hPSpbgqCJ4JPeTIFGVCKJlaLUspIYQoMBLoBKY+fr
- +0p0PTLc5/qaQ==
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id C04D631E0634; Sun, 18 Oct 2026 11:29:07 +0200 (CEST)
-Date: Sun, 18 Oct 2026 11:29:06 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
+ c=relaxed/relaxed; t=1792317062;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=nVhUWHZLOudXX/Sggmv1nZLlWOJR3rJMfrNm0edYKgw=;
+ b=j2EpJO6MwmpmLWrbb81JfbgZQCaFxf2rlA+0t3tutoMVCPXhJfgDvqnji1ExH9dVgvKR
+ kbrxGSeGlPhGWjdwXBx5nqmwtU2cYRjK+PZ8+vLx/XgQg4mSVURyoP7J7otIQUJE+cend
+ vNN1ZHswixmUjLJ6dRiisnibSIrXyZnWJPvs7agptoNofYllKj/2VI9vXzYuBsYC4S7bH
+ BxGy7Zn/opcR6px57wgMckY8x7P/TlomrBY7GxaI6N4N5nOfTabyM3AsfyoQHAQCJKOJc
+ vMU4lqRPPEhQ0x4dxAB+z+35OjjdAugdezX/C+6GtrHb/o8qFCmT7j4611IWeUgciiw==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id E823A40937
+ for <buildroot@buildroot.org>; Sun, 18 Oct 2026 09:51:02 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E113496ADC; Sun, 18 Oct 2026 09:49:40 +0000 (UTC)
 To: buildroot@buildroot.org
-Message-ID: <atSRYnTOayKlrbjq@waldemar-brodkorb.de>
-MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 6.12.107+deb13-amd64 x86_64
-Subject: [Buildroot] [PATCH] package/erlang: enable uClibc support
+Date: Sun, 18 Oct 2026 11:28:51 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6d666b46f2d35adf6462300dbc959ecccbd4a5b0
+X-Git-Newrev: 5b61def5b3b15b85f93a4d9c17474e003c4f64f7
+X-Patchwork-Hint: ignore
+Message-Id: <20261018094940.E113496ADC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ support/testing/tests/package/test_uboot_tools.py: fix typos
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,54 +111,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-uClibc support was disabled in commit:
-fb72418160417e9e872f626c356f898bff49cf48.
-This problem is solved in 1.0.59. So in internal
-Buildroot toolchains and external Bootlin toolchains.
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5b61def5b3b15b85f93a4d9c17474e003c4f64f7
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-The change can be backported to stable branches.
-
-Tested with aarch64 and external uClibc Bootlin toolchain.
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/erlang/Config.in | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ support/testing/tests/package/test_uboot_tools.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang/Config.in b/package/erlang/Config.in
-index 724f91123b..d3fe0dbec1 100644
---- a/package/erlang/Config.in
-+++ b/package/erlang/Config.in
-@@ -15,11 +15,11 @@ config BR2_PACKAGE_ERLANG_ARCH_SUPPORTS
- 	# erlang needs host-erlang
- 	depends on BR2_PACKAGE_HOST_ERLANG_ARCH_SUPPORTS
+diff --git a/support/testing/tests/package/test_uboot_tools.py b/support/testing/tests/package/test_uboot_tools.py
+index 8cff6fda21..13f77c3379 100644
+--- a/support/testing/tests/package/test_uboot_tools.py
++++ b/support/testing/tests/package/test_uboot_tools.py
+@@ -96,7 +96,7 @@ class TestHostUbootTools(infra.basetest.BRHostPkgTest):
+         keydir = Path(self.builddir) / "keys"
+         keydir.mkdir(exist_ok=True)
  
--comment "erlang needs a glibc or musl toolchain w/ dynamic library, threads, wchar"
-+comment "erlang needs a toolchain w/ dynamic library, threads, wchar"
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_PACKAGE_ERLANG_ARCH_SUPPORTS
- 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !BR2_USE_WCHAR || BR2_TOOLCHAIN_USES_UCLIBC
-+		|| !BR2_USE_WCHAR
+-        # We generate a prublic/private key pair to sign the image.
++        # We generate a public/private key pair to sign the image.
+         cmd = [
+             "host/bin/openssl", "req", "-batch", "-new", "-x509", "-nodes",
+             "-newkey", "rsa:2048", "-keyout", str(keydir / "dev.key"),
+@@ -150,7 +150,7 @@ class TestHostUbootTools(infra.basetest.BRHostPkgTest):
+         ]
+         infra.run_cmd_on_host(self.builddir, cmd)
  
- config BR2_PACKAGE_ERLANG
- 	bool "erlang"
-@@ -27,7 +27,6 @@ config BR2_PACKAGE_ERLANG
- 	depends on BR2_USE_WCHAR
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on !BR2_TOOLCHAIN_USES_UCLIBC
- 	depends on BR2_PACKAGE_ERLANG_ARCH_SUPPORTS
- 	select BR2_PACKAGE_ZLIB
- 	help
--- 
-2.47.3
-
+-        # We check again the siganute, and expect a failure.
++        # We check again the signature, and expect a failure.
+         cmd = [
+             "host/bin/fit_check_sign", "-f", "signed.fit",
+             "-k", "test-key.dtb",
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
