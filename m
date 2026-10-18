@@ -4,25 +4,25 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5A8FCCA490
-	for <buildroot@archiver.kernel.org>; Sun, 18 Oct 2026 09:51:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8ED34CCF2C9
+	for <buildroot@archiver.kernel.org>; Sun, 18 Oct 2026 09:51:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F064B409BC;
-	Sun, 18 Oct 2026 09:51:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 359E9409BA;
+	Sun, 18 Oct 2026 09:51:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BvnEPEuP_7Ck; Sun, 18 Oct 2026 09:51:10 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org C56934096D
+ id x4Q87S29lCiA; Sun, 18 Oct 2026 09:51:12 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org DF150409C6
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792317069;
-	b=dGAPStHsN9nXvfXamGmKy8fIxGYXj3T/US5Xo1G6nEe3Vo9JK4MwIt3+hdZeW+SWvmpN
-	 JA+yRBLrezqK86cufNy15h5lj6qfTRVC87/fb/2sqsGR4jilDL0xTnXWKQ7omNEDxuZF+
-	 i/Gny4wQihkfJU49zMkhl2QI42D0q7Z6J3dn5aPAm+NTb0DBxsS6Qyo1RXfQAmdT2a/z6
-	 9HPGJNkduWY1QDifO6odq5mrKkprNoH+EkeGxRJgL4wQ2KEsApfnBq9AL1Jab+dbIsEvU
-	 KIjwFSTCuQ366JB3/1puJ4uLckkZQ0eJxp1Cf/BL/jaTOINrhqVsU7+G8zAqTxnvFBQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792317072;
+	b=k7UL7f2G2eGQA4suMIaIuIjNSJDVIcFn5Uuu/t0zcBt86Wna62LuO7suHlksuqQcDZ7X
+	 W/jwLyR+F83AayAemtFkzTntFq2HKmQ9PEUz51QnTYkYqpIQsPbreQvQREzC30+Q24lgz
+	 WFDzFEvzdL012DrRraLEG0mvGeFo9ITJSEIjMzqw87m93SCzzg0qtP+b+q+Ydq6ZctaVT
+	 ATDRHOeFjnWjDIPy93PDKG1WeoNMpPVe5xwNDrRdHrTeeUOXYj/v0/lGCtZcU9Aiu8OuN
+	 /EC0RYDMZTOJ45pNr90u39euIQfTNLziqLQeZED3dYoeh1hOPtJumWsKBcUX8ONwWdQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792317069;
+	c=relaxed/relaxed; t=1792317072;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=9swsc8dTVaJvUUJ7rYbqDzZMuZxRg9ZggndopgZysrg=;
-	b=ba/a7oGWnG7Q1vGK7Dtka1N/lqauNV4K4plduFDJfFzbyhJyV30bnRAaUGaLQB4AqzIl
-	 wdeSH54agLgxvidwvAZXUwTJ6fUNtq8nw9UlvI3gVekp87TR4PwKxLvFrhHYEVbvbkWIu
-	 5/27G4jZF/u7Bpvw24JLZWodgjQfN32CGMWmwaiWldPJH7f7XsPDIcD+8EDLY4g6NtHC3
-	 f2SQw9CSO7rK4ezjsDSCLoKiLTScPVRqMDPf2pPtpKlj5fxpXtXcepe9jBrYBoO2Rokup
-	 osfv9EkNzxUVP6U087/uZky3ZTqtUWRttwHPKYXzmQhiX4nop6omY6v3R65nlXTQIZA==
+	bh=IcIDa2jbT2ddglYung7m9L//pBJ60PDbc5qHa4+WTt8=;
+	b=beK4TWp8F1NKY+TG3fnOjABphLhJyaMNtOjQR3CLZXvE222kZ2V9MB4928DM887pe53L
+	 kkgc/JUJZcdGQSBAwCx+PLQHk62+UkGyCoDzYzd/rG48SutIJ87KgojatiiZX78hv5dcS
+	 DEflkDQm/n8esSt5HNpZOacHU6iughjHFDaNsbBa74QQtFJ8ejS/RhzffCZ5IUTfoDDVL
+	 Z28rqee25RKNUAMLE/P8UiN7cyM9vn8YHg8eLc0jU1MzFanLl5uXzw24qPIHmeuo76lwx
+	 pIZ9WzZjTc5QEhOZOk/u2AvSNzj9vfa0kxRJNOLBQyz+vz5i1R63XWoRJDXvcrDqE1w==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792317069;
-	bh=9swsc8dTVaJvUUJ7rYbqDzZMuZxRg9ZggndopgZysrg=;
+	s=default; t=1792317072;
+	bh=IcIDa2jbT2ddglYung7m9L//pBJ60PDbc5qHa4+WTt8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ZAIMW46F/q2eOODg/s7giMdFsgoNlLJZxwdueWFbPVIbavgP53box5KXPdBv8IPFh
-	 78VZ0KoIXEyISPduYvDWhoecZYILm9Y+bLlalW9HKsAj5FoNzv9rVa+FO4bYxeUKbb
-	 71nCApRDt1FElraulsoq2cytNlYEfQ03MEJ9hT81aHrgZBvleXT2wYiFWvSkDFRrF8
-	 wdkI0fNpJLjAVW8QY+nYMiR7Pwcah6l6Kmub111iGyYS1EN95ArETtSkpfmPbGs2EN
-	 1gPDn5bZp09uczZIaTynVkwk/tBbQS5TO4Uf5qeS1PgGAUqkRtPQoGBKzAhnGfJNDg
-	 nlqLFtj/CojCQ==
+	b=LT5WZ0UCpj5KBbDorBHvsK3o36HEBRvLvzjcKyZ8aeTonSNR8F4cZWtMLE3m9VAwV
+	 UaWk/7jotDwBPNKPRjmRudwP2O5pW84ZjgExjARYaH7ChoIiRnzHRM0svHYOkg0xh4
+	 qxSR0zfPYm8vhzhY+ElUNUuGToiWMKKiAclKKif1TO4lGIZfbP96Ap2hJT03RyfBM5
+	 Q2ksMI3AoN0NEqlyNdd5/bdPc986X8HFIz0x0prARtfAZ06f5onQYTYFTeDtvh8jbT
+	 G48+in9h4SYd4f8gzMywX5wM5Aa+VMJg+EFyVmH6zaBEQEh3g0Wj0zqE2mcOHqwQML
+	 W/cRV5ejqjcPw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C56934096D;
-	Sun, 18 Oct 2026 09:51:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF150409C6;
+	Sun, 18 Oct 2026 09:51:11 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 27A1923F
+ by lists1.osuosl.org (Postfix) with ESMTP id 341BB263
  for <buildroot@buildroot.org>; Sun, 18 Oct 2026 09:51:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0DD18606D5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 267F1606BB
  for <buildroot@buildroot.org>; Sun, 18 Oct 2026 09:51:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xXvwBAOm8IJV for <buildroot@buildroot.org>;
- Sun, 18 Oct 2026 09:51:03 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org F2D4A606BB
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792317063;
- b=nLRC+/upfC8zUQqmZoRapKji3wOSyZQUg9NdIQVVUrVZSSQLnhtxSv25i2G582GMppVQ
- z8Dzf+pjQ+HM0gHj0CydXdX53o0A2/gSJbNk7j84q0oB4Y2htttIuEVkjJ/HSw665cuG2
- Ab4ExAeqxZI9Jry5KkUnxJzJTshZDWHs3Oq4x96pHi5MTDkIL0EntSqTEUUx2QSsPoWcG
- OKjSS0OnYw/yEvY8X+Fkh+e4Nl2Z44eHGm/DYhTm7uUFSVkyMjNOm56h8uLniNpIqYvNL
- RgDA6CqnvLyFwcy7VwlAAF7jmOIf2Xta/q+K+nokWSSbtuqjaxaagR2vbMCU/9Bu7EQ==
+ id LboVA5RkQ9LD for <buildroot@buildroot.org>;
+ Sun, 18 Oct 2026 09:51:02 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org D50FC606AA
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792317062;
+ b=DockFVJu/oJZuGKX4rD4V3UNvKf4AkL9HuIGRbShI5EQPkyek1DNB/jgQ+e6+/Y85uka
+ N1rNaTq3tQi9dLgu1AIE2/U1re3vd7xC5+XXvAtIus3iNUdd5x0QOZZsg+gbuvOe0V8Id
+ HQeGxaEz5y4d8C6jCFhMF3YvfpCNjeZJ1wfaiYtJdGGckTVZdU6i1moGLGprsXJdegg/N
+ 9UWlq3XsIhYwt1vKLvC4Mf6CJNvQnAmooa6qZvK+teZFlAnV23gfKoBADyBqH+g/dSPmk
+ tdCOYeW6EADRHrFTU9jW+WvKffpjEfD4wCFZgRbc33Dtm40Z8+kh7huCmOSJIvEMcog==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792317063;
+ c=relaxed/relaxed; t=1792317062;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=QGU+y67ibR/08aF9f/C/k2GtcY2VHwaM6OCaTJ1ZfLQ=;
- b=fNl1si0MNBCRtVqJlmq///PTt6hK0CyQi/ir4nzKRuOUOGRyFa+YZURbTEezhAsZ+uRe
- q8G7+t8LyLUMn84iWf9QHq8R4HnV/GZfsx9KIv+kddoTel6io+RhhgPuiDDpA2L/vHbpc
- 4YMD6ab8geR0Dl+XbfB5+INcDDzGeg6PCpGGMZTEfAmnn3iP9MIlUVSucxmDsjDQXc1WB
- aZEsOx4nzgDrLWqneIr3Ix1GUPlc1NjesQPn0ZDrsbFbJe09D1icQrBuFNxGBdhzMXy+A
- cN2JYZbHTpisJax1K9ndITeLiZS5VJgiQQJg4XRjTNYmlwjx1bhhc71oEuwMC6yeKrA==
+ bh=WEBzvz4wJiZ/Bp8zOZOjS66DzHJeMXbTEs1y3X6MaT8=;
+ b=c+fy4nYPMkfOnXPlwztg5o7Hm3OA7ohZzupHTuxd7QZYKUtIXPsaoc391ZTrl+39eAAb
+ X8QPVhRNAblJbgwbl8NBN16ZN2YBp2e2N2QrpHqBOMIp55Xh/q6JSHdoy1QVXk/Qtj1IN
+ SCeOpJwsbBOEwncwQZU805HJFbsB5+Kpv5q9lp+BdqB//wiO9sNI9go6ZlX/Lr4C100r4
+ z/o7u+0oJDotNEyoK1wsd4Dx59Vuea4Lrads3cW71yqsJaYb/+CPPl6RAdqPxSLgMHR2i
+ oOf72newS/WJMdt9s0EZalcEuVr3f4U60WzcdWpedrIGNfc7wqsiAx4R5pYSB77A8FA==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F2D4A606BB
+ by smtp3.osuosl.org (Postfix) with ESMTP id D50FC606AA
  for <buildroot@buildroot.org>; Sun, 18 Oct 2026 09:51:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EBCBC96AD9; Sun, 18 Oct 2026 09:49:40 +0000 (UTC)
+ id D7CAE96ADB; Sun, 18 Oct 2026 09:49:40 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 18 Oct 2026 11:28:51 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5b61def5b3b15b85f93a4d9c17474e003c4f64f7
-X-Git-Newrev: d7ccf54d7f8cfcb1ab40b227c080aee36f5a6aa1
+X-Git-Oldrev: 1923f760bbf8ac7ed43f90d2e7df33faebe9afb8
+X-Git-Newrev: 6d666b46f2d35adf6462300dbc959ecccbd4a5b0
 X-Patchwork-Hint: ignore
-Message-Id: <20261018094940.EBCBC96AD9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/uboot-tools: fix target FIT
- signature support
+Message-Id: <20261018094940.D7CAE96ADB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/uboot-tools: do not require
+ OpenSSL PKCS#11 provider
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,48 +119,68 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d7ccf54d7f8cfcb1ab40b227c080aee36f5a6aa1
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6d666b46f2d35adf6462300dbc959ecccbd4a5b0
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Commit 928cc5dc5cb82e6f2cb43f853488309eb806ef89 ("package/uboot-tools:
-fix host FIT signature support") fixed building host-uboot-tools with
-FIT signature support after upstream changes to the config included
-since v2026.04, added to Buildroot with commit
-e049f6fef1fd1e1b0b6095e0ff9113312a7d7f81 ("package/uboot-tools: bump
-to version 2026.04"). This commit applies the same fixes to
-configuration for target uboot-tools.
+Patch 0003-Add-support-for-OpenSSL-Provider-API.patch makes
+package/uboot-tools build without the OpenSSL engine API, but it fails
+at runtime if pkcs11-provider [1] is not available. That provider is
+not packaged in Buildroot, and should not be required when not
+actually using PKCS#11 keys.
+
+The problem has been discussed on the U-Boot mailing list [2], and
+part of the reason this patch has not been merged into U-Boot yet. It
+causes tests.package.test_uboot_tools.TestHostUbootTools to fail with:
+
+=== STDOUT/STDERR ===
+At main.c:259:
+- SSL error:12800067:DSO support routines::could not load the shared library: crypto/dso/dso_dlfcn.c:115
+- SSL error:12800067:DSO support routines::could not load the shared library: crypto/dso/dso_lib.c:147
+- SSL error:07880025:common libcrypto routines::reason(37): crypto/provider_core.c:1026
+mkimage: OSSL_PROVIDER_try_load(pkcs11)
+
+This commit adjust the patch as suggested in [2] to continue if the
+PKCS#11 provider fails to load, making the test work. However,
+actually using PKCS#11 keys will not work until pkcs11-provider [1] is
+packaged.
+
+[1] https://github.com/openssl-projects/pkcs11-provider
+[2] https://lists.u-boot-project.org/pipermail/u-boot/2026-August/629348.html
+
+Fixes: f87cf2d6239d676147dec1fef088d81ee873277a ("package/uboot-tools: Fix build with OpenSSL 4.0.0")
 
 Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/uboot-tools/uboot-tools.mk | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ package/uboot-tools/0003-Add-support-for-OpenSSL-Provider-API.patch | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index b5924f6954..32fe9f1d7b 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -33,7 +33,10 @@ define UBOOT_TOOLS_CONFIGURE_CMDS
- 	mkdir -p $(@D)/include/generated
- 	$(if $(BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT),$(UBOOT_TOOLS_ENABLE_HASH_ALGOS))
- 	$(if $(BR2_PACKAGE_UBOOT_TOOLS_FIT_SUPPORT),echo '#define CONFIG_TOOLS_FIT_PRINT 1' >> $(@D)/include/generated/autoconf.h)
--	echo $(if $(BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),'#define CONFIG_FIT_SIGNATURE 1') >> $(@D)/include/generated/autoconf.h
-+	$(if $(BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),echo '#define CONFIG_TOOLS_IMAGE_PRE_LOAD 1' >> $(@D)/include/generated/autoconf.h)
-+	$(if $(BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),echo '#define CONFIG_TOOLS_RSASSA_PSS 1' >> $(@D)/include/generated/autoconf.h)
-+	$(if $(BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),echo '#define CONFIG_TOOLS_FIT_SIGNATURE 1' >> $(@D)/include/generated/autoconf.h)
-+	$(if $(BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),echo '#define CONFIG_TOOLS_FIT_SIGNATURE_MAX_SIZE 0x10000000' >> $(@D)/include/generated/autoconf.h)
- 	mkdir -p $(@D)/include/asm
- 	touch $(@D)/include/asm/linkage.h
- endef
-@@ -50,7 +53,7 @@ UBOOT_TOOLS_DEPENDENCIES += dtc
- endif
+diff --git a/package/uboot-tools/0003-Add-support-for-OpenSSL-Provider-API.patch b/package/uboot-tools/0003-Add-support-for-OpenSSL-Provider-API.patch
+index 9a5071cae3..2403e3ebab 100644
+--- a/package/uboot-tools/0003-Add-support-for-OpenSSL-Provider-API.patch
++++ b/package/uboot-tools/0003-Add-support-for-OpenSSL-Provider-API.patch
+@@ -29,6 +29,8 @@ Signed-off-by: Eddie Kovsky <ewk@edkovsky.org>
+ Upstream: https://github.com/u-boot/u-boot/pull/918
  
- ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),y)
--UBOOT_TOOLS_MAKE_OPTS += CONFIG_FIT_SIGNATURE=y CONFIG_FIT_SIGNATURE_MAX_SIZE=0x10000000
-+UBOOT_TOOLS_MAKE_OPTS += CONFIG_TOOLS_LIBCRYPTO=y CONFIG_FIT_SIGNATURE=y
- UBOOT_TOOLS_DEPENDENCIES += openssl host-pkgconf
- endif
- 
+ Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++[Fiona: apply fix from https://lists.u-boot-project.org/pipermail/u-boot/2026-August/629348.html to make pkcs11 provider optional]
++Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
+ ---
+  lib/aes/aes-encrypt.c |   4 +-
+  lib/rsa/rsa-sign.c    | 102 +++++++++++++++++++++++++++++++++++++++---
+@@ -149,10 +151,10 @@ index 0e38c9e802f..f456f3c58e6 100644
+ +	EVP_PKEY *private_key = NULL;
+ +	OSSL_STORE_CTX *store;
+ +
+-+	if (!OSSL_PROVIDER_try_load(NULL, "pkcs11", true))
+-+		ERR(1, "OSSL_PROVIDER_try_load(pkcs11)");
+ +	if (!OSSL_PROVIDER_try_load(NULL, "default", true))
+ +		ERR(1, "OSSL_PROVIDER_try_load(default)");
+++	if (!OSSL_PROVIDER_try_load(NULL, "pkcs11", true))
+++		ERR_clear_error();
+ +
+ +	store = OSSL_STORE_open(path, NULL, NULL, NULL, NULL);
+ +	ERR(!store, "OSSL_STORE_open");
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
