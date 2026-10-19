@@ -1,160 +1,124 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7086CCF2E3
-	for <buildroot@archiver.kernel.org>; Mon, 19 Oct 2026 12:19:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E026CCCF2D6
+	for <buildroot@archiver.kernel.org>; Mon, 19 Oct 2026 12:24:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6728B6069B;
-	Mon, 19 Oct 2026 12:19:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A0B4F40613;
+	Mon, 19 Oct 2026 12:24:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bTy4UnIUgXVL; Mon, 19 Oct 2026 12:19:57 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 8B8D460634
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792412397;
-	b=s72/QK0dz/HRUDvTOhCowChPayHyG3Neqwisua31025hmt+oSShEsUMH8hqmOQ80kzsz
-	 OLirkE7E9OCC5HRnlIe4wMXY1wHEdCoOiEWE46CrHuEWoq+3IBQEpMfEbaXnPpTJA7i91
-	 G3y9BuAAyQs52Mse1xFJwu7JZ+Vm3RdEPeQT+XjYEoN5Vvv5a4Hevwdm6lmb8EoG2Yiw1
-	 qIeAgI4WUZGrslHnY+eC5Qn7zKXRxG0gM7e6D7qqCJ4OULy6qsih86QHjj0Fc3Q5GF+KR
-	 OvnSIFimWXPssOiE2nsekkBuEga2A8OcXmk0INXW9dd9KSVYmCal7F0b7INjU2Xk57A==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lUxnKubmLej6; Mon, 19 Oct 2026 12:24:00 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org BD38540611
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792412640;
+	b=XVXyI/Ovzu+SgNadVARIsTlLFwAMtMPIeBReYByhxAIiX8X3Zhjex1cQikYRGx/cNBVr
+	 LToLETNJpWSH91u7AMyP4kwBvCoIzMBglLGKzKx25QP77Scd4OjDteP9Cnrdi8Ej4RADv
+	 HbhV/Lhrm7BnZgWborZENLedont1wG9vx1OH7HTp5IF0W+nQsDnYwfEkQ25xwEI7XlIAt
+	 lzswGLpJLvgv7ztyBD42xsgy6/U8wbdyxhLrHseKVRraU9bmS5jOJSs2Ick7u66rdGMNu
+	 9u6skB3dVLBiw+KTM9+gOeM+DG9ucDmhHdvi9/0SnqcRKA9tUHVJefWAvQNDbXY3a9Q==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792412397;
+	c=relaxed/relaxed; t=1792412640;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
-	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
+	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=773eJXUY+tBo67opBqiSsYFttbriqIfsaiANULBXhiY=;
-	b=SlVXKiYZOnMpy7bTfm6E0h+SPRXst8/Kddmpe1ezqyq2KzhbTf5WoCsWYhJt8mblJkPI
-	 0kClqiKO6etqjxw5mI7ResJYvVYZB7i8YBjb05/k88yIjAqoU/gb4QRz7x6DCa3VK5T/q
-	 8RE5Jcdt8rYMt7iBjLR9Dm1A8/lKXNY+16xficPtIJr3C2Lzq1tpkeqL8wJPZWjXgzdzP
-	 vUcD8ZIuwA837adC+4icquPPepbnlp3+aMEEIGKBIenfpLDF2/+zQ+b6wFktG8pwAedZQ
-	 XGVfxAuESK9uC1g8JGC23RdGFLyQHHtUA1dyjp1wvRIPVtXZ2UC4OPFfao+mvnOJ89A==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	bh=Lvvuqs+q1EeMLQFNM+F5PaDYUHfBuqxc0Csgrrc5De0=;
+	b=hSV+lj4qga/DrS7XPet7SphAZ/K0zjPQDaR18P8U/dfy0bk/d08zFD36r+Kt6ivzUyHl
+	 ej+0tNLUeKsouylbh3B+yU8BVYKLyctZwcFomZFqe+PNvl2vOogIeC37nf1Sgf6GQAbbB
+	 Ww67YS4qcRhxV65mR4kgR3M0CpE47PkBvLd4FHZyZTvrnp4TujJ575i0pRi0WXU3KY4oY
+	 vny+wM6UFTjSoyxln+O5Bqnl6+ZyUwB4AWsZ7UgoHdlMQHoC4DVuRoU/i7EtHHaUQoxxj
+	 IPea01J9zqVpLk67RdjGlJuxGhftmewW+FjkpE7JEQX4+vs6Q1XfTmK8pHdWE5h92jw==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792412397;
-	bh=773eJXUY+tBo67opBqiSsYFttbriqIfsaiANULBXhiY=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=rLkJf35m/ygYDQEO7oWUSSAN6aaBhI5zL7E+qMPQ5xNZvT4xskscVXQPU908nz9Wy
-	 v5vTzGCoybWXvIM07vCjbPjhiH4rHmHRRaoYcTt1CxqL7dtXGJxKZNLlLpaj79VLwQ
-	 +Tp+yw86uoXEFrYhfhP3iUYxCNaDB8jEGI8bChtVBBSPyc/cJHf14M0NZ0MF9GIrjh
-	 K/jizUDe6nnqohpepXRasRkTyp1P9LUqpezauc+/0LOhPF6f5WWvoJAnpBFme6/309
-	 BJrG/g8jd3yXLwQxWUj/hidKXNiU2NfVcVhqSZ8VEOqkPnUcmTNtdHNr2Ckh5YN+mP
-	 YcV4vsLBlbAgg==
+	s=default; t=1792412640;
+	bh=Lvvuqs+q1EeMLQFNM+F5PaDYUHfBuqxc0Csgrrc5De0=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=WQ5DAvx40TI0Si8F6pEz1dgp25dAa/twaYrtiarnWO7Tgo1AEs/VwR7PotwzrRqKw
+	 Hiqr6aDtij/RhgdthSM7J9Gav2a/be1ADVfXRRIdZXFCppkJh3TSKn+NUqnqS8HidQ
+	 DC0sPK2lr8vUs0bySpyrt08cXPbIXdBTKtVfucaSq3Vl1ks//QYIXuLm60fOTwhqUS
+	 Xh6ICrToyMrpJcBM7ewNP1pAkgiHInsHXEdNDjfhNiMssku6ORpm/XX+HFw9giPG3/
+	 mf6XDp6U4UIaqYPBcA7Az0mrRXqUzG3L5F0fvpFJOczNchcU6RADb7NmmoZAhFvjK8
+	 UxuMC2TZXO0GA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8B8D460634;
-	Mon, 19 Oct 2026 12:19:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1FD2D22B
- for <buildroot@buildroot.org>; Mon, 19 Oct 2026 12:19:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD38540611;
+	Mon, 19 Oct 2026 12:24:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8669722B
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 12:23:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 10CE380DBF
- for <buildroot@buildroot.org>; Mon, 19 Oct 2026 12:19:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 789C160634
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 12:23:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YzV50yRYpDZb for <buildroot@buildroot.org>;
- Mon, 19 Oct 2026 12:19:55 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org C154480DBC
-Authentication-Results: smtp1.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::632"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792412395;
- b=cq2W/6JyXjBWsTZBEe4e6mfvbK5aYWpNus6PpRBMwkOvJvPXJpqu6YXApDkz2HQCVdTq
- poLZMrda/7GX5lvyp5Ojf3LVa3naSDbeXiqOo9muBxnib7MEoNa5/9vwwC3ewIBwbOl6A
- Ku8MXVnNlIHi5hHhSCS2HcLnISvHuO9TY5A3lhBF3Dz8d8xotHE5O3sVJ3xzWaKBKztVs
- 5+MfS8rOrM/S+OWlSwqsdsca0tQ9ytOcy39BTzqzumPDHuBRYEJNB7NFUym9QlxS88dap
- BhGL98jlrfOfItcxvFMTrWKGOSH1rsP5WlJGIv/RSfmR6HyXYeiuD2NE7+9VCykJPJQ==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tyJ83Hj-k5qt for <buildroot@buildroot.org>;
+ Mon, 19 Oct 2026 12:23:57 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org CEF0E605EB
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792412637;
+ b=LawU7Tzf68c6HzmFlOWJ88AhbadN3g+9WmRXbaHYi2sNhPcY8Tk74YD/p806BGoVcwTp
+ fYAMlq0NLm7oDNT3iQf96C6SqZX8lkd71lYAAonMOvEjocb/Aur3x2bBxazGULS0BxWN6
+ 42YGQbiMqISocnmYPTmqDnipSykXYox3CxD2H4UiROA0G7pJhgkjdT8XAzUdntRfI4bUy
+ qK9g0OGwobFgjJmzEPAT5KzIEHCVPSqchDt4VA0qMdp557jgB7iBFDNBPy3V3YNlAayVk
+ 1sAJ6+1NI6cQhM8iJYzgQMhHjur68gnZxWIUUe/hbtjeNjr4mw6e1DfJPwJJuWSjzSg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792412395;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
- bh=Owzs9j2C5wAK7gblIM0H8089XiQEH2WESZa62ZXRGXQ=;
- b=m43649wGJDbz3oRXbml8JrLKZtJ3CcOMm2vijdGdZL3iGDAWDinbkDBo2qyE8WP2oXex
- 3+bN6qJy2d0TsgSkiHza3CKJPlLPnagMJy0rH7scduQOUeNmtTDxnwlCRmpZppVn7Ky+/
- zBnWVQdRczZRenJJhyfi2fBKvi3mqx+FX6+E0u6WMlJPTo3J5qttDN8/UCTouUOAn7xNL
- N3g2w601nNFDMdA8m85bOD7DgUNk0a0AkbMcqedYgvjm1inDgeHwCLIWZMtBue7z63VnO
- w0Fm1LWkFH0MNadqsd2z+5Pk7JDw4LH+3k7219kZw4LGzDCbWDwQA5tzajLosKP5/eA==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
- dmarc=pass header.from=amarulasolutions.com;
- dkim=pass header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=FU5EvIlj; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::632"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::632; helo=mail-ej1-x632.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org; dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-Authentication-Results: smtp1.osuosl.org; dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=FU5EvIlj
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C154480DBC
- for <buildroot@buildroot.org>; Mon, 19 Oct 2026 12:19:54 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id
- a640c23a62f3a-c37b612635bso238637866b.3
- for <buildroot@buildroot.org>; Mon, 19 Oct 2026 05:19:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1792412392; x=1793017192;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=Owzs9j2C5wAK7gblIM0H8089XiQEH2WESZa62ZXRGXQ=;
- b=FU5EvIljlN4NQChhlfQM2Z4FAhEMPOGOMldWjb5uZRRl7oLUQBkRFbD8EE8RVmA2bH
- lZRwREpKn0z15jyZ9P6UKw56fE9h5Tr4mGDzDnguWxDosOdMoazHSs2znaO6NfEznC85
- pfCECpCRcAg3Aha6Wk60rTsAP8N6rAC67iXC4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1792412392; x=1793017192;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=Owzs9j2C5wAK7gblIM0H8089XiQEH2WESZa62ZXRGXQ=;
- b=UPhiMz4ONQiEWjoUAZ9dU8mLuUc6y6gp+797Y4Q8+KDGbRr7UNpwH8zLQQ45V9ylsf
- fA8FOaTVyMxEs34lPT4FBfB1R8UD9llIWBiY/TtR8I6U7670E0/DrstVhUrjlGNUGTVO
- TUiTDPen7dDdIkPEafRUO/5qh6ikGlGy6v+ypQ74Uri5OmxChfl/bBH1xGadnrgKdONm
- U2TbwhTteFxe1arXPQGHA/Gl781YpMtTzlTQ8CCMATdkKL7IVpUZfnjGP8SanYmCXnCI
- mnjmOPkHu4gsOujWuBoYIn+QZcYLUm0+oyTEvF9QKZLMw01mYmA5bgrOda81M/zWDBsN
- uPHA==
-X-Gm-Message-State: AFq9FYIelmaq43soYu9Qp7ystRqUiz4ajCMw0nrdSA36IyjikpKb8kOh
- d7KR476gi9y5Bo0vsCh4aI0JVFsAdFtgW2HJaU1kRZFvvDwqxPgU/5IoFaFHYzuwkTgHzISFs6u
- APRRA
-X-Gm-Gg: AYBFou2SQLs/aZJoC/pEsoTPCMFKwZdri/sx1axeXlW/7sBqcoU4AO+27IpTFjBI+Wi
- 4gZ/ecuxwhiV9kKMSmvkEAdizxcncxZlK/UGwNu+Pph4+jk3U8Srttpmuz2BU6OB319gFNJs5g6
- PubT6Cl2I1FnAGwGh/6OboQUszPPz+jqmbDnvrlvvs8o3349nL3VsoyEaYUmkgSxEazjtABes2j
- 79byYAiU7tXvG480dIu8rDN2U/72Yzcdv5igLEas1pMMXxZ900ze3zwuceTg7lEL1zXH3Yv3NxO
- WmwEXwwnN8Gmrskk3qwZ9WhgzZgDbEfnuT4cwhR2QpzmWaMypM6TjW9YZl6oR28DeEStluO6ZCv
- FcD1pg5nl1S177JbaeyaA5OHbRminoylpdmCadnukpGso9TtEpT+0rswEvStXJWMhtan6tqqdlR
- rhPwmvoEg4+/07fr22yvHrkWV+SkRSg7mKdzgkGVEogqGKQypVxTX57tSVBtexJFj8YpfbOKorD
- Bf7CmbkdumybPK3eZpr1rjNil2De5azdf0kOxgKMaV4rzl5LmycIjuwFF16GxXvmXvBj6YvDad+
- H9gGKKPgvuWSbP9khZKC8lUrkgJyvrVFC97aYWxhJWffWTt/Kyy2Cvq1W33uPaeX2qiv1Wg=
-X-Received: by 2002:a17:906:630b:b0:c40:91fb:b76 with SMTP id
- a640c23a62f3a-c41a0202480mr523979666b.33.1792412391650; 
- Mon, 19 Oct 2026 05:19:51 -0700 (PDT)
-Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
- (host-79-14-29-58.business.telecomitalia.it. [79.14.29.58])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48dfdcc0f20sm22437258f8f.11.2026.10.19.05.19.50
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 19 Oct 2026 05:19:51 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Mon, 19 Oct 2026 14:19:45 +0200
-Message-ID: <20261019121945.1672247-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+ c=relaxed/relaxed; t=1792412637;
+ h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
+ Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+ Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
+ bh=xjy8t6IWF1u+qCWGw70BNvFGkRfZQvn/Xqm9CedYuKs=;
+ b=eRXmZ+yeWEZyoiOZDRfpTWbjF7PCv7QBmntq3e/gFBS3MieSm01L5SnhzJXf9ozxdCAT
+ +9cBIckdwOIJEol7R/3qjjBA0xD7r4I2fbA6Y1cl1qPXVWgRL25U/32FMgLHuNX9YvSHA
+ Gl+lttuCrVQXRWUJXoz4+MFRiKOA9uTRa5ctV8w5BXKuLRcgsHCLfHIyQlq/Y0vTFqshP
+ SCuibvcMlU6sHwFcMKkqFNmT+qyKo5N0AJjNjq4uD++lD3EN1U4T7gPFHASJnO8ocKdg3
+ nzhalsP32gXaVWrP5cESTLRzlSLfP2OSt/XOMqrbrbZex0U1j7Znspo3FelGGVK7STA==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ dmarc=pass header.from=bootlin.com;
+ dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=bi2DudEM; 
+ arc=none smtp.remote-ip=185.246.84.56
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CEF0E605EB
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 12:23:55 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 34F111A125E;
+ Mon, 19 Oct 2026 12:23:54 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id EDE1060582;
+ Mon, 19 Oct 2026 12:23:53 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 078671032865C; 
+ Mon, 19 Oct 2026 14:23:46 +0200 (CEST)
+Date: Mon, 19 Oct 2026 14:23:45 +0200
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: John Ernberg <j@j-ernberg.se>, buildroot@buildroot.org, 
+ Adam Ford <aford173@gmail.com>, Bernd Kuhls <bernd@kuhls.net>, 
+ Joseph Kogut <joseph.kogut@gmail.com>, Romain Naour <romain.naour@gmail.com>
+Message-ID: <atYLM_NKiCwSpJSU@windsurf>
+References: <20261018160651.349981-1-j@j-ernberg.se>
+ <atUtmzafWnVtVm-t@windsurf> <atWwZGNSjbN0GrwD@landeda>
+ <atXItOiRRP2j79zR@windsurf> <atXov2HEcIiVzCAU@landeda>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/armadillo: bump to version 15.6.2
+Content-Disposition: inline
+In-Reply-To: <atXov2HEcIiVzCAU@landeda>
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [RFC PATCH] package: {libgl, libglvnd,
+ mesa3d}: Propagate libglvnd GL provider to libgl dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -166,46 +130,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://arma.sourceforge.net/docs.html#changelog
+On Mon, Oct 19, 2026 at 11:54:07AM +0200, Yann E. MORIN wrote:
+> Thomas, All,
+> 
+> On 2026-10-19 09:40 +0200, Thomas Petazzoni spake thusly:
+> > On Mon, Oct 19, 2026 at 07:53:40AM +0200, Yann E. MORIN wrote:
+> > Yes, because right now we have:
+> >         [GL-using package] -> libgl -> libglvnd
+> > And separately
+> >         mesa3d -> libglvnd
+> > which means that [GL-using package] can be built before mesa3d, except
+> > that libglvnd doesn't provide *all* what is needed to act as a GL
+> > provider, for example it doesn't provide dri.pc.
+> [--SNIP--]
+> > > I wonder if should further have this:
+> > >     [GL-using package] -> libgl     ->     libglvnd
+> > >                               \-> mesa3d -/
+> > I'm afraid I don't understand your diagrams :-/
+> 
+> * libgl depends on libglvnd
+> * libgl depends on all actual GL providers (like mesa3d)
+> * actual GL providers (like mesa3d) depend on libglvnd
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
- package/armadillo/armadillo.hash | 2 +-
- package/armadillo/armadillo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+But what are you describing here? How it _should_ work, or how it
+works _today_?
 
-diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
-index 4fdff326cbbb..fa420ae3b264 100644
---- a/package/armadillo/armadillo.hash
-+++ b/package/armadillo/armadillo.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  58fa258d0e1f93074c9afa792027fc259b85cb974ccc0b932b061d4ada5bd83a  armadillo-15.4.2.tar.xz
-+sha256  63ee9351b54994dff7b4e2094a86ace48cfb41354cb65893a9dab7c8a16382c4  armadillo-15.6.2.tar.xz
- # License files, locally calculated
- sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
-diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
-index 15704952d3a1..fdc6cc39d745 100644
---- a/package/armadillo/armadillo.mk
-+++ b/package/armadillo/armadillo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ARMADILLO_VERSION = 15.4.2
-+ARMADILLO_VERSION = 15.6.2
- ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
- ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
- ARMADILLO_INSTALL_STAGING = YES
+Because today the part:
+
+* libgl depends on all actual GL providers (like mesa3d)
+
+is not there, and that's precisely the problem.
+
+That being said: it is odd for mesa3d to provide dri.pc. This means
+that if you have multiple OpenGL providers... they would all provide
+their own dri.pc, overridding each other?
+
+> > > ... even though the libgl -> mesa3d would be here just to ensure build
+> > > ordering, and there would be nothing from mesa3d that the [GL-using
+> > > package] would use at build time in practice. I think...
+> > And that's where you're not correct, and that's the whole point of
+> > John's patch in the first place. Check out his commit log for details.
+> 
+> Sorry, I don't have the thread history here; only digest-subscribed.
+
+Welcome to the world of lore/lei :-)
+
+https://lore.kernel.org/buildroot/20261018160651.349981-1-j@j-ernberg.se/
+
+> IIRC, one of the reason to bump the nvidia-driver back at the time,
+> besides the bump itself, was that the newer driver was glvnd-aware.
+> But this has stalled.
+> 
+> Also, eventually, there are tricks to actually have multiple GL
+> providers, when one uses br2-external trees, so even if GL providers
+> bundled in Buildroot do not play nice with glvnd, it does not mean
+> out-of-tree providers can't use it...
+> 
+> > Essentially, I'm trying to figure out whether we should:
+> > (1) Fix this libglvnd issue by adding more complexity
+> > or
+> > (2) Re-simplify everything by dropping libglvnd entirely
+> 
+> Well, no longer my call to make anymore. I was just providing a
+> recollection of what I remembered from back then.
+
+Indeed, but I wanted to see if there was anything I was missing.
+
+On my side, I believe I would be in favor of (2), i.e dropping
+libglvnd.
+
+Thomas
 -- 
-2.43.0
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
