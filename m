@@ -1,113 +1,105 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB001606A31F
-	for <buildroot@archiver.kernel.org>; Mon, 19 Oct 2026 18:30:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98E3F606A31D
+	for <buildroot@archiver.kernel.org>; Mon, 19 Oct 2026 19:30:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=pPZCi8Cz
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=fGq9itoE
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 777ED60761;
-	Mon, 19 Oct 2026 18:30:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6B3C8404C1;
+	Mon, 19 Oct 2026 19:30:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e5cGBg1YrHkI; Mon, 19 Oct 2026 18:30:30 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 9600B60751
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792434630;
-	b=D3cZV41IRN6J4oknDl1eJRRQdU9bsMt4XCXuQVj6HdpXB5Sh/GeyfhXLwKw47hbzUbV4
-	 PO5JoLnDbn1VEjdRPsMSP0xomBOQUmK1y8wTuKMQ9iH1wHS5NlsMi2XHdYomAZaMFxoy4
-	 8s62XKBdetK3TUJxXXiIe9OqGW+pYQAUVtKRCW1grMSlIfhQVyBdV8ts4GcOPdS+Yavui
-	 6gJWVU7lT/PdXQlN3UpCl71eM4bcDusJAks5yaHmX2QnIpWUBorcti4hhtkCPoLR2Z+8J
-	 SM/q1mBTodngntpLyxtDl6cvYiPWYsakBIj+KKDnx4qnPEupGPFdQW4W/QrPRs218YQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AripU5VYvYRi; Mon, 19 Oct 2026 19:30:42 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 7ECF140540
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792438242;
+	b=DAXlHfPx4N0JebbB0uSCZhMBsvWfzp6Aw3SUCD72fqZPLO3agZoyKOa86qLg07oc3RUU
+	 jQBJQFg29uHrTfvJAgtTvUuhQywV3++lHY5BMDrbAM7vDJwbSCC693A7V1XboSXMNBa06
+	 e4gJNR+0O4bHcpyPbs9u2rWbJ1MgJ9aBG0Gnk9gg1FVs9hRrVKRz7L7C3StQKbu2XYO+5
+	 eUXf0wN6I9tPW3aBEnX96s9wkqdrXLZNhoxr+7KMquD9CjjIjQ8WUxxSmRrkh10SFY3/0
+	 nRh9fQhWlU603nZafqY0kVHc4dPXVEXptWRy6b+oyvEHpxUbXcm+mns1Q9keAFu334w==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792434630;
+	c=relaxed/relaxed; t=1792438242;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:To:
-	 Cc:In-Reply-To:References:User-Agent:Date:Message-ID:MIME-Version:
-	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
-	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=6EcbfU9gzclRNNAs3WQQy1H3gNEQHy9CvjPvVZ/9+N4=;
-	b=A70fZ1FIDwfWfnI8rHXR9Ajy7P+5AN8E/7ifFtxNt02QlJ5YPGHSjMRjnBpbVxT8gElC
-	 oi/9n1TKs9lc8QCKhXoob1KTeKqx1F969HpnL3c5xDHxmUSpPhmDTRS2JMCcIRHmMCWhI
-	 pH62xv4azT4ilUTy1iLm0gCf1jsP4kfMyNw3rLCx+NuhzI2lc/6FKTvrf2Z27c9CwGY/n
-	 7S4YO2sQVB1acqNK+FOdDS/4On28GeGTp53NgclJhlZwvRn+IG+NYIBBQpyaLObWaixmD
-	 tCXvjHILqhyoaf4iF4ixldlOELb9QmhgzBP4cnDvzc7CUegGzb/G+H0c6oSpLEeRmyA==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=hhgnvI1gZ2m5INpcPXHRU249Yhoo1Fbx0oqBV00HYEY=;
+	b=DZE4Huz+/dPf96S7pQ2jUkyOQjPMQuFG5Bmy1UqgEkZgDyl0monskdp5AafDiR1DrpQ4
+	 caIXrl9CeQdeoBfqFVz728RCHNm+SLVAGIKZOnHRordLgMu3Vgix6SRZIKVsjbWR2Ffsh
+	 rkB15lzsX1jsqhUXccPl6kEPmU6r0TSqijZTTz3psqMHoXEw6i5PAuofaUGGSyE3P2q3I
+	 T0a9a7VhZRhNDARuPZ2io6o+dRY8B/j+RlHMXlrNi5qI6VC6ABMq6cWg2A25Qqaw8Ctr1
+	 c/cqOF1kPI4TzMtpMReHr+beKr49AlM8jtmKvYLKfbSwQkeiaaBInNCq/4Ug8aX+e4w==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792434630;
-	bh=6EcbfU9gzclRNNAs3WQQy1H3gNEQHy9CvjPvVZ/9+N4=;
-	h=To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=pPZCi8Cz0e4z8oDV2bqYGE9fUsN7kGLZ0M7AcH9UgfywjU1KUzvLMalgpxuoyMSGu
-	 UXxT4D+kT53AcJchRJjkK4G0MoLe4QBN9YnH9N+eG5vzefpCQ6K12QOWxeThYg+Lg7
-	 SOFDAALCuKewXDSSObaCsXELsHjs5RDXL28R6tWWx2jWe80bD7QahxAvTndJ3tYI/G
-	 NEv6rhh9SoxIndcwOcglEgRzsVxXM2if46Xkea6/uLcCy8u8RNbUjP+o+d0a1q3tVP
-	 UNUj1r2qc6Z/XzIXl7Qb4j1bGdGtnaIovMardHS+SWGtBR0GFNYYzFLAB8htFbiRwB
-	 eubeCaiOu6aVA==
+	s=default; t=1792438242;
+	bh=hhgnvI1gZ2m5INpcPXHRU249Yhoo1Fbx0oqBV00HYEY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=fGq9itoEugzBH7ALQ7XAcWrvykpHScMpLx0syRiU2qlWXmbl54ZSH2zWAQf2+fXVr
+	 4D5/LQW/y7fN285xUOOAfjtY5jo5AgHV5qN3kqeDhzIAeQLzQkf3yb4iflTOMrsj/Q
+	 u17x2YAo1CljUsqSSeCVt9yt46Yv6hAK/RVpcL+QJouvAdK2hOQESrOaIW0yuFIMsG
+	 JgTPAvjn+uM2TMqAcm7sSlx4frizFd3C0mapEJTT4j2MikqDotVkAFqDsIJPTURkPC
+	 Nbet1YQ7nuOiUPGywh9RxP8TpT70Ch3OEeY3uj8wPAI5mHqNxhtGGM8+m3TZsnF4ua
+	 Kt8x0kscjeBYw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9600B60751;
-	Mon, 19 Oct 2026 18:30:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 172D023A
- for <buildroot@buildroot.org>; Mon, 19 Oct 2026 18:30:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7ECF140540;
+	Mon, 19 Oct 2026 19:30:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8C8321E9
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 19:30:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 087D680D34
- for <buildroot@buildroot.org>; Mon, 19 Oct 2026 18:30:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7E924606D3
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 19:30:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 435gp0u_zOHI for <buildroot@buildroot.org>;
- Mon, 19 Oct 2026 18:30:28 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 918C680CB6
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792434628;
- b=OAr2bocF9xdCkYbrBqpxAZ2Kq8Bwsw4mYUDSgHTU9h/3d4fzSaKNnsHpm8KUEWPc2G6v
- e+0b9KYuhSxbPDMSAQquww4NBxW0fCw/IbrAHqrpCJwL6ubZ4Uj7c2NaIw5y2ZBQJVrSZ
- I6aRp6SEAm5/DXijPH6H0LgCJQMvwodn2wwhjOc4YIqNpJmAXfvR2PIayZy3yCBpij8X2
- wScH6rYeywTjsWkeKd36VnO17+WvwPA7K1BGneoehvRSl+QZTZD4gLo8oQ5pAcZEV7toJ
- 8F9PowDddek9HMeC0RVjaSuIJ05WAXUULHobzyYGSE09hNh95YxVQy4DZJ1DcEAAW+A==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CBH2coBryljD for <buildroot@buildroot.org>;
+ Mon, 19 Oct 2026 19:30:40 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 3B52E606DC
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792438240;
+ b=RihULJvEMIu4cZ3xFoN/Rqwp9qsYEPIw/5bag7vS+fc/SD4dMdS7Ui4hJPCOtdb7Fk60
+ EUW+x4NmP5vv13+cdY8C6JkqRqcQcntKBsmHRmTqg91uGWILwuoWeJPwbqLcM3rMv4400
+ A7oC1o10MwU4k202VhubaJjubIffzGrELkQpbAo8vO6CI8dEFrE4BaWQ9QlATfp/VBJ39
+ /SPVavaS0Q+t/gPOUVdqNF7Q9X73sT+OC2R5kfT5IsSBM2HdsM8fOCyUn+6bvD/s7U+IO
+ lpeDbtP1nwK6FbapT7Dy5KHCTL3TURg6maWyuDMKb42a68pumJnzD45m5WtDFetGYTA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792434628;
- h=Received-SPF:Received:DKIM-Signature:From:To:Cc:Subject:In-Reply-To:
- References:User-Agent:Date:Message-ID:MIME-Version:Content-Type;
- bh=aoK/RlnJfvMQi0BWhBROFq+LLii85sg+hEBIpx8bDYA=;
- b=XQCqxXxEUaq3Oh6VoSNhTiJMSdpe52G+rHNguro8d7g+2j6Tapb6zhKN0gaHTbZy4Hqw
- bPK8Dn9yOjaqLsBDFI/KyNTBpiQoWb0B7BV1dIIzKibQ90Nk7gdThXV6tvrJetnZCNCj2
- 30yrBRJzR3zZC/kgGeXuH9gSpzfmQD0FuYK38d/tgcqUV7x3p7SdOZPJGtssWiGAFGXXa
- xF8m6yPJ0vDOuAgqWdHopLTb8HjwcZyf0txVnW163Evf84DH8bArBp9+RbPz4l/vwj9cs
- 0Q4uCHet90hoXIvU1Y3/Yi5ZUdCfzZl2k0x1eH7pR5BZlCNMEjqx48pFetkfwr1sGIg==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
- dmarc=pass header.from=tkos.co.il;
- dkim=pass header.d=tkos.co.il header.i=@tkos.co.il header.a=rsa-sha256
- header.s=default header.b=0mryjbi8; 
- arc=none smtp.remote-ip=84.110.109.230
-Received-SPF: Permerror (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
- helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
-Received: from mail.tkos.co.il (wiki.tkos.co.il [84.110.109.230])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 918C680CB6
- for <buildroot@buildroot.org>; Mon, 19 Oct 2026 18:30:26 +0000 (UTC)
-Received: from localhost (unknown [10.0.8.4])
- by mail.tkos.co.il (Postfix) with ESMTP id 6A4C5440513;
- Mon, 19 Oct 2026 21:29:02 +0300 (IDT)
-To: Martin Contamin via buildroot <buildroot@buildroot.org>
-Cc: Martin Contamin <martin.contamin@murena.io>
-In-Reply-To: <20261019180050.1175211-2-martin.contamin@murena.io> (Martin
- Contamin via buildroot's message of "Mon, 19 Oct 2026 20:00:50 +0200")
-References: <20261019180050.1175211-1-martin.contamin@murena.io>
- <20261019180050.1175211-2-martin.contamin@murena.io>
-User-Agent: mu4e 1.14.2; emacs 30.2
-Date: Mon, 19 Oct 2026 21:30:22 +0300
-Message-ID: <877bjdk0g1.fsf@tarshish>
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] support/libtool: make v2.6 patch apply
- to libtool 2.6.0 ltmain.sh
+ c=relaxed/relaxed; t=1792438240;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=Zw+oL0+JHT7trNSGVx115vRtHPQbrOi76uDQNjhIDto=;
+ b=jQoQnyijeTVP42cJEAb9wsvvMCDPGo+R3CfWh7lF8PxUxebnH4ZxOgx/Zh3Ou8uJn7LI
+ szSC+dad15CuHnffmFsb5o8sYVWETP3ZS3vtLDjl7xzUvLXFGQbHZ9vdxCG1JNKpEpA3v
+ C86LY0UHqCcTSQ4ecDhLnxUY5NF7y0pXhpvMnLOkXCPpGi3ga1ZpCPIDzzg59mWAWfqtn
+ WJH3Wj0F3zF/dfppXHmR1bIQPUlX7JvtECw+Xhl1qaKINO31qnZCxB+k5jgT0EIBIox3i
+ UMLLR2TcwrET1U8Hwbo6qAhGaKfEfWV+kwYyS1uMO8pveFtEXx1Ygi0ElYAPRtbJyRg==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3B52E606DC
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 19:30:40 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8904B995AF; Mon, 19 Oct 2026 19:29:17 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 19 Oct 2026 21:21:12 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4eeec84c3341715e0436e40f94b31379f227000f
+X-Git-Newrev: 24590006a64e09a52ea6ed254c706877b9706e61
+X-Patchwork-Hint: ignore
+Message-Id: <20261019192917.8904B995AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mender-update-modules: add missing
+ BR2_USE_MMU dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,77 +109,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS autolearn=ham
-	autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Hi Martin,
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/24590006a64e09a52ea6ed254c706877b9706e61
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-On Mon, Oct 19 2026, Martin Contamin via buildroot wrote:
-> Commit 5dbba2616f ("package/pkg-autotools.mk: also handle libtool 2.6.x")
-> enabled the libtool 2.6 patch for packages shipping an ltmain.sh
-> generated with libtool 2.6.0, such as libmodbus 3.1.12. But this patch
-> was written against libtool 2.6.2, where the -static-libtool-libs
-> pattern was merged with --static and -Bstatic. In libtool 2.6.0 the
-> corresponding context line only reads "-static-libtool-libs)", so
-> hunk #4 failed to apply and the build stopped at the "Patching libtool"
-> step.
->
-> Remove the context lines around this deletion so the hunk only relies
-> on the deleted lines themselves, which are identical in both versions;
-> the patch now applies to ltmain.sh from both libtool 2.6.0 and 2.6.2.
->
-> Fixes: https://autobuild.buildroot.org/results/11f3c460407c816d9829f101f0ee55e4b03965cd/
->
-> Signed-off-by: Martin Contamin <martin.contamin@murena.io>
+BR2_PACKAGE_MENDER_UPDATE_MODULES_RPM selects BR2_PACKAGE_RPM without
+replicating its BR2_USE_MMU dependency.
 
-You might want to take a look at the patch Thomas suggested:
+BR2_PACKAGE_MENDER_UPDATE_MODULES_SWU selects BR2_PACKAGE_SWUPDATE
+without replicating its BR2_USE_MMU dependency.
 
-https://patchwork.buildroot.org/project/buildroot/patch/20261011074658.1888569-1-thomas.petazzoni@bootlin.com/
+This commit fixes that by properly propagating the missing
+dependencies. There is in practice no functional change:
+BR2_PACKAGE_MENDER_UPDATE_MODULES depends on
+BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS and go is only supported on
+MMU-capable CPU architectures. But since there is no formal
+relationship between BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS and
+BR2_USE_MMU, automatic validation cannot infer that
+BR2_PACKAGE_MENDER_UPDATE_MODULES cannot be selected on !MMU systems.
 
-baruch
+Fixes: a474642fdcd8c69e12126bbe8304479aa855d916 ("package/mender-update-modules: new package")
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/mender-update-modules/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> ---
->  support/libtool/buildroot-libtool-v2.6.patch | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
->
-> diff --git a/support/libtool/buildroot-libtool-v2.6.patch b/support/libtool/buildroot-libtool-v2.6.patch
-> index b3968b1289..060acaad5d 100644
-> --- a/support/libtool/buildroot-libtool-v2.6.patch
-> +++ b/support/libtool/buildroot-libtool-v2.6.patch
-> @@ -42,19 +42,13 @@ Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
->   	  if test yes = "$build_libtool_libs" && test -z "$link_static_flag"; then
->   	    func_warning "complete static linking is impossible in this configuration"
->   	  fi
-> -@@ -7072,12 +7076,6 @@
-> - 	  fi
-> - 	  prefer_static_libs=yes
-> - 	  ;;
-> +@@ -7072,6 +7076,0 @@
->  -	-static)
->  -	  if test -z "$pic_flag" && test -n "$link_static_flag"; then
->  -	    dlopen_self=$dlopen_self_static
->  -	  fi
->  -	  prefer_static_libs=built
->  -	  ;;
-> - 	-static-libtool-libs | --static | -Bstatic)
-> - 	  if test -z "$pic_flag" && test -n "$link_static_flag"; then
-> - 	    dlopen_self=$dlopen_self_static
->  @@ -7393,7 +7391,8 @@
->         prevarg=$arg
-
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+diff --git a/package/mender-update-modules/Config.in b/package/mender-update-modules/Config.in
+index 88e0805976..dac83c47ec 100644
+--- a/package/mender-update-modules/Config.in
++++ b/package/mender-update-modules/Config.in
+@@ -208,6 +208,7 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_RPM
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	depends on BR2_PACKAGE_LUA && !BR2_PACKAGE_LUA_5_1
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # rpm
+ 	select BR2_PACKAGE_RPM
+ 	help
+ 	  The Rpm Update Module updates software on the device using
+@@ -220,6 +221,7 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_RPM
+ 	  https://github.com/mendersoftware/mender-update-modules/tree/master/rpm
+ 
+ comment "rpm needs a toolchain w/ dynamic library, threads and lua >= 5.3"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
+ 		|| !BR2_PACKAGE_LUA || BR2_PACKAGE_LUA_5_1
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+@@ -228,6 +230,7 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_SWU
+ 	bool "swupdate"
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # swupdate
++	depends on BR2_USE_MMU # swupdate
+ 	select BR2_PACKAGE_JQ # runtime
+ 	select BR2_PACKAGE_SWUPDATE
+ 	help
+@@ -240,6 +243,7 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_SWU
+ 	  https://github.com/mendersoftware/mender-update-modules/tree/master/swu
+ 
+ comment "swupdate support needs a toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_STATIC_LIBS
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
