@@ -1,28 +1,28 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A942C606A319
-	for <buildroot@archiver.kernel.org>; Mon, 19 Oct 2026 17:45:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FE96606A31D
+	for <buildroot@archiver.kernel.org>; Mon, 19 Oct 2026 17:45:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=d1nWM4e+
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=m4P7FIro
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B6974060A;
-	Mon, 19 Oct 2026 17:45:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0B09360727;
+	Mon, 19 Oct 2026 17:45:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lB9WClKGdYto; Mon, 19 Oct 2026 17:45:49 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 8C3C040620
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792431949;
-	b=NzxgxhAeG34m1tV+8DReC0db3kD+vo/3Jnt2S1XOW0HqYMbEr5GgyXV4N7href4HjkEO
-	 GXh7oWEwa6lkwJ4X9X3zoShoA4G23xnKYb5ioQvn5V0zp8S80TTJsO5b1lFF4pv25aJSC
-	 AwFiCmw5aenRM4D2gXqwRVbe5xtlKY01UJGXNtB3HK8IufK61AWu2EnKb4JZJipaL4cAc
-	 8vh1ugmb9PlNqBmk/pV+ueHLHsOPXKD4dl8bWwMa+va9hIDCBKoomCJSpl5wCyb8CjGVY
-	 sa6sXEc/sXTlo+O6NbaJd/lRMKDDEa/H8oMf3u4joWn3l0mcif2Mr0VowmwJTcwIhIg==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uDslaSsZO9LG; Mon, 19 Oct 2026 17:45:53 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 1D44960730
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792431953;
+	b=NoImTw+haAwN00SlbBkb9xOrzWAmr9HbzZBV0gdCluabeoCej+IxlhbS/Ex8NXx3QRrb
+	 jMufEO5WLYMJij1bTCCMw+YOFMCJRXqAo8O63ARIM8kze5GAfT5BzcH0+36b8BFmC6FLn
+	 pp6625fviJhjBrztTdArfSBQ2HryaDr6Lz56Nn/klUArtnNSoL6iiacBhYmBUkXGB4S70
+	 3Z72aqWaPEsxvF/Jjwwx5cfCiTrM4uF4RUFn/QttFiNZb6vARbUCc5jcssyap2ozmtKWd
+	 jQ1NwnpSwG8LZrGXWrR4VV03j/ptin4rZx1ZxuBQxkmK7WN1t6AWXtAESw6vx8asUiQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792431949;
+	c=relaxed/relaxed; t=1792431953;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=A6e+4x7N+h0p0oj+j+9e33j1eLl5xKs4X0mvJ9or8Q0=;
-	b=oiVOHVTtM1ftlLxspKqJ7U4p70BXZTvYoxLbIBtY+PKH3HTk3dy50FOPiyNN2JCPqYs2
-	 wzWYbdNTdsjaof3JE4mAYrUnnPzkjONgPerWPdPpNoH5zGV3wZ/Pa+YfkoEJUUgARDnBN
-	 ZvchcFbhKSrwZ14G3I/xED+MuezUoNX57bQYWOiHlOQH/JtsFfOpoFIpcH9t+HNkZegQC
-	 FPkXZSWCf9rvrzYS7vq2keukAbdOgvEZ5m0dCrnZmTMYI7UO/Xh/MyawMEeCCTPj1nzA7
-	 8PE7T7yYxmXC8dtxdZazz6ci0k6MMnX2ewbJ13MCL+BrPG/6E8xpDXc+WRtVFMurrzA==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=sNYwRb6rhQkiP91ay8Z2k5sRV0npBFFQVLfoh1+R7E4=;
+	b=PguA74dZm81/EEqFj2w5fKdTi0xdXcfY3f/9qMyZWLJvVx84b/ca4jjabUpb6UjO2S+K
+	 GEu3/IuJTmm9u+V2yE18D0pV/GmkeGqxrX8T4eQ6SejGEQ/Dhv7Kcc75VuZfiW6VTUdLa
+	 cz7H5xf9yT58SMPovlB0Bwr/1E6YpGZjh8IYL3UaOW3aQHdw4eIGHr/RSlzWKIY9XLlmg
+	 7+Tk5J2fR22ZCz5jyOyR0HQK5kyhHjz4LrsxZFKIQ8VYmJvQwbuFx22BH3l7N2e/4wbM6
+	 JSG00O0bcfK9zBRAN5Dwbsj6jKxGHkaia3KBNZe3OGOHrvoumVPIKYrzxpM9gvEIEqQ==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792431949;
-	bh=A6e+4x7N+h0p0oj+j+9e33j1eLl5xKs4X0mvJ9or8Q0=;
+	s=default; t=1792431953;
+	bh=sNYwRb6rhQkiP91ay8Z2k5sRV0npBFFQVLfoh1+R7E4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=d1nWM4e+HLvt6cDVIZs2TIr7b10ZBZoCw0qmzIH7TVTRb7qW3pl+LwAr7a221VmFH
-	 3kYfVd7Kw8quMtaJSkpLJcwnC9PlcYDNHuF68xUVy6RsPBjMVZXoi//teJxiuiXYLd
-	 DXd0dZ3FAij4qkFd0XfbjH7ST/JVa67ZVAYSF9Ho5Yvqoo85obnhpFg/g8SD5TNrEq
-	 0sPzkjJ2EifOvsTzwfeRARBpsPwJkXmIgk66zoPqGEM9KCc2vX3ffWu7aKQmz+qazk
-	 /Td18ZVldaGDgx6KC2bX2mnIvGriQ5LsNHdS3Sj0Nd3RhZQENJDncBQOfok5hreqhf
-	 gitnfBebuuitA==
+	b=m4P7FIrojNLxd6W+8yrwijZ4luGvRfNIXdJs39YayL1NNAlnpC5bgpNeXrk3rr/eQ
+	 i4SZRuckThCNEp6UECirXqJxan95s14YaLTvVTrl7uy5n7XzZRq6wCWIv/C/DH0WE1
+	 eS730zaR5xTmmgBkkSDDCX9KenfBhsfDQfVdpCTssUBOdu1EBIrXZ9fAd9Uak3BYTT
+	 FpHBVMjvsh9pXYbdYUhm0qp6L9oO7btSOQgrt3ls8JrQNfTIn11G8qJnmi0zxT97Dr
+	 kQgvYymlWXaWA27aVbK22AXZn3jbGe4XZNwHMkydSojXL9vZBjntgWIkjj4YEx/f6O
+	 /sP00oL7JlUMg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C3C040620;
-	Mon, 19 Oct 2026 17:45:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id F0A631E9
- for <buildroot@buildroot.org>; Mon, 19 Oct 2026 17:45:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1D44960730;
+	Mon, 19 Oct 2026 17:45:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0A692279
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 17:45:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E05EF80AA0
+ by smtp4.osuosl.org (Postfix) with ESMTP id E1D8F40699
  for <buildroot@buildroot.org>; Mon, 19 Oct 2026 17:45:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hVGmPdxJjc54 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jRrJY3Zogsbk for <buildroot@buildroot.org>;
  Mon, 19 Oct 2026 17:45:46 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 2117780AB5
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 27F7840620
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792431946;
- b=QmmqhmkGEuhlpKjrR+8faEsM1n79hRqRz4d9ekLU+OOj7VTkUn0fkpQMxCISJwG5ov6P
- BF1h1AdmJFB1jy/7ZJzS0omh7zqaySwo3zWz2GJEkg2uhZ6PPYN2u5R9aM6NCB8WtnhRe
- Dtc2AiPCf5COmKcABbR9z/Pqsib4H9Ee1rmx7QONUohFvN5Ph0GPr2W2ntFsINHNFBlYk
- TRSvrL1RbYxeneRx6U6TT12+JAKX2YyaZg3ROTjY/26Y7zUYBR6xmOs/x26YZ+3ezslrK
- PIo+d+Z4ZPGWLiwodFY310PEJPGLCQIGgDmJfE1hqw1WkzYyyrfog3SEAOvp6lFKhRg==
+ b=lUwV+rlADilx87LQgMlDhUsRh4w6BRzetJTTYd62onQhLMR9v/eU19itV1wqV8cFPNlx
+ Sw6TzTl0wGcJf/yI+jDq49rcZC0gtOfXnC7Kgq9vaajCiuJytrQ4PhiaK4VnUaPUC6SaH
+ kIYKTUJqg/AG+2YmcUp9WzH/9qZLzmgZQCc1qONt+jjT2qJFDjDvkPP5ClY46CV0v1u6V
+ i3BMRwajHaUEx3UWs16LBdXXSbJVKWq+Xrh88my74e2muEjh4eH38BcPd2dedSbAmIIfO
+ t6Kw2QxQIcl9SGIqj9IenMzRbBHyrMt7PsWKRAzEa2UJg98AO3zXbRR+U+6/948aZpQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1792431946;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=Px1MTj4cvScVBlRnZIDhYIn3SDgJPwGSjiqELfv8ihg=;
- b=JrkQbI+4fWCMKvQEnYTexD1K2ByS/DTvEpkj3cM7E8Zh//MU7lzJO4eV1WjjQ/+cZXEl
- MLXCxxxV8OSAGIqGn80Pid7h/8G5DaneUjtxUQC8y9vZiMpzpvAwqHYAxptXkFac69YTj
- kTYSHuuBTUnBqNbElvULyud+uglEYLqXE6xxT395F/Bx81g1msltev3rOVw7OyK5/urju
- aIgmvdupv+ZTW8P1due1s6ttVf6FFaNsyXNOJFBQuFGE7VJ75uWaZ/D2qRwaJYIlH38EJ
- CI2IxP+7SyvuAi+tYzs2XpvXhyrZRg/jJ1VEgoByFUz/694vePf2GxIp0d0Q+ls5gVw==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ bh=UFhT2B9VB8z8oGn8HLuF17TbwnzaQRzL72U9JElHw/o=;
+ b=q2NZKzMqxry3AbD6xxLG8MpsObs0KtWDZZN+yGjCjDHjHPgoX2J4jlriXS4ftQFZla7a
+ f3/CpK4Nx0+GalZP+3E5134lDkPM0C5dyv6awKkZdeo1dpE7p0YVzAnIF3Y5DRlIzFBtC
+ ulA0o8g9rK1tO02ffPGcsqIAyqg8TBMCr1YJo32LiBumVpLap+CFqXaQDWd7ZNf/A/xBw
+ 5qOsUJajIygda0d1YU3mqCvSR84+6Wu4UJ7idEdNpl/4c44dwFZX/FVIW4tJfYsCrLBwC
+ kuNSDPAm6c2w7nfpgV/sxVDCuTasyJT3gZGdR6EL8bUYXIrRgNWdfmBbu6VqaYrUhog==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2117780AB5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 27F7840620
  for <buildroot@buildroot.org>; Mon, 19 Oct 2026 17:45:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6ED1398CAE; Mon, 19 Oct 2026 17:44:23 +0000 (UTC)
+ id 81DAA9926F; Mon, 19 Oct 2026 17:44:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 19 Oct 2026 19:34:04 +0200
+Date: Mon, 19 Oct 2026 19:34:26 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3057e90598e166dca597fa75b9fdb3ed03b5bb9d
-X-Git-Newrev: 1332f3f4589b0764b850ff2d0546b2c47b6e4604
+X-Git-Oldrev: 44f77c2dc6715e68c9aa0b4dc1084b7c8bf67079
+X-Git-Newrev: 79ab24a7e4414f7a23d6e8106fabb2867f9b0bf5
 X-Patchwork-Hint: ignore
-Message-Id: <20261019174423.6ED1398CAE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-typer: new package
+Message-Id: <20261019174423.81DAA9926F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-jaraco-text: bump to
+ version 4.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,83 +118,79 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	TVD_SPACE_RATIO autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1332f3f4589b0764b850ff2d0546b2c47b6e4604
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/79ab24a7e4414f7a23d6e8106fabb2867f9b0bf5
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+Add the host-python-coherent-licensed build dependency.
+
+Update license hash due to generated license text:
+https://github.com/jaraco/jaraco.text/commit/9a81db3c77bc106017dcd4b0853a5a94f43ae33c
+
+Add the python-typer-slim runtime dependency.
+
+Drop the no longer required python-autocommand dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/Config.in                      |  1 +
- package/python-typer/Config.in         |  9 +++++++++
- package/python-typer/python-typer.hash |  6 ++++++
- package/python-typer/python-typer.mk   | 15 +++++++++++++++
- 4 files changed, 31 insertions(+)
+ package/python-jaraco-text/Config.in               | 2 +-
+ package/python-jaraco-text/python-jaraco-text.hash | 6 +++---
+ package/python-jaraco-text/python-jaraco-text.mk   | 6 +++---
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 1d20359c8c..fd7ec64333 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1499,6 +1499,7 @@ menu "External python modules"
- 	source "package/python-txtorcon/Config.in"
- 	source "package/python-typeguard/Config.in"
- 	source "package/python-typepy/Config.in"
-+	source "package/python-typer/Config.in"
- 	source "package/python-types-python-dateutil/Config.in"
- 	source "package/python-typing-extensions/Config.in"
- 	source "package/python-typing-inspect/Config.in"
-diff --git a/package/python-typer/Config.in b/package/python-typer/Config.in
-new file mode 100644
-index 0000000000..e78557d95d
---- /dev/null
-+++ b/package/python-typer/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_PYTHON_TYPER
-+	bool "python-typer"
-+	select BR2_PACKAGE_PYTHON_ANNOTATED_DOC # runtime
-+	select BR2_PACKAGE_PYTHON_RICH # runtime
-+	select BR2_PACKAGE_PYTHON_SHELLINGHAM # runtime
-+	help
-+	  Build command-line interfaces using Python type hints.
-+
-+	  https://github.com/fastapi/typer
-diff --git a/package/python-typer/python-typer.hash b/package/python-typer/python-typer.hash
-new file mode 100644
-index 0000000000..aac74ce2bb
---- /dev/null
-+++ b/package/python-typer/python-typer.hash
-@@ -0,0 +1,6 @@
-+# md5, sha256 from https://pypi.org/pypi/typer/0.27.2/json
-+md5  2d81e72fd4c60a94c9d1b6ade7142f65  typer-0.27.2.tar.gz
-+sha256  269b7eb9d3c202ca84b4bc9618cb04ebb43d3d4d1e567e4c768607232c05f945  typer-0.27.2.tar.gz
-+# Locally computed sha256 checksums
-+sha256  58992cebcf8dfb6e40c4e2112ed12126c243666dca3912a3d78b7ecac4859d49  LICENSE
-+sha256  9a8ad106a394e853bfe21f42f4e72d592819a22805d991b5f3275029292b658d  typer/_click/LICENSE.txt
-diff --git a/package/python-typer/python-typer.mk b/package/python-typer/python-typer.mk
-new file mode 100644
-index 0000000000..ca0d1c6ee7
---- /dev/null
-+++ b/package/python-typer/python-typer.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-typer
-+#
-+################################################################################
-+
-+PYTHON_TYPER_VERSION = 0.27.2
-+PYTHON_TYPER_SOURCE = typer-$(PYTHON_TYPER_VERSION).tar.gz
-+PYTHON_TYPER_SITE = https://files.pythonhosted.org/packages/16/f7/57713ba479fd405eb76de31404b2c744c289e336b2d999511ebf51e496f7
-+PYTHON_TYPER_SETUP_TYPE = pep517
-+PYTHON_TYPER_LICENSE = MIT, BSD-3-Clause (vendored click)
-+PYTHON_TYPER_LICENSE_FILES = LICENSE typer/_click/LICENSE.txt
-+PYTHON_TYPER_DEPENDENCIES = host-python-pdm-backend
-+
-+$(eval $(python-package))
+diff --git a/package/python-jaraco-text/Config.in b/package/python-jaraco-text/Config.in
+index 44000ccb18..9d987063df 100644
+--- a/package/python-jaraco-text/Config.in
++++ b/package/python-jaraco-text/Config.in
+@@ -1,9 +1,9 @@
+ config BR2_PACKAGE_PYTHON_JARACO_TEXT
+ 	bool "python-jaraco-text"
+-	select BR2_PACKAGE_PYTHON_AUTOCOMMAND # runtime
+ 	select BR2_PACKAGE_PYTHON_JARACO_CONTEXT # runtime
+ 	select BR2_PACKAGE_PYTHON_JARACO_FUNCTOOLS # runtime
+ 	select BR2_PACKAGE_PYTHON_MORE_ITERTOOLS # runtime
++	select BR2_PACKAGE_PYTHON_TYPER_SLIM # runtime
+ 	help
+ 	  Module for text manipulation.
+ 
+diff --git a/package/python-jaraco-text/python-jaraco-text.hash b/package/python-jaraco-text/python-jaraco-text.hash
+index 8de574393e..e4c69141ae 100644
+--- a/package/python-jaraco-text/python-jaraco-text.hash
++++ b/package/python-jaraco-text/python-jaraco-text.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/jaraco-text/json
+-md5  3c519c7a49d6448e6dc2073d466afd39  jaraco_text-4.0.0.tar.gz
+-sha256  5b71fecea69ab6f939d4c906c04fee1eda76500d1641117df6ec45b865f10db0  jaraco_text-4.0.0.tar.gz
++md5  23d91c6899e89f3bb1bb6f9148302b92  jaraco_text-4.3.0.tar.gz
++sha256  ddd5eb6259d0701e08cb642c8d6b63bcc73947d03df9239ea67bbef911b3e4e1  jaraco_text-4.3.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256  86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741  LICENSE
++sha256  9755a18519666e5f0f4cae3daad3d7012bcae48a600b31237d75e9fe134e6683  LICENSE
+diff --git a/package/python-jaraco-text/python-jaraco-text.mk b/package/python-jaraco-text/python-jaraco-text.mk
+index 2d612196a6..e0868bc575 100644
+--- a/package/python-jaraco-text/python-jaraco-text.mk
++++ b/package/python-jaraco-text/python-jaraco-text.mk
+@@ -4,12 +4,12 @@
+ #
+ ################################################################################
+ 
+-PYTHON_JARACO_TEXT_VERSION = 4.0.0
++PYTHON_JARACO_TEXT_VERSION = 4.3.0
+ PYTHON_JARACO_TEXT_SOURCE = jaraco_text-$(PYTHON_JARACO_TEXT_VERSION).tar.gz
+-PYTHON_JARACO_TEXT_SITE = https://files.pythonhosted.org/packages/4f/00/1b4dbbc5c6dcb87a4278cc229b2b560484bf231bba7922686c5139e5f934
++PYTHON_JARACO_TEXT_SITE = https://files.pythonhosted.org/packages/be/8c/c74f1107719400477289d99cd2c0b5b7809a45f60acecfb5ef961c3533c8
+ PYTHON_JARACO_TEXT_SETUP_TYPE = setuptools
+ PYTHON_JARACO_TEXT_LICENSE = MIT
+ PYTHON_JARACO_TEXT_LICENSE_FILES = LICENSE
+-PYTHON_JARACO_TEXT_DEPENDENCIES = host-python-setuptools-scm
++PYTHON_JARACO_TEXT_DEPENDENCIES = host-python-coherent-licensed host-python-setuptools-scm
+ 
+ $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
