@@ -1,118 +1,104 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2549606A31B
-	for <buildroot@archiver.kernel.org>; Mon, 19 Oct 2026 19:32:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBD29606A31D
+	for <buildroot@archiver.kernel.org>; Mon, 19 Oct 2026 19:42:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=mmJbdSgU
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=FLio6aXE
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8068D40541;
-	Mon, 19 Oct 2026 19:32:50 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 091vSgBD4lYr; Mon, 19 Oct 2026 19:32:49 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org A734140577
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792438369;
-	b=Y1ysUPvEEvdOw8jBTP4x0kZan/JBD0crYQHGSx5CE7Rzvxhwrz/gdUpDEk34w26K7kJw
-	 4hoDtlUVBEprkCsq+0D0F63ikClw7GLk8ZmxQYmVnkb1LlQaaqlLGVa4iFX7TdNjNykQa
-	 k/Al6As32AaSuP1hLS8oN21PHLQVOmtHsHeVtuBT+/K4ciGXGkhJDUi8K+9CowgbpyvaS
-	 HhikUCEK94GVf6BaFoTFIJE41nV/giDWW9lMcqbjtwM74DAFdQ2CvBg5hccgnHvlGbeF8
-	 x+Jvfa0zT8KjweWx9r1zN6DJC6lAf5LZd1u7+bLmAZiZ8CpqxaotVUpwuvrB2LEZhaQ==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792438369;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
-	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
-	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
-	 Errors-To:Sender;
-	bh=W2Z4wXBBEE1quQEH2IdoG885j4bdpi+e5fTISESApxo=;
-	b=dJFBAgNfBEg5qlyYnSNQG1N2KXG2uH3q6cd4aHWhTVTmmdtAcXVG8pz6uRJVGcvMO0qG
-	 XPquU9uQ7Z4TbT51+r6aohyflhV2UzvdOHFn4GoA5+BwZ90/ZehSGJcjV9r3qWDpXZl3v
-	 BfuzHt9d5HzFh0xSY+c/8wWx0sv0ylL9gO/BrwM40K2ilPHbp08UglmctbPQDJAm7hW2n
-	 6wH4I8/pGnNhnWLUcDfS/N7+3ZeaZImgXNqzlN8KP4hMxIVcSfeWZP2KK3BZlG+nQE0dY
-	 ZX7W5eO3k8vn+YvIJX6w7Br8oogpQ2hV7cx5RT/WV+DJRMGciDhchcVFo3fCWgx5olg==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
-	arc=fail smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792438369;
-	bh=W2Z4wXBBEE1quQEH2IdoG885j4bdpi+e5fTISESApxo=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=mmJbdSgU99rikfazI1yWPQQcGoHYwpDkFAoC6yFJ06hDX4S1BJilLkA2R2USSmToT
-	 NCLEaMjLbZr2IPDyaRBz+x/8fE9zbBDgNuFf0xmshrY0S/0q7vdzWW/AQjb8MC1eX4
-	 YukeOhF2QLEhgXphCKlvnx0s8ZKPYg+7tWtpV1uAWFzvoAScuAeJSaLlMbam/59L0H
-	 T9uORYVUkggblVwjIJY6IUWZE0q3X2l8zDymNH0Ey97budEv0NL5cyN/5UNDchzFgd
-	 7x3rx0ti8zEVUYCUXl9OSQD/kKqOWbTaUItlyG7RMI2od9IMnFQxGbl9Xk0gXdjF6Y
-	 7f6pIiynO+bfg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A734140577;
-	Mon, 19 Oct 2026 19:32:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id C45B11DE
- for <buildroot@buildroot.org>; Mon, 19 Oct 2026 19:32:47 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AA2E1606DB
- for <buildroot@buildroot.org>; Mon, 19 Oct 2026 19:32:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C516760760;
+	Mon, 19 Oct 2026 19:42:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Nz0xkDTUJOHK for <buildroot@buildroot.org>;
- Mon, 19 Oct 2026 19:32:47 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 7ED78606A0
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792438366;
- b=MRsrqCFOILpamS63INLF2MAy/h3mAJWWk++N0X+i5ck7NfzdO+/LD41YLUBvfyXj1CW/
- jh/G91lOkMGv/kqHpmc2hKrzHSFtphIZfS15zqreV575DXG5uPAHzWzAK9gEbkjcqCAe4
- cidva27XmeYlungsrAMWxOLFfkboi4UXd/pW49JV8G3Cne+ZeDjd/CF4LxBbMKqeGPsPo
- 6mWptR/UZRq2OXr5FEDsN03MyIRjWw+f8QoQMGtk5psbnAa5EjG6gsHzvS4UqZLiFtOAq
- J/q5TSzY0g19MljJLSwhkS7O8rcaN0mka6nz30q78EATfxdz631KkFkmF7g3++5SWiw==
+ id 5VcUemJpjScc; Mon, 19 Oct 2026 19:42:53 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org DDED460714
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792438973;
+	b=bTF5KcUk8kLpgIK0AGyaW/ibc03mJQ01CY+c2tRnYTCGyAlyB3Nxh6BUSD5/TyDxoR5h
+	 l2HgvkMM7xNnSgUQIjdt1sgIAiKISFykv0pdFpAmLjl86MIc5b+QvhS+YU41FUdF5LNRh
+	 l5WigEuMnQhKQOcg9xLgMNwVHrI2D7wJSRZru/ErN43sQvnXTZm6Dp1pXatfVG1panRn7
+	 zC30to3uwcmcwTX0LQtMW2jecdIqQ4VpPQd1i6u+OahQXQo1tn550Zzc29Rcey1GM0TuD
+	 g7uAus9DbdD/wWIITZGmSEMkNLmkh0sf+CiIkpm8BBM9/Qj+NfbNRBz5+37z7LoUApw==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1792438973;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=PHIgH4wj8lNOp809Xern2026fAkMgO17Z7/eJwt9Wdo=;
+	b=ST5cl5Suxlt7ORtjgmMipXOQ4NZs3V5gKYy8SfzEvtzy2WFB+DS+PuPkX0OznsykuZI9
+	 PBnLJpY3mKVjLZ6LeegbTY//8wKtIx14jcBM0A+pN1fQH6LM0kIl62ZdSgx81m5eUQNaa
+	 +jdCf0sk2DaqHjlKHcedkuL0nVWcz6f8Lqjq55R6OIor9VVgj6xQ42q1sUQIqmRiwEEOx
+	 teMOCFw+5OihEL9TaJffBapyi3IfLd0qCytzSDQ/2K4S/4FHFqGDNS300pMM2O6JYTUHa
+	 TTuQvD4SpnZKEClUwTm+SsCr2peCV3ASdymyM27ksh77an8F6v32IFbZWGs265Mvqtw==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	arc=fail smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1792438973;
+	bh=PHIgH4wj8lNOp809Xern2026fAkMgO17Z7/eJwt9Wdo=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=FLio6aXEm0/rTD8Q9LFE9pMnHUaldDPCCzxkVQyy7PRtcBPjhd/UoCcHmBAvISO8V
+	 tG/NEGfO8eFLtYlRnlgUBua+SN5CzHFieMJE1G3WXApyvno+594wnQMFKy3ZLQVvuZ
+	 fZFaJlPWp1xX7C4P6HgqWMm1EHg9IIUY+KpOfHfQBE5+iBNTtpqLLLiP+s9IYFnSBa
+	 bbIFdKsuu5tU7KgcegzRfjat2804sobbO4MXXipCrWdYtLhtG4UBsqLwV4JOFDCwkL
+	 kmyFmuIFv4B5Pilkomep449n+QIZITYLqveM4H4MFl6aQQe8AxdEiAfZxZcHAViLZb
+	 Uah3ukhoopGNw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id DDED460714;
+	Mon, 19 Oct 2026 19:42:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BD3A41DE
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 19:42:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A341B400B0
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 19:42:51 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h9AIlDKvEfE0 for <buildroot@buildroot.org>;
+ Mon, 19 Oct 2026 19:42:51 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 06A4A4008C
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792438971;
+ b=pMyRwiG0NPY5JAntKX3sDI8JjMFPJPci1by5ghKBlDyTGWkpfyLh9W3Kryn80aXguiqI
+ VBZ4R2soKMyG18q5ZVhaWwwnn2M80P20S+RJFLKKkX12zMxchStoubt1+btGhJ7RPBfRi
+ BywAApuzQbG/YfR5Tu03kmEaR6UaCxsuBrz2AS3EhwnJdeEG7+GjvxWHp8aBYNS62iptd
+ zHtJ5MHp2fBBSsYcPCQ79yH/th32gKMDfMf1bikOS0ocOyoyyPKk1nQy1TUZSkpRZpnb0
+ u+H/RrRVWrBXXpwkQ1eGbY4KRqYec6IvYsJ3a798qH6eLrt0TTXtRIKp3mABjEBY4dw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792438366;
- h=Received-SPF:Received:DKIM-Signature:Received:MIME-Version:Date:From:
- To:Cc:Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
- Content-Type:Content-Transfer-Encoding;
- bh=/DsuODmAii+mV5AI+ZNrijnCeEAroH19aDFgV+zVVCc=;
- b=jdOG6JQgynX7nhDC7JXsdBLBXf3ukJcrvXfGuqvKWSOdc92yhADxwZYIKgJRB+oHQkP1
- aLaQBgH2DYj8lni1mvikYzZ0XmUnSnL3aP8A4Mnx0oJyXYUwjUTO1suhFkGSw7F4dMN72
- jYf2V+GD+9wExLQE0QzqKAhqfjgax2bvNmPpnlh58qPACRvSMDx5DopUDpRqG72W+KEev
- H/YN/Q0LHT7cCN5kZYwDMADlhpzTSjTI/xuUdAVIqS35zOVrh/Rtp+0tZnt4jKVc99JKQ
- kP120PuEDsRzIKRP+XbIwtwLpmmYMj7uz+iiMQ3FBF4ourof2EmBqHJwzI6FuGTmKag==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
- dmarc=pass header.from=free.fr;
- dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=Y0m0be7w; 
- arc=none smtp.remote-ip="2a01:e0c:1:1599::13"
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7ED78606A0
- for <buildroot@buildroot.org>; Mon, 19 Oct 2026 19:32:46 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id CB7B519F574;
- Mon, 19 Oct 2026 21:32:41 +0200 (CEST)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 via
- 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr with HTTP (HTTP/1.0
- POST); Mon, 19 Oct 2026 21:32:41 +0200
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
-Date: Mon, 19 Oct 2026 21:32:41 +0200
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org, Adam Duskett <adam.duskett@amarulasolutions.com>
-In-Reply-To: <20261014214158.535942-1-thomas.petazzoni@bootlin.com>
-References: <20261014214158.535942-1-thomas.petazzoni@bootlin.com>
-User-Agent: Webmail Free/1.6.20
-Message-ID: <8051f71801c6c1a76aff81c77f5233cf@free.fr>
-X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH 1/2] package/podman: propagate missing
- dependency inherited from runc
+ c=relaxed/relaxed; t=1792438971;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=WIXbTIN5ZYUUKZAJ8NEujJGxB0G9HYxBSeXjc757J8s=;
+ b=ZRN7Ah0FknUDFTwyQR5g8YYBFgVQ5qjPdwRfrmMf4m7O1SW9XXWi8+rZqfkQ0M7B61Vr
+ 5eGYo+ZFwneIre3by97TJFO6Q1IUNnvKXEmns5qRNUoMtYipKqKYXuBWf3JFdqUmI1l5T
+ ghzaYaTlnkm5gTc/Nyd+YSyAtTYQPEYzhJv65kYR5UEJ4mHNkn7iZuw+NTRmxcBFy3gyH
+ bNU58jR3vzd1v/GTnLuMgXZZ28F3RrWIk3PHz+OfKazHbCOs+nc4Xbi2NbIYPuRHCehLR
+ pYQHLhDR94rsXWPDDQvPtqtH8vO5SH4tY0PN4YqwEYnLRgTFuc4VV9T+qgSoKZNiDVw==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 06A4A4008C
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 19:42:51 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 53EAD995C3; Mon, 19 Oct 2026 19:41:28 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 19 Oct 2026 21:38:30 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f09b4c5bf7becfc1bf22a1880ec4c029b768647d
+X-Git-Newrev: 731121fc1b0f968fc94e8b168014c35d970ac7e8
+X-Patchwork-Hint: ignore
+Message-Id: <20261019194128.53EAD995C3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/genrandconfig: add missing newline
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,36 +110,72 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_PASS autolearn=ham autolearn_force=no
-	version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-On 14/10/2026 23:41, Thomas Petazzoni via buildroot wrote:
-> BR2_PACKAGE_PODMAN has:
-> 
-> 	select BR2_PACKAGE_RUNC if !BR2_PACKAGE_CRUN
-> 
-> but forgot to propagate the
-> BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS dependency from
-> BR2_PACKAGE_RUNC.
-> 
-> Propagating this dependency requires a bit more care than usual, due
-> to the ability to use crun as an alternative to runc.
-> 
-> We also propagate it to the only reverse dependency of podman, which
-> is mender-update-modules.
-> 
-> Fixes: ebbaac08e3f462bf023c12077f739ed1c0543eb2 ("package/podman: new 
-> package")
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/731121fc1b0f968fc94e8b168014c35d970ac7e8
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Series applied to master, thanks.
+The line:
+
+  configlines.remove('BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y')
+
+would fail with:
+
+Traceback (most recent call last):
+  File "/home/thomas/projets/buildroot/./utils/genrandconfig", line 650, in <module>
+    ret = asyncio.run(gen_config(args))
+  File "/usr/lib64/python3.14/asyncio/runners.py", line 205, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/usr/lib64/python3.14/asyncio/runners.py", line 128, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/lib64/python3.14/asyncio/base_events.py", line 720, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/home/thomas/projets/buildroot/./utils/genrandconfig", line 556, in gen_config
+    if await fixup_config(sysinfo, configfile):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/thomas/projets/buildroot/./utils/genrandconfig", line 255, in fixup_config
+    configlines.remove('BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y')
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: list.remove(x): x not in list
+
+because all configlines end with a newline, so this needs to be fixed
+to:
+
+  configlines.remove('BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y\n')
+
+Fixes: b07d21ab984d10cbabeb186fbd47d446e027c03b ("utils/genrandconfig: handle BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y")
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ utils/genrandconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 8437d6342d..597602f257 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -252,7 +252,7 @@ async def fixup_config(sysinfo, configfile):
+ 
+     if 'BR2_LINUX_KERNEL=y\n' in configlines and \
+        'BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y\n' in configlines:
+-        configlines.remove('BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y')
++        configlines.remove('BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y\n')
+ 
+     if 'BR2_PACKAGE_LINUX_BACKPORTS=y\n' in configlines and \
+        'BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG=y\n' in configlines and \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
