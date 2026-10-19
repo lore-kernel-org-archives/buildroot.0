@@ -1,28 +1,28 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98E3F606A31D
-	for <buildroot@archiver.kernel.org>; Mon, 19 Oct 2026 19:30:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B357606A31D
+	for <buildroot@archiver.kernel.org>; Mon, 19 Oct 2026 19:30:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=fGq9itoE
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=FlRdKdBO
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6B3C8404C1;
-	Mon, 19 Oct 2026 19:30:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D5DAD606DB;
+	Mon, 19 Oct 2026 19:30:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AripU5VYvYRi; Mon, 19 Oct 2026 19:30:42 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 7ECF140540
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792438242;
-	b=DAXlHfPx4N0JebbB0uSCZhMBsvWfzp6Aw3SUCD72fqZPLO3agZoyKOa86qLg07oc3RUU
-	 jQBJQFg29uHrTfvJAgtTvUuhQywV3++lHY5BMDrbAM7vDJwbSCC693A7V1XboSXMNBa06
-	 e4gJNR+0O4bHcpyPbs9u2rWbJ1MgJ9aBG0Gnk9gg1FVs9hRrVKRz7L7C3StQKbu2XYO+5
-	 eUXf0wN6I9tPW3aBEnX96s9wkqdrXLZNhoxr+7KMquD9CjjIjQ8WUxxSmRrkh10SFY3/0
-	 nRh9fQhWlU603nZafqY0kVHc4dPXVEXptWRy6b+oyvEHpxUbXcm+mns1Q9keAFu334w==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NdIev1BTIXQX; Mon, 19 Oct 2026 19:30:44 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org BBB73606DC
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792438243;
+	b=SaDydmgTRBwTs59tT9u4CwgF3bN6gY6KxaQ0Y0MKQkYdhOseHtiSK1LbMcim4mb4Zl2/
+	 bfWppoRi8dR1hkg1FHKge8i5Hy6HeiOJ7LvH33Ye+Y/IAts+MTQsXySR1La07a1tbIpWf
+	 YWCRdLJdKWPkJFbarR27S5W7ALuEXQJhDUk/g20x0js+uiXOIxOIFxZGiDd/6gNXvyZGa
+	 pe+QPIrX2SzDjWQzoVxI+xLmY8PxO8df5rGnpNz8fk3xBGU/3gaOygFXWt5R9bDduXiqw
+	 E/twodLX9n0mYb0zSRa9podwd1bfySo/BN1qmPBl6Y9NUb1fBYV2Hms/MwVi9CI7wGA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792438242;
+	c=relaxed/relaxed; t=1792438243;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=hhgnvI1gZ2m5INpcPXHRU249Yhoo1Fbx0oqBV00HYEY=;
-	b=DZE4Huz+/dPf96S7pQ2jUkyOQjPMQuFG5Bmy1UqgEkZgDyl0monskdp5AafDiR1DrpQ4
-	 caIXrl9CeQdeoBfqFVz728RCHNm+SLVAGIKZOnHRordLgMu3Vgix6SRZIKVsjbWR2Ffsh
-	 rkB15lzsX1jsqhUXccPl6kEPmU6r0TSqijZTTz3psqMHoXEw6i5PAuofaUGGSyE3P2q3I
-	 T0a9a7VhZRhNDARuPZ2io6o+dRY8B/j+RlHMXlrNi5qI6VC6ABMq6cWg2A25Qqaw8Ctr1
-	 c/cqOF1kPI4TzMtpMReHr+beKr49AlM8jtmKvYLKfbSwQkeiaaBInNCq/4Ug8aX+e4w==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=kubeXDN5H21DFkYZAQqag0ZwY0YX59Ao1Qpcq0uwfNQ=;
+	b=Qv7ymnvLLmFgcL49pVHBaxPn//zOFcnBWk6lpDrFXNJpOjOq3MSS0B7YJG3ZD8EA80Kk
+	 zrcmg4Ga5sKxZ8rmMr6tVZ6JPmNzc7DrS/QGYrLkfx/wIvYOF/8O1EUf5/hvLzcVQFZG5
+	 dCyjCqhgKDYvDTHFAakjx4m9aw/Q9hqQ77BAA1hnaPoKNZssU7CrTuZnnRCQB6SrQiqT4
+	 1grtd7KvMyQZ+2Rn6Uo4715cQ0mOfIgstkpQ7Bxb/qx/DEJs/vNZdQzVaCx8R7pGHbSjt
+	 FzZs9TcUviVaTa5xbKNZ60ojOWfFF124m9Lh7wnFH4fn7PQlL0CCekYmqxGIMakvK9Q==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792438242;
-	bh=hhgnvI1gZ2m5INpcPXHRU249Yhoo1Fbx0oqBV00HYEY=;
+	s=default; t=1792438243;
+	bh=kubeXDN5H21DFkYZAQqag0ZwY0YX59Ao1Qpcq0uwfNQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=fGq9itoEugzBH7ALQ7XAcWrvykpHScMpLx0syRiU2qlWXmbl54ZSH2zWAQf2+fXVr
-	 4D5/LQW/y7fN285xUOOAfjtY5jo5AgHV5qN3kqeDhzIAeQLzQkf3yb4iflTOMrsj/Q
-	 u17x2YAo1CljUsqSSeCVt9yt46Yv6hAK/RVpcL+QJouvAdK2hOQESrOaIW0yuFIMsG
-	 JgTPAvjn+uM2TMqAcm7sSlx4frizFd3C0mapEJTT4j2MikqDotVkAFqDsIJPTURkPC
-	 Nbet1YQ7nuOiUPGywh9RxP8TpT70Ch3OEeY3uj8wPAI5mHqNxhtGGM8+m3TZsnF4ua
-	 Kt8x0kscjeBYw==
+	b=FlRdKdBO6EVuTlyLjz0br+3tiFCzv82gkCcMbDxVMNF9/7gGISnxsDRzwVfeOUIuT
+	 tWgx1ZP7Rc7N3inuWXbZAYmjMH2pYWF+7FXcBEz/WPL2UghhQZXXRNfK0Y64kiXvsu
+	 Xh2UHiONJn/FupacadogJLTXf5sjSKEXigah3IxXCESGi8J2j31WNHfDEM20ku4faS
+	 vxRzY0n7CfRXpi/1xmW2BM66XU5luQn8tNlnyzV05ieocQq0cs6C1fxhuLLDJzTfz+
+	 bqBGmXqosBN0i9JkOXGVGrleRDDyH+NbCqskLDbgjQsmRGnO476GVRfJDclMWg+1B/
+	 x9XNnD0ZP7eVg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7ECF140540;
-	Mon, 19 Oct 2026 19:30:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8C8321E9
+	by smtp3.osuosl.org (Postfix) with ESMTP id BBB73606DC;
+	Mon, 19 Oct 2026 19:30:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AA8021E9
  for <buildroot@buildroot.org>; Mon, 19 Oct 2026 19:30:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7E924606D3
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9BD0380E3E
  for <buildroot@buildroot.org>; Mon, 19 Oct 2026 19:30:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CBH2coBryljD for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QvcuEWqVZxmo for <buildroot@buildroot.org>;
  Mon, 19 Oct 2026 19:30:40 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 3B52E606DC
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 5128480D2D
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792438240;
- b=RihULJvEMIu4cZ3xFoN/Rqwp9qsYEPIw/5bag7vS+fc/SD4dMdS7Ui4hJPCOtdb7Fk60
- EUW+x4NmP5vv13+cdY8C6JkqRqcQcntKBsmHRmTqg91uGWILwuoWeJPwbqLcM3rMv4400
- A7oC1o10MwU4k202VhubaJjubIffzGrELkQpbAo8vO6CI8dEFrE4BaWQ9QlATfp/VBJ39
- /SPVavaS0Q+t/gPOUVdqNF7Q9X73sT+OC2R5kfT5IsSBM2HdsM8fOCyUn+6bvD/s7U+IO
- lpeDbtP1nwK6FbapT7Dy5KHCTL3TURg6maWyuDMKb42a68pumJnzD45m5WtDFetGYTA==
+ b=bBGTFd1iIW/RUetTx41KODfir4f8/vqeCkXfbIT9eiW1TEAciM+yCH8RAgMFACcY9r3A
+ dWGcK7O6k+gFt4qy0ZWBHk9JX6/jYnN8ngUzXeCRubA1i3s2WHC1/a4l+d6Ak8nPD79FD
+ wMQjKqBlScfMuAWe46swl/jlANEzN0mMiuz+oK4l03jyo5lHgtoOhFRlGDNO+m4v+Ck2Z
+ LxJ5ESzg+x1cLjwAvGXUiLRLIBqNCa+VGOuFdhV5CTyEZgwhPdBWnTl/oydYoORZmqLVa
+ 0JjhYutQwMQqkkeYibAhk77F0YZza2gL1yZht2lLO2FTX494wZ+Fc5sfYkJT0RjMi9w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1792438240;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=Zw+oL0+JHT7trNSGVx115vRtHPQbrOi76uDQNjhIDto=;
- b=jQoQnyijeTVP42cJEAb9wsvvMCDPGo+R3CfWh7lF8PxUxebnH4ZxOgx/Zh3Ou8uJn7LI
- szSC+dad15CuHnffmFsb5o8sYVWETP3ZS3vtLDjl7xzUvLXFGQbHZ9vdxCG1JNKpEpA3v
- C86LY0UHqCcTSQ4ecDhLnxUY5NF7y0pXhpvMnLOkXCPpGi3ga1ZpCPIDzzg59mWAWfqtn
- WJH3Wj0F3zF/dfppXHmR1bIQPUlX7JvtECw+Xhl1qaKINO31qnZCxB+k5jgT0EIBIox3i
- UMLLR2TcwrET1U8Hwbo6qAhGaKfEfWV+kwYyS1uMO8pveFtEXx1Ygi0ElYAPRtbJyRg==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ bh=sPWXmV5jgFjfK2eoT9+c86s5PO7b7CDQHVY8/TNmkpU=;
+ b=AYRBmVJIYpcBUHN98cjtQu7/xIbE+sRhk9e+cD60IKhYR8NeiWNIjngtgUZhPLxf5Y4R
+ XT/3Jvb3eOmqLrnQL/A0IRRfaAFo2M5C02bg+0ZdVgGaE0w2QpiCp277onvzFzVNGZumP
+ DhkoudUdSDLeaKR8J3m4we/YCryVvT/Hk2RLJ9JoAey+ozsqr5+IKkqCNmTZkd+auqdVC
+ 5PoLs82tCo/2J1hnUYZHXTMMGe6XiWp6jCZA2sLLXYz3qGSQBGUQf/IU4mwOCtkfH2aS2
+ 7RgZTelfsYeyGwESTZted01Vcx/7uAtFvuoF/F9q0Et+IuV4sfldoTiPdNHV8zDY3dQ==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3B52E606DC
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5128480D2D
  for <buildroot@buildroot.org>; Mon, 19 Oct 2026 19:30:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8904B995AF; Mon, 19 Oct 2026 19:29:17 +0000 (UTC)
+ id 973709876D; Mon, 19 Oct 2026 19:29:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 19 Oct 2026 21:21:12 +0200
+Date: Mon, 19 Oct 2026 21:25:20 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4eeec84c3341715e0436e40f94b31379f227000f
-X-Git-Newrev: 24590006a64e09a52ea6ed254c706877b9706e61
+X-Git-Oldrev: 24590006a64e09a52ea6ed254c706877b9706e61
+X-Git-Newrev: 3e1ac8ad16a8d0d54cf0757faa414ff663174ae1
 X-Patchwork-Hint: ignore
-Message-Id: <20261019192917.8904B995AF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mender-update-modules: add missing
- BR2_USE_MMU dependencies
+Message-Id: <20261019192917.973709876D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/podman: propagate missing
+ dependency inherited from runc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,72 +118,76 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
 	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/24590006a64e09a52ea6ed254c706877b9706e61
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3e1ac8ad16a8d0d54cf0757faa414ff663174ae1
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-BR2_PACKAGE_MENDER_UPDATE_MODULES_RPM selects BR2_PACKAGE_RPM without
-replicating its BR2_USE_MMU dependency.
+BR2_PACKAGE_PODMAN has:
 
-BR2_PACKAGE_MENDER_UPDATE_MODULES_SWU selects BR2_PACKAGE_SWUPDATE
-without replicating its BR2_USE_MMU dependency.
+	select BR2_PACKAGE_RUNC if !BR2_PACKAGE_CRUN
 
-This commit fixes that by properly propagating the missing
-dependencies. There is in practice no functional change:
-BR2_PACKAGE_MENDER_UPDATE_MODULES depends on
-BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS and go is only supported on
-MMU-capable CPU architectures. But since there is no formal
-relationship between BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS and
-BR2_USE_MMU, automatic validation cannot infer that
-BR2_PACKAGE_MENDER_UPDATE_MODULES cannot be selected on !MMU systems.
+but forgot to propagate the
+BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS dependency from
+BR2_PACKAGE_RUNC.
 
-Fixes: a474642fdcd8c69e12126bbe8304479aa855d916 ("package/mender-update-modules: new package")
+Propagating this dependency requires a bit more care than usual, due
+to the ability to use crun as an alternative to runc.
+
+We also propagate it to the only reverse dependency of podman, which
+is mender-update-modules.
+
+Fixes: ebbaac08e3f462bf023c12077f739ed1c0543eb2 ("package/podman: new package")
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/mender-update-modules/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/mender-update-modules/Config.in | 2 ++
+ package/podman/Config.in                | 2 ++
+ 2 files changed, 4 insertions(+)
 
 diff --git a/package/mender-update-modules/Config.in b/package/mender-update-modules/Config.in
-index 88e0805976..dac83c47ec 100644
+index dac83c47ec..53ffd13dbf 100644
 --- a/package/mender-update-modules/Config.in
 +++ b/package/mender-update-modules/Config.in
-@@ -208,6 +208,7 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_RPM
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
- 	depends on BR2_PACKAGE_LUA && !BR2_PACKAGE_LUA_5_1
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_MMU # rpm
- 	select BR2_PACKAGE_RPM
- 	help
- 	  The Rpm Update Module updates software on the device using
-@@ -220,6 +221,7 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_RPM
- 	  https://github.com/mendersoftware/mender-update-modules/tree/master/rpm
- 
- comment "rpm needs a toolchain w/ dynamic library, threads and lua >= 5.3"
-+	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
- 		|| !BR2_PACKAGE_LUA || BR2_PACKAGE_LUA_5_1
- 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
-@@ -228,6 +230,7 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_SWU
- 	bool "swupdate"
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # swupdate
-+	depends on BR2_USE_MMU # swupdate
- 	select BR2_PACKAGE_JQ # runtime
- 	select BR2_PACKAGE_SWUPDATE
- 	help
-@@ -240,6 +243,7 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_SWU
- 	  https://github.com/mendersoftware/mender-update-modules/tree/master/swu
- 
- comment "swupdate support needs a toolchain w/ dynamic library"
-+	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_STATIC_LIBS
- 
+@@ -129,6 +129,7 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_PODMAN
+ 	bool "podman"
+ 	depends on BR2_USE_MMU  # podman
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS  # podman
++	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS || BR2_PACKAGE_CRUN # podman
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS  # podman
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS  # podman
+ 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS  # podman
+@@ -153,6 +154,7 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_PODMAN
+ comment "podman support needs a toolchain w/ headers >= 4.14, threads, wchar"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS || BR2_PACKAGE_CRUN
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
+diff --git a/package/podman/Config.in b/package/podman/Config.in
+index bbcb15691d..a8c625c5b1 100644
+--- a/package/podman/Config.in
++++ b/package/podman/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_PODMAN
+ 	bool "podman"
+ 	depends on BR2_USE_MMU  # fork()
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS  # host-go
++	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS || BR2_PACKAGE_CRUN # runc
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS  # netavark
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS  # libgpgme
+ 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS  # libseccomp
+@@ -91,6 +92,7 @@ endif
+ comment "podman needs a toolchain w/ headers >= 4.14, threads, wchar"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS || BR2_PACKAGE_CRUN
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
