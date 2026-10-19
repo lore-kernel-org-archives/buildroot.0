@@ -4,262 +4,143 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90E4BCCF2E5
-	for <buildroot@archiver.kernel.org>; Mon, 19 Oct 2026 14:18:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51926CCF2E5
+	for <buildroot@archiver.kernel.org>; Mon, 19 Oct 2026 14:18:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 56E2380E02;
-	Mon, 19 Oct 2026 14:18:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0704480DF6;
+	Mon, 19 Oct 2026 14:18:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EtbC5EtZT9vi; Mon, 19 Oct 2026 14:18:04 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 688BA80DBB
+ id Uix8y_1XGf5e; Mon, 19 Oct 2026 14:18:09 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org E144580DF7
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=3; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792419484;
-	b=tPiwWiBMQUoaOVyutOeMXSYrH/pj2nC7a4kS7cdH/67cfZ6Ky2X+KSIq9QDrKevvEY5X
-	 oRdaVSgDb19wRaMmdxlR7UCYLHS9QWGmkZc0Lxaop/QTIE5vL52CMgKYCUrJDyeGEJro3
-	 v6Dyn1RXBOpGd6p44ejDWozMoyoxt31LTgKkIxOyigoiBnC2Awl80989WE2PMBrmcRhuL
-	 +LdQxGtXxTu1bueTZTrtv+0FdHgD1ybFitqWeikTjeQPoPZrGj60cdpSD4SFrTizx8Ih5
-	 GgguAStWpmiZ1j8kXbziQjziohcI3shU2TYJ+fYN6NIeFZpc52gioIOmsmd8nRndiNA==
-ARC-Message-Signature: i=3; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792419484;
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792419489;
+	b=b9VpCyMhkcyvO4/qxmFJsjnK7djBCvgDmq21g4s6zGy03H7H8TBJ6Y/RthwDPF6pblnB
+	 eFSKfsg6tX0PXf9OcTVbUsjwbtmqc15kuOOxXfF7aJFLXRuNcneHPS76pZQQ97HdQaZg0
+	 Taxt44AfoH1y+Achq+8u9uc4xmlifVdrMlo6ycn4rJ8S0ha3e2yUhPZoEZ9FyYfKfyY04
+	 tqR4jkV20LUNOQl0NltdA+S9yb11owSCARuzothhf11Px1gYFTfqeimzFUhsomV2zKlUm
+	 wS/zpw5Oy61qlboItCGcb0ntzdT4hkuCt1vrIr4OiOFvOjYidPWGanDutBWYG5l7ceg==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1792419489;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:Received:Received:X-MS-Exchange-Authentication-Results:
-	 Received-SPF:Received:Received:Received:Received:Received:Date:To:CC:
-	 Message-ID:X-PGP-Fingerprint:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:X-EOPAttributedMessage:
-	 X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-Exchange-RoutingPolicyChecked:
-	 X-OriginatorOrg:X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-Id:
-	 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:
-	 X-Proofpoint-ORIG-GUID:X-Authority-Analysis:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-GUID:
-	 X-Proofpoint-Spam-Info:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:Content-Type:Content-Transfer-Encoding:
-	 Errors-To:Sender;
-	bh=rlgzphh218rsP9dwUi86BlXUXI3hHXbzZeWNZimG0Uc=;
-	b=MLr0AzQfI+KdY7RUCyjInnVVcNExZBbFI6HKwUuRUgQET2kEKncwBk7reZZEFB/huhhl
-	 YT9Rz6916lO7z4vaDwkbobPxGLTwUHMNoUjRe+X8CD3rzdbov2uI/8lWW+eckUYXYTdhP
-	 sQjcssL0xaxqPHmlo1dAtIjiH/7LydqFtk+EB/oRFZYeveU0THfXpEfmGHczwBPPc7YH8
-	 iQTTnUe3vpTQ5C+D7YPwk/vMK6xBTxiiyiUXJjR+l+z3ClURcmz5yvN2FsocAzISEirv9
-	 MszGwT2VhmaQDcJ4zKceP8gsWHh8XdvYM8aatpom3NuAgg5b9a3QWWZyj1SXHVC8n8Q==
-ARC-Authentication-Results: i=3; smtp1.osuosl.org; 
+	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 Received:X-Google-Original-From:To:Date:Message-Id:X-Mailer:
+	 In-Reply-To:References:MIME-Version:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=b36o6fR2w5eYn5FTe3oSwKVIcWcgfOJ2DYXoF+oTBAk=;
+	b=JWnoUWSnPYRoX0coGeu8/7PqRJ44qhiXXcPVrt7sXUF2Vl0Q1vkVynFiwcXPUXJ8TwFi
+	 RPqfE5F2y0h7GuNVIjwxCYbGWJ5mmv9Y/FuH4TGldF4s4T7f0XcGOvE4rypM3dm499fQb
+	 vpTupMEmiZoO8qa3qWW30817EhaTOvIqOq0XD9dDTe5nAD+t/nM1sah9v6dfYKKzpLf4C
+	 07OSC4t165EQqe4Mfig2yOZXPoGSxHB1wFCsjYr9E0zTqbWsOWnjzhOOarXQQDiOecOYF
+	 M/3Wj/EfZD/yCh6eTTaza2cIQ9ezIO6FvEXtcY4NyTxft4rEYvWi2VLqcRZXW01dN9A==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792419484;
-	bh=rlgzphh218rsP9dwUi86BlXUXI3hHXbzZeWNZimG0Uc=;
-	h=Date:To:CC:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=TPYcTLjmpJxejnuWXwrHTuoHJzTkcvS/uWi1R+ow8L6hDSUaj31rvDbiS81UfH8c9
-	 RZLlhxCKt6zMK88aEeEcxEPPb1RbdvC0sWvjAp1+Cp0Cl9LSveNzHiR7vo7ZKLDFFi
-	 dw4D+6aN6q1gsV/34JkzAoNsBZUPGm2S+8klhEeKzyHOJbEKlNIx8WdC93MYA8/CdI
-	 L6e3tRL3hFCOu6ZGa7SDhMcv/LlZ9jMDY+hPnaxpZiLN4w3ld1hMOYtJlTTXMukMXE
-	 mzVeqGYhxs+XNhfoVMpG3BlEqMR0CMdQ6NdCZ/9/RtZ3E0STWpttp5/7wRSCdgugew
-	 KHitxzhkfhGow==
+	s=default; t=1792419489;
+	bh=b36o6fR2w5eYn5FTe3oSwKVIcWcgfOJ2DYXoF+oTBAk=;
+	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=WFOv5ZNkeygyAn8Y9eZdjLEZCKub8mlbXmurVUVKli9VsjogA0uSlkv7PBOTyRPRx
+	 NJJZ5DDyGK8ap9Ll5ME3mlRU1CzHH/BvOdjgU+b6eNVk009qQSXtu91kNLWfScrsTV
+	 O7OsebJ1aKG9z5/r6evtTS2rOLZ+u/aXjbRvFI8ND4zUs+poHdyDDsACkvj0hNJY8v
+	 h57PZRxw+m0ihnSUEepIu35z8MuPRoBQg9/CXe0V267BVL6o95U4RR1xxic2LcwleH
+	 h/TQMSvJnWkoSBzjcZS+9FmbiQ7lTqkS3+7ALZLIHCbKBcdH993xtOZhf9QTpyzmj+
+	 MZm2ivpIEFqKQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 688BA80DBB;
-	Mon, 19 Oct 2026 14:18:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 60F271AB
- for <buildroot@buildroot.org>; Mon, 19 Oct 2026 14:18:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E144580DF7;
+	Mon, 19 Oct 2026 14:18:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id AB7C71AB
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 14:18:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5289840637
- for <buildroot@buildroot.org>; Mon, 19 Oct 2026 14:18:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 91572606BA
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 14:18:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k2_z1HxTdDOp for <buildroot@buildroot.org>;
- Mon, 19 Oct 2026 14:18:01 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org C98B540633
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=pass; t=1792419481;
- b=H/4mwC6Mow9jG5sJiVqHyCXiAW1eJ5mY/qtbZPxfuqt4lnc4bqbE6OFjr1h8QXpPqEpp
- oZK8F+fBjBGxlFzJqNKzutAmJ8yrv+JyEWFWG93qYvtSsuG23rEBcNYF1wWqac5n1xepc
- /tDUXYK8AgDnycq/TDvmBM7yS/PEfYWMj7GBSScUClgrDN1h8EbhT0Sp0g16KFBp0344C
- rBCvH7WlxV4bjC40LMZpIJVK76px9w+dzHH2dpXFPy3qwIaX0nQwLS5Uo/YWlgbjWwI/w
- eRCivw9Xjv9urKRm3nezzqJ9HD1UExxpiisktrlgl3bJBc+8daMvma++f58W3oambpg==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792419481;
- h=Received-SPF:Received:DKIM-Signature:Received:DKIM-Signature:
- Received:Received:X-MS-Exchange-Authentication-Results:Received-SPF:
- Received:Received:Received:Received:Received:Date:From:To:CC:Subject:
- Message-ID:X-PGP-Fingerprint:References:MIME-Version:Content-Type:
- Content-Disposition:In-Reply-To:X-EOPAttributedMessage:
- X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
- X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
- X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
- X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
- X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
- X-MS-Exchange-AntiSpam-MessageData-0:X-Exchange-RoutingPolicyChecked:
- X-OriginatorOrg:X-MS-Exchange-CrossTenant-OriginalArrivalTime:
- X-MS-Exchange-CrossTenant-Network-Message-Id:
- X-MS-Exchange-CrossTenant-Id:
- X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp:
- X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
- X-MS-Exchange-CrossTenant-FromEntityHeader:
- X-MS-Exchange-Transport-CrossTenantHeadersStamped:
- X-Proofpoint-ORIG-GUID:X-Authority-Analysis:
- X-Proofpoint-Spam-Details-Enc:X-Proofpoint-GUID:
- X-Proofpoint-Spam-Info:X-Proofpoint-Virus-Version:
- X-Proofpoint-Spam-Details;
- bh=k1SfslDZxhMNVdzGw6JtVAR6K7v2toID0YB7Mtgrk6U=;
- b=Og46hCRWC53EgJi0gd7U5lvHQdRaxBn7Wivac3AqaK1FTtptvmRuxuOD8UEYNvEIV6A8
- 40bz+fqkFkEaBIhDMRAqWTSXU/lHZwX0Q+hFhzmzko162/dFVP/0WAuvNxsfTfJhckKwS
- 5bn4xhGiREB/WJratEL75EsobHqqcexRc9L8lkqzpHI8ycNbE4Z1d1I6zUI3kNz6HmLMq
- PgQsplg/LWvr/34MZSk55gj0aVUmr5yq536fTmuVWFx97Z1PLoA5GW9k2mOdwCjoAsCjg
- F05zXXIEjG/dG653kKVeXoC4DS9Ymjgg45iXHklqJZ3VeQhOinMOietfOj9QwZ//UJA==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
- dmarc=pass header.from=ti.com;
- dkim=pass header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=proofpoint-05-2026 header.b="lmW/zPdi"; 
- dkim=pass header.d=ticloud.onmicrosoft.com header.i=@ticloud.onmicrosoft.com
- header.a=rsa-sha256 header.s=selector1-ticloud-onmicrosoft-com
- header.b=hXR4whFk; 
- arc=pass header.oldest-pass=0 smtp.remote-ip=148.163.150.75
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=148.163.150.75;
- helo=mx0a-0002e601.pphosted.com; envelope-from=bb@ti.com; receiver=<UNKNOWN> 
-Received: from mx0a-0002e601.pphosted.com (mx0a-0002e601.pphosted.com
- [148.163.150.75])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C98B540633
- for <buildroot@buildroot.org>; Mon, 19 Oct 2026 14:18:00 +0000 (UTC)
-Received: from pps.filterd (m0380145.ppops.net [127.0.0.1])
- by m0380145.ppops.net (8.18.1.11/8.18.1.11) with ESMTP id 69JDwekP280379;
- Mon, 19 Oct 2026 09:17:59 -0500
-Received: from sj2pr03cu001.outbound.protection.outlook.com
- (mail-westusazon11012006.outbound.protection.outlook.com [52.101.43.6])
- by m0380145.ppops.net (PPS) with ESMTPS id 4hct1jpept-1
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
- Mon, 19 Oct 2026 09:17:59 -0500 (CDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=WKNu+PQH5G4bQSv4Hxq0Dvu7Ghq0ZHZmeXRN/n3OnNkt4+JGohw0ItzgJvj0pzvU6S/9qbdF0EqZsVbhvRNe1tSZPPb2R8oIYq0XChKFfx1QTVfuYgPRz3QeOlZRQ3eYGliw6aLb5dqISCyDukEleyusXCxnc4rJm+DNWcJAeSn8HD2xKcmQrQt01XLZ6X+/uEgNjc66fm96QnhYnV/9ReSI2r3ybBc2iANedGtlZhB/pV/24M6n/gjE+ztu+EHBn2msZUUpvrS0MnaFtcXtD7WcG18+YKKSJSkikUkzLYsdM00+6QJu/8deNIzZy5zkbkDgfXGRAWcZEQN5+xZ+TQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k1SfslDZxhMNVdzGw6JtVAR6K7v2toID0YB7Mtgrk6U=;
- b=o3kHfWzjUDdbr4KL5sT38T0T/t1o46ba5US+bGQJjJlYa/9fu6MkiZ3go2cDp9mIPHdd3+QV1/LI2nqphiMDXx5Kqv1bHeNr5ylzQ6LSfEggfeM6J0kCi0/WCQqfMiltiyxkf3WZKuLZ/IRJaGR/Ws3HY1M9MB8CKQpePPJH1oPhBU+VnSYjYqIfTfEru91jLL9k6Xy7GRDc7GdENQniHECtc9wql02kghEpdFQlgmc0k3Tp5u5YtFiISLX8O8gCNVQKOpODeXlswtvFbSb1irqid1OXwBwYVwFvlg7ge1XOacg3vP+gQEYe8yuHmrsM5EMZZkQCkYSqwLotVUYA+A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 198.47.23.194) smtp.rcpttodomain=gmail.com smtp.mailfrom=ti.com; dmarc=pass
- (p=quarantine sp=none pct=100) action=none header.from=ti.com; dkim=none
- (message not signed); arc=none (0)
-Received: from BN9P220CA0011.NAMP220.PROD.OUTLOOK.COM (2603:10b6:408:13e::16)
- by SA1PR10MB7738.namprd10.prod.outlook.com (2603:10b6:806:3ac::14)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.546.14; Mon, 19 Oct
- 2026 14:17:54 +0000
-Received: from BN2PEPF0000449F.namprd02.prod.outlook.com
- (2603:10b6:408:13e:cafe::44) by BN9P220CA0011.outlook.office365.com
- (2603:10b6:408:13e::16) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.472.20 via Frontend Transport; Mon,
- 19 Oct 2026 14:17:54 +0000
-X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
- is 198.47.23.194) smtp.mailfrom=ti.com;
- dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=ti.com;
-Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
- 198.47.23.194 as permitted sender) receiver=protection.outlook.com;
- client-ip=198.47.23.194; helo=lewvzet200.ext.ti.com; pr=C
-Received: from lewvzet200.ext.ti.com (198.47.23.194) by
- BN2PEPF0000449F.mail.protection.outlook.com (10.167.243.150) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.522.6 via Frontend Transport; Mon, 19 Oct 2026 14:17:54 +0000
-Received: from DLEE209.ent.ti.com (157.170.170.98) by lewvzet200.ext.ti.com
- (10.4.14.103) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Mon, 19 Oct
- 2026 09:17:36 -0500
-Received: from DLEE204.ent.ti.com (157.170.170.84) by DLEE209.ent.ti.com
- (157.170.170.98) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Mon, 19 Oct
- 2026 09:17:36 -0500
-Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DLEE204.ent.ti.com
- (157.170.170.84) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45 via Frontend
- Transport; Mon, 19 Oct 2026 09:17:36 -0500
-Received: from localhost (bb.dhcp.ti.com [128.247.75.137])
- by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 69JEHa5c2947987;
- Mon, 19 Oct 2026 09:17:36 -0500
-Date: Mon, 19 Oct 2026 09:17:36 -0500
-To: Julien Olivain <ju.o@free.fr>
-CC: <buildroot@buildroot.org>, Anand Gadiyar <gadiyar@ti.com>, Xuanhao Shi
- <X15000177@gmail.com>
-Message-ID: <20261019141736.vxoxhvfebtxevtqg@bryanbrattlof.com>
-X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
-References: <20261014-uboot-fixes-v1-0-2676fd37a97a@ti.com>
- <20261014-uboot-fixes-v1-1-2676fd37a97a@ti.com>
- <da1ddb5f52475161b61ff86f347c180e@free.fr>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LpAriT0QRrts for <buildroot@buildroot.org>;
+ Mon, 19 Oct 2026 14:18:06 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 3746E605CC
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792419486;
+ b=fxFTvabm+kzCQQCAhyjhQL1Je43+88COhkrwKN/CS6+F9Bs4wnU2yT6HpcPLsWT2HJ2N
+ uAYL6mb/+jiLNmYjn+g4f7gd2JAUXzKQ0oG07/GfT6kzqepeD3N4T34WX4eTKsfxgfhzW
+ 0p7bcPjuxXXiCJ1zL1sAFuKK+0FyxrV+9atpKEDVwMKNoc4e4Z1Lr7KXCE6mt18Q4+/NB
+ 95GHoS5JChaHnuGqtRCqe0vRDR9Go5NVthssCvYCS5vPE869U9WLLnBRpYaRdO86hknRi
+ HpCWjPIsge/6jylPc5AMs2u5aMIYI0mGlE9l39Qa1TtaBw0wCKHdoGtREr1Na33wX4w==
+ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
+ c=relaxed/relaxed; t=1792419486;
+ h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
+ X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:
+ X-Google-Original-From:To:Cc:Subject:Date:Message-Id:X-Mailer:
+ In-Reply-To:References:MIME-Version:Content-Transfer-Encoding;
+ bh=hfFPhnFMZUlQLkDXjnwJltCrp0pWCHc5sFiQJS9VR/o=;
+ b=ANavDCActlFhQFx26j0GdOo6DirZeq4G8NeTpPq69zdziiLuEqprlN4FT2tA55idzV5K
+ F+p86q7oZ/WmOgHb8II9P7WtQ0E4ovmBAOFGAos/EOcx8v1CMNcuBxly/kB06xEuy/hUV
+ LMPn+9zFCx1DggESEWhTm0SWN1BCylzEC1sW7Oq/fjLzE6Ne88CC4UWrgnYLTkh98X8i5
+ 2ar0JAMu7sPn1C/ddRI5IxV1JQ7aaAxYaZvw20WVSxYqpzmOxUc+bCqB/3pHNKkQMwuCE
+ OiPIhdxDwYqOogV8leDB//LQg9BM7/I0tM0kr8HbylPYUuDnKo1i7IN2HALwh5LIaTQ==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ dmarc=pass header.from=googlemail.com;
+ dkim=pass header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256
+ header.s=20251104 header.b=Kpqzk27N; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::636"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::636; helo=mail-ej1-x636.google.com;
+ envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
+ [IPv6:2a00:1450:4864:20::636])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3746E605CC
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 14:18:05 +0000 (UTC)
+Received: by mail-ej1-x636.google.com with SMTP id
+ a640c23a62f3a-c2e8c710847so260292366b.0
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 07:18:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1792419484; x=1793024284;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to:content-type;
+ bh=hfFPhnFMZUlQLkDXjnwJltCrp0pWCHc5sFiQJS9VR/o=;
+ b=YZyiHkY2TkGAeNF924dRGeg7Gn5StRVLbGB131xJTsH0mVUkXMiSEtXUWrFTfSL9iy
+ d9pnvyIxhCbEF5gaPTHA0NSLDjqPhzJE+vkecj13buCtqdCwiJCn+dMFO/SmS3x1qHEB
+ bw7Zlp/dQUDSNGZO4C30brSaPJDYZMfmDtgEvl410OGxXuvbXWZGkkq0nE7f8wtv4kp9
+ 5CAMP6ySOQLJD/iLEVWMB+yeyFoVwGnASTAq+vNNvv5LBIXIU6Z93cx28M1c3Xq5gN4y
+ OWlL59Sik+HAvKxphwdAlhMWkSYLmxM76/fDQeAIkIbSmfn0AMRnWdcyoRKFQiZUa8bd
+ ZUJw==
+X-Gm-Message-State: AFq9FYKmtAB9RdlyYcBZvUbYVPorBzXGewSxg6JHSHE8a8BB8Mk0v0tA
+ VPeAiYy7PD5VCttWPXZE68YSpYt5226MiJ+B6+o3DULDVGC7IXRKqob5U2p1eQ==
+X-Gm-Gg: AYBFou0b8Y+vp/Oli2mMQVGvNFbHgVHLlYLLT4wRfpcuK8hk3eyMxis/QxJO3pOHZB3
+ pRrOu8JYoa6URwIhz9ANxDQu390QhHBjl7tSGQ7kv22+P1KwRripbbzFZelMx+HbdEF5UDcyakF
+ O2WzzokPWOZDn77XN487XsAvmIMKouvuczZ0DJtoyskyB5xzOnOLFxyMV8sZgwiJyhpVs+7oTDH
+ RWkQlP3v/WdvCvoTQkWoMuKxbbArwZE9hwxCid+F7myJ3F3EzdAfKn4ZLomBR3H8EOuQj6+PJss
+ f0IdTTb5wvea5S5tWGhEYYwh+K1h+sDTp57n4aBGoBwJ4NhXfEGGrIwsDliMaWAHRrZpcexhmvJ
+ Urp75T3rRl2CGkAmyIFpIqPJISEdKWCR2mkAUoFx9gzHl90VX2Z1LiIDtyRFZ5vrjg/dJQSxdRb
+ Ee5KMqi1ARRY0ydk+g3TdUFfzFbnlmb6RDePNldUregic+TWJTyJbb1Wo4o3SMGX+wGRY+YNYOy
+ 8NQdud07CztX+DTMhcFdXZN6MxFAJhhxWZ2oE6t23NXjfU=
+X-Received: by 2002:a17:906:ba83:b0:c26:1649:47ab with SMTP id
+ a640c23a62f3a-c419f8feb44mr515785166b.33.1792419483422; 
+ Mon, 19 Oct 2026 07:18:03 -0700 (PDT)
+Received: from development2.visionsystems.local (mail.visionsystems.de.
+ [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-c40919bde60sm357657866b.60.2026.10.19.07.18.01
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 19 Oct 2026 07:18:01 -0700 (PDT)
+X-Google-Original-From: Yegor Yefremov <yegorslists@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 19 Oct 2026 16:18:01 +0200
+Message-Id: <20261019141801.1653017-1-yegorslists@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20261019060028.1078791-1-yegorslists@gmail.com>
+References: <20261019060028.1078791-1-yegorslists@gmail.com>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <da1ddb5f52475161b61ff86f347c180e@free.fr>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN2PEPF0000449F:EE_|SA1PR10MB7738:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0b1011b5-2f2c-4060-1e63-08df2debc42d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
- ARA:13230040|82310400026|376014|1800799024|23010399003|36860700016|18002099003|22082099003|10067099003|4143699003|261009223027099003|56012099006|41080700001;
-X-Microsoft-Antispam-Message-Info: iT5inebexFmPYnSf+oVMtU7LIXPsSQATChjJu2+oTDVJYhO3RMUXKYM4modkjEUzr3ILVhQwDqxpdfzA/v1ZLYZmiF3KWEHtQtM1sKtr2/CfRQ4wMIs9nWendOh9WpcUOslStF5tMAH6iHyeEDpQPzFciR0RtT4gje4OOGhPBqBgIURD9MYm0NaFhfo0SC0AAyWXbX/2LJq4KBcYu1pOe0XSEzL21uNkirRsbWMwXvhp8Npk2BCgbEsF1PqZ+jd0cEKBGBFzQCw9O/IBus+cIB2lHejLndtQM2I61ww+Q/WeSQxr86ryi3JAWaiHRHQBD51d7k3G5SOPCmffXRwmaIi5Re/kei31vnSQMeH/SgZZgZDn0+yXZU08ftG72Wn7e7TLGaP6AM0lxa1L1zccMGbM55eapyYSBuCBY5uk5PoHaMA1XFui4yYsCmGKHTwxEyJ//VX1fcIuwHTggaJkGZqGDruaQhCY+1YD8ySKoDAW81pSGt2PQMdGH4qVZmBRXN6dSU0xX1SbzTsqOxCKaeTfraMxsR/qySTpAP9HEMefHmSIpQh5qkJSfgL7L50qpFdmlhOmX7mm0Eum3hOBU1Yva4S8MZMbCxs2kXEhquMwZQUfDX8rpSY3SAdakS9r66x/Rqcg0hQHPLgrqWnNAOyKntdaQIeiOumCcJpwLrzDiyeO1o7sCDwza//2hkUQSzwO2cz5wRpiGFsYIbjfJiblDtzQg0lSHeb47sE57XiPo/0ovgKz2r30roTkW2f3nO2wdbkNsSLNMFeXeu1F6w==
-X-Forefront-Antispam-Report: CIP:198.47.23.194; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:lewvzet200.ext.ti.com; PTR:InfoDomainNonexistent;
- CAT:NONE;
- SFS:(13230040)(82310400026)(376014)(1800799024)(23010399003)(36860700016)(18002099003)(22082099003)(10067099003)(4143699003)(261009223027099003)(56012099006)(41080700001);
- DIR:OUT; SFP:1101; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: E6JhSulNyaljvCYCfd2CpZuzyHEn9zgR9bsT6LsTXYGoXHYf+imtin3XtROv3WHKBmqToRC5KPOVuxsOaX06G6RJ2dzx3V8fl9v6MadUXzefMg4dz61IOEoReK4dYliGTq9pGCmsTFSoKwmR6NsIpH4RPKNNj0iPNKx5xA0gG0R9SYoxKEGQ45kH13qNsn0/gOG/itTa53/4Jp3lzaarsqC2hPobj1s/xKDqCjDNKrtLvqfh2CV+wB+LV62hvPAMgqpRKahR/xZLlaXahMBoF5qWzJ6GbKVxhP6Cz0++pdzC5Xamol9H84A1GizHWN5cMM+GBCnKmwL6Omd+2TflklWvF+06o7GE6Te9qefFcWRW2xlhs1Z/K35uarEg+HeR78OYvCbXg9XBciWOoFpy1TIUUO8ftrXruvy6wq0Q7tRme+WFMHMATvebSXTBH8xL
-X-Exchange-RoutingPolicyChecked: dJewWvk/LFUicWsZxISdCdMH78M4AvBr0/fKlMRQgErwgzy0Q///m0eRwqMWsm5u3DSVd3w5S4Jvb13j2gRhNH0yn2Gi9hGMsS5V+ehmS7BdmACFzW6loi8IQ7iIOgorDniVFySrbLaLFvp3akBeU+/k5X54KRuXbke6aro9PaL5sDFRNdYrLstLZBCnKx7oQ20yiLvL1djqOqNl4zPIa2t9DEBRY42R/RPjLftsPc3Wc2mizByangoQkFY764/rnKcmyvYYfxJGK1YY+CzJT7s5WyuN3WOdxMNdh/z09+BSbAkhHdb/C4kGf6gAto76lEKPf1SP9Lxd1CfgwtR65g==
-X-OriginatorOrg: ti.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2026 14:17:54.0532 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0b1011b5-2f2c-4060-1e63-08df2debc42d
-X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7; Ip=[198.47.23.194];
- Helo=[lewvzet200.ext.ti.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN2PEPF0000449F.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB7738
-X-Proofpoint-ORIG-GUID: iYPDzo-bF_LgHslkKwrOuy9mCTp9hTaZ
-X-Authority-Analysis: v=2.4 cv=ZN9CCn7b c=1 sm=1 tr=0 ts=6ad62697 cx=c_pps
- a=JXicDZ6CVi74U63V4YFJkg==:117 a=WotqVVQAdb04rnGuttW3Kw==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10
- a=s63m1ICgrNkA:10 a=AlMIdn_sM9wA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Z8NIEmU8O1QQgoT56wFK:22 a=gO1vWkAQAl3rybz1DQOp:22 a=p0WdMEafAAAA:8
- a=YRHvXXt1AAAA:8 a=sozttTNsAAAA:8 a=r0UBTMTOJqwyHRUxTBYA:9 a=QEXdDO2ut3YA:10
- a=9bw_jnHfPby8klRCszyn:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDE5MDA1NiBTYWx0ZWRfXxf/TDat0jylv
- fVD8voLK6vKvRaHU2rXzdtjl0loU7K89wvJq7e/ckEwctvJzwYQ3iQ7BpHd5EWdD1k2hU3PLW4t
- qGAeIZ1Wvnkcp6WWPqVx+z0Cy/JvBttD49VUKWrmvSINBdsAGJGImeH2onWZUczVbGK9OdMMpBg
- 9dnegYklrwwu+QX7Wzdw8Lv4OgSTjoB00JT8yj3XVkNlrEFQlhXapHehv4UuHH7m70hOLV3w4PQ
- o2THtxzr7p5LLU8upwqeytG9dOR4GDAXFiaVWKApqoLtNS4ZrzbHyNhUrHQ0fgLwQwBr8pafN6h
- RKQmUaI+8Z39S0ciKOo47s4w03XEMzu9IYnfo2LG9J+j+TqKgDnzHfxdBITOOBX37tQtGizNr8Y
- h8OLRe4AQlkkHlZszNCCSa1oR8v9c8a2jDDUEagJ7xs0DuhbP2+5MxEB8fDiJTK44dzY22dng62
- 2/0mhY64q/vuDhVSSjA==
-X-Proofpoint-GUID: iYPDzo-bF_LgHslkKwrOuy9mCTp9hTaZ
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDE5MDA1NiBTYWx0ZWRfX3DTCfpCEbha5
- 9wZGM8O0EGC5yZs/KEn7O2u/uphBL6IF0CbTrJp7mGdcWtix6VliqU+nKGP+92xBKohRtTGkL9H
- 2Qe6pk2T5BJm/fHZiXYVucXSg4cL7S0=
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-10-19_04,2026-10-14_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1011 spamscore=0 phishscore=0 impostorscore=0 lowpriorityscore=0
- suspectscore=0 bulkscore=0 priorityscore=1501 malwarescore=0 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2610080000 definitions=main-2610190056
-Subject: Re: [Buildroot] [PATCH 1/4] configs/ti_am62ax_sk: bump tfa,
- linux and uboot versions
+Subject: [Buildroot] [PATCH v3] package/ncftp: fix cross compilation
+ detection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -271,37 +152,172 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Bryan Brattlof via buildroot <buildroot@buildroot.org>
-Reply-To: Bryan Brattlof <bb@ti.com>
+From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
+Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On October 18, 2026 thus sayeth Julien Olivain via buildroot:
-> Hi Bryan,
-> 
-> On 14/10/2026 19:10, Bryan Brattlof via buildroot wrote:
-> > Bump the am62ax-sk reference board to use the latest stable tfa, uboot
-> > and linux kernel releases to pull in the latest bug fixes and features.
-> > 
-> > Because swig 4.5.0 removes support for Python 2 compatibility we need to
-> > backport a patch for U-Boot to remove the Python 2 macros it uses to
-> > generate the final fimrware images.
-> > 
-> > Signed-off-by: Bryan Brattlof <bb@ti.com>
-> 
-> I applied this series on master, thanks.
-> 
-> For info, I did minor changes to fix check-package errors.
-> I added the missing "Upstream:" and "Signed-off-by:" (with my name)
-> tags. I also added links to upstream hash source in linux.hash
-> files. See for example:
-> https://gitlab.com/buildroot.org/buildroot/-/commit/5ff10177c49d18878e44a1d8ab33e24d1e72ba50
+From: Yegor Yefremov <yegorslists@googlemail.com>
 
-Thank you Julien! My apologies for not catching something so trivial.
+ncftp still ships a configure script generated with autoconf 2.13, which
+determines whether it is cross compiling by simply trying to run a
+trivial program built with $CC, instead of looking at --host/--build.
+That heuristic breaks when the build machine is able to execute the
+binaries produced by the cross compiler, which is typically the case
+when building for x86/x86-64 on an x86-64 machine:
 
-~Bryan
+  checking whether the C compiler (...) is a cross-compiler... no
+
+configure then takes the AC_TRY_RUN path for the remaining tests. Those
+tests link against the target libraries but are executed on the build
+machine, so they fail as soon as more than the bare C library is
+involved. The most visible victim is the curses detection, which links
+the test program against the target libncurses and then runs it:
+
+  checking for curses library headers... checking for ncurses.h... yes
+  checking for curses.h... yes
+  checking for curses library... no
+
+With no curses library, ncftpbookmarks is silently dropped from the
+build and installation later fails with:
+
+  install: cannot stat '.../build/ncftp-3.3.0/bin/ncftpbookmarks': No such file or directory
+
+Other checks are mis-detected the same way, e.g. the 64-bit integral
+type checks, which end up breaking the build itself:
+
+  checking how to scan a 64-bit integral type... cannot scan
+  io_get.c:763:96: error: expected ')' before 'PRINTF_LONG_LONG'
+
+So add a patch making the generated configure script follow what
+autoconf has been doing since 2.50, and consider the build cross
+compilation as soon as --host is given and differs from --build,
+regardless of whether the produced binaries happen to be runnable.
+
+Regenerating configure instead is not an option: the macros in
+autoconf_local/aclocal.m4 rely on autoconf 2.13 internals (AC_LANG used
+as a value, AC_FD_CC, __oline__, ...) and upstream generates configure
+with a patched autoconf 2.13 (see autoconf_local/acgeneral-2.13.m4.patch
+and acspecific-2.13.m4.patch). A modern autoconf fails with:
+
+  configure.in:53: error: AC_LANG: unknown language:
+
+This regression was introduced by commit
+f8bc27111531e9607f79121414f61c0c2d5f83c0 ("package/ncftp: bump to
+version 3.2.9"). Before it, a pre-configure hook regenerated configure
+with autoconf precisely because the bundled script "doesn't detect
+cross-compilation correctly". With 3.2.9 that regeneration started to
+fail, so the hook was dropped, which brought the broken detection back.
+That commit left the host-autoconf dependency behind though, so drop it
+now.
+
+The issue is present since 2025.05, and in 2025.02.x since 2025.02.1,
+where the 3.2.9 bump was backported as commit
+6b0e4d82c31ee04e8a6abb48323252a7cd97c177.
+
+Fixes:
+https://autobuild.buildroot.org/results/ab25f98d7ab8b397e2aa4f87af9cf1d814f3d6cc/
+
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+Changes v2 -> v3:
+  - identify the commit that introduced the regression and the affected
+    releases, including 2025.02.x (Thomas)
+
+Changes v1 -> v2:
+  - explain why configure is patched rather than regenerated (Thomas)
+  - drop the leftover host-autoconf dependency
+
+ ...cross-compilation-from-host-and-buil.patch | 60 +++++++++++++++++++
+ package/ncftp/ncftp.mk                        |  1 -
+ 2 files changed, 60 insertions(+), 1 deletion(-)
+ create mode 100644 package/ncftp/0001-configure-detect-cross-compilation-from-host-and-buil.patch
+
+diff --git a/package/ncftp/0001-configure-detect-cross-compilation-from-host-and-buil.patch b/package/ncftp/0001-configure-detect-cross-compilation-from-host-and-buil.patch
+new file mode 100644
+index 0000000000..c3ecd61d1f
+--- /dev/null
++++ b/package/ncftp/0001-configure-detect-cross-compilation-from-host-and-buil.patch
+@@ -0,0 +1,60 @@
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Thu, 3 Sep 2026 10:00:00 +0200
++Subject: [PATCH] configure: detect cross compilation from --host and --build
++
++ncftp still ships a configure script generated with autoconf 2.13, which
++determines whether it is cross compiling by simply trying to run a
++trivial program built with $CC. That heuristic breaks when the build
++machine is able to execute the binaries produced by the cross compiler,
++which is typically the case when building for x86/x86-64 on an x86-64
++machine: configure then concludes it is not cross compiling and starts
++using AC_TRY_RUN based tests.
++
++Those tests link against the target libraries but are executed on the
++build machine, so they fail as soon as more than the bare C library is
++involved. The most visible victim is the curses detection, which links
++the test program against the target libncurses and then runs it:
++
++  checking for curses library headers... checking for ncurses.h... yes
++  checking for curses.h... yes
++  checking for curses library... no
++
++With no curses library, ncftpbookmarks is silently dropped from the
++build and installation later fails with:
++
++  install: cannot stat '.../build/ncftp-3.3.0/bin/ncftpbookmarks': No such file or directory
++
++Follow what autoconf has been doing since 2.50 and consider the build
++cross compilation as soon as --host is given and differs from --build,
++regardless of whether the produced binaries happen to be runnable.
++
++Note: configure is not regenerated during the build, hence the generated
++script is patched directly.
++
++Upstream: N/A, patching a generated file (upstream has neither a public
++VCS nor a bug tracker)
++
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ configure | 7 ++++++-
++ 1 file changed, 6 insertions(+), 1 deletion(-)
++
++diff --git a/configure b/configure
++index d955e20..2311c73 100755
++--- a/configure
+++++ b/configure
++@@ -845,8 +845,13 @@ int main(void){return(0);}
++ EOF
++ if { (eval echo configure:847: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
++   ac_cv_prog_cc_works=yes
+++  # If --host was given and differs from --build, we are cross compiling,
+++  # even when the build machine happens to be able to run the binaries
+++  # produced by the cross compiler.
+++  if test "$host" != NONE && test "$host" != "$build"; then
+++    ac_cv_prog_cc_cross=yes
++   # If we can't run a trivial program, we are probably using a cross compiler.
++-  if (./conftest; exit) 2>/dev/null; then
+++  elif (./conftest; exit) 2>/dev/null; then
++     ac_cv_prog_cc_cross=no
++   else
++     ac_cv_prog_cc_cross=yes
+diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
+index c56fc86848..4075449c53 100644
+--- a/package/ncftp/ncftp.mk
++++ b/package/ncftp/ncftp.mk
+@@ -11,7 +11,6 @@ NCFTP_TARGET_BINS = ncftp
+ NCFTP_LICENSE = ClArtistic
+ NCFTP_LICENSE_FILES = doc/LICENSE.txt
+ 
+-NCFTP_DEPENDENCIES = host-autoconf
+ NCFTP_CONF_OPTS = --disable-ccdv
+ 
+ ifeq ($(BR2_PACKAGE_NCFTP_GET),y)
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
