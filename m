@@ -1,274 +1,272 @@
-Return-Path: <buildroot-bounces@buildroot.org>
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-	aws-us-west-2-korg-lkml-1.web.codeaurora.org
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 651B2CCF2E5
-	for <buildroot@archiver.kernel.org>; Mon, 19 Oct 2026 14:30:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D35B60A8F5F
+	for <buildroot@archiver.kernel.org>; Mon, 19 Oct 2026 15:21:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=P6OFthX9
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 18FAE80D35;
-	Mon, 19 Oct 2026 14:30:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 66171809BE;
+	Mon, 19 Oct 2026 15:21:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kUiWlOqDWbS9; Mon, 19 Oct 2026 14:30:10 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org E3DD380D9F
+ id g-HGwB7dnJvp; Mon, 19 Oct 2026 15:21:37 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 48F3F80C6F
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792420210;
-	b=oacUSvZL0QOWdzArE6QgLlF1BFEV+cz/v8zixRXl3AoNXXTycxgP0jFLkbPOB8Pixsix
-	 4CnpFn4wR3my/DfPMcSv/lCXafBbFkWAWwbA7sGXntid2qUL1J2DarUrh3x1YqfxCWutq
-	 EacF2p13HCOSw7MZHynr0NaKDuaDJ3o9+Pl283NVArIon8/kWl1xWNDIx6Z38i40MeNJw
-	 JBqFDxNZBS9hXlnQgvlwua51GEbX84ds52prNCNX+fDbLgOBs0iyu2Acj4/ufHwxFVTPJ
-	 IVPO9u2Okx0gkKAcjd3XELdqQeCSZIadVLLs189QDgWahlGShTnV8FaE4JMeWDHm04w==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792423297;
+	b=Pj+foCk3cLwenbSQ3OKKR2VebFYZgF80/i2uKP3aJ0a6w55GZPpgkvf4RXnKVb6WGCyZ
+	 l7EswEzXjGfJS5HlD4XZ07YVlWnVtbyJ37w6o8uFdNp9X/lTI+ADwarJjFZr/o+ChxN7R
+	 QCPV+4D3nDH7XogvYxhwSvDbnRaIF2ZZUzeXgsNGi3QSMo9pqeuAsD269uR/cr8GPrxh8
+	 UwHt5+IUXs1gQL6Ftf9XFC0x6QhMKiAG8WDqG4Th07bB3bqqNX0pk2n5qHoFyOcrTu80v
+	 9pzrwNBT6o3seSp+kRgqjDjwAR11XhQGcVLF4roOTeNvUOvCTvmSOzIUevoGWd0ljng==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792420210;
+	c=relaxed/relaxed; t=1792423297;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=B87k5eXV2r+15HC3MWcRP6dORqUSdBTZ8bpE1SlAZjg=;
-	b=d0FV3TxAk/1WPK2ddflabwClEVsAQQ99vcxP7/phnfwM7YxT7bvAaX9TLeBiWhao/L/g
-	 iyY61b0fKbUnOWiglqg8fqBql9Ubg1GYYGoVQI8+r65D8WqbyaeiFWQThveh+V950Vctl
-	 LbnJscL/kjSBtVYAX4RpZfLvmx10rjqixmNKNwGKQHR95yLfKe2mT+EWqzt2AFW+5H1nF
-	 lugj12wbtq4U5T1KVX1WuumKcrd16/zqqmofTv6OrV0r3q+DKpnoEQuK2PkD2T9UUGkox
-	 WBCkGi9ynO1BDV4CC+ah0OcUbyxXAAAP2Eke0AIz40gZSDOazrXZgMjOK5h1Eh2b0qg==
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:Received:Date:MIME-Version:Message-Id:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer:X-Last-TLS-Session-Version:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=/v5jKuXTvkOuhV18PDj4cwfAIAOV1rAFYcvGsFEg3S4=;
+	b=EZOd/dgXQaZCpQH9Jirb9q4lKrGkj0OzhQcpO2pVdgq3jRRmSOm5WK58sGWhL1TR7hv8
+	 gFzfYXe9xhHENdIFAUQMB0CEGeePwwJ+6SZ4yRuLh5txaQ1TZ5nXVE7AOcvzR2rT3pLw6
+	 SbW1TnRmqUwvgooc7lr18Cf2Mn5SUvzMEuSYJR202kILsk/bJKK+krcATpb11TWLP8kOG
+	 PGWGuPYZi8r5UU4DT7ZaMTIzO+SdF3Hz8cr9F8Yb9hcgtiRj5qIVTdU/+tF/7m7dCDltl
+	 mOrX5bIDUaGZPu2URZjo3zsPFRa5EaQdeKbQb4ZjWI1l/q3BgIKE9d2X5c2Mau85t7A==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792420210;
-	bh=B87k5eXV2r+15HC3MWcRP6dORqUSdBTZ8bpE1SlAZjg=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=NvbNRjAA5Yd+PqkjNq529Y1rxjqa85Kb/EZQMD8JpsKJfpgkc7n2fi+v14v6jSdYy
-	 M0T9/b1bfJoCdPUtATiXWnesA03ygI+5p3KIdb3Hn6zuHrvJuM2Kz1YxU85Z6VKdBD
-	 5UVKiyk7zQdREP4I2C/DQZzzdhhtP8ZIDkt7GKnI88IwnhLUaVW7GQq1VnvSp/zH0h
-	 z7kkRUOM31/bsZy9sAa7H+IWmU6NEpcPq8KwWXVsgETgUqabsvHmnNM0h10J5Rg4QH
-	 EpaOX6H+H44eX/jQ/tqUn/owuAVK3bZaGihpvTH5pYkSBUR1HjfRSKVFVWhSVkT6kI
-	 O+0rLpAI5DJOg==
+	s=default; t=1792423297;
+	bh=/v5jKuXTvkOuhV18PDj4cwfAIAOV1rAFYcvGsFEg3S4=;
+	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=P6OFthX92Pmbmd39LElDWvJelEO1zllZmBzJJMe6a/MVHgpTB4D8MtZ89uvjuN3K1
+	 qwBDty8yuzxO7+GJDgjGdMwIRob4agYn8htlML6d/DQ7GZyKaYNifOSQE1JeVhQkzH
+	 hy4JhKyixF2slFMXNaiK5AVY7AWh5m3h5yIfjjM/7jLq0UEc+YJq2xaSsECUvGcODm
+	 P4h5pNh/kyokPWjvHIxlvcBxWgIUGWeqed+YW4c8HAT3pTruG6keNLndpQ4SSasFCk
+	 V+tRE3NzQk15FnNFdWb2rjN9+mDDXssuRLIoInFB6nzXYeWazX2HsZqyr6H0C8W5V3
+	 NR5jkuouA5NDw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E3DD380D9F;
-	Mon, 19 Oct 2026 14:30:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 48F3F80C6F;
+	Mon, 19 Oct 2026 15:21:37 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 1461E1AB
- for <buildroot@buildroot.org>; Mon, 19 Oct 2026 14:30:08 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id BF7B41DE
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 15:21:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 063C880D9F
- for <buildroot@buildroot.org>; Mon, 19 Oct 2026 14:30:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A54CD80C6F
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 15:21:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HfqHqKNk24Rb for <buildroot@buildroot.org>;
- Mon, 19 Oct 2026 14:30:07 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 00EE580D35
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792420207;
- b=dPSIzKRPSOJ9S4q0ejZ9/wD6n8H1TV2zmBAFJiP+i1MUPFKkyEjXiEjbWjMNj38FwQEd
- XtJiVsN8YhZNdZpmIWTPEt4RgIdftdp3Kh/nC27wM3g82x0K6qz6sIX2wfpwhYCov6Fx/
- i+TbdauuuHp6Cj3CcHH4SJryRViiYW1XqJmMaSEn+GbBPHkdb6IlY31qUxNUz7GQfE9OW
- LhQosRVXZXpTqq+8AGnWahjKsATvjDp3PIthT5mZA2DOsJB6C41qUpjAUpfmu+GyK2VdX
- JBCa7GbWFIXmS29LrSvQLo9YKihox8K3QVcU8k8m1oEIjECmcQaJITuyWqWnZf1dZww==
+ id 3r0s2tvVT-vL for <buildroot@buildroot.org>;
+ Mon, 19 Oct 2026 15:21:34 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org E51FB809BE
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792423294;
+ b=kN1dBFKXdtd9aoZkuBDS6FJdFeZbebAjrUOSs62yjXHlW6kdvGu485Lz0QADU2b3yGcc
+ GSWC6AZCTA90XfmOOC5PQ12g7txUb96wgUfdo8kinYeAWBtstjmGj1CtNFkFQK5KfpOtN
+ hEaGgudHQyjlhYzQ8qpWUeJlfzxoLRkeA0aR8ArDgtSqpygiQGtkjLXkGRydre8z6s0oi
+ uZG0zhcnZH82sFTuJpaVFjP52rLeW3pnofQ/V9nVw3MrCzf4yx4sVu0jA6DFS5qoUx4MC
+ k4HTXInYLrfkS6AoLfiQ8dWLss2CMX3b6RX9qQj1lpwTqJ/Enk6EEqxSbx3KpjTjhGQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792420207;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=KZplvon8Szy103w+8z2c+QfnPAA8saU7g4ozXRad8n8=;
- b=brCbbuFSDwgBFVokN14qEFZLA4AVNgPZQa4IyGK1WOs04PQJgXa5xEsMhSwunBV2Hyej
- SzEJnAkM39BQ+7ZQIdjIxFoA6p345esneh8YXDRFW/yQ7f+ood5dP/oSIEsxgAox0xXtm
- O7+qziYpI6hGEMFE5Hu5f4/8fNDgAY46lJbsKd+WnY24xqODZDinIClRw/7Itm1DMwGCC
- 8GHRVlydOLvciVtPvrTzbwjxqFRFXOdKbMAJ+oQp6nQUF9Mm6cSpcG0oHAUgkWNAWCHlQ
- tl8TyrrdSj1ruu5oKAN5sesjx/R7zIE90AN3huLD3U7N1sCUz6M0aw50/B2g5Tw80ag==
+ c=relaxed/relaxed; t=1792423294;
+ h=Received-SPF:Received:Received:Received:DKIM-Signature:From:Date:
+ Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:
+ Message-Id:X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:
+ X-Last-TLS-Session-Version;
+ bh=r61IO90y0/LFVACintPvDTJeRnoScOQvuRfTcNdKJdE=;
+ b=DVfvjjIw+kfhNLxcerr/weUY3JDihIsl+0EtKBLejEHPzCWgMN4TXVjAv0nHpiWskLtN
+ 3vUMau6DRJ/3webhjbxAxUSb3fclkE+n+//L6UGuSFiJUx3J5QNPza0q7Qe8rPvQH/Iaw
+ ScGS0GdmnJxzmEBWHLBZdJSRJyQWctu4BPL2Q+rEw6xWl1dSbfAYakPb4w+zdVo2xBew+
+ xfN9ymTNkgcpcwldXXL163bKZx6kdfpr96HPOv2Hllf0N5VVKTWdLp5j9wMKiCcNxjF4B
+ FSXrKdvhhlCzMvHCY9U4YdbnrsDdi+73beiM71rzuumKAEKen4J0m1Lo0dSwJxfKyfw==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ dmarc=pass header.from=bootlin.com;
+ dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=nTstEVdw; 
+ arc=none smtp.remote-ip=185.246.85.4
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
+ helo=smtpout-03.galae.net; envelope-from=alexis.lothore@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 00EE580D35
- for <buildroot@buildroot.org>; Mon, 19 Oct 2026 14:30:07 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 698209871D; Mon, 19 Oct 2026 14:28:44 +0000 (UTC)
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E51FB809BE
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 15:21:32 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-03.galae.net (Postfix) with ESMTPS id 5CDE64E41223
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 15:21:30 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 2ACB960582
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 15:21:30 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 39F2E10328429; 
+ Mon, 19 Oct 2026 17:21:23 +0200 (CEST)
+Date: Mon, 19 Oct 2026 17:21:05 +0200
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
+Message-Id: <20261019-bump_openscap-v1-1-28ee6f7afa48@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXM0QpAMBSA4VfRubayrdS8iiSbg6PM2kFK3t1w+
+ V38/wWMkZChyi6IeBDT6hNknoGbOj+ioD4ZVKFKWUgj7L6Edg3o2XVBWGO07o2WSiGkJkQc6Px
+ +dfObdzuj294J3PcDlI/tqHEAAAA=
+X-Change-ID: 20261019-bump_openscap-b9933d93122e
 To: buildroot@buildroot.org
-Date: Mon, 19 Oct 2026 16:29:17 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 145bbce3eac839e55183db7f09b07e5af2ecaf12
-X-Git-Newrev: c65582cfd29a1c12457fb506014673bee727e9b8
-X-Patchwork-Hint: ignore
-Message-Id: <20261019142844.698209871D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ncftp: fix cross compilation
- detection
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.15.2
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: [Buildroot] [PATCH] package/openscap: bump to version 1.4.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
 List-Id: Discussion and development of buildroot <buildroot.buildroot.org>
-List-Unsubscribe: <https://lists.buildroot.org/mailman/options/buildroot>,
- <mailto:buildroot-request@buildroot.org?subject=unsubscribe>
 List-Archive: <http://lists.buildroot.org/pipermail/buildroot/>
 List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-Errors-To: buildroot-bounces@buildroot.org
+From: =?utf-8?q?Alexis_Lothor=C3=A9_via_buildroot?= <buildroot@buildroot.org>
+Reply-To: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
+X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	RCVD_IN_DNSWL_BLOCKED,RCVD_IN_ZEN_BLOCKED_OPENDNS,SPF_HELO_PASS,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
+	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c65582cfd29a1c12457fb506014673bee727e9b8
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-ncftp still ships a configure script generated with autoconf 2.13, which
-determines whether it is cross compiling by simply trying to run a
-trivial program built with $CC, instead of looking at --host/--build.
-That heuristic breaks when the build machine is able to execute the
-binaries produced by the cross compiler, which is typically the case
-when building for x86/x86-64 on an x86-64 machine:
-
-  checking whether the C compiler (...) is a cross-compiler... no
-
-configure then takes the AC_TRY_RUN path for the remaining tests. Those
-tests link against the target libraries but are executed on the build
-machine, so they fail as soon as more than the bare C library is
-involved. The most visible victim is the curses detection, which links
-the test program against the target libncurses and then runs it:
-
-  checking for curses library headers... checking for ncurses.h... yes
-  checking for curses.h... yes
-  checking for curses library... no
-
-With no curses library, ncftpbookmarks is silently dropped from the
-build and installation later fails with:
-
-  install: cannot stat '.../build/ncftp-3.3.0/bin/ncftpbookmarks': No such file or directory
-
-Other checks are mis-detected the same way, e.g. the 64-bit integral
-type checks, which end up breaking the build itself:
-
-  checking how to scan a 64-bit integral type... cannot scan
-  io_get.c:763:96: error: expected ')' before 'PRINTF_LONG_LONG'
-
-So add a patch making the generated configure script follow what
-autoconf has been doing since 2.50, and consider the build cross
-compilation as soon as --host is given and differs from --build,
-regardless of whether the produced binaries happen to be runnable.
-
-Regenerating configure instead is not an option: the macros in
-autoconf_local/aclocal.m4 rely on autoconf 2.13 internals (AC_LANG used
-as a value, AC_FD_CC, __oline__, ...) and upstream generates configure
-with a patched autoconf 2.13 (see autoconf_local/acgeneral-2.13.m4.patch
-and acspecific-2.13.m4.patch). A modern autoconf fails with:
-
-  configure.in:53: error: AC_LANG: unknown language:
-
-This regression was introduced by commit
-f8bc27111531e9607f79121414f61c0c2d5f83c0 ("package/ncftp: bump to
-version 3.2.9"). Before it, a pre-configure hook regenerated configure
-with autoconf precisely because the bundled script "doesn't detect
-cross-compilation correctly". With 3.2.9 that regeneration started to
-fail, so the hook was dropped, which brought the broken detection back.
-That commit left the host-autoconf dependency behind though, so drop it
-now.
-
-The issue is present since 2025.05, and in 2025.02.x since 2025.02.1,
-where the 3.2.9 bump was backported as commit
-6b0e4d82c31ee04e8a6abb48323252a7cd97c177.
-
-Fixes:
-https://autobuild.buildroot.org/results/ab25f98d7ab8b397e2aa4f87af9cf1d814f3d6cc/
-
-Fixes: f8bc27111531e9607f79121414f61c0c2d5f83c0 ("package/ncftp: bump to version 3.2.9")
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...tect-cross-compilation-from-host-and-buil.patch | 60 ++++++++++++++++++++++
- package/ncftp/ncftp.mk                             |  1 -
- 2 files changed, 60 insertions(+), 1 deletion(-)
-
-diff --git a/package/ncftp/0001-configure-detect-cross-compilation-from-host-and-buil.patch b/package/ncftp/0001-configure-detect-cross-compilation-from-host-and-buil.patch
-new file mode 100644
-index 0000000000..c3ecd61d1f
---- /dev/null
-+++ b/package/ncftp/0001-configure-detect-cross-compilation-from-host-and-buil.patch
-@@ -0,0 +1,60 @@
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Thu, 3 Sep 2026 10:00:00 +0200
-+Subject: [PATCH] configure: detect cross compilation from --host and --build
-+
-+ncftp still ships a configure script generated with autoconf 2.13, which
-+determines whether it is cross compiling by simply trying to run a
-+trivial program built with $CC. That heuristic breaks when the build
-+machine is able to execute the binaries produced by the cross compiler,
-+which is typically the case when building for x86/x86-64 on an x86-64
-+machine: configure then concludes it is not cross compiling and starts
-+using AC_TRY_RUN based tests.
-+
-+Those tests link against the target libraries but are executed on the
-+build machine, so they fail as soon as more than the bare C library is
-+involved. The most visible victim is the curses detection, which links
-+the test program against the target libncurses and then runs it:
-+
-+  checking for curses library headers... checking for ncurses.h... yes
-+  checking for curses.h... yes
-+  checking for curses library... no
-+
-+With no curses library, ncftpbookmarks is silently dropped from the
-+build and installation later fails with:
-+
-+  install: cannot stat '.../build/ncftp-3.3.0/bin/ncftpbookmarks': No such file or directory
-+
-+Follow what autoconf has been doing since 2.50 and consider the build
-+cross compilation as soon as --host is given and differs from --build,
-+regardless of whether the produced binaries happen to be runnable.
-+
-+Note: configure is not regenerated during the build, hence the generated
-+script is patched directly.
-+
-+Upstream: N/A, patching a generated file (upstream has neither a public
-+VCS nor a bug tracker)
-+
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ configure | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure b/configure
-+index d955e20..2311c73 100755
-+--- a/configure
-++++ b/configure
-+@@ -845,8 +845,13 @@ int main(void){return(0);}
-+ EOF
-+ if { (eval echo configure:847: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
-+   ac_cv_prog_cc_works=yes
-++  # If --host was given and differs from --build, we are cross compiling,
-++  # even when the build machine happens to be able to run the binaries
-++  # produced by the cross compiler.
-++  if test "$host" != NONE && test "$host" != "$build"; then
-++    ac_cv_prog_cc_cross=yes
-+   # If we can't run a trivial program, we are probably using a cross compiler.
-+-  if (./conftest; exit) 2>/dev/null; then
-++  elif (./conftest; exit) 2>/dev/null; then
-+     ac_cv_prog_cc_cross=no
-+   else
-+     ac_cv_prog_cc_cross=yes
-diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
-index c56fc86848..4075449c53 100644
---- a/package/ncftp/ncftp.mk
-+++ b/package/ncftp/ncftp.mk
-@@ -11,7 +11,6 @@ NCFTP_TARGET_BINS = ncftp
- NCFTP_LICENSE = ClArtistic
- NCFTP_LICENSE_FILES = doc/LICENSE.txt
- 
--NCFTP_DEPENDENCIES = host-autoconf
- NCFTP_CONF_OPTS = --disable-ccdv
- 
- ifeq ($(BR2_PACKAGE_NCFTP_GET),y)
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Q2hhbmdlbG9nIGF2YWlsYWJsZSBhdApodHRwczovL2dpdGh1Yi5jb20vT3BlblNDQVAvb3BlbnNj
+YXAvcmVsZWFzZXMvdGFnLzEuNC41CgpUaGUgdHdvIHBhdGNoZXMgcHJlc2VudCBpbiB0aGUgcGFj
+a2FnZSBkaXJlY3RvcnkgYXJlIG5vdyBpbnRlZ3JhdGVkIGluCnRoZSBuZXcgdmVyc2lvbiwgc28g
+ZHJvcCB0aGVtLgoKU2lnbmVkLW9mZi1ieTogQWxleGlzIExvdGhvcsOpIDxhbGV4aXMubG90aG9y
+ZUBib290bGluLmNvbT4KLS0tCiAuLi4vMDAwMS1GaXgtYnVpbGQtd2l0aG91dC1jcnlwdG8tc3Vw
+cG9ydC5wYXRjaCAgICB8IDU3IC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KIC4uLmdjcnlwdC1jbWFr
+ZS12YXJpYWJsZXMtaWYtZ2NyeXB0LWlzLW5vdC1mLnBhdGNoIHwgNTAgLS0tLS0tLS0tLS0tLS0t
+LS0tLQogcGFja2FnZS9vcGVuc2NhcC9vcGVuc2NhcC5oYXNoICAgICAgICAgICAgICAgICAgICAg
+fCAgOCArLS0KIHBhY2thZ2Uvb3BlbnNjYXAvb3BlbnNjYXAubWsgICAgICAgICAgICAgICAgICAg
+ICAgIHwgIDIgKy0KIDQgZmlsZXMgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspLCAxMTIgZGVsZXRp
+b25zKC0pCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9vcGVuc2NhcC8wMDAxLUZpeC1idWlsZC13aXRo
+b3V0LWNyeXB0by1zdXBwb3J0LnBhdGNoIGIvcGFja2FnZS9vcGVuc2NhcC8wMDAxLUZpeC1idWls
+ZC13aXRob3V0LWNyeXB0by1zdXBwb3J0LnBhdGNoCmRlbGV0ZWQgZmlsZSBtb2RlIDEwMDY0NApp
+bmRleCA5N2RhNjBmMDMyYTMuLjAwMDAwMDAwMDAwMAotLS0gYS9wYWNrYWdlL29wZW5zY2FwLzAw
+MDEtRml4LWJ1aWxkLXdpdGhvdXQtY3J5cHRvLXN1cHBvcnQucGF0Y2gKKysrIC9kZXYvbnVsbApA
+QCAtMSw1NyArMCwwIEBACi1Gcm9tIGQxMmQ4MjBhOTQ5M2IwYTBlZTFhZDRiMGFlYWE4N2RhMjhh
+YTAwODAgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCi1Gcm9tOiBFbGplZXMgPHl1cnl0dW1hbm92
+LnJAeWFuZGV4LnJ1PgotRGF0ZTogTW9uLCAyNyBKdWwgMjAyNiAwNjo1NzozOCArMDMwMAotU3Vi
+amVjdDogW1BBVENIXSBGaXggYnVpbGQgd2l0aG91dCBjcnlwdG8gc3VwcG9ydAotCi1VcHN0cmVh
+bTogaHR0cHM6Ly9naXRodWIuY29tL09wZW5TQ0FQL29wZW5zY2FwL2NvbW1pdC9kMTJkODIwYTk0
+OTNiMGEwZWUxYWQ0YjBhZWFhODdkYTI4YWEwMDgwCi1TaWduZWQtb2ZmLWJ5OiBBbGV4aXMgTG90
+aG9yw6kgPGFsZXhpcy5sb3Rob3JlQGJvb3RsaW4uY29tPgotLS0tCi0gc3JjL0NNYWtlTGlzdHMu
+dHh0ICAgICAgICAgICAgICAgICAgIHwgMiArLQotIHNyYy9PVkFML3Byb2Jlcy9DTWFrZUxpc3Rz
+LnR4dCAgICAgICB8IDIgKy0KLSBzcmMvT1ZBTC9wcm9iZXMvY3JhcGkvQ01ha2VMaXN0cy50eHQg
+fCA3ICsrKysrKy0KLSAzIGZpbGVzIGNoYW5nZWQsIDggaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlv
+bnMoLSkKLQotZGlmZiAtLWdpdCBhL3NyYy9DTWFrZUxpc3RzLnR4dCBiL3NyYy9DTWFrZUxpc3Rz
+LnR4dAotaW5kZXggNWQ1OWJmM2YwMzZmLi5mMzFjZTgwNDBlMGEgMTAwNjQ0Ci0tLS0gYS9zcmMv
+Q01ha2VMaXN0cy50eHQKLSsrKyBiL3NyYy9DTWFrZUxpc3RzLnR4dAotQEAgLTU5LDcgKzU5LDcg
+QEAgaWYgKEVOQUJMRV9QUk9CRVMpCi0gCQkpCi0gCWVuZGlmKCkKLSBlbmRpZigpCi0taWYgKEhB
+VkVfTU1BTl9IIEFORCAoR0NSWVBUX0ZPVU5EIE9SIE5TU19GT1VORCkpCi0raWYgKEhBVkVfTU1B
+Tl9IKQotIAlsaXN0KEFQUEVORCBPQkpFQ1RTX1RPX0xJTktfQUdBSU5TVAotIAkJJDxUQVJHRVRf
+T0JKRUNUUzpjcmFwaV9vYmplY3Q+Ci0gCSkKLWRpZmYgLS1naXQgYS9zcmMvT1ZBTC9wcm9iZXMv
+Q01ha2VMaXN0cy50eHQgYi9zcmMvT1ZBTC9wcm9iZXMvQ01ha2VMaXN0cy50eHQKLWluZGV4IGU1
+MDU5MDhmNTg0Mi4uMjVlM2NhNTZhMGMzIDEwMDY0NAotLS0tIGEvc3JjL09WQUwvcHJvYmVzL0NN
+YWtlTGlzdHMudHh0Ci0rKysgYi9zcmMvT1ZBTC9wcm9iZXMvQ01ha2VMaXN0cy50eHQKLUBAIC0x
+LDcgKzEsNyBAQAotIGFkZF9zdWJkaXJlY3RvcnkoIlNFQVAiKQotIGFkZF9zdWJkaXJlY3Rvcnko
+InByb2JlIikKLSAKLS1pZiAoSEFWRV9NTUFOX0ggQU5EIENSWVBUT19GT1VORCkKLStpZiAoSEFW
+RV9NTUFOX0gpCi0gCWFkZF9zdWJkaXJlY3RvcnkoImNyYXBpIikKLSBlbmRpZigpCi0gCi1kaWZm
+IC0tZ2l0IGEvc3JjL09WQUwvcHJvYmVzL2NyYXBpL0NNYWtlTGlzdHMudHh0IGIvc3JjL09WQUwv
+cHJvYmVzL2NyYXBpL0NNYWtlTGlzdHMudHh0Ci1pbmRleCAxZjNlNWE5NjNiYmYuLjNmYjZmMTIz
+YzhkNiAxMDA2NDQKLS0tLSBhL3NyYy9PVkFML3Byb2Jlcy9jcmFwaS9DTWFrZUxpc3RzLnR4dAot
+KysrIGIvc3JjL09WQUwvcHJvYmVzL2NyYXBpL0NNYWtlTGlzdHMudHh0Ci1AQCAtMSw0ICsxLDkg
+QEAKLS1maWxlKEdMT0JfUkVDVVJTRSBDUkFQSV9TT1VSQ0VTICIqLmMiKQotK2lmIChDUllQVE9f
+Rk9VTkQpCi0rCWZpbGUoR0xPQl9SRUNVUlNFIENSQVBJX1NPVVJDRVMgIiouYyIpCi0rZWxzZSgp
+Ci0rCSMgY3JhcGlfaW5pdCBoYXMgYSBuby1vcCBpbXBsZW1lbnRhdGlvbiBmb3IgYnVpbGRzIHdp
+dGhvdXQgYSBkaWdlc3QgYmFja2VuZC4KLSsJc2V0KENSQVBJX1NPVVJDRVMgImNyYXBpLmMiKQot
+K2VuZGlmKCkKLSBmaWxlKEdMT0JfUkVDVVJTRSBDUkFQSV9IRUFERVJTICIqLmgiKQotIAotIGFk
+ZF9saWJyYXJ5KGNyYXBpX29iamVjdCBPQkpFQ1QgJHtDUkFQSV9TT1VSQ0VTfSAke0NSQVBJX0hF
+QURFUlN9KQotLS0gCi0yLjU1LjAKLQpkaWZmIC0tZ2l0IGEvcGFja2FnZS9vcGVuc2NhcC8wMDAy
+LURvLW5vdC11c2UtZ2NyeXB0LWNtYWtlLXZhcmlhYmxlcy1pZi1nY3J5cHQtaXMtbm90LWYucGF0
+Y2ggYi9wYWNrYWdlL29wZW5zY2FwLzAwMDItRG8tbm90LXVzZS1nY3J5cHQtY21ha2UtdmFyaWFi
+bGVzLWlmLWdjcnlwdC1pcy1ub3QtZi5wYXRjaApkZWxldGVkIGZpbGUgbW9kZSAxMDA2NDQKaW5k
+ZXggZDRkM2JkMmQxNjUzLi4wMDAwMDAwMDAwMDAKLS0tIGEvcGFja2FnZS9vcGVuc2NhcC8wMDAy
+LURvLW5vdC11c2UtZ2NyeXB0LWNtYWtlLXZhcmlhYmxlcy1pZi1nY3J5cHQtaXMtbm90LWYucGF0
+Y2gKKysrIC9kZXYvbnVsbApAQCAtMSw1MCArMCwwIEBACi1Gcm9tIDViODU4ZDE3ODZjMDI1Y2Jk
+NTBkZmMyODRiMjUyYzNlZTZkZDk5ZGMgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCi1Gcm9tOiA9
+P1VURi04P3E/QWxleGlzPTIwTG90aG9yPUMzPUE5Pz0gPGFsZXhpcy5sb3Rob3JlQGJvb3RsaW4u
+Y29tPgotRGF0ZTogVHVlLCAxOCBBdWcgMjAyNiAwOTozODowNSArMDIwMAotU3ViamVjdDogW1BB
+VENIXSBEbyBub3QgdXNlIGdjcnlwdCBjbWFrZSB2YXJpYWJsZXMgaWYgZ2NyeXB0IGlzIG5vdCBm
+b3VuZAotTUlNRS1WZXJzaW9uOiAxLjAKLUNvbnRlbnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNl
+dD1VVEYtOAotQ29udGVudC1UcmFuc2Zlci1FbmNvZGluZzogOGJpdAotCi1Db21taXQgZDEyZDgy
+MGE5NDkzICgiRml4IGJ1aWxkIHdpdGhvdXQgY3J5cHRvIHN1cHBvcnQiKSBlbmFibGVkCi1idWls
+ZGluZyB0aGUgY3JhcGkgbGlicmFyeSB3aXRob3V0IGEgY3J5cHRvIGJhY2tlbmQsIGJ1dCBsZWZ0
+IHRoZQotdGFyZ2V0X2luY2x1ZGVfZGlyZWN0b3JpZXMgYW5kIHRhcmdldF9jb21waWxlX2RlZmlu
+aXRpb25zIGNhbGxzCi11bmd1YXJkZWQuIFdoZW4gbm8gY3J5cHRvIGxpYnJhcnkgaXMgYXZhaWxh
+YmxlLCB0aGUgR0NyeXB0IGZpbmQgbW9kdWxlCi1sZWF2ZXMgR0NSWVBUX0lOQ0xVREVfRElSUyB1
+bnNldCwgc28gQ01ha2UgZmFpbHMgYXQgdGhlIGdlbmVyYXRlIHN0ZXAKLXdpdGg6Ci0KLSAgQ01h
+a2UgRXJyb3I6IFRoZSBmb2xsb3dpbmcgdmFyaWFibGVzIGFyZSB1c2VkIGluIHRoaXMgcHJvamVj
+dCwgYnV0Ci0gIHRoZXkgYXJlIHNldCB0byBOT1RGT1VORDogR0NSWVBUX0lOQ0xVREVfRElSCi0K
+LVRoZSB0ZXN0IGNvbW1hbmQgcHJvdmlkZWQgYXQgdGhpcyB0aW1lIG1hZGUgdGhlIGJ1aWxkIHN1
+Y2Nlc3NmdWwgYmVjYXVzZQotaXQgcHJvdmlkZWQgLURDTUFLRV9ESVNBQkxFX0ZJTkRfUEFDS0FH
+RV9HQ3J5cHQ9VFJVRSwgYnV0IGlmIG5vIGNyeXB0bwotYmFja2VuZCBpcyBwcm92aWRlZCwgaXQg
+ZG9lcyBub3QgbWFrZSBzZW5zZSB0byBwcm92aWRlIHRob3NlIGNtYWtlCi1jb25maWd1cmF0aW9u
+IG9wdGlvbnMgcHJldmVudGluZyBkZXBlbmRlbmN5IHNlYXJjaCBtYW51YWxseS4KLQotR3VhcmQg
+Ym90aCBjYWxscyB3aXRoIGEgQ1JZUFRPX0ZPVU5EIGNoZWNrIHNvIHRoZXkgYXJlIG9ubHkgYXBw
+bGllZCB3aGVuCi1hbiBhY3R1YWwgZGlnZXN0IGJhY2tlbmQgaXMgcHJlc2VudCwgZXZlbiB3aXRo
+b3V0IHByb3ZpZGluZwotLURDTUFLRV9ESVNBQkxFX0ZJTkRfUEFDS0FHRV9mb28KLQotVXBzdHJl
+YW06IGh0dHBzOi8vZ2l0aHViLmNvbS9PcGVuU0NBUC9vcGVuc2NhcC9jb21taXQvNWI4NThkMTc4
+NmMwMjVjYmQ1MGRmYzI4NGIyNTJjM2VlNmRkOTlkYwotU2lnbmVkLW9mZi1ieTogQWxleGlzIExv
+dGhvcsOpIDxhbGV4aXMubG90aG9yZUBib290bGluLmNvbT4KLS0tLQotIHNyYy9PVkFML3Byb2Jl
+cy9jcmFwaS9DTWFrZUxpc3RzLnR4dCB8IDYgKysrKy0tCi0gMSBmaWxlIGNoYW5nZWQsIDQgaW5z
+ZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKLQotZGlmZiAtLWdpdCBhL3NyYy9PVkFML3Byb2Jl
+cy9jcmFwaS9DTWFrZUxpc3RzLnR4dCBiL3NyYy9PVkFML3Byb2Jlcy9jcmFwaS9DTWFrZUxpc3Rz
+LnR4dAotaW5kZXggM2ZiNmYxMjNjOGQ2Li44OGNiOTE2YjZkOTYgMTAwNjQ0Ci0tLS0gYS9zcmMv
+T1ZBTC9wcm9iZXMvY3JhcGkvQ01ha2VMaXN0cy50eHQKLSsrKyBiL3NyYy9PVkFML3Byb2Jlcy9j
+cmFwaS9DTWFrZUxpc3RzLnR4dAotQEAgLTgsNSArOCw3IEBAIGZpbGUoR0xPQl9SRUNVUlNFIENS
+QVBJX0hFQURFUlMgIiouaCIpCi0gCi0gYWRkX2xpYnJhcnkoY3JhcGlfb2JqZWN0IE9CSkVDVCAk
+e0NSQVBJX1NPVVJDRVN9ICR7Q1JBUElfSEVBREVSU30pCi0gc2V0X29zY2FwX2dlbmVyaWNfcHJv
+cGVydGllcyhjcmFwaV9vYmplY3QpCi0tdGFyZ2V0X2luY2x1ZGVfZGlyZWN0b3JpZXMoY3JhcGlf
+b2JqZWN0IFBVQkxJQyAke05TU19JTkNMVURFX0RJUlN9ICR7R0NSWVBUX0lOQ0xVREVfRElSU30p
+Ci0tdGFyZ2V0X2NvbXBpbGVfZGVmaW5pdGlvbnMoY3JhcGlfb2JqZWN0IFBVQkxJQyAke0dDUllQ
+VF9ERUZJTklUSU9OU30pCi0raWYgKENSWVBUT19GT1VORCkKLSsJdGFyZ2V0X2luY2x1ZGVfZGly
+ZWN0b3JpZXMoY3JhcGlfb2JqZWN0IFBVQkxJQyAke05TU19JTkNMVURFX0RJUlN9ICR7R0NSWVBU
+X0lOQ0xVREVfRElSU30pCi0rCXRhcmdldF9jb21waWxlX2RlZmluaXRpb25zKGNyYXBpX29iamVj
+dCBQVUJMSUMgJHtHQ1JZUFRfREVGSU5JVElPTlN9KQotK2VuZGlmKCkKLS0tIAotMi41NS4wCi0K
+ZGlmZiAtLWdpdCBhL3BhY2thZ2Uvb3BlbnNjYXAvb3BlbnNjYXAuaGFzaCBiL3BhY2thZ2Uvb3Bl
+bnNjYXAvb3BlbnNjYXAuaGFzaAppbmRleCAxNmNlYmM1NGM5MWQuLjYwYjM0Mjg3ZjNiYiAxMDA2
+NDQKLS0tIGEvcGFja2FnZS9vcGVuc2NhcC9vcGVuc2NhcC5oYXNoCisrKyBiL3BhY2thZ2Uvb3Bl
+bnNjYXAvb3BlbnNjYXAuaGFzaApAQCAtMSw2ICsxLDYgQEAKLSMgRnJvbSBodHRwczovL2dpdGh1
+Yi5jb20vT3BlblNDQVAvb3BlbnNjYXAvcmVsZWFzZXMvdGFnLzEuNC40Ci1zaGEyNTYgIDI1YjFi
+MDQ2ODIyMTIxMjA0ZTZkNTNkODc3YTUzMmM4OGJmN2ZkZTE0Yjk0YzljNzIyOTdjZDU3MDliMDM0
+NzggIG9wZW5zY2FwLTEuNC40LnRhci5negotIyBGcm9tIGh0dHBzOi8vZ2l0aHViLmNvbS9PcGVu
+U0NBUC9vcGVuc2NhcC9yZWxlYXNlcy9kb3dubG9hZC8xLjQuNC9vcGVuc2NhcC0xLjQuNC50YXIu
+Z3ouc2hhNTEyCi1zaGE1MTIgIGM2OTczNmJlZTk5N2U1MGEwNGFmZjhlNGYyMmRhODgwZjM0MjE5
+MGUxMjg5YzVkZjBmYjczYjdhZjM0ODMzZDNiZDlmNGU1MDU1YjIyN2ExOGQ1NzExNjc2NzFmODIx
+NzAxYTA5ZjhjOWEzZTQ1NjhjN2RhNjhjYzRiZTUxMTMzICBvcGVuc2NhcC0xLjQuNC50YXIuZ3oK
+KyMgRnJvbSBodHRwczovL2dpdGh1Yi5jb20vT3BlblNDQVAvb3BlbnNjYXAvcmVsZWFzZXMvdGFn
+LzEuNC41CitzaGEyNTYgIGY0ZmMwYTU0YjUwNDQxYjNjNmJiMzUyN2MyOTIzNDVjZGIzYmVhMTZh
+OWQyMzQzNTI5MmJlYjUwOGViOTZlNDcgIG9wZW5zY2FwLTEuNC41LnRhci5negorIyBGcm9tIGh0
+dHBzOi8vZ2l0aHViLmNvbS9PcGVuU0NBUC9vcGVuc2NhcC9yZWxlYXNlcy9kb3dubG9hZC8xLjQu
+NS9vcGVuc2NhcC0xLjQuNS50YXIuZ3ouc2hhNTEyCitzaGE1MTIgIGNiMzllNTNhNWNmZThlMGJm
+Njk0MThmMDRmZjIxNzVlMjU3OTY1NjYyMGQ1OWFlODRiYWI0ZGU0ODJiY2IzNWE1ODU4MGQ1OThm
+ODZkZmRmYzc2MTNiYjdjMWMzN2RkOTlhYTljOWJiYjhmZjAxNWY0NzcyYWQ2MmZlY2Q2MjY3ICBv
+cGVuc2NhcC0xLjQuNS50YXIuZ3oKICMgTG9jYWxseSBjb21wdXRlZAogc2hhMjU2ICA1ZGYwNzAw
+NzE5ODk4OWM2MjJmNWQ0MWRlOGQ3MDNlN2JlZjNkMGU3OWQ2MmUyNDMzMmVlNzM5YTQ1MmFmNjJh
+ICBDT1BZSU5HCmRpZmYgLS1naXQgYS9wYWNrYWdlL29wZW5zY2FwL29wZW5zY2FwLm1rIGIvcGFj
+a2FnZS9vcGVuc2NhcC9vcGVuc2NhcC5tawppbmRleCA2ZmJlMDk3NzE4NjMuLmZlYjcwMDQ4ZWRj
+ZiAxMDA2NDQKLS0tIGEvcGFja2FnZS9vcGVuc2NhcC9vcGVuc2NhcC5taworKysgYi9wYWNrYWdl
+L29wZW5zY2FwL29wZW5zY2FwLm1rCkBAIC00LDcgKzQsNyBAQAogIwogIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMKIAotT1BFTlNDQVBfVkVSU0lPTiA9IDEuNC40CitPUEVOU0NBUF9WRVJTSU9OID0g
+MS40LjUKIE9QRU5TQ0FQX1NJVEUgPSBodHRwczovL2dpdGh1Yi5jb20vT3BlblNDQVAvb3BlbnNj
+YXAvcmVsZWFzZXMvZG93bmxvYWQvJChPUEVOU0NBUF9WRVJTSU9OKQogT1BFTlNDQVBfTElDRU5T
+RSA9IExHUEwtMi4xKwogT1BFTlNDQVBfTElDRU5TRV9GSUxFUyA9IENPUFlJTkcKCi0tLQpiYXNl
+LWNvbW1pdDogMDVkYzQ5MDE3Y2NkZjFiZTI1MTk0NjBjNzM2NDMyYjJhNDI2Yzk2OApjaGFuZ2Ut
+aWQ6IDIwMjYxMDE5LWJ1bXBfb3BlbnNjYXAtYjk5MzNkOTMxMjJlCgpCZXN0IHJlZ2FyZHMsCi0t
+ICAKQWxleGlzIExvdGhvcsOpIDxhbGV4aXMubG90aG9yZUBib290bGluLmNvbT4KCl9fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5n
+IGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
+L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
