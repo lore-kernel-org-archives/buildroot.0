@@ -4,119 +4,157 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06735CCF2D6
-	for <buildroot@archiver.kernel.org>; Mon, 19 Oct 2026 09:54:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFB06CCF2E3
+	for <buildroot@archiver.kernel.org>; Mon, 19 Oct 2026 11:59:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE1A8605EC;
-	Mon, 19 Oct 2026 09:54:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 718B16063F;
+	Mon, 19 Oct 2026 11:59:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rzq1fnvMIjWX; Mon, 19 Oct 2026 09:54:46 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org DA2AE60603
+ id DAoI8xHIDV0u; Mon, 19 Oct 2026 11:59:25 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 8D7B160612
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792403686;
-	b=UxzlZay33GU4Mpara8+xy5prS7HKxK0orSH/GBTIpmRrkbvw7ozDX3ANOkPoEibI7xlY
-	 Uz82BdFMbxSZ49f5ZqlDxnR5Z1GUHSC4hq9+sBnJPfn6F+TN354NTWgeDw39uSTvwgzkY
-	 ANHXpjwMlMnBMy2rExYNn2rSo4pXj5BzENf+ZHvCXGTK/+lcSjxbnrg2jAcW9+YbsC4Ev
-	 Fm0IIXtwpCiNiSSMF9sCluMcp4bU6J2qRyGOOVhzooROwe7/kLfwicjEeOFS3+BkMmeWt
-	 nJSbEKEJYh46DToeSTBd0tyVQeTKc5FUlCR+hAT0xkGqnKiX9cvN4Dx1ZKUbB/+wyag==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792411165;
+	b=C/zlBh9muuwup3swVz3hk8nCvPczPdZ5O4esl6Cs0iDkwmjjn7+XHzyFWwnzZxngbQ0z
+	 aJND91cGQr0+r0X1YzysTpsdVITVFfF0mXj7T/b9pOpH6OkTd8xywtv49BwvWjDrE5ehS
+	 mm8U5Dfq16pcvtrgoVYqg8q/7tFQNk/TX0CZJrb7Lhu1DSRJpTfPeGUwKJlqe9NN+HI4y
+	 1PG6lIuSIh4ExXOepIf/EBrBG7QABONph2ikrs9PWQ7TyeuNrW3f/W1muHw1K8zWmA+Zd
+	 TViOZ5So66SdBv2hjug7clv7W82VzRcHXMkekqZDmQ6PE0ENY/eNz+oU/7sPcIq+YuA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792403686;
+	c=relaxed/relaxed; t=1792411165;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:Date:To:Cc:Message-ID:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:Content-Type:Content-Transfer-Encoding:
-	 Errors-To:Sender;
-	bh=4yyyyPWTa3roX/3jKN6kG0rTbqTVJQ4dwtlMbDRSQao=;
-	b=plDVEg5C5n1GW73dqY5UCFU+pKpHpex4Ea/7EGyZKF5Dt/k+zX89ZNBic+yp4dHKnTpr
-	 QW6On5OmdPSxYmpxq5lYxegiN54yqdMBHE24KBWC96jy70apNBa2g44ZapxDWTaLtacAo
-	 abR3NzAIJdhN/wAPNYQ3OjenCKbz7hT2IjC4Exbpe1x3jOKrEbWdWzp67YLi+0ui1fYLJ
-	 xAFagRYYslz50FMwHZCZaHXDCcQdAH1Q6yTtV9mK4lNN1I9swcWK9e+SNvXr1U+01cEmk
-	 kegH7x0HbatnbcUjDHsLGl3PTnk9rpQTGpwU2sq2tIwMeGybIzyR9r74W47FA38yFKg==
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
+	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=3f6BEeQlo0ogVMt/LctYi2JH1I30QPll0X4ycAr45ZU=;
+	b=RulMrvlLd9RDkJTFKldkuM3tb0gVfpyckhXaTIlnQc4bLK0ubOzc1O8xPBHanzxlkEpi
+	 zkUJqyxr4ZKNkFlJ1aIBUOb2MNC1BsvKi3PDj/2lNwWvq/YUuOnLizM6EwqGm3iWJlimb
+	 BoQU6qDq7MuUcA2CJXGuD6MCNKr5H4EH2f/07iy+Ywkq/Aq7d5Vw5Mk97F5am+OyJ2NNv
+	 G6Nn61SRJZGjuc/Q3v4qH5dg+1lrNd4SA0g13MJxZ8OltOFhBN3sdAlTgdvAc565KY0T2
+	 5aT9gBlk5IClS04pos/0FSVmMrYhqatLjYy2FM9dy/5qw8sP7xYp1WRnf6dvxo1+YCA==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792403685;
-	bh=4yyyyPWTa3roX/3jKN6kG0rTbqTVJQ4dwtlMbDRSQao=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=fWPp+mVeHM7uwMSiaR/9ONO2l6VgXI2kPCiVfgl8n0TnljnOx3lJ/6aWU+TGOS0qf
-	 7LrpZO3p/WUOWak1DeO2WXQTj73jroEUoVQ/NHGYM1x+Y07k6q5KNcrWDONa7wSGNC
-	 WYghgwgcay9oBRITT2GwVQx3YNCkYiOmAR0Hdw5tFDapbmQSrn6onbT0l3olMNePje
-	 5DhkEBJ9MVQ+1ipV6luOdKkS8b6VDv4Tg7p7ha2wfho6D6OrjVwnYVEonSWzS6hpG3
-	 VMZyjhLLLavXfkBmeZsnvQ3//q0gqyL/Es7pljlsyI0HjL/LpuucE0sQwW3AwRDY6M
-	 OGSPYlGG0bFYA==
+	s=default; t=1792411165;
+	bh=3f6BEeQlo0ogVMt/LctYi2JH1I30QPll0X4ycAr45ZU=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=CtUxJPCYy11+tbTt/4XPdQ1WYKtunlMud/Na4Y5gSiKMuceuMUugxcd6a6N8YNCuN
+	 9Fs9ZppF8THBvFi/df7CL7DW4sb09e5RhyGLqsDf4a6CuBSzOQveayINa9iIyVEUcf
+	 xM6/Ruviw1zKNGuUPq22PuKiRo6bZvb8IL51l2dXiiVnPRkPizEy4RtmUCqqggi4yS
+	 HDKG5MLyaJh28xYMR4PswaN6WVlToMpn6BkY092v4vzrd0YoGtnDYXR4suy4xEHIBI
+	 2FzZhgD+Ud6WIymZ4PW7EfrDWv5j/fn12P7IHGHv5mqGp++oUNMhS+ta+wJ8C50uWv
+	 OeL7wODpFY86g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DA2AE60603;
-	Mon, 19 Oct 2026 09:54:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9418D2A8
- for <buildroot@buildroot.org>; Mon, 19 Oct 2026 09:54:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D7B160612;
+	Mon, 19 Oct 2026 11:59:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 12BC01DE
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 11:59:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 85FFC605FD
- for <buildroot@buildroot.org>; Mon, 19 Oct 2026 09:54:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 04883406C0
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 11:59:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jDxQYEPm9aGI for <buildroot@buildroot.org>;
- Mon, 19 Oct 2026 09:54:43 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 6F13D605EC
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792403683;
- b=VYwi8t6RHkA7DtNKu6uAIeqE7MktdSBPK1xGPP9OP0DjH0TUtQgZXoCaTSb0CJoK0F/b
- nqvlu+a0Qdf9wWoKlH58rVDnJVUqK7c9xBKFcswAaKe+b2INgp2vztkWDbNJ1hWe9tsxr
- dAERxLsecZ9toTQ3kBHo7cXHoi8Xzh8nt1+O1SkYarqySfYtnAXv4y1PEUNWjgGiuOWEQ
- rBPK8nQx2e8sSyapPFSddTGzil75pWDWDzqmHdNxgwmXQmCAZ7nprsoRzTUWi99DsGlAu
- pmLadAyCckNO/mNP1QHbDPtcV8jkqEctmNK/TJhFAbId3VbICbU00vE6A7lZtHBXf3g==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WGHUDlmRfYDA for <buildroot@buildroot.org>;
+ Mon, 19 Oct 2026 11:59:23 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 26C27406BF
+Authentication-Results: smtp4.osuosl.org;
+ arc=none smtp.remote-ip="2607:f8b0:4864:20::1232"
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792411163;
+ b=fFB0VRWmDH4l+kXCBVfHU9p9kj977DRiO0JRshoi4p+0VCcSKkyGsCSGguawmpTA/7hB
+ fgquryb1OIlAQVWLtP1Reo8rdaPw5mZgIANqMOBgHiJx7Eck9JKV8e61QZXoD79CLnv1n
+ b3q7O69oK9fNYEWwvz5vhSEnrU8+QjQ0PSa+WzPnyJNAW9OKVZYOrhjxdgsaBe8bPt39S
+ xoibGz2eFm7EkAwVPa0rlo5rxdCLST93D+oQG5PZBN+LbKo2eHziGUeCJshTVdC+xXSmg
+ TQ2DecObz2HHqWbsUC1V09tMJTrdzcgU2sQSpGkdcHZhn1aAxnGCKKFgUq7oNBp+NgA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792403683;
- h=Received-SPF:Received:DKIM-Signature:Received:Date:From:To:Cc:
- Subject:Message-ID:References:MIME-Version:Content-Type:
- Content-Disposition:In-Reply-To;
- bh=RRtX6Lf/svc8U/NRPnqxQurMRVFzpjNv3gr+5lq4Jvc=;
- b=r9S55AbSc833a+mcWbwPUIaVpYzhq2saX+2M4aB/VoNkHrSIyxplrjvGQdy1qVZMgaaV
- 3nT9s/BRLT2cMibJE6sQJFphc7PjIoj+QEuW9TrYW6s00ahM7t85w0BWxkgOsTxiqI1Nu
- uVYEEuDAipAyCW0dinaSMwIt1NIBDXYBJICoWsy4b0LmymdTzu/CYnP6P1YUPmyqDyp5n
- kcwtZiBcCTqORKgkfpcibgXJE8ZMPW0C7WfxmJ+XOgMKROJWcYhMEDNaaCgT5UqRc4da8
- CG7HOl3pdCvk+2WfDM8PmGMPQ1cByFbVN/KPQLbEgs4uFofQyqnO/bUZDf7++pQEgSQ==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
- dmarc=pass header.from=free.fr;
- dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=ZCK1jlh+; 
- arc=none smtp.remote-ip="2a01:e0c:1:1599::14"
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6F13D605EC
- for <buildroot@buildroot.org>; Mon, 19 Oct 2026 09:54:41 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:93aa:5000:c1b2:c247:1f34:4379])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 1217D60141;
- Mon, 19 Oct 2026 11:54:32 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 19 Oct 2026 11:54:07 +0200
-Date: Mon, 19 Oct 2026 11:54:07 +0200
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: John Ernberg <j@j-ernberg.se>, buildroot@buildroot.org,
- Adam Ford <aford173@gmail.com>, Bernd Kuhls <bernd@kuhls.net>,
- Joseph Kogut <joseph.kogut@gmail.com>,
- Romain Naour <romain.naour@gmail.com>
-Message-ID: <atXov2HEcIiVzCAU@landeda>
-References: <20261018160651.349981-1-j@j-ernberg.se>
- <atUtmzafWnVtVm-t@windsurf> <atWwZGNSjbN0GrwD@landeda>
- <atXItOiRRP2j79zR@windsurf>
+ c=relaxed/relaxed; t=1792411163;
+ h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
+ X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+ Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+ bh=A55+/bIrb8REMeMiFlZBycUp4ZzfUwH6GiwLrXHcfjA=;
+ b=h6u6fV3lHRU70g8GYjxdLY1cRtwyFlD0mx5lR2/pBrWNX0F13KJ4UCVDgCHVUqZIsesf
+ Qvk9wpzg8vLeqUz9LXQaGcvzQbVae9Q3Ra1BNFmSDs83sEaWIT8F1xtfYZk4eMyfQMRSI
+ TRwYJbCnJ1dI23J+4FwRoCI88zNPv++Jb+RY+cmDuEDZmUs/L2TY3NrH9zr3ZLZVVffiG
+ B+0u8nreTz8CUuaxM5NcEdeFhlyH00yWTOzPYhcxbGujDUKOvM/DzHIeWgRLSLo6oiJFQ
+ mW8kUPum4pnZ6m7AhvE5vG7pmW+6McHRcYw6KN5Mevl56RuWRDOfTkUfp850H0pT92A==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ dmarc=pass header.from=gmail.com;
+ dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=bsq81QAP; 
+ arc=none smtp.remote-ip="2607:f8b0:4864:20::1232"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::1232; helo=mail-dl1-x1232.google.com;
+ envelope-from=chakrabortyshubham66@gmail.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=bsq81QAP
+Received: from mail-dl1-x1232.google.com (mail-dl1-x1232.google.com
+ [IPv6:2607:f8b0:4864:20::1232])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 26C27406BF
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 11:59:22 +0000 (UTC)
+Received: by mail-dl1-x1232.google.com with SMTP id
+ a92af1059eb24-18cdcfc05ffso56588c88.1
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 04:59:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20251104; t=1792411161; x=1793015961; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=A55+/bIrb8REMeMiFlZBycUp4ZzfUwH6GiwLrXHcfjA=;
+ b=bsq81QAPSEoUsJLbe+wtuqOxKVOZtbvKTPVLZvoP/ef0fX+tV5cDr8CWSqQO6eCguq
+ w06CN2rkPwBXPaiW3G4R1zCTLNUJu3GLjqQXZQWHFOpYd3vY9YWL7zyQ3LoAuBGGDrVA
+ 4os+33hxbWCGAMRCEnVXadIRwRuCv0hlVu69uX2lI8gOYjNPPSBkh9Qfj5dG6aLnBSj6
+ zaonqWsxQot8HtcdTtt9XRvCs6NBKeQnIlu1BeTDmq5Guq0pg3CD5HMiVZkEVoglh/9r
+ 2AhhlFxRtrPi2yONYy3VkK7Fx2MCL8o4V4vOSGg7yKy8675EKcbUvq+wWc3kc9ldzTfl
+ R4vA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1792411161; x=1793015961;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=A55+/bIrb8REMeMiFlZBycUp4ZzfUwH6GiwLrXHcfjA=;
+ b=MwSKWNxCjwyamUVc2bEN21nmUDKY4hcspcSDaCFucMIflvqC9rD7Pmsep1W9lgB6Bv
+ YlItqlA8fEy36kic/WMnMMPOi3E/DJfPqqO1yjmIPk5OkP/4p8jfdABo8PIldaoZIdbs
+ +wqWq29csW7Vfol44SjPbOO6WU00GPnX2uJeh+uOwypsiTV9CFDIsOC5aBDSke55Czjj
+ MywtWzg4lUqAc2wx2T00bVnn5jKw8HxEZcsD1xO2YqPzYHyoF6m2xQGPZQHvsRTr+IFr
+ XT7rZFvAxKAtgqvdoVzUOyMFYlK4Bl0sJHHp79ghPbdTc+8yyn3b7l8rLx9KNGyORU98
+ ybmw==
+X-Gm-Message-State: AFq9FYLFHcR7djX7zQTAM6H/K+TPF0QDSdvRXBVXR3Sp9NaGC0+v1ant
+ xhJXyCI5ZmBybbgpFFaMui8q+6pB5wWFb+Ra6fj22ODApjcHmaXf+e3mSg+k3tjfhtg=
+X-Gm-Gg: AYBFou3EkVz23AXSHdK6WF1IJOe9072Mx4lrOflQSzyXtHabIiPdjm6zwSkpWvi4unV
+ NHLBT8YBeAcgU4woNbMYnTOn1BO2cNcJltH4GCbb6vypWj8mZ/Z+sZuHVuDJTveNE3tYFGQT2hB
+ Nv3GFPOx3EwJvlCJd5JoOARTHvpruj8+uu9bPZSbsylHdunATUYk013dDEvcLqCoFBV81wD18U8
+ MUMIxYxLxMPOMiuPnj2VoytgEAdyBCVWluu6gXF5dq6EufH9MtoCZonHJ44KG6VG3x44s6Aarnh
+ rz9TMg7liW/4mAWa7z7NkYu9OGGiYFw0sF85Jl4ror/JQRyWkXbEMhIY7rfSqgQNH7k3NPYOrFm
+ q3O1Q6HFX8MgsZWK3FeApQY5eNkoPXhb/r4i62Z3j1+hPL/rPQSwTKBtXvzWSuCenvU3rosss8u
+ v4sCRpwAogNNUkkyT6hxJ5Up9XYzrDEcbtv27V6JKV8BWeGpJ7rOJJ7JjgRzR8+sy3G/dXyvkaw
+ ilL9IYHGJCwiNfGfu8p8VKQjM65SCNh
+X-Received: by 2002:a05:7022:5f04:b0:18b:48c3:287c with SMTP id
+ a92af1059eb24-18b48c35c92mr2073798c88.41.1792411161274; 
+ Mon, 19 Oct 2026 04:59:21 -0700 (PDT)
+Received: from fedora.taildae27b.ts.net
+ ([2405:201:9008:10c1:dea5:be99:85df:68ae])
+ by smtp.gmail.com with ESMTPSA id
+ 5a478bee46e88-36083283478sm30657918eec.29.2026.10.19.04.59.19
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 19 Oct 2026 04:59:20 -0700 (PDT)
+From: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+To: buildroot@buildroot.org
+Cc: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Date: Mon, 19 Oct 2026 17:29:15 +0530
+Message-ID: <20261019115916.775677-1-chakrabortyshubham66@gmail.com>
+X-Mailer: git-send-email 2.56.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <atXItOiRRP2j79zR@windsurf>
-Subject: Re: [Buildroot] [RFC PATCH] package: {libgl, libglvnd,
- mesa3d}: Propagate libglvnd GL provider to libgl dependencies
+Subject: [Buildroot] [PATCH] package/hyperfine: bump to version 2.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,84 +166,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Yann E. MORIN via buildroot" <buildroot@buildroot.org>
-Reply-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+For change log, see:
+https://github.com/sharkdp/hyperfine/blob/v2.0.0/CHANGELOG.md
 
-On 2026-10-19 09:40 +0200, Thomas Petazzoni spake thusly:
-> On Mon, Oct 19, 2026 at 07:53:40AM +0200, Yann E. MORIN wrote:
-> Yes, because right now we have:
->         [GL-using package] -> libgl -> libglvnd
-> And separately
->         mesa3d -> libglvnd
-> which means that [GL-using package] can be built before mesa3d, except
-> that libglvnd doesn't provide *all* what is needed to act as a GL
-> provider, for example it doesn't provide dri.pc.
-[--SNIP--]
-> > I wonder if should further have this:
-> >     [GL-using package] -> libgl     ->     libglvnd
-> >                               \-> mesa3d -/
-> I'm afraid I don't understand your diagrams :-/
+Changes in v2.0.0 include:
+- Add support for alternative performance metrics (peak memory usage,
+  instructions, CPU cycles, cache misses, branch misses, ...).
+- Add --env to set environment variables even without an intermediate
+  shell.
+- Benchmarked commands are now executed directly by default, without
+  an intermediate shell (--shell=none).
+- The JSON format for --export-json has changed (schema version 2).
 
-* libgl depends on libglvnd
-* libgl depends on all actual GL providers (like mesa3d)
-* actual GL providers (like mesa3d) depend on libglvnd
+Refresh the vendored cargo tarball hash for the new release.
 
-The trick will be to ensure that alibgl can depend on *all* actual GL
-providers. This was easy for a single provider with the current virtual
-package mechanism, esp. for providers in br2-external trees, but that
-won't be usable when we allow for multiple providers...
+Tested using:
+ utils/test-pkg -c /tmp/hyperfine.config -p hyperfine
+ (Result: 6 builds, 3 skipped, 0 build failed)
 
-This is where the complexity might creep in...
+Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+---
+ package/hyperfine/hyperfine.hash | 2 +-
+ package/hyperfine/hyperfine.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> > ... even though the libgl -> mesa3d would be here just to ensure build
-> > ordering, and there would be nothing from mesa3d that the [GL-using
-> > package] would use at build time in practice. I think...
-> And that's where you're not correct, and that's the whole point of
-> John's patch in the first place. Check out his commit log for details.
-
-Sorry, I don't have the thread history here; only digest-subscribed.
-
-> > Depends if Buildroot eventually want to support boards with two GPU, one
-> > integrated and one (or more) discrete. This happens.
-> 
-> That is understood, but libglvnd was introduced in 2020, we're in late
-> 2026 and nobody has enabled any other GL provider to be
-> libglvnd-capable. So it seems like this dual GPU use case is currently
-> of no interest to Buildroot users?
-
-IIRC, one of the reason to bump the nvidia-driver back at the time,
-besides the bump itself, was that the newer driver was glvnd-aware.
-But this has stalled.
-
-Also, eventually, there are tricks to actually have multiple GL
-providers, when one uses br2-external trees, so even if GL providers
-bundled in Buildroot do not play nice with glvnd, it does not mean
-out-of-tree providers can't use it...
-
-> Essentially, I'm trying to figure out whether we should:
-> (1) Fix this libglvnd issue by adding more complexity
-> or
-> (2) Re-simplify everything by dropping libglvnd entirely
-
-Well, no longer my call to make anymore. I was just providing a
-recollection of what I remembered from back then.
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/hyperfine/hyperfine.hash b/package/hyperfine/hyperfine.hash
+index 0bd5a1b873..6abfa53fa0 100644
+--- a/package/hyperfine/hyperfine.hash
++++ b/package/hyperfine/hyperfine.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  10ef59c1ae8c368f3663cecff219f872ada90dd6bdd52d07e544bf9bdf777093  hyperfine-1.20.0-cargo6.tar.gz
++sha256  09a95fe2fab6d647acd5f8653e686650ec6fdd629c0d639fb8ac840e622ef68b  hyperfine-2.0.0-cargo6.tar.gz
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE-APACHE
+ sha256  1dfee18c2ff07ce551de4d6a1d2db158c0380746b488a7f0d08c8e0d3568b7c3  LICENSE-MIT
+diff --git a/package/hyperfine/hyperfine.mk b/package/hyperfine/hyperfine.mk
+index 8af6e0298a..59e503d094 100644
+--- a/package/hyperfine/hyperfine.mk
++++ b/package/hyperfine/hyperfine.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HYPERFINE_VERSION = 1.20.0
++HYPERFINE_VERSION = 2.0.0
+ HYPERFINE_SITE = $(call github,sharkdp,hyperfine,v$(HYPERFINE_VERSION))
+ HYPERFINE_LICENSE = Apache-2.0 or MIT
+ HYPERFINE_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.56.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
