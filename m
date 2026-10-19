@@ -2,120 +2,104 @@ Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 042E0606A31E
-	for <buildroot@archiver.kernel.org>; Mon, 19 Oct 2026 17:26:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 844EA606A31D
+	for <buildroot@archiver.kernel.org>; Mon, 19 Oct 2026 17:32:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=B9g9JFdE
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=rVY15Gjk
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D476860771;
-	Mon, 19 Oct 2026 17:26:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 55E58605D9;
+	Mon, 19 Oct 2026 17:32:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iLXn2-iWair7; Mon, 19 Oct 2026 17:25:57 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 8ED9860762
+ id 9XjJ_3985a5a; Mon, 19 Oct 2026 17:32:37 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 814B4606E1
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792430757;
-	b=H5+Bto4j5hT+FrkUvkzTFyx/raeVw8aOUx7oHZU9Yy4ynzIxYW8MqNGNNPHJ9/qtT9HK
-	 DedFXfwa8liM6+paI3zzUYCL76PKlFgKnqStoZv4fpL1WHgabaN0q4SZ5tkwAwuy4V8re
-	 ALsXt0DwRjWkgLzAUmNhKDjxVbZEvvA9RGP0D3FV9g2F95TYS2+Ar1fS6kUqM+IPevlpw
-	 z76nMTZR7XJPtc/at+yPkrAdFemoJRZJ8BsbBM7omv9u5Z0FLBC1xtCD6mWlnCANrWrqj
-	 D/rrn1kFPvKoOjvJcJBiWkwS4mA7pWmkzEKf1yXA4hEBjiunv8B3AKmGOTFVucrqaXA==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792431157;
+	b=WMYYO6oLlLcSJmT+Nur5zL4kAuWvzd2XbfWf74UFzV2QNa9TZIA1uSCjM4SC8MRdPJa1
+	 7p/5oIMkY8JBxrwWveespt6sZV6NgQG8yZ4fxdVCNLmkZRN5AWi0IdRUtI8jBNu18dz+p
+	 HJPH4Hj8dCltqXk8kP5VEbeT7hIljddoqO+Z0DyeSoyYaQwDzBJhFSwmJAR4fFQkOuGUB
+	 bRQI+xAMdKWTRH91+8yhdfRiEYzmMPX07CrpXSAAnAt0sFXKfSTzWeua7IDCzpLVjEeGX
+	 Jl3TNZBFlWXSNyBn9hPv58xOrbXrFK5eZRc7Q67ZnTdEfmjDWe7kTZg/+1G7FJpp6tw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792430757;
+	c=relaxed/relaxed; t=1792431157;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=Oem2SNMXc9sZdThAReBtNMcS9tISWlF/KNkWeQX0vVI=;
-	b=NDrLAAskbyrud0u8aiI52kxgtC00okcwe/UTkG6jI6mWkh1jEyNcjMUID7EeY49f30Oc
-	 pO8+n4L7XZf9q2/KYRKaPrcAY7Is74TofEojjI2CJYHqMPf8aWlsGHOW4uUgwK1a+Bdgr
-	 Mfrhh3kzFfE++hycO4MyWM4rXiYmnmRh4vZCLgP77nvrTPlCrTaUHBZ3XuUPo8Bc5p22K
-	 W2TJcyIbUcp6LqRtZqSernEb3DIXUYF6ceki50sg3C4+Z4QMAiYnpcr1o9LJ/J867cn1v
-	 cDR+1PckWi56egQ8hjdhxcvsi/lXJ7MQ5z2hbJP5lLm8OupEFjJOSwYUfZyBUYrm3qA==
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=orhiCwPfUtynIn2egNKD4H5DwaoyQgWHgMbqu/mA05Q=;
+	b=XJ7CZzSslJCtZIwf7hoxrgkR87ujyn+zPYmiXzR+4sDGcfYZX+zeN5Y3FVCX7EQV3djZ
+	 EmQ0ZukwhEVjBBRl3dx7rFoxKV5SKL8xQ2fZOlgJcOwfoypu6mBE7cHQbXlV6E1QfB82e
+	 KEdUcbja6L+gZLO8DZ9Cjj/5PFebOe4MQwTivLDHdf1zFPW+3IjnP7Ixyv26681T16hNQ
+	 bELednaD/4sf0zlnfM7hZKZsK9dDgf/jWNK13G4gDltp2kFooiTZ6Zve7wz82HkDAYJim
+	 U97+hMkwRCBuOLqHhZWf6YXENqRU+lXGnrRsoc3L3xLNYvm5QqEhYGDnHQEGMdXQ2dA==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792430757;
-	bh=Oem2SNMXc9sZdThAReBtNMcS9tISWlF/KNkWeQX0vVI=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=B9g9JFdEtnhSGX1eZODdFqGf0RlfX26vqdiPmTogt60cLUJAi0PEmqCoISn18NLAL
-	 BCx/uHzdOkmJNdTko7ZYS7dFhqMHdw33Ku0pEWba8x5RNBSboJxaVfncRnBU1AVsIt
-	 5a7NkqDSKcVEmLDfemASEGCq/wlBTIUh+BFbzJYaaboeHISmDKXGq40gC51I39dMrO
-	 990Qb81OJN/zdgLjsmxj09QdHEylwBhgKbvrm/A6v+x1C3Myti4TrNaF39uHijZlHb
-	 gvvRnHRwcnV4DtpZBTzruxqvivslJVtTdUo2ENZTrzREFyOjH3+iLTh8pQGGkSgiAY
-	 GJsKV1PRy6daw==
+	s=default; t=1792431157;
+	bh=orhiCwPfUtynIn2egNKD4H5DwaoyQgWHgMbqu/mA05Q=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=rVY15GjkNxjHfuHFe0F2XKB6vH2en/djbWxsMvm5IalKB5z0oEtcq8vNemEtS+4Yd
+	 Yb3VnEpLKf0nvmqYWmwhXkDgeA8kfvK6B5JGEcmhx0JwJ0eb4qtZ8nEy77rlCdhDHJ
+	 I2Ac5p+789YVjRAww4J90QCCbTq7Kv1zhl0mSTKYw80x7kGNfJoslLGkKOnyYCdms/
+	 r7CsSr9rMi6fY18eEvSyzfQQ9NnIzmhwiy9elLMc8PcwkAQ65H82KFXToarDQioxli
+	 r8MnBhKiORA1Jf2p8DW6yU0/ONZYICsp9efpkv2RSbLW9y7/d5VIzzbMQMjZ+EV1xD
+	 juAeescoKsRUg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8ED9860762;
-	Mon, 19 Oct 2026 17:25:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 122AD1AB
- for <buildroot@buildroot.org>; Mon, 19 Oct 2026 17:25:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 814B4606E1;
+	Mon, 19 Oct 2026 17:32:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5FA031AB
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 17:32:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EC9C04069A
- for <buildroot@buildroot.org>; Mon, 19 Oct 2026 17:25:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 50D3E80EA2
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 17:32:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hZXln8HSj0VB for <buildroot@buildroot.org>;
- Mon, 19 Oct 2026 17:25:54 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 5881E4056C
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792430754;
- b=Lq3v/8nu7ktzOURdckIjNSM+A1129v6fuI6YLck6Jh5AkTwbALx5GOWUnzFqGxKiz373
- wgluSPq6GDU91C7XW0lP+gYsDf3Uwrn5D9G85kU0heoTUsI3Xs78+9vU9G1msRAtz7hl2
- lsyqvR5hxtaV7OVsSlKPmNr1d5owMmTQpq7cf8YDQp7aVJm5rqAh4bNYZQs7tmsrkn+UI
- 1JYQOz/zEfSHmFq8LY6jplmPMwHPWHo5dKhIDlSKeMHc+86bJYKttc25AnExZzd72ikro
- GAsLJkpuiw6Jhjk+yc+QdU/Vihlv1f529Pn5YGm38ZCz01WepkTxL5u1aNqfmOfmb2A==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3joTK_6KuMY0 for <buildroot@buildroot.org>;
+ Mon, 19 Oct 2026 17:32:35 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 930EB80E34
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792431155;
+ b=WX2k1W8hL3NE9942ySNiqbhYpN5h567uPqiRktCNUMBkP2ybO6PSNSCvoVZL5OYcXV6d
+ ex9pdXgz6bwbflSUzefrdkge7FygryyAbswF6ehHr36t1+sveAVryzKtXvDh0mM7YbVoM
+ IN2mtimbJRBRL3aZUtvNgW9NLYuSQb4B8Qx4Wj7OQCmTxeleWFc5ONUNvtrxbM5eUjGpa
+ XufLHVsWflQwVhWKlKmBcWIXZ8Eeixe45SwwWMcapi6hzIO4cSxwmoYHJibkxM4LHn97d
+ 28lOwbs2QMHRAnsEdVZOYpjqVU85Ocq4Ivnp+Q3geCiH3GkWQK/ad0qjIrraBDevh9w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792430754;
- h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
- Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
- Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
- bh=x1/Rpml9l7UTq9PmtKntaYWDEpkikMUuza/K4dQ8QbA=;
- b=teVR3VDc3yAY5kLkGO+GNcloTroOLHJL7jImGyRjgJaJusxREQVcKW17pk1pz55HHEBr
- DCcjDbfjALqXoq/uxirabS/PswaWjKQF6cTS2DCZoNFZGSh7yIpO+xabXOOn30yi/C7zd
- ZHi4UBPaGzXwLdtnOj32UPb6vWy0fe6jI0w5CHIHgLhK0kwNz4YfVg/cB47eZ34q+peID
- iZWQRF0OobPtQky63KTlmIpAFIR7489AJ9DPWD8Fhp2ScPrYc576pl/pyEF8eegZdGJl0
- PFaWPztDQLAgc/q2wXcQ0GbEngW/HD2SFAfGFhu4Ies299edkNLvcK/AIbqvYf+NScw==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
- dmarc=pass header.from=bootlin.com;
- dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=z5uPkqvZ; 
- arc=none smtp.remote-ip=185.171.202.116
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ c=relaxed/relaxed; t=1792431155;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=GPrEQwOWbx/GALHwhJhkBzmqkGDSEgsLEr3ja+Ct4KA=;
+ b=rDaRj9zx/2zMRZhLWGJp0LBYMsHrzwN0cL61R2s7GWTlG8qIqVdEKBWGF6VuShLpQgDj
+ PNyrDlPWscL/RzZN5dDlJ9CzNWgzjZLvbr/Y/XfY6gIc29cWIb+1KBePN9rEGh0LW5z1c
+ QkuXoTrGLIGHVcdwEvRJX2fLdLtNeHU+BJGSZcumYbq4fe/EuHRAojORDLjUKXE0eYM0Y
+ 1wTQsBGI/8UK4l+ZJGWOeofyN1ZNK7a5W1mX2eBFz4F/8qu/meKQrRbZtD89nRlS+G3AB
+ IZDdnfwOfsm/Um6AnBSzJ05dy3cU1g/6tnMzquqCPvVHZFJ++gd81l7hlR3VnQU7ZZA==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5881E4056C
- for <buildroot@buildroot.org>; Mon, 19 Oct 2026 17:25:53 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id CF704C5CD5C
- for <buildroot@buildroot.org>; Mon, 19 Oct 2026 17:26:48 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 92F0E60582;
- Mon, 19 Oct 2026 17:25:50 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id A176110328429; 
- Mon, 19 Oct 2026 19:25:45 +0200 (CEST)
-Date: Mon, 19 Oct 2026 19:25:44 +0200
-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: buildroot@buildroot.org
-Message-ID: <atZRLNEv27mHGuZP@windsurf>
-References: <20261018232916.3896517-1-fiona.klute@gmx.de>
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20261018232916.3896517-1-fiona.klute@gmx.de>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH 1/1] package/uboot-tools: fix build without
- FIT support
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 930EB80E34
+ for <buildroot@buildroot.org>; Mon, 19 Oct 2026 17:32:35 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E0D91984B2; Mon, 19 Oct 2026 17:31:12 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 19 Oct 2026 19:31:09 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2d3102a8b313302d7a451ddde4a35dc914e1397b
+X-Git-Newrev: 807096866b2c8902afea3e497dd99bdb43e0cb4f
+X-Patchwork-Hint: ignore
+Message-Id: <20261019173112.E0D91984B2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-autobahn: bump to version
+ 26.10.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -127,58 +111,56 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_PASS,SPF_PASS autolearn=ham
-	autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-On Mon, Oct 19, 2026 at 01:29:15AM +0200, Fiona Klute via buildroot wrote:
-> Commit d7ccf54d7f8cfcb1ab40b227c080aee36f5a6aa1 ("package/uboot-tools:
-> fix target FIT signature support") changed how options for FIT support
-> are written to include/generated/autoconf.h, removing the
-> unconditional "echo" call (possibly with empty arguments) that existed
-> before. Because of this, include/generated/autoconf.h was not created
-> when U-Boot was built without FIT support, making the build fail
-> because of the missing header. Add a "touch" to ensure the file is
-> always created.
-> 
-> Fixes: d7ccf54d7f8cfcb1ab40b227c080aee36f5a6aa1 ("package/uboot-tools: fix target FIT signature support")
-> 
-> Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/807096866b2c8902afea3e497dd99bdb43e0cb4f
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks!
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-autobahn/python-autobahn.hash | 4 ++--
+ package/python-autobahn/python-autobahn.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Just reviewing the previous change:
-
-+       $(if $(BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),echo '#define CONFIG_TOOLS_IMAGE_PRE_LOAD 1' >> $(@D)/include/generated/autoconf.h)
-+       $(if $(BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),echo '#define CONFIG_TOOLS_RSASSA_PSS 1' >> $(@D)/include/generated/autoconf.h)
-+       $(if $(BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),echo '#define CONFIG_TOOLS_FIT_SIGNATURE 1' >> $(@D)/include/generated/autoconf.h)
-+       $(if $(BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT),echo '#define CONFIG_TOOLS_FIT_SIGNATURE_MAX_SIZE 0x10000000' >> $(@D)/include/generated/autoconf.h)
-
-Seems a bit heavy. What about:
-
-      $(if $(BR2_PACKAGE_UBOOT_TOOLS_FIT_SIGNATURE_SUPPORT), \
-      	   (echo '#define CONFIG_TOOLS_IMAGE_PRE_LOAD 1' ; \
-	    echo '#define CONFIG_TOOLS_RSASSA_PSS 1'     ; \
-	    echo '#define CONFIG_TOOLS_FIT_SIGNATURE 1'  ; \
-	    echo '#define CONFIG_TOOLS_FIT_SIGNATURE_MAX_SIZE 0x10000000') >> \
-	    $(@D)/include/generated/autoconf.h \
-      )
-
-Something along those lines?
-
-Best regards,
-
-Thomas Petazzoni
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/python-autobahn/python-autobahn.hash b/package/python-autobahn/python-autobahn.hash
+index 64715ff622..724045a52e 100644
+--- a/package/python-autobahn/python-autobahn.hash
++++ b/package/python-autobahn/python-autobahn.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/autobahn/json
+-md5  d6e43b49c77a11d5b36ac8a2da415d0f  autobahn-26.7.1.tar.gz
+-sha256  c6949a2c6eb95fb1c218837dbda0a59abbbebafb8b11098551c01a7061dfd245  autobahn-26.7.1.tar.gz
++md5  2958a002f07a91d6ac8c0ce3ac50764e  autobahn-26.10.1.tar.gz
++sha256  0acc00895d4d3b06b55e4c945592d426033062c989ca2910749777a855faa27a  autobahn-26.10.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  ff61657bfe1984c96d932fc0423268097b4b588bc57d47c26e8d680250d6c76d  LICENSE
+diff --git a/package/python-autobahn/python-autobahn.mk b/package/python-autobahn/python-autobahn.mk
+index bb411033fe..97ec7b1b0e 100644
+--- a/package/python-autobahn/python-autobahn.mk
++++ b/package/python-autobahn/python-autobahn.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_AUTOBAHN_VERSION = 26.7.1
++PYTHON_AUTOBAHN_VERSION = 26.10.1
+ PYTHON_AUTOBAHN_SOURCE = autobahn-$(PYTHON_AUTOBAHN_VERSION).tar.gz
+-PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/de/73/f109f563c27e048e45d135d81af19e6ca391e24905550b06bd1c9d674c57
++PYTHON_AUTOBAHN_SITE = https://files.pythonhosted.org/packages/df/e0/f0a9218a299f0d79feaaf62042812629bb7fa0c1fd6d044a6068ee7f5c79
+ PYTHON_AUTOBAHN_LICENSE = MIT
+ PYTHON_AUTOBAHN_LICENSE_FILES = LICENSE
+ PYTHON_AUTOBAHN_CPE_ID_VENDOR = crossbar
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
