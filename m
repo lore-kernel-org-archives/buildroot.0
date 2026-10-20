@@ -2,106 +2,135 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6944A606A319
-	for <buildroot@archiver.kernel.org>; Tue, 20 Oct 2026 10:21:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F58B606A31B
+	for <buildroot@archiver.kernel.org>; Tue, 20 Oct 2026 10:29:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=KFTfbDyl
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=L5rKCSok;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256 header.s=purelymail3 header.b=JY7VL8iY
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E95B4810C1;
-	Tue, 20 Oct 2026 10:21:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6E39780D66;
+	Tue, 20 Oct 2026 10:29:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CQKvIpx5_Hxe; Tue, 20 Oct 2026 10:21:35 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org C72E781167
+ id xAD4RbFrZUdj; Tue, 20 Oct 2026 10:29:15 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 7BB1B80C5C
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792491695;
-	b=YQVUTs95Bxd4BugziAE9VQzsoLL9P2SPV/5MPqnj2E7HmedfmORt2D91CulSz1tSea5L
-	 0/w3gR3m99lxahUyi/0YiZqmMOCBIrfX8lJLwM6//3J2qNSOplJiJFino2ikukTQVfMiJ
-	 HMC7wF/MyscMPC+shQ2LC+6CtLTmxaEk1yfKaLNQw4QyQ75lF/ty4ajf0VNXp5ySnVEFD
-	 us2UGNaNFQabDtFTRUWcDF2NtrJFtBU1dOYjn9WuIoZ+xZv72T13JT5nrt3A4s7p2YPDR
-	 icZITo0yrSPKx/8wTOCvI+ocWVri8abEmPV3PpTmvCkbSxzf63BC8cCLtK+utccmUWw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792492155;
+	b=Vo0ni8IJp9pehQQpNFLbInPagJ4uAO+/ZeAagTIETthO3gPIid4AneZtp9tlRasFH9Er
+	 13XkF6xTxG3r3GIV0HC4+dvKsmDho6AaMr+ouTPYWnO1juFW+JHkU5tWKd5q+RMtlb6R5
+	 dRJ100deFCYIx1EP+arFSpx101rCzU4tpqwlyv/e2ySclDQXFhZkmhcaGI/uUxoWuqDeY
+	 8m6fsoae7eyeQdy7VmmuJ0+yRB1ugCMmwnZjIcq1axBUw8JTSY0kGqtpvxYtZk90c1Z6b
+	 f3QaTjl3ff8knhX8lOAfrxsFpzIFFyl5j94E7way5XSxj/Dst/sEwg5xdgGt4cDobog==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792491695;
+	c=relaxed/relaxed; t=1792492155;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:From:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	 Errors-To:Sender;
-	bh=GhxKeeH5c+QP3x/Sijy1EjL+Oj/4ptmZXccPQNKFvno=;
-	b=e30F+waOV5eCkh3dCRpk5zomdqVPGxpm+Nn8eFwBRF23EskAkKN/epEcclVIuB0PxE78
-	 SttDPNKZygbZ6i+UasKvn7j9A53hAUQqxvDOMiFBD9lh5wGsUTVHg2PO+91zXgzt9evbr
-	 mwcv+vJiG5ZfWlsHKP/68e92/FYzTY52Wp1/IR1QHTYgeiKamunQ3xwSSbB14KffLTZje
-	 C9IRE4Wfskla8oIC5AerEd657ghuqki+g8ebsiggHxkZZQiDyScLlR5n539KaMNpgKUsN
-	 3T40JUWC3dMMOmIBpDQrQuckVOFsOz/QklTU8xMOvYExq+JobXXriOxorSr+ilLmGrA==
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:Received:From:To:
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 X-MIME-Autoconverted:Subject:X-BeenThere:X-Mailman-Version:Precedence:
+	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
+	 Sender;
+	bh=vJBguaJw2K1ROIRPaHOliP7/hsLR+Phj5lno3GF7/AY=;
+	b=njZSnn09ai5hsKS/C//GhR1W79dqlAodQU0f7GHi40N3/Nls6r9WSiKfHC0d+mTyZgHO
+	 84VOFuuBqJ/12LCtQuf5nXAE1d26hDWTZiSVYULUFlzyGQ80GxMBr7tizcOkjmiGuaHpQ
+	 yR+HYrRyZcWktz8TZgb5BnmplplLy7tyXwV6+jwu36n0FYNG7/VXtngtZwc5lw2kbCDtQ
+	 A/Ft7zHYoPmtQOQcGTsj0k7Je6o2QW5Vh3supr1FUseBoFcFWP+cp6YkH37Gky48moP1X
+	 cGlnKACa/kEqwvNwvjqcZRP2LcilN+8uKwK266qZQozPPCeD/7UK7/7e7uAk9eBChPA==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792491695;
-	bh=GhxKeeH5c+QP3x/Sijy1EjL+Oj/4ptmZXccPQNKFvno=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=KFTfbDyl3DG7wcTFLiNGzXUBpFEIsy0Jbl4TP4EY+AUvZ1D/bcuQuMC29KPKeoxMX
-	 sO+in70owKQfkqBucVi1SvIQo1vpbRTq/BsddHHi7rAD7KLanfmPTPvSMoq8h3jfo4
-	 pxAkJJZJgEuITEPh1yIe6gTJ1PcqnfbaOsCY58RZ0Fc9gr4BDAE56QMXix7rbtjqY5
-	 tEb9NuNU7jF4tNoWy+ueGFwdLJm/OpESAzPLDRKgdHYtoF+gUpQDJKXn51BxbdaAL1
-	 GXVa3BPXdyHZDT/jS1p70l6rnbsosGEj89T4z3MLzlWFzxPlrqGFFZa4jUScTnXWd+
-	 g95KuwpeS7h8w==
+	s=default; t=1792492155;
+	bh=vJBguaJw2K1ROIRPaHOliP7/hsLR+Phj5lno3GF7/AY=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=L5rKCSokxOfbI7QbaD23FI9Z9sgguTYQqMVYABkyjRQslMDS6WOwRpsHJDnYDKf+7
+	 +tnOvmeTfMQmnxXz9CYhX+M3TSXfny0HArM95jHfx//7ppGBDF65BZ40Nm3uB1U+B/
+	 xVKcEU9DMu/t+t6UOY6zmLEKjhcYnvU52uc3uTMiVCFBPZ7rFUoOc9uDice8fVBUel
+	 NwwxbqMFWHwUOkzVkf/ZrijRvvAKfsw6N5nO1Cjb7fzr8uVWqOmydnX/9zzcWb/DJ2
+	 eyhXf9Lwa+wRAkZkcWrgyo61l5awBgCwoufJ1pAYsV4yRxLEagKjc11jvQmtGRkjHG
+	 UKwUTm2ixwhcg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C72E781167;
-	Tue, 20 Oct 2026 10:21:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id DF96D3A8
- for <buildroot@buildroot.org>; Tue, 20 Oct 2026 10:21:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7BB1B80C5C;
+	Tue, 20 Oct 2026 10:29:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 02EB11E9
+ for <buildroot@buildroot.org>; Tue, 20 Oct 2026 10:29:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C64F76083C
- for <buildroot@buildroot.org>; Tue, 20 Oct 2026 10:21:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DD19440119
+ for <buildroot@buildroot.org>; Tue, 20 Oct 2026 10:29:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oiCXIOf8VUk6 for <buildroot@buildroot.org>;
- Tue, 20 Oct 2026 10:21:26 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org C913060822
-Authentication-Results: smtp3.osuosl.org;
- arc=none smtp.remote-ip=140.211.167.122
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792491686;
- b=BtnzRjpVhi/I9KPmKtppWLMGL46VjETA1FFBSarTdo8878jctbylvDpvTLlrrBwN6rzQ
- C0jFhuS9+PngvM0hVxcoyI12RrV2ze/FSoHJUjyN3dytwVTbZiRFG+xWdFiFrhT/Ym74H
- NE2yhGAEP3D2y9pYgVwrYVWIVMDam9LnhwmxvB1NvzkpnoI+KspVg/vgSUes2XJnaO0r3
- I+r+PC3Qq/J/QPQ6mZaDL/fbCRzRDLJaqINyf3n4ir5CmhYbaUvXESTlas3cDPdX11Q3S
- 5sU6ynaUv6rJ3A7+j7fvA5zHJ39ZhuUExBvxXjGbz0W+skSeK8Zcu9dVh7vL3J3/qpQ==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KPuqEHUjMSpU for <buildroot@buildroot.org>;
+ Tue, 20 Oct 2026 10:29:13 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org D99C5400FC
+Authentication-Results: smtp2.osuosl.org;
+ arc=none smtp.remote-ip=34.202.193.197
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792492153;
+ b=o6/4L5MTgTVUmKJkb+sGj9Qy9tvU6bUSg047SD8HZN9d6cT2uGmfE7XKKMArsIkZ3Ahv
+ wA7j5sjGgCNCBMx/PosEPtewP8uFzPR/uvnikxcRQZY1pWQ1oejN7Nn5VziH0l4tHENq1
+ 3j/jBAYorbw6LE67viCkU8xkqLLnVWzsSTjbMI7Vaq/QbWTLYvr+uA+EoVoYNi6K/ntMv
+ bfi/2yvrLOa1lT68ydgFe4kgCo8QDmtdRRA6KiqGtJcHmLxBwlyjKiShJEPTPeJxH3wZB
+ 3Iqx5YHeGFvMI96Eg6pNzokNkfT/zv0FJs/q8pvEtTIHtCc8Bayqfq+3dIQ5ej54slw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792491686;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=L74ZzKqz1NAYRVpQK+ik3I+xJksee7DQa/ztFFjE/7M=;
- b=lIELp5FIhGbBWWR9xYcJxhR6MeOOZiFZvGcITGNe8RbFRdAnqyhXFxY7R/3kQZUQj/71
- +Cg3tyMBt8V/kckPWzlrWuXRjuFKs9iG4umclaN7l89j4dvapU2bZk6gEEg8sTUis5cEf
- 1zG3CpNyAmR7TK5HIrL+Kf4sHDzdWWAuqHl8mxMOuYiG+ZA3Z1M7vrKifIol+YaXMGooR
- PfNuv0lB0PbhZ1BJQ3ap1JTETGkjrfvs7m9zbJxuWwMocOlWCh69jVvYjx/lSgJ0eCOoS
- ajo0qXCdAFlPDLTopveTOIcbsFuHtHK6TJgWLOPAXCyvetFqphbZWs+M23RqJxSKnRw==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ c=relaxed/relaxed; t=1792492153;
+ h=Received-SPF:DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:
+ Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:In-Reply-To:
+ References:MIME-Version:Content-Transfer-Encoding:
+ X-MIME-Autoconverted:Content-Type;
+ bh=KruyeNk2Zt0oLoO1IqYnFgQG7HjGTXLbuma2mXdIF3g=;
+ b=FG1Q7Siy1donY6/vw7BbxAi7cTl2m7KD4iIk+OM/EKFDgS0JFPvrCDzJL8Ff4pk6BD9n
+ /wyv6BiuNLCMzoHbJ4h14lAS5dfzzIiCzhyvfm0PLXFpurlMiihvnjFYGDboUTzrxHqAB
+ bt0b4SImltoezEJNG4Cn4T1D9miDGW+Z/n3HIDM7ZVAaGfqIIhUaNp/lWOW5k/JgtTXb5
+ gzsxMn24m6pqry8J4x7UQv5xQrpMJ+c81nr7J/89jJtkd8k5FCe+cPWrc5ijs1ue4Whol
+ zZ3RCg4X4QLIdygDxM+VFGhC68ENUoA2VShOr+MyPOEniXERDvWnG8ylfR5F1rnRZ4A==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ dmarc=none header.from=korsgaard.com;
+ dkim=pass header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256
+ header.s=purelymail3 header.b=JY7VL8iY; 
+ arc=none smtp.remote-ip=34.202.193.197
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
  receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C913060822
- for <buildroot@buildroot.org>; Tue, 20 Oct 2026 10:21:26 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CF83C99715; Tue, 20 Oct 2026 10:20:03 +0000 (UTC)
+Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=korsgaard.com
+Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=JY7VL8iY
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D99C5400FC
+ for <buildroot@buildroot.org>; Tue, 20 Oct 2026 10:29:12 +0000 (UTC)
+DKIM-Signature: a=rsa-sha256;
+ b=JY7VL8iYQ68YuI2hxRP4rBCnwR47eLWhVDjMN2YTi6XfDgfIBzxczjFbMQ3uDsBC9ono1nFr0eTAxD0S+5QxTeeYFZ0d8BTQ9wSPbflr6ijrsCADzhX5Ec7de9u+UVG8QoKmApjX+MBI0e0GIN+B9jGRTPR6f3Auyn7+crMLwrRjxHvfq8+ruXrPxyLHHBtACMeon/J8qxeTTxlEHzqVDO3iDHQ4EuQi7h6VxxmDEkXMOlhdzMi7q4mRFpXat4HAtuZorPKaL+l+I60R9jpHoy+RlkNvacii1KJHfpupblovdkIxCKjMFNhtojFszgcFZQx4v8IQs/A/LAWpoV0FIA==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=a5I6BbA2VJ1zDRA1D+Rq3p84bC0RoQcOqKNT+SwVlMQ=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Authentication-Results: purelymail.com; auth=pass
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -616613616; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Tue, 20 Oct 2026 10:29:10 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1xJ75h-00000008336-11rO;
+ Tue, 20 Oct 2026 12:29:09 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 20 Oct 2026 12:17:30 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ad1d1c6dbc4b4d789b0136c814ad0e904dff6db2
-X-Git-Newrev: 874aba9eba6799b6bd033bac73e35af8970fde3a
-X-Patchwork-Hint: ignore
-Message-Id: <20261020102003.CF83C99715@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/am33x-cm3: fix build with gcc >= 15
+Date: Tue, 20 Oct 2026 12:28:56 +0200
+Message-ID: <20261020102906.1918308-2-peter@korsgaard.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20261020102906.1918308-1-peter@korsgaard.com>
+References: <20261020102906.1918308-1-peter@korsgaard.com>
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+Subject: [Buildroot] [PATCH 2/7] boot/uboot: add support for firmware-ele-imx
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -111,60 +140,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-16.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE autolearn=ham autolearn_force=no
-	version=4.0.1
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/874aba9eba6799b6bd033bac73e35af8970fde3a
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+Similar to the existing firmware-imx support, some platforms need the
+EdgeLock Secure Enclave firmware when building U-Boot:
 
-gcc 15 defaults to the C23 standard, where bool, true and false are
-keywords. The am33x-cm3 code base defines them in its own stddef.h,
-so the build fails with:
+https://docs.u-boot-project.org/en/v2026.10/board/nxp/imx93_frdm.html
 
-src/include/stddef.h:18:15: error: 'bool' cannot be defined via 'typedef'
-   18 | typedef _Bool bool;
-      |               ^~~~
-src/include/stddef.h:19:8: error: cannot use keyword 'false' as enumeration constant
-   19 | enum { false, true };
-      |        ^~~~~
+So add an option for this and extend the existing UBOOT_COPY_IMX_FW_FILES
+logic to also handle it.
 
-The upstream project has not received any commit since 2018 and none
-of its branches fix this issue, so rather than carrying a patch that
-cannot be submitted to an active upstream, force the GNU C11 standard
-in the .mk file.
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/am33x-cm3/am33x-cm3.mk | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ boot/uboot/Config.in |  9 +++++++++
+ boot/uboot/uboot.mk  | 10 +++++++++-
+ 2 files changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/package/am33x-cm3/am33x-cm3.mk b/package/am33x-cm3/am33x-cm3.mk
-index 8c890a75fc..f753e46134 100644
---- a/package/am33x-cm3/am33x-cm3.mk
-+++ b/package/am33x-cm3/am33x-cm3.mk
-@@ -13,8 +13,10 @@ AM33X_CM3_LICENSE_FILES = License.txt
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index d4e77fd0f8..381a12197d 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -351,6 +351,15 @@ config BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE
+ 	  This option makes sure that the i.MX firmwares are copied into
+ 	  the U-Boot source directory.
  
- # The build command below will use the standard cross-compiler (normally
- # build for Cortex-A8, to build the FW for the Cortex-M3.
-+# The code base predates C23 and defines its own bool/true/false, so
-+# force an older C standard to build with gcc >= 15.
- define AM33X_CM3_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D) all
-+	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC) -std=gnu11" CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D) all
- endef
++config BR2_TARGET_UBOOT_NEEDS_IMX_ELE_FIRMWARE
++	bool "U-Boot needs firmware-ele-imx"
++	depends on BR2_PACKAGE_FIRMWARE_ELE_IMX
++	help
++	  Some i.MX8/i.MX9 platforms encapsulate NXP specific firmware
++	  for the EdgeLock Secure Enclave inside U-Boot.
++	  This option makes sure that the i.MX EdgeLock Secure Enclave
++	  firmware is copied into the U-Boot source directory.
++
+ config BR2_TARGET_UBOOT_NEEDS_ROCKCHIP_RKBIN
+ 	bool "U-Boot needs rockchip-rkbin"
+ 	depends on BR2_PACKAGE_ROCKCHIP_RKBIN
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 96b8cd0d2e..99330a2f15 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -224,13 +224,21 @@ endif
  
- define AM33X_CM3_INSTALL_TARGET_CMDS
+ # Mainline U-Boot versions can create the i.MX specific boot images
+ # and need some NXP firmware blobs.
++ifneq ($(BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE)$(BR2_TARGET_UBOOT_NEEDS_IMX_ELE_FIRMWARE),)
++
+ ifeq ($(BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE),y)
+ UBOOT_DEPENDENCIES += firmware-imx
+-UBOOT_IMX_FW_FILES = \
++UBOOT_IMX_FW_FILES += \
+ 	$(if $(BR2_PACKAGE_FIRMWARE_IMX_NEEDS_HDMI_FW),signed_hdmi_imx8m.bin) \
+ 	$(if $(BR2_PACKAGE_FIRMWARE_IMX_LPDDR4),lpddr4*.bin) \
+ 	$(if $(BR2_PACKAGE_FIRMWARE_IMX_DDR4),ddr4*.bin) \
+ 	$(if $(BR2_PACKAGE_FIRMWARE_IMX_DDR3),ddr3*.bin)
++endif
++
++ifeq ($(BR2_TARGET_UBOOT_NEEDS_IMX_ELE_FIRMWARE),y)
++UBOOT_DEPENDENCIES += firmware-ele-imx
++UBOOT_IMX_FW_FILES += $(FIRMWARE_ELE_IMX_AHAB_CONTAINER_IMAGE)
++endif
+ 
+ define UBOOT_COPY_IMX_FW_FILES
+ 	$(foreach fw,$(UBOOT_IMX_FW_FILES),\
+-- 
+2.47.3
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
