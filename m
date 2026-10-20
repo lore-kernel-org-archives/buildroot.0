@@ -2,27 +2,27 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2429606A328
-	for <buildroot@archiver.kernel.org>; Thu, 22 Oct 2026 09:34:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29BC7606A319
+	for <buildroot@archiver.kernel.org>; Thu, 22 Oct 2026 09:34:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=F+zuJqfQ
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=A6P056/k
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6D5C940776;
-	Thu, 22 Oct 2026 09:34:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DF1C04096F;
+	Thu, 22 Oct 2026 09:34:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h_iRx4LZG7dN; Thu, 22 Oct 2026 09:34:39 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org A6E7040940
+ id pmIm1DmOd0I0; Thu, 22 Oct 2026 09:34:41 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 11D674097B
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792661677;
-	b=otUKoeooM1Ay860+1hUbbc9EhS2D6GesxmLuxShCZSjhVsBAodbdHENptqrAuHYOPt70
-	 nLBDnXMLBQ6DLlCt0lm9lP285PIxnaSMA9kR8Yk8gYCAtC8QXxCxzYhlSB1rlnzuIjokU
-	 LGxn5PhU/17Ramw7Hmhc9eEC70EuUyhqa9XkpyYFLScXOcOFjCelTmEB4CKdrOwXnf0ap
-	 IdnrLDcrkisVTv4nQP6fo7MqV4AqAyaNWVCLNaVa+4uCdGBBgAGxjDI/H9CEv1lek0+4B
-	 9/u4qk69BqVkZ7m4SEmCDVz9IqQdWAhHxxNIHSM6zRPaUIRwNr/YX2XKTYQOkJ/jfGw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792661679;
+	b=LVowh5szBT8C2s0EaEt3On8q98f5vkBSAJIvC8cKb4kH5cVccZ2ztyu1vJA1ij3SHH4M
+	 c9NaD6p8SUj61UB4LLFXpYBznRAT0SySBTs+T2jVr1U6u0slJCeqKGHxFuhp/Ytth7Dgx
+	 y9J1LrP13JRi9lmxCNhYbhZ0+/hrWC/WhYguP3KShtKjr5JPpKNPrmG7sQsRYx0VmwStZ
+	 +rYsG6oRowhBIQFXCZxEgLkmdQ4moa6T8w0fHgBrxPqmOy4V7fcoIrIoG2mlEU3cuKH2w
+	 DR6gg+onTiVmL3ego8aKeu0B/MaJ/kCVD/oQH2yU/8866+SwQnDH7aXqHzpJNKlgW8g==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792661677;
+	c=relaxed/relaxed; t=1792661679;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=ECs2rneUQ2bqKNPWXKiyI61obXw0fjpY4+skkoXdNxk=;
-	b=VbbnrfUjPJxAcZ3s52obBskO/5iGLTFE7CVuEP9lJ9wFfRV0BdnpkEVjK8DDFrVMXHci
-	 ZoHzE8XEaiHDY3ExXtVl+VR3GYlZexiwjkUL+03w0ir74XkXHSVkvqBOf4/XB9yBBr4du
-	 QZVxkIuXRruUFaDct0/U8tCHk0wIDhOeh4Q5eDF3zShe7DubKqhvHSylzUGJJpYtzoiSx
-	 y6w27IAKawD7xEwI0Zh7VRm7KLOPxlL86wetTppkSVXG9KrTYT5f3C6TBCH+Nwm075hlL
-	 telh0u/DsllQmykVhnRyJtvJBvrAxzxEX3NMdo+CgtE89XB3DOQDiXCfeHQyluaPBRA==
+	bh=tQFikXPQ3Gelb74pM6kJrNny8G6nj115CI0y2YrPj/w=;
+	b=ZVMWRpoSMTGtl/aVOYuiJrs28fcAKLF2HUtvw0W426LzGbFE0AI3t+y1FSnruXijiWus
+	 Q9ToOiuvB6YVMxYMHwzaQn/kPj1Kkc9enQIdiW+l5kFNTmUr+XOcK7hsD/NLeej/h7oPA
+	 +Q1MMZn7zAHnL7SrsIiqMYLlbRmIZ5YujzVHNR+hZ+HZFaoVX1m6hVgXOks/xG6cni2QH
+	 bmeIX/YmiS+K1hzp9KjLEG16L5vczsIdt28Yk6+tncocxV/k9o2Z4la9qGdg/3tWHPk6L
+	 QKINFygzwdkKn/wNK3Ew3ZloCL88zhqHCyBV9SyUWkXDyYn0FBLGj2mzUc8t+m+b54g==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792661677;
-	bh=ECs2rneUQ2bqKNPWXKiyI61obXw0fjpY4+skkoXdNxk=;
+	s=default; t=1792661679;
+	bh=tQFikXPQ3Gelb74pM6kJrNny8G6nj115CI0y2YrPj/w=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=F+zuJqfQj/W1ztkhZchlJuCzDC89AjByMq7g5UGy2oCy8A1eEQKI7twCjR2tHlOvh
-	 OwPEcBtGi9DIdQbUDW5VjYLWMI8IpLedwFXILBDlAFB20sokGW3HIzqEuYLoGXRm8j
-	 aR8lHPIylKGm3AtdTW9UpcpMEEuXYJxkac+P4H9Y/bp1ucQ0+YhlyyiDc/hE+yfTFL
-	 41oUunpMWrusp7Sp3Y7028xmp2NJGWQ14A9MtgdlOzCD1mfqg629IOf5k3jU7Rgdq8
-	 SwpnWNOVpEpoEq+PxMIqGXAvWpPdr2lhf29J8OYQNpMMtcUVSZipL0fXqa1iqZ7/sJ
-	 1h4cZGD5FnWgA==
+	b=A6P056/kjt0pYzLwRuJm0qjEzPzIm40w8YRzygwq2rf57h5k/J0YXnfp0OdtNlkO1
+	 ST7i9IX1sQVMXpPJf8lo6NC4OnEaOWEfPTitdqABjklMPG89PAa6INHR8xuCcosOuh
+	 aq+uNPFMZ9YNwsQi2DELUorgegkvTBdZ8gplIfbCiCMi+R1C8B30yLXcuvRctbA9ue
+	 MdO3jaCa/n06O3ObvBNU/j89DmVV5vju2M35HLdR2xjrYHYNC+5oExGV2H0QB2k6gU
+	 4YVsc25rqu9pgry19ighToQxtZiwsE/0mzcSjlVb8+9d1KG6JCDW+5aDMgr7G3Iy+c
+	 C55TvusWXZ7yg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A6E7040940;
-	Thu, 22 Oct 2026 09:34:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id E565595C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 11D674097B;
+	Thu, 22 Oct 2026 09:34:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id F260A1E11
  for <buildroot@buildroot.org>; Thu, 22 Oct 2026 09:34:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E34E060852
+ by smtp2.osuosl.org (Postfix) with ESMTP id E2B4C403DB
  for <buildroot@buildroot.org>; Thu, 22 Oct 2026 09:34:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tO6Nh6ZfImJw for <buildroot@buildroot.org>;
- Thu, 22 Oct 2026 09:34:32 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org DD0D060823
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792661672;
- b=bAxy+peRx8WNzTNp0+jwRLGxN/cxUsDhPDTVVmcHrhiIn3ltIVgAyn81hrpS5QSodBgl
- WQS49iZ30UGIH9m6bmf4fniOqzdR0X1LHYoVHlIApkrZ3O37T0NW5D1Aj6RdMyTgenMrV
- /akZQr7QZy3eVdlGq82WmnoTXzdIKwxVsvBcbqIHnqMt8oGXxc8BBS51Ldc8A+Rc/YoD7
- Rj3OMAei4enYvFWIwQxM/pghYgTdbHbKfDljZoxCGnwVOXYU4t/S3kCI+E4UroYpU+XT1
- VKPh6rTyYzCvk/FDqCTjEoLRil15MNaNZ3Blj9Hc5I9FHRUgtcCvva0Fl/thAxeTiNA==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PgTc5ybTzIk9 for <buildroot@buildroot.org>;
+ Thu, 22 Oct 2026 09:34:33 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 35654401A4
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792661673;
+ b=C8mmppsV3/NuD2wwhVk7C2iu1SsZ241do1I/DllvrGglr6TRSPZV8dc1Gy8MGPoxNw0c
+ ug/N/IqF8mLSeSYkj9MmbgVWMEw66ljoLCzstmGiZhxuYKmt+7WdVsASIRMhfpsqVxWBU
+ J/1vU51ZFqDgXvohI8oap+q9weoo4+zRJ/UrZKHNQpW7aBz0gCOrZdIcrHWRGinbsOhlP
+ 7M6viDTcXR9L5a/0hnV35pXdqAw+hFc9itwavVQPeRy4pG5mOv5W/ggtO4jthySm3g9Qc
+ ycyyNdCYD6oLj6naWliRYiWGJxUilkqURoJWkodW/BfOBXdGfM5x8AFmOnIVRpisfTA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792661672;
+ c=relaxed/relaxed; t=1792661673;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=PB0Q4x4s4LO9r2EDBeDc4VxgSoS8Q2eYOXgmQgFmcU0=;
- b=dHNB4CilLoK65dD9xQ09XttWf4u59rq2yDU3cTnp0WJjNSxq+Ih9nm8i6L32aMmEBuZ/
- 8dwgar9DjOqFsfP8cGRDBoAi0JVbl8yyClYEh5iRCPDkr2Tre85GUT+2gxcbT3p/lFhD4
- JoyxC21iMc2fVmC/KTq6oAGdCbsC9VKalF4tEJU2mWROWJirbSOWKK/7RK7QeMIYE0DuC
- A7a/9/BCyeaN2c3Szzw0ebr1pEwyQoFNo08bdjoIqvUyeq53m0wyRcpkEH7EeTVFOwWMk
- PdqcRzGaMYdco5tfRbfKQRefLcNAB2i/PnZwgdFWX02jKtEHEsbnKeKrZnjRztUFR1w==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ bh=HlkQ3SpZDjQZMzPOeARhgLztiBSdAocdc3bPAaMnypY=;
+ b=HUD3zClK6o68QwNJwPTrzjK6rOZhQzoJ5W7VHA+bXAX9pP5MLnNE4cFQ82ngIqwPhHnh
+ UUoc5OslBT2aor70TAuXNhvMos3aysooNl617uj7YQqRnfEoqy5fRd8dFVc8hKoAGVtw3
+ WLSevFF3gwvZdMkVa08EUQedN7GoFvJYwSqOFCK9q8doMiGbuInWk60PaaeWewhhLWVOG
+ djNho6oqXXenfJuuEyGfgsRMief8azR4Tl8cpL4DZGetRDxA5dGfSMDOrOA5oakbS+XX9
+ 8ChTFAbMxIjD75BV4aCTZnmqkvcSN8PV+Ti+/FdK2P7mHm6+ELBeqkiPnrMkhkGJM8g==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DD0D060823
- for <buildroot@buildroot.org>; Thu, 22 Oct 2026 09:34:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 35654401A4
+ for <buildroot@buildroot.org>; Thu, 22 Oct 2026 09:34:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D8DF89B985; Thu, 22 Oct 2026 09:33:08 +0000 (UTC)
+ id 4D9229B985; Thu, 22 Oct 2026 09:33:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 20 Oct 2026 08:38:10 +0200
+Date: Tue, 20 Oct 2026 08:45:40 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 352c1fb59eebaff863f07182fbddacd00b82daeb
-X-Git-Newrev: e81cea88313cfe308a9b07d6c0ab4ee87965165e
+X-Git-Oldrev: 9f6df9b7d6158757ab08f5a83622888a0c7310df
+X-Git-Newrev: 0f238d5a207bae39f6a6675d305770bb6fafffa3
 X-Patchwork-Hint: ignore
-Message-Id: <20261022093308.D8DF89B985@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] support/testing:
- TestPythonPy3NetworkmanagerGoi: fix assertion
+Message-Id: <20261022093309.4D9229B985@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/python-scipy: fix
+ build with cython >=3.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,50 +118,73 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-20.1 required=3.0 tests=BAYES_00,DATE_IN_PAST_48_96,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
 	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e81cea88313cfe308a9b07d6c0ab4ee87965165e
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0f238d5a207bae39f6a6675d305770bb6fafffa3
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Since python-gobject version 3.51.0 [1] and PR [2] the pygobject Enum
-are using the standard python Enums [3].
+Since Cython version 3.1.0 [1] and buildroot commit [2] python-scipy
+failed to build. This has been fixed upstream with [3].
 
-At the moment of the changes that introduced this code in the
-NetworkManagerGoi tests [4], the master branch was based on
-python-gobject version 3.54.2.
-The 2025.02 version of python-gobject is version 3.50 which doesn't
-support enum as standard python enumaration and thus doesn't include the
-'.name' property.
+This commit backports it to fix the build with the cython present in
+2025.02.x.
 
-This commit change the assertion to compare the 'DeviceType' &
-'DeviceState' object instead of the name.
+[1] https://github.com/cython/cython/commit/ed7e95912b6ed7d20e190fbf1aecb9f2a997d479
+[2] b536caaec0 package/python-cython: bump to version 3.1.2
+[3] https://github.com/scipy/scipy/commit/217748476403a1e5726a921cedb674e7ffbc952e
 
-[1] https://pygobject.gnome.org/changelog.html#pre-release
-[2] https://gitlab.gnome.org/GNOME/pygobject/-/merge_requests/394
-[3] https://docs.python.org/3/library/enum.html#enum.Enum
-[4] f38f5bb593 support/testing: TestPythonPy3NetworkmanagerGoi: check we actually get data
-
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/17125191068
+Fixes: b536caaec0 package/python-cython: bump to version 3.1.2
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- support/testing/tests/package/sample_python_networkmanager_goi.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ ...02-use-int-instead-of-long-in-cython-code.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/support/testing/tests/package/sample_python_networkmanager_goi.py b/support/testing/tests/package/sample_python_networkmanager_goi.py
-index dff68e66f9..faf78aed3d 100644
---- a/support/testing/tests/package/sample_python_networkmanager_goi.py
-+++ b/support/testing/tests/package/sample_python_networkmanager_goi.py
-@@ -30,5 +30,5 @@ assert len(connections) > 0
- # check that we can find the loopback device ...
- loopback = client.get_device_by_iface("lo")
- # ... and read its type and status as expected
--assert loopback.get_device_type().name == "LOOPBACK"
--assert loopback.get_state().name == "ACTIVATED"
-+assert loopback.get_device_type() == NM.DeviceType.LOOPBACK
-+assert loopback.get_state() == NM.DeviceState.ACTIVATED
+diff --git a/package/python-scipy/0002-use-int-instead-of-long-in-cython-code.patch b/package/python-scipy/0002-use-int-instead-of-long-in-cython-code.patch
+new file mode 100644
+index 0000000000..6763c8cc5e
+--- /dev/null
++++ b/package/python-scipy/0002-use-int-instead-of-long-in-cython-code.patch
+@@ -0,0 +1,37 @@
++From 217748476403a1e5726a921cedb674e7ffbc952e Mon Sep 17 00:00:00 2001
++From: Thomas A Caswell <tcaswell@gmail.com>
++Date: Thu, 21 Dec 2023 14:20:52 -0500
++Subject: [PATCH] MNT: use int instead of long in cython code (#19725)
++
++https://github.com/cython/cython/pull/5830 /
++d7e95912b6ed7d20e190fbf1aecb9f2a997d479 in cython removed
++long as a valid type in favor of int.
++
++Upstream: https://github.com/scipy/scipy/commit/217748476403a1e5726a921cedb674e7ffbc952e
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++---
++ scipy/_lib/_ccallback_c.pyx | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/scipy/_lib/_ccallback_c.pyx b/scipy/_lib/_ccallback_c.pyx
++index 59ba74369267..6c493dac7c9c 100644
++--- a/scipy/_lib/_ccallback_c.pyx
+++++ b/scipy/_lib/_ccallback_c.pyx
++@@ -58,7 +58,7 @@ def get_raw_capsule(func_obj, name_obj, context_obj):
++     elif context_obj is None:
++         context = NULL
++     else:
++-        context = PyLong_AsVoidPtr(long(context_obj))
+++        context = PyLong_AsVoidPtr(int(context_obj))
++ 
++     if PyCapsule_CheckExact(func_obj):
++         capsule_name = PyCapsule_GetName(func_obj)
++@@ -70,7 +70,7 @@ def get_raw_capsule(func_obj, name_obj, context_obj):
++         if name == NULL:
++             name = capsule_name
++     else:
++-        func = PyLong_AsVoidPtr(long(func_obj))
+++        func = PyLong_AsVoidPtr(int(func_obj))
++ 
++     if name == NULL:
++         name_copy = name
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
