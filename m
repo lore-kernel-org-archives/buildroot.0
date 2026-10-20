@@ -2,259 +2,116 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19DE6606A332
-	for <buildroot@archiver.kernel.org>; Tue, 20 Oct 2026 12:55:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7F8760A4ACB
+	for <buildroot@archiver.kernel.org>; Tue, 20 Oct 2026 13:01:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=T0gXYNoi
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=F07+ZoE9
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E030581021;
-	Tue, 20 Oct 2026 12:55:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8CCEF80F88;
+	Tue, 20 Oct 2026 13:01:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RhXfPcqS7K21; Tue, 20 Oct 2026 12:55:12 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org D6FFD8100D
+ id Fi7KM-8j5cMd; Tue, 20 Oct 2026 13:01:29 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 80D5180D1B
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792500912;
-	b=UFRHVL9ch6qB8+2uHyxJambixN/sUsqdRkgQbeiydX/s/3gfHTXfmgI3s+Lf1O59GGAt
-	 QFeKtrRC0Gidxmw+ajSUFp8SRJxg2LTXGKNwuHBKwYT/0ZjxtQGcZ/pJUzhfRQ6XJriyV
-	 RwLreGCiwQP1ASDN1kBxQ0k7mgJMJDgPRGGdvi67lUpQaTwXJyMqHJYWkoqkzJkf9OPm9
-	 V4hbqQFfEWsVBem1O4tvRe2G3IdVTV9bcUZlVmduxoYcZB2j3MrgMpXdfEGaE7mPS9HSt
-	 VwHBkYjVXQBlM6WFFSKFOOQkpjEshy9ijqP2m0oMnIuUoyj8xK409PVlhRS9VIe3rQA==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792501289;
+	b=Rh/gpeD8lyWRe33Q0SxnSj7/B8TjSJrg6glW5gWfFIaK7PTCteknvMKsKtpJZimC6RZS
+	 HJS92TAdQH1WqvC744KjDvtKJWzPeOrZuIfZaGfmJ/1G6kahVmL4g8Ieks08jo4DbR2eZ
+	 eTILF7VkLx/c4HpdRB0bh+ljWOVlNmoqo7Jkh7WnXELnYflVvqJldaojWN1lGNgNGo5Vo
+	 KYgPGbmy5cpyJQaKdliB/7MO9oA99Sjc5LFSO5/UU2ndWam07fUATYhWReFukvpeYJ4iS
+	 YZNn7SASk+DK5MInJIpFkAL/GgWYrKeq6iY3TKpPssfdSigA4ueBKWgrTNHooj8vcQg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792500912;
+	c=relaxed/relaxed; t=1792501289;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 X-UI-Sender-Class:Received:Message-ID:Date:MIME-Version:User-Agent:To:
-	 Cc:References:Content-Language:Autocrypt:In-Reply-To:X-Provags-ID:
-	 UI-OutboundReport:Subject:X-BeenThere:X-Mailman-Version:Precedence:
-	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:Received:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
+	 X-Last-TLS-Session-Version:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:Content-Type:Content-Transfer-Encoding:
 	 Errors-To:Sender;
-	bh=xIbq9kZbbYLTFJAAqRQMCnP/53HoTfEg9+Gd53eFeQQ=;
-	b=H83pTKfMJHnnMR5i89pnVLUz60OTASXsrgMBQ/RxsSn5JKYScgFbysZgujWZL60frVzV
-	 BlmGKYnr3ics4OQBEHBL/jZ92LNlvpQfPw3mkFwWkCsV1oBpjYRox8cO4NdZFLXQ/x66N
-	 XQpGPqi42gE82cLMAH77Br3Kxq6YPBJ3Mwg42S7d9xCUpsBFMBdqkGLku6M/toZQX2ltG
-	 8mjZwGchtzjDZ+7k7xW938kcnpVEoRQcNEGQAMjPT5U+rXGXfHZw/PMR5KjoYVVlYc6vx
-	 JO+9xu68FOQPrpzcM6GtAD5kb7kNPJVb01PlgknBX33nlX+rYyoE7zWGWxRfGe3BH0g==
+	bh=AiLFCJvObXPLwkZmHwMTTpsZBT4XbbdfFiRo1TiCa7o=;
+	b=AfOEUTbofDOBOhpuWWg5CrnHt6sMPTIYCC8JV1c732zX05tLcLa+zSsivjnyJJY13Ix9
+	 kBjnnoi6bkixGtoUneMbeefpnqzEwUIxW0Aplp5mqqKc6sWQ+tjQVv6Qe4MWZ8eIMSFvg
+	 I4kA4fAV5iVobw+RbkJzdEyYn8lPm08Y1RWXHk3Om4TfRhZkbceaSRyX2Q0e8wFNFvPpg
+	 inkA2CwVyB4SYOMWkDO0iejSrr5wdodAY4fReONSgke3J1bqoyr4z0zxW2kx9iiKEONxV
+	 SMCwKKTnb2xCFy9mm6qtq4ziwBt4yfBf2HmuiJLYtfOJpxaiZyOvFt0BoXXW2lyIg6A==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792500911;
-	bh=xIbq9kZbbYLTFJAAqRQMCnP/53HoTfEg9+Gd53eFeQQ=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=T0gXYNoik4hCY8NcbKZLmkcXZ0HtBJhhm1boek/AKl1XjpuOTdIM/iXJPn/yVEZGO
-	 hIAon1z3HrSrV4CuV4eTJpEqT82yiu6hqH0HnBVakON7Klg2/Qi4gNm5tKTuluCbI1
-	 xSxM0L3eLAlMz4DiV8/Xq+48b+EukNAwC2PZhECw09c8Vi3oG8+pGLZTqLQkuBjO1J
-	 9eXHs1ANbJuthD3Na4noKKxglxfrxNCcBo4IQXH557sqQV2EKe/Cf/M9nFk5UzJ1Pa
-	 phkVDzqmQ+H1LANfHr7R+4ZXctzXyFy7wnG/InkCgruRdh5lboZnKXR4+PvvGKtxAE
-	 y4ZdrJoiHaftg==
+	s=default; t=1792501289;
+	bh=AiLFCJvObXPLwkZmHwMTTpsZBT4XbbdfFiRo1TiCa7o=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=F07+ZoE9YdVCVKxfSWrmXp+nkfVZKIoIv1mIrtSM0DNjDCWsojI1cNeYl/4ggAsAx
+	 V6QUQNdelhdGuZhDhKge0cVXrQGCwHT86JZjeSigBF6GZgO+MJp053BetFbEy2WLme
+	 ie5tYJReXfHChWI6ah+5WkwLC9hPSiR1luYm7YeudCs0AVdoyc2hl8+E1fpJdbfAjb
+	 tCneSGQzRreJVGCCkKzr1LHMjZBiQRfql49EqSwSpf2gc1/Nu+OjdbfelZRm3PcXN+
+	 gddRAQSnkBVY5lcpzcIw9aqXSqN3UoL2QiUDlDgXJ7JgQa5h8pWBntS7eFmCifAoU6
+	 jc1S6apGdqjfQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D6FFD8100D;
-	Tue, 20 Oct 2026 12:55:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3F976769
- for <buildroot@buildroot.org>; Tue, 20 Oct 2026 12:55:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 80D5180D1B;
+	Tue, 20 Oct 2026 13:01:29 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2C390769
+ for <buildroot@buildroot.org>; Tue, 20 Oct 2026 13:01:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 25296407E0
- for <buildroot@buildroot.org>; Tue, 20 Oct 2026 12:55:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1DEFC40342
+ for <buildroot@buildroot.org>; Tue, 20 Oct 2026 13:01:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Lm46nxuKfE56 for <buildroot@buildroot.org>;
- Tue, 20 Oct 2026 12:55:09 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 6896C407D4
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792500909;
- b=kRTWd1k67BCe86YjVMnjn0EcPRwCxMvV3OgoD/+y9gwJlNAIVrqsgKXLYKOp8PfNcrNU
- gNiPCheYiurjr1b+Dj/5O8jNC5oxLehOo2Drff+ea0NbiMDHXH+18Y1qmMlA9yPXNMIcn
- 0lbo6xU7iTEQgZrjcFeE8Bh8xux3oKmcHyYlO9Wu6jIoLOdXXnqJPQo08/3u4mcnO0gn7
- 7s3PLAD1CqCBl+9lIO9E4AsnZd9ThXbOPnwbRgyFHNUo2mMmO2bhU/yofxAY3caFjYRfX
- iMyX4WoMwAh0RNpf0OYZ/pCPqqXp4qDiwtrQl9cI2OT4oL1yTo0R4KMya4EeZQ8e4TA==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6Vf5HotVA-0X for <buildroot@buildroot.org>;
+ Tue, 20 Oct 2026 13:01:26 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org AE0DC400F1
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792501286;
+ b=oeFugJHdN43vhINbYSEN2Z786+Z0BJc6hLoVb/BH2O7GdiWKZMcti7ageHjRqpY2/56i
+ e364FU93iwlDKHdhtCcDsoq7J3b0ygFMYtVcEi2ToJDIT33SshU4+NOWX2Y2E7BBOiMcd
+ krrFRHCT4dgR6sm4T3WKe5CEF5Dsz1uRxJhz7oFwto1AciX7tamFrwTtbjS0txiBJ5LeQ
+ MON1qU/l53x+CppTaA+D/qcXWXN+x33/8fNc4CWtkLBuvDoWMdhaAehSz5uoLw2XP7qPK
+ jOsORYvAYq4Q90ITMjeBiEdW0KNCi9BGl4uEpFo6hQt9I9yWZ+QtCQ2E9WLjwXqtUpg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792500909;
- h=Received-SPF:DKIM-Signature:X-UI-Sender-Class:Received:Message-ID:
- Date:MIME-Version:User-Agent:Subject:To:Cc:References:
- Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
- Content-Transfer-Encoding:X-Provags-ID:X-Spam-Flag:UI-OutboundReport;
- bh=QhIhn8LHdQoUu95PJGdssz8FESuijxBSPnfNN1LTh5k=;
- b=MdKEdeRO4LIIfSog0Ih0viAlOaFBtxZpTo+fXxhI0tXJMrk53OVpnPseu+K22KBsRQFW
- iBR162QzDu53GKpMwFTtLgNL8+6l3fa0ITYhMcm35YrM4KwR0odXTU/TaHuzt6OfOfNYW
- wi/8lFlE+rmbwtJS4hAEIfGuUGsF5Nx3UUBc023QIiZPkZY2v3YyPsHnQgVRqcXsyA7xq
- 0P5g4/+zJHzJLXholW6v2gmKESvEKlN7Mmu1pLiXow1pIKGrafeZ5NpyX3wuh3TTYGXos
- ZzVUf7AmZOK9rVhY5JZZ+uGEUc5RPvDlvSxNMTVGNGhTBp/jceRJxrwRMzCYPKhvphw==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
- dmarc=pass header.from=gmx.de;
- dkim=pass header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=bylx9hTs; 
- arc=none smtp.remote-ip=212.227.17.21
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6896C407D4
- for <buildroot@buildroot.org>; Tue, 20 Oct 2026 12:55:07 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Md6Mt-1wjGeY0NH9-00c9GI; Tue, 20
- Oct 2026 14:55:05 +0200
-Message-ID: <8b5cbb21-caa0-4935-b2d4-35908b5ab0d8@gmx.de>
-Date: Tue, 20 Oct 2026 14:55:04 +0200
+ c=relaxed/relaxed; t=1792501286;
+ h=Received-SPF:Received:Received:Received:DKIM-Signature:From:To:Cc:
+ Subject:Date:Message-ID:X-Mailer:MIME-Version:
+ Content-Transfer-Encoding:X-Last-TLS-Session-Version;
+ bh=PFLANnlQ92DGcosW6JodKVLpXNhT9/5VT/u7UpKwSJw=;
+ b=q408pIV0X0X2w4dvbOKKgIqGPL8/Wb3u/sdUAsKoxG7GXLbniI+AGcECwCjETt+0ayrD
+ uHMqyOZHmDHEG87ffMQopsPaNUyYAcx8hRCc7NEGwD09iTbSCqxxST0RvW6r18gs8oVHs
+ nnFyWO9RJnxqgZL27w1gD0/9vd639OBBLOou2HEQRK4RTHqbcKjb0LdC2Ne2dAGUmciNf
+ bLCxXqfNnVu0LIaQq0OS6O/E0vr9h5aVVeVZSEaugk3vxVa5bRhnDbOtnF7ldd3vpqn+A
+ TKvQ49GDorgI8gKKzebYNsKpR785UnHRO3UROjGezOnShEw70CMxjAB/txxKHxpHREA==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ dmarc=pass header.from=bootlin.com;
+ dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=W3qyTbGF; 
+ arc=none smtp.remote-ip=185.171.202.116
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AE0DC400F1
+ for <buildroot@buildroot.org>; Tue, 20 Oct 2026 13:01:24 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-04.galae.net (Postfix) with ESMTPS id EEBB2C62200
+ for <buildroot@buildroot.org>; Tue, 20 Oct 2026 13:02:20 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 6184B60393
+ for <buildroot@buildroot.org>; Tue, 20 Oct 2026 13:01:22 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 598AD10328934; 
+ Tue, 20 Oct 2026 15:01:08 +0200 (CEST)
+To: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 20 Oct 2026 15:00:44 +0200
+Message-ID: <20261020130045.1323516-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.56.0
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Cc: Francois Perrad <francois.perrad.86@gmail.com>
-References: <20261020120646.1306735-1-thomas.petazzoni@bootlin.com>
- <20261020120646.1306735-2-thomas.petazzoni@bootlin.com>
-Content-Language: en-US, de-DE-1901, de-DE
-Autocrypt: addr=fiona.klute@gmx.de; keydata=
- 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
-In-Reply-To: <20261020120646.1306735-2-thomas.petazzoni@bootlin.com>
-X-Provags-ID: V03:K1:AiHmNcQ0wRm0nD0C1ghgQ307VX157Ot48kZsW3UENqGUWP+1LtD
- NYCRDLvQtgG7nZE5+fO1CtqcF9uWoZvFk9Pst0K6DVc5YXjy+a52L6h4Q1HsTx2uAfjahka
- NLtDqLwnCNZM2JyA4Gwe8cdqmwuQs+swngBwZDmUXGQe1dl/+EvfyfgK2FGGK5fjjTFZgMT
- 3zDNEE61GfdcJCBdJDFPA==
-UI-OutboundReport: notjunk:1;M01:P0:UBudZwCw2VY=;yHprFu7/4vffi8uRSLOZeuoXh7h
- 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
- tyHcO9QF4uA=
-Subject: Re: [Buildroot] [PATCH 2/2] package/pkg-hare: move cache directory
- outside of $(HOME)
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: [Buildroot] [PATCH] package/jailhouse: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -264,70 +121,514 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-17.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Am 20.10.26 um 14:06 schrieb Thomas Petazzoni via buildroot:
-> By default, hare will store its cache directory in $(HOME)/.cache,
-> which is a problem as we don't want a Buildroot build to write outside
-> of its output directory (to the exception of DL_DIR, of course). The
+jailhouse fails to build against recent Linux kernel versions:
 
-And CCACHE_DIR, if enabled. Not really critical, but might give someone 
-who's new to Buildroot a wrong idea. ;-)
+driver/sysfs.c:571:17: error: initialization of 'ssize_t (*)(struct file *, struct kobject *, const struct bin_attribute *, char *, loff_t,  size_t ' {aka 'long int (*)(struct file *, struct kobject *, const struct bin_attribute *, char *, long long int,  long unsigned int)'} from incompatible p
+ointer type 'ssize_t (*)(struct file *, struct kobject *, struct bin_attribute *, char *, loff_t,  size_t)' {aka 'long int (*)(struct file *, struct
+ kobject *, struct bin_attribute *, char *, long long int,  long unsigned int)'} [-Wincompatible-pointer-types]
+  571 |         .read = core_show,
+      |                 ^~~~~~~~~
 
-> build of hare-package packages currently fails with:
-> 
-> Error creating /home/br-user/.cache/hare: Permission denied
-> make[2]: *** [Makefile:15: dbus-introspector] Error 255
-> Error creating make[2]: *** Waiting for unfinished jobs....
-> /home/br-user/.cache/hare: Permission denied
-> make[2]: *** [Makefile:19: dbus-scanner] Error 255
-> 
-> due to this issue.
-> 
-> We fix this by passing XDG_CACHE_HOME when building hare-package
-> packages.
+[...]
 
-I'm not familiar with Hare, what does it store in its cache dir? The 
-default path suggests it's intended as a global cache, so I'm wondering 
-if something like $(BUILD_DIR)/.hare-cache might be better than a 
-per-package cache. But of course that depends on what goes in there.
+driver/pci.c: In function 'create_vpci_of_overlay':
+driver/pci.c:336:13: error: too few arguments to function 'of_overlay_fdt_apply'; expected 4, have 3
+  336 |         if (of_overlay_fdt_apply(__dtb_vpci_template_begin,
+      |             ^~~~~~~~~~~~~~~~~~~~
 
-Best regards,
-Fiona
+However, the project seems to be unmaintained: there has been no
+commits for the past 4 years in the upstream Git repository at
+https://github.com/siemens/jailhouse/.
 
-> Fixes: 44d38432343e65ec7a6d898cf982985cc2bc1e88 ("package/pkg-hare.mk: new infrastructure")
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->   package/pkg-hare.mk | 6 +++++-
->   1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/pkg-hare.mk b/package/pkg-hare.mk
-> index 15dc769311..6494d2651c 100644
-> --- a/package/pkg-hare.mk
-> +++ b/package/pkg-hare.mk
-> @@ -51,7 +51,11 @@ define $(2)_BUILD_CMDS
->   	if grep "^all:" $$($(2)_SRCDIR)Makefile > /dev/null; then \
->   		target=all ; \
->   	fi ; \
-> -	$(MAKE) -C $$($(2)_SRCDIR) HARE="$$(HARE_RUN_CMD)" HAREFLAGS="$$(HARE_ARCH_OPT) $$(HARE_LIBDIR_OPT)" $${target}
-> +	$(MAKE) -C $$($(2)_SRCDIR) \
-> +		HARE="$$(HARE_RUN_CMD)" \
-> +		HAREFLAGS="$$(HARE_ARCH_OPT) $$(HARE_LIBDIR_OPT)" \
-> +		XDG_CACHE_HOME="$$($(2)_SRCDIR)/.cache" \
-> +		$${target}
->   endef
->   endif
->   
+Since maintaining an hypervisor like this requires keeping up with
+Linux kernel changes, seeing the project being inactive for the past 4
+years makes it basically unusable, which is why we're removing it.
+
+There are a number of autobuilder failures related to jailhouse for
+the same reason.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ Config.in.legacy                              |   7 ++
+ DEVELOPERS                                    |   2 -
+ package/Config.in                             |   1 -
+ .../0001-YOCIMX-9281-1-Fix-gcc15-errors.patch | 119 ------------------
+ ...81-2-hypervisor-arm64-fix-strh-usage.patch |  38 ------
+ package/jailhouse/Config.in                   |  28 -----
+ package/jailhouse/jailhouse.hash              |   3 -
+ package/jailhouse/jailhouse.mk                |  71 -----------
+ .../testing/tests/package/test_jailhouse.py   | 103 ---------------
+ 9 files changed, 7 insertions(+), 365 deletions(-)
+ delete mode 100644 package/jailhouse/0001-YOCIMX-9281-1-Fix-gcc15-errors.patch
+ delete mode 100644 package/jailhouse/0002-YOCIMX-9281-2-hypervisor-arm64-fix-strh-usage.patch
+ delete mode 100644 package/jailhouse/Config.in
+ delete mode 100644 package/jailhouse/jailhouse.hash
+ delete mode 100644 package/jailhouse/jailhouse.mk
+ delete mode 100644 support/testing/tests/package/test_jailhouse.py
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index db320ea981..566f723ac4 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
+ 
+ comment "Legacy options removed in 2026.11"
+ 
++config BR2_PACKAGE_JAILHOUSE
++	bool "jailhouse"
++	select BR2_LEGACY
++	help
++	  jailhouse has been removed. It was no longer maintained
++	  upstream.
++
+ config BR2_PACKAGE_IFENSLAVE
+ 	bool "ifenslave"
+ 	select BR2_LEGACY
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0f52ba2267..1d8869f09c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -602,7 +602,6 @@ F:	configs/ti_am62x_sk_defconfig
+ F:	configs/ti_am64x_sk_defconfig
+ 
+ N:	Carlo Caione <carlo.caione@gmail.com>
+-F:	package/jailhouse/
+ F:	package/sunxi-boards/
+ 
+ N:	Carsten Schoenert <c.schoenert@gmail.com>
+@@ -1962,7 +1961,6 @@ F:	support/testing/tests/package/test_iperf3.py
+ F:	support/testing/tests/package/test_iproute2.py
+ F:	support/testing/tests/package/test_iptables.py
+ F:	support/testing/tests/package/test_iputils.py
+-F:	support/testing/tests/package/test_jailhouse.py
+ F:	support/testing/tests/package/test_jq.py
+ F:	support/testing/tests/package/test_jq/
+ F:	support/testing/tests/package/test_kexec.py
+diff --git a/package/Config.in b/package/Config.in
+index 6615c2b2af..54af5e7450 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2856,7 +2856,6 @@ menu "System tools"
+ 	source "package/iotop/Config.in"
+ 	source "package/iprutils/Config.in"
+ 	source "package/irqbalance/Config.in"
+-	source "package/jailhouse/Config.in"
+ 	source "package/keyutils/Config.in"
+ 	source "package/kmod/Config.in"
+ 	source "package/kmon/Config.in"
+diff --git a/package/jailhouse/0001-YOCIMX-9281-1-Fix-gcc15-errors.patch b/package/jailhouse/0001-YOCIMX-9281-1-Fix-gcc15-errors.patch
+deleted file mode 100644
+index 15e10714c1..0000000000
+--- a/package/jailhouse/0001-YOCIMX-9281-1-Fix-gcc15-errors.patch
++++ /dev/null
+@@ -1,119 +0,0 @@
+-From da2aa3c97fe9a374709c4bddf9b55253d53e1350 Mon Sep 17 00:00:00 2001
+-From: Tom Hochstein <tom.hochstein@nxp.com>
+-Date: Thu, 12 Jun 2025 06:49:58 -0700
+-Subject: [PATCH] YOCIMX-9281-1: Fix gcc15 errors
+-
+-Fix several instances of the following errors:
+-
+-```
+-| inmates/lib/include/inmate_common.h:87:16: error: cannot use keyword 'true' as enumeration constant
+-|    87 | typedef enum { true = 1, false = 0 } bool;
+-|       |                ^~~~
+-```
+-
+-```
+-| In file included from configs/arm64/hikey.c:16:
+-| include/jailhouse/cell-config.h:318:41: error: initializer-string for array of 'char' truncates NUL terminator but destination lacks 'nonstring' attribute (6 chars into 5 available) [-Werror=unterminated-string-initialization]
+-|   318 | #define JAILHOUSE_SYSTEM_SIGNATURE      "JHSYS"
+-|       |                                         ^~~~~~~
+-| configs/arm64/hikey.c:26:30: note: in expansion of macro 'JAILHOUSE_SYSTEM_SIGNATURE'
+-|    26 |                 .signature = JAILHOUSE_SYSTEM_SIGNATURE,
+-|       |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~
+-```
+-
+-Upstream: https://github.com/nxp-imx/imx-jailhouse/commit/2be7793ca658015470fe0d60c0c973e12ce68d73
+-
+-Signed-off-by: Tom Hochstein <tom.hochstein@nxp.com>
+-Signed-off-by: Peng Fan <peng.fan@nxp.com>
+-[Romain:
+-  use "__STDC_VERSION__ < 202311L" as suggested by Peter Korsgaard
+-  https://lore.kernel.org/buildroot/878q8uk9qf.fsf@dell.be.48ers.dk/
+-]
+-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+----
+- hypervisor/include/jailhouse/header.h | 2 +-
+- hypervisor/include/jailhouse/types.h  | 2 ++
+- include/jailhouse/cell-config.h       | 4 ++--
+- include/jailhouse/hypercall.h         | 2 +-
+- inmates/lib/include/inmate_common.h   | 2 ++
+- 5 files changed, 8 insertions(+), 4 deletions(-)
+-
+-diff --git a/hypervisor/include/jailhouse/header.h b/hypervisor/include/jailhouse/header.h
+-index 518bc5cb..324eb94b 100644
+---- a/hypervisor/include/jailhouse/header.h
+-+++ b/hypervisor/include/jailhouse/header.h
+-@@ -55,7 +55,7 @@ struct jailhouse_header {
+- 	/** Signature "JAILHOUS" used for basic validity check of the
+- 	 * hypervisor image.
+- 	 * @note Filled at build time. */
+--	char signature[8];
+-+	char signature[8] __attribute__ ((nonstring));
+- 	/** Size of hypervisor core.
+- 	 * It starts with the hypervisor's header and ends after its bss
+- 	 * section. Rounded up to page boundary.
+-diff --git a/hypervisor/include/jailhouse/types.h b/hypervisor/include/jailhouse/types.h
+-index 6d78ad6d..80f2a9ca 100644
+---- a/hypervisor/include/jailhouse/types.h
+-+++ b/hypervisor/include/jailhouse/types.h
+-@@ -19,7 +19,9 @@
+- 
+- #ifndef __ASSEMBLY__
+- 
+-+#if __STDC_VERSION__ < 202311L
+- typedef enum { true = 1, false = 0 } bool;
+-+#endif
+- 
+- /** Describes a CPU set. */
+- struct cpu_set {
+-diff --git a/include/jailhouse/cell-config.h b/include/jailhouse/cell-config.h
+-index 17d59306..affce1c2 100644
+---- a/include/jailhouse/cell-config.h
+-+++ b/include/jailhouse/cell-config.h
+-@@ -91,7 +91,7 @@
+-  * structure.
+-  */
+- struct jailhouse_cell_desc {
+--	char signature[5];
+-+	char signature[5] __attribute__ ((nonstring));
+- 	__u8 architecture;
+- 	__u16 revision;
+- 
+-@@ -330,7 +330,7 @@ struct jailhouse_pio {
+-  * General descriptor of the system.
+-  */
+- struct jailhouse_system {
+--	char signature[5];
+-+	char signature[5] __attribute__ ((nonstring));
+- 	__u8 architecture;
+- 	__u16 revision;
+- 
+-diff --git a/include/jailhouse/hypercall.h b/include/jailhouse/hypercall.h
+-index 07574d3d..cf58a4c9 100644
+---- a/include/jailhouse/hypercall.h
+-+++ b/include/jailhouse/hypercall.h
+-@@ -107,7 +107,7 @@
+- 
+- #define COMM_REGION_GENERIC_HEADER					\
+- 	/** Communication region magic JHCOMM */			\
+--	char signature[6];						\
+-+	char signature[6] __attribute__ ((nonstring));						\
+- 	/** Communication region ABI revision */			\
+- 	__u16 revision;							\
+- 	/** Cell state, initialized by hypervisor, updated by cell. */	\
+-diff --git a/inmates/lib/include/inmate_common.h b/inmates/lib/include/inmate_common.h
+-index 1c20a0af..cae2a673 100644
+---- a/inmates/lib/include/inmate_common.h
+-+++ b/inmates/lib/include/inmate_common.h
+-@@ -84,7 +84,9 @@ typedef u32 __u32;
+- typedef s64 __s64;
+- typedef u64 __u64;
+- 
+-+#if __STDC_VERSION__ < 202311L
+- typedef enum { true = 1, false = 0 } bool;
+-+#endif
+- 
+- #include <jailhouse/hypercall.h>
+- 
+--- 
+-2.54.0
+-
+diff --git a/package/jailhouse/0002-YOCIMX-9281-2-hypervisor-arm64-fix-strh-usage.patch b/package/jailhouse/0002-YOCIMX-9281-2-hypervisor-arm64-fix-strh-usage.patch
+deleted file mode 100644
+index 9b75b8bdbe..0000000000
+--- a/package/jailhouse/0002-YOCIMX-9281-2-hypervisor-arm64-fix-strh-usage.patch
++++ /dev/null
+@@ -1,38 +0,0 @@
+-From bc09bd33a23f9599b0cb4596a0b7f5c601a74c75 Mon Sep 17 00:00:00 2001
+-From: Peng Fan <peng.fan@nxp.com>
+-Date: Mon, 25 Aug 2025 09:48:05 +0800
+-Subject: [PATCH] YOCIMX-9281-2: hypervisor: arm64: fix strh usage
+-
+-hypervisor/arch/arm64/entry.S:555: Error: immediate offset out of range
+-
+-Per ARM spec:
+-STRH (immediate)
+-<pimm> Is the optional positive immediate byte offset, a multiple of 2 in
+-the range 0 to 8190, defaulting to 0 and encoded in the "imm12" field
+-as <pimm>/2.
+-
+-So align sdei_event to 2 bytes aligned.
+-
+-Upstream: https://github.com/nxp-imx/imx-jailhouse/commit/98f6f8dc23d6b3d4fe5b15045ccb3d3ef36747be
+-
+-Signed-off-by: Peng Fan <peng.fan@nxp.com>
+-[Romain: rebase on top of latest commit on upstream repo
+-  https://github.com/siemens/jailhouse/commit/e57d1eff6d55aeed5f977fe4e2acfb6ccbdd7560]
+-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+----
+- hypervisor/arch/arm64/include/asm/percpu_fields.h | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/hypervisor/arch/arm64/include/asm/percpu_fields.h b/hypervisor/arch/arm64/include/asm/percpu_fields.h
+-index 67573fd6..118d69d0 100644
+---- a/hypervisor/arch/arm64/include/asm/percpu_fields.h
+-+++ b/hypervisor/arch/arm64/include/asm/percpu_fields.h
+-@@ -13,4 +13,4 @@
+- #define ARCH_PERCPU_FIELDS						\
+- 	ARM_PERCPU_FIELDS						\
+- 	unsigned long id_aa64mmfr0;					\
+--	bool sdei_event;
+-+	bool sdei_event __attribute__((aligned(2)));
+--- 
+-2.54.0
+-
+diff --git a/package/jailhouse/Config.in b/package/jailhouse/Config.in
+deleted file mode 100644
+index 445414162f..0000000000
+--- a/package/jailhouse/Config.in
++++ /dev/null
+@@ -1,28 +0,0 @@
+-config BR2_PACKAGE_JAILHOUSE
+-	bool "jailhouse"
+-	depends on BR2_aarch64 || BR2_x86_64
+-	depends on BR2_LINUX_KERNEL
+-	help
+-	  The Jailhouse partitioning Hypervisor based on Linux.
+-
+-	  https://github.com/siemens/jailhouse
+-
+-if BR2_PACKAGE_JAILHOUSE
+-
+-config BR2_PACKAGE_JAILHOUSE_HELPER_SCRIPTS
+-	bool "helper scripts"
+-	depends on BR2_PACKAGE_PYTHON3
+-	select BR2_PACKAGE_PYTHON_MAKO # runtime
+-	help
+-	  Python-based helpers for the Jailhouse Hypervisor.
+-
+-	  https://github.com/siemens/jailhouse
+-
+-comment "helper scripts require Python3"
+-	depends on !BR2_PACKAGE_PYTHON3
+-
+-endif
+-
+-comment "jailhouse needs a Linux kernel to be built"
+-	depends on BR2_aarch64 || BR2_x86_64
+-	depends on !BR2_LINUX_KERNEL
+diff --git a/package/jailhouse/jailhouse.hash b/package/jailhouse/jailhouse.hash
+deleted file mode 100644
+index 96d5819847..0000000000
+--- a/package/jailhouse/jailhouse.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed:
+-sha256  38ea5d2d9672ce7f76fd0c163edaa8968711aca58f245aec3c8934f140e828b6  jailhouse-e57d1eff6d55aeed5f977fe4e2acfb6ccbdd7560.tar.gz
+-sha256  3aafb31a2436178323663e00511f16d58fc36ea654b1457532e79d017205efd8  COPYING
+diff --git a/package/jailhouse/jailhouse.mk b/package/jailhouse/jailhouse.mk
+deleted file mode 100644
+index a1c86f0e91..0000000000
+--- a/package/jailhouse/jailhouse.mk
++++ /dev/null
+@@ -1,71 +0,0 @@
+-################################################################################
+-#
+-# jailhouse
+-#
+-################################################################################
+-
+-JAILHOUSE_VERSION = e57d1eff6d55aeed5f977fe4e2acfb6ccbdd7560
+-JAILHOUSE_SITE = $(call github,siemens,jailhouse,$(JAILHOUSE_VERSION))
+-JAILHOUSE_LICENSE = GPL-2.0
+-JAILHOUSE_LICENSE_FILES = COPYING
+-JAILHOUSE_DEPENDENCIES = \
+-	linux
+-
+-JAILHOUSE_MAKE_OPTS = \
+-	CROSS_COMPILE="$(TARGET_CROSS)" \
+-	ARCH="$(KERNEL_ARCH)" \
+-	KDIR="$(LINUX_DIR)" \
+-	DESTDIR="$(TARGET_DIR)" \
+-	prefix=/usr
+-
+-ifeq ($(BR2_PACKAGE_JAILHOUSE_HELPER_SCRIPTS),y)
+-JAILHOUSE_DEPENDENCIES += \
+-	host-python-mako \
+-	host-python-setuptools \
+-	python3
+-JAILHOUSE_MAKE_OPTS += \
+-	HAS_PYTHON_MAKO="yes" \
+-	PYTHON_PIP_USABLE="yes"
+-else
+-JAILHOUSE_MAKE_OPTS += \
+-	HAS_PYTHON_MAKO="no" \
+-	PYTHON_PIP_USABLE="no"
+-endif
+-
+-ifeq ($(BR2_PACKAGE_JAILHOUSE_HELPER_SCRIPTS),y)
+-define JAILHOUSE_BUILD_HELPER_SCRIPTS
+-	cd $(@D) && \
+-	$(PKG_PYTHON_SETUPTOOLS_ENV) \
+-	$(HOST_DIR)/bin/python setup.py \
+-		build
+-endef
+-define JAILHOUSE_INSTALL_HELPER_SCRIPTS
+-	cd $(@D) && \
+-	$(PKG_PYTHON_SETUPTOOLS_ENV) \
+-	$(HOST_DIR)/bin/python setup.py \
+-		install --no-compile \
+-		$(PKG_PYTHON_SETUPTOOLS_INSTALL_OPTS) \
+-		--root=$(TARGET_DIR)
+-endef
+-endif
+-
+-define JAILHOUSE_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(JAILHOUSE_MAKE_OPTS) -C $(@D)
+-
+-	$(JAILHOUSE_BUILD_HELPER_SCRIPTS)
+-endef
+-
+-define JAILHOUSE_INSTALL_TARGET_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) $(JAILHOUSE_MAKE_OPTS) -C $(@D) modules_install firmware_install tool_inmates_install
+-	$(TARGET_MAKE_ENV) $(MAKE) $(JAILHOUSE_MAKE_OPTS) -C $(@D)/tools src=$(@D)/tools install
+-
+-	$(INSTALL) -d -m 0755 $(TARGET_DIR)/etc/jailhouse
+-	$(INSTALL) -D -m 0644 $(@D)/configs/*/*.cell $(TARGET_DIR)/etc/jailhouse
+-
+-	$(INSTALL) -d -m 0755 $(TARGET_DIR)/usr/libexec/jailhouse/demos
+-	$(INSTALL) -D -m 0755 $(@D)/inmates/demos/*/*.bin $(TARGET_DIR)/usr/libexec/jailhouse/demos
+-
+-	$(JAILHOUSE_INSTALL_HELPER_SCRIPTS)
+-endef
+-
+-$(eval $(generic-package))
+diff --git a/support/testing/tests/package/test_jailhouse.py b/support/testing/tests/package/test_jailhouse.py
+deleted file mode 100644
+index 4634fc4de2..0000000000
+--- a/support/testing/tests/package/test_jailhouse.py
++++ /dev/null
+@@ -1,103 +0,0 @@
+-import os
+-import time
+-
+-import infra.basetest
+-
+-
+-class TestJailhouse(infra.basetest.BRTest):
+-    # This test uses a specific configuration, mainly for matching the
+-    # requirements of the Jailhouse Qemu inmate demo. We also use the
+-    # Linux kernel from Siemens, which includes patches for
+-    # Jailhouse. Finally, we use the kernel config from
+-    # board/qemu/aarch64-virt rather than the Kernel defconfig, for
+-    # faster build (as it enable less components, but includes
+-    # everything needed for this test).
+-    kernel_ver = "eb6927f7eea77f823b96c0c22ad9d4a2d7ffdfce"
+-    kernel_url = \
+-        f"$(call github,siemens,linux,{kernel_ver})/linux-{kernel_ver}.tar.gz"
+-    config = \
+-        f"""
+-        BR2_aarch64=y
+-        BR2_TOOLCHAIN_EXTERNAL=y
+-        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+-        BR2_LINUX_KERNEL=y
+-        BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-        BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="{kernel_url}"
+-        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+-        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+-        BR2_PACKAGE_JAILHOUSE=y
+-        BR2_TARGET_ROOTFS_EXT2=y
+-        BR2_TARGET_ROOTFS_EXT2_4=y
+-        # BR2_TARGET_ROOTFS_TAR is not set
+-        """
+-
+-    def test_run(self):
+-        drive = os.path.join(self.builddir, "images", "rootfs.ext4")
+-        kern = os.path.join(self.builddir, "images", "Image")
+-        # Qemu option and Kernel args are taken from Jailhouse demo. See:
+-        # https://github.com/siemens/jailhouse/blob/master/README.md
+-        # We also add oops=panic to improve the test coverage.
+-        self.emulator.boot(arch="aarch64",
+-                           kernel=kern,
+-                           kernel_cmdline=["root=/dev/vda console=ttyAMA0 mem=768M oops=panic"],
+-                           options=["-M", "virt,gic-version=3,virtualization=on,its=off",
+-                                    "-cpu", "cortex-a57",
+-                                    "-m", "1G",
+-                                    "-smp", "16",
+-                                    "-drive", f"file={drive},if=none,format=raw,id=hd0",
+-                                    "-device", "virtio-blk-device,drive=hd0"])
+-        self.emulator.login()
+-
+-        # Check the program can execute.
+-        self.assertRunOk("jailhouse --version")
+-
+-        # Load the kernel module.
+-        self.assertRunOk("modprobe jailhouse")
+-
+-        # Check the device is present.
+-        self.assertRunOk("ls -al /dev/jailhouse")
+-
+-        # Load the cell config this this qemu test.
+-        self.assertRunOk("jailhouse enable /etc/jailhouse/qemu-arm64.cell")
+-
+-        # Dump the jailhouse console, and check we see its
+-        # initialization string.
+-        out, ret = self.emulator.run("jailhouse console")
+-        self.assertEqual(ret, 0)
+-        self.assertIn("Initializing Jailhouse hypervisor", "\n".join(out))
+-
+-        # Create the cell.
+-        cell_cfg = "/etc/jailhouse/qemu-arm64-inmate-demo.cell"
+-        cmd = f"jailhouse cell create {cell_cfg}"
+-        self.assertRunOk(cmd)
+-
+-        # Load the demo image.
+-        cell_name = "inmate-demo"
+-        img = "/usr/libexec/jailhouse/demos/gic-demo.bin"
+-        cmd = f"jailhouse cell load {cell_name} {img}"
+-        self.assertRunOk(cmd)
+-
+-        # List Jailhouse cells and check we see the one we loaded.
+-        out, ret = self.emulator.run("jailhouse cell list")
+-        self.assertEqual(ret, 0)
+-        self.assertIn(cell_name, "\n".join(out))
+-
+-        # We should also see our cell in sysfs.
+-        cmd = "cat /sys/devices/jailhouse/cells/1/name"
+-        out, ret = self.emulator.run(cmd)
+-        self.assertEqual(ret, 0)
+-        self.assertEqual(out[0], cell_name)
+-
+-        # Start the cell.
+-        self.assertRunOk(f"jailhouse cell start {cell_name}")
+-
+-        # Let the demo cell run for few seconds...
+-        time.sleep(3)
+-
+-        # Stop and unload the cell.
+-        self.assertRunOk(f"jailhouse cell shutdown {cell_name}")
+-        self.assertRunOk(f"jailhouse cell destroy {cell_name}")
+-
+-        # Stop and unload jailhouse.
+-        self.assertRunOk("jailhouse disable")
+-        self.assertRunOk("modprobe -r jailhouse")
+-- 
+2.56.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
