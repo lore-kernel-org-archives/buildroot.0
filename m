@@ -1,142 +1,112 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10D91606A319
-	for <buildroot@archiver.kernel.org>; Tue, 20 Oct 2026 19:51:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3530606A319
+	for <buildroot@archiver.kernel.org>; Tue, 20 Oct 2026 19:58:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=p/do7Ad4
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=hiLt0rzc
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DF9A460728;
-	Tue, 20 Oct 2026 19:51:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 842E480F3C;
+	Tue, 20 Oct 2026 19:58:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vl7psVoM3H9r; Tue, 20 Oct 2026 19:51:54 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org D88BA6074D
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792525914;
-	b=WiijOU1pv18lowTYWYHI6e2aLHazcfkexaXjv1m7pGd6A9vtkIhsh8avM4QeDoGAV7u2
-	 zc6J34qOaPLvgqud9meVLMTVsT/mh+h3SWd4xHogooHZPXAyDSJ5zJxb/UuUEUgqwvYM6
-	 SLbgFCzrfgq6takdOnyzKyOnmNytkbf3YbzhUVe1x/xsZNXYY3/S6j16gLH0pQviHRJOS
-	 QntG2zAfVa2R0SBnl99Q1RTg8IPtIqJ2qM2HOkEup9AGV3wFtuB89RzQZKPW0JmhP7gUT
-	 nQhjx/apM0wuSMT5U/GzjQ9MTAvxTHTy7CIjvQrbTyWvxPro8/cxHyH+plMgmwBtmkg==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AYXzOZj7PkKH; Tue, 20 Oct 2026 19:58:19 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 126F981090
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792526299;
+	b=GKbLCMKUw2aPnMEfeeqW1CNZw+3NIfbj6ZyUEn2cbtxK2y8efZGNKIENanmWHdtLPUNb
+	 u0o3JdCq+/CNzS7RQxDg1gsgV+WbsvKtCo8yz9w73zmnokGdUvQJ/Old0mat4a5eY/c71
+	 pkG4J0EXguVJfxEHA/jgO9YtiN4myWcvtPPnQp8eVxboI8jbrGDozROhR6q8YeFquOWRR
+	 F+M8d/6yeZXTK81Bo5QZQZBkw/wIlZzZKiFn1A2Tui1py9diuHv0LngTaCvLNX7nzsJ9c
+	 xFOl6QTgzmfs85NVJqG/czfhlgwy8P9GDLeYN6Rer0HwBipKJhAQaPLke5Gj5rmCmTA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792525914;
+	c=relaxed/relaxed; t=1792526299;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 Received:To:Date:Message-ID:X-Mailer:MIME-Version:Subject:X-BeenThere:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:To:
+	 Cc:Date:Message-ID:X-Mailer:MIME-Version:Subject:X-BeenThere:
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:Content-Type:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=u2H86SKY70QLgC7THMoUuzCGkIMfQdafEF4ba3A/zcE=;
-	b=Ahmp3e1hSlo4fXFqvCeOv12pQnl8jK8AbT29DarkeJ6ImPHGuOYOaP0R3ZEeXG+mDp1t
-	 IWh9k3y/P8FZAXss9E2RY7+wwD6FSxsgS+rI79cWUbVIy3K+ZxhoE4qzWTWoWY1Ik0u6K
-	 Uk17+ZJayxHbcS5V98pfqxLamtzWjOqq0WZsG8Nfs+ZQiMSggW/srmIt6oOXtmHhkBnr3
-	 KPbzG4Nov/kVb+aWR/Jh4ay9gsQqS9pfYO3AgjIHQLKULOL7Mr20VdSv140KymI2OMPYL
-	 Zuw8rajuoEaOoxMjyomFdsl5Xy5cAoZpZYrmQW+/Vv60J+MzsllXMCt+OBniLgz4osA==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	bh=YMcM/Kbowus2n4AWY7AESIAK3y+Ftu+7opzI0mWCHVs=;
+	b=UZbbq1XUC/EDd8Q0BN/w0n5uTw/rd2mVRRFYXvfeDB+qZfmpWLNUIC9hTaGe2N3FJ07y
+	 29j20Sa4wzF9zKpvil2co37j9HCR0YZgqqiydnOOUyDornEqhYJYd4S/pTxDQpNgzK+o3
+	 +KA5J8sRvCI8FBz1FIUY8FmvE6LLUthhOt9U+lkV88zwku6jeK8sv1ihuy76LtwllAWEX
+	 OVzKDVHzLC3HM9INLq7OFGfobS+HecJWICsYJNzEYk66QFfli44v3DBu/eb5Xmj8erh3k
+	 Oytm4PBonUtjIKVZe88GlUAgSYTqX0IVpkEul7mF5GnoC85gQq/lTh9Pv8Ed3LAngqw==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792525913;
-	bh=u2H86SKY70QLgC7THMoUuzCGkIMfQdafEF4ba3A/zcE=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=p/do7Ad4SQZZ9RC8r7iWAyqxzBVfd7qjVquwWUh9BKwaY/UEsBFvTEpZHHhPyNwHY
-	 j2expSWyBU4HM0e/rwAezjtAXKbkXHJIzzBtOQo8zHMWXjlYMqGA6u1WaGUpXr5STG
-	 eoWimr7pSeccgrcb2wGcPxMoUzIlVj7KMXOnHwHgCCbUqSuvRVOfsoJKcy8BO3sBoz
-	 D1YWahwmMAnqeJvXC9SCsrA+R4XhEtQimIuG4WfcFYSLigNEMmKzHkOJxb/Vbebqc2
-	 +hNJG/11w6SL63lazGcox2JRgEsMJch3e4dQSiTDts154qm6QrMCP6EVmNlWv3glvs
-	 jdNZADTWmcn6g==
+	s=default; t=1792526299;
+	bh=YMcM/Kbowus2n4AWY7AESIAK3y+Ftu+7opzI0mWCHVs=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=hiLt0rzcdlxBTp+HbkZ6RLzL1pPb7OutQCP1fnTi33SN3PKMjynFuwzGqGUpqbnTg
+	 OYuIrWHUhVwSUwtBnWeLkkxH5nM61CU9w56qTwuSYVjInVYbG8KsQm4cHCCoV1SRSy
+	 54q/jnCG1mQSeYNgiol1HZtxFtKaIayxbMGLY3dkiCgAIxyu/B+qsrPuy9ssXK8lVw
+	 AlMUclvN1V5rl7G7yY4NLc6NZ/incDYkccyNlAObX2cyRuNVx+WbTdGyQzU0O+064g
+	 NTqbIttjRSvIyAW0tz2W7pr7L+4aP7xuV2frlWLF8zxEEaqBL9zGVzYPYk7t6+J9ah
+	 SNhLVtlqiL/4g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D88BA6074D;
-	Tue, 20 Oct 2026 19:51:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8FFE5255
- for <buildroot@buildroot.org>; Tue, 20 Oct 2026 19:51:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 126F981090;
+	Tue, 20 Oct 2026 19:58:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id AA2AA3A8
+ for <buildroot@buildroot.org>; Tue, 20 Oct 2026 19:58:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8175A407C4
- for <buildroot@buildroot.org>; Tue, 20 Oct 2026 19:51:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9BB4C405F0
+ for <buildroot@buildroot.org>; Tue, 20 Oct 2026 19:58:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2yZN_WcTV1bT for <buildroot@buildroot.org>;
- Tue, 20 Oct 2026 19:51:51 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 87D24407BC
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792525911;
- b=IFPO3aOwAhtiTPxVjPoVweHYe8QyoJLZNHKsm2SvwQ72jQqbW3ydbU1wvXL5EEUuAJhe
- WYi0iVI6YemBA0PWWIVndI8aYl902A4m50MDF/gIs6mwN3zVzWJtiY+SdaPdUrSiT5Iv6
- bFUVMy5YCbrQQJv8kdoFtxpECCcvBZqEIIpXRcIk9CGWoNkQzRWX8pqp4H1/0CXVX8CoK
- yLxp5zGgbHoIJ7ed7eBXn1bA20bbLZkRseooqS2bDonrWrNLkzApoVtXETcCjqZKeriPt
- iDnKi/fuYox0Cc9zY3y9MLzSTXrTYOfOj9dpLpH+fHFAaPVdjBmXRMKVmCojWcZRCdA==
+ id BN3we_IxWnXt for <buildroot@buildroot.org>;
+ Tue, 20 Oct 2026 19:58:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 78436407C4
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792526296;
+ b=VvWowZfqarLBHS17WS3J0sGUDgvfrhSook6k75vOSaqTunWUWKTLsQt/8vFkwnE/CX2T
+ L9/Z/o+Ot30oBYFnI6Hl5HH+7zvMfuySD2kEMwf3msQXPZIUA+J8P39CcY1DCpZelXoVV
+ GseYgthYbAjWkl5l/IeV3uH2egzXCqdGyDM+enRTticahValfVPZLtckRQWwrdTzM+ljm
+ DsSt1PyrkwgazzpF16U0F19pQLsFyWMwLslK5iEc28KEKX5M0RYDoykH52I2EIUbohFEh
+ rOcERgNciQ8Tsm9cI1qqPHs+WHPUmDk3Yp5PNC6S2Lhu+NiV2Pe5OciL0sb3ci3T4YQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792525911;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
- bh=DahnTcmnxk8wSOIc1jDf2xpKnA8k18YIFM480lvNT1Y=;
- b=dleOF/IzwqQRODg/Lc4HH5Cyi29YS0ja9c4yBY9AKzDCyEmWfKifli81rTX9SmkQQVAt
- EHX3/eoueiBcfBrB6az8PFuHwsScSE58E0DtB9pVdl1Dy4uCJV5K0tSolRbpqCFaV12+R
- mDilWQKedMApihRB0KA1FhN68vFV5ZLjrKyb9d0zuovdzO8nVGplaYWPAbvSNRUIiVPOb
- zrdy5eT6dkV3jsWKy3ZUAnhCRmU5VshOQYqNEsYTYPZNzPdj0bFOkrfMgYRwH25xkNN6C
- jymCLiyy8ahFVVl6dd38++/yogmjhqqTp655qOLXe9Tyx5TmN5NwphWv5+cfBPBsbFg==
+ c=relaxed/relaxed; t=1792526296;
+ h=Received-SPF:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+ Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+ bh=DEZ0dpuai28J3aNzHjFDb0a/jtJsJBSwRDXIoPiK/2E=;
+ b=UBzmvM0PRu+KXNurdGE+7tHxWWszqc9LtFqVZ8ZitjVMYu9L22Bnxv4t9aheK9x5i6um
+ oovujm8g3L1eVhSTzhYQOe4LkSOeU6s9K8hV06LxPOQaem6xCoo8sKZE8p2UFQbEQuMr6
+ R3HhLiAHO1NxEfG0rQtzH7FtzDLCr9/CGFyOzueHk/eE0quEv3kBKdSf8lcu8KZpValOG
+ Adr0iCyrJJPMkfu/rhrkFl6ypa8MIVKvWWdhcnJe1Py01CVDk3RO2uCnviX7g+YNzpd8K
+ vxetAjUnVanAXDWTjXRn/7aJQSzJ/ZMs6kwKH5t70ptgSbjvG3QfgZ1WIrvEIgLCSYA==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
- dmarc=pass header.from=aperture.us;
- dkim=pass header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
- header.s=google header.b=h9Ys19PM; 
- arc=none smtp.remote-ip="2607:f8b0:4864:20::1032"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::1032; helo=mail-pj1-x1032.google.com;
- envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com
- [IPv6:2607:f8b0:4864:20::1032])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 87D24407BC
- for <buildroot@buildroot.org>; Tue, 20 Oct 2026 19:51:50 +0000 (UTC)
-Received: by mail-pj1-x1032.google.com with SMTP id
- 98e67ed59e1d1-3ad41b47541so38828a91.1
- for <buildroot@buildroot.org>; Tue, 20 Oct 2026 12:51:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1792525910; x=1793130710;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=DahnTcmnxk8wSOIc1jDf2xpKnA8k18YIFM480lvNT1Y=;
- b=KXk15sksLjZSc9yb+uQEZFZNpxMYz3XRWVexLXH74/ooKHT4G+5LpgKQAz1vfBIFtw
- i0GgL2N370BnwJlHlJmNMZgTP0mH1awIt0y1XWrrHNiy9M2LYTx5SXSWGngjdUsEdpLV
- JvecyARZCFLIX+K+SHDwPzUixlTgWrgSSJV/ypA0bnh+/1BCbL0CmwW8SZAJgBW6X/HS
- rbNyOqjfM77HvrEla9JiqFoJUxE9fDD7s9M87w5BELRtvJUhqXjm8lWCoZN+pLL5ND3V
- 28zT8I8kGFqGh6Xtr4WJ3JHa7ghKAE2vcjupsO/Ep7BWNO8qE2rEkD0EM2VRSq0jwtgj
- U5kA==
-X-Gm-Message-State: AFq9FYKmxu7lLtCUhhjz/HEDvYfnrz0wci5xR4JaGY16hzwt5TttZ3r2
- jWwWSl3/GHUSH9uSzfi+KxSwR4kgvY2hahWjj/nUV0UJlNqm1v0eheOfVTsewVQreoMdEaeYlUH
- qtSOjgXQ=
-X-Gm-Gg: AYBFou336Hxw85J7aQAMbPyWj8pV34UPtlbfpMpoCN/MJPk7cOBSsmf2coQvy8ONwX6
- 5L3LtpXDQZPV/1xHlKE4qoSoiiLFZmY1vmTaa3Y0wxY8ykLrh0bo6SbjRZDEUf3n+SgSjfN6Kk9
- xAn47B8pqxEVbq0SpFj3YOxuSNLv1HlLwdxW9wFbd8ksGz9cQDL4Oursw9q2V/Xnp4ocGnqCG0o
- dT3W5ydkHrrOLB8D6+Cp4+ZsgbDO7z/5pvscIeH85V9iJmJkqRII8qQKronz1Zt47kECsqi1xsq
- C+p6dIg7fdIy0c6jlzhWf3qSpwrVFxaEhHsS97owJ6KT+TmNddv7XfnlTuOOpPYkxlJeqh9mVyX
- WJgY1qeWCP1/fv+3NBmURhz21a75n53UcjsTdD/fzWvfwfTUAPB5Trr9XHIuV5v1Zcqs0pAVlN5
- uZ8Kisjekzyag9IDsBe11Eah1yjHXuE2ocFWamA0czmcxybCXPtsCBovG+GELXa0CbN1xMSujo/
- uxGMtul+vYsbdwh3zm+Z6doG4gbs0r3XZjgbA==
-X-Received: by 2002:a17:90b:582d:b0:3ab:b39f:41b9 with SMTP id
- 98e67ed59e1d1-3acef13e5d8mr10241911a91.61.1792525909666; 
- Tue, 20 Oct 2026 12:51:49 -0700 (PDT)
-Received: from localhost.localdomain ([187.15.93.220])
- by smtp.gmail.com with ESMTPSA id
- 98e67ed59e1d1-3ad812d3cefsm735659a91.11.2026.10.20.12.51.48
- (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
- Tue, 20 Oct 2026 12:51:49 -0700 (PDT)
+ dmarc=pass header.from=free.fr;
+ dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=tZN1tDxp; 
+ arc=none smtp.remote-ip=212.27.42.5
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 78436407C4
+ for <buildroot@buildroot.org>; Tue, 20 Oct 2026 19:58:14 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:1065:2100:52d9:65fe:2df3:c492])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 8BE3E61F00;
+ Tue, 20 Oct 2026 21:58:08 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Tue, 20 Oct 2026 12:51:45 -0700
-Message-ID: <20261020195145.32754-1-christian@aperture.us>
-X-Mailer: git-send-email 2.54.0
+Cc: Dick Olsson <hi@senzilla.io>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>,
+ Julien Olivain <ju.o@free.fr>
+Date: Tue, 20 Oct 2026 21:57:58 +0200
+Message-ID: <20261020195759.1091151-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.56.0
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v1 1/1] package/pkg-golang: use external linking
- on ARM Thumb
+Subject: [Buildroot] [PATCH v2 1/2] boot/grub2: bump to version 2.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -146,69 +116,262 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@aperture.us>
-Cc: Christian Stewart <christian@aperture.us>,
- "Yann E . MORIN" <yann.morin@orange.com>, Julien Olivain <ju.o@free.fr>,
- James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Thomas Perale <thomas.perale@mind.be>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-On ARMv5, runtime/cgo calls __sync_synchronize, which comes from
-libgcc.a. When cgo objects have unresolved symbols, the Go internal
-linker loads libgcc.a itself to resolve them. With
-BR2_ARM_INSTRUCTIONS_THUMB=y, gcc is built with --with-mode=thumb, so
-libgcc.a contains Thumb code, which the internal linker rejects:
+For release notes, see [1] and [2].
 
-  link: R_ARM_THM_CALL, are you using -marm?
+The grub2 project moved to gitlab. See [3] and [4].
+This commit updates GRUB2_SITE accordingly.
 
-Go already passes -marm when it compiles the cgo C sources, so adding
--marm to CGO_CFLAGS does not help. The call from ARM code into Thumb
-code must switch the processor to the other instruction set, which the
-internal linker cannot do. Force external linking instead: GNU ld can,
-by rewriting the call to BLX or routing it through a small stub.
+The commit removes the package patches which are included in this
+release, and also adds an upstream patch to fix an issue on arm64
+platform.
 
-Fixes: https://autobuild.buildroot.org/results/7534211959577546c3777939d11e411d8a417baa
+Tested by compiling and booting the defconfigs using grub2:
 
-Signed-off-by: Christian Stewart <christian@aperture.us>
+    qemu_aarch64_sbsa_defconfig
+    qemu_arm_ebbr_defconfig
+    qemu_loongarch64_virt_efi_defconfig
+    qemu_riscv64_virt_efi_defconfig
+    qemu_x86_64_efi_defconfig
+    pc_x86_64_bios_defconfig
+    pc_x86_64_efi_defconfig
 
+and running the runtime tests with:
+
+    support/testing/run-tests \
+        -d dl -o output_folder \
+            tests.boot.test_grub \
+            tests.fs.test_iso9660
+
+[1] https://gitlab.freedesktop.org/gnu-grub/grub/-/releases/grub-2.16
+[2] https://gitlab.freedesktop.org/gnu-grub/grub/-/blob/grub-2.16/NEWS
+[3] https://gitlab.freedesktop.org/gnu-grub/grub/-/commit/754a3d867d015ffc242a7bb67fd6b88624667af9
+[4] https://lists.gnu.org/archive/html/grub-devel/2026-03/msg00036.html
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/pkg-golang.mk | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Changes v1 -> v2:
+- No change.
 
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index 3e388cb257..cf12dd56b0 100644
---- a/package/pkg-golang.mk
-+++ b/package/pkg-golang.mk
-@@ -146,6 +146,17 @@ ifeq ($(BR2_aarch64),y)
- $(2)_EXTLDFLAGS += -fuse-ld=bfd
- endif
- 
-+ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS),yy)
-+# On ARMv5, runtime/cgo calls helpers such as __sync_synchronize that
-+# come from libgcc.a. With BR2_ARM_INSTRUCTIONS_THUMB, libgcc.a is built
-+# as Thumb code while Go emits ARM code. A call between the two must
-+# switch the processor to the other instruction set, which Go's
-+# internal linker cannot do: it aborts on the R_ARM_THM_CALL relocation.
-+# The external linker (GNU ld) can, by rewriting the call to BLX or
-+# routing it through a small stub, so use it.
-+$(2)_LDFLAGS += -linkmode=external
-+endif
+Note: runtime tests using i386 CPU are failing due to unrelated
+reasons (illegal instruction in libc form /sbin/init). Without
+this bump, those tests are failing the same way. Since the
+failure happens in user space, it means the boot still work with
+this bump.
+---
+ ...it-memory-allocations-to-4GB-boundar.patch | 34 +++++++++
+ ...-Check-linker-for-image-base-support.patch | 75 -------------------
+ ...-Print-a-more-helpful-error-if-autoc.patch | 36 ---------
+ boot/grub2/grub2.hash                         |  4 +-
+ boot/grub2/grub2.mk                           |  4 +-
+ 5 files changed, 38 insertions(+), 115 deletions(-)
+ create mode 100644 boot/grub2/0001-Revert-arm64-Limit-memory-allocations-to-4GB-boundar.patch
+ delete mode 100644 boot/grub2/0001-Revert-configure-Check-linker-for-image-base-support.patch
+ delete mode 100644 boot/grub2/0002-Revert-configure-Print-a-more-helpful-error-if-autoc.patch
+
+diff --git a/boot/grub2/0001-Revert-arm64-Limit-memory-allocations-to-4GB-boundar.patch b/boot/grub2/0001-Revert-arm64-Limit-memory-allocations-to-4GB-boundar.patch
+new file mode 100644
+index 0000000000..ec83b2fa79
+--- /dev/null
++++ b/boot/grub2/0001-Revert-arm64-Limit-memory-allocations-to-4GB-boundar.patch
+@@ -0,0 +1,34 @@
++From ec277f1056227689c8875d1c73602b47bfe72633 Mon Sep 17 00:00:00 2001
++From: Neal Gompa <neal@gompa.dev>
++Date: Mon, 28 Sep 2026 18:12:45 -0400
++Subject: [PATCH] Revert "arm64: Limit memory allocations to 4GB boundary"
 +
- ifneq ($$($(2)_EXTLDFLAGS),)
- $(2)_LDFLAGS += -extldflags '$$($(2)_EXTLDFLAGS)'
- endif
++This causes failed memory allocations on some ARM-based platforms,
++notably Apple Silicon Macs.
++
++This reverts commit 1cae861314f43540cde773fab8b6ed769dc5f106.
++
++Reviewed-by: Leo Sandoval <lsandova@redhat.com>
++Signed-off-by: Neal Gompa <neal@gompa.dev>
++Part-of: <https://gitlab.freedesktop.org/gnu-grub/grub/-/merge_requests/274>
++Upstream: https://gitlab.freedesktop.org/gnu-grub/grub/-/commit/711110daccaf15df695b270d13f76b5bc84a64dd
++Signed-off-by: Julien Olivain <ju.o@free.fr>
++---
++ include/grub/arm64/efi/memory.h | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/include/grub/arm64/efi/memory.h b/include/grub/arm64/efi/memory.h
++index 2c64918e3..c6cb32417 100644
++--- a/include/grub/arm64/efi/memory.h
+++++ b/include/grub/arm64/efi/memory.h
++@@ -1,6 +1,6 @@
++ #ifndef GRUB_MEMORY_CPU_HEADER
++ #include <grub/efi/memory.h>
++ 
++-#define GRUB_EFI_MAX_USABLE_ADDRESS 0xffffffff
+++#define GRUB_EFI_MAX_USABLE_ADDRESS 0xffffffffffffULL
++ 
++ #endif /* ! GRUB_MEMORY_CPU_HEADER */
++-- 
++2.56.0
++
+diff --git a/boot/grub2/0001-Revert-configure-Check-linker-for-image-base-support.patch b/boot/grub2/0001-Revert-configure-Check-linker-for-image-base-support.patch
+deleted file mode 100644
+index edfaea2de8..0000000000
+--- a/boot/grub2/0001-Revert-configure-Check-linker-for-image-base-support.patch
++++ /dev/null
+@@ -1,75 +0,0 @@
+-From 3a9d2dd2f5fb07b75a74c307d61b9b9fc5d20a62 Mon Sep 17 00:00:00 2001
+-From: Yi Zhao <yi.zhao@windriver.com>
+-Date: Fri, 27 Feb 2026 11:46:54 +0800
+-Subject: [PATCH] Revert "configure: Check linker for --image-base support"
+-
+-This reverts commit 1a5417f39a0ccefcdd5440f2a67f84d2d2e26960.
+-
+-Signed-off-by: Yi Zhao <yi.zhao@windriver.com>
+-Upstream: temporary revert, until upstream fixes the issue, see
+-discussion at
+-https://lists.gnu.org/archive/html/grub-devel/2026-02/msg00039.html
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- acinclude.m4 |  5 -----
+- configure.ac | 14 ++------------
+- 2 files changed, 2 insertions(+), 17 deletions(-)
+-
+-diff --git a/acinclude.m4 b/acinclude.m4
+-index 70c1912f8..fa7840f09 100644
+---- a/acinclude.m4
+-+++ b/acinclude.m4
+-@@ -79,11 +79,6 @@ AC_DEFUN([grub_PROG_OBJCOPY_ABSOLUTE],
+- [AC_MSG_CHECKING([whether ${TARGET_OBJCOPY} works for absolute addresses])
+- AC_CACHE_VAL(grub_cv_prog_objcopy_absolute,
+- [cat > conftest.c <<\EOF
+--asm (
+--    ".globl start, _start, __start\n"
+--    ".ifdef cmain; .set start = _start = __start = cmain\n.endif\n"
+--    ".ifdef _cmain; .set start = _start = __start = _cmain\n.endif\n"
+--);
+- void cmain (void);
+- void
+- cmain (void)
+-diff --git a/configure.ac b/configure.ac
+-index d8ca1b7c1..041cfbab4 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -1461,6 +1461,7 @@ elif test x$grub_cv_target_cc_link_format = x-mi386pe || test x$grub_cv_target_c
+-   TARGET_IMG_LDSCRIPT='$(top_srcdir)'"/conf/i386-cygwin-img-ld.sc"
+-   TARGET_IMG_LDFLAGS="-Wl,-T${TARGET_IMG_LDSCRIPT}"
+-   TARGET_IMG_LDFLAGS_AC="-Wl,-T${srcdir}/conf/i386-cygwin-img-ld.sc"
+-+  TARGET_IMG_BASE_LDOPT="-Wl,-Ttext"
+-   TARGET_IMG_CFLAGS=
+- else
+-   TARGET_APPLE_LINKER=0
+-@@ -1468,6 +1469,7 @@ else
+-   TARGET_IMG_LDSCRIPT=
+-   TARGET_IMG_LDFLAGS='-Wl,-N'
+-   TARGET_IMG_LDFLAGS_AC='-Wl,-N'
+-+  TARGET_IMG_BASE_LDOPT="-Wl,-Ttext"
+-   TARGET_IMG_CFLAGS=
+- fi
+- 
+-@@ -1798,18 +1800,6 @@ grub_PROG_TARGET_CC
+- m4_ifndef([AX_CHECK_LINK_FLAG], [m4_fatal([autoconf-archive is missing. You must install it to generate the configure script.])])
+- 
+- if test "x$TARGET_APPLE_LINKER" != x1 ; then
+--AX_CHECK_LINK_FLAG([-Wl,--image-base,0x400000],
+--    [TARGET_IMG_BASE_LDOPT="-Wl,--image-base"],
+--    [TARGET_IMG_BASE_LDOPT="-Wl,-Ttext"],
+--    [],
+--    [AC_LANG_SOURCE([
+--asm (".globl start; start:");
+--asm (".globl _start; _start:");
+--asm (".globl __start; __start:");
+--void __main (void);
+--void __main (void) {}
+--int main (void);
+--    ])])
+- grub_PROG_OBJCOPY_ABSOLUTE
+- fi
+- grub_PROG_LD_BUILD_ID_NONE
+--- 
+-2.43.0
+-
+diff --git a/boot/grub2/0002-Revert-configure-Print-a-more-helpful-error-if-autoc.patch b/boot/grub2/0002-Revert-configure-Print-a-more-helpful-error-if-autoc.patch
+deleted file mode 100644
+index 8e38bb9d3f..0000000000
+--- a/boot/grub2/0002-Revert-configure-Print-a-more-helpful-error-if-autoc.patch
++++ /dev/null
+@@ -1,36 +0,0 @@
+-From d0f516385dc73e8dd92b78ce08c1df100434fe67 Mon Sep 17 00:00:00 2001
+-From: Yi Zhao <yi.zhao@windriver.com>
+-Date: Fri, 27 Feb 2026 13:58:44 +0800
+-Subject: [PATCH] Revert "configure: Print a more helpful error if
+- autoconf-archive is not installed"
+-
+-This reverts commit ac042f3f58d33ce9cd5ff61750f06da1a1d7b0eb.
+-
+-Signed-off-by: Yi Zhao <yi.zhao@windriver.com>
+-Upstream: temporary revert, until upstream fixes the issue, see
+-discussion at
+-https://lists.gnu.org/archive/html/grub-devel/2026-02/msg00039.html
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- configure.ac | 5 -----
+- 1 file changed, 5 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 041cfbab4..209c0fb11 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -1794,11 +1794,6 @@ LIBS=""
+- # Defined in acinclude.m4.
+- grub_ASM_USCORE
+- grub_PROG_TARGET_CC
+--
+--# The error message produced by autoconf if autoconf-archive is not installed is
+--# quite misleading and not very helpful. So, try point people in the right direction.
+--m4_ifndef([AX_CHECK_LINK_FLAG], [m4_fatal([autoconf-archive is missing. You must install it to generate the configure script.])])
+--
+- if test "x$TARGET_APPLE_LINKER" != x1 ; then
+- grub_PROG_OBJCOPY_ABSOLUTE
+- fi
+--- 
+-2.43.0
+-
+diff --git a/boot/grub2/grub2.hash b/boot/grub2/grub2.hash
+index 5b5ac28eda..cf46011359 100644
+--- a/boot/grub2/grub2.hash
++++ b/boot/grub2/grub2.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking signature
+-# https://ftp.gnu.org/gnu/grub/grub-2.14.tar.xz.sig
+-sha256  bc8d3c73535b8838d8c8e2654d73edc4e6ae8c8acdb45d5df5dc9a1547446d43  grub-2.14.tar.xz
++# https://gitlab.freedesktop.org/api/v4/projects/26558/packages/generic/source-assets/grub-2.16/grub-2.16.tar.xz.sig
++sha256  f0db0104927df0b9a48bc41b735c702936190d17eb2d73d3018fa77474a0cabe  grub-2.16.tar.xz
+ # Locally computed:
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index de9f913e93..d34415d467 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-GRUB2_VERSION = 2.14
+-GRUB2_SITE = $(BR2_GNU_MIRROR)/grub
++GRUB2_VERSION = 2.16
++GRUB2_SITE = https://gitlab.freedesktop.org/api/v4/projects/26558/packages/generic/source-assets/grub-$(GRUB2_VERSION)
+ GRUB2_SOURCE = grub-$(GRUB2_VERSION).tar.xz
+ GRUB2_LICENSE = GPL-3.0+
+ GRUB2_LICENSE_FILES = COPYING
 -- 
-2.55.0
+2.56.0
 
 _______________________________________________
 buildroot mailing list
