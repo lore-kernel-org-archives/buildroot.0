@@ -2,27 +2,27 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58E91606A31D
-	for <buildroot@archiver.kernel.org>; Tue, 20 Oct 2026 10:21:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6944A606A319
+	for <buildroot@archiver.kernel.org>; Tue, 20 Oct 2026 10:21:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=bio2L3Id
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=KFTfbDyl
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B7E14810B5;
-	Tue, 20 Oct 2026 10:21:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E95B4810C1;
+	Tue, 20 Oct 2026 10:21:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AqqR0p2wb6Xx; Tue, 20 Oct 2026 10:21:33 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org B118E810E2
+ id CQKvIpx5_Hxe; Tue, 20 Oct 2026 10:21:35 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org C72E781167
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792491692;
-	b=kQaA7tOgz4saXYwVJu9xxGs6Trd/6W4M+pEbPj/wvj7Q3W3+ZK2WeChn3rpf42Seu/I+
-	 aQbmpJtVbfQiShVkqdbIdF4+2jMBXtp6AKKpHupVllMLSSagudExcwieEt1+WvQNdWMmE
-	 fnEmoELGNcXoPx5KH+otxUYc/O4LVxSU8he60SdH9S4F6m5VU+QZ/cwriKLQ6XW9x3X27
-	 WIpMxd/OzK7aGMHsd+C043Irg2gC8+5Tzn4aNxzgsn4l4VHee0Rsh1q/WKZnP2Rn6mlnr
-	 Q86HPrbSvjqREg2rVi0DoFo1BotKp4X7EyadNed/oaYuNcD/7OYR7QueGVBnRJYpl6A==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792491695;
+	b=YQVUTs95Bxd4BugziAE9VQzsoLL9P2SPV/5MPqnj2E7HmedfmORt2D91CulSz1tSea5L
+	 0/w3gR3m99lxahUyi/0YiZqmMOCBIrfX8lJLwM6//3J2qNSOplJiJFino2ikukTQVfMiJ
+	 HMC7wF/MyscMPC+shQ2LC+6CtLTmxaEk1yfKaLNQw4QyQ75lF/ty4ajf0VNXp5ySnVEFD
+	 us2UGNaNFQabDtFTRUWcDF2NtrJFtBU1dOYjn9WuIoZ+xZv72T13JT5nrt3A4s7p2YPDR
+	 icZITo0yrSPKx/8wTOCvI+ocWVri8abEmPV3PpTmvCkbSxzf63BC8cCLtK+utccmUWw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792491692;
+	c=relaxed/relaxed; t=1792491695;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:From:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,79 +30,78 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:MIME-Version:Content-Type:Content-Transfer-Encoding:
 	 Errors-To:Sender;
-	bh=Evi6krOvfNDgB88AEDAYbBvdlTC1QTFrGeLxr51O5D8=;
-	b=qSmR0Tct16oGs+OF3zn9gR+NK4ZqtYNdyGMyynT4N1tBS8G+Yzy0jGp5iE4YzdHPqr/4
-	 /z99fNzsZO6njYjf285LWpeylsS2tbvYHtOxqV9muqNTd6UHnYJdRt0QKHRDjBES0BP3Q
-	 jvyMJP0AoEEMAoExLom0ztR0wheGeqzpUc9aVsP2pwh52wkufWjzMN7DXqBtEXTzVSaIi
-	 mLZXmGG8uTyoURXefkBqlGCH7P3ediYUk49Mga68/l1q8BgVDEOCrwZHZQP+FPeiARqhB
-	 hzz0LMc/E6Y0YtqgaQQyqNXO9yrc+alJqRCDppQJyDLpY5RiTlCZKc97rajzjOTlV+Q==
+	bh=GhxKeeH5c+QP3x/Sijy1EjL+Oj/4ptmZXccPQNKFvno=;
+	b=e30F+waOV5eCkh3dCRpk5zomdqVPGxpm+Nn8eFwBRF23EskAkKN/epEcclVIuB0PxE78
+	 SttDPNKZygbZ6i+UasKvn7j9A53hAUQqxvDOMiFBD9lh5wGsUTVHg2PO+91zXgzt9evbr
+	 mwcv+vJiG5ZfWlsHKP/68e92/FYzTY52Wp1/IR1QHTYgeiKamunQ3xwSSbB14KffLTZje
+	 C9IRE4Wfskla8oIC5AerEd657ghuqki+g8ebsiggHxkZZQiDyScLlR5n539KaMNpgKUsN
+	 3T40JUWC3dMMOmIBpDQrQuckVOFsOz/QklTU8xMOvYExq+JobXXriOxorSr+ilLmGrA==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792491692;
-	bh=Evi6krOvfNDgB88AEDAYbBvdlTC1QTFrGeLxr51O5D8=;
+	s=default; t=1792491695;
+	bh=GhxKeeH5c+QP3x/Sijy1EjL+Oj/4ptmZXccPQNKFvno=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=bio2L3IdzAllSZQq3qX+CTvNUtOLLu+PjEPAlCZqj9E5SfaxE1XQFbLr7eY9CVHna
-	 hhVk+YlIW1A4a7lPtB6qdARw9i50xhaRwWcs9F6HmunB46dDzDokAMyJ+Eg0nPz1Om
-	 ASBM+JOOZr7qT6v8o1e55GNjWCw/HE1beSvOtIu6KXEBYDmvUwLVgjcD/07Eu+TVhX
-	 I2KQOYMA0XbxA4PMuer9eundMNfvkC7b6Wex+OH8KZE37cT8wmG0S98B0CHPPkrzUa
-	 GREyNCnL5HadfiO897HqAPV2jVYzCeebD3S5BdzqAbiODwSmPFQbtChNkwOdQbzSik
-	 L9kkNf5pszN8w==
+	b=KFTfbDyl3DG7wcTFLiNGzXUBpFEIsy0Jbl4TP4EY+AUvZ1D/bcuQuMC29KPKeoxMX
+	 sO+in70owKQfkqBucVi1SvIQo1vpbRTq/BsddHHi7rAD7KLanfmPTPvSMoq8h3jfo4
+	 pxAkJJZJgEuITEPh1yIe6gTJ1PcqnfbaOsCY58RZ0Fc9gr4BDAE56QMXix7rbtjqY5
+	 tEb9NuNU7jF4tNoWy+ueGFwdLJm/OpESAzPLDRKgdHYtoF+gUpQDJKXn51BxbdaAL1
+	 GXVa3BPXdyHZDT/jS1p70l6rnbsosGEj89T4z3MLzlWFzxPlrqGFFZa4jUScTnXWd+
+	 g95KuwpeS7h8w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B118E810E2;
-	Tue, 20 Oct 2026 10:21:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C72E781167;
+	Tue, 20 Oct 2026 10:21:34 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D32DC1AB
+ by lists1.osuosl.org (Postfix) with ESMTP id DF96D3A8
  for <buildroot@buildroot.org>; Tue, 20 Oct 2026 10:21:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C4D4D60830
+ by smtp3.osuosl.org (Postfix) with ESMTP id C64F76083C
  for <buildroot@buildroot.org>; Tue, 20 Oct 2026 10:21:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dAnk1sCwK8bC for <buildroot@buildroot.org>;
- Tue, 20 Oct 2026 10:21:27 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 0391E60825
+ id oiCXIOf8VUk6 for <buildroot@buildroot.org>;
+ Tue, 20 Oct 2026 10:21:26 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org C913060822
 Authentication-Results: smtp3.osuosl.org;
  arc=none smtp.remote-ip=140.211.167.122
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792491687;
- b=Nb9P/T8nh3/rvJtrLTa90JmfmkpQS7hDaJEMPh53+HjFUsiuWqa0sMgoXwNJlCInB9zV
- k0BfsN7DN5PVMEDRU0JMzBYN//80+EXJcXR9pKk20rLY0W1U9AH233jLzE3dENsxjfJU1
- iYSFH3MrZ13OmdsgybDUh8w/Haig9P/r6F1WQTVs+/UR51tLN/Wq6P6umbdz7P3jG3Vgh
- g/3Jv/RGj0s5VPA9DmRN/aRTSf5OqcuALATHOz4w8ydzop1SXIMfzD65yKJLyy6V8kPV3
- g4RVNE0atao0w4P3YZ1vS84YoGbqwPLruu8V4d9i1yEO6Xqa808wqfB3OB3HLPPHtbA==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792491686;
+ b=BtnzRjpVhi/I9KPmKtppWLMGL46VjETA1FFBSarTdo8878jctbylvDpvTLlrrBwN6rzQ
+ C0jFhuS9+PngvM0hVxcoyI12RrV2ze/FSoHJUjyN3dytwVTbZiRFG+xWdFiFrhT/Ym74H
+ NE2yhGAEP3D2y9pYgVwrYVWIVMDam9LnhwmxvB1NvzkpnoI+KspVg/vgSUes2XJnaO0r3
+ I+r+PC3Qq/J/QPQ6mZaDL/fbCRzRDLJaqINyf3n4ir5CmhYbaUvXESTlas3cDPdX11Q3S
+ 5sU6ynaUv6rJ3A7+j7fvA5zHJ39ZhuUExBvxXjGbz0W+skSeK8Zcu9dVh7vL3J3/qpQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792491687;
+ c=relaxed/relaxed; t=1792491686;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=qTpcSL55Sc5hGqKZbDfqe9Y7D65NPUAuCrjTajLujXs=;
- b=h6kWbXUXRHGmBQVoQHNlyAJirFJQWWIPNX/lPd7QvDzqqB0dio9vfWzZN59ACq6AB8/o
- wIwBomW6XwXHEPACjUuzpozsPs8leQ/o/YM7IaXp5RgD2oUO4A962NlqBSd7rAZ4Kf1p+
- gIGKb7qI8IqFdEixDEIyg9Qcf+aG5MEIKKHexxxqgby4kAJ834h4XiIyshYD9JKXDky79
- NtU/cAJ+Sibn3hWF2JrO/ubtJpgH9F0QuPEb9fdKmgpi+0nu1CX2siJmIFieI0umLZZOu
- UrAiZjNoheumnJNiiCIWK/w0V1iwqZoWt2hn352fw6NQNIeXpGDsWynwWb1VYnUtitg==
+ bh=L74ZzKqz1NAYRVpQK+ik3I+xJksee7DQa/ztFFjE/7M=;
+ b=lIELp5FIhGbBWWR9xYcJxhR6MeOOZiFZvGcITGNe8RbFRdAnqyhXFxY7R/3kQZUQj/71
+ +Cg3tyMBt8V/kckPWzlrWuXRjuFKs9iG4umclaN7l89j4dvapU2bZk6gEEg8sTUis5cEf
+ 1zG3CpNyAmR7TK5HIrL+Kf4sHDzdWWAuqHl8mxMOuYiG+ZA3Z1M7vrKifIol+YaXMGooR
+ PfNuv0lB0PbhZ1BJQ3ap1JTETGkjrfvs7m9zbJxuWwMocOlWCh69jVvYjx/lSgJ0eCOoS
+ ajo0qXCdAFlPDLTopveTOIcbsFuHtHK6TJgWLOPAXCyvetFqphbZWs+M23RqJxSKnRw==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0391E60825
- for <buildroot@buildroot.org>; Tue, 20 Oct 2026 10:21:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C913060822
+ for <buildroot@buildroot.org>; Tue, 20 Oct 2026 10:21:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 008B799715; Tue, 20 Oct 2026 10:20:04 +0000 (UTC)
+ id CF83C99715; Tue, 20 Oct 2026 10:20:03 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 20 Oct 2026 12:20:45 +0200
+Date: Tue, 20 Oct 2026 12:17:30 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b89d3a408f87b4638bb1ec802decf11c23193445
-X-Git-Newrev: af83dd919177a7bbef22ed315eed696705d01afe
+X-Git-Oldrev: ad1d1c6dbc4b4d789b0136c814ad0e904dff6db2
+X-Git-Newrev: 874aba9eba6799b6bd033bac73e35af8970fde3a
 X-Patchwork-Hint: ignore
-Message-Id: <20261020102004.008B799715@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/freescale-imx/firmware-ele-imx:
- bump to version 2.0.7
+Message-Id: <20261020102003.CF83C99715@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/am33x-cm3: fix build with gcc >= 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,48 +124,47 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/af83dd919177a7bbef22ed315eed696705d01afe
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/874aba9eba6799b6bd033bac73e35af8970fde3a
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-To match the NXP BSP version LF6.18.37_2.1.0.
+gcc 15 defaults to the C23 standard, where bool, true and false are
+keywords. The am33x-cm3 code base defines them in its own stddef.h,
+so the build fails with:
 
-License hashes changed because the LA_OPT_NXP_Software_License changed from
-"v63 May 2025" to "v64.2 May 2026".
+src/include/stddef.h:18:15: error: 'bool' cannot be defined via 'typedef'
+   18 | typedef _Bool bool;
+      |               ^~~~
+src/include/stddef.h:19:8: error: cannot use keyword 'false' as enumeration constant
+   19 | enum { false, true };
+      |        ^~~~~
 
+The upstream project has not received any commit since 2018 and none
+of its branches fix this issue, so rather than carrying a patch that
+cannot be submitted to an active upstream, force the GNU C11 standard
+in the .mk file.
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash | 6 +++---
- package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/am33x-cm3/am33x-cm3.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash b/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash
-index f064ef1830..ea2405cf52 100644
---- a/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash
-+++ b/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  c3ae4a1e1a41da441bd61483ef011ac24bf624aa6bad36f879b5dfa435647b4c  firmware-ele-imx-2.0.4-93492e0.bin
--sha256  3001cf84018c5cb10d183a678f6ec8a928c797616ba06b398d7ca93c0779aaa2  COPYING
--sha256  a829b109a0a406a6a2fec19975a332feca225098ce66bfab2220c6608db8fce5  EULA
-+sha256  a24f0e6be783a09281d44b0c2fb26ed719038387441e7ef325b9d4c514592b1d  firmware-ele-imx-2.0.7-0265375.bin
-+sha256  09fc7cbaffd4b91cb3b464be0a71f420bc84c2b674de9c1895a292dbb326b3c6  COPYING
-+sha256  402244fa32bbd3d061688096049229c224b296a294c147984bfd2de306755340  EULA
- sha256  8721a617a5d4c7f366aaf857ebda21eb4c9fc9175dc92b70f627c611d403ec8e  SCR.txt
-diff --git a/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk b/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk
-index a844ca0d94..5756b422ba 100644
---- a/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk
-+++ b/package/freescale-imx/firmware-ele-imx/firmware-ele-imx.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/am33x-cm3/am33x-cm3.mk b/package/am33x-cm3/am33x-cm3.mk
+index 8c890a75fc..f753e46134 100644
+--- a/package/am33x-cm3/am33x-cm3.mk
++++ b/package/am33x-cm3/am33x-cm3.mk
+@@ -13,8 +13,10 @@ AM33X_CM3_LICENSE_FILES = License.txt
  
--FIRMWARE_ELE_IMX_VERSION = 2.0.4
--FIRMWARE_ELE_IMX_REVISION = 93492e0
-+FIRMWARE_ELE_IMX_VERSION = 2.0.7
-+FIRMWARE_ELE_IMX_REVISION = 0265375
- FIRMWARE_ELE_IMX_SITE = $(FREESCALE_IMX_SITE)
- FIRMWARE_ELE_IMX_SOURCE = firmware-ele-imx-$(FIRMWARE_ELE_IMX_VERSION)-$(FIRMWARE_ELE_IMX_REVISION).bin
+ # The build command below will use the standard cross-compiler (normally
+ # build for Cortex-A8, to build the FW for the Cortex-M3.
++# The code base predates C23 and defines its own bool/true/false, so
++# force an older C standard to build with gcc >= 15.
+ define AM33X_CM3_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D) all
++	$(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC) -std=gnu11" CROSS_COMPILE="$(TARGET_CROSS)" -C $(@D) all
+ endef
  
+ define AM33X_CM3_INSTALL_TARGET_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
