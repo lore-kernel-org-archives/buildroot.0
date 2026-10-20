@@ -2,104 +2,104 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAAF3606A31B
-	for <buildroot@archiver.kernel.org>; Thu, 22 Oct 2026 09:34:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7530E606A31B
+	for <buildroot@archiver.kernel.org>; Thu, 22 Oct 2026 09:34:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=nfqUOnQQ
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=L1t6pLHV
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 89573409EE;
-	Thu, 22 Oct 2026 09:34:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 486F2409EB;
+	Thu, 22 Oct 2026 09:34:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pWF_g4nSfdW1; Thu, 22 Oct 2026 09:34:45 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org CDA9B4077B
+ id XX8do65YPtC4; Thu, 22 Oct 2026 09:34:48 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 1B96740976
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792661685;
-	b=WmuvraLzQftCtQAAn9I2el7Ju/Sn+XKvaU5N7SMvnA6UauALYES4SP5eLJ3QVE1U9OGA
-	 E91AesKSLOtJB1hzZNO4Ks4ogp5uQG8evLX88W2jGqDt98Cjg+s/QGsJLLEWysMScl4eZ
-	 1MUCfRSkZ5GuFvrI08usvUOtKXPX8EiIKK19kpy5kj0az5mxK25XgTpLPGS9C39YlcA4b
-	 J+rRxDrtcBXWfprxtY9Ch6M/Xl1tIjhI+Zaou7Ki4l02aI18HYKIcPlFKXhXUFb+dllqA
-	 zDcFl0iYRDuq/vAKplmmisTJRYG+SuhYKWO17GexmZCQx+YV7Z+tw1LGFDKDNJRVE7w==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792661688;
+	b=OtvAdEXrgDeFOYL46g8XHVl6/bOTv8xijk3YuqEdU63n5bmPadTWf3QAYPn154pagUXT
+	 7SeinDD7khE6NTpAf6KiHr8aC0Xr9314hsLCcN9GkXEL1YWcMeGCiKd6DcrDjnhM17hvI
+	 LMHoAOhyQT2Vhjj5+gaA5/xzVDKror+hrISG5PMIoEJ1yyVXEgM3Ks2UfDCq9FCnFjxoU
+	 8ok5e6X3xf3+H3MHsZ2yaQJ5a0z5IG8Y/DkOKmBWiPElI423dU9H/sK8ddZX6MapjhTpg
+	 F3ByvfRMg7Ebf9iK7mLk0N5Ny4MBEQyufHm/JHilSrSIuw6Q4oWC2pkEU51N7O1ki3g==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792661685;
+	c=relaxed/relaxed; t=1792661688;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
 	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=6D6cWr9pElYCvzqHHi+xB9CEJruJEI0gfHrlYiT34B4=;
-	b=bZ1gifClPSULKuUPzx9U7Swh2B0AAmJMif/OStMGGP6nX3k4OGn7Bzxp9bRkZqlioisc
-	 34tgo8Z+0V2Y4aTHE5c8cpp8k0Ir4WUH5106rsa4uCJ4FfqfPQ1iOFjfpvoyn1tROSY2/
-	 AyvfCfTBVQg63DCCngjH+D8zUiGBXWCnsn2KjqWv6RUfZmKKzLmjwVSHi0bIXyM2dJ3+H
-	 TvHWsmw4zW67Zo87nJ/PD+PM6zNvlENslPImm+j7p5t0LXcbnefX3kSwY2Pi4UJ5jNUU3
-	 QWhiJdk7tTBYhwzzUpVPRwzidoB6Zw0I4EeZLdp81ZGtquKR1N0z+wKDw8S+2Gt5RyA==
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
+	 Sender;
+	bh=dR7CPwNzq4+CpDb7jPKlIVKVb7HlyOpIL/hFvGt4g7Q=;
+	b=Y4T1LQvfo7hoEZ8faih3SVXlYOwKaFq3ki9k1sP1BPJr79pbxNu5gF6ELUv+ztzygLeA
+	 D3EwKPP52o1a95X5M7OGD0EAunz4TFgGwLBxPf8E7OiQ9IRX0SR+As7zAwfrJYVPEAs/r
+	 yPvT+ZYlWEayMerKrzKyX78iq3KiEPqJk5dZSTLjGSxMS2yDJaQZYzv+6+gyIXq3PFcmB
+	 8UxdZyoeim792rOUAsdroB2u747d8Lg4TzDUZMCoKwnwvqJkrPl4pglzsLpguUY4xx2rz
+	 f5cdP05XBsE4PifujAkxwTn1jOdy8LOZhs5FAQx+K0NGeNGteiyUIzQcNohHHP/jwBQ==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792661685;
-	bh=6D6cWr9pElYCvzqHHi+xB9CEJruJEI0gfHrlYiT34B4=;
+	s=default; t=1792661688;
+	bh=dR7CPwNzq4+CpDb7jPKlIVKVb7HlyOpIL/hFvGt4g7Q=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=nfqUOnQQanfspPWgYYa5yK4nDtR3fac6JjhpgKEkYp2UfUW24iim4eFpJd9iYwGMB
-	 X+l+h3CIskLvJI8CMM80GZ8qyYaunBlBwLhF+9+40HOa4D+0yGoY7RP1BdAU8CqPFX
-	 cYSvD3L/xXwQeTIoAbmTQ5f6xGMdclXHfyfGLoMBkM+fwCBX4d22gLszWG1yNq7UXr
-	 u1MlVe1pgxQWNzNBcaDyJKLOj/SJ0+PDWOxVrkESg3YpTlDatC1xyomb89ECstvtba
-	 bGxq+u8WAKT3IWT7XJbC/3v/ftHzKbG+pAn6YhuCJ2bKTCEcWyy0srFIvve2eC3oR8
-	 aMhp09zCd3pWg==
+	b=L1t6pLHVt3xVixmh+o9FBCl83OQ2JmLGClS9hreLhHcemo5f8DaBrizG/7Rk0rfBW
+	 k5wE8cshUq6ZwdZvpl6DzoWTXS/SRgpd/tAAOKH+B1oFUze8WJFe3HItMnBacO+QJF
+	 WaH81D5eHktkO1A23n/+cd5spnpQeZ3zXn+aE1AkTOfXkoYx4gUo6HbIdIII5latXl
+	 OiNO2YFJAn3GJVL9P3VoaPz4Fklu8Q7grXhz4aRDjDUIfOG3fbTEKekc2DSEM0MeKZ
+	 bRQlCTYNasf2k5Fu37J/gEUsZvsj2N06G9VQUEHiviTDhbhQ+r0Xpp6b96Ap6R1NWJ
+	 OHQkBTj9WHcBg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CDA9B4077B;
-	Thu, 22 Oct 2026 09:34:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 49FF095C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1B96740976;
+	Thu, 22 Oct 2026 09:34:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5634D1184
  for <buildroot@buildroot.org>; Thu, 22 Oct 2026 09:34:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3C12C60823
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3C080811CA
  for <buildroot@buildroot.org>; Thu, 22 Oct 2026 09:34:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A1R3hIWFpWEh for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5S-R9u-4sYoW for <buildroot@buildroot.org>;
  Thu, 22 Oct 2026 09:34:33 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 82E0260846
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 6617D811C8
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792661673;
- b=oG+7SRZYHDTt2Kr3+xzt2Ql60EsiOz2uoskwq1MmcCcZMls/KxFjw/YC7+UAWMnvnKtQ
- GAcFo78brmoAyUB53JEc9bNitqaUVumkaQL95eq16+KFqUx/E6JPqGW4nsWEPsfcvK0IL
- IcQ8i2W6NOFfIavdPVe/BUzbtSWdgm/vwh8yVR43umTu71CiUWvuJkM76ou/q71RiR6fd
- so9qMaNZxL8KfN5r5BNW0QvPWNQlVOIgMXxgQvyIiQrnwLrFqkuOg9u9yRC2kIDB6r6D1
- cr4HoaK4P2vGGkZ3d4vK7/OB/ZYbYXIr1Oh3HNaILsP04hCeg7TdtiryDc6QWQsfs6w==
+ b=X35injBTKCpDrLiZi3sgDIhsELU6NRhT3xVhmWM1wynHQuPuqg4qlLj5/XrX1YZckdTO
+ rekenQoEyKRab4xUazqqRP5XkW2zUfEJlFp0ie4rzaxga/znxPBPIQQVdCFkC7WwzWfz2
+ bi0hVq294MZiZkmaqH77BdW++LOIIH3L1IZeQpigxociZsVYn5Xv0SwRK9ZHgrVHdH6nd
+ 5fT9OZDIjvQiOnxkRFWUX/qSTS0uJ4alCv57KuHMj4nWnkBHtl77eHULzpV29UxRFe0Df
+ ZN6nimMr/8fRBJMNmKPKFuT66KuGIHznFAEWSGckZFzajZI7llELF92xXsDoQdcvuYg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1792661673;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=IkQwsMd41Kl1vAoOmE5in0oqA/PRkhqWtyYFrbiZbKY=;
- b=h2iFhHxmMXi53dtu82CI1FsIjqC3AXYeErBV8i/BlnNhi6wqoVjtLPcB60JSRvCEAkpW
- fXH3ScLm4trqOrpjB/Oi5AEsbeNliA2QzA6YsZiGbxZniHKnKowDYJYthRBRIlED7Eqb5
- yLnvXQ3sjxoBiURpVkBZM/ZiLXu7K2uRnwlmDu8q7BAzGtDI/1LmSB/q/nUFkh4R2nxep
- pMGwJ2QU6Locjw10jklhYx9XzwU0vJuHpJJi3uxswUXdV/Qihs4z8MUztbdeoqtlZGL3+
- FtVjegDwlJlV3Idax0evyul0+zea5htk0SX2774/AAhTQx8ss990O7V9h9NBwfAl18Q==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ bh=NsRkCo4Plt23P2xwBlsfEVifLyC9CDO+9zikL5QoULQ=;
+ b=rju0WDHejQlxaQ0QcSw5vBYOjkmBy1QAQaur687e/jXyk90rM6IVtSpVAHOWoylktGOy
+ 82ew0whEegqB6JKDGXQrQjcMOk2Qldc25Thl73ihr6ywXd+IgRwN1PZp7dbGeYveYafjc
+ 6vlMRMLe0RfNrttq5PZu0AgYHmOxFDF5YnXx2zYzj+fteZyK9xcqId8rLYaYovGuClWDV
+ FZc9MparrBcr0zNICI3FUFWGF/SXZmG+tbcNXscei4vPNa4ab0hLzrmBWtoEJOCoM5jC5
+ 6RfzLuCzVR+wAcmkkIZAXi9+iZ4xz95V7QMLqQmGMsvoLW326fVq3XAaItLMYzArtUA==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 82E0260846
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6617D811C8
  for <buildroot@buildroot.org>; Thu, 22 Oct 2026 09:34:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7EED29B986; Thu, 22 Oct 2026 09:33:09 +0000 (UTC)
+ id 6F7519B985; Thu, 22 Oct 2026 09:33:09 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Tue, 20 Oct 2026 08:45:40 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 24b11a34d4323e6d795540f43ba7e394ea2b8719
-X-Git-Newrev: cffa4cbb83b2679a83cae3afe3bf1aef099b14be
+X-Git-Oldrev: 0f238d5a207bae39f6a6675d305770bb6fafffa3
+X-Git-Newrev: 24b11a34d4323e6d795540f43ba7e394ea2b8719
 X-Patchwork-Hint: ignore
-Message-Id: <20261022093309.7EED29B986@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/python-numpy: fix
- meson configuration with LAPACK
+Message-Id: <20261022093309.6F7519B985@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/python-scipy: fix
+ build with GCC14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,140 +113,109 @@ From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5538965177996262042=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-20.1 required=3.0 tests=BAYES_00,DATE_IN_PAST_48_96,
+X-Spam-Status: No, score=-19.9 required=3.0 tests=BAYES_00,DATE_IN_PAST_48_96,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
-	autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_NONE autolearn=ham autolearn_force=no
+	version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/cffa4cbb83b2679a83cae3afe3bf1aef099b14be
+--===============5538965177996262042==
+Content-Type: text/plain
+
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/24b11a34d4323e6d795540f43ba7e394ea2b8719
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Building numpy with the LAPACK package enabled (like when building
-python-scipy) would result in the following error during configuration:
+When building python-scipy package with target GCC14 the following error
+would occure:
 
-```
-numpy/meson.build:203:49: ERROR: Could not get pkg-config variable
-and no default provided for <PkgConfigDependency lapack: True None>
-```
+../scipy/interpolate/src/_fitpackmodule.c: In function ‘fitpack_bispev’:
+../scipy/interpolate/src/_fitpackmodule.c:255:10: error: assignment to ‘npy_int32 *’ {aka ‘long int *’} from incompatible pointer type ‘int *’ [-Wincompatible-pointer-types]
+255 |     iwrk = (int *)(wrk + lwrk);
+    |          ^
 
-This is reproducible with the following defconfig:
+This has been fixed upstream with the patch [1] introduced in scipy
+version '1.13.0'. For more information see [2].
 
-cat >.config <<EOF
-BR2_arm=y
-BR2_cortex_a7=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_PACKAGE_PYTHON3=y
-BR2_PACKAGE_PYTHON_NUMPY=y
-BR2_PACKAGE_LAPACK=y
-EOF
-make oldefconfig
-make python-numpy
+Backport this patch into the current 2025.02.x scipy version.
 
-The variable that triggered that error got assigned a default value in
-upstream commit [1] which is available in python-numpy v2.0.0, which fix
-this error.
+[1] https://github.com/scipy/scipy/commit/fdf3b908eeb93203c1847c6fb4efd12e88c37ce5
+[2] https://github.com/scipy/scipy/pull/20135
 
-This commit backport the part of the upstream commit that assign the
-value by default.
-
-[1] https://github.com/numpy/numpy/commit/34afbb97cc9915ad5976ddc869a539e897545722
-
-Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/17125191093
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...eson-implement-BLAS-LAPACK-auto-detection.patch | 77 ++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
+ ...define-F_INT-as-int-rather-than-npy_int32.patch | 50 ++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
-diff --git a/package/python-numpy/0002-meson-implement-BLAS-LAPACK-auto-detection.patch b/package/python-numpy/0002-meson-implement-BLAS-LAPACK-auto-detection.patch
+diff --git a/package/python-scipy/0003-interpolate-define-F_INT-as-int-rather-than-npy_int32.patch b/package/python-scipy/0003-interpolate-define-F_INT-as-int-rather-than-npy_int32.patch
 new file mode 100644
-index 0000000000..f7822ef852
+index 0000000000..f722c4ca37
 --- /dev/null
-+++ b/package/python-numpy/0002-meson-implement-BLAS-LAPACK-auto-detection.patch
-@@ -0,0 +1,77 @@
-+From 34afbb97cc9915ad5976ddc869a539e897545722 Mon Sep 17 00:00:00 2001
++++ b/package/python-scipy/0003-interpolate-define-F_INT-as-int-rather-than-npy_int32.patch
+@@ -0,0 +1,50 @@
++From 53796772ed735c1564863fc7ca8d902acb628167 Mon Sep 17 00:00:00 2001
 +From: Ralf Gommers <ralf.gommers@gmail.com>
-+Date: Tue, 10 Oct 2023 00:27:02 +0200
-+Subject: [PATCH] ENH: meson: implement BLAS/LAPACK auto-detection and many CI jobs [wheel build]
++Date: Thu, 22 Feb 2024 09:10:46 +0100
++Subject: [PATCH] MAINT: interpolate: define `F_INT` as `int` rather than
++ `npy_int32`
 +
-+This reimplements the auto-detection and many of the switches that
-+`numpy.distutils` offered. Beyond that, it implements several new
-+features:
++This fixes an incompatible pointer issue that shows up as a warning in
++Windows CI jobs, and is reported to break the build with GCC 14 on
++Fedora 40 in gh-19993.
 +
-+- Auto-detect the symbol suffix for ILP64 OpenBLAS (can be none or
-+  `64_`)
-+- MKL ILP64 support, threading control, and use of the layered library
-+  model for MKL >=2023.0
-+- FlexiBLAS support (LP64 and ILP64)
-+- Support for the upcoming standard in Reference LAPACK for `_64` ILP64
-+  symbol suffix convention.
-+- A test suite for BLAS/LAPACK libraries, covering:
++Using `#define F_INT int` is done in several other submodules; this
++was the only instance of using `npy_int32`.
 +
-+    - OpenBLAS: LP64, ILP64 detected via pkg-config and with a "system
-+                dependency" (i.e., custom code inside Meson)
-+    - MKL: LP64, ILP64 (layered) and LP64 (SDL)
-+    - Accelerate: LP64, ILP64 on macOS >=13.3
-+    - FlexiBLAS: LP64, ILP64 on Fedora
-+    - ATLAS (LP64, via pkg-config only)
-+    - BLIS (LP64, via pkg-config only)
-+    - plain libblas/liblapack (Netlib, LP64 only)
++Closes gh-19993
 +
-+The list of libraries that is tried with the default 'auto' setting
-+excludes a couple of libraries, because they're either no longer
-+developed (ATLAS), not mature (libflame), or can't be tested and
-+may be re-added later (ArmPL, ssl2). Those libraries can still be
-+quite easily used via pkg-config.
-+
-+The new CI jobs are running by default right now. Once things settle
-+down, the plan is to disable them by default and allow triggering
-+them via a `[blas ci]` command in the commit message (just like for
-+wheel builds).
-+
-+Docs will be included in a separate PR with the pending rewrite of
-+all the build/install docs. For now, the CI jobs and the
-+`meson_options.txt` file serve as guidance for how to use this.
-+
-+Note that the test suite contains a few hacks, because of packaging
-+bugs for MKL on PyPI (broken .pc files) and BLIS (missing .pc file in
-+Debian).
-+
-+Upstream: https://github.com/numpy/numpy/commit/34afbb97cc9915ad5976ddc869a539e897545722
-+[thomas: backport subset of upstream commit.
-+  Only the part that fix the 2025.02.x scipy version LAPACK detection.
-+
-+ Fixes:
-+    numpy/meson.build:203:49: ERROR: Could not get pkg-config variable
-+    and no default provided for <PkgConfigDependency lapack: True None>
-+]
++Upstream: https://github.com/scipy/scipy/commit/fdf3b908eeb93203c1847c6fb4efd12e88c37ce5
 +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 +---
-+ numpy/meson.build | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
++ scipy/interpolate/src/_fitpackmodule.c | 4 ++--
++ scipy/interpolate/src/fitpack.pyf      | 2 +-
++ 2 files changed, 3 insertions(+), 3 deletions(-)
 +
-+diff --git a/numpy/meson.build b/numpy/meson.build
-+--- a/numpy/meson.build
-++++ b/numpy/meson.build
-+@@ -198,10 +198,10 @@
-+   if dep.found()
-+     conf_data.set(name + '_VERSION', dep.version())
-+     conf_data.set(name + '_TYPE_NAME', dep.type_name())
-+-    conf_data.set(name + '_INCLUDEDIR', dep.get_variable('includedir'))
-+-    conf_data.set(name + '_LIBDIR', dep.get_variable('libdir'))
-+-    conf_data.set(name + '_OPENBLAS_CONFIG', dep.get_variable('openblas_config'))
-+-    conf_data.set(name + '_PCFILEDIR', dep.get_variable('pcfiledir'))
-++    conf_data.set(name + '_INCLUDEDIR', dep.get_variable('includedir', default_value: 'unknown'))
-++    conf_data.set(name + '_LIBDIR', dep.get_variable('libdir', default_value: 'unknown'))
-++    conf_data.set(name + '_OPENBLAS_CONFIG', dep.get_variable('openblas_config', default_value: 'unknown'))
-++    conf_data.set(name + '_PCFILEDIR', dep.get_variable('pcfiledir', default_value: 'unknown'))
-+   endif
-+ endforeach
++diff --git a/scipy/interpolate/src/_fitpackmodule.c b/scipy/interpolate/src/_fitpackmodule.c
++index 0e913d1c7e43..dc79b2b28833 100644
++--- a/scipy/interpolate/src/_fitpackmodule.c
+++++ b/scipy/interpolate/src/_fitpackmodule.c
++@@ -28,8 +28,8 @@ static PyObject *fitpack_error;
 + 
++ #else
++ 
++-#define F_INT npy_int32
++-#define F_INT_NPY NPY_INT32
+++#define F_INT int
+++#define F_INT_NPY NPY_INT
++ #define F_INT_MAX NPY_MAX_INT32
++ #if NPY_BITSOF_SHORT == 32
++ #define F_INT_PYFMT   "h"
++diff --git a/scipy/interpolate/src/fitpack.pyf b/scipy/interpolate/src/fitpack.pyf
++index 08cb0c141c98..a9535a83f479 100644
++--- a/scipy/interpolate/src/fitpack.pyf
+++++ b/scipy/interpolate/src/fitpack.pyf
++@@ -16,7 +16,7 @@ python module dfitpack ! in
++ #ifdef HAVE_ILP64
++ typedef npy_int64 F_INT;
++ #else
++-typedef npy_int32 F_INT;
+++typedef int F_INT;
++ #endif
++ 
++ static double dmax(double* seq, F_INT len) {
+
+--===============5538965177996262042==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5538965177996262042==--
