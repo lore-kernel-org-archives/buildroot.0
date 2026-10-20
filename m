@@ -1,164 +1,119 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E017606A319
-	for <buildroot@archiver.kernel.org>; Tue, 20 Oct 2026 22:47:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C72606A32C
+	for <buildroot@archiver.kernel.org>; Tue, 20 Oct 2026 22:50:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=I+QoGKfY;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=dyoJpBpd
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=i5/o3DOg;
+	dkim=temperror header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256 header.s=2022 header.b=oPYKGF4D
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E700180F92;
-	Tue, 20 Oct 2026 22:47:04 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ohzXNrXUNbms; Tue, 20 Oct 2026 22:47:04 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org D431780F50
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792536424;
-	b=FZXuWtGafTgjkKoUpAf2a3gqTT7IQuNS5IBqEYyvVeY+7hxVNxJPsZBYleEdXugMrule
-	 4nCiBW9j51Kn6dcftK5b/gMe0DoLJRKRIL6RBvGqpR/oKsg8xmfVwfUfY/hAAiboez9Yw
-	 +dg9a4hj8xtX+4OSXClsmrJ1C69VEFYN+lA19rfkwVbxJJflYb+2xrkeEFwJ0ayR4Zbj2
-	 VsOQhlh9cF+/JQWhoet8bsfW9fHEpoD58QUrQoSajOGvVaGXa4HwYitrvm/8z8hff3hFP
-	 pEaPfouXV8wM+JnDUZckuHU5vs+S45ZwBVQ8Y11aAq9GTDwAz3RaYdQdMZHydR110sg==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792536424;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
-	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=INXjBGJyfoKVQ7uztrxmSPg29Zflry1mn5oi7QtX3Eg=;
-	b=UXbnsJ0logLEweVlnBqgGD1YvVZK+iWczh1rrHfgJsYc3CtjSInrDz61qyO8m9+rvWqw
-	 gqIjPTGeh6w+Z6ZbMjuG6oycKmFHPRGMc8bTFC5X+bC2gjijlmc3RCtpHNz4EIU5Xp6gV
-	 r54hBcRNr37EeRbkWLb+YxISofaZphlD5NDGWgnxsx5aS7P4snj9Bs34OaiYFZ+gQg5Fi
-	 LnCgLY0Dz488AnwSRYzlbEoDIZJkFb2x/irunJd5X+tM/YwSL2dUBB79As/1zpJRjyAzb
-	 +HL6y5AHNtS/NSD3O+7zPgyr/qorh2/9RZuSRJkBpljSem0iZdyWiTUp9oTWz8PCGZw==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
-	arc=fail smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792536423;
-	bh=INXjBGJyfoKVQ7uztrxmSPg29Zflry1mn5oi7QtX3Eg=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=I+QoGKfYYTJQbohosO2DJoP8bUaM9PgGToqxTXWyQevEpzv1NsDbiXjMb9bmPJeho
-	 EEb3bh83cRUz7ycusY0hTpCaTzp/kaV5Z0F4UIsVjved3k0VVDzeXr2oViIn70ZGIv
-	 CcOgSeANwrCu5xKEZqC/KrZBS+r7OjAjkUoTET82QGorndu2f/9+Z6Bs3qGBEXBk2+
-	 c+x9cF56UD3CF+gdmlJTIh6mHu7H0mvMDefIoRYZsXgoz6Z60T3mDpKbVSXug1XubO
-	 Cgi5tFGYN+qP8Gi/vNtTE7fwPrCP1MaWAXWJWQVKZ6Q+rzNM2p3ajil+eRxS2UbEUn
-	 kEnQtGUtnPumQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D431780F50;
-	Tue, 20 Oct 2026 22:47:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 148FA1AB
- for <buildroot@buildroot.org>; Tue, 20 Oct 2026 22:47:02 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 062C860728
- for <buildroot@buildroot.org>; Tue, 20 Oct 2026 22:47:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A554B6071C;
+	Tue, 20 Oct 2026 22:50:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2qIaPmv_viXB for <buildroot@buildroot.org>;
- Tue, 20 Oct 2026 22:47:00 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org A037C6071C
-Authentication-Results: smtp3.osuosl.org;
- arc=none smtp.remote-ip="2607:f8b0:4864:20::c31"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792536420;
- b=LIjWpVv4E51Dg9hnOiqTJvXdu3hqvlwDZWUFXXfxk7TyehPTrEx0NhIhJ53hb3A2eFgZ
- xR4V0VBaC2MfR29uQSDh8e0hjEr9bKP/A1DkH0DXkLxaEGsedUgM1xFmH/hvT9UZk7gIg
- E2xz5KONpR/aY0s2T47dT4WFFNGNLIdmbNOW+SjAW3ou2d28BIzNsF86upr0WfMmeal31
- VyfwfCOSjvE/rH5csTYpuVLYDhclV6t3mt0acKu2eyhwTrNcOwRLbrhgPTnDCOQtEdLWl
- HhIT3OsAaQH8t9VljTdw30FJjtlfg5+kfiYEF/y555zuF+oUrkKdSNh0qqouSPE4eXQ==
+ id yS02ETul297g; Tue, 20 Oct 2026 22:50:11 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 821A06071D
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792536611;
+	b=Y3vHbOzSyqgqPJtaIRaofZFgPDDSyVERaEgVPbxhuMvlHVFC9xSuhdf+/IP3ujuONBgb
+	 Uv7JuDXR9F7z9TTtHbDNmqwRlwSn+Ai3Z8RNCrQIPKD9GMKa+msZldJJCZnzIcNodw/KP
+	 /SkC1vbBdH4YUADU5uRBo85d+xnmY0qOP/CX2y/YwuSi2UP3ifc6jWTgWaed3rBdCUe1z
+	 52wGRykcVzAkTIunN0SU8/6cusVPM8ENDoPZOfWy/mvHSjU4qtiL+uJMwVWWj4e3SLmHb
+	 Ebobpmkt49nGp2J4viLh5l51ayJgfOQiJpSN7r0JYT7ANM0xSA8eMrEYnIZaOuHKNOw==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1792536611;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 DKIM-Signature:Received:Date:From:To:Message-ID:MIME-Version:
+	 Content-Disposition:X-Operating-System:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=smGUVq7rFKREtMB6dvQE163bbofsc1G3/Y0hpmKlJ0o=;
+	b=gSMU/MU9PP3TGs9hEupnvXn3JHu4Ymg5Xypo3W0h8UbTfNK9LCRBGcNXjZDq5peU3wnP
+	 WtHoF/v16XxVCPo2WY7yoqFtfcOXKBG5tAL+i8G/gtBmsRQ3ugPEAbhpgSp1AKX064wm5
+	 S/99V0iJLp8fKrnP0j7nvIFdJGZgL7skopx8rEvr/2NFyebpfS5248lgObCimfmARmyNQ
+	 +83a+DItPrw+hsRuzlZwuOWLZKrLTrkJjFNwxyJpI4esN1UdIUuBA347vETr+tBdheQTT
+	 34zuJrqh+uXKH1UBGLVpTS4EimFLCaM1AJLl9DeO7FzA3c9/fmPZuSGzj5xbEr5CXIQ==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	arc=fail smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1792536611;
+	bh=smGUVq7rFKREtMB6dvQE163bbofsc1G3/Y0hpmKlJ0o=;
+	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=i5/o3DOg5I2fWlXs5hiePNhxoVR8S1fLV3ltBS6e9t5lgE42vSLnRKB68lZltBvBp
+	 l8FiYF57ZEcL+ukOOdXx0sO7Uq2Uz1vB7ph0tQuds5MdN4ljR5R9cTgDd6OrjFC05T
+	 nctiyYKU1NC/zM3H+Mr8tpZmmWELbHMXXNwocLeU07HHTAVi/a63MehhDDrRtMiWs0
+	 lIvjEzqNi2z3VD4je1WcTcH0HwF9J0igGKqPEH5ZZium66NBSBqYbvz2igP/LXgAgt
+	 VZ8YLEOy/SGLVktkBeGQ6Fr9J3PEfK47cjp+rZCBrMrVG54Mq5Rg840djMsOw67jlV
+	 5NWXp/YXRfYyw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 821A06071D;
+	Tue, 20 Oct 2026 22:50:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7C699930
+ for <buildroot@buildroot.org>; Tue, 20 Oct 2026 22:50:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6E514400F3
+ for <buildroot@buildroot.org>; Tue, 20 Oct 2026 22:50:09 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RucqS2fhM68T for <buildroot@buildroot.org>;
+ Tue, 20 Oct 2026 22:50:07 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 4944A400CB
+Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=89.238.66.15
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792536607;
+ b=CjB8aOIKHez47jlro2W+gi9s4mnP01OP3I3iO06ySX8nn+T95wfKKHL1T83u39VJ6tv6
+ 0C4bxd5cxmWgj4RIK2Mwvf+Afn2A4Y2M5NGiX5+gVJNM6CIJWO/u+CDDX3nuWcaBJb+dV
+ geFgn+GAKv5ae0ckvhQ4npPcXZGXRLfc7qpqhXwWXHsE/wQaiUiE0ht+LireD1y3lLUyx
+ xlokC7UagJb4t87yiAFN1e+JnLObi1aF6fcjNMFn8l7fg/pWUV9TzvGH4mzUGfNMRjgus
+ uO33dCgECfGfmP6e1+zk8skCuwt04N6EQNtRu5Rmqrxb9bM4SEPpMlILHiUoYT/P6wg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792536420;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
- bh=O9Jn5jMVS2eCaptOgc3FpuQhGOTDxWA0i2Kt1YHCGG0=;
- b=eMU7SRp4xbuqZXInmzeoESub+2Jk8FWKtOSoZ3jI7ytGCo5BntDcehostzPP3UF869bT
- iq/U0AgckyNqEw0Rt3TDpLoYK/Y07tg7j2UueB/mVThX8phbHA+abpAXKY0zuKc83WDqm
- SPY6WgiB3JkD0ILtGrbGC8M5jLlpg3FH592p3drV0py3291Tp3fzKpgaZHQySXlGukGNh
- Gu9yOb1FEMjR4da6sftUBLB9mZSDi+hcNaBWAOLmA8fD2Kmx0skzhGBc7wkAN8f+uG7DH
- cZtvmyIiWGHlsKV5l1Z4BoDgS0r98LeItQ3fikZ4+Plfkq1swXfrLVMgS3vM6VEKAzA==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
- dmarc=pass header.from=gmail.com;
- dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=dyoJpBpd; 
- arc=none smtp.remote-ip="2607:f8b0:4864:20::c31"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::c31; helo=mail-oo1-xc31.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=dyoJpBpd
-Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com
- [IPv6:2607:f8b0:4864:20::c31])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A037C6071C
- for <buildroot@buildroot.org>; Tue, 20 Oct 2026 22:47:00 +0000 (UTC)
-Received: by mail-oo1-xc31.google.com with SMTP id
- 006d021491bc7-6b8e2d8df4fso41060eaf.1
- for <buildroot@buildroot.org>; Tue, 20 Oct 2026 15:47:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1792536419; x=1793141219; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=O9Jn5jMVS2eCaptOgc3FpuQhGOTDxWA0i2Kt1YHCGG0=;
- b=dyoJpBpdypSZOwXFppBimTR7wKGRrqQba8MfZYqDpCyq1JQF7yN6AWvqeNQ/WTgoMp
- RP8WgqRdIBa4dXBSmTPjxdhatOde5P+CpQ4Fl32aak1Nw6DR/0nV5Xp2h2U6aOcqFvmy
- JQ4dymYBHUUkfbQW1p1TkKoRKG5apzHHwFb8xl0kgst7Nq7Qk4x2JOW7z/6LF944Mp2P
- BcbNd4KuxrvM4BEN/zmXcxmNBmWC4eKSqs+luPQP0EP6+Uu7BkQiqP9JVg628BK8dcXp
- RshwZudzmlmKNgYkjNfgmfyEao0h8+G1qtTc9MaeCcn8zCqsDuuJ3s+Li0cPpV+FD0yN
- 13hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1792536419; x=1793141219;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=O9Jn5jMVS2eCaptOgc3FpuQhGOTDxWA0i2Kt1YHCGG0=;
- b=1W/qT77NFAX2lBCGtOUTLyCU8XTd9yGvflp2Falpde/5j4yAhrRV9PpfBdGuIstJRX
- Miw+Wpr3hi1qLqiixl7sBCsEt9s0t7iAo6Fg8vibMCXbPdaVfJ56fiI549aPAryr7geq
- BYNc2raWUQILPa1eEfbJ17jxnbLvJU887VYoqtrTYvVql6/I3uyPgS3erxqFiWAiTfAo
- etSAX9UZAQil85tFjU1+VZ376Q9fthoNON0TgA5zTUsBjSU+lzUICPAdeXDQY5X8o5Z8
- BrYmIhumdHux5eCUWW6duJxmLrsrMBqfOQV5v74Q4RNcvHYWZGfrNi/tyOTxog1hLGG9
- mgjA==
-X-Gm-Message-State: AFq9FYKEGRmPoNJaqJQuNqvzVGBovgBWLC/qx/2cbQ5PRUPT+iQksSxH
- O9Gw153QfCE6mxa51zvB7G+Ks9XxBUEYQIgO0C8GzZioLR5PVH+Q3ankMnx5Ag==
-X-Gm-Gg: AYBFou0MUJVXLvFp5DzYxgPdg5HPQe/qH2ZS3CR6YDxSkcQmKabrEqXaxO7dmwWvWzP
- phEMMxcNNMJWY59p9VZAhW0ICXxOmD2DwEbDG4AwLxWnFRbGjsptiYcCs/1BPL/GAaxX8677XKi
- LSU9/toGGX2CUcaufeVWZZoRV87nwDsK/YPOjvwp1Ahw2MiujE2TPhmjbPMQlxFEHDk7EXz26iD
- MI4ajlNCpomrleMKpTAN9tItHJuIN929pHrxwAxZp3s2HF09AfzxhvYUeSyyZp2jSINJpQkubpC
- kc9n60ezD+lKfXGb9vlJ2KfeepHAj/wQ+weViIpM9icrmGKd2E+rbJwnwWT6jhL9VdTSGnIldcu
- M96yClVrMBdccmAMDl6ivEUmo36WjHFh73jNqS/sNGgRNx/P1K+T1bWiOjVbOmaupdSp62cN0Fv
- CdooR5YqwrFG7WDkZxa68eAa+6WA1fma3+xZkVosYCBaEHqtpCO6d8QE6xuZpcJAF/U/ShVhgq0
- jKGEL9lgJbnqIYJBTMmRn7JRqJKB1K+oxtMkir5m17YHYeSh4qMyn1whMYNarIXtuu1S2CPpAZq
- a+/qHhhHCdVmLYjgz17xqXhNyov8MktQkhgdEyy9Qx4QUXeJPm0BexO2fy7pQuJVaTU2zgPnRl9
- WwR2F+S4NQZkRJuh081kLQL2ua6GqqkRzShymxjVPvQ==
-X-Received: by 2002:a4a:ee14:0:b0:6da:453d:7cd4 with SMTP id
- 006d021491bc7-7093fbba3d0mr198204eaf.23.1792536419050; 
- Tue, 20 Oct 2026 15:46:59 -0700 (PDT)
-Received: from james-x399.tailafd1a.ts.net (174-29-1-49.hlrn.qwest.net.
- [174.29.1.49]) by smtp.gmail.com with ESMTPSA id
- 46e09a7af769-84cbc7d991esm717024a34.5.2026.10.20.15.46.58
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 20 Oct 2026 15:46:58 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+ c=relaxed/relaxed; t=1792536607;
+ h=Received-SPF:DKIM-Signature:Received:Date:From:To:Subject:Message-ID:
+ MIME-Version:Content-Type:Content-Disposition:X-Operating-System;
+ bh=BCrgSpYPKK3gWl4tGZxWJjRqPX95lwqdS/cHqGrCzNY=;
+ b=AHEk7KMCwTxgwAGDIisz9Q6xIAanJG7LdhjDyZizUeMzcPT2VupCQpbsB4/K7BfwRHCz
+ T+3jKO9Nd4sZPpCXXJiq68i73JkknopZVjHdKcTKn+l3XMzlunMyFnigxk0Th8/Kqsgqt
+ /8ULcDQQgfKCaufKCHWfTgBDw+UfmX10BlntrHi1O0uvh4qtPy89mF8TNZt3FK1Ir53y0
+ H2xQluJIeGCmHcCSBPAYvh/sI8m5jKQKL49svz/xaHPNhUQgbRaT7JScX9duJDx43MiJE
+ nAuDyEZKGNrsNeS6ASVycwNkp81ymzSg3iTLYfzyDdGDzaKuWTlD72yi9zwNeVo8TKg==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ dmarc=none header.from=openadk.org;
+ arc=none smtp.remote-ip=89.238.66.15
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
+ helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=openadk.org
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4944A400CB
+ for <buildroot@buildroot.org>; Tue, 20 Oct 2026 22:50:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=openadk.org; s=2022;
+ t=1792536603; bh=YZDjU5RDmeNdzXQhDvn3wlkCOcMWRf65C06dRkoXO5w=;
+ h=Date:From:To:Subject:From;
+ b=oPYKGF4DwExNInj1M039JnpmrgTg6tK3mCDYF8baeW07BjxF4zSYJ9NkSjXNWzUXA
+ 7NyeyAoVwhMX+6/ht2mMNCN3PzsbgEaKg1oPG1mFg/5RVIYhxAn+3Vj4jom/cOpB9Z
+ WzVV+VKgnXyuwX0rRJV1YysvvFRg8Mlx5VBaxAG2I917y8vKD3tgH9mB56jECOrBho
+ VK2FHvcj0btX7dq4bIUP61wUyPyledd5Jx3WIQ4lv5C59HR/35rmZ6Ub7EOnVlq01b
+ yFjk7eH0nLOM4AuxEwA7mJPTOOc816VORAhvCTRjCJrtS9N3Ss8u8OB0NHCYPRJ7RU
+ v+6zTCuwkdT3w==
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id E6E7431E0B69; Wed, 21 Oct 2026 00:50:03 +0200 (CEST)
+Date: Wed, 21 Oct 2026 00:50:03 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 20 Oct 2026 16:46:56 -0600
-Message-ID: <20261020224656.1714095-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.53.0
+Message-ID: <atfwG_AuFeMvY02v@waldemar-brodkorb.de>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/cloudflared: bump to version
- 2026.10.2
+Content-Disposition: inline
+X-Operating-System: Linux 6.12.107+deb13-amd64 x86_64
+Subject: [Buildroot] [PATCH] package/pkcs11-provider: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -171,45 +126,167 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
-	FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-18.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/cloudflared/cloudflared.hash | 2 +-
- package/cloudflared/cloudflared.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+An OpenSSL 3.x provider to access Hardware and Software Tokens using the
+PKCS#11 Cryptographic Token Interface.
 
-diff --git a/package/cloudflared/cloudflared.hash b/package/cloudflared/cloudflared.hash
-index 89110ffe3f..b963d57aec 100644
---- a/package/cloudflared/cloudflared.hash
-+++ b/package/cloudflared/cloudflared.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  c3619a29cc529a5bc43ba99e1b298483ac0b8d8c412f69575c089a6bd4a7867d  cloudflared-2026.6.1-go2.tar.gz
-+sha256  8e1f95a4e4b11cf545dccafbc49c1b251b3b4625b1986ab8384203d6738c9cc5  cloudflared-2026.10.2-go2.tar.gz
- sha256  58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  LICENSE
-diff --git a/package/cloudflared/cloudflared.mk b/package/cloudflared/cloudflared.mk
-index 44ddc82226..5003515ab4 100644
---- a/package/cloudflared/cloudflared.mk
-+++ b/package/cloudflared/cloudflared.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CLOUDFLARED_VERSION = 2026.6.1
-+CLOUDFLARED_VERSION = 2026.10.2
- CLOUDFLARED_SITE = $(call github,cloudflare,cloudflared,$(CLOUDFLARED_VERSION))
- CLOUDFLARED_LICENSE = Apache-2.0
- CLOUDFLARED_LICENSE_FILES = LICENSE
+https://github.com/openssl-projects/pkcs11-provider
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ DEVELOPERS                                    |  1 +
+ package/Config.in                             |  1 +
+ ...rovider-fix-OpenSSL-provider-install.patch | 53 +++++++++++++++++++
+ package/pkcs11-provider/Config.in             |  9 ++++
+ package/pkcs11-provider/pkcs11-provider.hash  |  7 +++
+ package/pkcs11-provider/pkcs11-provider.mk    | 15 ++++++
+ 6 files changed, 86 insertions(+)
+ create mode 100644 package/pkcs11-provider/0001-package-pkcs11-provider-fix-OpenSSL-provider-install.patch
+ create mode 100644 package/pkcs11-provider/Config.in
+ create mode 100644 package/pkcs11-provider/pkcs11-provider.hash
+ create mode 100644 package/pkcs11-provider/pkcs11-provider.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1ecf7c991d..71f28df2cd 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3519,6 +3519,7 @@ F:	package/perl-cgi-session/
+ F:	package/perl-log-message/
+ F:	package/perl-log-message-simple/
+ F:	package/perl-switch/
++F:	package/pkcs11-provider/
+ F:	package/ruby/
+ F:	package/uclibc/
+ F:	package/uclibc-ng-test/
+diff --git a/package/Config.in b/package/Config.in
+index a7c2433e08..24f0466a76 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1688,6 +1688,7 @@ menu "Crypto"
+ 	source "package/parsec/Config.in"
+ 	source "package/parsec-tool/Config.in"
+ 	source "package/pkcs11-helper/Config.in"
++	source "package/pkcs11-provider/Config.in"
+ 	source "package/rhash/Config.in"
+ 	source "package/sigsum-c/Config.in"
+ 	source "package/tinydtls/Config.in"
+diff --git a/package/pkcs11-provider/0001-package-pkcs11-provider-fix-OpenSSL-provider-install.patch b/package/pkcs11-provider/0001-package-pkcs11-provider-fix-OpenSSL-provider-install.patch
+new file mode 100644
+index 0000000000..e2e9e57f87
+--- /dev/null
++++ b/package/pkcs11-provider/0001-package-pkcs11-provider-fix-OpenSSL-provider-install.patch
+@@ -0,0 +1,53 @@
++From aa14490c8c1fd693a44726a77f78b45abd9512db Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Mon, 19 Oct 2026 13:21:41 +0200
++Subject: [PATCH] package/pkcs11-provider: fix OpenSSL provider install path
++
++When cross-compiling pkcs11-provider with Buildroot, Meson queries
++OpenSSL's libcrypto.pc file to determine the provider installation
++directory through the modulesdir variable.
++
++The pkg-config file defines modulesdir in terms of libdir, which
++in turn depends on prefix. During cross-compilation, pkgconf uses
++PKG_CONFIG_SYSROOT_DIR to prepend the target sysroot to the
++resolved absolute path. Consequently, Meson receives a host-side
++path such as:
++
++$(HOST_DIR)/$(GNU_TARGET_NAME)/sysroot/usr/lib64/ossl-modules
++
++Using this path as the shared module's install_dir causes the
++module to be installed under the host sysroot directory inside
++TARGET_DIR. Buildroot then rejects the package because it installs
++files outside the expected target filesystem layout.
++
++Just strip the sysroot prefix from the resulting path. This ensures that
++pkcs11.so is installed into the target's OpenSSL provider directory, for
++example /usr/lib64/ossl-modules, rather than a host-specific directory.
++
++Upstream: https://github.com/openssl-projects/pkcs11-provider/commit/4e0be5aa9606b5ffe1cbeaf19efb70a0b4c9a5d0
++Assisted-by: LLM
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++---
++ meson.build | 6 ++++++
++ 1 file changed, 6 insertions(+)
++
++diff --git a/meson.build b/meson.build
++index fd14952..98cc114 100644
++--- a/meson.build
+++++ b/meson.build
++@@ -50,6 +50,12 @@ if not libcrypto.found()
++   libcrypto = dependency('libcrypto3', version: '>= 3.0.7', required: true)
++ endif
++ provider_path = libcrypto.get_variable(pkgconfig: 'modulesdir')
+++
+++sys_root = meson.get_external_property('sys_root', '')
+++if sys_root != '' and provider_path.startswith(sys_root)
+++  provider_path = provider_path.replace(sys_root, '')
+++endif
+++
++ libssl = dependency('libssl', version: '>= 3.0.7', required: false)
++ if not libssl.found()
++   libssl = dependency('libssl3', version: '>= 3.0.7', required: true, method: 'pkg-config')
++-- 
++2.47.3
++
+diff --git a/package/pkcs11-provider/Config.in b/package/pkcs11-provider/Config.in
+new file mode 100644
+index 0000000000..851bdff70d
+--- /dev/null
++++ b/package/pkcs11-provider/Config.in
+@@ -0,0 +1,9 @@
++config BR2_PACKAGE_PKCS11_PROVIDER
++	bool "pkcs11-provider"
++	select BR2_PACKAGE_OPENSSL
++	help
++	  an OpenSSL 3.x provider to access Hardware and 
++	  Software Tokens using the PKCS#11 Cryptographic
++	  Token Interface.
++
++	  https://github.com/openssl-projects/pkcs11-provider
+diff --git a/package/pkcs11-provider/pkcs11-provider.hash b/package/pkcs11-provider/pkcs11-provider.hash
+new file mode 100644
+index 0000000000..73df0f0870
+--- /dev/null
++++ b/package/pkcs11-provider/pkcs11-provider.hash
+@@ -0,0 +1,7 @@
++# Locally calculated
++sha256 b8bbc30cfb7865603fff1dd0fb516cce90437d8ddb267e331cd89d6121960538  pkcs11-provider-1.3.0.tar.xz
++
++# Hash for license files
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSES/Apache-2.0.txt
++sha256  4c42a835e1a5754dc85a3ac746b482005fec41205cb8843d335d9231550eaa66  LICENSES/LicenseRef-Public-Domain-PKCS11-Headers.txt
++
+diff --git a/package/pkcs11-provider/pkcs11-provider.mk b/package/pkcs11-provider/pkcs11-provider.mk
+new file mode 100644
+index 0000000000..6eda9a0507
+--- /dev/null
++++ b/package/pkcs11-provider/pkcs11-provider.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# pkcs11-provider
++#
++################################################################################
++
++PKCS11_PROVIDER_VERSION = 1.3.0
++PKCS11_PROVIDER_SOURCE = pkcs11-provider-$(PKCS11_PROVIDER_VERSION).tar.xz
++PKCS11_PROVIDER_SITE = https://github.com/openssl-projects/pkcs11-provider/releases/download/v$(PKCS11_PROVIDER_VERSION)
++PKCS11_PROVIDER_LICENSE = Apache-2.0, Public Domain (src/pkcs11.h)
++PKCS11_PROVIDER_LICENSE_FILES = LICENSES/Apache-2.0.txt LICENSES/LicenseRef-Public-Domain-PKCS11-Headers.txt
++
++PKCS11_PROVIDER_DEPENDENCIES = openssl
++
++$(eval $(meson-package))
 -- 
-2.53.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
