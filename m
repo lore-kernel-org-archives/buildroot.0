@@ -2,119 +2,103 @@ Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31DD6606A31B
-	for <buildroot@archiver.kernel.org>; Tue, 20 Oct 2026 07:27:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26280606A325
+	for <buildroot@archiver.kernel.org>; Tue, 20 Oct 2026 07:27:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=AL2t/iyv
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=LpSUxgGl
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0B43E60822;
-	Tue, 20 Oct 2026 07:27:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 067156080E;
+	Tue, 20 Oct 2026 07:27:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bFWZFFg1zZmI; Tue, 20 Oct 2026 07:27:20 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org B040860808
+ id 56Df6SJMkPWl; Tue, 20 Oct 2026 07:27:39 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 1F1626080B
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792481240;
-	b=NOLL6NKWcfKr+CLQl8Ljuthhk7IEsjkmHpPBkCnoF5qK+4C7N/faGTt1ue6+Fu2Chz6O
-	 TE57y5qmiUz9/OLxki4r568KUNmfiqv6XGVwPET4pzfxHDCwJR5Ij0T2IuPyZ5149lt7f
-	 vXNQh/wHmlErFYBDtjkhqtdk9DnznWPcEkHwo9nSazklRXq6MqYIol5DnNVlmU38lLtat
-	 NZst5NdrbgrqXRwJVIb27A5Dy4eWjCIIbjY0id6CFqJGeqD9wefpo/clbciZcK/JKQ2HD
-	 8bmr+ni28Qf3kGMw0pOMP9vm50BFwE3hIbsVes0DNhty8usXlI5s0UAZQkdJm7i5Drg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792481259;
+	b=paIiZStv7ML3PoI80zPVJXOCxtv/kcygZZSSSH4XjbjicmJL3qU6iLvn8c4i7glu79l3
+	 dAosCILfDTVpDNJCZmV/mL5XcnsmhH9ybU/cgb7meLNztV7o/HqRXk0AfEZ7BDHWIZV28
+	 iMM6zlm0/f/doZVyQKwq3GBmIY71j56jZ9HSYFy9jdRfNIz5QpiP01u36Sa1nVuibKztD
+	 Ut/yEpVigVrtm70Vef6S5Bo554+aw/xRCQ2djsghHtlErhN/BTZUe5OE6VAh5beB9kKfT
+	 AM/j62LKjcPne1U5o/EgOdOpADdqY+4lq83blKRp+quKsFrSK4s8gyalOLeRKozWCEA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792481240;
+	c=relaxed/relaxed; t=1792481259;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=Vu6E5z5BS+079/6ScVbBzPHNM40k4ZdHXpNwhBUgUYk=;
-	b=sERKoMW85iQPI1pS76FK22hHSHg0J5kve7dZ0MikiQQYTOaQ13pq3+Ao2mzVKG7G0Oc5
-	 yLL/0prtrETmse+rHx+23jfF0aIjy67/lTI7qycM+0ZGbdHPWSLH2U2DsyFR7QGG+yqNy
-	 eWysg+vm6hv9AZa06BsUvUFiKI42jYLRffTDThsTJxbWOK1vDvXeAIPwH0v69p2C7JhmO
-	 00x/WgBSB5AQtA2GnGEDxQFH7bTM2mRCc0vn161L2A96Q/xyBEvKJ/4sKtAW7LGqtMHZD
-	 zwPhZMItzpXm35Be1e9AmI0bqbIlSVhTc7UO0oTGJxQ995LSocP6hwDh5ubvLSyAJKA==
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=qlk+W0rSgrMmIFRxILYA9lDbir1yVtpcVwQdSMKUxbw=;
+	b=h2EZKc/uCKyWqFBCdS395p/rEIt/n++6ooMsGByMQjoX1OQ25ftbaRT/QRTHr/YW4os+
+	 hq0RCEIIbT46KMk+Z98tf0JfDtVClFn2+9L3sDbXZ5jRCVQfT29KujMiOL0rhZxqzFQ1+
+	 PrkHGlg4dKVinE3nJGqvKJF9pA21PPyjX2mJsMueiOvsojeWmYsFIyyQsjqVtwae2Bnm7
+	 wNEXBD8FRSsNdjdeubescbVwc1n5mgWYwxZZldzsOvF/6lop2D4HIgKDkYCqosaCIIsHw
+	 kFyvZ46gHM6OXSF2dqB7i/MfjicobGA3pUKbb2oyCPIC7jOwgyC8oJhICimHgXT2N9A==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792481240;
-	bh=Vu6E5z5BS+079/6ScVbBzPHNM40k4ZdHXpNwhBUgUYk=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=AL2t/iyvUSvn8j5mN3RmuwKnIZ8NN2jC4FGd8+zQyxiBEN9gkpsPZlloGxPXI3HMg
-	 haQ1XPzxzL6KU7juCjya9q8EaH7svFqKVpLTBiZdODPS65ekSji0cJd0/CdeAhhHzJ
-	 V4uKFWHs1sWuFzVYj4yR6XLIfo5tM27RpR/xGhlWHt0+bEJWBlIcEDh93PIMI+sP2U
-	 Jj7JIZoQrmfk8e9TnSUb267Cf5H6J8TJeXi/SC+V8kZYNgulWmPi0kBWbuhM5qzRfn
-	 8xPUVoPFTErTmcsNL0qnWYsRxcNu2TOPGby1gCTFekyiOHNV07Qr1ieoGcNKTZYK6m
-	 cK9AnISKIzHIg==
+	s=default; t=1792481259;
+	bh=qlk+W0rSgrMmIFRxILYA9lDbir1yVtpcVwQdSMKUxbw=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=LpSUxgGlXVgtRwvmQhWSob7Gyh4bRF2sjoe7w8nO+Y3nswCptvVVJSVaqkeQ5ZtaH
+	 hT96QNg6XcjtZZTmpWZ7XdwDIPwZrizmPt+IhpJbOoEf2TTAVRXlSgdWrXzZns2Av2
+	 9keQrbkdeGhNlC2DBfhFD3bNkp+zzv7MTuomNAQXNAVY7PmSDq1EYNy5gtdUznHT99
+	 9VPauflJvMZaq3r6rtAaCNLKzluuRwnNaIJudlraz15Dd6SytN/prFbZO2SOxrMKjb
+	 MnDev3S3NNnKUBR+6h4GLTFrgTrnMqzxMAPwEgV9T67vY8iSoMYZbGla4lWG84zkp8
+	 dJ2yJQfWs+s/w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B040860808;
-	Tue, 20 Oct 2026 07:27:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 916B823A
- for <buildroot@buildroot.org>; Tue, 20 Oct 2026 07:27:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1F1626080B;
+	Tue, 20 Oct 2026 07:27:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6DDC1465
+ for <buildroot@buildroot.org>; Tue, 20 Oct 2026 07:27:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 772B940328
- for <buildroot@buildroot.org>; Tue, 20 Oct 2026 07:27:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5F1836080E
+ for <buildroot@buildroot.org>; Tue, 20 Oct 2026 07:27:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M_VNNeFgzLGT for <buildroot@buildroot.org>;
- Tue, 20 Oct 2026 07:27:18 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org F0BEF4016F
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792481238;
- b=YfCT/wVMJogRYDgBQCQ0JukKZ/ah5ny+7VlY0SUegzpE6DX/CP17WQmpESQuH+Lhcupc
- TGpd00B3rRfWB4zF91BVii0eT+iHQnJZO2sJSKfoCwpgHekFXOZSKfUZYPhXYEcP1G89n
- z0c8qge+quw5T8vFej6yv5UXHe40wSAZoaVEOr/5lP95PyepBM54PxhBVcdgjFVm6QB6+
- rIzNbbIKNBfACYpcOArnJS1OGtppZ8mEMZQZrjlybCBoZxXUh5ppDgKliH8Gddi3HyIgP
- xWDvQX6Imw3Lici3RNiSyFlK+uEs+XbZURy85ZybC/rx7kk+JR9LtBzm3CKQbuuCojA==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UsIjknxRyVvF for <buildroot@buildroot.org>;
+ Tue, 20 Oct 2026 07:27:34 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org B07566080B
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792481254;
+ b=YiImTPuK+PRIQXqkRItnnPlDO8VuYfJzMIgTXJeXqNdgfwBc0C+wYrwRF2GVNxsYnNE7
+ KWTA3jID/ClQhf9zwFuraHxyxZT4BJRfVPxc/JU3BT+xNGxQ81VERYQXBOg+6KxtTukA+
+ hn3x+RHfGWC5pzyeZpT2hELNhMBkKZ0NT1QUCBtn561BAKG/B/ZDdi9aagymVEA6FzHCb
+ Op9V5+6M0Q4/HQAsp7hTQQx01C2FAI+2YlXZrMZYRGbl5DoIRHxLWdMFRTrGHdiQVwBOr
+ JyPsieYDzFC6oJwxMyLoUOiyrlJm0YfU3LGtlRCkErsyM0z3qsulEaW7QinSEYXM71A==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792481238;
- h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
- Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
- Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
- bh=tENRP5gMmEu6fAItoABgnnWedpCVuXHX6B8vICk7w2U=;
- b=MQyRg452F2K2guQV8ltaae3BP6Fh47M1funngv4pgCv5Yvo5caez/LwINYQHKNJ4fYwY
- XsoN6am6Y/67gL/q/6jbvwfXMujf1w9ndNiOd6nUvwLjRlV+QJUjYPJruyoFyNYHh61MG
- w+3Dyklkj0XFApv+Zyo9Iv8IX9UyE3lT4QwDbpdUfZv8cSfyuHe7jl+qcYhQQII5DrORi
- DLiKauaRt/+ZX9HMDlfwP7JcyPuXw4Zi5rimzZ1p1M60AtOWPR9W/4HCNsvavQF156o1T
- Fg+xhBR+ClGUoHD3MC1IJ1oXYC4YC7mHL7yoGtZaEaz5RIoLE0z/mo+PKxJuymdtTtw==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
- dmarc=pass header.from=bootlin.com;
- dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=FtDihIw7; 
- arc=none smtp.remote-ip=185.246.84.56
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ c=relaxed/relaxed; t=1792481254;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=5q1d4MRgR1HTToQdTBEasmDj5eNyborvNg2GckhuT6U=;
+ b=k2LrOo9+bnCB4o+1ORMTDeXhuChMzQdeOGCBdH04hc5A9l9tNJYHDIlX8/oA7X6ndtYv
+ ADfiJuaLn9NJ327l2m4pA1GNo4xVtNP2Js1Otl3EA6bMZXZeZSKXb+BaKbXhjqnKlhowC
+ dzl7JIrdMf3Oi/xwU0oUHsG28KGeXiGSUxwBvvrESMOwVbmtpveNZp/fa4Tw4x0nmU+np
+ 9dlv4CZ+ljyBlwdWZFoxzZvqZbkXFgLWfLusHgiwGXmTOGxJwCJW20K+sv7QWK+Q58WJo
+ TgxL3/1Lurv4DEj6QKrdYiXqZgNhI9gc26/o7i/+/QDmPh5FQcrrwJWWBRCGuTPv6gA==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F0BEF4016F
- for <buildroot@buildroot.org>; Tue, 20 Oct 2026 07:27:16 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 5999B1A1290
- for <buildroot@buildroot.org>; Tue, 20 Oct 2026 07:27:14 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 1DA1E606D2;
- Tue, 20 Oct 2026 07:27:14 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 8CBA510328CEA; 
- Tue, 20 Oct 2026 09:27:12 +0200 (CEST)
-Date: Tue, 20 Oct 2026 09:27:10 +0200
-To: Fengwei Tan <tfx2001@outlook.com>
-Cc: buildroot@buildroot.org
-Message-ID: <atcXyVZESLAFzjUs@windsurf>
-References: <SY8P300MB0041329F1DE99C028DCA8064B5982@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <SY8P300MB0041329F1DE99C028DCA8064B5982@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH v2] package/btop: fix build failure on ARM
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id B07566080B
+ for <buildroot@buildroot.org>; Tue, 20 Oct 2026 07:27:34 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A3BE2996AF; Tue, 20 Oct 2026 07:26:11 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 20 Oct 2026 09:26:14 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 59f3ebf60ae7d980ce2bddcfbff5b2e14d6e059c
+X-Git-Newrev: 32a2510317091c91e265650864d368b72507d29a
+X-Patchwork-Hint: ignore
+Message-Id: <20261020072611.A3BE2996AF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/btop: fix build failure on ARM
  Thumb-1 target
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -127,33 +111,94 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_PASS autolearn=ham autolearn_force=no
-	version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-On Mon, Oct 19, 2026 at 12:24:00PM +0800, Fengwei Tan wrote:
-> Add a patch to add CMake compile test for -fstack-clash-protection, only
-> enabling the flag when the test succeeds.
-> 
-> Fixes: https://autobuild.buildroot.org/results/573e0fc3178f8c9a0583bf86a678caa775410ef2/
-> Fixes: a7d47860f323 ("package/btop: new package")
-> Signed-off-by: Fengwei Tan <tfx2001@outlook.com>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/32a2510317091c91e265650864d368b72507d29a
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks!
+Add a patch to add CMake compile test for -fstack-clash-protection, only
+enabling the flag when the test succeeds.
 
-Best regards,
+Fixes: https://autobuild.buildroot.org/results/573e0fc3178f8c9a0583bf86a678caa775410ef2/
+Fixes: a7d47860f323 ("package/btop: new package")
+Signed-off-by: Fengwei Tan <tfx2001@outlook.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...-add-compile-test-for-fstack-clash-protec.patch | 56 ++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
 
-Thomas Petazzoni
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/btop/0001-build-cmake-add-compile-test-for-fstack-clash-protec.patch b/package/btop/0001-build-cmake-add-compile-test-for-fstack-clash-protec.patch
+new file mode 100644
+index 0000000000..b26a550698
+--- /dev/null
++++ b/package/btop/0001-build-cmake-add-compile-test-for-fstack-clash-protec.patch
+@@ -0,0 +1,56 @@
++From f7b5ba16d3662ca036c6b1724fe741b28f29106a Mon Sep 17 00:00:00 2001
++From: Fengwei Tan <tfx2001@outlook.com>
++Date: Sun, 18 Oct 2026 16:37:11 +0800
++Subject: [PATCH] build(cmake): add compile test for -fstack-clash-protection
++
++On ARM Thumb-1 targets, GCC front end accepts -fstack-clash-protection,
++but fails to compile actual code:
++
++  format.h:960:36: sorry, unimplemented: '-fstack-check=specific' for Thumb-1
++
++Add a compile test with large stack allocation to trigger the compiler
++to emit stack-clash protection code, verifying whether the flag works
++correctly.
++
++Apple Clang ignores -fstack-clash-protection and emits a warning, so
++skip this flag on Apple platforms.
++
++Upstream: https://github.com/aristocratos/btop/pull/1918
++Signed-off-by: Fengwei Tan <tfx2001@outlook.com>
++---
++ CMakeLists.txt | 17 +++++++++++++++--
++ 1 file changed, 15 insertions(+), 2 deletions(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 3398196..0be6365 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -134,10 +134,23 @@ endif()
++ target_compile_options(libbtop PUBLIC -Wall -Wextra -Wpedantic)
++ 
++ include(CheckCXXCompilerFlag)
++-
++-if(NOT APPLE)
+++include(CMakePushCheckState)
+++
+++cmake_push_check_state(RESET)
+++set(CMAKE_REQUIRED_FLAGS "-fstack-clash-protection")
+++check_cxx_source_compiles("
+++  int main(int argc, char *argv[]) {
+++    char buf[16384], *src = argv[0], *dst = buf;
+++    while ((*dst++ = *src++) != 0) {}
+++    return buf[argc];
+++  }
+++" HAS_FSTACK_CLASH_PROTECTION)
+++cmake_pop_check_state()
+++
+++if(NOT APPLE AND HAS_FSTACK_CLASH_PROTECTION)
++   target_compile_options(libbtop PUBLIC -fstack-clash-protection)
++ endif()
+++
++ check_cxx_compiler_flag(-fstack-protector HAS_FSTACK_PROTECTOR)
++ if(HAS_FSTACK_PROTECTOR)
++   target_compile_options(libbtop PUBLIC -fstack-protector)
++-- 
++2.56.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
