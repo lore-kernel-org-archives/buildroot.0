@@ -1,28 +1,28 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81CC1606A31A
-	for <buildroot@archiver.kernel.org>; Tue, 20 Oct 2026 21:18:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7DC5606A31D
+	for <buildroot@archiver.kernel.org>; Tue, 20 Oct 2026 21:18:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=qkqZ/3h3
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Uidnmo7a
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4F6E6407BC;
-	Tue, 20 Oct 2026 21:18:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7E3E560730;
+	Tue, 20 Oct 2026 21:18:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KtkxTcwWGMei; Tue, 20 Oct 2026 21:18:14 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 22ED1407C1
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792531094;
-	b=L7hBCsOSTSReI7lZJvH0XuBF/IQr+gTuuvQeHQD2LbsRJCph/ek0a2BD/nBKR1s0S620
-	 Gi6wxKSV4rCBGwxXKtOXfWidaFqkhEOzQA6RMikyAkcfk7zhGwKYK3Jlgw1PE/6ENAEk1
-	 v1XadpCxHz3++dZXrhImStabDZ/kZO7C9MqTZgozm44MwBjq6ZU2P8PJt9cb0p+PFgekw
-	 SCiT2/cFl9V7AbQa7iz3+eYDy4pG4Ru+aL/js5n18pKr5c4MzB+GyiD/pM5GKYQZGF5q2
-	 oXXNir/qYNDUlKoTmzX8vqTjXnriE/zOh4rMHm0+KAiaUJjOYATxZqZ/jNb/hOzVwPA==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p-dZqqo-m3xA; Tue, 20 Oct 2026 21:18:15 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 6A1D56073D
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792531095;
+	b=Bqsd1HspYbE7e4YDJyqkyqNQEgm3cNzQ0lYmm6dHpyOaYt2EWBmBZd0ELPirz8skKvpj
+	 OJ95Ujgxyr8ktnf0ApL48C64rZQszfGYhmlaWq9G+jEC3GvdLe+DDdZ9AQOq5IeqkUWfl
+	 QjJpGOuh2CXcjY9dp+FRiJCTc4F+N1W+O+rqTLq15haxbZd58mTT5EZzvIamtROw5D7X9
+	 fXnhX17XWmKk2tJC7R4Uft3MGBmt6MyltQe83+lPINOlSrXH55YDndImm+s6xgdfbRzG2
+	 plxqU0Py9wJeFLcakF0oZkM5MKUBugZP6LhK5w8RRgXhXqyjTTp4dBfyo4o46sWwPDQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792531094;
+	c=relaxed/relaxed; t=1792531095;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=kBX47ED6fjQKdUzQeYs/kXNVXmnLBOWSKAQKd8zPmCI=;
-	b=LO52ILAs2+eWSmmyPBcDtVxFB56TRGoJ+83m7GiIn2rp32wjca4hZBVnJtgDhCEygX34
-	 OuYVyIZPZfoxbZ9pPKsS0Ln/eFWGjBe1cN8Yo9KYjHNjESfWuz0myiAqu6x2g9vKdyq8d
-	 HJm/bZ4jiAD3qTXOCSM8XB5x/W6QzVNCQ53FjcFABMbEorOd1rVDjMF7GKJWhe0gv2TUs
-	 dwNPCQOScOHaBgDEuCsoGEDvQyMpu0IKXwcqfEMRjf4E7l+xdN/ezdrS7NRibLv1rvE/9
-	 FOqBA4H+21WfRkQOkgZPWo7yxxgUkicChZnNrBpM5BlAn4r/FefaabfiZSJHiDSKYUA==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=OpSxyP9Ek4J0jxkp004cdCPyMG7ATa0ZCyTNv2JQcG4=;
+	b=bC0u/YhcxGPoxCfroJ9DycYUZr+T97hX1RB6/JsNezc8stYkZQd9DRAVOtVRhr52lYXe
+	 qb6gvMpN4QzfaoSDuM35kJUsXJAM+VleWXxLdc5yRwL5jOyLa6L2AAmKZgRbDRJ+jQ9+X
+	 5N1aMsTfcYQ3WYWUnS4tPLC4pWgSsIhJ3toHcq5Y61LpPBriKDtesxVyfPXbgUAl1nzEI
+	 Rq4/5tBuCnH/OWfL0xgQdDBPf7clvAs4XMyRjd0WqQXNXUwNqCv7q0hR1jrr3IQQcTFWV
+	 flrBm32V4tCFg+rLUNRi0ORyQ97WkRoPwKrvwpTgVQXRfeEOqWnYWjdZz5pSFndeq7g==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792531094;
-	bh=kBX47ED6fjQKdUzQeYs/kXNVXmnLBOWSKAQKd8zPmCI=;
+	s=default; t=1792531095;
+	bh=OpSxyP9Ek4J0jxkp004cdCPyMG7ATa0ZCyTNv2JQcG4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=qkqZ/3h3hWf5BO3+aUB5a3X3ElD5TyU+jqQ1rRAcd443ukzb8LhYn8CC3arfVS+El
-	 muqJfT+0as9HXdnBSZB++9LaCMluGxOjUVdRQdzuGJ+TxusF0mQi+4GlW7M00bpWxY
-	 YcVKSp1CLu5bzQNuYXTdB1pkAkEkuMhMR3mV3M7lUiYexiFxFclh9oKkkcytAKbVlo
-	 6LiGMRzo1bNBDLbbP//qDtEMp85FJwZ3vEP5G6dB+abqKGF9/c82pVK4LbrT1hjWPI
-	 1qKjUhWkLJCI4EAh7fmGraPqlmzvcV2Tx/Y/D/BFNtocJnnCR93+fQ4uAe9JhL3yZe
-	 zOOqdCYHboXDg==
+	b=Uidnmo7a4y2keq78w+lggXMVzBSLcu/zlGKKR0S8mBcfHFILfbRTG4kgN4isjncMW
+	 BCimzxEHT1BcNsdEUP+7UZq3N1hsvSyw6A4czh3LAPR64rVP4UVvkqIPp6Gf5s8OS9
+	 51hsdERwo111egccVCzBDawOr4H58Y/oLCQxB/kcBtaHAt+G26Fxo5qFADMDurj7yl
+	 rIls4rO+sbR4Zy2BR2wsdoZnLPjxtC4lKbGpxxx/O29QzQJ8YJoaII0tbMx6actggK
+	 5amwOdv8eTWsPAy2QJTmMztP6PFC5wryR2VnqROzhrSw3IMcmzaaimDX/HMXoKLdG9
+	 JD/QABs8Qhzjg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 22ED1407C1;
-	Tue, 20 Oct 2026 21:18:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 699EC930
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6A1D56073D;
+	Tue, 20 Oct 2026 21:18:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 976333A8
  for <buildroot@buildroot.org>; Tue, 20 Oct 2026 21:18:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6701380DE3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7DA3E4006F
  for <buildroot@buildroot.org>; Tue, 20 Oct 2026 21:18:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rnE9z7Z0hqmR for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eopDQbdua1vY for <buildroot@buildroot.org>;
  Tue, 20 Oct 2026 21:18:10 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 8D92280CE8
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org ABB5E4005E
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792531090;
- b=c1EXx+nFi/hFKKK1ob1da24o84G1ggZU4qvqtZNJ6snVTWlZv2AifSTKGtgyKad7chg6
- RkChUhUcNhN6hHs3L5sMzjloMBo7HWATlU9sQIrn+jdzefy3V8IxCCxtwqhtSDkd3UKA4
- f7ZinFdMBNGUY1vHpDM+aRknU3Puq0BWiOnQFEEUoG8MfByopnZnch+ZDGakZ3zABTp+P
- p7YdhFibI5dR5HLQg4FtFHuwpUUvtQX719yHQFr0aVkhtuMLQ3FievJK7ruPbtFxBSWEL
- 4kYPQv0ybRnrKwfEq2KifcAk50bwmvDY1QDk0yKSx/dOXa86/l5rRsoYSYqZ6SnQ85Q==
+ b=k72nTsK+/iM5/XQM9+6p0ROtkgLl31OcRShaHtTN4rzC+l84ZhBVnUnwpcGCcNaztBKZ
+ Ena+TM4a6y4X3bwiZnPVABbGoYe8Kiwbv31jY4Xh8dEtphwRChNmfK8WBBF0xJM5o7Og8
+ cUpiGBnooncCZV++Oi+WFzcutRtx8mjTB2LPLh4IjvcOXBalKVStfFfuAZCB1LvUgc/xM
+ vrnL0IZOhYUEy2JM02fmKppHbdo8zxBlrJC2FkdqSXIR76Ck/AD23JAOaxHMBOlP6lpEk
+ 7NBfZp3xYxcQp4/su1Kd5Uomy/vW8yTTPyyPz5wURnPJNUcj2upW8CiN5Pe0kV0I/jQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1792531090;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=s12knASwir0vCvvGJZz9dssdm7oLAjoPQKsH0Ll374Y=;
- b=WIoiKDclRUmD9AhA13syfF49tvTnSfDYDfEJTmF3w7HhmUzKyhgk9zimQkAl3Iv4Piby
- ab1JFHGyhOgr2Q7cBb9+4Vg6f4JCRx5g43rUDiqaSIt3LAcGULasv4DwiWaKdIHMCGGh/
- 3ZeYVeszropE9eBymYiS0bnwf8SN05p6ZqsZp+m2p6aZsTzg1/3Q60JIcncV7V/YG0KX8
- MXUbvr2s0mpBYSTAxL9FrHelah+u6T8aIMgtCgEJhkB756rdpo+dVXCuWFFhh24b0a0Gq
- dQ8ifOvQBNjuzmG0QLJ3IYUgSJAoRhRK8HL6MVWXLqAskbttpPmjRVpX2Jl+hU6rexg==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ bh=1CMDihGWtLRRTBw/3n0AeZJLtx1GOUz49gSa0T3rZPE=;
+ b=UTQVuLfHYj1MJuNR9Xp8tgSL/HeiaYpEMQeuPKOrjZJW+4X5fLIbQDpT1ikPQSSbPK6h
+ /FxVSD0UjkVnZsu4Yml9slSqeHL2svaDZh83ZW5YUiUWWiw0vTtugulonVHkDFKLcWOvP
+ xU+rHrRvhR2kjPzbicboHxWZJlDUuU4EIUAAopd/fer0dm4ZIbz+ux3bt7I9yvhD85hdP
+ N1bPGs3rLgT4xVjZXUtO5JDIEtmmZ2pRhg083yN2iBosMnjRysZohFaSmBBYx6ljeNdAj
+ XlIqFF59vSTIqTR6Y0IqWiE2X/RBhuUFaXOoN6jcMnRMmeeyAEPMwkJMA3a8OaxvcRA==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8D92280CE8
+ by smtp2.osuosl.org (Postfix) with ESMTP id ABB5E4005E
  for <buildroot@buildroot.org>; Tue, 20 Oct 2026 21:18:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 509AF99992; Tue, 20 Oct 2026 21:16:47 +0000 (UTC)
+ id 6DD38999AA; Tue, 20 Oct 2026 21:16:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 20 Oct 2026 23:03:27 +0200
+Date: Tue, 20 Oct 2026 23:03:31 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 84a940ebe1cca7c6df49062a8e9c250fe9221867
-X-Git-Newrev: f14e138f6f643d208455c500ca3ba7cfa9de30b4
+X-Git-Oldrev: f14e138f6f643d208455c500ca3ba7cfa9de30b4
+X-Git-Newrev: 854abad276a73134867fe2fac98333a120b8f197
 X-Patchwork-Hint: ignore
-Message-Id: <20261020211647.509AF99992@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pkg-golang.mk: make GOPROXY
- configurable
+Message-Id: <20261020211647.6DD38999AA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tailscale: bump to version 1.102.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,82 +117,50 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
 	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f14e138f6f643d208455c500ca3ba7cfa9de30b4
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/854abad276a73134867fe2fac98333a120b8f197
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-BR2_GOPROXY now configures the Go module proxy URL used to download Go modules
-specified in project go.mod and go.sum files. By default, it uses Google's
-official Go module mirror at proxy.golang.org, falling back to direct downloads
-if the module is not found in the mirror.
+LICENSE hash changed due to changing AUTHORS to contributors:
+https://github.com/tailscale/tailscale/commit/3ec5be3f510f74738179c1023468343a62a7e00f
 
-The default value from the toolchain can be read with "go env GOPROXY"
-
-We rely on package developers to audit their dependencies in go.mod and go.sum.
-
-The value can be configured to:
-- A comma-separated list of proxy URLs
-- "off" to disable all downloads
-- "direct" to download directly from source repositories
-
-For more details on Go module proxies:
-https://go.dev/ref/mod#module-proxy
-
-Discussion:
-https://lore.kernel.org/all/CADvTj4pXO2rwJ8oCzzGNY+OxLuo3uJnDT2PAxbyquw0L6dhfiA@mail.gmail.com/T/#t
+Fixes:
+https://tailscale.com/security-bulletins#ts-2025-008
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Christian Stewart <christian@aperture.us>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in             | 16 ++++++++++++++++
- package/pkg-golang.mk |  2 +-
- 2 files changed, 17 insertions(+), 1 deletion(-)
+ package/tailscale/tailscale.hash | 4 ++--
+ package/tailscale/tailscale.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/Config.in b/Config.in
-index ac58c685d1..34e9ec6705 100644
---- a/Config.in
-+++ b/Config.in
-@@ -334,6 +334,22 @@ config BR2_LUAROCKS_MIRROR
+diff --git a/package/tailscale/tailscale.hash b/package/tailscale/tailscale.hash
+index e2d600f03e..5683610ef2 100644
+--- a/package/tailscale/tailscale.hash
++++ b/package/tailscale/tailscale.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  4830cd822a838d5d44fd5eeebd07a2aacaf0255fb3fb7d3852d57659f54e51bc  tailscale-1.78.1-go2.tar.gz
+-sha256  d1ee1c7947d4b2c1963ea214d5324f1d4c89f2f1d0f0224889b4dfb868dad725  LICENSE
++sha256  a4c0e5916bb4cf5a8a46791788534e8931a622ffac32dbff5bd8f21df7272029  tailscale-1.102.5-go2.tar.gz
++sha256  a7ca6186a7963a0a60740f6047760eecd7a0234e8c38bd7e1e0bbcb324bda45b  LICENSE
+diff --git a/package/tailscale/tailscale.mk b/package/tailscale/tailscale.mk
+index f231022476..9c24d6aaf3 100644
+--- a/package/tailscale/tailscale.mk
++++ b/package/tailscale/tailscale.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	  See http://luarocks.org
- 
-+config BR2_GOPROXY
-+	string "Go module proxy"
-+	default "https://proxy.golang.org,direct"
-+	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+	help
-+	  The Go module proxy URL used to download Go modules. By
-+	  default, it uses the official Go module mirror, falling back
-+	  to direct downloads if the module is not found in the mirror.
-+
-+	  The value can be one of:
-+	    - Comma-separated list of proxy URLs
-+	    - "off" to disable all downloads
-+	    - "direct" to download directly from source repositories
-+
-+	  See https://go.dev/ref/mod#module-proxy
-+
- config BR2_CPAN_MIRROR
- 	string "CPAN mirror (Perl packages)"
- 	default "https://cpan.metacpan.org"
-diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-index 26da7be71b..3e388cb257 100644
---- a/package/pkg-golang.mk
-+++ b/package/pkg-golang.mk
-@@ -101,7 +101,7 @@ $(2)_POST_PATCH_HOOKS += $(2)_GEN_GOMOD
- $(2)_DOWNLOAD_POST_PROCESS = go
- $(2)_DL_ENV += \
- 	$$(HOST_GO_COMMON_ENV) \
--	GOPROXY="https://proxy.golang.org,direct" \
-+	GOPROXY=$$(call qstrip,$$(BR2_GOPROXY)) \
- 	$$($(2)_GO_ENV)
- 
- # If building in a sub directory, do the vendoring in there
+-TAILSCALE_VERSION = 1.78.1
++TAILSCALE_VERSION = 1.102.5
+ TAILSCALE_SITE = $(call github,tailscale,tailscale,v$(TAILSCALE_VERSION))
+ TAILSCALE_LICENSE = BSD-3-Clause
+ TAILSCALE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
