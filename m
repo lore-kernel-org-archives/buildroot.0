@@ -1,28 +1,28 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0591D606A319
-	for <buildroot@archiver.kernel.org>; Tue, 20 Oct 2026 21:58:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67F0F606A319
+	for <buildroot@archiver.kernel.org>; Tue, 20 Oct 2026 21:58:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=RwwIcm0h
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Fid7Zpj0
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D091380F7F;
-	Tue, 20 Oct 2026 21:58:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2F702605E7;
+	Tue, 20 Oct 2026 21:58:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cnaYVzdFRHfN; Tue, 20 Oct 2026 21:58:34 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org BC9FC80DFF
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792533513;
-	b=NAsa53UfVOJyTGTyieLs1115Bamf2wJkdh3Xx/rtRF5tPX8pk0e0Lap1jguipeGnqmGO
-	 lrMNbA/eB1NMDMlGtFS+RQA8mAjzwOkEHxX3bYxCbDL0hB4wSiXxlU3+8oCPLixMEX3uu
-	 eZ+HZFLGr931l7i0Hxhe12Vu4g2BYlTkUi91hH8qYSGZDsym8YL6jIGSZTuaweqS1lFZG
-	 7XrtxqdqVtqEonHc5EZKBfXj5tWQauVJeC80phXWryVbWezw2GBHh4iAd+SggLqKduLD9
-	 OxdUA9VLuhdA06+mHLZYQeBKW4SLt0L7lJ6H2OyjwLQc1vOLMN++CdU5p9kcrOGqiNA==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id O1l5m58fCAV0; Tue, 20 Oct 2026 21:58:35 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 33A4B6070D
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792533515;
+	b=reqN5kJCet/AiLWFF4qbRP5ZfEcCkqvGQXr9gBbIj0wYSynUtbPGMSrGrxiLudOI06FF
+	 kAjbTDXMNk7Xof+YpscQPsP+E0PV0/V24U30MgI5+6bnhzmLHLn9hxhdg6o+kPOAVzsMJ
+	 j5JgQO5QGuLrSTucRO7PyOIgoh7n0hnlvvyaWb3DksZ5dHdCg+07vzNh+8TZFtKVjNKL7
+	 7kbB54ffWyZ/JkczLwdTFU4EhOzGuc8KQdmm9hFIJFtdIol83aScCbPMB91AFNldYMhc0
+	 pq8cI8MaEeZ0Iv2lxieSG+OKP/KsOHwGAAKHCR4lVkzLgFRv5YT/1g2XMkTw7IKz22Q==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792533513;
+	c=relaxed/relaxed; t=1792533515;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=F1HMrPAM5XYZv+LSXRIWrcUY20TCS1TlPAwNa3PdPo8=;
-	b=ipOWxi3v8dO/hkA0jCQKPoOH2ntVY5JiSU0qZhZF7YlX2VpIrP5RE69T+hgvhpuTQ1ZX
-	 FqKBzyUvAy+eZXVdCwdsPlXwh0WEqiypAoZmY91cr0cnMBtFqB34kZbXGUzJBHYODW+9N
-	 OMMws0elD9l/pjrspsjKWs/j+w9vo3U6WRYh4AvnTHOH/GeSq9Gc1KBmIxzCcibU5Kz+0
-	 dsKc8isXD1YWySvPbzMjGaDQtn/2JSFxGscjkWp9Y9Yx7GpYSGD5W1VMfOPQ7HJSg58iF
-	 pU4aUSEXFRHDA90eqxRlXpEbjp4y+AaosoHuO5KAYE4swugyTlb/SBEF6k0mNYe/N6Q==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	bh=vPTgL+IEAYYJ0Ga1KQqGdHLX5QQRoK9ZrhmhdBDDaJ4=;
+	b=Lb4cy437rw5y4CQHOmBYS4D7h2VHiRvnsUF7FTyAUHnLWikTATpPUDIK8JXCjhgmtRDo
+	 ttvEVfCLlwp63wYUvL6+ymk+oCP5Z3UzlT95DV8Z6fK9Rvp651JlosP6cPDgTBMSuOysC
+	 YbyDDPvW0d3eECY7PdX4x6bRbQWHrTE2iVTLFR32hgetM50rTtyqbSrvhq+PbLkiG3H3d
+	 Lk7t23dpC8Tn5XywhXSNWVrJgblLEPoo/fhFkeE+WjwLm7q+fBOmwRp2H+K99Bt3BMQSU
+	 3kpl4thcKgnRgyFd9c9jIjjnweCappJNXzzSWG1Cn/7QPBvpSsxeyzSDi26BTNQfN+w==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792533513;
-	bh=F1HMrPAM5XYZv+LSXRIWrcUY20TCS1TlPAwNa3PdPo8=;
+	s=default; t=1792533515;
+	bh=vPTgL+IEAYYJ0Ga1KQqGdHLX5QQRoK9ZrhmhdBDDaJ4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=RwwIcm0hvGPCMaPBkaLw2Rm/BMhoSw2WtQ3oaSPmORlWEtWMUW9EHomwIXQSHUII+
-	 JvACNcbIFisdPsMris+mpsUozlBbj5QPqaRAfxeUikYnhrrIQMh33YE5hDa2plqWbo
-	 M7Bw+gKCgERB+pcxbz0EkJDHopA4mYYNIWS/7p0Tpg3cvMHZokeaerCzLn3iJ8q5Bz
-	 85CDG3WvbqgMyOW93havgKLp8tMPFR2/NiAr0xdUe2o8qR7eAw1gZ1niceWwCgioF/
-	 r934jYIfnocmRSM6ntUveepA96Nr3Q40L7XrrxJf7CCdz8Mo7Vs7gEFr7cBAKl8F/b
-	 5VuXQXKNUdxXg==
+	b=Fid7Zpj0zu2psyX9bOef1OlV/IQ8DjB6XY1GIoiogqQwsTR0MC/P7twYX6OY2QUJ9
+	 3NOFZLe+0yyUTVXe1cLLnaD2FXDPEt+94GwOluDatX++YvgaPZEuQy1k7yNaXRrENb
+	 HBBlAFioshIfSiOYDnloUAkIeZqh3880/DDox0yMYQwQflF3g/wqaJTaW56dZxUaub
+	 mpmf69MaBJdqqehRBrXs80MGEktIYe7F6txTBaXjRVlYTBFxghSmCfBXbVyUlpvVi3
+	 fXiDPwK+IqkOTo7DTv7ZRviy45GAReKKVG9nFy3PwJKMy6VVx5xY20tD0gDWnlghF0
+	 A0tOKCBJ1PU/g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BC9FC80DFF;
-	Tue, 20 Oct 2026 21:58:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 33A4B6070D;
+	Tue, 20 Oct 2026 21:58:35 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 772DE3A8
+ by lists1.osuosl.org (Postfix) with ESMTP id 76C173A4
  for <buildroot@buildroot.org>; Tue, 20 Oct 2026 21:58:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5C5A780F5E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5C5CD80F61
  for <buildroot@buildroot.org>; Tue, 20 Oct 2026 21:58:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ls7JPD-zHzj1 for <buildroot@buildroot.org>;
+ id f9kEy_mfEP6n for <buildroot@buildroot.org>;
  Tue, 20 Oct 2026 21:58:31 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 7E55380CEE
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 945DC80DFF
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792533511;
- b=A1HllCuNvyi7WepiIHgqFT+5MxDBeeJufkBj80p9dg1K7MjyHxjz5hgCpcqd2AifYqlr
- qjyb9kl0NK5AZ0bu2moFeb2QNd4UdGcqppX+eJy7+BYsh6GsEAzs162jmdR4HVhpX6YfI
- VOcf/inGpL6Z/8QM/H/5nlgAEbkqfYhahubIhOzIRUWB/Yfa8WE+FbwmE75q4GfV26GsY
- VfdFTmr+db+TjVaRz99iHR90efjjiieb+a49IEI1LkzGAiPnudalCgFfW527zrpvzep+4
- xk3fe2g2eTMcCdNYb0cuRPzQJuMvR8WnxlqPBEf6D+B0Hniu4XVyBsuOQhsXQQNRzYA==
+ b=OPnlRH4Cccb3y86j80/UJpyUrH16tPb0Vaf3OtyK6VgcOKnEpjLMGA+GlJ3kHDxMrPf7
+ pxLO5e/SDjg7ZB0HZU18VCwWBvDPjOYDn+2DFDW5k3GQYCounf/I23NYBvFwqJ0ppug44
+ lU0o4cg2/2jKYzQEvUpIivPxbrtac6nXKdzl7hf1T0q2HOEklI33ZERtNemwB+NTjSqg/
+ wf71A2nm13G2Zo1yqQBpFNLRS8tK9a5yVVCk4mLfzALpOY/E3wF8CCV/YPyaTwnPCPkCJ
+ zK2oMG4lTz9Adra8jHtPSKSkGHgdeCeMUBnYyKxtGkMf7XODaTq3irL52Vo+1KOUnKQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1792533511;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=65OXHrZt6kd1X/J9fH7ONUjQwJ8ZPFPFvkj8/2jZwMw=;
- b=F1YD+AGGeRotJg0dVhNOGGHDUdgONTx47gwSuJZf0eKVWGXlf5IJB1pcayYpeFGBLJat
- IB8hSERW+cZ1Rs5me9KvKZRCjmjS8YwL5gKfFFiIOadMe/b9ZJt7q3Q8h2wXYunpkYLue
- g/Q9Z99kdAroBXc+H+8qDki9Y3/Ln9Q+uM2hVeBKpBCzjjWugdZmOTJ9UcYtszMkAscr0
- R5g3mdbkqAE+II5hwD6dxjJQT/y5wEmZuK9J5zi745fvJrjWV1ImXR2+XEncAEcfCycHi
- HToI+UOb+/8w2lCIWgTJJcqyAxQGroZl774eUEKTicLuJwEoc4zxoyVeplCJnv6/FDw==
+ bh=Z4BVv62xlbZ6UIOuOnyGnOtdN9+nfRifKvb3CtQxnfA=;
+ b=XcM19zZDhqcZVkDMyydNJX8jtfTWfZ/t3n3VsFaynFkzWpG7IVrHgoitsEtIAH94u3H6
+ AsgNXjf8ABH8XxPMgbLZdQymk1PBkTSDidCv1H7j9I6yGrkdkElfG+tNbk6f1LU9fz1m0
+ stehxLljtmTrFuKeuARb7Vr31cJvtQIcUdKpjGSTrH3AH2FE5LwvjOhXlzf03C5SJwV4J
+ wbF/3xS81cK8mrkJDM+ziXvT9x6f6L8YHzDPZkwrTeEnw+rmYuqUyUgWtGKD+hzNW5WOL
+ u34F3jCFEABP64r5enUVbm1zxVvWAMXwQzMQWw1VdTBb7rQphyMZE9xt/OXWhXZkPyA==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7E55380CEE
+ by smtp1.osuosl.org (Postfix) with ESMTP id 945DC80DFF
  for <buildroot@buildroot.org>; Tue, 20 Oct 2026 21:58:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4E21F999CD; Tue, 20 Oct 2026 21:57:08 +0000 (UTC)
+ id 3F6FE999CC; Tue, 20 Oct 2026 21:57:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 20 Oct 2026 23:28:19 +0200
+Date: Tue, 20 Oct 2026 23:28:14 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 87a1518a25d131ba75b89311df8977d738dbf79a
-X-Git-Newrev: 4b65f6274e5e70e7101277a6580929abb39e8ef0
+X-Git-Oldrev: bc03d108fbf17c3db07e459864f1110a463490f4
+X-Git-Newrev: 87a1518a25d131ba75b89311df8977d738dbf79a
 X-Patchwork-Hint: ignore
-Message-Id: <20261020215708.4E21F999CD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-setuptools-scm: bump to
- version 10.3.4
+Message-Id: <20261020215708.3F6FE999CC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-vcs-versioning: new host
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,54 +123,48 @@ X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4b65f6274e5e70e7101277a6580929abb39e8ef0
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/87a1518a25d131ba75b89311df8977d738dbf79a
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-Add new host-python-vcs-versioning dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-setuptools-scm/python-setuptools-scm.hash | 4 ++--
- package/python-setuptools-scm/python-setuptools-scm.mk   | 7 ++++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/python-vcs-versioning/python-vcs-versioning.hash |  5 +++++
+ package/python-vcs-versioning/python-vcs-versioning.mk   | 15 +++++++++++++++
+ 2 files changed, 20 insertions(+)
 
-diff --git a/package/python-setuptools-scm/python-setuptools-scm.hash b/package/python-setuptools-scm/python-setuptools-scm.hash
-index eaed490fc7..ea27f06b74 100644
---- a/package/python-setuptools-scm/python-setuptools-scm.hash
-+++ b/package/python-setuptools-scm/python-setuptools-scm.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/setuptools-scm/json
--md5  72975fc3ec40a1ae06bb2d86ca8ac48d  setuptools_scm-9.2.2.tar.gz
--sha256  1c674ab4665686a0887d7e24c03ab25f24201c213e82ea689d2f3e169ef7ef57  setuptools_scm-9.2.2.tar.gz
-+md5  048be3394d065d8d6404d07b0161f1b3  setuptools_scm-10.3.4.tar.gz
-+sha256  a69f28bfc245608781205e912faae437c2b2165773afa4e7b979d77447a69dd2  setuptools_scm-10.3.4.tar.gz
- # Locally computed sha256 checksums
- sha256  89807acf2309bd285f033404ee78581602f3cd9b819a16ac2f0e5f60ff4a473e  LICENSE
-diff --git a/package/python-setuptools-scm/python-setuptools-scm.mk b/package/python-setuptools-scm/python-setuptools-scm.mk
-index 8c74a55335..9b751447fe 100644
---- a/package/python-setuptools-scm/python-setuptools-scm.mk
-+++ b/package/python-setuptools-scm/python-setuptools-scm.mk
-@@ -4,15 +4,16 @@
- #
- ################################################################################
- 
--PYTHON_SETUPTOOLS_SCM_VERSION = 9.2.2
-+PYTHON_SETUPTOOLS_SCM_VERSION = 10.3.4
- PYTHON_SETUPTOOLS_SCM_SOURCE = setuptools_scm-$(PYTHON_SETUPTOOLS_SCM_VERSION).tar.gz
--PYTHON_SETUPTOOLS_SCM_SITE = https://files.pythonhosted.org/packages/7b/b1/19587742aad604f1988a8a362e660e8c3ac03adccdb71c96d86526e5eb62
-+PYTHON_SETUPTOOLS_SCM_SITE = https://files.pythonhosted.org/packages/85/d8/fc143f88819ccf10ba2388ba86732ee2de193e578234e25a783f6cc14bf7
- PYTHON_SETUPTOOLS_SCM_LICENSE = MIT
- PYTHON_SETUPTOOLS_SCM_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_SCM_SETUP_TYPE = pep517
- 
- HOST_PYTHON_SETUPTOOLS_SCM_DEPENDENCIES = \
- 	host-python-packaging \
--	host-python-setuptools
-+	host-python-setuptools \
-+	host-python-vcs-versioning
- 
- $(eval $(host-python-package))
+diff --git a/package/python-vcs-versioning/python-vcs-versioning.hash b/package/python-vcs-versioning/python-vcs-versioning.hash
+new file mode 100644
+index 0000000000..964a21fb70
+--- /dev/null
++++ b/package/python-vcs-versioning/python-vcs-versioning.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/vcs-versioning/json
++md5  bfb201115bc6c78668ed643c9b06503f  vcs_versioning-2.5.0.tar.gz
++sha256  956a796e31f80fe714d219d6d1df15a6bf247d10f6d851bf4b98279d0a42da55  vcs_versioning-2.5.0.tar.gz
++# Locally computed sha256 checksums
++sha256  f52f6085a2f4acdb7f425fac78d4bb013b2d723616792fb173a9f8aea191d8f0  LICENSE.txt
+diff --git a/package/python-vcs-versioning/python-vcs-versioning.mk b/package/python-vcs-versioning/python-vcs-versioning.mk
+new file mode 100644
+index 0000000000..78d04b8457
+--- /dev/null
++++ b/package/python-vcs-versioning/python-vcs-versioning.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-vcs-versioning
++#
++################################################################################
++
++PYTHON_VCS_VERSIONING_VERSION = 2.5.0
++PYTHON_VCS_VERSIONING_SOURCE = vcs_versioning-$(PYTHON_VCS_VERSIONING_VERSION).tar.gz
++PYTHON_VCS_VERSIONING_SITE = https://files.pythonhosted.org/packages/6f/a0/6977bb418312ad30f27e522c5040604d4bbf7e40ccd5a11d333afe549354
++PYTHON_VCS_VERSIONING_SETUP_TYPE = setuptools
++PYTHON_VCS_VERSIONING_LICENSE = MIT
++PYTHON_VCS_VERSIONING_LICENSE_FILES = LICENSE.txt
++HOST_PYTHON_VCS_VERSIONING_DEPENDENCIES = host-python-packaging
++
++$(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
