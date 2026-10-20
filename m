@@ -1,28 +1,28 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3528606A325
-	for <buildroot@archiver.kernel.org>; Tue, 20 Oct 2026 20:27:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E143606A334
+	for <buildroot@archiver.kernel.org>; Tue, 20 Oct 2026 20:27:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=UKlu1OVQ
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=iXVl9q5H
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B6400606ED;
-	Tue, 20 Oct 2026 20:27:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ECB5280DC7;
+	Tue, 20 Oct 2026 20:27:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ll_oCmyby_-y; Tue, 20 Oct 2026 20:27:03 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 95B506070C
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792528023;
-	b=WGhRQBgeVxP6fFXgvHXYZb4sZ6kDv64g16SKY0iu3rPLki0GGQ8/+6BHUbi/vur2RU6C
-	 OFtjxwXXaPNsri2o5Fc334szKvC0+bqDBxf/g43BhUPixI+nmOqcysjHkVV/Ve+qF1Fwj
-	 uWDuzNwwTU3YY1FLE6vP27SrFUNq9w7il6GSndC0sklginPs9hzoL8uW1wtJ/oQ36NDjh
-	 pNsBd+WR7j+Bp963+KuI1rbOhQnss7fP8s2ngPAMT/VlcSAy39UQLi0w3EtsIvc7NuZBX
-	 M8RBE3NItdPflkFqb9+zKvUGNpVV2yNi+VHN4g2z0iJbRYlRihL+B/ZlIJok/AycqRg==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 16aDpOr6OcSb; Tue, 20 Oct 2026 20:27:11 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org E854480DE4
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792528031;
+	b=qx0zVyrUX30BEca4zE+ArIl0eAJHmzLkeoHkzob6uaYGUamVb1fVfu6Wm/LHEm9frgFR
+	 C7fzK7v3Fm0O4/PDhjw0tjXkPK5emM2R0zcUQYCDao0T5rPKG8+ON1T7p4DY0Kl8bNWxm
+	 DhC0YFNO8JvImK368BTf2x0KwLQI+LxEzZVluSkow8uLW4cg7w5EgiR9tt1kZjIXIZNpx
+	 7eQx0nHhOlWSqGT5ynWEO05f2WYHdqkk0XMHiYp/FxRelZFRQQGLIzhtFjzb2f0bTR/n5
+	 XN6CKPQOOfquVM63hZiNRJ5L93yfm87Q7CEzEavg3lkzUuolX9CxY4h3h9w/X9iwwvA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792528023;
+	c=relaxed/relaxed; t=1792528031;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:To:
@@ -30,87 +30,87 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=UmjZEt7ckBSUtEOlOYay0opptYxy977UGkC/MrYp/+k=;
-	b=BK9gDK+hMSceqgqdpKji5CQHO1t0JFt10M6PNid+ZQGUaLMQ7waUOK3wcazKHvj/PxbP
-	 Jz2nUz4pDoQ02AN/1IWHKDV//IRp0tMQMheJZqBzjkKy9TpCw0oDyqxW/eMmI5WtK7KUm
-	 ym/qJyawhh2HOTBr7ckGtDn/e0btvdxq7ZpKVxmQJl8egAz/gFMg5BPqcN7ofJGxkjsGJ
-	 8hMTf9wLkESI1ERziNQMLeS9rSlSXzNg8duM9j1Jm8DVbEF3YSCEKtpev2gMJOFkbDwnz
-	 iRnQpsthWHMUluf9jc7yAaIhGBcXDhpJMD9ErOJ/uyk/IPRxDGeJMaRnbEDR4/GTZgQ==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	bh=IfGuEyx+urEyal/siRMyXTQ/xA1nNd6AB50hWgSwf0g=;
+	b=BMy2cZalr+xgTqpx0nFwhI+DIfNFhbUVYOEco0ZXJGvhrSgSbWzrE0JmTsymxTrzoxE+
+	 iBvm/KDP6yurBuXCIkSDaIkwojo/ACBOF//IL5LtoKt1fQOHpuSq0kp6CHxPxU5BikYY4
+	 GhP+L1YkBNMvnCUUwnPHKCIN5S3ZVfZ5+PzU/PKvckjXu5iaYzkxljeWDaasjNrJh+Bsd
+	 WxgP3j1QyEFXxJGH6ZyA2PlK3cMRAWKylVmT0j9Wp7qunQnJm4LtNAwDvumqNh/JYiWnz
+	 ZcCSLkHqvRtMdZQ988zYpEq7U/6DBw4rVp1UsOg4bWy/gQ+np11J2CoAhuSlAmZEoRQ==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792528023;
-	bh=UmjZEt7ckBSUtEOlOYay0opptYxy977UGkC/MrYp/+k=;
+	s=default; t=1792528031;
+	bh=IfGuEyx+urEyal/siRMyXTQ/xA1nNd6AB50hWgSwf0g=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=UKlu1OVQJJ1dcY3FpaQChynleBY1NEWJ3fU1DO7eO3tSZc2NRdug1Pt9Qjkj8FrSf
-	 2HQKBMfXln7Bg4SVEklw14qu/C2P27VjlTVVCN5mK55BD5Lwxic24hinZSHND/y1uC
-	 xLClbSQWWj9jw8d0fz5IbNZW4uBofBT7p5uGl+wQ9Uj5BMvKHIWz0hyPGeXc6179Sq
-	 Oxsb9YtAOSHloZ9K4qOIotjrWb1gCxCyPlZnwvWepXhyl5f6rdsD6vzQiP9C3+7UE+
-	 ZvNEno0VN+mKvyPNS8zVG0ZnKvA4dBBUwVdjRwOm0GDtY/0yYS8fejcmYcwmuITN45
-	 tN2D1LFkmVsbA==
+	b=iXVl9q5HqOAzkC4KyI2c32+Ft4fK8ywE7vpCz0ZYB+adx1LYBaUBnKS2ejD305nQr
+	 DLSpWpSORarKAecM2LayqcymYxuGe4oMRNaUfvo0C46DYni95MGLCrq3aiUgSAeKsD
+	 l5vfCFx851Gj6T2NzuMWz/7Cdv0goHayXq29a/iQpV/q4FBB8opvGYc6NVMkQqiOIm
+	 reaOM97zBBf6+ubdg1VGxZai9Wz/70vOoRQyk/JUjZ7N+0g9zCZZgZIYl8aPUS0gLt
+	 74iN2DNCENn5ZFsEuWRgYtfSUeRF5nt3mUlMsWVsvATFYCxAVk7bTU6O3dFPtcEvMf
+	 YT0V3FpD/Ya7Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 95B506070C;
-	Tue, 20 Oct 2026 20:27:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E854480DE4;
+	Tue, 20 Oct 2026 20:27:10 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1DAC4380
- for <buildroot@buildroot.org>; Tue, 20 Oct 2026 20:27:02 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id D057F380
+ for <buildroot@buildroot.org>; Tue, 20 Oct 2026 20:27:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 043BA40112
- for <buildroot@buildroot.org>; Tue, 20 Oct 2026 20:27:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B634140112
+ for <buildroot@buildroot.org>; Tue, 20 Oct 2026 20:27:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JF2mZvkxqZWp for <buildroot@buildroot.org>;
- Tue, 20 Oct 2026 20:27:01 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 172894006F
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792528021;
- b=RqnfDWnhvR/iXVID+MlxURZtwv1WIWSgFFC/UsIbZIVuQIpFlB1q4cfdn0WtUSNX95Ou
- BA33w8vPealsJmkMUy4G7Driha+3WH6icE3lTdEFSphjzDvCImQIk56UKJe/d9Mbg+WvG
- 5tQc9DmUz5oitjttKM/IlwK6LHI7uFOh+UfgefTZuE4jAxWWPyZiR3yd4WdG7lKvJXyi4
- /ImErM+CHKnfTxj4b9ZtnQvEDiRc3I0zGy5C9atJGv1yogZ/uESb/4Ju0hjpD+s/1bvGt
- DmeaKcBwWNC3Xb2Kl4itB7WArV+/gDa+WUqfUARVDKMP/f9NFZM0x2bQRQnJwKQMmRg==
+ id O8woYza7ATYZ for <buildroot@buildroot.org>;
+ Tue, 20 Oct 2026 20:27:08 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org A32D84006F
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792528027;
+ b=B/gbxvfCfemqEqETr6ZxsgtlJlNHJsGLxlb17XMhGWCrNpLoJuABU/ezFz8Jb8nZeb8b
+ sTEswtml0wgjLZPy8IA/KcLVf/qcsflu9dva+pRB2jAw6mPLbeGB7m5k9qX7QJSfRZUzc
+ +9Jj8rgO86E0SjxsV4LjVjmBDxrYatXd6itc50+Zb2rqFXnZTfiFzkstDmSLATcyt7VfQ
+ oKuChWVCOprZRE0cUJZFclbRAkphIMonzILDphOx218JA9BlLPyYf9RKG0a68Yu31t8Pt
+ /dTTGBiuBWfQy85AiQ3vqeRZfbgxMzE9zF5I+mmmjRqKZde97RhPfCb5YAi1H0LD1BA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792528021;
+ c=relaxed/relaxed; t=1792528027;
  h=Received-SPF:Received:DKIM-Signature:From:To:Cc:Subject:Date:
  Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=GnKpjW8tRQP5zF+N6aOAuZ2OvvH5F+TxegI3aiIfnIo=;
- b=Bz8lbLnpdqHAgIsQtHLOz9JoCPC7kC5x9Jj55mjp7DxKmu+uTegH+92fBy4EtXBkslGc
- imIucJs8RvwDOyd1xywoONDd8kfHy5h2Vr2wm3jQdrXblMBMewYoNyKFEGdu8JvbiiQ0e
- obpzRJKpQ+ZDWHF2R503sBS9Iu18QM46yKFb58TJod0PaO6PLBQwXsxrBsEVI9NJ4obOb
- FMsdwImI3UF/7XNWiBV57FGmyAXEtfTX69YjSvO1xjYqpbXrj47n4v3WMgld78PkuDf6K
- E5oIwXb4cDxpcpuwjNBpjg4TR4fBOB+YUbucBEPAtr+NQYQVpzyd5IBYG2qGCQJDawg==
+ bh=WXHssGC28dowfD7X21q0vAdxxiRyB4ZPYTIKc6x0rDU=;
+ b=bQsouLScWVn7m3yoqdBJKhksyOZYEGr7vrfRUP102QCW+G7iFmGfPHTpyks+yjqYFQrz
+ 1IFuYInvtgDoZtLhdCu+yshdx4H7o3wzqIIAGjHG4OnPBn1sTGETFqyo2vAMaAFvL8mIO
+ m2BvA0u9uaOmj0YffzSbYr9ui7p9Cep3fuYVkrI9RnL9Te0LF8GypdRc4TxxfhPYkQKKF
+ /kQdHI9UhdBdeY4yngowYnv57A/o31HxhDeKzmOJT/RUexTqE9Xwhro8IGvuLVSpVb+/E
+ WKE4ZI254YdFRGAMD3kkA28K2nf9aPWTxgneRiDBAa6ra7y4o5QZrXgVOtMgZ5mwotw==
 ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  dmarc=pass header.from=free.fr;
  dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=KqItX7kz; 
- arc=none smtp.remote-ip="2a01:e0c:1:1599::14"
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+ header.s=smtp-20201208 header.b=boEIXK3u; 
+ arc=none smtp.remote-ip=212.27.42.5
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
  helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 172894006F
- for <buildroot@buildroot.org>; Tue, 20 Oct 2026 20:27:00 +0000 (UTC)
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A32D84006F
+ for <buildroot@buildroot.org>; Tue, 20 Oct 2026 20:27:06 +0000 (UTC)
 Received: from home.juju.sh (unknown
  [IPv6:2a01:e0a:1065:2100:52d9:65fe:2df3:c492])
  (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 6528A614D2;
- Tue, 20 Oct 2026 22:26:54 +0200 (CEST)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 01B5A614B6;
+ Tue, 20 Oct 2026 22:26:59 +0200 (CEST)
 To: buildroot@buildroot.org
 Cc: Mark Corbin <mark@dibsco.co.uk>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Julien Olivain <ju.o@free.fr>
-Date: Tue, 20 Oct 2026 22:26:37 +0200
-Message-ID: <20261020202639.1094960-2-ju.o@free.fr>
+Date: Tue, 20 Oct 2026 22:26:38 +0200
+Message-ID: <20261020202639.1094960-3-ju.o@free.fr>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <20261020202639.1094960-1-ju.o@free.fr>
 References: <20261020202639.1094960-1-ju.o@free.fr>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/4] Revert "arch: mark a set of target
- configurations as secondary"
+Subject: [Buildroot] [PATCH 3/4] utils/genrandconfig: implement secondary
+ configurations filter
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,254 +125,123 @@ Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-The initial attempt to make secondary configurations to be selected
-less frequently by autobuilders is not working as expected. It was
-observed that the i686 architecture was selected most of the time,
-because it is currently the default choice. We revert this
-implementation to propose a new one.
+Buildroot commit [1] marked a set of target configurations as
+"secondary", with the intent to test those less frequently in
+autobuilders. This was implemented by adding a Kconfig "depends on
+!BR2_HIDE_SECONDARY_TARGET_OPTIONS" which was controlled by an
+environment variable that could be set by the "autobuild-run"
+script. It turns out that "make randconfig" is not selecting random
+configs amongst the available options (i.e. following the
+dependencies). Instead, it selects fully random options, and if a
+dependency could not be met, the default choice is taken. As a
+result, every time a secondary architecture needed to be filtered
+out, the default architecture was selected instead, which is
+currently i686 at the time of this commit.
 
-This reverts commit ddce0814a794b27a6449b144f85c90fa53e92ac6.
+This commit reimplement the list of secondary configurations
+initially made in commit [1] as a filter in the
+"utils/genrandcondig" script. This commit also adds the following
+x86 i586 CPUs which were missed in commit [1]:
+c3, geode, pentium_mmx, winchip2, winchip_c6
+
+Since "utils/genrandcondig" is called from "autobuild-run",
+this commit fixes the too frequent i686 architecture issue.
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/ddce0814a794b27a6449b144f85c90fa53e92ac6
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- arch/Config.in       | 19 -------------------
- arch/Config.in.arm   |  5 -----
- arch/Config.in.riscv |  2 --
- arch/Config.in.x86   |  3 ---
- 4 files changed, 29 deletions(-)
+ utils/genrandconfig | 49 +++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 47 insertions(+), 2 deletions(-)
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 863a1eed34..7bfa174b5f 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -23,7 +23,6 @@ choice
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 5cea529354..e6655fe189 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -99,7 +99,46 @@ class SystemInfo:
+         return not missing_requirements
  
- config BR2_arcle
- 	bool "ARC (little endian)"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	select BR2_USE_MMU
- 	help
- 	  Synopsys' DesignWare ARC Processor Cores are a family of
-@@ -42,7 +41,6 @@ config BR2_arm
  
- config BR2_armeb
- 	bool "ARM (big endian)"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	select BR2_USE_MMU
- 	help
- 	  ARM is a 32-bit reduced instruction set computer (RISC)
-@@ -61,7 +59,6 @@ config BR2_aarch64
+-async def fixup_config(sysinfo, configfile):
++def is_secondary_config(configlines):
++    """Identify secondary configurations.
++
++    This function identifies configurations considered as
++    "secondary". This classification can be used to skip those less
++    frequent configurations.
++
++    Returns: 'True' if the configuration is considered as "secondary",
++    or 'False' otherwise.
++    """
++
++    secondary_configs = [
++        # Secondary architectures (including all CPUs)
++        "arcle", "armeb", "aarch64_be", "hppa", "loongarch64", "m68k",
++        "microblazeel", "microblazebe", "mips", "mipsel", "mips64",
++        "or1k", "powerpc", "powerpc64", "s390x", "sh", "sparc",
++        "sparc64", "xtensa",
++        # Secondary CPUs:
++        # Armv4 CPUs:
++        "arm920t", "arm922t", "fa526", "strongarm",
++        # Older 32bit CPUs before i686:
++        "x86_c3", "x86_geode", "x86_i486", "x86_i586",
++        "x86_pentium_mmx", "x86_winchip2", "x86_winchip_c6",
++        "x86_x1000",
++        # All RISC-V 32-bit:
++        "RISCV_32"
++    ]
++    for cfg in secondary_configs:
++        if f"BR2_{cfg}=y\n" in configlines:
++            return True
++
++    # We also mark RISC-V 64-bit noMMU as secondary
++    if "BR2_RISCV_64=y\n" in configlines and \
++       "BR2_RISCV_USE_MMU=y\n" not in configlines:
++        return True
++
++    return False
++
++
++async def fixup_config(sysinfo, configfile, skip_secondary_configs=True):
+     """Finalize the configuration and reject any problematic combinations
  
- config BR2_aarch64_be
- 	bool "AArch64 (big endian)"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	select BR2_ARCH_IS_64
- 	help
- 	  Aarch64 is a 64-bit architecture developed by ARM Holdings.
-@@ -70,7 +67,6 @@ config BR2_aarch64_be
+     This function returns 'True' when the configuration has been
+@@ -113,6 +152,9 @@ async def fixup_config(sysinfo, configfile):
  
- config BR2_hppa
- 	bool "HPPA"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	select BR2_USE_MMU
- 	help
- 	  Precision Architecture (a.k.a. PA-RISC) is a 32-bit
-@@ -86,7 +82,6 @@ config BR2_i386
+     ROOTFS_SIZE = '5G'
  
- config BR2_loongarch64
- 	bool "LoongArch64"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	select BR2_USE_MMU
- 	select BR2_ARCH_IS_64
- 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_12
-@@ -97,7 +92,6 @@ config BR2_loongarch64
++    if skip_secondary_configs and is_secondary_config(configlines):
++        return False
++
+     # libffi not available on ARMv7-M, but propagating libffi arch
+     # dependencies in Buildroot is really too much work, so we handle
+     # this here.
+@@ -530,6 +572,9 @@ async def gen_config(args):
+     else:
+         configfile = os.path.join(args.outputdir, ".config")
  
- config BR2_m68k
- 	bool "m68k"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	# MMU support is set by the subarchitecture file, arch/Config.in.m68k
- 	help
- 	  Motorola 68000 family microprocessor
-@@ -105,7 +99,6 @@ config BR2_m68k
++    # Skip secondary configurations 90% of the time
++    skip_secondary_configs = randint(0, 9) != 0
++
+     # Now, generate the random selection of packages, and fixup
+     # things if needed.
+     # Safe-guard, in case we can not quickly come to a valid
+@@ -553,7 +598,7 @@ async def gen_config(args):
+         if ret:
+             return ret
  
- config BR2_microblazeel
- 	bool "Microblaze AXI (little endian)"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	select BR2_USE_MMU
- 	help
- 	  Soft processor core designed for Xilinx FPGAs from Xilinx. AXI
-@@ -115,7 +108,6 @@ config BR2_microblazeel
+-        if await fixup_config(sysinfo, configfile):
++        if await fixup_config(sysinfo, configfile, skip_secondary_configs):
+             print("  configuration valid")
+             break
  
- config BR2_microblazebe
- 	bool "Microblaze non-AXI (big endian)"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	select BR2_USE_MMU
- 	help
- 	  Soft processor core designed for Xilinx FPGAs from Xilinx. PLB
-@@ -125,7 +117,6 @@ config BR2_microblazebe
- 
- config BR2_mips
- 	bool "MIPS (big endian)"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	select BR2_USE_MMU
- 	help
- 	  MIPS is a RISC microprocessor from MIPS Technologies. Big
-@@ -135,7 +126,6 @@ config BR2_mips
- 
- config BR2_mipsel
- 	bool "MIPS (little endian)"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	select BR2_USE_MMU
- 	help
- 	  MIPS is a RISC microprocessor from MIPS Technologies. Little
-@@ -145,7 +135,6 @@ config BR2_mipsel
- 
- config BR2_mips64
- 	bool "MIPS64 (big endian)"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	select BR2_ARCH_IS_64
- 	select BR2_USE_MMU
- 	help
-@@ -166,7 +155,6 @@ config BR2_mips64el
- 
- config BR2_or1k
- 	bool "OpenRISC"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	select BR2_USE_MMU
- 	help
- 	  OpenRISC is a free and open processor for embedded system.
-@@ -174,7 +162,6 @@ config BR2_or1k
- 
- config BR2_powerpc
- 	bool "PowerPC"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	select BR2_USE_MMU
- 	help
- 	  PowerPC is a RISC architecture created by Apple-IBM-Motorola
-@@ -184,7 +171,6 @@ config BR2_powerpc
- 
- config BR2_powerpc64
- 	bool "PowerPC64 (big endian)"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	select BR2_ARCH_IS_64
- 	select BR2_USE_MMU
- 	help
-@@ -215,7 +201,6 @@ config BR2_riscv
- 
- config BR2_s390x
- 	bool "s390x"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	select BR2_ARCH_IS_64
- 	select BR2_USE_MMU
- 	help
-@@ -225,7 +210,6 @@ config BR2_s390x
- 
- config BR2_sh
- 	bool "SuperH"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	select BR2_USE_MMU
- 	help
- 	  SuperH (or SH) is a 32-bit reduced instruction set computer
-@@ -236,7 +220,6 @@ config BR2_sh
- 
- config BR2_sparc
- 	bool "SPARC"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	select BR2_USE_MMU
- 	help
- 	  SPARC (from Scalable Processor Architecture) is a RISC
-@@ -247,7 +230,6 @@ config BR2_sparc
- 
- config BR2_sparc64
- 	bool "SPARC64"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	select BR2_ARCH_IS_64
- 	select BR2_USE_MMU
- 	help
-@@ -268,7 +250,6 @@ config BR2_x86_64
- 
- config BR2_xtensa
- 	bool "Xtensa"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	# MMU support is set by the subarchitecture file, arch/Config.in.xtensa
- 	help
- 	  Xtensa is a Tensilica processor IP architecture.
-diff --git a/arch/Config.in.arm b/arch/Config.in.arm
-index 5c9037c959..eb5babe29b 100644
---- a/arch/Config.in.arm
-+++ b/arch/Config.in.arm
-@@ -112,27 +112,22 @@ choice
- 
- if !BR2_ARCH_IS_64
- comment "armv4 cores"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- config BR2_arm920t
- 	bool "arm920t"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	select BR2_ARM_CPU_HAS_ARM
- 	select BR2_ARM_CPU_HAS_THUMB
- 	select BR2_ARM_CPU_ARMV4
- config BR2_arm922t
- 	bool "arm922t"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	select BR2_ARM_CPU_HAS_ARM
- 	select BR2_ARM_CPU_HAS_THUMB
- 	select BR2_ARM_CPU_ARMV4
- config BR2_fa526
- 	bool "fa526/626"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	select BR2_ARM_CPU_HAS_ARM
- 	select BR2_ARM_CPU_ARMV4
- config BR2_strongarm
- 	bool "strongarm sa110/sa1100"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	select BR2_ARM_CPU_HAS_ARM
- 	select BR2_ARM_CPU_ARMV4
- 
-diff --git a/arch/Config.in.riscv b/arch/Config.in.riscv
-index 8801590d80..299190f364 100644
---- a/arch/Config.in.riscv
-+++ b/arch/Config.in.riscv
-@@ -58,12 +58,10 @@ choice
- 
- config BR2_RISCV_32
- 	bool "32-bit"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 
- config BR2_RISCV_64
- 	bool "64-bit"
- 	select BR2_ARCH_IS_64
--	select BR2_RISCV_USE_MMU if BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 
- endchoice
- 
-diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
-index 51b157409f..0a6d80bf03 100644
---- a/arch/Config.in.x86
-+++ b/arch/Config.in.x86
-@@ -50,15 +50,12 @@ choice
- 
- config BR2_x86_i486
- 	bool "i486"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	depends on !BR2_x86_64
- config BR2_x86_i586
- 	bool "i586"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	depends on !BR2_x86_64
- config BR2_x86_x1000
- 	bool "x1000"
--	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
- 	depends on !BR2_x86_64
- 	help
- 	  The Intel X1000 is a Pentium class microprocessor in the
 -- 
 2.56.0
 
