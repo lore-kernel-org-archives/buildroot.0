@@ -2,27 +2,27 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3751606A319
-	for <buildroot@archiver.kernel.org>; Wed, 21 Oct 2026 18:56:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 622CF606A319
+	for <buildroot@archiver.kernel.org>; Wed, 21 Oct 2026 18:56:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=cafGJcXc
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Q1QeBnIo
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7CCED405B3;
-	Wed, 21 Oct 2026 18:56:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 39C2E41105;
+	Wed, 21 Oct 2026 18:56:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sjsOo_g02z-Q; Wed, 21 Oct 2026 18:56:03 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 4638140EC6
+ id ht_9Hj_fDBhv; Wed, 21 Oct 2026 18:56:06 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 80EFF4110D
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792608963;
-	b=hMWRGG7wFjsCugz0q9o+QAnUjPoBOB9VgbegKsnFJZ4sBrmNJshufx7sU4YjThA4Ul0V
-	 x0LTv7BW3QDaU+jh5ovo7y6m/XFYHcB0o3qFWOAc98BYbH4rsofQoRQmncZUqyptt3TUO
-	 O+dl6+FSDli2qnwfoDTimaP5S86QP2n2+QA+yFl0Xra2IrCnC9Z6YSTBreQyqOIAsh36L
-	 mvJlzKw0/4fQpcXr3BnHAXzArn3PYAGjYnkYTaiN3sn3Bw9Ax3O5iyPs+E6tGYpDcJM8P
-	 lQFdi99gbkfVHLs9wJvyAtpK4BI0Q9n+2UjlbJWyggefmupBak2KTAcxwSqspAmo+nQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792608966;
+	b=Z84jhlzgPjpa2Sm8XEdbcc5UsGR995lmhY+I+ZpMFWqv6LJU4CqnVcQQBJ1MHMbyf3uf
+	 bghSEvmLqYbnDgQy3NihkdNTJAL0wRzWxm9rxmDMAkKTj99t0CE2gBHlUBaqynto8RhNj
+	 Lwt5YK8aoZvQ3tpSZq2kU3GjH0IFXfbM93Vmyw8opN/9w14Mu61TT6c3RhzB3Uy3zbd0A
+	 vx6i0vqCarzznhnOi4KEVS1Hnrj2dPlLextmuZSqm3yaCPbc/UHPpRVmKd2pNscOnGmvP
+	 P4/FjWruzX3d4gzpp3UHwQ8nFgZvTRDCTuvtOgWPYq4GQA24lyfVPEfiuKNfBy6Y7sQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792608963;
+	c=relaxed/relaxed; t=1792608966;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=HLp68L1xeMAbtHBH2erDklb1wzd2gsfD+v7pzL2CYTM=;
-	b=arK9zzIsPJx671H3jcVjpjqaFA5SeuBGe7CxTgOTPRwzpSOtM3ivXLgLwsKxNcc50emO
-	 m6gO1ktpUIL4Z7sMOeiR4JIQFQUhDCQmdTsJ11telQitPyGlrpDfzWW2XGZ2lOZy4ImHf
-	 Riv9Vrl8/FqwMhCrwhkVkQPPSLut/su8IONxFUauMbFjAL9g/fR5jRHOGKeANRTi1pTA7
-	 CKH811rMdDpFHdeL9KuLdNLQpeFtM0NYV5tcLbKuMB/+w/JdVRtlJpytgVdbH4Nv8tT3C
-	 Xhcdo1ay39flCRbRh7xmgyAmq9gFrMVfdPsulpzjAuel7/PHX/K0J0MnfGO+eDCS08w==
+	bh=YdKxCnV9uMLeMY40J8AOUGn7BpulrShn0Yj4rd/G/3U=;
+	b=ePNOY+6SwMSi9z0/v5cSS1Hn4CdKnlbB/QZvmiNg9QvmZhZPN7ontzKCa0idKoll93m+
+	 1BT7UzbHHLPBICgeXn614iURI1rm0IUzLbEY+xoi0sYYb1cvKx2jkRdNlF1AzNvmYxZA5
+	 VvW0DXLWFg13IkzfKhf6ARGz8C3XH6t6OQXqJ6pV1OBa/BEKvOth54mxJOlz5dgTMBA9Y
+	 qPjFd83og7bHYypiphcHs+YgBGOD8QzszALMOYR+QJTh8FeCfN66Tw8x3xWm2BztSvmM+
+	 XzxB16LjJiH5q9a6KzM2g1lQKAZWD2o/jkCJ8YumYLvKpAIzunBm85q7HT2T5sdFH2A==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792608963;
-	bh=HLp68L1xeMAbtHBH2erDklb1wzd2gsfD+v7pzL2CYTM=;
+	s=default; t=1792608966;
+	bh=YdKxCnV9uMLeMY40J8AOUGn7BpulrShn0Yj4rd/G/3U=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=cafGJcXc5YbxYgAJsc5xMgB6yk79BpxhqLzvujccvRTuidAzXSJ5QXj6VyOUUqzxp
-	 FjesUFuGgLSX/1QOt9TKZlQ8zBlytBTpSArAANbmN0Sh1gBuLBiywwUt3kIywTJBIF
-	 pO3tKnW9T8U4dF3BKUwGi3XxrsyGHEgRkP3jldKnfa+P88Imp++9Mjm6Jm5LsEO1+i
-	 hTVSKijK0WsJ1nY+zatpq9Xw0oX156l+y4mr7sGVJjNUWFsnlbRwE1ah8MxEMhb/YN
-	 JiDcL6T+BX5/GXl9ox17dtj16qxxizmYZRaGcnn/FKwEqs9AkxDeQMMOYLzOqGuQlN
-	 xh6+4zrUJNMYQ==
+	b=Q1QeBnIo7tA1CqeKXmzz3mbitd3YXNYFi4jZ28cqoLXwZRdqi9I21tDwTt9/o4+PR
+	 hEMAzKdNu2nAEZjsKeYKKvS1I97PFgOLwThO6t5suN3i1oJeIP2NpqbD+3dgek97Ce
+	 AYYadSnFpv0PaNHKxDxvLvpQoQ2INMrSNtsWM+W1U5iL2dy5ZBJFLN87+RGrUvPACg
+	 Ax7VlFPguesr4v23j4/Cu93rI2Txfu1bRUC8Nbd26S6sP77waiy6JYvUgqDlaAkIkg
+	 XgzXP05mJzoecXvBGIIqTm3DBikZGCods6uBaI+B0a2SNo+aTCkZL/77LT1ZXhwcnM
+	 4DYyEo1+WBQFA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4638140EC6;
-	Wed, 21 Oct 2026 18:56:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id E1F013A4
- for <buildroot@buildroot.org>; Wed, 21 Oct 2026 18:56:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 80EFF4110D;
+	Wed, 21 Oct 2026 18:56:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0FB8C3A4
+ for <buildroot@buildroot.org>; Wed, 21 Oct 2026 18:56:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C817240FCA
- for <buildroot@buildroot.org>; Wed, 21 Oct 2026 18:56:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0191F60844
+ for <buildroot@buildroot.org>; Wed, 21 Oct 2026 18:56:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MHBKyPCGshMQ for <buildroot@buildroot.org>;
- Wed, 21 Oct 2026 18:56:00 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org D3010405B3
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H1Nv73656d3v for <buildroot@buildroot.org>;
+ Wed, 21 Oct 2026 18:56:03 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org B2F4F6FAAD
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792608960;
- b=nfWnj9076ZXAdCbOy1VYiCc91lQYhbhOfKqBpLKmszWw3jcGKTJ10wmsKuhv0LIrAQo/
- /Vy+5KkGdYv3Yf1mQZ+SraNXXqa6FfX2gmP01pfjh8Ii46kk+PmiHVoNrlfWSXHeDG3H5
- Eqc8grIVRT/FzsejGtLgfGclMsoucC5SDO/kfZhsmWvHBhewBpm1VQio2URyTppLtLH+R
- i4hXtriRzVXGk8xAd/2uJObHiJb3ygK9yMwD3aEejM/AFeD4OBPLEKOifPAhbf2Z6hu+Y
- QorXDhJWx1o+7PKqO6awKHrDHcehDUpeO/WAUcUhTTQ4iGhFttNeutNXI3+OA9FDGIQ==
+ b=kB1B3eBB0/jyJygomETHIe37oEOwiTTUBcq5T/dfbGpfwv9RtMoxxBa9GI4epahvsB1Y
+ w52Jv7sr7jgVZQDCm8rVjg+1VtjT5kpeWS3OiKPWwbLY7gh733BAYMSwdgXul4OufUCQL
+ b2hQRYlx0OWkq3hGWnJe62POeyGvOcNi0XNa9yLgLodvgdHlXTvuw08FxbrwzDBbVfRq8
+ T9scWAUv7U7LohjJjI2iT/ijMPal7cv1pJTYhrtxIMAtP11TudqpKFG5cmxFZ6D1Bj9nw
+ /97qo+18Y+w56onoJj4amMBhV+MsbcQOcJ5qJi2SLso0jUMSg1LtDHVRgnez45ZfuEA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1792608960;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=XpYqQm28jZa2QCUQ8QI98WglpSJULtbDXRb9zYA9A+U=;
- b=jFO4j5M+fiNq/L+Lp9scMQDbo3KTUTeaUhWIjqN7jxXtz65YAZbPOlfXCzQfloR+ZgyH
- HsjTbxMAfiEzv7HiC27rsr0rFcucIyN9q31BjSH+9IUvOjVFJaPldE0xM8gaqmYKF8gKv
- 5DL/KQxj67hPo3ZZVSdZ/mLcBY49wBPglThG04y9S75vcCRWrZIEEOk8+8EnBQgZdfL9E
- 6SdZopkX+Pgiupy3dknrZ+Tz0e8DkQwftcHJrjl9uMhGdaXPmWdSFHaD8u5MqCXYwdwkv
- AHnJqq9f++rrddqKj+4uZzd8g6emC+Ri9c6eYF1/lRz1Szv16W+GxiwcKr51XP2tXZw==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ bh=2iUxD1x+eu6CfYjhAy+wT2e/sww6E8hNoaHY2HpweA0=;
+ b=bgnbVD9S4DraH+0fIV3nv0ky3ZfD2q1nNfkAg6VcLntleRl2O1L/q09Sc0skmaD2LZXR
+ IIEaBkf7IJXgT6797kpmBREUm8KkQphif6Jww6a0HT9m296XZPXo1Gr27FQiPHRbb3ogP
+ uiwn06uxlR6wE4isjZPAU4s2WK0u/b6/3E3KlKZoOUeny6PJAt1whiyl9h0SrfTIpCrB5
+ nOudZRaAuMKLg/JjyrSE9M0FIgRLsy7eM5Lw5NLYx/S+p/UOazXlk3KSVt6J2VNuQDy1Y
+ bMi4lT+W0EV5sAtdF45/6PxXuzCIL8moe+LSlFl3pPZZ7IAue2nX61LGIwoZbx5DMaQ==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D3010405B3
+ by smtp3.osuosl.org (Postfix) with ESMTP id B2F4F6FAAD
  for <buildroot@buildroot.org>; Wed, 21 Oct 2026 18:56:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3206F99A56; Wed, 21 Oct 2026 18:54:37 +0000 (UTC)
+ id 0AA8599A57; Wed, 21 Oct 2026 18:54:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 21 Oct 2026 20:55:19 +0200
+Date: Wed, 21 Oct 2026 20:54:33 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 77473256bd9a49f2120d1efedbc412aaf4501ecd
-X-Git-Newrev: 1b2f53da31daf77dcf6e1606f5ca780813cf57fd
+X-Git-Oldrev: 4770bb547aeedbd9d0c7d0e414471c1815735587
+X-Git-Newrev: 77473256bd9a49f2120d1efedbc412aaf4501ecd
 X-Patchwork-Hint: ignore
-Message-Id: <20261021185437.3206F99A56@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 7.2.x, 6.18.x,
- 6.12.x, 6.6.x series
+Message-Id: <20261021185437.0AA8599A57@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/musl: add upstream security patch
+ for CVE-2026-107891
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,135 +118,222 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
 	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1b2f53da31daf77dcf6e1606f5ca780813cf57fd
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/77473256bd9a49f2120d1efedbc412aaf4501ecd
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Update the latest kernel releases to:
- - 7.2.11 -> 7.2.12
- - 6.18.57 -> 6.18.58
- - 6.12.113 -> 6.12.114
- - 6.6.159 -> 6.6.160
+CVE-2026-107891: musl libc: multiple integer overflow in regcomp,
+possibly leading to incorrect allocation sizes and out-of-bounds heap
+writes
+https://www.openwall.com/lists/musl/2026/10/21/1
+
+The upstream announcement states: "The vulnerable code has been
+present since version 0.5.0. All subsequent versions up through 1.2.6
+are affected." So the patch needs to be backported to all Buildroot
+stable branches.
 
 Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- linux/{6.12.113 => 6.12.114}                 | 0
- linux/{6.18.57 => 6.18.58}                   | 0
- linux/{6.6.159 => 6.6.160}                   | 0
- linux/{7.2.11 => 7.2.12}                     | 0
- linux/Config.in                              | 8 ++++----
- linux/before-6.17/linux.hash                 | 4 ++--
- linux/from-6.17/linux.hash                   | 4 ++--
- package/linux-headers/{6.12.113 => 6.12.114} | 0
- package/linux-headers/{6.18.57 => 6.18.58}   | 0
- package/linux-headers/{6.6.159 => 6.6.160}   | 0
- package/linux-headers/{7.2.11 => 7.2.12}     | 0
- package/linux-headers/Config.in.host         | 8 ++++----
- 12 files changed, 12 insertions(+), 12 deletions(-)
+ .../0007-regex-avoid-int-overflow-in-regcomp.patch | 171 +++++++++++++++++++++
+ package/musl/musl.mk                               |   3 +
+ 2 files changed, 174 insertions(+)
 
-diff --git a/linux/6.12.113 b/linux/6.12.114
-similarity index 100%
-rename from linux/6.12.113
-rename to linux/6.12.114
-diff --git a/linux/6.18.57 b/linux/6.18.58
-similarity index 100%
-rename from linux/6.18.57
-rename to linux/6.18.58
-diff --git a/linux/6.6.159 b/linux/6.6.160
-similarity index 100%
-rename from linux/6.6.159
-rename to linux/6.6.160
-diff --git a/linux/7.2.11 b/linux/7.2.12
-similarity index 100%
-rename from linux/7.2.11
-rename to linux/7.2.12
-diff --git a/linux/Config.in b/linux/Config.in
-index c84c4d41e6..e0a8bbb457 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -182,10 +182,10 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
+diff --git a/package/musl/0007-regex-avoid-int-overflow-in-regcomp.patch b/package/musl/0007-regex-avoid-int-overflow-in-regcomp.patch
+new file mode 100644
+index 0000000000..aafb71cdfe
+--- /dev/null
++++ b/package/musl/0007-regex-avoid-int-overflow-in-regcomp.patch
+@@ -0,0 +1,171 @@
++From 7813e9119eb5fe681b6750b8a033a0490bca0941 Mon Sep 17 00:00:00 2001
++From: Szabolcs Nagy <nsz@port70.net>
++Date: Thu, 23 Apr 2026 21:22:18 +0000
++Subject: [PATCH] regex: avoid int overflow in regcomp
++
++regcomp has many int arith ops that may overflow. before tre_expand_ast
++int values are limited by 2x the input length n, e.g.:
++
++  input ERE        int field    max value
++  aaaaaaaaaaaa...  position     n
++  ()()()()()()...  submatch_id  n/2+1
++  ()||||||||||...  num_tags     2n-3
++
++so overflow before expand requires large n (and a lot of memory). later
++some values can become big due to repetitions:
++
++  input ERE                     int field that overflows
++  (((a{255}){255}){255}){255}   position
++  ((a|b*){255,}){255,}          num_transitions
++
++num_transitions and memory use can be big without {k,} repetitions too:
++
++  input ERE        what             max value
++  (a|a|a|a...|a)*  num_transitions  n^2/4
++  (()|a|a|...|a)*  sum tnfa tags    > n^3/16 - n^2
++
++so memory can run out quickly as n grows (with 31bit va space 1700 long
++input is enough even without {k,}) about half is tnfa and half is ast
++firstpos/lastpos data. but overflow can happen before allocations fail.
++
++fix early overflow by limiting n. the stack usage is in [n,11n] without
++repetitions, usually 7n, so the stack limit got adjusted too. the limit
++is such that almost all inputs that worked before still work.
++
++overflows during and after expand are fixed by explicit checks via a
++check_add helper and xcalloc instead of xmalloc.
++
++CVE: CVE-2026-107891
++Upstream: https://git.musl-libc.org/cgit/musl/commit/?id=7813e9119eb5fe681b6750b8a033a0490bca0941
++Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
++---
++ src/regex/regcomp.c | 41 +++++++++++++++++++++++++++++++++++------
++ 1 file changed, 35 insertions(+), 6 deletions(-)
++
++diff --git a/src/regex/regcomp.c b/src/regex/regcomp.c
++index b4b81968..a7115b12 100644
++--- a/src/regex/regcomp.c
+++++ b/src/regex/regcomp.c
++@@ -1680,6 +1680,12 @@ tre_add_tags(tre_mem_t mem, tre_stack_t *stack, tre_ast_node_t *tree,
++   AST to TNFA compilation routines.
++ */
++ 
+++/* check if a+b overflows for a,b in [0,INT_MAX] */
+++static int check_add(unsigned a, unsigned b)
+++{
+++	return a + b > INT_MAX;
+++}
+++
++ typedef enum {
++   COPY_RECURSE,
++   COPY_SET_RESULT_PTR
++@@ -1731,6 +1737,8 @@ tre_copy_ast(tre_mem_t mem, tre_stack_t *stack, tre_ast_node_t *ast,
++ 		    /* XXX - e.g. [ab] has only one position but two
++ 		       nodes, so we are creating holes in the state space
++ 		       here.  Not fatal, just wastes memory. */
+++		    if (check_add(pos, *pos_add))
+++		      return REG_ESPACE;
++ 		    pos += *pos_add;
++ 		    num_copied++;
++ 		  }
++@@ -1826,6 +1834,8 @@ tre_copy_ast(tre_mem_t mem, tre_stack_t *stack, tre_ast_node_t *ast,
++ 	  break;
++ 	}
++     }
+++  if (check_add(*pos_add, num_copied))
+++    return REG_ESPACE;
++   *pos_add += num_copied;
++   return status;
++ }
++@@ -1870,6 +1880,8 @@ tre_expand_ast(tre_mem_t mem, tre_stack_t *stack, tre_ast_node_t *ast,
++ 		tre_literal_t *lit= node->obj;
++ 		if (!IS_SPECIAL(lit) || IS_BACKREF(lit))
++ 		  {
+++		    if (check_add(lit->position, pos_add))
+++		      return REG_ESPACE;
++ 		    lit->position += pos_add;
++ 		    if (lit->position > max_pos)
++ 		      max_pos = lit->position;
++@@ -1998,6 +2010,8 @@ tre_expand_ast(tre_mem_t mem, tre_stack_t *stack, tre_ast_node_t *ast,
++ 	      }
++ 
++ 	    iter_depth--;
+++	    if (check_add(pos_add_total, pos_add - pos_add_last))
+++	      return REG_ESPACE;
++ 	    pos_add_total += pos_add - pos_add_last;
++ 	    if (iter_depth == 0)
++ 	      pos_add = pos_add_total;
++@@ -2010,6 +2024,8 @@ tre_expand_ast(tre_mem_t mem, tre_stack_t *stack, tre_ast_node_t *ast,
++ 	}
++     }
++ 
+++  if (check_add(*position, pos_add_total))
+++    return REG_ESPACE;
++   *position += pos_add_total;
++ 
++   /* `max_pos' should never be larger than `*position' if the above
++@@ -2711,9 +2727,19 @@ regcomp(regex_t *restrict preg, const char *restrict regex, int cflags)
++   /* Parse context. */
++   tre_parse_ctx_t parse_ctx;
++ 
+++  /* Limits: before tre_expand_ast, int values like position, subid or
+++   * num_tags are bounded by 2x input length, used stack entries are
+++   * bounded by 16x input length. input length is checked upfront to
+++   * avoid overflows before expand. later, values that can grow big are
+++   * bounds checked via check_add and xcalloc. */
+++  const int input_limit = 1024000;
+++  const int stack_limit = 8*input_limit;
+++  if (strnlen(regex, input_limit) >= input_limit)
+++    return REG_ESPACE;
+++
++   /* Allocate a stack used throughout the compilation process for various
++      purposes. */
++-  stack = tre_stack_new(512, 1024000, 128);
+++  stack = tre_stack_new(512, stack_limit, 128);
++   if (!stack)
++     return REG_ESPACE;
++   /* Allocate a fast memory allocator. */
++@@ -2801,9 +2827,12 @@ regcomp(regex_t *restrict preg, const char *restrict regex, int cflags)
++ 	   for example "a*" or "ab*".	Figure out a simple way to detect
++ 	   this possibility. */
++   tmp_ast_l = tree;
++-  tmp_ast_r = tre_ast_new_literal(mem, 0, 0, parse_ctx.position++);
+++  tmp_ast_r = tre_ast_new_literal(mem, 0, 0, parse_ctx.position);
++   if (tmp_ast_r == NULL)
++     ERROR_EXIT(REG_ESPACE);
+++  if (check_add(parse_ctx.position, 1))
+++    ERROR_EXIT(REG_ESPACE);
+++  parse_ctx.position++;
++ 
++   tree = tre_ast_new_catenation(mem, tmp_ast_l, tmp_ast_r);
++   if (tree == NULL)
++@@ -2813,22 +2842,22 @@ regcomp(regex_t *restrict preg, const char *restrict regex, int cflags)
++   if (errcode != REG_OK)
++     ERROR_EXIT(errcode);
++ 
++-  counts = xmalloc(sizeof(int) * parse_ctx.position);
+++  counts = xcalloc(sizeof(int), parse_ctx.position);
++   if (counts == NULL)
++     ERROR_EXIT(REG_ESPACE);
++ 
++-  offs = xmalloc(sizeof(int) * parse_ctx.position);
+++  offs = xcalloc(sizeof(int), parse_ctx.position);
++   if (offs == NULL)
++     ERROR_EXIT(REG_ESPACE);
++ 
++-  for (i = 0; i < parse_ctx.position; i++)
++-    counts[i] = 0;
++   tre_ast_to_tnfa(tree, NULL, counts, NULL);
++ 
++   add = 0;
++   for (i = 0; i < parse_ctx.position; i++)
++     {
++       offs[i] = add;
+++      if (check_add(add, counts[i] + 1))
+++        ERROR_EXIT(REG_ESPACE);
++       add += counts[i] + 1;
++       counts[i] = 0;
++     }
++-- 
++2.55.0
++
+diff --git a/package/musl/musl.mk b/package/musl/musl.mk
+index 5384a08abf..cb9f7f8870 100644
+--- a/package/musl/musl.mk
++++ b/package/musl/musl.mk
+@@ -34,6 +34,9 @@ MUSL_IGNORE_CVES += CVE-2026-6042
+ # 0006-qsort-fix-shift-UB-in-shl-and-shr.patch
+ MUSL_IGNORE_CVES += CVE-2026-40200
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "7.2.11" if BR2_LINUX_KERNEL_LATEST_VERSION
--	default "6.18.57" if BR2_LINUX_KERNEL_LATEST_6_18
--	default "6.12.113" if BR2_LINUX_KERNEL_LATEST_6_12
--	default "6.6.159" if BR2_LINUX_KERNEL_LATEST_6_6
-+	default "7.2.12" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.18.58" if BR2_LINUX_KERNEL_LATEST_6_18
-+	default "6.12.114" if BR2_LINUX_KERNEL_LATEST_6_12
-+	default "6.6.160" if BR2_LINUX_KERNEL_LATEST_6_6
- 	default "6.1.190" if BR2_LINUX_KERNEL_LATEST_6_1
- 	default "5.15.223" if BR2_LINUX_KERNEL_LATEST_5_15
- 	default "5.10.272" if BR2_LINUX_KERNEL_LATEST_5_10
-diff --git a/linux/before-6.17/linux.hash b/linux/before-6.17/linux.hash
-index d288e880e7..8be46f25a9 100644
---- a/linux/before-6.17/linux.hash
-+++ b/linux/before-6.17/linux.hash
-@@ -1,6 +1,6 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  e09b6727e5c521253f0d41694900b9c38fb7604db7d35238a8197aa9f7de2428  linux-6.12.113.tar.xz
--sha256  7206727244da5d85f4a03758d29e1c0673f2f01877793f494c0f3638c46b8fa5  linux-6.6.159.tar.xz
-+sha256  7a8589912bd7a8adb07fed074283652cf482a35facef8954554654f0154b4af3  linux-6.12.114.tar.xz
-+sha256  b24c40a9e2188695803358567edda51c4080176424a57dbefca45e5ac44ec225  linux-6.6.160.tar.xz
- sha256  8aa50daca0412a3d0a61a87af3744f39773d40b3132635fb7bc9be652cdb7b0c  linux-6.1.190.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  c1faba89652ec4af585fb96131fdb70d99e891c2b368cbf6d9c1e5fb7f156c23  linux-5.15.223.tar.xz
-diff --git a/linux/from-6.17/linux.hash b/linux/from-6.17/linux.hash
-index 96b0dcce55..83d7d04e16 100644
---- a/linux/from-6.17/linux.hash
-+++ b/linux/from-6.17/linux.hash
-@@ -1,8 +1,8 @@
- # From https://www.kernel.org/pub/linux/kernel/v7.x/sha256sums.asc
--sha256  fd0fc479f983a8c05313f13e9c36330fe6651cf725396748c40d5cd93fa1e6a4  linux-7.2.11.tar.xz
-+sha256  bb18468a8dc8978aa00caa6446e753f7b6da3fee56b6b7f38b16f9430ba02d4f  linux-7.2.12.tar.xz
- 
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  5bd9acdc82ec5efc3790ae840e5aaa40dfde7efff261cf6dde902dc570acf98c  linux-6.18.57.tar.xz
-+sha256  069b19f9032c4dac8149ae4b6520c35debca0f42a9f6d52ee55ba6ca9b818013  linux-6.18.58.tar.xz
- 
- # Licenses hashes
- sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
-diff --git a/package/linux-headers/6.12.113 b/package/linux-headers/6.12.114
-similarity index 100%
-rename from package/linux-headers/6.12.113
-rename to package/linux-headers/6.12.114
-diff --git a/package/linux-headers/6.18.57 b/package/linux-headers/6.18.58
-similarity index 100%
-rename from package/linux-headers/6.18.57
-rename to package/linux-headers/6.18.58
-diff --git a/package/linux-headers/6.6.159 b/package/linux-headers/6.6.160
-similarity index 100%
-rename from package/linux-headers/6.6.159
-rename to package/linux-headers/6.6.160
-diff --git a/package/linux-headers/7.2.11 b/package/linux-headers/7.2.12
-similarity index 100%
-rename from package/linux-headers/7.2.11
-rename to package/linux-headers/7.2.12
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index bdf0bb58b8..405d278e1e 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -477,10 +477,10 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.10.272"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.15.223"	if BR2_KERNEL_HEADERS_5_15
- 	default "6.1.190"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.159"	if BR2_KERNEL_HEADERS_6_6
--	default "6.12.113"	if BR2_KERNEL_HEADERS_6_12
--	default "6.18.57"	if BR2_KERNEL_HEADERS_6_18
--	default "7.2.11"		if BR2_KERNEL_HEADERS_7_2
-+	default "6.6.160"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.12.114"	if BR2_KERNEL_HEADERS_6_12
-+	default "6.18.58"	if BR2_KERNEL_HEADERS_6_18
-+	default "7.2.12"		if BR2_KERNEL_HEADERS_7_2
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
++# 0007-regex-avoid-int-overflow-in-regcomp.patch
++MUSL_IGNORE_CVES += CVE-2026-107891
++
+ # musl does not build with LTO, so explicitly disable it
+ # when using a compiler that may have support for LTO
+ ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
