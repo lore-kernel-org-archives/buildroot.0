@@ -1,162 +1,146 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84BA6606A31B
-	for <buildroot@archiver.kernel.org>; Wed, 21 Oct 2026 09:42:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94290606A319
+	for <buildroot@archiver.kernel.org>; Wed, 21 Oct 2026 12:52:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=lC5INj9R;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=q0l30xbi
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=LfTtQ0eS
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5C0404076D;
-	Wed, 21 Oct 2026 09:42:58 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p-K4fjkMrjUX; Wed, 21 Oct 2026 09:42:57 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 319AC407F0
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792575777;
-	b=bZCYUHelp6sw8mw4T9gxZdbJXyWS0yJMxnp20mMPUIWWcbjPZux+DirI2r7YitLjrKNS
-	 4tSw2MhK1vqBMDRu3jEzH4evLqNDh8ecvonasqSfdlGOZ6Ckv15iN9+1os0VOtM1SqN0I
-	 mpUQhXRBoK9M2eBLUkfnUUNMfA+jqPIo+beOnCYIcWULWgCua5zwDu8Ouh49MNqZmzt7K
-	 zHX6zonaaCoAAljZDfWjmo0HjrfoBH2Qu7rGZxhMQlFUo5iDxEwc/gw7MdLXbMcLw6//+
-	 sX2VCdIBWx7UII9ishiRBfbTVOCAXXGJa556y111YU2thr/8200VrUvNSzb6XI+aKEw==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792575777;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
-	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=uKeZGRoxGyzpovuDD4EwvaqrUK62svhYanlImUCctlw=;
-	b=R/uKoFTSxWPPJXHJHRTldefKgDRxoZIMe91OqDfunFs0XmKY6Qx4Zlhv/gW6W+pHQVEr
-	 cH8CxpCfGsyEk7VG23gKdGYOdVbP/Frtur0yLnUXVIkqEFUo1zidswixcrD5KMwxe0BiC
-	 5ljZbj+m062D7KJnSAdweiaooB6eRr73GkOsHdIN2CrgFU2qvqYsiZfB5+a6Pxcgl+Xcd
-	 ckB1VfsyiBXZH4w/wD5JqhLQ33TCLYxm7YCG8qoiRcl8Gac8QRaAe4BeU+BO/Rr3CDkKs
-	 jdgddaIXPV/pJRg8BNS5YJt9i0+dz419Bx3y4dxg6fp07lSIYkcqBYAHpoemR8kuv0Q==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
-	arc=fail smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792575777;
-	bh=uKeZGRoxGyzpovuDD4EwvaqrUK62svhYanlImUCctlw=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=lC5INj9RwoCwOv5gABPeRbeLbEfxS6OzTxKiqyfOTftr4PwZQRppOQtPIE/XgLmOV
-	 pXVBBkSkV+fJf3QyczhkvHQmaE2HtgmhjSjFanNdpflBPD0Ts4HVMUwkEcnvx88kvc
-	 pIKUnOqeNXBciT1XRVsgRuLuKj4Vgs11mxY/8b6QQdEcvBvymRBfKUtMoqsGdBWv7B
-	 3fdi6mJY3bSdj6saL7FDaTJpffZU0el1kMqtjuF0798sPb6Yhmi9of2CHC7OL5jP1o
-	 WNKLNUu56qn9bft5+KbfJGpCQo30hjo1wKSD5AFQhIB6XZt/aIlZR7oMRwt5e+P7ry
-	 9QjhnRedPJTDA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 319AC407F0;
-	Wed, 21 Oct 2026 09:42:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 34EB42A8
- for <buildroot@buildroot.org>; Wed, 21 Oct 2026 09:42:55 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1A9B660773
- for <buildroot@buildroot.org>; Wed, 21 Oct 2026 09:42:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6DE1060809;
+	Wed, 21 Oct 2026 12:52:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2njUGVpGoaXx for <buildroot@buildroot.org>;
- Wed, 21 Oct 2026 09:42:54 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org D8F4260755
-Authentication-Results: smtp3.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::52f"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792575774;
- b=ogj6kwuD0n4Ku4Uh32IvGViHIcWD1AqapZ/HL0Lw6NK4UwsKM2f2nRElVxDprnVRpPrR
- 47hKOXty/jmkpTEwY7FfYE+XmaIJM3c9PjMnno1UrIoMamMJ6INtWYiejx2M1MZqTY/OX
- y51lMjWpRDZzkL2F+Vrj/KOSMYkhXiwCk4YRZH1S1voR9JGCoD2LyKz1KAze+dzY0+wsz
- rStZ/pgakMkuv0tUmXps/7CszHYKd5ReIewWwFbhbzLfC+Gupv/NLLXEP9yN4Z/EeHTwz
- fqMher4055XAPQO+mIlVqceDjsf1+hFPZDu+KZhv+mQKuTVZkROPKvpMQMyeDLN0KHg==
+ id 87ywXouSEgKG; Wed, 21 Oct 2026 12:52:24 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 38F8760831
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792587144;
+	b=fRKY5iDKuz/xf1VO3k16KQo2/KEMSOxSi9g0aojRGMS+d2ZmwCkaWZS3nFl+dFc50Mf8
+	 pt1BA6HOFYD/YbAQl/4WLdh6h15lVxv9eGBu4Hgi2K0psaGJAd1voa8rj1HWjROwpHCIr
+	 fTk1yfwn70FpGujtINiShg6Uw0B4fP1njhu59z+7gWB/DobwValB5YNmHdNF0fL963kpw
+	 qsKL5TM5/seM3qY0lhw7ko4z2sQUeYovwesFDlVyi+U+4K5zxMdJBK73FK101XOTo/F7+
+	 q2zSJ3Ek1u4m0jRGWQrswkAfQxv5nuSiIWI3WTNOubdL1BT3b4J+Co+Sd4P6nAuxHAQ==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1792587144;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 Received:To:Date:Message-Id:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
+	 Reply-To:Cc:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=IUhoek9Y1pK3TlCZrZTJzdnxrQRIcAoukHCmyT8bfak=;
+	b=OQg+ockvBe+5/6sjbl3dTSL8bpeeEZ+oNGOCJly5O75FqpBIPcYAW4PYWj2LWVj3006Y
+	 tMJ9we8ZE9SQ9AQbRu18r/dMvyDv3wOl/HM9VYuh6ZzNJlo1Aa9GdoxQu8c1i4sG0P8/S
+	 Ko/AeYvwU6kA3jYsXJnD2Aqm2qIrWaFz1t/l2ss8q7yKu/WJfUydEW5R2L8L3z+9k9+A3
+	 EMIVNRNvbN8H8th6qg6ymMsFXjRBV5W6aR8xhw0k219D1GtGA/Dk47ss5+wCmK2UPBigl
+	 hOQcUoynbI8YLnczQ9igMWmR/wgIwUiEWalR5bFZwBkzUSqNT9H0LQEZx1TBU+R91mQ==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	arc=fail smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1792587144;
+	bh=IUhoek9Y1pK3TlCZrZTJzdnxrQRIcAoukHCmyT8bfak=;
+	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=LfTtQ0eSzjb9xD8BTgJgR++yTxm5n1boIGhp4hetvKbc5lsFt5Gv0U9nNBzs54Ccp
+	 gw4qVVmKY+1oioorSvEkzQ4SxysUR3mQLn90viQi19XbvkyQPrljVPvhURosa48W/L
+	 1v2vJ7j5P+PyAGZ6TtDK4VveE6YavxCoJiBXvNQjUt1E0+OOoCtiu1ijtd8iNygBYg
+	 l4XWObNs2Z/NrtRivuViWa/k8tZys1IYn1jSg/oVuOiSvzPGpu0CDKj7/CsrTkmm3B
+	 3RjERUEt3xcrBY/pKAjMsTRbNux2AgkPYJV/ugO24vq2hRqngBzK88aiZwmss4pOzq
+	 bnnseyEI+kXgg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 38F8760831;
+	Wed, 21 Oct 2026 12:52:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C046C23A
+ for <buildroot@buildroot.org>; Wed, 21 Oct 2026 12:52:22 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B1672810DD
+ for <buildroot@buildroot.org>; Wed, 21 Oct 2026 12:52:22 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oKoXQkIArnRt for <buildroot@buildroot.org>;
+ Wed, 21 Oct 2026 12:52:21 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 41177810C5
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792587141;
+ b=g8B5eB0vxw2O4vXL3bUv5bX3JitEPo0zxPmR/YL19kqqAlCaPwdLjJcS+rQ28Wjb34sH
+ k9K9iIGinoWhZcL61o5RPaZ7WL9EkfNTk0FdYZ7xATbjcoRrK9dSNgEbCNvl3wCPu4viJ
+ gLRQr3H5eKJaO4FqHAvCf+/+ZAULYyuJneE36yIriLq0GZI83nbSIV4s1l5SJLH2pSvGt
+ tVaUkWvyuuENfTx9HZ6++tplbncJS/qvw8qaIh7qt7ElByDrMT2H+FnhqBzvleIS5DF+N
+ gM6x548+rww5emk1VjzhyUU9U/JQG6bKUJbxfEXMW8cYSwgb3lPKBm74QS1HLng05ug==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792575774;
+ c=relaxed/relaxed; t=1792587141;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
- bh=ta/RqOR/FJYW7NemLVYlZ+LMNda/VsqPZuGA1051iDU=;
- b=cDYQ+7+20ILr1p48NhBjmDnVr05BW2FKv4XRDnH3sGZij02Y1iMT5qrRbcW2IIyhqmtG
- +AUhVcVhdOF+lSUe64YosKNFSBr5NjzYY92gKV/n/d9lanmgxfohQ2Q0rGP6WdYX3MIT6
- W3gCG20c9J+Q5Z/+TwQOMwAQICfZJZqxkts5WJV07QC95rA7RQZW2ccJZllcJWVa4Jdzz
- PClgoHEZqgEsmx1A/NhQDATdKlrV8LsDM4S1KGic8yuOM6sl72xxUODB5FOMiZD30ZwZV
- 4FmFjrV5Pnh4Xy7ULXOsniOHzBRisAL+ddHX1sXBAE4CIhGz1tDoBn84RiWa68ZTEEg==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
- dmarc=pass header.from=gmail.com;
- dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20251104 header.b=q0l30xbi; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::52f"
+ Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
+ Content-Transfer-Encoding;
+ bh=kFcGgk4nPOWZMhsxhOZMp87lFtJJpCBIPmF0MuxStlg=;
+ b=JcXwAwZrIWhc58pLSny6WH74XdnDNTCbvBO34MvMgrTyznA2h5n4lM+j8eUBwsnHLd4F
+ C5TZ0nt7JpIZc359pZFcTlcVIEoDgNiud6aZSpgMBU2vUsYeR/bP+nVzcB66JItbSfq9+
+ nLpAmQcMcvttkcXwjhmVfUzKUg9qVf6l9im1MYoyV8nAAGFa3NVCNTrvH6ylWezXX7ffi
+ t7kL7JVXNJftPIM965Nto9t1TanAUmaoZGLpp2IthVlWXVKk6Rd6tHzasPQSeQlA+cn/D
+ EWY4v3XC+mZJrIKMyD4KyfhYdF2v5SISSnbjV8rG4Wnh3OCniQBOmJxIuD41oUKCy9Q==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ dmarc=pass header.from=googlemail.com;
+ dkim=pass header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256
+ header.s=20251104 header.b=D2lFoCjY; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::62b"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::52f; helo=mail-ed1-x52f.google.com;
- envelope-from=troglobit@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20251104 header.b=q0l30xbi
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
- [IPv6:2a00:1450:4864:20::52f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D8F4260755
- for <buildroot@buildroot.org>; Wed, 21 Oct 2026 09:42:53 +0000 (UTC)
-Received: by mail-ed1-x52f.google.com with SMTP id
- 4fb4d7f45d1cf-6b1ab2ad719so764608a12.3
- for <buildroot@buildroot.org>; Wed, 21 Oct 2026 02:42:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20251104; t=1792575771; x=1793180571; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=ta/RqOR/FJYW7NemLVYlZ+LMNda/VsqPZuGA1051iDU=;
- b=q0l30xbikSy4SpVpIYtxq4romfiKhJORskyS2Jejk3f4CVnWGm/xN4tQugYx0gZLEt
- pHLmw7pnbRMP7nXF6pQR4aCzu0Lu/rAEMDVdBeq2xlJugoV0Iu4UZCW33jyKYbVu6qEX
- UWO1XppByJ+YQuCNYnv6ocVykHLv1EX8xruv1mDN1P4OMYQ9MPypB8Sqkn7jzXjnOXeb
- pz4g8Q+c4sk3fvMzkkNA1BxZNEByGOUltygAtfW/0nfst9zNmZfLRL2rpRQQWcrqsWM8
- Aq+JGkClXf24IQZMreRTQYGf6XouaseR12doerP5PETN6ov2f59xIrCmSiRIqU+uXM/a
- Hj5A==
+ client-ip=2a00:1450:4864:20::62b; helo=mail-ej1-x62b.google.com;
+ envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 41177810C5
+ for <buildroot@buildroot.org>; Wed, 21 Oct 2026 12:52:20 +0000 (UTC)
+Received: by mail-ej1-x62b.google.com with SMTP id
+ a640c23a62f3a-c46822eefb6so61954766b.2
+ for <buildroot@buildroot.org>; Wed, 21 Oct 2026 05:52:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1792575771; x=1793180571;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=ta/RqOR/FJYW7NemLVYlZ+LMNda/VsqPZuGA1051iDU=;
- b=0JZ0pC35U6MM0ALEBco0xpj+s8fpTC3toacGyOOVsw5sUUgSy/YUvBf0KxvpbDgY4z
- B1U68a0uXjFs31mFauRk5OAI2OPfxob0ax46QpXvWmMpkH/6huwhYRhznWuQQ1ntony4
- nLi2mOCv7mVbQOhz1wge9w1FUjKuT75fjlVGf0Z67qfs8HebwHLJB4XZvSMSOeqajaiu
- +itl+nc6GJbB5lQPVFYlJ8D9UUYggrfVVCMWRiJPAY7mSqYOTx6TI6/+XoChuJxeef49
- gnspc9ihYNJTRz4FxFq2SIkPrZk+XyquZj9RGnv8t72vFm2WIqRTDVIVTzSLboAyQdKQ
- vkZw==
-X-Gm-Message-State: AFq9FYIjbFpRQqqurRkrZr1audadFfhu52JDplmL01nuuoywpIKI1CoR
- IfkCecFXZg1tlDKJfwGGusNPZgceG2kBRvpuHjnKWhCswbVJRqemJSyf//Y8nSkv
-X-Gm-Gg: AYBFou0amYTLNCLtVZvxFxghZABMFtmNEEeOAU88SZNyGtTQrXR9BevyeztJpwvHrsD
- B8dHpx9OumXgyim1AB8E6nXLF1ecuYcfTJeXQASS+SGSAig8CFd93F6WCIWxpDJ7esjYG+6xJWs
- sI9+fENOgJ+UstsYhTd2pfm1SLqt2j2tKHtU9j+e8Erj82MgKYRnVye2lVtQ05wsh6y65w//gw1
- S5dDRy7Iq6SS84K4m0CIPTm9OxkZKowYQnrQi5htgcSMYxjv5vZfZhhA0XIzmNBhuryWs0mX84H
- Mh+wh3kFXLo7U/VK/8Nlnfpo3ROHvCUE6MMzafUKnhCVA2hDJwvN7nFQYDnH7wMoUx9OrfuhLfJ
- PVVq9O2R1ajkgaK/8WmOhUpxzyfa8HsouiwwJCugnI4jcffa1soEU4E0c2MTeFxs0Mtt8StTmbR
- wqOapBY9gdMqqFomDA0DBxHRQ7pRiSNTQa+daqOCotEmCEvgldSRk3YdSqqENPMXKQ1zCSQ+Kk6
- 6sPc8X5APlCVKQCJcFLn56lfD7juG/sqCR/hAX/1SCm9n6/RyJl/gu59TDOFBtteMMuhzrxo1gt
- xHHwfyVWcihZamsAow==
-X-Received: by 2002:a17:907:72cd:b0:c31:866c:9696 with SMTP id
- a640c23a62f3a-c467973ae23mr123846466b.31.1792575771220; 
- Wed, 21 Oct 2026 02:42:51 -0700 (PDT)
-Received: from gimli.addiva.ad (h-46-59-24-110.NA.cust.bahnhof.se.
- [46.59.24.110]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c4678e5acc9sm60252166b.9.2026.10.21.02.42.50
+ d=1e100.net; s=20260707; t=1792587139; x=1793191939;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to:content-type;
+ bh=kFcGgk4nPOWZMhsxhOZMp87lFtJJpCBIPmF0MuxStlg=;
+ b=o/oVVrqpX7HZ2XPszZmtCHiW7eSeu28JXs+eeiQCNywiMCj8jmYKXcofSeJ53ULCz/
+ q1nKNW6cGI09PClAtf46HYcB4MLhtwL1h856WmzC1e6iyyt+oEbKgeyWOF8qyoAsNn8B
+ 8OKxRXkAAcRFks7ESVw18rqlBI1vFUtvVSBWNJpSVl4voaeX3ElqmRkLP+MWq4e5iZ45
+ 78aK4/sfeT5mdSZEZEeFqtlOjRKx6uF1yMX7wqDUS3O5HdZS82pBHk8I+FliHmP6TRDO
+ by9eBzlIook8ZvQL9fa8lHEjEaWG2x43iL+QAL2eoCGYb7xUFJJKLFLZea0Lkprh0SHM
+ IkIQ==
+X-Gm-Message-State: AFq9FYK9782u4ors1zMdNyh6FgxHAQlopqh8H/wOUCkA84Fj3hKEF65S
+ SLqEztGCnrz/NLlcWMf150lrCg9s4U0QX5G8oAzgJz+1MRllfYCJIVPBvBDvEQ==
+X-Gm-Gg: AYBFou24E5KskkHnaTE+lTLOLLsjgFv47VIlm/VU4Ra7r7bWOkG25c+GAa6vzWeezND
+ BIPsddRA260Wxx+tGlE4kCkiDBTKWFcW5c1cL3dAmnmzqSNvfvyS0ZoWiBhmHu3qJmkrJCnM9QS
+ syXtFLr3d2pWSgLb/WDDsqDQ1qXfbZ4gSCjQ0Uq69klVidX1MKvZ1UuVooRSgmFpIx41TAOClUT
+ KYL01ZCe8MQn3gfkGjT/lJNsY/kN3EOougq7aypU8k9RNj/iMd9USQo1iQaj1UV8WcLdLG3R4bZ
+ u6ozkIYZbIH8IUSmcIXp35UuTGzBdrmxvB7hHzWlla/twBhmtIVu0hK41kbkuc5JaCmlPF9B7YC
+ bR1YqWN4pldTvvHPdLKH4Qurhy9+I3riP2sIJx3yWGZa2RnVobQgy3Pvr/6xQzIPoS1Jlt66YXk
+ NoLJR+fwtKnFvWgpa6c0GiGnauAm0KF4832nj1m9tT8zayIZ72v3DpcPDxd1RGxY4x5tiRulOg3
+ bpuAG7E0bYTJ3D1DpUJutr4tQMQ+NR8AJrt6O8UM3Sn3ufJVqiZO7rNUTqDLixphCGAcgkze1Fx
+ 3mf/S3pbYF6FMZUtF8HvnLkhcbWxs1fLKrb62Thjo5u0mR3bF3TdypwI
+X-Received: by 2002:a17:907:6d21:b0:c43:ae92:9b3 with SMTP id
+ a640c23a62f3a-c4679a46d2fmr188804766b.38.1792587138713; 
+ Wed, 21 Oct 2026 05:52:18 -0700 (PDT)
+Received: from development2.visionsystems.local (mail.visionsystems.de.
+ [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-c4678fa929dsm74191066b.41.2026.10.21.05.52.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 21 Oct 2026 02:42:50 -0700 (PDT)
-From: Joachim Wiberg <troglobit@gmail.com>
+ Wed, 21 Oct 2026 05:52:16 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: Thomas Perale <thomas.perale@mind.be>, Joachim Wiberg <troglobit@gmail.com>
-Date: Wed, 21 Oct 2026 11:42:47 +0200
-Message-ID: <20261021094247.2931801-1-troglobit@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Date: Wed, 21 Oct 2026 14:52:14 +0200
+Message-Id: <20261021125214.141014-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260926133654.2836794-1-yegorslists@googlemail.com>
+References: <20260926133654.2836794-1-yegorslists@googlemail.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2025.02.x] package/firewalld: fix CVE-2026-4948
+Subject: [Buildroot] [PATCH v2] package/libmicrohttpd: fix build without
+ thread support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -166,95 +150,217 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
+Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>, Will Newton <will.newton@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-The setZoneSettings2 and setPolicySettings D-Bus methods are guarded
-by the polkit "config.info" action instead of "config".  The desktop
-polkit policy shipped with firewalld grants "config.info" to any user,
-so a local unprivileged user can change the runtime firewall
-configuration.
+When the toolchain has no thread support, libmicrohttpd is configured
+with --with-threads=none. In that case connection_get_wait() is not
+compiled, because it is defined inside the
+"#if defined(MHD_USE_POSIX_THREADS) || defined(MHD_USE_W32_THREADS)"
+region, but MHD_get_timeout64(), which is built unconditionally, calls
+it:
 
-Backport of the upstream fix from firewalld v2.5.0, g5fb3914.
+daemon.c: In function 'MHD_get_timeout64':
+daemon.c:4524:18: error: implicit declaration of function 'connection_get_wait' [-Wimplicit-function-declaration]
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Add a patch, submitted upstream, that moves connection_get_wait() out
+of the threads-only region.
+
+The faulty code was introduced upstream by commit 73c43a7ef7bd ("Added
+workaround for system clock jumps back"), first released in v0.9.75,
+which added connection_get_wait() inside the threads-only region and
+at the same time called it from MHD_get_timeout().
+
+This issue has been present since commit 8ec001b467e2
+("package/libmicrohttpd: bump version to 0.9.75"), which pulled in
+that upstream code. It therefore affects 2022.02 and later, and all
+maintained branches (2025.02.x, 2025.11.x, 2026.02.x, 2026.05.x and
+2026.08.x). However, it only turns into a build failure with GCC >= 14,
+as implicit function declarations are errors by default since GCC 14
+[1]; with older GCC versions only a warning is emitted.
+
+[1] https://gcc.gnu.org/gcc-14/porting_to.html#implicit-function-declaration
+
+Fixes:
+https://autobuild.buildroot.org/results/10f33829552059264104623353a9ec1584b08e4f
+
+Fixes: 8ec001b467e22904c0a7ec5780d83afd44ad78f3 ("package/libmicrohttpd: bump version to 0.9.75")
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- ...K_ACTION_CONFIG-for-set-ZoneSettings.patch | 41 +++++++++++++++++++
- package/firewalld/firewalld.mk                |  2 +
- 2 files changed, 43 insertions(+)
- create mode 100644 package/firewalld/0001-fix-policy-use-PK_ACTION_CONFIG-for-set-ZoneSettings.patch
+Changes v1 -> v2:
+  - identify the commit that introduced the issue, add a Fixes: tag
+    and explain that the failure only shows up with GCC >= 14
+    (suggested by Thomas Petazzoni)
 
-diff --git a/package/firewalld/0001-fix-policy-use-PK_ACTION_CONFIG-for-set-ZoneSettings.patch b/package/firewalld/0001-fix-policy-use-PK_ACTION_CONFIG-for-set-ZoneSettings.patch
+ ...t-thread-support-connection_get_wait.patch | 145 ++++++++++++++++++
+ 1 file changed, 145 insertions(+)
+ create mode 100644 package/libmicrohttpd/0001-fix-build-without-thread-support-connection_get_wait.patch
+
+diff --git a/package/libmicrohttpd/0001-fix-build-without-thread-support-connection_get_wait.patch b/package/libmicrohttpd/0001-fix-build-without-thread-support-connection_get_wait.patch
 new file mode 100644
-index 0000000000..b875e69903
+index 0000000000..d7f93f57f3
 --- /dev/null
-+++ b/package/firewalld/0001-fix-policy-use-PK_ACTION_CONFIG-for-set-ZoneSettings.patch
-@@ -0,0 +1,41 @@
-+From 511a305c504e4c0928eda670598528309da3436d Mon Sep 17 00:00:00 2001
-+From: Sizhe Zhao <prc.zhao@outlook.com>
-+Date: Tue, 31 Mar 2026 20:46:50 +0800
-+Subject: [PATCH] fix(policy): use PK_ACTION_CONFIG for
-+ set{ZoneSettings2,PolicySettings}
++++ b/package/libmicrohttpd/0001-fix-build-without-thread-support-connection_get_wait.patch
+@@ -0,0 +1,145 @@
++From b9da2097d719dbd125849f2e344d0a7d80b56da6 Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Sat, 26 Sep 2026 12:08:52 +0200
++Subject: [PATCH] fix build without thread support: connection_get_wait() must
++ be unconditional
 +
-+Reference: https://access.redhat.com/security/cve/cve-2026-4948
++connection_get_wait() was defined inside the
++"#if defined(MHD_USE_POSIX_THREADS) || defined(MHD_USE_W32_THREADS)"
++region, but MHD_get_timeout64(), which is compiled unconditionally,
++calls it.  When MHD is configured with --with-threads=none the
++definition is not compiled and the build fails:
 +
-+Upstream: https://github.com/firewalld/firewalld/commit/5fb3914ad830feff6cb2b0670457c60a323c6c6c
-+CVE: CVE-2026-4948
-+[Joachim: backport to 2.0.2]
-+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
++  daemon.c: In function 'MHD_get_timeout64':
++  daemon.c:4524:18: error: implicit declaration of function
++    'connection_get_wait' [-Wimplicit-function-declaration]
++
++Move the function above the threads-only region.  Pure code motion,
++no functional change; the two thread-only call sites in
++thread_main_handle_connection() still follow the definition.
++
++Found while cross-compiling for a Buildroot mips64el/uClibc toolchain
++without thread support (--with-threads=none).
++
++Upstream: https://lists.gnu.org/archive/html/libmicrohttpd/2026-08/msg00002.html
++Assisted-by: Claude:claude-opus-5
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 +---
-+ src/firewall/server/firewalld.py | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
++ src/microhttpd/daemon.c | 97 +++++++++++++++++++++--------------------
++ 1 file changed, 49 insertions(+), 48 deletions(-)
 +
-+diff --git a/src/firewall/server/firewalld.py b/src/firewall/server/firewalld.py
-+index be53fbab..ceaa4322 100644
-+--- a/src/firewall/server/firewalld.py
-++++ b/src/firewall/server/firewalld.py
-+@@ -946,7 +946,7 @@ class FirewallD(DbusServiceObject):
-+         log.debug1("getZoneSettings2(%s)", zone)
-+         return self.fw.zone.get_config_with_settings_dict(zone)
++diff --git a/src/microhttpd/daemon.c b/src/microhttpd/daemon.c
++index b42d4ee..081d9a6 100644
++--- a/src/microhttpd/daemon.c
+++++ b/src/microhttpd/daemon.c
++@@ -1847,6 +1847,55 @@ process_urh (struct MHD_UpgradeResponseHandle *urh)
 + 
-+-    @dbus_polkit_require_auth(config.dbus.PK_ACTION_CONFIG_INFO)
-++    @dbus_polkit_require_auth(config.dbus.PK_ACTION_CONFIG)
-+     @dbus_service_method(config.dbus.DBUS_INTERFACE_ZONE, in_signature='sa{sv}')
-+     @dbus_handle_exceptions
-+     def setZoneSettings2(self, zone, settings, sender=None):
-+@@ -970,7 +970,7 @@ class FirewallD(DbusServiceObject):
-+         log.debug1("policy.getPolicySettings(%s)", policy)
-+         return self.fw.policy.get_config_with_settings_dict(policy)
++ #endif /* HTTPS_SUPPORT  && UPGRADE_SUPPORT */
 + 
-+-    @dbus_polkit_require_auth(config.dbus.PK_ACTION_CONFIG_INFO)
-++    @dbus_polkit_require_auth(config.dbus.PK_ACTION_CONFIG)
-+     @dbus_service_method(config.dbus.DBUS_INTERFACE_POLICY, in_signature='sa{sv}')
-+     @dbus_handle_exceptions
-+     def setPolicySettings(self, policy, settings, sender=None):
-+-- 
-+2.43.0
-+
-diff --git a/package/firewalld/firewalld.mk b/package/firewalld/firewalld.mk
-index eae8afc27f..d2c87267c6 100644
---- a/package/firewalld/firewalld.mk
-+++ b/package/firewalld/firewalld.mk
-@@ -9,6 +9,8 @@ FIREWALLD_SITE = $(call github,firewalld,firewalld,v$(FIREWALLD_VERSION))
- FIREWALLD_LICENSE = GPL-2.0
- FIREWALLD_LICENSE_FILES = COPYING
- FIREWALLD_CPE_ID_VENDOR = firewalld
-+# 0001-fix-policy-use-PK_ACTION_CONFIG-for-set-ZoneSettings.patch
-+FIREWALLD_IGNORE_CVES = CVE-2026-4948
- FIREWALLD_AUTORECONF = YES
- 
- FIREWALLD_DEPENDENCIES = \
+++
+++/**
+++ * Get maximum wait period for the connection (the amount of time left before
+++ * connection time out)
+++ * @param c the connection to check
+++ * @return the maximum number of millisecond before the connection must be
+++ *         processed again.
+++ */
+++static uint64_t
+++connection_get_wait (struct MHD_Connection *c)
+++{
+++  const uint64_t now = MHD_monotonic_msec_counter ();
+++  const uint64_t since_actv = now - c->last_activity;
+++  const uint64_t timeout = c->connection_timeout_ms;
+++  uint64_t mseconds_left;
+++
+++  mhd_assert (0 != timeout);
+++  /* Keep the next lines in sync with #connection_check_timedout() to avoid
+++   * undesired side-effects like busy-waiting. */
+++  if (timeout < since_actv)
+++  {
+++    if (UINT64_MAX / 2 < since_actv)
+++    {
+++      const uint64_t jump_back = c->last_activity - now;
+++      /* Very unlikely that it is more than quarter-million years pause.
+++       * More likely that system clock jumps back. */
+++      if (5000 >= jump_back)
+++      { /* Jump back is less than 5 seconds, try to recover. */
+++        return 100; /* Set wait time to 0.1 seconds */
+++      }
+++      /* Too large jump back */
+++    }
+++    return 0; /* Connection has timed out */
+++  }
+++  else if (since_actv == timeout)
+++  {
+++    /* Exact match for timeout and time from last activity.
+++     * Maybe this is just a precise match or this happens because the timer
+++     * resolution is too low.
+++     * Set wait time to 0.1 seconds to avoid busy-waiting with low
+++     * timer resolution as connection is not timed-out yet. */
+++    return 100;
+++  }
+++  mseconds_left = timeout - since_actv;
+++
+++  return mseconds_left;
+++}
+++
+++
++ #if defined(MHD_USE_POSIX_THREADS) || defined(MHD_USE_W32_THREADS)
++ #ifdef UPGRADE_SUPPORT
++ /**
++@@ -2009,54 +2058,6 @@ thread_main_connection_upgrade (struct MHD_Connection *con)
++ #endif /* UPGRADE_SUPPORT */
++ 
++ 
++-/**
++- * Get maximum wait period for the connection (the amount of time left before
++- * connection time out)
++- * @param c the connection to check
++- * @return the maximum number of millisecond before the connection must be
++- *         processed again.
++- */
++-static uint64_t
++-connection_get_wait (struct MHD_Connection *c)
++-{
++-  const uint64_t now = MHD_monotonic_msec_counter ();
++-  const uint64_t since_actv = now - c->last_activity;
++-  const uint64_t timeout = c->connection_timeout_ms;
++-  uint64_t mseconds_left;
++-
++-  mhd_assert (0 != timeout);
++-  /* Keep the next lines in sync with #connection_check_timedout() to avoid
++-   * undesired side-effects like busy-waiting. */
++-  if (timeout < since_actv)
++-  {
++-    if (UINT64_MAX / 2 < since_actv)
++-    {
++-      const uint64_t jump_back = c->last_activity - now;
++-      /* Very unlikely that it is more than quarter-million years pause.
++-       * More likely that system clock jumps back. */
++-      if (5000 >= jump_back)
++-      { /* Jump back is less than 5 seconds, try to recover. */
++-        return 100; /* Set wait time to 0.1 seconds */
++-      }
++-      /* Too large jump back */
++-    }
++-    return 0; /* Connection has timed out */
++-  }
++-  else if (since_actv == timeout)
++-  {
++-    /* Exact match for timeout and time from last activity.
++-     * Maybe this is just a precise match or this happens because the timer
++-     * resolution is too low.
++-     * Set wait time to 0.1 seconds to avoid busy-waiting with low
++-     * timer resolution as connection is not timed-out yet. */
++-    return 100;
++-  }
++-  mseconds_left = timeout - since_actv;
++-
++-  return mseconds_left;
++-}
++-
++-
++ /**
++  * Complete the resume of a connection that has its own thread.
++  *
 -- 
-2.43.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
