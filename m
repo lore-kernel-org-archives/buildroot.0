@@ -1,28 +1,28 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 201A0606A327
-	for <buildroot@archiver.kernel.org>; Wed, 21 Oct 2026 20:04:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E8F606A324
+	for <buildroot@archiver.kernel.org>; Wed, 21 Oct 2026 20:04:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=IwH6GAL+
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=haDtvJaD
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EF0E240C1F;
-	Wed, 21 Oct 2026 20:04:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DEBEE81854;
+	Wed, 21 Oct 2026 20:04:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BNBiS4E5WPth; Wed, 21 Oct 2026 20:04:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 0AFBA40C70
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792613081;
-	b=Y/FMtxNbyQV/hvNqewy+NLUocr/LGO8yhDKo6wPu6rQ/CMMDoQMUQUMIkBOkdraj0kMb
-	 hnCsWmOiRRAUi4JMyaNwP1HRtOTzS/GPhWmmnn1Abc9tT5r+4L8SvMhiALSx//yJPQxeS
-	 bbxcaeIrsR/DRWl4n3RMKvUDkGmABPYrfHGUSSJzfYEX+PrOHawxBvh8DBc9MGs+afCYV
-	 o4hiYy+owyq1t302HYkQG1d4hV4+9exq1c0ria3/kGqak72/iE3541sM4/rqvGAHsvFPD
-	 KMUyoIKPw24Is93Jz7yMheXEVhuY1x9+wgPil1krIe6tvS1xTMpm/hs1IpmGVK8KkrQ==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OrO9Ii2XED7z; Wed, 21 Oct 2026 20:04:44 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 097A881C56
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792613084;
+	b=N1/r1t0pB5Fdo9yS0vnw1VvrdfAZeJGx3hNzc198rOJHXNGyHKDCwlE1d5DkTQcMdKjm
+	 HsZiY1BIteoDqvlzENOU995hIjbVuxhWJq3bm1U8HRleOjZVJjAGNaN8bhWihmATtLG1b
+	 yBNSvpJs6X6vD1+sWW/+U8Ao0RACgeiR76xN0/ZQ4RjRROGfbom3BGeKve+lcfOEjdzU/
+	 6bjVehZSaZSJu2kJVHVE1D2XAlZsvm3EKJrbtlX/Sren8W9uJIgkQAdatL65MxrH2WNrE
+	 16qBjCxO7XKjESqHHz2PDJvj0EzfLSV1LKjxhHoMN0zY/G7WrvuYTmW8vPudjR3X8jw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792613081;
+	c=relaxed/relaxed; t=1792613084;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=s6IIrEYjBt8UV+O2VMBKdjz87wOuxzUp3q3qPcPrA7M=;
-	b=DltdqfBKekbrdyrN8p/C/LraGtoE0qBBxmewG+dcCVk4WGNwZb7drnv05nevgpEUA3xp
-	 ZcML7Pb00C6HzuC0XgMO3fsRd+XjL9oFuEmKOjKOsyziyNcE/xnDIZ0k0u185Y437clFY
-	 OAtT8gMapY0+0BDYjYbEuCBQRmucfd0ElKP+2X6r9L/56Xpu8JUO4BgEid089VNVVugDj
-	 13wDmielqRU+aQqVU1ApS4ZHeUbFdj2LAVtGkfwRg3DALM5X9jxNcqVG0+cZacHZuVGuz
-	 zuEnjvYXscS0+1lz8chPCdJOQKNRNwia2R1ArzvnXoCSbmDE30XRvZP/mxLEaLnwm/g==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=MaV5HOzRA3vqB4a++IpAIgWu3aKvp6HCLyqGqj8g1CQ=;
+	b=nqJFSyKSxgFDJLflqf5a/tRRfzIL0XMlijxT7HXMw67CJfExliWmh+NrAAy+4tZos9/I
+	 WouBtFVIoZKRArG4Ft+eFqBLRoxId1HiCj8ciGP8AT4ICqgBjXLguYL2j9d7LoaGLhWcv
+	 0dcZv7U1jhZBo9ceb6Zq1musIjpIGgYde1C5fycANsd98ewiplj7PmE6s8O8IaOV9ab5N
+	 fydgMeuuq8Jm+AXPbJKgecTMtrSua0WmALqLmvhcjpxvcJndoRIrKb45CMLDducnP7h3v
+	 6ZJ++54f9XEd/+QZmOwGEfjHdxXvAeFfscNUJSxVZHCYWAlwU3g3H3A7aCe1N1v5bgw==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792613081;
-	bh=s6IIrEYjBt8UV+O2VMBKdjz87wOuxzUp3q3qPcPrA7M=;
+	s=default; t=1792613084;
+	bh=MaV5HOzRA3vqB4a++IpAIgWu3aKvp6HCLyqGqj8g1CQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=IwH6GAL+eTrJWC+QJts0VKdbDxGIRUEsNiyB7DgD3XItbYkRA9juVyOEAyE3poj0B
-	 tE3KOwHSECMlZ/c5gYAPgl/o8LVBjcZRNMUrkwfavRZQw0p4yiLQS95FzvTsL+xGXi
-	 4x3P1Xh/+npDxbc5hi9jnJOKcKUvcF4C+wA3+3D8fIfyn5Km9N75scsfy0l0YFU9mi
-	 Y3h/UQsgUm+HB+GB5VZvJQyVukzYw4TGoSGeOmtBnQ85ncQTqdHk9kAoZydafeaX7V
-	 cdl29g1gArJTs+faek+lA4QtinAPb4WsGUiiEKMZd9R9LgYmTjRyR4ritwwP6RG3vp
-	 6/CuP6oRzCTaQ==
+	b=haDtvJaDHUdV1xCsnS6HW+I4kQE4nThxZsMOu2Bd90VlhOxL/siB4MbNqRQNG00Bc
+	 4lpUiDo+QTxwaTL9bDEEY1G+Y/CAZWYyBN4V+XRm1JO8bWAr/kLLGHOIWEIdUhPaWF
+	 VPwQTbwxa4vHQiH80s7yDNBRw0zOgfFxuzLBcbsbIreP/cNcrmt3l/0G0kETrS2WSe
+	 1p9jkoiF7wiyv4BX1qkEPWWlNzKGIT3Uhnbn9y9nQaZ11m/TRE9oePylg6JhvoB+e9
+	 +y7T2Ymv8JrAcDON96ExKTKDKsF5vaWKnHXNMzkaHYYbuk0dKFsAeG1SoPZRjmAMt7
+	 XaSXVKWzm6lGQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0AFBA40C70;
-	Wed, 21 Oct 2026 20:04:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 71331769
+	by smtp1.osuosl.org (Postfix) with ESMTP id 097A881C56;
+	Wed, 21 Oct 2026 20:04:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 86A9E1460
  for <buildroot@buildroot.org>; Wed, 21 Oct 2026 20:04:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6329C4016D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6967B81A3B
  for <buildroot@buildroot.org>; Wed, 21 Oct 2026 20:04:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wVrxKWHUcJ28 for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QmlR0iMjy0r1 for <buildroot@buildroot.org>;
  Wed, 21 Oct 2026 20:04:37 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 8526640042
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org A964F80DE4
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792613077;
- b=PobhyNQxKhlTIu2OOZTa8dRqvsAZH1JpR5bVrhudqHpUi3Cb1Qr3St+mkxlppBYvB1aM
- wMMrLduYrEQmt/Ehr/BUz6q7v/pDu0MXPPVXd2h7MUV3V/Vdr3hWRIh/qY9N+KY2aS7R7
- J8beAX6ZybzU7x2S4FnHBKQwN0O6xG1GtAnY38ZjxFiXQ+DJ8CEen+hGdeZ6RaFJSHXLm
- tnY7kkhZ2dwZC/hPQGke4tW5EXxAziTVuzQSVW/dfRxs1xNUByFhShxesutg9EwSZ8k8r
- DN8ow361tpAH48nmx9sesiWhlgIOK225eP2DFEPkw+L42nrVABqLX1kgZ7g6itQuRfA==
+ b=XK+efeNOnzh+JFtSDmANN5SjpSTLfSelM5MXXsDyXkMokBHi+EsBDKTbnl07dY8dcZMF
+ vKzBBClbA7YhwB6JEJAGhRWzHXfQBRdh+nqDoVQP8O7zXzEI3CVD7Y3x0uGWzA+OFQov1
+ 6Yh5/mQ8ps7V/97gEg+Ct287qc/a5tor0myJL8iEwI/KV6GRTLKDKIL3gHgwrMJx/+bQU
+ 8k1FS4z8k/21+EVq/nshduqZEMJLv69b4T3+72KhqphXQgTELNmNTXR9vSm+FJiMZKN/T
+ Rk+nii6JGbMfZDx4E0K87EnMR26DufWmoTXdZUthNsDBbchHIkKviJlG0ZCFPfP+YEQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1792613077;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=TN1x7yqD2oKTrAzmJqfQyaIzijlm+PzIyrECMmbBW58=;
- b=HIZSfnHR0KVjkJj9Q02FXU0yr8Rloa1tspxCDrlvEtqERDOdg0SgUcPbSsQg9SOr0a1e
- 5x2fODg2iXWAhcNffj/wW55LVQC+ES05ecd80JcUNwnRSs0dTrsNXAZ6sng7so9S9e3pm
- fcS6EcHXgMestvJN+ZFY4+vXZTbYIkJx99s3USvaIwiUd2Iy3bnLV2M4h6UDcCEns9mfs
- /6aXy7Pd0dBNBacMtoQWvJfqhEqzsMtuRIO+u10421Q3OGqj3Z4CQ8kKpdngLnoBGQoHe
- nmi/2yVcz4pkCPRgVWBSViN9WRGH6A8G1SBJ0PPMhKUovL/qHaQrKasJshrtNlARIPw==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ bh=QIHiY4+wXlu7+aEQlqUKIehNgstK3L2UkQ5JzdnzVpM=;
+ b=eyphcl9iXyxcrBmb8sfoB2yQFN5VL9PWiGaf7Jke+MFc0GDq40Nfyoc9IFXwrCFuczDt
+ vqUZFkfBnn5QhQFtZlg2QNPBDEjbAQapFY/r2WA/rIAux6wzJbwuajhy1j2GPD+O1xX9A
+ poxkAxkHlJIirFwJh4GCv8t0hjK2u0uwCfRGCXZsdvEEHhjU4qd/g7AgOQQSJpDfNwDf4
+ QjRw943INIWVOINwWZJWxc/UHsDdAcOpjJdUBtb8Vygjy8dPjFGLjrZvBbwzPKkWCfTaD
+ BnggyfXG8luD1CltxFPkIhMHDWeS8E9q50xJCZLDHI6cW/8YHMCk+5P7Id/DoALySfA==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8526640042
+ by smtp1.osuosl.org (Postfix) with ESMTP id A964F80DE4
  for <buildroot@buildroot.org>; Wed, 21 Oct 2026 20:04:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DDC6D99B20; Wed, 21 Oct 2026 20:03:13 +0000 (UTC)
+ id 0022399B23; Wed, 21 Oct 2026 20:03:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 21 Oct 2026 22:03:33 +0200
+Date: Wed, 21 Oct 2026 22:04:07 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8de9e606d7bb3d1fd5facf12aed36cb0b0d92612
-X-Git-Newrev: 9b79b19bb0137f0c02b936db08737b5ca3861e62
+X-Git-Oldrev: aa1ed6e7415b48807b4a0df289c230d690bff45e
+X-Git-Newrev: 436d7fae9ae3092d89e8a8485cfe1d64a290acf6
 X-Patchwork-Hint: ignore
-Message-Id: <20261021200313.DDC6D99B20@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/uboot: add support for
- firmware-ele-imx
+Message-Id: <20261021200314.0022399B23@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/imx93-evk_defconfig: drop explicit
+ FIRMWARE_IMX_LPDDR4=y
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,71 +123,29 @@ X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9b79b19bb0137f0c02b936db08737b5ca3861e62
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/436d7fae9ae3092d89e8a8485cfe1d64a290acf6
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Similar to the existing firmware-imx support, some platforms need the
-EdgeLock Secure Enclave firmware when building U-Boot:
-
-https://docs.u-boot-project.org/en/v2026.10/board/nxp/imx93_frdm.html
-
-So add an option for this and extend the existing UBOOT_COPY_IMX_FW_FILES
-logic to also handle it.
+This is the default on i.MX93, so is dropped by 'make savedefconfig'.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- boot/uboot/Config.in |  9 +++++++++
- boot/uboot/uboot.mk  | 10 +++++++++-
- 2 files changed, 18 insertions(+), 1 deletion(-)
+ configs/imx93-evk_defconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
-index d4e77fd0f8..381a12197d 100644
---- a/boot/uboot/Config.in
-+++ b/boot/uboot/Config.in
-@@ -351,6 +351,15 @@ config BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE
- 	  This option makes sure that the i.MX firmwares are copied into
- 	  the U-Boot source directory.
- 
-+config BR2_TARGET_UBOOT_NEEDS_IMX_ELE_FIRMWARE
-+	bool "U-Boot needs firmware-ele-imx"
-+	depends on BR2_PACKAGE_FIRMWARE_ELE_IMX
-+	help
-+	  Some i.MX8/i.MX9 platforms encapsulate NXP specific firmware
-+	  for the EdgeLock Secure Enclave inside U-Boot.
-+	  This option makes sure that the i.MX EdgeLock Secure Enclave
-+	  firmware is copied into the U-Boot source directory.
-+
- config BR2_TARGET_UBOOT_NEEDS_ROCKCHIP_RKBIN
- 	bool "U-Boot needs rockchip-rkbin"
- 	depends on BR2_PACKAGE_ROCKCHIP_RKBIN
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index 96b8cd0d2e..99330a2f15 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -224,13 +224,21 @@ endif
- 
- # Mainline U-Boot versions can create the i.MX specific boot images
- # and need some NXP firmware blobs.
-+ifneq ($(BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE)$(BR2_TARGET_UBOOT_NEEDS_IMX_ELE_FIRMWARE),)
-+
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_IMX_FIRMWARE),y)
- UBOOT_DEPENDENCIES += firmware-imx
--UBOOT_IMX_FW_FILES = \
-+UBOOT_IMX_FW_FILES += \
- 	$(if $(BR2_PACKAGE_FIRMWARE_IMX_NEEDS_HDMI_FW),signed_hdmi_imx8m.bin) \
- 	$(if $(BR2_PACKAGE_FIRMWARE_IMX_LPDDR4),lpddr4*.bin) \
- 	$(if $(BR2_PACKAGE_FIRMWARE_IMX_DDR4),ddr4*.bin) \
- 	$(if $(BR2_PACKAGE_FIRMWARE_IMX_DDR3),ddr3*.bin)
-+endif
-+
-+ifeq ($(BR2_TARGET_UBOOT_NEEDS_IMX_ELE_FIRMWARE),y)
-+UBOOT_DEPENDENCIES += firmware-ele-imx
-+UBOOT_IMX_FW_FILES += $(FIRMWARE_ELE_IMX_AHAB_CONTAINER_IMAGE)
-+endif
- 
- define UBOOT_COPY_IMX_FW_FILES
- 	$(foreach fw,$(UBOOT_IMX_FW_FILES),\
+diff --git a/configs/imx93-evk_defconfig b/configs/imx93-evk_defconfig
+index f3af2b5183..05ab4ae7af 100644
+--- a/configs/imx93-evk_defconfig
++++ b/configs/imx93-evk_defconfig
+@@ -22,7 +22,6 @@ BR2_PACKAGE_FREESCALE_IMX=y
+ BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX93=y
+ BR2_PACKAGE_FIRMWARE_ELE_IMX=y
+ BR2_PACKAGE_FIRMWARE_IMX=y
+-BR2_PACKAGE_FIRMWARE_IMX_LPDDR4=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
