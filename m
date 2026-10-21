@@ -1,129 +1,163 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 526A6606A32E
-	for <buildroot@archiver.kernel.org>; Wed, 21 Oct 2026 13:34:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A5A160A260B
+	for <buildroot@archiver.kernel.org>; Wed, 21 Oct 2026 13:47:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=MB7j02sd;
-	dkim=fail reason="signature verification failed" (1024-bit key, unprotected) header.d=n621.de header.i=@n621.de header.a=rsa-sha256 header.s=dkim header.b=aEs2JIK/
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=gM/7/PVK;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=PyqxQGDd
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2959A80DF7;
-	Wed, 21 Oct 2026 13:34:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 02781407F8;
+	Wed, 21 Oct 2026 13:47:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SMKhmgyQq-Aq; Wed, 21 Oct 2026 13:34:15 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org CC87680D66
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792589654;
-	b=BkykqWuWXILz+Y1R+MvA1KbjWtTl9DH/ZVRa3EaEME0nj1obRu584GzCMGxIoB5CFIxZ
-	 H8ha/YJqhXkj/KqWwGR/BlVuLND58hXWXCmdBaZRqXSTnaZMdAM8FPQDu0Izt9r73BPFA
-	 ldE+i1MZUWB2HQVntosb4WZkplJfkZa09xtTFYhtZBdnnCQ+tl8Msz99mSY1WNCDfWr5O
-	 YA1hEn4LsOi8goU/D3ic7PGTzW8icdrVRUQ+NfaboAJCiaQ6BKf/tSwtySV02Af4FyuMd
-	 wv9/dqVKHsT35XiZZDeyN1JX+3JWydHwNCGdNOJ7j8Lq9hHeSjALi0bf1xJQZNgTGRQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9Tq9bfINMI_d; Wed, 21 Oct 2026 13:47:11 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org D7C8340866
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792590431;
+	b=cbYJPyDKyZOge+xxrq4SfNOnbSZmmhRIprGnAk8OaUe6l4efD1tNKskH/18iJNGXHzSG
+	 XcnZ9Ya2NGqyTe0GXu88BvJ34NBizyLaK0hQy1TKsFTDposFHn6Rcc8XqciNDb0E2prAY
+	 blVcmi0iRBqOwl7GQxpVIn93gZ0qQluTMnOkQKcjwYR8MCtwL2c9QKAPn1OuDEI/8PoRt
+	 jtLpRuSGAax8y+EnqQ0FGAAUlmc+iwfjJtyc4qahnMEp4jDkQGUb+Xfv1bhU8poGxv8Zf
+	 Ka4VE/32T1CYJiU1v40QUuwpnkLdgZMOps2CLOeJGKDAXsbC1khBOQdpjVjB4XxG6OQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792589654;
+	c=relaxed/relaxed; t=1792590431;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:Date:From:To:Cc:Message-ID:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
-	 Sender;
-	bh=RBKOAqz/Hmo8y2a7CBjbnDNBW/Cf9TLCXZ9DWGzGNeg=;
-	b=IjCUd2y8Iksbzu4sOelJPertjFoEiNMx5q0wIBBlGxfEqr5YkYE6CUSQN2IUXN76vkD8
-	 ldpZsTwpygIiOHJOwnybdS5T/l8xPAWKMx8747SD2ezxqvZ3IYvsHbY3qSlGpYLjYNq7Z
-	 nosTTK+x4m3SBNuXF4BFP/xdLTkVwmrZsBKZX5DcqUpDCdpBDLTGvGsGkWQyBnUf4d2x3
-	 wVXuhaeKri5oVgOtpexAi2v/H04muDmIoowtoBR9X5oJhi0RVB/+IGyhmf/MMQw9Be3/M
-	 iIZvUbnjJ/S3IGtfGfVVSndSv2QZSI4rWbFwDEFlgk4vvWqlBQiCA+eKyLQQ0iLmVuQ==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
+	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=cFPPz0ErRDWAaAnKthaEN72F7XfzObhHm7Q7PI4PHhk=;
+	b=NPYMLcwiQ1JbpQr0FAnE5DzGp5Ur7VSj5pqdpSxaHzk5het2Ml9QTISLhgUcPGlHUDqy
+	 rEACMDhSkV8aON/DZuJOqKUWRS7liDAnyRgr5YG2yj5nuxw1rnk5NxuWFr3BFkxuz3V9b
+	 +LMqatDn+iBV7cMQWSIKQ8fxrd6mMjF6HNzZ4aHKS76sT+ypdtH/7nq1TnMCQnuYkmQBE
+	 a/3FgseHVz+sw6pEBCiM00OCiTb/8gj2Df7RrUb0s7UWFf/YlWPdinUXtwnKcXkMTViwn
+	 4ND4geI1P2emEFEZfP5wFKG4NlPyRW5krBWzFGIYru2h9FanVV4N07DNosPavoEQhNA==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792589654;
-	bh=RBKOAqz/Hmo8y2a7CBjbnDNBW/Cf9TLCXZ9DWGzGNeg=;
-	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=MB7j02sdKfAOyOZ8JvRLVZfXAguZIa9QhuXPM2qEXAw870F2iiqMERfJwxCKvYyw+
-	 Z1hKTBKf3dS9cdJ7lMQKbovCqRItzB00fuSuQ3iq+2A8t2yEBzOLo14hAAzIT8urVR
-	 joo8T9LToDK3Er5eOA1VK79PL93y0tAW8pYUjDjjX04qjc4v3rQxO85yFZ2qRivvZf
-	 +vb6l5Z3i/yO8ydnpHaic4sob7+qn3C4q6H0zJZgANYJl6I4GOOJmsHM7FRDWB8Q+4
-	 B62/KEby5bYPCUSP1mIDF0zX/8sDgHRhsvcqAfY+4aUe+khBbbqFcqHZ1f923AmTc1
-	 6vI1M7tvwbn6Q==
+	s=default; t=1792590430;
+	bh=cFPPz0ErRDWAaAnKthaEN72F7XfzObhHm7Q7PI4PHhk=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=gM/7/PVKuFTIFkgNFB8H7vA+0iL/Wy9kR42gECs2Le+g4+TaNE5lqBdE75Gm4RDOD
+	 PZ6DHL6ZrMLbtedFAHe9RJnzPTqOb5gU4YLJPfytP9eWkq9PD2xHC2Jya8hd8jnu3I
+	 c4RRlxnmKN4le1FmoIu59B7W2C/HjGEZ8AfftkZuIGMKkHzEZ5QrkyxGuJaAhC14M3
+	 6Do+ufL53s7MSbIUVRWS9RHvIZ5IgGAru7aUCwuZtn/qYW217QVnWyJc3DWwOgBfDg
+	 fRLwJby3ghlpi7/orMZNdmw4VAi7Vn2MFme01bDsY2Pvsk30iG/So53TiFYbd+BPsX
+	 SN9famL7hp7zQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CC87680D66;
-	Wed, 21 Oct 2026 13:34:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 133CD765
- for <buildroot@buildroot.org>; Wed, 21 Oct 2026 13:34:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D7C8340866;
+	Wed, 21 Oct 2026 13:47:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 378D01E9
+ for <buildroot@buildroot.org>; Wed, 21 Oct 2026 13:47:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 94F08403AD
- for <buildroot@buildroot.org>; Wed, 21 Oct 2026 13:34:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 293FD60749
+ for <buildroot@buildroot.org>; Wed, 21 Oct 2026 13:47:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id umA2kD-kSYXj for <buildroot@buildroot.org>;
- Wed, 21 Oct 2026 13:34:09 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 68C1C4039F
-Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=136.243.2.102
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792589649;
- b=blMK1M2wIQvo4lcQRU2aTgPH9OglpzB0AukgZnOK6WEe+/8apOjBeWm/r5R2ljUghajk
- gC0JR7t5R0nDoeyGmYgp3vv3GdsknTJanGztWqguOmsZP/NBv7DnsZXlskg/5bglr9MGn
- V9PHA+2Y+bWU3WuR8llCZvIWONgNtcaGulQsMIpuuOW70ebZOJyN26pZT+uaqQsW+JDVk
- xdzlftNV6CEsu9pOhhUtT01dhLMC1bG4J554hzJWdi3pbhZF9NfR/OKixIIWHAQOBIX71
- 2C+Mh29ywstXX+e1qwAzJdXdq0dvKUvRF/QBRRgPPCuF87rzkglAqDwOJI37BsUpamQ==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EuCr4BoB6gpn for <buildroot@buildroot.org>;
+ Wed, 21 Oct 2026 13:47:08 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 2929C6068B
+Authentication-Results: smtp3.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::432"
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792590428;
+ b=KQuJhXGrR7grMy3RowsRIoBJb5gAOLtcY7JSgTku9vLSj6WjQ3so1/QQ897AUQ0w+KT8
+ NpGuOa7RaOR5Rr6UBGKRPy6y1ZWcrD3U/tdxtkGwxataLIfo3/b5wVaHJ3bitPOiNRpMT
+ 4+uqqiMlp1gBY79tBoJw+NtgKHICOQFYjuDml/pG2KXkuOecAJn5WqwYrMumLzUniP+uz
+ /rhWDmBxsiRC7N/ALwpcCtLhTGCakspH4wHZt/XKe8EJByTci7V7+o4YUGh9Cn0nmXDWY
+ gjYSKMg/Ytvm42mzzxhOpsMxzhpRGA0tw4BoEC24yDdo/4NuIqpR3oUH1eJK8gxnVOw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792589649;
- h=Received-SPF:Received:DKIM-Signature:Date:From:To:Cc:Subject:
- Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
- In-Reply-To;
- bh=wRTHS6Iq2om/3NO6AzGhDItQe4jJKap6OvvN75UvxBQ=;
- b=Vt4snHV3UOE1nHBCbtiRY4E27rPgzwl4JygXiYBeH23DijqZG6BcRtGBc5+0JfrZLqr/
- +RxvwK1vad3qqTtNw7njEbQDe4YOlGU9Q7yAXbRLH9zuwgJcj5+8WigY4LOYdp5zef+yF
- qA3btUyXUg5ssnqonee8dFdibW9/vXikmJ7OerpgyPDSukhkjZo7U4XjvH+SOgqVl+bVI
- Pa7RJpnu0Xn4JZxzUof+nDpRrFWCv7qb8eZTbHFCxZCTivsyUaw3xBJiICTqHSmNIknGQ
- w5sLD/QdI4ewbDFi3hqd9NxObe4BPMSe7RPR4aDEy+JDKWXEv6t0d6wfYudamF01UHg==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
- dmarc=pass header.from=n621.de;
- dkim=pass header.d=n621.de header.i=@n621.de header.a=rsa-sha256 header.s=dkim
- header.b="aEs2JIK/"; 
- arc=none smtp.remote-ip=136.243.2.102
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=136.243.2.102;
- helo=nyx.n621.de; envelope-from=fl@n621.de; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=n621.de
-Authentication-Results: smtp2.osuosl.org; dkim=pass (1024-bit key,
- unprotected) header.d=n621.de header.i=@n621.de header.a=rsa-sha256
- header.s=dkim header.b=aEs2JIK/
-Received: from nyx.n621.de (v4gw.hekate.n621.de [136.243.2.102])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 68C1C4039F
- for <buildroot@buildroot.org>; Wed, 21 Oct 2026 13:34:08 +0000 (UTC)
-Received: by nyx.n621.de (Postfix, from userid 1000)
- id 377A0E009D6; Wed, 21 Oct 2026 15:34:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=n621.de; s=dkim;
- t=1792589645;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- in-reply-to:in-reply-to:references:references;
- bh=wRTHS6Iq2om/3NO6AzGhDItQe4jJKap6OvvN75UvxBQ=;
- b=aEs2JIK/4NW3G1AhGdz8Z9q1yJyzJWWpZCebIb3bG+fd1TLeES3IUlL2e3RZdM+CckcCIp
- CA2zuqO2Efg1xyEvtpGCklU1BFDqVBr3aZH/cDw7wVLN/AqwZoSn3AgvhlT+nU5fmLeAlb
- I9TT4zeInbarFayN0V5bdKJ9yBsG2Cw=
-Date: Wed, 21 Oct 2026 15:34:05 +0200
-From: Florian Larysch <fl@n621.de>
-To: yann.morin@orange.com
-Cc: buildroot@buildroot.org, Martin Bark <martin@barkynet.com>
-Message-ID: <20261021133405.njzdmebr5dbaqqn2@n621.de>
-References: <20261020144902.10111-2-fl@n621.de> <athMFB-DQ98pvKhX@yd-6wlzhs3>
+ c=relaxed/relaxed; t=1792590428;
+ h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
+ X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+ Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+ bh=xsUOWUyOzsl2rRTaHJ6RybNITB/n/R5r1KlnR3DCiZY=;
+ b=lYKZDtegJbo5vae23aD2tzhu7PePJienoRItiD7fXQBIn2EPSOEAG4Zfl1oSEhoD3Kw8
+ c9tUBMUKIanJE5XZAoZW5E/rfhG/wHo2JRKxImg25K6FRZnEiYfpxXPRhAknAiauYqftV
+ WGW+OZJSmUh1FPe0zqFYUJgQjbHjhJkjnAClzQtfg+oCfRFpHpdEbxUvvaKW9hJfEHJeq
+ 5/uJKGEi3wueBZ6+Yc9WRQC/aEJWqXdNeEqPXmEKh2LNzaqZA3kNvSbt4W5MIudl79TvL
+ T04AsGiI+c/5G6W9WFk3HESKHZVyTOK3nR8ruDtuPBDmztPOOOCMmZ2IGzE/TVF38mg==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ dmarc=pass header.from=gmail.com;
+ dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b=PyqxQGDd; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::432"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
+ envelope-from=raslene.ziadi@gmail.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=PyqxQGDd
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2929C6068B
+ for <buildroot@buildroot.org>; Wed, 21 Oct 2026 13:47:07 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-48dfdd0678dso618916f8f.0
+ for <buildroot@buildroot.org>; Wed, 21 Oct 2026 06:47:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20251104; t=1792590425; x=1793195225; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=xsUOWUyOzsl2rRTaHJ6RybNITB/n/R5r1KlnR3DCiZY=;
+ b=PyqxQGDdV7FeLbjxWAMUsBsGg/YxrrETpbfZSbAt0xKSO3ljZevO+WujZQQpzmpQ9m
+ 87UZBDndIA5rN6e2nLeLDzPkpGeCv9ag/iI99GTK54LNWfTjs/pP0/nrZR3kIqlozfiB
+ 5il/90QDfLkJPLGMOR+GSRtxnQBi/qsTtcxqkknKrnsTihjjtc5YsBjQC2QT8XAWaI40
+ wXDC0GW36Q/pQrAYC5tlPXOgapo1TTtbUAyM/OF6K1gdyCrQxUX1gbKlzI/Bgwk1goda
+ /ABnGfu0OLdGnkcmrdM64pYJRHAC/cEJzusYL6Rxo5Jhok51BuaGylmCu0oqDohkHwZM
+ hh5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1792590425; x=1793195225;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=xsUOWUyOzsl2rRTaHJ6RybNITB/n/R5r1KlnR3DCiZY=;
+ b=vtToEM0TF4Y3W8iVnGo3dNQDoz90bFCwdA2KNYu8AVGP87PJVkgYzh8yQhb4yVPOEX
+ op5QFvXCSlZs4XdS1COJR5W1rAth3H7vISJwqCZUmdyOflFpLVBYUj0iZdwnKxXumv5z
+ 6v2IsPoYmN1c+hytl/5E9zUubgTLOVW2mvurdC3ekW5QkS9bDdHk77YngV6kmdDRtwqm
+ e6+9FgyihvUB0BoUMxtLrDJnkj7MQN8bEt01KRIOwDuw4exczDpzDGm+KVjrDE6rS7gI
+ ARBdLCqAltWDl/0FwunGCeW4NVIwFXcRQdXcvxH/Bp4e0jNeSKpD/+NLGU4agI7uqSDV
+ II9Q==
+X-Gm-Message-State: AFq9FYK0HqXJmjMlQxgB62yDozqMiQf5kMGhKKtmIIh0asO1cql/mwFq
+ WpYjqaW00/zqgs7zrUE1lGWO+pWUoIkhxeSeUPx7nmrY+/q9rm39TVze9Ur3z0BdfQc=
+X-Gm-Gg: AYBFou1DE4NW7MUwg2sMPWp8gulGJr/n8UbrJiH4hi/YsNhRSljvvXX12dKj8qBthVD
+ inU4weap8g56kiMVdRFA/CFyGK9IJk0kDBtfWBjQ0djY34wzjJ8DVDgxJsMxUCOmsywDRdJ28Gv
+ VXxf4GwqLkzFaOclcuxFpF4TP1lzX6S0jv8PYZhv/B/x+vPqptLACXFUcWo6mRcCqCrAmDr9N/S
+ FGmYKj4mJNmGDrB4Ka8SQ3UjFBNDD9APWakRewY1RZYOmtMxdxJXC5bZkkDNokPf8Rc+AhLy44H
+ zxbqjV0olEW8dTdARmMCuYYMqjf1+ryC1j1C+t3W1a90kMTARcHZpbXreB/3234SlnZlJ4xM4E2
+ 9ZOofmtshWxz79W07ncT0DJJMKoDso4PxE6XS8Sr9WBzux4La0HvO2bs8PudmYSfs/MOCWAK3E3
+ p6Imkntl58I0D4rBSmTtgqrLNxam0suzd0WCt4QK5GUd6X3r2ZhiASnCRa3ws6ciQzCVM8N7HvQ
+ doj+cfM+UMGmi2hREv8wnnoZoxA0g1WfZqWymnpJcozjVPSr6UiWOjjq0QqXxKCWkM=
+X-Received: by 2002:adf:e28e:0:b0:48d:ec3c:3247 with SMTP id
+ ffacd0b85a97d-48e264dacd3mr3448673f8f.44.1792590425194; 
+ Wed, 21 Oct 2026 06:47:05 -0700 (PDT)
+Received: from raslen-HP-Laptop.. ([41.62.58.180])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-48e2582a53fsm5535771f8f.32.2026.10.21.06.47.03
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 21 Oct 2026 06:47:04 -0700 (PDT)
+From: raslene.ziadi@gmail.com
+To: buildroot@buildroot.org
+Cc: Sen Hastings <sen@hastings.org>,
+ Raslen Ziadi <raslen.ziadi@enim.u-monastir.tn>
+Date: Wed, 21 Oct 2026 14:46:55 +0100
+Message-ID: <20261021134656.30706-1-raslene.ziadi@gmail.com>
+X-Mailer: git-send-email 2.43.0
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <athMFB-DQ98pvKhX@yd-6wlzhs3>
-Subject: Re: [Buildroot] [PATCH 1/1] ca-certificates: remove roots chaining
- to eMudhra intermediates
+Subject: [Buildroot] [PATCH 1/1] support/scripts/pkg-stats: handle missing
+ git repository
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -136,42 +170,78 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_PASS,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
+	FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-On Wed, Oct 21, 2026 at 07:22:28AM +0200, yann.morin@orange.com wrote:
-> There is also 20260816+nmu1 in sid, which supposedly has the leaked
-> certs removed, so maybe we could also bump to that shortly?
+From: Raslen Ziadi <raslen.ziadi@enim.u-monastir.tn>
 
-AFAICT, it does the exact same thing as my patch[1], so this should be
-equivalent.
+pkg-stats can be run outside a Git repository. In this case,
+retrieving the current commit fails and aborts the script.
 
-> Well, I better get errors about legitimate certificates, rather than
-> silently connect to compromised hosts.
+Handle this failure and omit the commit information from the HTML
+and JSON reports when the Git commit is unavailable.
 
-That's fair, I made the same call for our internal stuff.
+Signed-off-by: Raslen Ziadi <raslen.ziadi@enim.u-monastir.tn>
+---
+ support/scripts/pkg-stats | 22 +++++++++++++++-------
+ 1 file changed, 15 insertions(+), 7 deletions(-)
+
+diff --git a/support/scripts/pkg-stats b/support/scripts/pkg-stats
+index eb6d1836c3..52a4293948 100755
+--- a/support/scripts/pkg-stats
++++ b/support/scripts/pkg-stats
+@@ -1260,7 +1260,10 @@ def dump_html_stats(f, stats):
  
-> And those who have legitimate certs will have to ergenerate new ones
-> with a trusted CA anyway, since theirs are no longer trusted by major
-> browsers already anyway.
+ def dump_html_gen_info(f, date, commit):
+     # Updated on Mon Feb 19 08:12:08 CET 2018, Git commit aa77030b8f5e41f1c53eb1c1ad664b8c814ba032
+-    f.write("<p><i>Updated on %s, git commit %s</i></p>\n" % (str(date), commit))
++    if commit:
++        f.write("<p><i>Updated on %s, git commit %s</i></p>\n" % (str(date), commit))
++    else:
++        f.write("<p><i>Updated on %s</i></p>\n" % str(date))
+ 
+ 
+ def dump_html(packages, stats, date, commit, output):
+@@ -1300,9 +1303,10 @@ def dump_json(packages, defconfigs, stats, date, commit, output):
+     final = {'packages': pkgs,
+              'stats': statistics,
+              'defconfigs': defconfigs,
+-             'package_status_checks': Package.status_checks,
+-             'commit': commit,
+-             'date': str(date)}
++             'package_status_checks': Package.status_checks}
++    if commit:
++        final['commit'] = commit
++    final['date'] = str(date)
+ 
+     with open(output, 'w') as f:
+         json.dump(final, f, indent=2, separators=(',', ': '))
+@@ -1371,9 +1375,13 @@ def main():
+     else:
+         package_list = None
+     date = datetime.datetime.now(datetime.timezone.utc)
+-    commit = subprocess.check_output(['git', '-C', brpath,
+-                                      'rev-parse',
+-                                      'HEAD']).splitlines()[0].decode()
++    try:
++        commit = subprocess.check_output(
++            ['git', '-C', brpath, 'rev-parse', 'HEAD'],
++            stderr=subprocess.DEVNULL
++        ).splitlines()[0].decode()
++    except subprocess.CalledProcessError:
++        commit = None
+     print("Build package list ...")
+     all_trees = get_trees()
+     packages = get_pkglist(all_trees, args.npackages, package_list)
+-- 
+2.43.0
 
-Since the certs that were *actually* compromised are intermediates,
-removing the roots (which haven't actually been compromised) is a very
-coarse way to resolve this issue that causes collateral damage for CAs
-which are actually fine. I think the way browsers are resolving this by
-actually only blocking certs which have the broken intermediates in
-their chains.
-
-However, there's no generic way to do something similar for an entire
-Linux system, hence the root store hack.
-
-[1] https://salsa.debian.org/debian/ca-certificates/-/commit/4a0203e5ce4ce1a064b97387f52ca6a00c97185c
-
-Florian
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
