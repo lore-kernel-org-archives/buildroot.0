@@ -1,157 +1,201 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00006606A328
-	for <buildroot@archiver.kernel.org>; Wed, 21 Oct 2026 06:40:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 725B2606A331
+	for <buildroot@archiver.kernel.org>; Wed, 21 Oct 2026 08:47:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=E94rvpVs;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256 header.s=orange002 header.b=qQsExqG1
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=c/rJ6PoJ
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CA833606ED;
-	Wed, 21 Oct 2026 06:40:02 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GZmU8m2V47Jx; Wed, 21 Oct 2026 06:40:01 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org B31FD60762
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792564801;
-	b=HVwL8LNQB+FdvlU6OpkCLZiedQzbBt87aD83pc8C/RN7/KfQHWE3EYf9whgIFcVZtvyn
-	 DgjmmD7SMveFPAeb/jV6CGJTOgEpdmzmGbh5k7LB0y+wFWis0TcXFPlz8WLZ/ZlHFbgfK
-	 QxUXcHpoeuaOzFmv35tNiJ72nO+/IhE7fLx9Rpb6wS9O+QsBk+XDvoTdkJByRCdPltOO/
-	 Pal1lEcZ6N5wiw0j3KUecG4ygFuVQ0gI2BwQfiu7i+PZLMb8BeYsghKIgIqAFPFvRgifa
-	 SwgUIEpqdZgEIkZl5zxtG7DJrIGLJ9KH3SNw6Qsk1v/LGDbYJnZcXeoYwtAq6IBODDg==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792564801;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:Received:Received:
-	 Received:Received:From:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
-	 X-IronPort-AV:X-Amp-Result:Date:To:Message-ID:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:X-Originating-IP:X-ClientProxiedBy:
-	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:Cc:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=54WDMRrXUvUwLLYGZaPiUJWuce4xahEb80DLzcwXdK8=;
-	b=TQSgLli5dbyTOBEmAx6p1F2exQAyM82UECJEakhBWUB5J01KeQKbN6HQ4zmeq1rE0tDw
-	 sT9RBnKa5uxmVN8BPZzrEs9CX6LRgWNzCf0762ymZ+ZAKTDQl9XrRLc7uXiRkIj3GkOrD
-	 YGiyXyf7N/xFOPomNpyxIPsDgLGQuxLC2VmufSgzOK0Engqk3kivcHKf8IbDAKEWyg39j
-	 nUspfn/65jUDIpPa3RzV629oR/cSII99H6+MfKFBisUcHKMLMwsHdifGagGs4fAD46FHf
-	 x23Ag9HtJIYiHVoYTi/WsSEbXu6DMMXXirz7b1kKA83JzJI/Uf4w/rP/yZsIeUMW5pw==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
-	arc=fail smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792564801;
-	bh=54WDMRrXUvUwLLYGZaPiUJWuce4xahEb80DLzcwXdK8=;
-	h=From:Date:To:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=E94rvpVsPiCukqkCTCqQ8RZBGeZKZT9WvKLcMTVUibh9D0Dz8RZKjXTi6M/YZ6BOe
-	 2wf6LFnI3KEE+W+Erwo1vfoxJUcr7WHVh5dr9NZhTGmIcpL1JAIv6uvDCjSXMQKEZO
-	 fGWAnW400aIASpcJ0sBbpGFwgNrNQqMaGSDAQ5KTjT8cLOvX89tppTx7IxKmYVO94f
-	 +TZ68O95vy+to0ur62DiDwqGWmUE4uWJ9Tu07J8UKelsqnD34uerZ7Nk7Qu59UUYN8
-	 MWNKqZdZhpUOpQ+0oLA7eAPILO2YZg+uWP5ilU9UIs+gOQN5mrJ/ibHTxtaL8aqg9Z
-	 4outjm1SPzNVw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B31FD60762;
-	Wed, 21 Oct 2026 06:40:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id AA2803A4
- for <buildroot@buildroot.org>; Wed, 21 Oct 2026 06:39:59 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9BCC281080
- for <buildroot@buildroot.org>; Wed, 21 Oct 2026 06:39:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 33F0480D6A;
+	Wed, 21 Oct 2026 08:47:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ydSyvRXZrDD4 for <buildroot@buildroot.org>;
- Wed, 21 Oct 2026 06:39:58 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 190D280FB7
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=80.12.126.237
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792564798;
- b=OKi+vW2EzSP4YuSp9Iuyqo8jcOIbLRGOrPkNJ5D9uJNp59+KZgtCSHMUEVTkRNGJf6DE
- MpAFcWaDSV6Ob4CM8PsM/KHyJGk6fcQfUJHDqn9uj8CnOn9vCSQgmEogrMfd8NbHNCh1x
- DlFZxNbeKXdk0p/SPalMUrVUKZivS1MueVEMsVBWlk+pOmnIVGXWkxIF7DEnw8OXfOxVX
- jZ59otj3bYbAC9zuMT0K/jwVmW5KTBTlitE3n4OgnaWc76p+jciqeQBmapY7lET+DwPPZ
- 5uAitqturJyy8MBl6jjJMxv5uavsYWpUTUgWSfRq6tqrNMP1CigWUVA1/Z7VNRGioeg==
+ id S1KtO-Rt_v4O; Wed, 21 Oct 2026 08:47:52 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 2733B81027
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792572472;
+	b=AL+TZh02BGnHnaRoPDHrbqQbb5+IhyNzGNzr2Gn3LZ1Z/Fa7BFrBVjuOxZPbtJNbvOKZ
+	 XK80VJbH/TvY3FuXW26BBtvkVTFxnFEQNKRwW/2y40age9/zgYhUF0fIpHepUgOb+/wzD
+	 qOeDvZVLBlE9mF0cyNgoHRuFzhQXANYDUO6kaKqqb69axcfXZvMYLdATlbB8dxkDGQ+yV
+	 wezmS5Ul8ZY43KGITuIR5P1o/gsNBVDiUe1AU6Xak0C9fh4gv2ZNA2smMwsmjdhAbVnEj
+	 Kv6EiEcwmBodgUI8NeXw/P/wCGW/sOWzOKwP380+R39fz23QXYe15WZH3zhlG9NjyvQ==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1792572472;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:Received:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:X-Received:Received:Date:MIME-Version:Message-Id:
+	 X-B4-Tracking:X-Change-ID:To:Cc:X-Mailer:X-Proofpoint-ORIG-GUID:
+	 X-Proofpoint-GUID:X-Proofpoint-Spam-Info:X-Authority-Analysis:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Virus-Version:
+	 X-Proofpoint-Spam-Details:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:Content-Type:Content-Transfer-Encoding:
+	 Errors-To:Sender;
+	bh=d5ajHkfFFIv51iTHakVkOBzBzx2BXoW/GGmwZm8oXAs=;
+	b=orjbsBFYfdl9N7o43UCsFxmik5SARyyGwAI3kc0D4XeYg7ZNggU79HqVAoI35AdJDwZN
+	 AoE3EfuqckCf3/jIAQcwM9Un0KgpIAdZmya5IhsbNOy1/lB+RCPVY9bgWfiI94nX6oUsW
+	 Qu0SpoxFw3BRDwE3V5DD7mELBNX6IG49iDZ0ktl0E3KfHa8DPLOUNDH/XpgNLaLgLr14J
+	 4FXuHPMxA2VCjpKIaaQ24N84gfY389jvvH6lM2tQRtZXD3kuYyP5IMAgLLAWKO69/cqUC
+	 pPiawJPgX1Hb8wh8itaExT+EdWKY38jDyXCLqUulys7Ek9JXADeURcJpIovY8CehWdw==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	arc=fail smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1792572472;
+	bh=d5ajHkfFFIv51iTHakVkOBzBzx2BXoW/GGmwZm8oXAs=;
+	h=Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=c/rJ6PoJdbgM0TvcCEet0jVEfQnLWOJX6V8UO5hfUTdBZX2x8prMxiluQ+qzl13bd
+	 8tD0Uphj4hQ1UrFDnO6uec94dwHDRbsRCWf+KvvI7jNdkL5mMoaSf+qgeKiDPs/4ru
+	 aEGBjaKkRuMcRgrnyJCZCot8h7YjoYBXCjxGVpGbPrfIvTAuOcMzRmvkq72GIAM+tW
+	 lD6jPksN6g/s4k8Qrpl1/qrh9xWCu+ZTfx6Mi5lc3nyyPhXl4EkUX+WtL31x5PzFt5
+	 v2X6FmIqpLPK+A9HWbgG5lEU4/4sjozgCwuXuuuzCH1eECqVvN2AoA3WqEfFIg8jQP
+	 82tyPMHoaxFhA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2733B81027;
+	Wed, 21 Oct 2026 08:47:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 59702E50
+ for <buildroot@buildroot.org>; Wed, 21 Oct 2026 08:47:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4B12060719
+ for <buildroot@buildroot.org>; Wed, 21 Oct 2026 08:47:51 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SN8n2u7qwYuw for <buildroot@buildroot.org>;
+ Wed, 21 Oct 2026 08:47:50 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 2BCD86070D
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792572470;
+ b=h+Jbpa8gHDiKd7/dMzYWOcwKVsRHzPxQ9YAL/zdFMRBGK8o7CbPh/qW7QZ4Xs/Yk5kzJ
+ O1rBfBZu/eBTXuGo1EYi/JHt8MDyp3FGVhP18uiuATdam09JP+7A4LoejFRpA6RQ3xh+u
+ cDRqDfuPQknzFojnALx0h1s005EaAohxSmpSBC6B1KwLU68Zj254juUVRVdUmwQbAO+MV
+ ZtgkliLMu1/y4FRm0nk/tZVRptV3WaFicKKW6r5WHOYgS8O9bWQR+4mOI4FrFdidX4bSf
+ +vhSSN77ptl11tBQdnZSmYtC3TOzUJyxx7+m4CYfAChDyVLSY4rxya3yDVHXsdH478g==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792564798;
- h=Received-SPF:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
- Received:Received:Received:Received:From:X-CSE-ConnectionGUID:
- X-CSE-MsgGUID:X-IronPort-AV:X-Amp-Result:Date:To:CC:Subject:
- Message-ID:References:MIME-Version:Content-Type:Content-Disposition:
- In-Reply-To:X-Originating-IP:X-ClientProxiedBy:
- Content-Transfer-Encoding;
- bh=VjrXWvTuuKNXyMZAgVs6hRf9VfdUOeiy/9MDGrYZpws=;
- b=afnGweNFboqgjOed+mlT+iDE66fw0c11fm4J08gO+POk5Uluv0THw8NtKXPU+juhT66r
- oCVw4h/cNf6CRzWLKmYLED8HBWngcvqpw4gB4+s4mU8uXuQGD6f2V8COm4yRRObMCNvAI
- uTz9ieWamrg3RVGDJL3phfeJ7nRzF2x3mwkpnEMkCvcA1wXz78K9AJl2l1ZRV7YajbW+X
- CrOkDfQgvWeTKDg9mwLznTj7tG1bCJvT8Kn4kuJsdTpHFnnM0AzlpETp76a1sohUVkZgz
- S5lgf2oVuev0e5NvZHJhqaEvDlqZuC3FbDU6d8YvCJ17t0Hmlo+xpxqU69sATpatHzQ==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
- dmarc=pass header.from=orange.com;
- dkim=pass header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=qQsExqG1; 
- arc=none smtp.remote-ip=80.12.126.237
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.237;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
+ c=relaxed/relaxed; t=1792572470;
+ h=Received-SPF:Received:DKIM-Signature:Received:Received:
+ DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+ X-Received:X-Received:Received:From:Date:Subject:MIME-Version:
+ Content-Type:Content-Transfer-Encoding:Message-Id:X-B4-Tracking:
+ X-Change-ID:To:Cc:X-Mailer:X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:
+ X-Proofpoint-Spam-Info:X-Authority-Analysis:
+ X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Virus-Version:
+ X-Proofpoint-Spam-Details;
+ bh=oPFjMXnckDTP7gtQLpqIYhzvZ1q4a6U2AzyUr8HQDic=;
+ b=Pc2+XmqI3bRqjFKakSzHaBYrvfkTp2y+RdunqfnASttGa7oHVSW5qzHCMFdEiXBz3r7D
+ c5x7EZc7hFoL7mc3XTXtUbOb1vKssPm+BUoDBC3sCFLk9HsgpUWjBHajAUalJgdiSYmUz
+ BOMQ0pxLcQSu8SNTn+DPNYhZqJpUJ2/5zDl3I/MvuzkKdk67e8RP/QNwqYUJPt3hiTaPA
+ GCudHD6w4rj4c0MVPnesLx1HeE5Z4bT5Jkh0WlNkdxZVdwoq4zvAAmEMr2lDud8KhYfoi
+ cLXTSe2H3e+uGjJlIn5OflFm30txMfwm89EN+Q7mQ8gEsT4F0kj2iWl+sLRyCIt7pNw==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ dmarc=pass header.from=oss.qualcomm.com;
+ dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256
+ header.s=qcppdkim1 header.b=K9BvOvZI; 
+ dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com
+ header.a=rsa-sha256 header.s=google header.b=MY78ucfu; 
+ arc=none smtp.remote-ip=205.220.168.131
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=205.220.168.131;
+ helo=mx0a-0031df01.pphosted.com; envelope-from=igor.opaniuk@oss.qualcomm.com;
  receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=orange.com
-Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=qQsExqG1
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.237])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 190D280FB7
- for <buildroot@buildroot.org>; Wed, 21 Oct 2026 06:39:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1792564798; x=1824100798;
- h=date:to:cc:subject:message-id:references:mime-version:
- in-reply-to:content-transfer-encoding:from;
- bh=VjrXWvTuuKNXyMZAgVs6hRf9VfdUOeiy/9MDGrYZpws=;
- b=qQsExqG1AmmKqWai+CaMWPGlxG5EwO7qjN2yJxco3ImJfoUGp1EALbwK
- lX5GqSwMmtCs9zV//JOVcR8ua0iP0YUxTVDKeH4HZDfpXpA9oU0+MO1M2
- ldQN/18AF1owDpVmayWA3Ju6MCELFmBlnyhm/swDpJWItPMD8CCT02W1a
- LGN/2IgxO5KbcULnRKfVDXp20iq57xrfayWQ77SgWdQuxbiRrhhYx4+rZ
- RWIX7i006ElK94ISWbDc2mNfHmS8UXUAa2nRN8cXfbk5vDK3V0wpqjCPL
- dx4KyKq1P5rVU/UHOHqgY4LY52wCDvu3pF/+2EKog3nnJVXBTyW0yQRzK w==;
-X-CSE-ConnectionGUID: IVAhmJD0Tl2Ncwq7Qtzx+A==
-X-CSE-MsgGUID: PKKbyNHgRnOCh260RA/WSg==
-Received: from unknown (HELO opfedv1rlp0f.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/TLS_AES_256_GCM_SHA384;
- 21 Oct 2026 08:39:55 +0200
-Received: from unknown (HELO OPE16NORMBX506.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv1rlp0f.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2026 08:39:54 +0200
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX506.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.49;
- Wed, 21 Oct 2026 08:39:52 +0200
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Wed, 21 Oct 2026 08:39:51 +0200
-From: yann.morin@orange.com
-X-CSE-ConnectionGUID: p7hDCHhETUC8jScj36vreQ==
-X-CSE-MsgGUID: lmRXMhMtTNupdNHt3xsc8g==
-X-IronPort-AV: E=Sophos;i="6.27,169,1787004000"; d="scan'208";a="488058193"
-X-Amp-Result: SKIPPED(no attachment in message)
-Date: Wed, 21 Oct 2026 08:39:51 +0200
-To: Christian Stewart <christian@aperture.us>
-Message-ID: <atheN4vBnVfvFWCD@yd-6wlzhs3>
-References: <20261020195145.32754-1-christian@aperture.us>
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com
+ [205.220.168.131])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2BCD86070D
+ for <buildroot@buildroot.org>; Wed, 21 Oct 2026 08:47:49 +0000 (UTC)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+ by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id
+ 69L5ixGb756329
+ for <buildroot@buildroot.org>; Wed, 21 Oct 2026 08:47:48 GMT
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199])
+ by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4heda4u08v-1
+ (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+ for <buildroot@buildroot.org>; Wed, 21 Oct 2026 08:47:48 +0000 (GMT)
+Received: by mail-qk1-f199.google.com with SMTP id
+ af79cd13be357-93f20addba1so91309585a.1
+ for <buildroot@buildroot.org>; Wed, 21 Oct 2026 01:47:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1792572467; x=1793177267;
+ h=cc:to:message-id:content-transfer-encoding:content-type
+ :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+ :cc:subject:date:message-id:reply-to:content-type;
+ bh=oPFjMXnckDTP7gtQLpqIYhzvZ1q4a6U2AzyUr8HQDic=;
+ b=IbmKRUzuw80CmXlqcynx9su3AkZUwOosqEiF4IwyG8AYhfqG3UnuIVfR9uB2TzlVnj
+ YowOLPXpuG6UF/TvsUypC5tqoif1CVFEJVh+WpdjFwYYH7OpewI3yU/fu63/Zyy56Rm6
+ OrogLAbMgqUo5l2lmQhR4h4XtfOULqItwAReZBsc/8k8zMTwJq01gidDjrfNHNGuLgFY
+ i8CP9I//4Lk5js1IEDzx1zsmCS7gKOVjImakoo8nII/4ki0WsNi/NqJxAkYSbGiLYjXR
+ 1coIGKKpJWY8zNbw1qgkHQckaBYl3mHOQJNHNGF1gfuKZ/rQmbQC9bX3St+Jqb6cwexF
+ pKEg==
+X-Gm-Message-State: AFq9FYI/HYgbWXwtXk5867kTKUArbyclBcMbyqtnpJ+IeKfU+80mM9p1
+ 6xTKkIvJTiDNhlWwxlKpaAuKNYwKbskXjLWtITrO75js1Il+Obu2Zh9KJHFTAYDUaBsrxF5siJv
+ j+hr1DwNxLGlhb3sZuTPn/KvjPp2+AIeH0JIWx2XltOvQ5+LB+92rSnkBxsKV
+X-Gm-Gg: AYBFou0LiYhijWy39TvdvXhNJYYh9jdHJY15T+vDPx25yjTa4+itBWhiR6YvxmzXiew
+ BzlUB/LWAwUvsvgtryUJqmZH+Jd3Jy1s8Y8qd5HmKHw2c8hOjFmaPXeKqOU0dpFP8wNyqJfkNe3
+ svhCWjqsdLlU3NWON41KOmHFRS4NIVPIRfZwziWeznLzPOfHhDcs6IoR9dxqxfvaqEVpZVi4YgX
+ rAn9JQAAQat/pGWWyXnownwk8D/ocoywroEAO5lCQAj7HRrkskVgquEi57IOcaxxmXeI3s6qAz9
+ YEfn3SnsTlZqsXZXLHpGA2oU3cjzNEjs3EgvLuf66Dcaa/qqnbXpFAvb9Fu8M+1J/wwJ6G7qJ/Y
+ LO9k2nLSu9OtRDm/BvTRfcmvuiQXI+bnebmAQGIoIa9jj
+X-Received: by 2002:a05:620a:29c6:b0:93e:4e1e:aafc with SMTP id
+ af79cd13be357-93f57f2324cmr302705285a.36.1792572467467; 
+ Wed, 21 Oct 2026 01:47:47 -0700 (PDT)
+X-Received: by 2002:a05:620a:29c6:b0:93e:4e1e:aafc with SMTP id
+ af79cd13be357-93f57f2324cmr302703885a.36.1792572467082; 
+ Wed, 21 Oct 2026 01:47:47 -0700 (PDT)
+Received: from [127.0.1.1] (185-164-141-21.cgnat.inetia.pl. [185.164.141.21])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-c4678fa80d7sm54152666b.32.2026.10.21.01.47.45
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 21 Oct 2026 01:47:46 -0700 (PDT)
+Date: Wed, 21 Oct 2026 10:47:17 +0200
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20261020195145.32754-1-christian@aperture.us>
-X-ClientProxiedBy: OPE16NORMBX607.corporate.adroot.infra.ftgroup
- (10.115.27.31) To OPE16NORMBX506.corporate.adroot.infra.ftgroup
- (10.115.27.26)
-Subject: Re: [Buildroot] [PATCH v1 1/1] package/pkg-golang: use external
- linking on ARM Thumb
+Message-Id: <20261021-b4-qrtr-static-v1-1-b980f0bf22e4@oss.qualcomm.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWMQQ7CMAwEv1L5jEUT2iL4CuLgBIcGqaHYKUKq+
+ ncSOM5qZ1ZQlsgK52YF4XfU+EwFzK4BP1K6M8ZbYbCtHUxrDboOX5IFNVOOHrvBht4eD9SHExR
+ pFg7x8wtern/WxT3Y51qpD0fK6ISSH+u0zJqFadpPpJkFtu0LiTf6nJQAAAA=
+X-Change-ID: 20261021-b4-qrtr-static-462f5273a5f9
+To: buildroot@buildroot.org
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Fiona Klute <fiona.klute@gmx.de>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Sumit Garg <sumit.garg@oss.qualcomm.com>,
+ Jorge Ramirez-Ortiz <jorge.ramirez@oss.qualcomm.com>,
+ Igor Opaniuk <igor.opaniuk@oss.qualcomm.com>
+X-Mailer: b4 0.15.2
+X-Proofpoint-ORIG-GUID: t5PEIb-RiDyqyH4pzO5-YgAx0l4XIOYT
+X-Proofpoint-GUID: t5PEIb-RiDyqyH4pzO5-YgAx0l4XIOYT
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDIxMDAzNCBTYWx0ZWRfX0BoDC1q/cDw8
+ KU6Mak8jrgXDQ9xo64oMR8uipynZXut9hFWSoMD+9dOqkduJ2tKCV1fdpBpA9hPIGZSgMYBMwuT
+ +CqlHSgCz4IVS+rd/qbw1VAY+TC64ck=
+X-Authority-Analysis: v=2.4 cv=R7aWitRX c=1 sm=1 tr=0 ts=6ad87c34 cx=c_pps
+ a=HLyN3IcIa5EE8TELMZ618Q==:117 a=JsdSkJyxCPcZmfxNhm0PvA==:17
+ a=IkcTkHD0fZMA:10 a=660iZSQnnn4A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=Um2Pa8k9VHT-vaBCBUpS:22
+ a=YRHvXXt1AAAA:8 a=NEAV23lmAAAA:8 a=EUspDBNiAAAA:8 a=6H0WHjuAAAAA:8
+ a=qOitBILJYPvU8zZjW4QA:9 a=QEXdDO2ut3YA:10 a=bTQJ7kPSJx9SKPbeHEYW:22
+ a=9bw_jnHfPby8klRCszyn:22 a=Soq9LBFxuPC4vsCAQt-j:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDIxMDAzNCBTYWx0ZWRfX9ooPbrXDg8xZ
+ /Bou6nUQouM5vLOACbHavbk/kGxm1GSkJiSbhYuy1nU+GsE78u/8woL7642rowtXJxZHErFLFP4
+ 3EtnrLEJAKn2xpWTlZzBbG4LD1ye6lOXKH8d54jOM15kcgZBNxmw9vYnYkV7zKT4vAXSAgqcs5c
+ meAoHU+1g4CeHmYHHTGufwTP00mc5nCTXq1be0NcNC62a3qsCSL8LEoFQRLbQQgTmOTH7eZv0RF
+ w6BS+aGkhU8SqV+T507fdlsBv2hrjrY0NxwkxMSBOxkKSRZJwNiqMTLs9cRmUOZeLX5FXk9m4dk
+ rD6P2/kFwn+jJ9SfJgfgkZg5V1X8OF6AFT8irZ2+KYlTnUV2H/rqnmIHwLL2OxO8YNPWYLLINHa
+ VND8OPJ0CwSfTX+yrDcL/2GxPJphuValg9CF7IsITUffiT6Grhc5al9PvC0XrtbL2xINZODlX3R
+ KrjV4aBL0CpkM+iYHNw==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-10-21_02,2026-10-19_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 adultscore=0 priorityscore=1501 lowpriorityscore=0
+ clxscore=1015 impostorscore=0 bulkscore=0 spamscore=0 suspectscore=0
+ phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2610190000
+ definitions=main-2610210034
+Subject: [Buildroot] [PATCH] package/qrtr: fix static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -161,99 +205,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>, James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Thomas Perale <thomas.perale@mind.be>
+From: Igor Opaniuk via buildroot <buildroot@buildroot.org>
+Reply-To: Igor Opaniuk <igor.opaniuk@oss.qualcomm.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,
-	SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-	version=4.0.1
+X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Christian, All,
+qrtr 1.2 declares libqrtr with shared_library(), so it builds a shared
+library even when Buildroot asks meson for static ones only
+(-Ddefault_library=static). With BR2_STATIC_LIBS=y the tools are then
+linked with -static against libqrtr.so, which fails:
 
-On 2026-10-20 12:51 -0700, Christian Stewart spake thusly:
-> On ARMv5, runtime/cgo calls __sync_synchronize, which comes from
-> libgcc.a. When cgo objects have unresolved symbols, the Go internal
-> linker loads libgcc.a itself to resolve them. With
-> BR2_ARM_INSTRUCTIONS_THUMB=y, gcc is built with --with-mode=thumb, so
-> libgcc.a contains Thumb code, which the internal linker rejects:
-> 
->   link: R_ARM_THM_CALL, are you using -marm?
-> 
-> Go already passes -marm when it compiles the cgo C sources, so adding
-> -marm to CGO_CFLAGS does not help. The call from ARM code into Thumb
-> code must switch the processor to the other instruction set, which the
-> internal linker cannot do. Force external linking instead: GNU ld can,
-> by rewriting the call to BLX or routing it through a small stub.
-> 
-> Fixes: https://autobuild.buildroot.org/results/7534211959577546c3777939d11e411d8a417baa
-> 
-> Signed-off-by: Christian Stewart <christian@aperture.us>
+ld: attempted static link of dynamic object `lib/libqrtr.so.1.2'
 
-Many thanks for looking into this! :-)
+Backport the upstream commit that declares it with library(), so
+default_library decides. It is not part of a qrtr release yet.
 
-Reviewed-by: Yann E. MORIN <yann.morin@orange.com>
-Tested-by: Yann E. MORIN <yann.morin@orange.com>
+Fixes:
+https://autobuild.buildroot.org/results/d5f669f99f72ee68433bc8a1b1197594f46e8882
 
-Regards,
-Yann E. MORIN.
+Fixes: 81bec84bfce986a49b799384c3d0c540fda5367c ("package/qrtr: new package")
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: Igor Opaniuk <igor.opaniuk@oss.qualcomm.com>
+---
+ ...ib-meson.build-Don-t-force-shared-libqrtr.patch | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-> ---
->  package/pkg-golang.mk | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
-> index 3e388cb257..cf12dd56b0 100644
-> --- a/package/pkg-golang.mk
-> +++ b/package/pkg-golang.mk
-> @@ -146,6 +146,17 @@ ifeq ($(BR2_aarch64),y)
->  $(2)_EXTLDFLAGS += -fuse-ld=bfd
->  endif
->  
-> +ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS),yy)
-> +# On ARMv5, runtime/cgo calls helpers such as __sync_synchronize that
-> +# come from libgcc.a. With BR2_ARM_INSTRUCTIONS_THUMB, libgcc.a is built
-> +# as Thumb code while Go emits ARM code. A call between the two must
-> +# switch the processor to the other instruction set, which Go's
-> +# internal linker cannot do: it aborts on the R_ARM_THM_CALL relocation.
-> +# The external linker (GNU ld) can, by rewriting the call to BLX or
-> +# routing it through a small stub, so use it.
-> +$(2)_LDFLAGS += -linkmode=external
-> +endif
-> +
->  ifneq ($$($(2)_EXTLDFLAGS),)
->  $(2)_LDFLAGS += -extldflags '$$($(2)_EXTLDFLAGS)'
->  endif
-> -- 
-> 2.55.0
-> 
+diff --git a/package/qrtr/0001-lib-meson.build-Don-t-force-shared-libqrtr.patch b/package/qrtr/0001-lib-meson.build-Don-t-force-shared-libqrtr.patch
+new file mode 100644
+index 0000000000..05cf46faf7
+--- /dev/null
++++ b/package/qrtr/0001-lib-meson.build-Don-t-force-shared-libqrtr.patch
+@@ -0,0 +1,41 @@
++From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
++From: Luca Weiss <luca.weiss@fairphone.com>
++Date: Thu, 16 Apr 2026 09:08:41 +0200
++Subject: [PATCH] lib: meson.build: Don't force shared libqrtr
++
++Allow the build system to build a static version of libqrtr when the
++user requests it.
++
++As per meson manual:
++> You should use this [library()] instead of shared_library(),
++> static_library() or both_libraries() most of the time.
++
++Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
++Upstream: https://github.com/linux-msm/qrtr/commit/f83bb6c1a87a4a030e36796b4ca9240b0321e15d
++---
++ lib/meson.build | 10 +++++-----
++ 1 file changed, 5 insertions(+), 5 deletions(-)
++
++diff --git a/lib/meson.build b/lib/meson.build
++index aab46cb..faaf7d1 100644
++--- a/lib/meson.build
+++++ b/lib/meson.build
++@@ -3,10 +3,10 @@
++ pkg = import('pkgconfig')
++ 
++ libqrtr_srcs = ['logging.c', 'qmi.c', 'qrtr.c']
++-libqrtr = shared_library('qrtr',
++-                         libqrtr_srcs,
++-                         version: meson.project_version(),
++-                         include_directories : inc,
++-                         install: true)
+++libqrtr = library('qrtr',
+++                  libqrtr_srcs,
+++                  version: meson.project_version(),
+++                  include_directories : inc,
+++                  install: true)
++ 
++ pkg.generate(libqrtr)
++-- 
++2.53.0
++
 
--- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
+---
+base-commit: 4b65f6274e5e70e7101277a6580929abb39e8ef0
+change-id: 20261021-b4-qrtr-static-462f5273a5f9
 
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
+Best regards,
+--  
+Igor Opaniuk <igor.opaniuk@oss.qualcomm.com>
 
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
