@@ -2,27 +2,27 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0975F606A31E
-	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 12:25:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B3A0606A31A
+	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 12:32:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=MnqQ7ED0
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=axUJzH3u
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C7A67814A9;
-	Fri, 23 Oct 2026 12:25:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5B214813F1;
+	Fri, 23 Oct 2026 12:32:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2GPsuVNC6krx; Fri, 23 Oct 2026 12:25:02 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org A3443812DB
+ id r79dcnj810_p; Fri, 23 Oct 2026 12:32:05 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 8FF2B813B7
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792758301;
-	b=OWatxG47uBPqfTi4GgzFC5e57fBK7ApvjSJ7vYATOwDN54V63FAjgijk5UOGw+NKpiBd
-	 ShHDR1PRIulfwft+8XJe2WfpI4w8Q7wrfVGIznBdFbdY9yBNQkI3squQ2iVMS671nEDv2
-	 ssTTJW8zMWAJ6ePuAA4ClLIGnxAiOR1gxpbwmgOXo3t2TD9kepMYN7hd0A0DOznmS7W1B
-	 cV4B0yvG3bl8ro/jKtspr24SYDO2gM8Sg7sW6cE6E5fZeHl3gDPhh9BmazkiwGNolOOO0
-	 HbCf1hUMAFqY/wK1dW/VHhZY7E1Ep/c9bAgCRtf6YB7yGuysD9G9zYWCVhkAbhlibyg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792758725;
+	b=q3plM98MgKXgxAPWsJVy/qDXPRf8qha6RD+YawLgfdP3JP0acPaEH5i2cqNEmM3ousP9
+	 QuWrKfB5vddhZteFOuTwt03jpxwuJ+lFNUiqfvFvIurMR6ccHpnNc8nCUandQriOld4Xk
+	 BFLOfGdqU+wk/NJ5G9qt2syLnmHKB8wg/COeXTjad0YIbBm/0DtgU7sRj+2CIFGM15IXI
+	 D2Z5JlFM8OwyedlJP/FtCkdu/7c5koy5kSaWr+htV1vXUEA1lc9QD9yOKgCzwWtESuHer
+	 wXulE/qr1m089HF9w0DtLXeKakSEXkgYhSxfXMHuLmtCQNNowf6J0THyKmEoiCz9NtQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792758301;
+	c=relaxed/relaxed; t=1792758725;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=B9A/TuJZvYlzsiy0VEl9ZFec6qGySJTcCTaMQxdEVrc=;
-	b=kNpP9F+mf++XWrS6NqO72ZvlXj2cdm7R0wiCNdipPqw2xfIBQ4jLlKdoAt/eTJxv1BL0
-	 qznyxr0Je9dxvaCOUkuIEy3/ITyapFsU6Rygf+CMZ2uUivSinT1WpXiJak0d0sV5ZJmnE
-	 HKNdZy0JIw9hqIl4CV92VIFhb9+PdgpIOFjLssoTd8qDV6H+ph7GvUETC9957olkW0Wz0
-	 SzMeXMIeb+BDMM+ED5ql/I0F0Dyr+qRTmQdzLKE9trMXPYy0X5TMWDyWk4W7vg6Xi158C
-	 Beh6VaVi3yxPJwIAOhzBdM9Axbf72CCoHddFKFflcWNm2qLRy/NVN217WmcDHD+sU4Q==
+	bh=A8rMuhgWIvt5qu4OCs9/6Xhm2fW4qxhkIytNWIloZ4U=;
+	b=ISP/IGszY8oP4PeJq10bfSxOKu3FL4/uJ7Z2CzMY1U97ClkKQJYDXwfLy7uzNfoL9Wik
+	 MJQQbFsjlXF6Wqf5YFHq7Ls6HBbqrsFYGY0cignyaoopbN2r9XAu9Xrfsa+p+oet2Ovuu
+	 F5lVq0ifEGvLsCN5UI7cxIMR2d3X62md9uFJ6vAni62nDl6zgpfp8YKSmsguIZ3wJPXPH
+	 GatkA+H+IAQ1wHcs2cxuw9AUqfD++/vdENnomdGYVkkUZZbksB/MyjQKtVr+7BaIPtA+o
+	 VFJRKSgAja6Lr8s3z8aGft96sKMq26Qp/k1uzN6/GXfCdh18+j0W380gB5cKoAZyb2w==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792758301;
-	bh=B9A/TuJZvYlzsiy0VEl9ZFec6qGySJTcCTaMQxdEVrc=;
+	s=default; t=1792758725;
+	bh=A8rMuhgWIvt5qu4OCs9/6Xhm2fW4qxhkIytNWIloZ4U=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=MnqQ7ED04C2g3x4j3YGEDI1SRBx2xI9eYx+Unw1YxuocUMjFwbWQPa0urlYJ55tPg
-	 RmsGhqwuNIPuhhS9Ag6M6bnF2CEfNMyLMGkNHVh11z2gnnIkBaTq6WWPwSH2nnw+Yp
-	 g+drDncV2qs80bNoKHuQuS9rBhiLCWCtJI2xFEvQvOLezKCI95EblzbasXW0D+Ie+n
-	 XYIUlHx/8eWxInShSz/BE3s8U6NsN6uFRfQawPItfR13OnTMPJ2TJjHhM+T23TnGtm
-	 u+Sy88Ug6WkmQaqtxTJjb6eLDqKWA6lq3cUlDXSufzO6Yw7Q721nBuYfqsH2ZsjoY3
-	 584lqPN/BwVQQ==
+	b=axUJzH3uH34GZeKSglAgAbf1qLCLfVhQh6ePNS2heANKUVJlahd8Dz6n54hVoBGZw
+	 70Yf6wY6dnVokkbcCge5Ysd+FcX5EskB5fR0UDWuXqT9bZfYFrzM0Fk0ARPcKiuB3D
+	 cRWRvfhGkteYasuROMVjP7yfIb782OLMUkji6+a2ZSBCPAh1Th6eR60xe7QUqDk/jG
+	 nAf5XhyosbhCCnw32LFJnZH+wUQvcOOn4oFoVQ1eQS4FbgYTIOTX+yGc2WAo7epfcD
+	 mTStyNXLe4A/6EBDKcsG+6ft8om1AhaacnVXwa5EG118FAM6fpWVQ57KI2Xl8A0KfG
+	 xA8MpmJS12YMA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A3443812DB;
-	Fri, 23 Oct 2026 12:25:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9D03D2739
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 12:24:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8FF2B813B7;
+	Fri, 23 Oct 2026 12:32:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C969B12C
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 12:32:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9EBDF60633
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 12:24:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BB62340119
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 12:32:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ESB1OvGUL0Xi for <buildroot@buildroot.org>;
- Fri, 23 Oct 2026 12:24:43 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org DD73660618
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792758282;
- b=q72Wi40vaLzZJ7PtG09d53JOIcRw55LAqbXfbP2MUgSi1tLVlkx6T7I4SS6plEBzb82F
- ZHw63/QiFPqRVlhLicy+3jiad5j/kaswCsImVVY/PwbTyxUGqRRpb7D4FXbdA6JfNQ83r
- 7DVTVC3jX7U/WFKJ0D2g6Z54VR+7OsaTJR/q+Km3q+E7Bfi96u1nh31p+zCsUC6YWE5ap
- 2TIjMQ8xZvWoLSmJta3zeAUvA6nlbnt/Cp/td4lPVa4I0mo5MIb+Mz3w33uWQIl4A3TQR
- TOcmUm9PLWKy39MyNFCbN8n6RxxKSWbqT0mkhf6gmeQkHIn2g+iF9Q7SsZqrRGfrtww==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vPIHJyGU2UbQ for <buildroot@buildroot.org>;
+ Fri, 23 Oct 2026 12:32:04 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 30443400DB
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792758724;
+ b=eipg2qVXi1z/KmvI1Sv/2KvrIrkxbuzbkBeMYxEmwMD57v6bzIaFg6VA+v0wGqwp32iW
+ n8W0e0+sSx8pSvYqauwMr0YDZTvWH25Hu3pAMRvCbFfHAMExX/5I/MZQSTBHZfWFfd8LX
+ JebT5hjbOU5Sp0Jfuf5t4E4LX3NRtmbqdrVO/l0Gw8ZUd76366/beoeAipQWzWAd06h4G
+ YlIC6Uk07P/ozaQ55LFgvsjdwHt/buwQemwpsEitqCQLJERZCe1V/9QLnniGN6ym9lDVf
+ 27zQAdJ+tfjEpgXHAXsaXSHhLMJOfd1Bs+mqaLFMaaXGfGKDkI2kvwe4EFXCPzvANoQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792758282;
+ c=relaxed/relaxed; t=1792758724;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=NsPI7Pv21JfyedwYIfeDx72Q39TSoLc0WQAR5/f58oE=;
- b=rdnz4H6MPTQGeGkN2PcHHgA1KBbSMaaFUfhr+hP+eeP8FXUZegNFhn/cDYyyOB0PVZua
- uDKpic8PypLhyng/QL5+S2s5IWfL9oABzhm3cGFwaYy8GTIdwv7bpEp52oKdyNqIwOT8P
- zYJjJ84JGLcYX41Ms2PXzf4nKDojC3piGv9K0DkyZ53LDQt8VZFB8AOgXxkbv9PpmHmgD
- D6YFk9S/j3FAvSMfEUWw4NB+4/AkOLUf90EumoLd7mb7oS+npVlrDy8+euEDjuv7i/GMi
- j5myqb05PDbLjv+BltQSpF2/pHA5Ur17PvCHARtNVwIwq7vFepxnm6BHuE6MOI3Em0w==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ bh=ePcSW0GVnGeBxGtccU+Fe/qD1zyNt5pMEytacJHLDGM=;
+ b=s10tpUbkmrb2hoYaEXDnRo/gXn5QL5a3khxRHy96qmAlADL6M+WvlvAwtkEFhI5Acajq
+ y+faInsCJxOGELKw6d8bY9f2hhdlO6N73YJdbPpuJGjOYiOpDx6GNR8wqstxBEHmBsDEi
+ Aite1KvLuRtktQifsMUEoWrF5ebJ1mxArSKk2peUGtLkF1G8CwEpExopHUMYILz5JJgsV
+ ZAXe3Iu1x/JlQi5weE54oH2VWaTCuZyyHe6yisD09b3d1Cnk8xYS2mcKGFipAuJ0pQIkb
+ DnaY+yTpmFhSLTpbJRsHAB9dAlGQ1OJCxEnf0Ip25v43HrDM6gTxrVtOsNbed4uxg/g==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DD73660618
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 12:24:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 30443400DB
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 12:32:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 649049C66A; Fri, 23 Oct 2026 12:23:18 +0000 (UTC)
+ id B6CF29C669; Fri, 23 Oct 2026 12:30:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 22 Oct 2026 20:49:54 +0200
-X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: f9b94b567edd26d2e53cd59877133ed9f5383cab
-X-Git-Newrev: 0a9b75673ad0bd68d913cdfcb55676a44e448159
+Date: Thu, 22 Oct 2026 20:50:23 +0200
+X-Git-Refname: refs/heads/2026.08.x
+X-Git-Oldrev: 85cb9195db250012922721c2b37eb86e604f1505
+X-Git-Newrev: 054a087d8a77fa1677d4b95811a8f1d44d834f4a
 X-Patchwork-Hint: ignore
-Message-Id: <20261023122318.649049C66A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/firewalld: fix
- CVE-2026-4948
+Message-Id: <20261023123039.B6CF29C669@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] DEVELOPERS: move aichat
+ to maintainer entry
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,99 +114,54 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3338727235537185824=="
+Content-Type: multipart/mixed; boundary="===============4175426896464890088=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_NONE autolearn=ham autolearn_force=no
+	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_PASS autolearn=ham autolearn_force=no
 	version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============3338727235537185824==
+--===============4175426896464890088==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0a9b75673ad0bd68d913cdfcb55676a44e448159
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/054a087d8a77fa1677d4b95811a8f1d44d834f4a
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-The setZoneSettings2 and setPolicySettings D-Bus methods are guarded
-by the polkit "config.info" action instead of "config".  The desktop
-polkit policy shipped with firewalld grants "config.info" to any user,
-so a local unprivileged user can change the runtime firewall
-configuration.
-
-Backport of the upstream fix from firewalld v2.5.0, g5fb3914.
-
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Alexander Shirokov <shirokovalexs@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a498c7cbf61089f154e9f53a033e77bb25089340)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- ...use-PK_ACTION_CONFIG-for-set-ZoneSettings.patch | 41 ++++++++++++++++++++++
- package/firewalld/firewalld.mk                     |  2 ++
- 2 files changed, 43 insertions(+)
+ DEVELOPERS | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/package/firewalld/0001-fix-policy-use-PK_ACTION_CONFIG-for-set-ZoneSettings.patch b/package/firewalld/0001-fix-policy-use-PK_ACTION_CONFIG-for-set-ZoneSettings.patch
-new file mode 100644
-index 0000000000..b875e69903
---- /dev/null
-+++ b/package/firewalld/0001-fix-policy-use-PK_ACTION_CONFIG-for-set-ZoneSettings.patch
-@@ -0,0 +1,41 @@
-+From 511a305c504e4c0928eda670598528309da3436d Mon Sep 17 00:00:00 2001
-+From: Sizhe Zhao <prc.zhao@outlook.com>
-+Date: Tue, 31 Mar 2026 20:46:50 +0800
-+Subject: [PATCH] fix(policy): use PK_ACTION_CONFIG for
-+ set{ZoneSettings2,PolicySettings}
-+
-+Reference: https://access.redhat.com/security/cve/cve-2026-4948
-+
-+Upstream: https://github.com/firewalld/firewalld/commit/5fb3914ad830feff6cb2b0670457c60a323c6c6c
-+CVE: CVE-2026-4948
-+[Joachim: backport to 2.0.2]
-+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-+---
-+ src/firewall/server/firewalld.py | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/firewall/server/firewalld.py b/src/firewall/server/firewalld.py
-+index be53fbab..ceaa4322 100644
-+--- a/src/firewall/server/firewalld.py
-++++ b/src/firewall/server/firewalld.py
-+@@ -946,7 +946,7 @@ class FirewallD(DbusServiceObject):
-+         log.debug1("getZoneSettings2(%s)", zone)
-+         return self.fw.zone.get_config_with_settings_dict(zone)
-+ 
-+-    @dbus_polkit_require_auth(config.dbus.PK_ACTION_CONFIG_INFO)
-++    @dbus_polkit_require_auth(config.dbus.PK_ACTION_CONFIG)
-+     @dbus_service_method(config.dbus.DBUS_INTERFACE_ZONE, in_signature='sa{sv}')
-+     @dbus_handle_exceptions
-+     def setZoneSettings2(self, zone, settings, sender=None):
-+@@ -970,7 +970,7 @@ class FirewallD(DbusServiceObject):
-+         log.debug1("policy.getPolicySettings(%s)", policy)
-+         return self.fw.policy.get_config_with_settings_dict(policy)
-+ 
-+-    @dbus_polkit_require_auth(config.dbus.PK_ACTION_CONFIG_INFO)
-++    @dbus_polkit_require_auth(config.dbus.PK_ACTION_CONFIG)
-+     @dbus_service_method(config.dbus.DBUS_INTERFACE_POLICY, in_signature='sa{sv}')
-+     @dbus_handle_exceptions
-+     def setPolicySettings(self, policy, settings, sender=None):
-+-- 
-+2.43.0
-+
-diff --git a/package/firewalld/firewalld.mk b/package/firewalld/firewalld.mk
-index eae8afc27f..d2c87267c6 100644
---- a/package/firewalld/firewalld.mk
-+++ b/package/firewalld/firewalld.mk
-@@ -9,6 +9,8 @@ FIREWALLD_SITE = $(call github,firewalld,firewalld,v$(FIREWALLD_VERSION))
- FIREWALLD_LICENSE = GPL-2.0
- FIREWALLD_LICENSE_FILES = COPYING
- FIREWALLD_CPE_ID_VENDOR = firewalld
-+# 0001-fix-policy-use-PK_ACTION_CONFIG-for-set-ZoneSettings.patch
-+FIREWALLD_IGNORE_CVES = CVE-2026-4948
- FIREWALLD_AUTORECONF = YES
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d27bf5454c..0e9a391ba7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -87,6 +87,7 @@ N:	Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
+ F:	package/cpp-httplib/
  
- FIREWALLD_DEPENDENCIES = \
+ N:	Alexander Shirokov <shirokovalexs@gmail.com>
++F:	package/aichat/
+ F:	package/broot/
+ F:	package/kibi/
+ F:	package/nnn/
+@@ -131,9 +132,6 @@ F:	package/openpgm/
+ N:	Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
+ F:	package/libest/
+ 
+-N:	Alexander Shirokov <shirokovalexs@gmail.com>
+-F:	package/aichat/
+-
+ N:	Alexander Sverdlin <alexander.sverdlin@gmail.com>
+ F:	package/mini-snmpd/
+ 
 
---===============3338727235537185824==
+--===============4175426896464890088==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -217,4 +172,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============3338727235537185824==--
+--===============4175426896464890088==--
