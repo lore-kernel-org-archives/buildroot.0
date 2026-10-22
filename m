@@ -2,27 +2,27 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B543606A32C
-	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 12:24:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18108606A31A
+	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 12:24:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=TIU3VhNC
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=GvhAO9Cd
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 70705811D7;
-	Fri, 23 Oct 2026 12:24:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0EC8381371;
+	Fri, 23 Oct 2026 12:24:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jwwDFUbxSRbP; Fri, 23 Oct 2026 12:24:23 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org BDB8580F5E
+ id c3fzPB5Eqrmy; Fri, 23 Oct 2026 12:24:26 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 00F28812DB
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792758262;
-	b=MlxOZdhvOGGsbSNBT0cFp4IS1H/wul3FtNg/Ziw5Lxl8QqTC0uB6TytvBfIYSP2AAMDg
-	 OwZ/iK2NhCWfV1u9kC0PwzJufwi8edgUYJ3kCOHZzLzM0elnLaTpywM+I5Mc2BbDkE5vD
-	 GsYC5YO4McY5PjSPipWQvA9IVvzrZfqGMiAPM+dDuzdM3icLXcrwFWRb0X1ntQYdtBVE1
-	 UcWakt5DLkNNNzpmoYOO/kY9VqDIl8tS1Jo+a07d9mHjAULVx5lmQd4RRO2684qtOVkOp
-	 lQI5ikcZCinAmR6LmMXQUkOLMneQ7N5u/OxvN+TdMdLDL0DwJUnoTLedZmbieERS/7A==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792758266;
+	b=CZ+DeZbAa+abdq7sUIFfaK9QqraZ1p8dYmQEvWMwYYNSSHa2LLZoynAP0x8jo9utuRsX
+	 3CfjhHgfka1MUuSnyk9ZwUCyngqha4hyNGnxbAW5vQDOUm8cNhj9zEBhD/jRDJ8E9C+Ll
+	 ydv1g+SJ+yCCK8PN+GSaxvYlyegSDLxZBD1RMt2rbLRTSF3GXztVRofTQIO00QBun7KxT
+	 QvUsVUJfy1xGF9jsF20LWiDyU/LrJHMlM66DId6Lwe4+uPEfJz/Lcx68IqnaD7j6XsLbo
+	 TkMjkPpQcyRAZEQO1rpDqD4iv6FJ3Y8jFYF5KCv6qO9DDcoVQi5CxcZuzNeHayi57LQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792758262;
+	c=relaxed/relaxed; t=1792758266;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=UiItOrOJEbSfKqGg2ZcdMOHaV/F7LFhsKqkFGOdI0+M=;
-	b=CQcLL9aWRtSGXGflt8I9RU5lgWDOFFhtCYp9Sr4Ru6tnqD57zml555D9Vonc8TO+DHCB
-	 XRwewp0VRgGQUC9bPE6fyak6WZJix5yL2eJAa4Twn7VQwoUXB9GxpfmWCxGVdI2UaG+iW
-	 mmEkR0kWSYzh+YpNo5+HZx3RJ9DuVL33rbnYcfTWPj1ZVMtrZScdUdtGmwADZpbHa0frv
-	 UH4jVxeIZp6XemC1oDNO7g/9KUaQrkWo6jnEAjDfqzOVecxDhrjnFQevsFcFHLlO7XGHR
-	 uFSAXm9tVn3w5ovfb9n7l/ajxW2uUfw1X+vD9p2hW8+UCodzYufrjjxn1GWLwD4k6jA==
+	bh=rzWdDlj0av5tHwbHMJp+varYooWSyvfHzcZT6mPWiGc=;
+	b=kZ5+DYahGgSFPujiJHZY6I1z39iwhaCJhO/N5A0kbZ22n+URtCG4GnIroE3vZolYAutz
+	 sBytMt5BGmPxf9hhKFjrw06u8pByc+0Lq0+2rLjR1tPM5fwcAMWRuYVQTotP4opJUc4Fr
+	 MiEiY3c/AYV+9z+heWnU5dNYA7nDIf9JBTCK54u7NkasW99yHLdYfPBntavHPZceXc+Pi
+	 Xg1Zz9VFaX3APqgilRBL/jZvcbRtQGbyfLuWTPaNxkVy4TX2g1gycF2ENGsTl05PMI4MB
+	 oF7qvexsI4RuEIu7sMW9CXFChIEA53Q4M3uW/qzm4cg+X5Qp2INBwAr7FgV+R3bN9Pg==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792758262;
-	bh=UiItOrOJEbSfKqGg2ZcdMOHaV/F7LFhsKqkFGOdI0+M=;
+	s=default; t=1792758266;
+	bh=rzWdDlj0av5tHwbHMJp+varYooWSyvfHzcZT6mPWiGc=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=TIU3VhNCPXKrhmlM2ymVNVqt1PZpZXsBYVOIjrPvndG5JJFV278Qtl59Uf78jb971
-	 z1K/Y/FwYooxYbNRE3sh7Gzfr1J4GS74sYhV3cVsPSd9iDpRU7GkwAJMoFrdzZrz2w
-	 Cxt/eTDfDwC21cN1g4b9Y7gtQeM8kP1CyOMcJ66VCuNpEqmt6+g3VGtCEM+mSGCcGi
-	 PTMG0qTSfavAIx46dta/o9HPSTLKUY/FM1IqY3fq2XqCOrso+hkdYCqTD2y7K90q5L
-	 //0POTINnJ3nAqkCRKFSESAZ5/d5wozCV1oH0bD4EL9j5sNOHUjof0P4h3plmiWrAq
-	 KoPny2B3a2lDg==
+	b=GvhAO9CdK2H5aEe/EKx/+40M5gl19BfHkIcyuW5PCna59psW2Lx19FqTkET78jy3z
+	 kH9oRN2bdRZIx2k/719yDqkH1DFD2upT1adEeZOsjH7r72uf2zoQUYeRVoyYntbgGr
+	 j1MXF8zVkkeVNlQkHEFM+3Fxqz1gbuMTbSO1fK794QdAE2RnqZiRoaw5iRhFz4U2v6
+	 jbrchZVDwaI0PZUP0zYzYp1a1kvYaeAz57zyJPL6cBPgMa5DxscHliMFoB8JHHPLtd
+	 B2diPvXp7FpIYbdf3U0vCDU7i3v5Z+smJjx/6pQmw7uGLamo99n8Sx+dEpxZs3B/CX
+	 wUds0bZkCuotw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BDB8580F5E;
-	Fri, 23 Oct 2026 12:24:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 72F6623A
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 12:24:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 00F28812DB;
+	Fri, 23 Oct 2026 12:24:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4BFE723A
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 12:24:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5856140119
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 12:24:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3D4DA40782
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 12:24:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1ZmuzcINTQEC for <buildroot@buildroot.org>;
- Fri, 23 Oct 2026 12:24:19 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 2E7EB400DB
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792758259;
- b=SvgCqZQzc1oVyVLJJstM+wXPxkUxHtXGCMhtgA7OT9M70u7c2CAHdvSJxYfHWSr3JSJP
- CXi1IUonlyCNe12ElXoCVyu58lX9IUiGkoBVJ40q7dR5iin5aQpKDu07p0HYrngUfqpsU
- S4dES4QJrzkFegQplbvFVuSGOHzXKfLxd1be7HEpg1Wnc1FFO8S47vndRtONjwq/KSMS0
- zbTSSfTze+jSnRhgPLHFjwKyRzf2CCFK6vT68KAEKMF7FY2qOApJSW48FCU8DZOunfDwc
- Jluz/LNAhxIf2Vj9YoZublfRByNq7dyDTpUtUpmwBr/gLxupeIiEGAysajo27s+vrrQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id B3CkJKcIjiGZ for <buildroot@buildroot.org>;
+ Fri, 23 Oct 2026 12:24:21 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 8D4BE4072E
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792758261;
+ b=BspN6/LHmSWCAY+1QvHUo11kyG8xYkK2L43ElWFKOrLG2aa9OKeDJu58gt1QydaVceY9
+ O5WROdV+maJ4dL3wPTM8ZBZrwA2zA/ODnRWI64mq0377spykmv2rGsLvxIXbjTLdtW1XJ
+ 73nQKbnRfdYSpSmDiKZDtifo+ciMn0SchmXUQv74qlONK3UMJyf7KR1zXabN+E1MYtkos
+ kyBOYVPKnKwvUfN86+oBvJbYaGCsV0/ARfIYuPM3wVHrqIvay77+AoYjkqR2+raABI7C/
+ gtg0QbMjI3m/Cp4TO7KsPj9ORARiGAbKjGsxrlcTzjFnF5QFEawcY2+rlkyaCWXcXIA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792758259;
+ c=relaxed/relaxed; t=1792758261;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=57Rbk4355bJ/gJF7cAxxoH0Lt5x3Y37dF+uZ60BptZI=;
- b=Cja/xq5f79wxqohKMUUBR3jDASf2eONOyaTXI6BH4yLRz8WwDadwVzQxEVQbHmfiDiMP
- gh2sSznq1qD6AuhTx+tfbi1UO1GljoKm++Fz6MI004IWc/az2fS15uflZnSkwAkjw0AVz
- srURIrSolctXFsrjbsqRbkVeKvlP5O/ZRu8/4ULqV7GQfgnGCJutVZeLJG3WOM5sAojG6
- frBHKDjwPMYRiVWLyC7EU78TyMtcMlAliOJaknnrutPrvrZodwqJ6H7MzvIEdm8Tcxq0D
- OX+EWVXbXR4yJGydKunEv+RtG5KIbItCsrNuTseJ+52eA7p0VbT+lIKhIi42uiWwdFQ==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ bh=+oXe10h/+0zVG3vFbLw0F3PJeZCwwRToncEZ80WOPIc=;
+ b=aPCKUUf96YJxPdIs/4Hcj+A4P0pvCffSvZzO1kMGc63RO3XGzYrVaOoLYxYuyC8Vytaf
+ t8JVB4itsF+pHwX74sc678l7TQZ05aJ7nk0F72EKR/kZC95LFYs0y/uAzlMwWRWRW7L3J
+ QBaL28dohh2YLyzNSi77emyIV4OuOw0mSYt5tjIAOnK08UpfwqvJg0Yi6OU2CsWrV9CtO
+ +qPdiJbsmyaIXxtKweQgM4ZmsV0Ho18wPmMPIEnFhunsrtMZhv6YDnRblypyW7/Y8zQJH
+ 009LUP3yxkPezbvA7Gjyt0Jxqnq4rcwKuWoFDa0qr5iC73+L5hhwJd8W/xPfWHBsE9A==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2E7EB400DB
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 12:24:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8D4BE4072E
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 12:24:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A44019C66B; Fri, 23 Oct 2026 12:22:54 +0000 (UTC)
+ id 138E09B9AA; Fri, 23 Oct 2026 12:22:57 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 22 Oct 2026 20:49:51 +0200
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 4f5b0a9d8df3ebc4dc1fd5055a1893f8c97f9bc7
-X-Git-Newrev: 5d0ad5b077ce7b53b99e499e6f3db543b0fddd69
+X-Git-Oldrev: 5d0ad5b077ce7b53b99e499e6f3db543b0fddd69
+X-Git-Newrev: dd33fed5e1bdcda6959f52c5f6a1184a8367ffb1
 X-Patchwork-Hint: ignore
-Message-Id: <20261023122254.A44019C66B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/uclibc: add
- missing sys/auxv.h for static builds
+Message-Id: <20261023122257.138E09B9AA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libzlib: upstream
+ patch for CVE-2026-85091
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,7 +114,7 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3613225011498945812=="
+Content-Type: multipart/mixed; boundary="===============6913234995722342158=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
@@ -124,91 +124,88 @@ X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============3613225011498945812==
+--===============6913234995722342158==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5d0ad5b077ce7b53b99e499e6f3db543b0fddd69
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/dd33fed5e1bdcda6959f52c5f6a1184a8367ffb1
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-getauxval() works fine for static builds. This was already fixed
-a while ago, see the commit message of the patch for more details.
+This fixes the following vulnerability:
 
-Fixes:
- - https://autobuild.buildroot.net/results/f03/f03380ef48cea232e4958084eae419d5516f4ef4
+- CVE-2026-85091:
+    zlib versions 1.3.1.2 through 1.3.2 contain a heap buffer overflow
+    vulnerability in the gz_vacate() function when processing non-blocking
+    gzwrite() operations with stale external buffer pointers. Attackers
+    can trigger the overflow by calling gzprintf() or gzvprintf() after a
+    write stall, causing an unchecked memmove() to write beyond the
+    internal input buffer boundary.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 471feacb2d9c13190d635721208b9d31e995d04e)
+For more information, see:
+ - https://www.cve.org/CVERecord?id=CVE-2026-85091
+ - https://security-tracker.debian.org/tracker/CVE-2026-85091
+ - https://github.com/madler/zlib/commit/df84af25dc1942490e1d1c899a07619152a46148.patch
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+(cherry picked from commit 58e72377a0eaa0b76f252c6351d25cf31c25a7ee)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- ...nstall-sys-auxv.h-for-static-builds-again.patch | 57 ++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
+ ...ffer-overflow-bug-in-non-blocking-gzwrite.patch | 31 ++++++++++++++++++++++
+ package/libzlib/libzlib.mk                         |  2 ++
+ 2 files changed, 33 insertions(+)
 
-diff --git a/package/uclibc/0006-buildsys-install-sys-auxv.h-for-static-builds-again.patch b/package/uclibc/0006-buildsys-install-sys-auxv.h-for-static-builds-again.patch
+diff --git a/package/libzlib/0001-fix-buffer-overflow-bug-in-non-blocking-gzwrite.patch b/package/libzlib/0001-fix-buffer-overflow-bug-in-non-blocking-gzwrite.patch
 new file mode 100644
-index 0000000000..74d14b5501
+index 0000000000..32aaabcc76
 --- /dev/null
-+++ b/package/uclibc/0006-buildsys-install-sys-auxv.h-for-static-builds-again.patch
-@@ -0,0 +1,57 @@
-+From 6dc9f06a0330f11171f76f4b831724c02642f11f Mon Sep 17 00:00:00 2001
-+From: ramin <lordrasmus@gmail.com>
-+Date: Mon, 12 Oct 2026 16:30:56 +0200
-+Subject: [PATCH] buildsys: install sys/auxv.h for static builds again
++++ b/package/libzlib/0001-fix-buffer-overflow-bug-in-non-blocking-gzwrite.patch
+@@ -0,0 +1,31 @@
++From df84af25dc1942490e1d1c899a07619152a46148 Mon Sep 17 00:00:00 2001
++From: Mark Adler <git@madler.net>
++Date: Wed, 16 Sep 2026 16:26:14 -0700
++Subject: [PATCH] Fix buffer overflow bug in non-blocking gzwrite.
 +
-+getauxval() has not needed ld.so since 227b7c825 and 737a0edf4 ("Make
-+getauxval work with static linking", "Support non-cached entries in
-+getauxval", v1.0.52): _dl_auxvt and _dl_auxv_start are defined in
-+libc/misc/elf/dl-support.c for the static libc, and __uClibc_main calls
-+_dl_aux_init() on that path too.  The static libc.a carries getauxval,
-+__getauxval, _dl_aux_init, _dl_auxvt and _dl_auxv_start.
++This addresses CVE-2026-85091.
 +
-+Its header is still withheld, though.  df81bd1e2 ("getauxval: remove
-+header for static builds") put sys/auxv.h next to dlfcn.h in the
-+HEADERS_RM line that applies when HAVE_SHARED is unset, as a way around
-+the link error of the day -- a package that probed for getauxval would
-+not find a declaration and would take its fallback path.  That error is
-+gone and the workaround outlived it: a static sysroot installs 70 of the
-+71 headers in include/sys, and the one missing is auxv.h.
-+
-+So a static configuration of, say, openssl fails with "sys/auxv.h: No
-+such file or directory", which reads like a missing feature rather than
-+a withheld declaration.
-+
-+Measured on riscv64 with a static configuration and gcc 10.5.0: with the
-+header installed, a
-+statically linked program answers AT_PAGESZ as 4096, matching
-+sysconf(_SC_PAGESIZE), returns every entry of /proc/self/auxv unchanged,
-+and reports ENOENT for a type that was not passed -- both for a type
-+inside the cached range and for one above it, which takes the search
-+over the whole vector.
-+
-+dlfcn.h and bits/dlfcn.h stay removed.
-+
-+Upstream: https://gogs.waldemar-brodkorb.de/oss/uclibc-ng/commit/6dc9f06a0330f11171f76f4b831724c02642f11f
-+Signed-off-by: Ramin Moussavi <lordrasmus@gmail.com>
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: https://github.com/madler/zlib/commit/df84af25dc1942490e1d1c899a07619152a46148.patch
++CVE: CVE-2026-85091
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 +---
-+ Makefile.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ gzwrite.c | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
 +
-+diff --git a/Makefile.in b/Makefile.in
-+index 3b28fbf60..72865863d 100644
-+--- a/Makefile.in
-++++ b/Makefile.in
-+@@ -257,7 +257,7 @@ HEADERS_RM- := \
-+ ifeq ($(UCLIBC_STRICT_HEADERS),y)
-+ HEADERS_RM- += sgtty.h
-+ endif
-+-HEADERS_RM-$(HAVE_SHARED)                    += dlfcn.h bits/dlfcn.h sys/auxv.h
-++HEADERS_RM-$(HAVE_SHARED)                    += dlfcn.h bits/dlfcn.h
-+ HEADERS_RM-$(PTHREADS_DEBUG_SUPPORT)         += thread_db.h
-+ HEADERS_RM-$(UCLIBC_HAS_ARGP)                += argp.h
-+ HEADERS_RM-$(UCLIBC_HAS_BSD_ERR)             += err.h
-+-- 
-+2.47.3
++diff --git a/gzwrite.c b/gzwrite.c
++index b217b85ce..512329244 100644
++--- a/gzwrite.c
+++++ b/gzwrite.c
++@@ -242,8 +242,11 @@ local z_size_t gz_write(gz_statep state, voidpc buf, z_size_t len) {
++             n -= state->strm.avail_in;
++             state->x.pos += n;
++             len -= n;
++-            if (ret == -1)
+++            if (ret == -1) {
+++                state->strm.avail_in = 0;
+++                state->strm.next_in = state->in;
++                 return state->again ? put - len : 0;
+++            }
++         } while (len);
++     }
++ 
+diff --git a/package/libzlib/libzlib.mk b/package/libzlib/libzlib.mk
+index c73328deee..18438415d0 100644
+--- a/package/libzlib/libzlib.mk
++++ b/package/libzlib/libzlib.mk
+@@ -14,6 +14,8 @@ LIBZLIB_PROVIDES = zlib
+ LIBZLIB_CPE_ID_VENDOR = zlib
+ LIBZLIB_CPE_ID_PRODUCT = zlib
+ 
++LIBZLIB_IGNORE_CVES += CVE-2026-85091
 +
+ # It is not possible to build only a shared version of zlib, so we build both
+ # shared and static, unless we only want the static libs, and we eventually
+ # selectively remove what we do not want
 
---===============3613225011498945812==
+--===============6913234995722342158==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -219,4 +216,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============3613225011498945812==--
+--===============6913234995722342158==--
