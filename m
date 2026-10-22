@@ -1,104 +1,179 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5328B606ACC1
-	for <buildroot@archiver.kernel.org>; Thu, 22 Oct 2026 15:22:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5317D606ACC1
+	for <buildroot@archiver.kernel.org>; Thu, 22 Oct 2026 15:22:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=borOi4aL
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=BglnSpLM;
+	dkim=fail reason="signature verification failed" (1024-bit key, unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google header.b=FkIEAgt6
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 259C440993;
-	Thu, 22 Oct 2026 15:22:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1EBDE811F3;
+	Thu, 22 Oct 2026 15:22:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rCqm_HvlhC9d; Thu, 22 Oct 2026 15:22:05 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org B2DF040877
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792682524;
-	b=LFlsX701UqUjb1x7vtP9c4vd4gFG7190dNVGWXf/dVqVhtCRpvIjA2YFKNjCOQClJfbH
-	 CMgnCINXb+F6DMHIAMF7+cqBWQIPT4yoY+qND9UPqS5IdQDmYfluJVwrhCZ/tZ52chxZK
-	 p0oYb9MXMk6Uk6wSAc3VRrYkQKN7eo00vKPSmlA/aiadFdBas1veLQRd+BhaK5OGyYyMY
-	 mMHHmXrTu91D2t7aryYPH6o2SjCEqbRS8d8bSA9En2/+oh2E5eIozVVbr60z1uyN2zCNm
-	 NlHIv3yjrBTG9xFATuryE7zKHz+cSxCWNAOV406vFuMvD4QguF1IoVUV+xZshYhox9w==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792682524;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1dYx95ayRQd1; Thu, 22 Oct 2026 15:22:11 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 060A3811F8
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=3; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792682531;
+	b=F08bVJVWMm1++753doyKN+aiaB3163cBJX51V7jSk7o1M/R+KVNkOfntnVX1wAAxjMS3
+	 gtmQaKeNIQXQ6ZX8BINlVavI9C3dPu5fMb84wj6YYZrZvg8oxXeLMUHM6l5ADusPCaekT
+	 SqIM3mixYfB+i2KX7yvkmivFmNvixd/JXMNL5DJZioany2y/BmEdzq1yWleoEZM3Lzm5N
+	 xYE2Hzyrg+UhCCg2rgq5z4owtw0bmevPSt9T9DTeZ6a4HvQ2NumE2H8y1wgGbcvaBLVD1
+	 L1VgUvR+s71Z5DWEGdXGIT+xm7JWHZmdAKGomHv51On1WRf36eLM5gkKSfiNZQoa2Ow==
+ARC-Message-Signature: i=3; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1792682531;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:MIME-Version:References:In-Reply-To:From:Date:
+	 X-Gm-Features:Message-ID:To:Cc:Subject:X-BeenThere:X-Mailman-Version:
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=UoUOzP8zpt2TbS2aDS2qW5/PE+gJqHDtAURKT3JbR4M=;
-	b=NPkgbM7oogD31BooqWBUIl3ZaRDRpki0sycDiucRutrt7NyzhDPqDriHKcYzdeGzAf8x
-	 Wp9izRxQDMSTF9Dr0rDIV2Hvh62E4DvXUzYlhcW/k0p3SZRV5y7O1VT4egpl6vlAgJ9oA
-	 NeDjmj7bTP7HVc6wyH7/voqoTO4w9a7aUOYTsppAjNE+PL/A2v2wz4N9YpuNGw3tJrLkw
-	 gg6Wq4TivB2wQYN2JZlmVeddufYzqP+5VD4nMKuHZ/7XLu2t77Lj0ZMbBAmE2lpk8DIK8
-	 6V/7nfVmjygle+7bPX5SO+7iJ1Yn8YEK+6xek5zbxyCagZ0uFtzaBoKkGHdsuRSZNKg==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	 List-Subscribe:Content-Type:Errors-To:Sender;
+	bh=RpULm8VcF/iA7zPFBxp9L5p8jcBhkqF+XU52ztZ1/R0=;
+	b=fdLgtv9Ayks+Nfhu52Qu2RFWq4Qui0Li8RypJJQtqG3G+oRuWEinSXUuGlmkExi5Mqk9
+	 OgUoGyPKMBkDzOiP8IsDT8GnvAwEN58VWDVe7RvNFSaDOWDBVao+h35IOnnGQssE1lha5
+	 X2aYHrWwPO5IqYdSxHHgxzBK7toYqZj9V+MoW0COBcO2tdII3QKN7z6xiP0vDCvcSdgDC
+	 TJLGsBa05FlXutTdHIUIGCAit0eo2PsdmZli+v7PliHkM36qMlYuojCQXcwVE+L3dP35E
+	 0ZqusVfVwEN58KfYXomfYsUA+uEaRxCaZgf6mFHxPHs0s3ptIKnPyNVDm2/mFp4AEMQ==
+ARC-Authentication-Results: i=3; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792682524;
-	bh=UoUOzP8zpt2TbS2aDS2qW5/PE+gJqHDtAURKT3JbR4M=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=borOi4aLa1a4YxDlS94LTj+l6+zceVnqSHkI7BWTJ70j7qn3wgEolHFJxNwMS0BOQ
-	 Pklc7EaOqQdeDHSj5CREGzkhgUa0n6Lqu6Z2ZXsvWzOSlRGNYDQ9UUv2vyxh95VrBm
-	 ee/6RLJCHcnJBJH7CDMltNBuD15V1+tnx/gCNxdMqE+W/x/sNk56ZPMyxKdyBhji/z
-	 vuNHurIWnI19CyXXXlclwcnfW0xsX6S6hHDrF9yyVNn2wBUv5XUQTKdgAhSaMkULR4
-	 a3Dmhm2q1KdxNwgoRUXA7U3xZTz/k4n+VZ00X2/MK3g15QmkphSQR2u7/uIdsIcw+d
-	 pGQx679cBM28Q==
+	s=default; t=1792682531;
+	bh=RpULm8VcF/iA7zPFBxp9L5p8jcBhkqF+XU52ztZ1/R0=;
+	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=BglnSpLMECkZBDm6JU0M9qjXwuClvlSzmvnZ7iwrTSCaxOdefk67JOS3Pypy11sEC
+	 NiVE05Nz8QOa5xaykEV5kYyTqQnsYyxYHkcZalmZL1cTY52SfSBVvGs56Vpb8xonBw
+	 N5Pp5cm494y0QpgLLB4mUw+59oBH7OJFIrJ3lo8rkLAt/x42kh4MBTxblpEyTWttuG
+	 lWvkal/Cix4cNLOPdN1izDgPGmjOLeDPsTEP10N/6ArN1ap9SwjyMy4YSXXifWMPCq
+	 M48zp/RzKDWs9c4Nffb6QyLmyXMQUR2Oe2l3uUMA5MCZXJiol7lFKgJpd/QUXmqT1x
+	 Rkcg+ZS3WSAog==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B2DF040877;
-	Thu, 22 Oct 2026 15:22:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 8FF3D3A4
- for <buildroot@buildroot.org>; Thu, 22 Oct 2026 15:22:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 060A3811F8;
+	Thu, 22 Oct 2026 15:22:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 93A9795C
+ for <buildroot@buildroot.org>; Thu, 22 Oct 2026 15:22:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 821E640877
- for <buildroot@buildroot.org>; Thu, 22 Oct 2026 15:22:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 79C776069C
+ for <buildroot@buildroot.org>; Thu, 22 Oct 2026 15:22:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qIJz3L3kSeQw for <buildroot@buildroot.org>;
- Thu, 22 Oct 2026 15:22:02 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 804A840800
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792682522;
- b=phEz8IHSAd2ACTlG7tcTFAX50eQTrNoWMDrf0d0HuWjEzrnx3gEuKz0I8lZTcQE9eAo2
- hxbpvjsXoZ1PS4kT3J9e+XL9XrtdQ55Mrj1rZJWoFYoL6Wmb1P4uGchKnIq3x0HvfMWMm
- w49qj1ukr4PdAZEjUamFpPEPBZ7KWifhK6HHk1hyMqStzMAJ8F5pU2HEuI910if7OQknW
- pa/7ICiLeOsWtQPCfNiM1HhC+6wX7S2/yIMXMyTfRnYgXd3qjaF3EtQYgcy2xIiPdiAX7
- Rexrn651Thb2A/NXDKEGqFTWHgHV5iHtOt25IUyIKzZKrYvXd2ytMxYtDvjB++2vUuQ==
-ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792682522;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=0jnv5fjlvRmy7B4TS7Z+UaxTNcpyu84QTQMaAf91nG4=;
- b=RBLr1hiXFghqg/W8ZyiGOKZ2vtqdjhQkaxRXbm+pblDtXpsqznxZ1w/0zbuzazU5FuOV
- whkbs9OPea7/gqcEgAJLfoUE/lB3fVmswmkyCnALbKjjvMKwtYNPXi0s4I2sbMQGeRaSj
- 1O0ptpRCKJwzJbci0X6FcyDpqKt2egIZA7KBd/ztoGeXok4kmKAHxqTXZTsWk5GtYgQR5
- CM8yE0Y8LJaLruZ4mBIcRFnez2o2Y3tNkBkC1friIsCTn9YVlTpERORRXsKNjsmR2srjw
- cj0Q5UJNk27L6wj0I5gg9p8F9ccf6jzp18YAPnZU2T1eMzyvtqX+IgOMPz7GI7mZsPA==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 804A840800
- for <buildroot@buildroot.org>; Thu, 22 Oct 2026 15:22:02 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 746809B9F9; Thu, 22 Oct 2026 15:20:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8idVro9_9B1F for <buildroot@buildroot.org>;
+ Thu, 22 Oct 2026 15:22:08 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 26B3060680
+Authentication-Results: smtp3.osuosl.org; arc=pass header.oldest-pass=0
+ smtp.remote-ip="2607:f8b0:4864:20::112c"
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=pass; t=1792682528;
+ b=VYg17y4h52NbB27AHXNFTqunjmdXJ3sJcflf+JDvvMwAmsBdSmbJXV0g6KxnuuZa+cCd
+ KlDrTi0fC4mSxebI1IcMzIEY/PZ53VrrQDe6jhEquHmTRo9tk4iXgHkxYl+bfVJCaEwGv
+ GqLZ3CoIVzCpkAnsr//8FlVwIAWdSll6qTghIX2QRX1kW5unSTUcQTEdYs6Zq7pSika+o
+ QMO7Cdle7HOyExRAmLsfqfm+LvE96j0sny4ezV7P657HFT67rEFojLzYmNYPT/ZErvv9X
+ ElB6lJB0fTH1+lNc7uJOxBjCvwEIV6E7uRxaZrHaq0aR9F+f0njNWu6h+sXT0w7c0mw==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+ c=relaxed/relaxed; t=1792682528;
+ h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
+ X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
+ In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
+ Content-Type;
+ bh=EHt24r/LfFX/D0CTNdl5F88NBySzw1MVOHpAQEeTx6U=;
+ b=FM/4U8NwUDh3g3QRGYFp4+OLcD/H90K/C+ypMoh+OYEBTMFsOlM8EVopOYO5bZre6uXN
+ CABjoxuqkLBhgEE9tfnhZJT6fosZ8qsiugNM5+hE/LusrKlUeDpfvACMoAF/e+lJGvt5H
+ CEPGP1JoMnOJAqqtLogVDUaXJAb2mostUTm0jHlBUuhV4BJb6EyrQVWTDIL6xnTChfNdV
+ T2CngzcLwzYiI+OeJ03nG+tcd55TI+fTLF8cuWSxYCFQvYLishs3NwQd2CnjNwA1eQi9w
+ KrUJaN/CZfL05Pwp9g3FpiPAP6E4WHgJHXw+6Unkt+DBlWzg8p1NbVd7qSlWI8NiQ/A==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+ dmarc=pass header.from=amarulasolutions.com;
+ dkim=pass header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=FkIEAgt6; 
+ arc=pass header.oldest-pass=0 smtp.remote-ip="2607:f8b0:4864:20::112c"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::112c; helo=mail-yw1-x112c.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp3.osuosl.org; dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+Authentication-Results: smtp3.osuosl.org; dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=FkIEAgt6
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com
+ [IPv6:2607:f8b0:4864:20::112c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 26B3060680
+ for <buildroot@buildroot.org>; Thu, 22 Oct 2026 15:22:07 +0000 (UTC)
+Received: by mail-yw1-x112c.google.com with SMTP id
+ 00721157ae682-8b0e21048f8so19295267b3.0
+ for <buildroot@buildroot.org>; Thu, 22 Oct 2026 08:22:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792682527; cv=none;
+ d=google.com; s=arc-20260327;
+ b=InEjPzdcZyvDy4sOS/PVGTIXX9jGGeBYGuL5igczmNKbJx9oNUwr+vPR8AsdrX0z0J
+ Gi4xN6T8yW5zVno3NINWe3OJP9ZW2iHMFL+vfJbSXC69EBlZMZIVEPyo2bpqlffQVWDy
+ iWz6SVOSmuizYAwHSf3XmzIwlKjnK863IV1sxO/uC50eSpgF3cr6SYmwN9b5AK9h9Py6
+ MUb4TgXDxcsJNMKzF+RVEwj3GI9hMaBh20dnvs0S6O9U6/ScISZlMyA6nERF/aV7lxCF
+ mmk2HYMloCq1XZ6nBeEyx2yQe1nIK9XUv5F+oU4uybJeluaNjgUP+P4RSyJARZ2doNhr
+ iOEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
+ s=arc-20260327; 
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:dkim-signature;
+ bh=EHt24r/LfFX/D0CTNdl5F88NBySzw1MVOHpAQEeTx6U=;
+ fh=uO4p1laeMeYHYyNzBoKjK3Va3goVXExfxtFn1BssHXk=;
+ b=WlXDJuHdgzvtT4YXH3ysG0fVC8zjgPm0DvoTbfc1EX2Sz6az7vfBRwoKhyVQe1QKfi
+ tl1HNg5XXpyznZMK1IQwFDt92Hs9PvoNcRE+PFBWwF2vzyowJHrD7DKlFPxzaWaWfoi2
+ h1cWvQE+7CSRT1GDhLhqtjT2A9Ts73ENt94cmFeYi8OeUmWhkOye54hH4QgWYgwgkmYz
+ mWlVYo4lnBHbwvPgC8CrmCwZWlKk+xgBcd+nxyanU4vAeSBjyjEfHeYXgEEwV2eMUd+/
+ o9N8jJyck32tesc1DSu/MGYRVlXu8FUyZkCiy+OTAgjbJe2ASFOGD74MQ3F7Z8/iKbF9
+ D12g==; darn=buildroot.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1792682527; x=1793287327;
+ darn=buildroot.org; 
+ h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+ :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+ :content-type; bh=EHt24r/LfFX/D0CTNdl5F88NBySzw1MVOHpAQEeTx6U=;
+ b=FkIEAgt6mUBSVwGZrAO5dVNAFC4uHozlgJPWdxGmuWCLS2lUifRwViDCjvD2+tehOF
+ BeH/GAJreT1xcgheTj40Vj6uQ+jypXeadBBzj394siOBSLVEIFJo3Q9bgKT0HX7DJPU8
+ 1Voe4VbH1KigZplQJgSoZUAuahROAaMb3Jslg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1792682527; x=1793287327;
+ h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+ :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to:content-type;
+ bh=EHt24r/LfFX/D0CTNdl5F88NBySzw1MVOHpAQEeTx6U=;
+ b=apWxmcnieiy0KibSBhKfPE6+IrdpC38x9dgU/5SqA/EzFLgXvpjFWdT7Y826s+Jf0b
+ mFgtmnq6EykHrcrCqtKTQUis/MpB+4yz6TeESWw+IAp129MkeaXaFwn/6m9+JFP2UAn9
+ mqrZfG59Zn3xX8Qg57mYt6zfmaiQPYKmUNS4gWG5Xt9kyu5CjA9bn4b8M4+WW6DM4Mxc
+ 4F5RgS//57Bm7vBJ28r56zvZk8R2RmUx6x+IaUf2Mcl1malsFRMV4LJMSC07ibDCH/aN
+ 3BVdzWNQ7V6EQi+dnBtvCTyWK5tBCiNckDQ1abz7U84fGR+AEFu1nDDp35fvro5j4Oys
+ ecCA==
+X-Gm-Message-State: AFq9FYJeHAiNd3j5TIhNCWHlgk6oP++IvVDOOW3BOMFoSN8CPsac6OL+
+ BK+wXbThxKgEpfFM2AIzvAIgS9w5NnVTFRp87blQr0grL3KcfoNwkuQBfQv5hs1PVMddjeEF7ZQ
+ 6JQU7TeamXVGbur3JoiM/OuwlLtAbG8nMutq3iPQS1WaKVtDWKc2QrVQ=
+X-Gm-Gg: AYBFou1sNR0EP7wDTKPg5MO5jpUgbqzs3qJT530M6mLxznR7j7K7F3vxbFuLr+OlVCo
+ WMDMbzg5doNUh/whIkF0VgVf1Td8lSTg57D3ElZ+cTB3/BjRXVwOCCUi8gdJWtihpKa93A6ZKyJ
+ 3Pvd1cgsxIzh9N9LoPlbAty/+PZ38Al7iiHJeJUFFFs9Ye2BJRiILjWGO1T1yX+1BORh6RgRM+c
+ 86n1OfPEpHx0gmWLnS5PfcVo3Y/h8TR5wP1pWaODnoEvOYj1s/q8HaxHfXgTL3qQ7rh8+8Urarg
+ gH6iVO0W3GxSsbtmMALbBLOAZwdM8LGDhgW++Qgb4koNLhKnsiqKnswvenX7wzaRL+Oyt6vjjKo
+ HgyM5P5kH6YrpS3P5Dn/D0EaMYTkoXS/bxnB7GM3Bsrl3ddORs7EHl1J/wQXE602fNA==
+X-Received: by 2002:a05:690c:4f8f:20b0:8b1:533a:e10 with SMTP id
+ 00721157ae682-8b1533a1224mr3193557b3.45.1792682526520; Thu, 22 Oct 2026
+ 08:22:06 -0700 (PDT)
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
+References: <20260824063843.839745-1-dario.binacchi@amarulasolutions.com>
+In-Reply-To: <20260824063843.839745-1-dario.binacchi@amarulasolutions.com>
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date: Thu, 22 Oct 2026 17:21:55 +0200
+X-Gm-Features: AclHuK8YbKuBmfySzOLQ22sRGOfYZQchV9aq3_a_rgnHd5WsUyT74R6PrMx-mi8
+Message-ID: <CABGWkvqCSNdeeLbh5RHRce7d+Wkewhme5CzV5_mBFCj8SsuXrw@mail.gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 22 Oct 2026 16:21:19 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 638c9592cff955c3aadcf509186b86330c36f176
-X-Git-Newrev: 83142f3f79537de47593f34fb5a90affe0ffa8ae
-X-Patchwork-Hint: ignore
-Message-Id: <20261022152038.746809B9F9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/eigen: bump to version 5.0.1
+Cc: Michael Fischer <mf@go-sys.de>
+Subject: Re: [Buildroot] [PATCH v6 0/6] package: add CANopenterm and
+ dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,237 +183,235 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4144176841643632758=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
-	autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-5.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS autolearn=no
+	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/83142f3f79537de47593f34fb5a90affe0ffa8ae
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+--===============4144176841643632758==
+Content-Type: multipart/alternative; boundary="0000000000003044cf065e6f6dcd"
 
-Update Eigen from 3.4.0 to 5.0.1.
+--0000000000003044cf065e6f6dcd
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Remove the downstream CMake patch because the BLAS, LAPACK and
-CMake package toggles are now provided upstream in 5.0.1.
+On Mon, Aug 24, 2026 at 8:38=E2=80=AFAM Dario Binacchi <
+dario.binacchi@amarulasolutions.com> wrote:
 
-Refresh the source and license hashes to match the new release and
-update the package license metadata to reflect the current upstream
-licensing files.
+> This series adds CANopenterm and the packages required to build it.
+>
+> The previous version was blocked by the lack of an SDL3 package in
+> Buildroot, as pointed out during the review of v5 [1]. SDL3 has since
+> been merged into Buildroot, so this series now builds CANopenterm
+> against the current SDL3 package.
+>
+> While revisiting the v5 series, I also addressed some build issues and
+> added the missing dependencies required by CANopenterm.
+>
+> This series was also tested with Buildroot's test-pkg.
+>
+> [1]
+> https://patchwork.ozlabs.org/project/buildroot/patch/20250707055824.49575=
+-1-dario.binacchi@amarulasolutions.com/
+>
+> Dario Binacchi (6):
+>   package/sdl3: fix build on PowerPC with uClibc
+>   package/sdl3: disable m68k builds
+>   package/pocketpy: link with libatomic
+>   package/isocline: new package
+>   package/canvenient: new package
+>   package/canopenterm: new package
+>
+>  DEVELOPERS                                    |  3 +
+>  package/Config.in                             |  3 +
+>  package/canopenterm/Config.in                 | 27 +++++++++
+>  package/canopenterm/canopenterm.hash          |  3 +
+>  package/canopenterm/canopenterm.mk            | 29 ++++++++++
+>  .../canvenient/0001-Fix-build-with-musl.patch | 43 +++++++++++++++
+>  package/canvenient/Config.in                  | 13 +++++
+>  package/canvenient/canvenient.hash            |  3 +
+>  package/canvenient/canvenient.mk              | 14 +++++
+>  ...nly-require-CXX-compiler-when-needed.patch | 55 +++++++++++++++++++
+>  package/isocline/Config.in                    |  9 +++
+>  package/isocline/isocline.hash                |  3 +
+>  package/isocline/isocline.mk                  | 21 +++++++
+>  package/pocketpy/pocketpy.mk                  |  8 +++
+>  ...001-Fix-build-on-PowerPC-with-uClibc.patch | 40 ++++++++++++++
+>  package/sdl3/Config.in                        |  8 +++
+>  16 files changed, 282 insertions(+)
+>  create mode 100644 package/canopenterm/Config.in
+>  create mode 100644 package/canopenterm/canopenterm.hash
+>  create mode 100644 package/canopenterm/canopenterm.mk
+>  create mode 100644 package/canvenient/0001-Fix-build-with-musl.patch
+>  create mode 100644 package/canvenient/Config.in
+>  create mode 100644 package/canvenient/canvenient.hash
+>  create mode 100644 package/canvenient/canvenient.mk
+>  create mode 100644
+> package/isocline/0001-Only-require-CXX-compiler-when-needed.patch
+>  create mode 100644 package/isocline/Config.in
+>  create mode 100644 package/isocline/isocline.hash
+>  create mode 100644 package/isocline/isocline.mk
+>  create mode 100644
+> package/sdl3/0001-Fix-build-on-PowerPC-with-uClibc.patch
+>
+> --
+> 2.43.0
+>
+>
+Gentle ping.
 
-Add a gcc >= 6 dependency in Config.in because Eigen 5.x requires
-C++14 support.
+Could someone please review the series?
 
-Update the project homepage to the current upstream GitLab URL.
+Thanks,
+Dario
+--=20
+*Dario Binacchi*
+Senior Embedded Software Engineer
+M. +39 328 0625246
+dario.binacchi@amarulasolutions.com
+=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=
+=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95
+Amarula Solutions SRL
+ Via Felice Cavallotti 25D, 41012 Carpi, MO, IT
+info@amarulasolutions.com
+www.amarulasolutions.com
 
-Signed-off-by: Shubham Chakraborty <chakrabortyshubham66@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .checkpackageignore                                |  1 -
- ...ake-Options-for-controlling-build-compone.patch | 88 ----------------------
- package/eigen/Config.in                            |  7 +-
- package/eigen/eigen.hash                           | 11 ++-
- package/eigen/eigen.mk                             |  6 +-
- package/gtkiostream/Config.in                      |  4 +-
- 6 files changed, 15 insertions(+), 102 deletions(-)
+--0000000000003044cf065e6f6dcd
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index bdeef49192..5fff512d93 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -293,7 +293,6 @@ package/ebtables/0001-replace-ebtables-save-perl-script-with-bash.patch lib_patc
- package/ecryptfs-utils/0001-musl.patch lib_patch.Upstream
- package/ecryptfs-utils/0002-openssl110.patch lib_patch.Upstream
- package/ecryptfs-utils/0003-fix-parallel-build-issue.patch lib_patch.Upstream
--package/eigen/0001-Adds-new-CMake-Options-for-controlling-build-compone.patch lib_patch.Upstream
- package/elftosb/0001-fixes-includes.patch lib_patch.Upstream
- package/elftosb/0002-force-cxx-compiler.patch lib_patch.Upstream
- package/elfutils/0001-Add-a-enable-disable-progs-configure-option.patch lib_patch.Upstream
-diff --git a/package/eigen/0001-Adds-new-CMake-Options-for-controlling-build-compone.patch b/package/eigen/0001-Adds-new-CMake-Options-for-controlling-build-compone.patch
-deleted file mode 100644
-index 737e7d39b7..0000000000
---- a/package/eigen/0001-Adds-new-CMake-Options-for-controlling-build-compone.patch
-+++ /dev/null
-@@ -1,88 +0,0 @@
--From f49d5c1a6b7c22be359189cd0b1e2e766bd05365 Mon Sep 17 00:00:00 2001
--From: =?UTF-8?q?Antonio=20S=C3=A1nchez?= <cantonios@google.com>
--Date: Sat, 5 Mar 2022 05:49:45 +0000
--Subject: [PATCH] Adds new CMake Options for controlling build components.
--
--[Retrieved from:
--https://gitlab.com/libeigen/eigen/-/commit/cf82186416d04ea5df2a397d8fe09dc78d40ca65]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Julien: rebased patch on 3.4.0]
--Signed-off-by: Julien Olivain <ju.o@free.fr>
-----
-- CMakeLists.txt        | 6 ++++++
-- blas/CMakeLists.txt   | 3 ++-
-- lapack/CMakeLists.txt | 5 +++++
-- 3 files changed, 13 insertions(+), 1 deletion(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index f3e69b845..74ff755f5 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -495,6 +495,9 @@ if(BUILD_TESTING)
--   add_subdirectory(failtest)
-- endif()
-- 
--+include(CMakeDetermineFortranCompiler)
--+option(EIGEN_BUILD_BLAS "Toggles the building of the Eigen Blas library" ${CMAKE_Fortran_COMPILER})
--+option(EIGEN_BUILD_LAPACK "Toggles the building of the included Eigen LAPACK library" ${CMAKE_Fortran_COMPILER})
-- if(EIGEN_LEAVE_TEST_IN_ALL_TARGET)
--   add_subdirectory(blas)
--   add_subdirectory(lapack)
--@@ -612,6 +615,8 @@ set_target_properties (eigen PROPERTIES EXPORT_NAME Eigen)
-- 
-- install (TARGETS eigen EXPORT Eigen3Targets)
-- 
--+option(EIGEN_BUILD_CMAKE_PACKAGE "Enables the creation of EigenConfig.cmake and related files" ON)
--+if(EIGEN_BUILD_CMAKE_PACKAGE)
-- configure_package_config_file (
--   ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Eigen3Config.cmake.in
--   ${CMAKE_CURRENT_BINARY_DIR}/Eigen3Config.cmake
--@@ -647,6 +652,7 @@ install ( FILES ${CMAKE_CURRENT_SOURCE_DIR}/cmake/UseEigen3.cmake
-- # Add uninstall target
-- add_custom_target ( uninstall
--     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/EigenUninstall.cmake)
--+endif()
-- 
-- if (EIGEN_SPLIT_TESTSUITE)
--   ei_split_testsuite("${EIGEN_SPLIT_TESTSUITE}")
--diff --git a/blas/CMakeLists.txt b/blas/CMakeLists.txt
--index f3a94ec4a..d07090f69 100644
----- a/blas/CMakeLists.txt
--+++ b/blas/CMakeLists.txt
--@@ -1,6 +1,7 @@
-- 
-- project(EigenBlas CXX)
-- 
--+if(EIGEN_BUILD_BLAS)
-- include(CheckLanguage)
-- check_language(Fortran)
-- if(CMAKE_Fortran_COMPILER)
--@@ -59,4 +60,4 @@ if(BUILD_TESTING)
-- endif()
-- 
-- endif()
---
--+endif()
--diff --git a/lapack/CMakeLists.txt b/lapack/CMakeLists.txt
--index e48497fda..71255d96d 100644
----- a/lapack/CMakeLists.txt
--+++ b/lapack/CMakeLists.txt
--@@ -1,6 +1,8 @@
-- 
-- project(EigenLapack CXX)
-- 
--+if(EIGEN_BUILD_LAPACK AND EIGEN_BUILD_BLAS)
--+
-- include(CheckLanguage)
-- check_language(Fortran)
-- if(CMAKE_Fortran_COMPILER)
--@@ -450,3 +452,6 @@ if(EXISTS ${eigen_full_path_to_testing_lapack})
-- 
-- endif()
-- 
--+elseif(EIGEN_BUILD_LAPACK AND NOT EIGEN_BUILD_BLAS)
--+ message(FATAL_ERROR "EIGEN_BUILD_LAPACK requires EIGEN_BUILD_BLAS")
--+endif() #EIGEN_BUILD_LAPACK
---- 
--2.45.2
--
-diff --git a/package/eigen/Config.in b/package/eigen/Config.in
-index ef0a16f2f7..f1b5937a0e 100644
---- a/package/eigen/Config.in
-+++ b/package/eigen/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_EIGEN
- 	bool "eigen"
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # C++14
- 	help
- 	  Eigen is a C++ template library for linear algebra: vectors,
- 	  matrices, and related algorithms. It is versatile, fast,
-@@ -11,7 +12,7 @@ config BR2_PACKAGE_EIGEN
- 	  right away. There is no binary to link to. Eigen is a pure
- 	  template library defined in the headers.
- 
--	  http://eigen.tuxfamily.org/
-+	  https://gitlab.com/libeigen/eigen
- 
--comment "eigen needs a toolchain w/ C++"
--	depends on !BR2_INSTALL_LIBSTDCPP
-+comment "eigen needs a toolchain w/ C++, gcc >= 6"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_6
-diff --git a/package/eigen/eigen.hash b/package/eigen/eigen.hash
-index ad7d6da9dc..09d23ef7e6 100644
---- a/package/eigen/eigen.hash
-+++ b/package/eigen/eigen.hash
-@@ -1,8 +1,7 @@
- # Locally computed
--sha256  b4c198460eba6f28d34894e3a5710998818515104d6e74e5cc331ce31e46e626  eigen-3.4.0.tar.bz2
-+sha256  e4de6b08f33fd8b8985d2f204381408c660bffa6170ac65b68ae1bd3cd575c0a  eigen-5.0.1.tar.bz2
-+sha256  03379001a7b12a2ec997a25554247d985270b353c10d5bafee9ac8d6519820b7  COPYING.APACHE
- sha256  51928dce36213c5333ba3172e847d735d4c6e9b7ff2722a326c49067155b82eb  COPYING.BSD
--sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING.GPL
--sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
--sha256  f5b330efdad110cdd84d585ec61220b0650461fa599e36b13e1726c9346dcfb9  COPYING.MINPACK
--sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  COPYING.MPL2
--sha256  c83230b770f17ef1386ea1fd3681271dd98aa93646bdbfb5bff3a1b7050fff9d  COPYING.README
-+sha256  c87b7f8ee88f6195e91743820c00354833583aef091b72e2d4a49c8e28e798a0  COPYING.MINPACK
-+sha256  66a3107d5ad6a058aab753eaac2047ccb2ed0e39465dd0fe5844da3e300d5172  COPYING.MPL2
-+sha256  db640ff2bd90c6abd6a4d3fbb351e0ee4d555417cf840492054d1cbb2ea85644  COPYING.README
-diff --git a/package/eigen/eigen.mk b/package/eigen/eigen.mk
-index 7fe3fbdac6..df83db70fa 100644
---- a/package/eigen/eigen.mk
-+++ b/package/eigen/eigen.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
- 
--EIGEN_VERSION = 3.4.0
-+EIGEN_VERSION = 5.0.1
- EIGEN_SOURCE = eigen-$(EIGEN_VERSION).tar.bz2
- EIGEN_SITE = $(call gitlab,libeigen,eigen,$(EIGEN_VERSION))
--EIGEN_LICENSE = MPL2, BSD-3-Clause, LGPL-2.1
--EIGEN_LICENSE_FILES = COPYING.MPL2 COPYING.BSD COPYING.LGPL COPYING.README
-+EIGEN_LICENSE = MPL-2.0, BSD-3-Clause, Apache-2.0, Minpack
-+EIGEN_LICENSE_FILES = COPYING.MPL2 COPYING.BSD COPYING.APACHE COPYING.MINPACK COPYING.README
- EIGEN_INSTALL_STAGING = YES
- EIGEN_INSTALL_TARGET = NO
- EIGEN_SUPPORTS_IN_SOURCE_BUILD = NO
-diff --git a/package/gtkiostream/Config.in b/package/gtkiostream/Config.in
-index 334b4dc331..0ebd85b525 100644
---- a/package/gtkiostream/Config.in
-+++ b/package/gtkiostream/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_GTKIOSTREAM
- 	bool "gtkiostream"
- 	depends on BR2_PACKAGE_GTKIOSTREAM_ARCH_SUPPORTS
- 	depends on BR2_INSTALL_LIBSTDCPP # eigen
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_6 # eigen
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	select BR2_PACKAGE_ALSA_LIB_MIXER if BR2_PACKAGE_ALSA_LIB
- 	select BR2_PACKAGE_EIGEN
-@@ -18,7 +19,8 @@ config BR2_PACKAGE_GTKIOSTREAM
- 
- 	  https://github.com/flatmax/gtkiostream
- 
--comment "gtkiostream needs a toolchain w/ C++, threads"
-+comment "gtkiostream needs a toolchain w/ C++, gcc >= 6, threads"
- 	depends on BR2_PACKAGE_GTKIOSTREAM_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_6 || \
- 		!BR2_TOOLCHAIN_HAS_THREADS
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote g=
+mail_quote_container"><div dir=3D"ltr" class=3D"gmail_attr">On Mon, Aug 24,=
+ 2026 at 8:38=E2=80=AFAM Dario Binacchi &lt;<a href=3D"mailto:dario.binacch=
+i@amarulasolutions.com">dario.binacchi@amarulasolutions.com</a>&gt; wrote:<=
+br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8e=
+x;border-left:1px solid rgb(204,204,204);padding-left:1ex">This series adds=
+ CANopenterm and the packages required to build it.<br>
+<br>
+The previous version was blocked by the lack of an SDL3 package in<br>
+Buildroot, as pointed out during the review of v5 [1]. SDL3 has since<br>
+been merged into Buildroot, so this series now builds CANopenterm<br>
+against the current SDL3 package.<br>
+<br>
+While revisiting the v5 series, I also addressed some build issues and<br>
+added the missing dependencies required by CANopenterm.<br>
+<br>
+This series was also tested with Buildroot&#39;s test-pkg.<br>
+<br>
+[1] <a href=3D"https://patchwork.ozlabs.org/project/buildroot/patch/2025070=
+7055824.49575-1-dario.binacchi@amarulasolutions.com/" rel=3D"noreferrer" ta=
+rget=3D"_blank">https://patchwork.ozlabs.org/project/buildroot/patch/202507=
+07055824.49575-1-dario.binacchi@amarulasolutions.com/</a><br>
+<br>
+Dario Binacchi (6):<br>
+=C2=A0 package/sdl3: fix build on PowerPC with uClibc<br>
+=C2=A0 package/sdl3: disable m68k builds<br>
+=C2=A0 package/pocketpy: link with libatomic<br>
+=C2=A0 package/isocline: new package<br>
+=C2=A0 package/canvenient: new package<br>
+=C2=A0 package/canopenterm: new package<br>
+<br>
+=C2=A0DEVELOPERS=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 =
+3 +<br>
+=C2=A0package/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 3 +<br>
+=C2=A0package/canopenterm/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0| 27 +++++++++<br>
+=C2=A0package/canopenterm/canopenterm.hash=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 |=C2=A0 3 +<br>
+=C2=A0package/canopenterm/<a href=3D"http://canopenterm.mk" rel=3D"noreferr=
+er" target=3D"_blank">canopenterm.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 | 29 ++++++++++<br>
+=C2=A0.../canvenient/0001-Fix-build-with-musl.patch | 43 +++++++++++++++<br=
+>
+=C2=A0package/canvenient/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0 =C2=A0 | 13 +++++<br>
+=C2=A0package/canvenient/canvenient.hash=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 |=C2=A0 3 +<br>
+=C2=A0package/canvenient/<a href=3D"http://canvenient.mk" rel=3D"noreferrer=
+" target=3D"_blank">canvenient.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 | 14 +++++<br>
+=C2=A0...nly-require-CXX-compiler-when-needed.patch | 55 ++++++++++++++++++=
++<br>
+=C2=A0package/isocline/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 9 +++<br>
+=C2=A0package/isocline/isocline.hash=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 |=C2=A0 3 +<br>
+=C2=A0package/isocline/<a href=3D"http://isocline.mk" rel=3D"noreferrer" ta=
+rget=3D"_blank">isocline.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 | 21 +++++++<br>
+=C2=A0package/pocketpy/<a href=3D"http://pocketpy.mk" rel=3D"noreferrer" ta=
+rget=3D"_blank">pocketpy.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 |=C2=A0 8 +++<br>
+=C2=A0...001-Fix-build-on-PowerPC-with-uClibc.patch | 40 ++++++++++++++<br>
+=C2=A0package/sdl3/Config.in=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 8 +++<br>
+=C2=A016 files changed, 282 insertions(+)<br>
+=C2=A0create mode 100644 package/canopenterm/Config.in<br>
+=C2=A0create mode 100644 package/canopenterm/canopenterm.hash<br>
+=C2=A0create mode 100644 package/canopenterm/<a href=3D"http://canopenterm.=
+mk" rel=3D"noreferrer" target=3D"_blank">canopenterm.mk</a><br>
+=C2=A0create mode 100644 package/canvenient/0001-Fix-build-with-musl.patch<=
+br>
+=C2=A0create mode 100644 package/canvenient/Config.in<br>
+=C2=A0create mode 100644 package/canvenient/canvenient.hash<br>
+=C2=A0create mode 100644 package/canvenient/<a href=3D"http://canvenient.mk=
+" rel=3D"noreferrer" target=3D"_blank">canvenient.mk</a><br>
+=C2=A0create mode 100644 package/isocline/0001-Only-require-CXX-compiler-wh=
+en-needed.patch<br>
+=C2=A0create mode 100644 package/isocline/Config.in<br>
+=C2=A0create mode 100644 package/isocline/isocline.hash<br>
+=C2=A0create mode 100644 package/isocline/<a href=3D"http://isocline.mk" re=
+l=3D"noreferrer" target=3D"_blank">isocline.mk</a><br>
+=C2=A0create mode 100644 package/sdl3/0001-Fix-build-on-PowerPC-with-uClibc=
+.patch<br>
+<br>
+-- <br>
+2.43.0<br>
+<br>
+</blockquote></div><div><br clear=3D"all"></div><div><p>Gentle ping.</p><p>=
+Could someone please review the series?</p><p>Thanks,<br>Dario</p></div><sp=
+an class=3D"gmail_signature_prefix">-- </span><br><div dir=3D"ltr" class=3D=
+"gmail_signature"><div dir=3D"ltr"><font color=3D"#888888"><font color=3D"#=
+000000" face=3D"Times New Roman"><span style=3D"font-size:14px"><b>Dario Bi=
+nacchi</b></span></font><br style=3D"color:rgb(0,0,0);font-family:&quot;Tim=
+es New Roman&quot;;font-size:medium"><span style=3D"color:rgb(0,0,0);font-f=
+amily:&quot;Times New Roman&quot;;font-size:12px">Senior Embedded Software =
+Engineer<br></span></font><span style=3D"color:rgb(0,0,0);font-family:&quot=
+;Times New Roman&quot;;font-size:12px">M. +39 328 0625246</span><font color=
+=3D"#888888"><span style=3D"color:rgb(0,0,0);font-family:&quot;Times New Ro=
+man&quot;;font-size:12px"><br><a href=3D"mailto:dario.binacchi@amarulasolut=
+ions.com" style=3D"color:rgb(17,85,204)" target=3D"_blank">dario.binacchi@a=
+marulasolutions.com</a></span><br style=3D"color:rgb(0,0,0);font-family:&qu=
+ot;Times New Roman&quot;;font-size:medium"><span style=3D"font-family:&quot=
+;Times New Roman&quot;;font-size:12px;color:rgb(241,194,50)">=E2=80=95=E2=
+=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=
+=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95</span><br style=3D"color:r=
+gb(0,0,0);font-family:&quot;Times New Roman&quot;;font-size:medium"><span s=
+tyle=3D"color:rgb(0,0,0);font-family:&quot;Times New Roman&quot;;font-size:=
+12px"><span style=3D"font-weight:700">Amarula Solutions SRL</span><br>=C2=
+=A0Via Felice Cavallotti 25D, 41012 Carpi, MO, IT<br><a href=3D"mailto:info=
+@amarulasolutions.com" style=3D"color:rgb(17,85,204)" target=3D"_blank">inf=
+o@amarulasolutions.com</a><br><a href=3D"http://www.amarulasolutions.com/" =
+style=3D"color:rgb(17,85,204)" target=3D"_blank">www.amarulasolutions.com</=
+a></span></font></div></div></div>
+
+--0000000000003044cf065e6f6dcd--
+
+--===============4144176841643632758==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4144176841643632758==--
