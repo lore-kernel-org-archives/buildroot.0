@@ -2,27 +2,27 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA7A606A326
-	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 12:32:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0306C606A333
+	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 12:32:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=YuGtdWku
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=OI+3Bs/3
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5ADA381661;
-	Fri, 23 Oct 2026 12:32:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B642381493;
+	Fri, 23 Oct 2026 12:32:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 29IbeCeOKFzD; Fri, 23 Oct 2026 12:32:19 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 1822681628
+ id qov_a33APLvg; Fri, 23 Oct 2026 12:32:21 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 1A3D781495
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792758739;
-	b=THXFADif9ztdIRXB5eiQUxTW4B5vp8cp/emYSfuR5M6spO2UoOXLoRRZUy8doOSegusj
-	 +FRs/FXFASvSHkRVDoQGFLbRLp2HsEPTKhqaEiwwDKahsTRShQ7vF9ksVF9y3PYRbKO+M
-	 nNIHdTikQ8dipuRgVe11w5SkPbd+reaPJZ/RhmX7ObZRwaizUJwVuuwM7HsSdFSPyQ6gR
-	 BxuFMMbs4LydPXzhswikWG9jJS49okgyzI0d2lCe4ZPY5Or7z2GPp3AelzbIV/gvZ/2zn
-	 fHm5XHuii/nY63qFfq1niE4JknomLetVGOIgRb3GVDUO8NLuPrINKtI5/nfeDbpbbIQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792758741;
+	b=orXATNbB+O8JoQ8cofAdKf9IQoP4mXWSuL8xwKrS4ReGlJsyxaOd+E6hsvi/BV2x+hkc
+	 LxjP1TL4KgcD835Ypjnk6Ai65AtQrrT13WVSBSdKg7kKiG4xyrS1fPOjHS2+jbu3Boeqo
+	 tvymrwVWCaeOUG/RnVRprwHjrKlPHr3doB3jftnr49OKQcncReVM53J2MDVAeRnS7a0yH
+	 csOA9GtP4E8iBciKrdwc9/n7jOLsXG3iF4dsNJoIs0V/HnVglqii18pFMARTEL6aEvggX
+	 FrWbfU/rmWcJSyBELZkOXbfsmPNxIl6A6j9X/RHVMoI+L2dgdtZe7zt04f5fibnZ09A==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792758739;
+	c=relaxed/relaxed; t=1792758741;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=L0uNkodizZU5Xtih0jhZHTmxLyYA2TKRCIrpYcnf0hw=;
-	b=hTYte46ZezTIkEop2lL7F43pUU6QI8CGbbidwQ0T+4yl8K0gZa7x+ct+qXcImxMk76ms
-	 QLd0JX0Uf8kd2s0Fbg8e+Rpe2WFRsDSwOO5TpVGuj+lEH3kbp5TkKakTvnClRgLkXKu+t
-	 UqaZ2N5QDgHVd4W//5g6HsOixhgv786vttvNra0PGyH0nfJohS8GXRQV5FW2sNpvYhowp
-	 7MStD65afrCSwfDHMMKbzhjr9YH1lClP7nUH0K3xtoySSxy6z6j5K4xjR87i/Ksmomi4C
-	 D36tHbJ0B7QAfOqNBhfc0eUviWIo0BADIvlKVyEHJQTgVs86gKcy9ZylnhdyEdF8Otw==
+	bh=83DS2GI36z0rA0Yr6cmnZaeO4ifXk1IeZtSg+v+bgpg=;
+	b=II/am1Uy+4sbWzklwp33yPWFiON+HeTXc1Ab/XXSFJajEzv8S898ffv1QbxJFNwtg5Pn
+	 25tOL/YtlI1w+adpCQzDpd6S7ZsUq28lbBdrmy2q5+A7cPCtp+nLNVcTCb6z01ITZej/l
+	 Lmbhghdne4zRhA9T+xQcJ2m3L0siULh0GvANQC4JEoHK0gO+/YYnJupm2mRZrwqpiM2mu
+	 JR800+rSXVXRP3or3/96qiVR2ohCZgxGBgV/GslMp/kPO/Z7QdUfxBfwIxEqR0ZcRwc6R
+	 Oc5lWD1lzi6qFE/Ln5q3PnK7eRW7JD4WqO8SEviWdaOdLkYvr14GGNJEIWMD1FbHkYQ==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792758739;
-	bh=L0uNkodizZU5Xtih0jhZHTmxLyYA2TKRCIrpYcnf0hw=;
+	s=default; t=1792758741;
+	bh=83DS2GI36z0rA0Yr6cmnZaeO4ifXk1IeZtSg+v+bgpg=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=YuGtdWkujrm9+iMYWmlG1xjkcj5SNXChYwbzm5n7Xc6e3XyvhXYviRu1K2OHqd1R3
-	 BXxtjUQye7J2ZaHTFsTe599CuEufMf3rQjfMjL5sWBFAT9v4RRoAvpdHJm2OlD+IsA
-	 bs3A+xE8fq5+ph+AUEsY/tR1X83O2tqRqN45v7ltYHsCSH4MaMKqG5tSffrK2fCo5V
-	 +mc0u0rj4zp3J+U8PVaJj6taOuwSGFMdKBhswrVUmAurFD0tYaRqXWCAVGdc8VLBWw
-	 X5RK/5S/wKihMXPhSceFcR/Kb041INxQiABxEV1z5lzm77hHPqc2S6LDKCqrGqOtDH
-	 oHGb8JHzMwjMQ==
+	b=OI+3Bs/3Dl938eWXipTQuaJDRYiO10fqB7I95t2J8drFWZEIQCUdDFPj5CDII7r6X
+	 PbUGRxBlhCp793imctLpzTrr0Vbu22mOyBQs9LKsZV+O0m5aXVpCanRvfYWbEpQBPN
+	 5H5VDy1Aqcyg1XtsFCfY0434HIhPFrY5dXlB8BzD/gVDl3FqndmrBaj5ezEbvnkSyE
+	 xXYS/Z9A1vTMQ8iKWqRepeYGnxxaRguFSRswQQUy55MJWuC/9i7g7SNdd699ZHbKDO
+	 fecbOXZA4O7Pgh+3NGEkZCqJxYmQe4/kLGE8E25uemlc8jR4FPF/j/Fw7c4hhFuCaW
+	 XkPfPB2KlpLcQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1822681628;
-	Fri, 23 Oct 2026 12:32:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1A3D781495;
+	Fri, 23 Oct 2026 12:32:21 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id E75A212C
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 12:32:06 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 1A69812C
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 12:32:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D94FA401D6
+ by smtp2.osuosl.org (Postfix) with ESMTP id F37B2401D6
  for <buildroot@buildroot.org>; Fri, 23 Oct 2026 12:32:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UfM53p_APsQQ for <buildroot@buildroot.org>;
+ id aRh86Li_Y_oQ for <buildroot@buildroot.org>;
  Fri, 23 Oct 2026 12:32:06 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 15040400DB
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 56587401CC
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792758726;
- b=QRwrS+NG7oG+I5Olaj4BXlzGlzbnY1/yprcj4/zVqyXVanqsdFKarSVTgvBBPQ7u5n7X
- z6qxnfUCYI3swlskusNN99jRYN7PcBflX4vuli9evNYGI38U8ySqB8pfbJF6IyUWkJmP9
- 4Qj8iERnDRbc0q6Q750gMGENOdEFEYm4b1cpRQIpIv5gixTPrF0uja8nJZkND7/T4CcTD
- /BT9mirkAHj9rDFF5p/mxcjvLGMifUNWfNsgL7y3nSl8JpO2EDaDzpVMK+hVmv1lRLElT
- Yf8pGOsFVKwBaTnfXV+zvfL5FLHEvwzEFj/PADq84KoosFVXCE6x3xxpF9qDP9+fbwQ==
+ b=j0nG1g9jFdtPjiHettsFV6u9+d5HvHvyUYT50ZyG099OTjoe/J5zEHc/TrSECzHtVJb+
+ brIaafkhA8FlmpkN04sS3ewJUnAxg3wXSSo7mo6eS/j2QbvP9JNuFPgCw6nu/UTVgUuBz
+ hkogXlipH6nMvHj+bkJbR7varO0j1YXRCVQ4zQDKvIndc1q+jSVFLEdT9FO7Cn6Wqj9zA
+ 9WdDp1pG7sbmtypu0hdeDzOsuKRWHGX4ayghq4nnMLK4NRCPIXmlggKlcILy5liCCLqMc
+ k31BZcLqa3bvvxgNWYyKsqm4GjPDVlDJ0UceR9QOzsdaLcltMpQF59v2557DPNFgRsA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1792758726;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=d2TsN9j1nzq1z+HHxBeHHHsm4tkJGfIWLR0BW0Wc9Y0=;
- b=AUy1b6psj0zSigM97XTVlx28xy8qzOMr+bq96FvB9Jh1WcOlKDHQVE4f+uYlY0dWbLyx
- XA942mmyJUgvjy6GX5RzIh/KNBonrF+z53aXj6yUefOK7rBDop14hXf1djYgGsHfw5QYe
- pM4cXRfW9sIZ4T2GOi8OGDLsqjsFTAUBjNM79pA4swGMPNN6aYw3PcpeNFrHb0qgUxNxM
- 8910rRg0+X/gZSl8CkYZlKK71Dt9gLcNLSyzB7URPfMs8bixRBhckLKa58H6d650hJG3k
- awdtSf0TuA7/7xetTG5hZBrGWhUQmBgOmaea7Jplr+q+96K//pO1MKnals6AhQD1p2Q==
+ bh=XPGdwr7hHLfjiasN86J9K/AA0524Ugg1Wc98bvv3K2Q=;
+ b=c0xvslg8BB/9h5UDdWxffVnWXrD9MRQy4kBCCG+u0WF9PVsugDCCw8Q72Q9BDWDEVmFM
+ npfg0FiIYH7pwuqWRzhquhh/1cec4m6RdfG1MgjJnamSfRgf7deiupI4ojtQQcgqm9Ih2
+ iNB/ZrLk1kSnBX/3so9QQW3skQIckBFAoYMu0rINNJwT131hmA9wsGw3Vwn8VuzL0IAcT
+ epRxje2Wi2j1IXdewjl1XbruzbkvIX9HdhDovt4vE/QuL5OA8yVHVgXLm/opkc1MqFzX4
+ Mr5eiMwKMDgOfwRILThR8NApi7vMFjIQFS1FXm9glZoaP+1fTA6q8PH4Vn4icwcHqpg==
 ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 15040400DB
+ by smtp2.osuosl.org (Postfix) with ESMTP id 56587401CC
  for <buildroot@buildroot.org>; Fri, 23 Oct 2026 12:32:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 999319C669; Fri, 23 Oct 2026 12:30:41 +0000 (UTC)
+ id C866F9C669; Fri, 23 Oct 2026 12:30:41 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 22 Oct 2026 20:50:24 +0200
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: 42684bae0780c8e1db53961cb89ca76c78c19f4b
-X-Git-Newrev: 1380aa119bc92e7f91f1528860b04fef4c7dc093
+X-Git-Oldrev: 57968f8678452280c038dd84e3fb0dfe7309782c
+X-Git-Newrev: 3d84c56479b9388a97b20f5c43ae2ce59853b8c6
 X-Patchwork-Hint: ignore
-Message-Id: <20261023123041.999319C669@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/libcurl: security
- bump version to 8.23.0
+Message-Id: <20261023123041.C866F9C669@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/libglib2:
+ security bump to version 2.88.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,7 +114,7 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4645395842469138715=="
+Content-Type: multipart/mixed; boundary="===============5351172646841970963=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
@@ -124,139 +124,74 @@ X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============4645395842469138715==
+--===============5351172646841970963==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1380aa119bc92e7f91f1528860b04fef4c7dc093
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3d84c56479b9388a97b20f5c43ae2ce59853b8c6
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-Fixes the following vulnerabilities:
+No CVEs specified, but NEWS states:
 
-- CVE-2026-86410: redirect to SFTP or SCP bypasses host verification
-  https://curl.se/docs/CVE-2026-86410.html
+!5394 Backport various security fixes to glib-2-88
+https://gitlab.gnome.org/GNOME/glib/-/merge_requests/5394
 
-- CVE-2026-86412: server-set cookie erases cookie jar
-  https://curl.se/docs/CVE-2026-86412.html
+And a number of other bugfixes:
 
-- CVE-2026-86413: Negotiate credentials sent to redirected origin
-  https://curl.se/docs/CVE-2026-86413.html
+* Bugs fixed:
+  - #4011 gio/tests/services: Installed service file contains build path after
+    !5259 (Jaipaul Cheernam)
+  - #4020 ‘TLS callback not invoked’ error on msys2-clang64 CI job (Luca Bacci)
+  - !5262 Backport !5261 “gio/tests/services: Fix installed service file
+    containing build path” to glib-2-88
+  - !5273 Backport !5266 “docs: Fix gio gi-docgen docs_url” to glib-2-88
+  - !5285 Backport !5283 “gconstructor: Reference _tls_used also on GCC, CLang”
+    to glib-2-88
+  - !5323 Backport !5311 “fix: handle long filenames in trash by truncating from
+    front” to glib-2-88
+  - !5379 Update Norwegian Nynorsk translation
+  - !5394 Backport various security fixes to glib-2-88
 
-- CVE-2026-86414: leaking host credentials to HTTP proxy
-  https://curl.se/docs/CVE-2026-86414.html
+* Translation updates:
+  - Norwegian Nynorsk (Roy-Magne Mo)
 
-- CVE-2026-86415: auto client cert connection reuse mixup
-  https://curl.se/docs/CVE-2026-86415.html
+https://gitlab.gnome.org/GNOME/glib/-/blob/2.88.4/NEWS?ref_type=tags
 
-- CVE-2026-87861: cross-origin reuse of a Negotiate connection
-  https://curl.se/docs/CVE-2026-87861.html
-
-- CVE-2026-87862: HSTS cache import drops longer-lived child
-  https://curl.se/docs/CVE-2026-87862.html
-
-- CVE-2026-87863: HSTS response erases persisted entries
-  https://curl.se/docs/CVE-2026-87863.html
-
-- CVE-2026-87865: knownhost callback mismatches key as missing
-  https://curl.se/docs/CVE-2026-87865.html
-
-- CVE-2026-87866: wolfSSL public-key pinning bypass
-  https://curl.se/docs/CVE-2026-87866.html
-
-- CVE-2026-92386: server-set cookie aborts cookie jar load
-  https://curl.se/docs/CVE-2026-92386.html
-
-- CVE-2026-92387: never-ending loop via server response omission
-  https://curl.se/docs/CVE-2026-92387.html
-
-- CVE-2026-92388: FTP wildcard write callback mixup
-  https://curl.se/docs/CVE-2026-92388.html
-
-- CVE-2026-92389: TFTP direction confusion
-  https://curl.se/docs/CVE-2026-92389.html
-
-- CVE-2026-92390: -J no-clobber guarantee bypassed with 103 early hints
-  https://curl.se/docs/CVE-2026-92390.html
-
-- CVE-2026-92391: curl_mime_free stack overflow by recursion
-  https://curl.se/docs/CVE-2026-92391.html
-
-- CVE-2026-92392: HTTP/2 upload Use-After-Free
-  https://curl.se/docs/CVE-2026-92392.html
-
-- CVE-2026-94265: Authorization: Negotiate sent to foreign origin
-  https://curl.se/docs/CVE-2026-94265.html
-
-- CVE-2026-94266: password leak in CURLINFO_EFFECTIVE_URL
-  https://curl.se/docs/CVE-2026-94266.html
-
-- CVE-2026-107928: info leak uploading over WebSockets with GnuTLS
-  https://curl.se/docs/CVE-2026-107928.html
-
-- CVE-2026-107929: local interface connection reuse mixup
-  https://curl.se/docs/CVE-2026-107929.html
-
-- bump to version 8.23.0 (for details see [1], [2])
-- drop '--enable-smb'/'--disable-smb' as smb support is gone (see [1])
-
-[1] https://curl.se/changes.html
-[2] https://daniel.haxx.se/blog/2026/10/14/curl-8-23-0/
-
-Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-[Peter: add CVE info]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 57f40e5f6e9838d1da8882d0f18996e83ac856e9)
+[Fiona: fix typo in upstream NEWS link]
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+(cherry picked from commit db192575e0fc2c9e155477b1cbb6d6001d0b0a83)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/libcurl/libcurl.hash | 6 +++---
- package/libcurl/libcurl.mk   | 4 +---
- 2 files changed, 4 insertions(+), 6 deletions(-)
+ package/libglib2/libglib2.hash | 4 ++--
+ package/libglib2/libglib2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 0a7b9e0169..086f3d8978 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,7 +1,7 @@
--# From https://github.com/curl/curl/releases/tag/curl-8_22_0
-+# From https://github.com/curl/curl/releases/tag/curl-8_23_0
- # after checking pgp signature:
--# https://curl.se/download/curl-8.22.0.tar.xz.asc
-+# https://curl.se/download/curl-8.23.0.tar.xz.asc
- # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256  f7ef3ae8a22e521f289803fe93543eb64c329b58aa73a9e224dfd915a2a5f4f7  curl-8.22.0.tar.xz
-+sha256  8dadd7d2536a314f982ad05a651b713f426bf7d02cc2c76cffb9796f2218e6c5  curl-8.23.0.tar.xz
- # Locally computed
- sha256  82f2f4427d6545ee5aaac4f0b80428da6cc8ba41c2cf5da3a03680ec327b9681  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index c3590a8a9e..00f718fbec 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libglib2/libglib2.hash b/package/libglib2/libglib2.hash
+index 8970ef74e3..95bf4d3179 100644
+--- a/package/libglib2/libglib2.hash
++++ b/package/libglib2/libglib2.hash
+@@ -1,4 +1,4 @@
+-# https://download.gnome.org/sources/glib/2.88/glib-2.88.3.sha256sum
+-sha256  ab24d24e698dfa1e408b7bcdb508f4aafc906185a8b8ce72fdf79bbbdc9b383b  glib-2.88.3.tar.xz
++# https://download.gnome.org/sources/glib/2.88/glib-2.88.4.sha256sum
++sha256  25fd169f3b2f91fe2391ad297883ce0fcf30c69fc789ffd1c9672d1332b1c5a8  glib-2.88.4.tar.xz
+ # License files, locally calculated
+ sha256  fa6f36630bb1e0c571d34b2bbdf188d08495c9dbf58f28cac112f303fc1f58fb  COPYING
+diff --git a/package/libglib2/libglib2.mk b/package/libglib2/libglib2.mk
+index bfe4920291..45aa894b81 100644
+--- a/package/libglib2/libglib2.mk
++++ b/package/libglib2/libglib2.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--LIBCURL_VERSION = 8.22.0
-+LIBCURL_VERSION = 8.23.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
-@@ -161,7 +161,6 @@ LIBCURL_CONF_OPTS += \
- 	--enable-imap \
- 	--enable-pop3 \
- 	--enable-rtsp \
--	--enable-smb \
- 	--enable-smtp \
- 	--enable-telnet \
- 	--enable-tftp
-@@ -172,7 +171,6 @@ LIBCURL_CONF_OPTS += \
- 	--disable-imap \
- 	--disable-pop3 \
- 	--disable-rtsp \
--	--disable-smb \
- 	--disable-smtp \
- 	--disable-telnet \
- 	--disable-tftp
+ LIBGLIB2_VERSION_MAJOR = 2.88
+-LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).3
++LIBGLIB2_VERSION = $(LIBGLIB2_VERSION_MAJOR).4
+ LIBGLIB2_SOURCE = glib-$(LIBGLIB2_VERSION).tar.xz
+ LIBGLIB2_SITE = https://download.gnome.org/sources/glib/$(LIBGLIB2_VERSION_MAJOR)
+ LIBGLIB2_LICENSE = LGPL-2.1+
 
---===============4645395842469138715==
+--===============5351172646841970963==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -267,4 +202,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============4645395842469138715==--
+--===============5351172646841970963==--
