@@ -2,120 +2,104 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A822606A319
-	for <buildroot@archiver.kernel.org>; Thu, 22 Oct 2026 21:27:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AEDF606A319
+	for <buildroot@archiver.kernel.org>; Thu, 22 Oct 2026 21:29:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=DR1L2GeA
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=gKpzMBmo
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DCEEF4099B;
-	Thu, 22 Oct 2026 21:27:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37A1D4051F;
+	Thu, 22 Oct 2026 21:29:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EcfW5UXwBOeN; Thu, 22 Oct 2026 21:27:35 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 029F4409A5
+ id msWfcwoxn7Zr; Thu, 22 Oct 2026 21:29:31 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 523FB409C6
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792704455;
-	b=mlNt5/HUEMrRI+fDId3Pe9vH00ELk69VANrN/bK5TjTbE8Yucd7noQfT/eCFYIUMzW0k
-	 fA+FoF13Q+C4ovWboEksHjfENNG5eYRRs5PvGQ3SQIunTbyra4MrWDIsF9FyHTRfygkTP
-	 TJmZ5T/mSzPzLleH8NN+yUNkD5KmmzmS95x2nq67hRPVXWE3g/rfapwaAFyhC8Ua5Hyuf
-	 FldRBhwL+zghhXYMGLbvjNbG7IFesQ8Thj4O/CNohEcbrtioP7uyTiblXl4lZPX2FEMLI
-	 29jwBnnPQIOYsxAeCZYxFvXWjAqKbzqcH5lcsxBvLaivwLn2vNmkOI6h2AnKPohfK3w==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792704571;
+	b=UMn/zTK81IuIV6IfPPZMwy4jg6qbv0M0a7jtfywD8O8O/KwJ1rdztzkjPICPwza+gZ/Q
+	 v6P6ihl3DW8wNTEHKVEL9ArMgzbRNUj8JVX+oPtQdWmAk02br0hky5j0MYIuqFcYgvaRN
+	 GeP8HBh1U/9tkXMG7VJnOuf0H5kjJixHOfHBcctwSuxBnxqE1L9qPKOaF9IfdbBlPiJiw
+	 ANd862/kgbMSXmZ7rjZnUv/R7uk821veheiYaffgwO+WlD1XsP23YsZgweIr3N7ef92DN
+	 OtuaiQ+I6CfnvcWUbw/MECbR8upuk7XApoNeNFxFdQisfsa7i86+T37uHYWUyzMiMLg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792704455;
+	c=relaxed/relaxed; t=1792704571;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=T69x640bAVWeaedp3vsCLNV5n9K67xtswgDW/Eqr4S0=;
-	b=LXW45+BOn8vpDGVQfjT9LuoeDnwI0DBWoQl+sOb06z8Olub2FZObTYh9opgn5K60P0CR
-	 ErFOt633+1LZ4Yr3P9Pcbva7rjRR/6wad9DRluzWuVfreK5BECSpLkGzdbg51LQiNpkBw
-	 bghVpeSJDQOpW6beHxQJqQbnTvs/1zuNSWE0XfypQ5AsXflhewQbUF2dihf1hlR1exc5Y
-	 191E+U2UjXVi7O0WTGAiumHzrinKIh/9dZP5nDgS7R9QlHlLX+BZ+kN8NxFmbqfLPKFzp
-	 zQkyLg5ErV2fRL8SBH+mH1zrCpBLkRaSmBm411Hy/MsnQyLzNf/6y7rxyFH0U5v3Ddw==
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=WH7PPihkaVMkUbYCokO82os0nPmh0OxRcizm6dXOgfY=;
+	b=heBAXAen9nYZnJpPKgAdq/aRPzZceIqmCFW3z7RCWCeU48aS60HPvoYzmrhOXFbubx0a
+	 5tek33C6dWN9VEWir1TG0bYIdw+UAuwzI/DSCTKi38b4J+U9nM5IYspQFAL795DLiVmdl
+	 Ln8nZy2lCUrvQ/PHzsFMVZkoovI1xP7rBgkxe+K1JByG363mzUT5M0tNREUyta+LbVXUh
+	 2kwdqeB32R09R7sskXThFjk31+oJgq8P4/yVLtuHoRIwimD1OwvanKZvlexj1tmYyjpdk
+	 935HPn5+uOSEfhlzS89AyRz2x+PP4k2QDJbe2JCKd4OZkaf2Oz+OVGglwo2dG8UrovQ==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792704455;
-	bh=T69x640bAVWeaedp3vsCLNV5n9K67xtswgDW/Eqr4S0=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=DR1L2GeAFbmxt0vEvu8/+Jk1H4o+1LnwmTBy0Y0phHVMfgWtfWQOvgDi0w5mbujfl
-	 nKDfr7s1JcAZPwTufuAgYTg2Ex1VC9f9P64qFwNiljt+cNqOh8cYScTyAy5r6fWxUJ
-	 zxK5KhqvNPwYK9sShRxk09R8owmlxeXJD2/bM30zWCjsW+fgCc6aEoW8jNXEmMpRiO
-	 wP/f4EUtGPkee1KH4hadKJW9k9WAiDOuWLtGjvnSz5xonUzWojWrDBw4CgO1ymIf2Y
-	 peeyEKb8GliTy+kCX2P7hJSTttWK9n/wvGoezk2MwyuemtBj53tB0tFW4vPwCrWyKP
-	 b0AQRSMzNRAgg==
+	s=default; t=1792704571;
+	bh=WH7PPihkaVMkUbYCokO82os0nPmh0OxRcizm6dXOgfY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=gKpzMBmovPQf79jDhKNQMBYi19T+cJNNetlRJzDgFcRFL43lBcqzc4jNbpDnd7wkd
+	 /ydTWbjJWh3h3I6ruGgQio6JoHm4GQ3wTU6AFDggdqtirTmkaLh3FZ2dG8s1lBBXQv
+	 ACbwhqNKqupYfAd475LZqIqQOlCuqYoqmu72ORWQ9q9eUTm1OQ2MkdW1qnUmyoZaaN
+	 FM2ifmH91XSM3fq9BchUlz+TKDuqHfiY9tAql5GtZovoawy+ihH7RQpG4i8Ht5YbVi
+	 EBVnZA13ys13cxDdoS3yOW+W3StI7DRPF1VHvCCtJnMqB020M+0Qw48JZl/gcLRU+Q
+	 pEEihj/qAt0Pg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 029F4409A5;
-	Thu, 22 Oct 2026 21:27:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id EE4A23AF
- for <buildroot@buildroot.org>; Thu, 22 Oct 2026 21:27:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 523FB409C6;
+	Thu, 22 Oct 2026 21:29:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 00DC13AF
+ for <buildroot@buildroot.org>; Thu, 22 Oct 2026 21:29:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DFF54401DE
- for <buildroot@buildroot.org>; Thu, 22 Oct 2026 21:27:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E680581352
+ for <buildroot@buildroot.org>; Thu, 22 Oct 2026 21:29:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4S7uGnBDBNDQ for <buildroot@buildroot.org>;
- Thu, 22 Oct 2026 21:27:32 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org CED97401D0
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792704452;
- b=mRTcGXIKo5AC+SG8GQwSLdAFqkPTGNTY1sdnSfR0+ysTThMatTygsttXyuXhsQ/6Bqnl
- wwJlnxGyMAxtsac9DUyCy9GhfTKqAEI3Mn01xj9MIp7kCopz76OD20OSo1ND84PsKXdNf
- ldlK+hZCXkl5LT4vD1NaXQoyVZK7sZpdLXPh8bf0yiMM66PwVyrz9SfSkwnUYjIalGdc6
- I0s7+Qk1QvuBhJAeQkumOBaiVl8rV+5mFHneIfkpncN+KxB4zTLFBaSZLT7nszZ5gJDKA
- BrtX8D4rKK3h1jMTMQvQ1iZZs7NOTn0c7yqDKpOSXZ9oPb9WxCpYlORciG+Sb8CUmXQ==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kF4NQS-dY4lq for <buildroot@buildroot.org>;
+ Thu, 22 Oct 2026 21:29:29 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 4C06580AD3
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792704569;
+ b=HrKVjrTKEk8eugF/kA+j4GLMpMTq9zkZcsmtk/PmdQVOEr8/OjVNao01BZAtFYPMAqfQ
+ IVZDphmoh5hBEIc4Oz9ndG+N1CdvbvHEhIM/ltV0m01N8HRlALaLksyxDYlJMSg3OeRrp
+ qOstdjh4q8lEFSfxWM4WFC4U6LRwBb1dC/vsmdyIBX24/9xCOxt1d4HRLEE4S7InU/0/k
+ F7pb8AS49OluC1TmW2WRa2T8a63DWl1zsCAkqci2ao2a8ELp23Qh6V8sV4CTlPzLVMY5G
+ j+B/E9Cwbgy8TSFdIegwptgTmXSMyMZJ4l15ANeJ/q4uYxC/YalAicEnJko2yulMQ6A==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792704452;
- h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
- Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
- Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
- bh=Nu7atxcxQkfGykfw1zBY+LuHjK0t/8TW8NrHqkVCQGU=;
- b=At5q08BYfVYHi8Th0iSbJHaDQ2Xw1v6l/1Y2lUM1qhssPpRANQ6aZmQln+ue4WuiwIBI
- D/7gOw9rsIo0tr2guTvzkFyTR2KyRdsu5i8cKkxVzjkvvunuR33FOR/UFRkvneiMIzEqd
- v+K4+VHB1fVDfPfabqWKp2xKW/SoY1z+1dFpvmsM9ReePsq3KTsAnDu6kJkP+9T6h0lGe
- 22XT5Sm4G2v2WWQws7yolqi92XAB+5Q6S7cfJ5L4B9FaTSE0CQKbzDrzNcqwQyGHWpGWi
- 6aJLhC7ARp3yQ1f+LXLbSj9LfoFSLx5jAMAFDoUDfM9OrIJKMWjbWGKM0YpVq2zjToQ==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
- dmarc=pass header.from=bootlin.com;
- dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=m7RnehNy; 
- arc=none smtp.remote-ip=185.171.202.116
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ c=relaxed/relaxed; t=1792704569;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=KLhh6vrUuV+lUk7DzEk6VBIaT3saXmHBv4iARTwjbzo=;
+ b=Eoc1V6R5y2nK8AsMZA6SgjYYVqO45psxFQ+V81J15Ack/SGPUxLDN7LhI3zj+0gyPcfu
+ qqgZSRVX5Gu7WO45ZDr2D+Pkcp0/hqgP6W3Uin3J+jEfMDQT6wQVPunvLGlrqdaB2Q5b1
+ Ua2Cf5gTcV/CDAQgPJli/f2jra/SS51ocx90EW8tBAjKwHi5FusCwIOL140D49e4Fbaaw
+ yzfVEXEOwvxwF8Twgao7uJIvcNeufKtyIxa8rhNpL4vajUp27n/yhVryv2RMSiiL+8gD4
+ inodQhL6tEDd0VnfrMUM04cMSEPiPnbYKOZsa8Vr5H+p59xBz/J9dCXUOpP/kd2sqmQ==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CED97401D0
- for <buildroot@buildroot.org>; Thu, 22 Oct 2026 21:27:31 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id A0EABC51457;
- Thu, 22 Oct 2026 21:28:28 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 21D7960763;
- Thu, 22 Oct 2026 21:27:29 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 37339103281B0; 
- Thu, 22 Oct 2026 23:27:24 +0200 (CEST)
-Date: Thu, 22 Oct 2026 23:27:23 +0200
-To: Vincent Jardin <vjardin@free.fr>
-Cc: buildroot@buildroot.org, Vladimir Oltean <olteanv@gmail.com>
-Message-ID: <atp_trY-e6Zp4prX@windsurf>
-References: <20261003205412.2056188-1-vjardin@free.fr>
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20261003205412.2056188-1-vjardin@free.fr>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH] package/qoriq-mc-binary: bump version to
- 10.40.100 for lx2160a
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4C06580AD3
+ for <buildroot@buildroot.org>; Thu, 22 Oct 2026 21:29:29 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 190929C5B3; Thu, 22 Oct 2026 21:28:05 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 22 Oct 2026 23:27:40 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0c41f4f1221f1812b4110dbaed0cbf7bf7b0622b
+X-Git-Newrev: 69e98fc39aa8e1610a5cfd7e74e193641d57857d
+X-Patchwork-Hint: ignore
+Message-Id: <20261022212805.190929C5B3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/{opencv4,
+ opencv4-contrib}: bump version to 4.14.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -127,44 +111,77 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS autolearn=ham
-	autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-On Sat, Oct 03, 2026 at 10:54:12PM +0200, Vincent Jardin via buildroot wrote:
-> NXP tagged 10.40.100 as an engineering release on top of 10.40.0. It
-> sits one commit past upstream master and only ships the lx2160a
-> firmware, with DPNI shaping and DPSW fixes over 10.40.0.
-> 
-> Use it for the lx2160a target, and keep 10.39.0, the last release that
-> still ships them, for the ls1088a, ls2080a and ls2088a targets.
-> 
-> qoriq-mc-utils stays at 10.39.0: upstream has a 10.40.0 release of it
-> but no 10.40.100.
-> 
-> Changelog:
-> https://github.com/nxp-qoriq/qoriq-mc-binary/blob/mc_release_10.40.100/CHANGELOG.md
-> 
-> Tested with Buildroot's GitLab CI (test-pkg on all toolchains):
-> https://gitlab.com/vjardin/buildroot/-/pipelines/2909708426
-> 
-> Signed-off-by: Vincent Jardin <vjardin@free.fr>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/69e98fc39aa8e1610a5cfd7e74e193641d57857d
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks!
+https://github.com/opencv/opencv/releases/tag/4.14.0
+https://github.com/opencv/opencv/wiki/OpenCV-Change-Logs#version4140
 
-Best regards,
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/opencv4-contrib/opencv4-contrib.hash | 2 +-
+ package/opencv4-contrib/opencv4-contrib.mk   | 2 +-
+ package/opencv4/opencv4.hash                 | 2 +-
+ package/opencv4/opencv4.mk                   | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-Thomas Petazzoni
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/opencv4-contrib/opencv4-contrib.hash b/package/opencv4-contrib/opencv4-contrib.hash
+index 84e249cd30..810834abfa 100644
+--- a/package/opencv4-contrib/opencv4-contrib.hash
++++ b/package/opencv4-contrib/opencv4-contrib.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  1e0077a4fd2960a7d2f4c9e49d6ba7bb891cac2d1be36d7e8e47aa97a9d1039b  opencv4-contrib-4.13.0.tar.gz
++sha256  4f17abd1bc7f88e19c3380c8de7cbf2d863aced5b5ee8d8934cc7902b67d42c9  opencv4-contrib-4.14.0.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/opencv4-contrib/opencv4-contrib.mk b/package/opencv4-contrib/opencv4-contrib.mk
+index c21be2f948..412846fd95 100644
+--- a/package/opencv4-contrib/opencv4-contrib.mk
++++ b/package/opencv4-contrib/opencv4-contrib.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update opencv4
+-OPENCV4_CONTRIB_VERSION = 4.13.0
++OPENCV4_CONTRIB_VERSION = 4.14.0
+ OPENCV4_CONTRIB_SITE = $(call github,opencv,opencv_contrib,$(OPENCV4_CONTRIB_VERSION))
+ OPENCV4_CONTRIB_INSTALL_TARGET = NO
+ OPENCV4_CONTRIB_LICENSE = Apache-2.0
+diff --git a/package/opencv4/opencv4.hash b/package/opencv4/opencv4.hash
+index 283f7606b1..cc74feb8a0 100644
+--- a/package/opencv4/opencv4.hash
++++ b/package/opencv4/opencv4.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  1d40ca017ea51c533cf9fd5cbde5b5fe7ae248291ddf2af99d4c17cf8e13017d  opencv4-4.13.0.tar.gz
++sha256  ee8fb9b30eb60850431b4656447080e3737b56e45719c92b67f245950609f86e  opencv4-4.14.0.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/opencv4/opencv4.mk b/package/opencv4/opencv4.mk
+index 0e2567eb6f..2a85290aaa 100644
+--- a/package/opencv4/opencv4.mk
++++ b/package/opencv4/opencv4.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update opencv4-contrib
+-OPENCV4_VERSION = 4.13.0
++OPENCV4_VERSION = 4.14.0
+ OPENCV4_SITE = $(call github,opencv,opencv,$(OPENCV4_VERSION))
+ OPENCV4_INSTALL_STAGING = YES
+ OPENCV4_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
