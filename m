@@ -2,27 +2,27 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21217606A31A
-	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 12:32:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7B2E606A31E
+	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 12:32:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=tBYOSjBv
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=HuRCr/Hu
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E38BE81585;
-	Fri, 23 Oct 2026 12:32:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A519481469;
+	Fri, 23 Oct 2026 12:32:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q5pfCRB_Cjfr; Fri, 23 Oct 2026 12:32:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org CBE8881495
+ id GDkHOfd-YDGU; Fri, 23 Oct 2026 12:32:42 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org A4223815DC
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792758761;
-	b=jG7d8KzaMKVLGBVgGq+YbWHetRdoJK7nMZ2aRsWZiPLjf7Q91mYEgrytuPqKd/nvPjLA
-	 tPcX5Yuc9RHEu3YUC6e72b25AsPQYojUcVR4zWtaH5SWefVySLe3apsWT3PJIs9ycgQrx
-	 SZw1wlQr4coCGpFHkyHd5n6naRXuD0bvFhbBqJTEhs9vhouOjqnY0KcDoH/qMVa6UHRj5
-	 Q0AkVZ9X1UODIyqutwhC2+89oD67N3WdfF1QXbNNEUhdKgsci3UeJeK9ALepmdqKgR77z
-	 EQqKbsIzVvCgFDhlYT0XFpV3d7iKAsMLpT+DGPyZB6nbZ3dsR5DOLHeL0pLv+aZ3NRg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792758762;
+	b=CGw+KENa6SpEl1p3kM0zck8UPw/OBygX1dXwneu81A+tXBkDmlRA2dILzj4kYkFRdEhf
+	 5kCfOHF3xGMPMPSXPW8NQMyQl1vVEF4XHlNOsWnIhDF+brX+8MxGVD7IAtH7rYJaBf2Tm
+	 LlbXhxLzs/WeeIJFibJiBfCFKlSjNHx5J6NMttYrL8M97ZUKkf+bkK9ikhk8fBwFhsfNh
+	 lWu5XDvxkEYj3J/gf1nyg+7EnRo1PkCtByx1XxsF80XrnL1ShUzvJ1d0jZMeJfI92J1q6
+	 KkKQniGpBbEtMUwgVwTRAlZWSq2EuRKYIJWnzFwNYdbfphxEsmG+MNp7COPf0LEeKdQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792758761;
+	c=relaxed/relaxed; t=1792758762;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=O7ijWjicCU8BIwKZoje+K0Z+70b0w01Im2MxOVmbR0U=;
-	b=JIiQtyeqbm2QpthshLtIVn894JzNuaT+FhKMun/n1De2ANUDPAKw3KWjxP06Z6JGv6eK
-	 JxMj6VrHGJ+sTepxSf9svZ6tv5bTyu3xc3hly4jmDVK8dQSjtBbqK5oucIg2b57hgcDEw
-	 PyNz5I+X3e3KOe3Xyi4dIGxVLSONW2UqHKvFshNh+XE2gn8Tq0x5xRzCTVCQAyZIUCAec
-	 H0lqx0xzifeuqb72Dshnq8VwDyTQxWW9YSD5ui2klkcON8aYnVCEpj0wyYMU+l1UJ7umE
-	 q2/20YlHSWzKgiTVJmjOcbps7OTeCavHPk98iApGE+YeHG/dyjFkWmNb0SFyhkgMJUw==
+	bh=XuAZo9guBITSCtAodOVQ7EO1uW0gVW0jRaGlfxY4eBc=;
+	b=iXw8ImNpS7iRR/uspd+dauGiZ6Y510wewT5NIQG5l4KSw5oLoCuTre1L8HA3HpDtl7/t
+	 JbFNkmzLLaUy6Q/KqBNkJMCk78Fw3GYPCweEoHZtQyVzFeSmJkZP5G6mPfUPprPALb8SU
+	 8rpeKaO6Ep3NtLkM6h2fZkLdKBCt/iAqK15qYOgvQBCLCnp+bjfBTB4PMFxHywQLDb7gp
+	 Ad+rJiowvdP4Q6qGkeUCOQzvbCMRVdeT3Om6RziSSq5bHcpTnmeoqwBXfazpKsBNrPhbP
+	 GaX/OYvE/hdgYVpj41FbiVJgJoZePhB45dVwJyeuTVNG8kzLn+X7KVTr9Cm22Wt8LTA==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792758761;
-	bh=O7ijWjicCU8BIwKZoje+K0Z+70b0w01Im2MxOVmbR0U=;
+	s=default; t=1792758762;
+	bh=XuAZo9guBITSCtAodOVQ7EO1uW0gVW0jRaGlfxY4eBc=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=tBYOSjBv6M2u1OGQ8A3QOQPIMbEEAxsPlcquD2ndosjAatBz2uhonWQ75k1ggrRLw
-	 Xdg/PoR2XqF0cqZhnQ1PRAoS1JdbRkmFltCBALf+34jRYkw3z6CINu+dQUI0RcCWyv
-	 qt4dy9bLbYPZBAOFOBRVOxvsl7Ylt/xTL/tnLn0KON2d9OJiS8zo0ylhSKnVAgHJFo
-	 8CyloLRpXxo6okpJk80gcPmLsgIZTilfqdKuODJqmoaIFi61n2BmTr+0FqiOtM+h4o
-	 VXvzBG36N4KCyJ6v46jtOo7wbGJNmbge35Xz2G7L+K8IbVn6iTZJu98eXuecRJRoD+
-	 jvQRrEfq+GBKg==
+	b=HuRCr/HuKJ5WX4ibPy6YdwOvfTh7nmbiMKv2gtxtcAgXPK5yBE783bHYkwhpC0utz
+	 2wa4CyLWHexMmCW5Bk4QO9AEPPGsxrfZhaiMnSE4vrPDumq30z/JP0kJJnXeVB8VBS
+	 njxgqZocuLLsvOW1UODUAo2ZVOsyTvEQU376gtevlGWMj1AahKbeTNpp1Vh0tDhfFA
+	 gR7zd+6FMenmVaLZDskOpn2gV7MgYhqGP3a8PsrqCrEBlSmkMWYff3lhgSUq3Vlg7P
+	 qjLVeHTj+fN+N+qVrARdpUok79VrKyb0HZV540Vv6Zs8EPw6RCepgeBbrbhf2KKPiy
+	 Kuc4mCD5Bn80A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CBE8881495;
-	Fri, 23 Oct 2026 12:32:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5FD1F12C
+	by smtp1.osuosl.org (Postfix) with ESMTP id A4223815DC;
+	Fri, 23 Oct 2026 12:32:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8867412C
  for <buildroot@buildroot.org>; Fri, 23 Oct 2026 12:32:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 454C5401CC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6F37040956
  for <buildroot@buildroot.org>; Fri, 23 Oct 2026 12:32:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ys8zzcqDWWpT for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6Z4k4YegcN6C for <buildroot@buildroot.org>;
  Fri, 23 Oct 2026 12:32:07 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 8B15C40119
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org CFD8540934
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792758727;
- b=dzN/UlIhs4M7dRK8NjMlYZ/dGSA6C8z7eAZaUAFv9LsLYlxNi0PCjZtj9r0Srr+PovP8
- ghQeXrqpYbNvMvxo86gJS8Uwhv8IOn4dvZxKFIWZNUrHJ8a+SXdAkT5iOzMTnY9Tux7vH
- 5ht+YDBqMcu4MPSrazvrPME3HOQllFWm1+HeWZfhpDJNqQ2O6oi06XxjB1wIjwAGeDUXC
- Q9VUBECaTL4pjd+Siqr5BHIk2TSJl6XIAA+dIEBZRJZNwGWVWvhplUTDfS3tqqjfmA+Wl
- ZQmfZG7He2LVQQoKHlNvMju0cI9E84Lufb8HDHxxis6k7D3Dnpd7Q6E4c0k+o1z4r4w==
+ b=if+akFimqzs81L3W+tws9/Lq3ZbJqV2slZRUrBsIrNE76v98OkA23oi2raxOcWl1h81r
+ oLXuJ0zfjGwUhdat6PhvxN3p2aDa5c64ZOGN1ndfaeEpxknvmHG5AztA8O/yR8X9cOpov
+ cEF0/ky8v3rARSg6gx0c8YeBWJLNgy78lnWGmfRnH0gpwoJjNiZKhoD1BYe+3VStYXyO3
+ hWqg+P/uZhHeQoabPu8xbK8b59A8F2s7w02Q/s3ew4E1/8pBfKUKwm/hMWNef1EMpk1+j
+ a2E0KCgAy5XiVdlZdhSCq71UaJydrs20xg4bwIuhjA115FA3mV0rE/GEcsMSDYKbFmw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1792758727;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=UUqFU7bt6PZZqASGl6jKpFecennBxbrpBGKa3qWvGYc=;
- b=mQpJB53/LNt5pLn8Hms4L0Yzk6YsVfzdLU+tpZzlDAGGwjsUjEuVK8BermKIQiK0bZUo
- dz9+DyXfUp39An/VPcaSBW4RfUkAPV7OCDh7H8Z3VjEVcez8JllbBJxVjWgP1a+n2T7T8
- 2TBkuBYP+qRnbj2XMeUPFrRY7aaxeQiVhtKbbJ5j8IZlHaalkXikUYIR/vfFQ8wkGzhS8
- AVpsSqYaJbkGFX/2sJcBiAVZUaNdGQJ7nWZHnEAlwPR5xe1r5GVzJy2s1TCi/a/zG0Ty4
- snsadKiqlT90nDk4IOzOtRc68x4HbpoEpbalw4ZMrJZ8reL/hsYCmP4WAcYQ+VjbsaQ==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ bh=9fP/ri4T9XFjqRtECG7AytIgLeXMZKzWZAo5eqYZJOU=;
+ b=Ca3txpM6GX5nYhsXlpp1F+s2ibNFEHuCA8y2gMPuj3NokfSu8i3lsiaHpK8FBKKf6btg
+ B33iNmuvhuO6nZGgSOv0rIT79tNJ5yVQveEyXtp7GogBjj+zoV3fUkCMfmS8P/piACHUp
+ 7josGT1xtmhBkY185nzUBlIYWS9VHO69jKhG0bug+CdocbCaVlZLUeNf+5Ixb6vqM/K+t
+ kul6e2XAyEXkyu/e9m5iuEqPSJrRqBnFYTwXU9O5EmQGcGjubLFSAqzOefNZSIS6mtalv
+ 74wiVSM69Ek+Z1mjN4TmWAm/+qOtiwCzMCaJR37k+/XYQaX+LEl7w9IE4dvIWZsiFAw==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8B15C40119
+ by smtp4.osuosl.org (Postfix) with ESMTP id CFD8540934
  for <buildroot@buildroot.org>; Fri, 23 Oct 2026 12:32:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1E44C9C669; Fri, 23 Oct 2026 12:30:43 +0000 (UTC)
+ id 56E419C66A; Fri, 23 Oct 2026 12:30:43 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 22 Oct 2026 20:50:28 +0200
+Date: Thu, 22 Oct 2026 20:50:29 +0200
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: 6c40b598849e8879b7fea47be1c79a2aa7a0ff3a
-X-Git-Newrev: 8d1527892c2022c0bf340029059f63f8aee5766b
+X-Git-Oldrev: 2e919a4cb688e2b36c1033978476c47daa2d1bcb
+X-Git-Newrev: b100bc0a91aa656846e839a688f457ea7467f6f7
 X-Patchwork-Hint: ignore
-Message-Id: <20261023123043.1E44C9C669@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/p11-kit: security
- bump to version 0.26.5
+Message-Id: <20261023123043.56E419C66A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x]
+ support/testing/tests/package/test_uboot_tools.py: fix typos
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,74 +114,54 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1987896914570920579=="
+Content-Type: multipart/mixed; boundary="===============1000655204712325076=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_NONE autolearn=ham autolearn_force=no
-	version=4.0.1
+	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_NONE,T_PDS_OTHER_BAD_TLD
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============1987896914570920579==
+--===============1000655204712325076==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8d1527892c2022c0bf340029059f63f8aee5766b
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b100bc0a91aa656846e839a688f457ea7467f6f7
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-Security fixes by versions:
-
-0.26.5
-* CVE-2026-18938: rpc: guard against overflow when decoding nested
-  attributes
-  https://github.com/advisories/GHSA-6x8p-h5fj-5ppr
-
-0.26.3
-* CVE-2026-13757: server: fixed stack exhaustion via unbounded
-  recursion in RPC attribute parsing by enforcing a recursion depth
-  limit
-  https://github.com/advisories/GHSA-p2wm-69qx-x25w
-* various memory management fixes (including memory leaks) without
-  CVE or details on possible security impact
-
-Full upstream changelog:
-https://github.com/p11-glue/p11-kit/blob/0.26.5/NEWS
-
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit f432a9e625cd1dabc7722e894909d7ae23e5e488)
+(cherry picked from commit 5b61def5b3b15b85f93a4d9c17474e003c4f64f7)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/p11-kit/p11-kit.hash | 2 +-
- package/p11-kit/p11-kit.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ support/testing/tests/package/test_uboot_tools.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/p11-kit/p11-kit.hash b/package/p11-kit/p11-kit.hash
-index 943ad9c22f..ca76eddae6 100644
---- a/package/p11-kit/p11-kit.hash
-+++ b/package/p11-kit/p11-kit.hash
-@@ -1,4 +1,4 @@
- # From https://github.com/p11-glue/p11-kit/releases/tag/0.26.2
--sha256  09fd9f44da4813a3141e73d5e7cf7008e5660d0405f13d56c15e1da9dcecf828  p11-kit-0.26.2.tar.xz
-+sha256  f2cc09111e44bf3fea58f023180b33acea90aa82d042d6fbb623fbc5ba033bb7  p11-kit-0.26.5.tar.xz
- # Locally computed
- sha256  2e1ba993904df807a10c3eda1e5c272338edc35674b679773a8b3ad460731054  COPYING
-diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
-index 60133223ce..b3bb3e1263 100644
---- a/package/p11-kit/p11-kit.mk
-+++ b/package/p11-kit/p11-kit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/testing/tests/package/test_uboot_tools.py b/support/testing/tests/package/test_uboot_tools.py
+index 8cff6fda21..13f77c3379 100644
+--- a/support/testing/tests/package/test_uboot_tools.py
++++ b/support/testing/tests/package/test_uboot_tools.py
+@@ -96,7 +96,7 @@ class TestHostUbootTools(infra.basetest.BRHostPkgTest):
+         keydir = Path(self.builddir) / "keys"
+         keydir.mkdir(exist_ok=True)
  
--P11_KIT_VERSION = 0.26.2
-+P11_KIT_VERSION = 0.26.5
- P11_KIT_SOURCE = p11-kit-$(P11_KIT_VERSION).tar.xz
- P11_KIT_SITE = https://github.com/p11-glue/p11-kit/releases/download/$(P11_KIT_VERSION)
- P11_KIT_INSTALL_STAGING = YES
+-        # We generate a prublic/private key pair to sign the image.
++        # We generate a public/private key pair to sign the image.
+         cmd = [
+             "host/bin/openssl", "req", "-batch", "-new", "-x509", "-nodes",
+             "-newkey", "rsa:2048", "-keyout", str(keydir / "dev.key"),
+@@ -150,7 +150,7 @@ class TestHostUbootTools(infra.basetest.BRHostPkgTest):
+         ]
+         infra.run_cmd_on_host(self.builddir, cmd)
+ 
+-        # We check again the siganute, and expect a failure.
++        # We check again the signature, and expect a failure.
+         cmd = [
+             "host/bin/fit_check_sign", "-f", "signed.fit",
+             "-k", "test-key.dtb",
 
---===============1987896914570920579==
+--===============1000655204712325076==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -192,4 +172,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============1987896914570920579==--
+--===============1000655204712325076==--
