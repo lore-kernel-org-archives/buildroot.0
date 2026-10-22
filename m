@@ -2,114 +2,123 @@ Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79DD3606A31E
-	for <buildroot@archiver.kernel.org>; Thu, 22 Oct 2026 18:25:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF9A560A260F
+	for <buildroot@archiver.kernel.org>; Thu, 22 Oct 2026 18:31:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=rowtkd44
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=MB98bXlu
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 525BA607BB;
-	Thu, 22 Oct 2026 18:25:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 29DCF60821;
+	Thu, 22 Oct 2026 18:31:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1YonfG4-FTdl; Thu, 22 Oct 2026 18:25:15 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 977F5606A5
+ id Yq-2c8nnzI7g; Thu, 22 Oct 2026 18:31:05 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org DDEF7606C4
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792693515;
-	b=O2yMBuOZgGInhPqXLKLPCoVECIOCQwa0EzrEwij7SGObtyxUB1Ujfr7bHMXhGignub7q
-	 QnqwAy15fLUoLZ/eq4/RPL8idZ8fYo0fjNIDSyesU/M5MCCwpFEpq+6kOaEV1aCXYeAUA
-	 MujGyKDZlOe57wBMBeKulwPYgIRVEZPfUwTpRaUO8MqzPMUQSWoJ2bFE0FKzT2hoIK5aw
-	 394eD8sEf79A69UzPaNYU0+cGTbJOXZ2TaS22eh8J2pHO5RP+Zw0oBoBtfQ3vmh6cGgdB
-	 BWiZAJjpcKJJ0OwxZG9xLjURynSGMETi/9zFXu/iIu62ypfuJBpi6ZOC/AZZma586FA==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792693865;
+	b=j3ApWCw45zQ+yooP5+1xEEgSd+V46bISVj1F7nJIscgFiARkKWkt9zAOvhpiRB0obaJp
+	 ybQhcHDMFHtuxEz58GtCJJTWwtryrFVKR0MVI3r8C5P4JSNyxOMBbfGZZfplrY8153R8E
+	 jv9UOJerQdH+iEfMH1XDcGRYSRl8wMxplKafiPfCNTsZS/ToizTkgD6IcOceCOsS21d/S
+	 FEV9xL9QfWr3pWKwchjPxpDFinuuVM/GWOhPWZ5Xs9e0ZZ9H3hUP4M0MCc133d8t5egTN
+	 y+nDy9MV/w20+YsNx5lkPhAkqsfwKrckgyAvJUrzFuP+V8NrfOb0LYlM8cmdkwRwNTw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792693515;
+	c=relaxed/relaxed; t=1792693865;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 X-Injected-Via-Gmane:To:From:Date:Message-ID:References:Mime-Version:
-	 User-Agent:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
+	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=th2OqMMbg5sgwszE68JqxmFjoNy8WGcu/W+EpFlddFM=;
-	b=sqakeEOPuhck6CjlDJisWcBX9H0F1BbIe5emn72Yf3Eb31Yx9H+qsSzancJdOYiWKS+I
-	 icHQVFOj6R0BTeSb67JubCC15IEf9yVce7ktNxza8hbOuIGBE/5+kEfY/ew05+oCPm5f0
-	 KwUswtjdRaGNXQToqI3WGA/oc2BCcYb44DNbL2kmNrQqVzx19/LbWFoDYzY/mhhXY8Ty+
-	 303KYNrV4V2iW2p6jTgIOd8zIn1X/OnJMdf1Zr5FSYQyXD9yuZyNSeNzTh1rOv4a77T5q
-	 1EPv3fhCQ6HIVPQlYpA6qKSBUvBDf7HiqA2RQ7d5G4RlpuhEk4wuXAI+0e+n604HoHA==
+	bh=XTKxaFooBrdlapwEvELqeHPslS31JzWBlQcPBbr+K7o=;
+	b=jbxo+VhXiJPcpWZ9XSgezmhvJ9upJi21iyv1HtkZxXrjtQVpdDgCZ1cJWOxyZsUb+Luz
+	 KDCQN45HycPby2G6WHL4E+36HGI/wrxCz0CtbfKgAuPzPFVTAVcq01H7Q2XtF6xKF8PZP
+	 qF3dxxRxjaY8n01tyqlOrMTRG5Oum444Y3hgtNI56cyKuP7euCcgYkuZ6/O864kczHE8S
+	 kN/xwXFR90dhdU9I5XQCIXEP//XlVYwKGQxL+qUA7BxfY3TLtVL+OYm28/bP9zjify7vk
+	 Xkw4RQ+5qkzqFtYSx1guGREHjgxTg3PpzX/ZLNCIfjTH7Sx4BM0DTX5sh7aR4GMrwSg==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
-	dmarc=fail header.from=kuhls.net;
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792693515;
-	bh=th2OqMMbg5sgwszE68JqxmFjoNy8WGcu/W+EpFlddFM=;
-	h=To:From:Date:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From;
-	b=rowtkd44d6mcG93P8mPXV6Qkvw0Q8BfjZAQ4OTSuulVviay1qgLeodBBoe0hfD3sC
-	 UQ6HMIRybIwZ9Kra1hCFoRoCFQ6oWqdMs0gFsbImAYuZ9gLqpczzcTmUIUIqgdqLCw
-	 kUB3uMaqrQMurWxiyL+QMSUa7Yg8S8Fl8yax1Oitu0VLPcy5jRymSU6MR3eATwnUio
-	 1EGW6hqsDPBqC8EkfreoJuGIfrPrcYRiyy/MoWUV06G34pFH4G9zir4GKns0o/F/0y
-	 ME4nGDlbp+i9eLip58cqAWmN0UQ30ExBLKFF4m4vNo4zUHcu6jXHiDNLGVsDUxBF5p
-	 +2E6fHPBGljYQ==
+	s=default; t=1792693864;
+	bh=XTKxaFooBrdlapwEvELqeHPslS31JzWBlQcPBbr+K7o=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=MB98bXluzxvgcV+LJOv/srlii9B4vptfVZH6whyw6Zn23+Vy9gNJ0agKt4Y/RIm8u
+	 MY4OxW99MQoC2BUJ2CVAq33bOkHjk75j64/o3keverAjiV/niI3pmHlCnNPnTp2jP4
+	 RgcTPkgHVIN8NW/gXInN0gIL5Bs7lJeFyCDkjToq59l5z1WkH/gmu1iniwORKjn/6z
+	 y6xP67gZAh5631YlG01VaSl4OiM21O6Yvy79dvsD9sp0oQfITTLYbgoBOlF4Lc4nt8
+	 BkYM1m49wtCeQ3KnGIEqDRjwQdO1CDarfnyQ252x/tNsixgKM9LtWduUeVFm0v7E4V
+	 xljN9XDDUaXLw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 977F5606A5;
-	Thu, 22 Oct 2026 18:25:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6B5793A4
- for <buildroot@buildroot.org>; Thu, 22 Oct 2026 18:25:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DDEF7606C4;
+	Thu, 22 Oct 2026 18:31:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id EEE164BC
+ for <buildroot@buildroot.org>; Thu, 22 Oct 2026 18:31:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 50DF0606A5
- for <buildroot@buildroot.org>; Thu, 22 Oct 2026 18:25:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D4A98606C4
+ for <buildroot@buildroot.org>; Thu, 22 Oct 2026 18:31:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 73mZN5HOGuqu for <buildroot@buildroot.org>;
- Thu, 22 Oct 2026 18:25:12 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 0055C6066C
-Authentication-Results: smtp3.osuosl.org;
- arc=none smtp.remote-ip=116.202.254.214
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792693512;
- b=hyK1JmOfGPR+2rWfwiWgP89/FgWIDmyka/Ac09vpamQ5UD+L5xPgeAqSFoelMMIOehGm
- 49V/rAIndzsp4lBgibJ4/upYS3zQG865E1tVv0D4AL3Vq92jPdrMxqUc/8Txmp9Vzwyic
- HpSVlTJHTM94DNf56kDUvwav3AQNYqB1DMF1U6si2xGwYSfIcZEBaSHBdQYvuWknnQHw7
- Fy6EiJVKKOtsQzixB3aQGJb4UgEwGQDG3CE7pQKA42sdiPHgWdUxKqjQRLTmkbpdaagLR
- 78j4p1veKfG4VgS7N6z74pAkK97O0GyP4lD1O/A7t5UI1wsnolpJCBX38cQBuwzWqew==
+ id x0ophIzFJjeo for <buildroot@buildroot.org>;
+ Thu, 22 Oct 2026 18:31:01 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 425A0606A5
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792693861;
+ b=tMd2j2hEdoaLS+Ep+qjNnTf6149ao/bdJz71zFOjG0TRofggGFfCy5CLuwWl2wjGGR09
+ kKXqimO96jsg1YT9A+eMd7DzERBRBXaW4F4TWguKpcnly4Qz4MMSEIIwubWHgAk9E5X8q
+ GU0DG3XN/vZqlPR01fUDHr4yq6YlTVWxlkWzq9AeAnAR0jNytDCTVZLA/ONhhSIXn3EuM
+ WfaOnzR6DmPmU2VDIXKOY8wGQQJC6C15NlKe/BYq/jkevFaj7FQJT2uK0OUza7Omyg9Hx
+ RkbQ0dfou5cH26z+gg+xhTk2nTx+H/p4olthTtlhgrFVG3KJomovEbBWL41auqRnxWA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792693512;
- h=Received-SPF:Received:X-Injected-Via-Gmane:To:From:Subject:Date:
- Message-ID:References:Mime-Version:Content-Type:
- Content-Transfer-Encoding:User-Agent;
- bh=BoJgwEBF0eOaWLj6qCo/5SnoneXlnOaLENluLqvM+jI=;
- b=ILA5NiDr/C1BbC7JV3zhij25EcSBQYf9cJdDnoVVQFxUwqZqob3s6GdiRwUWWirezi0A
- e0X5T5e7qeBfnoiA50mSZWBdIUMRIWBN327UZs1kvvDVB3ccjq8ToaYKF4GV3SH2TaXrJ
- fhXwCrOX4Bt1EDDix4+Z2qwGFC5RB1fSB48MiLMpEHa7r99bIo/u4j22wflJBtpzUKRRv
- K/fEv5GMq8lE7FmpG8cNbOBhJ/0tCSy5VEli1uWCChMCrWlJer1QR7VdnFk8LUNM6MSo8
- VmbNk8vdF0Zb8u3Qz6+IC3A595c8DWOaIpScTePEwlRsTKIQaNYqR/dw/p3xCyPNG6w==
+ c=relaxed/relaxed; t=1792693861;
+ h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
+ Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+ Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
+ bh=j+pXiifekIj72Dn2mw2JpSqbz/d2LEa5YWamj3g4kp0=;
+ b=POVoTaRHaOYK7NNjW8X9eLrJyehZJXCMevj6q6sr7eLAYQruPFXWFGsWvVgyrzXlyO4t
+ dsBUJUbiDY6rilXuwa+QUPvBBmDOcKvJhp2B3WWtozaght33QZakm7VcbQvvBbeSbYe+E
+ qti5FQfQfuMM9N6psEqVi7KwhSXXaEF0P0doKwviFtVF0lvtejIfmXBQZI4/VSq1+SDJ7
+ lSLIQGqnoyWQ27+F6leXt2qBR2NaZvnGpP5dsPOJzD4TTUqQkXsB+ZdirBAyRuBwlhcDr
+ JsksDNPqg+MqHfJyzmOfDI4jA+CWiOVN7tcgxtfPvXwWlFyS9i0iIrRHyQnm7VbDwrA==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
- dmarc=fail header.from=kuhls.net;
- arc=none smtp.remote-ip=116.202.254.214
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=116.202.254.214;
- helo=ciao.gmane.io; envelope-from=gclub-buildroot@m.gmane-mx.org;
+ dmarc=pass header.from=bootlin.com;
+ dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b=W+qqOqFG; 
+ arc=none smtp.remote-ip=185.171.202.116
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
- dmarc=fail (p=none dis=none) header.from=kuhls.net
-Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0055C6066C
- for <buildroot@uclibc.org>; Thu, 22 Oct 2026 18:25:11 +0000 (UTC)
-Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1xJxTQ-0000mh-Me
- for buildroot@uclibc.org; Thu, 22 Oct 2026 20:25:08 +0200
-X-Injected-Via-Gmane: http://gmane.org/
-To: buildroot@uclibc.org
-From: Bernd Kuhls <bernd@kuhls.net>
-Date: Thu, 22 Oct 2026 20:24:51 +0200
-Message-ID: <pan$81eee$f9c76c37$aa369c86$e125e2c3@ID-313208.user.individual.net>
-References: <20261022181803.1291476-1-florian.fainelli__18987.6594625943$1792693116$gmane$org@broadcom.com>
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 425A0606A5
+ for <buildroot@buildroot.org>; Thu, 22 Oct 2026 18:31:00 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-04.galae.net (Postfix) with ESMTPS id 1FB8EC5847C;
+ Thu, 22 Oct 2026 18:31:57 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 98EC660763;
+ Thu, 22 Oct 2026 18:30:57 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id B333C10328501; 
+ Thu, 22 Oct 2026 20:30:50 +0200 (CEST)
+Date: Thu, 22 Oct 2026 20:30:49 +0200
+To: Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: bernd.kuhls@t-online.de, chrismcc@gmail.com, yann.morin.1998@free.fr, 
+ buildroot@buildroot.org, fontaine.fabrice@gmail.com, markus.mayer@broadcom.com
+Message-ID: <atpWByZNXAvK-Cgg@windsurf>
+References: <20261022172753.1256542-1-florian.fainelli@broadcom.com>
+ <atpJvzAWPfCcAFln@windsurf>
+ <00959e65-921f-4fe0-8c3b-38961367fa5e@broadcom.com>
 X-Archived-By: <archiver.kernel.org>
-Mime-Version: 1.0
-User-Agent: Pan/0.162 (Pokrosvk)
-Subject: Re: [Buildroot] [PATCH v2] package/linux-tools: fix PCI endpoint
- tests build with recent kernels
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <00959e65-921f-4fe0-8c3b-38961367fa5e@broadcom.com>
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH] package/linux-tools: fix PCI endpoint tests
+ build with recent kernels
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,29 +128,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_PASS autolearn=no autolearn_force=no
-	version=4.0.1
+X-Spam-Status: No, score=-6.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MAILING_LIST_MULTI,
+	SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Am Thu, 22 Oct 2026 11:18:03 -0700 schrieb Florian Fainelli via buildroot:
+On Thu, Oct 22, 2026 at 11:02:41AM -0700, Florian Fainelli wrote:
 
-> Since Linux 6.14, the PCI endpoint tests have moved from tools/pci to
-> tools/testing/selftests/pci_endpoint. The existing build commands still
-> use the old location, causing the build to fail with newer kernels.
+> > Hm is this thread dependency new? With the Linux 6.14 change, or
+> > unrelated?
+> 
+> I looked at the Makefile and because it linked with libpthread I assumed it
+> needed it, but the source code reveals that it does not actually, just sent
+> this out:
+> 
+> https://lore.kernel.org/all/20261022180022.1282641-1-florian.fainelli@broadcom.com/
 
-Hi,
+Saw your patch. Problem is that all kernels from 6.14 to 7.4 at least
+will require pthread to build the pci endpoint tests. So in the end, I
+suggest that we keep your thread dependency.
 
-this looks similar to https://patchwork.buildroot.org/project/buildroot/
-patch/20260602190501.2038962-1-bernd@kuhls.net/
+Not a big deal as 99.99% of people will use a configuration that has
+threads enabled. Better that than having random build failures from
+time to time in our autobuilders.
 
-Regards, Bernd
+> Yes we certainly can do that, it's more concise, v2 on its way.
 
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
