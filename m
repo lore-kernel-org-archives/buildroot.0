@@ -2,103 +2,118 @@ Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08C36606A319
-	for <buildroot@archiver.kernel.org>; Thu, 22 Oct 2026 06:23:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C571606A319
+	for <buildroot@archiver.kernel.org>; Thu, 22 Oct 2026 06:24:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=rxf2N68e
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=oSoxulYh
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 22F30607E4;
-	Thu, 22 Oct 2026 06:23:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E13FF607C4;
+	Thu, 22 Oct 2026 06:24:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EJHR2DDZ-gTl; Thu, 22 Oct 2026 06:23:47 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org E24066081D
+ id n34D_c34Fh8T; Thu, 22 Oct 2026 06:24:08 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org D42A2607E4
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792650227;
-	b=Qolq+wWvaJec4Lnx2ZkbntuKIQdsqo/RAdgPqLJaPdYz6p2Mb2isYmNITAsZzcAvdpkR
-	 eztCxcq7g1UuEFZllnfsJ5oXwGg7JkmqRdy6F64YjqQdDQiy4XtHMg8c1wvsgm0oqt0nA
-	 aEzhSDVlhPpXcdj/pm1WEH8lXsL73VrJAUeaGehQ6/BHP21GZ2PRU91/qEzLgpXkpRWtQ
-	 ovzS4hnVPtMfJ9Umj2Act65ZcBHD/xBPrjTbBVKe7NHzc650ihzfAWGmxNDQ4R/zhvCBN
-	 pTyUGDSkCElvy/KCm8a+QqFHCs+Boyk55XVGW3OPGvm/WpOhKUHw/h6gWdHpUQ1zl4A==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792650248;
+	b=ivFvbwJTc6TzgpIbfXrlxud/hEWiYCCy+XRRwwWjM7UvDEaSPeLR4EsOmjuWSXiIcazD
+	 x7arHkgJ4tVhvkKmOmRmkWBslpBh4O9u4Zp10biFnc4WkmbfSl8a3cTsYRiRQqKvKIoZT
+	 GnBuBNRxt39rKKhlFCGqv9SMQA9BSJbX0TzEZFRvKLD2HZRDzHfN5nRIw/jpJ2/mYkFz3
+	 03FKP2FazeEdTH5eM1AyEZNFVSBuGerfRo7Qew/MNzryDNNDMrAU+X0cjwDhCu0QHjN15
+	 zCnZRp+gIzHYAiwR/8bxMs7uyHvW1P+/WPTu+TUurStDX9CjNHBBF/iU3bcZT86njdQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792650227;
+	c=relaxed/relaxed; t=1792650248;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=uhjU9e5GD8/JA0gf8eBAKEmhl9VIDvU1kehs9oKC54M=;
-	b=YJYGYitlU2VzNmvgO2iDqRhcmjYOEcmhkRr0YDjijOZ2C3KbfeK4MzPjPiWO7V+58XZZ
-	 fplTIBMUwD/Emes+pcvkqQY/j1AMe7MxxypEuHN8B+Q9JaTQrJ65hRDDgwRHysZQaelBV
-	 VEAHqscu+p+SnEx/gbMAeFr0Ud/wQUbte+AEtemc8ZidE2O1J9+IagzSKaupTtpFe1Wv+
-	 8UhW2+nvmINiQqfyFti12EXj4HdeqgbcJM6Qk58E+qZSSJQdHU0unBD+9cbnwlsXwYlOS
-	 VnIPWEpno9GuAl4ivoVUrH7CC+YvFLMQUpIHGSwlTL3OqqZGiA2nP587fdHiGVl3yzw==
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
+	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
+	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
+	 Errors-To:Sender;
+	bh=9hKWvpk4Tb0vuTJdL9SaDqftyOu4lyjLlnM6kqa6UlY=;
+	b=DsDOfsyu4dtMXANctWYu16Jcjhro6lDVZMv9Ec7bNWhYVPhLKWqKZQ8ONGch8M5SeFuA
+	 AG8320s3m3nnW9qUcGXqwAEmiFoeEPKdzkjfgQhqdNGYWdUPfgAJ8TTwsxVbmWixbC7F6
+	 AmNmQfFuejp/muBHwmjjBkEKd7Vp4i27/Ajj4OxgsD3iHzq1/pm6yewqLEYA1XklWQ0cf
+	 3JjuBYwMBPkFG4AQIoKoLwqno9rtSJMZSOcrTSLhE/URdDLsoVeuzjeAx2crKcD2jFdnb
+	 lUUeu0Gun64VvRM2emI+JTBTLGT0pTIqZ3cbRDgxzuoB1RyaqlvxscJ7XjeiCNAUkRg==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792650227;
-	bh=uhjU9e5GD8/JA0gf8eBAKEmhl9VIDvU1kehs9oKC54M=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=rxf2N68eMiMv9m4C+sqBtJrc5xVknO4VHlFxk6BXScTS4OytTSMSQbxBNKeKstJ8Q
-	 fJtguYC8dzYUa8fl2YTK4JZZtnucrIRKtZIidUzgkmIf/+hOka5T1opcq8JN/GOmBQ
-	 GJ+tw7vSuiSyLZ4vGmx0G9DzJc1fHVz7uerz20famjZMh8XwhwKcRWYghfQfH0j7GA
-	 yadfoEwNY0xC9BSur7BwURpquNjIkUboIEceJhrNu6wpKOGpchDGdBr6KF9A4oXt7X
-	 sNqdZsHVa13szDYxfmpkcknhYNATpJmPmk4aATzVKVs26MPbUDqx8JKkxymPIFp8x1
-	 CeheJTBlysa8w==
+	s=default; t=1792650247;
+	bh=9hKWvpk4Tb0vuTJdL9SaDqftyOu4lyjLlnM6kqa6UlY=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=oSoxulYhtjJsCvxhoickwsBgS9RExim9zrF+zwRglsIWT7yyRBJhDfv/Tiy5VEua5
+	 fXcZe90owOC6DVsqeGn+id9ynjLzejpihX7pr8rav5yikIEezn2YA1eMb4wgxdNYil
+	 QjNgV39WAsF7pbgJ9fmBuxAE6SNAM0zJVOUgzRbfnVWdLUvdwEA+7MBrN57zbfWqYl
+	 JR4lx6DhKk8mlmO4gMRnDXFfyBgQXZUFUnlVS6EK3FFBibYJIkUUOCrJOVNVUIKOsu
+	 /M64p8fOV6IglkxmzmvbY3uIQLbISWQFf1xumwGcfCJ6WcRibxoYFrOApMRAJbp/jq
+	 FwZjFIAPe79EQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E24066081D;
-	Thu, 22 Oct 2026 06:23:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 24FA91184
- for <buildroot@buildroot.org>; Thu, 22 Oct 2026 06:23:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D42A2607E4;
+	Thu, 22 Oct 2026 06:24:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 44887356
+ for <buildroot@buildroot.org>; Thu, 22 Oct 2026 06:24:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0ACAD8085F
- for <buildroot@buildroot.org>; Thu, 22 Oct 2026 06:23:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2A1B740075
+ for <buildroot@buildroot.org>; Thu, 22 Oct 2026 06:24:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZnBWmaARMNf9 for <buildroot@buildroot.org>;
- Thu, 22 Oct 2026 06:23:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org E8DB180969
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792650220;
- b=no3H+R2gmmiINSCKlFTv+PGp5d3A7GrLy7rUqIC7NiirwdbCBgDCDzWysfc6Uza8mmXL
- TtWth7WjNUSqd8hbjlqnWlti34GoDMwEG1GFtgPlUtg7diidhzfNXVMqOIOwRfUbeDuER
- OcZ26v7PADREuCerhcPGC3XF8607DJ4D7WmF8tFIL2YO5S3kmmijf+75+bA9Ip2FtZ8bE
- SOv/aje7sWSvqalRZtMq45sVf5hBgXwbYWVMFIkBrDKXzGCevww5CTLaApPOVO3D5sCGm
- a++Wm64fv2zaja/xZ68yil4WpxGNGBYKJ41acuAWu7P1OU8JJ8EdH45nb9eq9gVXUBA==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NIszk8EjrO-j for <buildroot@buildroot.org>;
+ Thu, 22 Oct 2026 06:24:05 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 3C1ED40042
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792650245;
+ b=LLXD3gUT9Pv/p+pSbbWbsuPtOpA9o7TUuPMRZGn0bIY4F4fZwwN7TUjvbVAygLwm+2lu
+ l5vqXxlavAzzHTDQzQw4l564K6srPdNasu/ET2AUuK8nlWGK25YWw7y3IdY8AazD2x31Y
+ xfnqvy25TQr5gDOwWV7BhCXUYKpy91Xl5jJKX832lDyAyksha7RXQ4T+YPmZOiCAnKf3O
+ bWADBKXmAafClX4Yh3a8JPiqsQo4WvXTzWq+9M9UzlX63awSCTHmgQ27EvSO+/yF5Qzfo
+ W+YAtD+EuRuKScZu+vKz9kWo9OjIykpXiC9LWnbCXkA88St5N/bC/sroxEQ4J4Dzx8g==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792650220;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=v+ZQjD1yy64oQRZuR2y3O8tRC4CKpLZ3kM92mAcz0ws=;
- b=f+Z8bvwH7GWtl7M48cMeL6KjGYmzCaPH2AmviNoNFzkqz/qOjP+5ATjzxpk5OocbOYlo
- P1eix2pylqp4FaTs1sdSjeHvPBEVgTJdIhzuVs5ekYY/VUcdfVUHAWcP1fWWp/3ovLxMy
- WHLxVZzDn1A11tn4pkF+k31gJTu32mtN1k/8u9ZkyZK2pJpQI97Qdeo/ZlaQKh2hTNvht
- k+8sJzuKCaD3QiDz1PZN5nAmPV8Adl4mN7fAL+vDIueFktoLtBpE6xdvDKn7VVoLTCMQ2
- 0FYqChppiljxTVpWYt4RZMTa+76pfj5ACpoRU4uvjZyapYVWTzRVdD6ldNLotSeFYyQ==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E8DB180969
- for <buildroot@buildroot.org>; Thu, 22 Oct 2026 06:23:40 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 162489B489; Thu, 22 Oct 2026 06:22:17 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 22 Oct 2026 08:12:14 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 59f5e16ffebacd111d5fb84f110e15554b9a209d
-X-Git-Newrev: b216661a73f7b8e21290a1bc9033e7f9b5fb230e
-X-Patchwork-Hint: ignore
-Message-Id: <20261022062217.162489B489@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {toolchain,
+ c=relaxed/relaxed; t=1792650245;
+ h=Received-SPF:Received:DKIM-Signature:Received:MIME-Version:Date:From:
+ To:Cc:Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
+ Content-Type:Content-Transfer-Encoding;
+ bh=UUu2Nfw/Pu63sc3JGm70UXdgH0FBcq2UodGrXgLqjUM=;
+ b=B61AE9FXzlnFCS0Ym1yHDUEK2S7e/QC7TP7T9fqhO/MG7JGN0RtOMJfHRWXsYd3jAwsA
+ xQ8ByQSwa4urPYcvFBWtiHH3VtsJ3FF0l2xAV+nFmiAeIWx9Oq//nUjWXRB+XbdOpDkxK
+ iG0Y4RkNd+amnVogAc0Yr6mgx8CS+KJwVVShQhWTTBmT8lpBVI+zb/Lg0S321KJI45QUL
+ cZXSIk6VXE/mpXo9pJfoniKtq3kcbE10B7jHAjB8UppSm/Qt1xZAiNgS2YOlBvgT0rlpL
+ UZ+8C8C3H6a6N1GXCZNgiwjo52SnRUNDGVCpa5eK3shFvOVsXDpdxRp9qgb39tGE5tQ==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ dmarc=pass header.from=free.fr;
+ dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=iNt4XSuD; 
+ arc=none smtp.remote-ip="2a01:e0c:1:1599::11"
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3C1ED40042
+ for <buildroot@buildroot.org>; Thu, 22 Oct 2026 06:24:04 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.1])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 281CD200500;
+ Thu, 22 Oct 2026 08:23:57 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 via
+ 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr with HTTP (HTTP/1.0
+ POST); Thu, 22 Oct 2026 08:23:57 +0200
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
+Date: Thu, 22 Oct 2026 08:23:57 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Giulio Benetti
+ <giulio.benetti@benettiengineering.com>, Romain Naour
+ <romain.naour@gmail.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20261022060218.752140-1-bernd@kuhls.net>
+References: <20261022060218.752140-1-bernd@kuhls.net>
+User-Agent: Webmail Free/1.6.20
+Message-ID: <8bdd24b5505cf81952931c38a57772fb@free.fr>
+X-Sender: ju.o@free.fr
+Subject: Re: [Buildroot] [PATCH 1/2] {toolchain,
  linux-headers}: add support for 7.3 headers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -111,147 +126,20 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
-	autolearn=ham autolearn_force=no version=4.0.1
+	MAILING_LIST_MULTI,SPF_HELO_PASS autolearn=ham autolearn_force=no
+	version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b216661a73f7b8e21290a1bc9033e7f9b5fb230e
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 22/10/2026 08:02, Bernd Kuhls wrote:
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- linux/7.3                                                 |  1 +
- linux/from-6.17/linux.hash                                |  1 +
- package/linux-headers/7.3                                 |  1 +
- package/linux-headers/Config.in.host                      | 15 ++++++++++++---
- toolchain/Config.in                                       |  5 +++++
- .../toolchain-external-custom/Config.in.options           |  6 +++++-
- 6 files changed, 25 insertions(+), 4 deletions(-)
-
-diff --git a/linux/7.3 b/linux/7.3
-new file mode 120000
-index 0000000000..74e2b2d5b6
---- /dev/null
-+++ b/linux/7.3
-@@ -0,0 +1 @@
-+from-6.17
-\ No newline at end of file
-diff --git a/linux/from-6.17/linux.hash b/linux/from-6.17/linux.hash
-index 83d7d04e16..27bd3da1d9 100644
---- a/linux/from-6.17/linux.hash
-+++ b/linux/from-6.17/linux.hash
-@@ -1,4 +1,5 @@
- # From https://www.kernel.org/pub/linux/kernel/v7.x/sha256sums.asc
-+sha256  87363c24f10e06321eb362765521094e94471f6bff8bce2d6b3e40f39f004953  linux-7.3.tar.xz
- sha256  bb18468a8dc8978aa00caa6446e753f7b6da3fee56b6b7f38b16f9430ba02d4f  linux-7.2.12.tar.xz
- 
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
-diff --git a/package/linux-headers/7.3 b/package/linux-headers/7.3
-new file mode 120000
-index 0000000000..a4e1d3ec9c
---- /dev/null
-+++ b/package/linux-headers/7.3
-@@ -0,0 +1 @@
-+../../linux/from-6.17
-\ No newline at end of file
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 405d278e1e..36d72710a0 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -3,7 +3,7 @@ comment "Kernel Header Options"
- choice
- 	prompt "Kernel Headers"
- 	default BR2_KERNEL_HEADERS_AS_KERNEL if BR2_LINUX_KERNEL
--	default BR2_KERNEL_HEADERS_7_2
-+	default BR2_KERNEL_HEADERS_7_3
- 	help
- 	  Select the kernel version to get headers from.
- 
-@@ -55,6 +55,10 @@ config BR2_KERNEL_HEADERS_6_18
- config BR2_KERNEL_HEADERS_7_2
- 	bool "Linux 7.2.x kernel headers"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_2
-+
-+config BR2_KERNEL_HEADERS_7_3
-+	bool "Linux 7.3.x kernel headers"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_3
- 	select BR2_KERNEL_HEADERS_LATEST
- 
- config BR2_KERNEL_HEADERS_VERSION
-@@ -131,8 +135,12 @@ choice
- 	  If your kernel headers are more recent than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_7_3
-+	bool "7.3.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_3
-+
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_7_2
--	bool "7.2.x or later"
-+	bool "7.2.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_2
- 
- config BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_7_1
-@@ -480,7 +488,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "6.6.160"	if BR2_KERNEL_HEADERS_6_6
- 	default "6.12.114"	if BR2_KERNEL_HEADERS_6_12
- 	default "6.18.58"	if BR2_KERNEL_HEADERS_6_18
--	default "7.2.12"		if BR2_KERNEL_HEADERS_7_2
-+	default "7.2.12"	if BR2_KERNEL_HEADERS_7_2
-+	default "7.3"		if BR2_KERNEL_HEADERS_7_3
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
-diff --git a/toolchain/Config.in b/toolchain/Config.in
-index 7452d96122..4e6a8d7927 100644
---- a/toolchain/Config.in
-+++ b/toolchain/Config.in
-@@ -681,6 +681,10 @@ config BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_1
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_2
- 	bool
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_1
-+
-+config BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_3
-+	bool
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_2
- 	select BR2_TOOLCHAIN_HEADERS_LATEST
- 
- # This should be selected by the latest version, above, to indicate that
-@@ -694,6 +698,7 @@ config BR2_TOOLCHAIN_HEADERS_LATEST
- # stops affecting a value on the first matching default.
- config BR2_TOOLCHAIN_HEADERS_AT_LEAST
- 	string
-+	default "7.3" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_3
- 	default "7.2" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_2
- 	default "7.1" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_1
- 	default "7.0" if BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_0
-diff --git a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-index 721fd272e0..33171214ff 100644
---- a/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-custom/Config.in.options
-@@ -178,8 +178,12 @@ choice
- 	  If your toolchain uses headers newer than the latest version
- 	  in the choice, then select the latest version.
- 
-+config BR2_TOOLCHAIN_EXTERNAL_HEADERS_7_3
-+	bool "7.3.x or later"
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_3
-+
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_7_2
--	bool "7.2.x or later"
-+	bool "7.2.x"
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_7_2
- 
- config BR2_TOOLCHAIN_EXTERNAL_HEADERS_7_1
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
