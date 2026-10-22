@@ -2,120 +2,103 @@ Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEF44606A31A
-	for <buildroot@archiver.kernel.org>; Thu, 22 Oct 2026 21:45:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6679D606A319
+	for <buildroot@archiver.kernel.org>; Thu, 22 Oct 2026 21:56:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=j7OaTUe9
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Oiiuly6g
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CD78960883;
-	Thu, 22 Oct 2026 21:45:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3940260848;
+	Thu, 22 Oct 2026 21:56:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id snW5B2VSou7F; Thu, 22 Oct 2026 21:45:55 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org DAA56608AA
+ id JlVYQC1aZxFp; Thu, 22 Oct 2026 21:56:46 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 5C494608AA
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792705555;
-	b=n5FN8D70Lfc59WkoVsoVpsASzJO1EzgxMjlkl3hSJ+oHNN2zXpF1l86lDJqNsAi0+jhc
-	 R4GL2s7qm3xxJGhr2j7R0snmhg7zoiErpkAG8oGsmzW9R4ql23OcWFraCEoy4IApgUIFn
-	 GBk8fycH69Z0mKDUhHgXSsf5J4Bm9kombiyxhAEdHSzaQx1FSVBI9alAPzJdXBP4cgYU4
-	 jsa45FFfEld7YtPWIdKZaufLW8gG1lsfIiEO24XBS+jibcGgclIQNVt/KnExfcM3zAlfm
-	 PKZyr7sp6VlQuRWESIJ6PnEJLMbPA83r/Cu/QxCI0Ot6luwrj8A6nAUfg7b2sjxfgbg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792706206;
+	b=d9iVvleXci//yiZ3hPu+drQqxSKcL3o6ooSrH6FcMhZnxYgIRGWvPzkfomMvstcEjfBc
+	 Jx4Zlh8L6gMvz7JpgbYl+WuR/WAU/51Zq46XOajuKdaIAtEV4q3/6AnY9OXnbso/4nJMR
+	 kcb+22Zu+mZTRbFEGpohT3zEPHBGdfehVThiqDYGoRgM1F7xQHhiHM0DUQuIlgCK09aWx
+	 1HOwovkabrBOcSfbhyXS4+sGlXX9JKJ6OJ4mvHqfjyTIKikxoivsuotQVrgTJAOn/r8+U
+	 wMJIKK6VzY8gUunrSqiaSMJPLTE3zfeoBTHG4r8twXmgLsVIvagfsqKYBxe6MQvN8tg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792705555;
+	c=relaxed/relaxed; t=1792706206;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=SLep1dagN6i7ZjIloHzwkAgop6qeu3jNkvI+uPe/ORc=;
-	b=XzLFr6RBTg4v2xTUzK6nDFDSTsbHcrwJ7ZQ5s5gM+RfDaVKU7681h63LzGca/VtwSTNA
-	 SaHVwQDpO7z+PaDp2otE308HSOH1GRlrB3Yd/AiCrdF2EUS4IWtqTAncYKxccjQP/bYjP
-	 OvZg4T0z1vfJcFVofaVoWtX+o4RpRQQ8dLtaqklWT3lGF5VYday4JhyG/CJ7npZC+0v0P
-	 3ETfuxfiFaupQFNoVhRWk8NUTqa0H7NOzLUnoQApAoXUPJgmF8znj78U/LywEGMd33EwI
-	 MvzdWwHKTN1tUIJ5GxggCSMZpX1IVd7jFXD31CglnDUp3vOTOUHqlx4Lc5BJM+9VfyA==
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=CY024FHOH47/Fwqy6t6Y9SeJp6W1axxOm/SiKfsRNNg=;
+	b=CAuKNqzCsDBaBLPGoSFEIdfaGmofqPPl9G+lqKZXvPSLlVB3z8FIA9QULeZm0N62u2Hn
+	 ZO1sZXv6h1DnSeDS+drDyIOYRY4GcUXj2TsDzKX+Ejux/LWzE/QAtAE1mp1iG7Gqri0kU
+	 YafE38oo75sQNsuAkqz+MUY9tQUPgUNI0QrlPMdHVzxq6reeyMvJi70ylNQiLSG0W0ng/
+	 T2vvjRrclQ7XqWH471i0oK8sOHgTe6Swe0uw83UXpFdxpyw28YRJi73zsqflUeNI1sxXU
+	 Aci+qD9WzG/aC0nmKxjTFbjJBQ4+buV+y/XLdm52mSo4Eux0jP2cbJPUGRbO6TDtrxw==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792705554;
-	bh=SLep1dagN6i7ZjIloHzwkAgop6qeu3jNkvI+uPe/ORc=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=j7OaTUe9M5TzlaivMm5VS2rzCDE/ewgbRyqd+tjxWNBot6o95/gBanHPGLh3GiNG4
-	 DwC69ZCESwkmyRZxCuBFTvVrxC2CVbpgjgrdQ5jzqwmBojGHiIP88wsmpB3HL6+AK6
-	 hUQv2Y9tL0OAwRIqG4YNNAIYny80QpL41n60RtdWT7ExFB+AAr2EVNTkhipNrwE4MB
-	 bjEULOxQAbFEV9tGQNTUN9f+RsSCpVBVGfovhA7axHOnTiqtQip3gA9kDZNJNAgBWT
-	 ZlvHVGh1WwMT5enk0wg/2IbHEpG+aVXqvLeQXqpdu40BOkFsM9CDPIYx6pmkiLbhJb
-	 ojsz5J6YyMwZg==
+	s=default; t=1792706206;
+	bh=CY024FHOH47/Fwqy6t6Y9SeJp6W1axxOm/SiKfsRNNg=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=Oiiuly6gkoFpk4apmcvXQWfVtC82ims1yAAuhHNyKGNTMAevsUsOCkf6IMle57cQy
+	 PAoFfC6lHuQq3nS0qrns0J9JKVGGWCJFb8MWXI3a/6qP/UnTl0KEsL+P1by7kj5Kgt
+	 O3kbn/0n4fPCtDJFxDS1Ma7za3Mvxg6qNSOczm5mTgzYqxLT2vYjRbb+HOApPtUo9s
+	 XEZgAfHU0U6Xke5nM/f6ONta6I+ZkZKu99Ort+rZ44jkL/PF76zM7iXxR6OMgyoMG7
+	 9xq1eDjlhDLRYgZHmkKudznkfIDGxCRCbA+ZmTQkkl0ZzirWnkeECaQ6PS2ghgzXLR
+	 6aAAbRX+ZuFRQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DAA56608AA;
-	Thu, 22 Oct 2026 21:45:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id CB7433C1
- for <buildroot@buildroot.org>; Thu, 22 Oct 2026 21:45:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5C494608AA;
+	Thu, 22 Oct 2026 21:56:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 438CD499
+ for <buildroot@buildroot.org>; Thu, 22 Oct 2026 21:56:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B1194608AA
- for <buildroot@buildroot.org>; Thu, 22 Oct 2026 21:45:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 355B64040D
+ for <buildroot@buildroot.org>; Thu, 22 Oct 2026 21:56:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X-PAisZSaraf for <buildroot@buildroot.org>;
- Thu, 22 Oct 2026 21:45:52 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 2D91E60883
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792705552;
- b=O1dMRazBPedq65OTBL3sMl6RTRrCoWIr0OuiblusT+k0k/hgZasFkORnlOC1Rh1cH9FA
- 39AS9pqmOx4nQIuQZudhHkf/1tqj+rSd4zc72ntVPcSMtncJIT7AFuKLeccjjBDqNAGxI
- xHbPwFprwoQGTpPLvjTjUNb3LjBiBg6Qs+49zipj+o3CF5wV2R24iqhU/gZS1ZL3woowT
- c7nWxMoGVbj34sJpHu3LdOTmkqReejLkWGPZqTLvr4lEhEMazZ1OIlyJTB62lhnKAnm/i
- 0mySBc6SCEjccM14FRrH2SjFQ99yRxWbnieoR4+fIMpFRGi8XV0fYMebVRhxOmHwkew==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sLUT1tjuR8Ft for <buildroot@buildroot.org>;
+ Thu, 22 Oct 2026 21:56:43 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 7A40C40270
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792706203;
+ b=DtajMSJtcb+mNbFOZ5N4op4GbxBxERJg3TkQ2ZgpwlDuMktgpz2nMIrAGJhulJw3BLYv
+ eXhu596x/7sSEAHZ8+6X+0h85jnG+3I+ON5Q1qHhQbIx+54bMoWjyp+C3B+gGQhztljW8
+ FilZ0Ua+7q9IVJSh6OKeMueltCdAt+1qm+R1xesluZaR+uzx4ROuBg/7om3PECA604YDk
+ qMc39Z0mtD64QOrmfWqU4QT+p3s+Z00+a3JlwNqoDl65VzjRDkAiNmEQvJq4aLokk4FQY
+ fndWmHX/tnviq3FHiyiyK09PPF5ThKPzaVh8Y4wk572dBEXyZMKeXLadPQu+tVN11IA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792705552;
- h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
- Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
- Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
- bh=IvHtZTmP9U53FK1hyxvsnIqapiKdMnL1649pe8vDu9U=;
- b=rCp6uAY3Z8toj7bx2Jo/RdPtLl14HbMUNQE5BoMqkJSi8VYrSJSN+olia2JlmUGCzDkb
- EvmgREXznlewDBXIbShombeNzqepOBar6SWXeUqTLbINAELyrgd4aO3BM4/FiMRg1TR34
- QnJLcwSKzYTZiFP3TLIr8wka/dqppkR6SZMDmwORoMUWhXk9eG/I12VkuN/LwyaSQDm9Y
- NQmFED7QgjAy56KZt8CQA2H/qy1iZo96NHkVtUHrMgEFNDmRRLgTo4em7HhwSU8wOqIXi
- MYEhCZTPBWw9pX00cnpqLPB+fcxJJvx1hCLX8x+qRfBokjH3vtYek79RN20oq9O4F9Q==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
- dmarc=pass header.from=bootlin.com;
- dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=K9kMyWsY; 
- arc=none smtp.remote-ip=185.171.202.116
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ c=relaxed/relaxed; t=1792706203;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=rBYQQEyvsxYYeIlvXLPrBAxKke7ChU9xkAPhro8k444=;
+ b=DbuFEcPpvcgfuuwP1E74oDknCaY6JYq7GeTv87XNyxPCAzU8/SZ1E/XxZ8HJ16wOsIWL
+ ZR9Mv8YeDXnfG7LvCY1uhkGN6B9F81IeruzsI5wibN+Q2F2mAHORzqfa8cvF+aFGi+xa9
+ OK/71cARMCIkPz2+gxy52zzYZN8ZucmNqHj6vHUS6gl49lcQqvWrIeRpGPFTIf2j+561V
+ 0VrIWKQKVEPPEh/7FPc2bTQPgutJegu9/3zi5vDR309XJS1CZHlyyHxvId8KoqwBoiTdK
+ azSrG/oZ8gKR3eK37RMalIrfiEK+30P9oPhJIimcFWKRuX5PL/y9ToCp/q7OvXXwEyg==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2D91E60883
- for <buildroot@buildroot.org>; Thu, 22 Oct 2026 21:45:50 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id 97318C51457
- for <buildroot@buildroot.org>; Thu, 22 Oct 2026 21:46:47 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id EBAAE60763;
- Thu, 22 Oct 2026 21:45:47 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id DDDD210328501; 
- Thu, 22 Oct 2026 23:45:42 +0200 (CEST)
-Date: Thu, 22 Oct 2026 23:45:41 +0200
-To: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: buildroot@buildroot.org
-Message-ID: <atqD_rfy-x1S0X7A@windsurf>
-References: <20261008075224.3992252-1-yegorslists@googlemail.com>
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20261008075224.3992252-1-yegorslists@googlemail.com>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH] package/zlog: bump to version 1.2.20 and
- switch to the CMake build
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7A40C40270
+ for <buildroot@buildroot.org>; Thu, 22 Oct 2026 21:56:43 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 51E779BA25; Thu, 22 Oct 2026 21:55:19 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 22 Oct 2026 23:55:52 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8579c1eb00c7465275eeaf12d04e2be02a6d7a2e
+X-Git-Newrev: 02a4df08f99fa4ce205b5dfe510f20a6d3b8bfd8
+X-Patchwork-Hint: ignore
+Message-Id: <20261022215519.51E779BA25@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sdl3: fix X11 dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -127,63 +110,96 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS autolearn=ham
-	autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-On Thu, Oct 08, 2026 at 09:52:24AM +0200, Yegor Yefremov via buildroot wrote:
-> zlog ships two build systems: the hand written makefiles used so far and
-> a CMake one, which 1.2.19 reworked. Switch to the latter and use the
-> cmake-package infrastructure, because the CMake build not only installs
-> zlog.pc like the makefiles do, but also the CMake package files
-> (zlogConfig.cmake and friends), so that dependent packages can use
-> find_package(zlog) and the zlog::zlog imported target.
-> 
-> Dropping the custom build and install commands also restores the ability
-> to build zlog in parallel, as the makefile build had to be serialized
-> with MAKE1.
-> 
-> An out of source build is needed, as zlog rejects an in source one since
-> 1.2.19: CMake would generate its own makefiles over the hand written
-> ones that are part of the source tree.
-> 
-> -DZLOG_WERROR=OFF disables the -Werror upstream turns on by default,
-> following the usual Buildroot practice of not letting a new compiler
-> warning break the build.
-> 
-> zlog uses C11 atomics since 1.2.19, and 1.2.20 adds 64-bit ones, which
-> need libatomic on e.g. ARMv5:
-> 
->   libzlog.so.1.2.20: undefined reference to `__atomic_store_8'
-> 
-> So depend on BR2_TOOLCHAIN_HAS_ATOMIC and link the library against
-> libatomic when the toolchain provides it.
-> 
-> The CMake build installs the same set of files as the makefile build did
-> (zlog.h, zlog-chk-conf, libzlog.so.1.2.20 and libzlog.a) plus zlog.pc
-> and the CMake package files. The soname is libzlog.so.1.2 with either
-> build system.
-> 
-> Changelog: https://github.com/HardySimpson/zlog/blob/1.2.20/Changelog
-> 
-> Assisted-by: Claude:claude-opus-5-5
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/02a4df08f99fa4ce205b5dfe510f20a6d3b8bfd8
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks!
+Add handling for optional X11 dependencies to fix configure errors like:
 
-Best regards,
+CMake Error at cmake/macros.cmake:433 (message):
+  Couldn't find dependency package for XCURSOR.  Please install the needed
+  packages or configure with -DSDL_X11_XCURSOR=OFF
 
-Thomas Petazzoni
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Please note that SDL3 only checks for these dependencies when X11
+support is enabled so we do not need to add =OFF options to the else-
+clause -DSDL_X11=OFF:
+https://github.com/libsdl-org/SDL/blob/release-3.4.12/cmake/sdlchecks.cmake#L325
+
+The problem exists since the package was added with buildroot commit
+2dd13e328f118363165b47258429604a5ffd3b41 so a backport to the 2026.08.x
+branch should be considered.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/sdl3/sdl3.mk | 43 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+
+diff --git a/package/sdl3/sdl3.mk b/package/sdl3/sdl3.mk
+index 8c2cb8f629..861714385f 100644
+--- a/package/sdl3/sdl3.mk
++++ b/package/sdl3/sdl3.mk
+@@ -59,6 +59,49 @@ endif
+ ifeq ($(BR2_PACKAGE_SDL3_X11),y)
+ SDL3_DEPENDENCIES += xlib_libX11 xlib_libXext
+ SDL3_CONF_OPTS += -DSDL_X11=ON
++
++ifeq ($(BR2_PACKAGE_XAPP_XINPUT),y)
++SDL3_DEPENDENCIES += xapp_xinput
++SDL3_CONF_OPTS += -DSDL_X11_XINPUT=ON
++else
++SDL3_CONF_OPTS += -DSDL_X11_XINPUT=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXCURSOR),y)
++SDL3_DEPENDENCIES += xlib_libXcursor
++SDL3_CONF_OPTS += -DSDL_X11_XCURSOR=ON
++else
++SDL3_CONF_OPTS += -DSDL_X11_XCURSOR=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXFIXES),y)
++SDL3_DEPENDENCIES += xlib_libXfixes
++SDL3_CONF_OPTS += -DSDL_X11_XFIXES=ON
++else
++SDL3_CONF_OPTS += -DSDL_X11_XFIXES=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXRANDR),y)
++SDL3_DEPENDENCIES += xlib_libXrandr
++SDL3_CONF_OPTS += -DSDL_X11_XRANDR=ON
++else
++SDL3_CONF_OPTS += -DSDL_X11_XRANDR=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXSCRNSAVER),y)
++SDL3_DEPENDENCIES += xlib_libXScrnSaver
++SDL3_CONF_OPTS += -DSDL_X11_XSCRNSAVER=ON
++else
++SDL3_CONF_OPTS += -DSDL_X11_XSCRNSAVER=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBXTST),y)
++SDL3_DEPENDENCIES += xlib_libXtst
++SDL3_CONF_OPTS += -DSDL_X11_XTEST=ON
++else
++SDL3_CONF_OPTS += -DSDL_X11_XTEST=OFF
++endif
++
+ else
+ SDL3_CONF_OPTS += -DSDL_X11=OFF
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
