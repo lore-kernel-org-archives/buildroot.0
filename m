@@ -1,104 +1,146 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC7B606A319
-	for <buildroot@archiver.kernel.org>; Thu, 22 Oct 2026 08:12:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CAFF606A31D
+	for <buildroot@archiver.kernel.org>; Thu, 22 Oct 2026 08:37:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Zc8l+1r0
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=GYTUcegp
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 97EC160787;
-	Thu, 22 Oct 2026 08:12:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D38BD40879;
+	Thu, 22 Oct 2026 08:37:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UxNqB4iMYt1h; Thu, 22 Oct 2026 08:12:44 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 363D460818
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792656764;
-	b=GxBsJDxdphDmP+4TBolu1bLlz+owI7ZhdqI3QViK0viz5hw0iOogdrcVmse51PSAoifx
-	 qcmPBwSIZWzUGstRR237Ewg7TgSf2uudKHbM+wYAzui9mbWx4Q6kVtFs5O44v+TKUxp6e
-	 UZNqqd6YJI/2J+ROIJoZFLNOUfFkBnBWq9n3AQdGwDdKpeVpwjTwzt1Ze+lrOdIb6VEOq
-	 TJXqEFzf3XZe4nvf8m+Nf1teJqXTwDEKdCA5WyYsJF0+zwrO6zcMPwDI6NuFAW+py0cXv
-	 rt8Zlsu3jNDz1FHxeYdceql96GOyp7JcMvH2ablj5zfpzGlnUR76VYiK1GP5CQ3mPoQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XCNdw9Be1uRG; Thu, 22 Oct 2026 08:37:26 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 80F69407A3
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792658246;
+	b=HJVwvmR2IKXGgs02xenbeMWkpntyos85tx44BboPOj4hV2/+z8Rpk5epVqjmT3CD6/6j
+	 cTC4Q0YOlu0JeG4qo7g5WZ9HneuaOmO6jk+VtGQIcT+WnNbrD+/m/hGkYyXNu1E2Mkmgt
+	 U5Sbx36caCAXkad8U46Tn0BfiSn5sfirUiOIY0GJMH7graA/Vsl+FexRldsq2+qKtrk3i
+	 H4X110DMT80BRJbEClwOkGdyLUgyj8kjsEECd6YEzoJDwqVNFbAb3PJB1OHjF97XMSoYG
+	 9pVC8adW0oqFKkplPEdObayfRju60sY7OzPX5qRnFZSFQjfj7o7mINevTGzNZmZJTcw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792656764;
+	c=relaxed/relaxed; t=1792658246;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=KFVx6DY/U0ujsKSluozSsKV7BRE5QmajIBmmCjxXFCs=;
-	b=Pci/ulkCtc04cHL/QnCYohoj6cNmikNWsAGxEKyU3sUHUFeLTWr1AOwcXBTdhOj8ZMxX
-	 4cexdF9d+r/hO3o4fbRAbe3tiRHkLMpyhFdpfsqMjGczp06zLqmoCwp9oC6iPAfAmYxHI
-	 oycPIEysmbnMlk5Pe8JQpNzpukpjKWPuDC3B8MpDB9jPkUofzbAmr9cZ4o5crQKQcnd9A
-	 UpOj0UMDMaVohrNo8INDkva0A0jMPVA1WhyO3olBGSwKYd7jVRZ21q+8qZG87GRIxq9Kv
-	 dKdz7+KgOLhR9I88/PXutBeKWXHKWMeVSQnsjt/W16Oz8LLuVybOYj3dKfvUdvtNGog==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 Received:To:Date:Message-Id:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
+	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=IrclcdlR7TkNPKql8w4yHZWWVtmqAKv827IdpywKHrk=;
+	b=ALHAQ9uhqf+QBasOsdEoVgxQcZTqVXJAueI4S7H9OeBgypDxzxOE4f9XfqW8LVriFSpe
+	 w2I5KxRPOBba9Q/JWQupVzA+DpihpV/HPqeTZmJNIDVc8FgixF+sWf1rxL7dDbsojJ+u8
+	 vai6oUaZezYLSAupXAd2SGSWSkaTXOynuQdjStXp8xbsayIVTKU6aW7aqua9ElJL6k0c5
+	 VcGrJkV99EIgbOFCZXeZe3QNaYHQgDN3odkcD04xOzgVME6E5D7yktDgDUE3oHJMJqL/Y
+	 vkvJJL6rfdnEInOxEXFC5xAVc2lAJ8RgQFIkSzgu4gVYXE9mUEkz4l1EskNTqzDwvBg==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792656764;
-	bh=KFVx6DY/U0ujsKSluozSsKV7BRE5QmajIBmmCjxXFCs=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Zc8l+1r0klmcuGG8RB6F1AF2/Z2ZjruZ30jtO5aHqYlyP7pjy8e8knnVqYBDD0409
-	 cLRnoNbQLBa1GdLmFr7vCgv8CUCJhAnLLCxt13cEuveU9uMPJvidRb+6ZNnyKHLQfg
-	 RQbYllZ9hRfKU+sBnj1Ld3gt3qTquagy0ZVI5cHaM8i8UdVhzEyBkvHqISSIlMXpfL
-	 gKBFdrYr7nEDC6QhUvucCf74gycg/YXAIYcPtLIK9NdQKkqmGKR8rLNQ/I8rK8WGuB
-	 Vzi79+sNkrxEzSARIuXy7k9TbWCNzlKa2ycQWmKtjGC8Gk/Mr9iod+OcuTOXYMI59q
-	 4S0MH19rmDNrQ==
+	s=default; t=1792658246;
+	bh=IrclcdlR7TkNPKql8w4yHZWWVtmqAKv827IdpywKHrk=;
+	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=GYTUcegpg1yyX76VlSbJDyT9yGuf1PXy9/plbsSaGZF25yPfMHQt+r1OQfhiDE2bg
+	 R2eGFQQWY2u8odlKMieGhv1cn1xmPT/dm/JiZZ8kQ29l/4yMPR6DhihOCm23bk8VZ6
+	 kvpZjJgdRIKHy6KTgjM/RBAKVVFY/qzqDj4po8w1K2+xxUK+5ydP7yd5jGTi8sDyF+
+	 CdxIVrS2/fI/j12aaj/TOL+CLv4+w7lO6YrF537psG1ADyzdzFtePvbQNc2B5fN1Dg
+	 FYhjarxFvenIaTMwu4d9/E+YKzbczUbAdGaJQj98WXmEm0ThQ//zu0nX767u6GVeHl
+	 WLoK4b9WxULmQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 363D460818;
-	Thu, 22 Oct 2026 08:12:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id B3FFB95C
- for <buildroot@buildroot.org>; Thu, 22 Oct 2026 08:12:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 80F69407A3;
+	Thu, 22 Oct 2026 08:37:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0E3D9235
+ for <buildroot@buildroot.org>; Thu, 22 Oct 2026 08:37:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A683281237
- for <buildroot@buildroot.org>; Thu, 22 Oct 2026 08:12:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0814E407AD
+ for <buildroot@buildroot.org>; Thu, 22 Oct 2026 08:37:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qiNdLRAw-yyD for <buildroot@buildroot.org>;
- Thu, 22 Oct 2026 08:12:39 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org A0D468122D
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792656759;
- b=b4NvlnXbL1MCd2rtG+RatVmlFI56Mz2IGXJDcrqrqOl6W8QowpTT2APtelnnpqXlR/TL
- H8AUJhTCXUNvVs+6enaDKD0vYr/Bm+3BSyn/PC0GC2Vm10bZUhg8yyuGf0TLLjxt89QFk
- +VRGQJmylxQI2nEV9Q346BJ88WLDcLOOpFPCbJqPB4k6XTAGY57LkCsxiqdmP2bpaB1GH
- S+q6tsDKvutfsaR7OIc24KhKxqrYXCYN9Y7KOAQA86ZlNVlHbZYXqfXU7vadX7hPVWjcV
- tBXd6OpOq6uQQ4YPY/FncS1Q0soyl1GbqE4oVgo1K0dbpSHYuppU3obZhN8IarOd14A==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id o4t5y4oFfn6d for <buildroot@buildroot.org>;
+ Thu, 22 Oct 2026 08:37:24 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org BFDFA407A3
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792658244;
+ b=pW4uJ9Stpkah5vtUhwNOwrDh0PdcjvdqUDVx69l1OPymhcHj9KuCeh421BvObwk+v3JU
+ hIYGsx0j2+k8b1nbqwFKhh+/S8sCl+V7jbUebsUEzAMQj7WwKI71l5DXEgSNa8mp2s2QB
+ io4m57VeIOpDwSki+V4H8HAPk09uWHRou2FOX1uir9fOFz7KApNOPCfCrfY0bBx3/vP+D
+ VoP3DXyheOZ/dmdCesd+zVIg5MbHmPaWwgQ0rq2kzMWoZpZlZyOz7pCEkM1xKxlSxn5MO
+ CZ0jAUtf9R2LbeQVuR+nMyvo6zSMS+5h6sIKKq+4NOC99+pKaD0AOP8ZWPxb1O1gXMw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792656759;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=+6BUkTbZTNbiGMXK99tSLn2ffs2HQMhOvyKxkwxt9CQ=;
- b=Olpgs4juAHlNsWxY5043OYenRjKaqa/vWJjBS9yU0rjZXkl8f/w1NbpY55ARQbHJkHHH
- y7xwrVr79X89ceNTqCTKNaYe66fAshz9D6mzi3KOZgH1HCQq3261A6i07ifRxDkjYvxbQ
- J0kGVvnARdCJ9F2bscWx501+rQOyXIojzbyDUgX6yLpSIqMtlZwDTI7VmAlq3CcvrtjmG
- LulqchEEfw+3inmZrqBFhWu0ldMlMxuHlYT6PDBa0/Buv/p+4OwECgal/jMEAx2TumjzK
- 1801RVu4qYDn9tRBB53WgUVhCH6hBCmMIdNZ3OFOT2ze7+xMCDtyLKsyDiafbU6sN9w==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A0D468122D
- for <buildroot@buildroot.org>; Thu, 22 Oct 2026 08:12:39 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B0FB09B97C; Thu, 22 Oct 2026 08:11:15 +0000 (UTC)
+ c=relaxed/relaxed; t=1792658244;
+ h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
+ X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+ Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
+ Content-Transfer-Encoding;
+ bh=7JZxuJos2Ciu7Sngs4Z1aR80CUZYS+2J6FNxTbpelJk=;
+ b=Ps1I/AWmUWO9BKdFkkuirYg29v4bc3er+2A+wANDXlY5wBi/Klam9kSswCAlEvSGV3/3
+ gWtVfPc4ETbqbrW13dcsF+7TnSBomPoaUkAUQv6MiJOZGY7biKfOJYJkul2HeWFWF1aoS
+ aEE1VojCOdc0rBB4XlWtIaTwEr8Eskjj8fWJkNG4OfrKsnUp4ii4fP5yxgI84b+SHTUI8
+ 1bjKKlk5OrzzOLkcLu7wlvKwig9JzIdi8aRjWuFcq6DtXe3dMO6i9YQR8ag1lDGJJHGoj
+ ESyriZydxZrYgrJx1VrioAkMPMCDJA7D+qoxxVApC/nmN5RPtAXRmx28BQFQd2GEB0w==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ dmarc=pass header.from=googlemail.com;
+ dkim=pass header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256
+ header.s=20251104 header.b="L/wnufFb"; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::631"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::631; helo=mail-ej1-x631.google.com;
+ envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
+ [IPv6:2a00:1450:4864:20::631])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BFDFA407A3
+ for <buildroot@buildroot.org>; Thu, 22 Oct 2026 08:37:23 +0000 (UTC)
+Received: by mail-ej1-x631.google.com with SMTP id
+ a640c23a62f3a-c315869241fso195980166b.0
+ for <buildroot@buildroot.org>; Thu, 22 Oct 2026 01:37:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1792658241; x=1793263041;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to:content-type;
+ bh=7JZxuJos2Ciu7Sngs4Z1aR80CUZYS+2J6FNxTbpelJk=;
+ b=SZnH4w+yMEgMtuKc51Nnpglga4t2E4zMOOjmwsEpXV9Ts0BBTP5rerrlwuZjA1motP
+ Pnp9nKeNsbLj4RuPx4pc0A3UVVnMOUl43BfjVzBCOOx2fspQO4X7AesKtR4H60DVEBZZ
+ 3qxPW+iCcTh7TkJU00tXBRY8lZLA+vDuMAmhxFsCm5C3Y1LfUklTBjpwexO8x/TeH5b9
+ 692wO9fBI37FWFZmnT96MWmEHPeZh+sD2j5hb+AzXstEme/o58lLwsmI4GuUON5SAZ+q
+ Sr8HECoi1JPFsC3pwbKhpM+in+FGEwYWz2OmgV82dJcPBieFz7fXiF8bRrbbVISbXyOA
+ ZBqA==
+X-Gm-Message-State: AFq9FYIkA2JnQHrFivuLQ2n80++biL1DLU47HSBRVL9lejZDYdM6e4VE
+ SW7s07+RnP+NOMjpOubeiKopterTXltvFw6b6dbhO0ZgB9nuZ1o+jJB1i/pHUQ==
+X-Gm-Gg: AYBFou2O3muHB563+GAly4dKm1R+uWc0Vm/VJZApkk63luizdV+6vkjg+WxY1T/aohX
+ lSh8lyPb57uw2qE2DKLvQmuqzxHqbO0bZ0l5v3o1pGolEa9jwTp+03Ox/MR9zetW6rSi4WR1TCi
+ 4lbsotukROY+pZQxCu3qgKc1jgLUL64mJMYmslnh5SUfvrOckxLcTBKTByvZMIyDTdjBr2Sd1XG
+ LPQhyUq9TODYfst1/Z1UgO2EHvNRiYSsSmcMrX+ygUzmOM4UazuQ8hLsQyoiUh5wBjr2NSXU2dI
+ sH7N9+oUGOuQWT7K66+tqO66WLVt0OJAeCImK7zw1SDX3iWS94zeVCKKhupwIs7XMqEgQuvV0UP
+ eScQZ9LyCHQ2pE3ud2sJgu39Rz2x0X7UiCgxTVpvZsq0czf+T9UviGIU+xGvyRgffpVc+steJLF
+ svM7mhhqJe15JsTn5g5Gdi3l8Nu7UfZNQa8SjRB4WDeR14kMIXlWPQ/87faibSrZzMpz+6vDI7K
+ YUbAlmZW6dOYyruYMbb9rKtQ2K9FnLiK4cJbgw0pCSLD2ILZPYHg//snYTIi5fbvL2i3oArCmjr
+ jxG1lVhlU6F+ruBsCL0SyfK9vpuEEV3wC9g=
+X-Received: by 2002:a17:907:9345:b0:c45:b99:f282 with SMTP id
+ a640c23a62f3a-c467920d805mr453489666b.7.1792658240944; 
+ Thu, 22 Oct 2026 01:37:20 -0700 (PDT)
+Received: from development2.visionsystems.local (mail.visionsystems.de.
+ [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-c468a5dfbccsm82773066b.67.2026.10.22.01.37.20
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 22 Oct 2026 01:37:20 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Thu, 22 Oct 2026 10:11:01 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0aef99c165ba6fb4db33efaec77c113ff03eb80d
-X-Git-Newrev: 37aa996967499efc62948b93811b279abe981c1f
-X-Patchwork-Hint: ignore
-Message-Id: <20261022081115.B0FB09B97C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nuttcp: bump to version 8.2.2
+Date: Thu, 22 Oct 2026 10:37:20 +0200
+Message-Id: <20261022083720.2682440-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260831160420.2415569-1-yegorslists@googlemail.com>
+References: <20260831160420.2415569-1-yegorslists@googlemail.com>
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
+Subject: [Buildroot] [PATCH v3] package/attr: don't rely on kernel headers
+ for struct xattr_args
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,348 +150,155 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
+From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
+Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
-	autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/37aa996967499efc62948b93811b279abe981c1f
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+struct xattr_args was added to <linux/xattr.h> in Linux 6.13, but the
+getxattrat() and setxattrat() syscall numbers can be defined
+independently of the kernel headers: musl libc, for example, defines
+them in <bits/syscall.h> for all kernel header versions.  Building
+against kernel headers older than 6.13 with such a libc fails:
 
-The change history is available in the header of nuttcp.c.
+  libmisc/xattrat.c:35:16: error: variable 'uargs' has initializer but
+  incomplete type
+     35 |         struct xattr_args uargs = {
 
-Drop 0001-susv3-legacy.patch: it replaced bzero()/bcopy() for uClibc
-configurations without SUSv3 legacy support, but Buildroot's uClibc-ng
-configuration enables UCLIBC_SUSV3_LEGACY, and 8.2.2 uses these
-functions in many more places, so the patch is no longer needed.
+Stop including <linux/xattr.h> and use our own definition of this fixed
+part of the kernel ABI instead, so that the build no longer depends on
+the kernel headers version.  The struct layout is identical to the
+kernel definition (size 16, members at offsets 0, 8 and 12) on 32-bit
+and 64-bit architectures.
 
-The tarball hash is now locally computed, as the FreeBSD reference
-only covered 6.1.2.
+Upstream: https://lists.nongnu.org/archive/html/acl-devel/2026-08/msg00000.html
 
+This issue has been present since commit c804ebff5502 ("package/attr:
+security bump version to 2.6.0"), as libmisc/xattrat.c and its
+getxattrat()/setxattrat() wrappers were introduced in attr 2.6.0. It
+therefore affects 2026.08 and later. The maintenance branches up to
+2026.05.x, including the 2026.02.x LTS, still use attr 2.5.2 and are
+not affected.
+
+Fixes:
+https://autobuild.buildroot.org/results/10926ccaf3d3212d8816f5156ae2405b469195aa
+
+Fixes: c804ebff5502eac6e7d84129bfb2becc400898c6 ("package/attr: security bump version to 2.6.0")
 Assisted-by: Claude:claude-opus-5-5
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore                    |   1 -
- package/nuttcp/0001-susv3-legacy.patch | 264 ---------------------------------
- package/nuttcp/nuttcp.hash             |   3 +-
- package/nuttcp/nuttcp.mk               |   2 +-
- 4 files changed, 2 insertions(+), 268 deletions(-)
+Changes v2 -> v3:
+  - describe since when the issue has been present and add a Fixes:
+    tag for the culprit commit
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 6c026da328..bdeef49192 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -651,7 +651,6 @@ package/norm/0003-Fix-mixed-tabs-spaces-in-protolib-wscript.patch lib_patch.Upst
- package/nss-pam-ldapd/S45nslcd Shellcheck lib_sysv.EmptyLastLine lib_sysv.Indent lib_sysv.Variables
- package/ntp/S49ntp.in lib_sysv.Variables
- package/ntpsec/0001-wscript-remove-checks-for-bsd-string.h-fixes-host-co.patch lib_patch.Upstream
--package/nuttcp/0001-susv3-legacy.patch lib_patch.Upstream
- package/nvidia-driver/0001-use-LDFLAGS.patch lib_patch.Upstream
- package/octave/0001-Fix-BLAS-library-integer-size-detection.patch lib_patch.Upstream
- package/ofono/S46ofono lib_sysv.Variables
-diff --git a/package/nuttcp/0001-susv3-legacy.patch b/package/nuttcp/0001-susv3-legacy.patch
-deleted file mode 100644
-index 9a215f8a86..0000000000
---- a/package/nuttcp/0001-susv3-legacy.patch
-+++ /dev/null
-@@ -1,264 +0,0 @@
--[PATCH] Replace susv3 legacy function with modern equivalents
--
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
-----
-- nuttcp-6.1.2.c |   90 ++++++++++++++++++++++++++++-----------------------------
-- 1 file changed, 45 insertions(+), 45 deletions(-)
--
--Index: nuttcp-6.1.2/nuttcp-6.1.2.c
--===================================================================
----- nuttcp-6.1.2.orig/nuttcp-6.1.2.c
--+++ nuttcp-6.1.2/nuttcp-6.1.2.c
--@@ -1925,11 +1925,11 @@
-- 	if (udp && !haverateopt)
-- 		rate = DEFAULT_UDP_RATE;
-- 
---	bzero((char *)&frominet, sizeof(frominet));
---	bzero((char *)&clientaddr, sizeof(clientaddr));
--+	memset((char *)&frominet, 0, sizeof(frominet));
--+	memset((char *)&clientaddr, 0, sizeof(clientaddr));
-- 
-- #ifdef AF_INET6
---	bzero((char *)&clientaddr6, sizeof(clientaddr6));
--+	memset((char *)&clientaddr6, 0, sizeof(clientaddr6));
-- 	clientscope6 = 0;
-- #endif
-- 
--@@ -1985,7 +1985,7 @@
-- 		}
-- 
-- 		while (stream_idx <= nstream) {
---			bzero(&hints, sizeof(hints));
--+			memset(&hints, 0, sizeof(hints));
-- 			res[stream_idx] = NULL;
-- 			if (explicitaf) hints.ai_family = af;
-- 			if ((cp2 = strchr(cp1, '/'))) {
--@@ -3013,12 +3013,12 @@
-- 		if ((stream_idx > 0) && skip_data)
-- 			break;
-- 
---		bzero((char *)&sinme[stream_idx], sizeof(sinme[stream_idx]));
---		bzero((char *)&sinhim[stream_idx], sizeof(sinhim[stream_idx]));
--+		memset((char *)&sinme[stream_idx], 0, sizeof(sinme[stream_idx]));
--+		memset((char *)&sinhim[stream_idx], 0, sizeof(sinhim[stream_idx]));
-- 
-- #ifdef AF_INET6
---		bzero((char *)&sinme6[stream_idx], sizeof(sinme6[stream_idx]));
---		bzero((char *)&sinhim6[stream_idx], sizeof(sinhim6[stream_idx]));
--+		memset((char *)&sinme6[stream_idx], 0, sizeof(sinme6[stream_idx]));
--+		memset((char *)&sinhim6[stream_idx], 0, sizeof(sinhim6[stream_idx]));
-- #endif
-- 
-- 		if (((trans && !reverse) && (stream_idx > 0)) ||
--@@ -3028,15 +3028,15 @@
-- 			if (client) {
-- 				if (af == AF_INET) {
-- 				    sinhim[stream_idx].sin_family = af;
---				    bcopy((char *)&(((struct sockaddr_in *)res[stream_idx]->ai_addr)->sin_addr),
---					  (char *)&sinhim[stream_idx].sin_addr.s_addr,
--+				    memcpy((char *)&sinhim[stream_idx].sin_addr.s_addr,
--+					  (char *)&(((struct sockaddr_in *)res[stream_idx]->ai_addr)->sin_addr),
-- 					  sizeof(sinhim[stream_idx].sin_addr.s_addr));
-- 				}
-- #ifdef AF_INET6
-- 				else if (af == AF_INET6) {
-- 				    sinhim6[stream_idx].sin6_family = af;
---				    bcopy((char *)&(((struct sockaddr_in6 *)res[stream_idx]->ai_addr)->sin6_addr),
---					  (char *)&sinhim6[stream_idx].sin6_addr.s6_addr,
--+				    memcpy((char *)&sinhim6[stream_idx].sin6_addr.s6_addr,
--+					  (char *)&(((struct sockaddr_in6 *)res[stream_idx]->ai_addr)->sin6_addr),
-- 					  sizeof(sinhim6[stream_idx].sin6_addr.s6_addr));
-- 				    sinhim6[stream_idx].sin6_scope_id = ((struct sockaddr_in6 *)res[stream_idx]->ai_addr)->sin6_scope_id;
-- 				}
--@@ -3113,8 +3113,8 @@
-- 				 * to the multicast group
-- 				 */
-- 				if (af == AF_INET) {
---				    bcopy((char *)&sinhim[1].sin_addr.s_addr,
---					(char *)&save_sinhim.sin_addr.s_addr,
--+				    memcpy((char *)&save_sinhim.sin_addr.s_addr,
--+					(char *)&sinhim[1].sin_addr.s_addr,
-- 					sizeof(struct in_addr));
-- 				    if (!client && (irvers >= 50505)) {
-- 					struct sockaddr_in peer;
--@@ -3124,8 +3124,8 @@
-- 						      &peerlen) < 0) {
-- 						err("getpeername");
-- 					}
---					bcopy((char *)&peer.sin_addr.s_addr,
---					    (char *)&sinhim[1].sin_addr.s_addr,
--+					memcpy((char *)&sinhim[1].sin_addr.s_addr,
--+					    (char *)&peer.sin_addr.s_addr,
-- 					    sizeof(struct in_addr));
-- 				    }
-- 				    else {
--@@ -3136,8 +3136,8 @@
-- 							&melen) < 0) {
-- 						err("getsockname");
-- 					}
---					bcopy((char *)&me.sin_addr.s_addr,
---					    (char *)&sinhim[1].sin_addr.s_addr,
--+					memcpy((char *)&sinhim[1].sin_addr.s_addr,
--+					    (char *)&me.sin_addr.s_addr,
-- 					    sizeof(struct in_addr));
-- 				    }
-- 				    sinhim[1].sin_addr.s_addr &=
--@@ -4197,13 +4197,13 @@
-- 						&melen) < 0) {
-- 					err("getsockname");
-- 				}
---				bcopy((char *)&me.sin_addr.s_addr,
---				      (char *)&mc_group.imr_multiaddr.s_addr,
--+				memcpy((char *)&mc_group.imr_multiaddr.s_addr,
--+				      (char *)&me.sin_addr.s_addr,
-- 				      sizeof(struct in_addr));
-- 			}
-- 			else {
---				bcopy((char *)&peer.sin_addr.s_addr,
---				      (char *)&mc_group.imr_multiaddr.s_addr,
--+				memcpy((char *)&mc_group.imr_multiaddr.s_addr,
--+				      (char *)&peer.sin_addr.s_addr,
-- 				      sizeof(struct in_addr));
-- 			}
-- 			mc_group.imr_multiaddr.s_addr &= htonl(0xFFFFFF);
--@@ -4330,12 +4330,12 @@
-- 			if(udp) {
-- 				strcpy(buf, "BOD0");
-- 				if (multicast) {
---				    bcopy((char *)&sinhim[1].sin_addr.s_addr,
---					  (char *)&save_mc.sin_addr.s_addr,
---					  sizeof(struct in_addr));
---				    bcopy((char *)&save_sinhim.sin_addr.s_addr,
--+				    memcpy((char *)&save_mc.sin_addr.s_addr,
-- 					  (char *)&sinhim[1].sin_addr.s_addr,
-- 					  sizeof(struct in_addr));
--+				    memcpy((char *)&sinhim[1].sin_addr.s_addr,
--+					  (char *)&save_sinhim.sin_addr.s_addr,
--+					  sizeof(struct in_addr));
-- 				}
-- 				(void)Nwrite( fd[stream_idx + 1], buf, 4 ); /* rcvr start */
-- 				if (two_bod) {
--@@ -4344,8 +4344,8 @@
-- 					(void)Nwrite( fd[stream_idx + 1], buf, 4 ); /* rcvr start */
-- 				}
-- 				if (multicast) {
---				    bcopy((char *)&save_mc.sin_addr.s_addr,
---					  (char *)&sinhim[1].sin_addr.s_addr,
--+				    memcpy((char *)&sinhim[1].sin_addr.s_addr,
--+					  (char *)&save_mc.sin_addr.s_addr,
-- 					  sizeof(struct in_addr));
-- 				}
-- 				if (timeout)
--@@ -4361,7 +4361,7 @@
-- 				fflush(stdout);
-- 			}
-- 			if (udplossinfo)
---				bcopy(&nbytes, buf + 24, 8);
--+				memcpy(buf + 24, &nbytes, 8);
-- 			if (!udp && interval && !(format & NORETRANS) &&
-- 			    ((retransinfo == 1) ||
-- 			     ((retransinfo >= 2) &&
--@@ -4372,13 +4372,13 @@
-- 					tmp = 0x5254524Eu;	/* "RTRN" */
-- 				else
-- 					tmp = 0x48525452u;	/* "HRTR" */
---				bcopy(&nretrans, buf + 24, 4);
---				bcopy(&tmp, buf + 28, 4);
--+				memcpy(buf + 24, &nretrans, 4);
--+				memcpy(buf + 28, &tmp, 4);
-- 			}
-- 			else {
-- 				send_retrans = 0;
-- 				if (!udp)
---					bzero(buf + 24, 8);
--+					memset(buf + 24, 0, 8);
-- 			}
-- 			if (nbuf == INT_MAX)
-- 				nbuf = ULLONG_MAX;
--@@ -4423,12 +4423,12 @@
-- 				nbytes += buflen;
-- 				cnt = 0;
-- 				if (udplossinfo)
---					bcopy(&nbytes, buf + 24, 8);
--+					memcpy(buf + 24, &nbytes, 8);
-- 				if (send_retrans) {
-- 					nretrans = get_retrans(
-- 							fd[stream_idx + 1]);
-- 					nretrans -= iretrans;
---					bcopy(&nretrans, buf + 24, 4);
--+					memcpy(buf + 24, &nretrans, 4);
-- 				}
-- 				stream_idx++;
-- 				stream_idx = stream_idx % nstream;
--@@ -4523,8 +4523,8 @@
-- 				nbytes += cnt;
-- 			if(udp) {
-- 				if (multicast)
---				    bcopy((char *)&save_sinhim.sin_addr.s_addr,
---					  (char *)&sinhim[1].sin_addr.s_addr,
--+				    memcpy((char *)&sinhim[1].sin_addr.s_addr,
--+					  (char *)&save_sinhim.sin_addr.s_addr,
-- 					  sizeof(struct in_addr));
-- 				strcpy(buf, "EOD0");
-- 				(void)Nwrite( fd[stream_idx + 1], buf, 4 ); /* rcvr end */
--@@ -4532,7 +4532,7 @@
-- 		} else {
-- 			first_read = 1;
-- 			need_swap = 0;
---			bzero(buf + 24, 8);
--+			memset(buf + 24, 0, 8);
-- 			if (udp) {
-- 			    ntbytesc = 0;
-- 			    got_eod0 = 0;
--@@ -4584,7 +4584,7 @@
-- 				     * goes off right here */
-- 				    if (udplossinfo) {
-- 					    if (first_read) {
---						    bcopy(buf + 24, &ntbytesc,
--+						    memcpy(&ntbytesc, buf + 24,
-- 								8);
-- 						    first_read = 0;
-- 						    if (ntbytesc > 0x100000000ull)
--@@ -4598,7 +4598,7 @@
-- 						    }
-- 					    }
-- 					    if (!need_swap)
---						    bcopy(buf + 24, &ntbytesc,
--+						    memcpy(&ntbytesc, buf + 24,
-- 								8);
-- 					    else {
-- 						    cp1 = (char *)&ntbytesc;
--@@ -4627,8 +4627,8 @@
-- 					    uint32_t tmp;
-- 
-- 					    first_read = 0;
---					    bcopy(buf + 24, &nretrans, 4);
---					    bcopy(buf + 28, &tmp, 4);
--+					    memcpy(&nretrans, buf + 24, 4);
--+					    memcpy(&tmp, buf + 28, 4);
-- 					    if (tmp == 0x5254524Eu) {
-- 						    /* "RTRN" */
-- 						    retransinfo = 1;
--@@ -4661,7 +4661,7 @@
-- 				    }
-- 				    if (read_retrans) {
-- 					    if (!need_swap)
---						    bcopy(buf + 24, &nretrans,
--+						    memcpy(&nretrans, buf + 24,
-- 								4);
-- 					    else {
-- 						    cp1 = (char *)&nretrans;
--@@ -5327,10 +5327,10 @@
-- 		itimer.it_interval.tv_usec = 0;
-- 		setitimer(ITIMER_REAL, &itimer, 0);
-- 		signal(SIGALRM, SIG_DFL);
---		bzero((char *)&frominet, sizeof(frominet));
---		bzero((char *)&clientaddr, sizeof(clientaddr));
--+		memset((char *)&frominet, 0, sizeof(frominet));
--+		memset((char *)&clientaddr, 0, sizeof(clientaddr));
-- #ifdef AF_INET6
---		bzero((char *)&clientaddr6, sizeof(clientaddr));
--+		memset((char *)&clientaddr6, 0, sizeof(clientaddr));
-- 		clientscope6 = 0;
-- #endif
-- 		cput = 0.000001;
-diff --git a/package/nuttcp/nuttcp.hash b/package/nuttcp/nuttcp.hash
-index c7d0148e12..a43081d632 100644
---- a/package/nuttcp/nuttcp.hash
-+++ b/package/nuttcp/nuttcp.hash
-@@ -1,4 +1,3 @@
--# From http://lists.freebsd.org/pipermail/freebsd-ports-bugs/2009-August/170685.html
--sha256  054e96d9d68fe917df6f25fab15c7755bdd480f6420d7d48d9194a1a52378169  nuttcp-6.1.2.tar.bz2
- # Locally computed
-+sha256  7ead7a89e7aaa059d20e34042c58a198c2981cad729550d1388ddfc9036d3983  nuttcp-8.2.2.tar.bz2
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  LICENSE
-diff --git a/package/nuttcp/nuttcp.mk b/package/nuttcp/nuttcp.mk
-index 2636f950aa..a33af9bf87 100644
---- a/package/nuttcp/nuttcp.mk
-+++ b/package/nuttcp/nuttcp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NUTTCP_VERSION = 6.1.2
-+NUTTCP_VERSION = 8.2.2
- NUTTCP_SITE = http://nuttcp.net/nuttcp
- NUTTCP_SOURCE = nuttcp-$(NUTTCP_VERSION).tar.bz2
- NUTTCP_LICENSE = GPL-2.0
+Changes v1 -> v2:
+  - add upstream URL
+
+ ...ly-on-kernel-headers-for-struct-xatt.patch | 85 +++++++++++++++++++
+ 1 file changed, 85 insertions(+)
+ create mode 100644 package/attr/0002-libmisc-don-t-rely-on-kernel-headers-for-struct-xatt.patch
+
+diff --git a/package/attr/0002-libmisc-don-t-rely-on-kernel-headers-for-struct-xatt.patch b/package/attr/0002-libmisc-don-t-rely-on-kernel-headers-for-struct-xatt.patch
+new file mode 100644
+index 0000000000..9ab7a99891
+--- /dev/null
++++ b/package/attr/0002-libmisc-don-t-rely-on-kernel-headers-for-struct-xatt.patch
+@@ -0,0 +1,85 @@
++From 9755020b815066732677d6107d40af12a58d1a0d Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Fri, 28 Aug 2026 23:43:48 +0200
++Subject: [PATCH] libmisc: don't rely on kernel headers for struct xattr_args
++
++struct xattr_args was added to <linux/xattr.h> in Linux 6.13, but the
++getxattrat() and setxattrat() syscall numbers can be defined
++independently of the kernel headers: musl libc, for example, defines
++them in <bits/syscall.h> for all kernel header versions.  Building
++against kernel headers older than 6.13 with such a libc fails:
++
++  libmisc/xattrat.c:35:16: error: variable 'uargs' has initializer but
++  incomplete type
++     35 |         struct xattr_args uargs = {
++
++Stop including <linux/xattr.h> and use our own definition of this fixed
++part of the kernel ABI instead, so that the build no longer depends on
++the kernel headers version.  The struct layout is identical to the
++kernel definition (size 16, members at offsets 0, 8 and 12) on 32-bit
++and 64-bit architectures.
++
++Upstream: https://lists.nongnu.org/archive/html/acl-devel/2026-08/msg00000.html
++
++Assisted-by: Claude:claude-opus-5
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ libmisc/xattrat.c | 23 ++++++++++++++++++-----
++ 1 file changed, 18 insertions(+), 5 deletions(-)
++
++diff --git a/libmisc/xattrat.c b/libmisc/xattrat.c
++index 5f6212c..c07c04d 100644
++--- a/libmisc/xattrat.c
+++++ b/libmisc/xattrat.c
++@@ -18,7 +18,7 @@
++ */
++ 
++ #include "config.h"
++-#include <linux/xattr.h>
+++#include <stdint.h>
++ #include <sys/syscall.h>
++ #include <unistd.h>
++ #include <errno.h>
++@@ -27,13 +27,26 @@
++ 
++ #pragma GCC diagnostic ignored "-Wunused-parameter"
++ 
+++/*
+++ * struct xattr_args was added to <linux/xattr.h> in Linux 6.13, but the
+++ * syscall numbers can be defined independently of the kernel headers (musl
+++ * libc defines them in <bits/syscall.h>, for example), so we cannot rely on
+++ * the kernel headers to define the struct.  Use our own definition of this
+++ * fixed part of the kernel ABI instead.
+++ */
+++struct attr_xattr_args {
+++	uint64_t value __attribute__((aligned(8)));
+++	uint32_t size;
+++	uint32_t flags;
+++};
+++
++ ssize_t
++ getxattrat(int dirfd, const char *path, int at_flags, const char *name,
++ 	   void *value, size_t size)
++ {
++ #ifdef __NR_getxattrat
++-	struct xattr_args uargs = {
++-		.value = (unsigned long)value,
+++	struct attr_xattr_args uargs = {
+++		.value = (uintptr_t)value,
++ 		.size = size,
++ 	};
++ 
++@@ -50,8 +63,8 @@ setxattrat(int dirfd, const char *path, int at_flags, const char *name,
++ 	   const void *value, size_t size, int flags)
++ {
++ #ifdef __NR_setxattrat
++-	struct xattr_args uargs = {
++-		.value = (unsigned long)value,
+++	struct attr_xattr_args uargs = {
+++		.value = (uintptr_t)value,
++ 		.size = size,
++ 		.flags = flags,
++ 	};
++-- 
++2.34.1
++
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
