@@ -1,28 +1,28 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95EA1606A31A
-	for <buildroot@archiver.kernel.org>; Thu, 22 Oct 2026 21:23:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C935C606A319
+	for <buildroot@archiver.kernel.org>; Thu, 22 Oct 2026 21:23:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=CZ6Fn7aW
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=XWhib4kQ
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6FC6D40967;
-	Thu, 22 Oct 2026 21:23:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A60F860848;
+	Thu, 22 Oct 2026 21:23:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fZdNtHOerKQq; Thu, 22 Oct 2026 21:23:35 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 81DB44096D
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792704215;
-	b=UW9aC6Iw9JLOwL79VqZQnTrCrvqySjEJiW2OgCw02HniXZL+xUNWrF/8KrXncW2oFM4u
-	 2FoCa/GvizlOYydehZpTeFkP5FHBhb+f7nJ6PdGGWmfpC0di2KizgkZvfYeRgVtKuJOCo
-	 FgIKIn6rPV23XBL4KkULBFutTDPAfDdOgtcGsiWzxqorVSh5jqHwHWdAPCd7559EK7Xlf
-	 LLxuD4i8UmpwozMmee2p8OjUNiNBMpp4DOsFIGSSLRjlQpQP8ZuiUcBovXCiY369cvG+M
-	 3jcuPcpWmv9loNGQin14S/hmuNPcF09E/J22UNJ+58qj4fCotYTl5qwoFw09dyGJOjQ==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KycCPBhpAZSS; Thu, 22 Oct 2026 21:23:36 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org B331C60874
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792704216;
+	b=QyE+i1EfjzC693HX806BdVELCG/MAZr9WN3XZGBnn/DrJXsSSqcEUanv1rm0IqcV85Fh
+	 vqdqCSUU7xDiCHI44ow40o3H9TTvaCwmtHO6v0ZVtePaLrCbfVqj8nzEahbeS1ofhnNWY
+	 SkNzjVe3Q35eq7QLk7vbMMaXJlKWqC5C5M0Y9TzDtEK5MIGR9wVXAy8M7yAggtD05O5P9
+	 2QkOYFdyhMRGJlEI9YAzBE/Q/spZ9B87yzr9rw324C7sc3Fq17lR8S/+6jpgBATp4GVF4
+	 LJikdU2PQQyuABglqeqYwB9fzRZgxuSBB9vb6+zt3ltun9/0uObg1TbreUvZ7LovQOw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792704215;
+	c=relaxed/relaxed; t=1792704216;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=wveWCeKpj3TWQ5kUVcf3F+SpIsKXBhA/zAx+y/VzbB8=;
-	b=UD7jlGnc9H4QiHCQ1mL2a8RbrupY5YyBdl0OrAWJYhrhyNg71FPDxd3d5wnmpTO5B8Zd
-	 GAs2NDsIT1UFWTtewALC5YECJbJ8n3pfOKB+VLKzJDaCJF9jxoMAkPKJDLO15DCJAPmcZ
-	 /QwKfMoMoEbdzqB2qroxzVXc3fu1M6kW76kDP9KnIgrXeCIlOZcXI97TMduZ70Zyl6Sa/
-	 Ob44qH/hek7bWAwbr7jfn2RXGtKyb3bkE68KwGNA65vnaQZMIQn8XTRNKwhAe2CPoXjDp
-	 aFN6B28HGuGX5ZhXSi4A0HDPf3xzFVv0qPFVS0fhbFPclocWGgwD9auWezs2U4JmCNg==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=HJlW4ymKzqxDqflMgnVEyyQHoFHoA9bupZS/uALXVOU=;
+	b=tdx+zvxXXwtAX6VHhTcpwtUd3QFeMHNpElWQgGEu8n26qP1hYNRBDGvL1yLJmQBTl5DL
+	 gvENvMbH/EmWcMIk2MQa6sV2MeyLlP7kIM4Z4Yf/TVu8xGCZob8ZNe04GuFfe+UGgoOZZ
+	 KAHxhtJ2++teutjC7q3VgLax9NVyTKbbphkVD8+pLGkxlAPCl37+xHhH+MhbGHPJoZdbc
+	 VYHesTEpVgKAJntdCpaIpWYz71yKNCzk/NGsLrpZwKNpgTY/JMlfy0jtOlJTvyjWTxGjH
+	 N6hQzsL8yAH0DcLTG6jUew5jNeSbxbsMg5y8nsRJ0u41Nncb29RK3ucVRK5D/OlolRA==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792704215;
-	bh=wveWCeKpj3TWQ5kUVcf3F+SpIsKXBhA/zAx+y/VzbB8=;
+	s=default; t=1792704216;
+	bh=HJlW4ymKzqxDqflMgnVEyyQHoFHoA9bupZS/uALXVOU=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=CZ6Fn7aWFMBk5YRttpBKhEnUE0+kJjONHKuSnSaLiPGT810HnM0BsDk2/Zv+YdrTs
-	 l47X5jGrhdlrIZWvJ96oJyrvQuQ0/Oo064gtdjJxrvMDoBerOLbrq8xIJa35nQBRbC
-	 jSesJvW+KkeN2iVEY1VfTiYJaiuoJAfWzcbY+BsO1T4kkqwyAQoxlY2IMxvWBcvz6R
-	 BW5gZ3i5Vlbpgx7LQyYG/n4s3br4QrDiet/Pch0/qPkJ4epk423hKooH293aIVxYJJ
-	 Zm7VTXkcmS7EZp58Tq0I/OrQcVCWUyOCgDYZkmbvTpCr6okNichpu034Xn7vybv8bL
-	 gI5kfUzpDHihw==
+	b=XWhib4kQIBuxVjHNf/bCub8uvjUMS4ORO1s2bN/GGgwhu/hnIoAO6peCSkh3naQkD
+	 Ng1TIf+Yd19Xwy0sU2MH6hwhJO34KbDccsD43MnSZhr1RT83xFGRjFZ7aDjdorjI//
+	 aXaYund4Mgqe4D4Bg6Wwdtz1Suc8uvx0VK06+ti4kANvXpO3RaMPlCFFd+pIVCBgR0
+	 HKNMBykhZp3wSlNWVYN2x5H+AizFuvalGarzwxVaixWF8Ogvs0zqj/DjGm8q14C1ji
+	 bgrJ5LsNX15VpGkD7troenGSYotHLBjv8FWTrezmyv+rkoeWvPuTVZiDJx3TFKlx7+
+	 S2FSW3raU6JLQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 81DB44096D;
-	Thu, 22 Oct 2026 21:23:35 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 7B8E53AF
+	by smtp3.osuosl.org (Postfix) with ESMTP id B331C60874;
+	Thu, 22 Oct 2026 21:23:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A7D5A3AF
  for <buildroot@buildroot.org>; Thu, 22 Oct 2026 21:23:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6D58D40270
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8E03A811F1
  for <buildroot@buildroot.org>; Thu, 22 Oct 2026 21:23:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8fkoZHtFHljR for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hXz3rMXWd_qs for <buildroot@buildroot.org>;
  Thu, 22 Oct 2026 21:23:33 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org C5B0C401D0
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org B895981112
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792704213;
- b=FlzYqozB4hEL4Qk2yjsIq5pgm2M3iYKbqRlj/KNhhHsM448yGGir2HdY9eGQku3yle4b
- zFCcjvOunjFqFnyIFitldZ9H/+BUVG3ZA185jVu66R7zVbL1TjnVCU1xzjyAaks53MUe4
- Rc6Z47OGgJ1d7SWBqDi3gkOX5Csk4i0OIP2y6gnEtWrd56CDuTmmvMJgm9J1P8MiY5sW3
- 3uVwxBje5XWYvTMzDLEtiCY0D1YZQgqUkG6TfkhWMk1lpECmf99NZcZW4HyR0vHhS92KN
- tqWJnMiPN6WTyxH5LSsEfV8+VmlOeAr1eXyd9x9kkP3wyFyzCmVe2rc1Z+t4EY6okOw==
+ b=H+6hnBMvi1ZghQBkuvYA5DZqzNpPvib9E9Jctfc9HDignkSdSLZL30lSOWVJtMOGoFEW
+ 7pv9CFdKigPKvyrIjcR1pPTerTw4URFmSX0Yec3DNGrScWgL35dmx04gQy7l750Z/k49S
+ 0ZWs8wwJgPcrJMSsIkgXsno0hh4yv5xbC2XTgB/dPoMOPr805I7oYZO8VuoLuw9jNkk6s
+ pP46DY2EwDftLDqVonE/5xaXeWD2dkPf1kmrFVdaZjQlyYepwkAvqtnh1x8DhOS+1lv/W
+ Z5djhrmea40eBeI2aZDM5nhxO+424QMz5/KDOjt8eROLvqYNNmZ0LfpEb4Ay8TOskQQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1792704213;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=S/g36wbf8LxUgPb2eaT/8q/xOVK44g4W5mEJ0/qvSyI=;
- b=mnHBtk0aiK+bhq/9JFy9dNbAOAbvvdWzmy8nTBummImzL4wuGuX5Oic7c86CgnNm9TKg
- OkA/ORYnGx6D/NXczn4m6QIJAPa29wlCX4fHVEPKZLzgQsWJikp2WYEUZ82k6T3K3BCXF
- D7V+J8ZBxAsaVh7zAJL1I0/M1vaumJM+zoTHwysQm4NP3m1W5zSltT3QyPbmzeKTQzDx9
- WxeZYfStl5ltq4T1a2SZ4rz4Ibolgl6Psc+R930wq+vp4RUr9euZZEIdDnGVN2ih6hg1z
- cwC86cvZ7yLVYFvaL90f83LTuNyIPQwdLEovaInV9fdGjlq4KqXOBWj8AGiC86rxfhA==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ bh=wIN7s6tJ55Okn1l7UM/vzapRR55kQsnlr3+1kR+qLes=;
+ b=AoeqMycJXGhgPzH4R2ZTgYMn0EZzVJQ4m8813kkb0EHSooWueCcQWRT6STmfN2BspKQc
+ uXUl1xYIiq8OPPDd2KCCRVyzS/TIxuq/seSAqWNqWgEinIYTtgzGHabv93Kzc0Q5ywpmZ
+ EpP9mpxl9Le6I6tevC0r0PvJoR+giKWSIn1E91plTV1eija7Hljjjpvq/BAL2c3mjw3ts
+ DAcrm/KMcmWrCj7VYSWwN8rayEmR6kfxsOXWObNzKpjTL0A2QH4Ty9axjzsnhpdqCyZ1L
+ rVErMMLC30ilmydfDh6AL35zcjsQIOYArcrkxBknzNKMJgj9ImJuFRh3VWKjh8HfARw==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C5B0C401D0
+ by smtp1.osuosl.org (Postfix) with ESMTP id B895981112
  for <buildroot@buildroot.org>; Thu, 22 Oct 2026 21:23:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A12129C26D; Thu, 22 Oct 2026 21:22:09 +0000 (UTC)
+ id 92D409C27A; Thu, 22 Oct 2026 21:22:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 22 Oct 2026 23:22:03 +0200
+Date: Thu, 22 Oct 2026 23:21:54 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b56db7616008c93d9e6803a2376ccc9873eb6f7f
-X-Git-Newrev: b904a38926a15849ad92482a7ca63914fecda420
+X-Git-Oldrev: 1af96e786ef1d420bdb66c285a77d18df97db689
+X-Git-Newrev: b56db7616008c93d9e6803a2376ccc9873eb6f7f
 X-Patchwork-Hint: ignore
-Message-Id: <20261022212209.A12129C26D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bind: security bump version to
- 9.20.30
+Message-Id: <20261022212209.92D409C27A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/iozone: fix build without ASYNC_IO
+ with GCC >= 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,44 +123,141 @@ X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b904a38926a15849ad92482a7ca63914fecda420
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b56db7616008c93d9e6803a2376ccc9873eb6f7f
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://ftp.isc.org/isc/bind9/9.20.30/doc/arm/html/notes.html#notes-for-bind-9-20-30
+With uClibc, iozone is built with the linux-noaio target, where the
+async_*() stubs are declared and defined without parameter lists. GCC 15
+defaults to C23, where an empty parameter list means the function takes
+no arguments, so the build fails:
 
-Fixes CVE-2026-19630, CVE-2026-94300, CVE-2026-96888 & CVE-2026-97313.
+  iozone.c:8150:32: error: too many arguments to function 'async_write_no_copy'; expected 0, have 7
+  iozone.c:9126:31: error: too many arguments to function 'async_read_no_copy'; expected 0, have 8
+  iozone.c:20165:1: error: conflicting types for 'async_init'; have 'void(void)'
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Add a patch, sent upstream, that gives the stubs full prototypes
+matching their ASYNC_IO counterparts. iozone 3.510, the latest release,
+still has the same stubs, so a version bump wouldn't help.
+
+This issue has been present since commit 75891397abe6 ("package/gcc:
+add support for GCC 15.x"), as GCC 15 is the first version defaulting
+to C23. It therefore affects 2025.08 and later, i.e. 2025.11.x,
+2026.02.x, 2026.05.x and 2026.08.x when GCC 15 is used. 2025.02.x is
+not affected as it doesn't support GCC 15.
+
+Fixes:
+https://autobuild.buildroot.org/results/4090fb0d0a3b8bee60707b1672c35dada744bff5
+
+Fixes: 75891397abe60dbe3d82a1ec39654ff81d1b1406 ("package/gcc: add support for GCC 15.x")
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/bind/bind.hash | 4 ++--
- package/bind/bind.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...04-Fix-build-without-ASYNC_IO-with-GCC-15.patch | 96 ++++++++++++++++++++++
+ 1 file changed, 96 insertions(+)
 
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 8129fa2d2b..2d6aa2fde4 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.20.27/bind-9.20.29.tar.xz.asc
-+# Verified from https://ftp.isc.org/isc/bind9/9.20.30/bind-9.20.30.tar.xz.asc
- # with key 706B6C28620E76F91D11F7DF510A642A06C52CEC
--sha256  587029508b3b1b43229fae416c97e5543aba45809cefaca98a5004a02a5736c1  bind-9.20.29.tar.xz
-+sha256  9e1443a40a72a30272cbc3196d020a6b2e26937111c83e59e101e82e1e3b4fef  bind-9.20.30.tar.xz
- sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index a05ef6c362..7fb07fc83c 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIND_VERSION = 9.20.29
-+BIND_VERSION = 9.20.30
- BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- BIND_INSTALL_STAGING = YES
+diff --git a/package/iozone/0004-Fix-build-without-ASYNC_IO-with-GCC-15.patch b/package/iozone/0004-Fix-build-without-ASYNC_IO-with-GCC-15.patch
+new file mode 100644
+index 0000000000..b049ce60ed
+--- /dev/null
++++ b/package/iozone/0004-Fix-build-without-ASYNC_IO-with-GCC-15.patch
+@@ -0,0 +1,96 @@
++From 0cc510655874362bc95c608021ef7921ae389559 Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Thu, 22 Oct 2026 22:16:32 +0200
++Subject: [PATCH] Fix build without ASYNC_IO with GCC >= 15
++
++Without ASYNC_IO (e.g. the linux-noaio target), the async_*() stubs
++are declared and defined without parameter lists. GCC 15 defaults to
++C23, where an empty parameter list means the function takes no
++arguments, so the build fails:
++
++iozone.c:8150:32: error: too many arguments to function 'async_write_no_copy'; expected 0, have 7
++iozone.c:9126:31: error: too many arguments to function 'async_read_no_copy'; expected 0, have 8
++iozone.c:20165:1: error: conflicting types for 'async_init'; have 'void(void)'
++
++Give the stubs full prototypes matching their ASYNC_IO counterparts,
++with the long long * cache pointer used without ASYNC_IO.
++
++Upstream: sent to capps@iozone.org
++Assisted-by: Claude:claude-opus-5-5
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ src/current/iozone.c | 26 +++++++++++++++-----------
++ 1 file changed, 15 insertions(+), 11 deletions(-)
++
++diff --git a/src/current/iozone.c b/src/current/iozone.c
++index 8de26cf..5542714 100755
++--- a/src/current/iozone.c
+++++ b/src/current/iozone.c
++@@ -1332,11 +1332,11 @@ size_t async_write_no_copy(struct cache *,long long ,char *,long long,long long,
++ #else
++ long long *gc=0;
++ void async_init(long long **,int,int);
++-int async_read();
++-int async_read_no_copy();
++-size_t async_write();
++-size_t async_write_no_copy();
++-void async_release();
+++int async_read(long long *, long long , char *, off64_t, long long, long long, off64_t, long long);
+++int async_read_no_copy(long long *, long long, char **, off64_t, long long, long long, off64_t, long long);
+++size_t async_write(long long *,long long, char *, long long, off64_t, long long);
+++size_t async_write_no_copy(long long *,long long ,char *,long long,long long,long long,char *);
+++void async_release(long long *);
++ #endif
++ void do_float(int, double, int, int);
++ int create_xls(char *);
++@@ -20144,37 +20144,41 @@ long long length;
++ 
++ #ifndef ASYNC_IO
++ int
++-async_read()
+++async_read(long long *gc, long long fd, char *ubuffer, off64_t offset,
+++	long long size, long long stride, off64_t max, long long depth)
++ {
++ 	printf("Your system does not support async I/O\n");
++ 	exit(169);
++ }
++ size_t
++-async_write_no_copy()
+++async_write_no_copy(long long *gc, long long fd, char *buffer, long long size,
+++	long long stride, long long depth, char *free_addr)
++ {
++ 	printf("Your system does not support async I/O\n");
++ 	exit(170);
++ }
++ size_t
++-async_write()
+++async_write(long long *gc, long long fd, char *buffer, long long size,
+++	off64_t offset, long long depth)
++ {
++ 	printf("Your system does not support async I/O\n");
++ 	exit(171);
++ }
++ void
++-async_init()
+++async_init(long long **gc, int fd, int flag)
++ {
++ 	printf("Your system does not support async I/O\n");
++ 	exit(172);
++ }
++ int
++-async_read_no_copy()
+++async_read_no_copy(long long *gc, long long fd, char **ubuffer, off64_t offset,
+++	long long size, long long stride, off64_t max, long long depth)
++ {
++ 	printf("Your system does not support async I/O\n");
++ 	exit(172);
++ }
++ void
++-async_release()
+++async_release(long long *gc)
++ {
++ 	printf("Your system does not support async I/O\n");
++ 	exit(173);
++-- 
++2.34.1
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
