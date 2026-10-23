@@ -1,142 +1,132 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29387606A31A
-	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 07:44:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DEA0606A31A
+	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 08:32:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=i/cgdYmV
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=FoyXkFpr;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256 header.s=purelymail1 header.b=bX8TRcUj
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 008D580DB0;
-	Fri, 23 Oct 2026 07:44:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 64E0D60650;
+	Fri, 23 Oct 2026 08:32:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ngnY_LIeVWji; Fri, 23 Oct 2026 07:44:39 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org E715080E04
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792741479;
-	b=kli3vkObhsEawBsVFE9hfT1LmvIFvqg+g3sItQxmyURQnMV5KbI0/GH1g8jwLPnTliTL
-	 FS99PaUwXGg2aWfHgV0SxbrIbW0DwcO9oZH26a7ugzx13LImUZu4eMnJisKV/LRw/KiLn
-	 r+jL+LpWvC09YQuu4wIDRgKTGfiENXH5c/z0k1PBpVhmxi4sQnUvkn4wci3ENaT2i9KcT
-	 oKCW3Hy1bHyQHrlLF3iLuH/cw79LZIpW2oDVx6TU56IMalZK7/Uj+rfJ2q/NpflS9ai9V
-	 zudpyEHTbZzq/9pzQYaGv1UCnYkfybm6jqt7Y5ZI7ZYwt7djvpHYAyEtNsMsnH93CtA==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id d-hUfqDimEBX; Fri, 23 Oct 2026 08:32:17 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 6A4426065A
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792744337;
+	b=F4871TwXF9eAzG/jxgw1DopoZ7NfTRc9zMKDsolOKKT5s1n1RxHfCN0dlHyx3MhbpTXq
+	 PCU4ouGcvofQxWx31fQPMGMVE3Cm0dajy3VHl8aSPviskR2ySKXHYUKEynGNJK3KptTnG
+	 gyUDOts6bvz/jTaBGTL57JhTuARqpqNRS1nLTxsRZEo4vwaKKMJwCUgSTZ6hfmoR7hD2F
+	 TdM8Fadq7CmAHTKAbHaMweMiCN+A8jsQa6FUx7ryeCZ/AT5eWeCzdy3yGpyn8B2xDPXaQ
+	 /5vJo0mlCKw6tgFRFwHJRvnbIUqsxIJrLeBOdJA+SOXwuFPxfcXTemf7DmFjqrCx7Gg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792741479;
+	c=relaxed/relaxed; t=1792744337;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 Received:To:Date:Message-Id:X-Mailer:MIME-Version:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:Content-Type:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:Received:From:To:
+	 Date:Message-ID:X-Mailer:MIME-Version:X-MIME-Autoconverted:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=5KfRRGsdI24rFjiCDqkB0cVzACRCbXSoO5lo5h1rvCQ=;
-	b=ns8Y19IdbVV7mHESaqWOWoDbqEpkRQLuzho+E6yBjPEDj3wi4fs2dGFN0HIwxQ5zc80z
-	 /MmDMR1bi4BUwBaNApTZShksUo+QZOdKitdKGVZyHfnW1h9rdgj6jb+0eJRwJGYntrAke
-	 r24NHmA8yuO6HMBStBaFCo7qRN+NMvV3wEoBjBjAGgNM3BJd8KMaaeHGvHGojtQTqBy22
-	 w/NdLX+IDfNMs197TmdTaYIoyleZJWOs9VbQCB70Q2O5ynFgytVTtWHZ1HeveUm7+PtrJ
-	 H1SqIhxvjKZvAoW02FmdUn69yrQP0alXBRXcSVz3sJ/ppJ/HBBuxtk2S8e/E+d+0gCQ==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	bh=7/2KkDX5pmrP0gEaJi7RArzB8aSNxNBW3jHWl9H3KNw=;
+	b=GLPmhNakdDEaJMmrq8vrk09llBpMvu+A3k2Py4i+OLTqCM3dpQHVnS+PKorpd/KJoHkE
+	 j9WCH0ZBGNl+/BE31+hp4ACbi9glaOlXAOnQYhKs2RN0oZMjZAMeN8yTojeRwWrKVKrF1
+	 +bwh72rBqk1A0lXRlVZIUheE2Qsovy3ZBH5wiQdy2ecwdfojyBdNgTPqABffNV2j8SuGH
+	 4rz6nk63oO/xnXn6dopoNPLsSeft4QkOvbmyoAXeg8khSat2bNI3c+ozPuNrCVH0xXjDy
+	 DFSoj9/aGxWfSOcnk31OHoiqLgH1HPP1+9maYGEIAjq76tHLoQ4qipYRMYZX4eneCkA==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792741479;
-	bh=5KfRRGsdI24rFjiCDqkB0cVzACRCbXSoO5lo5h1rvCQ=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=i/cgdYmVxzTWt2ojR/wU1Sv2Lys8VcdMKya21YZoxyTF19yB/8Rsi8XKQZtX16n24
-	 OSn7ksBXHk5ErcwK1SaEPw94XPcSeP/LRN7q1rmYWrBc8A5dcA26yjOeC+wsRCFA8a
-	 lY62AM4sI7d2cDA8IAFgnP2r3O4wvGvteW9tSDs1BZJlmsp+snMDPeO8Ipe4cfFWdC
-	 PlAo8xIG0n8OgsI4c78+/7abloC3H4GMtQnsqMgG0vHwpIASQHWGCvctHYwrL8nGkH
-	 1ok9SYxVqsJB/uQh9eUvdK0okGhnBX5DozUH1ge1nlT3uMOwvrO2ANV06tUonob4qd
-	 FOah2TgmOlXqg==
+	s=default; t=1792744337;
+	bh=7/2KkDX5pmrP0gEaJi7RArzB8aSNxNBW3jHWl9H3KNw=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=FoyXkFprHQpBwckN4D+jC2dbYVvKBEE3CXxNRSFCt4qdx7JTzIWRHTnVDyGXsPtwI
+	 w1nyc4b4BJZEkpRnJq16hR8Nu1FjJCDKXBoyC030vaonLN1vBTy0YrzoBsZxDHFOQm
+	 uTA9cH1FtckaSxvoBZs6jzyf7lA4if26BU447o1idyGtJaUU5eGmr8gqZ9uAJUH9oy
+	 dAe1WOcgDgAZDHKA9IwD5cr5sCd4Cxa6kVyyhZYKDVM8MUpXxjh+EJbsj8CFZ/StdK
+	 5vLiHuAiPkfEteVpmes+e70AtpI19DlZPedsO7Q0WbWbidjSHiK7utH8XTCoXSu7D2
+	 K+ifUM2OK4nsw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E715080E04;
-	Fri, 23 Oct 2026 07:44:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 0B71B356
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 07:44:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6A4426065A;
+	Fri, 23 Oct 2026 08:32:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C8AF71FC8
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 08:32:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F0D0F40782
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 07:44:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BA29F811B1
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 08:32:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jo1BIcWgotQc for <buildroot@buildroot.org>;
- Fri, 23 Oct 2026 07:44:37 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org ABF6140820
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792741477;
- b=NCFWs34gO+V9Vp/FIeQ6zhNgsG9YrJzHx5QWZ88DHqr1LiAcLonkrAkDvWfzwRhEY9Z+
- 59ahhCTv16T9g2Vcoc3jvPgZMnB3Ce/LtL15yKN+y9hlVn/wkSyILUjKdIH3sePFYAdIu
- Nn1vvLaeOHP7/Ktdd38WIMCwqqxkz3lndmpTSYgAmU0OOQPmOLP++dXHpOfwjzNrvvaZF
- 7hoCe7FthWIGeLZSwA+LJ5GaTY7F2QQjhU117ZAnXO7YFM29O879XgFLlT3MPFqa1AS1U
- uQBsbtLgHpnE27KgMZEslRaBlgMAzkIWhHWEvIz3q4BkATRlUSxRqchnPM30y7+Xw0A==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id icKWcy8Vxge5 for <buildroot@buildroot.org>;
+ Fri, 23 Oct 2026 08:32:14 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org D5C58811AA
+Authentication-Results: smtp1.osuosl.org;
+ arc=none smtp.remote-ip=34.202.193.197
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792744334;
+ b=gQ5525YKI6Q7D4htlIltUKKLKGqG/OXSkbkayvIc3CHJA2T9zn5O4lyNCv2p1TzKTVEi
+ R1Urr71aT9C2HpelxEfeZUKBejrrh3/0+kvxROQclIXsEAfyLmA8fXs2KpbvEPPIzss8+
+ 7jG3ICra9Qqwa6mbVKuLTX3kkux7ApBEBWquNuHnU3ruthf1LxHbIkcaXSAYx9PeJRea6
+ T9ihJvBQVD1lNvo/kctajxzukLcpj8GK5n8yovhMQlihCDVDAYLtBS0oPIUV/t/t7hEw9
+ lE2CxoehRTQL+revvHQvB6HEc0cqd7VBwyX+lbaWbI2jXquTpVlEPDwiNDhWOCQ8XUg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792741477;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
- bh=2bRaEa/xfh3ajIqFigdry9U3uli4mH5QKidRtZoTZk8=;
- b=eCXa/DGocrtuGS8h078y1V/dzk6UyMP1A96GeletmAgzv6jmKlUtw3vrKyM8EmcxehHC
- xYQ+ahpWbhRRGyYUizJi9sX8iCOwm33sLv+G2OiP3TTbvLQiohBDqCdJnt8WvfuoO/Roi
- xJ9I9SZgonnkEkhgpGIItax0vd8+L0+CZFrZGWY466aGtUBjKgbg4BsuAwq5xgqcd8KUn
- e1OftQ2MmLjyRQXG9pDeoDDArHmcV4mlEP2RPgY7k1ca+u2LokLnYEmBiiv4Y4P0CltZV
- QH/Rtws0aI/95mKeE7gqNUsdm9UkwDOBn+GXg1BDz6EA2+UkuDDb7quCum7uovX1CLg==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
- dmarc=pass header.from=googlemail.com;
- dkim=pass header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256
- header.s=20251104 header.b=TuwH8R5u; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::636"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::636; helo=mail-ej1-x636.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
- [IPv6:2a00:1450:4864:20::636])
- by smtp4.osuosl.org (Postfix) with ESMTPS id ABF6140820
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 07:44:36 +0000 (UTC)
-Received: by mail-ej1-x636.google.com with SMTP id
- a640c23a62f3a-c2afa22e1dcso81483966b.1
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 00:44:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1792741474; x=1793346274;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=2bRaEa/xfh3ajIqFigdry9U3uli4mH5QKidRtZoTZk8=;
- b=FO8EZ/UqyMTYb4bp3maLx8R3o+oXbzioOoNuf4DppdQE1nSpeCMu/LKiXioHRu+4w6
- 1o7F/ZhwcLGp4OQJ+DT3ajpdQ1mhdyAO+t4DgYpBabHkqOmewxt+U1zGITwAuYmlU2zz
- ikVkpYU0LHpA/XbDykCr3Ys7ST/XFNv4rWHU8R30KVwIhylPMCxTeL9J5ml6vuPT2GnG
- x9XrApIjrYfXivUam6XPbHf263tL7Tf7Ibtw1Q75JOgUqyw0fSlgl+xNZVljblrrKIBT
- 3ND9+c2MxswU4aZ/uVv6QTA88cWjdElwufgsoSs9wjCToPdDXwYmYCNPim4oOe3S7yGX
- Zzvg==
-X-Gm-Message-State: AFq9FYI9725/WOFg2N0H/dmSJS04AlCjc947YWVVbaKAPrkijrJEkWIY
- vznnpy1ECKe13PV0fZx2G4OOZ7fqo9zmXH99jIBRpSS82lXse9XijqcM1J1rzg==
-X-Gm-Gg: AYBFou35oTtfg434Z+nOfZzwDDTAq4EhClN2gzJqlPykM1sZLss2q3Bne4HUsIT54F5
- JqB5zJRKt9Rr7HjMa4VxS9DyfBuYOU8eSecgMH2yXcHXmc1inFRjIXFwuXTqhqNkxmqFI6VV+3Z
- Z+R1rYT5FZ5cPhSO4DM6tJvMAYFR4d1s0joxP55SNl9lZi5gsTv1lwVajeGxBBKHjo0HaQUONx5
- 00/1FMwjAdVjZPZNsGmrYUKoaoquVNAHztCIuIPISde6//nMQkwOGDeB1TfZGx++WejWqdEHObq
- tCE0W+KP+dhKiCO3Ho+atHb1pax42bs5R1FWYRfeVQPsOdLtKnYwjMdMxc+IhOct2DTPtQdkyNi
- PpKfQ60KeC6XRBPHzDFuvpytMkT5iowSMKJIy2VNjGlywWvlKA9tjyK8rd9J+05h3UuIJBlopWd
- D9nIpscikJGqSdXmHlG0NTf3mt4tJIIEh5g572vkpUQ4awQSLTzIBN29/kX1PB+bUCP8xt47TD5
- Tz1m+EJqZeBA8fSR8udOut+m91EQB4LM79t4TkkoDTYazd1lAH2Fk04wUGLFLhiReDdpYtEBya+
- CiJn4fGQ40ltp1+iQxKl+TapNSAG5v1dFgU=
-X-Received: by 2002:a17:907:6096:b0:c3f:e414:d35a with SMTP id
- a640c23a62f3a-c46a90f499bmr201018666b.26.1792741473934; 
- Fri, 23 Oct 2026 00:44:33 -0700 (PDT)
-Received: from development2.visionsystems.local (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c46a5c4d54dsm71846766b.24.2026.10.23.00.44.32
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 23 Oct 2026 00:44:33 -0700 (PDT)
+ c=relaxed/relaxed; t=1792744334;
+ h=Received-SPF:DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:
+ Received:From:To:Cc:Subject:Date:Message-ID:X-Mailer:MIME-Version:
+ Content-Transfer-Encoding:X-MIME-Autoconverted:Content-Type;
+ bh=2jwYxnqN9sJx8sGpkgy9qZR27DvP7fhDGTCjkdIwOXM=;
+ b=rFuyHKsLcVd0xKwDnzhDt8uWS7MYtgcS8fKc9uKRQJlq+DezcwM4ZyWvgshApHPT7soi
+ nQG/d+wdF3fX4Xwq+iCoewtjCp7uOGyZkN6cLA8Mn5KUrvaENqNsWSaxPvtkFZxP0bjbr
+ 844YepdKhQ5mh/es4qPjQFrZApW2Pr8ewI2v60Ov7lnDpEipNxpr9aPu7yElpDxn+vQc1
+ PCoMMfjnQ9H/SCeg7tFrwVq1IOQapJ2hGxPxUz1TtLO/bhugJjJlRO3nZ5V5LS7OVv0GK
+ ow6/U4zyf3cCoJO/JwglTf8dC7LRZgOM3lJQiMVOIIIJ8+1hkmDR7mqo8Qf8GDcZj0A==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ dmarc=none header.from=korsgaard.com;
+ dkim=pass header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256
+ header.s=purelymail1 header.b=bX8TRcUj; 
+ arc=none smtp.remote-ip=34.202.193.197
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
+ receiver=<UNKNOWN> 
+Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=korsgaard.com
+Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=bX8TRcUj
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D5C58811AA
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 08:32:13 +0000 (UTC)
+DKIM-Signature: a=rsa-sha256;
+ b=bX8TRcUjhjDApnNiQOM3JDC+nVAA0kj+M/IquoNLFuoIquqf6AthO7X3/hY531xFgV91SzsQcMv4CEUJhA3oWYK2KqaIxMoRMK/Ea60iX6K2yCc9DvD/+YvBX2DJJ0Pjl+aRN1C3FQn5m+7/zv0u+nEeHep236sffvl5WAOt7RKy3EE4nEe8FVZcVm0oMiMtOfAWufGLIwcU09gNnp0boWuZhFqVIUMZhuMfoatEb4gMtES3IRWybOt4w2O4A8FnZVgYosHqG1Kjt/dL1i4Nu4ONO3ZrYaAzCVgYX/Cs0FndAxCb8ZS3T+w4KRO/HEpXxbunXOxvBRPciUybI7Kidg==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=4rxq0yvCCETmlWnbbCtZCNp3JE55w1MsdRnCHy7HvN0=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date; 
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Authentication-Results: purelymail.com; auth=pass
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -166456756; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Fri, 23 Oct 2026 08:32:10 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1xKAh7-0000000FpqN-0iLf;
+ Fri, 23 Oct 2026 10:32:09 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 23 Oct 2026 09:44:32 +0200
-Message-Id: <20261023074432.947659-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Fri, 23 Oct 2026 10:31:35 +0200
+Message-ID: <20261023083137.3767694-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.47.3
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/python-remi: fix build when
- setuptools_scm is installed
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+Subject: [Buildroot] [PATCH-2025.02.x] package/brotli: security bump to
+ version 1.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -146,107 +136,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
-Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
+Cc: Adrian Perez de Castro <aperez@igalia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-python-remi fails to build when host-python-setuptools-scm has been
-built before it:
+Fixes the following vulnerability:
 
-  File ".../setuptools_scm/_integration/setuptools.py", line 174, in get_keyword_overrides
-    assert isinstance(value, dict), "version_keyword expects a dict or True"
-  AssertionError: version_keyword expects a dict or True
+CVE-2026-111497: out-of-bounds write permits remote code execution
 
-remi's setup.py first calls setup() with setup_requires=['setuptools_scm'].
-With a PEP 517 build, setuptools' build_meta backend always raises
-SetupRequirementsError for it, so the bare except fallback is always
-used, which calls setup() again with use_scm_version=False. If
-setuptools_scm is installed, its use_scm_version keyword handler still
-runs, and since setuptools_scm 8.0 it rejects False.
+https://github.com/advisories/GHSA-9v8h-qqgm-4m35
 
-Add a patch, submitted upstream, that removes the use_scm_version
-keyword in the fallback instead, so the static version is used whether
-setuptools_scm is installed or not.
+https://github.com/google/brotli/releases/tag/v1.1.1
 
-This issue has been present since commit 8937db8dd595
-("package/pkg-python.mk: migrate setuptools to pep517"): before it,
-setup.py was run directly and the first setup() call succeeded when
-setuptools_scm was installed. Combined with setuptools_scm >= 8.0
-(bumped in 2024.02), it therefore affects 2024.05 and later, including
-all maintained branches.
-
-Fixes:
-https://autobuild.buildroot.org/results/cf1985c008c0af6a0a2dc08f98ae426b3b17874b
-
-Fixes: 8937db8dd595e0988751e5dbb568e870b07b39cc ("package/pkg-python.mk: migrate setuptools to pep517")
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...drop-use_scm_version-in-the-fallback.patch | 43 +++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 package/python-remi/0001-setup.py-drop-use_scm_version-in-the-fallback.patch
+ package/brotli/brotli.hash | 2 +-
+ package/brotli/brotli.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-remi/0001-setup.py-drop-use_scm_version-in-the-fallback.patch b/package/python-remi/0001-setup.py-drop-use_scm_version-in-the-fallback.patch
-new file mode 100644
-index 0000000000..67190a4519
---- /dev/null
-+++ b/package/python-remi/0001-setup.py-drop-use_scm_version-in-the-fallback.patch
-@@ -0,0 +1,43 @@
-+From c653ab24e36ef6c4190e70e064e8102401247428 Mon Sep 17 00:00:00 2001
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Fri, 23 Oct 2026 06:08:41 +0200
-+Subject: [PATCH] setup.py: drop use_scm_version in the fallback
-+
-+The fallback setup() call sets use_scm_version to False. But when
-+setuptools_scm is installed, its use_scm_version keyword handler is
-+still invoked, and since setuptools_scm 8.0 it only accepts True, a
-+dict or a callable:
-+
-+  File ".../setuptools_scm/_integration/setuptools.py", line 174, in get_keyword_overrides
-+    assert isinstance(value, dict), "version_keyword expects a dict or True"
-+  AssertionError: version_keyword expects a dict or True
-+
-+The fallback is always taken when building through a PEP 517 frontend
-+such as pypa/build, because setuptools' build_meta backend raises
-+SetupRequirementsError for the setup_requires entry. So remi can't be
-+built whenever setuptools_scm is installed in the build environment.
-+
-+Remove the keyword instead, so that the static version is used.
-+
-+Upstream: https://github.com/rawpython/remi/pull/554
-+Assisted-by: Claude:claude-opus-5-5
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ setup.py | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/setup.py b/setup.py
-+index ffcda9a..1abc27d 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -26,6 +26,6 @@ try:
-+     setup(**params)
-+ except:
-+     del params['setup_requires']
-+-    params['use_scm_version'] = False
-++    del params['use_scm_version']
-+     params['version'] = '2022.7.27'
-+     setup(**params)
-+-- 
-+2.34.1
-+
+diff --git a/package/brotli/brotli.hash b/package/brotli/brotli.hash
+index 145467c420..0500fb79d5 100644
+--- a/package/brotli/brotli.hash
++++ b/package/brotli/brotli.hash
+@@ -1,5 +1,5 @@
+ # Locally generated:
+-sha512  6eb280d10d8e1b43d22d00fa535435923c22ce8448709419d676ff47d4a644102ea04f488fc65a179c6c09fee12380992e9335bad8dfebd5d1f20908d10849d9  v1.1.0.tar.gz
++sha512  f7f3a7e4620403aa26d69458e0bb886d322f7677685c55717fac824f0b789e0c25cf4ff7d8d455d70a8526d0150d7a09b9df292a11f9ef5d3bf625878cb51368  v1.1.1.tar.gz
+ 
+ # Hash for license files:
+ sha512  bae78184c2f50f86d8c727826d3982c469454c42b9af81f4ef007e39036434fa894cf5be3bf5fc65b7de2301f0a72d067a8186e303327db8a96bd14867e0a3a8  LICENSE
+diff --git a/package/brotli/brotli.mk b/package/brotli/brotli.mk
+index 80aa2566b5..b7049b104e 100644
+--- a/package/brotli/brotli.mk
++++ b/package/brotli/brotli.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BROTLI_VERSION = 1.1.0
++BROTLI_VERSION = 1.1.1
+ BROTLI_SOURCE = v$(BROTLI_VERSION).tar.gz
+ BROTLI_SITE = https://github.com/google/brotli/archive
+ BROTLI_LICENSE = MIT
 -- 
-2.34.1
+2.47.3
 
 _______________________________________________
 buildroot mailing list
