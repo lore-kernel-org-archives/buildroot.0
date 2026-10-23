@@ -2,103 +2,116 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D41A8606A33E
-	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 17:44:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 257B7606A322
+	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 17:45:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=I8PBvz1P
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=NKJ5LnGs
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BE3508146E;
-	Fri, 23 Oct 2026 17:44:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F1559815CA;
+	Fri, 23 Oct 2026 17:45:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9xtKBRK6Jwi0; Fri, 23 Oct 2026 17:44:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org E66E781164
+ id zbkB99pLaRZ3; Fri, 23 Oct 2026 17:45:06 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 4B0908159B
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792777481;
-	b=nzFm9md1lySq7BkaMLzQINDLf0gro13h118DTlXrzAwXbpuXHi41whLw8oIpE6iGBUW7
-	 4A9lb0q05KYsKzQaPSsW7pcftttK17uK5NrbH4kRdYtUiQtUSTyZMjJ7g68XwBE4V4Ky+
-	 Fz2fs65lZNrY4Xxd0Aice4hsKK+SfCaTdS6zGNMz5hXGrn1g4BOyLGiTuRihCTO+ix/wM
-	 7Svuno/kwrBFynepToQrPrC6HMLJHHNy6yvLq6/iPu2q74/eP5DQpDR2lVhm9qXCtpX98
-	 LgL1u2DDvOUrVXn44gXoAntwBHPI1VWzfHqCu3vyxJAeUd+TFvpapV/20qe9b5ezaIg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792777506;
+	b=bZiz0uQ9G/J79vAX63+YtgXBX8HBQMV/NiRVa1fBz/j0IO0va29UhiA6oXYcGD74G++4
+	 MliPUqZskC5tsRMpjwqFjoHBAh5Usr1pjMRauNbs7ScEKAuua3TL85sdbWH8WwHufdTlp
+	 qHPqN5Rx8WzrXs+wRy4YgP2hF1r0EuSbeU71hQ56mj6OWfcfvsCdG+BY/Oemm/XTNQSyL
+	 0aZqP2JDiimwtvuy7H6h0J0isgQc5tUCb7Nna8dMukCNiXEJsCZYhkVca0t2+UPg8kjcv
+	 21qhiSPmqhfVDu26F/yImKg3LxxZb7oIC3k7yaxIm1nWqRZEzLAbHSZlNxuU1IhnYcw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792777481;
+	c=relaxed/relaxed; t=1792777506;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=LZqqrES5qVd5SJWh2wPowBAm2gSn1xaWkq61AWtjXtY=;
-	b=jfI7LzLLJT5GddNM1HLa+0maiW8vP3Juxv+eG4AmmX1iFwgWhVByImheqxTqPAm6O+t7
-	 ecrDpZ0Sj8DFvxljSCSqmcic8NCRVBf6MDCy4Md3Hv2uah37ZqjyucuZcppMhlEgG9ya1
-	 E9ODmO4/0VVibZQz4Mcsubnybn9T2euhRx+uAWCNg1SO1nDGKIQLvt3yzhUqxUeLE+ayH
-	 YOd6Jw+gDeIMPUSd2ES38dkSqkcXErlhyDCW2gigiWhqhHHBdjGG8qpFeQEvEW6ZH5IUj
-	 uu4IiAnYAXnYk0V+wyvrTpxNOCve3VsS/0mtIS3dnP6O6lC+kHcNSADeR75fnyp+m1Q==
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
+	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
+	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
+	 Errors-To:Sender;
+	bh=F4NA8wPxcqjvBrQbDakJI66F91p5hjxGnUsrgVNaVfk=;
+	b=m0TUQngiTaUBGFiG77OZzm4ECh0BemapymtGdMnY+UfSRxRBIjcCmdcnrTgQ34+rs9ye
+	 5NUuXoa0rupVbrwGzXmrthFsHXATRLGerg7Xj12d/K8LLYg6B5TJJM+m74X7jvAxUMp9Q
+	 ZHS6zVsGLanZcJomz1YLE3vduPgGqB95LU/I8lrIJWWZdocw+JrDWqf9OlkGtvT5+CayV
+	 KuEN8/sqf4VEqi26BUJwiaTizxJE7TG1fR1fj/g8mopwqYvQprHXN43tD9ABEQ1EruO0I
+	 ptVjVmwe2U3t+7iUK48Tqmmf1yB77h0I9UUz6oRf/2ONyZtIGfjuMCpEPsN+XZWfcwA==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792777481;
-	bh=LZqqrES5qVd5SJWh2wPowBAm2gSn1xaWkq61AWtjXtY=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=I8PBvz1PzA3H6/K1R2Qff3fzON26XIhpBr5X/SHBaDNzkroYscGTYK5dV3AsJEjbS
-	 pQDuOUds+A/yrsf/3N8X7lIhBS/q+xzteJ9xBNYCOq7qdAE6Gn8dA0af+Fo64Zhaaa
-	 W4/U4V0JOqnBL/xSWHFs4e1kPAHD1Xp1EFwEeSq1m2gUPl9EyVjLMluCcrNzOfPPt/
-	 XYMcmKSKyCMt1tFdk9IPER2b2ecdma1Kml/5W2d1f1SI31DzQoTueYwa6+q8GSOD1K
-	 Whh5LBzV24TlX9C1ZxX68amQWpJtjBC/FYJxo+MOV+GwLuKFwzcDRhxP7zVRt3WhYz
-	 hurqYxGj+hEcg==
+	s=default; t=1792777506;
+	bh=F4NA8wPxcqjvBrQbDakJI66F91p5hjxGnUsrgVNaVfk=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=NKJ5LnGs2YEOTXILgsdshpYKgp8zkKfFopD2ZjTixzfPiovdu0YrL6h9exmYsIRYR
+	 P0/RFx/r5ngTImQeWSlVRyIZJi9I+FUSG3JiW58Fgl7QNvG10IQr4/etcbxbN8eyHC
+	 5ccltWE9cwEhSn2Xnv9sbSZluXDrqJY3L4EYQFapFvxyeSCLYv3BiSGLo/v5TmmiMD
+	 iCC74sgAlyD0RXl8yc188t6dm2ThT/29eIZxA/bxBLv/gPPYVBsILEoGTlrqq1LQaB
+	 Hk4/jaZYOnieAMRjcPyoDvR7qJ6DKp+q2Ea5Hb1ROjyPp4zqitnb2Pdl+qb6HmCN3y
+	 Fd2XXexFDySLw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E66E781164;
-	Fri, 23 Oct 2026 17:44:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B6637235
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 17:44:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4B0908159B;
+	Fri, 23 Oct 2026 17:45:06 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 934E412C
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 17:45:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A847540059
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 17:44:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7E968401DF
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 17:45:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gwceKnB7xzlY for <buildroot@buildroot.org>;
- Fri, 23 Oct 2026 17:44:37 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 8FA74401DF
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792777477;
- b=Swfm+0CrLVnjzxzCIto1AkgzLAfqkAWtxZ11WS99NqXXCxTG3D5IYf5UI8ym8Mnf2nGF
- 4SJPBA6p6ALCEvrr+Sd0IEqmopNro2int1Yn+w7u95UndAPMLUBoL3tqq2wlH4SEfC1a3
- zZzwI9gaQXTGCsTv+lX+c3vtMRs1eRgRc/wCuP19zD48RKigOLoZi/IbTF7hdJsNvB9be
- cXQsGZAFgOEn9As0Dye6pLPL1HZDPxXGJyIs+YFKNFWrny/lULDf0brMD4USwQZO/x9Qi
- P4FaYyjO57KSI+YYVZFdenfvGX0W1/qs1oiJJQwXbl1N3U8c4cLwbjtF5oBA5t9UWOw==
+ id ZrRJnw1IW0J1 for <buildroot@buildroot.org>;
+ Fri, 23 Oct 2026 17:45:01 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 0FDAE40059
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792777501;
+ b=h7AC1DMJu8ofaHQt7PAYlvYAUZHo5+C+CQPXHU7/GFwHqRkDAOvpwqIhUrYuYvV5i8Ig
+ kpLIbzS5SgiezSSQe2RWwaFlhDJNTGaPcLnkpa2hv26yGyxObbQhre8X19lvvvIjOR57x
+ 1X4gLfFMkV+FTtRV4ZJb3pBzd2MnPj/iGhOwhmug4XLkrIkT3D5IOotWZ60HX6YHlF2x6
+ WxjGa2LV/LEtfTPJ7a7u8UOP83/F67sXMpsHQLCJZQ1Nmrf6sVFugNkOxmKRRpk/hH3FU
+ TfOAXkBbVts1+vmy76LXVuWxUwatlM0m2m4wEvZTnvNLbXTXZD8l6iteQWizacX+s4A==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792777477;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=f5ok2CMxyoHO/jETAYQe//t1IC/VlHMtdQZan3R+UBk=;
- b=RHYomkLc+GMpU8jSO/CLpeeBBvjeH6n04ggJxZD3jp/2IDpwaOXFVC6BtoK+2ge9rE3a
- I1mtjKEIkk/yVFpTgkmPraItB4iww4vZHzwaXrkbxkgyrpY891R4qyzmjL6pMJGe5jsg9
- mwoEaPOX3LEKm8AroZEt9yNQ3ApnEypYb6FemI1AU4q+KkDgl8LtqztHLagRG4rJxzh4v
- oAPZUXsEDVpYRMzDRqX1R6zm1xKElzo8Jd88kgS1XNTNLwvUOdx7YuNjOVCLctENWkD3h
- SDbPcdGESB8SsT677u7bB1BEto72TTx6OZtOxZmn0a+ZuAaIfNtuOl8ZUjyhoWJrmUg==
+ c=relaxed/relaxed; t=1792777501;
+ h=Received-SPF:Received:DKIM-Signature:Received:MIME-Version:Date:From:
+ To:Cc:Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
+ Content-Type:Content-Transfer-Encoding;
+ bh=Q3K3yKb95Pb07hNleFR8swU6zqPIWkEXN8jbRHaMlew=;
+ b=fFrXxbMDe1G5XScDg+M1NtorqgqHJrOL4zC4qws9db/kOKrHbcq9hpzdXWsFDvfCjssW
+ G8L7XUzTeCo/hMUHkgUs3kAftZLW4tAILoHOCbZalrNRX5LNN19VxZ+jOd6bc2w/N/Kv8
+ 6SZE/xJ0C0nKfvZNQNLG8XkNm1+yLsT8n70tAgsxOwB4JMZadGDaZEBKUwtvIT3rmksMg
+ B+rVBBUwIG0V+ct/eG1sS84ppY3VtWhnN9AqLxeBMkF6SI7Ppth/KOBsk+l6qxFEzOFch
+ +24Wfom0vG+2UlFGWaj/rDUal9a+MIh5C66RYQgh8BBKb1TFW9qSCK82s3DmwpF4w1Q==
 ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8FA74401DF
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 17:44:37 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 058359C686; Fri, 23 Oct 2026 17:43:13 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 23 Oct 2026 19:43:21 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: fd9c348c227e9560a45caaeaa2cb026a8cf8043d
-X-Git-Newrev: c4f9adc6e661d73123e929595deaf0f3c8bb496b
-X-Patchwork-Hint: ignore
-Message-Id: <20261023174313.058359C686@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/avrdude: bump to version 8.3
+ dmarc=pass header.from=free.fr;
+ dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=IJ1I1x6L; 
+ arc=none smtp.remote-ip=212.27.42.5
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0FDAE40059
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 17:44:59 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPA id 1E2855FF88;
+ Fri, 23 Oct 2026 19:44:57 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 via
+ 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr with HTTP (HTTP/1.0
+ POST); Fri, 23 Oct 2026 19:44:57 +0200
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
+Date: Fri, 23 Oct 2026 19:44:57 +0200
+To: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20261023133016.1694359-1-yegorslists@googlemail.com>
+References: <20261023133016.1694359-1-yegorslists@googlemail.com>
+User-Agent: Webmail Free/1.6.20
+Message-ID: <752637ab32da89dc584a326006b4c7d5@free.fr>
+X-Sender: ju.o@free.fr
+Subject: Re: [Buildroot] [PATCH] package/feh: bump to version 3.13.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,134 +123,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
-	autolearn=ham autolearn_force=no version=4.0.1
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS autolearn=ham
+	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c4f9adc6e661d73123e929595deaf0f3c8bb496b
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 23/10/2026 15:30, Yegor Yefremov wrote:
+> Changes since 3.11.2 include:
+> 
+> - 3.12: %f and %n format specifiers are no longer allowed in --action
+>   and --info strings, as they don't escape shell syntax and allowed
+>   command injection through untrusted file names [1]. Use %F and %N
+>   instead.
+> - 3.13: switch the default font to the bundled NotoSans Medium.
+> 
+> ChangeLog:
+> https://github.com/derf/feh/blob/3.13.1/ChangeLog
+> 
+> [1] https://github.com/derf/feh/issues/821
+> 
+> Assisted-by: Claude:claude-opus-5-5
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Release notes:
-https://github.com/avrdudes/avrdude/releases/tag/v8.2
-https://github.com/avrdudes/avrdude/releases/tag/v8.3
-
-Drop 0001-CMakeLists.txt-allow-disabling-Python-support.patch: the
-upstream pull request [1] was merged, but the option was renamed to
-FORCE_DISABLE_PYTHON_SUPPORT, so use that instead of
-ENABLE_PYTHON_SUPPORT.
-
-[1] https://github.com/avrdudes/avrdude/pull/2051
-
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...eLists.txt-allow-disabling-Python-support.patch | 59 ----------------------
- package/avrdude/avrdude.hash                       |  2 +-
- package/avrdude/avrdude.mk                         |  4 +-
- 3 files changed, 3 insertions(+), 62 deletions(-)
-
-diff --git a/package/avrdude/0001-CMakeLists.txt-allow-disabling-Python-support.patch b/package/avrdude/0001-CMakeLists.txt-allow-disabling-Python-support.patch
-deleted file mode 100644
-index fc6210c099..0000000000
---- a/package/avrdude/0001-CMakeLists.txt-allow-disabling-Python-support.patch
-+++ /dev/null
-@@ -1,59 +0,0 @@
--From 41ee27cf1d31bbc62425aab286b7e524acc64bff Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Fri, 29 Aug 2025 22:21:50 +0200
--Subject: [PATCH] CMakeLists.txt: allow disabling Python support
--
--In some cases, even if Swig is found and Python3 is found, it may not
--be desirable to build Python support in avrdude, so this commit adds
--an ENABLE_PYTHON_SUPPORT option to be able to explicitly disable using
--Python support (unfortunately CMake doesn't allow passing arguments
--that would prevent it from finding Swig/Python 3 if available).
--
--To preserve existing behavior, this option defaults to enabled (ON).
--
--Upstream: https://github.com/avrdudes/avrdude/pull/2051
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- CMakeLists.txt | 19 +++++++++++--------
-- 1 file changed, 11 insertions(+), 8 deletions(-)
--
--diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 7f3fce92..94263bab 100644
----- a/CMakeLists.txt
--+++ b/CMakeLists.txt
--@@ -34,6 +34,7 @@ option(USE_EXTERNAL_LIBS "Use external libraries from AVRDUDE GitHub repositorie
-- option(USE_LIBUSBWIN32 "Prefer libusb-win32 over libusb" OFF)
-- option(DEBUG_CMAKE "Enable debugging output for this CMake project" OFF)
-- option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
--+option(ENABLE_PYTHON_SUPPORT "Enable Python support" ON)
-- 
-- if(WIN32)
--     # Prefer static libraries over DLLs on Windows
--@@ -281,14 +282,16 @@ if(HAVE_LINUXGPIO)
-- endif()
-- 
-- # -------------------------------------
---# Find SWIG
---find_package(SWIG 4.0 COMPONENTS python)
---if(SWIG_FOUND)
---  find_package(Python3 COMPONENTS Interpreter Development)
---  if(PYTHON3_FOUND)
---    set(HAVE_SWIG 1)
---  else()
---    message(STATUS "Found SWIG but no Python3 header/library; cannot use SWIG")
--+# Find SWIG/Python3 if needed
--+if(ENABLE_PYTHON_SUPPORT)
--+  find_package(SWIG 4.0 COMPONENTS python)
--+  if(SWIG_FOUND)
--+    find_package(Python3 COMPONENTS Interpreter Development)
--+    if(PYTHON3_FOUND)
--+      set(HAVE_SWIG 1)
--+    else()
--+      message(STATUS "Found SWIG but no Python3 header/library; cannot use SWIG")
--+    endif()
--   endif()
-- endif()
-- 
---- 
--2.50.1
--
-diff --git a/package/avrdude/avrdude.hash b/package/avrdude/avrdude.hash
-index 995dad3782..d7ab47d895 100644
---- a/package/avrdude/avrdude.hash
-+++ b/package/avrdude/avrdude.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  2d3016edd5281ea09627c20b865e605d4f5354fe98f269ce20522a5b910ab399  avrdude-8.1.tar.gz
-+sha256  6c6fe3606f2ef331e502fb9c1d418ba09eb9705e811efbe18259025a9787ee3d  avrdude-8.3.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
-index 8f451a7fdb..5708fe2017 100644
---- a/package/avrdude/avrdude.mk
-+++ b/package/avrdude/avrdude.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
- 
--AVRDUDE_VERSION = 8.1
-+AVRDUDE_VERSION = 8.3
- AVRDUDE_SITE = $(call github,avrdudes,avrdude,v$(AVRDUDE_VERSION))
- AVRDUDE_LICENSE = GPL-2.0+
- AVRDUDE_LICENSE_FILES = COPYING
- 
--AVRDUDE_CONF_OPTS = -DHAVE_LINUXGPIO=ON -DENABLE_PYTHON_SUPPORT=NO
-+AVRDUDE_CONF_OPTS = -DHAVE_LINUXGPIO=ON -DFORCE_DISABLE_PYTHON_SUPPORT=ON
- AVRDUDE_DEPENDENCIES = elfutils libusb libusb-compat ncurses \
- 	host-flex host-bison
- 
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
