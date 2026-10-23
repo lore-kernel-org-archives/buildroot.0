@@ -1,142 +1,141 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49170606A31B
-	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 23:24:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 549E1606A31D
+	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 23:30:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=G7tIevVi
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=fS7CjRrH
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1E33840A00;
-	Fri, 23 Oct 2026 23:24:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A204460A81;
+	Fri, 23 Oct 2026 23:30:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JvLq-qApyXYZ; Fri, 23 Oct 2026 23:24:48 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 188DE40A66
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792797888;
-	b=kkuDhLrkVQPb6NdTUlbFd0orlQKxJL+nGuYxbxiStG0493IoQ71L+4URlvlSRwLjz/YQ
-	 OBRNuXgq+8aBJu2AAKbKglT0lHZRG70sSv25eCs8r9l6B+z3c7mCsa+sbC8eKzvS7tWcA
-	 t7xdkX8iCJVl0GwaqFeVrjXfq1RPFHYJyhXKqAg+W0WGvSeCG2Y4J1mbQW8MePefYvGPY
-	 mzjZyHA4j3ZWCzs6Fj6rHzZ74STBGHAApUIX6PdpmbCv96rouTsefXYe2cCL6tkNspK6C
-	 LfP/Il5J96/Lwh6EQl/oMaC5dGjN0XsSyeaxbDwP5nzXAMM1dvYA0wtHvgLbI2cdrsw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id B84iVyK5KFq5; Fri, 23 Oct 2026 23:30:12 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 3332560A5A
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792798212;
+	b=L5CdTNPiHx6S3cCPlxyoM7Nm+BGXYRSNpP7FVPHx2Q/uYJYlbw1a+sJoTdKfcHccetLX
+	 Tn5uQullS+o+6CYwIbCM+7YfXz1AYqLpgN66PbE896FNDz8f7BH11RUL/BQR97OaufFLh
+	 uQylOwuNXtjxXA1YBzjgSQFDoAm9WjssKFFC1NZUWlk+mBoculiFntt+jn2c0AzhOJ6yn
+	 J06N/y2THwGqWSfNnWseQH76xzOeteTgIs7VXgX+gyC3PQTDMMo0Ale5Y02fRiLOA726k
+	 qgfr4zZYJU9vhNamt/2kbgz1pIjl4kqqKP5EzR0o7UasWMORGBEQ4mV65Af6Gjyyjbw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792797888;
+	c=relaxed/relaxed; t=1792798212;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
 	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
 	 Received:To:Date:Message-Id:X-Mailer:MIME-Version:Subject:X-BeenThere:
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:Content-Type:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=eSSbIcH6SrKiaEkRc9QN8kNlmaWfVDMZ4Bd4KT1Iny0=;
-	b=Y/YsXZRlG3v7baEvH+n6pCJ6V4p05L9+awN5Yz218Zl9cfTffNRHcJMRMVKA1gKsZ4Yg
-	 YzAKWP17U0wk9/b8GUmNuSRgsEEYy8f1OlG0I8NLojLblwmk7JHtMS1DI/O+wixzvzog0
-	 VMwTYx4aJWNIpJMmzGeJEZfm4iHMEMNHHMPJl9p7hYBGoxAJhCGIpA9f7FgnMbjdt91QJ
-	 UWyfM2qj/3z61iAlriytFPaVbXSjK20tiPMQn0O03Jf2tBhaFqho1+aMApeyNrUW4biRe
-	 x9ELocGwaGwIz3iF4knxZGZJPV5ljlt9ef+c4LUTHIGcEL44ZCIT63WEXBTPfmWC7kA==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=pa6go1JcH/Rd63KFBLw5/SLel23CPd5nuSUVvz3Er0g=;
+	b=rvzk6psGBxsBXi+UTbskJu9JnNKt6S3lrnhwUoCIpQJhwhRwSkfdOTmrEMV5zP8qDG+z
+	 ebTmsEHj6fZCEYIvsCijX5iZtQDO5RQIkrgOxxvpe4foWDgO+ZVUC3zrpmQiJJNUXKeot
+	 CWMHCg2PAxlzKtn2uO4o6t8BiuhFp0kwTBXFZ+uvamiIvC3m1vieVNxgcdjO9NAxsT8zW
+	 aeWlcNdZhpGk1XUl2jfv40673idNBxjGG88gqMd17rtgF8I3ET0cmLv43XW8w14S7sSwO
+	 k7LVytqVemMAQFfiPoJw80tcT3mqD6VI50Cmu7NV5P0WTNfcsscwwLWTrM2s1s7o43Q==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792797888;
-	bh=eSSbIcH6SrKiaEkRc9QN8kNlmaWfVDMZ4Bd4KT1Iny0=;
+	s=default; t=1792798212;
+	bh=pa6go1JcH/Rd63KFBLw5/SLel23CPd5nuSUVvz3Er0g=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=G7tIevVi8Zq/FCVCL3EkFZvjqDQoAYFqe0XJDJ3DabyQvwm6aLKXVt4YBEKThhntc
-	 lfWJhOdO+isvK1mAIekGT3ijDRfb7YATfYp0GaovQJQmupCO8EKgII5soH9uopTNTj
-	 hYiZSPKG2eZJfjIDIYBTYZwUIBoPcCHsJGF1o5/kuYiQ6iYznHim92WFdOZxMKCQXS
-	 25wbBzHdmKV2O5TvFeBwFnEVUq7ty9WYh7knoSi+ub3VvQDxt/MbpDmlvMFHsL3JCM
-	 7Ow14Zzw16Zqbjj8ssjaXYWCJtuVb74gaXjJSk/1S10jBtjqFQVyUwWfian19k7ubQ
-	 4e8xQjIR1EbTw==
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=fS7CjRrH27Pbf+iU6NeyQFL/IP3lfP8vICkKxoPkzrvtYIzDmq1PZgfRVXVsswtYZ
+	 GF735ag5en+Eu2jO/T/ltpEToLC0pOHgAxDzwQ9G5MF2IFd/RzRPUzfb3YvhRPlm21
+	 fHGVetidaQ3C/yb0b8I/l25uYMF2X2q+PffLuVovvKvBukcL6ntb0KuqoPLBFWgCM2
+	 XUQCRtKQOvPFM/NGC1VD/C6ehs1vWB724DlFWBrrmmqrZE6BYG3QhcqEJTewzOa5YA
+	 MSiCkgvMv5z1n/WdMRA6W044oWVaX6ZsAYrH1fEfzj/tZheZlIHZcPo73DE6klQQ3w
+	 CNfJBOvu9iB9g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 188DE40A66;
-	Fri, 23 Oct 2026 23:24:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 42EC5356
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 23:24:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3332560A5A;
+	Fri, 23 Oct 2026 23:30:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1033F43
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 23:30:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 271C9812BB
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 23:24:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0207E60A5A
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 23:30:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AK1bPnnfiZs7 for <buildroot@buildroot.org>;
- Fri, 23 Oct 2026 23:24:46 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org B0A81811E5
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792797886;
- b=aM5PUjxnegUUDH8rrIOtjB3/NRaP3O7GwseL5uhV2+egjXJz2/WZJ4189yI3I9FuVMg0
- DC17at5Uap/D4r3ou+3NfMSX9KAQy6otyqtaHm35vZIqcDhFPecBCowP3vVw3JJlxE2c3
- EpTFgq04+lpwgGqM3h3McOcCAnNSVhJoMSNocQXLQ0LMefZwbk5BB2FWxKoHgmAInqq8f
- 0iq6kvyyuSeIRUFGG34s4wIn8F3DvcS9DUwjz2ITROmIG8ADfcIlBKHzDZ8qLqnheOnmw
- yQ8BWwqaE+syWIQqiJomha8/b7apJekxmb0G7wvUV0wu425sKoK7vDf3LLzIRdCGx+A==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xh7xq60UdYuz for <buildroot@buildroot.org>;
+ Fri, 23 Oct 2026 23:30:09 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org CDAAE60666
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792798209;
+ b=nyZx7Yh6Hgu42L/13EqkXGxdvEEMuD8Sb5aaa0hKFqGV0JNAWhQXiIGV+XsT7kegHi8w
+ TKSlV1Gd2OH0C3bjad95gfvkfUrcddPBVV9JlUz6H8EKz3G9KEpbIy9iDLJcUcwN+ftkZ
+ T61UIqX/8Kw0ChdLX8Uyk4tp7QC3lXX1hVtGTgeiEoQP27vBM04Q9R+q3hGwBMziNqTiH
+ TYjk6nOh+FSKjD42eBIKdXezkTunzXBvXlku/IH8BILeyJIZWSMmcc+SkqB7sZWBrDmBa
+ R08TL0lUxL6TG5eg5APAnhC1cnP5wPCbNpFSLQoz9bGWyTI2+4sZt8esND6QpHuXGVQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792797886;
+ c=relaxed/relaxed; t=1792798209;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
- bh=ZfyXtlhvNRiiZvyZF7QzNa/Q4dyhnaFI/Zh5cwM5jKI=;
- b=boBQlDdspJ4lkpIyPdMvnwA0c7Tzou5lwZeFJT+LMZGVuQDud1j0bjeRfWTpy62ZgX1X
- lSqKZm1y0RIMVgLaf5lYs7qBXURa5PsQUZNScX/UHa9uXkqJITOwQYmPJg7+1mToMX0Wn
- x2pNsR+2nT2N/cku3SPue1aEdO8n8IYGNQke8L+MEt2iGrwfKXOW5fKiygHrOQ2nR9cB/
- D9ault/k9M2y9bhWmMI+xQm/LvBWbfQIUOv8nypEimT2S42JUQW24AZkhopH5SdpoL8KJ
- 3l8soMnwtVOjVKA+MMXJXcu71L5N4CPmRxQp/DTBjfzg2CF7F/FdFN723hj1UU3L6fA==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ bh=S19y0AHL8XW1MWU1j63zJJMie+kf8dIfEIuHox4w44I=;
+ b=EjBChTkAI7j9MFlpIR236O3p9www3UfkkpkIlxHsu38uyHFrFeFu/VulgOk3h8aYMQW4
+ S7PV1Q7rY9uDx232dRP11s7qA/zdy3bEXoLobbujZ3U6DuhBJGDAn8YiX8QigW0yjIeEu
+ ip+BjrX9nYcLa7atzIh5mefXM+LUU7O3IhYjK+vwfch2ckWlFmpwai5KkggxolWAHz4Xd
+ NmfemeWhwYrNEo7Vd3+9GXDRMDPFFMVe7wM58XaPlXy418qKC7nmjaMruwZZR9ueYUZou
+ HNhKpUVYJR6CT7qnFusm26DqxPMMZKjRQQpCJ0gKdb6aPz48y8hR7xAMxPXj6Jr6iXg==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
  dmarc=pass header.from=googlemail.com;
  dkim=pass header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256
- header.s=20251104 header.b=IDNyDGLp; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::62d"
+ header.s=20251104 header.b="RSUS/WMw"; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::534"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62d; helo=mail-ej1-x62d.google.com;
+ client-ip=2a00:1450:4864:20::534; helo=mail-ed1-x534.google.com;
  envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B0A81811E5
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 23:24:45 +0000 (UTC)
-Received: by mail-ej1-x62d.google.com with SMTP id
- a640c23a62f3a-c450ab1483cso190582066b.3
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 16:24:44 -0700 (PDT)
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
+ [IPv6:2a00:1450:4864:20::534])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CDAAE60666
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 23:30:08 +0000 (UTC)
+Received: by mail-ed1-x534.google.com with SMTP id
+ 4fb4d7f45d1cf-6acb9c018ffso1887177a12.1
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 16:30:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1792797883; x=1793402683;
+ d=1e100.net; s=20260707; t=1792798206; x=1793403006;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=ZfyXtlhvNRiiZvyZF7QzNa/Q4dyhnaFI/Zh5cwM5jKI=;
- b=GxBimaULizgvKcAUikwLsU7suJpmC2YEDQNAHxZj9rhU8XGcioNREagOEetT+azxOw
- AGgnlL1V6orPfup8ZBq9LqLr/LZYFl8kGROj3yNIRUZZswKxPcSjuYjPIV+8GyTEr3JP
- VexzP7PGm7Wf+i+dGxVl2VEdkTTx2O/vj8088iXa6yvEIhGpvzlAH/k6PX69PdT3MdvZ
- ASaEbnLNroVpYecB42hmqShq5m5Tig9Xj2yatK/sxKc7OYh7pmjjptP9cFOvuARVj2KU
- TswhXH3tUfvFnuk37A1OPJPTs2No+N5Qje11oT2JqXLFgxwejVH7+VQAagtlOMt214qR
- LbIA==
-X-Gm-Message-State: AFq9FYIQJncuzEu0Hk9NxNUDWvswMcjRjaLSZ456ELY5K+vWSlVsPff/
- yMzGb0yNEhZZnkC4p/obXGGum1qnJ3N86vjma2c2+ACPLjUPvsNIeEi70Mu4oA==
-X-Gm-Gg: AYBFou0EhRpCNWwQIqXobkjQC4qDGVdqMg5j8VfCO8+0ctlMT6jCKM/bqSb9TsFNF23
- W/OM1lnr41H0wsAgHrCRozC/C4Yq67eb/kJ3GqQQwQp6EDulxisT1ztgv+knFFdtCyOeI3+Q9yC
- etB99fW7KPjZcnrmkqgGviyDYK/CsAT0kIiKxBoDy7gjTYXmakIDnPB+8pstD/uh24kO3hpevKy
- zUGPJGrCMJOPZeJs6R8no1XrzQbBN1m/Rtbrp/Ve+qvb9HzMQ8vIfTJcaJuhFEq7l15mCIYlhLB
- U2weaYhCAW1shOTZIp8vwsZ/Oum1ekJG6HksTTseXYmP3yODJ2XB8KiqndmcvwqXrujrFx+AKmf
- 4ortfvXK4Ga0L2kqJGPguP1H/FO0BB5OVVmR5WhcYKpjnNiKzOYgg9fdz9MrKpILDz2kn1M0VsR
- 7eJeA3LEVQI0iQL4RxTFxcgYx7Bnsk/ZGffu32uR7Z43Xy0LinnHT9M755c+wX0UhKjpzEjRI5n
- a0cFqmXs1UpsHvlWVPXiZaXbrcE49WHOcG/eij1c2DRrQ2PnRRx/3yUDSMbqOHPw9uPsV+oNB4C
- rD7eOWojn1ZptzMRivnHiXezfp//w6TIiv0=
-X-Received: by 2002:a17:906:d555:b0:c31:8cfe:9a25 with SMTP id
- a640c23a62f3a-c46bdc2aa9amr45823466b.9.1792797883048; 
- Fri, 23 Oct 2026 16:24:43 -0700 (PDT)
+ bh=S19y0AHL8XW1MWU1j63zJJMie+kf8dIfEIuHox4w44I=;
+ b=wDcTxdwLhxKKzukVxr5akEKZmyhj+jzZBXsFR9B0UjitgfYYTPmUo1LRKaJaTfwxTs
+ ek8mZJfNYpY2rf48Od9x5rdRyECCUExqiqH3VzuCz1cmp7JWSSgJBOD02zuI2zGqrlG3
+ uc9/blTLiwnpCeOgo5RW+pOTwzkFp20cRKv5kepBvWvYu+bAbEs0jQfvXuMi6djw4Sic
+ c9O/tpmiCgj+yeJzmUZSfne7QMV0jGyMrc7Kcg+r2QrqcGtGt+4vq0FgMvOz0NlSQmuU
+ E+zGHURwta29HmxHu9ZFG1CVjN2ykiMd05ICZfm7KPnliEgBJuiZEAjslhUB72Jf8h8m
+ qylA==
+X-Gm-Message-State: AFq9FYKqpp601CUS0hliEUm4b9B8rCUVD2u9DsubNPiquNyCZrpnEFKN
+ UTJZSuMXVRyuvaHxDkKixGyUgGTtPQbF7q+FrRg5oLWOxkTP2M78o3Z4/BgeTA==
+X-Gm-Gg: AYBFou2dPg5UPs9kUBOzSgYfKOnabgJ9CU2lQ4F4FlCh8jde71hyUQwlwUi+RaUFZ+B
+ JVToutd/5AI0m6DNdXIvPElu9iuwq3yOyMQHgCwzzTA8nepbLYvJsa4PKVA+rJcewNlT6eidFAy
+ A2Q4TPOH35kc8+ekTBwn1OFbQ22eDXimsY/pAdWEOY+B4V01pxg8mwTNO70aP71masajuAJ/gSv
+ 6HQNuSL3XSomS+cOHEh1+BwPuHBE4bNtyUwHeYU7hYP73noVQzI2rRVAQ8ntMt39G86cCZVPpe+
+ oYHUPylbKQwHyQNxznjOLwD3Vkot7Y6XQXRzfYi/XzmihgV9q28Wg/NWXVoaWO0dc463MWr6Tim
+ 0l/aGwEP03EqqxcOSnG1Q145RRtDsU2eT0MV+6YxRSaizY/ewJA0zx5K8uZrXAhyJ3SS/3cn/y7
+ fjYuD8RxD1lpQ0besWSldEX8+R73sraJOc1CVr1RABb/P7/XJDh8p37I9kv3d1ZL0RBu6+XBioi
+ TFU0bvoaCcTyKUAca6pFUW94bi69KoEh7o8HnQqY/BE3LsPYDaG0zpdlha6jJiJzg+RvoJ6UbBK
+ q0jnk/6ra2IDrvbw4+UDJnnoROhXUWDWAKk=
+X-Received: by 2002:a05:6402:e08:b0:6b4:1eed:b9f2 with SMTP id
+ 4fb4d7f45d1cf-6b443a2fee7mr753482a12.10.1792798206221; 
+ Fri, 23 Oct 2026 16:30:06 -0700 (PDT)
 Received: from development2.visionsystems.local (mail.visionsystems.de.
  [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c46bd34fe2dsm19768866b.1.2026.10.23.16.24.41
+ 4fb4d7f45d1cf-6b44595e251sm173982a12.12.2026.10.23.16.30.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 23 Oct 2026 16:24:42 -0700 (PDT)
+ Fri, 23 Oct 2026 16:30:05 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Sat, 24 Oct 2026 01:24:41 +0200
-Message-Id: <20261023232441.2685643-1-yegorslists@googlemail.com>
+Date: Sat, 24 Oct 2026 01:30:05 +0200
+Message-Id: <20261023233005.2692911-1-yegorslists@googlemail.com>
 X-Mailer: git-send-email 2.34.1
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/alsa-lib: fix i386 dmix build with -Os
- and AVX512BW
+Subject: [Buildroot] [PATCH] package/rtai: fix download URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -148,7 +147,6 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
 Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: Bernd Kuhls <bernd@kuhls.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
@@ -159,127 +157,45 @@ X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-When building alsa-lib for i386 with BR2_OPTIMIZE_S and a CPU that
-supports AVX512BW (e.g. BR2_x86_cannonlake), the dmix plugin fails to
-build:
+The RTAI download area has been removed from www.rtai.org, so the
+download fails with:
 
-  pcm_dmix_i386.h:52:9: error: 'asm' operand has impossible constraints or there are not enough registers
+  ERROR 404: Not Found.
 
-The i386 mix_areas_*() assembly clobbers esi, edi, edx, ecx, eax and
-ebx, and at -Os gcc uses ebp as frame pointer, so no general purpose
-register is left. Since upstream commit abc9f32cf45c ("pcm: dmix:
-assembly: give more freedom over the constraints"), the size operand
-is "+&rm", and with AVX512BW enabled, gcc 15 and gcc 16 then fail to
-fall back to memory.
+The website now points to a GitHub repository holding the former
+rtai.org files, including the latest release rtai-5.3.tar.bz2 [1].
+Download it from there, pinned to the commit that added it, so that
+the URL doesn't depend on the repository branch. The tarball is
+identical, so the hash is unchanged.
 
-Add a patch, submitted upstream, restoring the "+m" constraint for
-size, as used before that commit.
-
-This issue has been present since commit dfb3ac81e484
-("package/alsa-lib: bump version to 1.2.3"), as alsa-lib 1.2.3 is the
-first release with the relaxed constraint. It therefore affects 2020.08
-and later, including all maintained branches, when building with a
-toolchain that hits it (verified with gcc 15 and gcc 16).
+This is not caused by a Buildroot change: the download URL has been
+the same for years, and upstream removed the files. All maintained
+branches use the same URL and are therefore affected as well.
 
 Fixes:
-https://autobuild.buildroot.org/results/ff613c2d94c35a38a5886b70d72aa37b58440b5d
+https://autobuild.buildroot.org/results/24364819229d65dda43a4294f26a31667e7bd77b
 
-Fixes: dfb3ac81e48485a3ab8c018854725cfe30631e3a ("package/alsa-lib: bump version to 1.2.3")
+[1] https://github.com/mmorandi/RTAI/tree/main/userfiles/downloads/RTAI
+
 Assisted-by: Claude:claude-opus-5-5
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- ...i386-keep-the-size-operand-in-memory.patch | 82 +++++++++++++++++++
- 1 file changed, 82 insertions(+)
- create mode 100644 package/alsa-lib/0002-pcm-dmix-i386-keep-the-size-operand-in-memory.patch
+ package/rtai/rtai.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/alsa-lib/0002-pcm-dmix-i386-keep-the-size-operand-in-memory.patch b/package/alsa-lib/0002-pcm-dmix-i386-keep-the-size-operand-in-memory.patch
-new file mode 100644
-index 0000000000..f57e93efce
---- /dev/null
-+++ b/package/alsa-lib/0002-pcm-dmix-i386-keep-the-size-operand-in-memory.patch
-@@ -0,0 +1,82 @@
-+From 5729c2cd216bf3fe8564ab720e25e143660c089a Mon Sep 17 00:00:00 2001
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Sat, 24 Oct 2026 01:18:15 +0200
-+Subject: [PATCH] pcm: dmix: i386: keep the size operand in memory
-+
-+The i386 mix_areas_*() assembly clobbers esi, edi, edx, ecx, eax and
-+(since gcc 5, even in PIC mode) ebx. When gcc also needs ebp as frame
-+pointer, which it does at -Os, no general purpose register is left.
-+
-+Commit abc9f32cf45c ("pcm: dmix: assembly: give more freedom over the
-+constraints") relaxed the size operand from "+m" to "+&rm". With
-+AVX512BW enabled (e.g. -march=skylake-avx512, cannonlake, icelake or
-+x86-64-v4) and -Os or -Oz, gcc 15 and gcc 16 then fail to pick the
-+memory alternative and abort:
-+
-+  pcm_dmix_i386.h:52:9: error: 'asm' operand has impossible constraints or there are not enough registers
-+
-+As the asm already uses all registers, restore the "+m" constraint for
-+size, as used before that commit. The loop decrementing it in memory
-+also does read-modify-write operations on dst and sum, so the extra
-+memory access has a negligible cost.
-+
-+Upstream: https://github.com/alsa-project/alsa-lib/pull/537
-+Fixes: abc9f32cf45c ("pcm: dmix: assembly: give more freedom over the constraints")
-+Assisted-by: Claude:claude-opus-5-5
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ src/pcm/pcm_dmix_i386.h | 10 +++++-----
-+ 1 file changed, 5 insertions(+), 5 deletions(-)
-+
-+diff --git a/src/pcm/pcm_dmix_i386.h b/src/pcm/pcm_dmix_i386.h
-+index 0a56e8c6..7c9c9dcf 100644
-+--- a/src/pcm/pcm_dmix_i386.h
-++++ b/src/pcm/pcm_dmix_i386.h
-+@@ -149,7 +149,7 @@ static void MIX_AREAS_16(unsigned int size,
-+ #ifdef BOUNDED_EBX
-+ 		"\tmovl %[old_ebx], %%ebx\n"	/* ebx is GOT pointer (-fPIC) */
-+ #endif
-+-		: [size] "+&rm" (size)
-++		: [size] "+m" (size)
-+ #ifdef BOUNDED_EBX
-+ 		  , [old_ebx] "=m" (old_ebx)
-+ #endif
-+@@ -248,7 +248,7 @@ static void MIX_AREAS_16_MMX(unsigned int size,
-+ #ifdef BOUNDED_EBX
-+ 		"\tmovl %[old_ebx], %%ebx\n"	/* ebx is GOT pointer (-fPIC) */
-+ #endif
-+-		: [size] "+&rm" (size)
-++		: [size] "+m" (size)
-+ #ifdef BOUNDED_EBX
-+ 		  , [old_ebx] "=m" (old_ebx)
-+ #endif
-+@@ -376,7 +376,7 @@ static void MIX_AREAS_32(unsigned int size,
-+ #ifdef BOUNDED_EBX
-+ 		"\tmovl %[old_ebx], %%ebx\n"	/* ebx is GOT pointer (-fPIC) */
-+ #endif
-+-		: [size] "+&rm" (size)
-++		: [size] "+m" (size)
-+ #ifdef BOUNDED_EBX
-+ 		  , [old_ebx] "=m" (old_ebx)
-+ #endif
-+@@ -491,7 +491,7 @@ static void MIX_AREAS_24(unsigned int size,
-+ #ifdef BOUNDED_EBX
-+ 		"\tmovl %[old_ebx], %%ebx\n"	/* ebx is GOT pointer (-fPIC) */
-+ #endif
-+-		: [size] "+&rm" (size)
-++		: [size] "+m" (size)
-+ #ifdef BOUNDED_EBX
-+ 		  , [old_ebx] "=m" (old_ebx)
-+ #endif
-+@@ -599,7 +599,7 @@ static void MIX_AREAS_24_CMOV(unsigned int size,
-+ #ifdef BOUNDED_EBX
-+ 		"\tmovl %[old_ebx], %%ebx\n"	/* ebx is GOT pointer (-fPIC) */
-+ #endif
-+-		: [size] "+&rm" (size)
-++		: [size] "+m" (size)
-+ #ifdef BOUNDED_EBX
-+ 		  , [old_ebx] "=m" (old_ebx)
-+ #endif
-+-- 
-+2.34.1
-+
+diff --git a/package/rtai/rtai.mk b/package/rtai/rtai.mk
+index 6b309ebf85..6e189bf27b 100644
+--- a/package/rtai/rtai.mk
++++ b/package/rtai/rtai.mk
+@@ -6,7 +6,7 @@
+ 
+ RTAI_VERSION = 5.3
+ RTAI_SOURCE = rtai-$(RTAI_VERSION).tar.bz2
+-RTAI_SITE = https://www.rtai.org/userfiles/downloads/RTAI
++RTAI_SITE = https://raw.githubusercontent.com/mmorandi/RTAI/cb3c52f056559c9aaa54d0e1c8c0b47467ae5f3e/userfiles/downloads/RTAI
+ RTAI_INSTALL_STAGING = YES
+ 
+ # The <pkg>_CONFIG_SCRIPTS cannot apply here to the specificities of rtai-config
 -- 
 2.34.1
 
