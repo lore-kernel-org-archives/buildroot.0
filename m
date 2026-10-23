@@ -1,104 +1,119 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6903606A31A
-	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 19:23:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C20B9606A31A
+	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 19:23:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=a1GwdLK1
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=N5mWM6Wn
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 07AAC6065A;
-	Fri, 23 Oct 2026 19:23:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9D67381280;
+	Fri, 23 Oct 2026 19:23:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iSEgXtYoSpRQ; Fri, 23 Oct 2026 19:23:03 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 8667260A47
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792783382;
-	b=BwzgZkuxl0pg8RmSugBfZ9qi4wlnkk7Ny4l+YUFnl0J5vyBfTdO6TgMl73sYdUUO67VB
-	 fHALn2SkhQOEpfCUO2k781Srqmjt9XUVVo6YWADrkFaC0MGDuSESbsHH84Ar53RFCVpJb
-	 lhrS06lorknCzRBnRMoQfyVrWKJlLPjNj+JBB5yXD6TChl/KsakYBjNka//+o4UEF3Qge
-	 ZDGsBrROH2nYu3RheaEIZUbkEr7lGQa74cd2WNPzB/dYoLwb5EBEu/V7jHPxq+083abpg
-	 b0zNab4/qs+EVYc2j2vDmlKnUTU5oNZtekh/ixuOJA79sc1xXfwrUBwKucdJaTTAnPg==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u4wTiM00E6Ua; Fri, 23 Oct 2026 19:23:35 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org B9B138121F
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792783415;
+	b=YBTR4FusVAd4RsCBNhj9f5agBR5gMPSHcp5nNke40GMpcojPJ6vv7eSvq/bYBeTByFdV
+	 Jq0WymzLqhsqojwl1LJwrbGuueiLtsRlVnoaE6XCHV7odg44ToskXDi5EH/tYzDSghrB2
+	 UM01CymT4ug5RhW/zXRzaYCoZaWOtqfZ6q2lZttPM7YVLovj8a/8WJOArL0Ey6plw9fPH
+	 IuxonECN0VIEj3VGPAiJMF8HieQ+Az+kZznnfoGJxWc8HEXgLUShp8P6T7rcxnCsUDxZD
+	 jfUizlKYQxT5PC6ib+1+C3UORvtpTfQsdbKVfDqQcS5FKj56+OKteVOU8kfMvfZ7PDg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792783382;
+	c=relaxed/relaxed; t=1792783415;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=I+V9sL2DqF7IWpicRoNW/ZDjvJ/Jm8C8hAhxqsJqO+4=;
-	b=TGKD7CzjmC0x/hcm7feNCPPnq5tBy2u46R5Bs51/r4wDjTkXYL5GjwYf6/lyXMMOgQAJ
-	 z4jxWr/2Odh5fB2qIO4n7Lk20tuiGT3CnKrPX1pdRga67i6DxbkYQvdHgDXgzzXHMbPve
-	 Wl/rK081Bm3hBcm/12acnFhR9sq7APsFym2OQlTIESKvOlfjzy+QAkS7JeRLRAhoTalwz
-	 UgxcTtyTzNWp5v91Rno3SsQSM+bEkM4VD9WmQAUP7UOjx+mDo8moOaXY+YhqBd/JkJI/o
-	 5hfdRQnoDXetzC2KMaCuuGPpyy4UyukeBxk97r/ZTG6ZBC5K/kpqMLogv3eMHrd3SvA==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
+	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
+	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
+	 Errors-To:Sender;
+	bh=hSa6/UZrLQfDUZ7rL3YfruSoJTu2mO7jh3Jj+o+JtmY=;
+	b=JTp5L9nE8RuNFASsCjCOF3hVvuAcpVr4GS7CF4mXD7Xmg8O2cQ4X7JA8VfczzKvHOmb4
+	 lOTVHL8E7xrOokOibZJ9tLPI04VF3SaJcfP0XsqhYNCQrD4h045s+gosaZ7ymSLGF89BW
+	 4UpbAbDy/LAm9uyQgvMM9ShgkvEFcLNp2ubfk0yZArl86txvVDxfLXf63hqoFRGNxT+95
+	 IvRrL3bDv2hciuAdC5gX5Ki7wisLqc9/1BsFhz0oWmISyRyS1I+v8u6RwALPPQVvhpnAr
+	 qgrrjwjSxkIjdk6FMFABWPXvS6SX2Pl0ng7gOriXKLqojeZsXrvvCQh9u1PJDIqjY2Q==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792783382;
-	bh=I+V9sL2DqF7IWpicRoNW/ZDjvJ/Jm8C8hAhxqsJqO+4=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=a1GwdLK1eJ1lLlmZhGYqnmAEEYEsTTBo4JxAGy44pVdt7Xai12mXWAvJA9rOWPTDr
-	 YveKAX8XdRu4u6ZbuZDFzpgwTaiC8k2/Fn+WBEBoXipcy77DVU3wRFzzu/8hIvqNut
-	 J6se1QNmGqkzIt63OGVZzt2nEJDyC8PuOfcyKdsjbUN/OxBj/XBsrL1af7UQ+0ddwc
-	 8sVdbEhKdhZqKKoHGPj2Q0ra1C8Ba4qUOC5avtPGi7k0/XBsQujOKZs8BhUFUIcXhC
-	 +YcP5aaXPyEaxKsMHHcQ3z8QK6EZrnCAVk8hmbehR0EwcdAmR0QaFiHZxyCG4xNDP6
-	 Hwheut/1iI3CQ==
+	s=default; t=1792783415;
+	bh=hSa6/UZrLQfDUZ7rL3YfruSoJTu2mO7jh3Jj+o+JtmY=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=N5mWM6WnetXOnV7ic2yhcS3YIn1QNnKjOYpf0bzBnRqQ0QMb6DhVVvT+WDyqshE5t
+	 WIY8WneDAriau6wBW1bNZJzJqGp0I3BFVQixf190/U++iA/9AlH7djmw/FeM5VRfLf
+	 uRfYusSJQSL+wivp73baRo2QK2nj3v1I/mOBGVBfNI0RYs49TbrqROdskDlItskkQW
+	 Nxeh7JdeITfSEOiyhsW2P9ZBJ9UpibH+sdaamgMoP3e6rfZlUzAoxjeoQogug8WUYU
+	 A+1aGAMnFjxyDFW4HtCsY6cCruUW3eJ8jGjhjQ4SVe8Vj5J0HmGbDQGJpF0oH9BMIl
+	 Xz0USzAVo2yMQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8667260A47;
-	Fri, 23 Oct 2026 19:23:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 900C679F
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 19:22:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B9B138121F;
+	Fri, 23 Oct 2026 19:23:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B45E1388
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 19:23:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7637D60A3D
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 19:22:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A67018121F
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 19:23:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FLLCPNNb5r-w for <buildroot@buildroot.org>;
- Fri, 23 Oct 2026 19:22:58 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 7157460A41
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792783378;
- b=SdkO6HgOkKu9vao61vy/BOJNQJ+Rj2IumW4zMFSt/QoQMp/H7EO+6axM3YH59+E2Kq8V
- DDzmE3DENFvLIKutz2m2ECNwnsVt/UGyQbSjRycQE/q/R/TE2W07ERZ/IHsrpv2kGbU85
- QQxpdSTLNBpCGMYjfg/HDQBUUv0Pk3A+iBAu8oGotK2coLB4SmsZnXhcr4Eo1Uqg1x4Ci
- vdIF2iYm++IP+1qn6/YncSGeAEZ5I3SP5ihPKqSsQIbVdMaku+3mUDLaU1EWK58H9l3jX
- IQqjSuFuKroVblRFm6qAkfoNSECRVvlDONyYcOpsn6FVgjGt83H5agMUbm5WJVUURow==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 20bkY0QeXPj2 for <buildroot@buildroot.org>;
+ Fri, 23 Oct 2026 19:23:33 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 59AAE8121A
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792783413;
+ b=epFuo3vKwQG412xRcABVe40E+ag5/yKpN6xBZVZFTnAv1XX3rLYw09n/rDDvsUwdjvPZ
+ Jnol05ZXJPNTpEWcxlCMvWD3/7DRNtHVmfezdHNKm6Z1AmX3yUS0e0nS1xYEcHL5KesY4
+ 6hDq183XPClBuyZ6myDaLXSJ17hApkSNvlma17Nao/QB1Hdx+4kArKZt5T14yMjgG1OJv
+ ryjVJrDLkCPMz6RZC/wjJ2q8ljiNU2czpNKkDmQ8MSQpn5Kv3xbmiUfZNhL09/qIk00JK
+ 2e2gjRkqtm/QVBgKhpN2uFejg9Fpcr3a0IbkIwL+RUIw/cvfraucIxdm3FAFJabBPfQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792783378;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=1SNFCzkmnpSCBJQQqo//36cll4fx6mimiVCF20OXk4M=;
- b=po7YW0pdQKRLyVaVrlaOMltsdaBEtxmqFv/cLXfAGxRlkWI2kR0AZkEaA9islOJnDXMj
- UVR8DttyTi7U7U4jrp9fZlcO5ddKB/V/JC5y7xcXj9fue+jt18N3JpgQ89CwYAjOclupZ
- FccmYRNzF04TAH1NvLnxWFhYIVIG4svSn7eAyujN9eQ64L08PWniBhJd7AtTzLUdbH6kX
- mXEqvkrwbcme8itLFmOrW79h6o66WiED0I/u3PYu5LaorXCrtyLLS0LEQrgU71hF2EBZE
- 6ZJjg1qJGNqm4W51Y1MRtDZ2FxFwhzc34psuhDkUr686qwaR28ZH6Orhu4BYWP2UAvA==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7157460A41
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 19:22:58 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B8BEA9C688; Fri, 23 Oct 2026 19:21:33 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 23 Oct 2026 21:13:57 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ce9729d7ead802f8afd487f01982e2cae5ba9121
-X-Git-Newrev: 410b9c87c26d5d5eaf44b2b2362452febf887b06
-X-Patchwork-Hint: ignore
-Message-Id: <20261023192133.B8BEA9C688@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libical: bump to version 4.0.7
+ c=relaxed/relaxed; t=1792783413;
+ h=Received-SPF:Received:DKIM-Signature:Received:MIME-Version:Date:From:
+ To:Cc:Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
+ Content-Type:Content-Transfer-Encoding;
+ bh=dI+ZEDsIThwM0srPUhFFAcwzZVxeLK2ixRSzZLgncyc=;
+ b=qdnFYqzCMMAjnfrmnBLGptQocfDfmwVhAuXEzJ2y9CGrzsma5yrPLomAR+5Sr8qrFRFs
+ xhAK367M63yrkxNrU255W25kgTXxBnBXU+CHRXsmmPF/xssFbdEjqqfKPoKwcWkUe+INk
+ lUcdux7uGrUsOKJ2pYbmODhW4RPTwrNIMJNJpasRkAbjrZE/nBAuG1n9awDGnrVPFb4KL
+ ezdrSK5C6kpwsVzRvwzJn+zRlrdpPhvCV82hEyeQ2gBvqpaNAgYLet/+BPbuI2OJZcvgf
+ TMtnyfCk7MpIOXgxhRIxg8AJsBoTrZ6cgI1eramr3PLkWylj9Hr8HnWEqatihDY/euA==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ dmarc=pass header.from=free.fr;
+ dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=BLZe18Xq; 
+ arc=none smtp.remote-ip="2a01:e0c:1:1599::13"
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 59AAE8121A
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 19:23:31 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPA id 2230019F576;
+ Fri, 23 Oct 2026 21:23:25 +0200 (CEST)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 via
+ 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr with HTTP (HTTP/1.0
+ POST); Fri, 23 Oct 2026 21:23:25 +0200
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
+Date: Fri, 23 Oct 2026 21:23:25 +0200
+To: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: buildroot@buildroot.org, Grzegorz Blach <grzegorz@blach.pl>, Thomas
+ Perale <thomas.perale@mind.be>, Marcin Bis <marcin@bis.org.pl>
+In-Reply-To: <20261023184306.2419659-1-yegorslists@googlemail.com>
+References: <20261023184306.2419659-1-yegorslists@googlemail.com>
+User-Agent: Webmail Free/1.6.20
+Message-ID: <c12555e0e24cd7906a8b60adf9d470c0@free.fr>
+X-Sender: ju.o@free.fr
+Subject: Re: [Buildroot] [PATCH 1/2] package/bluez5_utils{,
+ -headers}: bump to version 5.87
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -110,113 +125,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
-	autolearn=ham autolearn_force=no version=4.0.1
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS autolearn=ham
+	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/410b9c87c26d5d5eaf44b2b2362452febf887b06
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 23/10/2026 20:43, Yegor Yefremov via buildroot wrote:
+> Besides bug fixes in GATT, BAP, BASS, AVRCP, PBAP and MCP, this release
+> adds support for libical 4.0 [1]: libical 4 no longer pulls
+> libicalvcal into the libical.pc link flags, so obexd needs to use
+> libicalvcal.pc to link.
+> 
+> ChangeLog:
+> https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/ChangeLog?h=5.87
+> 
+> [1] 
+> https://git.kernel.org/pub/scm/bluetooth/bluez.git/commit/?id=e60d07255327db3fc4e3a28d7fcc792cd42c34d0
+> 
+> Assisted-by: Claude:claude-opus-5-5
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-libical 4 is a new major version that is neither source nor binary
-compatible with 3.x, see the migration guide:
-https://github.com/libical/libical/blob/v4.0.7/docs/MigrationGuide_to_4.md
-
-The in-tree users have been checked:
-- asterisk builds fine as is (including res_calendar_icalendar);
-- bluez5_utils needs version 5.87 for libical 4 support, as
-  libical.pc no longer links libicalvcal.
-
-Build system changes:
-- most CMake options got a LIBICAL_ prefix, the old names being
-  deprecated: switch to the new names;
-- SHARED_ONLY has been removed: use LIBICAL_STATIC=OFF instead;
-- the new LIBICAL_JAVA_BINDINGS option defaults to ON and makes the
-  configure step fail when JNI is not found: disable it.
-
-The license files have moved to the LICENSES/ directory (the LGPL-2.1
-text only changed in formatting). Also list the BSD-3-Clause license
-of the new icaldate code and the MIT-like license of libicalvcal, which
-was already used in 3.x but not declared.
-
-Release notes:
-https://github.com/libical/libical/blob/v4.0.7/CHANGELOG.md
-
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/libical/libical.hash |  9 ++++++---
- package/libical/libical.mk   | 26 +++++++++++++++-----------
- 2 files changed, 21 insertions(+), 14 deletions(-)
-
-diff --git a/package/libical/libical.hash b/package/libical/libical.hash
-index 4c47c9347b..40063dece3 100644
---- a/package/libical/libical.hash
-+++ b/package/libical/libical.hash
-@@ -1,4 +1,7 @@
- # Locally computed:
--sha256  e73de92f5a6ce84c1b00306446b290a2b08cdf0a80988eca0a2c9d5c3510b4c2  libical-3.0.20.tar.gz
--sha256  3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04  LICENSE.MPL2.txt
--sha256  051753f11d7bb731d178eb3a972560f65a1dbc8f207b166a1c7c090e5d85f582  LICENSE.LGPL21.txt
-+sha256  47c05bc96e41416578cf1803bb2ba3f8d292cb17d5ac2fca539dee922bae8a94  libical-4.0.7.tar.gz
-+sha256  fe5ebb1ff742efb28112295d0f021c7b0171dbb3cbe27cd1dd1a628fefd3b4bd  LICENSE.txt
-+sha256  3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04  LICENSES/MPL-2.0.txt
-+sha256  fa6f36630bb1e0c571d34b2bbdf188d08495c9dbf58f28cac112f303fc1f58fb  LICENSES/LGPL-2.1-only.txt
-+sha256  3cf06aba3588c41c514f6946bb2d757b413ff6491647d474800f55edca75dcb4  LICENSES/BSD-3-Clause.txt
-+sha256  87e24cc49b33d9d5e2819cdb390cfb7dcaa1fdf8d320782fdd5d6cdd0ee5585a  LICENSES/LicenseRef-APPLEMIT.txt
-diff --git a/package/libical/libical.mk b/package/libical/libical.mk
-index 56489b4e98..a8e6418352 100644
---- a/package/libical/libical.mk
-+++ b/package/libical/libical.mk
-@@ -4,25 +4,29 @@
- #
- ################################################################################
- 
--LIBICAL_VERSION = 3.0.20
-+LIBICAL_VERSION = 4.0.7
- LIBICAL_SITE = https://github.com/libical/libical/releases/download/v$(LIBICAL_VERSION)
- LIBICAL_INSTALL_STAGING = YES
--LIBICAL_LICENSE = MPL-2.0 or LGPL-2.1
--LIBICAL_LICENSE_FILES = LICENSE.MPL2.txt LICENSE.LGPL21.txt
-+LIBICAL_LICENSE = MPL-2.0 or LGPL-2.1, BSD-3-Clause (icaldate), MIT-like (libicalvcal)
-+LIBICAL_LICENSE_FILES = \
-+	LICENSE.txt \
-+	LICENSES/MPL-2.0.txt \
-+	LICENSES/LGPL-2.1-only.txt \
-+	LICENSES/BSD-3-Clause.txt \
-+	LICENSES/LicenseRef-APPLEMIT.txt
- LIBICAL_CPE_ID_VALID = YES
- LIBICAL_DEPENDENCIES = host-perl
- 
- LIBICAL_CONF_OPTS = \
--	-DGOBJECT_INTROSPECTION=OFF \
--	-DICAL_BUILD_DOCS=OFF \
--	-DICAL_GLIB=OFF \
-+	-DLIBICAL_BUILD_DOCS=OFF \
- 	-DLIBICAL_BUILD_EXAMPLES=OFF \
- 	-DLIBICAL_BUILD_TESTING=OFF \
--	-DWITH_CXX_BINDINGS=OFF
--# building without this option is broken, it is used by
--# Gentoo/alpinelinux as well
--LIBICAL_CONF_OPTS += -DSHARED_ONLY=ON
-+	-DLIBICAL_CXX_BINDINGS=OFF \
-+	-DLIBICAL_GLIB=OFF \
-+	-DLIBICAL_GOBJECT_INTROSPECTION=OFF \
-+	-DLIBICAL_JAVA_BINDINGS=OFF \
-+	-DLIBICAL_STATIC=OFF
- # never build time zone info, always use system's tzinfo
--LIBICAL_CONF_OPTS += -DUSE_BUILTIN_TZDATA=OFF
-+LIBICAL_CONF_OPTS += -DLIBICAL_ENABLE_BUILTIN_TZDATA=OFF
- 
- $(eval $(cmake-package))
+Series applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
