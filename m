@@ -2,134 +2,134 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7E60606A31E
-	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 14:55:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C10A2606A31A
+	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 14:59:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=J7KGMaKW;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b=ST6qyt7B
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=bCLiznef;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b=aCIrvJN7
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8A83F40A61;
-	Fri, 23 Oct 2026 14:55:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9AA8A408EE;
+	Fri, 23 Oct 2026 14:59:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wpx9UhXV0yn3; Fri, 23 Oct 2026 14:55:48 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 3E7CE40A60
+ id 0ov_L_PrKwUn; Fri, 23 Oct 2026 14:59:34 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org ACC9540844
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792767348;
-	b=R1Q2loNKf3cnt8DYqTWHV3eDEdd2pLhU9EVk3dXwnnAec+JkcM2jSU9jzLAS6Pe5V7Q8
-	 acOyYQLwbXc8C8bGNms8rS/TMreUs1s54NPeOeFO9vzCDkCYqsLjPHKh66e0CJcgXPMau
-	 iFidhbwSiQ4leUCzdjIr/hidH4xWxEG8P24tsTvgELljSwNnXmrp3KYVrfIUNxuC3K0sP
-	 egC2vG/OiKqa27cDhaVwvCg5tJKsCDetL6wBHzAHxhQSWyV1kZ/A2GYRwAOj/6AXHCa8o
-	 Zsz/lhybcNVVQcvVzr0jLsQkk6ydDTS25uEg28TMMW+DMUExOC9pjYIXV9jOHmrTjXw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792767574;
+	b=PyxMMe6azTkBfFJI245E/gR2TUYaVE26UPb88ZlBl3/jwTTPOYqaqQXTJ9FGIBuBKvGY
+	 cd4x8cLPQRmqJwaca3Vv/i/8jRG7a//rOHX/ThdQyommgTtibpuAn9WnxE5nZA7epZ+yw
+	 mlO0AwAg/LxyBQs34OsC06JyPrJS3NgCfHO/1D/BODxxgmaohRnE3rm0WQIa/rpQX3XFF
+	 YBPdgzVzXNu2XKmM61RcnXmAjBCkSml1RLPNSp9pqfoz3goakc2LXr7rFfNkhpZzUYcGJ
+	 q+7X9kY9t/TZMNwkWdl/3IzYTumMfrMDkiH3yyBatMXeDL3SHHLayoW0a/kBMLvBI2A==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792767348;
+	c=relaxed/relaxed; t=1792767574;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
-	 X-CMAE-Envelope:Subject:X-BeenThere:X-Mailman-Version:Precedence:
-	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
-	 Sender;
-	bh=5+F1xgIzxL7sqWZpnwCl9dB0I6DBXxYSunNgPbs2SCY=;
-	b=Tz+h9WasE3ZrrhQqT6lBgDNAPN5gnCK6xR+rlqMJBMknpHyvqcdrHN5fbyf7kI6uRxxf
-	 vKtbF6JfISZBfns2nt7gcBHwkzs0x6Gb9IRXmIAHJ+QFFMk8PnsKgR0K0kFm2UgCaUuPS
-	 IuLKCveMgumiO/j6RAgBP7LwOrZmN73sPEB37gBwxdEgcu5doX4CCTCv76phx7JM9Bo5t
-	 izJg42/QYG1d7e0noaEObEXndCtcDF3ITFfUmBZ95sn1b83CyxRG+7tzP5EJirt+yAhu0
-	 7f8lDBwCMMvEs4ANfwpCrMUdAxiMALQL8zk7Qhm/FDJVFlrCutQEfLEDNooKG531mfw==
+	 DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:To:Cc:
+	 References:Content-Language:From:In-Reply-To:X-CMAE-Envelope:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Transfer-Encoding:Content-Type:Errors-To:Sender;
+	bh=6kIrJOBSQFznukgjYymghsDjJgmj7I66/DlJWJuxRtk=;
+	b=IbN9y3xEwQKuZ21oaOvl3NF+uwaW0MT0wmGi6/3O5J6ss7DXRxt9daV/OFefZutPvOvy
+	 3wAqtqJ9uF0RjY6mU5R6YsLGcKeJ8Oc+w7zSz8ndePXw1M2GnGYwfHdhy5RPHOwxH7dl6
+	 Y/uF7N4XQO2spT+9Loc1mmiDp+LCYnYJYmI7oy4PeuQH9pRVwvYUJqu4wCA6ecwsVPzVV
+	 pHNka4zqzQ9GSZaorNqpBtFtSvfWwRLUpdgbE7PMMCmEetbVgikKJFjfVWUrEQKQ9I870
+	 xJHfzL5n9EIcQjWV2BCLgvQ/PVu6fmzFYWd/XrUn+a/tMMnGoUxptDhGaY4ywHSYw9g==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
-	dmarc=pass header.from=benettiengineering.com;
-	dkim=pass header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b=ST6qyt7B;
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792767348;
-	bh=5+F1xgIzxL7sqWZpnwCl9dB0I6DBXxYSunNgPbs2SCY=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=J7KGMaKWbNkJL/ftU7QmcnT+ut9EIMzfMOsZaXSOLiA41a3N8KBqJTXhhUTlb7F27
-	 ur1hm83YyjSWRqzj/8qEVS4KXv+cC7Wjj4KefiNZ2LEZD+kGxRxl5PJ3OchAcJFnOy
-	 SoOQN2jrlMqMdxmo2aBBO2Jldx6Peuo6NPXoHGws137seKrHUer+5uVmMw2JPCUHGE
-	 TAZtjXYCuLQinZRKzIINDlFFAI+ybjZAVzQeVLsbIgpzLG/xmQSqDcuvPMdiZgYfT8
-	 DeYpwzAueJn6G1Nc1Fsl+sEXZpNrCMXyVOSrvqrK6xyFiw+GFLauTk92+LDv4PneCc
-	 jKR6bImD/yWQg==
+	s=default; t=1792767574;
+	bh=6kIrJOBSQFznukgjYymghsDjJgmj7I66/DlJWJuxRtk=;
+	h=Date:To:Cc:References:From:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=bCLiznefvU1ZS9M6m0ELOQLdJdeqlVnnkPIf7JqW/1PcE99AW6uftglTt21IRIehF
+	 zqFJ7sYXRDrxt+IY7UoMPqiSPiZ6HbMtclzSUkkZj1xGpSR46WtbT8J66Qm1GIeHzg
+	 ggZKyeV1EUvxVp+OVdjafaVnguqMYMfDLSue7t9ZE4k2gGyPSi7Y3lZfj72Z0cWm7z
+	 QWDidKuvSOas0zrrTbPQoGkOqPqfN+mJhnHP0z6hwih19w+sY+4UlmU0VRP10eo5H/
+	 lTZj3x3OL+mggq5jSZOOzjYPxWcJW1rpnRqiNa20Mwtdx/eOm3XHZufF1PMrQMidw5
+	 aBx0KVlbuPSig==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E7CE40A60;
-	Fri, 23 Oct 2026 14:55:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id CABD112C
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 14:55:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ACC9540844;
+	Fri, 23 Oct 2026 14:59:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id BF9C149D
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 14:59:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BAEE4409F6
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 14:55:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A56BC401DF
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 14:59:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nEZcwOCrNmWT for <buildroot@buildroot.org>;
- Fri, 23 Oct 2026 14:55:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 9EE8540A37
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=62.149.156.86
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792767341;
- b=VJKHBLEpVP92BW/jZunu4gzwh2v/TG0II8h6zIiZ0k44gKbLj6vtYX4fsN/MUSaY74hF
- HTwhd7KSwf++WVhSEg1u0MS9feMhh2nXiFnCyAhmyU8mzu2k0FxS6TqGUiwHqe2W/hy7+
- dkZOfwLkJa7pGXlrMpASFnvWewDKuBCAX5bo1WmwCyLiTgPCN+C5nI2YRIeVdNxEkPkVP
- p8imJN2v2Ci1MhmYbg9EoJ4h6vdDsv/7ivt51KH1mIwQ0KeW12SulWPk0GC3gIpV+zRHb
- nqEig/1KvCVUdrffSyKYrNgBiSQbUw9acrM6MXX0B940rxc5/s5e42SQXlHdU+EoVvA==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iSjBqaLv0dcH for <buildroot@buildroot.org>;
+ Fri, 23 Oct 2026 14:59:31 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 7A074401D2
+Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=62.149.156.86
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792767570;
+ b=qA5CKQ2GmETwn1FKTHrcUmwQw1S+0dnZC4ieEJeRDU8w9kFC/O8u7iRLN1Tys3MGRFRL
+ UhmTIG0xRux4bv/r/jFwSuUn94aDOUOlGagJKzRgx7lMX2WZRSGIJ5rt/ZeLICLgUesN2
+ QA2rfvP7zlEkV0166FnCbw4+4mxu406Xh77wEDR3KRPZbtB1IJPCkcrM2QPtYL8QcEFqm
+ PDL8p4eSZ0M1i3vAvMnAcqdhnua0oNTcGp2mgPNu9Qd7N6iG1cbSsfx8LFJl8BGCvi3Di
+ UZVNx/sJnV2NmMor3qCth2NU/0r9YGc83MUlURqNa4ZXCaoYdnH4+50LzsVNb+MhpgA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792767341;
- h=Received-SPF:Received:DKIM-Signature:From:To:Cc:Subject:Date:
- Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
- X-CMAE-Envelope;
- bh=YUQ9LaLnb9o1pAROLhNPCUnglwNu4xe2LsvKordZNsQ=;
- b=o2nYaU6/QLWw9SoHQWFFqRHJABFFJIHyKTNflTOPMNsUY+JaSUvlu2Y/nqOXyadkzDj4
- VmrsepfHzgOZlNgIPXavJyD+vf5I0jKMTO7g5uErmxIaTmYkZYiCq3t/clbSMrQ3VXvpP
- I0GohqkQVjv9p9BgDt7omB3xq36sN6nouKiL9sXNHWkSKlJmLc5RZ2fHTftkmbGoRDgBi
- Yd+ZtsyFnkAsbS+6tpaXcod5tFZAG+gWt8XufNz1+wqryyRPq48EmydbiXebXXJ/OBwLJ
- Ga9WgOHFIwypBGFhvJnvD67Lg8i5sFzapgQXIrOvPI8xEAVhmflU6mtxE62V+QZqzgw==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ c=relaxed/relaxed; t=1792767570;
+ h=Received-SPF:Received:DKIM-Signature:Message-ID:Date:MIME-Version:
+ User-Agent:Subject:To:Cc:References:Content-Language:From:In-Reply-To:
+ Content-Type:Content-Transfer-Encoding:X-CMAE-Envelope;
+ bh=DX2EYpohJRy+EXocSKkR5eg1CuYrn1dQYhn8vJuHHFY=;
+ b=m5olQJ1ivpRjDI7lA5lJ/TSfYJRz4Vmd8Tp70kY4zKIwJoxH5RfOoB3BCHiQiJVUtm33
+ OWKKHp1IFjNSggibAXI3r0LvvnFuXIykEbm5ZxoZyE84kfg3Pl0mYSHY/gBjUcBr+YCZn
+ xjVNfs14ngoeSoM7nQElwLsH4Q6wbZFFf+3NXeUwujOXNxFVz8FfA5Y9Bz30wmgb2nSqJ
+ GI7wDmjSlB60RyPJtthFE01IcpAShCWhr6hnW0fz5UKrDWFteuEgBRhemRcKNxoWeW/1D
+ UrPdNU5IfsYLEANwbViPjZuTZi06ZQasC1AX8MNqyppBEF97CzNlEB3DRhgAndbrFdw==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  dmarc=pass header.from=benettiengineering.com;
  dkim=pass header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1
- header.b=ST6qyt7B; 
+ header.b=aCIrvJN7; 
  arc=none smtp.remote-ip=62.149.156.86
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.86;
  helo=smtpcmd0986.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
  receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org; dmarc=pass (p=none dis=none)
+Authentication-Results: smtp2.osuosl.org; dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
+Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
  unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=ST6qyt7B
+ header.s=a1 header.b=aCIrvJN7
 Received: from smtpcmd0986.aruba.it (smtpcmd0986.aruba.it [62.149.156.86])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9EE8540A37
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 14:55:39 +0000 (UTC)
-Received: from localhost.localdomain ([151.95.84.63])
- by Aruba SMTP with ESMTPSA
- id KGgBxmCEGAFghKGgCxLdBk; Fri, 23 Oct 2026 16:55:37 +0200
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7A074401D2
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 14:59:29 +0000 (UTC)
+Received: from [192.168.1.115] ([151.95.84.63]) by Aruba SMTP with ESMTPSA
+ id KGjuxmG6zAFghKGjvxLgKJ; Fri, 23 Oct 2026 16:59:27 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1792767337; bh=7kOgvOaSXBhIiOW7LAuCws1uwOYhqo+x+NnNjSjOGHQ=;
- h=From:To:Subject:Date:MIME-Version;
- b=ST6qyt7BgFi7dWqzqqAViA6XFTelkybPhnbS/r//NV2R5tNiF/6DVHp29rAshhruc
- hzVQDaa3tEg2YYCjYpALV0QXKJvX0RGAAtJBQMM4GJPFsyu5wxGokaxx1XbUsAGxJg
- iu8XrY2rIBsd3HcrUmdmtDBl9pvHHiWI2CHRxJw+JiNbwU6pgdgyc/gluK9Xnl2bLt
- HP+rZOJl6In9BPkCgwW7XDAi6Q1MFkilOI7kfm5LU8iXEF3rZiTFvZpneDDHt2y51n
- LDBIrvCHIlDhFxTJ4Xr6yh0Zr96BtiSG0dNZKpUunOV48ysvzGDQ/gbAtSodSX4Mbn
- Y2gvypmY3TwAg==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Maxime Chevallier <maxime.chevallier@bootlin.com>,
- Pierre Floury <pierre.floury@gmail.com>
-Date: Fri, 23 Oct 2026 16:55:33 +0200
-Message-ID: <20261023145535.3038864-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.47.3
+ t=1792767567; bh=sSLSzs6hqL1dxOEEY0ft2rYfZXS2/j/BPCXdJAk81GA=;
+ h=Date:MIME-Version:Subject:To:From:Content-Type;
+ b=aCIrvJN7VxVL5ZOcE0lffKgxUS8gX08pqXjqO750sKFcLneOTar+sMwj5PSt8nmNM
+ wbs1lk4CsmoKuklL8sVieztum17wUPSgKe4y8y4p/ijKauCTPpXu6KpGv+BRwhFt6h
+ gMHWmeHI/Z+Ugzjl8WZqISfgSPJoTZTMJEeSAJv0j3SiKb+pSZIej8aviQZBBPtvtT
+ aKQoY5p3cVPz8eVNe2JTbVJQ5UPsLZ1bHedoOzrYXMLfzLPWkAJ4fCm+mB12S5Cz6Z
+ RVdcmaCOYxagWFpSXxvrEpYD4iiRDlyYOsGR8WJgvqhchHeEg9OeQJjsCi1sDvx6Mz
+ GfRMEs7Q2SZnA==
+Message-ID: <e9098c25-c591-465e-aab1-c92b22f863fb@benettiengineering.com>
+Date: Fri, 23 Oct 2026 16:59:26 +0200
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfCUjIphurTsYed42IWI10FGJgcLX9YVPq/2QCjIp9CIi0T6zFC57eUZcfHQkqVHrSRYN+dNPsBdmU60orYp3D9hDtXyox1VtEURsyjCvVoPcDSpPeZuc
- RwuhoV9CTjSGDt1X1X/v8swz9E+669xuf/FdRDGTNJ3+ks7D/iEw50lGjZZDMPef4ivfRnxInvWNsPfkePR9Dm1FFalADdRj7x/iWYJW6MWcqL8i/s2yu0Xa
- vtaaPLt5GJNESXjQGhcDuYIxD5GHYubiWxHa2tWyMpOp5wswK2cbU8PSMfIZSeLKYOg1RPC7S9BIQyQ/sqDcG7lJMI4C/oxRGhfZSY79dYj4lCp1gV418k3x
- uOIyWbST
-Subject: [Buildroot] [PATCH 1/3] package/libtraceevent: bump to version 1.9.1
+User-Agent: Mozilla Thunderbird
+To: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>,
+ buildroot@buildroot.org
+Cc: Joseph Kogut <joseph.kogut@gmail.com>
+References: <20261023145524.1751306-1-raphael.melotte@mind.be>
+Content-Language: en-US
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <20261023145524.1751306-1-raphael.melotte@mind.be>
+X-CMAE-Envelope: MS4xfMvwdZEajz0hLFv07Rlr82h8jV7F9jaHAbwYlmLVODDPDXFdhcd/AwvbGYXvqRJNZ8//Nw4JHsuYwtwun48oJvdsqImQDphf1g4jseMMGaqMHfNngc4j
+ jeUWNtQmzJDAfIH1QM+lknhx/W7Mb2BLBHtjad8ngaYEZgokDEspi7n3BoaARsuLRg5I1iLhEd7B39zdsav8zjQOJ22pLxR0kbs8EBKsLHdi3fN2Kv20JF9E
+ Rx5kWDDNXj90JCAzc7QtNoLiPH2oZ0NjQnoBSpODnfzTzedSmXGhMKhXhnKpSND2
+Subject: Re: [Buildroot] [PATCH 1/1] package/libnss: security bump to
+ version 3.132
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -139,281 +139,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-15.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Release notes:
-https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/tag/?h=libtraceevent-1.9.1
-
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- ...uild-failure-due-to-btf-on-Linux-6.0.patch | 220 ++++++++++++++++++
- package/libtraceevent/libtraceevent.hash      |   2 +-
- package/libtraceevent/libtraceevent.mk        |   2 +-
- 3 files changed, 222 insertions(+), 2 deletions(-)
- create mode 100644 package/libtraceevent/0001-Fix-build-failure-due-to-btf-on-Linux-6.0.patch
-
-diff --git a/package/libtraceevent/0001-Fix-build-failure-due-to-btf-on-Linux-6.0.patch b/package/libtraceevent/0001-Fix-build-failure-due-to-btf-on-Linux-6.0.patch
-new file mode 100644
-index 0000000000..59c149bbbd
---- /dev/null
-+++ b/package/libtraceevent/0001-Fix-build-failure-due-to-btf-on-Linux-6.0.patch
-@@ -0,0 +1,220 @@
-+From ae96c2317cc4b3eb84d1d1717bfff2e370bea31e Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Tue, 10 Feb 2026 17:57:52 +0100
-+Subject: [PATCH] Fix build failure due to btf on Linux < 6.0
-+
-+With commit:
-+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6089fb325cf737eeb2c4d236c94697112ca860da
-+enum BTF_KIND_ENUM64 has been firstly introduced and this is the latest
-+BTF_KIND_* enumaration to be added to libtraceevent. So let's check
-+in runtime, both in Makefile and meson, if BTF_KIND_ENUM64 does exist.
-+If it's not there let's disable btf support.
-+
-+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-+Co-authored-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ Makefile        | 28 +++++++++++++++++++++-------
-+ src/meson.build | 12 ++++++++++++
-+ src/trace-btf.c | 31 +++++++++++++++++++++++++++++--
-+ 3 files changed, 62 insertions(+), 9 deletions(-)
-+
-+diff --git a/Makefile b/Makefile
-+index e1a10a0..bd88a98 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -27,6 +27,13 @@ $(call allow-override,PKG_CONFIG,pkg-config)
-+ $(call allow-override,LD_SO_CONF_PATH,/etc/ld.so.conf.d/)
-+ $(call allow-override,LDCONFIG,ldconfig)
-+ 
-++# Set compile option CFLAGS
-++ifdef EXTRA_CFLAGS
-++  CFLAGS ?= $(EXTRA_CFLAGS)
-++else
-++  CFLAGS ?= -g -Wall
-++endif
-++
-+ EXT = -std=gnu99
-+ INSTALL = install
-+ 
-+@@ -37,6 +44,20 @@ INSTALL = install
-+ DESTDIR ?=
-+ DESTDIR_SQ = '$(subst ','\'',$(DESTDIR))'
-+ 
-++test-build = $(if $(shell sh -c 'echo "$(1)" | tee /tmp/t.c| \
-++	$(CC) -o /dev/null -x c - > /dev/null 2>&1 && echo y'), $2)
-++
-++define BTF_LATEST_SOURCE
-++#include <linux/btf.h>
-++int main(void) { return BTF_KIND_ENUM64; }
-++endef
-++
-++BTF_OK := $(call test-build,$(BTF_LATEST_SOURCE),y)
-++
-++ifneq ($(strip $(BTF_OK)), y)
-++CFLAGS += -DNO_BTF
-++endif
-++
-+ LP64 := $(shell echo __LP64__ | ${CC} ${CFLAGS} -E -x c - | tail -n 1)
-+ ifeq ($(LP64), 1)
-+   libdir_relative_temp = lib64
-+@@ -123,13 +144,6 @@ INCLUDES = -I. -I $(srctree)/include -I $(EP_HEADERS_DIR) $(CONFIG_INCLUDES)
-+ 
-+ export LIBTRACEEVENT_STATIC LIBTRACEEVENT_SHARED EP_HEADERS_DIR
-+ 
-+-# Set compile option CFLAGS
-+-ifdef EXTRA_CFLAGS
-+-  CFLAGS := $(EXTRA_CFLAGS)
-+-else
-+-  CFLAGS := -g -Wall
-+-endif
-+-
-+ LIBS ?= -ldl
-+ export LIBS
-+ 
-+diff --git a/src/meson.build b/src/meson.build
-+index 3a7a082..2432dd8 100644
-+--- a/src/meson.build
-++++ b/src/meson.build
-+@@ -17,6 +17,18 @@ sources= [
-+ cc = meson.get_compiler('c')
-+ dl_dep = cc.find_library('dl')
-+ 
-++btf_enum64_test_code = '''
-++#include <linux/btf.h>
-++int main(void) {
-++    int x = BTF_KIND_ENUM64;
-++    return 0;
-++}
-++'''
-++
-++if not cc.compiles(btf_enum64_test_code, name : 'BTF_KIND_ENUM64 check')
-++    add_project_arguments('-DNO_BTF', language : 'c')
-++endif
-++
-+ libtraceevent = library(
-+     'traceevent',
-+     sources,
-+diff --git a/src/trace-btf.c b/src/trace-btf.c
-+index 859b086..52e933c 100644
-+--- a/src/trace-btf.c
-++++ b/src/trace-btf.c
-+@@ -8,12 +8,13 @@
-+ #include <stdlib.h>
-+ #include <stdbool.h>
-+ 
-+-#include <linux/btf.h>
-+-
-+ #include "event-parse.h"
-+ #include "event-utils.h"
-+ #include "event-parse-local.h"
-+ 
-++#ifndef NO_BTF
-++#include <linux/btf.h>
-++
-+ struct btf_header;
-+ struct btf_type;
-+ 
-+@@ -210,17 +211,24 @@ static int load_types(struct tep_btf *btf)
-+ 	qsort_r(btf->funcs, btf->nr_funcs, sizeof(btf->funcs[0]), cmp_funcs, btf);
-+ 	return 0;
-+ }
-++#endif
-+ 
-+ __hidden void btf_free(struct tep_btf *btf)
-+ {
-++#ifdef NO_BTF
-++	tep_warning("BTF not supported.\n");
-++	return;
-++#else
-+ 	if (!btf)
-+ 		return;
-+ 
-+ 	free(btf->types);
-+ 	free(btf->funcs);
-+ 	free(btf->raw_data);
-++#endif
-+ }
-+ 
-++#ifndef NO_BTF
-+ static struct tep_btf *btf_init(void *raw_data, size_t data_size)
-+ {
-+ 	struct tep_btf *btf;
-+@@ -271,6 +279,7 @@ static struct tep_btf *btf_init(void *raw_data, size_t data_size)
-+ 	btf_free(btf);
-+ 	return NULL;
-+ }
-++#endif
-+ 
-+ /**
-+  * tep_load_btf - Load BTF information into a tep handle
-+@@ -285,6 +294,10 @@ static struct tep_btf *btf_init(void *raw_data, size_t data_size)
-+  */
-+ int tep_load_btf(struct tep_handle *tep, void *raw_data, size_t data_size)
-+ {
-++#ifdef NO_BTF
-++	tep_warning("BTF not supported.\n");
-++	return -1;
-++#else
-+ 	/* If btf was already loaded, free it */
-+ 	btf_free(tep->btf);
-+ 
-+@@ -292,8 +305,10 @@ int tep_load_btf(struct tep_handle *tep, void *raw_data, size_t data_size)
-+ 	if (!tep->btf)
-+ 		return -1;
-+ 	return 0;
-++#endif
-+ }
-+ 
-++#ifndef NO_BTF
-+ static struct btf_type *btf_get_type(struct tep_btf *btf, int id)
-+ {
-+ 	if (!id || id > btf->nr_types)
-+@@ -457,6 +472,7 @@ static int init_btf_func(struct tep_btf *btf, struct trace_seq *s,
-+ 
-+ 	return 0;
-+ }
-++#endif
-+ 
-+ /**
-+  * tep_btf_list_args - List the arguments (type and name) for a function
-+@@ -471,6 +487,10 @@ static int init_btf_func(struct tep_btf *btf, struct trace_seq *s,
-+  */
-+ int tep_btf_list_args(struct tep_handle *tep, struct trace_seq *s, const char *func)
-+ {
-++#ifdef NO_BTF
-++	tep_warning("BTF not supported.\n");
-++	return -1;
-++#else
-+ 	struct tep_btf *btf = tep->btf;
-+ 	struct btf_type *type = tep_btf_find_func(btf, func);
-+ 	struct btf_param *param;
-+@@ -520,6 +540,7 @@ int tep_btf_list_args(struct tep_handle *tep, struct trace_seq *s, const char *f
-+ 			trace_seq_printf(s, "%s", param_name);
-+ 	}
-+ 	return p;
-++#endif
-+ }
-+ 
-+ /**
-+@@ -543,6 +564,11 @@ int tep_btf_list_args(struct tep_handle *tep, struct trace_seq *s, const char *f
-+ int tep_btf_print_args(struct tep_handle *tep, struct trace_seq *s, void *args,
-+ 		       int nmem, int size, const char *func)
-+ {
-++#ifdef NO_BTF
-++	tep_warning("BTF not supported. Args:\n"
-++		    "args: %08x, nmem: %d, size: %d, func: %08x\n");
-++	return -1;
-++#else
-+ 	struct tep_btf *btf = tep->btf;
-+ 	struct btf_type *type = tep_btf_find_func(btf, func);
-+ 	struct btf_param *param;
-+@@ -646,4 +672,5 @@ int tep_btf_print_args(struct tep_handle *tep, struct trace_seq *s, void *args,
-+ 		}
-+ 	}
-+ 	return 0;
-++#endif
-+ }
-+-- 
-+2.47.3
-+
-diff --git a/package/libtraceevent/libtraceevent.hash b/package/libtraceevent/libtraceevent.hash
-index 890e1294e6..41e130f35e 100644
---- a/package/libtraceevent/libtraceevent.hash
-+++ b/package/libtraceevent/libtraceevent.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  cec7167e885d2f022bc5a2b0f2c0c58110fa0575e5dba49d7b694f0a6fd7fa0c  libtraceevent-1.8.7.tar.gz
-+sha256  3bc19dd940914260ba591b5276723bf84bb43f82c7c3d4267622bee4d016ea55  libtraceevent-1.9.1.tar.gz
- sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
- sha256  0b9a4febcdee6de55872501d5c1a8f5d8b0d1650cd4d5351995ceb22e889f8ca  LICENSES/LGPL-2.1
-diff --git a/package/libtraceevent/libtraceevent.mk b/package/libtraceevent/libtraceevent.mk
-index d0de336de0..29a3c26c27 100644
---- a/package/libtraceevent/libtraceevent.mk
-+++ b/package/libtraceevent/libtraceevent.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBTRACEEVENT_VERSION = 1.8.7
-+LIBTRACEEVENT_VERSION = 1.9.1
- LIBTRACEEVENT_SITE = https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/snapshot
- LIBTRACEEVENT_LICENSE = GPL-2.0, LGPL-2.1
- LIBTRACEEVENT_LICENSE_FILES = LICENSES/GPL-2.0 LICENSES/LGPL-2.1
--- 
-2.47.3
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgUmFwaGHDq2wsCgpPbiAxMC8yMy8yNiAxNjo1NSwgUmFwaGHDq2wgTcOpbG90dGUgd3JvdGU6
+Cj4gVmVyc2lvbiAzLjEzMiBjb250YWlucyBhIGZpeCBmb3IgdGhlIGVNdWRocmEgaW50ZXJtZWRp
+YXRlIENBcyAoWzFdKS4KPiAKPiBGb3IgcmVsZWFzZSBub3RlcyBzaW5jZSAzLjEzMSwgc2VlOgo+
+IGh0dHBzOi8vaGctZWRnZS5tb3ppbGxhLm9yZy9wcm9qZWN0cy9uc3MvZmlsZS9OU1NfM18xMzFf
+MV9SVE0vZG9jL3NyYy9yZWxlYXNlcy9uc3NfM18xMzFfMS5tZAo+IGh0dHBzOi8vaGctZWRnZS5t
+b3ppbGxhLm9yZy9wcm9qZWN0cy9uc3MvZmlsZS9OU1NfM18xMzJfUlRNL2RvYy9zcmMvcmVsZWFz
+ZXMvbnNzXzNfMTMyLm1kCj4gCj4gWzFdOiBodHRwczovL2VtdWRocmEud2UtaGF2ZS1hLXByb2Js
+ZW0uY29tLwo+IAo+IFNpZ25lZC1vZmYtYnk6IFJhcGhhw6tsIE3DqWxvdHRlIDxyYXBoYWVsLm1l
+bG90dGVAbWluZC5iZT4KCkkgd2FzIGFib3V0IHRvIHNlbmQgdGhlIGlkZW50aWNhbCBwYXRjaCwg
+c286ClJldmlld2VkLWJ5OiBHaXVsaW8gQmVuZXR0aSA8Z2l1bGlvLmJlbmV0dGlAYmVuZXR0aWVu
+Z2luZWVyaW5nLmNvbT4KCkJlc3QgcmVnYXJkcwpHaXVsaW8KCj4gLS0tCj4gICBwYWNrYWdlL2xp
+Ym5zcy9saWJuc3MuaGFzaCB8IDQgKystLQo+ICAgcGFja2FnZS9saWJuc3MvbGlibnNzLm1rICAg
+fCAyICstCj4gICAyIGZpbGVzIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMo
+LSkKPiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJuc3MvbGlibnNzLmhhc2ggYi9wYWNrYWdl
+L2xpYm5zcy9saWJuc3MuaGFzaAo+IGluZGV4IDAyYmJjYWYwMGQuLjM3OTIyZjA5NGMgMTAwNjQ0
+Cj4gLS0tIGEvcGFja2FnZS9saWJuc3MvbGlibnNzLmhhc2gKPiArKysgYi9wYWNrYWdlL2xpYm5z
+cy9saWJuc3MuaGFzaAo+IEBAIC0xLDQgKzEsNCBAQAo+IC0jIEZyb20gaHR0cHM6Ly9mdHAubW96
+aWxsYS5vcmcvcHViL3NlY3VyaXR5L25zcy9yZWxlYXNlcy9OU1NfM18xMzFfUlRNL3NyYy9TSEEy
+NTZTVU1TCj4gLXNoYTI1NiAgY2EwMDA1YmM3N2U5MjU1ZDk5NDIxMDNlNmY5NzU2Y2ZlMzExYTNk
+ZjcyYWZhOTk4NjA3MDllMzg2ZWIzYzE2NyAgbnNzLTMuMTMxLnRhci5nego+ICsjIEZyb20gaHR0
+cHM6Ly9mdHAubW96aWxsYS5vcmcvcHViL3NlY3VyaXR5L25zcy9yZWxlYXNlcy9OU1NfM18xMzJf
+UlRNL3NyYy9TSEEyNTZTVU1TCj4gK3NoYTI1NiAgZWU5Y2Y0ODM3YmE4MDExNDFhODA0MzIxYzQ0
+NjJhZDhmNDUyZmY0MzE0Mjc1YzZkNTEwOGE2YjA1YWYyMjdmZiAgbnNzLTMuMTMyLnRhci5nego+
+ICAgIyBMb2NhbGx5IGNhbGN1bGF0ZWQKPiAgIHNoYTI1NiAgYTIwYzFhMzJkMWY4MTAyNDMyMzYw
+YjQyZTkzMjg2OWY3YzExYzdjZGJhY2Y5Y2FjNTU0YzQyMjEzMmFmNDdmNCAgbnNzL0NPUFlJTkcK
+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9saWJuc3MvbGlibnNzLm1rIGIvcGFja2FnZS9saWJuc3Mv
+bGlibnNzLm1rCj4gaW5kZXggNmI0ZTY4YTYyNC4uMjA5NzMwZjZiNSAxMDA2NDQKPiAtLS0gYS9w
+YWNrYWdlL2xpYm5zcy9saWJuc3MubWsKPiArKysgYi9wYWNrYWdlL2xpYm5zcy9saWJuc3MubWsK
+PiBAQCAtNCw3ICs0LDcgQEAKPiAgICMKPiAgICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gICAK
+PiAtTElCTlNTX1ZFUlNJT04gPSAzLjEzMQo+ICtMSUJOU1NfVkVSU0lPTiA9IDMuMTMyCj4gICBM
+SUJOU1NfU09VUkNFID0gbnNzLSQoTElCTlNTX1ZFUlNJT04pLnRhci5nego+ICAgTElCTlNTX1NJ
+VEUgPSBodHRwczovL2Z0cC5tb3ppbGxhLm9yZy9wdWIvbW96aWxsYS5vcmcvc2VjdXJpdHkvbnNz
+L3JlbGVhc2VzL05TU18kKHN1YnN0IC4sXywkKExJQk5TU19WRVJTSU9OKSlfUlRNL3NyYwo+ICAg
+TElCTlNTX0RJU1RESVIgPSBkaXN0CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qu
+b3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9v
+dAo=
