@@ -1,153 +1,166 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B56FA606A31A
-	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 21:17:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7CF9606A31A
+	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 21:48:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=lkAyOJwW;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=CWUXjxQ/
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=YaqTEHmc
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 94D1140A90;
-	Fri, 23 Oct 2026 21:17:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D3FD608FE;
+	Fri, 23 Oct 2026 21:48:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GssVsZAlLYoD; Fri, 23 Oct 2026 21:17:24 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org C2DCB40A92
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792790244;
-	b=c1FUFY3RHlQmbEJpsRJ+Xh2ECUBGb2FQh0CMXt5kfToR9jzBI4hwM7UdrUheoSh6JOuX
-	 pBwFVG11fUd8VYQE+SPIRNzPcNEuEyJef2go+IHxjEbMTlG8Zbje+HfRolAVtQjeOL0vW
-	 1jo6rmYKFB6X/gtiXrfMhXJNUAs7U/VAPn0cyODiSBJhbNiV1CX3MiGMKyvfGsQH/wWKF
-	 rKEuwnL/7+Xk0TZXrczJypdVDV4Lr32Y3JzymlpecZOcdu/4xYbYuArBfFNtUqMOXj0cx
-	 UldIEqSqr6Lt4s71VARr9JfXHYHs8FEIUPYbWZXKWNa2u43rap5GoMiUkYFtayJy6Gw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6ERPdb8omj9m; Fri, 23 Oct 2026 21:48:23 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 2448360A66
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792792103;
+	b=Xf+w0I//I51Ckg+pt9R80CKtQQ5Bd585636tqdlrJz+LLcFb+joatdeHRCUj2Y5g2sKN
+	 Dt+/R2sa2XZeF2YAjulivphwwIxzYNknfXfcxamov5LZ9D4ZXbUKJIzuFOFiGclJLIH1J
+	 7oGbuuCI+fOjyIMh1+MolrHwUhWjmukJ6cmtQyuC02ZHkESysFOR/Yi4Inag+1BG9kzAs
+	 sSQ5XjKEfHYOiDsySygdHxU+09bC+bCyioDsgLxmSao38IM1QHGkhVKMCAubuXGevTBtP
+	 ry2B8REckTz1btYLo70aBwDcWELfELTu9FEylyz62KgmPmlihCldGP9d5eNZLhcYpQQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792790244;
+	c=relaxed/relaxed; t=1792792103;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:X-Spamd-Bar:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 Received:X-Relaying-Domain:X-CFilter-Loop:Received:X-Received:
+	 X-Received:Received:To:Date:Message-Id:X-Mailer:MIME-Version:
+	 X-DetectorID-Processed:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=5Fs/kovm3CCJ5Q+F/U187n2jK5qwuKF9oGLeuWOna3c=;
-	b=Z9PdrnLgBy9gT4wn+/+n1vp5iZLlZ0O0++UlaLXE9X/SQt8FNq0DJxwlgLh2GbEvrI8D
-	 Tqscyy0rbybJIfwVhEHLfIMaFyRSDQRjCKB2X6FxghrM0yXXJ2HF34uwxNJs/J7LpVgFn
-	 n5VxaDdYqJmOMII+MhizfApc1pqsP/cH1KlGWgh5wlxcjsduH4+lrkgF7YPIPQj+thBRo
-	 g5k07xzSQqs6XEhXoajM9Bfe04GC1qhBRbHJ0b1C9Matlbrf8edPECK1WjR4AupRCLExD
-	 Ydnx6eHN+2S5tsQcH4Dcj4tnNRSqhkZ3OVVy+Uye6LRJo9PT/xlkayt7B21meDBq+Ug==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=XCriX1ICpdKWPdmXamD/VAbQg9SdryL7fJ38JQ2FpmU=;
+	b=smTxM7/kngCa3ODbyoIhdbJHE6I3iQzG5pGbH7btyRo3JQKoXWxdaRvIv2QoAspFB5+z
+	 +X5eH3/rovHLPzqdfAQO6j9alEXLKycCkvtAEH2todZysO2cByP+QLho2zf6Gf0XAtAEO
+	 9/woL+z3MhBPcqjsU680JlfyMI33gjKVqFtCGxFxXC80wqKuEGGQwh6DSEBGUFqRa4Jf1
+	 by9Y4gH4XulgQGQQsSfHxqresi9Zwoyalne5QaJHhPVdiTKbLd5IDnAXdreOA8eh1/JhS
+	 CXmVg6Sk+P/OPyVLgSlhg4cvo0minJiVMQ9mKBTQEnAhg/Muq+GjqU/4O4VFN9zoWZg==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792790244;
-	bh=5Fs/kovm3CCJ5Q+F/U187n2jK5qwuKF9oGLeuWOna3c=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=lkAyOJwWQJXv44oeEpuu6Uk1A9vlqWwJS6GPtIYYTvk/OSaSzJk0qiSHaW/jeD9Z7
-	 xZRf9t/xucFmN5fazMQPTodjRJ/iyaQiCSR8jOP4bPq5kUODwcC6EvH4jN0VsN0KxK
-	 c6RaiKj+zlUUxxSpqRz1JQGwZe2krqcBYAnoeOqnXY72CMGfVHd7SAfkUdsvP5+maj
-	 ZXukDi2O7fdG+7WYajVZDQP5zA6mFSj1fEOrrdcwX4DphuBnp9Od6WIkR4bBEE7DyU
-	 B1pAHos/sMuW0bmGmHJnbhq7MSxE7BDBz5sRY/Qt9Wwa5Rw5nsOC0zo/M3k8+MDliK
-	 nd2fvQy/XeQLw==
+	s=default; t=1792792103;
+	bh=XCriX1ICpdKWPdmXamD/VAbQg9SdryL7fJ38JQ2FpmU=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=YaqTEHmcihk5xe5TKzITPJ4tgHCN92gv/6udJBFO9Ik1O3H+KNmMQhegY8/j+RyNd
+	 JZ9Hcg+UWwj9rnCx6cR/Piild0KNjBtKfDgEx+jB+CosuKOZmAhsZMlN9MP9Vjalqo
+	 LX7dd0O1lsk+SyQL5IepMPQUb3zQKa2ILDEB6Q50CMxhHRVmOejp41KVYj8w4vcSJV
+	 PGGA2FdDGojWMEE0DZmnGQZ9h7goKxezhMeHO+kSehEYvWQEHFvU4ED9P8fYoLvQX/
+	 WgcjrVpbdLb5XXDWtqOtF0ti03EGmhCpSSUbYoZpnq217K7F2peth9A7K3D8hxo64J
+	 6jloFoOpLrEWw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2DCB40A92;
-	Fri, 23 Oct 2026 21:17:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id BA4243C4
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 21:17:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2448360A66;
+	Fri, 23 Oct 2026 21:48:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8816679F
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 21:48:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AAD4581668
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 21:17:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 79D24404A0
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 21:48:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z5fkBZdYuhT4 for <buildroot@buildroot.org>;
- Fri, 23 Oct 2026 21:17:22 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org C7C71815DC
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792790242;
- b=WRv5KBghHs5KrC9ewf6is6lY3J4ZEwBz9Y18QhqcYxdMCSWdyIMtXdGHJsje1h3c6SX8
- bauNoE/r3j5R5syUhUX8sBF7qHc/VbA8VcLL6Ew9SdCpeMG5t71v/9Ws2+eP3RF/Gtjqn
- T621k0EINi66Cf59SgrhSlcyDiShsDq8eEtFzcXuQEH3T9WPt2PxDztutSYqwCkRYkZvT
- HqA2/ha2unOeJyZp8ivodhrr4xju+hx4F7b0IIEBmh9P8oxNkTiEnTGPqDx4+ObrzHGAT
- etEtFYtm/urKyKp6rQcDx6KcOBbgmlPUkeeBzQlFX87IOC6cRWz8K/HeYq0lzsYrOVw==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6ovURNDC0HSf for <buildroot@buildroot.org>;
+ Fri, 23 Oct 2026 21:48:20 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org DD3E140488
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792792100;
+ b=U13ce3nyS1eLZfOQHoAl+J6BbPZCw6txN2vfHPIbozdhAp5k3ntzm5jbYp+/usWJ+Wer
+ JPTLHKdescQBf5ExkjJk7KGgQ/0JpvaZMsHJZy+TXRl1N2Qx9hPuDSHRPKY32L4ej+bfz
+ c3Ql52unRuXZMSw4T9lVzJePFJTgbUlMfwCHZ6jD1p7O59CHCz/tWUq9bQCFeXI0EVqpD
+ AliK2NWvpj3J2X+lEOjWSaJS9En63Cq3gHm20FSsGzLnnsXYK/WoDPl9TmHxV+6Nf89c/
+ rI7ilPqNwjtg5vUGES/FsgbcxpyCOODLCChx50v9CxVrDQ+AbkU8w5i3+WCtMQTiC4w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792790242;
- h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
- Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
- Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=BnoWiMkAbVZBxLXP2HjND5rWMOm0j8ri8Whm2XDuc9s=;
- b=H87KNiimlUnHjsSZiYlfpxTaAahgc2v2MqHNOc2n13GQyA/IfK5dL4iW73c8+VVzmKlp
- AhruB6XvleAfvGq3lR9zq0T4R0M/4ojSu6KOipRClEX/IWcftOb0wpM/6yh3tfSu5QJON
- 47sdjZGI9kA9eineTCRzZwAEqn5mNtZFafS8B8eomY+uioQO3RUC/nd+VRwa31wjIc5Zg
- xwDUJtYBlzl6xXb7f+7YYUUYDi6l+QCiFUvlz41wvZcOXsVk8Fee7TBtXzzuT5VQ9YcGf
- QzZouWmT03Jnby3Poyu8y409cmTTwgbqFvp2olf4eH3R2PGfvrldest2VIwToCafdiA==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
- dmarc=pass header.from=kuhls.net;
- dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b="CWUXjxQ/"; 
- arc=none smtp.remote-ip=85.13.140.57
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=CWUXjxQ/
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C7C71815DC
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 21:17:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1792790222;
- bh=BnoWiMkAbVZBxLXP2HjND5rWMOm0j8ri8Whm2XDuc9s=;
- h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=CWUXjxQ/3YjWD/2SinbADatH0WGpATOGYy0XsfwENczQCDcmZXblC54Wc4i9zwoAk
- XkHQW0ja3tS0TfH50ej1f+0gk7J4AFIFlugv614KG8IU4u/HHvFfX6zwt9Gb4SAtO2
- UZK8/clg8EkhrK5SMYGEZbdi8FsXsRO5bMxTK3evtaGA0uZ/g7g9Etw1daZdMKm9DD
- CMax3LQNi76opuJdo/kAS/rQkHRingi+uJe196tU3dat3s6op+68rioA5W12aYyCzJ
- 2xnbe4BDIjUOK2lyZwk3gy2JHZ8PRV+cdcTeaqJFsYRCqsELrsHlt+VABrjWcDCdwZ
- 4YbDYbNfNxFsg==
-X-KAS-Sym: v3:f51bdf72230551df:YQnrCVOyQTYqHcX7/s5yotzTnrVz65+Dzp6MAZJ+SVYAZ
- FfXy6c8x4QD3oOA/6VMQJlxhP+bhQ6ku5NDC2l/n9r11qYAKdcXLuotMdBF85g3NTWv2f+tNs3Z
- +ScI2dQYrWUxgEnjKZpNXqu9rp4TuG1CgE+CGfSmRzU0CB4w4X6f1vObzjTrX0gZ9twAGRuIYWE
- pP3EUkO4N1q0JVwHe6KVzeYwyIUF9JsZJ5P+kVciIGvKs9ETulcxrjtgfZaatakimoOKpkbqCfw
- sWNp6hwY6fyz1Udjb4VJK9FcXAMv/mS8QbDtTBhSdADn3xBP3Pt0ssbLdetdlSR1h/soPpAQ==:
- g9WKi/eeHCJmJpoYQTgzYaEAWHTUo0b+ogXKUZwwklBcKNyzqs3criGiLerogEPLOv2TCEWA6E2
- ctKVEoP9V6ZDUWXo0CPV+Dc4u4jUvjbKlrOqcL5fNt4uuo4wdjE/813LfqfZknLuRgz9iaYHANk
- wckUmXKXPwCAHHrMel1peoASKj220hEnXe0ROC2Y0kXHZ/OQa0aKwnIyN3+S7dmO7Xztcls+kGk
- BvEYndll1LW8RDVLzvnJaiVllO/jVImc2STJbeat3b3dOuqyvI0xuNvW1fliYa/iIoNPtMlPJKv
- RW25L3n/91cnSoMjvCOQnWfM/ZdnBJ4cpRvgLPYUhhH6Rid3FuLNRU5rsdxOTF8Lj1RAp222gyC
- AzeQ9w/eRx1peePTAFW3oIrZzsn7Z1NQYGllxSbjVMivonXov+Yo3OAKNr/qRJYn39KyF2hhoLF
- Vs18h4B+5K7kXzn5IJrcD+4xCEIxQCsn1MZlH2GtLmP0PWuolF63ZrgvxZhw1M545lFSXvFsJKn
- 8rfnHu3M+x1bmY7sgxxRigSHDc4MAvrBbqqu+b7WrBHXlFmqcUWXq6hkCzIQ/uJSGuFKA2Cc+di
- 3xyPfL2PLM5s3jPLqU0zp1Jbm6E73t7+1QZ0PkXE6U1UjQq/haRg40sEziIo717YjxAexcNwP6D
- l0OuCsWSLj6MaAUBmPA==
-Received: from fli4l.lan.fli4l (p5b3a054b.dip0.t-ipconnect.de [91.58.5.75])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 1B1B3A4C693A;
- Fri, 23 Oct 2026 23:17:02 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:50400)
- by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xKMcg-0000000069z-1ZxW;
- Fri, 23 Oct 2026 21:16:23 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ c=relaxed/relaxed; t=1792792100;
+ h=Received-SPF:Received:X-Google-DKIM-Signature:X-Gm-Message-State:
+ X-Gm-Gg:X-Received:Received:X-Relaying-Domain:X-CFilter-Loop:Received:
+ DKIM-Signature:X-Received:X-Received:Received:From:To:Cc:Subject:Date:
+ Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+ X-DetectorID-Processed;
+ bh=Fd4xNqlkDf052L3kzI4MxQi6qs26qm70wF5qUN/hUwY=;
+ b=IpyDXDgoh6rYqmvh6XU/RDkcTCpcKkVPSQoBh+S73Ux6SePebV//ZDrNGW1vioOyn+Fk
+ Acz/PI6GWmoOK0UHJ0P2O+aDiy3jZKaEBVxV66g5JKUk5Kh2g/apAIaoXSee3WStFHauT
+ i2FNo9jPSzUFM85gqpWS0aOGjRma6NSyvnPGyMuFI+704fqs7wikA3Q09DgKeJfJNGMeq
+ J5VFif6yJheP5p08cHNHoOvmu3/NbdVOY3ugUTngJvGUrKvCINhNigegz7vEf8IGkLCAA
+ uG/TuGx2ZXXp7X3hSyYt1+VHcUHL9gaULYuEriqpwL+JzE9pGFx1cJ9T6l/AB0khPLg==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ dmarc=pass header.from=broadcom.com;
+ dkim=pass header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256
+ header.s=google header.b="I/ZBUuYH"; 
+ arc=none smtp.remote-ip="2607:f8b0:4864:20::662"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::662; helo=mail-pl1-x662.google.com;
+ envelope-from=florian.fainelli@broadcom.com; receiver=<UNKNOWN> 
+Received: from mail-pl1-x662.google.com (mail-pl1-x662.google.com
+ [IPv6:2607:f8b0:4864:20::662])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DD3E140488
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 21:48:19 +0000 (UTC)
+Received: by mail-pl1-x662.google.com with SMTP id
+ d9443c01a7336-2e987b4a710so12716675ad.1
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 14:48:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1792792098; x=1793396898;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to:content-type;
+ bh=Fd4xNqlkDf052L3kzI4MxQi6qs26qm70wF5qUN/hUwY=;
+ b=0EbWxLvtTUjBTFuXs18DGODdJOQoVoStN4AorrHRd5DMQvFw9UMBRDkkKiLGP1lr2F
+ FKdPS59sC9t95PsbAgOwbWIiZ1wUqsHyQb+PHq5Zc4rsK5dCu/dAmgcn1SeC8DRluCVl
+ 5lQ2pn82853A9ptWtgICkTCpdSOV+fo86Y+D19MVPkpjLzxvZ5Nv6H3cp5ARfhLZ3dLJ
+ PQWorRlZLnk5TIzhnU3LlXJXb3a72mptatH7QOjrX3PaUwA3WaYgqmfoXMmWc2KHUKU6
+ HEs0fq5NeV3j3r4k1jciE2ecIg5yUN6E4DJ0aTqQMSf/+GyoiP7L4f2XT9ONxmnVw+bt
+ d5pA==
+X-Gm-Message-State: AFq9FYLLUgazt/Ug2fxvy7ysKBe8mRy0xDIRN4lHf/5mBcxc0ijQt58E
+ MXtVcC33Y4r0jECDfbQEYp/HGujvS3yUya/OHRRapLncW1XadSBLIm1Wi6Se9gvGiRYHZrnsKKY
+ s7rZhwMeNrKg914Lw2t+slBd+VQm/qQRDN2w55ul4cFgabJRQps5FAPIuSD7Ue+ftBOy9AKpL5D
+ 8S9pCHLfez+nce4IjirndMzxdEf9ydg3Sob/AQjrGHQVQYM2kzJyKr2oCxGfI1OuSQEWnZcOdaZ
+ ArtRp2fgcBVceRl9TDU
+X-Gm-Gg: AYBFou0MYnOgNCQcHkz7Ys/YWvPjEgWmbZZEdfgIM6eGxE3YZFShzOyWclKWPcMrBoF
+ 092XD0YKXIvM/KIgErosJuPjL0/TYzsccf4O2bz3HyNwUI/TnhgGYPsBZDhsiz7WgxFASfcg6Ss
+ ABSg5u08NQtKqbHmBWTdkFHTAGUKY2h4s3hU2zHm91plWM3G5dCFASwGoZfhO159SBE+ubVU+Yn
+ mCVNMusfgLwWo2A1AwbMYqZVLjtCd9RkR6SIe/+p1sOwgoiOAL7VYu8I6zkmO/UkfhIZDI4DnSp
+ HSOR3HKl1yOhWI2a48cRpIaU4L3lhaYFVeXanCMQUAVuqNyPCYymT3UqSRCSMTQ1pLvkq83W8d/
+ XYtEHWEOBrNzWEinELz8YMBXz2tl4CFQAsRB2ksmskOvJHXivmjb2hk0Ta03uumMzXepNPiWdX5
+ e2+SqkFymMmfsByQiM6MBAQbn6hdQOOURSjhmmfFB+zUw=
+X-Received: by 2002:a17:90b:4a52:b0:3a7:9ec3:ea0e with SMTP id
+ 98e67ed59e1d1-3adeb5a58e3mr281136a91.22.1792792098440; 
+ Fri, 23 Oct 2026 14:48:18 -0700 (PDT)
+Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com
+ (address-144-49-247-120.dlp.protect.broadcom.com. [144.49.247.120])
+ by smtp-relay.gmail.com with ESMTPS id
+ 98e67ed59e1d1-3adeba44b2fsm149926a91.1.2026.10.23.14.48.17
+ for <buildroot@buildroot.org>
+ (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+ Fri, 23 Oct 2026 14:48:18 -0700 (PDT)
+X-Relaying-Domain: broadcom.com
+X-CFilter-Loop: Reflected
+Received: by mail-qk1-f198.google.com with SMTP id
+ af79cd13be357-93f37c94ceeso486101785a.1
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 14:48:17 -0700 (PDT)
+X-Received: by 2002:a05:620a:4408:b0:93f:2e81:2217 with SMTP id
+ af79cd13be357-940ef9cf423mr48625085a.36.1792792097029; 
+ Fri, 23 Oct 2026 14:48:17 -0700 (PDT)
+X-Received: by 2002:a05:620a:4408:b0:93f:2e81:2217 with SMTP id
+ af79cd13be357-940ef9cf423mr48620385a.36.1792792096345; 
+ Fri, 23 Oct 2026 14:48:16 -0700 (PDT)
+Received: from stbirv-lnx-1.igp.broadcom.net ([192.19.223.252])
+ by smtp.gmail.com with ESMTPSA id
+ af79cd13be357-940f066a5bcsm16398785a.13.2026.10.23.14.48.13
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 23 Oct 2026 14:48:15 -0700 (PDT)
 To: buildroot@buildroot.org
-Cc: El Mehdi YOUNES <elmehdi.younes@smile.fr>,
- Joseph Kogut <joseph.kogut@gmail.com>,
- Romain Naour <romain.naour@gmail.com>
-Date: Fri, 23 Oct 2026 23:16:22 +0200
-Message-ID: <20261023211622.2096562-5-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261023211622.2096562-1-bernd@kuhls.net>
-References: <20261023211622.2096562-1-bernd@kuhls.net>
+Date: Fri, 23 Oct 2026 14:47:44 -0700
+Message-Id: <20261023214807.2151753-1-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.34.1
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-X-Spamd-Bar: -
-Subject: [Buildroot] [PATCH v3 5/5] package/{mesa3d,
- mesa3d-headers}: bump version to 26.2.5
+X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
+Subject: [Buildroot] [PATCH 00/23] Support building the Linux kernel out of
+ tree with LINUX_OVERRIDE_SRCDIR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -157,538 +170,240 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Florian Fainelli via buildroot <buildroot@buildroot.org>
+Reply-To: Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Gary Bisson <bisson.gary@gmail.com>,
+ =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Bernd Kuhls <bernd@kuhls.net>, Thomas Perale <thomas.perale@mind.be>,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>,
+ Refik Tuzakli <tuzakli.refik@gmail.com>,
+ Francois Perrad <francois.perrad.86@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Arnout Vandecappelle <arnout@rnout.be>, Petr Vorel <petr.vorel@gmail.com>,
+ Spenser Gilliland <spenser@gillilanding.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Pascal de Bruijn <p.debruijn@unilogic.nl>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-14.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-https://lists.freedesktop.org/archives/mesa-announce/2026-October/000871.html
-https://lists.freedesktop.org/archives/mesa-announce/2026-October/000870.html
-https://lists.freedesktop.org/archives/mesa-announce/2026-September/000869.html
-https://lists.freedesktop.org/archives/mesa-announce/2026-September/000868.html
-https://lists.freedesktop.org/archives/mesa-announce/2026-August/000867.html
-https://lists.freedesktop.org/archives/mesa-announce/2026-August/000863.html
+Hello,
 
-Removed patch which was applied to fix a build error with gcc < 13 seen
-with mesa 26.1.x.
+This series lets a package that is built from an OVERRIDE_SRCDIR be built
+out of tree, i.e. without rsync'ing its sources into output/build/<pkg>-custom/,
+and enables it for the Linux kernel.
 
-Renumbered remaining patches.
+For a large source tree such as the kernel, the rsync step is slow, doubles
+the disk usage, and leaves the developer's tree and the build directory out
+of sync. With this series, with LINUX_OVERRIDE_SRCDIR set, the kernel is
+configured and built with O=output/build/linux-custom and the sources in
+the overridden directory are never written to.
 
-Rebased patches 0005-0007 by replacing them with non-rebased versions
-of the upstream commits. The rebase was only needed for the mesa's
-26.1.x branch.
+Most of the groundwork comes from the out-of-tree work Thomas Petazzoni
+and Yann E. Morin did in 2015-2017, which was never merged. It has been
+rebased on current master, and extended to cover the custom logo, custom
+device tree files, and linux-tools. Their authorship is preserved.
 
-Added patch 0008 to fix a build error which would be introduced by this
-bump due to upstream commit:
-https://gitlab.freedesktop.org/mesa/mesa/-/commit/6351df29e2d99a982dbfed931b23a76defca0132
+Series overview
+===============
 
-Upstream commit
-https://gitlab.freedesktop.org/mesa/mesa/-/commit/3f9451b54c42a37b41246de3ceea991111389c37
-added rusticl to the variable with_driver_using_cl which creates a new
-dependency to the precomp-compiler:
-https://gitlab.freedesktop.org/mesa/mesa/-/blob/mesa-26.2.5/meson.build?ref_type=tags#L973
+Patches 1-8, infra preparation:
+  - introduce <pkg>_SRCDIR (where the sources are) and <pkg>_BUILDDIR
+    (where the package is built, and where the stamp files live), both
+    defaulting to <pkg>_DIR, so nothing changes for existing packages;
+  - fix up the users of LINUX_DIR that need the build directory
+    (boot-wrapper-aarch64, mxs-bootlets, the linux extensions), and run
+    the kernel version probing from the build directory;
+  - introduce <pkg>_SRCSUBDIR (<pkg>_SRCDIR/<pkg>_SUBDIR) and convert the
+    infras (cargo, hare, luarocks, meson, perl, waf) and gcc-final to it.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
-Please note that this series does not pass all Gitlab pipelines:
-https://gitlab.com/bkuhls/buildroot/-/commits/1eefcb30f86c653755ecfd95f3d32417b6e23830
+Patch 9, the kernel:
+  - add <pkg>_SUPPORTS_OUT_OF_TREE. When it is YES and <pkg>_OVERRIDE_SRCDIR
+    is set, the rsync step is skipped, the stamp files go in the build
+    directory and kconfig is called with -C $(SRCDIR) O=$(BUILDDIR);
+  - opt linux in, in the same patch. Kbuild requires a clean source tree
+    for O=: a tree with a stale .config, include/config or
+    arch/*/include/generated is rejected by kbuild itself.
 
-The only broken target is
-bootlin-m68k-68040-uclibc/build/mesa3d-26.2.5/.stamp_built:
+Patches 10-19, host/target consistency. When the sources are shared between
+the host and the target variant of a package, they must not be patched
+differently, so:
+  - sync the host and target patch hooks, and fix omniorb, lua and perl
+    which did different things between the two variants;
+  - have host packages inherit the extra downloads and apply the libtool
+    patch to host libtool;
+  - warn about packages that autoreconf without the libtool patch;
+  - replace $(PKG)_DIR with $(@D) where this is possible.
 
-../src/compiler/nir/nir_opt_varyings.c:3207:1: error: static assertion
- failed: "dedup_entry layout changed"
+Patches 20-21, the parts that write to the kernel sources:
+  - the custom logo (BR2_LINUX_KERNEL_CUSTOM_LOGO_PATH) and custom device
+    tree files (BR2_LINUX_KERNEL_CUSTOM_DTS_PATH) are copied into the kernel
+    sources. For an out-of-tree build, linux is then built from a "shadow"
+    tree: real directories whose files are symbolic links to the original
+    tree, created by the new support/scripts/symlink-tree. Files are
+    replaced rather than written through the links, so the overridden
+    tree is never modified;
+  - linux-tools checks which tools are available in $(LINUX_SRCDIR)/tools,
+    and builds them in a shadow of that directory, because several of the
+    kernel tools build in place, and some (mm, tmon) do not support
+    OUTPUT/O= at all. This also covers the PCI endpoint selftests path.
 
-The assert was added to 26.2.0 with upstream commit
-https://gitlab.freedesktop.org/mesa/mesa/-/commit/136596668e09431605d5cbac79243fb935da4520
+Patches 22-23:
+  - packages that read kernel headers from the source tree use
+    $(LINUX_SRCDIR) instead of $(LINUX_DIR);
+  - document the feature and the new variables in the manual.
 
-but neither do I understand it nor do I have an idea about how to fix
-the build error.
+Things this series intentionally does not do
+============================================
 
-v3:
-- bumped to 26.2.5
-- renumbered and rebased rusticl patch set
-- added patch 0008
-v2: bumped to 26.2.3
+  - Only linux opts in. Other packages are unchanged and still rsync.
+    A package opts in with <pkg>_SUPPORTS_OUT_OF_TREE = YES.
+  - The "hooks sanity check" and "host inherits the target hooks" patches
+    of the original series are not included: they do not work with the
+    infras that register per-name hooks (e.g. golang).
+  - The Python 2 and asterisk patches of the original series are dropped:
+    those packages are gone or no longer need them.
 
- package/mesa3d-headers/mesa3d-headers.mk      |  2 +-
- ...o-not-compare-sys_path-against-NULL.patch} | 68 +++++++--------
- ...er-jay-jay_ir.h-do-not-used-typed-en.patch | 41 ---------
- ..._libclc-turn-sys_path-into-an-array.patch} | 68 +++++++--------
- ...oad_libclc-add-llvm-23-libclc-paths.patch} |  4 +-
- ...-floating-point-exception-flags-with.patch | 84 +++++++++++++++++++
- package/mesa3d/Config.in                      |  1 +
- package/mesa3d/mesa3d.hash                    |  6 +-
- package/mesa3d/mesa3d.mk                      |  2 +-
- 9 files changed, 156 insertions(+), 120 deletions(-)
- rename package/mesa3d/{0006-nir-load_libclc-do-not-compare-sys_path-against-NULL.patch => 0005-nir-load_libclc-do-not-compare-sys_path-against-NULL.patch} (75%)
- delete mode 100644 package/mesa3d/0005-src-intel-compiler-jay-jay_ir.h-do-not-used-typed-en.patch
- rename package/mesa3d/{0007-nir-load_libclc-turn-sys_path-into-an-array.patch => 0006-nir-load_libclc-turn-sys_path-into-an-array.patch} (71%)
- rename package/mesa3d/{0008-nir-load_libclc-add-llvm-23-libclc-paths.patch => 0007-nir-load_libclc-add-llvm-23-libclc-paths.patch} (93%)
- create mode 100644 package/mesa3d/0008-nir-fix-build-of-floating-point-exception-flags-with.patch
+Testing
+=======
 
-diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
-index fd715b5f84..d42e7c7a0a 100644
---- a/package/mesa3d-headers/mesa3d-headers.mk
-+++ b/package/mesa3d-headers/mesa3d-headers.mk
-@@ -12,7 +12,7 @@ endif
- 
- # Not possible to directly refer to mesa3d variables, because of
- # first/second expansion trickery...
--MESA3D_HEADERS_VERSION = 26.1.8
-+MESA3D_HEADERS_VERSION = 26.2.5
- MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
- MESA3D_HEADERS_SITE = https://archive.mesa3d.org
- MESA3D_HEADERS_DL_SUBDIR = mesa3d
-diff --git a/package/mesa3d/0006-nir-load_libclc-do-not-compare-sys_path-against-NULL.patch b/package/mesa3d/0005-nir-load_libclc-do-not-compare-sys_path-against-NULL.patch
-similarity index 75%
-rename from package/mesa3d/0006-nir-load_libclc-do-not-compare-sys_path-against-NULL.patch
-rename to package/mesa3d/0005-nir-load_libclc-do-not-compare-sys_path-against-NULL.patch
-index 21cfe54e80..6883031951 100644
---- a/package/mesa3d/0006-nir-load_libclc-do-not-compare-sys_path-against-NULL.patch
-+++ b/package/mesa3d/0005-nir-load_libclc-do-not-compare-sys_path-against-NULL.patch
-@@ -1,4 +1,4 @@
--From f5011f50a7e9c3f8dc208e16a4bd3aadbd6fdae8 Mon Sep 17 00:00:00 2001
-+From 1219dc3f7fe83b1f7f200190bf02a86ab57b3d4f Mon Sep 17 00:00:00 2001
- From: Karol Herbst <kherbst@redhat.com>
- Date: Tue, 22 Sep 2026 13:53:43 +0200
- Subject: [PATCH] nir/load_libclc: do not compare sys_path against NULL
-@@ -11,14 +11,13 @@ Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/44624>
- 
- Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/commit/1219dc3f7fe83b1f7f200190bf02a86ab57b3d4f
- 
--[Bernd: backported to 26.1.8]
- Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- ---
-- src/compiler/clc/nir_load_libclc.c | 84 ++++++++++++++----------------
-- 1 file changed, 39 insertions(+), 45 deletions(-)
-+ src/compiler/clc/nir_load_libclc.c | 76 ++++++++++++++----------------
-+ 1 file changed, 35 insertions(+), 41 deletions(-)
- 
- diff --git a/src/compiler/clc/nir_load_libclc.c b/src/compiler/clc/nir_load_libclc.c
--index 4cb92bdb257..46beaf51cdf 100644
-+index edcd13b3b26..913dd8ff7a7 100644
- --- a/src/compiler/clc/nir_load_libclc.c
- +++ b/src/compiler/clc/nir_load_libclc.c
- @@ -145,20 +145,18 @@ map_clc_data(struct clc_data *clc)
-@@ -69,7 +68,7 @@ index 4cb92bdb257..46beaf51cdf 100644
-  #endif
-  }
-  
--@@ -198,33 +194,31 @@ open_clc_data(struct clc_data *clc, unsigned ptr_bit_size)
-+@@ -198,34 +194,32 @@ open_clc_data(struct clc_data *clc, unsigned ptr_bit_size)
-     }
-  
-  #ifdef DYNAMIC_LIBCLC_PATH
-@@ -77,7 +76,10 @@ index 4cb92bdb257..46beaf51cdf 100644
- -      int fd = open(clc->file->sys_path, O_RDONLY);
- -      if (fd < 0)
- -         return false;
---
-++   int fd = open(clc->file->sys_path, O_RDONLY);
-++   if (fd < 0)
-++      return false;
-+ 
- -      struct stat stat;
- -      int ret = fstat(fd, &stat);
- -      if (ret < 0) {
-@@ -85,46 +87,40 @@ index 4cb92bdb257..46beaf51cdf 100644
- -         close(fd);
- -         return false;
- -      }
---
-++   struct stat stat;
-++   int ret = fstat(fd, &stat);
-++   if (ret < 0) {
-++      fprintf(stderr, "fstat failed on %s: %m\n", clc->file->sys_path);
-++      close(fd);
-++      return false;
-++   }
-+ 
- -      clc->fd = fd;
- -      clc->size = stat.st_size;
---
-++   clc->fd = fd;
-++   clc->size = stat.st_size;
-+ 
- -      if (!map_clc_data(clc)) {
-+-         close_clc_data(clc);
- -         return false;
- -      }
---
-++   if (!map_clc_data(clc)) {
-++      close_clc_data(clc);
-++      return false;
-++   }
-+ 
- -      blake3_hasher ctx;
- -      _mesa_blake3_init(&ctx);
- -      _mesa_blake3_update(&ctx, clc->data, clc->size);
- -      _mesa_blake3_final(&ctx, clc->cache_key);
---
-++   blake3_hasher ctx;
-++   _mesa_blake3_init(&ctx);
-++   _mesa_blake3_update(&ctx, clc->data, clc->size);
-++   _mesa_blake3_final(&ctx, clc->cache_key);
-+ 
- -      return true;
- -   }
--+  int fd = open(clc->file->sys_path, O_RDONLY);
--+  if (fd < 0)
--+     return false;
--+
--+  struct stat stat;
--+  int ret = fstat(fd, &stat);
--+  if (ret < 0) {
--+     fprintf(stderr, "fstat failed on %s: %m\n", clc->file->sys_path);
--+     close(fd);
--+     return false;
--+  }
--+
--+  clc->fd = fd;
--+  clc->size = stat.st_size;
--+
--+  if (!map_clc_data(clc)) {
--+     return false;
--+  }
--+
--+  blake3_hasher ctx;
--+  _mesa_blake3_init(&ctx);
--+  _mesa_blake3_update(&ctx, clc->data, clc->size);
--+  _mesa_blake3_final(&ctx, clc->cache_key);
--+
--+  return true;
-++   return true;
-  #endif
-  
-     return false;
-diff --git a/package/mesa3d/0005-src-intel-compiler-jay-jay_ir.h-do-not-used-typed-en.patch b/package/mesa3d/0005-src-intel-compiler-jay-jay_ir.h-do-not-used-typed-en.patch
-deleted file mode 100644
-index af066287e2..0000000000
---- a/package/mesa3d/0005-src-intel-compiler-jay-jay_ir.h-do-not-used-typed-en.patch
-+++ /dev/null
-@@ -1,41 +0,0 @@
--From 345ccf93e9d00dfd0f71085832a7df0170b74f74 Mon Sep 17 00:00:00 2001
--From: Alexander Kanavin <alex@linutronix.de>
--Date: Sun, 14 Jun 2026 17:42:19 +0200
--Subject: [PATCH] src/intel/compiler/jay/jay_ir.h: do not used typed enum
--
--This is a C23 feature and not supported by gcc < 13, which
--many host distros still have (e.g. Debian 12).
--
--Upstream-Status: Inappropriate [yocto host distro requirements]
--Signed-off-by: Alexander Kanavin <alex@linutronix.de>
--Upstream: N/A, code completely changed upstream
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- src/intel/compiler/jay/jay_ir.h | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/src/intel/compiler/jay/jay_ir.h b/src/intel/compiler/jay/jay_ir.h
--index 8307044ef8a..abf175a71bf 100644
----- a/src/intel/compiler/jay/jay_ir.h
--+++ b/src/intel/compiler/jay/jay_ir.h
--@@ -579,7 +579,7 @@ jay_type_is_any_float(enum jay_type t)
--    return jay_base_type(t) == JAY_TYPE_F || jay_base_type(t) == JAY_TYPE_BF;
-- }
-- 
---enum jay_predication : uint8_t {
--+enum jay_predication {
--    /** No predication. */
--    JAY_NOT_PREDICATED = 0,
-- 
--@@ -634,7 +634,7 @@ typedef struct jay_inst {
--    bool decrement_dep:1;
--    unsigned padding  :12;
-- 
---   enum jay_predication predication;
--+   uint8_t predication;
--    enum jay_conditional_mod conditional_mod;
-- 
--    jay_def cond_flag; /**< conditional flag */
---- 
--2.55.0
--
-diff --git a/package/mesa3d/0007-nir-load_libclc-turn-sys_path-into-an-array.patch b/package/mesa3d/0006-nir-load_libclc-turn-sys_path-into-an-array.patch
-similarity index 71%
-rename from package/mesa3d/0007-nir-load_libclc-turn-sys_path-into-an-array.patch
-rename to package/mesa3d/0006-nir-load_libclc-turn-sys_path-into-an-array.patch
-index ff53b68f19..916af6547d 100644
---- a/package/mesa3d/0007-nir-load_libclc-turn-sys_path-into-an-array.patch
-+++ b/package/mesa3d/0006-nir-load_libclc-turn-sys_path-into-an-array.patch
-@@ -1,4 +1,4 @@
--From 9d4685ec168e28bec7c25859f8d9162865c14284 Mon Sep 17 00:00:00 2001
-+From 62ee563fd398169005906245831db680f813b19f Mon Sep 17 00:00:00 2001
- From: Karol Herbst <kherbst@redhat.com>
- Date: Tue, 22 Sep 2026 14:11:09 +0200
- Subject: [PATCH] nir/load_libclc: turn sys_path into an array
-@@ -7,14 +7,13 @@ Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/44624>
- 
- Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/commit/62ee563fd398169005906245831db680f813b19f
- 
--[Bernd: backported to 26.1.8]
- Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- ---
-- src/compiler/clc/nir_load_libclc.c | 63 +++++++++++++++++-------------
-- 1 file changed, 35 insertions(+), 28 deletions(-)
-+ src/compiler/clc/nir_load_libclc.c | 55 +++++++++++++++++-------------
-+ 1 file changed, 31 insertions(+), 24 deletions(-)
- 
- diff --git a/src/compiler/clc/nir_load_libclc.c b/src/compiler/clc/nir_load_libclc.c
--index 46beaf51cdf..54b45ad7808 100644
-+index 913dd8ff7a7..17b901db47c 100644
- --- a/src/compiler/clc/nir_load_libclc.c
- +++ b/src/compiler/clc/nir_load_libclc.c
- @@ -52,7 +52,7 @@ struct clc_file {
-@@ -48,41 +47,26 @@ index 46beaf51cdf..54b45ad7808 100644
-  #endif
-     },
-  };
--@@ -194,31 +198,34 @@ open_clc_data(struct clc_data *clc, unsigned ptr_bit_size)
-+@@ -194,32 +198,35 @@ open_clc_data(struct clc_data *clc, unsigned ptr_bit_size)
-     }
-  
-  #ifdef DYNAMIC_LIBCLC_PATH
---  int fd = open(clc->file->sys_path, O_RDONLY);
---  if (fd < 0)
---     return false;
---
---  struct stat stat;
---  int ret = fstat(fd, &stat);
---  if (ret < 0) {
---     fprintf(stderr, "fstat failed on %s: %m\n", clc->file->sys_path);
---     close(fd);
---     return false;
---  }
---
---  clc->fd = fd;
---  clc->size = stat.st_size;
---
---  if (!map_clc_data(clc)) {
---     return false;
---  }
---
---  blake3_hasher ctx;
---  _mesa_blake3_init(&ctx);
---  _mesa_blake3_update(&ctx, clc->data, clc->size);
---  _mesa_blake3_final(&ctx, clc->cache_key);
---
---  return true;
-+-   int fd = open(clc->file->sys_path, O_RDONLY);
-+-   if (fd < 0)
-+-      return false;
- +   for (unsigned i = 0; i < ARRAY_SIZE(clc->file->sys_paths); i++) {
- +      const char *sys_path = clc->file->sys_paths[i];
- +      int fd = open(sys_path, O_RDONLY);
- +      if (fd < 0)
- +         continue;
--+
-+ 
-+-   struct stat stat;
-+-   int ret = fstat(fd, &stat);
-+-   if (ret < 0) {
-+-      fprintf(stderr, "fstat failed on %s: %m\n", clc->file->sys_path);
-+-      close(fd);
-+-      return false;
-+-   }
- +      struct stat stat;
- +      int ret = fstat(fd, &stat);
- +      if (ret < 0) {
-@@ -90,19 +74,31 @@ index 46beaf51cdf..54b45ad7808 100644
- +         close(fd);
- +         continue;
- +      }
--+
-+ 
-+-   clc->fd = fd;
-+-   clc->size = stat.st_size;
- +      clc->fd = fd;
- +      clc->size = stat.st_size;
--+
-+ 
-+-   if (!map_clc_data(clc)) {
-+-      close_clc_data(clc);
-+-      return false;
-+-   }
- +      if (!map_clc_data(clc)) {
-++         close_clc_data(clc);
- +         continue;
- +      }
--+
-+ 
-+-   blake3_hasher ctx;
-+-   _mesa_blake3_init(&ctx);
-+-   _mesa_blake3_update(&ctx, clc->data, clc->size);
-+-   _mesa_blake3_final(&ctx, clc->cache_key);
- +      blake3_hasher ctx;
- +      _mesa_blake3_init(&ctx);
- +      _mesa_blake3_update(&ctx, clc->data, clc->size);
- +      _mesa_blake3_final(&ctx, clc->cache_key);
--+
-+ 
-+-   return true;
- +      return true;
- +   }
-  #endif
-diff --git a/package/mesa3d/0008-nir-load_libclc-add-llvm-23-libclc-paths.patch b/package/mesa3d/0007-nir-load_libclc-add-llvm-23-libclc-paths.patch
-similarity index 93%
-rename from package/mesa3d/0008-nir-load_libclc-add-llvm-23-libclc-paths.patch
-rename to package/mesa3d/0007-nir-load_libclc-add-llvm-23-libclc-paths.patch
-index bfef0c50ba..f43b7b7260 100644
---- a/package/mesa3d/0008-nir-load_libclc-add-llvm-23-libclc-paths.patch
-+++ b/package/mesa3d/0007-nir-load_libclc-add-llvm-23-libclc-paths.patch
-@@ -1,4 +1,4 @@
--From c86bf6e6b9fbc9cfb02eeed3d798ffbdd3dc0252 Mon Sep 17 00:00:00 2001
-+From 6b9cd5ab9cc3bfd0c79d9500a07a5e74351c72d1 Mon Sep 17 00:00:00 2001
- From: Karol Herbst <kherbst@redhat.com>
- Date: Tue, 22 Sep 2026 14:13:28 +0200
- Subject: [PATCH] nir/load_libclc: add llvm-23 libclc paths
-@@ -13,7 +13,7 @@ Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-  1 file changed, 3 insertions(+), 1 deletion(-)
- 
- diff --git a/src/compiler/clc/nir_load_libclc.c b/src/compiler/clc/nir_load_libclc.c
--index 54b45ad7808..bb1efd0ce57 100644
-+index 17b901db47c..889bde610a3 100644
- --- a/src/compiler/clc/nir_load_libclc.c
- +++ b/src/compiler/clc/nir_load_libclc.c
- @@ -52,7 +52,7 @@ struct clc_file {
-diff --git a/package/mesa3d/0008-nir-fix-build-of-floating-point-exception-flags-with.patch b/package/mesa3d/0008-nir-fix-build-of-floating-point-exception-flags-with.patch
-new file mode 100644
-index 0000000000..7130588206
---- /dev/null
-+++ b/package/mesa3d/0008-nir-fix-build-of-floating-point-exception-flags-with.patch
-@@ -0,0 +1,84 @@
-+From 0c567be6b8782b1fe3ed6f1e7499856bf6af9f6a Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Fri, 23 Oct 2026 21:33:52 +0200
-+Subject: [PATCH] nir: fix build of floating point exception flags with
-+ toolchains lacking fenv support
-+
-+uClibc-ng supports C99 Floating-point on a restricted set of platforms:
-+https://github.com/wbx-github/uclibc-ng/blob/v1.0.59/extra/Configs/Config.in.arch#L163
-+
-+causing build errors on the other supported platforms:
-+
-+src/compiler/nir/nir_constant_expressions.c:24:10: fatal error:
-+ fenv.h: No such file or directory
-+
-+Check for fenv.h and guard the fenv code added by commit
-+https://gitlab.freedesktop.org/mesa/mesa/-/commit/6351df29e2d99a982dbfed931b23a76defca0132
-+with ifdef's.
-+
-+Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/45569
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ meson.build                                  | 2 +-
-+ src/compiler/nir/nir_constant_expressions.py | 6 ++++++
-+ 2 files changed, 7 insertions(+), 1 deletion(-)
-+
-+diff --git a/meson.build b/meson.build
-+index 5f19ef921a6..9c57445edb6 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -1613,7 +1613,7 @@ endif
-+ 
-+ foreach h : ['xlocale.h', 'linux/futex.h', 'endian.h', 'dlfcn.h', 'sys/shm.h',
-+              'cet.h', 'pthread_np.h', 'poll.h', 'sys/inotify.h',
-+-             'linux/udmabuf.h']
-++             'linux/udmabuf.h', 'fenv.h']
-+   if cc.check_header(h)
-+     pre_args += '-DHAVE_@0@'.format(h.to_upper().underscorify())
-+   endif
-+diff --git a/src/compiler/nir/nir_constant_expressions.py b/src/compiler/nir/nir_constant_expressions.py
-+index c4ae87db1a7..23f4aa6adbb 100644
-+--- a/src/compiler/nir/nir_constant_expressions.py
-++++ b/src/compiler/nir/nir_constant_expressions.py
-+@@ -55,7 +55,9 @@ template = """\
-+  * IN THE SOFTWARE.
-+  */
-+ 
-++#ifdef HAVE_FENV_H
-+ #include <fenv.h>
-++#endif
-+ #include <math.h>
-+ #include "util/rounding.h" /* for _mesa_roundeven */
-+ #include "util/half_float.h"
-+@@ -660,6 +662,7 @@ nir_eval_const_opcode(nir_op op, nir_const_value *dest, nir_component_mask_t *ou
-+                       nir_const_value **src,
-+                       unsigned float_controls_execution_mode)
-+ {
-++#ifdef HAVE_FENV_H
-+    /* Temporarily disable floating point exception flags while we
-+     * evaluate shader constants. This avoids games unexpectedly crashing while
-+     * we evalute shader math on the cpu if they have the exeption flags turn
-+@@ -673,6 +676,7 @@ nir_eval_const_opcode(nir_op op, nir_const_value *dest, nir_component_mask_t *ou
-+ #endif
-+    if (unlikely(had_flags))
-+       feholdexcept(&__nir_const_fenv);
-++#endif
-+ 
-+    nir_component_mask_t poison;
-+ 
-+@@ -689,9 +693,11 @@ nir_eval_const_opcode(nir_op op, nir_const_value *dest, nir_component_mask_t *ou
-+    if (out_poison)
-+       *out_poison = poison;
-+ 
-++#ifdef HAVE_FENV_H
-+    /* Restore floating point exception flags */
-+    if (unlikely(had_flags))
-+       fesetenv(&__nir_const_fenv);
-++#endif
-+ }"""
-+ 
-+ from mako.template import Template
-+-- 
-+2.47.3
-+
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index f45a675445..d1b6a38858 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -64,6 +64,7 @@ config BR2_PACKAGE_MESA3D_RUSTICL
- 	select BR2_PACKAGE_LLVM_RTTI
- 	select BR2_PACKAGE_CLANG
- 	select BR2_PACKAGE_LIBCLC
-+	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
- 	select BR2_PACKAGE_SPIRV_TOOLS
- 	select BR2_PACKAGE_SPIRV_LLVM_TRANSLATOR
- 	select BR2_PACKAGE_OPENCL_ICD_LOADER
-diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
-index dc7776488a..fdcc345896 100644
---- a/package/mesa3d/mesa3d.hash
-+++ b/package/mesa3d/mesa3d.hash
-@@ -1,6 +1,6 @@
--# From https://lists.freedesktop.org/archives/mesa-announce/2026-August/000865.html
--sha256  b320f65874fd9653ac6c0bd1616605387344e1247411a50c797b5f3fb9dc0b55  mesa-26.1.8.tar.xz
--sha512  eb3d46ae9aaba70fdd908486cef24041fec9264ddf586eaebbba65ce55e716d306ef9e91be83e742dfaec4dfc94105a5cd3a36b29bf56614febcbcf6c1f8b516  mesa-26.1.8.tar.xz
-+# From https://lists.freedesktop.org/archives/mesa-announce/2026-October/000871.html
-+sha256  794b3d1729075dae7ebd47c7283b7ca0cdb5dec668f7f11cc0a5d82f6138a0a5  mesa-26.2.5.tar.xz
-+sha512  08c7d7ea426ddfb0f7bc51b06e18c363a4d31cf1a8b203828bb455eda0189e41d2215eb9f627585ed11e0d0f231a6a8c9f0c7176238760cd76b62e20c35ccd6a  mesa-26.2.5.tar.xz
- # License
- sha256  0d1a0472ecc81830e75c20d59b0ea02841e3db21255e0ebad97ab682c54d6615  docs/license.rst
- sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  licenses/MIT
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index 04112eea8e..f20f02190a 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version, please also update mesa3d-headers
--MESA3D_VERSION = 26.1.8
-+MESA3D_VERSION = 26.2.5
- MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
- MESA3D_SITE = https://archive.mesa3d.org
- MESA3D_LICENSE = MIT, SGI, Khronos
+All of the following build and, where noted, boot, with the series
+applied on top of master (fd9c348c227e):
+
+  - raspberrypi4_64_defconfig, stock (in-tree kernel);
+  - raspberrypi4_64_defconfig with the Raspberry Pi kernel built out of tree
+    through LINUX_OVERRIDE_SRCDIR: the Image differs from the in-tree one
+    only by the embedded build timestamp, the dtbs are identical;
+  - qemu_x86_64 and qemu_arm_vexpress, stock, and with an out-of-tree
+    kernel; the out-of-tree ones boot to a login prompt in QEMU;
+  - a wide package set on arm64 (autotools, cmake, meson, perl, python,
+    cargo, golang, waf, luarocks, hare, kernel modules, asterisk, ffmpeg,
+    libvpx, u-boot, and the linux-tools gpio, iio, perf, pci, cpupower,
+    rtla, tmon, mm, usbtools), both with an in-tree and an out-of-tree
+    kernel: the content of target/ is identical;
+  - a custom logo and a custom device tree file with a #include, out of
+    tree, with the overridden tree left unmodified;
+  - the same package set in the Buildroot CI docker image, offline;
+  - every patch of the series builds, tested on a small package set.
+
+Known issues, not caused by this series and identical with and without it:
+xtables-addons does not build with the Raspberry Pi 6.12 kernel, and
+some linux-tools selftests (mm) fail to link. I have not tested the
+selftests in the docker image, as the container has no python yaml.
+
+Not tested: the other kernel extensions (rtai, xenomai), which are
+adapted but not built, and booting on real hardware.
+
+Changes
+=======
+
+This is the first version.
+
+Regards,
+Florian
+
+Florian Fainelli (6):
+  package: use <pkg>_SRCSUBDIR where <pkg>_SRCDIR used to include
+    _SUBDIR
+  linux: build out of tree when LINUX_OVERRIDE_SRCDIR is set
+  linux: support custom logo and devicetree files in out-of-tree builds
+  package/linux-tools: support an out-of-tree kernel build
+  package: read kernel headers from LINUX_SRCDIR
+  docs/manual: document out-of-tree package builds and the new srcdir
+    variables
+
+Thomas Petazzoni (7):
+  package: prepare removal of <pkg>_DIR
+  infra: introduce a global SRC_DIR variable
+  packages: sync host and target patch hooks
+  omniorb: avoid target-only patch hook
+  lua: rework post-patch hook usage
+  package/libtool: use post-patch hooks
+  package/{ffmpeg,libvpx}: use $(@D) instead of $(pkg_SRCDIR) when
+    possible
+
+Yann E. MORIN (10):
+  package: fix <pkg>_SRCDIR and <pkg>_BUILDDIR values
+  boot/boot-wrapper-aarch64: needs LINUX_BUILDDIR
+  boot/mxs-bootlets: needs (BAREBOX,LINUX,UBOOT)_BUILDDIR
+  linux/extensions: point to proper _SRCDIR and @D
+  linux/linux: LINUX_VERSION_PROBED should run from build directory
+  infra: host packages inherit the target extra downloads
+  package/libtool: also apply libtool-patch to host libtool
+  package/perl: apply the perl-cross even for the host variant
+  infra/autotools: warn for package that autoreconf without libtool
+    patch
+  packages: replace $(PKG)_DIR with @D where possible
+
+ Makefile                                      |  1 +
+ .../boot-wrapper-aarch64.mk                   |  8 +-
+ boot/mxs-bootlets/mxs-bootlets.mk             |  6 +-
+ docs/manual/adding-packages-generic.adoc      | 11 +++
+ docs/manual/using-buildroot-development.adoc  | 30 ++++++++
+ linux/linux-ext-rtai.mk                       |  8 +-
+ linux/linux-ext-xenomai.mk                    |  4 +-
+ linux/linux.mk                                | 40 ++++++++--
+ package/a10disp/a10disp.mk                    |  2 +-
+ package/android-tools/android-tools.mk        |  1 -
+ package/binutils/binutils.mk                  |  1 -
+ package/ffmpeg/ffmpeg.mk                      |  2 +-
+ .../imx-alsa-plugins/imx-alsa-plugins.mk      |  2 +-
+ package/freescale-imx/imx-lib/imx-lib.mk      |  2 +-
+ package/gcc/gcc-final/gcc-final.mk            |  2 +-
+ package/gdb/gdb.mk                            |  1 -
+ package/gstreamer1/gst1-imx/gst1-imx.mk       |  2 +-
+ package/icu/icu.mk                            |  1 +
+ package/libtool/libtool.mk                    |  5 +-
+ package/libvpx/libvpx.mk                      |  2 +-
+ package/linux-backports/linux-backports.mk    |  2 +-
+ package/linux-tools/linux-tool-cpupower.mk.in |  8 +-
+ package/linux-tools/linux-tool-gpio.mk.in     |  6 +-
+ package/linux-tools/linux-tool-hv.mk.in       |  6 +-
+ package/linux-tools/linux-tool-iio.mk.in      |  6 +-
+ package/linux-tools/linux-tool-mm.mk.in       | 10 +--
+ package/linux-tools/linux-tool-pci.mk.in      | 12 +--
+ package/linux-tools/linux-tool-perf.mk.in     | 29 +++++---
+ package/linux-tools/linux-tool-rtla.mk.in     | 10 +--
+ .../linux-tools/linux-tool-selftests.mk.in    | 15 ++--
+ package/linux-tools/linux-tool-tmon.mk.in     |  8 +-
+ package/linux-tools/linux-tool-usbtools.mk.in |  6 +-
+ package/linux-tools/linux-tools.mk            | 20 ++++-
+ package/lua/lua.mk                            |  9 ++-
+ package/ncftp/ncftp.mk                        |  2 +-
+ .../omniorb/0002-optional-appl-services.patch | 29 ++++++++
+ package/omniorb/omniorb.mk                    | 26 +++----
+ package/pciutils/pciutils.mk                  |  2 +-
+ package/perl/perl.mk                          |  2 +
+ package/php/php.mk                            |  2 +-
+ package/pkg-autotools.mk                      | 28 +++----
+ package/pkg-cargo.mk                          |  8 +-
+ package/pkg-cmake.mk                          |  8 +-
+ package/pkg-generic.mk                        | 74 ++++++++++++-------
+ package/pkg-hare.mk                           |  8 +-
+ package/pkg-kconfig.mk                        | 48 ++++++------
+ package/pkg-luarocks.mk                       | 10 +--
+ package/pkg-meson.mk                          | 26 +++----
+ package/pkg-perl.mk                           | 12 +--
+ package/pkg-waf.mk                            |  8 +-
+ .../xdriver_xf86-video-imx.mk                 |  2 +-
+ support/scripts/symlink-tree                  | 58 +++++++++++++++
+ 52 files changed, 422 insertions(+), 209 deletions(-)
+ create mode 100644 package/omniorb/0002-optional-appl-services.patch
+ create mode 100755 support/scripts/symlink-tree
+
 -- 
-2.47.3
+2.34.1
 
 _______________________________________________
 buildroot mailing list
