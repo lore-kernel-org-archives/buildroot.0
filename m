@@ -1,28 +1,28 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D3D8606A324
-	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 21:52:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A9F606A31D
+	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 21:52:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=YaQoKNOV
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=MR73w0io
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5A16960618;
-	Fri, 23 Oct 2026 21:52:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4C99940AB2;
+	Fri, 23 Oct 2026 21:52:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l_NXs6iCCKsL; Fri, 23 Oct 2026 21:52:05 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org E6E5C60A4C
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792792325;
-	b=ADeTbwtV7OOcZXRpnWEBgHz5rGDJksFlIp5K/NIOU8KZWaO78mZf92fz/DFEvLKW9nPH
-	 DNqC56dQSpIfuB+INJYdL6SP3mvi2f+q6KYfX66V9Bhk/0V+pVmfveZQEvoARYZrRQ4wt
-	 gR+gyBCPZoe1GFtd5iJ0YiT2J9/uP3soK/Hr2iKaNI/eGYK5hL+g6sSh66I9xrSldbjwz
-	 eook1l/oBGIU+oKM/LZnpH27XN613dNFJFECN4gr8H49+MD6dScE1zMtLLqdbPhJcohU6
-	 rn3Z0QVXfiTvaaBietxpqcN9kuSI4HXPpLf7DN75QMOAv22HEck1mWqR45HyvgUKIBg==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w7J8-Hbp4ho2; Fri, 23 Oct 2026 21:52:06 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 2F31B40AB3
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792792326;
+	b=IvarOGhM4VrbR/K2oluq4+7HutPc1uUS/ej4wfPIfCRLJWHUQRMoXmK8D/HYKnFijCFo
+	 Qg6lp1sJp+UuPZPDobUvp+yMG0Opc4bwgjAHCN7rmBXt9C9pLHJ/gqwPy0+xanxmz0bTN
+	 oFG1mUHpKEl/pSqBM2z1/XkUFPRRUQiPiycUASgx94GFAGD+bbVuI4q9xidoKgDCwn0X2
+	 Gtw/6u7AeAn3LLozpPJ3D4Mli9lYShs0pgxi3NZ7vNuA/G4l7Gf5WcteBWyqUjuLqzhHs
+	 2CMRjxAgTICNCXiitOR3UJWU5PzQqR4C/3NU+q6BUeM6hDpu0IJmcGbHohTDAQaIqdg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792792325;
+	c=relaxed/relaxed; t=1792792326;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -33,48 +33,48 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=fduObpJNMJUox1CI4Dn1JnzEv+0ih4IhdXwLhwxcOaw=;
-	b=iAAz2PfqoIahELspB9dp0Laa0loiMugDwsbQ70CHrYiw9BMczpYJjOd2wDGu/7miS8cg
-	 Mj82fW4xlJCb+YL0S0W5ueodAODS5nUBtjkIKH67+jxRYxepkcWetisUnBNgyrYX1hRZP
-	 WMmSBtdsgEWip5lgqAQYRG1WsnfdbvHX2n36aqfJXlhgLgzHJWZpWqE7Uxanf0EYoro8U
-	 0f4Ch/IjPk1yvA4b3XAnMMmpvZLfK+wwtjvQxZUgeGxstFxWYzLvWiuI72shtRMnJP7Ak
-	 +zCwGf3e0/ua2HawCwN8fu1a3uXJ/R9PO7+O+enW+BdYOEcD7CpTx5gMpNt53ehrmmg==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	bh=X1YwXVFQagvJ/DILG309l/R+EfCde3T6rSA8QkOdy7c=;
+	b=Y7gMVrqLzPIudeYpBKJAnHy4z+4r7lWmg+TQ2DQ2Ua+uX4nvM9bl9QRE+w4lSTAN9NYk
+	 bTJx68Az888KB/r7+cSQgxpDC6UhLpIvp8+B+ah4IKR3vIFzY2CU64qaq+IjUp3LpQK0W
+	 lRVb+wFuX0fUYfQ/0j4WC2sv6Vw/6OP+BiqSfARZl1bEraosJ7ExF7ZBa7jVVjeD8VxYr
+	 vwXYVaM04PwDVuMVY8IwSYE8Uhj/cqgzHSUi+A/tHjhylYCT0sdVj2Zi0axbX62MLdAPi
+	 zeJ1Kj8UFbpdMtFEqWbT/awCa+3Yu+jCYY1//pAvzuJzJUYnelc5Jc+w1f8gEBfrJWg==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792792325;
-	bh=fduObpJNMJUox1CI4Dn1JnzEv+0ih4IhdXwLhwxcOaw=;
+	s=default; t=1792792326;
+	bh=X1YwXVFQagvJ/DILG309l/R+EfCde3T6rSA8QkOdy7c=;
 	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=YaQoKNOVDzzxvYDl31Y0uYXKtPP2mNNE/Ym2tuXwaldCFxI6yBo+gPlBLGMBfe/pm
-	 YZKaWGzkTYn0RvtLrLmlvkjJRa0FOOoncJqysB6C/UAVxlZC29t4wdBqJFreG916b1
-	 gU1MmyD/S3GGDH3HpEpsskwpuzbce6xqq2a7FdQpe7VUMpOn0NAbT6XH/LkpKtKxtf
-	 rgmSk2xAo3zATHN9mkLEmjDPw+G2Q6/Pi9cHcNBhd1l2R3gjhAjxZadWPSBnD+etAC
-	 R/ZexSj5I+dX/89ZyH0eRvSKbBv8pCU5R8u3wMIjq/+ehxb7/BeItEmxmdUbtcKBn4
-	 meD+xsJ1RT4ug==
+	b=MR73w0iolE4AindEBrAf14PylV6jD843Yf06W5pejHbQV5eBFOjy4YaNlKxjmrQLa
+	 Kqs+kmmRky/Zi/pM/0jbZNwY89GHsd5j4VSIP8jmg+V0zpojka8mv4R9vxRCavFuHJ
+	 KAOLkOawmKj2nvEPSJBJSiIqkv7DhFU6HlYhNulWG8rfahR/3GcIul40OyaR8LzZM8
+	 2aR+fTVJupBfBZcLArBlHf91rKzWLZMWYOR8aEqzRjS+HztCi4FzPbndwx+mINTjzI
+	 AhFyuPg68M99hr0MRi5FbzNEmMXYw1ziAQqemX83QqktpGYYW2Qp0SeTAPLoraHk6z
+	 iy4j27HMHJrUw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6E5C60A4C;
-	Fri, 23 Oct 2026 21:52:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 511F53D9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2F31B40AB3;
+	Fri, 23 Oct 2026 21:52:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id BEE2B3D9
  for <buildroot@buildroot.org>; Fri, 23 Oct 2026 21:52:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 42BB28168D
+ by smtp1.osuosl.org (Postfix) with ESMTP id A4B438168A
  for <buildroot@buildroot.org>; Fri, 23 Oct 2026 21:52:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BveRofmHI8rQ for <buildroot@buildroot.org>;
- Fri, 23 Oct 2026 21:52:02 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 016608168A
+ id rZBWf3A-2DCC for <buildroot@buildroot.org>;
+ Fri, 23 Oct 2026 21:52:03 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org C5C848168B
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792792322;
- b=Qbw/9qDm9F59vIbEufPn2d8Xm2CLElhTaw4qUFiToa/Pacmc77LvSTBHa9I9I8gPwh53
- sU8ytqQs7e0kh3UrWYS40MBCm09naH7AfADoEsxz0y2MdHttu70eiCeS0zAOOIccbmAHH
- Q/hrX5Ol/ApRELxDW/zuC+zhWAxvcjbrSU8I0/EXjA4v7g4t8ynwwa4kFTVcOnn/d2bbJ
- FJ+P1dEe+DMesk5lm1s7JOKeTQkWirrFLevNc/5HGvdHn8YxNFMXC/zdG9/HiGhGvuREm
- D30Vwy66mr/0ggc6PBfFI+rtYmwg0tm7SbRRPVmyxlJOnDtVGI9Dd6n/uCxo4x/dyJw==
+ b=PPfp0t18TXo7rYUPZQ06l5B2omGFAHTp4MXTbpOXsOBinT/ANsHhRiILhosouT47XON7
+ Q8AqobWeoEwNUSlFem/6pVF1Emxl/h9Ga7xamNEcEdK3XoGA6XZDyHf4/616jLnoYZ+oc
+ tBY3OZB5N7B/ACzC7c4Ba9FVRDBMsoaTXA2FESbbgAyRVn/9Lp12RnrA6qHU8LAhKKAUY
+ ZLeNbWFENealTNY7UHcjibDOVtbFeuC/3USWj9N6xQdeIdCZcLNxuwtVVa4Js41JJJ8dk
+ tuBxumeOag2aqICbQ8bPBOXMnECEiLKeZJewTlpxxqJKUg/DF0hCp0o0P7f7SNJM24g==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1792792322;
  h=Received-SPF:Received:X-Google-DKIM-Signature:X-Gm-Message-State:
@@ -82,81 +82,81 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  DKIM-Signature:X-Received:X-Received:Received:From:To:Cc:Subject:Date:
  Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-DetectorID-Processed;
- bh=7s3crOcm0cO9txhsfULW544AM2n12I26TXaI3fPK6fk=;
- b=JEGcFFrPAky4T57x7Rr+Jz0r8RAUiXR/CG3uvZLDBe0bBcYjWGQjVRFrhboXMfA0MXwD
- VwCoA/7+N4kjuObubBAtons9Qg1ERPAr+s+fJzQxB/3b5YqAjU7qXy8yrzLQDnUqFa9qa
- 7ixO4vbLFjYOk0nOp0nC9csU64OlCHfeQwbsxkcY7s/+557dtShHiJCIfG5cvEmhMGz7b
- 9cFujerf9p+x4Ag/J6SkgChw2Zc7+BA6bNyBnMHrGrsYQyyVexJor5t3+WPpFeo4fzmbN
- JQ2Gjw5/azzt67f2jbq7dvpZawwUPZTm2Ao3t6zdloYSRr3mgB2mIXE5wYHrRzcONbQ==
+ bh=BRLa4Ph82sT8B51mrhqM6bVi9+vWHnch6wdQ9hS97ok=;
+ b=S78QJZ2o43GtXeWpWNeU9LVMqeLQq4srZS4sxEoqEn5bO0dscX8fyUwGljNuDg7sZMYI
+ s7Xi0cGw8oMN41ILBDa6bY84bI3z8nIwUa0QybYDWFqkZ7qKmzO4GfrT1ouqRILnz+6fR
+ HTeXOFXnh4eK3hqfsgZZFnjNUoWE201SDP/yeWIo2NwPfZQdDSXkVBuG2/AWjmE0eYXnQ
+ AHo2ZCXY4p/BqPmE00RNbKUFCgqhveLKPl6rEv4ahJgezrzsHZcOjMSnoSZRgCMDFb5eY
+ 5QkNRyMT5eQDKHoOakO8G+LOcdShDqrCGkMlCv32E1AZTtl13Wzy6zBOmZzZ8+UpFFQ==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  dmarc=pass header.from=broadcom.com;
  dkim=pass header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256
- header.s=google header.b=YDnnrsk9; 
- arc=none smtp.remote-ip="2607:f8b0:4864:20::1062"
+ header.s=google header.b="HOL/AIWH"; 
+ arc=none smtp.remote-ip="2607:f8b0:4864:20::562"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::1062; helo=mail-pj1-x1062.google.com;
+ client-ip=2607:f8b0:4864:20::562; helo=mail-pg1-x562.google.com;
  envelope-from=florian.fainelli@broadcom.com; receiver=<UNKNOWN> 
-Received: from mail-pj1-x1062.google.com (mail-pj1-x1062.google.com
- [IPv6:2607:f8b0:4864:20::1062])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 016608168A
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 21:52:00 +0000 (UTC)
-Received: by mail-pj1-x1062.google.com with SMTP id
- 98e67ed59e1d1-3ac451e128cso959523a91.1
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 14:52:00 -0700 (PDT)
+Received: from mail-pg1-x562.google.com (mail-pg1-x562.google.com
+ [IPv6:2607:f8b0:4864:20::562])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C5C848168B
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 21:52:02 +0000 (UTC)
+Received: by mail-pg1-x562.google.com with SMTP id
+ 41be03b00d2f7-cd60c5da24cso768407a12.0
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 14:52:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1792792320; x=1793397120;
+ d=1e100.net; s=20260707; t=1792792322; x=1793397122;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:dkim-signature:x-gm-gg
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
  :content-type;
- bh=7s3crOcm0cO9txhsfULW544AM2n12I26TXaI3fPK6fk=;
- b=Xe4BKrOdgs9va5YHgFcf2yUnXk3S7QIJXUe6yMhmUBduSOnzQmrbx7qPjD0A1zgqDF
- j5A9xwobKAz5aLxKVn2A7VcP0V3jUYzW7/Ebi40JNi8Td20zajCOrkj/OK/DVdavRveG
- VBgzA8dUTvSS95xi1kZjKaWTCTHH/hdA7ET3Jaox5MIUe5D4X5osggdj5Hi23UEa1MBz
- aTjarDFKyMxmMrdfi2nTTNi4JZYait4duoUymLFexcM4WqkILFiV0NFkomUCTf8i+BHN
- /+jB/OtOkLy9FK2mb4+o3TX6ACwrerRWeiHrqh8UiFEVSDVyt78EbypW1+C2Zr3L44mR
- IN6Q==
-X-Gm-Message-State: AFq9FYL6WLEPteKCZkgcAok6ewIEgZsSF0vmtsIGUbrlS6Qk1pxzKRJ7
- f0wNLd5hdNHZ9qdPQV96+QePBZpN6jAqsKww31M6otkAeWkqxQ8ElFbWkHr9t/ojq0cfiSrkyJl
- gVHI/nooLgrt1LZV0GAAXpCfqutVfRK6YEnlWie/0JHTw8LXDrkckGIfulh6NQYCpO+cDL5z3n9
- bMdnlYQRAnlyoNwI7tnEZ2Xz6P6QP1NVbe91QrBoMjbSvfcRm3ki0zjOm9I75GpaPyzBrGiydwS
- n8Eaqv05wVu1LA33DW+
-X-Gm-Gg: AYBFou01dw054/10MGnKWVf0OkaspYi2bQFxAo1toXDEnoOB8Ljr4SA+BMv2dXG+r7W
- 9K8Zj2xC6qPcmcXVSx9Mni28qkTtYGIs+XUL2kKBzFKb+gl6B066/LmQFsk4e2mlhaMZKT2++QL
- j260c+f3guzWve+oplLmHTdgCNkknMzB3+cA3XWfsvGpx3IF5tbYwI8kAD+HI3N3hOdCsYGqgeC
- PoG1syCvj9FtM0et7JScz7Zm+vgozwtcCu6Bko0/P1Ln76oVmn/ZWp9V4nW2wCdwzantG2BkjRj
- PtNm9+pSerrFLY/EABxllc9g6EmXG2xRuhWL/xjYhJf1klbKIbCl31IV0M+IwzVVooLKKhT+PJl
- Y4UU8OeQJ/3jxnSxpZj12JsUB6NC810HbFV5JTUfSzSTLB4Pmqgi5dPHT8BQVLHkNVrrVBa1pkc
- ZccS13YItkzdow1xXfE8esLU8h8/w2r/h/s67j5sry
-X-Received: by 2002:a17:90a:e705:b0:3ac:a11a:7c7f with SMTP id
- 98e67ed59e1d1-3adeafa85b6mr405261a91.23.1792792319865; 
- Fri, 23 Oct 2026 14:51:59 -0700 (PDT)
+ bh=BRLa4Ph82sT8B51mrhqM6bVi9+vWHnch6wdQ9hS97ok=;
+ b=H1RwRZWFBsRqjfk4Nzu+LO5K7qeoxV4ULBgIexuZIjIUHSF/GA9W/wkFbk628D52Gv
+ Ej1pJY5ZQINie7OmhEv1e9Ol3BtxGNlzw7p151wrUguhmqct6gm3qknOo/zOckIrn7H/
+ jwK9DEoQzXxH9iV/4JPb431kjj+qswlYAewiMbNbHJhsw9ZL62flAN7f++eHJgeDt7JM
+ EPpYrYuBqg9LUMH49ca+ADiJpo7g3BXOhmz2RAbtaMl+qDX2P3y4EZffUrxRFQY4E9pl
+ VpQAuw5sFqjfQr9p0rtz1JWoq2b2FpeyJdNBehvRw0YOMC4bDLjQ33ePHVMMh7uzP2Da
+ 9LZw==
+X-Gm-Message-State: AFq9FYI+Li8XbDyfQr7DojoEqSJf7g48HeUO2ZRSNQktsxfl0jOQna7c
+ cuZZoZ/H4GTdvQQ/JAH7NEOYCwqlFBYvVEOux7yPLCBVo1gxELIbkvxgz5j6ZfVCTZrunovNraK
+ XR+Tj1dejWE4/SfNZCC1JNspeY5HD2yYC5zoT2sDoq8VOACsSFClHcD3iTd08kk8m6MITnMf1Y3
+ FTb7x+/rHP145q2hjoNAezN3U7fGjmndtTgUpuH1H8Cal0pplnue8wSK68TIZr3Nn2M9f9FE6cl
+ NAFeBPlmoz2IxFhLg==
+X-Gm-Gg: AYBFou3q2xfavmF8kgJAlg/CUtb3igsxn0wtzHfuBqM+VYXpC5mjhENYczo2rXN7OrM
+ momkYltVROrpd6bp5lLd7OAdNOtfU8v7G+IQEmfR5nAilTdaCETrQhfo9Cqcpu4EkpvTTvdHHYe
+ E7iDnczANT8wXmn1GDd7rwWXTwO5dth6ppchd0CBR866QgKwxbzmUne9jfy1q7aBB8OJymV8vtd
+ O/wlbyOrw8HRBIh5aNYOQ4ZO3uK4ny3wzBVKEv8m33j9df8m2sU2ntFpgz4fSSvF6nTPVe29pNB
+ Qpj4Jhi8jRzxe3USNAN8HqDQyQJkRmP4N8vA27cu8q5GacVu/P9p1tHn3hC6ar9c6qGDOwlMFq/
+ 9UN6WKsP5Tjkmh+YyolnVzbNmoSQMeo0pwY3GA1umtyzGC1ziZw5jEHsijwhfRU3WarqpvsVHSz
+ k6SsskimrM7VU4LFYBMuTpLLT4pDgjlTz0mi5OU0kA
+X-Received: by 2002:a17:90b:4d06:b0:3ac:7f4c:a68c with SMTP id
+ 98e67ed59e1d1-3adeb0ff8d0mr481333a91.49.1792792321614; 
+ Fri, 23 Oct 2026 14:52:01 -0700 (PDT)
 Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com
- (address-144-49-247-23.dlp.protect.broadcom.com. [144.49.247.23])
+ (address-144-49-247-28.dlp.protect.broadcom.com. [144.49.247.28])
  by smtp-relay.gmail.com with ESMTPS id
- 98e67ed59e1d1-3adeb83a327sm190345a91.0.2026.10.23.14.51.59
+ 98e67ed59e1d1-3adebb0aec5sm356568a91.8.2026.10.23.14.52.01
  for <buildroot@buildroot.org>
  (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Fri, 23 Oct 2026 14:51:59 -0700 (PDT)
+ Fri, 23 Oct 2026 14:52:01 -0700 (PDT)
 X-Relaying-Domain: broadcom.com
 X-CFilter-Loop: Reflected
-Received: by mail-dy1-f199.google.com with SMTP id
- 5a478bee46e88-33713e5e6daso2175227eec.0
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 14:51:58 -0700 (PDT)
-X-Received: by 2002:a05:7300:d10a:b0:365:d42a:f415 with SMTP id
- 5a478bee46e88-369e847a90fmr719116eec.12.1792792307830; 
+Received: by mail-dy1-f200.google.com with SMTP id
+ 5a478bee46e88-341eff9e381so3405752eec.1
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 14:52:00 -0700 (PDT)
+X-Received: by 2002:a05:7301:4543:b0:369:a113:7560 with SMTP id
+ 5a478bee46e88-369e86249f2mr711400eec.41.1792792309625; 
+ Fri, 23 Oct 2026 14:51:49 -0700 (PDT)
+X-Received: by 2002:a05:7301:4543:b0:369:a113:7560 with SMTP id
+ 5a478bee46e88-369e86249f2mr711304eec.41.1792792307983; 
  Fri, 23 Oct 2026 14:51:47 -0700 (PDT)
-X-Received: by 2002:a05:7300:d10a:b0:365:d42a:f415 with SMTP id
- 5a478bee46e88-369e847a90fmr718988eec.12.1792792305848; 
- Fri, 23 Oct 2026 14:51:45 -0700 (PDT)
 Received: from stbirv-lnx-1.igp.broadcom.net ([192.19.223.252])
  by smtp.gmail.com with ESMTPSA id
- 5a478bee46e88-369e8db450bsm830025eec.17.2026.10.23.14.51.44
+ 5a478bee46e88-369e8db450bsm830025eec.17.2026.10.23.14.51.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 23 Oct 2026 14:51:45 -0700 (PDT)
+ Fri, 23 Oct 2026 14:51:47 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Fri, 23 Oct 2026 14:51:23 -0700
-Message-Id: <20261023215138.2301146-2-florian.fainelli@broadcom.com>
+Date: Fri, 23 Oct 2026 14:51:24 -0700
+Message-Id: <20261023215138.2301146-3-florian.fainelli@broadcom.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20261023215138.2301146-1-florian.fainelli@broadcom.com>
 References: <20261023214807.2151753-1-florian.fainelli@broadcom.com>
@@ -164,8 +164,8 @@ References: <20261023214807.2151753-1-florian.fainelli@broadcom.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
 X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
-Subject: [Buildroot] [PATCH 08/23] package: use <pkg>_SRCSUBDIR where
- <pkg>_SRCDIR used to include _SUBDIR
+Subject: [Buildroot] [PATCH 09/23] linux: build out of tree when
+ LINUX_OVERRIDE_SRCDIR is set
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -198,331 +198,130 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-With <pkg>_SRCDIR no longer including <pkg>_SUBDIR, convert the
-infrastructures and packages that relied on the old meaning (cargo,
-hare, luarocks, meson, perl, waf, gcc-final) to <pkg>_SRCSUBDIR.
+Introduce <pkg>_SUPPORTS_OUT_OF_TREE. For a package that sets it and
+has <pkg>_OVERRIDE_SRCDIR defined:
+
+ - <pkg>_SRCDIR is the overridden directory, used in place: nothing is
+   rsynced into $(BUILD_DIR), only the pre/post rsync hooks still run;
+ - the source-related stamp files (rsynced, patched, ...) live in the
+   build directory so that nothing is created in the user's tree;
+ - kconfig packages start from the source directory with O=<builddir>,
+   which makes kbuild generate its wrapper Makefile in the build
+   directory, so that all the existing -C $(LINUX_DIR) invocations keep
+   working unmodified.
+
+Enable it for the Linux kernel. The source tree must be clean (no
+in-tree .config, include/config, arch/*/include/generated).
 
 Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
 ---
- package/gcc/gcc-final/gcc-final.mk |  2 +-
- package/pkg-cargo.mk               |  8 ++++----
- package/pkg-hare.mk                |  8 ++++----
- package/pkg-luarocks.mk            |  4 ++--
- package/pkg-meson.mk               | 26 +++++++++++++-------------
- package/pkg-perl.mk                | 12 ++++++------
- package/pkg-waf.mk                 |  8 ++++----
- 7 files changed, 34 insertions(+), 34 deletions(-)
+ linux/linux.mk         |  4 ++++
+ package/pkg-generic.mk | 30 ++++++++++++++++++++++--------
+ package/pkg-kconfig.mk |  6 +++++-
+ 3 files changed, 31 insertions(+), 9 deletions(-)
 
-diff --git a/package/gcc/gcc-final/gcc-final.mk b/package/gcc/gcc-final/gcc-final.mk
-index 97a64ae2fabf..570636a81dfe 100644
---- a/package/gcc/gcc-final/gcc-final.mk
-+++ b/package/gcc/gcc-final/gcc-final.mk
-@@ -51,7 +51,7 @@ HOST_GCC_FINAL_PRE_CONFIGURE_HOOKS += HOST_GCC_CONFIGURE_SYMLINK
- # So we must completely override the generic commands and provide our own.
- #
- define HOST_GCC_FINAL_CONFIGURE_CMDS
--	(cd $(HOST_GCC_FINAL_SRCDIR) && rm -rf config.cache; \
-+	(cd $(HOST_GCC_FINAL_SRCSUBDIR) && rm -rf config.cache; \
- 		$(HOST_CONFIGURE_OPTS) \
- 		CFLAGS="$(HOST_CFLAGS)" \
- 		LDFLAGS="$(HOST_LDFLAGS)" \
-diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
-index 47a6353f2592..aae6eb9b61aa 100644
---- a/package/pkg-cargo.mk
-+++ b/package/pkg-cargo.mk
-@@ -234,7 +234,7 @@ endif
- ifndef $(2)_BUILD_CMDS
- ifeq ($(4),target)
- define $(2)_BUILD_CMDS
--	cd $$($$(PKG)_SRCDIR) && \
-+	cd $$($$(PKG)_SRCSUBDIR) && \
- 	$$(TARGET_MAKE_ENV) \
- 		$$(TARGET_CONFIGURE_OPTS) \
- 		$$(PKG_CARGO_ENV) \
-@@ -248,7 +248,7 @@ define $(2)_BUILD_CMDS
- endef
- else # ifeq ($(4),target)
- define $(2)_BUILD_CMDS
--	cd $$($$(PKG)_SRCDIR) && \
-+	cd $$($$(PKG)_SRCSUBDIR) && \
- 	$$(HOST_MAKE_ENV) \
- 		$$(HOST_CONFIGURE_OPTS) \
- 		$$(HOST_PKG_CARGO_ENV) \
-@@ -269,7 +269,7 @@ endif # ifndef $(2)_BUILD_CMDS
- #
- ifndef $(2)_INSTALL_TARGET_CMDS
- define $(2)_INSTALL_TARGET_CMDS
--	cd $$($$(PKG)_SRCDIR) && \
-+	cd $$($$(PKG)_SRCSUBDIR) && \
- 	$$(TARGET_MAKE_ENV) \
- 		$$(TARGET_CONFIGURE_OPTS) \
- 		$$(PKG_CARGO_ENV) \
-@@ -289,7 +289,7 @@ endif
+diff --git a/linux/linux.mk b/linux/linux.mk
+index a90e09afe906..ffec32154222 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -6,6 +6,10 @@
  
- ifndef $(2)_INSTALL_CMDS
- define $(2)_INSTALL_CMDS
--	cd $$($$(PKG)_SRCDIR) && \
-+	cd $$($$(PKG)_SRCSUBDIR) && \
- 	$$(HOST_MAKE_ENV) \
- 		$$(HOST_CONFIGURE_OPTS) \
- 		$$(HOST_PKG_CARGO_ENV) \
-diff --git a/package/pkg-hare.mk b/package/pkg-hare.mk
-index 15dc769311a8..a263b4d42ef3 100644
---- a/package/pkg-hare.mk
-+++ b/package/pkg-hare.mk
-@@ -48,10 +48,10 @@ ifndef $(2)_BUILD_CMDS
- # https://harelang.org/documentation/usage/project-structure.html#makefiles
- # but in real world, the target "all" is not always the default one
- define $(2)_BUILD_CMDS
--	if grep "^all:" $$($(2)_SRCDIR)Makefile > /dev/null; then \
-+	if grep "^all:" $$($(2)_SRCSUBDIR)Makefile > /dev/null; then \
- 		target=all ; \
- 	fi ; \
--	$(MAKE) -C $$($(2)_SRCDIR) HARE="$$(HARE_RUN_CMD)" HAREFLAGS="$$(HARE_ARCH_OPT) $$(HARE_LIBDIR_OPT)" $${target}
-+	$(MAKE) -C $$($(2)_SRCSUBDIR) HARE="$$(HARE_RUN_CMD)" HAREFLAGS="$$(HARE_ARCH_OPT) $$(HARE_LIBDIR_OPT)" $${target}
- endef
+ LINUX_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
+ LINUX_LICENSE = GPL-2.0
++
++# When LINUX_OVERRIDE_SRCDIR is set, build out of tree: no rsync of the
++# sources, the kernel is built in $(BUILD_DIR)/linux-custom with O=.
++LINUX_SUPPORTS_OUT_OF_TREE = YES
+ LINUX_LICENSE_FILES = $(call qstrip,$(BR2_LINUX_KERNEL_LICENSE_FILES))
+ 
+ LINUX_CPE_ID_VENDOR = linux
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 138fe9ccef4f..c8f532e1c3e6 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -221,11 +221,11 @@ $(SRC_DIR)/%/.stamp_extracted:
+ # used.
+ $(SRC_DIR)/%/.stamp_rsynced:
+ 	@$(call step_start,rsync)
+-	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
++	@$(call MESSAGE,"$(if $($(PKG)_OUT_OF_TREE),Using out-of-tree source dir,Syncing from source dir) $(SRCDIR)")
+ 	@mkdir -p $(@D)
+ 	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
+ 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
+-	rsync -au --chmod=u=rwX,go=rX $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(RSYNC_VCS_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
++	$(if $($(PKG)_OUT_OF_TREE),,rsync -au --chmod=u=rwX,go=rX $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(RSYNC_VCS_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D))
+ 	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
+ 	@$(call step_end,rsync)
+ 	$(Q)touch $@
+@@ -559,13 +559,27 @@ ifndef $(2)_STRIP_COMPONENTS
  endif
  
-@@ -61,7 +61,7 @@ endif
- #
- ifndef $(2)_INSTALL_STAGING_CMDS
- define $(2)_INSTALL_STAGING_CMDS
--	$(MAKE) -C $$($(2)_SRCDIR) PREFIX=/usr DESTDIR="$$(STAGING_DIR)" install
-+	$(MAKE) -C $$($(2)_SRCSUBDIR) PREFIX=/usr DESTDIR="$$(STAGING_DIR)" install
- endef
+ $(2)_SRCDIR = $$($(2)_DIR)
+-$(2)_BUILDDIR = $$($(2)_DIR)
++$(2)_BUILDDIR ?= $$($(2)_DIR)
+ $(2)_SRCSUBDIR = $$($(2)_SRCDIR)/$$($(2)_SUBDIR)
+ 
+ ifneq ($$($(2)_OVERRIDE_SRCDIR),)
+ $(2)_VERSION = custom
  endif
  
-@@ -71,7 +71,7 @@ endif
- #
- ifndef $(2)_INSTALL_TARGET_CMDS
- define $(2)_INSTALL_TARGET_CMDS
--	$(MAKE) -C $$($(2)_SRCDIR) PREFIX=/usr DESTDIR="$$(TARGET_DIR)" install
-+	$(MAKE) -C $$($(2)_SRCSUBDIR) PREFIX=/usr DESTDIR="$$(TARGET_DIR)" install
- endef
- endif
++# Packages that set <pkg>_SUPPORTS_OUT_OF_TREE = YES can be built out of
++# tree when their source directory is overridden: the sources are used
++# where they are (no rsync), and only the build directory lives in
++# $(BUILD_DIR). The source-related stamp files must then not be created
++# in the (user-owned) source directory, so they live in the build directory.
++$(2)_STAMP_SRCDIR = $$($(2)_SRCDIR)
++ifneq ($$($(2)_OVERRIDE_SRCDIR),)
++ifeq ($$($(3)_SUPPORTS_OUT_OF_TREE),YES)
++$(2)_OUT_OF_TREE = YES
++$(2)_SRCDIR = $$(abspath $$(call qstrip,$$($(2)_OVERRIDE_SRCDIR)))
++$(2)_STAMP_SRCDIR = $$($(2)_BUILDDIR)
++endif
++endif
++
+ ifndef $(2)_SOURCE
+  ifdef $(3)_SOURCE
+   $(2)_SOURCE = $$($(3)_SOURCE)
+@@ -844,11 +858,11 @@ $(2)_TARGET_INSTALL_IMAGES =	$$($(2)_BUILDDIR)/.stamp_images_installed
+ $(2)_TARGET_INSTALL_HOST =	$$($(2)_BUILDDIR)/.stamp_host_installed
+ $(2)_TARGET_BUILD =		$$($(2)_BUILDDIR)/.stamp_built
+ $(2)_TARGET_CONFIGURE =		$$($(2)_BUILDDIR)/.stamp_configured
+-$(2)_TARGET_RSYNC =		$$($(2)_SRCDIR)/.stamp_rsynced
+-$(2)_TARGET_PATCH =		$$($(2)_SRCDIR)/.stamp_patched
+-$(2)_TARGET_EXTRACT =		$$($(2)_SRCDIR)/.stamp_extracted
+-$(2)_TARGET_SOURCE =		$$($(2)_SRCDIR)/.stamp_downloaded
+-$(2)_TARGET_ACTUAL_SOURCE =	$$($(2)_SRCDIR)/.stamp_actual_downloaded
++$(2)_TARGET_RSYNC =		$$($(2)_STAMP_SRCDIR)/.stamp_rsynced
++$(2)_TARGET_PATCH =		$$($(2)_STAMP_SRCDIR)/.stamp_patched
++$(2)_TARGET_EXTRACT =		$$($(2)_STAMP_SRCDIR)/.stamp_extracted
++$(2)_TARGET_SOURCE =		$$($(2)_STAMP_SRCDIR)/.stamp_downloaded
++$(2)_TARGET_ACTUAL_SOURCE =	$$($(2)_STAMP_SRCDIR)/.stamp_actual_downloaded
+ $(2)_TARGET_DIRCLEAN =		$$($(2)_BUILDDIR)/.stamp_dircleaned
  
-diff --git a/package/pkg-luarocks.mk b/package/pkg-luarocks.mk
-index abcd525fcf8a..9c12ed627b60 100644
---- a/package/pkg-luarocks.mk
-+++ b/package/pkg-luarocks.mk
-@@ -108,7 +108,7 @@ endif
- #
- ifndef $(2)_INSTALL_TARGET_CMDS
- define $(2)_INSTALL_TARGET_CMDS
--	cd $$($(2)_SRCDIR) && \
-+	cd $$($(2)_SRCSUBDIR) && \
- 		LUAROCKS_CONFIG=$$(LUAROCKS_CONFIG_FILE) \
- 		$$(LUAROCKS_RUN_CMD) make --keep --deps-mode none \
- 			--tree "$$(TARGET_DIR)/usr" \
-@@ -125,7 +125,7 @@ endif
+ # default extract command
+diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
+index 8a63d55be033..5e46c62c58e6 100644
+--- a/package/pkg-kconfig.mk
++++ b/package/pkg-kconfig.mk
+@@ -147,8 +147,12 @@ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
+ 		fi; \
+ 	done
  
- ifndef $(2)_INSTALL_CMDS
- define $(2)_INSTALL_CMDS
--	cd $$($(2)_SRCDIR) && \
-+	cd $$($(2)_SRCSUBDIR) && \
- 		LUAROCKS_CONFIG=$$(HOST_LUAROCKS_CONFIG_FILE) \
- 		$$(LUAROCKS_RUN_CMD) make --keep --deps-mode none \
- 			DEPS_DIR="$$(HOST_DIR)" \
-diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
-index f2efbae2eb72..350f597b7018 100644
---- a/package/pkg-meson.mk
-+++ b/package/pkg-meson.mk
-@@ -147,12 +147,12 @@ $(2)_CXXFLAGS ?= $$(TARGET_CXXFLAGS)
- #
- #
- define $(2)_CONFIGURE_CMDS
--	rm -rf $$($$(PKG)_SRCDIR)/buildroot-build
--	mkdir -p $$($$(PKG)_SRCDIR)/buildroot-build
-+	rm -rf $$($$(PKG)_SRCSUBDIR)/buildroot-build
-+	mkdir -p $$($$(PKG)_SRCSUBDIR)/buildroot-build
- 	sed -e "/^\[binaries\]$$$$/s:$$$$:$$(foreach x,$$($(2)_MESON_EXTRA_BINARIES),\n$$(x)):" \
- 	    -e "/^\[properties\]$$$$/s:$$$$:$$(foreach x,$$($(2)_MESON_EXTRA_PROPERTIES),\n$$(x)):" \
- 	    $$(call PKG_MESON_CROSSCONFIG_SED,$(2)_CFLAGS,$(2)_CXXFLAGS,$(2)_LDFLAGS,$(2)_FCFLAGS) \
--	    > $$($$(PKG)_SRCDIR)/buildroot-build/cross-compilation.conf
-+	    > $$($$(PKG)_SRCSUBDIR)/buildroot-build/cross-compilation.conf
- 	PATH=$$(BR_PATH) \
- 	CC_FOR_BUILD="$$(HOSTCC)" \
- 	CXX_FOR_BUILD="$$(HOSTCXX)" \
-@@ -162,21 +162,21 @@ define $(2)_CONFIGURE_CMDS
- 		--libdir=lib \
- 		--default-library=$(PKG_MESON_DEFAULT_LIBRARY) \
- 		--buildtype=$(if $(BR2_ENABLE_RUNTIME_DEBUG),debug,release) \
--		--cross-file=$$($$(PKG)_SRCDIR)/buildroot-build/cross-compilation.conf \
-+		--cross-file=$$($$(PKG)_SRCSUBDIR)/buildroot-build/cross-compilation.conf \
- 		-Db_pie=false \
- 		-Db_staticpic=$(if $(BR2_m68k_cf),false,true) \
- 		-Dstrip=false \
- 		-Dbuild.pkg_config_path=$$(HOST_DIR)/lib/pkgconfig \
- 		-Dbuild.cmake_prefix_path=$$(HOST_DIR)/lib/cmake \
- 		$$($$(PKG)_CONF_OPTS) \
--		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/buildroot-build
-+		$$($$(PKG)_SRCSUBDIR) $$($$(PKG)_SRCSUBDIR)/buildroot-build
- endef
- else
++# For an out-of-tree build, the first kconfig run is what creates the
++# wrapper Makefile in the build directory, so it must be started from
++# the source directory.
+ $(2)_KCONFIG_MAKE = \
+-	$$($(2)_MAKE_ENV) $$($(2)_MAKE) -C $$($(2)_BUILDDIR) \
++	$$($(2)_MAKE_ENV) $$($(2)_MAKE) \
++	$$(if $$($(2)_OUT_OF_TREE),-C $$($(2)_SRCDIR) O=$$($(2)_BUILDDIR),-C $$($(2)_BUILDDIR)) \
+ 		$$(PKG_KCONFIG_COMMON_OPTS) $$($(2)_KCONFIG_OPTS)
  
- # Configure package for host
- define $(2)_CONFIGURE_CMDS
--	rm -rf $$($$(PKG)_SRCDIR)/buildroot-build
--	mkdir -p $$($$(PKG)_SRCDIR)/buildroot-build
-+	rm -rf $$($$(PKG)_SRCSUBDIR)/buildroot-build
-+	mkdir -p $$($$(PKG)_SRCSUBDIR)/buildroot-build
- 	$$(HOST_CONFIGURE_OPTS) \
- 	$$($$(PKG)_CONF_ENV) $$(MESON) setup \
- 		--prefix=$$(HOST_DIR) \
-@@ -188,7 +188,7 @@ define $(2)_CONFIGURE_CMDS
- 		--wrap-mode=nodownload \
- 		-Dstrip=true \
- 		$$($$(PKG)_CONF_OPTS) \
--		$$($$(PKG)_SRCDIR) $$($$(PKG)_SRCDIR)/buildroot-build
-+		$$($$(PKG)_SRCSUBDIR) $$($$(PKG)_SRCSUBDIR)/buildroot-build
- endef
- endif
- endif
-@@ -203,12 +203,12 @@ ifndef $(2)_BUILD_CMDS
- ifeq ($(4),target)
- define $(2)_BUILD_CMDS
- 	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
--		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/buildroot-build
-+		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCSUBDIR)/buildroot-build
- endef
- else
- define $(2)_BUILD_CMDS
- 	$$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
--		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/buildroot-build
-+		$$(NINJA) $$(NINJA_OPTS) $$($$(PKG)_NINJA_OPTS) -C $$($$(PKG)_SRCSUBDIR)/buildroot-build
- endef
- endif
- endif
-@@ -220,7 +220,7 @@ endif
- ifndef $(2)_INSTALL_CMDS
- define $(2)_INSTALL_CMDS
- 	$$(HOST_MAKE_ENV) $$($$(PKG)_NINJA_ENV) \
--		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/buildroot-build install
-+		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCSUBDIR)/buildroot-build install
- endef
- endif
- 
-@@ -231,7 +231,7 @@ endif
- ifndef $(2)_INSTALL_STAGING_CMDS
- define $(2)_INSTALL_STAGING_CMDS
- 	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) DESTDIR=$$(STAGING_DIR) \
--		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/buildroot-build install
-+		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCSUBDIR)/buildroot-build install
- endef
- endif
- 
-@@ -242,7 +242,7 @@ endif
- ifndef $(2)_INSTALL_TARGET_CMDS
- define $(2)_INSTALL_TARGET_CMDS
- 	$$(TARGET_MAKE_ENV) $$($$(PKG)_NINJA_ENV) DESTDIR=$$(TARGET_DIR) \
--		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCDIR)/buildroot-build install
-+		$$(NINJA) $$(NINJA_OPTS) -C $$($$(PKG)_SRCSUBDIR)/buildroot-build install
- endef
- endif
- 
-diff --git a/package/pkg-perl.mk b/package/pkg-perl.mk
-index 1ecf31eff9ca..1fbfb00e3796 100644
---- a/package/pkg-perl.mk
-+++ b/package/pkg-perl.mk
-@@ -67,7 +67,7 @@ ifeq ($(4),target)
- 
- # Configure package for target
- define $(2)_CONFIGURE_CMDS
--	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] && [ $$($(2)_PREFER_INSTALLER) != "EUMM" ] ; then \
-+	cd $$($$(PKG)_SRCSUBDIR) && if [ -f Build.PL ] && [ $$($(2)_PREFER_INSTALLER) != "EUMM" ] ; then \
- 		$$($(2)_CONF_ENV) \
- 		PERL_MM_USE_DEFAULT=1 \
- 		$$(PERL_RUN) Build.PL \
-@@ -118,7 +118,7 @@ else
- 
- # Configure package for host
- define $(2)_CONFIGURE_CMDS
--	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] && [ $$($(2)_PREFER_INSTALLER) != "EUMM" ] ; then \
-+	cd $$($$(PKG)_SRCSUBDIR) && if [ -f Build.PL ] && [ $$($(2)_PREFER_INSTALLER) != "EUMM" ] ; then \
- 		$$($(2)_CONF_ENV) \
- 		PERL_MM_USE_DEFAULT=1 \
- 		$$(PERL_RUN) Build.PL \
-@@ -144,7 +144,7 @@ ifeq ($(4),target)
- 
- # Build package for target
- define $(2)_BUILD_CMDS
--	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] && [ $$($(2)_PREFER_INSTALLER) != "EUMM" ] ; then \
-+	cd $$($$(PKG)_SRCSUBDIR) && if [ -f Build.PL ] && [ $$($(2)_PREFER_INSTALLER) != "EUMM" ] ; then \
- 		$$(PERL_RUN) Build $$($(2)_BUILD_OPTS) build; \
- 	else \
- 		$$(MAKE1) \
-@@ -156,7 +156,7 @@ else
- 
- # Build package for host
- define $(2)_BUILD_CMDS
--	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] && [ $$($(2)_PREFER_INSTALLER) != "EUMM" ] ; then \
-+	cd $$($$(PKG)_SRCSUBDIR) && if [ -f Build.PL ] && [ $$($(2)_PREFER_INSTALLER) != "EUMM" ] ; then \
- 		$$(PERL_RUN) Build $$($(2)_BUILD_OPTS) build; \
- 	else \
- 		$$(MAKE1) $$($(2)_BUILD_OPTS) pure_all; \
-@@ -171,7 +171,7 @@ endif
- #
- ifndef $(2)_INSTALL_CMDS
- define $(2)_INSTALL_CMDS
--	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] && [ $$($(2)_PREFER_INSTALLER) != "EUMM" ] ; then \
-+	cd $$($$(PKG)_SRCSUBDIR) && if [ -f Build.PL ] && [ $$($(2)_PREFER_INSTALLER) != "EUMM" ] ; then \
- 		$$(PERL_RUN) Build $$($(2)_INSTALL_TARGET_OPTS) install; \
- 	else \
- 		$$(MAKE1) $$($(2)_INSTALL_TARGET_OPTS) pure_install; \
-@@ -185,7 +185,7 @@ endif
- #
- ifndef $(2)_INSTALL_TARGET_CMDS
- define $(2)_INSTALL_TARGET_CMDS
--	cd $$($$(PKG)_SRCDIR) && if [ -f Build.PL ] && [ $$($(2)_PREFER_INSTALLER) != "EUMM" ] ; then \
-+	cd $$($$(PKG)_SRCSUBDIR) && if [ -f Build.PL ] && [ $$($(2)_PREFER_INSTALLER) != "EUMM" ] ; then \
- 		$$(PERL_RUN) Build $$($(2)_INSTALL_TARGET_OPTS) install; \
- 	else \
- 		$$(MAKE1) $$($(2)_INSTALL_TARGET_OPTS) pure_install; \
-diff --git a/package/pkg-waf.mk b/package/pkg-waf.mk
-index 0529bb6ddaf2..c41d7314a132 100644
---- a/package/pkg-waf.mk
-+++ b/package/pkg-waf.mk
-@@ -65,7 +65,7 @@ endif
- #
- ifndef $(2)_CONFIGURE_CMDS
- define $(2)_CONFIGURE_CMDS
--	cd $$($$(PKG)_SRCDIR) && \
-+	cd $$($$(PKG)_SRCSUBDIR) && \
- 	$$(TARGET_CONFIGURE_OPTS) \
- 	$$($(2)_CONF_ENV) \
- 	$$(HOST_DIR)/bin/python3 $$($(2)_WAF) configure \
-@@ -82,7 +82,7 @@ endif
- #
- ifndef $(2)_BUILD_CMDS
- define $(2)_BUILD_CMDS
--	cd $$($$(PKG)_SRCDIR) && \
-+	cd $$($$(PKG)_SRCSUBDIR) && \
- 	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$(HOST_DIR)/bin/python3 $$($(2)_WAF) \
- 		build $$(WAF_OPTS) $$($(2)_BUILD_OPTS) \
- 		$$($(2)_WAF_OPTS)
-@@ -95,7 +95,7 @@ endif
- #
- ifndef $(2)_INSTALL_STAGING_CMDS
- define $(2)_INSTALL_STAGING_CMDS
--	cd $$($$(PKG)_SRCDIR) && \
-+	cd $$($$(PKG)_SRCSUBDIR) && \
- 	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$(HOST_DIR)/bin/python3 $$($(2)_WAF) \
- 		install --destdir=$$(STAGING_DIR) \
- 		$$($(2)_INSTALL_STAGING_OPTS) \
-@@ -109,7 +109,7 @@ endif
- #
- ifndef $(2)_INSTALL_TARGET_CMDS
- define $(2)_INSTALL_TARGET_CMDS
--	cd $$($$(PKG)_SRCDIR) && \
-+	cd $$($$(PKG)_SRCSUBDIR) && \
- 	$$(TARGET_MAKE_ENV) $$($$(PKG)_MAKE_ENV) $$(HOST_DIR)/bin/python3 $$($(2)_WAF) \
- 		install --destdir=$$(TARGET_DIR) \
- 		$$($(2)_INSTALL_TARGET_OPTS) \
+ # The specified source configuration file and any additional configuration file
 -- 
 2.34.1
 
