@@ -1,29 +1,29 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30014606A31A
-	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 21:16:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A03C9606A31E
+	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 21:16:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=fb5JF2rq;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=EeB8IwqK
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=oMWsuUPK;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=GVw3zU5A
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0429E40A92;
-	Fri, 23 Oct 2026 21:16:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 73213815DC;
+	Fri, 23 Oct 2026 21:16:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3igguRXcksxV; Fri, 23 Oct 2026 21:16:44 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org D543140A93
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792790204;
-	b=KqdNxivx/qXHLl//THEFG0zk+0J3XURBgAM3gBTSeGT9HkfRDXVKiK7DYB9da5NtVdeX
-	 VVS9/An14ELhkFTR/kGHvlcfji4NHLu/8y4pWB3VN+Nu0iuGZbA8Ji7yh7qcv2k3Sm94Q
-	 O8w5SGt8bAihJRDFd5Fe5LJqYKBvWg2Ej2NdNpESnqWAkIq71MXrwM62PntzhyAP0eeRX
-	 fB0g50XSyDjnu+O4f4PIDPky/Q4Ejx7F8lHNL5U07gZ+ie/tPC/8dIe/2ewOcikkJmKd1
-	 pB2adWtFWErL2jlUuta7fABLhhZc6Cuwkyg0/6DJnqCMvyYoJ30OFyTLx1Bteq7OLAg==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ww-Q8OXi6_S0; Fri, 23 Oct 2026 21:16:58 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 437F68165B
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792790218;
+	b=qyrZlduRQ+JESHnZQcBA+T3lBlm5AZ/WaeQclu2cbMxC79qp28jbh3gZEVG5HqC1eQ1D
+	 nUpjLJWW0w0D01YQscF5iHSMeILx/zMuzSzcrU0jZjDrKTpBcBG1AmUuhqYHjCPuuPgGV
+	 +wp4gRCkN0LisJgs8eHoJ7aCZcr6RaL+UkPyXcbRpEuaFHzZMyW1WWAaEzrk8qzltHQox
+	 w0n2EnLL8zvooDTknUrPgmM+BWg8Lk7PKBJZoP1nVnlEBrk6y6C+Zbz3K8NRhbMN9vGCd
+	 zwkwkcpq6tE7SjbaEc0MwdiTfXWGAoQTkbEDTd0epp8b8wPHSQr2BAajf9G/FPVYl8g==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792790204;
+	c=relaxed/relaxed; t=1792790218;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -32,122 +32,124 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=Gw1+ALzYH2+RaM5cRltBmyozSkE6tpLHYECkrLLovuc=;
-	b=J9p2K5FdMSsFhkMay2Hlv/LKJqGK8wy7vawqevXWI3xwWY4kKUiXhvk5eGuTVRT0L0Wg
-	 StA1ZTMqcfqpkBjXIe+EX42RdCmtbfrSYhdKTmrHm4W/mne1DDoJIIuvJ7iDEM+VI6OwJ
-	 wQ0FXpmuH5e0nuXTAYDKRtZaRCKVTRfeDaZptUXDb21P3Qhhbx+Q4/6/u5LPLHsWuNtSU
-	 Elr9oOuTkJtA0pnuIifOfDA5SiERVHOp8XQCPSukF8CcHZoI01D0p7IajkjIvbix2SNc/
-	 8w0n8eL0bERJyW/eUeNaMmBIiWJxlb0FDR+mIzzwzF7sTpvwj/sss2f+7HKJroCynAg==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=WaOUR6LMW5w0AQMCQglDj5wluMN3tIWfeY/30+iVTus=;
+	b=myRAI5MLcwu0QJs8IKdHOVBigKbG0MYTsAOra23BGQDZmpaD2VDKWBCS4ljpNoD++5YN
+	 eDT++rhymlulGA3rW9aSIV4wnSN7QXN6Q10SYdbsOqivC2N1U1L+I24cCRuFu3fbfbOe0
+	 viCRj6Z0dvhFyVehZCn990RfNnHCQjbjgWeOkG9kWl9XboFihjCCrE0Z/P8++nXVS6rUT
+	 RSZgdHedjqdTwOfWusPGqWfSyR+L5ZVdHbz45WJJ8vGXxYCHXTfp7kWIbYeQ+n3y3y5ef
+	 eYB5ha76RG3NChgDnT4n7yMF5j6kAI4WyrrxP+zWbFTM3pIM/uQajtBrEb57pQ7AkZg==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	dmarc=pass header.from=kuhls.net;
+	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=GVw3zU5A;
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792790203;
-	bh=Gw1+ALzYH2+RaM5cRltBmyozSkE6tpLHYECkrLLovuc=;
+	s=default; t=1792790218;
+	bh=WaOUR6LMW5w0AQMCQglDj5wluMN3tIWfeY/30+iVTus=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=fb5JF2rqtcgYol0ciEViImxLmsqoPpWiKTZCOFl6WjK3eKq1ZiZhrImgXnKkwUYDG
-	 furAz+yw1+AqPnlWHNQh0+UJOhWw9Kq26y6Ghfg8WqWu9cuBPam29Bz0iCoJ0aux16
-	 21a3l+dxXsLb76a5R1MFDrPEDefLN2yI9j9DCP+af75UmOKX/OxokALmYhEJuT4dP+
-	 GYmxro3Udox0UBoXaoQ0k5+h+pUDYyvwViji298O9IjF1dGSf9WDOwZG8CbqPyEups
-	 /EafygSr3UYWgcgCMwo0KwwZLgkzn22TTcuhVVsEgQB4eGV7O7clXpCTuiipp+k4OX
-	 jBGAd0MWfYn6Q==
+	b=oMWsuUPK5TWh1fDXwCF+HEOModKzeSv2tbVdobCpKRwI+jZCtn+BiWyoF4eLN4b6o
+	 16FyT4xSjPtD96s7qNb17NQ/kblvFwoiIRS9+mzWtDw4GlNz+kfEmEqWbWoKJk/ob9
+	 oRQpt6BNmzmg39DlolgzD0mP2OmZulqhD2aOC2g8RCPiH+946Mrdbw8+z89eAfkcEh
+	 sFFVKfXyWMcY/dih0zAT57MO3PFmnIuqkZKNK+QbM0Xdtclc2vsK5cXHwcxOfwmQpt
+	 gNnDozMGfV5G+e/8DchZiSyoHn2+2yo0MIHnLCOhF15Z50lX7+4XozYaAEbHktXPAM
+	 SrLTWIKJBnRsQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D543140A93;
-	Fri, 23 Oct 2026 21:16:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id A4D523C4
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 21:16:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 437F68165B;
+	Fri, 23 Oct 2026 21:16:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 010A43C4
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 21:16:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A21AC40490
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 21:16:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DB5BD8165B
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 21:16:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YpFa8B5BsDLd for <buildroot@buildroot.org>;
- Fri, 23 Oct 2026 21:16:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 9B06940474
-Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792790201;
- b=S5RGdKIydhznIAKJ0l0qv/8ffdSVPWnd71XQuTtlbB26yiCJiV8klRKbZmaP0VjAaIwE
- nUc3V9QbNmxPTLQAKFScvToY38fKZU4CSC0JDcIp9HZ+SNXRuaB3KoGdX0bf2Aw5VY9CS
- SR+QgaycITOHHsO3eGXsGrYgORtAE5utAW3pHG7LJvKesDR2Tzfmq0HFz0HVHK6oBfkeE
- Q6FBiRh2EPrsg4A+9oUWGpUBwsvZOe8b1ujRMx5UE8IYbJGhBF8P+QJcEQm9ytuQyNV0s
- B2yWP2mkSYZpP9eZFy5Glp/axJ2Wg1ucIoWF/HbRi5ZZ9DJ/k54l987iQl+8AHnWzUQ==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Lem9VuDTaDqA for <buildroot@buildroot.org>;
+ Fri, 23 Oct 2026 21:16:55 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 7BC33815DC
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792790215;
+ b=lYITBJikJxxAgN7vZUOcN6KwNLx+JBenby07rQ9DQWxaL75w7ePghyRfA05FFmfcqukt
+ ahV0v1ZK1tkXrvMT4a33EThoKWeYj0qWK2TqOZyj8mFSUzFHVAHRF7x6gV8cUxRW+YRKb
+ pPwDmGze7IZ4jBT4NwBX5Ol6vClvgqZ99210V4hlgmgffW9E9XV/QCpctlrihLOdByEXn
+ 7QObkiB5DHSwhQWApLytooPaHLbnYn14t6VIY+wwYODn2jyKsAALYnUsAww/csIh2Kx5G
+ ZI63CFLbY7acI/GNEm4zG/tXYdBX1H8b86kxpSvTH4t2rhXOj0Ywv9UoCPy9T6hQV1w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792790201;
+ c=relaxed/relaxed; t=1792790215;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=/eVfcsljOBJCxogKXZFwNp1gAvSVwSbJbNzyPsJo6o0=;
- b=I6GM48IdoMJ8pzCUHUIWFpKa3NocetOp9VUynoM9KwLQTRS7YROhZVDAmyfZZFT6Mq0I
- 6YZ7up5Yd+IIlkWOTzYMVBO2+6nUq3J0vvu0CZIJZcPE54AlWtOKk/wMQxf14+OcunvhS
- jEu7+7o5Ebu2LbVJagO/H6NC5LiyMLI7iqPl338tCLa8n1MvqXsPNADoC1GgVbRWCEzRA
- pvMZ98UdIw9hyFEIbGjUnSqQdy//f4WBlu9E0FVtQT6OgLPrmHu9eAY0EF0lQ4KUOxOQj
- uOYtqYlSvCDZ14UjgBIb7YAc+klGLKwn+ZKtoyXyAIhhR4E2XsEq2o79rmSAVY40liQ==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ bh=6DlcsNG+DKddRnJDvxCXrGwJGcYl2uCRdkViOzauOwE=;
+ b=WRdAy8zyo289RIBoppfkmiljayfVCIyYSFRFgupAKAYf2AuMDSkoOoKbN82vsEhtbmmQ
+ 4VOyyV+HUuDMkVcqBqa9txd0vE0GL+evCfy+EI+azOkI6N5vCUnWNCUzsBpDycZH9fn5u
+ 5pgzUUxz2LOK4CetXu+YNhUM3ZjLWQXH9+pdTZYq9L/NzUYXFTsUgUR6XIgOx6re6cDRG
+ vcCqp6h8VQvkOEQNavzrBBKh+Nt4Bf8zX3Yc34raO2G7USw7hQp1pLznrEpkMT9t7Iuet
+ 1x+S0kUMqoDsacMr/Fpwf3uTNVb/8nlKcntfMb7nPj0saOkGYXkW7AwqGuiIJ1xawNQ==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  dmarc=pass header.from=kuhls.net;
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=EeB8IwqK; 
+ header.s=kas202605290044 header.b=GVw3zU5A; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
+Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
+Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=EeB8IwqK
+ header.s=kas202605290044 header.b=GVw3zU5A
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9B06940474
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 21:16:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7BC33815DC
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 21:16:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1792790182;
- bh=/eVfcsljOBJCxogKXZFwNp1gAvSVwSbJbNzyPsJo6o0=;
+ s=kas202605290044; t=1792790183;
+ bh=6DlcsNG+DKddRnJDvxCXrGwJGcYl2uCRdkViOzauOwE=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=EeB8IwqK26eEA7wyMwl16smwQf0lGylXnKWGgbSNNMyf6J9nC8AM7SYPGS52LUJOc
- CHQPp3RtBkDcfAx+2VM/itGVoBk6Eg7prCQJLDSgg3fpLGf8glZenT+8gq7mj3PU6J
- 7Cal2hsM357Q0QKbobVqAz0q7i7aAIjH5hXYZhwkY1HgISnGAftG63Oqclpk11OqDX
- Qtk0z9MyKkqWpLUK9ExtkamdMKhdTzJHZijjZ5f4U925ohymx7XO8Pa0rH92JsRZl9
- qcwNBuSjjC22ZeJtrd5m/dDFsNWi3uac1uN2/5Lme8Orjgz58n1sjhJvkBUJOryI1d
- ALUJ5uTzpoJiQ==
+ b=GVw3zU5AAvf2ZLlJoygrVnTPer2TEHEkulDC9AUlNz2m3eu3l0rvw4M/E/0viGLO1
+ 5q3TekkT+YwVVDM2J1p1puKD0mFDmR+Sce+p5x+/tUJnc/M5jaR2UkdQDq3FdsXE8w
+ Z3Y8xmTQHn0dNGfLkeSqQpdayTKLLfZFA81I6wS6JJuPAD/RpFwGdA0DMNSsH1BRqy
+ ewo7ZoJnMTKlPlkiEAcVQk62Rt5gFt0SHd0e2nD/Bo5cFfb1meCn1SMnL6BFXZROMx
+ n4w8UQ9h1V7Q3/p8pu9pq26Xm8Eb3zrjyyLKiUZgXqS6F0Weya39u76dIRwU1XpjV3
+ Wpe6Z/VGiW7QA==
 X-KAS-Sym: v3:f51bdf72230551df:YQnrCVOyQTYqHcX7/s5yotzTnrVz65+Dzp6MAZJ+SVYAZ
  FfXy6c8x4QD3oOA/6VMQJlxhP+bhQ6ku5NDC2l/n9r11qYAKdcXLuotMdBF85g3NTWv2f+tNs3Z
  +ScI2dQYrWUxgEnjKZpNXqu9rp4TuG1CgE+CGfSmRzU0CB4w4X6f1vObzjTrX0gZ9twAGRuIYWE
  pP3EUkO4N1q0JVwHe6KVzeYwyIUF9JsZJ5P+kVciIGvKs9ETulcxrjtgfZaatakimoOKpkbqCfw
  sWNp6hwY6fyz1Udjb4VJK9FcXAMv/mS8QbDtTBhSdADn3xBP3Pt0ssbLdetdlSR1h/soPpAQ==:
- pou3kb/5cJUY1aFCpgIYWSJFIDTQNkT+pW3BRfmZlpyIeydyLSJlPByTLauyXJlaHPsYRdpEkHA
- ZAaLYhqh7PakIg7eFfkIaQKvsXAaIJWdVPulxui+1v7BG4Da1H2VyC6NknMXeFnkB2CECUZVLi/
- kzb2bDZnVE3qSVeQ0lqK+eUulfqvVVvdCNTF7ESc43IKMJzZetqir+fo1TqFvHVaV87Jj7GUFGp
- EvxGWZD2vrAJnj2Lk0UkyGrYDdMxQbcJODs90/vL+mp1t7nR2op9agpueveu5DlCTIyoBGdDDVc
- bvec14zvshN7OlQAE7URVBcNiDrYuF0aStCVv451StUY4C0h3ZXErX/OxGcgS8PxzvIpMh7pmU7
- KLAF8invXk+pRTCitoaET//GWZA16qFpGZWdbwIPm4o5n2FNsw+ZpDuaBXDm+5HGpQ+RC1yc/nU
- 9qz2J8WKhg4B4zPZokvSZVUA2wmqdMOXuUoxf2TsUMwQGyUl+i0/577iSJ5Azx50F1KgGuWyfji
- s9WUvTR7d+0E+he4HXtwZ6k6/Zr33Lh4vZGulZgpxEWbybR6MPofrICl6BGR8Lc7nxCppyLFnzb
- u0XGt1yAdsrymadqfxpzys8irIqy1StOhU9vCeNAyEjKVtv5ecNKLcN8KlsMXXzpHbDpmHH0mdd
- Fnjbo4lnGgnDM7Imvow==
+ /X+KzUqIe+NP7dX7fMjjAL84XW9YRUjuRoXLfbi9A9TT94DuNsWorCXWFzHxRPA014zpEPpSyNi
+ ybcChrIda3KEMo3x2KDIhzY787wpRAKB2s0m1i586pr+gGFwsB0ic/xDg8SOCKnCYCUuCMM5q3y
+ ghTOGphPiSIchqd+XiUZKsND2RyT87IG9HoQhBo5HBeiLeSPsNEnTyimE4AIfwpKegSA+EM/pQ0
+ cTwdUyj75W5PLAAdLk28EBZGlvbRhtcqaMI/Xbwr138BhpqFZWUZygksIJ/JK2sYhkU1y3N54Ez
+ 4Ae3LTqDN53MO1ztQrUbMGJwjUxQTuYh+CX5KFLvMlhTYJ86FO82XVj9QeTrk9wT+buTTdcTdaO
+ 30+vXi8qQERqVv9j5Kv1gp/CbcYAtSdJc1TF0BxpDVkxWEJtQKkvlhn8BbsVPn1a61a9RRN2Skx
+ ZkGU5fsXXh17x8AaoDEVPFa917eZaUEYUTFz7xJsN/+MRq2UZBCt8GRbyx4vjN2ubmiAKm/a9Ah
+ pOS6HSk2xTo8TyJ10xnNH3C10nP+ROKkoa5CnWwbJztDwLW1+xjliOIy7Q5VQRVs90VZYBeYPQR
+ AL2HaCVqLMQNvXNSl3Z7LnC181DGiYeciwSPnZm7i3A/12QWXd7+sjc5Uej31E3vnrD4ta7hr1I
+ fzz9mTpS08FGP/MoVYw==
 Received: from fli4l.lan.fli4l (p5b3a054b.dip0.t-ipconnect.de [91.58.5.75])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id DAE57A4C6934;
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id F09FAA4C6936;
  Fri, 23 Oct 2026 23:16:22 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:50400)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xKMcg-0000000069z-0FJN;
+ (envelope-from <bernd@kuhls.net>) id 1xKMcg-0000000069z-0s7m;
  Fri, 23 Oct 2026 21:16:22 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
 Cc: El Mehdi YOUNES <elmehdi.younes@smile.fr>,
  Joseph Kogut <joseph.kogut@gmail.com>,
  Romain Naour <romain.naour@gmail.com>
-Date: Fri, 23 Oct 2026 23:16:19 +0200
-Message-ID: <20261023211622.2096562-2-bernd@kuhls.net>
+Date: Fri, 23 Oct 2026 23:16:20 +0200
+Message-ID: <20261023211622.2096562-3-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261023211622.2096562-1-bernd@kuhls.net>
 References: <20261023211622.2096562-1-bernd@kuhls.net>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
 X-Spamd-Bar: /
-Subject: [Buildroot] [PATCH v3 2/5] package/mesa3d: precomp-compiler does
- not need target llvm
+Subject: [Buildroot] [PATCH v3 3/5] package/mesa3d: crocus Gallium driver
+ needs precomp-compiler
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -160,180 +162,73 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-16.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=4.0.1
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Inspired by and fixes
-https://gitlab.com/buildroot.org/buildroot/-/work_items/180
+Buildroot commit 59ed1137e9bb8c0157be3dc91a1cc462211dd3c7 bumped the
+package to 26.0.0 which added upstream commit
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/b72d347d1c3b9e829971fbdabf993b68776083c1
+requiring the precomp-compiler for the crocus driver.
 
-To build binaries provided by the host-mesa3d package we do not need to
-build llvm packages for the target arch.
+Add the necessary dependencies to fix a configure error:
 
-Added configure options for rtti support to fix build error when
-BR2_PACKAGE_LLVM_RTTI is not enabled:
+../output-1/build/mesa3d-26.1.8/meson.build:945:3: ERROR:
+ Feature llvm cannot be disabled: CLC requires LLVM
 
-output/build/host-mesa3d-26.2.3/meson.build:2042:8: ERROR: Problem
- encountered: LLVM was built without RTTI, so Mesa must also disable
- RTTI. Use an LLVM built with LLVM_ENABLE_RTTI or add cpp_rtti=false.
+caused by
+https://gitlab.freedesktop.org/mesa/mesa/-/blob/mesa-26.1.8/meson.build?ref_type=tags#L945
+
+which checks the value in the variable with_clc.
+
+When the precomp-compiler is not provided by host-mesa3d the meson
+configure option mesa-clc does not contain 'system' causing
+https://gitlab.freedesktop.org/mesa/mesa/-/blob/mesa-26.1.8/meson.build?ref_type=tags#L939
+the variable with_clc to be filled, among others, with the content of with_driver_using_cl:
+https://gitlab.freedesktop.org/mesa/mesa/-/blob/mesa-26.1.8/meson.build?ref_type=tags#L939
+
+which contains 'true' when the crocus driver is enabled:
+https://gitlab.freedesktop.org/mesa/mesa/-/blob/mesa-26.1.8/meson.build?ref_type=tags#L925
+
+So we need to provide the precomp-compiler also for the crocus driver.
+
+Fixes:
+https://autobuild.buildroot.org/results/baa718e140264a9aa64c3a8f4114ca1b05f740e3/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
 v3: no changes
-v2: added note about new rtti configure options (Romain)
+v2: no changes
 
- package/mesa3d/Config.in | 46 +++++++++++++++++++++++-----------------
- package/mesa3d/mesa3d.mk |  8 ++++++-
- 2 files changed, 33 insertions(+), 21 deletions(-)
+ package/mesa3d/Config.in | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index cb86e6a2a4..feed6b68fe 100644
+index feed6b68fe..e18d25eb8e 100644
 --- a/package/mesa3d/Config.in
 +++ b/package/mesa3d/Config.in
-@@ -23,8 +23,7 @@ config BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS
- 
- config BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
- 	bool
--	select BR2_PACKAGE_SPIRV_LLVM_TRANSLATOR
--	select BR2_PACKAGE_SPIRV_TOOLS
-+	select BR2_HOST_CMAKE_AT_LEAST_3_20 # host-llvm
- 
- config BR2_PACKAGE_MESA3D_LLVM
- 	bool "llvm support"
-@@ -147,15 +146,17 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915
- 
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
- 	bool "Gallium iris driver"
--	depends on BR2_PACKAGE_MESA3D_LLVM
+@@ -110,10 +110,18 @@ comment "Gallium drivers"
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_CROCUS
+ 	bool "Gallium crocus driver"
+ 	depends on BR2_i386 || BR2_x86_64
 +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # host-llvm
 +	depends on BR2_HOST_GCC_AT_LEAST_7 # host-llvm
  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
- 	select BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER
++	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
++	select BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER
  	help
- 	  Mesa driver for iris-based Intel GPUs.
+ 	  Mesa driver for gen4-7 Intel GPUs.
  
--comment "iris driver needs llvm"
--	depends on !BR2_PACKAGE_MESA3D_LLVM
-+comment "iris driver needs host gcc >= 7"
++comment "crocus driver needs host gcc >= 7"
 +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
 +	depends on !BR2_HOST_GCC_AT_LEAST_7
- 
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA
- 	bool "Gallium lima driver"
-@@ -189,15 +190,17 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST
- 	bool "Gallium panfrost driver"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
--	depends on BR2_PACKAGE_MESA3D_LLVM
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # host-llvm
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # host-llvm
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
- 	select BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER
- 	help
- 	  Mesa driver for ARM Mali Midgard and Bifrost GPUs.
- 
--comment "panfrost driver needs llvm"
--	depends on !BR2_PACKAGE_MESA3D_LLVM
-+comment "panfrost driver needs host gcc >= 7"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on !BR2_HOST_GCC_AT_LEAST_7
- 
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R300
- 	bool "Gallium Radeon R300 driver"
-@@ -360,46 +363,49 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_IMAGINATION
- 	bool "Vulkan imagination driver"
- 	depends on BR2_arm || BR2_aarch64
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
--	depends on BR2_PACKAGE_MESA3D_LLVM
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # host-llvm
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # host-llvm
- 	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
- 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
- 	help
- 	  Vulkan imagination driver.
- 
--comment "imagination vulkan needs llvm"
--	depends on !BR2_PACKAGE_MESA3D_LLVM
-+comment "imagination vulkan driver needs host gcc >= 7"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on !BR2_HOST_GCC_AT_LEAST_7
- 
- config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
- 	bool "Vulkan Intel driver"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd.h
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
--	depends on BR2_PACKAGE_MESA3D_LLVM
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # host-llvm
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # host-llvm
- 	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
- 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
- 	help
- 	  Vulkan driver for Intel hardware from Ivy Bridge onward.
- 
--comment "intel vulkan needs llvm"
--	depends on !BR2_PACKAGE_MESA3D_LLVM
--
--comment "intel vulkan needs a glibc toolchain w/ headers >= 3.17"
-+comment "intel vulkan driver needs a glibc toolchain w/ headers >= 3.17, host gcc >= 7"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 || \
--		!BR2_TOOLCHAIN_USES_GLIBC
-+		!BR2_TOOLCHAIN_USES_GLIBC || !BR2_HOST_GCC_AT_LEAST_7
- 
- config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_PANFROST
- 	bool "Vulkan panfrost driver"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
--	depends on BR2_PACKAGE_MESA3D_LLVM
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # host-llvm
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # host-llvm
- 	select BR2_PACKAGE_LLVM_RTTI if BR2_PACKAGE_MESA3D_LLVM
- 	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
- 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
- 	help
- 	  Vulkan panfrost driver.
- 
--comment "panfrost vulkan needs llvm"
--	depends on !BR2_PACKAGE_MESA3D_LLVM
-+comment "panfrost vulkan driver needs host gcc >= 7"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on !BR2_HOST_GCC_AT_LEAST_7
- 
- config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_SWRAST
- 	bool "Vulkan swrast driver"
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index c103345e86..04112eea8e 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -178,7 +178,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER),y)
- MESA3D_CONF_OPTS += -Dmesa-clc=system -Dprecomp-compiler=system
--MESA3D_DEPENDENCIES += host-mesa3d spirv-llvm-translator spirv-tools
-+MESA3D_DEPENDENCIES += host-mesa3d
- endif
- 
- ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),)
-@@ -347,6 +347,12 @@ HOST_MESA3D_CONF_OPTS = \
- 	-Dglx=disabled \
- 	-Dvulkan-drivers=""
- 
-+ifeq ($(BR2_PACKAGE_LLVM_RTTI),y)
-+HOST_MESA3D_CONF_OPTS += -Dcpp_rtti=true
-+else
-+HOST_MESA3D_CONF_OPTS += -Dcpp_rtti=false
-+endif
 +
- HOST_MESA3D_DEPENDENCIES = \
- 	host-libclc \
- 	host-libdrm \
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
+ 	bool "Gallium Etnaviv driver"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
 -- 
 2.47.3
 
