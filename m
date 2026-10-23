@@ -1,120 +1,142 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B273606A320
-	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 07:38:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29387606A31A
+	for <buildroot@archiver.kernel.org>; Fri, 23 Oct 2026 07:44:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=FpaWGMdO
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=i/cgdYmV
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5251D6064E;
-	Fri, 23 Oct 2026 07:38:39 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wyxOS571Te-x; Fri, 23 Oct 2026 07:38:38 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 7962060650
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792741118;
-	b=N7UyaF0b5HOJOBQavc3kZyYWRV+Y89SxP/JubI5CyXz6CxmEnvZC7aAFhlVVEzXvSjlo
-	 FM+ESHyFY/11zQtsUn1RPGqFs/Rw/bxM/z/r+/r4axyo1g/4gUlri0tWslu2gatpr3JfR
-	 o8R928iorSfUowa0OBn8cLaZM9qwMQGOMRwBiP8jmBxMLCMxnGvNtFRj7wkkFgLH4gSeq
-	 z7fio/ku4kzkfrGSHo+OmVxc9Y56qh5sSPmrdBMnrMmBWedsQrd4P/fqDx6ZfwIVAFPt1
-	 +SxCJZcvw/yrM97J0gF9TOPNO/DwW0W9FcIq+OPbmhKfbreyNmjYRkHMw1hkPgybTPA==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792741118;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:Received:Date:To:Message-ID:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=nutd59RseHCXnYKlz5eNJGVbRvWg0xq34VpTTk39ZIQ=;
-	b=kwdBJpfEKZIWdObDeQ+b9tzuhfeDKadUJ9w2RZCYbR4VUbdkGDArSkIfoFyXhntgFHfk
-	 hL9s3AUAAzefMyDZ7+Nk9w4dkGSqtuYD3QSiOufPmESx0LTXa/sCXVoLvKMtVqvokY34A
-	 sRUeYumEXYz9qeNgochyjkkJVACHdko4/mrNzYw1XU9td02oAZPaUyUZ0Q4QRkJ7z4qoM
-	 s1dncatn2uf9XX3sKlu80EznW5VhFCT2ggRfigoCLdP24vf8Kt0nTEhVqva0ZJBTwwsCf
-	 W4Qvw80O6sZMKSSuAQ9JyPczp2zLH83pQgJtCK7RWsTJLvvJowqfgWIvZbNw8FJJZVw==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
-	arc=fail smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792741118;
-	bh=nutd59RseHCXnYKlz5eNJGVbRvWg0xq34VpTTk39ZIQ=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=FpaWGMdOgHY7pgVsAQWx+UsCzysv4KjP6kVn43Itypp8bhT7fu5gI1YnQNa6ICZ1x
-	 Xq6NbNrPjzxDV6IpnDjW2GcrmXsyo3c3nr2/bYGRB9XmP5FpwQIh7J1RwQFz0C02s7
-	 B8BbqiT6Pl9WZ/hWft+sTkh+Si1m20SoMAHRnseyE9bdwZ4ZffecAu3jkfrjQeeusk
-	 hR1Co1hlDsPl69dxNxE0GwVNyPI9gfQKrPwtvCAxZLD6i7xbSL6LAgHKQtyozbyLQl
-	 mXBZVsvwjYjP3amicmMO5xk3aQB8REuWEg3MUs+8+BCWgIKVO5wWl2MBiatA8pbmE9
-	 ToRYjutCVs2vA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7962060650;
-	Fri, 23 Oct 2026 07:38:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6B49649D
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 07:38:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 689C680D2D
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 07:38:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 008D580DB0;
+	Fri, 23 Oct 2026 07:44:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nFf-oRUyPNKL for <buildroot@buildroot.org>;
- Fri, 23 Oct 2026 07:38:36 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 6985F810BA
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792741116;
- b=SvwOhdaf4A5Vo3eUko6LmixgEazc3aNJz9QZ6QuQYzM9YSotU+JE5+f43D4ibIJ4wjwv
- Y4bV4+vC/BdWUidj5amd+H1GUQ56XWCxbc7YZm4sH8hmSJV1zDKlC2Ssp+UgFiTAsR5q4
- DCu3w1FP2jrckbo+llhIThWJpA/dE5BXfjmoO0jgRxRVJlRvEeBe5NnDwI1SAIWg0Qy+V
- CVRkxk4nIDX3Q0f5ZF48QDpR9mOYyZU4sJaDz6oYrVQP7cacvJpP5MJuZ/DXGi1lIMSgg
- rnul5RoVJgnVClhR59T+GvSYiwy1N+qnhwQKh/tIyGfVEDvxkxLtx2ToWeYjVKLLdWg==
+ id ngnY_LIeVWji; Fri, 23 Oct 2026 07:44:39 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org E715080E04
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792741479;
+	b=kli3vkObhsEawBsVFE9hfT1LmvIFvqg+g3sItQxmyURQnMV5KbI0/GH1g8jwLPnTliTL
+	 FS99PaUwXGg2aWfHgV0SxbrIbW0DwcO9oZH26a7ugzx13LImUZu4eMnJisKV/LRw/KiLn
+	 r+jL+LpWvC09YQuu4wIDRgKTGfiENXH5c/z0k1PBpVhmxi4sQnUvkn4wci3ENaT2i9KcT
+	 oKCW3Hy1bHyQHrlLF3iLuH/cw79LZIpW2oDVx6TU56IMalZK7/Uj+rfJ2q/NpflS9ai9V
+	 zudpyEHTbZzq/9pzQYaGv1UCnYkfybm6jqt7Y5ZI7ZYwt7djvpHYAyEtNsMsnH93CtA==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1792741479;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 Received:To:Date:Message-Id:X-Mailer:MIME-Version:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=5KfRRGsdI24rFjiCDqkB0cVzACRCbXSoO5lo5h1rvCQ=;
+	b=ns8Y19IdbVV7mHESaqWOWoDbqEpkRQLuzho+E6yBjPEDj3wi4fs2dGFN0HIwxQ5zc80z
+	 /MmDMR1bi4BUwBaNApTZShksUo+QZOdKitdKGVZyHfnW1h9rdgj6jb+0eJRwJGYntrAke
+	 r24NHmA8yuO6HMBStBaFCo7qRN+NMvV3wEoBjBjAGgNM3BJd8KMaaeHGvHGojtQTqBy22
+	 w/NdLX+IDfNMs197TmdTaYIoyleZJWOs9VbQCB70Q2O5ynFgytVTtWHZ1HeveUm7+PtrJ
+	 H1SqIhxvjKZvAoW02FmdUn69yrQP0alXBRXcSVz3sJ/ppJ/HBBuxtk2S8e/E+d+0gCQ==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	arc=fail smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1792741479;
+	bh=5KfRRGsdI24rFjiCDqkB0cVzACRCbXSoO5lo5h1rvCQ=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=i/cgdYmVxzTWt2ojR/wU1Sv2Lys8VcdMKya21YZoxyTF19yB/8Rsi8XKQZtX16n24
+	 OSn7ksBXHk5ErcwK1SaEPw94XPcSeP/LRN7q1rmYWrBc8A5dcA26yjOeC+wsRCFA8a
+	 lY62AM4sI7d2cDA8IAFgnP2r3O4wvGvteW9tSDs1BZJlmsp+snMDPeO8Ipe4cfFWdC
+	 PlAo8xIG0n8OgsI4c78+/7abloC3H4GMtQnsqMgG0vHwpIASQHWGCvctHYwrL8nGkH
+	 1ok9SYxVqsJB/uQh9eUvdK0okGhnBX5DozUH1ge1nlT3uMOwvrO2ANV06tUonob4qd
+	 FOah2TgmOlXqg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id E715080E04;
+	Fri, 23 Oct 2026 07:44:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0B71B356
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 07:44:38 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id F0D0F40782
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 07:44:37 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Jo1BIcWgotQc for <buildroot@buildroot.org>;
+ Fri, 23 Oct 2026 07:44:37 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org ABF6140820
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792741477;
+ b=NCFWs34gO+V9Vp/FIeQ6zhNgsG9YrJzHx5QWZ88DHqr1LiAcLonkrAkDvWfzwRhEY9Z+
+ 59ahhCTv16T9g2Vcoc3jvPgZMnB3Ce/LtL15yKN+y9hlVn/wkSyILUjKdIH3sePFYAdIu
+ Nn1vvLaeOHP7/Ktdd38WIMCwqqxkz3lndmpTSYgAmU0OOQPmOLP++dXHpOfwjzNrvvaZF
+ 7hoCe7FthWIGeLZSwA+LJ5GaTY7F2QQjhU117ZAnXO7YFM29O879XgFLlT3MPFqa1AS1U
+ uQBsbtLgHpnE27KgMZEslRaBlgMAzkIWhHWEvIz3q4BkATRlUSxRqchnPM30y7+Xw0A==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792741116;
- h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
- Subject:Message-ID:References:MIME-Version:Content-Type:
- Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
- bh=CTe+TO70m3NsOnt/mBAKELzCiseNebKc+XdhpZNFeIA=;
- b=kukwZ6+YvDZBVopBCiTsIiXilnu2N3T5f1skadY2mx0EQiUCp+gtXsstSZP3biU9Jyqw
- INDiFXjsNvz8OUoPjMnQuzmZPwMFxlNcw2L6LYYg1VlTUT+xMtlwqZmCE3gRbhqvbeNIZ
- Db2jGb027ZqhbnozySnvyxHHDSmhrj6W/2wdXKF1QZjBc7K7+Fn8m0oEot1jqGs9m3A1C
- 6BpPTvw4mzuPODfOsG7WDa/ydYxXjWVZRUWJXemqQGIOKPpBZbS5cK+WqQhHws2RYntu7
- BPvre2XUW0G+Pu6uMzwLFhXbCRfvN6uLthsk2795Qm7TAKi/tWJ8RR3TERFk17FdOoA==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
- dmarc=pass header.from=bootlin.com;
- dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b="voLiO/mc"; 
- arc=none smtp.remote-ip=185.246.84.56
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
- helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6985F810BA
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 07:38:36 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-02.galae.net (Postfix) with ESMTPS id 7F9A61A1274
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 07:38:34 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 5459F60398
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 07:38:34 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id AB5DF10328EBA
- for <buildroot@buildroot.org>; Fri, 23 Oct 2026 09:38:33 +0200 (CEST)
-Date: Fri, 23 Oct 2026 09:38:33 +0200
-To: Buildroot List <buildroot@buildroot.org>
-Message-ID: <atsOr7voZR_wkANg@windsurf>
-References: <20261011074658.1888569-1-thomas.petazzoni@bootlin.com>
+ c=relaxed/relaxed; t=1792741477;
+ h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
+ X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+ Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+ bh=2bRaEa/xfh3ajIqFigdry9U3uli4mH5QKidRtZoTZk8=;
+ b=eCXa/DGocrtuGS8h078y1V/dzk6UyMP1A96GeletmAgzv6jmKlUtw3vrKyM8EmcxehHC
+ xYQ+ahpWbhRRGyYUizJi9sX8iCOwm33sLv+G2OiP3TTbvLQiohBDqCdJnt8WvfuoO/Roi
+ xJ9I9SZgonnkEkhgpGIItax0vd8+L0+CZFrZGWY466aGtUBjKgbg4BsuAwq5xgqcd8KUn
+ e1OftQ2MmLjyRQXG9pDeoDDArHmcV4mlEP2RPgY7k1ca+u2LokLnYEmBiiv4Y4P0CltZV
+ QH/Rtws0aI/95mKeE7gqNUsdm9UkwDOBn+GXg1BDz6EA2+UkuDDb7quCum7uovX1CLg==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ dmarc=pass header.from=googlemail.com;
+ dkim=pass header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256
+ header.s=20251104 header.b=TuwH8R5u; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::636"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::636; helo=mail-ej1-x636.google.com;
+ envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
+ [IPv6:2a00:1450:4864:20::636])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id ABF6140820
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 07:44:36 +0000 (UTC)
+Received: by mail-ej1-x636.google.com with SMTP id
+ a640c23a62f3a-c2afa22e1dcso81483966b.1
+ for <buildroot@buildroot.org>; Fri, 23 Oct 2026 00:44:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1792741474; x=1793346274;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=2bRaEa/xfh3ajIqFigdry9U3uli4mH5QKidRtZoTZk8=;
+ b=FO8EZ/UqyMTYb4bp3maLx8R3o+oXbzioOoNuf4DppdQE1nSpeCMu/LKiXioHRu+4w6
+ 1o7F/ZhwcLGp4OQJ+DT3ajpdQ1mhdyAO+t4DgYpBabHkqOmewxt+U1zGITwAuYmlU2zz
+ ikVkpYU0LHpA/XbDykCr3Ys7ST/XFNv4rWHU8R30KVwIhylPMCxTeL9J5ml6vuPT2GnG
+ x9XrApIjrYfXivUam6XPbHf263tL7Tf7Ibtw1Q75JOgUqyw0fSlgl+xNZVljblrrKIBT
+ 3ND9+c2MxswU4aZ/uVv6QTA88cWjdElwufgsoSs9wjCToPdDXwYmYCNPim4oOe3S7yGX
+ Zzvg==
+X-Gm-Message-State: AFq9FYI9725/WOFg2N0H/dmSJS04AlCjc947YWVVbaKAPrkijrJEkWIY
+ vznnpy1ECKe13PV0fZx2G4OOZ7fqo9zmXH99jIBRpSS82lXse9XijqcM1J1rzg==
+X-Gm-Gg: AYBFou35oTtfg434Z+nOfZzwDDTAq4EhClN2gzJqlPykM1sZLss2q3Bne4HUsIT54F5
+ JqB5zJRKt9Rr7HjMa4VxS9DyfBuYOU8eSecgMH2yXcHXmc1inFRjIXFwuXTqhqNkxmqFI6VV+3Z
+ Z+R1rYT5FZ5cPhSO4DM6tJvMAYFR4d1s0joxP55SNl9lZi5gsTv1lwVajeGxBBKHjo0HaQUONx5
+ 00/1FMwjAdVjZPZNsGmrYUKoaoquVNAHztCIuIPISde6//nMQkwOGDeB1TfZGx++WejWqdEHObq
+ tCE0W+KP+dhKiCO3Ho+atHb1pax42bs5R1FWYRfeVQPsOdLtKnYwjMdMxc+IhOct2DTPtQdkyNi
+ PpKfQ60KeC6XRBPHzDFuvpytMkT5iowSMKJIy2VNjGlywWvlKA9tjyK8rd9J+05h3UuIJBlopWd
+ D9nIpscikJGqSdXmHlG0NTf3mt4tJIIEh5g572vkpUQ4awQSLTzIBN29/kX1PB+bUCP8xt47TD5
+ Tz1m+EJqZeBA8fSR8udOut+m91EQB4LM79t4TkkoDTYazd1lAH2Fk04wUGLFLhiReDdpYtEBya+
+ CiJn4fGQ40ltp1+iQxKl+TapNSAG5v1dFgU=
+X-Received: by 2002:a17:907:6096:b0:c3f:e414:d35a with SMTP id
+ a640c23a62f3a-c46a90f499bmr201018666b.26.1792741473934; 
+ Fri, 23 Oct 2026 00:44:33 -0700 (PDT)
+Received: from development2.visionsystems.local (mail.visionsystems.de.
+ [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-c46a5c4d54dsm71846766b.24.2026.10.23.00.44.32
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 23 Oct 2026 00:44:33 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Fri, 23 Oct 2026 09:44:32 +0200
+Message-Id: <20261023074432.947659-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.34.1
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20261011074658.1888569-1-thomas.petazzoni@bootlin.com>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH] package/pkg-autotools.mk: further refine
- libtool 2.6 patching
+Subject: [Buildroot] [PATCH] package/python-remi: fix build when
+ setuptools_scm is installed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,58 +146,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
+Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_PASS autolearn=ham autolearn_force=no
-	version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-On Sun, Oct 11, 2026 at 09:46:58AM +0200, Thomas Petazzoni via buildroot wrote:
-> 5dbba2616f287cf6d333a0849ef870b0ce49f24f ("package/pkg-autotools.mk:
-> also handle libtool 2.6.x") added some patching logic for libtool
-> 2.6.x, in order to fix a build issue in cryptsetup, which uses libtool
-> 2.6.2.
-> 
-> However, the change in this commit applied the newly added libtool
-> patch to all 2.6.x libtool versions.. which broke libmodbus that uses
-> libtool 2.6.0, and unfortunately the ltmain.sh in libtool 2.6.0 and
-> 2.6.2 is sufficiently different that the same patch doesn't apply to
-> both.
-> 
-> So we:
-> 
-> 1. Rename buildroot-libtool-v2.6.patch to buildroot-libtool-v2.6.2.patch
-> 
-> 2. Introduce a buildroot-libtool-v2.6.0.patch
-> 
-> 3. Update the logic in pkg-autotools.mk to apply
->    buildroot-libtool-v2.6.0.patch to libtool 2.6.0 and 2.6.1, and
->    buildroot-libtool-v2.6.2.patch to libtool 2.6.2 and later. Note that
->    we didn't test with libtool 2.6.1 as we didn't identify a package
->    using this libtool version: we for now assume that it will be like
->    2.6.0, and will fix later if needed.
-> 
-> Fixes: https://autobuild.buildroot.net/results/3faf9e6889cbe33019141450a95023c730a6d03c/
-> Fixes: 5dbba2616f287cf6d333a0849ef870b0ce49f24f ("package/pkg-autotools.mk: also handle libtool 2.6.x")
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+python-remi fails to build when host-python-setuptools-scm has been
+built before it:
 
-I took the freedom of applying my own patch, because just yesterday we
-had 23 build failures of libmodbus because of this, and I believe the
-patch was quite obvious.
+  File ".../setuptools_scm/_integration/setuptools.py", line 174, in get_keyword_overrides
+    assert isinstance(value, dict), "version_keyword expects a dict or True"
+  AssertionError: version_keyword expects a dict or True
 
-Best regards,
+remi's setup.py first calls setup() with setup_requires=['setuptools_scm'].
+With a PEP 517 build, setuptools' build_meta backend always raises
+SetupRequirementsError for it, so the bare except fallback is always
+used, which calls setup() again with use_scm_version=False. If
+setuptools_scm is installed, its use_scm_version keyword handler still
+runs, and since setuptools_scm 8.0 it rejects False.
 
-Thomas Petazzoni
+Add a patch, submitted upstream, that removes the use_scm_version
+keyword in the fallback instead, so the static version is used whether
+setuptools_scm is installed or not.
+
+This issue has been present since commit 8937db8dd595
+("package/pkg-python.mk: migrate setuptools to pep517"): before it,
+setup.py was run directly and the first setup() call succeeded when
+setuptools_scm was installed. Combined with setuptools_scm >= 8.0
+(bumped in 2024.02), it therefore affects 2024.05 and later, including
+all maintained branches.
+
+Fixes:
+https://autobuild.buildroot.org/results/cf1985c008c0af6a0a2dc08f98ae426b3b17874b
+
+Fixes: 8937db8dd595e0988751e5dbb568e870b07b39cc ("package/pkg-python.mk: migrate setuptools to pep517")
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ ...drop-use_scm_version-in-the-fallback.patch | 43 +++++++++++++++++++
+ 1 file changed, 43 insertions(+)
+ create mode 100644 package/python-remi/0001-setup.py-drop-use_scm_version-in-the-fallback.patch
+
+diff --git a/package/python-remi/0001-setup.py-drop-use_scm_version-in-the-fallback.patch b/package/python-remi/0001-setup.py-drop-use_scm_version-in-the-fallback.patch
+new file mode 100644
+index 0000000000..67190a4519
+--- /dev/null
++++ b/package/python-remi/0001-setup.py-drop-use_scm_version-in-the-fallback.patch
+@@ -0,0 +1,43 @@
++From c653ab24e36ef6c4190e70e064e8102401247428 Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Fri, 23 Oct 2026 06:08:41 +0200
++Subject: [PATCH] setup.py: drop use_scm_version in the fallback
++
++The fallback setup() call sets use_scm_version to False. But when
++setuptools_scm is installed, its use_scm_version keyword handler is
++still invoked, and since setuptools_scm 8.0 it only accepts True, a
++dict or a callable:
++
++  File ".../setuptools_scm/_integration/setuptools.py", line 174, in get_keyword_overrides
++    assert isinstance(value, dict), "version_keyword expects a dict or True"
++  AssertionError: version_keyword expects a dict or True
++
++The fallback is always taken when building through a PEP 517 frontend
++such as pypa/build, because setuptools' build_meta backend raises
++SetupRequirementsError for the setup_requires entry. So remi can't be
++built whenever setuptools_scm is installed in the build environment.
++
++Remove the keyword instead, so that the static version is used.
++
++Upstream: https://github.com/rawpython/remi/pull/554
++Assisted-by: Claude:claude-opus-5-5
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ setup.py | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/setup.py b/setup.py
++index ffcda9a..1abc27d 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -26,6 +26,6 @@ try:
++     setup(**params)
++ except:
++     del params['setup_requires']
++-    params['use_scm_version'] = False
+++    del params['use_scm_version']
++     params['version'] = '2022.7.27'
++     setup(**params)
++-- 
++2.34.1
++
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
