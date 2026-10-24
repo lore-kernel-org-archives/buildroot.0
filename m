@@ -1,118 +1,105 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2817606A31F
-	for <buildroot@archiver.kernel.org>; Sat, 24 Oct 2026 17:18:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C9E0606A31A
+	for <buildroot@archiver.kernel.org>; Sat, 24 Oct 2026 17:54:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=k10VNhgf
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=e1pkBkRb
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BA85380883;
-	Sat, 24 Oct 2026 17:18:48 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IWiB45wTUhxi; Sat, 24 Oct 2026 17:18:46 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 3420F8087C
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792862326;
-	b=AvvvMmnfbJlwTR/r6G05ox425h9psqb8bHJwU8GEIhXw5SBeb4z+B+Lrvv92kFhlkeMH
-	 HgNXxFhMVD3HTxT5fmSgSNQPhPpcb0vrFd9yPkRnOg86THCb82FvTHyCtSGbPoHXXrfY+
-	 jqHOp12PTcdJlFQBIPBpPvYUoTolAONLXU4YPZLHQ5ApZestYwtqN1uIc09W03vqaxIoR
-	 M/705SP81IPQ31gr7vp9p/hu6vPm5ET/X+HpNk292RqjaJWbvstZE6GifoF0CFwIwE7Tj
-	 CXZMTi91G3bGTXFXspaEnALt6XQ4O+7PfKIXPqPPg9y8lLgRMLI51pPmj1xTSKpG5Gw==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792862326;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:To:Cc:References:
-	 Content-Language:In-Reply-To:X-Last-TLS-Session-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 Content-Transfer-Encoding:Content-Type:Errors-To:Sender;
-	bh=Xl4ECzR6/mDdRaGc1INFQO+ozFzem0GurjVCOp6TBVs=;
-	b=srOiT2THbTcxkCN8EfVzEdAxV/Rv2QEt1y6Zk4At80jnYDFH2SUNuWzxJ0LYWUZeJ22R
-	 qAo+uJNDSW6P11tDFL4HwqrYnEiaNXMFfusqhKfXfvk4LACmSn0eukFOPc3w/zLrIVSR9
-	 AdpYOjgGRn4pbtpMjbsg884U4WEYJiyIQlSyf38PYCh/T2jVCIQ9ndJr+f6svYfosAKQw
-	 69UuQMRj+Et8BIDw0Smvk7EUQTLwT97jBa2SI0DwmvSr3O3VZRMMGtBLNnv1p4b/Rr/A2
-	 vekpKW1j6YVKqgJsUfCQqiwyLBL7nEX6NwVUw6NoSSgE3aOWc+/63K6Xw2MHrbCH7fg==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
-	arc=fail smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792862326;
-	bh=Xl4ECzR6/mDdRaGc1INFQO+ozFzem0GurjVCOp6TBVs=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=k10VNhgfdkD4nMUi0ANz5rD/632pHxfF4drFUjyYQ9tztxDzT6idNF5qplEaOM/sN
-	 5NlK3q0DNabGdEdmF7WdtI3XOwooJ9ZcWSG4T9jnBs3T9CCbPh4q9oP5Ra8qrOrkur
-	 K9Imu4Bg6/1Tnacgvhg+y/uXUqJawY7P/yhjXfCsyDnpIZ3olgLwE5Reu71V47XHw7
-	 gV6oqBd+mwFaUYuNDWS/2PsZUFZRaG8wKWu+BfmyoujkGk/W9MZbAelHUULUG9/hNx
-	 5B8DNvQ5yLrHWu8GmZDfQjy2aMJQisyB/YArpyyMQwgI49fHHfadoymDnbn4sMa7GE
-	 qa6dMhHr5k2YQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3420F8087C;
-	Sat, 24 Oct 2026 17:18:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id EBA424D1
- for <buildroot@buildroot.org>; Sat, 24 Oct 2026 17:18:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D2290403AA
- for <buildroot@buildroot.org>; Sat, 24 Oct 2026 17:18:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F3EB40528;
+	Sat, 24 Oct 2026 17:54:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tQI7H1mqRm3m for <buildroot@buildroot.org>;
- Sat, 24 Oct 2026 17:18:44 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org E89BF402DF
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792862324;
- b=ZuhaKoDFmM+kmBimLUHSgtt5/GXLZF0Wq1FXOWmhzalcAFAkJgx3wSOTjCzn43NwsCkX
- TwP+cln9CbuBnEbxJ4k+xAFN71Jp+4HoCsjpFfeeg5aMUzytazIFqtiTN2waAfew//doK
- /GlWSePytHubOeIwqLb5ZUUz1cOB6SE5OWQ/VlnBzhz9KRbEnpVI8RpEEpa4fppF5Ug0V
- VACrZ4v9FzZvOy4kfb2QL3D0ZieDB0/Du4TH3FnxUl1FhxqW+zHl6E2wzUY4H/5NSZjtb
- Z+F4ZDNTxiUxm+nuG+SIr0gRy3sSMIcl74YdiFACwQNhCB6PoI5o0tu9ACP1n4WiM0Q==
+ id AysYgK8jJfNU; Sat, 24 Oct 2026 17:54:15 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 661D640692
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792864455;
+	b=qz/hFColeaOSHBGwm3poLJBycSZfaU6Al7s98J3DKBv0FhLkQ93CI2DkrzGKNb9gOgBf
+	 TbQcq/5pZhvxvPjYKGCkTC8xS27pxIX4WQSOG5XRLgDSvJm3XpwqBAMfakV4eZtWuNsUD
+	 DiS+NroMOASvvISKdW6nCFOhCbYn+B6HMzXDfmmJ3GUsPtu7/trWRL5T4RAiVFsZC+/yT
+	 33iF+CXSFWkzFgRMLT8jevKd+51jlGXFL8jBWCSqFX+5wZuvTU6ZqIisHgKoF1TNwxupa
+	 L53x4YtPxyGRPd0Eo3blNg2/wU69fVIcd+vl9E0h05bfJYh0SdcJZJrNZnVI1dmvVnw==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1792864455;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=r+q9zTHqhXebXlI5H45WWyI10pRTauPHET8rh/xlCbo=;
+	b=ZLOt30LhTtSoiibfaI/3k0sJf/KyfCCQ51U9SCifdcDng0vm5ua6ze/fu4DltouzwnTt
+	 vYlfe80TLeT50jIvQGAWpvQn1OpTOlo0kJs7xSb306NzrRB3adHUrpwWn1ewiUL1T8wF7
+	 aSzfP0mPM0FvG+iddzQvDRb3qDkpWYT3dkpc9WVxxbnxoe+uIc+In+3jEUOp1XJqsJgNc
+	 eufAWEqD9DQXj6eHUTsSOvnvhgtfXiXW0sYYKD3Thwm/3cY3pO68JoyY9k24sUhuKk3p+
+	 u1rhrKWDfmBS4c18qEUHIF2Kmo42TZRikLZtgVvUACMfQz48wS/xpm1Snw3ooSW8+ng==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	arc=fail smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1792864455;
+	bh=r+q9zTHqhXebXlI5H45WWyI10pRTauPHET8rh/xlCbo=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=e1pkBkRbFzxZhODYxRdpvGgDI3JGqSDr9v7XbcCxQOu/00V9utYXxN8u8s23RmQGt
+	 mo7qSvGpWfd/p+0QbBHNf0cfGhubBrSNOO0l+69fmRBzEfUpw4Ti7pssIv/1zYzSid
+	 shjNFVpZp3famvBLz4VnBrWQLuZRj71ZEOtatqPQnw1Tk/1eJRpjISOQZ+tSscAPo2
+	 e3ibPdsSN26JMPMv1Sp+mvV85nx0+kQguhdUgnOB9uD82XyV+6sRHDEWx7iGBMpBW0
+	 bQOgXwEhRu61wC77dPiOYvifpXLV98BcSw8GbafKZtLjPSHE9EZH7edjmmLY1l5NCw
+	 zRRS4YOQFG+1A==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 661D640692;
+	Sat, 24 Oct 2026 17:54:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 13B6D3D9
+ for <buildroot@buildroot.org>; Sat, 24 Oct 2026 17:54:14 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1113F811B1
+ for <buildroot@buildroot.org>; Sat, 24 Oct 2026 17:54:14 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Hbchs6s-xDrb for <buildroot@buildroot.org>;
+ Sat, 24 Oct 2026 17:54:13 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 22A6A8124D
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792864453;
+ b=YnwCeO3XPc2mYmpZOlPHIcEjk2c7XuxJ0uWsBe+O30ih3FcQlAjEd8LwV8ay5oKERMvs
+ 8UzgBFcew/wytM/KAtueevaLVowaFbHslnGv4SASSmfJP94PJbm+gAzAB4bIRtD+o1oMw
+ VARVCXiOybZeUok86QwM3mlZknv50PBe1tyk2vcl48KCDG3TIkwg0FRhJJJws6E7pu/71
+ xPg4TFFfN0TaqgNXy5F1EmBPm19zH0uT7aNh7FuvlhAyRai+I8/X/11xOPt63kCYVYyz8
+ n0zKp7SqsWe0dtmplxUjaW6fBa1ow0ZGvzOc8jbcQ4/BPCyYOO46+BtY3m7p86VPAdA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792862324;
- h=Received-SPF:Received:DKIM-Signature:Message-ID:Date:MIME-Version:
- User-Agent:Subject:To:Cc:References:From:Content-Language:In-Reply-To:
- Content-Type:Content-Transfer-Encoding:X-Last-TLS-Session-Version;
- bh=20OC9mWqxtME1LoB6VFE9J9HyE4Xu55hhyhinuU79r0=;
- b=QR2zl/LNG1kTNUwyan3K6/J7ZuBAAoxdIBlTVt6GVEXFAEWMZnZDmzcQ1gewwydt0aw6
- zG0Zlw9TyG+FUqsE1I/jKBxIWpMmFYJvBwU0f4c4AAX8lq6MdvDEjxHySDRH3j5qJDiiE
- TnQhAvkqTtZ+LjHHINTi8mEJciaWLPjG7YLsy5pofKpMt/PJBdw7M3yuB2xaEEg0i8o2J
- eOrqoY+vLDuo84Z2D78p6vgmEbFhbFkUmvB7OAtX+L9ipBAEXZ14ilwojvZiAJU5NuB6A
- dpP0qbJra/7EifrA5JljrFuy2xK8OKKAVaOCCFnOSZEERfhm+x4o8rx+gp9gb9gHhhw==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
- dmarc=pass header.from=rnout.be;
- dkim=pass header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=Xs7z5n4r; 
- arc=none smtp.remote-ip=79.99.201.12
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
- helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
-Received: from mail.nubo.coop (mail.nubo.coop [79.99.201.12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E89BF402DF
- for <buildroot@buildroot.org>; Sat, 24 Oct 2026 17:18:43 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 30A1BB97A533; Sat, 24 Oct 2026 19:18:40 +0200 (CEST)
-Message-ID: <7f66d899-c3aa-45a1-9e71-2e2afd586bb6@rnout.be>
-Date: Sat, 24 Oct 2026 19:18:38 +0200
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Baruch Siach <baruch@tkos.co.il>,
- Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Cc: Julien Olivain <ju.o@free.fr>, Mark Corbin <mark@dibsco.co.uk>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20261020202639.1094960-1-ju.o@free.fr>
- <20261020202639.1094960-4-ju.o@free.fr>
- <562ad192-b09a-4470-a02e-e3b0d5b2af00@rnout.be> <87zew6t6is.fsf@tarshish>
-Content-Language: en-GB, fr-BE
-In-Reply-To: <87zew6t6is.fsf@tarshish>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH 4/4] arch/Config.in: change default target
- architecture to AArch64
+ c=relaxed/relaxed; t=1792864453;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=7Scg/3Gvn97SW1xPc6y3mVHTanXthtc3xRTKiIGof94=;
+ b=SHb56VEQ/RGOKXckBnbAdWpmStjeuqMt7ZR4vHbFKpS0wEWuOfqZQQCnw+XuXV9diK86
+ GFeY7yFySxQ8MotET9JNBKy0O7UEF09t+b7oMKStDqEbtP0j14Pru+bGHP864Hvxz8ubh
+ RKBqUjSvRqXPTbVUXMcOer3Vw7fFDDdKnSBMUa6t4hhjrlPY5CJlg0gCJTn+NBCsTknPA
+ 5axYNpiZJXB6Q2IWonv+/u5/PmxJu1NWwA859emJMC8pm/mV9dD2fMp3s2GG+EEU0+NQQ
+ TqBmqSFifJSzBDAj19o3SSEZGO89Ie4j2bzT+cAWYRbWj1eSfzutA5TAiqdyHNvpYRg==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 22A6A8124D
+ for <buildroot@buildroot.org>; Sat, 24 Oct 2026 17:54:13 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0960C9C7BD; Sat, 24 Oct 2026 17:52:48 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 24 Oct 2026 19:10:28 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 105c0187151202fcb2f79a11e9f4d4b21f85f3ed
+X-Git-Newrev: 80a5e7af62e6bb4b963173391d3547a1f879fe25
+X-Patchwork-Hint: ignore
+Message-Id: <20261024175248.0960C9C7BD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mesa3d: precomp-compiler does not
+ need target llvm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,63 +109,187 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@rnout.be>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
 	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/80a5e7af62e6bb4b963173391d3547a1f879fe25
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
+Inspired by and fixes
+https://gitlab.com/buildroot.org/buildroot/-/work_items/180
 
-On 22/10/2026 11:43, Baruch Siach wrote:
-> Hi Arnout,
-> 
-> On Thu, Oct 22 2026, Arnout Vandecappelle via buildroot wrote:
->> On 20/10/2026 22:26, Julien Olivain via buildroot wrote:
->>> This commit switches the default target architecture in arch/Config.in
->>> from i686 to AArch64. AArch64 is now one of the most common
->>> architecture on embedded Linux systems. The default CPU for this
->>> architecture remains the Cortex-A53 (Armv8.0).
->>> While at it, this commit also refreshes the .defconfig to:
->>
->>   Do we even need this .defconfig file? Isn't that a leftover from very, very,
->>   very old Kconfig?
-> 
-> .defconfig seems to be Buildroot specific:
-> 
-> support/kconfig/patches/01-kconfig-kernel-to-buildroot.patch:
-> Index: kconfig/confdata.c
-> ===================================================================
-> --- kconfig.orig/confdata.c
-> +++ kconfig/confdata.c
-> @@ -30,7 +30,7 @@ static void conf_message(const char *fmt
->   static const char *conf_filename;
->   static int conf_lineno, conf_warnings;
->   
-> -const char conf_defname[] = "arch/$ARCH/defconfig";
-> +const char conf_defname[] = ".defconfig";
+To build binaries provided by the host-mesa3d package we do not need to
+build llvm packages for the target arch.
 
-  Well that's stupid... We don't need an architecture-specific defconfig, we 
-don't need any file at all to "seed" the defconfig. So I've sent a patch to 
-simplify that.
+Added configure options for rtti support to fix build error when
+BR2_PACKAGE_LLVM_RTTI is not enabled:
 
+output/build/host-mesa3d-26.2.3/meson.build:2042:8: ERROR: Problem
+ encountered: LLVM was built without RTTI, so Mesa must also disable
+ RTTI. Use an LLVM built with LLVM_ENABLE_RTTI or add cpp_rtti=false.
 
-  Regards,
-  Arnout
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/mesa3d/Config.in | 46 ++++++++++++++++++++++++++--------------------
+ package/mesa3d/mesa3d.mk |  8 +++++++-
+ 2 files changed, 33 insertions(+), 21 deletions(-)
 
->   
->   static void conf_warning(const char *fmt, ...)
->   {
-> 
-> baruch
-> 
-
+diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+index cb86e6a2a4..feed6b68fe 100644
+--- a/package/mesa3d/Config.in
++++ b/package/mesa3d/Config.in
+@@ -23,8 +23,7 @@ config BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS
+ 
+ config BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
+ 	bool
+-	select BR2_PACKAGE_SPIRV_LLVM_TRANSLATOR
+-	select BR2_PACKAGE_SPIRV_TOOLS
++	select BR2_HOST_CMAKE_AT_LEAST_3_20 # host-llvm
+ 
+ config BR2_PACKAGE_MESA3D_LLVM
+ 	bool "llvm support"
+@@ -147,15 +146,17 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915
+ 
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
+ 	bool "Gallium iris driver"
+-	depends on BR2_PACKAGE_MESA3D_LLVM
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # host-llvm
++	depends on BR2_HOST_GCC_AT_LEAST_7 # host-llvm
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
+ 	select BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER
+ 	help
+ 	  Mesa driver for iris-based Intel GPUs.
+ 
+-comment "iris driver needs llvm"
+-	depends on !BR2_PACKAGE_MESA3D_LLVM
++comment "iris driver needs host gcc >= 7"
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
++	depends on !BR2_HOST_GCC_AT_LEAST_7
+ 
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA
+ 	bool "Gallium lima driver"
+@@ -189,15 +190,17 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST
+ 	bool "Gallium panfrost driver"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
+-	depends on BR2_PACKAGE_MESA3D_LLVM
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # host-llvm
++	depends on BR2_HOST_GCC_AT_LEAST_7 # host-llvm
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
+ 	select BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER
+ 	help
+ 	  Mesa driver for ARM Mali Midgard and Bifrost GPUs.
+ 
+-comment "panfrost driver needs llvm"
+-	depends on !BR2_PACKAGE_MESA3D_LLVM
++comment "panfrost driver needs host gcc >= 7"
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
++	depends on !BR2_HOST_GCC_AT_LEAST_7
+ 
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R300
+ 	bool "Gallium Radeon R300 driver"
+@@ -360,46 +363,49 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_IMAGINATION
+ 	bool "Vulkan imagination driver"
+ 	depends on BR2_arm || BR2_aarch64
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
+-	depends on BR2_PACKAGE_MESA3D_LLVM
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # host-llvm
++	depends on BR2_HOST_GCC_AT_LEAST_7 # host-llvm
+ 	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
+ 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+ 	help
+ 	  Vulkan imagination driver.
+ 
+-comment "imagination vulkan needs llvm"
+-	depends on !BR2_PACKAGE_MESA3D_LLVM
++comment "imagination vulkan driver needs host gcc >= 7"
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
++	depends on !BR2_HOST_GCC_AT_LEAST_7
+ 
+ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
+ 	bool "Vulkan Intel driver"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd.h
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
+-	depends on BR2_PACKAGE_MESA3D_LLVM
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # host-llvm
++	depends on BR2_HOST_GCC_AT_LEAST_7 # host-llvm
+ 	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
+ 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+ 	help
+ 	  Vulkan driver for Intel hardware from Ivy Bridge onward.
+ 
+-comment "intel vulkan needs llvm"
+-	depends on !BR2_PACKAGE_MESA3D_LLVM
+-
+-comment "intel vulkan needs a glibc toolchain w/ headers >= 3.17"
++comment "intel vulkan driver needs a glibc toolchain w/ headers >= 3.17, host gcc >= 7"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 || \
+-		!BR2_TOOLCHAIN_USES_GLIBC
++		!BR2_TOOLCHAIN_USES_GLIBC || !BR2_HOST_GCC_AT_LEAST_7
+ 
+ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_PANFROST
+ 	bool "Vulkan panfrost driver"
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
+-	depends on BR2_PACKAGE_MESA3D_LLVM
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # host-llvm
++	depends on BR2_HOST_GCC_AT_LEAST_7 # host-llvm
+ 	select BR2_PACKAGE_LLVM_RTTI if BR2_PACKAGE_MESA3D_LLVM
+ 	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
+ 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
+ 	help
+ 	  Vulkan panfrost driver.
+ 
+-comment "panfrost vulkan needs llvm"
+-	depends on !BR2_PACKAGE_MESA3D_LLVM
++comment "panfrost vulkan driver needs host gcc >= 7"
++	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
++	depends on !BR2_HOST_GCC_AT_LEAST_7
+ 
+ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_SWRAST
+ 	bool "Vulkan swrast driver"
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index c103345e86..04112eea8e 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -178,7 +178,7 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER),y)
+ MESA3D_CONF_OPTS += -Dmesa-clc=system -Dprecomp-compiler=system
+-MESA3D_DEPENDENCIES += host-mesa3d spirv-llvm-translator spirv-tools
++MESA3D_DEPENDENCIES += host-mesa3d
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),)
+@@ -347,6 +347,12 @@ HOST_MESA3D_CONF_OPTS = \
+ 	-Dglx=disabled \
+ 	-Dvulkan-drivers=""
+ 
++ifeq ($(BR2_PACKAGE_LLVM_RTTI),y)
++HOST_MESA3D_CONF_OPTS += -Dcpp_rtti=true
++else
++HOST_MESA3D_CONF_OPTS += -Dcpp_rtti=false
++endif
++
+ HOST_MESA3D_DEPENDENCIES = \
+ 	host-libclc \
+ 	host-libdrm \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
