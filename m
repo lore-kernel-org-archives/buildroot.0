@@ -2,111 +2,117 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E82F606A31A
-	for <buildroot@archiver.kernel.org>; Sat, 24 Oct 2026 17:08:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2817606A31F
+	for <buildroot@archiver.kernel.org>; Sat, 24 Oct 2026 17:18:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=jLxFLXu7
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=k10VNhgf
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E5B87813B7;
-	Sat, 24 Oct 2026 17:08:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BA85380883;
+	Sat, 24 Oct 2026 17:18:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sA-FG1Dv339E; Sat, 24 Oct 2026 17:08:40 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org E96B981583
+ id IWiB45wTUhxi; Sat, 24 Oct 2026 17:18:46 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 3420F8087C
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792861720;
-	b=PK+bvn+hi6vGjW+8D/Dxvoj0FlMyGeeU7pP+dXnCr3wDeoQ44mWARjYyFVPgeFFl7F0v
-	 X8q2wnYIFbOxtBB57xZMbjdmmB3CRFaWFcWo2U6ACqjVhOxlPZjrW+MVe2EzkF/oNFufh
-	 88mxyy14rgYcSCMCxE1TUu63UhQBKXPTM8l3vu0d7HN79/85tsrUTye+vgB5zR3c6xP36
-	 qA4MDaYEGDcghCbQuak3hiPcwWHM39iZzTrWd/sSuMdM4aUlFpImgzZEq9pPHAPDNkKbO
-	 TylZjlhcrSQAZENYevcD92SdpkSHLMWwyfXzzXNmNQTtAeXEJJ+4NUcl4/cO1AHp0qg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792862326;
+	b=AvvvMmnfbJlwTR/r6G05ox425h9psqb8bHJwU8GEIhXw5SBeb4z+B+Lrvv92kFhlkeMH
+	 HgNXxFhMVD3HTxT5fmSgSNQPhPpcb0vrFd9yPkRnOg86THCb82FvTHyCtSGbPoHXXrfY+
+	 jqHOp12PTcdJlFQBIPBpPvYUoTolAONLXU4YPZLHQ5ApZestYwtqN1uIc09W03vqaxIoR
+	 M/705SP81IPQ31gr7vp9p/hu6vPm5ET/X+HpNk292RqjaJWbvstZE6GifoF0CFwIwE7Tj
+	 CXZMTi91G3bGTXFXspaEnALt6XQ4O+7PfKIXPqPPg9y8lLgRMLI51pPmj1xTSKpG5Gw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792861720;
+	c=relaxed/relaxed; t=1792862326;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:To:
-	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
-	 X-Last-TLS-Session-Version:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:Cc:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=6bX9lplb9QMeDkfCM73tgFMP0oWH0W9A9ckapRRYqW4=;
-	b=Rb0xqfbsnSbG9dCnct5Mim4fxBw3dhJ6+lqIVXFZiwyt+MK8nUY1Kg5s/+h8k9//weed
-	 s54XLjd9XJ0emgKEPZbTLvymjBD5YBIJ/A+SFftNiilNpaD0Aj/AunVElmGaMmIskLe1t
-	 e5HzQG07D9fHxISnLNSahWdAvAdKCZbTJKLmlXJiWLosKOBTLNojxMqVzxMt6y6Bovc5X
-	 wbTKezR3ZUXU5mVFJTYuPQgVchhQvozkbLDOmNDrDIvQ9a236h2FBCBLvCvl6eTHHJeyf
-	 JbcIAV2hqep2qwVwSm2zzVcSDANY0beMT+umBxbt72fOgzP2TLtOuUdFxKVg4D5EP8A==
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:To:Cc:References:
+	 Content-Language:In-Reply-To:X-Last-TLS-Session-Version:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 Content-Transfer-Encoding:Content-Type:Errors-To:Sender;
+	bh=Xl4ECzR6/mDdRaGc1INFQO+ozFzem0GurjVCOp6TBVs=;
+	b=srOiT2THbTcxkCN8EfVzEdAxV/Rv2QEt1y6Zk4At80jnYDFH2SUNuWzxJ0LYWUZeJ22R
+	 qAo+uJNDSW6P11tDFL4HwqrYnEiaNXMFfusqhKfXfvk4LACmSn0eukFOPc3w/zLrIVSR9
+	 AdpYOjgGRn4pbtpMjbsg884U4WEYJiyIQlSyf38PYCh/T2jVCIQ9ndJr+f6svYfosAKQw
+	 69UuQMRj+Et8BIDw0Smvk7EUQTLwT97jBa2SI0DwmvSr3O3VZRMMGtBLNnv1p4b/Rr/A2
+	 vekpKW1j6YVKqgJsUfCQqiwyLBL7nEX6NwVUw6NoSSgE3aOWc+/63K6Xw2MHrbCH7fg==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792861720;
-	bh=6bX9lplb9QMeDkfCM73tgFMP0oWH0W9A9ckapRRYqW4=;
-	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=jLxFLXu7ZizNuR0CZMC3rnj5HY6GJc+RMJfnZ4UZ8hSVCBxRq4TMViLY/wZpghhq3
-	 whSfNJyF264wMnC0bB3kUFkwf3AFsfbVOEQTTamrEN1gmoa7XxIeL1c9ZMyr+jCZKB
-	 NRyzSGlkDfF67htkpjkOlgZ97s+dzID2EzpIr4cOA6BJutzDGxoPYxbgcp+A82WJUB
-	 kUi7wpIQNMd7NBbaEfTL0H56u9gFrysdzh24TwyzB7uyMty+nkMoT25ijainEa3Dfg
-	 0Ghl2dnB6dza0GVYQa0q++IXGwusdK03soqLaff/qVJqKKgwN4maT86zYlpP87sWxw
-	 cc8OMxabl/0uA==
+	s=default; t=1792862326;
+	bh=Xl4ECzR6/mDdRaGc1INFQO+ozFzem0GurjVCOp6TBVs=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=k10VNhgfdkD4nMUi0ANz5rD/632pHxfF4drFUjyYQ9tztxDzT6idNF5qplEaOM/sN
+	 5NlK3q0DNabGdEdmF7WdtI3XOwooJ9ZcWSG4T9jnBs3T9CCbPh4q9oP5Ra8qrOrkur
+	 K9Imu4Bg6/1Tnacgvhg+y/uXUqJawY7P/yhjXfCsyDnpIZ3olgLwE5Reu71V47XHw7
+	 gV6oqBd+mwFaUYuNDWS/2PsZUFZRaG8wKWu+BfmyoujkGk/W9MZbAelHUULUG9/hNx
+	 5B8DNvQ5yLrHWu8GmZDfQjy2aMJQisyB/YArpyyMQwgI49fHHfadoymDnbn4sMa7GE
+	 qa6dMhHr5k2YQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E96B981583;
-	Sat, 24 Oct 2026 17:08:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 3665E3D9
- for <buildroot@buildroot.org>; Sat, 24 Oct 2026 17:08:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3420F8087C;
+	Sat, 24 Oct 2026 17:18:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id EBA424D1
+ for <buildroot@buildroot.org>; Sat, 24 Oct 2026 17:18:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1BB934006B
- for <buildroot@buildroot.org>; Sat, 24 Oct 2026 17:08:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D2290403AA
+ for <buildroot@buildroot.org>; Sat, 24 Oct 2026 17:18:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dhRfpbRXUwin for <buildroot@buildroot.org>;
- Sat, 24 Oct 2026 17:08:37 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org D995E40049
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792861717;
- b=dAfoC4OtyCZN95Fb4SS5qLqwXWPhVz4MCLnp62P49zEp3L7G8fFoKfIDgR09so1dMWgU
- dRxSsGyIWANvVA71ZTTYEmyW7CBVM9uXwDBfeYcj1dXF3kIAX4AS5B0Yk6N6Pu8tpbyIh
- IoS/RhuIxA/uBN8ULlWto9FgxuOG43S+I46MIHjayKFlDp+JGwYfaN4a/tFGqvcJwsQ5b
- uzL3dv1rF8ZrwwnbszUadKyjGLveJ4oS2XNJWg7I5CILFcsSLQ3Iem99ydWuj6RTnjjbT
- GP34zeqIAsxeUzcuN9Vs4CnLAA9ewJkdhVTjAAhFRr413pkCosHm0HfVYVW2gtM6gOg==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tQI7H1mqRm3m for <buildroot@buildroot.org>;
+ Sat, 24 Oct 2026 17:18:44 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org E89BF402DF
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792862324;
+ b=ZuhaKoDFmM+kmBimLUHSgtt5/GXLZF0Wq1FXOWmhzalcAFAkJgx3wSOTjCzn43NwsCkX
+ TwP+cln9CbuBnEbxJ4k+xAFN71Jp+4HoCsjpFfeeg5aMUzytazIFqtiTN2waAfew//doK
+ /GlWSePytHubOeIwqLb5ZUUz1cOB6SE5OWQ/VlnBzhz9KRbEnpVI8RpEEpa4fppF5Ug0V
+ VACrZ4v9FzZvOy4kfb2QL3D0ZieDB0/Du4TH3FnxUl1FhxqW+zHl6E2wzUY4H/5NSZjtb
+ Z+F4ZDNTxiUxm+nuG+SIr0gRy3sSMIcl74YdiFACwQNhCB6PoI5o0tu9ACP1n4WiM0Q==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792861717;
- h=Received-SPF:Received:DKIM-Signature:From:To:Cc:Subject:Date:
- Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
- Content-Transfer-Encoding:X-Last-TLS-Session-Version;
- bh=AhmHtRwf7YmkDDkXwiV5WWNXR/7dtMwZ25Z/mQhnvVU=;
- b=M01zz4U2S2Oc/5xCnQBzOr9pp2z5wkXIFsBkqScuwLBT8DBbMkVu7jKp7qS/39c+haNk
- +u/A90FdM47RIMEEA8ioRbxwKkoCitS7IElwNjRznvQBca9qQaL0oqxjCGjSglHNUnY16
- /QyyeYVGeOhQydg8DkE23+EJ3Uu7dLXIe0DXvas3zK0INyqT9JPNvP5laPqhN4jZOLYCp
- PSaojOUxUghRd3LVUppxe8IW3V3/HdZ2srNZRiNoeIvKBfFdoQozUzQGxBKtbYKz4XV46
- HSgIyP55pje9iZ2TxdTIQSxnX5VAjCiE/sw7I7+E67XxKl2/EeX9GeOSS6EruS9G5QA==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ c=relaxed/relaxed; t=1792862324;
+ h=Received-SPF:Received:DKIM-Signature:Message-ID:Date:MIME-Version:
+ User-Agent:Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+ Content-Type:Content-Transfer-Encoding:X-Last-TLS-Session-Version;
+ bh=20OC9mWqxtME1LoB6VFE9J9HyE4Xu55hhyhinuU79r0=;
+ b=QR2zl/LNG1kTNUwyan3K6/J7ZuBAAoxdIBlTVt6GVEXFAEWMZnZDmzcQ1gewwydt0aw6
+ zG0Zlw9TyG+FUqsE1I/jKBxIWpMmFYJvBwU0f4c4AAX8lq6MdvDEjxHySDRH3j5qJDiiE
+ TnQhAvkqTtZ+LjHHINTi8mEJciaWLPjG7YLsy5pofKpMt/PJBdw7M3yuB2xaEEg0i8o2J
+ eOrqoY+vLDuo84Z2D78p6vgmEbFhbFkUmvB7OAtX+L9ipBAEXZ14ilwojvZiAJU5NuB6A
+ dpP0qbJra/7EifrA5JljrFuy2xK8OKKAVaOCCFnOSZEERfhm+x4o8rx+gp9gb9gHhhw==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
  dmarc=pass header.from=rnout.be;
  dkim=pass header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b="P/svkbYp"; 
+ header.s=dkim header.b=Xs7z5n4r; 
  arc=none smtp.remote-ip=79.99.201.12
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
 Received: from mail.nubo.coop (mail.nubo.coop [79.99.201.12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D995E40049
- for <buildroot@buildroot.org>; Sat, 24 Oct 2026 17:08:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E89BF402DF
+ for <buildroot@buildroot.org>; Sat, 24 Oct 2026 17:18:43 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 78611B97A6AB; Sat, 24 Oct 2026 19:08:31 +0200 (CEST)
-To: buildroot@buildroot.org
-Date: Sat, 24 Oct 2026 19:08:30 +0200
-Message-ID: <20261024170830.543982-1-arnout@rnout.be>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <c3ab76847e4dd0d716ea7cbaeeb5e8fa@free.fr>
-References: <c3ab76847e4dd0d716ea7cbaeeb5e8fa@free.fr>
+ with ESMTPSA id 30A1BB97A533; Sat, 24 Oct 2026 19:18:40 +0200 (CEST)
+Message-ID: <7f66d899-c3aa-45a1-9e71-2e2afd586bb6@rnout.be>
+Date: Sat, 24 Oct 2026 19:18:38 +0200
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Baruch Siach <baruch@tkos.co.il>,
+ Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Cc: Julien Olivain <ju.o@free.fr>, Mark Corbin <mark@dibsco.co.uk>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20261020202639.1094960-1-ju.o@free.fr>
+ <20261020202639.1094960-4-ju.o@free.fr>
+ <562ad192-b09a-4470-a02e-e3b0d5b2af00@rnout.be> <87zew6t6is.fsf@tarshish>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <87zew6t6is.fsf@tarshish>
 X-Last-TLS-Session-Version: TLSv1.3
-Subject: [Buildroot] [RFC] Makefile: do defconfig with /dev/null instead of
- .defconfig
+Subject: Re: [Buildroot] [PATCH 4/4] arch/Config.in: change default target
+ architecture to AArch64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,119 +124,60 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@rnout.be>
-Cc: Julien Olivain <ju.o@free.fr>, Arnout Vandecappelle <arnout@rnout.be>,
- Thomas Perale <thomas.perale@mind.be>
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,USER_AGENT_GIT
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
 	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-For `make defconfig`, we use a .defconfig file. This is inherited from
-the kernel, which has a different defconfig for each architecture. The
-kernel defconfig passes ARCH on the command line rather than in Kconfig,
-and defaults are very different for different architectures. In
-Buildroot, we don't have that, instead we have a .defconfig file which
-only has the default architecture. And it's not actually a defconfig,
-it's a very old full .config where only the first part is kept.
 
-Since we have architecture-independent defaults, and any architecture
-specific things are expressed with "depend on" and an occasional
-"default ... if ...", we don't need this infrastructure at all. We can
-simply make .defconfig an empty file - the BR2_arch choice has a default
-and that's all we need. And we don't even need an empty file, we have
-/dev/null to do that job.
 
-Use /dev/null for the "defconfig" target if no DEFCONFIG is given.
-Remove the now unnecessary .defconfig.
+On 22/10/2026 11:43, Baruch Siach wrote:
+> Hi Arnout,
+> 
+> On Thu, Oct 22 2026, Arnout Vandecappelle via buildroot wrote:
+>> On 20/10/2026 22:26, Julien Olivain via buildroot wrote:
+>>> This commit switches the default target architecture in arch/Config.in
+>>> from i686 to AArch64. AArch64 is now one of the most common
+>>> architecture on embedded Linux systems. The default CPU for this
+>>> architecture remains the Cortex-A53 (Armv8.0).
+>>> While at it, this commit also refreshes the .defconfig to:
+>>
+>>   Do we even need this .defconfig file? Isn't that a leftover from very, very,
+>>   very old Kconfig?
+> 
+> .defconfig seems to be Buildroot specific:
+> 
+> support/kconfig/patches/01-kconfig-kernel-to-buildroot.patch:
+> Index: kconfig/confdata.c
+> ===================================================================
+> --- kconfig.orig/confdata.c
+> +++ kconfig/confdata.c
+> @@ -30,7 +30,7 @@ static void conf_message(const char *fmt
+>   static const char *conf_filename;
+>   static int conf_lineno, conf_warnings;
+>   
+> -const char conf_defname[] = "arch/$ARCH/defconfig";
+> +const char conf_defname[] = ".defconfig";
 
-Note that this also makes one hunk of
-support/kconfig/patches/01-kconfig-kernel-to-buildroot.patch redundant.
-Let's not do the effort of removing it now, we can remove it if it
-causes issues when updating the kconfig infrastructure.
+  Well that's stupid... We don't need an architecture-specific defconfig, we 
+don't need any file at all to "seed" the defconfig. So I've sent a patch to 
+simplify that.
 
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
----
- .defconfig | 50 --------------------------------------------------
- Makefile   |  2 +-
- 2 files changed, 1 insertion(+), 51 deletions(-)
- delete mode 100644 .defconfig
 
-diff --git a/.defconfig b/.defconfig
-deleted file mode 100644
-index d25c62e104..0000000000
---- a/.defconfig
-+++ /dev/null
-@@ -1,50 +0,0 @@
--#
--# Automatically generated make config: don't edit
--# Mon Feb 18 09:11:56 2008
--#
--BR2_HAVE_DOT_CONFIG=y
--# BR2_alpha is not set
--# BR2_arm is not set
--# BR2_armeb is not set
--# BR2_cris is not set
--# BR2_ia64 is not set
--BR2_i386=y
--# BR2_m68k is not set
--# BR2_mips is not set
--# BR2_mipsel is not set
--# BR2_powerpc is not set
--# BR2_sh is not set
--# BR2_sparc is not set
--# BR2_sparc64 is not set
--# BR2_x86_64 is not set
--# BR2_x86_i486 is not set
--# BR2_x86_i586 is not set
--BR2_x86_i686=y
--# BR2_x86_pentiumpro is not set
--# BR2_x86_pentium_mmx is not set
--# BR2_x86_pentium_m is not set
--# BR2_x86_pentium2 is not set
--# BR2_x86_pentium3 is not set
--# BR2_x86_pentium4 is not set
--# BR2_x86_prescott is not set
--# BR2_x86_nocona is not set
--# BR2_x86_core2 is not set
--# BR2_x86_k6 is not set
--# BR2_x86_k6_2 is not set
--# BR2_x86_athlon is not set
--# BR2_x86_athlon_4 is not set
--# BR2_x86_opteron is not set
--# BR2_x86_opteron_sse3 is not set
--# BR2_x86_barcelona is not set
--# BR2_x86_geode is not set
--# BR2_x86_c3 is not set
--# BR2_x86_winchip_c6 is not set
--# BR2_x86_winchip2 is not set
--BR2_ARCH="i686"
--BR2_ENDIAN="LITTLE"
--BR2_GCC_TARGET_TUNE="i686"
--BR2_GCC_TARGET_ARCH="i686"
--
--#
--# Target options
--#
-diff --git a/Makefile b/Makefile
-index 9b62da3e40..aa3826b5b4 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1037,7 +1037,7 @@ oldconfig syncconfig olddefconfig: $(BUILD_DIR)/buildroot-config/conf outputmake
- 	@$(COMMON_CONFIG_ENV) $< --$@ $(CONFIG_CONFIG_IN)
- 
- defconfig: $(BUILD_DIR)/buildroot-config/conf outputmakefile
--	@$(COMMON_CONFIG_ENV) $< --defconfig$(if $(DEFCONFIG),=$(DEFCONFIG)) $(CONFIG_CONFIG_IN)
-+	@$(COMMON_CONFIG_ENV) $< --defconfig=$(or $(DEFCONFIG),/dev/null) $(CONFIG_CONFIG_IN)
- 
- %_defconfig: $(BUILD_DIR)/buildroot-config/conf  outputmakefile
- 	@defconfig=$(or \
--- 
-2.56.0
+  Regards,
+  Arnout
+
+>   
+>   static void conf_warning(const char *fmt, ...)
+>   {
+> 
+> baruch
+> 
 
 _______________________________________________
 buildroot mailing list
