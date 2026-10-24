@@ -1,28 +1,28 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A67606A31A
-	for <buildroot@archiver.kernel.org>; Sat, 24 Oct 2026 10:33:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D2FF606A31A
+	for <buildroot@archiver.kernel.org>; Sat, 24 Oct 2026 10:33:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=HFhT8sxW
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=DLYbVQwZ
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C0523815CC;
-	Sat, 24 Oct 2026 10:33:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 27661605FF;
+	Sat, 24 Oct 2026 10:33:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ie_KfM7JSS_9; Sat, 24 Oct 2026 10:33:15 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org D30D3813B7
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792837995;
-	b=V6C0mwpg32DVg46/l00b9xB2p1JmqxQCz4WFfUGf9eRWfwtHNwVMSa066o0U14xrCbcw
-	 +MrZO715xp8m2VlasVXGDEU7GGCN4ZGVu11Y5mtlk+b7UDGb5jRCELMmgT6c4kW+yW3nL
-	 HfD16caqu13Ppxo6cc1+Qpwknwg3H9BXqYLFm6QfU24zIXnnOtFNVmXn4qk6AdlMsLvcF
-	 h3rgHlvIG8adjlL6G+X+0CWmktJ/sTwCDq/eBgJ+shDurgtpAgjPwb5rvtkht4Af4A+o4
-	 fqOfrY5e10U8peX8zEvU06XIBnK+n7NhhkE9dcoI9o6SR7ru4szjS3Y7bTWfxPKBJzQ==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3ZFCLaQl4VZh; Sat, 24 Oct 2026 10:33:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 44DDC60688
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792837996;
+	b=gf+KQunnw1obk0tFzU+LDVnY0jp6g9Mt962Wfz/qWEWbqeCX0ZsuWg2Rf9VI61e29laB
+	 o1Gz9WaCM3inRfoYAptOQ9TQmVMf3Mga39d1yTswDCvfz49MGqEP0z6qm4lWszQzIEH29
+	 sV9+xkHfpJZdEoUsSJ3e6oYsqMilMrt9Hq7Ab60FrVhizDZFyCrDKFF4tAAbcDjH0Hcb1
+	 Z75i99HpiJDAcHeHBV0Vo0uuGAm2RZ7AoQK1IsWBR0GkDVSQjoaDSOq6wdD43dP2REz+S
+	 +XHwbBoMaeTLjjBrMBN7U1SSsLhZBMcvrSHqOJk9TkywlS7IYsIk1STw1HuCPghTHcg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792837995;
+	c=relaxed/relaxed; t=1792837996;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=EahOsHwrG7LQBufId937prxycZZUxL0If+Jx8EwUicc=;
-	b=keqoZwHXi90NnDfonfNaFAqAKuKihJuTzgh9wBptbwTrxfCl5W0JhEvajmxmj33yo7SF
-	 vPa6OIvJa8/AHM3//b1W0pF+sc3o9kdMtL9ZkdWSlBiRXrSuQfIehMYP0KXWZBZnD0Mex
-	 Ly+H8P427RU/S6EkSrNIOxzwB3u5TKVRQp8uR+he+s9+ZwXzHMLKUycRHx1cYDMkbqa20
-	 BxqBSeJ9NPNjWCYdjrCo8/wNjQKYTmlC6czFgnCxcb6f+86gqVVsiTBCZohVsFO6bVu6K
-	 z32i9W2E/TKadHATj1WetfWvbZqkOpaBc9XzwvvLcZu66LM5TuUWHSFV7W4WExLiZTQ==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	bh=emHpgrxIUNCTdbN/0HniQhYbyeND69r5OPpavjZF1A4=;
+	b=pWR2gsjQ8Tl0eNJqXTlt0fKk4ieo1Q6ygE4dwMSeyWTC3mxoH0iFsvC28UQBb2dYK/dq
+	 NO1yUwOGP9FjJ1PwaB62DUgBJ/X+BPGEgNyYIiyIg3KvfX6JSLnr4OEbAUysbcRak7P1S
+	 mUpNe+Kh6Au6fYXY1MaLXbxQfVTL/OuyRQUrOyrmh4acmbZMoTSa2mg5YUa6W8iRzrSOs
+	 XxbRLAwTLsturh2D/HJk+Ki6YPHO85MlDtV71df6nXvUxcA/NrPvhx2HaN5/rIXXqWlYv
+	 E3oaTIzfot4ec+IDBz7h3dtjpcVjeGrHcwid6Q6IWDTD+hBDuRXbRGQTXdWfWb9cDNQ==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792837994;
-	bh=EahOsHwrG7LQBufId937prxycZZUxL0If+Jx8EwUicc=;
+	s=default; t=1792837996;
+	bh=emHpgrxIUNCTdbN/0HniQhYbyeND69r5OPpavjZF1A4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=HFhT8sxWoC/f93+UzXbyqaEV0CEK1Ihhxn5oY+tH2GjKIvVPqFEBuwnc27aA9CsJF
-	 xO5Chat0Gx6lK4Il9KjU2cMwKO1/TaGiS2syT8P9gAh6eATzIVxYQ6s9bRQoUPDRo0
-	 CyULhiM0tIcMnve31gw8okD6E3JlBXzSdmTH3FEbLwTI21b/4hn3DeAWGjTleLCCCg
-	 X+93Ef2vc5yuYq0Y+WeJpjU1yOtBeTc9qlvhJUr7WmdtTnVE4jHfAHlrB+jRg7hah7
-	 zdOEdczZES/yj4vxvES2QiM/2rnxGP2DUs2zsk80sdFL4QHXa9jXVvhdgJpsCwR6HU
-	 fhvO1FARXL8+g==
+	b=DLYbVQwZu0M57thGf13b4HF1I+gdw6AGCCnytc7awSnr/G1NUatgku+8+h0vP8FA8
+	 iICzAgClyvqy7XAn7UtwEGl5Hv5gjZEWz8QTb4rB2tFaXcI7re14fY8+Iftzkauqwe
+	 rcmaaD36IcrSW9pdT9chcQO9kXinfNMXoiJ6+TotfdWyrkwt594DkCZ/dEXMn+5lba
+	 L+eVe9Jmu0o6FVt4jS6cj1zxUKQVJ6GmufahFSawQwRMSRoNx6n4Y5fLSP4V0S+/7m
+	 BEVjF85l35CfvuXPwMQP6TJxap0UWS45Z8lUsxS+t/NB93JNzBCskjBVEkQJQ5frOQ
+	 imWrcIW2FWwIQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D30D3813B7;
-	Sat, 24 Oct 2026 10:33:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 05FCA4D1
+	by smtp3.osuosl.org (Postfix) with ESMTP id 44DDC60688;
+	Sat, 24 Oct 2026 10:33:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 05C1E43
  for <buildroot@buildroot.org>; Sat, 24 Oct 2026 10:33:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EB45B815CC
+ by smtp1.osuosl.org (Postfix) with ESMTP id EB62681685
  for <buildroot@buildroot.org>; Sat, 24 Oct 2026 10:33:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9er-JE6WKsds for <buildroot@buildroot.org>;
+ id HtUHyEmrBxuZ for <buildroot@buildroot.org>;
  Sat, 24 Oct 2026 10:33:12 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 0CB68813B7
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 4054C815DF
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792837992;
- b=ECN8rJv1jaspucXpRh/LivRuN6JNJG52ICtYm8CytWNXbwTUHmXQb7dX5k24mB/oC0Ra
- gz967CcBrPsunYYBdtwGYKKBwG5UHAAPkoqKHD1NvTxvKNrOT7OzAAv5M2sYsG5jplfJM
- EemyZzoz5dZEFUgWUE0HFpyeXRf8z7A5jHaqI9ENGtv9odIF4XssZlLUswOe39TiVaxq3
- wp7+V36Bo2YpgyUOk04pPIE5rfEsn72sKJo8yQ2gI9uyQF7Q435uI/k/dBTsFhJLdWbga
- fi6hbx/jH6lHG/l603qjGXmUZgBX7b1K8z8Qf3ASOdXvMRNYE2mrUiMcWwJbM4+rB3A==
+ b=cixkLR2pdanCsxoZoHQSp+klmCb1rdULaQBiMjrSU8vQ4VFbVF6buFix4toR1d4x79QJ
+ 4DgIACu8MjG17wjtDHd0VcF17FyBQ5/A/VOPwPlr6r5B6xqbNhkY72nu4ye5pMhtC57fX
+ hG2z8lN8cRwrcZ+RAhxbjOgBL1LFz48lJjN1+gyfvWEaMQN2daPuFAQGIzhN/HiLV1MTl
+ WXyXVt5+u1XDOuXpiFysUP/sIoKe55u0OowZQcpASxYi8abuXaEJvnt1C4DtrmGdm0ghb
+ qxEvm8/+S8zMBiTK2g1E7tVImvvsQseNMuyj2e+CsyqQBj3QCnk7Rntu2D+fvSfU6xA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1792837992;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=me3AQ/TTif8UJASvD+is59CmzVxm0NnYLWhMYzwIyhk=;
- b=kYc9AOdsOI0xknCXC233RHz+Uz8VMHmAM3SAfR9HhHDQlUfPkBosHXHzXmsuLX7ATh3u
- 2zl6rNSLkslVRwDRWmUU9et0mx0LJ+zhThSdOw+Wd6c+uHvcdxaLPXcK4ZTGXtHBskYqg
- i1ehSFSbqKRv31DBMeZLrlUAFnH6YvAiabxCqPOXhcIF5RrqVmAMx5LBGLLwRZ9vKca5g
- hwV65+7EwOvjgkFVYQl4ZL6k4u9OQGR/qD9cB6/ZCi9CPp+X5vFhcBQAYzgdbIopKjaus
- V0+UleXRnW483IeBSMJ6lfkCPjzHykT+JwzZm5oU9otnH55FH9NAYgGl8b5ahxPAH/g==
+ bh=mfBkdIHsgz8oDhmL/QBf8IsLrr4gIfmmHRwJwM2GunA=;
+ b=hLdbQ4KouvxzaX1FGeXamBqDMzsJwIghDDjfXBB4J74t85tt+spfucjvfS1d9i0621Fx
+ lh5+pfrWQyWnztjIaZlg/KMd/MMaT4W2d+L80rYX1UWTVp5GVf+xnJITf7IPSiXF4RDcg
+ oXjszoFJOc1IzmgRx+Sd6rJyNCr/VOkXPSq5jtHSByYXx1Q4PhMBwKQJuKGJA+3bJYnMB
+ zZ8yZ4No3Pt3/dL8ZXT+W3nA2lsyMdV6yutNCUo+vf7EmjWDUZnw7la9NJDmi1SDiNvem
+ S8VdBIa0dzg2VR4QLV2ck0auxJQPmWrCs6rEE2uTLM5GU3u+DbsYYKas8+ZaRNtFAZQ==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0CB68813B7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4054C815DF
  for <buildroot@buildroot.org>; Sat, 24 Oct 2026 10:33:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1A3169B43C; Sat, 24 Oct 2026 10:31:47 +0000 (UTC)
+ id 5B0A28D6C1; Sat, 24 Oct 2026 10:31:47 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 24 Oct 2026 11:45:53 +0200
+Date: Sat, 24 Oct 2026 12:00:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f35240d627e5bf0d134c3a734543872f8eda18b9
-X-Git-Newrev: 9a853913b9150a89f90b08dba25222a62a12b61e
+X-Git-Oldrev: 55a60382ae9a0e03a65186fbdf9e3afbeec56130
+X-Git-Newrev: ef46592ee7d343c306484743a6c307cac67c91fc
 X-Patchwork-Hint: ignore
-Message-Id: <20261024103147.1A3169B43C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-marshmallow-sqlalchemy:
- bump to version 1.6.0
+Message-Id: <20261024103147.5B0A28D6C1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-s3transfer: bump to version
+ 0.19.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,49 +118,49 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	TVD_SPACE_RATIO autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9a853913b9150a89f90b08dba25222a62a12b61e
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ef46592ee7d343c306484743a6c307cac67c91fc
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.hash  | 4 ++--
- .../python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.mk    | 4 ++--
+ package/python-s3transfer/python-s3transfer.hash | 4 ++--
+ package/python-s3transfer/python-s3transfer.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.hash b/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.hash
-index 1d1385026a..d1b76cb274 100644
---- a/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.hash
-+++ b/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.hash
+diff --git a/package/python-s3transfer/python-s3transfer.hash b/package/python-s3transfer/python-s3transfer.hash
+index c089207b1f..75d2ec66da 100644
+--- a/package/python-s3transfer/python-s3transfer.hash
++++ b/package/python-s3transfer/python-s3transfer.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/marshmallow-sqlalchemy/json
--md5  ad62daa42396557252047d43e69227bd  marshmallow_sqlalchemy-1.5.0.tar.gz
--sha256  e51192c204770645a2fab0d72f44f8789272eef75951f84b1608d6b4b0bfe0e6  marshmallow_sqlalchemy-1.5.0.tar.gz
-+md5  654d6871e29a2a9ac80793df6171217e  marshmallow_sqlalchemy-1.6.0.tar.gz
-+sha256  adebc7e36a7ec5662de93b00b850b50e36f4e8fe67ccf6e9e8e5ff42a78b1696  marshmallow_sqlalchemy-1.6.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/s3transfer/json
+-md5  b97db752b08e1cea95b7f958788d83ed  s3transfer-0.19.2.tar.gz
+-sha256  ba0309fd86be3c27dbf78cdd813c13c5e1df16e5874b99d2535ebbdfb9892993  s3transfer-0.19.2.tar.gz
++md5  18a4436009a8dd5b667f7e2e77d04169  s3transfer-0.19.3.tar.gz
++sha256  8326acc3d056d7f7b8a37110c7d2aea41f67e83f6ae79cd3b5fbcca34c726406  s3transfer-0.19.3.tar.gz
  # Locally computed sha256 checksums
- sha256  906b5d9051e426144cb173ad911667b8ebd05a9c584c2c26c135b32a3ed12001  LICENSE
-diff --git a/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.mk b/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.mk
-index 15715d9006..db391d8d65 100644
---- a/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.mk
-+++ b/package/python-marshmallow-sqlalchemy/python-marshmallow-sqlalchemy.mk
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/python-s3transfer/python-s3transfer.mk b/package/python-s3transfer/python-s3transfer.mk
+index 12d654da60..b0b7328457 100644
+--- a/package/python-s3transfer/python-s3transfer.mk
++++ b/package/python-s3transfer/python-s3transfer.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MARSHMALLOW_SQLALCHEMY_VERSION = 1.5.0
-+PYTHON_MARSHMALLOW_SQLALCHEMY_VERSION = 1.6.0
- PYTHON_MARSHMALLOW_SQLALCHEMY_SOURCE = marshmallow_sqlalchemy-$(PYTHON_MARSHMALLOW_SQLALCHEMY_VERSION).tar.gz
--PYTHON_MARSHMALLOW_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/ee/fe/247c297809e64116f766716632adbc3f4cd06f376f56dc15bb92f170d247
-+PYTHON_MARSHMALLOW_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/a1/6d/097b9792559b6eef8c6c130d659be0ed8c9fe65b14ad4c425f6cfbc6e90c
- PYTHON_MARSHMALLOW_SQLALCHEMY_SETUP_TYPE = flit
- PYTHON_MARSHMALLOW_SQLALCHEMY_LICENSE = MIT
- PYTHON_MARSHMALLOW_SQLALCHEMY_LICENSE_FILES = LICENSE
+-PYTHON_S3TRANSFER_VERSION = 0.19.2
++PYTHON_S3TRANSFER_VERSION = 0.19.3
+ PYTHON_S3TRANSFER_SOURCE = s3transfer-$(PYTHON_S3TRANSFER_VERSION).tar.gz
+-PYTHON_S3TRANSFER_SITE = https://files.pythonhosted.org/packages/76/43/35e4d8aa320bffe8287fe8f65f578fa2d2db0a64212f0e710dce58267854
++PYTHON_S3TRANSFER_SITE = https://files.pythonhosted.org/packages/49/c5/0a5ce655109cb96b8dfad36908a4e108d15f5dc2eff8fbc3146c4312e704
+ PYTHON_S3TRANSFER_SETUP_TYPE = setuptools
+ PYTHON_S3TRANSFER_LICENSE = Apache-2.0
+ PYTHON_S3TRANSFER_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
