@@ -2,27 +2,27 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73359606A31A
-	for <buildroot@archiver.kernel.org>; Sat, 24 Oct 2026 19:40:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9538E606A31A
+	for <buildroot@archiver.kernel.org>; Sat, 24 Oct 2026 19:41:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=at1KWnvY
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=YfVAEhTV
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4D8A4406C3;
-	Sat, 24 Oct 2026 19:40:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 740FB406C3;
+	Sat, 24 Oct 2026 19:41:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AnggrQSWJsfW; Sat, 24 Oct 2026 19:40:00 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 0B3BA406CF
+ id Wkjv-P3vJcEf; Sat, 24 Oct 2026 19:41:45 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 7E2A4406CD
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792870800;
-	b=fEngvtHEqnSRLaPQXqPqsgomt+zFuD7hMLoAVUa/lP+ZaLkN7FwWn2mycq+nW8ckFGLg
-	 SPfJy7cANE+BQylnFd6QSE7XRdSTgpucLYS3Xd80eOWOU4zMMOb2gjsCGjCyWIIjBa7jN
-	 Hyc0Wpk8u73xebrZDuvmxquGFmO1Na+J8I2GGyoRlqTpy4SSohH/+SyknNHv7bHGERsDH
-	 v5hmslNOrC3ry6k3gZnqNjESlTEV/G4Dk3Rt7ybormC7OxOlttfsMMOKoB7Zlbj33rW2l
-	 DbPZGhwG3QOENUXt7WWzorIKo3/jFtiCvixABulgjTXUCf3Pe6oX8Zuf41Vf5en3X2Q==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792870905;
+	b=K6RjmzcovnNpONSNAuQWNsw3CXjaz6iDIFwnjbkQoMR+GLeX0rGlx77Df5labp14IibD
+	 BYXD6e3ecuzHr6HkUg1phTK+6eDt4QUrqkf4K8azOQA11nhLOdmZ/fT6f9qQkaDD0qhjC
+	 W+g0Ve0Hp1Dr2hANa0s0mH8CVt7905j+n0NObJVllg8EnaxGhbdHn3+F+U/HPzfOIZkdt
+	 EITVGm+z47zoM3pL16mmzTutGfWDj+LKgGTtiCncnULsj+ZvDMKO7TBxkOIrNd5J604Zt
+	 9Zqam5H8+PCfWBlB9vJ20PV3SRjjmJvCL8HJxx64rHt5KCxlsgEX2hwbVfKa4x3wGqw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792870800;
+	c=relaxed/relaxed; t=1792870905;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,82 +31,82 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 Content-Transfer-Encoding:Content-Type:Errors-To:Sender;
-	bh=kTpZBPPoJkZ19uuFOtvQ0GuDM4d2NygjErRUPu5lrYM=;
-	b=EtDNul4t8Q6+ksEd45qQ4+TATKP8yLoXQI8/Xadi7K0+HMTSBFWV/mvcQ+akFGldXjZP
-	 JGJNpH17B61girtHvsMnvgYDCqfdJs3TK3vUshYd1Q/7oKu8LJyBeOtMsKBJflP0VrdzU
-	 cWBcmAbGUaOYsQEboRhA6PrhoGvvjyZ0dhJVPX2xGR4x4HsnW4HjujMsj9Jd7DSygAYK6
-	 z28X05meOaOE1UupIMGRmRQxHn+Ji1bu6eCRAJRuV9xi0bixEoGJ2h63qMBs5xSRhMcTk
-	 Go5u3Dft2Ig3dAunFoQveIOFrjjQnu3namuaRcPHUf3A12EHODax1AssAkM734jqyxg==
+	bh=aJf9MJwh8VpPfWeUOMG0EFKl47J5tC/o3zzUC2pm9sk=;
+	b=B5xPY65ia7BRcRNhbSO/9nEctkdKeLg/FGvs9ODluGqzTB9Vhtr/ppYA+y9P4/YqAG98
+	 lO4XBBrlnJ6dSrS1t+0Zp8jxKa1J22WvMQd13aYPh3Bu2v2qXFwWIfafBFB8q6TzMCcFc
+	 06R7Sm1HqWOMocpTkXxGSKg4Q+DO67DTUklHF9gKIOIHXNO+oe5CSxTHQPP4Ta0x7kARJ
+	 7wGA1/BmtAfpMQ3iFVFY43dB00muSVQO9HIQDvwVxKTAgLzkl1ojugAS2p+klgTP19SvW
+	 z9gHfgnQZpA8JIGtkogzPdkfZjyXNzuLwBHFpjAk9VdOsOPTooSwPXERPCKqYe2Lcvw==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792870800;
-	bh=kTpZBPPoJkZ19uuFOtvQ0GuDM4d2NygjErRUPu5lrYM=;
+	s=default; t=1792870905;
+	bh=aJf9MJwh8VpPfWeUOMG0EFKl47J5tC/o3zzUC2pm9sk=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=at1KWnvYcTreHRP8bY7KzpIEPpWACP2/VzmpbhMChQDzMIIzSV8BaRv+VaRXHvvQF
-	 2tunCr8z7qmYyWck1VIwpxdEZxGYOBHL+BeA05eFG3Bn2POod7c1vMonsxSNyCptq2
-	 5zzT+IpOD5/rThSGD+UiwtUJas7G5CHrjjDVPC6Bifp9Knb8turq+mksPJlF4aBfPZ
-	 bo1Ffg64CrYPVoMds3fUZJ0cimwFP98JGi8HE/m5CQsB5wjDXWJ0R9qxbU6VRYhODp
-	 Nvfc1ZdJcOd3t0129Fa6TBr8A2Ae+MHUuMPFf20L/tc8SDetyOAzWuaezE000tj8dv
-	 oKFAHh8kgAOEQ==
+	b=YfVAEhTVbBCogNYsW1yEZApkT1Wvc44cCRc3f/5FHU4RUlDUX1XtW3L/hoR3weXW7
+	 j7SwKDyDf/seM3WOV6ybnG0flE8KRT+nV4S/3u3zII7Bc9IZ52rgjl85dEUimPOL59
+	 WltqI28EMyh2GfVCxfguIHit8hfNgTAHxZBcarevHq/x9she6maOrPRoztRXn2rgF9
+	 /NNN9G2VVZKp0IQEFJ6j79Yw/nXjTysA0P24KtIl6nDTO3bsjFGDgA0C6PPhJAtf2+
+	 mTtmhcZaZ191urRNRbQrxSAB7ooMxpeXdVAoW+hKRaYjW0x16YXgGq/JuC+or7Vi3T
+	 90N8CKFABfqDA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0B3BA406CF;
-	Sat, 24 Oct 2026 19:40:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6B7794D1
- for <buildroot@buildroot.org>; Sat, 24 Oct 2026 19:39:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7E2A4406CD;
+	Sat, 24 Oct 2026 19:41:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7DBCB4D1
+ for <buildroot@buildroot.org>; Sat, 24 Oct 2026 19:41:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 515E4406CF
- for <buildroot@buildroot.org>; Sat, 24 Oct 2026 19:39:59 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6ECD9406CD
+ for <buildroot@buildroot.org>; Sat, 24 Oct 2026 19:41:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yhQHRGwfJYtV for <buildroot@buildroot.org>;
- Sat, 24 Oct 2026 19:39:58 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org DC3D5406C3
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792870798;
- b=Aqvc3aXzlhB2tfzx19TudgzqVZUnwTKjDOhQCdvo/h+o8f62lfg5CcwO4HgU0srbzymX
- 86aYAxUn8UrvrTQMXFPX/mNDoh7kX1R3ezN6DDNrSkTqwIGT0niO0H3Sjm9wnqPH3BNAN
- 6KbNhUbo3rbRlhMS2L9B8eKR1B2KIKeSTwnQxSqBa25sRus8bPPuwQmdjoicjreATARPW
- Dm7mxtfoI24uX60mHrScY12dCw7TGYBGLcJxNlTAxpk//ypYV6Nc7Ibbyxpl6G6GZDndF
- zfZnjklSrKKVCToXJHnOzlWhbyHF89TAgjMRE3e4Ap8bJAu6LT4zFNvWgW9c0i2gBTg==
+ id 1VX7vd3czQ7H for <buildroot@buildroot.org>;
+ Sat, 24 Oct 2026 19:41:43 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 6AF72406C3
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792870903;
+ b=TIY+CETl3M9PkmKCxMT12Ip9ygSYNIdGH2muIGCmUWQPmz9tzpsk+jzEa/qBb1orms2u
+ 09Vw8Yg8FrgcVl+72Mg85lq7OIpXa9Qg4+D0vuujkAB5ZBfl5UOWewSQ4/pm0q3UTK2JZ
+ e3a3M3HThoc/5wdFax9WAblfnDR8iJQjTlQ/GuDewrZdhmaPddMGk10kDsMwNwdAAmfwf
+ DeecgitSlWz2ugrQ3XBEaTczbsKmwUFfrI6Bo2Ol5KoP/LP7Gx3EszzHA6J08jGg2W7NA
+ xNjtPQkUu1etbYbK3CFZxZanU7Z3HR3APgNwARHKEWet0Ewak3SkuXvutMsLYhmEkxA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792870798;
+ c=relaxed/relaxed; t=1792870903;
  h=Received-SPF:Received:DKIM-Signature:Message-ID:Date:MIME-Version:
  User-Agent:Subject:To:Cc:References:From:Content-Language:In-Reply-To:
  Content-Type:Content-Transfer-Encoding:X-Last-TLS-Session-Version;
- bh=B+CztrExx0UG+no80L1wwOd/F9kGQT+JsCP3XYI4aD8=;
- b=bnzEgrR7ioCAa5SMy8f0wvPZJxji5fyC7yKP0qGh02K93evYIlTvBAs8sKhHCCXXSAWW
- xzTk+AkB4qaxK+lyu1zjF0LE7hg2YIXJjdqk5+xXMdbi9/P5mDv5qL2SgRWUki3buAAdR
- 3vXxp2pydw8BN1moFQ64zGZ59PyhVxthsPwcAMEJvwFRhhOxt26LGBjRoTJF5s7QO5g0q
- 82B8XH/BieaA82nvsyWv4qu86n3hXEjFjpAIwol7NxHFrzNfUajvQXJlisQRBLVuYsmWv
- SzHNecq8HFmUc5Z4/O5FO/qF7gOg5T6V5l3sAzOZYnWyCRT+merqsLynN3eSvx2qyXw==
+ bh=t9siSO2GujZAGAGiMxb97GmMqMbjPHmSH4q5HM5vI0E=;
+ b=njEta8hVfUeYH0URcyQRzgMsB3fOSKpaVc+UBPPJZw1XX3GTuPt0lpxzONcMtUIBSvhL
+ I4geLGp2PpIl7p/2mLrTuxdtz8tOiW86d0ygHk7UDl/AINPW0cIN3EpF0tAYGYiddkHff
+ JZgAf+Z5zPgJiVnjTXvGd06YQgWdZfazhMjMro50kODKXhTNRZiASYUcJOJx1nXK1eLt7
+ WJql8FN3yODbWZ2CSWflmGT5myvOM1TrSOaXzfPHLqORzd/vnxe1SjqrYCKj/ERyrJfvt
+ QbRS28l2eWy0Mdw/I92yb23HQjqoFQjWzNIA7l7qk4C8kFRj/38NtMn2A8drbSFTGUQ==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
  dmarc=pass header.from=rnout.be;
  dkim=pass header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
- header.s=dkim header.b=MMUbjpwz; 
+ header.s=dkim header.b=W0Hw8RfX; 
  arc=none smtp.remote-ip=79.99.201.12
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
  helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
 Received: from mail.nubo.coop (mail.nubo.coop [79.99.201.12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DC3D5406C3
- for <buildroot@buildroot.org>; Sat, 24 Oct 2026 19:39:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6AF72406C3
+ for <buildroot@buildroot.org>; Sat, 24 Oct 2026 19:41:43 +0000 (UTC)
 Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id D7C1CB97A652; Sat, 24 Oct 2026 21:39:52 +0200 (CEST)
-Message-ID: <1e670090-2e09-465e-b7d6-317b7d46881b@rnout.be>
-Date: Sat, 24 Oct 2026 21:39:50 +0200
+ with ESMTPSA id 75E7AB97A652; Sat, 24 Oct 2026 21:41:40 +0200 (CEST)
+Message-ID: <f01d7b59-7526-428a-b42a-f86f033ae1c1@rnout.be>
+Date: Sat, 24 Oct 2026 21:41:38 +0200
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 To: Thomas Perale <thomas.perale@mind.be>, Fiona Klute <fiona.klute@gmx.de>
 Cc: buildroot@buildroot.org, Quentin Schulz <quentin.schulz@cherry.de>
-References: <baaef26b-36cb-4c0f-8b90-32fca12548f5@gmx.de>
- <20261012183436.83398-1-thomas.perale@mind.be>
+References: <423a0c0b-a9e8-4ab2-909f-60fa4f0e030d@gmx.de>
+ <20261012201542.87634-1-thomas.perale@mind.be>
 Content-Language: en-GB, fr-BE
-In-Reply-To: <20261012183436.83398-1-thomas.perale@mind.be>
+In-Reply-To: <20261012201542.87634-1-thomas.perale@mind.be>
 X-Last-TLS-Session-Version: TLSv1.3
 Subject: Re: [Buildroot] [PATCH v5 2/2] utils/generate-cyclonedx: include
  external tree information
@@ -126,182 +126,65 @@ Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-7.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MAILING_LIST_MULTI,
-	SPF_HELO_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=4.0.1
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1 autolearn=no
+	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-  Hi all,
 
-On 12/10/2026 20:34, Thomas Perale via buildroot wrote:
-> Hi,
+
+On 12/10/2026 22:15, Thomas Perale via buildroot wrote:
+> Hello,
 > 
 > In reply of:
->> Hi Thomas!
+>> For the "buildroot" component it makes sense if you squint a little, in the sense that it represents the overall build (like "world" in the make dependencies). For an external tree that just provides extra packages etc. it doesn't.
+> 
+>>> I used DependencyTrack to kinda validate this behaviour. They have a tree style viz
+>>> of your project. To have it work properly with all the packages available under it
+>>> you need to add this dependsOn to all the packages similarly to what I described in
+>>> my previous email:
+>>>> https://pic.infini.fr/IkWJ9c5X/M9EqMt6b.png
+>>>> I think this is the kind of view we would want to achieve to show the hierarchy
+>>> of the project with externals ?
 >>
->> Am 12.10.26 um 17:41 schrieb Thomas Perale:
->>> I'm thinking again about potential solutions since the issue we brought
->>> upstream remained silent :-( [1]
->>
->> Yeah, I checked that too before sending this series. :-(
->>
->>> Do you have a slack account to give it another try there maybe ? (I don't have
->>> one sorry)
->>
->> No, I don't. I guess we could poke that discussion again?
->>
->>> I think the actual proper solution to this is the following. Given an external
->>> named "br-external" that has the package "foo" and a "buildroot" config that
->>> has the "busybox" package enabled:
->>>> ```json
->>> {
->>>     "bomFormat": "CycloneDX",
->>>     "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
->>>     "specVersion": "1.6",
->>>     "metadata": {
->>>       "component": {
->>>         "bom-ref": "project-name",
->>>         "type": "firmware",
->>>         "name": "project-name",
->>>         "version": "project-version",
->>>         "components: [
->>>          {
->>>            "bom-ref": "buildroot",
->>>            "name": "buildroot",
->>>            "version": "2026.08-891-ge17cfc9b3b",
->>>            "type": "firmware"
->>>          }, {
->>>            "bom-ref": "buildroot:br-external",
->>>            "name": "br-external",
->>>            "version": "...",
->>>            "type": "firmware"
->>>          }
->>>         ]
->>>       },
-
-  This composition looks very elegant to me.
-
->>>     },
->>
->> Moving the Buildroot repository/version info from metadata.component to an element of metadata.component.components makes sense, if we want to leave metadata.component fields for people to provide info about whatever they are building using Buildroot. Then we'd need to provide some way to supply that info. But in any case I think that's independent of external tree info. :-)
-
-  This is about the component name and version, right? I would say that this 
-should be provided by command-line arguments to generate-cyclonedx. bom-ref 
-would be derived from name by cleaning it up (replace everything non-alnum by dash).
-
->>
+>> That's a nice visualization, but at most tangentially related to what I want to achieve. Which is to record for each package that comes from an external tree a) that that's the case and b) which tree that is (plus the details about that tree, by reference). That information is only implied in the dependencies in your proposal (so, not obvious at all), when it needs to be explicit.
 > 
-> Yes we can discuss that part later. Because I have multiple option I need to
-> lay down to think which one makes more sense.
+> As a side note, it won't be the only place where the information is not obvious
+> to retrieve with CycloneDX ...
 > 
->>>     "components": [
->>>       {
->>>         "type": "library",
->>>         "bom-ref": "busybox",
->>>         "name": "busybox",
->>>         "version": "1.37.0",
->>>         ...
->>>       },
->>>       {
->>>         "type": "library",
->>>         "bom-ref": "br-external:foo",
->>>         "name": "foo",
->>>         "version": "...",
->>>         ...
->>>       },
->>>     ],
->>>     "dependencies": [
->>>       {
->>>         "ref": "buildroot",
->>>         "dependsOn": [
->>>           "busybox"
->>>           "buildroot:br-external",
->>>         ]
->>>       },
->>>       {
->>>         "ref": "buildroot:br-external",
->>>         "dependsOn": [
->>>           "br-external:foo"
->>>         ]
->>>       }
-
-  This doesn't look good to me at all. AFAIU dependencies are supposed to be 
-dependencies, not composition.
-
->>>     ]
->>> }
->>> ```
->>>> The metadata section declare the project and its core component (buildroot +
->>> externals), as its already the case with your patch. And then the dependencies
->>> express what are stored in which externals, as its already the case for buildroot.
->>>> I actually think that solution makes a lot of sense, even though it's not
->>> obvious by just looking at a component to understand where it comes from.
->>> But as we discussed previously nothing seems to fit that requirement in the
->>> component definition yet...
->>>> Again I wish I could give you a definite answer on how to handle this,
->>> what do you think about this solution ?
+> Btw, nothing against adding the information in the properties like your
+> proposal to make it indeed obvious but then this information would be hardly
+> usable by any other tools.
 > 
->> I think dependencies are the wrong approach. I guess you can see an external
->> tree as a dependency of the overall build, but recording packages provided by
->> an external tree as its dependencies doesn't make sense: the external tree
->> *provides* the packages, it does not require them. It's about origin of
->> components (packages), not dependency between components. If I define a new
->> package in my external tree and it later gets merged into Buildroot package
->> dependencies don't change, only the origin of that package.
+> If we declare the externals similarly to what you propose in this patch in
+> 'metadata', I think finding which external provide a component is pretty
+> similar to the action you need to conduct to find the vulnerabilities that
+> affect a component.
 > 
-> I understand your point but the same logic apply for the 'buildroot' meta-component
-> it also provides a number of packages but in the current implementation all packages
-> Buildroot provides are registered as dependencies.
-> How I understand it is: "to have a full buildroot build the entire list of packages
-> listed as dependency is first required".
+> I see that you can also use the "provides" property in "dependencies" instead
+> of "dependsOn". I don't know how much it's supported though. I will try in
+> DepTrack. Food for thought :-)
 > 
-> I used DependencyTrack to kinda validate this behaviour. They have a tree style viz
-> of your project. To have it work properly with all the packages available under it
-> you need to add this dependsOn to all the packages similarly to what I described in
-> my previous email:
-> 
-> https://pic.infini.fr/IkWJ9c5X/M9EqMt6b.png
-> 
-> I think this is the kind of view we would want to achieve to show the hierarchy
-> of the project with externals ?
+> https://cyclonedx.org/docs/1.7/json/#dependencies_items_provides
 
-  Not really I think - that graph should show dependencies, like our 
-graph-depends, no?
-
-
->> I'm also wary of encoding that origin information in bom-ref, as your
->> proposal does for packages. Bom-ref is supposed to be an opaque identifier.
->> Nothing against making it human-readable instead of a UUID or other random
->> string, but we should not use it to encode information that should be
->> machine-readable.
-> 
-> Yes here I just used as a way to improve the readability but I don't think
-> using an uuid changes the logic of the proposal.
-
-  I don't see the encoding of the external in the bom-ref as carrying 
-machine-readable information either. I think the idea is that the dependencies 
-carry the machine-readable information. But then, they don't, because different 
-kind of dependencies are mixed (actual dependencies and composition).
-
-  I don't have a solution unfortunately...
+  I think that provides is more for something like virtual packages. Like, 
+systemd provides udev. I'm not sure how you're supposed to represent the udev 
+component in the BOM then because it doesn't have a version or a provenance...
 
   Regards,
   Arnout
 
->> Where we're in agreement is that CycloneDX doesn't really have any suitable
->> fields. That is why I used a property (where we can define our own), and
->> suggested in my cover letter to register a CycloneDX namespace for Buildroot
->> (which implies publishing property definitions). It's not as nice as an
->> upstream field for "package repository" or similar, but that doesn't exist,
->> and with a registered namespace it'd be well-defined, documented, and
->> findable from CycloneDX documentation (and it'd let us clean up the current
->> BR_TYPE).
->>
->> Best regards,
->> Fiona
+> 
+>> If that dependency view is useful for you maybe we could do both, but I still think using the external tree as a sort of meta-package in dependencies is counter-intuitive, and I don't like introducing a messy data structure only because it's convenient for visualization.
+> 
+> It's not that I really need the view or anything. More that it give a
+> representation that I find make sense to represent how things are organized.
+> 
+> Thanks for the exchange. I will try to test some things later in the week.
+> I hope others in CC will have some opinion and ideas as well.
 > 
 > Best regards,
-> Perale Thomas
+> PERALE Thomas
 > _______________________________________________
 > buildroot mailing list
 > buildroot@buildroot.org
