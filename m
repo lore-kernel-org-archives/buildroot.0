@@ -1,147 +1,105 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74DA7606A31A
-	for <buildroot@archiver.kernel.org>; Sat, 24 Oct 2026 21:07:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 277D4606A31A
+	for <buildroot@archiver.kernel.org>; Sat, 24 Oct 2026 21:10:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=l38qTimr;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=D31Y1gGF
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=HZ+kFB7s
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5020080D35;
-	Sat, 24 Oct 2026 21:07:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F3AAE4056E;
+	Sat, 24 Oct 2026 21:10:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YklpeuCDHt0C; Sat, 24 Oct 2026 21:07:33 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 556AD80E28
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792876053;
-	b=oh/3ZT5fzSYiscRUCgnw8H/XwAUKiafx6RsyIu5fh5WocnvGqbF09fNhxsNuSNh+FOiu
-	 XJmsJW8rIqrEpgJRvAanJr3qJu6a5t49yn0x31vvCT4aA7FwF2aQEDji5pBZ/hOR3sNMf
-	 dZAi09WrZJBraRNsfKqW9y+X00IPeHuOXAAtC0+09t5YqZK4WjMZTjqOi4DPdbzM1Jugq
-	 BhzjMjpl/KZXeSF16Sfrrmk21BBXEChJoT+qSKU7bG+8sQERHg+T6f3p3iwtI9lh7RsY8
-	 v/Mo1KEh793NUIpCda7iNtqROkmd1UOFV3DN74gh1rr5HebjVSg1Q6Sdjyn+fFFLJww==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AckmQFDC4kfZ; Sat, 24 Oct 2026 21:10:01 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 1D4A740580
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792876201;
+	b=s6gBqQDi1u6/ibO38rFPWc77Qcp4HQtinV1oVXHSKjTsMbSl20woz2ebFeTrOrg7uXzo
+	 iNZuwGn6vc1HIkiE4fvLXUe+z+KFiedF2S4q/o8hhi7oh43js9XldH99tQHu5DZcyZ6+b
+	 Grckk77fjSOvci4Bl4W0IBeq1Gnqfg2ArsfyBud/mpQONrl5N59sEgMcr/94RKS5x/t92
+	 YxDLLvfz08HTnbZG8oa+UA5e1+owmgh+SOyYMP4oJyQpjA61GdkyU76InDwwHaYGIziGu
+	 Xvfxlg+ZDQJpAAUfaMdHjBPS5oWTPyIfkbfOz/Rv40/5lYH8bFKn/P31RU+sNGrY5QA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792876053;
+	c=relaxed/relaxed; t=1792876201;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Date:Message-ID:
-	 X-Mailer:MIME-Version:X-Spamd-Bar:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Content-Type:
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=8PWinVsqCjRiB/9hto/JTXwGdN3eTBbY6SJYwLNm3PE=;
-	b=UE+sI0EE68e+pabtsWgzGTSRKvJcrHyfasPvM9l8kJ1ErW1tApi/v8JtDnCu03oAtoYr
-	 egozqvulu4Evoe6qjY7kAN1mRcVdzAPd6zyeijyCHWWus0rxVW/bLklSgZ+cEBSeNfRWF
-	 Wqov+auma8xIxeObfuaUeOyZB/3PyyJ8a6xqntsA1HtMdcSqVA98dEFD51vX81U8o0Qkm
-	 t7OUaQz3/sBmVYhxPygUjctOgjvkmyzF6OZ06yPYc31ptGPkMH4WDOXLLj8MQzWcYim8a
-	 74aiiMyGOUEUW0wht9T8plS+lZu+myHXhBsNQVDJ8W3y9WK3mviaGGnsCPwYJBG6uSA==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
-	dmarc=pass header.from=kuhls.net;
-	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=D31Y1gGF;
+	bh=ec7mQC4Llv9nHGgS7hq3nC2edClNcgSNxeMFqn2V3cc=;
+	b=qBlAlJCZJcOJaAX8O5N9uRPX0YKhwf19IqPaIWQsNXDTsnIAwBF0IGOLlr/m4hxe30wY
+	 JFssYWw+IPtCYVivakdkrc9Gcc2P9asy3LCy+YVzUB564a8dK3MyG/GH7jc6/5PatrBaz
+	 5/moCFR7X5Mpp9PhEfUwgZf1BV+c7YV/05rlQePPBR7tIy1TNjP5urPEBuP0aqrVtNyZb
+	 1v9JTe30GEVw6Cq0vRne2T4dveIrqgetaSeeJitX8UxKS9Eh0uleO5+6azgKYBmDgnEzZ
+	 sMiABytTh6XmrA1Cbz4H7N0BWOajDcKCRdNZ5KlztuBtSeixlXt/SbH8zGAQOQ3nZFg==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792876053;
-	bh=8PWinVsqCjRiB/9hto/JTXwGdN3eTBbY6SJYwLNm3PE=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=l38qTimrtfmDCCVWPemZIBC/Tt0fBYu+3ENLO0XZFRQjVR8P+D1So68GT68XsDv/f
-	 iMiI+9EITDy7O7afaXGam/LKaaGdh9QDIJ5nUngfOcYlWe7Nct1z8YdeGJUDjb4Dt7
-	 OOhg3o1BmdS4iTvaFpRRafE1AWDyGAtG8i4jwkfIVUUDjPr5RsAlQOW3/6C28G9r3u
-	 VSMHjSNpynFKRCU7BfF6glYRYQpxSQGmTLYKW74ghrU0MKguXKkTnVKFZY9FF65VF5
-	 imlYUXdxSFGJneYKXpgl2rm8lk7GXeGaEcJ9n7cdHt3URMVLhxdR3JVgSbxJsdtfyc
-	 OJvRlvxEKGv8w==
+	s=default; t=1792876201;
+	bh=ec7mQC4Llv9nHGgS7hq3nC2edClNcgSNxeMFqn2V3cc=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=HZ+kFB7sr8i2GfbO6HANh5bU75vyIyWj7varqvQvAqph8OsbGn+hQBnR389BL3+uG
+	 oTcJV5spkdeKXZ6LBmuzzG4IFjRtjWIyiRw4QES65aFkWYgZj0H+t0ZwbDyQ8H9ewq
+	 i0/3erQuKWM4YtGZuxEw4nK+2TbbiSCtE1q5gliDdC7gfmUXXWwt4KegjNhA28Lf8o
+	 uAV3t+oLpYlIceJTfUaSv8hlBUT3YViWUNGNNFun+l3pE5bBsq4SCcSsa2nkJzpT/i
+	 XmCAbGg82lptEVU/2zwkmPC6gho9NB5CD1o2GqaAcxH3grpH39RrWhGPEL9jGDp8Gl
+	 x/o2pOYptkKhQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 556AD80E28;
-	Sat, 24 Oct 2026 21:07:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1D4A740580;
+	Sat, 24 Oct 2026 21:10:01 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3177F3D9
- for <buildroot@buildroot.org>; Sat, 24 Oct 2026 21:07:32 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id DBA282F5
+ for <buildroot@buildroot.org>; Sat, 24 Oct 2026 21:09:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2F09980E28
- for <buildroot@buildroot.org>; Sat, 24 Oct 2026 21:07:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CD56D80EBE
+ for <buildroot@buildroot.org>; Sat, 24 Oct 2026 21:09:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7lew7lFSyILA for <buildroot@buildroot.org>;
- Sat, 24 Oct 2026 21:07:31 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 3B15380D35
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792876051;
- b=ht+Z0H94dKvDKxS1SRVsVl25Zr3NbxH+WAY4ECATlkPxN1cZRhEioqat3blqr9cWn+XV
- Zyz8pd7cdW+lXLtA5lysrx/gLsveViPAJz5JHkvBEBlCMuIa+VszGx8pLzEy4/vnQd42e
- odJpPPMyqX1VzBBLhfY88QBVAO0sFrt3cTzB1WqMDyJRUr6YNo+oyh3Eezm6j4UL/mzl3
- 6jbqeV9Ndi6nQLbRLoJisRGssPq2kgtUXy/TjScqbVubG1RCfUvQZ3nxMtPdoaC4rNfsh
- DCNXUqyzmW4+MK39nl/lChCwCaAVAEH24B67WB0km1E2Tq/XXOl4mH1vB5FdTlZ0Nag==
+ id wcUdyh81tjfg for <buildroot@buildroot.org>;
+ Sat, 24 Oct 2026 21:09:59 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 1001880E98
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792876199;
+ b=RY1KSTztO8ajRLPJgGTZzGo0pX6nIYUEZwLoby1bIz9J5U51ugrvurSfZf5/Qly2RmVw
+ B10jFqaB1XPeT0o6Iu+GKXiUT8Qbv1IITeWGFWPhEQFUnGrtPeqIQh15rgZTxQhR8I2Fs
+ 4ADUBsR4jXafGrXjJC0nyMn61FC7gfjdwI8dn5qUVpFIl+8yUOK8Myz2LySltghNdWX5H
+ 9t5wajwN1L7f2A61xVcD+afxUv4GJ3F/m9JrpUOIbeA9HJpa58cv34LunqxTNWgfgCfZy
+ XKKq3q99MUcmhBmMuOZJMrS1J+iXQQRR/Vxoh8Qo71dMSbRZuclsQNjiwKID2LhGOvA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792876051;
- h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:
- Subject:Date:Message-ID:X-Mailer:MIME-Version:
- Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=E4hsBGUbto6pcrXkJKPemJSDTT5vY+6J4TT0k8Xjxc4=;
- b=PGbpAcr4A4d7ynzFFsttqpy7ryL8JFbwlc5DENuhaCFbgIxCMDwy3cThruxytpAnhC/B
- +MwhCNJqs0SKaDU47tmsLLJMWTpyIpjbKNoNmRwQr1KYA0kG03jjVl2f7EVQjoaNYf/f3
- ALltksogp5WQk1YK4eB8HETXN/QcqA18Yvs7gnXNgBzzBMq3Mx7VAu8Zdb6TrFVwzXUik
- AygRxpM2J8/Zqtzk9U2U4x4WIDFmyxaAeNCIcei+y9DbdCv8yfHuXfyN+w0LjseOo9f0s
- Dm83Qf0qy6FvtME7gkVvV9Xbcd1BcSKtrF5WW0412u7AxiWPAOCgI35CBEc11Boxr5Q==
+ c=relaxed/relaxed; t=1792876199;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=JKcnCkCthcoKuz9j2AInuQi9vow/fsTAANVgJLGODZc=;
+ b=DvVr8pLh96Mj3LKAsAUKIsh0MOKiyaZQPvyNBkzabZvKeNTa5d9gSlt/bTmaGzHlBwe8
+ 7lkRXmofddfe/CqS65qLU84CtbMXvzfC0U0vUgJTx/Xa4sK0e+J5BJO0Gj7IAN3Y0fcZ0
+ UrjrLut9h5IDMs2EMdTwTDrWvg4CRetziP2YrrUARvs2RU1BVwy9DqkIgREbcgtqorRxM
+ uxxEZOHqwmp8G7OoWjwyO+p+v7+Ooy56XGVqA7LnIFg5/B8yEfEbj1e22w4Kxygw++SxD
+ wW5S+P0LOP3wk3Z0yE5AQF82bOoBzIQImWb6fLObgNP6L+oxPQ9oThYl3kzu+EdADHA==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
- dmarc=pass header.from=kuhls.net;
- dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=D31Y1gGF; 
- arc=none smtp.remote-ip=85.13.140.57
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=D31Y1gGF
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3B15380D35
- for <buildroot@buildroot.org>; Sat, 24 Oct 2026 21:07:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1792876048;
- bh=E4hsBGUbto6pcrXkJKPemJSDTT5vY+6J4TT0k8Xjxc4=;
- h=From:To:Subject:Date:From;
- b=D31Y1gGFOumubZ2yVxlg+ZN0S6d659P++TnRk3bO4i29UZIgAdDkHWEI6ouIdpWM7
- XqcPFEBif6XWplMSySa8l2Mwig3U8uby0YPUDjkQcCVtMAjO+cQI1h093bkMQ9ASYO
- LfarkTs+wufoaxreIN9JqzZT1YtLVUzVxVomgw3smpDvJ9K34wJKLyz9S+z2Q2SZGS
- 12j4/L1/NYa6Eqm8gpwnr2SVjLS9hFMockU84f0rQlrZDPOp4ePdks83pT5fyP45OY
- +F6m8PDhDRymSqAYgl50RXsfOiJTxr4nL4pPLxhUwbaMwKXlFj5O51IKIpq0XuAaeT
- DBkGAt/lww/HQ==
-X-KAS-Sym: v3:f51bdf72230551df:f3ii2Pf5IBRYwwGLthLtXGJkLTPgqoxACYgD4IiVycvrS
- j1M1vDTU10u+vyvQfnBS31K0As89NHyFbLiR+XiJk5aiWEBBuitRKXoIwtDHN6pi21hrer0SYvn
- V+A39ndZNMxDfB6h2HiKW4QJ+HFssPiFff7IDlISCt35mL4IA02XCNl7xw5tRmPeGgCe2OIkxkA
- o8/26gATmafNvXKBKRiIdDbXVe7tGtvSqSVp6N/kWcptGQ9a2HqylIQIz3kgWaj1FzvcNIGfNL6
- ZOPh61N5WGe9ntIE9OuLxgcV67cMbbNeciDQcUonkXq1kmovRP5q4HrnSdujUGEhtd9v6VGA==:
- M2Z+8zTASm7z1qaJKtlU+sHoU/ZbPLqSbgSUivsYgnmESN7HUuWGFOkSDv+3JSbLH2j+fq1ciPE
- ZuVbQdZoawgNjSRR/9B4grTQb88Jg7Uz7rFiTgZ16Yh0s295PDdEvL7MnLsvpJQq+C08xSC6MIF
- yPJWE6q+8vo8fmI0XDt1wdThvyrpi4xwnIVHtD2dQu3Ng+UunkHgzKylv5B1q3AZYAkyAsACTj1
- 4eZ/rYZIzsk0nK5a2i2/AWCBMhiOzkw1rX17sKY27N+chSkdCOYIteQWzhoAzZHaOOHdkC3O1Eq
- rKsTyofqIwWB5hZs72OpHBt41tRT2r2Vlh1KtgyflycAoGQMvEc4L+sJPlBEsgBt7sQct2zJbIX
- yB/iOr5CqmWj5p1ZzshtnsfguVCguHWNcJAIw843WZEhMkNlCchN9AMeTxo8J0h1zaT8a1jYb8b
- 2eh+2tkrzSK+Ya2XTO3jLiSOIigyv54kG8UBqnqKnB12mSjznCvUdpnsDDQtvuAed+zTLhs8uBH
- KbAiiIoQZ4qPlCVi36MS1H49YRu3nrloGCy+1mk1f0GPLjqxo6bXWC7WBPzojUdYtNVAkI6HJts
- 7MfzAHHhATShB6Tq7ZKTIAy8pIOPPpWPlVEkXhBXzsvMsQ==
-Received: from fli4l.lan.fli4l (p54a1ba05.dip0.t-ipconnect.de [84.161.186.5])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id D323DA4C61EC
- for <buildroot@buildroot.org>; Sat, 24 Oct 2026 23:07:28 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:45030)
- by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xKixc-000000006qx-3JEf
- for buildroot@buildroot.org; Sat, 24 Oct 2026 21:07:28 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1001880E98
+ for <buildroot@buildroot.org>; Sat, 24 Oct 2026 21:09:59 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E58B79CD6A; Sat, 24 Oct 2026 21:08:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 24 Oct 2026 23:07:28 +0200
-Message-ID: <20261024210728.2817095-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
-X-Spamd-Bar: +
-Subject: [Buildroot] [PATCH 1/1] package/transmission: bump version to 4.1.4
+Date: Sat, 24 Oct 2026 23:05:10 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3272ba790b30561d923cf8ad1548ad22d5c109c3
+X-Git-Newrev: 2dbceeb7e67a99cbe2200aec3147bbc1f3bc4582
+X-Patchwork-Hint: ignore
+Message-Id: <20261024210833.E58B79CD6A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fluent-bit: bump fluent-bit to
+ 5.1.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -151,58 +109,98 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-https://github.com/transmission/transmission/releases/tag/4.1.4
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2dbceeb7e67a99cbe2200aec3147bbc1f3bc4582
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Upgrade from 4.2.0 to 5.1.2, bringing multi-worker network ingestion
+and improved OpenTelemetry processing.
+
+The 5.x releases also add Google Cloud Storage output, Windows Event
+Tracing input, NVIDIA GPU metrics, and new metrics processors, alongside
+FIPS, TLS, and proxy improvements.
+
+Signed-off-by: Aaron Mestdagh <aaron.mestdagh@barco.com>
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-Gitlab pipelines passed:
-https://gitlab.com/bkuhls/buildroot/-/commits/245feeab21fbecb986e3c9f95e8b75d5a1dc6ea4
+ ...ipser-initialize-temporary-diameter-entry.patch | 31 ++++++++++++++++++++++
+ package/fluent-bit/fluent-bit.hash                 |  2 +-
+ package/fluent-bit/fluent-bit.mk                   |  2 +-
+ 3 files changed, 33 insertions(+), 2 deletions(-)
 
-with the exception of an ICE for target
-bootlin-m68k-68040-uclibc/build/transmission-4.1.4/.stamp_built:
-https://gitlab.com/bkuhls/buildroot/-/jobs/17441421766
-
- package/transmission/transmission.hash | 2 +-
- package/transmission/transmission.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/transmission/transmission.hash b/package/transmission/transmission.hash
-index 0e81ec8ec1..7d207e28b1 100644
---- a/package/transmission/transmission.hash
-+++ b/package/transmission/transmission.hash
-@@ -1,4 +1,4 @@
- # From https://transmissionbt.com/download
--sha256  ce7d2d8b101f7eb54bc3cf0bc55f52f7ebd4a25fa48e00bdca9a7e0fc02617da  transmission-4.1.3.tar.xz
-+sha256  86e7aa020cdf64826447034bc85f4d3b7c848d8c0891d9dc9b9fddfb2c805d22  transmission-4.1.4.tar.xz
- # Locally calculated
- sha256  9715b55d11caa499d34a6e23498c766fe1ece4ace57777553313e27d688dee78  COPYING
-diff --git a/package/transmission/transmission.mk b/package/transmission/transmission.mk
-index 0f5ee5d6ac..94221d5f71 100644
---- a/package/transmission/transmission.mk
-+++ b/package/transmission/transmission.mk
+diff --git a/package/fluent-bit/0001-lib-ripser-initialize-temporary-diameter-entry.patch b/package/fluent-bit/0001-lib-ripser-initialize-temporary-diameter-entry.patch
+new file mode 100644
+index 0000000000..1514779f55
+--- /dev/null
++++ b/package/fluent-bit/0001-lib-ripser-initialize-temporary-diameter-entry.patch
+@@ -0,0 +1,31 @@
++From 83086bf5092d76c2fffbcd7f0cb671083bf0a3c3 Mon Sep 17 00:00:00 2001
++From: Aaron Mestdagh <aaron.mestdagh@barco.com>
++Date: Thu, 8 Oct 2026 11:52:22 +0200
++Subject: [PATCH] lib: ripser: initialize temporary diameter entry
++
++GCC 6 does not accept implicit default construction of diameter_entry_t.
++The temporary is assigned before use, so initialize it with Ripser's existing
++invalid-index sentinel.
++
++Upstream: https://github.com/fluent/fluent-bit/commit/56df8d278c927b2e7b81d28d7c08128fd7ded167
++Signed-off-by: Aaron Mestdagh <aaron.mestdagh@barco.com>
++Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
++---
++ lib/ripser-1.2.1/ripser.cpp | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/lib/ripser-1.2.1/ripser.cpp b/lib/ripser-1.2.1/ripser.cpp
++index 6bddf7271..b9ccc89d6 100644
++--- a/lib/ripser-1.2.1/ripser.cpp
+++++ b/lib/ripser-1.2.1/ripser.cpp
++@@ -183,6 +183,7 @@ value_t get_diameter(const index_diameter_t& i) { return i.second; }
++ 
++ struct diameter_entry_t : std::pair<value_t, entry_t> {
++ 	using std::pair<value_t, entry_t>::pair;
+++	diameter_entry_t() : std::pair<value_t, entry_t>() {}
++ 	diameter_entry_t(value_t _diameter, index_t _index, coefficient_t _coefficient)
++ 	    : diameter_entry_t(_diameter, make_entry(_index, _coefficient)) {}
++ 	diameter_entry_t(const diameter_index_t& _diameter_index, coefficient_t _coefficient)
++-- 
++2.43.0
++
+diff --git a/package/fluent-bit/fluent-bit.hash b/package/fluent-bit/fluent-bit.hash
+index be02761ed5..7fb94d60b2 100644
+--- a/package/fluent-bit/fluent-bit.hash
++++ b/package/fluent-bit/fluent-bit.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  44fe0f52e89a63b213695748f99691d0a6247a4bd05065f1b517c798d9f89bcc  fluent-bit-4.2.0.tar.gz
++sha256  1971d86c7dc0f3e6b906890297635d6a3a84e5e7ad64d36521b74da202fda62f  fluent-bit-5.1.2.tar.gz
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
+diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
+index a3a44b8dbe..b53da90706 100644
+--- a/package/fluent-bit/fluent-bit.mk
++++ b/package/fluent-bit/fluent-bit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TRANSMISSION_VERSION = 4.1.3
-+TRANSMISSION_VERSION = 4.1.4
- TRANSMISSION_SOURCE = transmission-$(TRANSMISSION_VERSION).tar.xz
- TRANSMISSION_SITE = https://github.com/transmission/transmission/releases/download/$(TRANSMISSION_VERSION)
- TRANSMISSION_DEPENDENCIES = \
--- 
-2.47.3
-
+-FLUENT_BIT_VERSION = 4.2.0
++FLUENT_BIT_VERSION = 5.1.2
+ FLUENT_BIT_SITE = $(call github,fluent,fluent-bit,v$(FLUENT_BIT_VERSION))
+ FLUENT_BIT_LICENSE = Apache-2.0
+ FLUENT_BIT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
