@@ -1,28 +1,28 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C9E0606A31A
-	for <buildroot@archiver.kernel.org>; Sat, 24 Oct 2026 17:54:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72216606A31A
+	for <buildroot@archiver.kernel.org>; Sat, 24 Oct 2026 17:54:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=e1pkBkRb
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Kwoikr6r
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F3EB40528;
-	Sat, 24 Oct 2026 17:54:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 391A28121A;
+	Sat, 24 Oct 2026 17:54:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AysYgK8jJfNU; Sat, 24 Oct 2026 17:54:15 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 661D640692
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792864455;
-	b=qz/hFColeaOSHBGwm3poLJBycSZfaU6Al7s98J3DKBv0FhLkQ93CI2DkrzGKNb9gOgBf
-	 TbQcq/5pZhvxvPjYKGCkTC8xS27pxIX4WQSOG5XRLgDSvJm3XpwqBAMfakV4eZtWuNsUD
-	 DiS+NroMOASvvISKdW6nCFOhCbYn+B6HMzXDfmmJ3GUsPtu7/trWRL5T4RAiVFsZC+/yT
-	 33iF+CXSFWkzFgRMLT8jevKd+51jlGXFL8jBWCSqFX+5wZuvTU6ZqIisHgKoF1TNwxupa
-	 L53x4YtPxyGRPd0Eo3blNg2/wU69fVIcd+vl9E0h05bfJYh0SdcJZJrNZnVI1dmvVnw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wdbkGIOVTKPr; Sat, 24 Oct 2026 17:54:18 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 4C3B6811E7
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792864458;
+	b=IwvbsaccLCkgQ7dQMhOKskuvI/un3eoGLAxRK2bBMOgzfXLHLM81WWTZzciEnL2ReOEF
+	 xylQIkPMQuXqkHDhYLiEs3UPF6fewS3Ru6YCrKjJ/XZlvrJS6VIBumovZUSh4m7dskscO
+	 bs77RKmEZVQOG2RihxVhpLBvNxaTLdeG+yScAw1qSObkYaqxRj14AwJK81OjCNQpbKOYg
+	 KfvMNr1vp4bvBOD7aceOS6rIB4G+rbGcBa15CeMsmmTjSS9vFQifaDH1ZNTJhqSKajrDH
+	 GoN5A86Z4/UN9JbvBr6Lb9SKwIPkkgneMrBIy571h+LvDUweo6hUX265/5KI/o0t9eA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792864455;
+	c=relaxed/relaxed; t=1792864458;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=r+q9zTHqhXebXlI5H45WWyI10pRTauPHET8rh/xlCbo=;
-	b=ZLOt30LhTtSoiibfaI/3k0sJf/KyfCCQ51U9SCifdcDng0vm5ua6ze/fu4DltouzwnTt
-	 vYlfe80TLeT50jIvQGAWpvQn1OpTOlo0kJs7xSb306NzrRB3adHUrpwWn1ewiUL1T8wF7
-	 aSzfP0mPM0FvG+iddzQvDRb3qDkpWYT3dkpc9WVxxbnxoe+uIc+In+3jEUOp1XJqsJgNc
-	 eufAWEqD9DQXj6eHUTsSOvnvhgtfXiXW0sYYKD3Thwm/3cY3pO68JoyY9k24sUhuKk3p+
-	 u1rhrKWDfmBS4c18qEUHIF2Kmo42TZRikLZtgVvUACMfQz48wS/xpm1Snw3ooSW8+ng==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=ZMn/jaAlX+BCFW+PVsDaaQPKMu+FEUS40GhihbJSN3A=;
+	b=nSpv+BedwqbdFWzoO+dAnoNHg4kUY/yaidXSAc5NBZ32MEOauywqdw09XHo8v8hyHN6G
+	 IkOZQrOhmIi3rnp/hbJA1yUm2Ww3mObkzHkVtrnOCdFrR3REOToFE+ovjBAUPyJYWdnJj
+	 cHmWkAIfKLY0nJR2Yc20oe7m7+U4WaI6Mxmc8XVcXNW34F9HuJ3lP3kwB6SpPfoTGinBJ
+	 qystDUUJBM1DlgeLKbPMFtS7y62H1eWcNlqw0M/QY7lCZUBVZwobb3CTISiHwq2dFB1Jv
+	 Fl+QsUqNx+prCBmfnI8kjZOIx3BEo/d1m2WNkPc6bhK2G1TjJPNtTk2lHf8qqXg7u7w==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792864455;
-	bh=r+q9zTHqhXebXlI5H45WWyI10pRTauPHET8rh/xlCbo=;
+	s=default; t=1792864458;
+	bh=ZMn/jaAlX+BCFW+PVsDaaQPKMu+FEUS40GhihbJSN3A=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=e1pkBkRbFzxZhODYxRdpvGgDI3JGqSDr9v7XbcCxQOu/00V9utYXxN8u8s23RmQGt
-	 mo7qSvGpWfd/p+0QbBHNf0cfGhubBrSNOO0l+69fmRBzEfUpw4Ti7pssIv/1zYzSid
-	 shjNFVpZp3famvBLz4VnBrWQLuZRj71ZEOtatqPQnw1Tk/1eJRpjISOQZ+tSscAPo2
-	 e3ibPdsSN26JMPMv1Sp+mvV85nx0+kQguhdUgnOB9uD82XyV+6sRHDEWx7iGBMpBW0
-	 bQOgXwEhRu61wC77dPiOYvifpXLV98BcSw8GbafKZtLjPSHE9EZH7edjmmLY1l5NCw
-	 zRRS4YOQFG+1A==
+	b=Kwoikr6r14pxSj7d5ZD8jg6HOpy60DWJagv8PjIHX6wn4/vTwmjDuve/q1vDdCdnP
+	 0D49nmBx5YE7bPMzele0NB3XTnpO8wFeDKZLpdF2z9TmUemI1KLa9hhNd4ZpKShpd5
+	 +L1ku1vngHNA8keqIu7Uq/Gp3EciPHYrYcXIkjK1wrU31pr12hA72coEr6MMebh09t
+	 JKh7mJM+zJ+iKgkZ800NB8SLmOs9EVLZk4+kRRlXp4H/M0s/mNVO3KFXG8Xm3LR7Kv
+	 ld4Dq60wnMvjWU+1HcLbuNtgA6vfgJzAktgr/7OI9pBO0iZZjzEOEb0at5QS9Xna1a
+	 j7bkYRmKo1IJg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 661D640692;
-	Sat, 24 Oct 2026 17:54:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 13B6D3D9
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C3B6811E7;
+	Sat, 24 Oct 2026 17:54:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2C362765
  for <buildroot@buildroot.org>; Sat, 24 Oct 2026 17:54:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1113F811B1
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1213440692
  for <buildroot@buildroot.org>; Sat, 24 Oct 2026 17:54:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Hbchs6s-xDrb for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 92PGSmibUSS1 for <buildroot@buildroot.org>;
  Sat, 24 Oct 2026 17:54:13 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 22A6A8124D
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 3ED3F4054E
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792864453;
- b=YnwCeO3XPc2mYmpZOlPHIcEjk2c7XuxJ0uWsBe+O30ih3FcQlAjEd8LwV8ay5oKERMvs
- 8UzgBFcew/wytM/KAtueevaLVowaFbHslnGv4SASSmfJP94PJbm+gAzAB4bIRtD+o1oMw
- VARVCXiOybZeUok86QwM3mlZknv50PBe1tyk2vcl48KCDG3TIkwg0FRhJJJws6E7pu/71
- xPg4TFFfN0TaqgNXy5F1EmBPm19zH0uT7aNh7FuvlhAyRai+I8/X/11xOPt63kCYVYyz8
- n0zKp7SqsWe0dtmplxUjaW6fBa1ow0ZGvzOc8jbcQ4/BPCyYOO46+BtY3m7p86VPAdA==
+ b=psNWi8SqvqfAms5T4Sbm+raC6VWV/qWAtb2XP/K+W7WAyCSPLNWKvetyyES6S3yuKlWl
+ b2Z2CUaQ0p13BKzzbWLomDafLtYxVmbo1YNaHV70D/WtqgBQGc+2b29fuviWGq6N19Ytq
+ XN+nqcjDOlxlJVOspvqLxnZ3onU1ySsudqTj1zhzFrvWbxSDgbPwKlE9qrR7y9jdPpPWs
+ YE+iGMByP4SuVIUNjlhQAiJ9kwdJHs0x8PHjO2YjkF090y+hq/77GiKd5Gel4Tnis88/u
+ BisjopOF90jFVwwVhc2hIYzJ/mz6tCcFsEe3h25q0MLKM2nRQMFj1MdVI/cKf/2ClEA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1792864453;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=7Scg/3Gvn97SW1xPc6y3mVHTanXthtc3xRTKiIGof94=;
- b=SHb56VEQ/RGOKXckBnbAdWpmStjeuqMt7ZR4vHbFKpS0wEWuOfqZQQCnw+XuXV9diK86
- GFeY7yFySxQ8MotET9JNBKy0O7UEF09t+b7oMKStDqEbtP0j14Pru+bGHP864Hvxz8ubh
- RKBqUjSvRqXPTbVUXMcOer3Vw7fFDDdKnSBMUa6t4hhjrlPY5CJlg0gCJTn+NBCsTknPA
- 5axYNpiZJXB6Q2IWonv+/u5/PmxJu1NWwA859emJMC8pm/mV9dD2fMp3s2GG+EEU0+NQQ
- TqBmqSFifJSzBDAj19o3SSEZGO89Ie4j2bzT+cAWYRbWj1eSfzutA5TAiqdyHNvpYRg==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ bh=Fi1xUZb3gbqUHCi2ZRyFaRcdGw7VvMf0zHUiJZbopz8=;
+ b=Mr3d5ZF0m4a9V7PQkm6xU1voRfx6FRqTEFw4igeKeRKaTNBlqdHIEAVvQasltyqGVd/e
+ /KW11Os2k6a9CuSJVig8u1D0XW1CWJUvbJMlGlF7aZXEeBXAHT95OmoFgrV/dM04VUtDg
+ Y8XO8PHooK6tBHooOHFvT3rsVgcf/Tg2dHopu/WJyfmy9PIpSVdHXqAcczTmlq99vpJC0
+ JgZJRzKjc2694bVOcEfbWHebbcGfJ+2qKIKRMpzrz4EXYWXl6AOSdEi0nfYgCUSYNMEGS
+ 8XqV2wiytx/ps1SoNbjdDX/cpo8J5Q3WOKPKsZwCovoYpR/GPfRQA/GltwujHDcVKvw==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 22A6A8124D
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3ED3F4054E
  for <buildroot@buildroot.org>; Sat, 24 Oct 2026 17:54:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0960C9C7BD; Sat, 24 Oct 2026 17:52:48 +0000 (UTC)
+ id 2791D9C8B5; Sat, 24 Oct 2026 17:52:48 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sat, 24 Oct 2026 19:10:28 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 105c0187151202fcb2f79a11e9f4d4b21f85f3ed
-X-Git-Newrev: 80a5e7af62e6bb4b963173391d3547a1f879fe25
+X-Git-Oldrev: a538bf0ac93e030e8ad8106865d11559a448b655
+X-Git-Newrev: 52ae9f49b215178784f36b486611248e217fc153
 X-Patchwork-Hint: ignore
-Message-Id: <20261024175248.0960C9C7BD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mesa3d: precomp-compiler does not
- need target llvm
+Message-Id: <20261024175248.2791D9C8B5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mesa3d: i915 Gallium driver needs
+ llvm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,178 +118,61 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
 	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/80a5e7af62e6bb4b963173391d3547a1f879fe25
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/52ae9f49b215178784f36b486611248e217fc153
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Inspired by and fixes
-https://gitlab.com/buildroot.org/buildroot/-/work_items/180
+Buildroot commit 3e296a151195f9d32dbfd62d6c75d08b822be6dd bumped the
+package to 25.3.0 which includes upstream commit
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/b8b38d38b1c14b60de0324ac2f98ff7f1f4cc3c5
+that enforces llvm for the i915 gallium driver causing configure errors
+in buildroot:
 
-To build binaries provided by the host-mesa3d package we do not need to
-build llvm packages for the target arch.
+../output-1/build/mesa3d-26.1.6/meson.build:241:3: ERROR: Feature llvm
+cannot be disabled: i915 Gallium driver requires LLVM for vertex shaders
 
-Added configure options for rtti support to fix build error when
-BR2_PACKAGE_LLVM_RTTI is not enabled:
+Please note that
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/4235c39a9a8378f1e2dc0899dd4c3c941f27b887
+later removed the llvm dependency for the r300 driver introduced by the
+commit mentioned above so we only need to add the dependency to the i915
+driver.
+The configure option draw-use-llvm is disabled by default when llvm is
+not available:
+https://gitlab.freedesktop.org/mesa/mesa/-/commit/37c7d19e46a4863c120186a99ac0344c2dd31260
 
-output/build/host-mesa3d-26.2.3/meson.build:2042:8: ERROR: Problem
- encountered: LLVM was built without RTTI, so Mesa must also disable
- RTTI. Use an LLVM built with LLVM_ENABLE_RTTI or add cpp_rtti=false.
+Fixes:
+https://autobuild.buildroot.org/results/acd9039901cf4168e6318c62252ddae6ea0ec93d/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/mesa3d/Config.in | 46 ++++++++++++++++++++++++++--------------------
- package/mesa3d/mesa3d.mk |  8 +++++++-
- 2 files changed, 33 insertions(+), 21 deletions(-)
+ package/mesa3d/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
 diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index cb86e6a2a4..feed6b68fe 100644
+index e18d25eb8e..f45a675445 100644
 --- a/package/mesa3d/Config.in
 +++ b/package/mesa3d/Config.in
-@@ -23,8 +23,7 @@ config BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS
+@@ -147,11 +147,15 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
+ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915
+ 	bool "Gallium i915 driver"
+ 	depends on BR2_i386 || BR2_x86_64
++	depends on BR2_PACKAGE_MESA3D_LLVM
+ 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+ 	select BR2_PACKAGE_LIBDRM_INTEL
+ 	help
+ 	  Support for i915-based Intel GPUs.
  
- config BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
- 	bool
--	select BR2_PACKAGE_SPIRV_LLVM_TRANSLATOR
--	select BR2_PACKAGE_SPIRV_TOOLS
-+	select BR2_HOST_CMAKE_AT_LEAST_3_20 # host-llvm
- 
- config BR2_PACKAGE_MESA3D_LLVM
- 	bool "llvm support"
-@@ -147,15 +146,17 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915
- 
++comment "i915 driver needs llvm"
++	depends on !BR2_PACKAGE_MESA3D_LLVM
++
  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
  	bool "Gallium iris driver"
--	depends on BR2_PACKAGE_MESA3D_LLVM
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # host-llvm
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # host-llvm
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
- 	select BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER
- 	help
- 	  Mesa driver for iris-based Intel GPUs.
- 
--comment "iris driver needs llvm"
--	depends on !BR2_PACKAGE_MESA3D_LLVM
-+comment "iris driver needs host gcc >= 7"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on !BR2_HOST_GCC_AT_LEAST_7
- 
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA
- 	bool "Gallium lima driver"
-@@ -189,15 +190,17 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST
- 	bool "Gallium panfrost driver"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
--	depends on BR2_PACKAGE_MESA3D_LLVM
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # host-llvm
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # host-llvm
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
- 	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
- 	select BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER
- 	help
- 	  Mesa driver for ARM Mali Midgard and Bifrost GPUs.
- 
--comment "panfrost driver needs llvm"
--	depends on !BR2_PACKAGE_MESA3D_LLVM
-+comment "panfrost driver needs host gcc >= 7"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on !BR2_HOST_GCC_AT_LEAST_7
- 
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R300
- 	bool "Gallium Radeon R300 driver"
-@@ -360,46 +363,49 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_IMAGINATION
- 	bool "Vulkan imagination driver"
- 	depends on BR2_arm || BR2_aarch64
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
--	depends on BR2_PACKAGE_MESA3D_LLVM
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # host-llvm
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # host-llvm
- 	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
- 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
- 	help
- 	  Vulkan imagination driver.
- 
--comment "imagination vulkan needs llvm"
--	depends on !BR2_PACKAGE_MESA3D_LLVM
-+comment "imagination vulkan driver needs host gcc >= 7"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on !BR2_HOST_GCC_AT_LEAST_7
- 
- config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
- 	bool "Vulkan Intel driver"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd.h
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
--	depends on BR2_PACKAGE_MESA3D_LLVM
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # host-llvm
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # host-llvm
- 	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
- 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
- 	help
- 	  Vulkan driver for Intel hardware from Ivy Bridge onward.
- 
--comment "intel vulkan needs llvm"
--	depends on !BR2_PACKAGE_MESA3D_LLVM
--
--comment "intel vulkan needs a glibc toolchain w/ headers >= 3.17"
-+comment "intel vulkan driver needs a glibc toolchain w/ headers >= 3.17, host gcc >= 7"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 || \
--		!BR2_TOOLCHAIN_USES_GLIBC
-+		!BR2_TOOLCHAIN_USES_GLIBC || !BR2_HOST_GCC_AT_LEAST_7
- 
- config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_PANFROST
- 	bool "Vulkan panfrost driver"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
--	depends on BR2_PACKAGE_MESA3D_LLVM
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # host-llvm
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # host-llvm
- 	select BR2_PACKAGE_LLVM_RTTI if BR2_PACKAGE_MESA3D_LLVM
- 	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
- 	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
- 	help
- 	  Vulkan panfrost driver.
- 
--comment "panfrost vulkan needs llvm"
--	depends on !BR2_PACKAGE_MESA3D_LLVM
-+comment "panfrost vulkan driver needs host gcc >= 7"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on !BR2_HOST_GCC_AT_LEAST_7
- 
- config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_SWRAST
- 	bool "Vulkan swrast driver"
-diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-index c103345e86..04112eea8e 100644
---- a/package/mesa3d/mesa3d.mk
-+++ b/package/mesa3d/mesa3d.mk
-@@ -178,7 +178,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER),y)
- MESA3D_CONF_OPTS += -Dmesa-clc=system -Dprecomp-compiler=system
--MESA3D_DEPENDENCIES += host-mesa3d spirv-llvm-translator spirv-tools
-+MESA3D_DEPENDENCIES += host-mesa3d
- endif
- 
- ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),)
-@@ -347,6 +347,12 @@ HOST_MESA3D_CONF_OPTS = \
- 	-Dglx=disabled \
- 	-Dvulkan-drivers=""
- 
-+ifeq ($(BR2_PACKAGE_LLVM_RTTI),y)
-+HOST_MESA3D_CONF_OPTS += -Dcpp_rtti=true
-+else
-+HOST_MESA3D_CONF_OPTS += -Dcpp_rtti=false
-+endif
-+
- HOST_MESA3D_DEPENDENCIES = \
- 	host-libclc \
- 	host-libdrm \
+ 	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # host-llvm
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
