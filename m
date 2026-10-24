@@ -1,215 +1,145 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F09B8606A31A
-	for <buildroot@archiver.kernel.org>; Sat, 24 Oct 2026 14:08:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0139606A31A
+	for <buildroot@archiver.kernel.org>; Sat, 24 Oct 2026 14:10:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=SaoLqm/u
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=e78+BqLj
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C6E9181775;
-	Sat, 24 Oct 2026 14:08:24 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E_Vckhwiz-ly; Sat, 24 Oct 2026 14:08:24 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org CF7D481585
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792850903;
-	b=LtrsN5NzflY57zLfezgPIy8yAdyHAc/YlgG4CjFGaPzZ0DCUwVKPvv4bPZDF7TLHzrbt
-	 6En8MUzxNqUvc4eBNiw372FcPnCzG+5J+ALuIpG9jrXUazCkiTEAdKXo3ObMYrkFISAe9
-	 nMDkBuJu0xuNWHbK7HQzgSCV245FikyhN1aU/SByGvB9S3Nb+M/ANRjHKqu1eFfrMNO5P
-	 da3s9QRJKjotI3CiXCOSfF1UGf+KObuKxZyBH4WFXKUehzA7hxTTt+E88Vulz+QD6uQvN
-	 RxXOc4gkkFBnaiohw3StB5zP1XnYr7U6NlM0hMV8jABXBV1c7pUlOWv0shO+htgnkOg==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792850903;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 X-UI-Sender-Class:Received:To:Date:Message-ID:X-Mailer:MIME-Version:
-	 X-Provags-ID:UI-OutboundReport:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:Cc:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=K2PLtnkf09UhShjtpycHN3l1bxIKd9n4wLAGLdvaHSA=;
-	b=o6gmj1hkX4pDw8/AyKaRLMzwqesWfCmYkrss/hChklhn4rmzebJD+DohaJ/zhLlmzO6Y
-	 mk8Oz38Br7IAkvLHavrQ58Zu270uUpFa9ha3bhLnFFK7FK+/bnKP8xRpfCtzn1D9Tiavu
-	 nXIQLeWpURTMe4m43bh8bf7uBC/HBJRFB0nJU8+11zArkz9sw9OtX5UadWFZd36ApkJ72
-	 dYtDsRWpLjS2WoXCFk4sYsJdOgxn0M1TDGI5k7Cf4Mb8zf+RsaY4YrsRqYanuSYoCqOMR
-	 lVjDIsowhjcriSVXMC9dc8mPm5CISIHw//nGGmwuYMPebmD3DEvlQtbw+0KWiSSKPnQ==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
-	arc=fail smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792850903;
-	bh=K2PLtnkf09UhShjtpycHN3l1bxIKd9n4wLAGLdvaHSA=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=SaoLqm/uRcfOdElGu5HmRO/SA3Q7gT1FvewZNWrsMKehmuxRuBq2fmlpVjfckEphj
-	 5R1SdG1SNjKu/a3nMAuSw3oU/tMDkbq3iZa+tCUM5e5IsQyerApDxuk3WoPDMe/iws
-	 7yOmdg8u/Oc34uV7TZzp18EFBd+xq+pcpmWeLbe+F3+ymBaFENQqGf6lJjzZJghm3C
-	 47oG/zPCoTXQX375/9uBhG4Sr4AlPxWUon7u7cF2xoXkW+rzEPwExj7KCkfqvNTRZC
-	 ajYN1QO/t2wDxfq8hPlHD1BqzSQPH5LAQ2BCcNHx+CkiCbVwa2xaqkB6JqIOhp/4fa
-	 QByylhCHa1zYQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CF7D481585;
-	Sat, 24 Oct 2026 14:08:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8E3F53C4
- for <buildroot@buildroot.org>; Sat, 24 Oct 2026 14:08:22 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 74F7160680
- for <buildroot@buildroot.org>; Sat, 24 Oct 2026 14:08:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CAA9F6067A;
+	Sat, 24 Oct 2026 14:10:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jx-_BDgeJA-D for <buildroot@buildroot.org>;
- Sat, 24 Oct 2026 14:08:21 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org CBE7560688
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792850901;
- b=MSa6TsMU9flwK8FfRAIJr4889wjFq/ib+qpAtmKm9UawGdhlLXVCmRuetCjmuzQxcydg
- Q25wmJ2bUf6c5XnAZV3o+fWRupCGpxZBUJWsB1vxKEv2GdT3sssix1ZvtdlmacwOhrrKH
- sh6noXwyJRR6ph5vP9vRZV9fPalAS43OeVAj+XEB/entKzRDSCoflnFFMONIFGDJbz20N
- WEXlCrrPTghNxG+sQ2IhYZuq6o3+TB8iteqMgilJB8nFDGUtL993PlNuy7HZQLS5cdofh
- owEOCUt7lK033ED4yHTHhpb/NtdmqmAIxzZ3AG1HHFgavDl7NDkiClsWXtreLec8ifA==
+ id mKAV-fHCsXoi; Sat, 24 Oct 2026 14:10:19 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 6AC5360680
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792851019;
+	b=tCBD2OnylY5c6osUrofQgK3pXuv9n/YfnFUcEO7I9p97HvQxl8dC0ansYvm6P64EN3tw
+	 TBqWKWbdkys9L3llwb7raJQ+ROnw8abWtrhk13xJkaQlDXlz6QawcBINdNmwhy4K9xXwC
+	 R9WIcPz9Cr9QiLcYStTP6mveR5En78CN9ijzQKdQt7eyY8aDrA2Qa4pllLb8/l/i80M1R
+	 H7FcTCkAVvJbHgCnhGWAgosw3u10Hj9rRFa9ak+RUlpwzpaAwSvfA4BU2ANdaJ7OjtR97
+	 2mMNz/IcuOiVQ8jUPYcOQJnSrHSxJUvOtbaNc3MRq/CxGGpGp5ui5WX/yktNvnl5r0Q==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1792851019;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 Received:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=CGXkKZB2n5g8moDZYdBjEjH7ZdtFdBnLzW3v5L3ncfw=;
+	b=BucZawxDR/bv/nWHOMT7V7aDJWTNcgrHl2JmgNnybuASMAhrWTJva4FvKVyFURqubN4z
+	 9243hy+Mq0CTRbNUtnsieSu0IcNbO7xurViNv7yGHl8bD/wjaemnbda1D/QoURqe8Wpfw
+	 6j0sR2vP00aYYKhWLvSl8iUqRyGHZn0wvVFThT3+GlPLb6cVsrkqg0s1cAsPBWXHsQs2o
+	 qDtuLMg2yykckKhcKV2EMxxnmQLa576NFwJSq1PEvQJG9g6J7zTQaoSCnvv1Kn7M8OBju
+	 IzFwLVqq7Olf5IDcrG4dZH8tpZwwIMJNJn17ryepELJp/yrAvtCSUGhLUGDs4lI4kzQ==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	arc=fail smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1792851019;
+	bh=CGXkKZB2n5g8moDZYdBjEjH7ZdtFdBnLzW3v5L3ncfw=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=e78+BqLjTjY3XNN2I0J9IpF3y74iCHa4vL81UafaLhNcHGV8MTOfdQUlLwFZCbgzk
+	 nCy2R2vd+gh+zs7VSpiNzhQ7yQBbqf71kvfN7Xb+3pJ4qarxdSzJi6IbK8jxTQEFeQ
+	 dje+FIyJCsCB/RBm8WoiKbrPH+jziFZRFLxSXjfNLW7jXkktNK+oIE5mhLN1msUqZS
+	 w45nZRyNIaocwxXimPx9LXsZaVDKOyPa7krD/+OAL4sVGnL2RJLCxVWYugB31U9/E2
+	 jYm0BWtOkix4w73xHoFVjafiwmhbJnrR6IcQsUPDY4Fo4bRv/TtI0A9oxx82bSiCXi
+	 ADZgjziZzAg+Q==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6AC5360680;
+	Sat, 24 Oct 2026 14:10:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 98325380
+ for <buildroot@buildroot.org>; Sat, 24 Oct 2026 14:10:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7E33F815AD
+ for <buildroot@buildroot.org>; Sat, 24 Oct 2026 14:10:17 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pfHDR9-3EO8q for <buildroot@buildroot.org>;
+ Sat, 24 Oct 2026 14:10:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org DB99181589
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=209.85.221.42
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792851016;
+ b=pDyCC89LBCqxNkhSbVGgbDi8bRwxIJcPY248joDpVnmbam7+eoiHgAHTdL7LY5S9AQvp
+ HfTZ9mkCz+kJIzLPmz8zLXc+EJM0NafT6okvSCJfIZpC6vyoFBTbcbCkRXBsjF89bBPH2
+ 8CYMCNt/LOOu0+G6os7M9q5fHQBtNqz4Im/45mmJP++6fue0MoS4NLUyuI76z5f8U1B4w
+ hHDKKMQSzKbWDuJP482sbOxbpF1cCJeGIFhb9FPjoRyUDXe22xr2tet6IPsatLhVxxDD1
+ J9Sj037yYtnHjE9M0RwpsL3sZG6ydAb3kdTv5YoxnG1FF4iz/GeCKauQxMmixXJHbiQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792850901;
- h=Received-SPF:DKIM-Signature:X-UI-Sender-Class:Received:From:To:Cc:
- Subject:Date:Message-ID:X-Mailer:MIME-Version:
- Content-Transfer-Encoding:X-Provags-ID:X-Spam-Flag:UI-OutboundReport;
- bh=b19GZanRR/3/SV933jJ1RsNJgdT4TbHdodGUKob55lI=;
- b=J5m2jWrBVbWj0ZjgwjaHw6fS9Qe2Bh7A9r9IjVs0ZX8DLuR/gTy64CkF4amDySgeegsU
- nqaQHD8TRg1ZvrG0l+nMKRZAOqolK5Jhm2DYXyKxuCx/G/EOFL459PhZlAjaNkkatw+CK
- 83/oxMDbcs+s0xEkeYR2yzT3hkuq7Qq3BniFgLb7BBcA90NtkL6ERwKLhnII62uNZTeI1
- KLAyzMXV4kFEP05APNBi6F5ppp07xVkKRd2N9nt1YNY5cX3fpBxkPP0ZDW5pfBmkEY41l
- GC43zgdfKnctIOJlwtO0QRX5QDQSlH2Lst4f72K8rsIQvKhLBUCWa8yIciv5FJVYy0Q==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
- dmarc=pass header.from=gmx.de;
- dkim=pass header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b="eB/vgmTW"; 
- arc=none smtp.remote-ip=212.227.17.21
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CBE7560688
- for <buildroot@buildroot.org>; Sat, 24 Oct 2026 14:08:20 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MS3mt-1xAT073xVL-00NQu4; Sat, 24
- Oct 2026 16:08:17 +0200
+ c=relaxed/relaxed; t=1792851016;
+ h=Received-SPF:Received:X-Google-DKIM-Signature:X-Gm-Message-State:
+ X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:Date:Message-ID:
+ X-Mailer:MIME-Version:Content-Transfer-Encoding;
+ bh=K0vrBrfXqs4oZ8nMg/v5JYxtYN+t+PjVajxHDPkRXo0=;
+ b=TmMbxatWW6FWV9CW6blDrlZ5KgxFZOzduK21GAIJvsy+3fv8mWuiJYhqm89PvS2ABE33
+ xYkgA5yVAc3q5Dq+R0MNtKtL9EJro64Reg3j0EE5ZT4UAqP0HAwTt8usoEf0pIg6aXCed
+ SdMkxfy8wChjIWzf4aFqns+Rrz8NX2R0xTRBodR5IPoqsoYS2yU7Nlcy0DVyu1F8NCSF2
+ vp03/l/MS0b4Fn3hkElvMThxcBcRWgDK6ldclqVDfyHlfp5/7FwlNUkNcKPuygNXHdzEn
+ R2KHuL/0bkYchNWJuu9kKOlRX1YIr7b/odBd8IN7MhR6c4N1y3Ig6F4f4svtXO9M+lw==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ dmarc=none header.from=devoogdt.com;
+ arc=none smtp.remote-ip=209.85.221.42
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.221.42;
+ helo=mail-wr1-f42.google.com; envelope-from=thomas.devoogdt@gmail.com;
+ receiver=<UNKNOWN> 
+Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=devoogdt.com
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com
+ [209.85.221.42])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DB99181589
+ for <buildroot@buildroot.org>; Sat, 24 Oct 2026 14:10:15 +0000 (UTC)
+Received: by mail-wr1-f42.google.com with SMTP id
+ ffacd0b85a97d-48b042c0759so1110328f8f.2
+ for <buildroot@buildroot.org>; Sat, 24 Oct 2026 07:10:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1792851013; x=1793455813;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=K0vrBrfXqs4oZ8nMg/v5JYxtYN+t+PjVajxHDPkRXo0=;
+ b=aRNtjZbDdb5y5GI+/YTkmCXteyx/lkQAgEJGnaXjCsI17wQQv8OUZcbv3kC4ywP274
+ R/i2in9+3mW0p6E+dJ8cg98VzQh1iej9vgoMpRFFTlbt7v8zKWtE7H0u3GGkQkAU2+lR
+ LvT65EhjyGzDGLOxyxyNofQ0uiknTTVOECMKzCuX3UtARkvhQBXBDg3VQHfk2KRO46BX
+ Ci/rnnoIh36uwrQrFJrW8YJjsAh8LKyXoBZV7silrqkS+cEfYKyqSktV7bnO6GrAfha6
+ swbvw0QCSfeqdgZehNbSfkjdS6pOab+lXGFQwEV/6bqgxobx/QZrZHvzJupuo66E3YCR
+ BIAw==
+X-Gm-Message-State: AFq9FYJgL0bs/cqyjfvFqvoKGrnEDKQz9Ziks+w57LqGfgEOlNDwlTmR
+ MQYdlfZKS06hKjQb0RAGrM8nXlfDbgLtOuwFIw0t2mkczTxEm6e1ldptiENxtw==
+X-Gm-Gg: AYBFou0TEUVbpIm+OQHvtuCQJx/dorPIv3ZqhVjdvBdEC4qEGFO8PhM7sJwhgnfnoRf
+ X4AGDHUUQ3wWO4hVmhmd7t0KETBv/NxDOvOw4PJozLOzRgpBVIo0KN4P++NkdHH123EzjZdVVPm
+ Sl6Q5ee6HxC6jUmTjZN9M78G3/tr7AipHeL3X9Yt8Bdg6ZOuRuW/6jB8I2Q5uyAiSyq6SKJD2R2
+ KWpOTEDIhGcH3SYqVDYnfyv7VSzKSKQyBBzppvwrm+NIDHfVJGpmbzCfIlPeEk7r/5ZLxStcHhy
+ HdUZD1UelFxc/c4FXw0TsQy+hRHXnfpL1EUCZ4/tk9Ix81uGnZW888VYVVTQLf6AeFSnbVS+9zL
+ CYpf63FNMgYoErC511ja4K8Q0Ms3UA6oWdtAt5OVQ7HDeO5BN8c32GKaEBIauEDZL8OYq2nJ/lB
+ fP53fDLu4jbjJ5N2ZUcSypcPctKqp4Tf6cTSTeC5H3kDA7vPUWBg6wxn7Z6z+i3HUMIQSE66n8I
+ SevhB0JHTPDzZKdPMHpBKXZgXiJmzVuclIJUB+AE6PYK4F7CP9RU9//N+i//AcnNw1h6NVZ8+bF
+ yjCxJXRqFsoxx+hV2SeiTGr8TOdotim8Oprj4LEOizXLW9Byg63W9N6X3CDWvnvpnH5grDRWClf
+ R5daigmusbHko0hs=
+X-Received: by 2002:a5d:43ce:0:b0:48c:77ad:d52d with SMTP id
+ ffacd0b85a97d-48e3eb9fdfcmr2302487f8f.43.1792851013183; 
+ Sat, 24 Oct 2026 07:10:13 -0700 (PDT)
+Received: from KORLIN44614.barco.com ([2a02:a03f:eb5f:fa00:a625:9f0:b064:c303])
+ by smtp.googlemail.com with ESMTPSA id
+ ffacd0b85a97d-48e3ebc3bdbsm3676517f8f.19.2026.10.24.07.10.12
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 24 Oct 2026 07:10:12 -0700 (PDT)
+From: Thomas Devoogdt <thomas@devoogdt.com>
 To: buildroot@buildroot.org
-Date: Sat, 24 Oct 2026 16:08:03 +0200
-Message-ID: <20261024140803.1467342-1-fiona.klute@gmx.de>
-X-Mailer: git-send-email 2.55.0
+Cc: Thomas Devoogdt <thomas@devoogdt.com>
+Date: Sat, 24 Oct 2026 16:10:08 +0200
+Message-ID: <20261024141008.1967095-1-thomas@devoogdt.com>
+X-Mailer: git-send-email 2.43.0
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:SULCZKV8ql/LjEMR6+VbaKO/LAn471BZ8dLXN+1FAQeAP91e/7V
- dk4SFske95Rwkvoo3M8UrHT5INA5zx06owfXE5GEoM4nTeC+VkbcCsQC+l7Rhd+2VzlbuQk
- DgmwK/Z4hxB9dZmwFX2Oey+ZeRPJVEtVyf3nE5LBKt62d1iGUJrCb7/f5hv9X+iGSa78NcM
- PuTAFgqJK5jrFNURBrbow==
-UI-OutboundReport: notjunk:1;M01:P0:/XWHmMbbMq0=;ZRKuJebO1y6XvHM5v2fVM11swVX
- 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
- ==
-Subject: [Buildroot] [PATCH 1/1] package/python-brotli: build against
- package/brotli
+Subject: [Buildroot] [PATCH] package/librdkafka: bump to v2.16.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -219,100 +149,364 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: Adrian Perez de Castro <aperez@igalia.com>, Julien Olivain <ju.o@free.fr>,
- James Hilliard <james.hilliard1@gmail.com>, Fiona Klute <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-By default, python-brotli builds the brotli libraries as part of the
-Python module. Set USE_SYSTEM_BROTLI=1 to disable that and link
-against the libraries provided by the brotli package instead to avoid
-duplicating build time and code.
+News: https://github.com/confluentinc/librdkafka/releases#release-v2.16.0
 
-Also add notes to package/brotli and package/python-brotli to keep the
-versions in sync, to avoid any incompatibility issues.
+Dropped 0002-src-rdkafka_conf.c-fix-curl-curl.h-include-when-WITH.patch,
+fix merged in https://github.com/confluentinc/librdkafka/pull/5136.
 
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+Refreshed 0001-CMakeLists.txt-allow-compilation-without-C-support.patch
+(upstream: https://github.com/confluentinc/librdkafka/pull/5311).
+
+Added 0002-Guard-fenv.h-usage-behind-HAVE_FENV-5650.patch, as fenv.h is
+not available on uClibc toolchains without FENV support, which broke the
+build since v2.16.0:
+  fatal error: fenv.h: No such file or directory
+Reported in https://github.com/confluentinc/librdkafka/issues/5650,
+fix proposed in https://github.com/confluentinc/librdkafka/pull/5651.
+
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 ---
-On my system the build time of python-brotli (extract to taget
-installed) shrinks from 20 sec to 1 sec, and the size of
-target/usr/lib/python3.14/site-packages/_brotli.cpython-314-aarch64-linux-musl.so
-from 806 KB to 34 KB.
+ ...-allow-compilation-without-C-support.patch |  36 ++--
+ ...d-fenv.h-usage-behind-HAVE_FENV-5650.patch | 158 ++++++++++++++++++
+ ....c-fix-curl-curl.h-include-when-WITH.patch |  32 ----
+ package/librdkafka/librdkafka.hash            |   4 +-
+ package/librdkafka/librdkafka.mk              |   2 +-
+ 5 files changed, 185 insertions(+), 47 deletions(-)
+ create mode 100644 package/librdkafka/0002-Guard-fenv.h-usage-behind-HAVE_FENV-5650.patch
+ delete mode 100644 package/librdkafka/0002-src-rdkafka_conf.c-fix-curl-curl.h-include-when-WITH.patch
 
-Of course a build that uses brotli only from Python trades that for
-having to build package/brotli (which comes out to about the same time
-& size), but for anyone using both it's a nice improvement, and in any
-case its cleaner.
-
- package/brotli/brotli.mk               | 1 +
- package/python-brotli/Config.in        | 1 +
- package/python-brotli/python-brotli.mk | 7 +++++--
- 3 files changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/package/brotli/brotli.mk b/package/brotli/brotli.mk
-index 47e2f8e57c..6dca818e7a 100644
---- a/package/brotli/brotli.mk
-+++ b/package/brotli/brotli.mk
-@@ -4,6 +4,7 @@
+diff --git a/package/librdkafka/0001-CMakeLists.txt-allow-compilation-without-C-support.patch b/package/librdkafka/0001-CMakeLists.txt-allow-compilation-without-C-support.patch
+index 9615aef408c..d38d60bdea3 100644
+--- a/package/librdkafka/0001-CMakeLists.txt-allow-compilation-without-C-support.patch
++++ b/package/librdkafka/0001-CMakeLists.txt-allow-compilation-without-C-support.patch
+@@ -1,19 +1,25 @@
+-From 4584734fc039e06dea71c94045283f3108c7fae8 Mon Sep 17 00:00:00 2001
++From 184ab88b6911e128319ae5ee75b6a7444af2982e Mon Sep 17 00:00:00 2001
+ From: Thomas Devoogdt <thomas@devoogdt.com>
+ Date: Sun, 15 Feb 2026 20:41:10 +0100
+ Subject: [PATCH] CMakeLists.txt: allow compilation without C++ support
+ 
+-$ CXX=/bin/false cmake . && make
++Only require a C compiler by default, and enable C++ only when a C++
++compiler is found (check_language). When it is missing, skip src-cpp,
++the C++ examples and the tests (which need C++), and default
++RDKAFKA_BUILD_TESTS to OFF. Explicitly enabling the tests without a C++
++compiler is a configure error.
++
++Verified with: CXX=/bin/false cmake . && make
+ 
+ Upstream: https://github.com/confluentinc/librdkafka/pull/5311
+ Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+ ---
+- CMakeLists.txt          | 25 ++++++++++++++++++++-----
++ CMakeLists.txt          | 30 +++++++++++++++++++++++++-----
+  examples/CMakeLists.txt | 30 ++++++++++++++++++++----------
+- 2 files changed, 40 insertions(+), 15 deletions(-)
++ 2 files changed, 45 insertions(+), 15 deletions(-)
+ 
+ diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index f3d05bad..7676f897 100644
++index 1e3c4450..c9c65c2e 100644
+ --- a/CMakeLists.txt
+ +++ b/CMakeLists.txt
+ @@ -3,7 +3,15 @@ cmake_minimum_required(VERSION 3.5)
+@@ -33,16 +39,21 @@ index f3d05bad..7676f897 100644
+  
+  set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/packaging/cmake/Modules/")
+  
+-@@ -181,7 +189,7 @@ endif()
++@@ -181,7 +189,12 @@ endif()
+  
+  option(RDKAFKA_BUILD_STATIC "Build static rdkafka library" OFF)
+  option(RDKAFKA_BUILD_EXAMPLES "Build examples" ON)
+ -option(RDKAFKA_BUILD_TESTS "Build tests" ON)
+-+option(RDKAFKA_BUILD_TESTS "Build tests" CMAKE_CXX_COMPILER)
+++if(CMAKE_CXX_COMPILER)
+++  set(build_tests_default ON)
+++else()
+++  set(build_tests_default OFF)
+++endif()
+++option(RDKAFKA_BUILD_TESTS "Build tests" ${build_tests_default})
+  if(WIN32)
+      option(WITHOUT_WIN32_CONFIG "Avoid including win32_config.h on cmake builds" ON)
+  endif(WIN32)
+-@@ -279,13 +287,20 @@ install(
++@@ -279,13 +292,20 @@ install(
+  )
+  
+  add_subdirectory(src)
+@@ -63,11 +74,11 @@ index f3d05bad..7676f897 100644
+ +    enable_testing()
+ +    add_subdirectory(tests)
+ +  else()
+-+    message(FATAL_ERROR "Building tests needs C++ suport")
+++    message(FATAL_ERROR "Building tests needs C++ support")
+ +  endif()
+  endif()
+ diff --git a/examples/CMakeLists.txt b/examples/CMakeLists.txt
+-index 91851d2c..28ce6e79 100644
++index d9ce7ac2..a71cd136 100644
+ --- a/examples/CMakeLists.txt
+ +++ b/examples/CMakeLists.txt
+ @@ -5,8 +5,10 @@ endif(WIN32)
+@@ -110,7 +121,7 @@ index 91851d2c..28ce6e79 100644
+  
+  add_executable(misc misc.c ${win32_sources})
+  target_link_libraries(misc PUBLIC rdkafka)
+-@@ -73,7 +81,9 @@ if(NOT WIN32)
++@@ -73,8 +81,10 @@ if(NOT WIN32)
+      add_executable(rdkafka_complex_consumer_example rdkafka_complex_consumer_example.c)
+      target_link_libraries(rdkafka_complex_consumer_example PUBLIC rdkafka)
+  
+@@ -121,7 +132,8 @@ index 91851d2c..28ce6e79 100644
+ +        target_link_libraries(kafkatest_verifiable_client PUBLIC rdkafka++)
+ +    endif(CMAKE_CXX_COMPILER)
+  
+- endif(NOT WIN32)
++     add_executable(share_consumer share_consumer.c)
++     target_link_libraries(share_consumer PUBLIC rdkafka)
+ -- 
+ 2.43.0
+ 
+diff --git a/package/librdkafka/0002-Guard-fenv.h-usage-behind-HAVE_FENV-5650.patch b/package/librdkafka/0002-Guard-fenv.h-usage-behind-HAVE_FENV-5650.patch
+new file mode 100644
+index 00000000000..60ef042cd79
+--- /dev/null
++++ b/package/librdkafka/0002-Guard-fenv.h-usage-behind-HAVE_FENV-5650.patch
+@@ -0,0 +1,158 @@
++From 476e962d5da476093f98a76b2c605e852fbc41cb Mon Sep 17 00:00:00 2001
++From: Thomas Devoogdt <thomas@devoogdt.com>
++Date: Sat, 24 Oct 2026 15:22:59 +0200
++Subject: [PATCH] Guard fenv.h usage behind HAVE_FENV (#5650)
++
++fenv.h is not available on some toolchains (e.g. uClibc without FENV
++support), which broke the build since the FPE check was added to the
++histogram unit test.
++
++Detect fenv.h at configure time (configure.self and CMake) and only use
++it when available.
++
++Upstream: https://github.com/confluentinc/librdkafka/pull/5651
++Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
++---
++ CHANGELOG.md                                    |  4 ++++
++ CMakeLists.txt                                  |  2 ++
++ configure.self                                  |  8 ++++++++
++ packaging/cmake/config.h.in                     |  1 +
++ packaging/cmake/try_compile/fenv_test.c         |  6 ++++++
++ packaging/cmake/try_compile/rdkafka_setup.cmake | 11 +++++++++++
++ src/rdhdrhistogram.c                            |  6 ++++++
++ 7 files changed, 38 insertions(+)
++ create mode 100644 packaging/cmake/try_compile/fenv_test.c
++
++diff --git a/CHANGELOG.md b/CHANGELOG.md
++index bf450191..eff77118 100644
++--- a/CHANGELOG.md
+++++ b/CHANGELOG.md
++@@ -57,6 +57,10 @@ callers retry them instead of treating them as a hard failure.
++ 
++ ### General fixes
++ 
+++* Issues: #5650.
+++  Fix build failure on platforms without `fenv.h` (e.g., uClibc toolchains without FENV support).
+++  `fenv.h` is now detected at configure time (`HAVE_FENV`) and only used by the histogram unit test when available.
+++  Happening since 2.16.0.
++ * Issues: #5600.
++   Fix re-bootstrap cases that never reached a bootstrap broker while the learned brokers were still connected, or kept an already connected bootstrap broker.
++   The client kept asking the very brokers that reported its metadata as stale. Learned and bootstrap brokers are now decommissioned when a re-bootstrap sequence starts, so the bootstrap servers are re-created and connected again, re-resolving their addresses, and only they are used until a Metadata response rebuilds the broker list. The transaction coordinator is reset too when its broker is decommissioned, so the coordinator connection is re-established and its address re-resolved, as already done for the group coordinator. Queued messages are handed back to their partitions and re-sent once new leaders are known. Admin requests in flight on a decommissioned broker now fail with `RD_KAFKA_RESP_ERR__TRANSPORT` (previously
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 1e3c4450..393c4242 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -195,6 +195,7 @@ endif(WIN32)
++ # * HAVE_ATOMICS_64_SYNC
++ # * HAVE_REGEX
++ # * HAVE_STRNDUP
+++# * HAVE_FENV
++ # * HAVE_PTHREAD_SETNAME_GNU
++ # * HAVE_PTHREAD_SETNAME_DARWIN
++ # * HAVE_PTHREAD_SETNAME_FREEBSD
++@@ -224,6 +225,7 @@ set(GENERATED_DIR "${CMAKE_CURRENT_BINARY_DIR}/generated")
++ # * WITH_SASL
++ # * HAVE_REGEX
++ # * HAVE_STRNDUP
+++# * HAVE_FENV
++ # * HAVE_PTHREAD_SETNAME_GNU
++ # * HAVE_PTHREAD_SETNAME_DARWIN
++ # * HAVE_PTHREAD_SETNAME_FREEBSD
++diff --git a/configure.self b/configure.self
++index 13a2c284..a2c4bf4f 100644
++--- a/configure.self
+++++ b/configure.self
++@@ -226,6 +226,14 @@ int foo (void) {
++    return getentropy((void *)seed, sizeof(seed));
++ }"
++ 
+++    # Check if fenv.h is available (isn't on uClibc without FENV support)
+++    mkl_compile_check "fenv" "HAVE_FENV" disable CC "" \
+++"#include <fenv.h>
+++int foo (void) {
+++   feclearexcept(FE_DIVBYZERO | FE_INVALID);
+++   return fetestexcept(FE_DIVBYZERO | FE_INVALID);
+++}"
+++
++     # Check if strndup() is available (isn't on Solaris 10)
++     mkl_compile_check "strndup" "HAVE_STRNDUP" disable CC "" \
++ "#include <string.h>
++diff --git a/packaging/cmake/config.h.in b/packaging/cmake/config.h.in
++index d09a56f9..8ae6cec2 100644
++--- a/packaging/cmake/config.h.in
+++++ b/packaging/cmake/config.h.in
++@@ -46,6 +46,7 @@
++ #cmakedefine01 HAVE_STRNDUP
++ #cmakedefine01 HAVE_RAND_R
++ #cmakedefine01 HAVE_GETENTROPY
+++#cmakedefine01 HAVE_FENV
++ #cmakedefine01 HAVE_PTHREAD_SETNAME_GNU
++ #cmakedefine01 HAVE_PTHREAD_SETNAME_DARWIN
++ #cmakedefine01 HAVE_PTHREAD_SETNAME_FREEBSD
++diff --git a/packaging/cmake/try_compile/fenv_test.c b/packaging/cmake/try_compile/fenv_test.c
++new file mode 100644
++index 00000000..b6f2be2d
++--- /dev/null
+++++ b/packaging/cmake/try_compile/fenv_test.c
++@@ -0,0 +1,6 @@
+++#include <fenv.h>
+++
+++int main() {
+++        feclearexcept(FE_DIVBYZERO | FE_INVALID);
+++        return fetestexcept(FE_DIVBYZERO | FE_INVALID);
+++}
++diff --git a/packaging/cmake/try_compile/rdkafka_setup.cmake b/packaging/cmake/try_compile/rdkafka_setup.cmake
++index ca9bc93e..9352dcae 100644
++--- a/packaging/cmake/try_compile/rdkafka_setup.cmake
+++++ b/packaging/cmake/try_compile/rdkafka_setup.cmake
++@@ -22,6 +22,17 @@ try_compile(
++     "${TRYCOMPILE_SRC_DIR}/getentropy_test.c"
++ )
++ 
+++set(_fenv_link_libs "")
+++if(NOT WIN32)
+++    set(_fenv_link_libs "-lm")
+++endif()
+++try_compile(
+++    HAVE_FENV
+++    "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
+++    "${TRYCOMPILE_SRC_DIR}/fenv_test.c"
+++    LINK_LIBRARIES ${_fenv_link_libs}
+++)
+++
++ try_compile(
++     HAVE_PTHREAD_SETNAME_GNU
++     "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
++diff --git a/src/rdhdrhistogram.c b/src/rdhdrhistogram.c
++index 2466b098..3fa319a6 100644
++--- a/src/rdhdrhistogram.c
+++++ b/src/rdhdrhistogram.c
++@@ -73,7 +73,9 @@
++ #include <stdlib.h>
++ #include <string.h>
++ #include <math.h>
+++#if HAVE_FENV
++ #include <fenv.h>
+++#endif
++ 
++ #include "rdhdrhistogram.h"
++ #include "rdunittest.h"
++@@ -662,11 +664,15 @@ static int ut_unitmagnitude_overflow(void) {
++         rd_hdr_histogram_t *hdr;
++         int r;
++ 
+++#if HAVE_FENV
++         feclearexcept(FE_DIVBYZERO | FE_INVALID);
+++#endif
++         hdr = rd_hdr_histogram_new(0, 200, 4);
+++#if HAVE_FENV
++         RD_UT_ASSERT(
++             !fetestexcept(FE_DIVBYZERO | FE_INVALID),
++             "rd_hdr_histogram_new(0,...) raised an FP exception (#4949)");
+++#endif
++ 
++         r = rd_hdr_histogram_record(hdr, 11);
++         RD_UT_ASSERT(r, "record(11) failed\n");
++-- 
++2.43.0
++
+diff --git a/package/librdkafka/0002-src-rdkafka_conf.c-fix-curl-curl.h-include-when-WITH.patch b/package/librdkafka/0002-src-rdkafka_conf.c-fix-curl-curl.h-include-when-WITH.patch
+deleted file mode 100644
+index dec80d538c9..00000000000
+--- a/package/librdkafka/0002-src-rdkafka_conf.c-fix-curl-curl.h-include-when-WITH.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From 5061a5b33dce11ada740e2a34137dce6934b731a Mon Sep 17 00:00:00 2001
+-From: Thomas Devoogdt <thomas@devoogdt.com>
+-Date: Sun, 15 Feb 2026 18:37:16 +0100
+-Subject: [PATCH] src/rdkafka_conf.c: fix curl/curl.h include when
+- WITH_CURL=OFF
+-
+-Change #ifdef to #if for WITH_OAUTHBEARER_OIDC preprocessor check.
+-When using CMake's cmakedefine01, the macro is always defined (as 0 or 1),
+-so #ifdef always evaluates to true. Using #if correctly checks the value.
+-
+-Upstream: https://github.com/confluentinc/librdkafka/pull/5309
+-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+----
+- src/rdkafka_conf.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/src/rdkafka_conf.c b/src/rdkafka_conf.c
+-index 0e346e74..f8f0d0ca 100644
+---- a/src/rdkafka_conf.c
+-+++ b/src/rdkafka_conf.c
+-@@ -56,7 +56,7 @@
+- #include <windows.h>
+- #endif
+- 
+--#ifdef WITH_OAUTHBEARER_OIDC
+-+#if WITH_OAUTHBEARER_OIDC
+- #include <curl/curl.h>
+- #endif
+- 
+--- 
+-2.43.0
+-
+diff --git a/package/librdkafka/librdkafka.hash b/package/librdkafka/librdkafka.hash
+index f745e55b819..aea35f7412b 100644
+--- a/package/librdkafka/librdkafka.hash
++++ b/package/librdkafka/librdkafka.hash
+@@ -1,4 +1,4 @@
+-# From https://github.com/confluentinc/librdkafka/releases/tag/v2.13.2
+-sha256  14972092e4115f6e99f798a7cb420cbf6daa0c73502b3c52ae42fb5b418eea8f  librdkafka-2.13.2.tar.gz
++# From https://github.com/confluentinc/librdkafka/releases/tag/v2.16.0
++sha256  e6b61de61d3282879a88e4ee3d9f634a8b05bf78a9198dfc25c4820c0c9ed231  librdkafka-2.16.0.tar.gz
+ # Locally computed
+ sha256  b9e4616bb9dd0c9ce3fa52e81c7bfc596e60b8855a1df5dce5fa50732b1ccdec  LICENSES.txt
+diff --git a/package/librdkafka/librdkafka.mk b/package/librdkafka/librdkafka.mk
+index 0cbab11d496..636765b3f5d 100644
+--- a/package/librdkafka/librdkafka.mk
++++ b/package/librdkafka/librdkafka.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
-+# Keep the version in sync with python-brotli
- BROTLI_VERSION = 1.2.1
- BROTLI_SITE = $(call github,google,brotli,v$(BROTLI_VERSION))
- BROTLI_LICENSE = MIT
-diff --git a/package/python-brotli/Config.in b/package/python-brotli/Config.in
-index ca493bfeff..81d55be5e6 100644
---- a/package/python-brotli/Config.in
-+++ b/package/python-brotli/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_BROTLI
- 	bool "python-brotli"
-+	select BR2_PACKAGE_BROTLI
- 	help
- 	  Python bindings for the Brotli compression library.
- 
-diff --git a/package/python-brotli/python-brotli.mk b/package/python-brotli/python-brotli.mk
-index 6f5e966a05..0cf0b4bdd6 100644
---- a/package/python-brotli/python-brotli.mk
-+++ b/package/python-brotli/python-brotli.mk
-@@ -4,13 +4,14 @@
- #
- ################################################################################
- 
-+# Keep the version in sync with brotli
- PYTHON_BROTLI_VERSION = 1.2.1
- PYTHON_BROTLI_SOURCE = brotli-$(PYTHON_BROTLI_VERSION).tar.gz
- PYTHON_BROTLI_SITE = https://files.pythonhosted.org/packages/cf/81/1546c983678a9b4e77cb4718eaedd1b2caf24a6cdbf1eb8775938d22aff7
- PYTHON_BROTLI_SETUP_TYPE = setuptools
- PYTHON_BROTLI_LICENSE = MIT
- PYTHON_BROTLI_LICENSE_FILES = LICENSE
--PYTHON_BROTLI_DEPENDENCIES = host-python-pkgconfig
-+PYTHON_BROTLI_DEPENDENCIES = brotli host-python-pkgconfig
- 
- PYTHON_BROTLI_CFLAGS = $(TARGET_CFLAGS)
- 
-@@ -18,6 +19,8 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_68485),y)
- PYTHON_BROTLI_CFLAGS += -O0
- endif
- 
--PYTHON_BROTLI_ENV = CFLAGS="$(PYTHON_BROTLI_CFLAGS)"
-+PYTHON_BROTLI_ENV = \
-+	CFLAGS="$(PYTHON_BROTLI_CFLAGS)" \
-+	USE_SYSTEM_BROTLI=1
- 
- $(eval $(python-package))
+-LIBRDKAFKA_VERSION = 2.13.2
++LIBRDKAFKA_VERSION = 2.16.0
+ LIBRDKAFKA_SITE = $(call github,confluentinc,librdkafka,v$(LIBRDKAFKA_VERSION))
+ LIBRDKAFKA_LICENSE = BSD-2-Clause
+ LIBRDKAFKA_LICENSE_FILES = LICENSES.txt
 -- 
-2.55.0
+2.43.0
 
 _______________________________________________
 buildroot mailing list
