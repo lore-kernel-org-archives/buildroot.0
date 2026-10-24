@@ -2,27 +2,27 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D1E7606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF33E606A31A
 	for <buildroot@archiver.kernel.org>; Sat, 24 Oct 2026 17:54:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=hc56HR2l
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=An+tr6VT
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A4F9140802;
-	Sat, 24 Oct 2026 17:54:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D94AC406A1;
+	Sat, 24 Oct 2026 17:54:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IUW8B0XwQ5PR; Sat, 24 Oct 2026 17:54:17 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org A806340692
+ id ctxQDHjCkl3R; Sat, 24 Oct 2026 17:54:19 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org A37B44077C
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792864456;
-	b=fayusM/jSfil8Yx/NvCs4sB3YVHRS1X4qzqXSgRka0sLyb1sn2GwTzxO8UF9ljv5mvXP
-	 PtWuf98M4aDL+1AfNsr20P3LknEztrz3EXyYZm8EMQ3Cz0RT6Stb9yGUpJd5iYeiDdZ9/
-	 zUxLN7PVMYOj4OjyWlU+pEDCQqTTqpCZXHHHNJOxRJvc0Q8e1bAU/FD+5bY1DPbd86cHi
-	 4kFLE/+smsZE+V5+F22cVA9GxPD9qAZEP/WONkI1kp2Wf3tAk4EVvJHMDtwK4Q058ggFi
-	 9tfd0DLHYPC+MdasUJ/fviVjrGd0HVzmz4b44q8ZMzCqJcrnjXzkHn3/emNKwCaUZdw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792864459;
+	b=rdgnL7uy7noaRLo6ioCYr9mBBDxVGmpp4xsi2d2YTH0kyWaRZnpw5VdJljxlRCgwTNRN
+	 Uon8naCVgQI752Em+RVOyZ5hiGWeRuBfhlR4vV1kvuD7FjH2imy1Ph1LDtC62sIQmCMPS
+	 4KrmuMQ4J4XLpD3zBraQF/12KvI+fjUk1A5g+nck520sMnGzehl5p8EimlefLsO6RHkws
+	 W1CdvYY19e+98RL8tmBBnpMYYoXnbPgxlcaoFiK465BW0PmNh7KlsSt2sHOs6UKeOtuoF
+	 fd38Nw+Q7FwHKKeH212Ds6tVqHICV1MChCSQ+4l1A6NDaqS/A8v2Gl6OJDI01up6Lwg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792864456;
+	c=relaxed/relaxed; t=1792864459;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,75 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=d24a1VM092r0FPQHT//MMPNUm/gJc8CTMdPWatTZrHk=;
-	b=d56j/yO/VkLBg0fIJepOagHHTe+Lq1sp0N4KOYs0uRqXeUiF+3CM/OkxOlKgffTd5cA6
-	 NYMm63BWd7+dhwp1icHD/4pcwgD1ql0iKebxXfKIVa/7UgST8ZnIMViad9ZkkZ5/LYLv4
-	 9ogwxrMQcNCD8DfVKJ0sXEERtzcxe0tBJ6oN2Ni7C2LZBCjZz5McN1D2vlr+N547vNqj4
-	 yRUos2jBin1CBN9Pq/jbV9JKSEBtjRt17AxTxQJp+521ahJBZuIZ7xc2O6evDdD3yG3aD
-	 M+TLEIpl9qkvwi4TOLvM5xX54O6qTAbNFPVRpEsHE1ew/2XKgmig58EPsMezujAwWiA==
+	bh=4h2d8PyEW9EaYEL1mYdgWXua604Am5TLNr5Uktb+m8Y=;
+	b=AjDyBPakM724dOuqWQ0bLciYMEEqK0GpjLx2Jq0FoKdVvPMQ+Oojh540lOobZOmXQI9l
+	 M+fGbkHCuEqvkr8DNaRDM4CAdxoe9YQ6rkKWWo4VZ/we3XtYfLfpQJj/DtJrbrzNor0os
+	 uDJixpAOP6YfV7Rap+DJmZe+RMMEGaEJKRpm+PuP9kFWe79bh+uSJhO3qQLHAW2lOitvb
+	 oQwGN9gSOTV6hY01vSbL5DbHqHWCzdKzOOu5vLDpJuHGNZg9VVhHD56O1ClmU9P4XfPsP
+	 MgIYeC42FcQs124ZKyAcyCpZTLW2vFHyQTeCnjobOfJKNGZEX7SqMWTY68AtcZz0zjQ==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792864456;
-	bh=d24a1VM092r0FPQHT//MMPNUm/gJc8CTMdPWatTZrHk=;
+	s=default; t=1792864459;
+	bh=4h2d8PyEW9EaYEL1mYdgWXua604Am5TLNr5Uktb+m8Y=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=hc56HR2lOlSb//g9EsQ5ZMgJt4A4NcPAkHOMDc891fS+hhV/CR2VjTKwXkJYE9gJn
-	 X7ZFvjC3m+OMtJAqGqiDvUDabJaWydE71EjSrS6OChMtqmeiecNMYjUSEZNkdFdh+u
-	 AXvyKUqJUmEJpr7FcJOLE3uRq5DRu29gTJUqKybKcroQZSyk7O4DvXUqWSmAD/y4Wo
-	 HLlvHloJDEY5k5RCJh/7EmeP4elpRFXN1EXGYL2CsJaFYsv+OjCyRu6hxHJmGOh6Jv
-	 OeyLgQgoa4Hta9kDr/a7vljShQTlG9VTVat0xLNI4sISHzJzvPortiCNTMjcursHeJ
-	 3nTxI4mAcp88g==
+	b=An+tr6VT4qI006ecRzv1C17DZEIHO2c+Bu8wLEhSkIdp5ydE+eYxq1pwyOjYpSUUO
+	 qAylCWPyqKKgiQyakdOGWux4r9fuCblmHoAZhRelhDHCm8P4PhbCotcxJW0WAQ9lAt
+	 0sjN4OGsJkNKlm0f+wMPY4J0PXxtdjfNvIESZeJw/OnTMjTFG3WcUOGKxiktpr5bpY
+	 3lI2SO6pWsRjSv6DCNBUgF9us8TuF7IYQ9yoyYt7ut/7i9VHrtJ3QTvCzy4lzc6F5I
+	 aJjcJSpvZ62H+Vphd9g+VWDbfgLb3qcxQgoQLE9FeU7yoyr16HfctK9Mcl360BenOb
+	 EKDoGTByjO58g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A806340692;
-	Sat, 24 Oct 2026 17:54:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 2B8CA3D9
+	by smtp4.osuosl.org (Postfix) with ESMTP id A37B44077C;
+	Sat, 24 Oct 2026 17:54:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 39097D35
  for <buildroot@buildroot.org>; Sat, 24 Oct 2026 17:54:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 12169406A1
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2A4A0811B1
  for <buildroot@buildroot.org>; Sat, 24 Oct 2026 17:54:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Usk0sdL0qGxZ for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OeBtG9PtZChq for <buildroot@buildroot.org>;
  Sat, 24 Oct 2026 17:54:13 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 3119A40528
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 20786811E7
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792864453;
- b=rB5fWOjmsFhdYAq0YZ8rsSQW9qFhriy0rS8A0NHGyb/9W6vPCqfuV1sZfr6/TIwyiAR0
- Wv4x70fq8JJjn9qN2BLQwrxXkMjybuEnicG1LXkHFWulfsIZYu2MiCUdVz3oRb8zkQHUD
- iFcaULTkFImfdBA/l/am/scY/csWOq7Yts88O25td4w+DPzmWcpFTooylzoOzij9nkkan
- 1s+l6CRInfbiwaVGdrP8sJFRfE6dHbKLMB/rI25xi9T9kQxpI7kmbT1tHv9CPZDF/lKOr
- wOTivBGzBeqew8coNYx+w4GHjL26leGWSBwwGHsmBC+iSr4Js74JeDyWxohWD/JfyXw==
+ b=GbKK/m0IsqX0qeOMLpDxYe1qUnW7oZvGicfdJG+lsNtVQuqGjQ2XTGogfMfihXbsi492
+ aS9h5qGoHoR8CvXVQAZk5UEsv4qWhNCpByeT/x0p8RtEKVPGK4btvJ8GeIfxbR+hgnxqS
+ aRE09SMPIJDR4uiKROyydJiVR/a4Cmcs5Pi2HWLnF3LeaeU5Fp9bRHcuKWTbYNT1Dut6Y
+ UOcC1XCvQf6eOMKv2skUkDI8xt+7HGT+3cJZAWSXZb2HhCSd1TGIYNH7OlzWNFhjjzYv8
+ 5z3oY+oX59StdV3WtN8e6/Xws6iBuIL7c0MvHTbIgPDUpIugXOyoNnlCJwhdLPIlgNQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1792864453;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=AaW+Gz/h77YIDFID3iVXOj+ZDRN1DhpFmO+89wi9Umc=;
- b=fF6YaNK66vIisuln1yDYm4VpSJm3X2Zk2d+2vrnHjhpu30PXq9n1aCuokMajU2apMc4J
- eykLqSRa6ottC7eXWBhUieo8qMUFv8gMjsWaAgNj9W8kI2vPhcORdXoWpjOBZS4ReWZIw
- swTj0BL4zzkw/9Dan4uvBh3t8zAGmY6xsVCkRU15rEgsiTaull4mDlACNZu5cFRaGxM6H
- CG886yv+t9skM9J4wQsFUu/CZz3sxJ4X/ZoHwb1PGtQpbzImu7OcT9nKA0WQvUNPXEQjd
- 0ZkLp5Oz/3VhFql5V/1SB351dVrXD06K85SLvvyClLBJ+Un6AgCRcDy3Vb6EQaSrnFA==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ bh=g7A/rv3gyA6RsfS6vzCBbilQCN5jsf6Ns2o/BzQqx8s=;
+ b=AafegBWHKDe+8heh9kYUysLvcpj3+Ck2KtUaDp6F0n/8S8XK4f5fUO+8U5avrQoRt8DY
+ c9mrOJU/AkCGL/pBp1em76cRxNYdQEenBKIVaBi/qP+xQnzzqTOgdAJXE7HaqtK2+r8YN
+ NONnNaf44yDbRe0IETEiCYqv5jW81pgMuF0yR1deLa7sadIQ1VFwrIHN2Ey1GjAAG8DY6
+ UxM1fYOlCZDnM8oA4hAFAkW+rdj/vpeCMP83Bz2RxvbuyDlCXB9VyBJCBrUMhvaI3qLRv
+ x5FytZgSqJGwUks2QIR+/4Ec74bvdBecfKH+CE3+KS4les63FwPGmpZLmdJUX4Kzm1A==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3119A40528
+ by smtp1.osuosl.org (Postfix) with ESMTP id 20786811E7
  for <buildroot@buildroot.org>; Sat, 24 Oct 2026 17:54:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 19F709C8B4; Sat, 24 Oct 2026 17:52:48 +0000 (UTC)
+ id C21D09C8B2; Sat, 24 Oct 2026 17:52:47 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sat, 24 Oct 2026 19:10:28 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 80a5e7af62e6bb4b963173391d3547a1f879fe25
-X-Git-Newrev: a538bf0ac93e030e8ad8106865d11559a448b655
+X-Git-Oldrev: 26a8be28c05ced9d63d7086b522e07c79fbfe4de
+X-Git-Newrev: 105c0187151202fcb2f79a11e9f4d4b21f85f3ed
 X-Patchwork-Hint: ignore
-Message-Id: <20261024175248.19F709C8B4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mesa3d: crocus Gallium driver
- needs precomp-compiler
+Message-Id: <20261024175247.C21D09C8B2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mesa3d: rework OpenCL handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,72 +117,161 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
 	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a538bf0ac93e030e8ad8106865d11559a448b655
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/105c0187151202fcb2f79a11e9f4d4b21f85f3ed
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Buildroot commit 59ed1137e9bb8c0157be3dc91a1cc462211dd3c7 bumped the
-package to 26.0.0 which added upstream commit
-https://gitlab.freedesktop.org/mesa/mesa/-/commit/b72d347d1c3b9e829971fbdabf993b68776083c1
-requiring the precomp-compiler for the crocus driver.
+Mesa3D removed the old Clover OpenCL implementation in version 25.2.0
+and kept only RustiCL:
 
-Add the necessary dependencies to fix a configure error:
+https://lists.freedesktop.org/archives/mesa-announce/2025-August/000815.html
+"[...] the Clover OpenCL implementation has been deleted. RustiCL is now
+ the only OpenCL implementation available [...]"
 
-../output-1/build/mesa3d-26.1.8/meson.build:945:3: ERROR:
- Feature llvm cannot be disabled: CLC requires LLVM
+Since then the option BR2_PACKAGE_MESA3D_OPENCL served no other purpose
+than allowing access to the RustiCL sub-option. This commit merges both
+options and their dependencies.
 
-caused by
-https://gitlab.freedesktop.org/mesa/mesa/-/blob/mesa-26.1.8/meson.build?ref_type=tags#L945
-
-which checks the value in the variable with_clc.
-
-When the precomp-compiler is not provided by host-mesa3d the meson
-configure option mesa-clc does not contain 'system' causing
-https://gitlab.freedesktop.org/mesa/mesa/-/blob/mesa-26.1.8/meson.build?ref_type=tags#L939
-the variable with_clc to be filled, among others, with the content of with_driver_using_cl:
-https://gitlab.freedesktop.org/mesa/mesa/-/blob/mesa-26.1.8/meson.build?ref_type=tags#L939
-
-which contains 'true' when the crocus driver is enabled:
-https://gitlab.freedesktop.org/mesa/mesa/-/blob/mesa-26.1.8/meson.build?ref_type=tags#L925
-
-So we need to provide the precomp-compiler also for the crocus driver.
-
-Fixes:
-https://autobuild.buildroot.org/results/baa718e140264a9aa64c3a8f4114ca1b05f740e3/
+Fixes https://gitlab.com/buildroot.org/buildroot/-/work_items/180#note_3501740032
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/mesa3d/Config.in | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ Config.in.legacy                             |  9 ++++++++
+ package/mesa3d/Config.in                     | 32 ++++++----------------------
+ package/mesa3d/mesa3d.mk                     |  8 +++----
+ support/testing/tests/package/test_mesa3d.py |  1 -
+ 4 files changed, 19 insertions(+), 31 deletions(-)
 
+diff --git a/Config.in.legacy b/Config.in.legacy
+index d94041edd4..29c9b7f9e7 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,15 @@ endif
+ 
+ comment "Legacy options removed in 2026.11"
+ 
++config BR2_PACKAGE_MESA3D_OPENCL
++	bool "Mesa3D OpenCL support is now provided by RustiCL"
++	select BR2_LEGACY
++	help
++	  Mesa3D removed the old Clover OpenCL implementation and
++	  replaced it by RustiCL. This option served no other purpose
++	  than allowing access to the RustiCL sub-option which was moved
++	  to the main options section.
++
+ config BR2_TARGET_EDK2_PLATFORM_ARM_SGI575
+ 	bool "EDK2 platform ARM SGI-575 has been removed"
+ 	select BR2_LEGACY
 diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index feed6b68fe..e18d25eb8e 100644
+index e184039150..cb86e6a2a4 100644
 --- a/package/mesa3d/Config.in
 +++ b/package/mesa3d/Config.in
-@@ -110,10 +110,18 @@ comment "Gallium drivers"
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_CROCUS
- 	bool "Gallium crocus driver"
- 	depends on BR2_i386 || BR2_x86_64
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # host-llvm
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # host-llvm
- 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
-+	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
-+	select BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER
- 	help
- 	  Mesa driver for gen4-7 Intel GPUs.
+@@ -23,7 +23,6 @@ config BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS
  
-+comment "crocus driver needs host gcc >= 7"
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on !BR2_HOST_GCC_AT_LEAST_7
-+
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV
- 	bool "Gallium Etnaviv driver"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
+ config BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
+ 	bool
+-	select BR2_PACKAGE_MESA3D_OPENCL
+ 	select BR2_PACKAGE_SPIRV_LLVM_TRANSLATOR
+ 	select BR2_PACKAGE_SPIRV_TOOLS
+ 
+@@ -56,35 +55,20 @@ config BR2_PACKAGE_MESA3D_LEGACY_BIND_WAYLAND_DISPLAY
+ 	help
+ 	  Legacy Wayland EGL_WL_bind_wayland_display support.
+ 
+-menuconfig BR2_PACKAGE_MESA3D_OPENCL
+-	bool "OpenCL support"
+-	depends on BR2_PACKAGE_MESA3D_LLVM
+-	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600 || \
+-		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST || \
+-		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI || \
+-		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS || \
+-		BR2_PACKAGE_MESA3D_VULKAN_DRIVER_AMD || \
+-		BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL || \
+-		BR2_PACKAGE_MESA3D_VULKAN_DRIVER_IMAGINATION || \
+-		BR2_PACKAGE_MESA3D_VULKAN_DRIVER_PANFROST || \
+-		(BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS && \
+-		 BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER)
+-	select BR2_PACKAGE_LLVM_RTTI
+-	select BR2_PACKAGE_CLANG
+-	select BR2_PACKAGE_LIBCLC
+-	select BR2_PACKAGE_HAS_LIBOPENCL
+-if BR2_PACKAGE_MESA3D_OPENCL
+-# libclc dependency is satisfied by
+-# BR2_PACKAGE_MESA3D_LLVM
+ config BR2_PACKAGE_MESA3D_RUSTICL
+-	bool "RustiCL"
++	bool "RustiCL OpenCL support"
++	depends on BR2_PACKAGE_MESA3D_LLVM
+ 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER
+ 	select BR2_PACKAGE_HOST_RUSTC
+ 	select BR2_PACKAGE_LLVM_DUMP
++	select BR2_PACKAGE_LLVM_RTTI
++	select BR2_PACKAGE_CLANG
++	select BR2_PACKAGE_LIBCLC
+ 	select BR2_PACKAGE_SPIRV_TOOLS
+ 	select BR2_PACKAGE_SPIRV_LLVM_TRANSLATOR
+ 	select BR2_PACKAGE_OPENCL_ICD_LOADER
++	select BR2_PACKAGE_HAS_LIBOPENCL
+ 	help
+ 	  RustiCL is an OpenCL implementation written in Rust.
+ 	  By default, devices are disabled in RustiCL. If you want
+@@ -93,8 +77,6 @@ config BR2_PACKAGE_MESA3D_RUSTICL
+ 
+ 	  https://docs.mesa3d.org/envvars.html#envvar-RUSTICL_ENABLE
+ 
+-endif # BR2_PACKAGE_MESA3D_OPENCL
+-
+ config BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER
+ 	bool
+ 
+@@ -554,7 +536,7 @@ config BR2_PACKAGE_PROVIDES_LIBGLES
+ 	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENGL_ES && !BR2_PACKAGE_LIBGLVND
+ 
+ config BR2_PACKAGE_PROVIDES_LIBOPENCL
+-	default "mesa3d" if BR2_PACKAGE_MESA3D_OPENCL
++	default "mesa3d" if BR2_PACKAGE_MESA3D_RUSTICL
+ 
+ endif # BR2_PACKAGE_MESA3D
+ 
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index 87c7f427e4..c103345e86 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -50,13 +50,11 @@ else
+ MESA3D_CONF_OPTS += -Dllvm=disabled
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_MESA3D_OPENCL),y)
+-MESA3D_PROVIDES += libopencl
+-MESA3D_DEPENDENCIES += clang libclc
+-endif
+-
+ ifeq ($(BR2_PACKAGE_MESA3D_RUSTICL),y)
++MESA3D_PROVIDES += libopencl
+ MESA3D_DEPENDENCIES += \
++	clang \
++	libclc \
+ 	host-rustc \
+ 	host-rust-bindgen \
+ 	spirv-tools \
+diff --git a/support/testing/tests/package/test_mesa3d.py b/support/testing/tests/package/test_mesa3d.py
+index 24fc6df59e..193aa7a373 100644
+--- a/support/testing/tests/package/test_mesa3d.py
++++ b/support/testing/tests/package/test_mesa3d.py
+@@ -17,7 +17,6 @@ class TestMesa3DRusticl(infra.basetest.BRTest):
+         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
+         BR2_PACKAGE_MESA3D=y
+         BR2_PACKAGE_MESA3D_LLVM=y
+-        BR2_PACKAGE_MESA3D_OPENCL=y
+         BR2_PACKAGE_MESA3D_RUSTICL=y
+         BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LLVMPIPE=y
+         BR2_PACKAGE_CLINFO=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
