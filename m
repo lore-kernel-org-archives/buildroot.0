@@ -1,146 +1,142 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E26606A31A
-	for <buildroot@archiver.kernel.org>; Sat, 24 Oct 2026 07:56:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92138606A31B
+	for <buildroot@archiver.kernel.org>; Sat, 24 Oct 2026 08:24:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=gV6bTQMe
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=TuI2lAlA
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 830008169F;
-	Sat, 24 Oct 2026 07:56:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 657EA60649;
+	Sat, 24 Oct 2026 08:24:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c2PECClnAc-W; Sat, 24 Oct 2026 07:56:39 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 603AF816DA
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792828599;
-	b=ljTi378s//CgHhfVxhIJ8fpta0jEypn93fpBFLp2N3rs0vR3yoV7lcKdD2LPl15Txb4T
-	 3SVRgy96aoUKYp/2SLP3L429DQ/OLD+oTShEwcJmhxINQvFg78tWgpJT399BImswf2S39
-	 AFc2zP4pR7Qh0E26qiKBv/UPzsaUJVJCgnNHJ/1mykD7BtexSveyh2ueCM8T/UXlzd3gj
-	 TyLvAW21u7J5JW0qOLlgp2/utAawW5udJThdwkfgu0d59o/O/km1Aj8fPuVV38vZhatjd
-	 6JdXnzXRjiVD+X18E/3m0oiabv2u7PSJotv1cr02P+VLpEL6S9JVG/UQow+bU9WytGg==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g6t9iYYdgGxf; Sat, 24 Oct 2026 08:24:31 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 5FD8760657
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792830271;
+	b=S6Qqtn7/vTQ7hURvpkR7vFm6yJ5jXtD0lEEr0au8ZDNpl1FrQ6blVLRSAzD+MWEdOx97
+	 QXywmW5b2QPA9I51jcZl6GlE2EyyuBm0BPf88XEup6c7Fhe4GrPq+hTN4hJbHrdJThyFH
+	 SWwdgPGd4mHEL/M6qEN2WXzbWb6xYNz0BLwKqlonu7WCLaSTsJPocF5kJzLtMLyhj/0J2
+	 RFjTbnZLsGrD1KKoBa+IFPOOvBWWU6kaAA73HQrDQJiFLQW5opQToUOqo+TKXKlycQ1In
+	 EjeEK/bQI6ydCOoA/Qq8I8nF/1gBqH6yw/vBzl+SmFZhWDAxM7pd14Tygx5LH6xWoag==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792828599;
+	c=relaxed/relaxed; t=1792830271;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
 	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 Received:To:Date:Message-Id:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
-	 Reply-To:Cc:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=Kc2E+cdAK5BJlQ7u3GNaR9T6AHFmUPcRGps3sGfpHbc=;
-	b=dsf/9LPWdgEfVIGPOtazqA174nzec1n99h+Qo5qGC+oA0L23qiPR1pQe7z2d7/XqcRK1
-	 iJ5eoQMFYhNZde5pD3qBU9A8Rj2SquDpXbk1srQsj4CX5BDJYdLoXapbSx8n3R4z8otSL
-	 Jg3DTkC3/UaD+xkkgTxC5qINMlA7VdLTpjMIjIJZJYA51u3ZHb20xTjuTCSIQ663SIXsB
-	 ayHOPeY4t3RvLW3MOyT31CcG7XUS2bFDeXtpEHBCzNgGwmVemiBqbYGA9Gm32vTr6ZfMQ
-	 vfxOZPNkZUUtVR+FuK4osjDyD05IXsb0JJ/o8uyFnqYAtQue5O0pVIPQtffrbM0r42Q==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	 Received:To:Date:Message-Id:X-Mailer:MIME-Version:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=5mv+PlZeD89P/nIXiFjC5PTbrq+RIh55FC4CHyjP/B4=;
+	b=aWoSyqawEdd0MLYOXZc4mmid3ys7xctPSmZvfOVisF7CEp9VownxjuY7/rn43DNRRCx/
+	 iw1MHJfFTXMzVZPwlHpnifXL+Ng3q78AktnmHH+d8WFlSIPNz2qUaRvSFE7W2aWOGt3wR
+	 QtFwGBAJmq1eKGXJkTfYDv5thzHLbwg1h1WsEzphn+bn5sCOS/JpUp/N9JXBqFURNek7K
+	 DSKWSAIAnPc52Hfkio2SDYDELAjEX4HhS0bLDRxKUPWsAahRjqBz1JtfScx+iDJokjOd1
+	 fUyCjHULlF5XisC3FCMUlVUIumgJrWgKijqv4GgCSzcZTSmEdPthIHUIrwhNo8x1a6w==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792828599;
-	bh=Kc2E+cdAK5BJlQ7u3GNaR9T6AHFmUPcRGps3sGfpHbc=;
-	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=gV6bTQMeK81zCnEKV58bYpIr6gy0tKRpwaqVST9F50ByS5PiTMNPtk7BxzjW/cuOv
-	 cDxjjpnwwzjwc21ln2PAruLiH+niHhOOtkXGmu/wyGonbgB5exH5SNGY/T6j/+gdbQ
-	 zBU3xGbFZbARNRVbaRxbiX67txBpRmTnJNNwhtUh8wT1udpmKmTDSVhcFdw9bDGXXb
-	 8xEaInDqMFv0WUwQWgiD/w0flYIazUHu5bwQnPNWGusFLEawJZr6m6dwfktdHYwxA6
-	 /84smGs5FV7E+OeBXWzfKOSxPHqDQ8CB9fElKn5VlKv22AHJocGrKdHGYkltAWg5AD
-	 bjTQ+AebXMeyQ==
+	s=default; t=1792830271;
+	bh=5mv+PlZeD89P/nIXiFjC5PTbrq+RIh55FC4CHyjP/B4=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=TuI2lAlAK3IpzZ0+zeayzRD4KtujLpOJ/zKKFd34N94i6q1rNlG3OHDQVsG+WVkiL
+	 L/cCcRc3UQ5EZmpzHs8g/zR4N1dFDwd+EYEJbONT8mBHZTkgVxZcpzionT5uDIIO/Q
+	 bKrYU7Jw6aSj2Wtnvx9185EezBLSAGtEKhovM4+/+KONmSbhHh8cJvIpHEfi1F7UqE
+	 9FDmT6mxKnfb1uQmTRgENqpZe2pvNqvczR/OH4mSRp6sUB5PEysIP1y9S4lkVlnfK2
+	 lL5rgQ1Y9OLhueBHK0jk3ZFYojL1URDndKHXU9V0PNXCzBiAhk4MpHTBqJjdvQlwjv
+	 +gWIzdQ38Ts1w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 603AF816DA;
-	Sat, 24 Oct 2026 07:56:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3EA68765
- for <buildroot@buildroot.org>; Sat, 24 Oct 2026 07:56:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5FD8760657;
+	Sat, 24 Oct 2026 08:24:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id C3682279
+ for <buildroot@buildroot.org>; Sat, 24 Oct 2026 08:24:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 24AB040ADF
- for <buildroot@buildroot.org>; Sat, 24 Oct 2026 07:56:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B519C400AF
+ for <buildroot@buildroot.org>; Sat, 24 Oct 2026 08:24:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oy_zNfXHF60I for <buildroot@buildroot.org>;
- Sat, 24 Oct 2026 07:56:33 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org C7C7440ADE
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792828593;
- b=WCq9XsFaRErE4rr/pQAZs1ShMQ9t7HASC0IAGvcWWNCq2rsMRbQL3nq3/GppyWGkhxuI
- qk4XuflCU9z1ONT3YNIelp74ppm/TRpVfSYRE/uZn3CRrE/lOqHua7rPwDz4O7hp2VF00
- Mi4k1AroR9EKhO2ZrAxRk2Fvy7QbLkvZnJHWCuz8SmbXKyHap0M2C7BpGikA1iu5hVK6K
- pBI7+WRh1AZXJHnE+h7IHhQ0wnUWNRuUXHGi4Kpk5JADV7ocXbDeOXUjUeVNFhwPLpbGb
- oJUA10683GYH4yzsdDOfh/36eFW7uURdAvzsLmlcnGeO8dmZzm0pNzbFZA2vfu4yejw==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eRbArTJvrzAc for <buildroot@buildroot.org>;
+ Sat, 24 Oct 2026 08:24:29 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 551D140068
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792830268;
+ b=cXiVhjMQdHo15rlsvP7Vj/fockI0VAaUf/G1fefjLYp9/z1U+1frP2ZUO3pyK1CUGcts
+ 6xu+dHQXZ/Wy22FNQDFwEihBqM+uABp8F1oImDylllhvbKzX6YIxwni6HQBkhzghBp3m6
+ SChPKUfV0i2RSzdIIgAnyaZOu+JF3mU6uWlndmWJUrJC6fAHlgFYmuotQ93ZPjjan16Bq
+ 03hB+AyQyCz7pBw1bjbeKmpXXNXwNYusCbYSmZ3Ge/hk3b/JXuyJb2ZDCn3+70v4YRJJk
+ oFEN54Fbt3cVq9yegja5LS8HPjNRgOAf0QsxLMDnYlas3W+TQ1+Werf+gZpTSkOH32A==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792828593;
+ c=relaxed/relaxed; t=1792830268;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
- Content-Transfer-Encoding;
- bh=MTfAFWEd5OOj4Nj+tV3OduNOKLThfW69fncc3vjhe+A=;
- b=HnpaX8TatVJkeEJ3gC3Tiaa4roDSFJnZ65lzm1789lThqRwcjHmdyHHnOO4oYzeNvgyo
- ZzqrZ5CpJW8FwtySu76VTsqXJcoLHkTBxbv9t4p31D5Ml3PddKRSLv838En1EeyBDOOZh
- XAL4AJxs1tFXcgHhF4CK8WAcSCHtbTYwfWR3dI8LW/koPtOHH65u3Q+sF/PP6mpiOwD0z
- z3fPDPfhov2iGTsTL6k1tZi0gU0D5dj1tUyXLpYJkCr0eAAlr6L38w0AtLgsXHopKhtyn
- gxsUXX04VoA57XP3477Ajxzu2UzrwHhCQsldK276eFchx6t4AwuqT3j4bgTAkW/akkg==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+ bh=SjOfldJC/nlbfiAR4npsOqgST9NsrsKSioYoHrH9DA8=;
+ b=fO2ksPbXlpdZRi9yfRIT55EzdneON1sF2e+rdAQJy3R/bVulN4cka8PEy+PCND861Esr
+ 30tDP88mOqLeczRg4Kj3FMl6mv+0iJssJpupOwfyofF+utybLW9ktRLTCo/UvCLIUZqR8
+ z3AtvB9jdocTSZsPHIY3pUKh2m+uWlOPA9nI7/0R/7+2CApN2k56vkn+YGFp1Rv/uIp2d
+ fPjlwDYnCyysBxklvqWS1He2cRr1u8UQ3F8PiLFpeMJLWppWAur7uhgUlSIyFmM1A0fNP
+ jkQE1Y8V8XXHR/CZ1LgSQXH+Jk+CN7u8ySF00yRhuEET2xE8pjiBsFWXptIy0tGREeg==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  dmarc=pass header.from=googlemail.com;
  dkim=pass header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256
- header.s=20251104 header.b=f9Gn3WXm; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::52e"
+ header.s=20251104 header.b=U40irDM3; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::52f"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::52e; helo=mail-ed1-x52e.google.com;
+ client-ip=2a00:1450:4864:20::52f; helo=mail-ed1-x52f.google.com;
  envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
- [IPv6:2a00:1450:4864:20::52e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C7C7440ADE
- for <buildroot@buildroot.org>; Sat, 24 Oct 2026 07:56:32 +0000 (UTC)
-Received: by mail-ed1-x52e.google.com with SMTP id
- 4fb4d7f45d1cf-6af8620a7d2so1805398a12.0
- for <buildroot@buildroot.org>; Sat, 24 Oct 2026 00:56:32 -0700 (PDT)
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
+ [IPv6:2a00:1450:4864:20::52f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 551D140068
+ for <buildroot@buildroot.org>; Sat, 24 Oct 2026 08:24:27 +0000 (UTC)
+Received: by mail-ed1-x52f.google.com with SMTP id
+ 4fb4d7f45d1cf-6b1d8944cb0so2354946a12.3
+ for <buildroot@buildroot.org>; Sat, 24 Oct 2026 01:24:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1792828590; x=1793433390;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=MTfAFWEd5OOj4Nj+tV3OduNOKLThfW69fncc3vjhe+A=;
- b=rSq1ePQg6QCDfK4Bn/ApgfEx/AHnekYWiZXleS6ysKB3SNKVn66tzv4k0rm6sTuDfe
- MDfb+tPvQFnfj9DaO7+PV1lUBAhKDVVq8hJoXVKF1QSiuqlWd2IGg9BjCsMGuDJB31UW
- 2PQ3mm44IDu5qW6uRjYIQZEKrZGwv83a4H4rEGcsQHkM/16tY9dq+fUiJCNzyZ1JYDra
- E6eu2JFxYOUv45djvAvRhSTV6uDxP7eG+WtfLtCfdIPJYfXQpFp0reo1MhOBJr+TpYCN
- PudhE6b3mDNtlygl23XuOouKiHPpJCtWtOVJ/33ExxPJihgEIQ2809S7+hDhAXt2HmYa
- ZUmw==
-X-Gm-Message-State: AFq9FYKsyu5QOKbSh/DfwL9jRVlabq4dcAuhrQbX6MWk5tXI7cnHHBPw
- znwQRJIphBJ7yEh35w27umwj2MVN/tHPRAnGKa2ZrFf/5/xMgiF60d+K0qJwgA==
-X-Gm-Gg: AYBFou02ju6eeFEBYljbAnWH4VM/tVnyCKtmFfKl66J0X5+wgMTG0a4mbYswlE4acNY
- eKQfGTkFFIp7yCBxgcrrrJQh71xFxxPLAhN3Zh44PpDtqQrt9hNZ+SwmC16XiZsH592xjJiXw0I
- RVgt4+FrDGafx3p3pLASoYRckj3uHCyfVkNrm3+eXbVT5+d/kECD68WWhqpwTmQlIahEu6ynqCK
- O5zUjgB0tRML1vHJG2J2lHWF/1s74+snKByvz3EQorIu8DRMGZrPYU+f7h/2snlj5wxdCzCUJ9G
- zsk9CkDM3LcTU6MMpJsMKc2YYMk05w6H6sZlbl8/LSKzXt4XR06IHj8/08DKRShUQAlWrLHf2kh
- gVxUHCxoAJ50TjTMKEbeZOGyWjfGn/eJtgiBJQGjsMQLCD+ZIzF5ohF4NiPMbFxdbWoTTfq3dSd
- TdEebEXA0Z8vJzlCnJGaTISFtvn6XfS5elpbK8fOvlSchWKNUGQHx8IB445GdFUHD0/6GhGTUAt
- TVOiN9lsCkPIngHQU17bIkyTv0/28QdJTUK7rbP9E+YizvyIYA0bgfvGNKHyGHv6HO/eEYY1FSH
- CugnuVMUq1LJ87LHjn2IUNaG4VOImcr6J4Po
-X-Received: by 2002:a05:6402:454d:b0:6aa:ff76:3076 with SMTP id
- 4fb4d7f45d1cf-6b442fece01mr1271620a12.32.1792828590169; 
- Sat, 24 Oct 2026 00:56:30 -0700 (PDT)
+ d=1e100.net; s=20260707; t=1792830266; x=1793435066;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=SjOfldJC/nlbfiAR4npsOqgST9NsrsKSioYoHrH9DA8=;
+ b=IC9RmBdOlNb7RyCMIM90FUbWvFp3wzdrq1Kj4CBEz2vujOIwNYrflDb4IJanE9B6/R
+ 6txWMT2yhMLT0TscAA19+NQ5G5aHIeowyJQgmN8P1aPZCoBaDNwkLh4aLwqEjgnVM0ff
+ BYCXf7bXeTDKpx6FL73kdXsz0uDflYhZ4zVdHPiVkaaRSve5n+icwzFyT3D89KjcJSQv
+ 7D7EKhiTXp0UJ5tdegU5Lp+nIzETgiJqb/riSHABSnIZhu8tLwGmHCOqdbSx3LIpASbW
+ +NjZyiPzJqN8DkCqg5JqObridM9VU177Yu2JAexgMZmdFyBmYDVE8G0RJTOa2NfhbU1w
+ uNzw==
+X-Gm-Message-State: AFq9FYK8avgd/pQ1unEWNFHUqCyu3uDGmhPo36p71IMlZRf7sKetILwq
+ /u2G10hBCc3gFH32rxe7Iz9GYk3s0xbe7VSLP8CoQsU4yy5xcGNQKJ/eFEmSrQ==
+X-Gm-Gg: AYBFou0u1ZMdPFDtvQ0yAoVeeCZXQ22auyc/tZmuXIuln5vVvWYTp5TTh/Ii9e4bhKY
+ CkD9ICTaIvk77OtAusDRA6GFnXBz6/QOhi+ycOqwdyo6nzOEBnoK/ytGwLEkvUJuoH6oM1fTpTn
+ /9snLaCIqHF/5X2NokjFIiI8bvkM543T/w1ThmqdDQ1p0EwUkg7xFoJHxO1Fqnx7oxlFZz1aRta
+ zf9fOWn60bVGkiH5TMTLsKGbQoPT8w3grkB1KSRNiF7wD/rEMfT8m6E9fv413zgZcYkxf+jloCR
+ AAQnJFkEy8cIIRLWS+7PSkvSlgfBn/ujT9EvBH+moTPMUixWkXuHm1ez5AgkTvOTbWGbsXMhAbb
+ x4M0qzPNrhRW4mIR2tOuvHoTCfGXMh26ALqAFpicDTVwbTY3g81So9GaY+/hSPn5pmswcbLuVJV
+ i0e5UOGg/iM2CtLd5yWr1AiowqGzI3Ygp8Po5EbsGoCj33DjJN8rZmBHzDCz/rtHktIEH5JFApp
+ wbpz4ZD7GQ+XA8c++qaVSja/CiAFFDHtaht59W/Qb+pEUopUlae8jcUurBjuX54KLn8YbUYzCow
+ 2oLBhZk2qNRlKVnd0r9EPRh2T5FZ4l4a9B4=
+X-Received: by 2002:aa7:c9d4:0:b0:6b1:c355:c7c0 with SMTP id
+ 4fb4d7f45d1cf-6b442fde26emr1163736a12.26.1792830265682; 
+ Sat, 24 Oct 2026 01:24:25 -0700 (PDT)
 Received: from development2.visionsystems.local (mail.visionsystems.de.
  [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-6b445984ca4sm708564a12.26.2026.10.24.00.56.29
+ 4fb4d7f45d1cf-6b445984d85sm745420a12.29.2026.10.24.01.24.24
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 24 Oct 2026 00:56:29 -0700 (PDT)
+ Sat, 24 Oct 2026 01:24:25 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Sat, 24 Oct 2026 09:56:27 +0200
-Message-Id: <20261024075628.3205436-2-yegorslists@googlemail.com>
+Date: Sat, 24 Oct 2026 10:24:24 +0200
+Message-Id: <20261024082424.3219244-1-yegorslists@googlemail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261024075628.3205436-1-yegorslists@googlemail.com>
-References: <20261024075628.3205436-1-yegorslists@googlemail.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/3] package/openocd: fix static build with
- jimtcl
+Subject: [Buildroot] [PATCH] package/uclibc: declare wcsdup() for
+ POSIX.1-2008
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -152,135 +148,99 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
 Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Since jimtcl 0.83, jimtcl enables ssl support in the aio extension and
-the zlib extension when openssl and zlib are found. With
-BR2_STATIC_LIBS, openocd then fails to link, as it only uses -ljim to
-link against libjim.a:
+hidapi fails to build with uClibc-ng and GCC >= 14:
 
-  jim-aio.c:(.text+0x16f4): undefined reference to `SSL_set_fd'
-  [...]
-  jim-zlib.c:(.text+0x11c): undefined reference to `deflateInit2_'
+  hid.c: In function 'utf8_to_wchar_t':
+  hid.c:116:32: error: implicit declaration of function 'wcsdup'; did you mean 'wcscmp'? [-Wimplicit-function-declaration]
+    116 |                         return wcsdup(L"");
+  hid.c:116:32: error: returning 'int' from a function with return type 'wchar_t *' {aka 'long int *'} makes pointer from integer without a cast [-Wint-conversion]
 
-Backport an upstream commit making openocd use pkg-config to find
-jimtcl, which adds the libraries from Libs.private when linking
-statically. This requires the jimtcl.pc file installed by the previous
-commit.
+wcsdup() is part of POSIX.1-2008 and glibc declares it under
+__USE_XOPEN2K8, but uClibc-ng only declares it under __USE_GNU. hidapi's
+Linux hidraw backend doesn't define _GNU_SOURCE, so wcsdup() is
+implicitly declared, which GCC 14 turned into an error. With older
+compilers, the returned pointer was silently truncated to int on 64-bit
+targets.
 
-This issue has been present since commit 283821fc31c4 ("package/jimtcl:
-bump to version 0.83"), as jimtcl 0.83 made its optional features
-enabled by default. It therefore affects 2025.11 and later.
+Backport the upstream commit moving the wcsdup() declaration under
+__USE_XOPEN2K8, which is enabled by default (_DEFAULT_SOURCE) and by
+_GNU_SOURCE. This fixes the issue for any package relying on the POSIX
+declaration, not only hidapi.
+
+This issue has been present since commit 5eb0203cb05c ("package/gcc: add
+version 14.x"), as GCC 14 made implicit function declarations an error
+while uClibc-ng has always hidden wcsdup() behind _GNU_SOURCE. It
+therefore affects 2024.05 and later, including all maintained branches
+(2025.02.x, 2025.11.x, 2026.02.x, 2026.05.x and 2026.08.x).
 
 Fixes:
-https://autobuild.buildroot.org/results/6436c7c81cda5eeb8331f18d40f33f4bf1dadd79
+https://autobuild.buildroot.org/results/eba842f15d96e483e0d16b12028da2ce10dcdeb0
 
-Fixes: 283821fc31c4890f141111cbc5994e36703c91eb ("package/jimtcl: bump to version 0.83")
+Fixes: 5eb0203cb05c0a65bdb7f89a2644eef7cff2dd27 ("package/gcc: add version 14.x")
 Assisted-by: Claude:claude-opus-5-5
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- ...-configure-Use-pkg-config-for-jimtcl.patch | 83 +++++++++++++++++++
- 1 file changed, 83 insertions(+)
- create mode 100644 package/openocd/0004-configure-Use-pkg-config-for-jimtcl.patch
+ ...ar.h-declare-wcsdup-for-POSIX.1-2008.patch | 41 +++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 package/uclibc/0007-wchar.h-declare-wcsdup-for-POSIX.1-2008.patch
 
-diff --git a/package/openocd/0004-configure-Use-pkg-config-for-jimtcl.patch b/package/openocd/0004-configure-Use-pkg-config-for-jimtcl.patch
+diff --git a/package/uclibc/0007-wchar.h-declare-wcsdup-for-POSIX.1-2008.patch b/package/uclibc/0007-wchar.h-declare-wcsdup-for-POSIX.1-2008.patch
 new file mode 100644
-index 0000000000..65f0f9424b
+index 0000000000..76c3039a4f
 --- /dev/null
-+++ b/package/openocd/0004-configure-Use-pkg-config-for-jimtcl.patch
-@@ -0,0 +1,83 @@
-+From a8a0b4c50768fb8bbcbd1683d020a31ad2bb0cad Mon Sep 17 00:00:00 2001
-+From: Marc Schink <dev@zapb.de>
-+Date: Tue, 2 Jul 2024 17:14:22 +0200
-+Subject: [PATCH] configure: Use pkg-config for jimtcl
++++ b/package/uclibc/0007-wchar.h-declare-wcsdup-for-POSIX.1-2008.patch
+@@ -0,0 +1,41 @@
++From 936a08b682e761afba98ef3800265add951201fc Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Thu, 22 Oct 2026 13:55:32 +0200
++Subject: [PATCH] wchar.h: declare wcsdup() for POSIX.1-2008
 +
-+The jimtcl project supports pkg-config, use it for a simpler
-+configuration of compiler and linker flags and to enforce the minimum
-+required package version.
++wcsdup() is part of POSIX.1-2008, and glibc declares it under
++__USE_XOPEN2K8, but uClibc-ng only declares it under __USE_GNU.
 +
-+Since the jimtcl pkg-config file is not available on all systems, use
-+AC_CHECK_HEADER() as fallback.
++As a consequence, code that doesn't define _GNU_SOURCE (for example
++hidapi's Linux hidraw backend) gets an implicit declaration of wcsdup().
++With GCC >= 14 this is an error:
 +
-+Change-Id: I6fdcc818a8fdd205a126b0a46356434dbe890226
-+Upstream: https://github.com/openocd-org/openocd/commit/a8a0b4c50768fb8bbcbd1683d020a31ad2bb0cad
-+Signed-off-by: Marc Schink <dev@zapb.de>
-+Reviewed-on: https://review.openocd.org/c/openocd/+/8383
-+Reviewed-by: Antonio Borneo <borneo.antonio@gmail.com>
-+Tested-by: jenkins
++  hid.c:116:32: error: implicit declaration of function 'wcsdup'; did you mean 'wcscmp'? [-Wimplicit-function-declaration]
++
++and with older compilers the returned pointer is silently truncated to
++int on 64-bit targets.
++
++Move the declaration under __USE_XOPEN2K8, which is also enabled by
++default (_DEFAULT_SOURCE) and by _GNU_SOURCE.
++
++Assisted-by: Claude:claude-opus-5-5
++Upstream: https://gogs.waldemar-brodkorb.de/oss/uclibc-ng/commit/936a08b682e761afba98ef3800265add951201fc
 +Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 +---
-+ Makefile.am     |  2 ++
-+ configure.ac    | 10 ++++++++++
-+ src/Makefile.am |  4 ++++
-+ 3 files changed, 16 insertions(+)
++ include/wchar.h | 2 ++
++ 1 file changed, 2 insertions(+)
 +
-+diff --git a/Makefile.am b/Makefile.am
-+index 647b571cfa..2230e628f8 100644
-+--- a/Makefile.am
-++++ b/Makefile.am
-+@@ -48,6 +48,8 @@ AM_CPPFLAGS = $(HOST_CPPFLAGS)\
-+ if INTERNAL_JIMTCL
-+ AM_CPPFLAGS += -I$(top_srcdir)/jimtcl \
-+ 			   -I$(top_builddir)/jimtcl
-++else
-++AM_CPPFLAGS += $(JIMTCL_CFLAGS)
-+ endif
-+ EXTRA_DIST += \
-+ 	BUGS \
-+diff --git a/configure.ac b/configure.ac
-+index becc531b0d..b7aed245e6 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -594,6 +594,15 @@ AS_IF([test "x$use_internal_jimtcl" = "xyes"], [
-+   ], [
-+     AC_MSG_ERROR([jimtcl not found, run git submodule init and git submodule update.])
-+   ])
-++], [
-++  PKG_CHECK_MODULES([JIMTCL], [jimtcl >= 0.79], [
-++      have_jimtcl_pkg_config=yes
-++    ], [
-++      have_jimtcl_pkg_config=no
-++      AC_CHECK_HEADER([jim.h], [], [
-++        AC_MSG_ERROR([jimtcl is required but not found via pkg-config and system includes])
-++      ])
-++  ])
-+ ])
++diff --git a/include/wchar.h b/include/wchar.h
++index 2e6ff77c0..0056f93da 100644
++--- a/include/wchar.h
+++++ b/include/wchar.h
++@@ -210,7 +210,9 @@ extern size_t wcsxfrm_l (wchar_t *__s1, const wchar_t *__s2,
++ libc_hidden_proto(wcsxfrm_l)
 + 
-+ AS_IF([test "x$build_remote_bitbang" = "xyes"], [
-+@@ -781,6 +790,7 @@ AM_CONDITIONAL([DMEM], [test "x$build_dmem" = "xyes"])
-+ AM_CONDITIONAL([HAVE_CAPSTONE], [test "x$enable_capstone" != "xno"])
++ #endif /* __UCLIBC_HAS_XLOCALE__ */
+++#endif
 + 
-+ AM_CONDITIONAL([INTERNAL_JIMTCL], [test "x$use_internal_jimtcl" = "xyes"])
-++AM_CONDITIONAL([HAVE_JIMTCL_PKG_CONFIG], [test "x$have_jimtcl_pkg_config" = "xyes"])
-+ AM_CONDITIONAL([INTERNAL_LIBJAYLINK], [test "x$use_internal_libjaylink" = "xyes"])
-+ 
-+ # Look for environ alternatives.  Possibility #1: is environ in unistd.h or stdlib.h?
-+diff --git a/src/Makefile.am b/src/Makefile.am
-+index 6d79cd6311..4d1c1a2509 100644
-+--- a/src/Makefile.am
-++++ b/src/Makefile.am
-+@@ -17,8 +17,12 @@ bin_PROGRAMS += %D%/openocd
-+ if INTERNAL_JIMTCL
-+ %C%_openocd_LDADD += $(top_builddir)/jimtcl/libjim.a
-+ else
-++if HAVE_JIMTCL_PKG_CONFIG
-++%C%_openocd_LDADD += $(JIMTCL_LIBS)
-++else
-+ %C%_openocd_LDADD += -ljim
-+ endif
-++endif
-+ 
-+ %C%_libopenocd_la_CPPFLAGS =
-+ 
+++#ifdef __USE_XOPEN2K8
++ /* Duplicate S, returning an identical malloc'd string.  */
++ extern wchar_t *wcsdup (const wchar_t *__s) __THROW __attribute_malloc__;
++ #endif
 -- 
 2.34.1
 
