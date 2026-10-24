@@ -2,144 +2,183 @@ Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDC27606A31F
-	for <buildroot@archiver.kernel.org>; Sat, 24 Oct 2026 09:02:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A78C606A31A
+	for <buildroot@archiver.kernel.org>; Sat, 24 Oct 2026 10:20:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=BuOjOiQk;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=rHlBz1mZ
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=W6Xul7dM;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20251104 header.b=lgx/BKGE
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 13CA160A7E;
-	Sat, 24 Oct 2026 09:02:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 62F3060679;
+	Sat, 24 Oct 2026 10:20:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Nnup8WYZ7RrX; Sat, 24 Oct 2026 09:02:35 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 8B5CA60A41
+ id nmnGnLt65QFG; Sat, 24 Oct 2026 10:20:42 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 30B1D60680
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792832555;
-	b=sU7oGzXmg+TZhgZXNP7Ik5y8yh8QgE/HiF27CZV7Z5MpCZyxt245/yU1TEomtoQ5yyXX
-	 y+Ts/i1g6MtH7CRLAC85nufBjJFODLr4Z60KD67IVKbVKtoc+L82v3vLoxPoEZBzJ9ITD
-	 vHuMEkGee0jzDKs03EAFZ/Ff7n4P5UmNrnVzEbxalOCCBeCIBAPdAqtXrgQB6SG2xTx+Q
-	 Dm0aGMRv0oWhesam7m51Gt3RyRwftyoEfnutMdzFIzU1v3u2MnC+/HHCU7IBXIxkOxgc8
-	 09Fr+31w1g5QzC2XSIULkyFdWMICUcGHm1Iipyqt7FjNjRv2z3U0pdOemZRjlK3Jucw==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792832555;
+ARC-Seal: i=3; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792837242;
+	b=Em1+CvJRXZ64GX1xaMPmlxi3PHxWvT2xhEUAaQzFSEfzvsTjp05z+6IYoH2OmwFqUy6p
+	 AWxTmdtF9SkDS2fMw9gFG1/qhVzpLVu+uXgbhMUu1rDGm9iIGS2bvD0UMho5JKxdpvWEV
+	 p+IVTpH6bgkFJxhbkTwSiMOWgyd6ALrQLx493Zt3YGkiQlUZ5JDXoZp9GhMAsPI6k7SHO
+	 R+SceA/tJBto8kx8go124O5OkO/KsPOh7caQwg08+weiYSHHH6bE2Hx9iSmaSMvPwOn6u
+	 4qayYfFJjvV1Jzf/wQkoRYQ8AJoSYXDYYU9GbZPD3VsDWcIq+S0WfdZTgTmftkextNw==
+ARC-Message-Signature: i=3; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1792837242;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Date:Message-ID:
-	 X-Mailer:MIME-Version:X-Spamd-Bar:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=sNI5F9UYzmjnByai5qit2cGAeYG9I3AdDcRxMSEMxzY=;
-	b=NYqMpg+j0MaaRbj3sOsA0/0MEXcFmFd3mZ6jtJuz0ISl3HQUlv0uVERGCLTjN+otoN57
-	 5TdwcFivNDHVNe9H0QXFzbqPgqb4X2TE5JpmstFKC68WoNVxSRWiNFzWn3Y7k4L6I/KbX
-	 /b24nA5FZT9p0+m+wZCL5EfsuPPKAs6GU2glao6cqi2VbuDgzPpi590F9cEVqyUPkbk+L
-	 TcZ1+YiQfm+nbBwfSA7BGOcovs7M4UVIgtpaN3SsWmuj/OjCyI8brfllCzgkdyxc/O2ze
-	 MBlQ7a/3QNtCqrT5/1kurDBdSLCSuOSSuuUnbQUe9LLegd99EQVOkXeUJ/aXVi7zZxA==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:MIME-Version:References:In-Reply-To:From:Date:
+	 X-Gm-Features:Message-ID:To:Cc:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:Content-Type:Errors-To:Sender;
+	bh=Qh0j4SJon2aJ9vJaDJjrOgoAF03mSDfNjKXleW7OOe8=;
+	b=KLK2KT7xhTJP61HqQoAkq0+n27SbEmn8gcGp6Q0AMiqBZQp7Hmhp2ZYo1g+9BZX7GQ0F
+	 qw3CAosNdcI6tC45NFxhVUi8hrJGGs8ojn0Zh5E1aggn3xBbm1NxysaaTwSEyAIAxnfUK
+	 22X50laRwkprUpmVVa0So6U7tl73q4KTLwBLBjr9FVFp9s1Z3iWcT56t92pfkB5oueZOk
+	 NZqQdFo1E9u7aG/F5vGpcsGcgYOanwbF+F54UtmXvme4npZocsSookeDhazDuqk7oyO9X
+	 E8Me9pAPVDob5vy7glyuAMOuzk9DD/hvdKIqD3Uhn7aP1VX4APXOPUBppL/4qHkiIng==
+ARC-Authentication-Results: i=3; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792832555;
-	bh=sNI5F9UYzmjnByai5qit2cGAeYG9I3AdDcRxMSEMxzY=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=BuOjOiQkHxPEq2olRi3mxT9GHohdPrYfi+ScwVc10KLpJg/rgS2Ls6uvEDd2+uzjv
-	 sQRhm++AamBDeMmWMFgy3hs883nVGNuNkx2rLF9o8kBrVR1G4a8wl6NN3grGZy2EAh
-	 OhjA9Mnxk+3K5oAZgIgq3l4WoWA+TTdQWaEzOx15pMpGZQPJIxobWZVaOl7VU/USEu
-	 WvdnhDO1NDMIeiOEK0HW7Dtnz2UFAKQEqrRQANOxJCc4wKEQmBMo0agY5lwBYlPYAx
-	 /w0LtjVtZdQWuUGa+JqAVQbFhnnrxZ+DSD2+G7MTDtdkZ3fueK92KBjiV8hctXAdh3
-	 qiSg6YiQMa1pQ==
+	s=default; t=1792837242;
+	bh=Qh0j4SJon2aJ9vJaDJjrOgoAF03mSDfNjKXleW7OOe8=;
+	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=W6Xul7dMLRt/zeQNxCsxqZKayBeal7tKPPJuK+Ya3SUUdD4xClOQ/Jl2Ryn9TV37L
+	 imDCkHho468qBe9+uTB4LkHnj+fwEEzrx1taD8sHAkfYpGP/Gyx5g/7UmPXmhQYIt4
+	 ifZzpawqPS0p+K7Bsb/wVGWYVri03HZnmGr13yR6C3JkwOFHPXm9yrPpMvaIjf2GK4
+	 3SbCx2yVWSd+9D4diT7xozoH/NWtGQeo3Jc882bIrL8b88kskJAAQ+7tqrM8O27Ila
+	 9niZIl96U/P56MTfWMg62mBOoq8TwmyKv7DHQSMZYUJdSLEqXPEuPIOLEt3zz1WcF7
+	 CuuQ0PE/8pKvw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8B5CA60A41;
-	Sat, 24 Oct 2026 09:02:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id B76FF79F
- for <buildroot@buildroot.org>; Sat, 24 Oct 2026 09:02:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 30B1D60680;
+	Sat, 24 Oct 2026 10:20:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6CCBB356
+ for <buildroot@buildroot.org>; Sat, 24 Oct 2026 10:20:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9C92740AC0
- for <buildroot@buildroot.org>; Sat, 24 Oct 2026 09:02:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5367B4009E
+ for <buildroot@buildroot.org>; Sat, 24 Oct 2026 10:20:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4JRIBX6PmN1z for <buildroot@buildroot.org>;
- Sat, 24 Oct 2026 09:02:32 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 4531440A16
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792832552;
- b=QdNKCECLGu6++rPpRjxrgSmf9YestvliKgT8RjGL+1ZTp0S/vKXE1Uw3wfnULnsf6COy
- 8M3Zkh2jyyC3ORmDyQOOJ21oju00EXDSsXDMnlzHMR278yRdsq21kBIJesSjBtMwqafWs
- MbgykgbzbHc9n8RdiqKEvUxPrfQtpoCH19bKffaklJ6t/ddWeNkMYHkMGPS/y+OaHO4g/
- jXMY6zn8Zm4iwYn2SHqISXPDSYdTTdpVAtlLYxMORZ02HdxQfdPRYzYPKVud0bSaEVoDJ
- xq2r8UDAALhhP2yZdvSSN1J/0XbrdFlrH3QzIvjcsjGrmQQtKhTxd2wm0kOL1Zt48rw==
-ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792832552;
- h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:
- Subject:Date:Message-ID:X-Mailer:MIME-Version:Content-Type:
- Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=AUpY04AyucqBPCkNAbfi8lWXGuGBBLJSP+TXV5aZJtM=;
- b=M5fEfg3yWdALWVf9Z5EwxG9M91/u36C1GseTWU+2oNEXcJ4Mcd2zob7HP6wNUHXUXDek
- H6SOv896yYLYN5UBzeZhNihdQA10C9reRf0aBiv1Kl7HZ6NuqNjAfcEGQgNMZlW4ppUbO
- cYrwLAfnxrvqpIWYjjEj6dQDgovJSf9oWVJUVwXtbNAlFjPxqozdKQrRd2hmVdhhyq8DH
- mMCnKgx/2HDcPObRQ/ku4VtTW+QkZ2+g804/so5IES5+jc94+4/QEJ8RIVOqcB4RHZIsH
- AgQK1+YmUwQQGd/3W0nyVyeCcCyWjgMpITXJKS2zpEozWBdXyW2h4X21dYDlohp8HVA==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
- dmarc=pass header.from=kuhls.net;
- dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=rHlBz1mZ; 
- arc=none smtp.remote-ip=85.13.140.57
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=rHlBz1mZ
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4531440A16
- for <buildroot@buildroot.org>; Sat, 24 Oct 2026 09:02:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1792832546;
- bh=AUpY04AyucqBPCkNAbfi8lWXGuGBBLJSP+TXV5aZJtM=;
- h=From:To:Subject:Date:From;
- b=rHlBz1mZVkHJ68XfWh2JaXe5I2TeP6kyRI/e0p01Pfr8owwx6EoxYfAp5qiyWoK2z
- Wamsd+8HBPNyOUVcnmH5ExX7ASYM7inDu5ajdzVwsxDEIhvolievlX6RJU3fLPU+mK
- 9SYnCv+0D/tShwzfsx03xSnrNZJnz6IXcD8UyucWVsDYEKnMOIEdFo+wtn51BvDU22
- DSi84+x1eqs/2cgITmIwfzgCTBr+Ov7GXXCjS5O6z9P+UAFQE0ee1ZcSQRcisaa1mQ
- br5U/e63yyqePwna83U6Nr/rxJnTUR/WhBinvqfQi3cabdfqtUOcdg7lMeMMmoMlKd
- 9lFB03VrelyXA==
-X-KAS-Sym: v3:f51bdf72230551df:b3Jgz0mvt5YPg2TnKCrn5shMmAMqXJrInCAn+G/KnQsu4
- 1Iy9TMrD2JsLPVjmsH8IfReHnlyhOW5mJQVK9UU96rqA1MBQgLVFfaHHzeWph7ut3WdV322iDll
- m35dKL821rsZgMFtJOCCjpPN9ucogHHA5MwwOzE3RQmY+y0T7Qpf4a1aBLgnO412KWBC6fpH0+0
- Id1V1nnnLJZm7OZLU+GrGebMuqkxP2lIeGxhkkiWiCnh5zS1SCwcM/Uma8G81FoNp6rdwbEhRQh
- 6dx4h+eKVItG/BNCopZqzEmofXx/CmM20Ktnk/NCxwscJZDYv8oCaDPDYLsYQRMzm0qhoVNw==:
- pQWO0yAVyZ0UVTMFSbo9qJIM3vZYYbe8ZcQCI5m5p8dbkH18x42qS4bXrmhkRmAxBGIMa7SuDTQ
- C/JxkDcxGim7ueZWJM4WvIN5/zEjIh3UFMgF3HJKzzB5rJrY/tLu9f22x2UutY4CnpjhIrqNTQF
- kXGcKGDQ9u62+JEcFwJi1rAl2zyUK43/OYiXnJkM43iGrbxIgayGwCfCeiizNtU9XattcwKfVOk
- JL6OAFQI/rcUdWzn+1pj5cm8fgxFz4iwBi4WAWQpjfhEYNwktvW6eBJ5/MgHLx5FM+OfEFujrxq
- O54ulvWyKibpY0POdUd9RMZMGi3qrGwIx+1PIMXgZ+pwvHY7aC4XbbQA6Q/v0NgxbLVsB2h0WBR
- ISAmEQdh/H0Tq1v++Dwz5SnwEctH5ssgD1RX7mtpVyhBvIBjz5lLjbOvjdEothWDVYy2022HNoR
- eo3FHQnAY/bib1NNfKHST2nLfOPZiayHXili78XcIKN6Ai6ZiDCgrTqmzXswi5h7+xU7sUBn5/s
- azZPEz02GnHUHaiuH05/lDGLbVo0aybpYU4xLDWOQkXn1b0YHA=
-Received: from fli4l.lan.fli4l (p54a1ba05.dip0.t-ipconnect.de [84.161.186.5])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 5417AA4C511A
- for <buildroot@buildroot.org>; Sat, 24 Oct 2026 11:02:26 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:48228)
- by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xKXdx-000000005Fb-3OVK
- for buildroot@buildroot.org; Sat, 24 Oct 2026 09:02:25 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Sat, 24 Oct 2026 11:02:24 +0200
-Message-ID: <20261024090225.3987962-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UHRP5ykHnBjL for <buildroot@buildroot.org>;
+ Sat, 24 Oct 2026 10:20:40 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 3875D40068
+Authentication-Results: smtp2.osuosl.org; arc=pass header.oldest-pass=0
+ smtp.remote-ip="2607:f8b0:4864:20::a33"
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=pass; t=1792837240;
+ b=SjESfUu6VQL2bn30PgOxOpzar+SCyKFFeAK3W4TQVL1Igum3KtjsgPOgBYK/qTjXddrf
+ xMdvmexmhMp6PU2iwyViDxaiPEBMnmygKpHqVIvvM2F7bdwf53WdYcrvXzYpcYP12xwB6
+ aTXJtFK8iMl97mQPIMLVLnRGWkIwprLrgKRWwafizaqX0JQEUBWP1TV+uVb1/v32WJ5wq
+ nnIEhOzBerY/1NjmM94+ykwdx0UevDJijYnpv0mQE0s/IzwDJcQcqzVqCb2YD03OxHY7c
+ zHHBh72EosMWmfjjB7ER5jYaria5+pwtHdrBg2zIA39mByd9lRK3iusqEArtde1C51w==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+ c=relaxed/relaxed; t=1792837240;
+ h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
+ X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
+ In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
+ Content-Type;
+ bh=WTFqNmd4tPch92EMyHyDrh71lYQSFQDGKC6eAhfNT5c=;
+ b=fRRGLYXhMNYMpKWFfCTDQs83I4Io4gZBmJItNfhTtptxURLaUiUmlIK4AKLregSsv9rz
+ 4dlmfUMNvWx70MQUl1ly5WSmHDDcp5pfeteMbiStm5ccQ5q06+mFTfsvfcYEs3OoUBBoE
+ KB6sD0egTbH+tfD5MEkfz3gndHk0ixdpNf09n+xNATYuD5cGzpbAL9vspKQkzc2AmObAE
+ KbYWG+yL5uOAyGLHA73SKic7OXVXdItyXWsAyk7g2stOJgQLKEs+3pSy0FiBHvIwxRUY/
+ v7z7B8ouCbgJMlPv24HIbdyqYFxdmO4fVPmVQKFczEYet06bVzYMiLfkiTwF26/wAzA==
+ARC-Authentication-Results: i=2; smtp2.osuosl.org; 
+ dmarc=pass header.from=gmail.com;
+ dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20251104 header.b="lgx/BKGE"; 
+ arc=pass header.oldest-pass=0 smtp.remote-ip="2607:f8b0:4864:20::a33"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::a33; helo=mail-vk1-xa33.google.com;
+ envelope-from=francois.perrad.86@gmail.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20251104 header.b=lgx/BKGE
+Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com
+ [IPv6:2607:f8b0:4864:20::a33])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3875D40068
+ for <buildroot@buildroot.org>; Sat, 24 Oct 2026 10:20:39 +0000 (UTC)
+Received: by mail-vk1-xa33.google.com with SMTP id
+ 71dfb90a1353d-5ead5ff47caso803610e0c.0
+ for <buildroot@buildroot.org>; Sat, 24 Oct 2026 03:20:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792837238; cv=none;
+ d=google.com; s=arc-20260327;
+ b=EKlenvI9MAIT6+J0BhiNCHZSAmMeRWMF4o2iLzNsdnjpUAHv3Wo2b/7k3scqjH1fSK
+ jd7fMxza5R+JRH814eEVyMQvAP6LRH+0vTlvuPeLJsmBQ6EQ1PtZywBKq7RxWZ2bv+Y7
+ 9s2DxG3gHLeA1vvAL+ypnliJ/FxgmDQTvW+mQxQyeI8Qq3gcCsaM9QR8QMDZTbtRSZhg
+ EunPUsoYzn6Hl9//zdmQHjU+SRU3+SRFPuPgfOsX39KcFmNJmxJYMm1gTv9vg0ysrqqw
+ NkgaVgWJpS+dR0Rbppgl2jNHRa7czz9n6smwh4wk06d++A9IA1i3FpPNZKuubjdkdRVG
+ nNiA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
+ s=arc-20260327; 
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:dkim-signature;
+ bh=WTFqNmd4tPch92EMyHyDrh71lYQSFQDGKC6eAhfNT5c=;
+ fh=uNQaJjvtYez2Pf/8MdVG/BxjCe+pTpQsdq1aveHShLY=;
+ b=ACJpYw7l6jZURvt5kf9ZtWgEdPQxPQfCa3GjlS/7+64IB7ODpQicOgL1QGf8I/t2gy
+ BKskVcg1mqTPVDouRgtHz1hAal18fzN6tcYl9QtyI7IrmAM9QFJkfipribKnM2T2H5G8
+ ctxaR339eM3vMnypanfi4n53Y+B3adTqV0IOMI3DJK0QGPjk+t+x1QytQALlUqsaWnhX
+ PTrop25Ud5P9aNDKb1XRVg2Hk8V5XWjJOf3oFXPt3/tciGU3rQL/dfLVuafZjNRUSuuu
+ X1tfjnjkBKSAmOr65ZMwsm1nDqipPhw4UN/ewmGoIya2hb+/McwnL4cNnbOGajInXUOB
+ WLGA==; darn=buildroot.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20251104; t=1792837238; x=1793442038; darn=buildroot.org;
+ h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+ :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+ :content-type; bh=WTFqNmd4tPch92EMyHyDrh71lYQSFQDGKC6eAhfNT5c=;
+ b=lgx/BKGEodnQQEARNJ1Nw1Ho+sHdgdZ231QgJSl+r4qFD+QojG12TtEAIdx0Zbkkhn
+ DjjD1G3Cw5oTXOyLZSRDunfksIWZENHJfoCX/sWtaUfTtPkTmO0SIOVOcngUEtlA0otk
+ /OYmJZBwrUSOoVs8jRsgVocZItpSOBmlZa30AUz+/cKtgmePUVG7kN9PGt/IH8TuCQnr
+ /Y7LCLYjbnsZwHo2COgWPHWMPSfTbdZ4i6o2Ikh0UjqnRBKzgg0i9UsQ0hLzi8hAxw0j
+ b0UV7T9ZGtdRAtaxOBbHojm1nCPIFAn/rlJTTlM0c7IuQYCXShZi2iUAwIZ44m6pbELm
+ EBzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1792837238; x=1793442038;
+ h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+ :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to:content-type;
+ bh=WTFqNmd4tPch92EMyHyDrh71lYQSFQDGKC6eAhfNT5c=;
+ b=IFO4fL2v4WiqUXYW+ywd7o0r+oWY+ztgCLtB+OZRPqJP4ks1hTru27YDxW021RR2+9
+ 4yW4219IzTXpsCLKxmHPG6291gBUL8XXKiRh7XkNsvKOXzymf8BqqWnpSb+MnDTtbLe3
+ xYesBYIkEP6AyuBwDa5fzJqmpIsZZ91BZikgmkCBuriFXabguP/n/o34aew5WFcGHCLn
+ N+E4Gz7SR3iiH+dr0njCUnSQGgny4ksGvWmFUT1SOJXwvp3wFnv3eNaJ1hP8p53QbVNX
+ 08uXyjUAEAye1TVOmUIOYiMWG55P3vu8069fVRceUMCuGGTU0Fa1rYxk91zDmtLsBfHq
+ V6Ww==
+X-Gm-Message-State: AFq9FYJZQhkx68o0fk73mcW7f9844Ot00993h1BsGqUzZlL/+ZIJ/fpY
+ QcfVIxJS0o1Jcg7JnANWrd9iboMSUP3DV9UWmO6eOqifbjpv2gt+HyeT91QMqXVQmnYpY4BaxgY
+ Gt16pkZr4EEyE7tMPfx4RO8B9SaJZXfQ=
+X-Gm-Gg: AYBFou2/v7CyT1+FX52SxSzpdjSGvrKxb8n64NwraLU9JCmle5rFZS7ufSO8jftJB4d
+ Ii1RTt/9YmjIh0imogkJru+RlSHv2i0FW7UmHkMfPSreZ2On+B+T7V8KBz22IbQzUlyzGYrYXwk
+ t88riypSeGxudysp96mryJ+pg+uSGM3fWNE8wIALysz6sEkEdeLpAWxCo9MoA8ow6G985G7GTHn
+ gmFwNIeQatwcMldvxG8cA6JFTvZxIXVyLyx49tyNP6rYkvT2ZpfNnyQucM7m32WBsWOcAXAR4z0
+ wY3lcuw/yQVCktdJHCkxr5QZwTTGQLw46egDNWwdOr9qAKVxk6uk5x7im9RBR9hVtATExHrHUA9
+ IRQpmSp5Ge1B9CqMyH++qz94CaReRZj3IVnXkl2wPuastirPKEVYfVdTU1Lf2NyAi633TRnQV1v
+ tiAlbDlBhhtrqURnqGOg==
+X-Received: by 2002:a05:6122:218e:b0:5ea:c36d:dc5c with SMTP id
+ 71dfb90a1353d-5ec232ee9damr424695e0c.20.1792837238409; Sat, 24 Oct 2026
+ 03:20:38 -0700 (PDT)
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-X-Spamd-Bar: ---
-Subject: [Buildroot] [PATCH 1/1] package/kodi: fix build errors with
- uClibc-ng
+References: <20261023214807.2151753-1-florian.fainelli@broadcom.com>
+ <20261023215138.2301146-1-florian.fainelli@broadcom.com>
+ <20261023215138.2301146-11-florian.fainelli@broadcom.com>
+In-Reply-To: <20261023215138.2301146-11-florian.fainelli@broadcom.com>
+From: =?UTF-8?Q?Fran=C3=A7ois_PERRAD?= <francois.perrad.86@gmail.com>
+Date: Sat, 24 Oct 2026 12:20:26 +0200
+X-Gm-Features: AclHuK-ywpDp3D5q7nD9mgUPZ_oR2gAOlP8jzByUqCGDZPm6Gy6w1-UY8nlWYxM
+Message-ID: <CAMTop89wEH4R8Jvf2zQoDU1f-Mf-Sc_QGAobjM2gOOfbYTmDnA@mail.gmail.com>
+To: Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: buildroot@buildroot.org
+Subject: Re: [Buildroot] [PATCH 17/23] package/perl: apply the perl-cross
+ even for the host variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -149,108 +188,180 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============6995781451147798359=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_PASS,USER_AGENT_GIT autolearn=ham
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	HTML_MESSAGE,INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
 	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-dUNsaWJjLW5nIDEuMC41OCBpbmNsdWRlcyBjb21taXQKaHR0cHM6Ly9naXRodWIuY29tL3dieC1n
-aXRodWIvdWNsaWJjLW5nL2NvbW1pdC80ODdhZjE0OTg4YzNjOTIzYWE2NjFmMjA0NjQyNTk3Y2Zm
-MzU2YTgzCndoaWNoIHJlbW92ZXMgIiNkZWZpbmUgUEFHRV9TSVpFIiBjYXVzaW5nIGJ1aWxkIGVy
-cm9ycyBkZXRlY3RlZCBieSB0aGUKR2l0bGFiIHBpcGVsaW5lcyBmb3IgYWxsIHVDbGliYy1uZyB0
-b29sY2hhaW5zOgoKL2J1aWxkcy9ia3VobHMvYnVpbGRyb290L2JyLXRlc3QtcGtnL2Jvb3RsaW4t
-cG93ZXJwYy1lNTAwbWMtdWNsaWJjL2J1aWxkL2tvZGktMjEuMy1PbWVnYS94Ym1jL3V0aWxzL1VE
-TUFCdWZmZXJPYmplY3QuY3BwOjI2OjEyOgogZXJyb3I6IGV4cGVjdGVkIHVucXVhbGlmaWVkLWlk
-IGJlZm9yZSBudW1lcmljIGNvbnN0YW50CgpQYXRjaCAwMDE1IGZpeGVzIHRoZSBwcm9ibGVtLgoK
-QnVpbGRyb290IGNvbW1pdCBmODJmNWZlMTc3YjdmODg0ZDQyNGM3Y2UyMmFmZjY3MGVkMTNmMzU5
-IGJ1bXBlZCB1Q2xpYmMKdG8gdmVyc2lvbiAxLjAuNTYgd2hpY2ggaW5jbHVkZXMgZ2V0dGlkKCkg
-Y2F1c2luZyBhIGJ1aWxkIGVycm9yLiBQYXRjaAowMDE2IGZpeGVzIHRoZSBwcm9ibGVtLgoKU2ln
-bmVkLW9mZi1ieTogQmVybmQgS3VobHMgPGJlcm5kQGt1aGxzLm5ldD4KLS0tCkdpdGxhYiBwaXBl
-bGluZXMgcGFzc2VkOgpodHRwczovL2dpdGxhYi5jb20vYmt1aGxzL2J1aWxkcm9vdC8tL2NvbW1p
-dHMvMzY5OTU5MDNkMjc4OWRlMGY1NDFiNTQzYzRjN2Y5ODkwYjI4ZjVkNgoKIC4uLi1Vc2Utc3lz
-Y29uZi1fU0NfUEFHRVNJWkUtdG8tcmV0cmlldi5wYXRjaCB8IDQyICsrKysrKysrKysrKysrKysr
-CiAuLi5kSW1wbExpbnV4LXVDbGliYy1uZy1wcm92aWRlcy1nZXR0aWQucGF0Y2ggfCA0NyArKysr
-KysrKysrKysrKysrKysrCiAyIGZpbGVzIGNoYW5nZWQsIDg5IGluc2VydGlvbnMoKykKIGNyZWF0
-ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2tvZGkvMDAxNS1VRE1BQnVmZmVyT2JqZWN0LVVzZS1zeXNj
-b25mLV9TQ19QQUdFU0laRS10by1yZXRyaWV2LnBhdGNoCiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFj
-a2FnZS9rb2RpLzAwMTYtQ1RocmVhZEltcGxMaW51eC11Q2xpYmMtbmctcHJvdmlkZXMtZ2V0dGlk
-LnBhdGNoCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9rb2RpLzAwMTUtVURNQUJ1ZmZlck9iamVjdC1V
-c2Utc3lzY29uZi1fU0NfUEFHRVNJWkUtdG8tcmV0cmlldi5wYXRjaCBiL3BhY2thZ2Uva29kaS8w
-MDE1LVVETUFCdWZmZXJPYmplY3QtVXNlLXN5c2NvbmYtX1NDX1BBR0VTSVpFLXRvLXJldHJpZXYu
-cGF0Y2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uM2I3ZTM1OTg0NAot
-LS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2Uva29kaS8wMDE1LVVETUFCdWZmZXJPYmplY3QtVXNl
-LXN5c2NvbmYtX1NDX1BBR0VTSVpFLXRvLXJldHJpZXYucGF0Y2gKQEAgLTAsMCArMSw0MiBAQAor
-RnJvbSBkYTg5ZGZjZTJkYTRjNjhlZjNhN2Y4OWE0ZmJhMWNkNmY4NjFlMzYzIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQorRnJvbTogZm9zc2RkIDxmb3NzZGRAcHduZWQubGlmZT4KK0RhdGU6IFNh
-dCwgMjIgRmViIDIwMjUgMjI6NTI6MTEgKzAxMDAKK1N1YmplY3Q6IFtQQVRDSF0gW1VETUFCdWZm
-ZXJPYmplY3RdIFVzZSBzeXNjb25mKF9TQ19QQUdFU0laRSkgdG8gcmV0cmlldmUgcGFnZQorIHNp
-emUKKworZ2V0cGFnZXNpemUoKSBpcyBkZXByZWNhdGVkIGFuZCBsZWdhY3kgc2luY2UgUE9TSVgu
-MS0yMDAxIGFuZCBpcyBub3QgYXZhaWxhYmxlCitvbiBhcmNoaXRlY3R1cmVzIHdoZXJlIFBBR0VT
-SVpFIGlzIG5vdCBkZWZpbmVkLiBJbnN0ZWFkIHF1ZXJ5IHRoZQorY3VycmVudCBwYWdlIHNpemUg
-YXQgcnVudGltZS4KKworVXBzdHJlYW06IGh0dHBzOi8vZ2l0aHViLmNvbS94Ym1jL3hibWMvY29t
-bWl0L2RhODlkZmNlMmRhNGM2OGVmM2E3Zjg5YTRmYmExY2Q2Zjg2MWUzNjMKKworU2lnbmVkLW9m
-Zi1ieTogQmVybmQgS3VobHMgPGJlcm5kQGt1aGxzLm5ldD4KKy0tLQorIHhibWMvdXRpbHMvVURN
-QUJ1ZmZlck9iamVjdC5jcHAgfCA0ICstLS0KKyAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24o
-KyksIDMgZGVsZXRpb25zKC0pCisKK2RpZmYgLS1naXQgYS94Ym1jL3V0aWxzL1VETUFCdWZmZXJP
-YmplY3QuY3BwIGIveGJtYy91dGlscy9VRE1BQnVmZmVyT2JqZWN0LmNwcAoraW5kZXggMmI4MzM2
-YmNlYS4uZjZiYTgxYzE4ZiAxMDA2NDQKKy0tLSBhL3hibWMvdXRpbHMvVURNQUJ1ZmZlck9iamVj
-dC5jcHAKKysrKyBiL3hibWMvdXRpbHMvVURNQUJ1ZmZlck9iamVjdC5jcHAKK0BAIC0yMyw4ICsy
-Myw2IEBACisgbmFtZXNwYWNlCisgeworIAorLWNvbnN0IGF1dG8gUEFHRVNJWkUgPSBnZXRwYWdl
-c2l6ZSgpOworLQorIGludCBSb3VuZFVwKGludCBudW0sIGludCBmYWN0b3IpCisgeworICAgcmV0
-dXJuIG51bSArIGZhY3RvciAtIDEgLSAobnVtIC0gMSkgJSBmYWN0b3I7CitAQCAtOTMsNyArOTEs
-NyBAQCBib29sIENVRE1BQnVmZmVyT2JqZWN0OjpDcmVhdGVCdWZmZXJPYmplY3QodWludDMyX3Qg
-Zm9ybWF0LCB1aW50MzJfdCB3aWR0aCwgdWludAorIGJvb2wgQ1VETUFCdWZmZXJPYmplY3Q6OkNy
-ZWF0ZUJ1ZmZlck9iamVjdCh1aW50NjRfdCBzaXplKQorIHsKKyAgIC8vIE11c3QgYmUgcm91bmRl
-ZCB0byB0aGUgc3lzdGVtIHBhZ2Ugc2l6ZQorLSAgbV9zaXplID0gUm91bmRVcChzaXplLCBQQUdF
-U0laRSk7CisrICBtX3NpemUgPSBSb3VuZFVwKHNpemUsIHN5c2NvbmYoX1NDX1BBR0VTSVpFKSk7
-CisgCisgICBtX21lbWZkID0gbWVtZmRfY3JlYXRlKCJrb2RpIiwgTUZEX0NMT0VYRUMgfCBNRkRf
-QUxMT1dfU0VBTElORyk7CisgICBpZiAobV9tZW1mZCA8IDApCistLSAKKzIuNDcuMworCmRpZmYg
-LS1naXQgYS9wYWNrYWdlL2tvZGkvMDAxNi1DVGhyZWFkSW1wbExpbnV4LXVDbGliYy1uZy1wcm92
-aWRlcy1nZXR0aWQucGF0Y2ggYi9wYWNrYWdlL2tvZGkvMDAxNi1DVGhyZWFkSW1wbExpbnV4LXVD
-bGliYy1uZy1wcm92aWRlcy1nZXR0aWQucGF0Y2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXgg
-MDAwMDAwMDAwMC4uODdjNzFhNTI1ZQotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2Uva29kaS8w
-MDE2LUNUaHJlYWRJbXBsTGludXgtdUNsaWJjLW5nLXByb3ZpZGVzLWdldHRpZC5wYXRjaApAQCAt
-MCwwICsxLDQ3IEBACitGcm9tIDZiMmZkOGMwNjkxNDI2YmU5ZThkMzYyNzZlNWYzYTgxNTNmYTMy
-NjIgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCitGcm9tOiBCZXJuZCBLdWhscyA8YmVybmRAa3Vo
-bHMubmV0PgorRGF0ZTogRnJpLCAyMyBPY3QgMjAyNiAwODowMzoxOCArMDIwMAorU3ViamVjdDog
-W1BBVENIXSBDVGhyZWFkSW1wbExpbnV4OiB1Q2xpYmMtbmcgcHJvdmlkZXMgZ2V0dGlkKCkKK01J
-TUUtVmVyc2lvbjogMS4wCitDb250ZW50LVR5cGU6IHRleHQvcGxhaW47IGNoYXJzZXQ9VVRGLTgK
-K0NvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKKworaHR0cHM6Ly9naXRodWIuY29tL3hi
-bWMveGJtYy9jb21taXQvYjViMmJlNzEyMWY3NTBiNWYyN2QyMDVlMmIxMWNlMDE3OWIzODhjZgor
-YWRkZWQgZ2V0dGlkKCkgYmFjayBpbiAyMDIyIGZvciBvbGRlciBnbGliYyBhbmQgYWxsIHVDbGli
-YyB2ZXJzaW9ucy4KKwordUNsaWJjLW5nIGFkZGVkIGdldHRpZCgpIGluIHZlcnNpb24gMS4wLjU2
-OgoraHR0cHM6Ly9naXRodWIuY29tL3dieC1naXRodWIvdWNsaWJjLW5nL2NvbW1pdC80N2MxNWRi
-YjUwZjA3YmUxZWY1YTFmZmM5NTU5MjA1NTg0MDc4ZmJjCisKK2NhdXNpbmcgYSBidWlsZCBlcnJv
-ciBub3c6CisKKy9idWlsZHMvYmt1aGxzL2J1aWxkcm9vdC9ici10ZXN0LXBrZy9ib290bGluLXg4
-Ni02NC11Y2xpYmMvYnVpbGQva29kaS0yMi4wcmMxLVBpZXJzL3hibWMvcGxhdGZvcm0vbGludXgv
-dGhyZWFkcy9UaHJlYWRJbXBsTGludXguY3BwOgorIEluIGNvbnN0cnVjdG9yIOKAmENUaHJlYWRJ
-bXBsTGludXg6OkNUaHJlYWRJbXBsTGludXgoc3RkOjp0aHJlYWQ6Om5hdGl2ZV9oYW5kbGVfdHlw
-ZSnigJk6CisvYnVpbGRzL2JrdWhscy9idWlsZHJvb3QvYnItdGVzdC1wa2cvYm9vdGxpbi14ODYt
-NjQtdWNsaWJjL2J1aWxkL2tvZGktMjIuMHJjMS1QaWVycy94Ym1jL3BsYXRmb3JtL2xpbnV4L3Ro
-cmVhZHMvVGhyZWFkSW1wbExpbnV4LmNwcDo3Njo0MzoKKyBlcnJvcjogY2FsbCBvZiBvdmVybG9h
-ZGVkIOKAmGdldHRpZCgp4oCZIGlzIGFtYmlndW91cworCitUbyBmaXggdGhlIHByb2JsZW0gdGhl
-IGtvZGkgaW1wbGVtZW50YXRpb24gb2YgZ2V0dGlkKCkgc2hvdWxkIG9ubHkgYmUKK3VzZWQgZm9y
-IG9sZGVyIGdsaWJjIHZlcnNpb25zLgorCitVcHN0cmVhbTogaHR0cHM6Ly9naXRodWIuY29tL3hi
-bWMveGJtYy9wdWxsLzMwMDU1CisKK1NpZ25lZC1vZmYtYnk6IEJlcm5kIEt1aGxzIDxiZXJuZEBr
-dWhscy5uZXQ+CistLS0KKyB4Ym1jL3BsYXRmb3JtL2xpbnV4L3RocmVhZHMvVGhyZWFkSW1wbExp
-bnV4LmNwcCB8IDIgKy0KKyAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRp
-b24oLSkKKworZGlmZiAtLWdpdCBhL3hibWMvcGxhdGZvcm0vbGludXgvdGhyZWFkcy9UaHJlYWRJ
-bXBsTGludXguY3BwIGIveGJtYy9wbGF0Zm9ybS9saW51eC90aHJlYWRzL1RocmVhZEltcGxMaW51
-eC5jcHAKK2luZGV4IDhjN2VkYmI1OTEuLmViZjRlYmU4MmIgMTAwNjQ0CistLS0gYS94Ym1jL3Bs
-YXRmb3JtL2xpbnV4L3RocmVhZHMvVGhyZWFkSW1wbExpbnV4LmNwcAorKysrIGIveGJtYy9wbGF0
-Zm9ybS9saW51eC90aHJlYWRzL1RocmVhZEltcGxMaW51eC5jcHAKK0BAIC01Miw3ICs1Miw3IEBA
-IGNvbnN0ZXhwciBpbnQgVGhyZWFkUHJpb3JpdHlUb05hdGl2ZVByaW9yaXR5KGNvbnN0IFRocmVh
-ZFByaW9yaXR5JiBwcmlvcml0eSkKKyAgIH0KKyB9CisgCistI2lmICFkZWZpbmVkKFRBUkdFVF9B
-TkRST0lEKSAmJiAoZGVmaW5lZChfX0dMSUJDX18pIHx8IGRlZmluZWQoX19VQ0xJQkNfXykpCisr
-I2lmICFkZWZpbmVkKFRBUkdFVF9BTkRST0lEKSAmJiBkZWZpbmVkKF9fR0xJQkNfXykgJiYgIWRl
-ZmluZWQoX19VQ0xJQkNfXykKKyAjaWYgZGVmaW5lZChfX1VDTElCQ19fKSB8fCAhX19HTElCQ19Q
-UkVSRVEoMiwgMzApCisgc3RhdGljIHBpZF90IGdldHRpZCgpCisgeworLS0gCisyLjQ3LjMKKwot
-LSAKMi40Ny4zCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-XwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8v
-bGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+--===============6995781451147798359==
+Content-Type: multipart/alternative; boundary="000000000000bc4dbf065e937231"
+
+--000000000000bc4dbf065e937231
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+The recent commit "package/perl: apply perl-cross patch only on target
+perl"
+https://gitlab.com/buildroot.org/buildroot/-/commit/8dea6e7c089cb5d4fa7bd78=
+8fc6e07c9f19f70a8
+must be reverted.
+It introduces a third hook PERL_POST_PATCH_HOOKS which becomes useless as
+the host & target tree source are now the same.
+
+Francois
+
+Le ven. 23 oct. 2026 =C3=A0 23:52, Florian Fainelli <
+florian.fainelli@broadcom.com> a =C3=A9crit :
+
+> From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+>
+> Currently, ther host and target variants have diffeerent source tree,
+> because the target variant extracts perl-cross, while the host variant
+> does not.
+>
+> This goes against having a single source tree for both, to ease
+> out-of-tree builds.
+>
+> However, extracting the perl-cross archive has no impact of the standard
+> build; it only ever adds new files that are not used by the original,
+> native-only buildsystem.
+>
+> So, we can extrat perl-cross for the host variant as well, by re-using
+> the same hook. We also need to apply the config.{sub,guess} hook.
+>
+> Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+> Cc: Francois Perrad <francois.perrad@gadz.org>
+> cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+> (cherry picked from commit d2ad97e0eeff39fc89a58b589f19094824402756)
+> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+> ---
+>  package/perl/perl.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/package/perl/perl.mk b/package/perl/perl.mk
+> index 43820cfcc33a..e5d8689776f4 100644
+> --- a/package/perl/perl.mk
+> +++ b/package/perl/perl.mk
+> @@ -31,6 +31,7 @@ define PERL_CROSS_EXTRACT
+>         mv $(@D)/cnf/diffs/perl5-5.42.0 $(@D)/cnf/diffs/perl5-5.42.3
+>  endef
+>  PERL_POST_EXTRACT_HOOKS +=3D PERL_CROSS_EXTRACT
+> +HOST_PERL_POST_EXTRACT_HOOKS +=3D PERL_CROSS_EXTRACT
+>
+>  # We need to patch perl-cross, but perl-cross is extracted over the
+>  # target perl sources only (and not the host variant). So we apply the
+> @@ -46,6 +47,7 @@ PERL_POST_PATCH_HOOKS +=3D PERL_CROSS_PATCH
+>  # on newer host architectures, so we borrow the hook which updates them
+> from the
+>  # autotools infrastructure.
+>  PERL_POST_PATCH_HOOKS +=3D UPDATE_CONFIG_HOOK
+> +HOST_PERL_POST_PATCH_HOOKS +=3D UPDATE_CONFIG_HOOK
+>
+>  ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
+>  PERL_DEPENDENCIES +=3D berkeleydb
+> --
+> 2.34.1
+>
+>
+
+--000000000000bc4dbf065e937231
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>The recent commit &quot;package/perl: apply perl-cros=
+s patch only on target perl&quot; <a href=3D"https://gitlab.com/buildroot.o=
+rg/buildroot/-/commit/8dea6e7c089cb5d4fa7bd788fc6e07c9f19f70a8">https://git=
+lab.com/buildroot.org/buildroot/-/commit/8dea6e7c089cb5d4fa7bd788fc6e07c9f1=
+9f70a8</a> must be reverted.</div><div>It introduces a third hook PERL_POST=
+_PATCH_HOOKS which becomes useless as the host &amp; target tree source are=
+ now the same.</div><div><br></div><div>Francois</div></div><br><div class=
+=3D"gmail_quote gmail_quote_container"><div dir=3D"ltr" class=3D"gmail_attr=
+">Le=C2=A0ven. 23 oct. 2026 =C3=A0=C2=A023:52, Florian Fainelli &lt;<a href=
+=3D"mailto:florian.fainelli@broadcom.com">florian.fainelli@broadcom.com</a>=
+&gt; a =C3=A9crit=C2=A0:<br></div><blockquote class=3D"gmail_quote" style=
+=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding=
+-left:1ex">From: &quot;Yann E. MORIN&quot; &lt;<a href=3D"mailto:yann.morin=
+.1998@free.fr" target=3D"_blank">yann.morin.1998@free.fr</a>&gt;<br>
+<br>
+Currently, ther host and target variants have diffeerent source tree,<br>
+because the target variant extracts perl-cross, while the host variant<br>
+does not.<br>
+<br>
+This goes against having a single source tree for both, to ease<br>
+out-of-tree builds.<br>
+<br>
+However, extracting the perl-cross archive has no impact of the standard<br=
+>
+build; it only ever adds new files that are not used by the original,<br>
+native-only buildsystem.<br>
+<br>
+So, we can extrat perl-cross for the host variant as well, by re-using<br>
+the same hook. We also need to apply the config.{sub,guess} hook.<br>
+<br>
+Signed-off-by: &quot;Yann E. MORIN&quot; &lt;<a href=3D"mailto:yann.morin.1=
+998@free.fr" target=3D"_blank">yann.morin.1998@free.fr</a>&gt;<br>
+Cc: Francois Perrad &lt;<a href=3D"mailto:francois.perrad@gadz.org" target=
+=3D"_blank">francois.perrad@gadz.org</a>&gt;<br>
+cc: Thomas Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni@free-electrons.=
+com" target=3D"_blank">thomas.petazzoni@free-electrons.com</a>&gt;<br>
+(cherry picked from commit d2ad97e0eeff39fc89a58b589f19094824402756)<br>
+Signed-off-by: Florian Fainelli &lt;<a href=3D"mailto:florian.fainelli@broa=
+dcom.com" target=3D"_blank">florian.fainelli@broadcom.com</a>&gt;<br>
+---<br>
+=C2=A0package/perl/<a href=3D"http://perl.mk" rel=3D"noreferrer" target=3D"=
+_blank">perl.mk</a> | 2 ++<br>
+=C2=A01 file changed, 2 insertions(+)<br>
+<br>
+diff --git a/package/perl/<a href=3D"http://perl.mk" rel=3D"noreferrer" tar=
+get=3D"_blank">perl.mk</a> b/package/perl/<a href=3D"http://perl.mk" rel=3D=
+"noreferrer" target=3D"_blank">perl.mk</a><br>
+index 43820cfcc33a..e5d8689776f4 100644<br>
+--- a/package/perl/<a href=3D"http://perl.mk" rel=3D"noreferrer" target=3D"=
+_blank">perl.mk</a><br>
++++ b/package/perl/<a href=3D"http://perl.mk" rel=3D"noreferrer" target=3D"=
+_blank">perl.mk</a><br>
+@@ -31,6 +31,7 @@ define PERL_CROSS_EXTRACT<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 mv $(@D)/cnf/diffs/perl5-5.42.0 $(@D)/cnf/diffs=
+/perl5-5.42.3<br>
+=C2=A0endef<br>
+=C2=A0PERL_POST_EXTRACT_HOOKS +=3D PERL_CROSS_EXTRACT<br>
++HOST_PERL_POST_EXTRACT_HOOKS +=3D PERL_CROSS_EXTRACT<br>
+<br>
+=C2=A0# We need to patch perl-cross, but perl-cross is extracted over the<b=
+r>
+=C2=A0# target perl sources only (and not the host variant). So we apply th=
+e<br>
+@@ -46,6 +47,7 @@ PERL_POST_PATCH_HOOKS +=3D PERL_CROSS_PATCH<br>
+=C2=A0# on newer host architectures, so we borrow the hook which updates th=
+em from the<br>
+=C2=A0# autotools infrastructure.<br>
+=C2=A0PERL_POST_PATCH_HOOKS +=3D UPDATE_CONFIG_HOOK<br>
++HOST_PERL_POST_PATCH_HOOKS +=3D UPDATE_CONFIG_HOOK<br>
+<br>
+=C2=A0ifeq ($(BR2_PACKAGE_BERKELEYDB),y)<br>
+=C2=A0PERL_DEPENDENCIES +=3D berkeleydb<br>
+-- <br>
+2.34.1<br>
+<br>
+</blockquote></div>
+
+--000000000000bc4dbf065e937231--
+
+--===============6995781451147798359==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6995781451147798359==--
