@@ -1,28 +1,28 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 838A9606A31A
-	for <buildroot@archiver.kernel.org>; Sun, 25 Oct 2026 11:56:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E910606A31A
+	for <buildroot@archiver.kernel.org>; Sun, 25 Oct 2026 11:56:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=UrDrg64z
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=EC7RaESm
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4686C81266;
-	Sun, 25 Oct 2026 11:56:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 70B9960F13;
+	Sun, 25 Oct 2026 11:56:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3CkiHhB8pHzL; Sun, 25 Oct 2026 11:56:29 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 5616281693
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792929389;
-	b=HPjY5xlHqqvoU1D24mKPwKoUGMjZTz/MQsf9866+w+/Og3p3QF0iUact3rTrvxwaE7JP
-	 /toXNzvE9Yf9rqkH2b3Z401no9XPmnVkUzlI14/GwvrR4SzG2xwiJ9Lk4ejXkO7MQDbXK
-	 NExK2Tiq2hWqozKpynRhmrK/hSuPRxbWnCzp8Rr//dmhO4TdRxPdF7xzWArLVh7uw+QQT
-	 qPGhZ6OBwxQWcATqm9L4vl4iTp7M/5WZG1nnZ3g1dGoQljNUNVOpGDDlyoOBYIyVxm5Yl
-	 z1oH74qv4me5ZZili7L0Jj9C+iVNgRvitGxqa18Biu6cbR0Yu89HPHeMghSlHPLnH1Q==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gDISUjxRBzyY; Sun, 25 Oct 2026 11:56:31 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org D616460ED8
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792929391;
+	b=rKg93U+oF4igEumiEozGzeqVbeYizOh8pHF0EBhThzXBafroByySEZ2L3DJVUIEvusMY
+	 ykaTVyKBlKXThmr8NZdJ3Jq46j4WSXDcx475Me5TQhmpW7QVAzMC8ofM+UApcSBLeRcpQ
+	 CRn+lLQMTtNNf40aBniUOyPgLv+Ca6LYoqXaKbvcjqqnccpj+cpCnpVoZxl0GxCW1ArfH
+	 KTa7eCSWEEEFQsJElGdzhzcqmDldJxxrx6saPfnyRdH/u8MCGascAIASxmCjWl/0kR8uc
+	 djUNbH92s/a+rbND2um6NZNQqEixHrSx4ZaOK2p/Fj0y+GgknCqoTlOVa/2gdbTHXIg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792929389;
+	c=relaxed/relaxed; t=1792929391;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=BKmhW7z2Fiq4O6Z2KupON49wCdG/U6hGMjGPe8jA/z0=;
-	b=T0kadGFOLz/ivWYn2JCl7u4nWfheYiGtkBYBuNnemFmuCmUzpRzIBjwNwKnZWtTRkbin
-	 t8knq51oOtcW/6gwAVzNe3zt1ReCKhKD3QAnwf6XZ/D16Z6/itjFphuBDArLOuKjH8lLo
-	 TFFnho7OLBGRI3voRiUm/KcjmN2ISjHFiIPP5VHF+wBV/0EbJ4VQr/dMBj4FgyloJSo98
-	 Irz4ekCrMIaqWHN5Rvd90xuMNYHT1fzdzwWyBWv4/+BK5EAPL4FWd+wnQov2zSPU/Osv4
-	 wlFyi3BEsHJpsA6CFdk92mgxZ/LHdeJ6hTJ75WfLMCXAQnU/cw3GO7UVZ0zkoBOBDxg==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	bh=1ao6YT5VIlQRTWso8OK4n5sZEzQcfnTf4llx+xlURN0=;
+	b=YzsIqRyj5J7ksPc3+QhdurvGzv08LWjIpBSigES8G/nxNHeKpwLJVItL77XMxiMtJv2s
+	 MhoJ7OXKeekhgnKzRTvdClNHebL3g60FUgjqUtqFQ9UTGerlB24JOHJchzvtSxy3PEKkB
+	 eDUwzNt8JhnP12A0DmSawJbvtHQiUZhqWMrGqyfdWZj9gJjiIeB9JIJRmwSAyir296InB
+	 BbrX+CCA912rG29Pqsawvdm03OyqfRj+RXN7hmZcoOVtiuW5MOuvGh3uiaTMbuKn2pAD1
+	 4DXqgppSlj+7FlW0nmMUGGrA/mZ5xi9i3J2HnqtDSZJYmmoptmamHbti2oO/XX7LArg==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792929389;
-	bh=BKmhW7z2Fiq4O6Z2KupON49wCdG/U6hGMjGPe8jA/z0=;
+	s=default; t=1792929390;
+	bh=1ao6YT5VIlQRTWso8OK4n5sZEzQcfnTf4llx+xlURN0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=UrDrg64zLfMMPOz5aor8XdphYZZSgfS7Fq7Rxpa33HmWAfipx2Eb2HPbVNOwGBR2G
-	 cTp4mRsOyBQNWiYadasdgPqUbDp5SYNZCyhJ5xauosD72uSMP/u9T2ZHfM17PfrtEO
-	 2LlVs2Dn6iaF0lyAstAt7IVV6hnnWou40X6Z7kb4tJ4ihfi3eaEKa5yBt0x9DZcOgc
-	 LVpE1dpsm6C3jNREw+OUj8bUk7fUN4OAfpHVLpT+H1CmKK1RB7bXiChpf2B86saIZh
-	 D0NEaWUsxIIvxFmNgqDQPe+0fBeJEKBn1hbsFGGbmvJy03XfcByZOGvxJbgicDLQID
-	 32CvmN7vIzvdg==
+	b=EC7RaESm5eMgEhFV2zLdj+CQXdmP+hUDCy9fBxu59XsYCqCNKmktls7j4XfkxIGcd
+	 eDBRsET6dzmxKgPeXDfShnZkiy4CQmXDeuQXJhHo5rzfSKix7lDeYUl9Swh05v0HHr
+	 Xtf7aXn2dhAqJq1vg3sKJ49+wSOTLshl+v3SbnTqY1dS5rGq72ce5khVSKbsB7MaHf
+	 W9TfOidGjIGgt7wV6+UR3ST+JmMowQ217KPcTbB95yKFZ5hTfww3atqOLjozHDozue
+	 HboJ+PTlRNyG2VySBYK631BEkQ05G+RaK8K8502dvcWCWxPb4weqmU8gemb9vYZ4Hw
+	 9XbPUJoFUW5Og==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5616281693;
-	Sun, 25 Oct 2026 11:56:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id CACAC43
+	by smtp3.osuosl.org (Postfix) with ESMTP id D616460ED8;
+	Sun, 25 Oct 2026 11:56:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E4187D33
  for <buildroot@buildroot.org>; Sun, 25 Oct 2026 11:56:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B0FC5401F1
+ by smtp3.osuosl.org (Postfix) with ESMTP id CA33160F08
  for <buildroot@buildroot.org>; Sun, 25 Oct 2026 11:56:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4qOujkVOUgoo for <buildroot@buildroot.org>;
- Sun, 25 Oct 2026 11:56:27 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org E4A3A4009C
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7EUegNzXXtRq for <buildroot@buildroot.org>;
+ Sun, 25 Oct 2026 11:56:26 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org CA28260737
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792929386;
- b=cqhwb+FgWnqHQP0wS56HISws4bDHEIsqfnE+sakth1ZOkj51BjJQhbuGq6TXxQoLUF+4
- 8meSEUDeC+qldH/MBUzHt02xjAo+KTSKiU3dDBFA3w4oO+GyaOXJpURsNaBhsswUtErij
- KoMUpix1QxBIxnY2TcmRvd4Zfwe2rGzg9pIvLVRp+9pAPjWHu59BXs/nGMA1YR9rMqHRh
- sfLXKjDxqlxE9/cRwWzacnXFS7g4YQq9ThW9T4h+NxQxSxCtC8QzYoFvJ0rQ3XHwjgzQW
- 3yVy+WLqoTMs8pORURUGFojUwEy038TH/V4tM0CA/eZ2iAsE6hPzx7ZlvFdUEZYdpwg==
+ b=BbDuVlOxxPLegoZOPS7+v7UhJTfKjYTcgsf0ZvMKB2LmvMcuF8ysTG8XzuRP7qKT/EAg
+ wKnWz9jJDDdaadreIusGIpRGx/wJm2zl01EJIncn4i9zHoLH4V/v68MsMQGCDPxdPVMNh
+ vxRMl/CDV3I5FWoOlcp/x1q64CW4tga0MKJkNNzJPizm6TtgEk0JnY4UprS58k6ipruBQ
+ v44m1UR3WtBKGrUjc2wyjvl+Adxo+a73YI1eJPCfr9YZgk8wbY++rLoGYrhdKFzNa6U+F
+ d5WsSdck52EXfTNV4+y80KbrJ9WeSblj0Yf4mgtSJSuX/uucwZNur4izW/yvUBJePqg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1792929386;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=usJe7Nxc/0xT4nU5FFtgypp2fnx0YLdk6y724RR/YgA=;
- b=j/ZuXLC0xxXj0enzMVQnfgxXt/OnZyUuJx1YSN1jUgk+VQ5xGFk4n0EdJF97h07CClsC
- YEb3MNIbYMFzybDde5SBgUgu1PHHEGoD3YpconcTbt4BzOBEF0ax0QYRSRBJZpldDcKEo
- oEldmWUchTNHQA8EF1QBomMjdRy0+UC8RsgUoJ3HGGyAZHcr+RXHZgbfFLkgSLt7xFrkh
- TJiihOH08GVCuSvnkMT4M9Eiy1XSDHnx4mPKFjrxtvT+jAMoVYyXluxEj66yIjHCgF+oC
- 2nSr6+WYJHgW++4Ee5FNfz8rznxsXnbNImngk2Va/MRJepOeakF4IQ6p87YR/6oGkPg==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ bh=lYCAhpyz6fbqq9HuKpEI20lVkuAJWXaHvqt43FzN8lo=;
+ b=i0wOi0ZQj7MrUlOiFgAY1Ifqr//wTzTV3jJz9g/GRnwcFjKtEBF7BGj17SkhDaaQPF8P
+ C0Ai0kh4xgzmqLwXGwFyF46ZW+wFijH49RH9k4njDvuOcmr+BJ+gorr0qexDSNfk3hb1/
+ vxAK/AUC5m2/UWRa2m5EqprEBlq1iEL6zev0Wz8jcF6IlDHzYLb0X+ssCCRbtQW23mJmf
+ Wiax1t/DcnqpeYV7Qr/1KFaBktBkkhhxZScqywP7MPfvQUuNp5hphKfG7i5aG3jU+4Uof
+ 5ApShESZjF5B63atTmaeEv2sObTJ78YEJheM86grTrLN74jfXwosUKrv00kdnFl1Ozw==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E4A3A4009C
+ by smtp3.osuosl.org (Postfix) with ESMTP id CA28260737
  for <buildroot@buildroot.org>; Sun, 25 Oct 2026 11:56:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 73E979CE82; Sun, 25 Oct 2026 11:55:01 +0000 (UTC)
+ id 6520A9CE81; Sun, 25 Oct 2026 11:55:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 25 Oct 2026 12:00:46 +0100
+Date: Sun, 25 Oct 2026 12:00:05 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a308036e6a5fcff95af8fc9ad7869043002ec94c
-X-Git-Newrev: 2313a15905fc459c6faf4bccd7832cb464640b18
+X-Git-Oldrev: 7f0381b3074862c1f287a4a4036b6bd154cd4869
+X-Git-Newrev: a308036e6a5fcff95af8fc9ad7869043002ec94c
 X-Patchwork-Hint: ignore
-Message-Id: <20261025115501.73E979CE82@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-fastapi: bump to version
- 0.162.0
+Message-Id: <20261025115501.6520A9CE81@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-aiohttp-sse: bump to
+ version 3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,44 +123,96 @@ X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2313a15905fc459c6faf4bccd7832cb464640b18
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a308036e6a5fcff95af8fc9ad7869043002ec94c
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+
+Drop the Python 3.14 compatibility patch, which is included upstream [1].
+
+Update the license hash for the replacement of the abbreviated notice
+with the full Apache-2.0 license text [2].
+
+[1] https://github.com/aio-libs/aiohttp-sse/commit/9eec5f5b0355bb3853d0e4f2af6486c9a5887e38
+[2] https://github.com/aio-libs/aiohttp-sse/commit/390f93d64bcb01db32b02195c8c90d2fafe5d8a1
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-fastapi/python-fastapi.hash | 4 ++--
- package/python-fastapi/python-fastapi.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .../0001-Fix-build-with-python-3.14.patch          | 35 ----------------------
+ package/python-aiohttp-sse/python-aiohttp-sse.hash |  6 ++--
+ package/python-aiohttp-sse/python-aiohttp-sse.mk   |  6 ++--
+ 3 files changed, 6 insertions(+), 41 deletions(-)
 
-diff --git a/package/python-fastapi/python-fastapi.hash b/package/python-fastapi/python-fastapi.hash
-index ed222d8e6a..8422f7684c 100644
---- a/package/python-fastapi/python-fastapi.hash
-+++ b/package/python-fastapi/python-fastapi.hash
+diff --git a/package/python-aiohttp-sse/0001-Fix-build-with-python-3.14.patch b/package/python-aiohttp-sse/0001-Fix-build-with-python-3.14.patch
+deleted file mode 100644
+index 76b595c7de..0000000000
+--- a/package/python-aiohttp-sse/0001-Fix-build-with-python-3.14.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From 7a649de6561ec181208a9c4fa712aed614a224d4 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd@kuhls.net>
+-Date: Mon, 8 Dec 2025 18:03:03 +0100
+-Subject: [PATCH] Fix build with python 3.14
+-
+-ast.Str was deprecated in python 3.12 and removed in 3.14. It inherited
+-from ast.Constant, `Str.s` was equivalent to `Constant.value`, so we can
+-use the latter on both old and newer python versions.
+-
+-Patch was inspired by
+-https://hg-edge.mozilla.org/mozilla-central/rev/dbf9702ed87e
+-
+-Upstream: https://github.com/aio-libs/aiohttp-sse/commit/9eec5f5b0355bb3853d0e4f2af6486c9a5887e38
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- setup.py | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/setup.py b/setup.py
+-index 6843260..fa41025 100644
+---- a/setup.py
+-+++ b/setup.py
+-@@ -25,7 +25,7 @@ class VersionFinder(ast.NodeVisitor):
+-     def visit_Assign(self, node):
+-         if not self.version:
+-             if node.targets[0].id == "__version__":
+--                self.version = node.value.s
+-+                self.version = node.value.value
+- 
+- 
+- def read_version():
+--- 
+-2.47.3
+-
+diff --git a/package/python-aiohttp-sse/python-aiohttp-sse.hash b/package/python-aiohttp-sse/python-aiohttp-sse.hash
+index e8382e7f8e..63aa6bb6d5 100644
+--- a/package/python-aiohttp-sse/python-aiohttp-sse.hash
++++ b/package/python-aiohttp-sse/python-aiohttp-sse.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/fastapi/json
--md5  9319a9bb00c891dd4d6df45dce5b34e6  fastapi-0.161.1.tar.gz
--sha256  4076b88434452e20289379068e976c4a04c65ffc8e6be31510106e150a422f0f  fastapi-0.161.1.tar.gz
-+md5  615d6ffdfaec36a6303202c48fa9f676  fastapi-0.162.0.tar.gz
-+sha256  6a22c1e2e6e32e0633ee7e170f00009a29b8228b16feb219ee42f32fd8d88a8f  fastapi-0.162.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/aiohttp-sse/json
+-md5  8c86e737a2f3642941c1d383f42ce6ae  aiohttp-sse-2.2.0.tar.gz
+-sha256  a48dd5774031d3f41a29e159ebdbb93e89c8f37c1e9e83e196296be51885a5c2  aiohttp-sse-2.2.0.tar.gz
++md5  86392c1b821f9e2b22b787a295f9beff  aiohttp_sse-3.0.tar.gz
++sha256  4c2158dc7221fbcad225699c2b7c368c15ae45ef195447ddd0ba3dea5af24c70  aiohttp_sse-3.0.tar.gz
  # Locally computed sha256 checksums
- sha256  4ec89ffc81485b97fec584b2d4a961032eeffe834453894fd9c1274906cc744e  LICENSE
-diff --git a/package/python-fastapi/python-fastapi.mk b/package/python-fastapi/python-fastapi.mk
-index 547748417c..9efb3b23b1 100644
---- a/package/python-fastapi/python-fastapi.mk
-+++ b/package/python-fastapi/python-fastapi.mk
+-sha256  5585eb91ec607b4fdbe97d44a61146a9cc27bb703336628bc3c6a1eaffe60307  LICENSE
++sha256  2e4be5fc6c4c72a466fcb665d726e049a6891981fe536c4f04b6366749461d23  LICENSE
+diff --git a/package/python-aiohttp-sse/python-aiohttp-sse.mk b/package/python-aiohttp-sse/python-aiohttp-sse.mk
+index bf46c98528..a8c27218a4 100644
+--- a/package/python-aiohttp-sse/python-aiohttp-sse.mk
++++ b/package/python-aiohttp-sse/python-aiohttp-sse.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_FASTAPI_VERSION = 0.161.1
-+PYTHON_FASTAPI_VERSION = 0.162.0
- PYTHON_FASTAPI_SOURCE = fastapi-$(PYTHON_FASTAPI_VERSION).tar.gz
--PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/ed/3d/2cc1a0dbc2dac6e157b4ef12bac063e1016cb7c6d7395f76665e439cf1aa
-+PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/e9/eb/2cf8c80abf09b2800aef0a83b41066fbfda8ee5495b7a08b9d1af40f7046
- PYTHON_FASTAPI_SETUP_TYPE = pep517
- PYTHON_FASTAPI_LICENSE = MIT
- PYTHON_FASTAPI_LICENSE_FILES = LICENSE
+-PYTHON_AIOHTTP_SSE_VERSION = 2.2.0
+-PYTHON_AIOHTTP_SSE_SOURCE = aiohttp-sse-$(PYTHON_AIOHTTP_SSE_VERSION).tar.gz
+-PYTHON_AIOHTTP_SSE_SITE = https://files.pythonhosted.org/packages/80/df/4ddb30e689695fd91cf41c072e154061120ed166e8baf6c9a0020f27dffc
++PYTHON_AIOHTTP_SSE_VERSION = 3.0
++PYTHON_AIOHTTP_SSE_SOURCE = aiohttp_sse-$(PYTHON_AIOHTTP_SSE_VERSION).tar.gz
++PYTHON_AIOHTTP_SSE_SITE = https://files.pythonhosted.org/packages/af/6d/01d7f71e38ac91a912dd8c4ed1a1481316dc83cb6c42043bbfa1b647c0e4
+ PYTHON_AIOHTTP_SSE_SETUP_TYPE = setuptools
+ PYTHON_AIOHTTP_SSE_LICENSE = Apache-2.0
+ PYTHON_AIOHTTP_SSE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
