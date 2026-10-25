@@ -1,148 +1,105 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70129606A31A
-	for <buildroot@archiver.kernel.org>; Sun, 25 Oct 2026 21:11:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D973A606A31A
+	for <buildroot@archiver.kernel.org>; Sun, 25 Oct 2026 21:18:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=h9iWviRe;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=D3zZPEBs
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=d1xxnZlm
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 34254405FF;
-	Sun, 25 Oct 2026 21:11:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1E8B360618;
+	Sun, 25 Oct 2026 21:18:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DhjOGEcDvJrD; Sun, 25 Oct 2026 21:11:18 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 66AE5405F5
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792962678;
-	b=QZHlG/ZUL1liAMGQfe0D0PeY0ezu3A4xUvQqh6/+aJTa+h4Urs11HUgFz/Jgi06cQ45e
-	 O11edbVuqWq1HUk4aj7gTggpyvVySPlh7hYmH0PXUHa2ritENOf2yEW1sW++6pfcBiKwh
-	 va+UByss6e+BTatYK+iIiH59q17Da6vi2Kc0zDe//MZHZIJ+xg7AELL3hK/x+fslRBd4A
-	 MTd2SmR/xiccaoxeIg59EUhW2JPpBI+I8sj/1FTv0ZSOStqMrElOqMTfAUijHBlu1oMXj
-	 HymHTrOA01gmWEwHkNt+6lK/ObcsB8O0+59P6ODbjdrEp55nXq1EFgjeVbMf75lkotw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QbqlhARJEYxe; Sun, 25 Oct 2026 21:18:06 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 7E77560607
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792963086;
+	b=Fm8JCzHaBGjbriVbVgHJBGyxCF1cRv4qkTQH6wD9uFbf5G1bd5GGuPHrAXiigqU77mDU
+	 9GbMjNbTtyWu29N0UR5HuFrDtomPocvS5zSOe21JzPT6mB5tJcoou50nkVJCDV3LIXmnJ
+	 j+AzbYPNVVxyyc933EgnZItCdsv3Pqy58ZCNPXii5U8EibIeUqDlpjBfTgvxRv0ORyKQV
+	 nwS4MsT2p2IoFFu1gTsyOVB4SFS6KLtaHJ2Y+bLWnXY0psf9NLJu0NzJvSmpgEja+pazY
+	 f7ZNAz8suRXcr0Wnge3bNiFCVHWSPawARacU4yGNUy31MbVs4honUvG215JMs91bxWg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792962678;
+	c=relaxed/relaxed; t=1792963086;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Date:Message-ID:
-	 X-Mailer:MIME-Version:X-Spamd-Bar:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:Content-Type:
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=3TGT3Gor5KXzYj9zadzlNAgazdvyPkvXQD8ai3M53/c=;
-	b=dOTvVBl6yI+uYCVIwlXJZVVAMDUAr7VwgS48tSh60yPCSMKv3nZHW2gOdrtkYVhh+Lwk
-	 nnA9HvUZqxXPL0Z2egyH8YOOTpDBqy/YvJIqURYcfO61+lsiDtbXKz7AdJycuUYaHdzBZ
-	 agir+yObEBC9oYJG1GkeRTnI7KSP9Lzj7+xngLXSXePDXCG2N5I8WrJea5UtL4LJyVBbn
-	 WkpjqSy72Dthuc/JKVxAIfTrvcRlQw1LRPoQfZKbTHlnPCXuSJaTfe13AsWjiG6iikl5A
-	 FiVf6x/O4YJUojlnQWORL0nFKYacJngHAkwANLk/DFO/bGZoSG+hEAG59YyNe1VBZGg==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
-	dmarc=pass header.from=kuhls.net;
-	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=D3zZPEBs;
+	bh=Cq9BZ0Pbu11kLEPKs1E9hy9bxr3lJS1wz+pCzA9ygQ8=;
+	b=FQUbZsGP5oE6vAeMklGRK3OfyL/vCCHNNpIA7XphSXSq3ohDkMGlEciuxTbMaxkmeUbf
+	 smZa0WdH0hi7bfGWXZm6ag+7NqNaeyxB15aoCuzFqjqSVgyvFJjRjwUYqOAIpQXDv7uRB
+	 WlcFCxtKqt50HvLdw46EOWrjVouPpDUj03hGsuaDNgRW8NcYOCE2uN7OeV3crarb0GlLj
+	 TepvhKZHCBW7sKT69KVGO2KPqRJ9E+UXEGZ+UenFdGBo5Fz/mgZ36ixCE2/gji2xxlUqc
+	 BaKodmRX7rSKIGPd0ldqSFqJQwpyTF4vC1GKBkJqTyX/e1oiV1EV7Vv2PNIOtoNdvoQ==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792962678;
-	bh=3TGT3Gor5KXzYj9zadzlNAgazdvyPkvXQD8ai3M53/c=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=h9iWviReHQU+oE6Q0pGMmZw4af4ARqVeXsmAj/1pWXCr4GVFh5O9bsu7wZU5wblUY
-	 GyOolGpsDpurYCXSEOExXdtBk8t9HMDktn/gVD+hxps46X7JLjNPpQKzuAT+GxosuZ
-	 ibGQcFDSwMiDU+ILkGPIJY1c8pmOTIU8YCOLJVUA+kkcay282he++tSGQUWox2TYq1
-	 TKcmmX/8tCp5fzwiN9CS1HxJqngR9KCm/n+feOc71qDof3F75dixX6MCiprcGuDniF
-	 HfJdYjl+FwsDYOISD/UX0nCYbIN56f8VzR3LXBUqNFG/6jh2nRjVl9UGKhLmyj23Mx
-	 xqVgZe4sPqTqQ==
+	s=default; t=1792963086;
+	bh=Cq9BZ0Pbu11kLEPKs1E9hy9bxr3lJS1wz+pCzA9ygQ8=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=d1xxnZlmMeSZOJmY3DmgtrkMNgafeg8ocI/JojskWG4Ps95IDk5gbtrgDPUcECDKr
+	 GQN3SBpRHb4NgCzIWnNhTdK3fSs1CsvGJxMUnirIcLWg18stXhTilxEUikh+agInr4
+	 +hr1rgTkeVYig2e8xMOIYw1V5EZWR88zs2E5r+eoqx/nugl9M5VQJXsMvfRcVzBiI4
+	 8BOyH7ERf0M/lvuO5TI4Dxm2GIw9JggmExudaMbvo8bnzLFgDiWNggOkU0hJSaSovr
+	 MrFrVWrAEughDVw7dc2EhHsah9amn4QUQMSYwtgHjaMWv1E5wB+IxpwKmdH1uEOIng
+	 YqQocCCMEBKiw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 66AE5405F5;
-	Sun, 25 Oct 2026 21:11:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id A3C08279
- for <buildroot@buildroot.org>; Sun, 25 Oct 2026 21:11:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7E77560607;
+	Sun, 25 Oct 2026 21:18:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E533279
+ for <buildroot@buildroot.org>; Sun, 25 Oct 2026 21:18:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 89961405F5
- for <buildroot@buildroot.org>; Sun, 25 Oct 2026 21:11:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 246E160607
+ for <buildroot@buildroot.org>; Sun, 25 Oct 2026 21:18:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n0atLnokrUcn for <buildroot@buildroot.org>;
- Sun, 25 Oct 2026 21:11:15 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 9FDCB405F4
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792962675;
- b=kf3DBEpXJzshWoZSlXV6vTmZ2vwDddz11bGOBzGpKefQ65bbjE9N44THljSkW//2bnPt
- 0zgfilPPciGF9RDAx7gdRSVWtkm6iV0icRmMtApv1h9gvbQheleBqgggicNziZBXwg5HU
- uliUr/pa9Uqw/wwGzSW9aYogifvHGydy3NSfpola3eb2nBZSp9Ag9L1kuVilkVMOqAK68
- 5r0S0wmoxzrCiCFGIuugIb28EHvFeNxD+enWDTNUW6OdX1Sj65l7Jm4CLRNoFg/fM2bSs
- JL590r79b1RNYHJseHsx8Dj1pNdJXIe50UBVB22n3NwgyISoam1bmLAqQqsloMJKM8Q==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HvZZwqczLHUe for <buildroot@buildroot.org>;
+ Sun, 25 Oct 2026 21:18:04 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 57B7B605ED
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792963084;
+ b=KkVQihWRWx9DRb1dJ393K6MWPnoPQdKBxLIN1Escvyu6u3jt8USWSHI6y4VZk5wuX1eE
+ y6e7qHo1OX66PLfCq5lcUGi1r+AcW3Qj0UCx/dXz/+VJYuN3aRnWhg7jswOL1f9UHmrxU
+ 6m2yLf+5jJIOPr/rcvqPc9GsV5M/D+9xPhFXyccN17mO3cHj7S38FvLNfr4RvH07eUu/H
+ lEcR89c+DwnNJ0nFJNOBLUlQbjYGW/gdyMVg4kLlSEAEet0VMN/dqkl2eRCwlk4r2Xjw9
+ HVfxVytNajPOAgQSVy9JIyrdg504ApZZMmi+I/xGAg4O0YJZptOe1V4AyRyiuNAYvDw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792962675;
- h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
- Subject:Date:Message-ID:X-Mailer:MIME-Version:
- Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=fy9wz7XM+t17X2erpImxr64iTQX5JXMY5qOakKlxKTQ=;
- b=EJXZ5Gy+7UkW+d6iayIe4nXQCpTuqOLThmkJyX5gYe7cnRatZDxNd5+sdfTWRkSLcw/l
- K7mBAHvZhrHUValpaMxRvgwz4idsgX+nnYP4UX++VDX0+GFDdcAM5wOTrq6McvR7yWgVF
- /EmA3l4O0hK5M+ymUB4LvUO9I0tfLlaJc57ByZgcCx5xYjthJZutUohwalgVsu+WgMYBG
- zjkES/nUNo1GUv61LKMRu4xthORDWgEo7eXOVUyJPaUT4KLLUMssNiB3aUE2gCld0sfMw
- /0E2POmS3cjUos3BxkYygii6ZwVJ4C8kTMZyMHZskaqZ1+n55dSlfIS3hazPT/zbunw==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
- dmarc=pass header.from=kuhls.net;
- dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=D3zZPEBs; 
- arc=none smtp.remote-ip=85.13.140.57
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=D3zZPEBs
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9FDCB405F4
- for <buildroot@buildroot.org>; Sun, 25 Oct 2026 21:11:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1792962673;
- bh=fy9wz7XM+t17X2erpImxr64iTQX5JXMY5qOakKlxKTQ=;
- h=From:To:Cc:Subject:Date:From;
- b=D3zZPEBs2zfaqdPB1WUn5X9S9Er9GOF6pb4cSI6bYbDaGjMr+zNDKcbVQ/Tmkcy/8
- 9uB/yn0MmeuSsHz9IsM/FGqrUQsU9mS9bKkgc8tWf/XNm09uVZA2HhuQmTMEA2uhB0
- L954KVvV3QFzMYMegpKiUiibDG5M1oByi0JSDWH7QuteBb6SsURDCLx+1HLXDQHjBU
- Lk1REBMAOklpWny0BDU/D1pnzqK+dgskURrQcXDkt9JTPV+Tl21DIjI36m2BZ/31k2
- C86DkQ1XFMj2A4j5JEH9MIieMO23Ji6lekENCOi7Hnme6USwOlD++pu4zEVxxI4ltt
- Ud9REVmi7phdg==
-X-KAS-Sym: v3:f51bdf72230551df:iVZcjZqEkY0mT81rvb4fyt8GQn994A2swy76MoxvKQm5F
- gPbbCiyUhPQv0DozOe5Y+Ff9XX1g665KIcnBC4UyWhVewIo7CvoLwwOmbrXgTK7YeKPn1c30zsH
- +8c15LPVz7DTOiMcI0s9rifIufp9EQ+bq3ZOpggPRQlQCdN54/V3OpcivkNsXiknVR4wAWhy8QM
- qlV2f5NUba0H/5jisOt+aP6tAND7f9YWlRFhunM9ZB+sD+KOIWWewBOokJu7E916S9pd8+TLgLS
- QbUjyKkhd+UsKXxFlR96Nzd9rgCIzfQfGJJt3mlI47B9SZkpntuj1+dmhY6iAWIcXPynKSJA==:
- Ti8CcVRKpouIIKMJ02OHmEyVA++39dZN7LQxnfP2e2YBLWxIkjcffa7Kmo/I3neV3oohCl8C3fu
- FlKrJ6IX/nCqnF+qsZIXPYR+hd397/66S+i4ghcbNlI3N/Wi5B2anOiIfkKjnhtVJxK5H7fyyj5
- uf3dRaWVEIKlIp5fZPQ6NByzcYSZs2FMxLXf4fBL/ex7uZCzXOR4/mexQaOJqLL7b9sdXJSyOan
- R5Fxbrj07ljHTpnSBvC+RBtx268a6upjfKxxUCGsSTRIpmXdEKsQ0S+iPH9Zdo/bcPRAwmsMblu
- Pm9+/7jZyTj/1UhS7FpgqeE2pPZ3rXco4lUsShXNWy1BnjMJ/z639u1PjD9JqYoe1hskbExlIWF
- 173hhKDb+DP2d4SWj5GHONWKCcB4sRqLUwjnUFXMdr+RPQ73AQNDZGgwNoYVengWzBtOQxzXsdm
- tdhj1JMoc4BhBerktUVLtrhpDwu6VJ7sOzoxIiufgawPCP4oUZjT6a02+DqkSCsx33OibcTrxhk
- vxmQ983KvO5HMpQ48qVcj/Ow0nVchcTUn4G6j3JhJv6Pg9VFjxp8IcQymoUyDUQrQT/kmPR+ge5
- sgIQJe0T6vBScsej5Ax3wiLzRV3/gWd+ftloku2O30ZebS+J7pTo3oe3Ii3u3Q==
-Received: from fli4l.lan.fli4l (p54a1ba05.dip0.t-ipconnect.de [84.161.186.5])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id C566AA4C6A1E;
- Sun, 25 Oct 2026 22:11:13 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:42208)
- by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xL5Un-000000000Ee-2tlB;
- Sun, 25 Oct 2026 21:11:13 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ c=relaxed/relaxed; t=1792963084;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=nQF9AWR/uM23BqARVCG2gJQBZunWxJZaMFqpR6emkTw=;
+ b=cDMr2Ngc3drWfJoIocWMWfj84KuA9D0vHV4EGlZyLpkhhPZQOct+O+KPgp5EIeU5nces
+ ADaLCgVfkbOecDyyugBjncSRKHljhHGCo4AGZicWmX8EtkY8XD92smv/dfUGTb3fcOh/o
+ vIWHX9yG7dMmensxS8+MqFyXT3K6Z0C+6MLoW2i1QyDsSjwbMamKHygleBjbT3bwvRp69
+ hD7bygfPiyoI/4ZtyeufiZ0+Pry8EA7sUVfZkzfQbLDXHeINZAHsn070i0T1ZWFx4GchS
+ 1FwCxSoOZh2DGCU8xvSvGSPQjS7VghwAeZe23yLoE1pe9dPPjoTEs1OXgaSD+Rfcq1g==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 57B7B605ED
+ for <buildroot@buildroot.org>; Sun, 25 Oct 2026 21:18:04 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id AC75F9CECD; Sun, 25 Oct 2026 21:16:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 25 Oct 2026 22:11:13 +0100
-Message-ID: <20261025211113.561701-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
-X-Spamd-Bar: --
-Subject: [Buildroot] [PATCH 1/1] package/python-charset-normalizer: fix
- build with setuptools 84.2
+Date: Sun, 25 Oct 2026 22:17:38 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 77fb7aa0c4fb7619a426fd37aae04a0455a51af7
+X-Git-Newrev: 49e3806198097567ca57a0b75d9c7d7a258b794d
+X-Patchwork-Hint: ignore
+Message-Id: <20261025211638.AC75F9CECD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/linux-tools/linux-tool-perf.mk.in:
+ fix doc build issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -152,74 +109,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Buildroot commit 2027954db7f5f42ed976ea2f4655e0cd224c7ee7 bumped
-python-setuptools from 80.9.0 to 84.2.1 causing a build error with this
-package:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/49e3806198097567ca57a0b75d9c7d7a258b794d
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-ERROR Unmet dependencies
- (checked against /home/autobuild/autobuild/instance-38/output-1/host/bin/python3):
-    setuptools<84.1,>=68
-        wanted: <84.1,>=68
-        found: 84.2.1
+Address potential document build issue when BR2_PER_PACKAGE_DIRECTORIES
+is enabled.
 
-Fixes:
-https://autobuild.buildroot.net/results/036/03644dd6955f4f8ccee2b0fe14f4500f0332c2bd/
+The perf package wants to prevent the documentation from being built,
+since it won't be installed anyway. The trick is to create an empty
+GNUmakefile in the proper place. It did this by using a POST_PATCH hook.
 
-Fixes: 2027954db7f5f42ed976ea2f4655e0cd224c7ee7
+The reason this approach works when BR2_PER_PACKAGE_DIRECTORIES is off
+is that the build system ensures only one package builds at a time, so
+Linux's "extract" stage and Linux Tool's "patch" stage can never execute
+in parallel.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+However, with per-package builds enabled, there is no guarantee that
+Linux has finished extracting by the time the linux-tool's POST_PATCH
+hook runs. This means the creation of GNUmakefile could silently be
+skipped if that portion of the source code hadn't been extracted yet.
+If, in addition to this, asciidoc happened to be installed on the build
+host (/usr/bin/asciidoc), perf would detect this and enable the doc
+build stage. At actual build time, it would use host-python3 (not the
+host's system Python), which does NOT have asciidoc, and the build would
+fail.
+
+  INSTALL libperf_headers
+  SYSHDR  /local/users/jenkins/workspace/[...]/libperf/arch/[...]/unistd_64.h
+  INSTALL libbpf_headers
+fatal: not a git repository: '.'
+  ASCIIDOC /local/users/jenkins/workspace/[...]/tools/perf/perf-amd-ibs.xml
+fatal: not a git repository: '.'
+[...]
+  ASCIIDOC /local/users/jenkins/workspace/[...]/tools/perf/perf-data.xml
+/local/users/jenkins/workspace/buildroot/[...]/host/bin/python3:
+No module named asciidoc
+make[5]: *** [Makefile:275: [...]/perf-data.xml] Error 1
+
+Turning the POST_PATCH hook into a PRE_CONFIGURE hook solves this timing
+problem and guarantees that the "fake" GNUmakefile can be injected into
+$(LINUX_DIR)/tools/perf/Documentation as intended.
+
+Signed-off-by: Markus Mayer <markus.mayer@broadcom.com>
+Tested-by: Florian Fainelli <florian.fainelli@broadcom.com>
+Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...1-chore-allow-setuptools-84.2-builds.patch | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 package/python-charset-normalizer/0001-chore-allow-setuptools-84.2-builds.patch
+ package/linux-tools/linux-tool-perf.mk.in | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/python-charset-normalizer/0001-chore-allow-setuptools-84.2-builds.patch b/package/python-charset-normalizer/0001-chore-allow-setuptools-84.2-builds.patch
-new file mode 100644
-index 0000000000..67969bf499
---- /dev/null
-+++ b/package/python-charset-normalizer/0001-chore-allow-setuptools-84.2-builds.patch
-@@ -0,0 +1,26 @@
-+From e836793ecb0bb79b87a14e369370591e87a8bc97 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Sun, 25 Oct 2026 22:07:00 +0100
-+Subject: [PATCH] chore: allow setuptools 84.2 builds
-+
-+Upstream: https://github.com/jawah/charset_normalizer/pull/828
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ pyproject.toml | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/pyproject.toml b/pyproject.toml
-+index b80909b..aae3185 100644
-+--- a/pyproject.toml
-++++ b/pyproject.toml
-+@@ -1,5 +1,5 @@
-+ [build-system]
-+-requires = ["setuptools>=68,<84.1"]
-++requires = ["setuptools>=68,<84.3"]
-+ build-backend = "backend"
-+ backend-path = ["_build_hook"]
-+ 
-+-- 
-+2.47.3
-+
--- 
-2.47.3
-
+diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
+index 8c91c2cc6b..3271fd5683 100644
+--- a/package/linux-tools/linux-tool-perf.mk.in
++++ b/package/linux-tools/linux-tool-perf.mk.in
+@@ -141,12 +141,17 @@ endif
+ # distributions.
+ # We name it 'GNUmakefile' so that GNU make will use it instead of
+ # the existing 'Makefile'.
++#
++# This must be a PRE_CONFIGURE hook, not a POST_PATCH hook. Only the
++# configure step is ordered after "linux" (via LINUX_TOOLS_DEPENDENCIES).
++# For a POST_PATCH hook, tools/perf/Documentation/Makefile is not
++# guaranteed to exist yet.
+ define PERF_DISABLE_DOCUMENTATION
+ 	if [ -f $(LINUX_DIR)/tools/perf/Documentation/Makefile ]; then \
+ 		printf "%%:\n\t@:\n" >$(LINUX_DIR)/tools/perf/Documentation/GNUmakefile; \
+ 	fi
+ endef
+-LINUX_TOOLS_POST_PATCH_HOOKS += PERF_DISABLE_DOCUMENTATION
++LINUX_TOOLS_PRE_CONFIGURE_HOOKS += PERF_DISABLE_DOCUMENTATION
+ 
+ # O must be redefined here to overwrite the one used by Buildroot for
+ # out of tree build. We build perf in $(LINUX_DIR)/tools/perf/ and not just
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
