@@ -2,132 +2,103 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C61A9606A31B
-	for <buildroot@archiver.kernel.org>; Sun, 25 Oct 2026 20:21:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFA0D606A31A
+	for <buildroot@archiver.kernel.org>; Sun, 25 Oct 2026 20:22:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=ZCtpRFYI
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=JTYGsL4h
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9F38B80D73;
-	Sun, 25 Oct 2026 20:21:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A9C2D80CDE;
+	Sun, 25 Oct 2026 20:22:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w740Ie1NIuav; Sun, 25 Oct 2026 20:21:13 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 3FB7B80D45
+ id KVHqPMVODICS; Sun, 25 Oct 2026 20:22:02 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 9F88E80D6E
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792959673;
-	b=DAXOUOi0Zb8qTaW+PAUaSqA7v50UOaPmmUab+QVF3PMOBMB9DumDxfHOGfaAMUhrCebR
-	 3JR53HpQKYHwLXZli13X5TnBy3A8WN6sKyNkuHjOTm1vkTMIzMmDrV3atAbudA0z8xB5J
-	 F1LLP0ArdfLDvd6Xsu/PC8QgEQlsaHDmrSP4jVkO5LhSiDJmPFvOJPBJKSY4J9RcEyXt9
-	 zZ7PNhNQHW+OiYKL9p3lUSm29ePfNYTQNrJHP8DFYmItyzZRem34sbQWB0LffVsArZQ/w
-	 2u8IVx05f5nrJ9uFgoCPXk+lFetQoeAsF07hFqf1mB4wICY9DR9g8E7G3/nSMgfGFKw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1792959722;
+	b=RHe6uNXi9PhVRUcfK4PT0px2YThj5Knps5BKLA7OaG1q+NnBAhj4GIlaPn8GkxbKXdK7
+	 dq1vqpfLdN0CkqjCSWreBaI5yzlBFj1FInmNXdkiWB2QQ/Y0ZX2Jg+cdd4T9QUnq85C8Q
+	 BIxs0yDYNOkuJpKrJWbGznnzCv8ymxo1zgqTVCwlWyDm+iK2piRbNgHezadK0sAtxdxmB
+	 TDlWS8k9VXKoZ5xIG33sxliAbhvhTOom3rmjI1xeGd7xHkkLuh7Yz8JNe5qUpAF9DfXQY
+	 2sATbgVoRlrejiWbsZhmiGBVWyU8oImw6OR1/DklDt+aQoz+hw5dUrdz4xEURnDNT+A==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1792959673;
+	c=relaxed/relaxed; t=1792959722;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=9MwYqaf4tUDDY3mwR12oOFbIGbkNXlYHP9WXGVI73qk=;
-	b=RUWc1r0mEZ0JRDiZMnClquLtdMM0eGalax2tVouPgziPHnqJdfmAiM1PuGPA8Z3wOMAs
-	 ZC6qgIvxAF+Qlo0Yjko0LhmgiODyzscC0teHM7naAu+86adipBv3DVw3CkJPwpOWg+lMG
-	 e3Vzi6DpXShUb0VIUE4dsYF+zmMdDrWWq1oMPx/7U6yQ5P8dma5M2u6pQmdhrFYyfGPaJ
-	 hjG3JbNbDr1p/pT2bfRNcjp/kDL84+Qp9UOhEpVQe0u5iEOcftxL/CaJ+8lKzy0R6giJW
-	 T4jpyfNyIzbQAs+nzdRLqJ9s3ZVv757u1Fe73wqmx0dTH9iAuGfMaquU9GquCiiu1Og==
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=rvLzxDnMOed40emgWtUFYft9Tb9a+hNreX8TUha+keY=;
+	b=PMduRv0wl+MB8XS1teyU49yB4D4eTzdD6J5fcBeFFdecC4nMQJsgEZP6LxbXB0M9uCJF
+	 521o0ogrNl/FGstd9wApw+BX7ThWo+u/sXGNLp6FttAck8etsY6vzQybVvts/MhL8JabO
+	 37yK9zR+WcCVdsncJ26ei3R6jONkH39EM4O5aJDZHb4eh07zYr9wyI0WY6zjsECioY4e2
+	 UO6miUNqVqlOF06Ed8rG7tiAEvmGjzo6J2VKXVj1ryKuKKgZCwy9Z9YIE71ryieRLwEvn
+	 8hcd4bCIqf1M0W26iRJ3WkZNH4YtGfJ7ZdrnaABF5EPj9rVR1Mee+qb47jn0T8wOBEw==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1792959673;
-	bh=9MwYqaf4tUDDY3mwR12oOFbIGbkNXlYHP9WXGVI73qk=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=ZCtpRFYIEBObHT6RQsPMuB3xWA3lHhWpahdXOR9tGeIxLG1Hqkk3Xi432U2yG19Jj
-	 nk3NSkDCaWOmPmKpcYO44BUqx/rg0Gl1hPYPDLSddUwhmfl/WjePFW1zjHzmp4MLIv
-	 i5Bzsxxce5GUVQRrPUx0KNSEF6hIHthcHwaoEdHyPukeOuUemJ70p122vk0PIenQJs
-	 CdcwejMwh+cGv7PhES5vvxQH2n1Dfpzy/rDoUU88ywGmIHucvmWdxSZyIggziInCCL
-	 5D4bKFCkm117+bSjuyErinr87gtiRIjRmzTmSbS5foOhIcHqbM2SRvNP6aEJ3lDNj0
-	 U4cvTaK3rwxsg==
+	s=default; t=1792959722;
+	bh=rvLzxDnMOed40emgWtUFYft9Tb9a+hNreX8TUha+keY=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=JTYGsL4hvsNy2RorhxNokvdW2+E789FCUoGuvQchkX3IHQiWzjVFGhKv4ytgmTSbg
+	 yp3EbLRsBenL9EIDkR0rEhb/hmFpranLtdDWorE4psjjOsU1P5kIihJ3hyEjpjMePR
+	 TlRADlgS7h7bPZWm+3v20rmvRaU9GgLYmtmazhaWZHxidbSkKgNmy+S/x8mgrkUI1Z
+	 Bb3STkVD09aiFELAIfIEAnsJJ/y/MdqXd2V4Vqj9wR8rbPmKjJFaS3u6toUgIVGWzY
+	 mvgRhoLikL4QjXqsOp/VHzF465nHT5AOaHEputVXn4ZOC+XJoYVH4qQwJ3Lt9+v0p4
+	 Sg0iYbD9yzvUw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3FB7B80D45;
-	Sun, 25 Oct 2026 20:21:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id B597B4D1
- for <buildroot@buildroot.org>; Sun, 25 Oct 2026 20:21:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9F88E80D6E;
+	Sun, 25 Oct 2026 20:22:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1A223380
+ for <buildroot@buildroot.org>; Sun, 25 Oct 2026 20:22:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A6D514059A
- for <buildroot@buildroot.org>; Sun, 25 Oct 2026 20:21:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0C58280D6E
+ for <buildroot@buildroot.org>; Sun, 25 Oct 2026 20:22:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hpr3d-KpOKL2 for <buildroot@buildroot.org>;
- Sun, 25 Oct 2026 20:21:10 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 03E9B40598
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792959670;
- b=XiJxLwMJydMlkjAzswmcT6esSdA6deBQQ3SPoYuDb1DiJT7JXB2eLYShSCOSjjFMEPBc
- YeibgP/xh55Be2k9Ls0xuUZFRFkl1CuNtioYa7YwG1hjkRJnchIifiLB4mLqyX+N4OnHW
- tQ8lnKeLnDcebYawljyPh2TmRyoMdOog71S1mi3aLtRGhSdUjRjoVwIImtZ8sgsJOVCZs
- y4HvFwuiKTRK+LL5D3kakLIU3ICZ+68XFCDqhKEDIHeVrvzUe0Fto5dRneHLCIc5XAuQa
- sS8Qzscu4kkZH9o5IC2Y6icWkBQXvt4UeQcX3pGR+WsKwpdnA0aa/EVHBncjubbJkCA==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pfzSEbCpv6cF for <buildroot@buildroot.org>;
+ Sun, 25 Oct 2026 20:22:00 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 4B07380CDE
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1792959720;
+ b=Mbx6JRwkMHzqdPq4nbo0lPGF8EybStruiEE9olxQybWfGOSVf6ZyBx9hro/JpZCfx9hJ
+ 3tfi3wwDKVYONSexztYgg6oxsLT8hj4oQ/qAC3asus9juHgYjyzhK+9+zOM45vgZaqjpO
+ /JVkPG1qJ8MovTSqo2/zfHypmHToqj1rsi/0Wgj534hZZV54nxp7olCdUFDwuGuqgOmhu
+ cPPj6jP+ZbYyPP5Wa7lxzOEnJ0qobtD1OqCTEnFlT7irKoMI1b3mEzhMMTo+RYvAIHO1T
+ Fae6L6QS1q6lGCULomvUtPBf8V0edGTMtUaTiW1ZHvKv9Z1wUKWu227niz4XCossDYQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1792959670;
- h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
- Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
- Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
- bh=p0A6Wb09pT1XE1NGC0BsEKDTUTWi3P0ZqcQtmTzvchg=;
- b=nZ1aAiUUdFRIyF8wnLI7cQEzp1yNqH9spzkvfDj7CY0vUVjjxBhlF/vr3bgiztavwKUg
- AC8vMXlBHR/TKCjgLgK819cXeTKIX+LLoBK72fKg12BRQz08pR12y80uYjDkaxVpQegyt
- SXBkxTYX5/LU+tvA0UN3jQ5Rg8MCHEb+S3aczh1etpxf6Pu/pQ2/ov3GKtwEYa7jUJquS
- nVJv6/3wSth9EkNIIxcIKS//ls7K01Mim3npSNZnJyis5Hqt7ril90T4LNbC4+9HGEqjv
- TWSIb+G2IR0h5KE6M03btJzKikIL5ymdbcYy06iAnG2/t7FEApDs+GN4AG2eLBgIHZw==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
- dmarc=pass header.from=bootlin.com;
- dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=f9kjsv4F; 
- arc=none smtp.remote-ip=185.171.202.116
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
- helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ c=relaxed/relaxed; t=1792959720;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=Q86o8/O8rh9ginkpsnea+EMVh8Wtfx0z+rU9udxYql0=;
+ b=jflco5WTjmFthDqRCA6F+f0FHYJwZtVBiCCUAK6X4biqAke0ho5smnr7RsuJRWwta6qh
+ A3H2y/3o2R3TUpEt5U8nlbXxVgiyFrzTFY8D2U/CyFXTnP/nzlF1GeuNZ7jLNGtiq1Ro2
+ +OacDNx5p/lOf8kw1nMYcurRchVGxuqJMOtHs/sCCFShFcLhABfghaDCytS09Is8Nc6Cb
+ 3sdsnazFMmG1B8qVIt5MnSgk4qt8a4ZAj8C5Z0LYgadXM2fdIY4G+7p9X+Co2sOxB+Oyh
+ eqs5LMUhLZv9Q00MduGO029ylPKeJrDjvQ+mkLko8BsXHSUntuUy7mhBY2o7i/l7nlQ==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 03E9B40598
- for <buildroot@buildroot.org>; Sun, 25 Oct 2026 20:21:08 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-04.galae.net (Postfix) with ESMTPS id 51921C51477;
- Sun, 25 Oct 2026 20:22:07 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 5FBFF60740;
- Sun, 25 Oct 2026 20:21:06 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 262831032902C; Sun, 25 Oct 2026 21:20:58 +0100 (CET)
-Date: Sun, 25 Oct 2026 21:20:57 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org, Daniel Lang <dalang@gmx.at>, 
- Sergio Prado <sergio.prado@e-labworks.com>,
- Raphael Pavlidis <raphael.pavlidis@gmail.com>, 
- Romain Naour <romain.naour@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>, 
- Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>, 
- Olivier Schonken <olivier.schonken@gmail.com>,
- Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>, 
- James Knight <james.knight@collins.com>, Mario Rugiero <mrugiero@gmail.com>, 
- Adrian Perez de Castro <aperez@igalia.com>, Simon Dawson <spdawson@gmail.com>, 
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Jesse Van Gavere <jesseevg@gmail.com>, 
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <at5kJQqc8iPk3NYG@windsurf>
-References: <20261025160912.468488-1-bernd@kuhls.net>
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20261025160912.468488-1-bernd@kuhls.net>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH 1/1] package/fontconfig: bump version to
- 2.18.3
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4B07380CDE
+ for <buildroot@buildroot.org>; Sun, 25 Oct 2026 20:22:00 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B05339C61E; Sun, 25 Oct 2026 20:20:34 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 25 Oct 2026 21:21:42 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d6c8b409ed4c6bf7abb2b3b99dcbb9397bf037b6
+X-Git-Newrev: fb0438aaf67da07027b1d9e734450ae5a333da23
+X-Patchwork-Hint: ignore
+Message-Id: <20261025202034.B05339C61E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/docker-cli: needs NPTL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -139,49 +110,114 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_PASS autolearn=ham autolearn_force=no
-	version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-On Sun, Oct 25, 2026 at 05:09:12PM +0100, Bernd Kuhls wrote:
-> https://lists.freedesktop.org/archives/fontconfig/2026-May/007334.html
-> https://lists.freedesktop.org/archives/fontconfig/2026-June/007345.html
-> https://lists.freedesktop.org/archives/fontconfig/2026-July/007371.html
-> https://lists.freedesktop.org/archives/fontconfig/2026-August/007385.html
-> 
-> Due to upstream commit
-> https://gitlab.freedesktop.org/fontconfig/fontconfig/-/commit/7643efb77552076b035d3eb506ca836ed4764ca5
-> added in version 2.18.0 fontconfig now uses locale_t which adds a
-> dependency to BR2_ENABLE_LOCALE that needs to be propagated to its
-> reverse dependencies.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/fb0438aaf67da07027b1d9e734450ae5a333da23
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Thanks, but it seems to be lacking a few dependency propagations:
+pthread_unix.c: In function 'x_cgo_getstackbound':
+pthread_unix.c:96:9: error: implicit declaration of function
+ 'pthread_getattr_np'; did you mean 'pthread_attr_init'?
+ [-Werror=implicit-function-declaration]
 
-package/foot/Config.in:1: BR2_PACKAGE_FOOT selects BR2_PACKAGE_FONTCONFIG, but does not depend on BR2_USE_WCHAR
-package/ghostscript/Config.in:1: BR2_PACKAGE_GHOSTSCRIPT selects BR2_PACKAGE_FONTCONFIG, but does not depend on BR2_USE_WCHAR
-package/python-matplotlib/Config.in:36: BR2_PACKAGE_PYTHON_MATPLOTLIB_QT selects BR2_PACKAGE_QT5BASE_FONTCONFIG, but does not depend on BR2_ENABLE_LOCALE
-package/cairo/Config.in:1: BR2_PACKAGE_CAIRO selects BR2_PACKAGE_FONTCONFIG, but does not depend on BR2_USE_WCHAR
-package/fcft/Config.in:1: BR2_PACKAGE_FCFT selects BR2_PACKAGE_FONTCONFIG, but does not depend on BR2_USE_WCHAR && BR2_ENABLE_LOCALE
-package/wireshark/Config.in:23: BR2_PACKAGE_WIRESHARK_GUI selects BR2_PACKAGE_QT5BASE_FONTCONFIG, but does not depend on BR2_ENABLE_LOCALE
+Fixes:
+https://autobuild.buildroot.net/results/756/756ceb50b78218ac6085e0143d9f358f97d9568d/
 
-Could you have a look and send a v2 that fixes those issues, if they
-are correct?
+The build error occured already in 2023:
+https://autobuild.buildroot.net/results/c0b/c0ba9647824dd2dc811c31e7b999167f04d0be49/
+A backport to LTS branches should be considered.
 
-Thanks a lot!
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/docker-cli-buildx/Config.in     | 6 +++---
+ package/docker-cli/Config.in            | 6 +++---
+ package/mender-update-modules/Config.in | 6 +++---
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-Thomas Petazzoni
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/docker-cli-buildx/Config.in b/package/docker-cli-buildx/Config.in
+index 486f1196c3..d1f9bc2804 100644
+--- a/package/docker-cli-buildx/Config.in
++++ b/package/docker-cli-buildx/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_DOCKER_CLI_BUILDX
+ 	bool "docker-cli-buildx"
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # docker-cli
+ 	select BR2_PACKAGE_DOCKER_CLI
+ 	help
+ 	  buildx is a Docker CLI plugin for extended build
+@@ -10,7 +10,7 @@ config BR2_PACKAGE_DOCKER_CLI_BUILDX
+ 
+ 	  https://github.com/docker/buildx
+ 
+-comment "docker-cli-buildx needs a toolchain w/ threads"
++comment "docker-cli-buildx needs a toolchain w/ NPTL"
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/docker-cli/Config.in b/package/docker-cli/Config.in
+index 52e7f7c871..2befb87578 100644
+--- a/package/docker-cli/Config.in
++++ b/package/docker-cli/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_DOCKER_CLI
+ 	bool "docker-cli"
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_PACKAGE_HOST_GO
+ 	help
+ 	  Docker is a platform to build, ship,
+@@ -20,7 +20,7 @@ config BR2_PACKAGE_DOCKER_CLI_STATIC
+ 
+ endif
+ 
+-comment "docker-cli needs a toolchain w/ threads"
++comment "docker-cli needs a toolchain w/ NPTL"
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/mender-update-modules/Config.in b/package/mender-update-modules/Config.in
+index 1fd7384f59..7c5a7e4442 100644
+--- a/package/mender-update-modules/Config.in
++++ b/package/mender-update-modules/Config.in
+@@ -76,7 +76,7 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_DOCKER
+ 	bool "docker"
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS # docker-engine, docker-cli
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS # docker-engine, docker-cli
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # docker-engine, docker-cli
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # docker-cli
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # containerd -> runc
+ 	depends on BR2_USE_MMU # containerd
+ 	depends on !BR2_PACKAGE_CGROUPFS_MOUNT # docker-engine
+@@ -98,11 +98,11 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_DOCKER
+ 
+ 	  https://github.com/mendersoftware/mender-update-modules/tree/master/docker
+ 
+-comment "docker support needs a glibc or musl toolchain w/ threads, headers >= 5.2"
++comment "docker support needs a glibc or musl toolchain w/ NPTL, headers >= 5.2"
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+ 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
+ 		BR2_TOOLCHAIN_USES_UCLIBC || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_2
+ 	depends on BR2_USE_MMU
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
