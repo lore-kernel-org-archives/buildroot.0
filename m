@@ -2,28 +2,28 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6849B606A338
-	for <buildroot@archiver.kernel.org>; Mon, 26 Oct 2026 16:30:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4FEF606AA3A
+	for <buildroot@archiver.kernel.org>; Mon, 26 Oct 2026 16:30:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=cwlIHCAF;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b=a6P3TUdJ
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=iWO7bhWD;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b=ChON9ZHw
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B8EC40661;
-	Mon, 26 Oct 2026 16:30:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 78CF440742;
+	Mon, 26 Oct 2026 16:30:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id csOTdoqgq5ng; Mon, 26 Oct 2026 16:30:47 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 5539540708
+ id T-_klh9NC6KG; Mon, 26 Oct 2026 16:30:51 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 965C94073B
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793032247;
-	b=h+/50KnNBwsnDsdGeJw8bv3sl6RWoMuynlAhkjlQXmR8UeKnREPYm5mLPYHt6eY6RIgA
-	 BLuiViuY5p9MIZOJe7GZR773nn8VNpCR7wrPVUG/7tl9YxM45WYAzf5omknNHFUvp+4K3
-	 MN3wvb73Jjcdd1YjXRFRx3ZW7X7tEWqrQ8QEBmM/fqOk0ruxd01syQ6uOhvReMNkxJ4fn
-	 lFbCYsV9eAo+HvHn8OvS3kaPzqdS8gdKHj5HcOYbrMpMdC2NkfJYjse0AvINEV7XQdfAn
-	 UUjHjA6FeEuMvJLldNoUj9oIFDGYe5KCcqOzrFrgJQEs8F9BOg9Y+zXSlaMyiK0YcSg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793032251;
+	b=Hk6An0mBCYe/hAnDYoTodpcGatTsm9UIEihVHloos7pogkO5/vY0QWHuKCx5ZRX5KLKN
+	 lYVYoUB7TqmI6cbr07W8wfyfV4yOLKTUK5N4tTbk2TlhNGARdEjvyBuD1odpYoFbLBZJK
+	 uQ4/B4JV7axnRCwmYA9ApGJzLQRn9CAHcHA2cXM2TDBETQXEC7H+5PjcoywPxCxWnemLq
+	 oYSu5TYl03Ge3/D+n6HtNMoN0WFnB8G1M17Ouy6iCpkqUEn+3MvOVAAg/rB3fOYL+PC9t
+	 LBh+sOiKwVsf/gL0wE2iJjKL/ofSAq5V3qrLY1jM8LxleKtk+DaIwt5K11sLYRDCtog==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793032247;
+	c=relaxed/relaxed; t=1793032251;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -32,95 +32,97 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=5BsuAR7tQU4WUcf8weZu3zMPIRDkdAbSdCayryifQTg=;
-	b=HjDmd3f3134/1b3o6ak7HAmCjfh794BnIdIBLx+0rASlngsqpiwd6PPbiYDWw59ot2uf
-	 9KUHunaRUfDgk5VqmPsxLFAS3LwsNyPQ5Ox0rVNpkxacbCp599NjNVNKVyQUg/Zm/LFrY
-	 qvvVx6DEpODb/T9Ajh+Ymsde+3FifZ6gBaDNwZqQ1Y6UuD5Xun7h5M2le100hhqr8tWDT
-	 E94Yi04c/1gWtzr248+TQVEvoSDwaflfB/lKgz8XlSf2LuHoqEWDEv2uQ1CbZUkejX1ov
-	 56cBohfIRkJnyjKqZYshGc/IOymnRWULkYRYyD0NXqgNav+uc7yro32pz8TEVCxmkdg==
+	bh=XTmbrLSVL8M0VUtjoAoBY688QiZWEJU77IDbMyR2/xY=;
+	b=n0JCo00/o7VRX6oZNwsi9ip7iA4gD+V/d76sw6HOB/0mC8YimDii4nBbpXZahuucSk5i
+	 VJJ7C0ckUHFshLZxmEMATYbFcChwaBLhnZ1RmvVGvJDpd2Kf+NcXPdA6GWq9yIKuvYRVD
+	 Srx1w1srBX7t8Fs/5xoxdQqhp6N36yKYdHA9J4CzjL5UPAOH7YlSt9EpvOGkk6UG2AuNk
+	 keRlJ/UAwj/BPvy6bId3rLr9OP3dxVDAd0+5+g7QR1j+ZOZIV1bGsLAeEtzzwrbFhgU33
+	 XvTp4Crkvdi8+fG6k5crC825rs9czb7rBPLRnNfL+/vQqYJLK7N7f70xc1jfYK9ra+w==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	dmarc=pass header.from=benettiengineering.com;
+	dkim=pass header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b=ChON9ZHw;
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793032247;
-	bh=5BsuAR7tQU4WUcf8weZu3zMPIRDkdAbSdCayryifQTg=;
+	s=default; t=1793032251;
+	bh=XTmbrLSVL8M0VUtjoAoBY688QiZWEJU77IDbMyR2/xY=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=cwlIHCAFUHsosGYZ09/lXi69+8JNrlWdzDGbDX413B5eopnb/S+Ct1/Zx2txLPi9l
-	 R5vm7hM61ImyOJkcr75KaKD7TrnT3SyuZZhdDK1diqiv5AtitjYTOvm0CIqyGW2KwP
-	 jcqz/lGCbs8HK1P/+ePDZdygWSAeTqYvfSlXJ4JFLpB70hEVxw2sXA8e4N9gyvF094
-	 Z/BOLe3i4jIVyg29loEXRyg1e3ivbH4t2NRHnet6jCu0jJrftHY96mJ2FosAgKCg5Z
-	 oH+qMZqLYnW9YhfaaxkswzJDTukq4ils9LO7CVZqQNrUdY+0SXppAt833Q+R8O5qic
-	 gzuuARVxNqY2w==
+	b=iWO7bhWDBTIIODpCtzq/b1DClDg+egFlF5GcLun9amgHNKrdtsqeiFobszC9M/fie
+	 wHK5ZFg129S804i/82+2zMjmFwkmnP5eZ4w7Yhwk/nd3t+UpvnKFrqxgQ1dK0425UF
+	 sCIiVmc+HLDk1QI5Q7SxSLSOQvQ5QZOo44TCOGYwNhXxy4UkI9M5OvjdAM5cyzy+uy
+	 JHDyVrc3WZEWAduX2jSPSQwhOXdeaKEIDsMdg1bTX5NTNsoWzaR3kTXy2baWgQRrGH
+	 6oSmw0JgFAlx9l2Wzxykk618KOMPaswLeFPeBsVNn4S1NgSKQwI6jhrgu3xGsyThHE
+	 famGBVeCX8jfQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5539540708;
-	Mon, 26 Oct 2026 16:30:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 854473A7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 965C94073B;
+	Mon, 26 Oct 2026 16:30:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D29D9356
  for <buildroot@buildroot.org>; Mon, 26 Oct 2026 16:30:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 76DE060635
+ by smtp4.osuosl.org (Postfix) with ESMTP id B899840708
  for <buildroot@buildroot.org>; Mon, 26 Oct 2026 16:30:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ujmEr7KtAczq for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PA46m8YuWnO0 for <buildroot@buildroot.org>;
  Mon, 26 Oct 2026 16:30:45 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 3636B605F7
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=62.149.156.71
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 362CE40661
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=62.149.156.71
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793032245;
- b=Mrd9zIfP9m92986g+3Uc6FLCpIz34DjaCIPRdZ3A6kAncuLbER8W68UWztSvdz5nMdK5
- TpN6h0dQrIqdSAsTUONM89e9y0Zsf077X6en/yY5CdsmExjSSCcIPtq+KUWvK2EquKDNB
- pBtnodmHcVN3rzLplUOu0PY+jyhsJA/0F+AN5QduXf1ya+O8KxhediKWDTHI1lecLORlf
- ueSv7rrYjlKVYTM70yBg+Q3M+SvjVggdd6uvEBZNb8n80JKMJOdwSeavfAivG5/i90tQj
- NxkUcPbLHnCyOf3s1wX9Bsd6Fc1wb3gXrlN4yt/46pReTWeFe7bB34hl7BmFuEPzkQw==
+ b=CFbjCEa4mUG8a+KBUdLhJ2ql7bhQMUJOvo+4Q2FV1cpbbIZwW8qKDw0fSdzHlJ9CgMK1
+ b+WN5cj0kq+Bbo5HhdPzF0Gv9YV+N4o90p5F8ePb8EdHXTzpXI5ryC7RRbF1RSwvs+s8T
+ O3eVafBBjo/jmU08m6o6LeX/dupNkZpQ13WcD6IBI2f/W7xEun3t3irv+M8y8fJaE9QW2
+ nbU7dv2+CItwByCEY55E1b3XgwaOlsjzjExYObo8UGLyF9HyyW6C7W9Rl631S8jtYwLcd
+ bPgOsrtzGOENexlz/l+/PqQpovs/iPeuqMqRDsKRK3AOFYpIV9EO+DRXmQuKg/NBMEQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1793032245;
  h=Received-SPF:Received:DKIM-Signature:From:To:Cc:Subject:Date:
  Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-CMAE-Envelope;
- bh=2FQcie07bLTeSM+sBRUaft5bksNr0o6RPa3zsbvl7z0=;
- b=Q/PO2msC414urWujUDoDRDLkgZco2o97VUZMaL7Z6Qtga255feo6JIvRVZ421au9CuwR
- z/RMgU+e3X/NWAo2e+zoiQKe0dKAt2rKbBjw2cvYFq48cljqF2M/5w/UfiNV1Y+wP56h+
- GAiwFZR50aLkKtzB+sRfusF1l21GnPphCZZk+Gjp9ewp0wAn6+HxWTkQYsNNeBIGfxzaX
- fiKjmNGH4TYCAUm3bHzW1lusVAaFvCO5iBC1UZNntxkHkOn8DuTd/gRjXsGK2mVHZl+iq
- qNanF7zVC5BYTKqNV6aMvG5EiGEHbDhGiJBqApN0ue4nsAm/RX5T7/451hVn770izdA==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ bh=/tY4/WssO8iRH0u5n32rstaH3eezoDHL20Pl76eLWDU=;
+ b=Aiz27rytH+1aAvUTYyZSoIhpG2o+3ayy9HKmlWqD+2XIB8NwnnUimr961BauMfU0u0lK
+ X8+A15C58jiV/Iij58SfYZx2v6EVop14F98YFmmdSikmZz0s/9P5TZgk7SxdJGBrQPP6A
+ U4k6fiDxr/pzqTvlJ2qZKCEiXKqlRep+53UxV6B1NNQKgbs6XPTlgTKqGO7XuV5fzzIaU
+ oDsqklnxczYiQ1rmlQ/K5DyySKj8hjyVHY86uivTGBO512vlCK35W3VpUUW0X9uGotYGH
+ UVEpJ/msc6fGEAT4S+j49RIoKrBtRqN5YTZCkT+TZGtGpYrkX8SA1cuYb6aTvkWouFg==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
  dmarc=pass header.from=benettiengineering.com;
  dkim=pass header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1
- header.b=a6P3TUdJ; 
+ header.b=ChON9ZHw; 
  arc=none smtp.remote-ip=62.149.156.71
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.71;
  helo=smtpcmd0871.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
  receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org; dmarc=pass (p=none dis=none)
+Authentication-Results: smtp4.osuosl.org; dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
+Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
  unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=a6P3TUdJ
+ header.s=a1 header.b=ChON9ZHw
 Received: from smtpcmd0871.aruba.it (smtpcmd0871.aruba.it [62.149.156.71])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3636B605F7
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 362CE40661
  for <buildroot@buildroot.org>; Mon, 26 Oct 2026 16:30:42 +0000 (UTC)
 Received: from localhost.localdomain ([151.95.84.63])
  by Aruba SMTP with ESMTPSA
- id LNaqxB7Yx6WK8LNaqxS9KA; Mon, 26 Oct 2026 17:30:40 +0100
+ id LNaqxB7Yx6WK8LNaqxS9K0; Mon, 26 Oct 2026 17:30:40 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1793032240; bh=8vGP0KbgbXQTkcsuF62te3BC6yHDIwSDIfUeqHcvmAk=;
+ t=1793032240; bh=8+GFnr5DMHMztZtQU0QSTFMM3HBciW/jmi3mgMS0FjQ=;
  h=From:To:Subject:Date:MIME-Version;
- b=a6P3TUdJ2apP4KswxkhJvUWMAcJdRnqARU3A9zL1btN+YN7KLOTEPtTSQlmY+BwYV
- Mx/mSNLSUxaCbKYy0Jps+Az4HoE0wgJ6R9C4oKvKYgb7KZOEHUu5RLsRmytRIx7OLR
- 71P0lght7eGXBH1lDrAUJh4mUQBy25ycWvyVoNErgCi/QiK6yXSbz17H0FslBELNxO
- JdxqryMQqaOzUBsD8KT/ZEsygpxsePOxs4Pcr6T/0B7YmFael4Q7iBcUBPpavJxRF9
- fUgy4fa5EDlMemP1Ifpcz+uOq0ajZJtUZG82OX9QjK+Vsk5/Tv/b6favhAZLUaEfbk
- 2gX4uDpjTRy/Q==
+ b=ChON9ZHw0ZcL9Q1mEp2QHP6KY5u28hSyXhcR04rhXrgDQefJmphgxSX4yzITOX2IZ
+ VKHLyu7p/I4PR9NM7pux3q5f1UeBKuR1SDjFcFaStpKOHbNcumUx8U7neQxblLz28X
+ 2x8FTpu3oO+ToPFpFSQB8fl1fSZ/Y6EklUBPDqa2BFRgxvtwC0StOvIZFzsgKsIGKf
+ Psa7lsEaRyVPibJGvNTbCdseUGmgILq7WNBOd5kNjCmhaNa1Vnm9goxQRw8Q//49kP
+ Jw0e6t0qYR80s9NMtOJxbXovaoHEPlooeCLgtb1e2cQyX0eT0c3Ax6DwGSegU8Z/XN
+ s0SAU+uumXPWA==
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
  Maxime Chevallier <maxime.chevallier@bootlin.com>,
  Pierre Floury <pierre.floury@gmail.com>, Julien Olivain <ju.o@free.fr>
-Date: Mon, 26 Oct 2026 17:30:39 +0100
-Message-ID: <20261026163039.664191-3-giulio.benetti@benettiengineering.com>
+Date: Mon, 26 Oct 2026 17:30:38 +0100
+Message-ID: <20261026163039.664191-2-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261026163039.664191-1-giulio.benetti@benettiengineering.com>
 References: <20261026163039.664191-1-giulio.benetti@benettiengineering.com>
@@ -130,7 +132,7 @@ X-CMAE-Envelope: MS4xfGjCWGsj51h1AKzdm9qXoHKawtUDN/P2ZwYYU2a4SeZEqLZu1laVuzEm1vH
  4zakjOtEbTAGFFFp3C8YpqivJ96MT8U+Cktt3bl13JTpQa2nJRZd3BiTZ+JGs0L7VO+ciD20qZApJdXYnSXZ31i0B7qxaCi//90sG7Q4SpZTMRMhM5XvgQA9
  OIsLREm7n0w/lFlYaDM5kUQTL/fFTzoy5pxxPusG3HF55UhVjCo9B13iFJPMaXJ3bci9kACFOlu1d+Z0q8FxY+Epzd5V4Cti851K9bZ7RLBCUNvUMzw5Y986
  ys2lyZO3ZC+05JvM1q8VGCe4Rvtjog==
-Subject: [Buildroot] [PATCH v2 3/3] package/trace-cmd: bump to version 3.4
+Subject: [Buildroot] [PATCH v2 2/3] package/libtracefs: bump to version 1.8.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -152,41 +154,40 @@ X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
 Release notes:
-https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/tag/?h=trace-cmd-v3.4
+https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/tag/?h=libtracefs-1.8.4
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
 V1->V2:
 * no change
 ---
- package/trace-cmd/trace-cmd.hash | 2 +-
- package/trace-cmd/trace-cmd.mk   | 2 +-
+ package/libtracefs/libtracefs.hash | 2 +-
+ package/libtracefs/libtracefs.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/trace-cmd/trace-cmd.hash b/package/trace-cmd/trace-cmd.hash
-index fa61654fd5..ee63bdc55e 100644
---- a/package/trace-cmd/trace-cmd.hash
-+++ b/package/trace-cmd/trace-cmd.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/libtracefs/libtracefs.hash b/package/libtracefs/libtracefs.hash
+index d4f6b95094..18e6631367 100644
+--- a/package/libtracefs/libtracefs.hash
++++ b/package/libtracefs/libtracefs.hash
+@@ -1,4 +1,4 @@
  # Locally computed
--sha256  8ed41f61010998e4a1ba54778f9077ee7afb5311d38dca9781d7a397dd70c9d4  trace-cmd-v3.3.3.tar.gz
-+sha256  604085ab395cc2cb84397dc3d209ea0d0b15ae506f8ea91ff45c86e5a050213c  trace-cmd-v3.4.tar.gz
- sha256  b1d04b850c1c7471b0f0896f6c6f0fcfc9f07e2dd183a5f5826af269fe9e88fb  COPYING
- sha256  70f297763149e72306919c924e164f83041d5e512868d4c8c1826c171b3e49f9  COPYING.LIB
+-sha256  a9cd9cbae81b7fff71b3f72d2b819e49cec0402529e5f252e1d9319a62a356cb  libtracefs-1.8.3.tar.gz
++sha256  75187bad93e622c94c4a691173e45f08948d38b9a28e9b855b54a3e956d289a6  libtracefs-1.8.4.tar.gz
  sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
-diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
-index a1b17289cd..f976176a5b 100644
---- a/package/trace-cmd/trace-cmd.mk
-+++ b/package/trace-cmd/trace-cmd.mk
+ sha256  0b9a4febcdee6de55872501d5c1a8f5d8b0d1650cd4d5351995ceb22e889f8ca  LICENSES/LGPL-2.1
+diff --git a/package/libtracefs/libtracefs.mk b/package/libtracefs/libtracefs.mk
+index e9e577d985..16507ced21 100644
+--- a/package/libtracefs/libtracefs.mk
++++ b/package/libtracefs/libtracefs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TRACE_CMD_VERSION = 3.3.3
-+TRACE_CMD_VERSION = 3.4
- TRACE_CMD_SOURCE = trace-cmd-v$(TRACE_CMD_VERSION).tar.gz
- TRACE_CMD_SITE = \
- 	https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot
+-LIBTRACEFS_VERSION = 1.8.3
++LIBTRACEFS_VERSION = 1.8.4
+ LIBTRACEFS_SITE = https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/snapshot
+ LIBTRACEFS_INSTALL_STAGING = YES
+ LIBTRACEFS_LICENSE = GPL-2.0, LGPL-2.1
 -- 
 2.47.3
 
