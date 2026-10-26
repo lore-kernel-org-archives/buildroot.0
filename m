@@ -1,146 +1,142 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37A85606A324
-	for <buildroot@archiver.kernel.org>; Mon, 26 Oct 2026 14:29:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7D6B606A31B
+	for <buildroot@archiver.kernel.org>; Mon, 26 Oct 2026 14:29:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=rfzM0E9V
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=M+geFXiq
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0C3AB40641;
-	Mon, 26 Oct 2026 14:29:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7B31280D92;
+	Mon, 26 Oct 2026 14:29:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hHlI1mZsT9zq; Mon, 26 Oct 2026 14:29:48 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 1ACD640653
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793024988;
-	b=mYygpzxIvB41WheIDka5XAxBuBazQMo5FHu8BJ7IP9jdMemTed4CB4uKIjxZpue2nSdd
-	 l8ERz3zMPu0oTESfCNlODF3qRHE3tSW2XT16WlvJwdbfP/Ri+ysc85PcX1Si2R4zQhjJX
-	 pXQspSCbP9XfAEBLyKPnKxHRQ9t+7javL/bP+YAhNuChXVfMIJHRzezGfPGRK51fr5+gQ
-	 yCl5XUNLUMJo7Ay5k0rNKHn18ygxlAubBYNk6srfKBsCKUvxN6smg7/0ptFGnLGEgr/Pt
-	 22BYhCW7y9HxOsnQ8nt7YOQgoOI/QP+u2n45crVeIAEXlHQA54/tnmA30UhmtZJvMpg==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6aVn1cnsmrer; Mon, 26 Oct 2026 14:29:49 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 8A98580DC2
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793024989;
+	b=hRc9EMjPH82yUzbkwyBo8TFw3xoOLaMrPjpbO+Q4yfZgETy20KO0XlWHsA7ww5vmBZWj
+	 MmFeeGGBz9TH94EWUHMrjWfDMtz9gfDVsiuvNltbXkDOfTPJMq+v0GHwQk3QQjSyOYBC8
+	 O9trox9q458gTiUebPx5RBUvybyBABKtCjZxzw6DsWJEdh4AsoPvcbvhYWpQw1qHrvCDL
+	 d69roKqG8ojIHyD3HUlJZ+uZFev6zdGDbhCIBjGkWxFMDuWDMWA6Jgy0KRDfvmAB7mVDW
+	 DH+LUTcfRUmNUVk9MfXrN9hK9282dQqQ+eUXxB476ow1bG4z+zEITSXEUdnA+eNnFtA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793024988;
+	c=relaxed/relaxed; t=1793024989;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
 	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 Received:To:Cc:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
-	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=vDO1CQessKnO99JL3V8rlVDJTZ6H/9t5hJmoDT9kOfc=;
-	b=kbcEGnas0pwizicauvNnDIL0g4JCaHzUv/h6prZ+3cP/jiTv8J4qzIvAH034WGNnrtS5
-	 w564GfmnBlHmeUxv4zW4tT43Py821KnwfZLWNbyNEUI1LmHuqZwQWOFvhk55Cf4q0Ix0L
-	 ORr2/Gs9qv346tzjKpWfOTZbyc818DmqpxMjKcwM3jtUltQ/wAfzTBXbD5Ef6a2ujH03F
-	 kMQvyVQvVYZVVcOEi3SmLRB4FVp/WaeDRtX6UEQU+ZdO2/kSDI+mi6GMCFS+4UB1uNro1
-	 oTYqXKRCn0llNY3+AD55MCyLdkn71KVLzG7Y7kTgPXjXDyt9N8/NIU8RlB6l/JvA2CQ==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	 Received:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=/PhdccLGz8be+sgwseV9Bl70yrHXTiv/pMl7PdtksIw=;
+	b=HMdFoV5qTLfdlPcK0GTUIhiWU1YwuCSrOzQr+gIrRoD2+jQbPN7/n0ZIkbJkfk5W98DH
+	 cfiMHqPB2mVeWTcNCzn/vJG6+vZgPvZHSCrIMMZTl4+G6i09q073070P7ISW7EuM5yMpE
+	 Wfj+SzN9Dly/b3CcS4K2ikNThVFJTHxvAOurEv1/LgcC+q8Jba6/rAsKYJ9+93fVNKuCH
+	 m2TcWB6k394c7TMPxsXNEa6pKJZ6pC2caF10x8a3y2k68IimwEHC2kfae7AaAUtImZLGq
+	 asbOC7HuyZBq0EKNOQq11VTFMDaTJx1733AwOgDXAWC4JDCr/G5uOEcBK+6irirqg7g==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793024988;
-	bh=vDO1CQessKnO99JL3V8rlVDJTZ6H/9t5hJmoDT9kOfc=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=rfzM0E9Vkv8KdIRWd6+LVaZ0YPJgxAg4DdriwYFsnSc3lSEDnaEJrWAL5oSVt1Kza
-	 JgNsgHIAtWp5YhmWo4xhoMqnSmAboaw6390pGRa+VREq5DMvwP1XHUhr/Yf34aFCc4
-	 EiGBJgEuddVv41EAXSRRIqSSVS+M8li8hZaEWuyZ4f3MYfCI78bQH1/AskwwIyEdy4
-	 53oPfWbMQKzy2a6iemIqDkgy+3gTOkc8S9RGk1qKnUYAhEo+EWZcV4atFKTmtcEL/B
-	 sj/qdcEkmGGBPv46nsntCsJr70Yx3zAJ8a14/N4kPGuXbbkf01X3wOhTdTaIUL7CBV
-	 jH6IAh1QrSepA==
+	s=default; t=1793024989;
+	bh=/PhdccLGz8be+sgwseV9Bl70yrHXTiv/pMl7PdtksIw=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=M+geFXiqxuM37C4XfUxU2KkjZTW4zd9b/qJWdfFODRrWiA5QFljFcMHkz+EOMsoBN
+	 IMp3p0F1tBvi4qiPFSL8lDY0+tAF3uQrzticasUZ7Y5HXPFsTWJIl7QaWnR6uVGtnp
+	 V8OjS8WhWIDUKTaG67C9PlhwFiwTcyoWRFS7xRHpvDrz3UKyDZ+5KdZ9EAEXICvDwb
+	 jxrzOETwdRG+8ry+VwYDOSool5/nGQhL4gzteDxy0y89nU2ptLV/tKuiraxTB1aFeE
+	 S7ueqk5yOpQ/uiS7ch5BnQF5Qg7reFvyTZM6OHFTdQRKbQMcgP3oGM4bJiQZcpmeGF
+	 r/LYyVr41BTtg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1ACD640653;
-	Mon, 26 Oct 2026 14:29:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B942D35F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8A98580DC2;
+	Mon, 26 Oct 2026 14:29:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id C85513D9
  for <buildroot@buildroot.org>; Mon, 26 Oct 2026 14:29:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AB342400F6
+ by smtp4.osuosl.org (Postfix) with ESMTP id BAA234066A
  for <buildroot@buildroot.org>; Mon, 26 Oct 2026 14:29:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rmVdQd0F98DE for <buildroot@buildroot.org>;
- Mon, 26 Oct 2026 14:29:46 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 8013940062
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qxQwK71cb8qd for <buildroot@buildroot.org>;
+ Mon, 26 Oct 2026 14:29:45 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 50F6840641
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793024985;
- b=R/J4qVQaeCBjHJ4iCgCIwNs+J/m0tf7NjXx7Nrj8sJ05YZ7MfYXkOyuncr8Okb2SPZgu
- Hz9v0ePhR92FoDSB/GFFigh5m6bgiSeuhjUL0hMGr3rMEQdwLptj8VbfX7eMGxH9GcLVq
- 0od8YTl/vwBM+THexXq79VyY+4KgzVwaXzEch1n95lVKIPmXZ5j5tMz42SCdPI9FpX2IA
- vtqGeoIprdBjS27J/++u/KHF3hV5pzYEjXgvqyrFADbtyqZktHrz998Ujmdx5T/0nelXS
- fTcpmD61t6ftkfHAlN69cR8mzQ+G11zVyl8IgH5jh1CvEQvITtln5vekLDNs26Zw6Hg==
+ b=ZIMQDNFgfD1xyVrq+2MyBm4pHq+BZMtTGoPlmZtnxEBcZa1U1VdsGVn7RaWdk7IGHSLW
+ 1t05JzykOsdUv79nRrsVjNn5GjtS82923bfS4gQG4PqDCSQjmzFLI+qjz+oc/d1Wzj5RT
+ tUo3aW5vrtYY2QxHKY58zP+H1PvODiNyFjlTOCD6lSnaNt3mOud+/+uBG9NO9kVPdC033
+ G2HJLikm5YEGzB0TJtfaaLcdVYG/JorxpRspz01GxadcRRbQJ5z0kxm9SqAbEKP3Hj/6b
+ wNcj7Dc08lOLs1EE6+AL6UVJ2acqqiKmJpexmndb3siKjCyv08TPA9mO8J7TqEcDHBw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1793024985;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
- Content-Transfer-Encoding;
- bh=3Fro0XEqcP/vy5R1olV+hWkQK7mEMA43EQoGO6JP9c0=;
- b=sAeZzxYpXRDyPGeazW4SFKtcn21O2oz15yJ2FcbjHqsYuuCAN+tU02Ysb+tEeCU5BkJA
- FmD2ghYp8amHepwn3w7tWX0s6Pkpa3ZjdOsURPF8TEkxNYi0z8Xf6ylLvRMQivmEfSRyn
- s0Q8YqFUyQcZCbW61XrLNfGDYrq/ra5F9RsyMp3V7a+GxCh2UD8xpXbYzyQ+CIvM7mGVR
- alM9GAjM9eQCsBH5RDdXWY/Nl5JfLKhq3B7HDvDC9sFNzsQCc+Vhs0viVIbzRpAzmp9he
- a8Gg0Toeup4hh/kyxwx77oXMJ1gUNzyjdzATkB9LmLCkFqy4m+GdT99voqMTqPiXLUQ==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+ bh=Y1yW8GvvQHtZ0gDNa7Jqnid6DNTDYK1JRdnqPySkOAo=;
+ b=Za1wk9gu53M79BiVdQryhOhK0xu8yGQTBPc2nGggXZMM8WDzp8ALtg/RtGs8ATwfdXEG
+ orcjlt5FIzclL1KiQBDGMA8FkNADL/O+izj5FemVIe0D3KOYJ7XScoQXzptzeDQK6X8ti
+ cBphpJh3Xhgm09ZwBGYT0tHyib2yYyV3+u6sFKzX28+3kgwlOemlaH6BkIWW05dJpVUmT
+ VxdqRPIK+ou132vRCpFdmMifFLgkr92zPdPJu5WgKEB56mytLBan1s/ZZ3chVo12WXPPb
+ LKywjFdFEs56WFxxw5ZtwdTFEu9skDCG9/rpzWkpIUXLv5JqOzYQF+yLW/GHO2OswCQ==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
  dmarc=pass header.from=mind.be;
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=VdJEyB2z; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::435"
+ header.s=google header.b=KtNLg8tU; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::332"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8013940062
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 50F6840641
  for <buildroot@buildroot.org>; Mon, 26 Oct 2026 14:29:44 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id
- ffacd0b85a97d-48e46e449e8so1009954f8f.3
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-4a3517554f7so19969465e9.2
  for <buildroot@buildroot.org>; Mon, 26 Oct 2026 07:29:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793024983; x=1793629783;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=3Fro0XEqcP/vy5R1olV+hWkQK7mEMA43EQoGO6JP9c0=;
- b=LbEt0faTAX7bdmQV9EmYYzJkcqEinm29DILdDpVpDdeR2llBBuU1AiQ1tqrt/jZvhl
- CftoVfSWAPGjJXm+NJZS/fj2K/yzD8M+NS67ppdn0ABF9il9OyTmWbkL8ZGSf/NHiCh3
- SlP9y6+JcSdFueMvbnVY2IPjPcrbgmHLZUFquvD8GpPQVrsYeCYUESETHzPhObeAvfQs
- 3kaxMVJztI/gMbzjy8nvyS65qCCWPHaF9g/Be9VtJMKa2BYP5hoRG00WIgcAWnjEARmS
- 6gDFgMrivLJJJWdbqI7577uAwfVawwc9uvJWXzaxY5grVZXcR55rTBJ3ypDZG3PM7D+S
- GpJw==
-X-Gm-Message-State: AFq9FYKtFBJNz7ZBU67JjEU9+XOsSDskzZnszTYFWD32uP5CW+8gY+iR
- 3J6TcIPVFw+dMmak5ZOknRA9W17INxOXjiFYfl+xp0U5Ny3SQrHXtyoEq7cosHRjlqp45Pvu+Xk
- ggY8h
-X-Gm-Gg: AYBFou3gL/LLj1jG2LPC4HUAVcySkj6MjyM8faUT3lXdq5nE2JLi1qdISYHOg0G5GUE
- YNdZ+4DoSP7zIhnVwtgx6C8NG0suOrP2Mnwm0XfD+QCYDqb9mlLN4MWoUfeyfS89TUtmd75zJqj
- oZJYpcKVYCJmr4hda79Se1Z01/0lBf7gw7ShvQThLD1qJkDm/VMdCQptsvBiIdJoUUEqb3q3KuD
- EcFyNAPQAAKzVJ9Pq9N8Lyj9c0zQAvfVwAf6aGohQeaSQmbmzC+MWzpnMHDJNBzq20OL2IjG2tK
- 4B9P3eJ00agOOUAI4ek4vOB/u6mV9ekoAap1hQdpTL6mhu2BwYbM4BkuVb31vBRIaMCJel7wHbY
- Yx4bcs/h9QXl7PWobn93yBt3UvEf8wCigbjKm7U7U5nAL3yF57QMdH+wkcJcaxmLA++rtx7qV4t
- Jscc/aaLvyPXWxgNlfL+re2O/oFUXAuXvK99imHOd6d4Gxn6YJmxqo9p4yMZHnTNjSBzBXK/epw
- g080UkfE4zPtiktXUK7bq9FdfhGmjlEZSuPtiMP61hvzpR8
-X-Received: by 2002:a05:6000:25f2:b0:48e:21d:7265 with SMTP id
- ffacd0b85a97d-48e3eb8d34cmr14380902f8f.34.1793024982806; 
+ d=1e100.net; s=20260707; t=1793024982; x=1793629782;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=Y1yW8GvvQHtZ0gDNa7Jqnid6DNTDYK1JRdnqPySkOAo=;
+ b=Gs59pkx2wV24FQ3zlO04HtpiYEhz2FxWbRLVFi3eWXQa2m/oPUfLz1mahs9KosUV4F
+ 2GhgqO2G9I/eqgHQfskgmWebeITiuN0EqcNNayK3o52DDKMc9BhPnIjDAXfZnay4Ax7f
+ 0ONQORAg8+dl6MFOfCCg0T+HhB2sVIs/jA8IEoBsVWJlvQf98shggwdESHktIK0AqGHm
+ Ei7qpM7RD2i9evmuCmWpUn+JL621PuXTKjh1R1FKTneTNPkx3pH40gOWgM6PhiI+6cjC
+ pZd304CAfFsZnMamgFW4oyh5O8vNgDD5+G88BTe2MM85Gmcs+rPNbd1Wd+jec66iUspQ
+ BT9w==
+X-Gm-Message-State: AFq9FYLkyToYiQVNXVqPMEaKAXX2X3fP7euYgfkDc6d8KHoSKgr9iZ5K
+ HEn8l4eb98K6fvG4xb3zfXxRmgWsOieKtV1f/ZA3JQHKzMMlOctBnzesemA3jdmx+g8Z7J3c9//
+ ChRzM
+X-Gm-Gg: AYBFou0KzhRk4wtdz/B4mE6DPadDDI6HEuK/UivR0rTbJzemQsCUjJhbtBNhGM3Hzgd
+ dv3csDmEaUWnJ7jpe0I76CSfhHUXXlVPCLArseDUqBa+wFdmq4isYlB1kRhVKtR1ofdCn+3fSKP
+ sEu4pbFzrLWmFY9Cv1Fx/Vuo+w+gmuJkW0ZJSm9t7HhTJ0ClRKLDLpH2NkIcYtXQ9d4lkP8RV0y
+ knFGJ/mATN+Tk/goOgPvW0CfkSJDaQCMWDE8TyWfhD7hwUbVJytYocuLSdiyuRtwBfuDbX8ehVt
+ fCSj65guK7sOyAY31S/X9aY9jSOhuf1qFL7BvF3zzmz5hSBiR02mTfLOHhLLiP/UwqWlAXpGfER
+ DuYk+VIRPf9vwWJuaHzxpL0KNS8uo/DtJ6pHDO6kWAVugzl9cSUxv7AKgw5W7Fw0Xs4anR5i7Xg
+ 6fWw6st0hwlXOyL1g57l+AOOh900HXm6dX4u1iAlGbs1GCGIe6VDD91BB4KNUheoneF/HXtP5v4
+ D/J122xerya9zQYPBnaAKhtnOBP3ww/OQ0aHur/UiL2JXty
+X-Received: by 2002:a05:600c:b86:b0:4a3:5a7b:6002 with SMTP id
+ 5b1f17b1804b1-4a35acab6damr128125335e9.28.1793024982312; 
  Mon, 26 Oct 2026 07:29:42 -0700 (PDT)
 Received: from arch ([79.132.229.115]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48e3ebcb9cesm17523814f8f.27.2026.10.26.07.29.42
+ ffacd0b85a97d-48e3ebcb9cesm17523814f8f.27.2026.10.26.07.29.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 26 Oct 2026 07:29:42 -0700 (PDT)
+ Mon, 26 Oct 2026 07:29:41 -0700 (PDT)
 To: buildroot@buildroot.org
 Cc: Julien Olivain <ju.o@free.fr>
-Date: Mon, 26 Oct 2026 15:29:41 +0100
-Message-ID: <20261026142941.605505-2-thomas.perale@mind.be>
+Date: Mon, 26 Oct 2026 15:29:40 +0100
+Message-ID: <20261026142941.605505-1-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261026142941.605505-1-thomas.perale@mind.be>
-References: <20261026142941.605505-1-thomas.perale@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2025.02.x 2/2] package/fluidsynth: upstream
- patch for CVE-2026-61714
+Subject: [Buildroot] [PATCH 2025.02.x 1/2] package/fluidsynth: upstream
+ patch for CVE-2026-58264
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -164,19 +160,20 @@ X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 
 This patch fixes the following vulnerability:
 
-- CVE-2026-61714:
+- CVE-2026-58264:
     FluidSynth is a software synthesizer based on the SoundFont 2
-    specifications. From 2.2.4 until 2.5.6, configuring synth.midi-
-    channels above 16 allows the MIDI player to index
-    _fluid_player_t::channel_isplaying outside its fixed-size heap
-    allocation while tracking active channels. The resulting out-of-bounds
-    reads and writes invoke undefined behavior and may compromise
-    confidentiality, integrity, or availability. No crafted MIDI file is
-    required because the unsafe condition is created by the channel-count
-    configuration itself. Keeping synth.midi-channels at its default value
-    of 16 avoids the vulnerable path. This issue is fixed in version
-    2.5.6.
-    https://www.cve.org/CVERecord?id=CVE-2026-61714
+    specifications. From 1.1.2 until 2.5.6, the FluidSynth command handler
+    accepts a pitch_bend_range command whose channel argument is not
+    bounds checked before the supplied value is written through the
+    selected synth channel. An out-of-range channel can therefore cause an
+    out-of-bounds heap write, leading to denial of service or possible
+    code execution. The issue is remotely reachable when the TCP server is
+    enabled through new_fluid_server() or fluidsynth -s, and it is locally
+    reachable through malicious commands delivered to the FluidSynth shell
+    on standard input. Applications that do not use the shell, command
+    handler, or TCP server are not affected. This issue is fixed in
+    version 2.5.6.
+    https://www.cve.org/CVERecord?id=CVE-2026-58264
 
 This vulnerability has been fixed on the master branch by the following
 package bump [1].
@@ -185,75 +182,53 @@ package bump [1].
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/fluidsynth/0003-CVE-2026-61714.patch | 48 ++++++++++++++++++++
- package/fluidsynth/fluidsynth.mk             |  3 ++
- 2 files changed, 51 insertions(+)
- create mode 100644 package/fluidsynth/0003-CVE-2026-61714.patch
+ package/fluidsynth/0002-CVE-2026-58264.patch | 26 ++++++++++++++++++++
+ package/fluidsynth/fluidsynth.mk             |  3 +++
+ 2 files changed, 29 insertions(+)
+ create mode 100644 package/fluidsynth/0002-CVE-2026-58264.patch
 
-diff --git a/package/fluidsynth/0003-CVE-2026-61714.patch b/package/fluidsynth/0003-CVE-2026-61714.patch
+diff --git a/package/fluidsynth/0002-CVE-2026-58264.patch b/package/fluidsynth/0002-CVE-2026-58264.patch
 new file mode 100644
-index 0000000000..5fa7a5ad1e
+index 0000000000..753ca02e36
 --- /dev/null
-+++ b/package/fluidsynth/0003-CVE-2026-61714.patch
-@@ -0,0 +1,48 @@
-+From 772702e00cc6acc7c607efb40283e2269211effc Mon Sep 17 00:00:00 2001
++++ b/package/fluidsynth/0002-CVE-2026-58264.patch
+@@ -0,0 +1,26 @@
++From 762a3bd39a431cd45abf3bbcce7286c87909d087 Mon Sep 17 00:00:00 2001
 +From: derselbst <tom.mbrt@googlemail.com>
-+Date: Sat, 27 Jun 2026 08:51:10 +0200
-+Subject: [PATCH] Fix heap buffer overflow in MIDI player GHSA-976m-35rw-h3m6
++Date: Fri, 19 Jun 2026 20:11:54 +0200
++Subject: [PATCH] Fix a heap-based buffer overrun in pitch_bend_range command
 +
-+CVE: CVE-2026-61714
-+Upstream: https://github.com/FluidSynth/fluidsynth/commit/772702e00cc6acc7c607efb40283e2269211effc
++Upstream: https://github.com/FluidSynth/fluidsynth/commit/762a3bd39a431cd45abf3bbcce7286c87909d087
++CVE: CVE-2026-58264
 +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 +---
-+ src/midi/fluid_midi.c | 9 +++++----
-+ 1 file changed, 5 insertions(+), 4 deletions(-)
++ src/bindings/fluid_cmd.c | 3 +--
++ 1 file changed, 1 insertion(+), 2 deletions(-)
 +
-+diff --git a/src/midi/fluid_midi.c b/src/midi/fluid_midi.c
-+index 6a501b277..39c06c910 100644
-+--- a/src/midi/fluid_midi.c
-++++ b/src/midi/fluid_midi.c
-+@@ -1617,10 +1617,11 @@ fluid_track_send_events(fluid_track_t *track,
-+         {
-+             if(player->playback_callback)
-+             {
-++                int *chan_is_playing = &player->channel_isplaying[event->channel % MAX_NUMBER_OF_CHANNELS];
-+                 player->playback_callback(player->playback_userdata, event);
-+-                if(event->type == NOTE_ON && event->param2 != 0 && !player->channel_isplaying[event->channel])
-++                if(event->type == NOTE_ON && event->param2 != 0 && !*chan_is_playing)
-+                 {
-+-                    player->channel_isplaying[event->channel] = TRUE;
-++                    *chan_is_playing = TRUE;
-+                 }
-+             }
-+         }
-+@@ -2138,7 +2139,7 @@ fluid_player_callback(void *data, unsigned int msec)
-+     {
-+         if(fluid_atomic_int_get(&player->stopping))
-+         {
-+-            for(i = 0; i < synth->midi_channels; i++)
-++            for(i = 0; i < MAX_NUMBER_OF_CHANNELS; i++)
-+             {
-+                 if(player->channel_isplaying[i])
-+                 {
-+@@ -2186,7 +2187,7 @@ fluid_player_callback(void *data, unsigned int msec)
-+         seek_ticks = fluid_atomic_int_get(&player->seek_ticks);
-+         if(seek_ticks >= 0)
-+         {
-+-            for(i = 0; i < synth->midi_channels; i++)
-++            for(i = 0; i < MAX_NUMBER_OF_CHANNELS; i++)
-+             {
-+                 if(player->channel_isplaying[i])
-+                 {
++diff --git a/src/bindings/fluid_cmd.c b/src/bindings/fluid_cmd.c
++index 19cb78216..76723a2ba 100644
++--- a/src/bindings/fluid_cmd.c
+++++ b/src/bindings/fluid_cmd.c
++@@ -795,8 +795,7 @@ fluid_handle_pitch_bend_range(void *data, int ac, char **av, fluid_ostream_t out
++ 
++     channum = atoi(av[0]);
++     value = atoi(av[1]);
++-    fluid_channel_set_pitch_wheel_sensitivity(handler->synth->channel[channum], value);
++-    return FLUID_OK;
+++    return fluid_synth_pitch_wheel_sens(handler->synth, channum, value);
++ }
++ 
++ int
 diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
-index 747aa5c1eb..22c4e96563 100644
+index bde3f416a7..747aa5c1eb 100644
 --- a/package/fluidsynth/fluidsynth.mk
 +++ b/package/fluidsynth/fluidsynth.mk
-@@ -18,6 +18,9 @@ FLUIDSYNTH_IGNORE_CVES += CVE-2025-56225
- # 0002-CVE-2026-58264.patch
- FLUIDSYNTH_IGNORE_CVES += CVE-2026-58264
+@@ -15,6 +15,9 @@ FLUIDSYNTH_DEPENDENCIES = libglib2
+ # 0001-Fix-a-nullpointer-dereference-during-legato-mode.patch
+ FLUIDSYNTH_IGNORE_CVES += CVE-2025-56225
  
-+#0003-CVE-2026-61714.patch
-+FLUIDSYNTH_IGNORE_CVES += CVE-2026-61714
++# 0002-CVE-2026-58264.patch
++FLUIDSYNTH_IGNORE_CVES += CVE-2026-58264
 +
  ifeq ($(BR2_PACKAGE_FLUIDSYNTH_ALSA_LIB),y)
  FLUIDSYNTH_CONF_OPTS += -Denable-alsa=1
