@@ -2,142 +2,130 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 422A7606A31A
-	for <buildroot@archiver.kernel.org>; Tue, 27 Oct 2026 13:39:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0C4606A331
+	for <buildroot@archiver.kernel.org>; Tue, 27 Oct 2026 13:53:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=snNCtUrA
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=bpk24mUF
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 178FB40728;
-	Tue, 27 Oct 2026 13:39:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 443D740721;
+	Tue, 27 Oct 2026 13:53:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bF11ZszBu_CY; Tue, 27 Oct 2026 13:39:25 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 155944061D
+ id 8vUKhs0R8QJP; Tue, 27 Oct 2026 13:53:19 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 4AB2940740
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793108365;
-	b=HtA0OsDrOsdrmsFd7JTMuIUDIoaRvOdywvJCuZXooFKgNrcKWpXeX4fltnJVhiywS9zL
-	 OrpE0V/WPWzPJGoQkFRVgVGSF5mUYHSxOXUnXXjO16Bs3NduwCKSArYAX7ifSwZsvPNDp
-	 w0QoH8lfqpmKV/4J6gZDqZxtMcAglHH4MwZ0H0hAXNojBtvUwp41JbsXmvCCc4iDJn5E+
-	 YBQzdXClnLfzkiwSmq+0srZ5rA+sbYv79Ko9Yn9hkzjgCuza4Nmc04kuaSQ3PzKwu5+Z/
-	 G2maIkDP+L8cTAf7QqNPbkGZIxBf9tG0JSVZj/dkMh8ar6l3JkY9I+9EbTMhbpqh9XA==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793109199;
+	b=lgx4bKwjNLlKPEOoxhWzW4J2LFGfW7WuDHnDgU2GV3jGVoJXPUCFXRkLwQ3XHwz8cljO
+	 9ydaqTOwu9E3YuMofQTJWzlDks+kus/nBoliSdKZuO8BL6AlwAhv8eO0U3jE4121nMuy1
+	 AOLJgu8p60wp+Q6Bz8zgYcxVpjl1TLHHIT0rFGYAWKVOJ7l9kbTPBzyY9VXJ7G5wiWzZi
+	 b0p8GtaN6jj1IfTtkLg40cw2mpkBUntXrCJdCBmOS5zJgCUX/L6ZL7aJYnqfmZUzxy4G0
+	 lTPxfMFcmWl5Lo32AcKSDWPWhALoHeIha2zPnCK+HCTcci606IIMjTVr5JQUiGPrK5g==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793108365;
+	c=relaxed/relaxed; t=1793109199;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 Received:To:Date:Message-ID:X-Mailer:MIME-Version:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=73gIHAFvh72A6yB1UiDPE/8pYwAx6IzORYuhZ/vSJMQ=;
-	b=LlspjkCvLX7vfTMBBGhivKuupYUc9J1c5uhWowBxOMF7uv+4dBmhC1rJRGT/ruIsSXlj
-	 a6+ScAP1wP186tRqi7o1Q1w0RgGvsDC43DcUTdyFTCJ40wk8s+tIJsZMjV0M1WU29wuqm
-	 w8EuwV3YTz15Kwmvte83J9la3av6gD1Hun+6RTm/TyzQBvxG2bqzNpnya6HPIi8SLTL6O
-	 iKkSku58rOENwTCmbPYOJQcWo/eKDT1r7+/fGJSK6YrsJj3BK7tlCd0dKVv+4VSEUlOGi
-	 ydhJhwEyksLrtuqswoLr2CnlB5D4TasppOQsc9EXUUHPWPo1SCoKcjOkA7uGFrW4+/A==
+	 Message-ID:Date:MIME-Version:User-Agent:To:Cc:References:
+	 Content-Language:In-Reply-To:X-Last-TLS-Session-Version:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 Content-Transfer-Encoding:Content-Type:Errors-To:Sender;
+	bh=rxFk0UCr50q9LEfuj3BNoajHdh0CkDRd0L4IQQCRXMQ=;
+	b=qhbLTQCQ81CcdiwEMZcywdkQNsYvYIRcCNlf7BQS/NB4XVNXyl6cbHxvaanC9CBPOj7X
+	 1JDHbrKw81MHWuMoCZeKCJgSZH1Gqr+0aac8qHLbnfSW7K4hoIhyl1qhuHpNhiibRRMjA
+	 XJ6N3G/YlaZJ3W/k11Kzx93qo6KVfVLnYCLeovvwGigWOKh7SxLwwSHafGYlpcO6omymW
+	 JdZSyc9Z5iTcMvRY6Izy7/kFc5RSnbpoxVz54q+FuunIi1PktbKc2uxehNeLNNg+aXg8A
+	 nAKCtsOtwBBcsKCe+3tBrailiepRbrXNd66aSZ7pgmud1cwLVDseiGFhIMp6cwsKZFw==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793108365;
-	bh=73gIHAFvh72A6yB1UiDPE/8pYwAx6IzORYuhZ/vSJMQ=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=snNCtUrAFyg4RecdB7kWxYW5+DHFnlsDoUHTQ5a03cXcEF9gtABfFNJKCD81AIcA1
-	 B7vcVC9ihMYCOsmCTtTzV+lgrwHfpQSwIbDzDS0XZ9NYmpjlqQ9FO0pcPT9ifB8MsZ
-	 eCgHP66m1YUsNHcR7mpl7wt0b5QJcDGhcMHzhhm4oruimaOoRWxjt6QcinYJhRMCDX
-	 EnTTnSA8aKMKi40aKiHWLBAPFrfgmBjkpbMRv/4kSN7Pavl6KN+sBL9cpew6KNuRPs
-	 nBI0wfBQtv++NowAlsXcg/w44EKmluVYEOvgdCEC55KMEE9qxlqqNyGxROeLg8sqkL
-	 pgM9VRstbIEgQ==
+	s=default; t=1793109199;
+	bh=rxFk0UCr50q9LEfuj3BNoajHdh0CkDRd0L4IQQCRXMQ=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=bpk24mUFMy4WNJi1r/j2KqBGEFcrnfGFBrV70JLASY7QBPgnhVgAbLFbyxgngTmu6
+	 ygfJkIkk91x6uBHK0TcxtlAq9Q9KLt0vtSR6iqki+a6VSGmAagEtxwJiC/IUmb0QXh
+	 AcC9cpeg0M6XhyZjNPCQGgO+1m1ZTNpL9g8pa5nUztl+a7+VIMz6zn1w8sf3+okSOq
+	 5bZ/jn0djfApTX2Ejxa7VAI3XcnCbLoGWuoJZ+0jX9BhFDWD+nSjDxU/kbeDtb2JSi
+	 m4P9sQsrbyBwkJDliVXOAIYfRuaogCT+sFyef9TlfrQF8KAT/jUacK26sNUfdzlA1r
+	 a6eTf+wGbz9Jg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 155944061D;
-	Tue, 27 Oct 2026 13:39:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 709864BC
- for <buildroot@buildroot.org>; Tue, 27 Oct 2026 13:39:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4AB2940740;
+	Tue, 27 Oct 2026 13:53:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 824974BC
+ for <buildroot@buildroot.org>; Tue, 27 Oct 2026 13:53:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 56A38402A4
- for <buildroot@buildroot.org>; Tue, 27 Oct 2026 13:39:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6504080C0F
+ for <buildroot@buildroot.org>; Tue, 27 Oct 2026 13:53:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5LmLb8WSUM5V for <buildroot@buildroot.org>;
- Tue, 27 Oct 2026 13:39:22 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org E213340261
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793108362;
- b=N9vHERa5W+AK8gZY7pzDpyVDEinTSEHGuXqlCwdw2WBJHfPWk542w1Ke1Qnk9fkTX9Ju
- W5B00ybDkdiV6w9/mroW/fhvYVgcydVz26VRas8kHF90JQV7RBiiERODBouKDPFeN15NI
- 3GQOXVGF0Wrwqb/OX3vdDpilHFYhrMUCzBDfZuRdZ3ZxfwOMkODf6hmGAA+MvmIEKt3w1
- 0Aa98Xboebd3Q1kTnCUKt32vSuqi0h6kJ1LwahHsdW6OV5wNjtKnheSaSC2OcDLzcMVhV
- UKaACFdwQHqebfovkUMox7tzSULBfwzv3wJpZcQG3jygRjNCgrZ+AnG/uCnNu4TJL+A==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3GZFC1KvP35l for <buildroot@buildroot.org>;
+ Tue, 27 Oct 2026 13:53:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 53E9880BE0
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793109196;
+ b=j+LeHXZxYNiEYOfPkSghk0YmiE379u9aK0r4inXVGOc3HIqYQsqnospNDaCrb4F1LoVC
+ YWeaaO4OYJIuC99nlWvquQQ4IiGusIgMGoVXuVbW9EWOlQlX+Mnwzz+WGXiFXZ+UsJuK6
+ ymKNvPS69KO7czD2IlTaaRwCUUttMpnZW63TWIy1RPDVN6VjLJKZSCp2uJ/Fs+I5FOv5S
+ 3Uey17eyf0ffbw6GadM0WMSmjpjsIbCE6oC86N5qhF2cKilRy1KfLz27bcsKSVWJjT5RZ
+ FN7B7R1x19HzyKy8zuoGveWlpEAk3ejZPsSzXfMvhYu3cvFjONNLACf09Tw+sYjIFvg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793108362;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
- bh=LnRRdYz8MxjT4+5zMxbziLyLshiPieISEvBnGaFqgq0=;
- b=BLwS+H27MoOehplSN7OzZoLG1Gz4MwvmPO3yEJsEsoqY4oQzxcVvS7tmVr2es80XhX8f
- FICbIF2Mi1+frwXsUgn86G52x1+2D7uHfIA+cTwsQ5ekw0NeJnwVaeL58TCw5fkIyt8ZA
- iTqAXa5VEMBPItkzDcfvnTFwXQlormpHt6WFZDIlCIXpsgz9cDVbZVNZl6vFUmlxWnY6K
- aEIpr+ecKzJuDpnmT1VPYHaUCmjPr6w3rvAisN2DHW1tgbEYkZGBNkRwgHJBymc3Ghsvo
- 1U4I0ZwDqE+u/ZgQaG81KlRSpDYR1wlJhftaz8+10JIMEXcleA/kfgJASeY3uLcG2rQ==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
- dmarc=pass header.from=mind.be;
- dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b="f/qxF5Ie"; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::333"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
- envelope-from=titouan.christophe@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E213340261
- for <buildroot@buildroot.org>; Tue, 27 Oct 2026 13:39:20 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-4a2084d62cdso32568115e9.1
- for <buildroot@buildroot.org>; Tue, 27 Oct 2026 06:39:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793108359; x=1793713159;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=LnRRdYz8MxjT4+5zMxbziLyLshiPieISEvBnGaFqgq0=;
- b=ZdvpraNBEIsvnjXnFoZKUkQQMWoJOzOmcsDBm9cR3MBLF/JAXkj6PkCBUjwsl/4CGl
- NWxXdIMcWaHfr9dQARCU9BnrTGPmCirApbGAPXQqO6TQ61XQ1O3mjQ9uKGQ90yV6nwjM
- kW2ci7b3OSGmMERvGj3hQROK9gPXhfU9W0+nX9bh5P5LryZR4jxcFSW4Bxv3UW17IlA3
- HDUsc8/56gE2MHd+hIhmYKZvGx9hST12G1SMO57c30sKtXtvtGx4iR9yIY+PMchwbmJe
- 9OqnK31YfXnbQRdMplu7VStTJxQvm6oTnIgKbDJnUm6WpeVHdOwTHHZGNMqTeDVYE3jt
- shrQ==
-X-Gm-Message-State: AFq9FYIBo7XJ+w4hITDIKu1OJEYyEQFIyzRXTMAaGltQrypJKPYvZHfi
- 2/43k37+PXNPNbTRCLzgb3YyKvZN71lCCYbQvBC+zOdI9joNH9GPvYDhTcs+DJ0kpeyXJ/3nT4v
- eO7Nb
-X-Gm-Gg: AYBFou3sSgbRacgmPE0o6VdURBHDkhFIMRwetmgPbAKy6KDXAvaiKvaIQC7gQayWXYd
- HUdcM3MzGP9H13wkRUNwhoLUH8DjF3gIr5H9xfJ2+7wo419OpvaFWgMC5WunTf529uF7R/FEkdx
- 3VxDymsuJNsAZYQJ59KAklewkQ1aN3/3R33z+R5IT68Sgl5zQ+LT6wcMk+0cmYQLQyxinCvjv86
- AXjomE6/J5DyIae0mu/N9vaiTCeqmh8u1yU19NQVeJg/WzC0uwi9FHK/5D/JaYSA8HRI/d9Goaz
- qHeoCIK/BGliMUSIbPh34kLm7X8lLITgfQd9gVcbdO7zLxRxDwYXvKYnx/N5szHr7+yjGFwCrbV
- IuqEsrHP/3N202w2XbDFbLB9ul+onpT/PkYoBtYxtqBlFy5WlCj4MUYHr5+vHShX5AaCoLwWkLL
- LSYkkcLceTgy8Jra3McHvxarjCqbgBMJeVT2/5JVgegg1MVU6DOhOBPgc6deh2z6xuhazV7iyar
- TI5jcEPHBL/D1nXp11PYRlIDh6i1rY7uXwt++GoYhKPNGu0CD3UiVPhlee1ga0x2s25fZQRfbFy
- zta+4HKXywIMFtjyeZOnMWY+Mst/hQr/
-X-Received: by 2002:a05:600c:310b:b0:4a2:150f:1607 with SMTP id
- 5b1f17b1804b1-4a35ac9495emr186503875e9.13.1793108358977; 
- Tue, 27 Oct 2026 06:39:18 -0700 (PDT)
-Received: from dragon.home (154.186-200-80.adsl-dyn.isp.belgacom.be.
- [80.200.186.154]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4a35a0bb112sm286133365e9.8.2026.10.27.06.39.18
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 27 Oct 2026 06:39:18 -0700 (PDT)
-To: buildroot@buildroot.org
-Date: Tue, 27 Oct 2026 14:38:54 +0100
-Message-ID: <20261027133854.3175088-1-titouan.christophe@mind.be>
-X-Mailer: git-send-email 2.55.0
+ c=relaxed/relaxed; t=1793109196;
+ h=Received-SPF:Received:DKIM-Signature:Message-ID:Date:MIME-Version:
+ User-Agent:Subject:To:Cc:References:From:Content-Language:In-Reply-To:
+ Content-Type:Content-Transfer-Encoding:X-Last-TLS-Session-Version;
+ bh=cf4hwkCi2d0jNE42C0hzM4uI4/ifem61abcFy0tinKQ=;
+ b=FDGFrQuMIqLg6zyLVq5YOkkjuwEmNcvED7CoCUCocapappbJma/BXrDpdM3P3sZvDNuH
+ lMP2k6Av2qt8kWYBfEtnEPuGuvvuD902E9AEz+BkiGXNx2/Dvpyf785j3YfZWxjjLoVnl
+ hQIlR070M71vDvPA26K4cPr0LszGXFUmJX8CrCs2OZFSB0cLaRUX9pMKC6Nma8BD9VQ7W
+ fzl10hq/V8xuQyTkZwaxbOkOVTeVtblo/W/GMPAjmUB75dY9bMc9gddwGuWs2+RNcilLP
+ pmR44gn8RLOcxj9DrJMjf+8N8E81CxPQuQvT0bn2DU9o54BZ0hA74hV3lsmExaZ3OMw==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ dmarc=pass header.from=rnout.be;
+ dkim=pass header.d=rnout.be header.i=@rnout.be header.a=rsa-sha256
+ header.s=dkim header.b=bEhnXS7c; 
+ arc=none smtp.remote-ip=79.99.201.12
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=79.99.201.12;
+ helo=mail.nubo.coop; envelope-from=arnout@rnout.be; receiver=<UNKNOWN> 
+Received: from mail.nubo.coop (mail.nubo.coop [79.99.201.12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 53E9880BE0
+ for <buildroot@buildroot.org>; Tue, 27 Oct 2026 13:53:15 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 0C8BEB97A2D8; Tue, 27 Oct 2026 14:53:05 +0100 (CET)
+Message-ID: <092b4771-dc93-49eb-9803-ccfcf9ccea2b@rnout.be>
+Date: Tue, 27 Oct 2026 14:53:03 +0100
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH for 2025.02.x] package/python-botocore: add
- patch for eMudhra leaked CAs
+User-Agent: Mozilla Thunderbird
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: buildroot@buildroot.org, Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Gary Bisson <bisson.gary@gmail.com>, =?UTF-8?B?SsOpcsO0bWUgUG91aWxsZXI=?=
+ <jezz@sysmic.org>, Bernd Kuhls <bernd@kuhls.net>,
+ Thomas Perale <thomas.perale@mind.be>,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>,
+ Refik Tuzakli <tuzakli.refik@gmail.com>,
+ Francois Perrad <francois.perrad.86@gmail.com>,
+ Petr Vorel <petr.vorel@gmail.com>,
+ Spenser Gilliland <spenser@gillilanding.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Pascal de Bruijn <p.debruijn@unilogic.nl>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+References: <20261023214807.2151753-1-florian.fainelli@broadcom.com>
+ <at0YSHfI0gcUfMtX@windsurf>
+ <fceb1e19-e9d3-4342-b1c3-d10e175dc47d@broadcom.com>
+ <auCcCZK-kGH25_uM@windsurf>
+Content-Language: en-GB, fr-BE
+In-Reply-To: <auCcCZK-kGH25_uM@windsurf>
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH 00/23] Support building the Linux kernel out
+ of tree with LINUX_OVERRIDE_SRCDIR
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -147,101 +135,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
-Cc: James Hilliard <james.hilliard1@gmail.com>, thomas.perale@mind.be,
- =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@rnout.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-7.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MAILING_LIST_MULTI,
+	SPF_HELO_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
+	version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-botocore commit 0a6c7b6b3e794e865193dee23c68adfadb6b9c04, available from
-version 1.43.117 onward (see [1]), blacklists the roots that signed
-the compromised eMudhra intermediate CAs ([2]).
 
-Since LTS & Stable versions are several versions behind, take this patch
-instead of bumping across (potentially breaking) versions.
 
-(alternative to commit fd9c348c227e9560a45caaeaa2cb026a8cf8043d)
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
----
-Note: this patch applies to both 2025.02.x (LTS) and 2026.08.x (Stable)
----
- ...-root-from-vendored-cert-bundle-3838.patch | 57 +++++++++++++++++++
- 1 file changed, 57 insertions(+)
- create mode 100644 package/python-botocore/0001-remove-comodo-aaa-root-from-vendored-cert-bundle-3838.patch
+On 27/10/2026 13:44, Thomas Petazzoni wrote:
+> On Mon, Oct 26, 2026 at 02:49:53PM -0700, Florian Fainelli wrote:
+> 
+>>> If we were to merge something like this, we would need to switch to
+>>> out-of-tree build completely, not just for the specific
+>>> <pkg>_OVERRIDE_SRCDIR situation.
+>>
+>> I wonder if this makes sense however, not arguing about it, but trying to
+>> think whether it brings anything?
+> 
+> For me, it's mostly a matter of consistency, i.e all packages and
+> workflows work the same "way". I'd find it odd that specifically for
+> the Linux kernel package, specifically for <pkg>_OVERRIDE_SRCDIR,
+> there is "special" mechanism in place.
+> 
+> You're focused on the Linux kernel package because this is what you
+> and your colleagues are primarily hacking one, but I would imagine
+> that another very significant use case of <pkg>_OVERRIDE_SRCDIR is the
+> development of end-user applications, for which the Buildroot users
+> have the same need of quickly iterating between making changes to the
+> code, building and testing on the target. They use
+> <pkg>_OVERRIDE_SRCDIR for that, and would also benefit from
+> out-of-tree build.
 
-diff --git a/package/python-botocore/0001-remove-comodo-aaa-root-from-vendored-cert-bundle-3838.patch b/package/python-botocore/0001-remove-comodo-aaa-root-from-vendored-cert-bundle-3838.patch
-new file mode 100644
-index 0000000000..515257271f
---- /dev/null
-+++ b/package/python-botocore/0001-remove-comodo-aaa-root-from-vendored-cert-bundle-3838.patch
-@@ -0,0 +1,57 @@
-+From: Shaan Majid <70789625+shaanmajid@users.noreply.github.com>
-+Date: Tue, 20 Oct 2026 14:51:25 -0700
-+Subject: Remove Comodo AAA root from vendored cert bundle (#3838)
-+
-+Eight eMudhra intermediate CAs whose private keys were compromised chain to AAA Certificate Services through Sectigo cross-signs (https://emudhra.we-have-a-problem.com/). Mozilla removed the root's TLS trust in 2025, and certifi dropped it in 2025.4.26. The bundle contains no emSign roots.
-+
-+---
-+Upstream: https://github.com/boto/botocore/commit/0a6c7b6b3e794e865193dee23c68adfadb6b9c04
-+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
-+---
-+ botocore/cacert.pem | 33 ---------------------------------
-+ 1 file changed, 33 deletions(-)
-+
-+diff --git a/botocore/cacert.pem b/botocore/cacert.pem
-+index 68d899399d..52ef539353 100644
-+--- a/botocore/cacert.pem
-++++ b/botocore/cacert.pem
-+@@ -356,39 +356,6 @@ LBfQdCVp9/5rPJS+TUtBjE7ic9DjkCJzQ83z7+pzzkWKsKZJ/0x9nXGIxHYdkFsd
-+ 398znM/jra6O1I7mT1GvFpLgXPYHDw==
-+ -----END CERTIFICATE-----
-+
-+-# Issuer: CN=AAA Certificate Services O=Comodo CA Limited
-+-# Subject: CN=AAA Certificate Services O=Comodo CA Limited
-+-# Label: "Comodo AAA Services root"
-+-# Serial: 1
-+-# MD5 Fingerprint: 49:79:04:b0:eb:87:19:ac:47:b0:bc:11:51:9b:74:d0
-+-# SHA1 Fingerprint: d1:eb:23:a4:6d:17:d6:8f:d9:25:64:c2:f1:f1:60:17:64:d8:e3:49
-+-# SHA256 Fingerprint: d7:a7:a0:fb:5d:7e:27:31:d7:71:e9:48:4e:bc:de:f7:1d:5f:0c:3e:0a:29:48:78:2b:c8:3e:e0:ea:69:9e:f4
-+------BEGIN CERTIFICATE-----
-+-MIIEMjCCAxqgAwIBAgIBATANBgkqhkiG9w0BAQUFADB7MQswCQYDVQQGEwJHQjEb
-+-MBkGA1UECAwSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHDAdTYWxmb3JkMRow
-+-GAYDVQQKDBFDb21vZG8gQ0EgTGltaXRlZDEhMB8GA1UEAwwYQUFBIENlcnRpZmlj
-+-YXRlIFNlcnZpY2VzMB4XDTA0MDEwMTAwMDAwMFoXDTI4MTIzMTIzNTk1OVowezEL
-+-MAkGA1UEBhMCR0IxGzAZBgNVBAgMEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UE
-+-BwwHU2FsZm9yZDEaMBgGA1UECgwRQ29tb2RvIENBIExpbWl0ZWQxITAfBgNVBAMM
-+-GEFBQSBDZXJ0aWZpY2F0ZSBTZXJ2aWNlczCCASIwDQYJKoZIhvcNAQEBBQADggEP
-+-ADCCAQoCggEBAL5AnfRu4ep2hxxNRUSOvkbIgwadwSr+GB+O5AL686tdUIoWMQua
-+-BtDFcCLNSS1UY8y2bmhGC1Pqy0wkwLxyTurxFa70VJoSCsN6sjNg4tqJVfMiWPPe
-+-3M/vg4aijJRPn2jymJBGhCfHdr/jzDUsi14HZGWCwEiwqJH5YZ92IFCokcdmtet4
-+-YgNW8IoaE+oxox6gmf049vYnMlhvB/VruPsUK6+3qszWY19zjNoFmag4qMsXeDZR
-+-rOme9Hg6jc8P2ULimAyrL58OAd7vn5lJ8S3frHRNG5i1R8XlKdH5kBjHYpy+g8cm
-+-ez6KJcfA3Z3mNWgQIJ2P2N7Sw4ScDV7oL8kCAwEAAaOBwDCBvTAdBgNVHQ4EFgQU
-+-oBEKIz6W8Qfs4q8p74Klf9AwpLQwDgYDVR0PAQH/BAQDAgEGMA8GA1UdEwEB/wQF
-+-MAMBAf8wewYDVR0fBHQwcjA4oDagNIYyaHR0cDovL2NybC5jb21vZG9jYS5jb20v
-+-QUFBQ2VydGlmaWNhdGVTZXJ2aWNlcy5jcmwwNqA0oDKGMGh0dHA6Ly9jcmwuY29t
-+-b2RvLm5ldC9BQUFDZXJ0aWZpY2F0ZVNlcnZpY2VzLmNybDANBgkqhkiG9w0BAQUF
-+-AAOCAQEACFb8AvCb6P+k+tZ7xkSAzk/ExfYAWMymtrwUSWgEdujm7l3sAg9g1o1Q
-+-GE8mTgHj5rCl7r+8dFRBv/38ErjHT1r0iWAFf2C3BUrz9vHCv8S5dIa2LX1rzNLz
-+-Rt0vxuBqw8M0Ayx9lt1awg6nCpnBBYurDC/zXDrPbDdVCYfeU0BsWO/8tqtlbgT2
-+-G9w84FoVxp7Z8VlIMCFlA2zs6SFz7JsDoeA3raAVGI/6ugLOpyypEBMs1OUIJqsi
-+-l2D4kF501KKaU73yqWjgom7C12yxow+ev+to51byrvLjKzg6CYG1a4XXvi3tPxq3
-+-smPi9WIsgtRqAEFQ8TmDn5XpNpaYbg==
-+------END CERTIFICATE-----
-+-
-+ # Issuer: CN=QuoVadis Root Certification Authority O=QuoVadis Limited OU=Root Certification Authority
-+ # Subject: CN=QuoVadis Root Certification Authority O=QuoVadis Limited OU=Root Certification Authority
-+ # Label: "QuoVadis Root CA"
--- 
-2.55.0
+  This series provides exactly that: if they set FOO_SUPPORTS_OUT_OF_TREE = YES 
+in the .mk file, then FOO_OVERRIDE_SRCDIR will skip the rsync. At least that's 
+what the manual says.
+
+  The only inconsistency that FOO_SUPPORTS_OUT_OF_TREE is only used if 
+FOO_OVERRIDE_SRCDIR is also set, not for "normal" builds.
+
+  Regards,
+  Arnout
+
+> Even though I admit the size of the Linux kernel
+> code base makes out-of-tree build even more appealing. But I would
+> find it strange that users experience a different behavior of
+> Buildroot depending on the package for which they use
+> <pkg>_OVERRIDE_SRCDIR.
+> 
+> Thomas
 
 _______________________________________________
 buildroot mailing list
