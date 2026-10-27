@@ -1,169 +1,134 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E01F606A333
-	for <buildroot@archiver.kernel.org>; Tue, 27 Oct 2026 14:42:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D877606A31B
+	for <buildroot@archiver.kernel.org>; Tue, 27 Oct 2026 14:54:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=LepboRjR;
-	dkim=fail reason="signature verification failed" (1024-bit key, unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google header.b=YcjdJE7q
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=GqAi5B4l;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b=e6uHLPu/
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4457B80DFA;
-	Tue, 27 Oct 2026 14:42:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0F69D607A6;
+	Tue, 27 Oct 2026 14:54:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fHASYkzGtA-T; Tue, 27 Oct 2026 14:42:10 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 29E3180E12
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793112130;
-	b=buMNnZSzyar0IXkAyxRcHVEr0LaardsbLm2NFyUurOeFGFkSBuFzru/0qibKhJMt1B8P
-	 qlxwuBFdx/aNgy1mWNPc5zyuJ9iDgKNkfz/WcOMXHOfwHb6sk2R6qV5sJmLrUeHAjm+Z0
-	 dtTdrLa749tSUHRcKTvsVc+98E85BbBEoov2DGHDnGgOvQdmpnaWod5WFroJgRoLgdV2k
-	 dcwMfv+OpOC8++USzydFjESRr+E9FolkXytT540q8cyodnGX5Buya0fMSBFjf2XpPUyCE
-	 Q7nUsewSvjqY8WXYvqZGwR61BMjXdIZw68NQ8w88bntVbzVHFkl6gK9an1UvmVn5y2g==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tA35jczfI7MO; Tue, 27 Oct 2026 14:53:59 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 2532560793
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793112839;
+	b=E8aYm2l7hZIWQBk7CfHSWd//VVq8or4uCCumka0q2eYVeTjyVJ8MlsDW5oUxnVWCOM0N
+	 NcXSoy25RS5hZi/gN4LK4TFurdiXkXgp4lBwuuJVYINIruqW613+0HsSmTj0/CWHweZ+/
+	 5hOFieU7j0ruTzH6hm5IAG7f2HfSRj9NRM/QsIYJye5d9ePnsgeNGHvxG+EsKLi3r+D8b
+	 +lo+56WlPJNcASFUxmbKma7PgEWLDVv1UTcADhsgnBXOFiRDW3WPrQQo7Ka/HLmzmBMWp
+	 JW7HjBdl6zYXd0ZYSmFObxvnCmlfhxuMuiX8zD8cqVGp1TqSSmC69ZfIBjJvheSc64g==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793112130;
+	c=relaxed/relaxed; t=1793112839;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:In-Reply-To:
-	 References:MIME-Version:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 DKIM-Signature:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
+	 X-CMAE-Envelope:Subject:X-BeenThere:X-Mailman-Version:Precedence:
+	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
 	 Sender;
-	bh=CZZ1myUwQEWpT6tuXuLHoJ1yXFsWjU4jb9GTCK9wkFw=;
-	b=Pj90BpL0MxtbI7dMZRE42vMa6KCu0lWfWGb+jnb5NM00LEWrIA2e246xwt3sr/FRlorH
-	 SVvFQt0bII2PmbkhEFEuf6Mi0s1FMRjTHDKik95k8fSN4O5U4xFI4WxPY+hwNerxdq0DO
-	 +9PrxMAB++38uTQvHKkFdK42ucOHYu5w16VF63qf+4ok+M/95ok//63p1+Xe21BlCnw95
-	 xMfLG8b+iMNKcJ3EfOZGHa5I3vrcEjbWAxCSNw9RBN3gqwJ9I4hp4YQeey5FKB2llYXA/
-	 10IrxEfv1jhWBpNEgdPBsSsNt43jfG3JI1pp4N9bMB+vmU3mFrNmLS0f/q+Eqw5yfsA==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	bh=l1JsADSGA2OZrpcwyfRTx0+PXl2qSqb7dQiEK7I+Bqk=;
+	b=kE+Rox601EqO8qg/jmEUZn8+h2J0vuDm3/w0sc6SSneDDGWV5S+HCw9gz9Zmjs4Br+Mt
+	 8AD5+dwm/jnQ1cHiN5sXeTHJb7o+ORJc2yxiwl4NlT98q3xktIpAGWZXHLzJQf5vq/+gT
+	 Jyv9sDuCr5RJUZAlpaAnjrCuPeJI8jpUP50EQgdWanYAJEHv6CiPOwSmIOLJANqIwDkhW
+	 LZnXANDhbAVVsrBzXCWPaNplypG/sMGqlwu33mVGt7Qq1uwerqzTPeG18QQ1jTbCocePr
+	 HZlL0+u1lG4IaXLcRaIgxurf24PqIAatnj9oMjIMW/1lvHNrGFNFzRjEFJ16Ia2us4A==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	dmarc=pass header.from=benettiengineering.com;
+	dkim=pass header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b="e6uHLPu/";
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793112130;
-	bh=CZZ1myUwQEWpT6tuXuLHoJ1yXFsWjU4jb9GTCK9wkFw=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=LepboRjRE9yZu3z6m/bRDyhKAxhDnO6TlsovSNvD0VVvBSVPNnMacZg50sdGwAcSo
-	 WnITzlhF5Zrra5iS3K55pLcUPXn6X4k1Ruoz+EsF/EBGaii0S+w4yGgpIQet4ObBkC
-	 84CVX+L6tXyTuPTCctDJzrBtra+7BBTy0LPJ25/aSLhjPQMecNeTG2LpvWPjLne4E5
-	 XpG1y+CjIk1MA9vGgDqgr5IaLe3TqQjsdARithSoRhr6wNYg3/6WhE5GJnGGtF+ky4
-	 nm27AHEEZ2AgIM9nGBDohynTewpTlz9eR8roit6bxFc6dXNecEr6CFLnSQ8P+IShvP
-	 CGzjvBqUroJrg==
+	s=default; t=1793112839;
+	bh=l1JsADSGA2OZrpcwyfRTx0+PXl2qSqb7dQiEK7I+Bqk=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=GqAi5B4lDxMVKS7ZgQniP5CE2J2H84Z4gvG5mIAnIxajIdPfUCU+EQZ3TedPPrVeV
+	 UM4kr0eWXabHcIVp7i+/K0U2mXA8Y70sVzJSI2jIwfzZdZqNf4tLtsE9pw8SJuE4/c
+	 2Vk3ccfzp0it02oB8dZdjbufGUxTrL2eMs8umDsW7x+EDJQE57nQdal/cpvVTBW7ZW
+	 T+5ZdXRoKIMlKOdDHuBasmSKTN7kvzE3oKnQE6qzFToyGsP/U3AnHDKvrtOEzKGWdu
+	 wHaxavug1DF2AspbDXspMjeYr9aYMtx3pBz0cHtExlxoNBGX25JKRGUEWJtjDyMyh6
+	 R3ac4PuQt4lag==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 29E3180E12;
-	Tue, 27 Oct 2026 14:42:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id D31202F5
- for <buildroot@buildroot.org>; Tue, 27 Oct 2026 14:42:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2532560793;
+	Tue, 27 Oct 2026 14:53:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id C8AC4A32
+ for <buildroot@buildroot.org>; Tue, 27 Oct 2026 14:53:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B9D3B40792
- for <buildroot@buildroot.org>; Tue, 27 Oct 2026 14:42:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BA4F060794
+ for <buildroot@buildroot.org>; Tue, 27 Oct 2026 14:53:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y6diEjoWj_KU for <buildroot@buildroot.org>;
- Tue, 27 Oct 2026 14:42:06 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 7178140781
-Authentication-Results: smtp4.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::436"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793112126;
- b=kCo27SVxkxWcONBKIq2N9CUDwz8RZ5I43Hic65Ss4LOA/eu/GhoGkPJUGOi9zCIQ6x6o
- o10q29SkfCtbs3HllRMkbfVM61/WcnejoDMafgsYvM0H6A2gd2UTY4aF2R59ckALUO3Ts
- DrRSiDGp47mOZq6Xz++0hQwMuGxEQcUdVaF4VxJTF5oa1iDFzFr9zKs2FfmSs1T9TowsT
- GTavip9p4NaUW6GP8tT6DTqcLgPPtaaLyg+XphVvcYW6mbNHgYjFOBrjSDfF+M6icrrHf
- +Yq5wkh7r9euFbskKSfZ/e8mTBESAlQpyvMahMEnJ0v8e5FnamoVXVrQrIJGMLz63ow==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id n-3tIXffxFUx for <buildroot@buildroot.org>;
+ Tue, 27 Oct 2026 14:53:56 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org DF5346064A
+Authentication-Results: smtp3.osuosl.org;
+ arc=none smtp.remote-ip=62.149.158.131
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793112836;
+ b=OYNEsBFk73vcu8Awn9CuORO3YDJqCmTXC9pVhSNBNSVACMZbwp+/7PR0ZrBCUq65d2iX
+ qvASJXOXY+yY1a8v3FPqJC11/COo2dJvywfWFj8kBwrLfUIel36JKylPTlGIWzNihdqp3
+ EPPFGXYPY0tLEUC5CzVqAJn+w0IsdCj07s/Tbpy2gYlRgbaOa2VWhRHUfxowqqBk4tRqw
+ 4ZqpWdnNZ7swDs0n6Ma0K4ntfueS9OyDepvSKD7INaTkembVn8qBJIzPVq1n93X83fTYf
+ ZQx4MpFV+p+6i0kdSbvIhCdtTwexM+oy/dKL+tphPKefanv06jw+1XMnpN9b3TLdNtA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793112126;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
- Content-Transfer-Encoding;
- bh=qKHNfPw/ortow2rogO+1w0BlUAlVRRDi+fQyqL0jlbQ=;
- b=QM1FmjDEpjEEv8ZjDU3oL6cPH+ah8gacYKr30Tr6AamSuK2UpHhvMcCfcAFx9hgnrx2C
- OxPEVHxxxf+26kB4Enieb+XnQA1He3ndnPDQ+gJ+0W7LhcdzxgrH9zUmwalK6T51HSZT6
- 3joTOHJp11f1hKlIDondBlxTWhOm+XoWPN3GDsyucGMnpsTJDxAnYw2oqnqQ97kVOe+o5
- fgD59JxuWpN/DiJqynbRw7V+jn2U3cqokvRq0wIuAkM6B22GGBsEUJoNOUJCvd29pqd3H
- PnnfO8fLwfOfeM9c+EMoKNRTbusR4qb+pvUDaMZttXXMc2QDzfggzWlxRRHciJ2jwTw==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
- dmarc=pass header.from=amarulasolutions.com;
- dkim=pass header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=YcjdJE7q; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::436"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org; dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-Authentication-Results: smtp4.osuosl.org; dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=YcjdJE7q
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7178140781
- for <buildroot@buildroot.org>; Tue, 27 Oct 2026 14:42:05 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id
- ffacd0b85a97d-48c4649b35bso4265511f8f.3
- for <buildroot@buildroot.org>; Tue, 27 Oct 2026 07:42:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1793112124; x=1793716924;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=qKHNfPw/ortow2rogO+1w0BlUAlVRRDi+fQyqL0jlbQ=;
- b=YcjdJE7q6mg2U5yMrGwz8h6qJGqSs8i1jcZJQrU0uXLFMksFyBs8kokSL5SQkiBzk/
- WkPN/yjOlahFeeyhhdG7EK3yG3CivCAaOzS6fmGlTWqWz25XT12s2YowmRdSIw39lcW4
- H2/c6OKRWNmGNN6Fc4muFpLvg8589kTOw7Ss4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793112124; x=1793716924;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=qKHNfPw/ortow2rogO+1w0BlUAlVRRDi+fQyqL0jlbQ=;
- b=iohr2B2TU9bBtHPcvjfvVSuMztCWkOsFz9azWlWMt+p/Txgt6gEmihFNOfa7jFhEuQ
- msYmVCP+NKGyUILfQr1XSotliKHK1k0sKxTw7TLmWvybQOO0yhPFlQnmEdzagANtDh7X
- 1Qn1+dAcGAsvndUMmPiB8hCooJGbkk4QRT6gmMbkDdkL5o6zqD546buLrw9zpUkVF9oA
- sBaWhfOt3OR2W6aY6nbCJC0onAh8sB6MUjcMgxtoyTbiV/8jowQI6sTegld1mqSVNjVO
- fXogT2bBCC5lhCmblmJDXGOFShYNgRlrFaUnesCUYuoPQ1U7mwWEFgIjJ2fsCGaDApbk
- +i0A==
-X-Gm-Message-State: AFq9FYLi0B6dDqPe/Ie+brGotJSQ+qsdukEdvRiNvU3yIs3dfT/cyLyv
- Sw5o97YEDQc5CXV6XgjrgXXsMKIREeZLEtqa7OcpGv8X7yGmfKFVzsrOnW1gv70+7RzpJ8Do8XQ
- hnF1y
-X-Gm-Gg: AYBFou3uNZvWoDrTDEaDatZUBMhAj79RbkNOkCKRglWVNb003BG/2T9I6YkMlhj/d5u
- EjppBoVsdloIR7dSM/v6JPws3ezr3Ye+ZQiCXaGnIdxbgFwq/Kx+WBkOjNZD4HMJm2UqmJGTy1A
- VzV8+Tr32T+IzkXOH3VdFhw8rOfYQ6wm9J+ZVuHqvlEZH1MgjxZKFubm8WxEKo64k4NH0WfNs8m
- WPwiAdk91hwGvIspZX00BmK0pPx1rE6sz9S/leNjTc+sYR+zpNtfqeNtwk/3Gj8JW63FnJTLFdl
- rg0OdDWFTa4ODXEIyJFkFwmsEcDhTy99d49A2pvZirbDhtzTmOhp2dxoeyfQh3C0jpeNN4tRo8W
- W1CXnUq8KvNLT8VWnJaENDLDAHK8ZqZvKOjMnFxtm2hrfMzE2iJE6fnVmmWHzbvShj2tlKE6hVO
- wzC5CCCpc0nxejsF0j2XO3ibV/g07jYkR46R6RJ1IUKZv82/N11RJfdWUSmb0yBAGxAIPjqdAQW
- CDKytaKr85QRXQZkSlD6m4aipARDg5IhQzClfzDBVazT6O//X5/pHRp8MJsTsO+unJOGp6r87VG
- Zuu2Ysv+8CfKwZIfzlOd0BUhvAs/FGxstmPIOb4mfVGGodf1Tdc6NHOMxFpCiAtEHPs1T8d+vbn
- kLDBpwHF/J5uRQYYupM24AQgfg1vJ2t3yp0HPipmWQDGyVe8/Q3BI
-X-Received: by 2002:a05:6000:b0b:b0:48c:4442:54e with SMTP id
- ffacd0b85a97d-48e3eb6fa36mr13995152f8f.30.1793112123586; 
- Tue, 27 Oct 2026 07:42:03 -0700 (PDT)
-Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
- (host-79-14-29-58.business.telecomitalia.it. [79.14.29.58])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48e3ebc39a8sm24204014f8f.11.2026.10.27.07.42.02
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 27 Oct 2026 07:42:03 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ c=relaxed/relaxed; t=1793112836;
+ h=Received-SPF:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+ Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+ X-CMAE-Envelope;
+ bh=ArmwKcXrq7E45lpnpPm9tHtzvv6BF7eqYJ1YKXU+65E=;
+ b=qnRT8IjubryphWSbKuvsF91PaqMvi+otLRVrcFEoZrHx0eXlFh/zifJpK+cE2EDKPaGk
+ sPrxu0w41FOECjxFH+GZ9jvutyx73l4Xu69Wjzt7uov1tXbJVhKu+P7T9zLOkxvj1AA5E
+ W1heT9ddo4xjNpBgrfODY5ZVb45X6CL/nTlrryo+c3fWgepkpF16+ndhj2qOBXql/lCqT
+ JPEI+GNV62JmWs4yh/sdVYH4nwumVe2T3Gpls/4eez2A3q6EdTpCeJK2E5Sry29RqxjZ3
+ VpzmcLrC39vX/yfzNzwTlUImTJUiH0yhVyzeIXgLrvzYJRSGNL0qvpoKSYkbt0VCnEQ==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ dmarc=pass header.from=benettiengineering.com;
+ dkim=pass header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1
+ header.b="e6uHLPu/"; 
+ arc=none smtp.remote-ip=62.149.158.131
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.131;
+ helo=smtpcmd04131.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp3.osuosl.org; dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=e6uHLPu/
+Received: from smtpcmd04131.aruba.it (smtpcmd04131.aruba.it [62.149.158.131])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DF5346064A
+ for <buildroot@buildroot.org>; Tue, 27 Oct 2026 14:53:54 +0000 (UTC)
+Received: from localhost.localdomain ([151.95.84.63])
+ by Aruba SMTP with ESMTPSA
+ id LiYhxeSyQtleFLiYixL1UF; Tue, 27 Oct 2026 15:53:52 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1793112832; bh=yochg/hOXIK33I+2idJ/dFRBPAMJJe9igrMkplyKgHU=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=e6uHLPu/QWMX6kAsTUMAd+0RGN1IFg7M8YlGViOoBV+EjBxtaM6j5AOI/Vfc7blF9
+ VMhvo6MCPuOGIhfJu3gnIVAUevI+3S0JWduWamxTIYFxcRs7M2fhclejsVuDXh7dLY
+ TN5JW/yfNXilr3dxyWjXEi3Fj00WUyjjh+acCQgJ8kiwnrh73GzPQQfavfNntaDjC8
+ /sEA7GN8QfR3YXDBvR1le+Ajryfz+UdNy9lyMZOsRbMjNkEjf1OQwYt9TuCuXqy/K3
+ D7gqh2qwekL2NCmmY7hgHVc8GoqMvnQI7UZP4hULNnMvIbQDx8kSjY4/Q1T6QKQNnN
+ /vHfm7pSohh4w==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Tue, 27 Oct 2026 15:41:58 +0100
-Message-ID: <20261027144159.1097876-2-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261027144159.1097876-1-dario.binacchi@amarulasolutions.com>
-References: <20261027144159.1097876-1-dario.binacchi@amarulasolutions.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>
+Date: Tue, 27 Oct 2026 15:53:49 +0100
+Message-ID: <20261027145351.1527631-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/drogon: fix build with LibreSSL
+X-CMAE-Envelope: MS4xfD3exo0Q76gDKh8viJGcyPbKnpAQhfhtffwObzzTe3xKkXDRDKFhwccsQXkHKsE23t3wxJEI80neMEZQCqYJn/GkwJLBSHhY2Zo2NNIHCdtk5Whtn7Kw
+ k0OEyvtgHoLhXDee2F2DIB0c7UaP8ItugF5qcrsPZ+/uLF6RwVDeTCS4q7XkW0S4c812ZNCE9RDoeOLRy0wrcUG/OJ4fX0JxRwRw7mWqDFRobQFl2kABp0Ld
+ 3IkKMrZKhOKs/1VtxHwmTXnczVqAexPZZIhuOGhLwE7e/HeGOF+Kq+sT/mGRFtzhEJpIqAMATxJBo8OqUkUXEg==
+Subject: [Buildroot] [PATCH v2] package/rtl8723bu: bump to 2026-10-27 version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -176,112 +141,61 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-16.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-The trantor library bundled in drogon 1.9.14 fails to build against
-LibreSSL, because it uses SSL_CTX_set_cert_cb(), which LibreSSL does
-not provide.
+This version allows to build up to Linux version 7.2 if -Wno-error is
+passed to USER_EXTRA_CFLAGS. This is done because starting with gcc 14,
+several C diagnostics which were previously warnings are errors by
+default. In particular, -Wincompatible-pointer-types was changed to a
+permanent error by GCC commit:
+r14-6037-g9715c545d33b3a32ddc1ae817ba9356ade1fb9df
+("c: Turn -Wincompatible-pointer-types into a permerror").
 
-Add the patch submitted upstream, which disables that call when
-building against LibreSSL. The patch description explains the details.
-
-Fixes:
- - https://autobuild.buildroot.org/results/f1c7a336f3fabb2d2a2793930573b69bc47c3ee7
- - https://autobuild.buildroot.org/results/795c9ab125a029f0d90a267147cb6d6d80887688
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- ...0001-trantor-fix-build-with-LibreSSL.patch | 73 +++++++++++++++++++
- 1 file changed, 73 insertions(+)
- create mode 100644 package/drogon/0001-trantor-fix-build-with-LibreSSL.patch
+V1->V2:
+* rewritten commit log to describe the root cause of tweaking CFLAGS
+---
+ package/rtl8723bu/rtl8723bu.hash | 2 +-
+ package/rtl8723bu/rtl8723bu.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/drogon/0001-trantor-fix-build-with-LibreSSL.patch b/package/drogon/0001-trantor-fix-build-with-LibreSSL.patch
-new file mode 100644
-index 000000000000..d608efbc23cb
---- /dev/null
-+++ b/package/drogon/0001-trantor-fix-build-with-LibreSSL.patch
-@@ -0,0 +1,73 @@
-+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Date: Tue, 27 Oct 2026 11:39:26 +0100
-+Subject: [PATCH] Fix build with LibreSSL
-+
-+The Buildroot autobuilders reported that trantor, built as part of
-+drogon, fails to compile against LibreSSL [1]. This patch fixes the
-+two errors below.
-+
-+1) SSL_CTX_set_cert_cb() is not declared
-+
-+OpenSSLProvider.cc:1623:9: error: 'SSL_CTX_set_cert_cb' was not declared in this scope
-+
-+Commit 7d3aac802ff5 ("Fixes and update to TLS subsystem (#411)") calls
-+SSL_CTX_set_cert_cb() to choose the server certificate during the TLS
-+handshake but LibreSSL does not provide this function.
-+
-+The same commit also registers a servername callback, which LibreSSL
-+supports and which chooses the server certificate as well, but only
-+when the client sends SNI. With LibreSSL, clients that do not send SNI
-+therefore get no certificate.
-+
-+2) lastOpenSSLError() is defined but not used
-+
-+OpenSSLProvider.cc:261:20: error: 'std::string internal::lastOpenSSLError()' defined but not used [-Werror=unused-function]
-+
-+lastOpenSSLError() is only called by code that is not built with
-+LibreSSL. With LibreSSL the function is unused, and -Werror turns the
-+resulting warning into an error.
-+
-+[1] https://autobuild.buildroot.org/results/f1c7a336f3fabb2d2a2793930573b69bc47c3ee7
-+
-+Upstream: https://github.com/an-tao/trantor/pull/422
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+---
-+ trantor/net/inner/tlsprovider/OpenSSLProvider.cc | 7 +++++++
-+ 1 file changed, 7 insertions(+)
-+
-+diff --git a/trantor/trantor/net/inner/tlsprovider/OpenSSLProvider.cc b/trantor/trantor/net/inner/tlsprovider/OpenSSLProvider.cc
-+index e876ee97faf1..7b6f42d88d32 100644
-+--- a/trantor/trantor/net/inner/tlsprovider/OpenSSLProvider.cc
-++++ b/trantor/trantor/net/inner/tlsprovider/OpenSSLProvider.cc
-+@@ -258,6 +258,7 @@ static bool isDirectory(const std::string &path)
-+ #endif
-+ }
-+ 
-++#ifndef LIBRESSL_VERSION_NUMBER
-+ static std::string lastOpenSSLError()
-+ {
-+     const auto error = ERR_get_error();
-+@@ -267,6 +268,7 @@ static std::string lastOpenSSLError()
-+     ERR_error_string_n(error, message.data(), message.size());
-+     return message.data();
-+ }
-++#endif
-+ 
-+ static void freeCertificateNames(STACK_OF(X509_NAME) * names)
-+ {
-+@@ -1620,9 +1622,14 @@ SSLContextPtr trantor::newSSLContext(const TLSPolicy &policy, bool isServer)
-+             ctx->ctx(),
-+             static_cast<int (*)(SSL *, int *, void *)>(
-+                 &OpenSSLProvider::selectServerCertificate));
-++#ifndef LIBRESSL_VERSION_NUMBER
-++        // LibreSSL lacks SSL_CTX_set_cert_cb(). There, the certificate is
-++        // selected by the servername callback only, so clients not sending
-++        // SNI won't get a certificate.
-+         SSL_CTX_set_cert_cb(ctx->ctx(),
-+                             &OpenSSLProvider::configureServerCertificate,
-+                             nullptr);
-++#endif
-+         // A resumed handshake may not select a certificate at all. Do not
-+         // resume one without consulting the current runtime provider.
-+         SSL_CTX_set_session_cache_mode(ctx->ctx(), SSL_SESS_CACHE_OFF);
+diff --git a/package/rtl8723bu/rtl8723bu.hash b/package/rtl8723bu/rtl8723bu.hash
+index e230485226..4b2b71ddb2 100644
+--- a/package/rtl8723bu/rtl8723bu.hash
++++ b/package/rtl8723bu/rtl8723bu.hash
+@@ -1,2 +1,2 @@
+ # Locally computed
+-sha256  22d81a21318cdae23ab6a65bed7c24d7cc98e7d1afef7a200804761c72036019  rtl8723bu-ac3d2f564bdf6816f1e3a3384524dc1a966f78a3.tar.gz
++sha256  eaebe07d38931408c8f5dedb3a8c61e251862e0b8859b899d193f9d5cb77d748  rtl8723bu-8292ef94965fb61d3052ff2bf068fcd830e665c1.tar.gz
+diff --git a/package/rtl8723bu/rtl8723bu.mk b/package/rtl8723bu/rtl8723bu.mk
+index f1c4eda4ed..4175d02d52 100644
+--- a/package/rtl8723bu/rtl8723bu.mk
++++ b/package/rtl8723bu/rtl8723bu.mk
+@@ -4,13 +4,14 @@
+ #
+ ################################################################################
+ 
+-RTL8723BU_VERSION = ac3d2f564bdf6816f1e3a3384524dc1a966f78a3
++RTL8723BU_VERSION = 8292ef94965fb61d3052ff2bf068fcd830e665c1
+ RTL8723BU_SITE = $(call github,benetti-engineering,rtl8723bu,$(RTL8723BU_VERSION))
+ RTL8723BU_LICENSE = GPL-2.0, proprietary (*.bin firmware blobs)
+ 
+ RTL8723BU_MODULE_MAKE_OPTS = \
+ 	KVER=$(LINUX_VERSION_PROBED) \
+-	KSRC=$(LINUX_DIR)
++	KSRC=$(LINUX_DIR) \
++	USER_EXTRA_CFLAGS="-Wno-error"
+ 
+ define RTL8723BU_LINUX_CONFIG_FIXUPS
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
 -- 
-2.43.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
