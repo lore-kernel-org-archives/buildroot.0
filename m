@@ -1,165 +1,172 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F597606A31A
-	for <buildroot@archiver.kernel.org>; Tue, 27 Oct 2026 16:40:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3ED2606A31A
+	for <buildroot@archiver.kernel.org>; Tue, 27 Oct 2026 16:40:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=JTS+djTi;
-	dkim=fail reason="signature verification failed" (1024-bit key, unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google header.b=PAR3xwLg
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=P/uzI1g0;
+	dkim=fail reason="signature verification failed" (1024-bit key, unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google header.b=GCXzI0zn
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 376B480CA9;
-	Tue, 27 Oct 2026 16:40:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BA85960768;
+	Tue, 27 Oct 2026 16:40:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ybOslAW-uYlG; Tue, 27 Oct 2026 16:40:21 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 5319080CB2
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793119221;
-	b=MIMOq5kM0x7yHsbE0L2uqVFEodjIqrmPeX6142a+xFwxULtk03gJkaiafU8nXDyc+ByW
-	 MET2Vp7BUA7nLdoWuWmlTcgM6MH8s/uYTAk9dbfD3b4/midcHQxSdDuV/1N0FOwenQq73
-	 LsJ+/apTMZbWEFBqnonWap6U36BzBwJnJCBXly01QGYIbyAc403kzS4McoSJx2mvHqbdb
-	 N/Ml+eDHnVQg/pt3qidBWgaQ7FPZCFA6Y0j6fEtICDydGRVPM2EOYUlXyL6MGZEJCtxiV
-	 1LOuITDv6KSrhn78y/dWHzF/ON32J8UUH00fgyunC3y/OvoCfItgym0gk4+a1PAxU4g==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AdhF4Y3hzzkP; Tue, 27 Oct 2026 16:40:24 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org B6055606CB
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793119224;
+	b=UxNZZ0dBwSxGNU3CEpVupv3LKLgPHAzx4pv1SVQ2V4/BGCFfWX4FAm2wGeJkD8exap3t
+	 4R2C6jpJmxklWN9GnWUdWNRwN+yLkacHIVuSbEuldAtsavNeQfo/UgaAoBAr3U1Cns8y8
+	 HD8T3Js+RggEsNY57++cj4xZ66ptYROjx5CXXcMq91MwR4EiASmOX1pQVF46pyucjJHCy
+	 br8OcEMmN4X94BSRf1J0CutqiQ6IpIj29YcIj1ip2oZqkKlCSAt0AJxI7kybCX6tGeYvY
+	 xANgb/kdOoMlocWB1Mlioyw+5bYfy/iROuXkrm/f2GiC62z4FGnG3gomymNWUbGPYsw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793119221;
+	c=relaxed/relaxed; t=1793119224;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
 	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:From:To:Date:Message-ID:X-Mailer:MIME-Version:
-	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:Cc:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=bTyzdF6kPjzvMTA9y0Fkbyewlytmai84ynmtT50BIts=;
-	b=pvqpHOaY8Gqa4W4R6w9ZKh4kAU4GPnwNo3CWfL9kwRHizajlFYZ8g9wSM297L/xjsxnQ
-	 PN8qx986e5aRmV1rzVko2XvLiWxeirz+3y/KMIGOHiwiMMGW5iiCEZBwlNIAT7eiL2YtI
-	 JtLQ78Ng4Ug0wlxFm+T94Abs5y3VXtVEDEPUKUvetdukTeAjgOr5jYmqd6QFUBaSB0g6z
-	 tDZA1fL5+I2l9mpXRbWwHU2Ku8BQIa5Z7A1ks08jEvDeDIhKhDU+Xt7Ffmqwbi0/Yuqqd
-	 g0C5b7ocU569IctgldKEjlBelMrbjfo6uMT65EsVj/FQXGK8KsrkQFokXo0Lro9z9bw==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	 X-Received:Received:From:To:Date:Message-ID:X-Mailer:In-Reply-To:
+	 References:MIME-Version:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:Cc:Content-Type:Content-Transfer-Encoding:Errors-To:
+	 Sender;
+	bh=+AH6g9K0mOe1f06/iOqZXvLO657uatQ/h4mDxAnnACI=;
+	b=mPE7muyNIxp4s/Of2vOll2ifN5DBb0tQrKsPh8zA1IQRxqqWs6VRdQIbhK7Hb0KhQnbE
+	 av/CvcsEp5hf8v5ZqlbZBwHqkh/P/O0r4ErhQKs1EL8ID0LkzzrrPoBnE9n7i7y27Bo2X
+	 zHTVgebPHqWX3ikp6HJpGAmmP1UkUuT5P5rdkOCjQi1XP9Gph0oCKJXWSkkOfFVB3GpQ1
+	 DscKz1qdJ2kTm8IKuFyZqanwXYl7e/Np83W2N+Iactp/hubrkomzILfEx3ugtn723EeLc
+	 nRXp2iiwH48L2VpE5iR0an6Q43ZW+VHQk348cdO0hY/NY7q4Fsb03D9zqFeu/mpa1OQ==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	dmarc=pass header.from=amarulasolutions.com;
+	dkim=pass header.d=amarulasolutions.com header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google header.b=GCXzI0zn;
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793119221;
-	bh=bTyzdF6kPjzvMTA9y0Fkbyewlytmai84ynmtT50BIts=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=JTS+djTiBWGr/n+tBNSByUg/ZuDUUniSb3ZyngUXpRFmQSlSOgdCCB+unAFVzSkP+
-	 fH4M2TSc+vOpbQjpUqKn8NNjGJ6WyJcEd8zfXHZG6rwijvrE1UpVjnmhkrZGoDt2q7
-	 r+12WMcy9nyuysRFFIv8QcaNh2WMvKQ8WuQcRMF0hftxmQnyBjCzqI93NpM9c9Fv1d
-	 1up/aGIOAbO8kkl5o5/cut1WcRAHA32GdiglRVRDzWPRafx9znATrrQvcnAuEoVDXR
-	 ZBw2Kyw09sgoclfe5ukmAiUJeSTBD8QMP1bVd4Cvrp0ptU4BGvidQcESuRWNPkvGhX
-	 6K30qQ1/SoKUA==
+	s=default; t=1793119224;
+	bh=+AH6g9K0mOe1f06/iOqZXvLO657uatQ/h4mDxAnnACI=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Cc:From;
+	b=P/uzI1g0zqDcleShdaB3ANKmx3sHaEgE+DHEH7II4SC4eJrq/HXsxJ3AgpDrK9ixd
+	 KvzsyJrVifxYvrAd9lCYsjUluwyFDq8O+xB93Q3CV41/OVZNvXGWHjz9x5gMlYxx77
+	 blkKPUGIr2xvrrmLsAPL2tH6Q1lnkXZWH3kLg9WtsMlsGMwBSzvQwGLeEjsdS3Eapv
+	 UKYXryGqtaotqAFPqRrhoUHmTmOe+EgPwys6M2Ash1iqTLWtiyjhQlw6AreGsT7wma
+	 RkqEsjpHeju3PljUNLxfX83m+pgPblT57ar8beXIj/sF238o0KnvvHa5Ai5tJKFkFc
+	 KKRXAXY/r7NKA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5319080CB2;
-	Tue, 27 Oct 2026 16:40:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id E42A272
- for <buildroot@buildroot.org>; Tue, 27 Oct 2026 16:40:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B6055606CB;
+	Tue, 27 Oct 2026 16:40:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6B3D64BC
+ for <buildroot@buildroot.org>; Tue, 27 Oct 2026 16:40:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E179F406FD
- for <buildroot@buildroot.org>; Tue, 27 Oct 2026 16:40:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5D7C26068F
+ for <buildroot@buildroot.org>; Tue, 27 Oct 2026 16:40:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8Vpej12PIq2B for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Gdi2__GHZSKI for <buildroot@buildroot.org>;
  Tue, 27 Oct 2026 16:40:19 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 87C5540534
-Authentication-Results: smtp4.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::634"
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org E02DA606CB
+Authentication-Results: smtp3.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::529"
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793119219;
- b=LbCHBKb2zXSikMG3WvaW83QEMsTyux3vxArK+Thc9obf+FhYsoUm9xe7QZp+r6GrVber
- YrEcXcu89VDhbwfvZAVTvSWLiWBPHDuufcVxEqPpPkHRIyrOX+gezHrUeQZ7S9p11TTJU
- ooXGRxmcYhGslQx8ebEFIKE+vZDhsObNKCGZ81tUqTkuzHu4/UHOIAyXtDJ9s7pfaNFFl
- BfB5GYr9Oc6TrqZGHPFRuoWEs2M6UsIM0ejdbxOqYW26KUMpeRGobu/SZK8TdTkE4uCOx
- AaKbwTi27f8QCaQnNf0+5TWuQWl+wmjYBpfL6mlGI/zAeZc3b928QVeinJRVUym9bAg==
+ b=Kmw7hmfAW7C3xB7nRERc+/wpL0ExBbEdZgpI/tn4fm24US9Cr887yqcMD6Ohz5dyGB4C
+ OBabTKVmVxIgRFXhUvA7FD3KrW84k91NkpMehlKLZKe3HlrUFQ3ofjVqRB/kN767YXvN6
+ e/e1sI6JGyWf9Rd6bte8ZnqQz3UDNjsAfYXSrgB+3PCihC1PR89CJLSVCnQzfaNpgNy/I
+ R/eCo8z2XCQTJE1klpmTsiFPSk12Rc979Wd5xLSjLvuADnARLeN1eOaDchQ4fqDtlGwOZ
+ H16kIIo3o2cMdbLvMfx5lJfeMFkMgF4lRUYX/g3ykPGB1RNekzeAc74hocLUOaGZeTQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1793119219;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-ID:X-Mailer:MIME-Version:Content-Type:
+ Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=KBKrzKALYP0lPLVykPV+ckcr6D70lrpKgftFGuNXu/A=;
- b=Hwuc1exOjogUxctAsWOXtI4ykkq4B6mifk9P3gfz7jKWAhG7B411anwhwuHqymTq8+QX
- DjV4TTszLhOJ9B61Ounj3seb5RSf3TvGztrrOZ+c6AcA7x6Kw4Kd/VNLc+cP04D12xeh4
- Fc5zgY6272DWC2MdLnTufMM+XeC7oztkHMNDIiEIhR6X5GPUOt52aWISU9JXpsloEogEh
- Wf0DLjrT84r9rt+dO5LZ3U1jEeDNe6aNfval1r5jhSLNXsvJixUBt2vAN/JiUHrAg0vtt
- HCxxHo/UkG+ltoQ29B0zuZJjObTJhriCd9226opVEZu2yeNxUySPiCATjuKjjlDdLwQ==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ bh=REXJrc7vD5PhdYIamVeWzSQMq6t+yzeKA+R2OTGiXJk=;
+ b=SL1Jv9cshWkTV4r0uCOhhRoTSuWTY0afhpKhCohSwvL8hyVHviO3tbADcg49jo+DbIQT
+ dlxC7Qspy7BfQtjuRygmKf5APl6OiSyma0IrI9wT4ZTpYcOtTwUtefaOeFuj1SS7c90b4
+ bC9kYIDCm6FMO58YtYljJ0leKjZXCZy+oMzMahw/6P7MjpoHjXMnCYxcrZW5+utOrlN8u
+ C2QZMJq/L/8QWOobAV+D8IQgp3er3Z8IkCjrZrVqlxpY9QYlElnX0c2KTgHxp0529Nink
+ /m8T1Rz9CNxz4iljayK1Dx1NU02if2FEwxcJ4asdgnCRMqQZeeYNxUWHSnh5EWuhQJA==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
  dmarc=pass header.from=amarulasolutions.com;
  dkim=pass header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=PAR3xwLg; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::634"
+ header.a=rsa-sha256 header.s=google header.b=GCXzI0zn; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::529"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::634; helo=mail-ej1-x634.google.com;
+ client-ip=2a00:1450:4864:20::529; helo=mail-ed1-x529.google.com;
  envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org; dmarc=pass (p=none dis=none)
+Authentication-Results: smtp3.osuosl.org; dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-Authentication-Results: smtp4.osuosl.org; dkim=pass (1024-bit key,
+Authentication-Results: smtp3.osuosl.org; dkim=pass (1024-bit key,
  unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=PAR3xwLg
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
- [IPv6:2a00:1450:4864:20::634])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 87C5540534
- for <buildroot@buildroot.org>; Tue, 27 Oct 2026 16:40:17 +0000 (UTC)
-Received: by mail-ej1-x634.google.com with SMTP id
- a640c23a62f3a-c499e0e43a9so29566b.3
- for <buildroot@buildroot.org>; Tue, 27 Oct 2026 09:40:17 -0700 (PDT)
+ header.a=rsa-sha256 header.s=google header.b=GCXzI0zn
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
+ [IPv6:2a00:1450:4864:20::529])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E02DA606CB
+ for <buildroot@buildroot.org>; Tue, 27 Oct 2026 16:40:18 +0000 (UTC)
+Received: by mail-ed1-x529.google.com with SMTP id
+ 4fb4d7f45d1cf-6aa046a99c6so16198a12.2
+ for <buildroot@buildroot.org>; Tue, 27 Oct 2026 09:40:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1793119216; x=1793724016;
+ d=amarulasolutions.com; s=google; t=1793119217; x=1793724017;
  darn=buildroot.org; 
- h=content-transfer-encoding:content-type:mime-version:message-id:date
- :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
- :content-type; bh=KBKrzKALYP0lPLVykPV+ckcr6D70lrpKgftFGuNXu/A=;
- b=PAR3xwLg2aViektvrmHOV1AY7NT8Ex5QjOr+6/G/qzjQh6qFmlaKWcRQHIkpG8KrXO
- QMFQGC1BSAaO40Ug+2TY8ssUzpXulsjjn0cuiUzJ6txIFwWtaovtAY3sVvJsUXuSv9IE
- o1EN/IYEqyZGomVOk9TnNjVUggk96Vc95pjx4=
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=REXJrc7vD5PhdYIamVeWzSQMq6t+yzeKA+R2OTGiXJk=;
+ b=GCXzI0znJatxJLA9Nw1Y1Ko+0jsYLo7Q4KZdqVTMYJKmMqSZZ43CFemgvuJQ7mj8SQ
+ h+zaIBpWdKZ6/zOxi72Zm1dOIeGkpSszZXr6adQGjBnZjh0LY6uZNhL++ZeMivHYXvxL
+ OnzTzZBOHsOVCsSU/fz7leGuL2BhHkXC5WPbc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793119216; x=1793724016;
- h=content-transfer-encoding:content-type:mime-version:message-id:date
- :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
- :date:message-id:reply-to:content-type;
- bh=KBKrzKALYP0lPLVykPV+ckcr6D70lrpKgftFGuNXu/A=;
- b=mjgKM42o20zNGJ6wyu++2PKdF32y4TvMC2nx5tyE5HPYim2M3jqEBVlnBDeW9WQy75
- 2OUDm1uv/ICp0pWqXGVZpIAoHZbfKP5pcgGbjcOgzO7KUT2hFrLTIPsNBeQJNF/eqafx
- vfcFWA6QKHqH+ndfkD1TY/1GNLMSnubvYEqRaEprV0k8FJhkZZyzMbLHeDbvkoEtorQy
- CkP9g+TWMEGuSGPTVKF6vxfrv3p61mq/eSZVYP6G4D4/91jTFgaDP95JO9RtSeOY6Ca4
- BRgmMeL3iE70hihWLdFH6mhzhjYJ1aQllDXF/C/AXgSCXFM8wsbuAKvieGoRS6EuIk8Y
- OcnQ==
-X-Gm-Message-State: AFq9FYL8WH0q8s4a5cBmcttfoM1Z+0mypUpSCN3pXMd+uPeF2EnswoFg
- 4RmbRn+7dMEI0DYqxiWak4t+GcL2UYps+BBr6HC1iFOLJ2u2tySvsZMXi1hT3qU+NFk4OLj/Tun
- JLxNcV64=
-X-Gm-Gg: AYBFou0Cvlp0Yde/use0zLTI/g6SMR57IEPo5cDy2jg7Qd/LH3HLixHFDPDSaFcjcq/
- jGPSwvT1g+wa10QQCbPHsS09lUwsO60kKukL44LxNe47d4Y+NCUhuvJgV2FYOpPbXwSM+tOgyL5
- UAVqEj92H5+SyADwN/kXgl++xJbJLJDZaqzrzqT9EQ4+Gws2ZSeOFjOddKaas8gitfbnQXz4avl
- A0uoqogjTVDb5p1/YRYJXSZPsOLp6Lc05l+O3esQ3AbueAotVk+GTQUkdcwpYo5idYwldrZ/R+2
- 8kJ7vLmb2ppK6mkI+wKaA0zm2wXKEJdizmnmOrw6UYiO6M3Cvz0c6I3pTfU71RVOuRIkrq96KvC
- MROuvTaarkhT9lRO1PqysErs1MP6fZqg/YKJHlXfH8r5eqfEue7kJK6Yx5pzKpwekXCcaD+/0q5
- AjAqwOqPo2kJnjDa5OT9ql43XoDYGIX8xTaE3wYb0I2kigWsy6QaWJcNR28fwp+4XlgdoLCIlT5
- ebPNHEmwQXbse+d6/inyUAaw8N/7g7FQKaNIZOIzLMEJkxQP2rCLW91AuDm4yQXI+gphSHN489T
- L819AX7YEwl27hE8YkU9kImXNwRqOPR29VHFW7w3T6hnvRE51hNzhDOr8SLUz60P2HpbtrzyLCn
- Guf3SWVUXA0dS6wSUw5V8Bpj7/zqhbXLiYws+W3MOG/R1LONC/1CHuS0Op7y5yw==
-X-Received: by 2002:a17:907:e00a:10b0:c32:8cbb:fac with SMTP id
- a640c23a62f3a-c46bde93534mr1157231966b.3.1793119215884; 
- Tue, 27 Oct 2026 09:40:15 -0700 (PDT)
+ d=1e100.net; s=20260707; t=1793119217; x=1793724017;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to:content-type;
+ bh=REXJrc7vD5PhdYIamVeWzSQMq6t+yzeKA+R2OTGiXJk=;
+ b=Fr5ug1cG3kzXzoumdeCD3hfKdgvRd8b+7WbSwu1TORne6hh+WyKJQd7G0QxQDTqUkv
+ o3Lg8HTNdAYJl/Em4EIu/SJYm7i9OboAZjNJeV6BzosHakBZwCTjCNJpxPGtyqPQX8/R
+ fbgcXwnls5vj5bkJMJygIUy83m4iaQoBBQFxlRhFPejsDe/qEmcRc7b4l5hP5TT0gtBc
+ KdNAcJPbJfEkaoEcQvtsKh+C6Ik7O6xDVnZ3fUX52fmvZbRm8fD20nisLcrzrq7bXkds
+ lP81DwK+1Woahyn+Nbqs8F1KhzPaiuxswQi85Ic0isBNeaOY5JDqMZzmIrLm6mizY+nt
+ ETjA==
+X-Gm-Message-State: AFq9FYJMCoPj0MiIaBCsOB8MdIcg+8FLVdrPXb1PplG15gCDBeTn/RMK
+ fFsLF73AUIDRpia/+yxWJGlNd5RNy03eVN8t2CzKJaymScPfz+aamJyMpAurSvJk3IPl/dE7O0q
+ 8wNMS/0Y=
+X-Gm-Gg: AYBFou0YWVKrT+mnT4cp1tBWt9gZutgXSY4yTQiTRzTCAt8fWKuhAA2XtJ8NiunQhUu
+ Ry2dNwt3qQAXmXrAWzjjAi4xS+ArmhCWL83tH77zZ6oRUtUCMNFEv3lTX25SzNDzdZKg0+JV4dK
+ +b+tTsmieg4XV4fDl1DF32VTq9kAcJ3oaGWJJseb1Jekpuvyeqx8tfECrfcCStDWo5X3pTdugQF
+ dTNtl7RJ61/weN+HLppUVMeKfqeagvZA3g/yTLrDGDg6VlHTKM7ei3e5WNP5ZLetPesTiA+pXnb
+ QP65qfmymZ7BGlAxefyqdpqvdzd+9Q2Z13+Df6umyk/3/434uxkkUr3x8NcXcynBz/d/fr5X9pA
+ A7SJvhYXA3iguuYAYI1T0iASnhQLQxjwYVEdpm9aHbekNfSAYv+QXPbIMXUFhuZLUIZ9PyQ6Zqd
+ gR6JCE26vmEsjz0o+inA9uzxts/3tQKxJiRdwd1MzK6AGESfrlWH2fRdxiazT+Tb2l80YlevDln
+ OiXQMJsMbaVAhESNlVmFChrx7ZvmBdXAg5Z7HjwnnnSQ6goDpXw/g98d3l4kzIjnpK+rApFE1fo
+ EVDKveK0czL8XwJ3NOnWPHMOFyPi31so+BQNlqH6QUQ59OE90pXPz7JKWXrmY4ZUUu982fEt2ad
+ vggC294lt08slm6p/gjKgIS8tx12Tt+f5Clgfy6Ds3nwk/E6BTqn/N6gqimAioA==
+X-Received: by 2002:a17:906:1953:b0:c3f:98d4:dfda with SMTP id
+ a640c23a62f3a-c49a5379e0cmr374269466b.3.1793119216658; 
+ Tue, 27 Oct 2026 09:40:16 -0700 (PDT)
 Received: from adam-linux.amarulasolutions.com
  (2001-1c00-8181-e800-030c-182b-b2a8-e89d.cable.dynamic.v6.ziggo.nl.
  [2001:1c00:8181:e800:30c:182b:b2a8:e89d])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c46bd79683csm479171966b.69.2026.10.27.09.40.15
+ a640c23a62f3a-c46bd79683csm479171966b.69.2026.10.27.09.40.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 27 Oct 2026 09:40:15 -0700 (PDT)
+ Tue, 27 Oct 2026 09:40:16 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Tue, 27 Oct 2026 17:39:58 +0100
-Message-ID: <20261027164013.1602502-1-adam.duskett@amarulasolutions.com>
+Date: Tue, 27 Oct 2026 17:39:59 +0100
+Message-ID: <20261027164013.1602502-2-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261027164013.1602502-1-adam.duskett@amarulasolutions.com>
+References: <20261027164013.1602502-1-adam.duskett@amarulasolutions.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 01/14] package/boost: fix asio.hpp compile
- errors with gcc >= 15
+Subject: [Buildroot] [PATCH v2 02/14] package/mender-connect: bump to
+ version 3.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -171,104 +178,124 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
  Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=4.0.1
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-VGhpcyBjb21taXQgdW5pbnRlbnRpb25hbGx5IGZpeGVkIGEgY29tcGlsZSBlcnJvciB3aGVuIHBy
-b2dyYW1zCmluY2x1ZGUgdGhlIGFzaW8uaHBwIGhlYWRlciB3aXRoIGdjYyB2ZXJzaW9ucyA+PSAx
-NS4KCmBgYApJbiBmdW5jdGlvbiDigJh2b2lkKiBtZW1jcHkodm9pZCosIGNvbnN0IHZvaWQqLCBz
-aXplX3Qp4oCZLAoKaW5saW5lZCBmcm9tIOKAmHN0YXRpYyBib29zdDo6YXNpbzo6aXA6OmJhc2lj
-X3Jlc29sdmVyX3Jlc3VsdHM8SW50ZXJuZXRQcm90b2NvbD4KICAgIGJvb3N0Ojphc2lvOjppcDo6
-YmFzaWNfcmVzb2x2ZXJfcmVzdWx0czxJbnRlcm5ldFByb3RvY29sPjo6Y3JlYXRlKGJvb3N0Ojph
-c2lvOjpkZXRhaWw6OmFkZHJpbmZvX3R5cGUqLAogICAgY29uc3Qgc3RkOjpzdHJpbmcmLCBjb25z
-dCBzdGQ6OnN0cmluZyYpIFt3aXRoIEludGVybmV0UHJvdG9jb2wgPSBib29zdDo6YXNpbzo6aXA6
-OnRjcF3igJkKICAgIGF0IC91c3IvaW5jbHVkZS9ib29zdC9hc2lvL2lwL2Jhc2ljX3Jlc29sdmVy
-X3Jlc3VsdHMuaHBwOjE0NzoxNToKCi91c3IvaW5jbHVkZS9iaXRzL3N0cmluZ19mb3J0aWZpZWQu
-aDoyOTozMzoKICAgIGVycm9yOiDigJh2b2lkKiBfX2J1aWx0aW5fX19tZW1jcHlfY2hrKHZvaWQq
-LCBjb25zdCB2b2lkKiwgdW5zaWduZWQgaW50LCB1bnNpZ25lZCBpbnQp4oCZCiAgICBmb3JtaW5n
-IG9mZnNldCBbMjgsIDEyOF0gaXMgb3V0IG9mIHRoZSBib3VuZHMgWzAsIDI4XSBvZiBvYmplY3Qg
-4oCYZW5kcG9pbnTigJkgd2l0aCB0eXBlCiAgICDigJhib29zdDo6YXNpbzo6aXA6OnRjcDo6ZW5k
-cG9pbnTigJkge2FrYSDigJhib29zdDo6YXNpbzo6aXA6OmJhc2ljX2VuZHBvaW50PGJvb3N0Ojph
-c2lvOjppcDo6dGNwPuKAmX0KICAgIFstV2Vycm9yPWFycmF5LWJvdW5kcz1dCmBgYAoKQmFja3Bv
-cnQgVVJMOiBodHRwczovL2dpdGh1Yi5jb20vYm9vc3RvcmcvYXNpby9jb21taXQvYjI0NzhhOWJh
-OWVkNzZkN2M4NTg0MTllM2Y2NzdjYzQ1NDU5MWQ0NQoKRml4ZXM6IE5vbmUgcmVwb3J0ZWQKU2ln
-bmVkLW9mZi1ieTogQWRhbSBEdXNrZXR0IDxhZGFtLmR1c2tldHRAYW1hcnVsYXNvbHV0aW9ucy5j
-b20+Ci0tLQogLi4uMDAyLXJlbW92ZS1GT1JUSUZZX1NPVVJDRS13b3JrYXJvdW5kLnBhdGNoIHwg
-NzUgKysrKysrKysrKysrKysrKysrKwogMSBmaWxlIGNoYW5nZWQsIDc1IGluc2VydGlvbnMoKykK
-IGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2Jvb3N0LzAwMDItcmVtb3ZlLUZPUlRJRllfU09V
-UkNFLXdvcmthcm91bmQucGF0Y2gKCmRpZmYgLS1naXQgYS9wYWNrYWdlL2Jvb3N0LzAwMDItcmVt
-b3ZlLUZPUlRJRllfU09VUkNFLXdvcmthcm91bmQucGF0Y2ggYi9wYWNrYWdlL2Jvb3N0LzAwMDIt
-cmVtb3ZlLUZPUlRJRllfU09VUkNFLXdvcmthcm91bmQucGF0Y2gKbmV3IGZpbGUgbW9kZSAxMDA2
-NDQKaW5kZXggMDAwMDAwMDAwMC4uZDA0NGI2MjY3NgotLS0gL2Rldi9udWxsCisrKyBiL3BhY2th
-Z2UvYm9vc3QvMDAwMi1yZW1vdmUtRk9SVElGWV9TT1VSQ0Utd29ya2Fyb3VuZC5wYXRjaApAQCAt
-MCwwICsxLDc1IEBACitGcm9tIGIzZDg3ZGE1Zjg3ZTI5MDdlZDAwNGVkZjFjNzJhZDM5NDJmZjEx
-NjUgTW9uIFNlcCAxNyAwMDowMDowMCAyMDAxCitGcm9tOiBDaHJpc3RvcGhlciBLb2hsaG9mZiA8
-Y2hyaXNAa29obGhvZmYuY29tPgorRGF0ZTogV2VkLCA1IEF1ZyAyMDI2IDE2OjA3OjE5ICswMjAw
-CitTdWJqZWN0OiBbUEFUQ0hdIFJlbW92ZSBfRk9SVElGWV9TT1VSQ0Ugd29ya2Fyb3VuZC4KKwor
-VGhpcyBjb21taXQgdW5pbnRlbnRpb25hbGx5IGZpeGVkIGEgY29tcGlsZSBlcnJvciB3aGVuIHBy
-b2dyYW1zCitpbmNsdWRlIHRoZSBhc2lvLmhwcCBoZWFkZXIgd2l0aCBnY2MgdmVyc2lvbnMgPj0g
-MTUuCisKK2BgYAorSW4gZnVuY3Rpb24g4oCYdm9pZCogbWVtY3B5KHZvaWQqLCBjb25zdCB2b2lk
-Kiwgc2l6ZV90KeKAmSwKKworaW5saW5lZCBmcm9tIOKAmHN0YXRpYyBib29zdDo6YXNpbzo6aXA6
-OmJhc2ljX3Jlc29sdmVyX3Jlc3VsdHM8SW50ZXJuZXRQcm90b2NvbD4KKyAgICBib29zdDo6YXNp
-bzo6aXA6OmJhc2ljX3Jlc29sdmVyX3Jlc3VsdHM8SW50ZXJuZXRQcm90b2NvbD46OmNyZWF0ZShi
-b29zdDo6YXNpbzo6ZGV0YWlsOjphZGRyaW5mb190eXBlKiwKKyAgICBjb25zdCBzdGQ6OnN0cmlu
-ZyYsIGNvbnN0IHN0ZDo6c3RyaW5nJikgW3dpdGggSW50ZXJuZXRQcm90b2NvbCA9IGJvb3N0Ojph
-c2lvOjppcDo6dGNwXeKAmQorICAgIGF0IC91c3IvaW5jbHVkZS9ib29zdC9hc2lvL2lwL2Jhc2lj
-X3Jlc29sdmVyX3Jlc3VsdHMuaHBwOjE0NzoxNToKKworL3Vzci9pbmNsdWRlL2JpdHMvc3RyaW5n
-X2ZvcnRpZmllZC5oOjI5OjMzOgorICAgIGVycm9yOiDigJh2b2lkKiBfX2J1aWx0aW5fX19tZW1j
-cHlfY2hrKHZvaWQqLCBjb25zdCB2b2lkKiwgdW5zaWduZWQgaW50LCB1bnNpZ25lZCBpbnQp4oCZ
-CisgICAgZm9ybWluZyBvZmZzZXQgWzI4LCAxMjhdIGlzIG91dCBvZiB0aGUgYm91bmRzIFswLCAy
-OF0gb2Ygb2JqZWN0IOKAmGVuZHBvaW504oCZIHdpdGggdHlwZQorICAgIOKAmGJvb3N0Ojphc2lv
-OjppcDo6dGNwOjplbmRwb2ludOKAmSB7YWthIOKAmGJvb3N0Ojphc2lvOjppcDo6YmFzaWNfZW5k
-cG9pbnQ8Ym9vc3Q6OmFzaW86OmlwOjp0Y3A+4oCZfQorICAgIFstV2Vycm9yPWFycmF5LWJvdW5k
-cz1dCitgYGAKKworCitPcmlnaW5hbCBwYXRjaCBjb21taXQgbWVzc2FnZToKK2BgYAorVGhlIHBy
-ZXZpb3VzIHdvcmthcm91bmQgZm9yIF9GT1JUSUZZX1NPVVJDRSB3YXJuaW5ncyBpbmNyZWFzZWQg
-dGhlIHNpemUKK29mIGFsbCBJUCBlbmRwb2ludCBvYmplY3RzLiBJbnN0ZWFkLCB0cnkgZml4aW5n
-IHRoZSB3YXJuaW5nIGF0IHRoZSBwb2ludAord2hlcmUgaXQgb2NjdXJzLCBieSBsaW1pdGluZyB0
-aGUgbGVuZ3RoIG1lbWNweS1lZCB3aGlsZSBwcm9jZXNzaW5nIHRoZQorYWRkcmluZm8gcmVzdWx0
-cyBmcm9tIGdldGFkZHJpbmZvLgorYGBgCisKK1Vwc3RyZWFtOiBCYWNrcG9ydCBbaHR0cHM6Ly9n
-aXRodWIuY29tL2Jvb3N0b3JnL2FzaW8vY29tbWl0L2IyNDc4YTliYTllZDc2ZDdjODU4NDE5ZTNm
-Njc3Y2M0NTQ1OTFkNDVdCitTaWduZWQtb2ZmLWJ5OiBBZGFtIER1c2tldHQgPGFkYW0uZHVza2V0
-dEBhbWFydWxhc29sdXRpb25zLmNvbT4KK1NpZ25lZC1vZmYtYnk6IENocmlzdG9waGVyIEtvaGxo
-b2ZmIDxjaHJpc0Brb2hsaG9mZi5jb20+CistLS0KKyBib29zdC9hc2lvL2lwL2Jhc2ljX3Jlc29s
-dmVyX3Jlc3VsdHMuaHBwIHwgMjIgKysrKysrKysrKysrKystLS0tLS0tLQorIDEgZmlsZSBjaGFu
-Z2VkLCAxNCBpbnNlcnRpb25zKCspLCA4IGRlbGV0aW9ucygtKQorCitkaWZmIC0tZ2l0IGEvYm9v
-c3QvYXNpby9pcC9iYXNpY19yZXNvbHZlcl9yZXN1bHRzLmhwcCBiL2Jvb3N0L2FzaW8vaXAvYmFz
-aWNfcmVzb2x2ZXJfcmVzdWx0cy5ocHAKK2luZGV4IDAxMjc0NzNlMi4uODdmYTNmYWRmIDEwMDY0
-NAorLS0tIGEvYm9vc3QvYXNpby9pcC9iYXNpY19yZXNvbHZlcl9yZXN1bHRzLmhwcAorKysrIGIv
-Ym9vc3QvYXNpby9pcC9iYXNpY19yZXNvbHZlcl9yZXN1bHRzLmhwcAorQEAgLTE0MSwxNCArMTQx
-LDIwIEBAIHB1YmxpYzoKKyAgICAgICBpZiAoYWRkcmVzc19pbmZvLT5haV9mYW1pbHkgPT0gQk9P
-U1RfQVNJT19PU19ERUYoQUZfSU5FVCkKKyAgICAgICAgICAgfHwgYWRkcmVzc19pbmZvLT5haV9m
-YW1pbHkgPT0gQk9PU1RfQVNJT19PU19ERUYoQUZfSU5FVDYpKQorICAgICAgIHsKKy0gICAgICAg
-IHVzaW5nIG5hbWVzcGFjZSBzdGQ7IC8vIEZvciBtZW1jcHkuCistICAgICAgICB0eXBlbmFtZSBJ
-bnRlcm5ldFByb3RvY29sOjplbmRwb2ludCBlbmRwb2ludDsKKy0gICAgICAgIGVuZHBvaW50LnJl
-c2l6ZShzdGF0aWNfY2FzdDxzdGQ6OnNpemVfdD4oYWRkcmVzc19pbmZvLT5haV9hZGRybGVuKSk7
-CistICAgICAgICBtZW1jcHkoZW5kcG9pbnQuZGF0YSgpLCBhZGRyZXNzX2luZm8tPmFpX2FkZHIs
-CistICAgICAgICAgICAgYWRkcmVzc19pbmZvLT5haV9hZGRybGVuKTsKKy0gICAgICAgIHJlc3Vs
-dHMudmFsdWVzXy0+cHVzaF9iYWNrKAorLSAgICAgICAgICAgIGJhc2ljX3Jlc29sdmVyX2VudHJ5
-PEludGVybmV0UHJvdG9jb2w+KGVuZHBvaW50LAorLSAgICAgICAgICAgICAgYWN0dWFsX2hvc3Rf
-bmFtZSwgc2VydmljZV9uYW1lKSk7CisrICAgICAgICBjb25zdCBzdGQ6OnNpemVfdCBleHBlY3Rl
-ZF9zaXplID0KKysgICAgICAgICAgYWRkcmVzc19pbmZvLT5haV9mYW1pbHkgPT0gQk9PU1RfQVNJ
-T19PU19ERUYoQUZfSU5FVCkKKysgICAgICAgICAgICA/IHNpemVvZihib29zdDo6YXNpbzo6ZGV0
-YWlsOjpzb2NrYWRkcl9pbjRfdHlwZSkKKysgICAgICAgICAgICA6IHNpemVvZihib29zdDo6YXNp
-bzo6ZGV0YWlsOjpzb2NrYWRkcl9pbjZfdHlwZSk7CisrICAgICAgICBpZiAoYWRkcmVzc19pbmZv
-LT5haV9hZGRybGVuID49IGV4cGVjdGVkX3NpemUpCisrICAgICAgICB7CisrICAgICAgICAgIHVz
-aW5nIG5hbWVzcGFjZSBzdGQ7IC8vIEZvciBtZW1jcHkuCisrICAgICAgICAgIHR5cGVuYW1lIElu
-dGVybmV0UHJvdG9jb2w6OmVuZHBvaW50IGVuZHBvaW50OworKyAgICAgICAgICBlbmRwb2ludC5y
-ZXNpemUoZXhwZWN0ZWRfc2l6ZSk7CisrICAgICAgICAgIG1lbWNweShlbmRwb2ludC5kYXRhKCks
-IGFkZHJlc3NfaW5mby0+YWlfYWRkciwgZXhwZWN0ZWRfc2l6ZSk7CisrICAgICAgICAgIHJlc3Vs
-dHMudmFsdWVzXy0+cHVzaF9iYWNrKAorKyAgICAgICAgICAgICAgYmFzaWNfcmVzb2x2ZXJfZW50
-cnk8SW50ZXJuZXRQcm90b2NvbD4oZW5kcG9pbnQsCisrICAgICAgICAgICAgICAgIGFjdHVhbF9o
-b3N0X25hbWUsIHNlcnZpY2VfbmFtZSkpOworKyAgICAgICAgfQorICAgICAgIH0KKyAgICAgICBh
-ZGRyZXNzX2luZm8gPSBhZGRyZXNzX2luZm8tPmFpX25leHQ7CisgICAgIH0KKy0tIAorMi41NS4w
-CisKLS0gCjIuNTYuMAoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRw
-czovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+License changes are due to golang dependency [1]
+
+Update github.com/go-ozzo/ozzo-validation/v4 from v4.3.0 to v4.4.1
+Update github.com/mendersoftware/go-lib-microfrom 904960e to f0e3087
+Update github.com/stretchr/testify from v1.11.1 to v1.12.1
+Update github.com/urfave/cli/v3 from v3.11.0 to v3.12.0
+
+1: https://github.com/mendersoftware/mender-connect/commit/14ebf68bd4f83057f75beb06702d6f8adac84aac
+
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+---
+ package/mender-connect/mender-connect.hash | 20 +++++++++++---------
+ package/mender-connect/mender-connect.mk   | 12 +++++++-----
+ 2 files changed, 18 insertions(+), 14 deletions(-)
+
+diff --git a/package/mender-connect/mender-connect.hash b/package/mender-connect/mender-connect.hash
+index 2872bb467c..8daf1dc5af 100644
+--- a/package/mender-connect/mender-connect.hash
++++ b/package/mender-connect/mender-connect.hash
+@@ -1,6 +1,6 @@
+ # Locally computed:
+-sha256  b04331f447b9d21c5962d5aef2670f1de861e3065522a1b298af0904a8ee6400  mender-connect-3.0.0-go2.tar.gz
+-sha256  420fd444caf5a39bc2db0ae2202c71451a8ea3900011547bd0fb22678aaa4ef6  LIC_FILES_CHKSUM.sha256
++sha256  7cdd498ea5073b0b22cbe3b1db0a6f0d86243089112a5905a9b1d2b0c18609bb  mender-connect-3.1.0-go2.tar.gz
++sha256  649734d795498f215fe39bba2a166a53864afe83caebd5fe9c363aac9132b9d4  LIC_FILES_CHKSUM.sha256
+ 
+ # Vendor licenses
+ # Generated with sed '/^[A-Za-z0-9_]/s/^/sha256  /' LIC_FILES_CHKSUM.sha256
+@@ -8,21 +8,21 @@ sha256  420fd444caf5a39bc2db0ae2202c71451a8ea3900011547bd0fb22678aaa4ef6  LIC_FI
+ #
+ # Apache-2.0
+ sha256  d7e8fd4ad05371007d60285c309ba7a7ce3e61029b843f949fbb9ec79dc9eb47  LICENSE
+-sha256  a4e99d13c6cd0e4faf3867ae5c9815ff88cab3cefdefe0dc1ec9ac28b1152944  vendor/github.com/mendersoftware/go-lib-micro/LICENSE
++sha256  80297c4cb7b51b895d0385e45fe3d773271c8ae4c58e7c6d1ee0312dddaa4ad2  vendor/github.com/mendersoftware/go-lib-micro/LICENSE
+ #
+ # BSD-2-Clause
+ sha256  8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86  vendor/github.com/pkg/errors/LICENSE
+ sha256  1530185dd39cdde7cb2f786a7a5fcf8bc34368b6ae73c15e72bafe88fd80b9a2  vendor/github.com/vmihailenco/msgpack/v5/LICENSE
+ sha256  0f02aac22084ef463aa5f42f566feeec6aa4c99653519744a8c25cb079da5b5d  vendor/github.com/vmihailenco/tagparser/v2/LICENSE
++sha256  75e1ca97a84a9da6051dee0114333388216f2c4a5a028296b882ff3d57274735  vendor/github.com/russross/blackfriday/v2/LICENSE.txt
+ #
+ # BSD-3-Clause
+-sha256  2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477  vendor/github.com/pmezard/go-difflib/LICENSE
+-sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/sys/LICENSE
+-sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/net/LICENSE
+-sha256  0b77fdea862f869ef4f201ac5649bdbd38ccb055c7f6454dffae9e2adb4941c1  vendor/github.com/gorilla/websocket/LICENSE
++sha256  c615fb76b7891c9b36b0e352c111d5a2fe77c0111e4129a23659b25b26c3fdd2  vendor/github.com/stretchr/testify/internal/difflib/LICENSE
++sha256  911f8f5782931320f5b8d1160a76365b83aea6447ee6c04fa6d5591467db9dad  vendor/golang.org/x/sys/LICENSE
++sha256  2be1b548b0387ca8948e1bb9434e709126904d15f622cc2d0d8e7f186e4d122d  vendor/github.com/gorilla/websocket/LICENSE
+ #
+ # ISC
+-sha256  1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251  vendor/github.com/davecgh/go-spew/LICENSE
++sha256  1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251  vendor/github.com/stretchr/testify/internal/spew/LICENSE
+ #
+ # MIT
+ sha256  a2a1cea59d9c2d71908082f516f86bb560abf857646ecf69d70c121ead14aef4  vendor/github.com/creack/pty/LICENSE
+@@ -32,4 +32,6 @@ sha256  51a0c9ec7f8b7634181b8d4c03e5b5d204ac21d6e72f46c313973424664b2e6b  vendor
+ sha256  b2663894033a05fd80261176cd8da1d72546e25842d5c1abcc852ca23b6b61b0  vendor/github.com/stretchr/objx/LICENSE
+ sha256  f8e536c1c7b695810427095dc85f5f80d44ff7c10535e8a9486cf393e2599189  vendor/github.com/stretchr/testify/LICENSE
+ sha256  da277af11b85227490377fbcac6afccc68be560c4fff36ac05ca62de55345fd7  vendor/github.com/urfave/cli/v2/LICENSE
+-sha256  d18f6323b71b0b768bb5e9616e36da390fbd39369a81807cca352de4e4e6aa0b  vendor/gopkg.in/yaml.v3/LICENSE
++sha256  d18f6323b71b0b768bb5e9616e36da390fbd39369a81807cca352de4e4e6aa0b  vendor/go.yaml.in/yaml/v3/LICENSE
++sha256  a55959c4e3e8917bfa857359bb641115336276a6cc97408fd8197e079fb18470  vendor/github.com/cpuguy83/go-md2man/v2/LICENSE.md
++sha256  c8024e31c1de453fea90f22a221968835cc7af9d520274a2576c9ec9976055b0  vendor/github.com/shurcooL/sanitized_anchor_name/LICENSE
+diff --git a/package/mender-connect/mender-connect.mk b/package/mender-connect/mender-connect.mk
+index 98fdfe16df..ae9094f3b4 100644
+--- a/package/mender-connect/mender-connect.mk
++++ b/package/mender-connect/mender-connect.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MENDER_CONNECT_VERSION = 3.0.0
++MENDER_CONNECT_VERSION = 3.1.0
+ MENDER_CONNECT_SITE = $(call github,mendersoftware,mender-connect,$(MENDER_CONNECT_VERSION))
+ MENDER_CONNECT_LICENSE = Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT
+ 
+@@ -17,11 +17,11 @@ MENDER_CONNECT_LICENSE_FILES = \
+ 	vendor/github.com/pkg/errors/LICENSE \
+ 	vendor/github.com/vmihailenco/msgpack/v5/LICENSE \
+ 	vendor/github.com/vmihailenco/tagparser/v2/LICENSE \
+-	vendor/github.com/pmezard/go-difflib/LICENSE \
++	vendor/github.com/russross/blackfriday/v2/LICENSE.txt \
++	vendor/github.com/stretchr/testify/internal/difflib/LICENSE \
+ 	vendor/golang.org/x/sys/LICENSE \
+-	vendor/golang.org/x/net/LICENSE \
+ 	vendor/github.com/gorilla/websocket/LICENSE \
+-	vendor/github.com/davecgh/go-spew/LICENSE \
++	vendor/github.com/stretchr/testify/internal/spew/LICENSE \
+ 	vendor/github.com/creack/pty/LICENSE \
+ 	vendor/github.com/go-ozzo/ozzo-validation/v4/LICENSE \
+ 	vendor/github.com/satori/go.uuid/LICENSE \
+@@ -29,7 +29,9 @@ MENDER_CONNECT_LICENSE_FILES = \
+ 	vendor/github.com/stretchr/objx/LICENSE \
+ 	vendor/github.com/stretchr/testify/LICENSE \
+ 	vendor/github.com/urfave/cli/v2/LICENSE \
+-	vendor/gopkg.in/yaml.v3/LICENSE
++	vendor/go.yaml.in/yaml/v3/LICENSE \
++	vendor/github.com/cpuguy83/go-md2man/v2/LICENSE.md \
++	vendor/github.com/shurcooL/sanitized_anchor_name/LICENSE
+ 
+ MENDER_CONNECT_DEPENDENCIES = \
+ 	dbus \
+-- 
+2.56.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
