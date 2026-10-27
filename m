@@ -1,164 +1,122 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30ECC606A31A
-	for <buildroot@archiver.kernel.org>; Tue, 27 Oct 2026 08:17:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B4B7606A31A
+	for <buildroot@archiver.kernel.org>; Tue, 27 Oct 2026 08:20:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=e4BdGDDK;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256 header.s=20251104 header.b=C6iA9eWH
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=pp6MfCNX
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0F36880CEC;
-	Tue, 27 Oct 2026 08:17:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EC3B9405B0;
+	Tue, 27 Oct 2026 08:20:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QD_uaCb0e991; Tue, 27 Oct 2026 08:17:06 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 1ABB780B7D
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793089026;
-	b=ozkWT2DVBfRXjRQPKg7hrBKeVa/3x/64/ptM80UqDn8zCuI/nFFSPQPoI4HEOCIVcRtE
-	 U1yVV2FdF0FXdV/nl2yJJC8ZICawcQe7w72Ko4gct3I//51fSF9I/hMkJ7/iEGaJxtvlC
-	 2aKCApwVN7BhszN2AxMUAZnXg+UzJaFrIPRkvPYAtIOBgU8dRzWT3J9sYNL6KAZdpfKLr
-	 UxUEW/EgiyjMomjdXhdvwcH5xoFhZuZKrkVG/jZRUwIEZFVdr5dbbQ/jWsDPwOd8jqKG5
-	 Kj8VGzaPCkT8leHZ2KyoWnDZMhNVrToqA5eTaPDL+wnc8D47ugLzpI5t4Xbn9t1v4UQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m5ImLikctUMP; Tue, 27 Oct 2026 08:20:07 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 0C9C64057C
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793089207;
+	b=IvKcLpEWT3SkCBayCMqn9MhQ1d3w61V7xyyFQogxmb2505HTVB5EzOUwMgkJdNexQPB4
+	 4wkk2eP+KEN64O11FbWwaj6gPcg02kJf2X0C2PFvY0VcY7lWiexThliejf3gqvBn8Ir+r
+	 MicvoVNj7CZ1pS0WU+mY/2rZsqT7c8XtnBiiqhfHrE5KkTIwaENtahtim2Wd0bboKSpuR
+	 zyqyZ401+QyRpn7SkzHbYpvGKCnlpc5RZ/klVMjPcRRK97pfAMb85r81OIHRV081nMKFS
+	 COC8AsCWeSj2S+NW4Hp65m0QSke/JZ/bOFBROZLxJb24P27vcVLkclqTjKO3ViwVk9Q==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793089026;
+	c=relaxed/relaxed; t=1793089207;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:From:To:Date:Message-Id:X-Mailer:MIME-Version:
-	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:Cc:
+	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
+	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
 	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=s6wQUQBx4VT/Ub1LnyyWn1NKGdi9GDRdUx0oTwA+sEY=;
-	b=erhvPdvS1BwB1L6oQAUSxpo4nJuV7OTU2QX/O+B2cOykydrX1CKuEI3MTyv+qZRrtWWK
-	 qWLg8xU4ydw1EJIVMSRoQ2KKKBxAEm+M/DGg/IAm0/7R7ryTSmW2So/Qi/KPBgZDNE5zw
-	 m4nBWFJNwjnNZcLpQOBXo6mRGIxwIzL9aXwC+njuv8XstR+TtBAwkhREBz4H6R5uiuoy3
-	 6waPZ6gQHnGpEJTZAsF53bdxqxq1+Yy9g30PpwgR3+Ho0PBla8FQqssThKJgBs5cTlkQm
-	 u5nnbEu6Q5NkJRtsEj7s7pPAxNjwQOfmJeE7PDDGsJqqGBe2mjNnGMTfI8RLifS43IA==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
-	dmarc=pass header.from=googlemail.com;
-	dkim=pass header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256 header.s=20251104 header.b=C6iA9eWH;
+	bh=cX1xrG9TClf1NRaYVV2TWgjLEPPMDryT4871zsda+2U=;
+	b=nlCHGEdmNJWFCFkfpzDJvrKjNd4f2rCux3hPAFCsC8RgMASAv+bKYCJPgeIsLcAwWJBm
+	 YQ3nvHbUdOSY3R4vq4X+IMG+j5V9lQEamX5+4lskJ7Fd6wamC9EAq1aHL0nW6zo2Ixeyt
+	 LsWPG9vxnuBUZFIku8162KwiknvqRmFWgnJSssmaSaFZG7CQ2koc26o1Fdpd5HBAkN23r
+	 6a/e7tmxrwBOEuCMy+NHfZl6kRboJQWsXnU1RbNgAS8tvPPUwnW20DIbHY6idBeutwCav
+	 1bb4K8XpB8/ziUlecCB8mDw5X6tI72FSW5z9V7XJo7URkla+stpxs310lKvnBp/NiSA==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793089026;
-	bh=s6wQUQBx4VT/Ub1LnyyWn1NKGdi9GDRdUx0oTwA+sEY=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=e4BdGDDKs7Jy5gqffqfC0oJGqrb8MJAkRM0C42/WqNhOIOAbrIgy6/aESVBwKx6JU
-	 8UkQo6QsKa7DBdL+AnLennYnarlRCn+i/1lAlKpIBVtAQAuypeCqzwLA8J9OH5R5qd
-	 JQ0A98u9B2IGxNBjV7mMNFeeP2tSMKvSMNAdYHt4AQS+IcXQFGP/BpXnD48/yyN1Ls
-	 Il3o1dYCvP/GqL22bek2qYplRoV3+35gp9PTCk3Yv3i4VBhVkkoq2rhMqJfiKcVzR0
-	 ppRV5YYz3aQOoJ3nwa/sEUjh/84hwaVFNqwzta2LvwO5xRbg0R7vjm5IM7EGJUVBHj
-	 ImC6jOYQI4Dug==
+	s=default; t=1793089207;
+	bh=cX1xrG9TClf1NRaYVV2TWgjLEPPMDryT4871zsda+2U=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=pp6MfCNXr/vQW8AawIkH5/N6S/PVFrBvOhqyVDubBjgK06p89xdbiIbIP761nhcA2
+	 c7IeYV3zZYjrthNsJCyWLvZ/BNQeFGfZonJJxj5vmdZRqfiwKtz/U86QGOX03K6InA
+	 1nQVYBvpHP5e3IZWwYUZFwdiWQ3PB8FcP2shYk4vUkS9JAsBYTD/8vj0KV7fSCJu1q
+	 hWrd86e1J7C8ZH7No5jk+Fjf+NWwnsmZn39QFI7tofZxBSftpqPhzjEL2J1Vs2Atlr
+	 a/66j6hRZIq+bnmEKdhBu6cgHu19YDkEoEjAz1a3C1ZDxLnjG1+2aTv2/U/F6ZQEVU
+	 N+qlX8UNGZ6tw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1ABB780B7D;
-	Tue, 27 Oct 2026 08:17:06 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 02BA2120
- for <buildroot@buildroot.org>; Tue, 27 Oct 2026 08:17:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0C9C64057C;
+	Tue, 27 Oct 2026 08:20:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 176A7120
+ for <buildroot@buildroot.org>; Tue, 27 Oct 2026 08:20:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0047180B7D
- for <buildroot@buildroot.org>; Tue, 27 Oct 2026 08:17:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F0F574057C
+ for <buildroot@buildroot.org>; Tue, 27 Oct 2026 08:20:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J1VswgTXhNHo for <buildroot@buildroot.org>;
- Tue, 27 Oct 2026 08:17:03 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org CF63C8087B
-Authentication-Results: smtp1.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::633"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793089023;
- b=StqRBhUISt7lYdyzrv/ZyIl7Hqhn60kGDXdP18jqBFY94n01J+EOHA74bNvXLvI0sM2B
- p07xcGhRFPFwn+WkY6qksR3yFwF4R9B4OQHJT1tQjDeQA+7BIwyUWaVYwo9yiXuzFxqaE
- gL7x5gZqdC4dExrvE542hj5lJgsq7EVHA2LlZ1uzk5r84L4KQ3WAh8MnpIrIy77FQAAWk
- qIEkW6tIwym/59EQRB9vumU7vOG9IKRbb2J4i2wORWYAbgGjWQ6dUEcbdlgAQHGhUcBub
- FkoMEx4S4MnC0kxtU07sYrjM8n86kD7KvptZbtZwh6lW3i3FQA8505DFkscchYfCZcA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bhw8nlvGdY3g for <buildroot@buildroot.org>;
+ Tue, 27 Oct 2026 08:20:05 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org DFE624056E
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793089205;
+ b=cVIhlqPerAN4+2k3kQwgbKk1BSVo4jEPfc8R/wCeHnEtFzRtbYEqc7JkRsyCc5WCkM+k
+ YJkLnbigH+/lSq5Gj3VBPKuahRPJ9LZuvEl75hfsBnA4YVqBMYuoHMRvtfu2uDH6p0hN4
+ 5H0LjnyKFz7S0XyBlyaq+858VclF32mAh1etZbm2KOUnGjNbcQEhF14kGQL1EpNuSKSLB
+ jgz7z7GcYfXMZvwRxilBOTGG4UqbG5xwwFOCf+w8LOaPLd4jhEPu1xSOWzgP5dCCZY5jq
+ NBWyNtAVeFhjvHM0NUcvyl9yApo/XtuwiaLA4dcizwvJMU9uASCwXczrkuugOlqdIGQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793089023;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
- bh=cFQ3fFMMpsQFrts/gAMsRsJFq8l+1gOh9YWWKrJtwDE=;
- b=PKHp8qOIsjXwiVZ3dSamjdAAPsH6OJcmYhPRSEDJIavo4qd3KmvHBOz7PamU6Pm6GrVR
- i/pVSK3fN75PJY7hNiTmJ8vRw0+bpM7Fm2KSP40mUTQtSkbbrELcTBNDSJIUXxi0/6YmX
- VzjaD62jUql7USqxJTLtLg2TtG2m5C59y1BlJYKh6X6RAautB+Pkiiu10q8p0F0Sp6sc6
- +2hIxstF6n+ddNH6xLEkml1Ga8eufoqeht3b82v/iGsWO/wBBHYIFSC8557xU1PK4JnU5
- QC1xTXY9AAM+Nr2t53nZ6L2r//lsG5JsoLhf5tJYfqRNXTGqhLRaRFN0TbXg8o/bh6w==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
- dmarc=pass header.from=googlemail.com;
- dkim=pass header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256
- header.s=20251104 header.b=C6iA9eWH; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::633"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::633; helo=mail-ej1-x633.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org; dmarc=pass (p=quarantine dis=none)
- header.from=googlemail.com
-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20251104 header.b=C6iA9eWH
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
- [IPv6:2a00:1450:4864:20::633])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CF63C8087B
- for <buildroot@buildroot.org>; Tue, 27 Oct 2026 08:17:02 +0000 (UTC)
-Received: by mail-ej1-x633.google.com with SMTP id
- a640c23a62f3a-c40e02b2ebaso594523566b.1
- for <buildroot@buildroot.org>; Tue, 27 Oct 2026 01:17:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20251104; t=1793089020; x=1793693820; darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=cFQ3fFMMpsQFrts/gAMsRsJFq8l+1gOh9YWWKrJtwDE=;
- b=C6iA9eWHkAO7N7AIn6Cwv69yeWcGcVG7LAPlFS5PHaf1iySTqYXkYqbcxLZPjPHFEf
- JYyiBsh+Rjawjv/i3vIZKKdbthR6tXyW8DAlgJWGsYRNWM/D4PiK2IsJ6Yw7SFmoTuFs
- 9jk9HIbO5LKBjl22bD0GycNrsgHSeELUyythKzB9vUFtFLKf+US9h1Rq0NSPFc5PejR0
- YPKTEGdwAMAyWI+EXK+qikFGpxpkXK5x5AVxTarGVLMjAgNMbx4tJgYFeCTZNvzTjDOK
- 0EioY6+wJhQLW/egw7Mh0LuqU5HMUA2aS/YuAj+PuWNnJ0E+TrY/tgMqbkPyzMCCXr6A
- JN2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793089020; x=1793693820;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=cFQ3fFMMpsQFrts/gAMsRsJFq8l+1gOh9YWWKrJtwDE=;
- b=l20R2cehh9MBDlsreZGpzEClefiGSUq5pRqKvfuVRYZq+NAyth1+uPGkfnCKLPsZq2
- yxkeqPUYCje+SYKM4Zt6YXFJD8IEIc0jwssAyOTGoPlFjRV+KjuALj3mSMY1w/cNT/7M
- PxIE2yTZDAv8QRDU6u17AkXNoy6C2X28YOiOfB+CM1vjh3s8MpDYaHa5RIgEeLMKQvqj
- o49EPdNvbIImfmUFdTyUxyq2Fqh1GWzcjEVX48UBzl/uzoUyFcZyjYwUNI098ZgDUMUS
- MQZwo5Kx9NGCuSzs5k+XEjW2XKJWJD4pVqI462svOvWPX9btdR/6Ux46jbw2Ct8HHJZ1
- k3JA==
-X-Gm-Message-State: AFq9FYLcssvbboN7thfC4NFfe7AzIm/w/WqaPvKbodLujNgcJKrL4jN2
- /zl0Nxypt+9lSUQjq8itDWBgscf53324LfcCoER5kHdkzQGvExHla3paYjGE3Q==
-X-Gm-Gg: AYBFou0XzCdUWpFivgAxhhR0IDSNpEdWZblnBEKnyqU5LyHgnNq1tyH4PsWwdEO7OPm
- xb9SwNnUBNspunQW5KfRBGkIJfVkDLPIz0xGiX3HS8VkjASc3Gabsvx5+sPET4M7uXMv+hQcIna
- 9mdWFtk3xXCDuDtvgSRgkEioH4QZUfZ7PKmQB2Qsr7VDCly+XoliVxKE1ZTo6cInP6bgwSjiBTv
- 3PgYSH4NHV3EjuDCZuFgJBFfHo46BnIUl/9470Skc27pXAyETJcdUrmKl+TMrswabpv54JqBzCg
- O5z17xs5zjJ8xLoQAcSF071NotcPKScY+jOu9tHoHDF8Ih52njEziXe0UVhLWB8k9E7li9M8Vgw
- GrbKFCGWH4dOrC9NUM4Pb3yZcMNwgcbjOoZdu/Cv7r4vDd98ZfS2+UlpNwSvLu1FJ3nPy2H0iyy
- KADlFyagajk5Mn462vChAPl/GPySQZSzh+J6OSe7R7DTuggPTs8HUTFJ2wvi2qfqekmE4NBL8gU
- jS0DcSr/B41x5QDltni2CtnVKT+ufPrYeYPUa46wyJg4W2gk83iZWLrniS8UY86Njy88TgreA5j
- ynCOKZsJMQn9oMGOed0jXLaeMbnvdFDVXLA=
-X-Received: by 2002:a17:907:7f9e:b0:c2e:52d6:1fb7 with SMTP id
- a640c23a62f3a-c46bde23187mr946550466b.22.1793089019971; 
- Tue, 27 Oct 2026 01:16:59 -0700 (PDT)
-Received: from development2.visionsystems.local (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c46bd524266sm425261866b.38.2026.10.27.01.16.59
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 27 Oct 2026 01:16:59 -0700 (PDT)
-From: Yegor Yefremov <yegorslists@googlemail.com>
-To: buildroot@buildroot.org
-Date: Tue, 27 Oct 2026 09:16:59 +0100
-Message-Id: <20261027081659.3905442-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.34.1
+ c=relaxed/relaxed; t=1793089205;
+ h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
+ Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
+ Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
+ bh=Ke+Df6TheNSoIQc6dUHKSg6wule6/MEBTXpLK710ugI=;
+ b=rO2mRbfAwwQ8UM5YNq1wpIcCOz3MVLZy9cczSLsUAREGLO9ZDMUp6xuXyxWEwAg2TAry
+ iwatEsnKPqnAkr64sgdeEiz7ldaIc0Vc9PD3VA39dJr2u5n0YQpBtzHgPVhCDjIG2Amxp
+ am9M9jrVWSRi7ohGmIpkPcjFJF2ubI5uF65Di1gwqmSb+o36ZFI8po/xZu1BsaIcJJ8nb
+ zOB7QkU/5fGMctE43/X3cr13EOYvNgZ+6scENJQisFKMWIHBYRB2RdtzPfo4NytCNuokj
+ zo+E3uXzkKvoJilnM2feVauNdSEpGmNpLDb65PLxLFf4uXj0ySA/vs1PqokSgPYzlQg==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ dmarc=pass header.from=bootlin.com;
+ dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=dkim header.b="gtCR/7Wi"; 
+ arc=none smtp.remote-ip=185.171.202.116
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.171.202.116;
+ helo=smtpout-04.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DFE624056E
+ for <buildroot@buildroot.org>; Tue, 27 Oct 2026 08:20:03 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-04.galae.net (Postfix) with ESMTPS id 6738FC79AAE;
+ Tue, 27 Oct 2026 08:21:02 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 022E8603BD;
+ Tue, 27 Oct 2026 08:20:01 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 790951032909B; Tue, 27 Oct 2026 09:19:59 +0100 (CET)
+Date: Tue, 27 Oct 2026 09:19:58 +0100
+To: Andreas Ziegler <br025@umbiko.net>
+Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>, buildroot@buildroot.org
+Message-ID: <auBeTP2NwmLiaDGR@windsurf>
+References: <20261024220915.2813680-1-alexander.sverdlin@gmail.com>
+ <at5oC97YlhN98HHS@windsurf>
+ <e34f4a3f8aaee192923e3ecdde4a287a1cfaabda.camel@gmail.com>
+ <45a821b584840d1cabe6df1dfe083fb8@umbiko.net>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/libwebsockets: fix OpenSSL detection
- without libatomic
+Content-Disposition: inline
+In-Reply-To: <45a821b584840d1cabe6df1dfe083fb8@umbiko.net>
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH v2] boot/syslinux: Bump to 6.04-pre2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -168,125 +126,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Danomi Manchego <danomimanchego123@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-6.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MAILING_LIST_MULTI,
+	SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Since version 4.5.3, libwebsockets adds -latomic to the libraries used
-by its OpenSSL API probes whenever 64-bit atomics don't work out of the
-box, without checking that libatomic is available. Buildroot toolchains
-without thread support don't provide libatomic, so on a CPU without
-native 64-bit atomics (e.g. ARMv5) all probes fail to link:
+On Tue, Oct 27, 2026 at 04:54:45AM +0000, Andreas Ziegler wrote:
 
-  ld: cannot find -latomic: No such file or directory
+> Yes, there is still interest in this software, and I sadly mourn the absence
+> of the don't-delete-host-syslinux patch.
 
-libwebsockets then assumes a pre-1.1 OpenSSL and fails to build:
+Not sure to understand this one. Could you clarify? Is Alexander's
+patch dropping some feature that exists today in boot/syslinux/ and
+that is important for you?
 
--- Performing Test HAVE_WORKING_ATOMIC_64 - Failed
-[...]
--- Looking for HMAC_CTX_new - not found
-[...]
-include/libwebsockets/lws-genhash.h:93:18: error: field 'ctx' has incomplete type
-   93 |         HMAC_CTX ctx;
-      |                  ^~~
+In any case: thanks a lot for raising your interest in syslinux. If
+both of you could add yourself in DEVELOPERS for boot/syslinux/, it
+would be much appreciated.
 
-Add a patch, sent upstream, to only use libatomic if linking against it
-makes the 64-bit atomics test pass.
-
-This issue has been present since commit 20c3eb6eb684
-("package/libwebsockets: bump version to 4.5.7"), which bumped
-libwebsockets from 4.4.1 to 4.5.7, the atomic check having been added
-in 4.5.3. It therefore affects 2026.05 and later.
-
-Fixes:
-https://autobuild.buildroot.org/results/863c30265623973e15a25c2d38c0e1631a39b7e8
-
-Fixes: 20c3eb6eb68432c37d5db69963be266b7f2d23f7 ("package/libwebsockets: bump version to 4.5.7")
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
----
- ...ly-link-libatomic-if-it-is-available.patch | 61 +++++++++++++++++++
- 1 file changed, 61 insertions(+)
- create mode 100644 package/libwebsockets/0001-cmake-openssl-only-link-libatomic-if-it-is-available.patch
-
-diff --git a/package/libwebsockets/0001-cmake-openssl-only-link-libatomic-if-it-is-available.patch b/package/libwebsockets/0001-cmake-openssl-only-link-libatomic-if-it-is-available.patch
-new file mode 100644
-index 0000000000..84724f9c50
---- /dev/null
-+++ b/package/libwebsockets/0001-cmake-openssl-only-link-libatomic-if-it-is-available.patch
-@@ -0,0 +1,61 @@
-+From e0480a47e95a0d74c826926ae6bfef14fc8d988f Mon Sep 17 00:00:00 2001
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Tue, 27 Oct 2026 08:47:29 +0100
-+Subject: [PATCH] cmake: openssl: only link libatomic if it is available
-+
-+Commit 09aade8c9 ("cmake: openssl: Added check for atomic library")
-+adds -latomic to CMAKE_REQUIRED_LIBRARIES whenever 64-bit atomics
-+don't work out of the box, without checking that libatomic exists.
-+
-+Some toolchains don't provide libatomic at all, e.g. GCC toolchains
-+built without thread support, as libatomic relies on pthreads. On such
-+a toolchain for a CPU without native 64-bit atomics (e.g. ARMv5), every
-+OpenSSL API probe then fails to link:
-+
-+  ld: cannot find -latomic: No such file or directory
-+
-+so lws believes it deals with a pre-1.1 OpenSSL and the build fails:
-+
-+  include/libwebsockets/lws-genhash.h:93:18: error: field 'ctx' has incomplete type
-+     93 |         HMAC_CTX ctx;
-+        |                  ^~~
-+
-+Only use libatomic if linking against it makes the 64-bit atomics
-+test pass.
-+
-+Assisted-by: Claude:claude-opus-5-5
-+Upstream: sent to Andy Green <andy@warmcat.com> on 2026-10-27
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ lib/tls/CMakeLists.txt | 15 +++++++++++----
-+ 1 file changed, 11 insertions(+), 4 deletions(-)
-+
-+diff --git a/lib/tls/CMakeLists.txt b/lib/tls/CMakeLists.txt
-+index d91c3dab6..9060d32fe 100644
-+--- a/lib/tls/CMakeLists.txt
-++++ b/lib/tls/CMakeLists.txt
-+@@ -564,10 +564,17 @@ if (DEFINED LIB_LIST)
-+ endif()
-+ if(UNIX AND (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID MATCHES "Clang"))
-+   check_c_source_compiles("int main() { long long x = 0; __atomic_fetch_add(&x, 1, __ATOMIC_SEQ_CST); return 0; }" HAVE_WORKING_ATOMIC_64)
-+-  if(HAVE_WORKING_ATOMIC_64)
-+-    set(LWS_ATOMIC_LIB "")
-+-  else()
-+-    set(LWS_ATOMIC_LIB atomic)
-++  set(LWS_ATOMIC_LIB "")
-++  if(NOT HAVE_WORKING_ATOMIC_64)
-++    # libatomic is not always available (eg, toolchains without threads),
-++    # only use it if it actually provides the 64-bit atomics
-++    set(CMAKE_REQUIRED_LIBRARIES_SAVE ${CMAKE_REQUIRED_LIBRARIES})
-++    set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} atomic)
-++    check_c_source_compiles("int main() { long long x = 0; __atomic_fetch_add(&x, 1, __ATOMIC_SEQ_CST); return 0; }" HAVE_WORKING_ATOMIC_64_WITH_LIBATOMIC)
-++    set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES_SAVE})
-++    if(HAVE_WORKING_ATOMIC_64_WITH_LIBATOMIC)
-++      set(LWS_ATOMIC_LIB atomic)
-++    endif()
-+   endif()
-+ endif()
-+ if (UNIX AND NOT (${CMAKE_SYSTEM_NAME} MATCHES "QNX"))
-+-- 
-+2.34.1
-+
+Thomas
 -- 
-2.34.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
