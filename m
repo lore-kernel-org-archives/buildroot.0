@@ -2,175 +2,165 @@ Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3789606A31A
-	for <buildroot@archiver.kernel.org>; Tue, 27 Oct 2026 15:12:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B77606A31A
+	for <buildroot@archiver.kernel.org>; Tue, 27 Oct 2026 15:18:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=f2wlK17i;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=d6ZwuBjG
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=AaWBXSvw;
+	dkim=fail reason="signature verification failed" (1024-bit key, unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google header.b=Varna9O5
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A0244607B8;
-	Tue, 27 Oct 2026 15:12:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 93FF7605EA;
+	Tue, 27 Oct 2026 15:18:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yOghgwqjv-84; Tue, 27 Oct 2026 15:12:09 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org D5E06607A5
+ id 6p1lwyXqGZJZ; Tue, 27 Oct 2026 15:18:19 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 11D76607BC
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793113929;
-	b=brTlUAWOQ/zIBBrA2c+sOIpsV+heiYxVoeKGEEbSgLzRy7nkeHmVLkFcCjTneACu0/OH
-	 LvssFVymgRgSIXVCmzMFQFANQdOLEA6CMn12BB29Sigx2eglDikoAt9tMiimC1fCN7MF0
-	 pqlmKeBiilLLZrL9nisWcDaek/b60Xtztc1AFFhVn07Dql0BPRhTJRETQsAY6U9Wi8mSV
-	 NI7w8bLl+lpEa9vd/cx0u8uV0EXNs2BAf3GU6V+kcmDonfmAbpu1PX6SkaHgjanbgAI8l
-	 FiAtsqnnz3au0k5n9IXTcB+oqeoQyjuu/te2zdCFx3kSP53dO3m0Ot0OxEXxOQ3FX2w==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793114299;
+	b=WqUIQeguPwh7C8AS2TL8Pxz17RZ4ps8mY+jN/LCWyKI62cWIQLZ/WEUctyzlg4+aMgia
+	 pdS3tLEH0JIE6KnaAdY1toM7Kn7r8GxYjbeor+3mcNwdul3Zxg/sUvYn42Sqi87WHX8Ag
+	 CSXvNYqv56wuMHvle0roAe89E2W5wE32Kg3wmDK8HMOrcZsQUBlsra0HQ1X9+4kYjvOI1
+	 62Qe1tZ6HeSMGBy73pkAkISo/PLjC6DalesuGQt3zZLesGMCWl5T2hMko34gqkLC6Kcz8
+	 kgWQ9dFHhubdVGs4kL6xyI7rm47gWeN2LEjQ/wJZU/cOZ2oORqib6NUXmJjBju4KZig==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793113929;
+	c=relaxed/relaxed; t=1793114299;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
 	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:Message-ID:Date:MIME-Version:User-Agent:To:
-	 References:Content-Language:From:In-Reply-To:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Content-Transfer-Encoding:
-	 Content-Type:Errors-To:Sender;
-	bh=HLYI6pDCQNHmxonvhOd3TueON8eK7lU5CNfcZSpJByY=;
-	b=h3ZqLYhxYfYyH4lc4D/upyn4hZg9uRVWefyfZZcxa6BxrPVY5X4dWaKQHG92JEc3Py7t
-	 FcsrWi7sYl6T2ZP4nvF+998NjpjIlmZe5nN8pXWtuxLe4fQCTuMowAy1XKF0uVk4hAhbd
-	 lmVGdI+Q744Tc4V72nFY6nUi0g8yqwiz6+b5G+YwkY+ZGoLhDcWcaB9M+qWqOEjTRm8ST
-	 0+aByGGkuLL9CMQ2w2I25eAAyYs8cCpF8zw2Xe9IH+8hHG03/yUiYUSL2LmVmYIe2t2ai
-	 LwGKbYVZ4m8VrRhJmhwBjFntosj6s0HbBRmS8iRqlsIYAbNom8jW51B9mT7+UHsN1Jg==
+	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
+	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=5N5ClecCA/g927VyInICISHR5XUIRIvsFZezqaPJ674=;
+	b=rYWCIJU91kkeoue4Sj/sF8yN0Y4VXkAYFk6ijVbGAystkU89BieftM/2LpFWsIMwlzvr
+	 ufIetgIE47t8tHh/HywTolK/wT7Bf7trTfYkgU3Jc0eEjIZXKRPxVaBYiDHtWg9KfXYCL
+	 RTWWsL2Vk/dTggGA/J2HA8g8hx+2VxQiJAB/O3JnPjNdiMiRGovKP09CUWW3L/9wCAQkQ
+	 9iUPNP17RTtjMIevgSQFHJTlrDYBFw+K8x1YGyc5xMcgujmhTTDZO17dgYrNw4F1/JPVj
+	 k8W0uoJCm8z+2+dwfvi44hYUzQVR6U9Pi7Zbuyy2yv/Kpqiv8pdPO5aRa/Bg8pbE7ZQ==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
-	dmarc=pass header.from=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=d6ZwuBjG;
+	dmarc=pass header.from=amarulasolutions.com;
+	dkim=pass header.d=amarulasolutions.com header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google header.b=Varna9O5;
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793113928;
-	bh=HLYI6pDCQNHmxonvhOd3TueON8eK7lU5CNfcZSpJByY=;
-	h=Date:To:References:From:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=f2wlK17iDI/mEa2pVLVp/KU7Pz9jmWyZlB0052/JN8iGeo2vJ5B4ZI2YrLG91Lk0b
-	 pgUVlI/mgFJa1ZTB5+FseldOxSrZ3A2EVb6pMRbxI4o7HcBG2DnRsW1aakLTlyST1o
-	 cw+6oI+2oq13WfC4+iydaWOBc7gZe7wxsKl3laan1M3uO+W/46g1aGFNoRzgh7Cz+D
-	 DhYqTLMB9vg9b2z2ThSwAx/b1M8xDqavOzCcwLbcG7FyRk5sUzy3tOck914mx/tvWe
-	 5J06L5oAuXPYIR8lAFR+LPxmPAf18ng9tdrsqMETtC5RL8Ue6cjPOsgEkNe7xQd+uX
-	 JnT5eH8p0rlug==
+	s=default; t=1793114299;
+	bh=5N5ClecCA/g927VyInICISHR5XUIRIvsFZezqaPJ674=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=AaWBXSvwCnHAgEda4k8gl/A74Ce+3QdX7ruxSP9eItf9FpQrhD7PFOUoLIXVXH+uZ
+	 V5eG+eEVCF6VlYcQB1nbr1KRPFK2sJpyG0ucHL2nirKwVG9EL1S7LlwrXgF2aibfTO
+	 3hjidMeEDrS4PnyAhCh0ionW+ucjtKFMOOF5bffqnODxCH8e9BUv1pHopX8vB4/9Sb
+	 +6mWSrwsnvdOsJM2Yk0elRUdBXag5LM45AIRgjV/ob+QB6OuR+Mu+dkQlkQIT+XWrk
+	 b4/rba1tlxyZWVp5NShTkmP1PI2DDy7x9EZPJkhQJQFc26r+dASlH2eNUJ1g4NVzJE
+	 JFVl53z7Ow9Ug==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D5E06607A5;
-	Tue, 27 Oct 2026 15:12:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id AF0A8279
- for <buildroot@buildroot.org>; Tue, 27 Oct 2026 15:12:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 11D76607BC;
+	Tue, 27 Oct 2026 15:18:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A0814279
+ for <buildroot@buildroot.org>; Tue, 27 Oct 2026 15:18:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 95170607A5
- for <buildroot@buildroot.org>; Tue, 27 Oct 2026 15:12:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 91B30607BC
+ for <buildroot@buildroot.org>; Tue, 27 Oct 2026 15:18:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 23EyICQnFu60 for <buildroot@buildroot.org>;
- Tue, 27 Oct 2026 15:12:06 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org B3C6060794
+ id h0rAtjeuOSJA for <buildroot@buildroot.org>;
+ Tue, 27 Oct 2026 15:18:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org B0612605EA
 Authentication-Results: smtp3.osuosl.org;
- arc=none smtp.remote-ip="2607:f8b0:4864:20::122f"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793113926;
- b=ahjv2O40JjuLufSoPivlGnsuB68QjjuLHsAsdLopXFs0wYS9dk8O7KEw8RlFsanc30xl
- BNj9DtknS3X55FRSrCPFvsBSdubHIJk9UDg067hrjoNJbk7HVr4Lsq3L4Q9UMGgOTKZO9
- rLtCTVkBws3Ld9lbNy+E00Pl2sMVSebzFvdHNpstmKstBub6wxZvtUfRTyZqDEGQEGXiN
- gV1tl8wtoD7RFM3x1vaCuOBo/SP8Kd/kotjDMfC7Ij2X2Nk3RwUu259bG8RfyHaIelcqR
- WaAZVmm9RGprDnRQeD58h0vk1IIZ3n1N9Ypz0JmWV0yFtYMoPfEHzWK8yIdUTYyWJBA==
+ arc=none smtp.remote-ip="2a00:1450:4864:20::336"
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793114296;
+ b=nd4ny1+9WqLAHHa428QQme1Q0ErU3bq66xGW3WmYmO/JcB2dNWWLmWadMwJu4vEaRVrN
+ Ef/haH91mpK7NcK5Gm0UqubBGFEALS/34jNDNpBXkhc2dlfIYQWD2TBtufgRiJOs+jSj4
+ Tc0UYAzljyHdeynZkhW0QTGEf0TJLKZ5r/euVuTUz4G/zNFeyZzN8Xh+rupvey9Jv364l
+ 1/1g6RRfs7JoNGMFRW/NFokC8DSUbtIlH6M7EnvP6LC7m1xC8brBmslZcvDzWu19NDeWE
+ 3ltKPbIGbV9saB9A8H/GjzDBZ2Vt9/jSdDxppfQlFRqGC0jO2k5pYcBID7VAUoVQ9AQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793113926;
+ c=relaxed/relaxed; t=1793114296;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:Date:
- MIME-Version:User-Agent:Subject:To:References:Content-Language:From:
- In-Reply-To:Content-Type:Content-Transfer-Encoding;
- bh=FjElHJZTlKAAdVjtZFgXfS1rmqpGPjBoMPNZsxikCew=;
- b=Ihy9vp9ZEZ5pYg4zFa8KgCSHGKko4AJ4m4STUPjjURTmsr+jiOu5U1dT4ivmS7DX+Qnt
- 3jtaiRSe429gnjJ3QJpAoFd3XxCvSMl7TyaBi+t3BbdlrWRmS9M0Tqg7CNeqVaVTJPVY/
- FnWyP25CLhgsU3EEI3DSTdjRO5FepCmokhsz1FmHcchqhonOjtkRAt5s8S6mut+1mnFu/
- goVQHxYAM9LfF9LcXgU/fy9Btm3xy+2kQcTh7pZvhXNp7yxUXL52mPa07hkKjc4TTGy5B
- W/boi65JYIycybPmOETCh6hMAvEh2uT6Khqa5WePXFWVkIw9z6kysjr0n225FOrN/sA==
+ X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+ Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+ bh=vbbvEmB7gcoc9igBFCn1vn50+DXAGz6hKOCYmQDvCgE=;
+ b=C5P2qyPTTd0WFWfhBciWyFRPgwiMnQsqjvMpEyQLFLAKqxXyBV1bVuXH6jlEd79F5kuq
+ 78wc4S8nforsYuABW4i0aYaSAJcngkr9eC8WUKvw67CEacxoMeRCFSPp2RVtQC7nDop2Y
+ F4WW/xn6f8sp4J/vqMQWJfEeYl/+FDKbeg/VmAvsF+o3WQWvu7KU1aHnbkZ1LHANnHjXm
+ KLHF8i2FohcgATiBqBo+C94VQ56wEQEaxLrDqzhQscCW0HNMWLPbMlOCEvk1uHwgWMTHV
+ zog9lNiUy+UU4xiUbyB3tPIUuh1oADUtIl+K9bgmulu8vzFdLVAWItqic2BxY5uponA==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
- dmarc=pass header.from=gmail.com;
- dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20260707 header.b=d6ZwuBjG; 
- arc=none smtp.remote-ip="2607:f8b0:4864:20::122f"
+ dmarc=pass header.from=amarulasolutions.com;
+ dkim=pass header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=Varna9O5; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::336"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::122f; helo=mail-dl1-x122f.google.com;
- envelope-from=lancethepants@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20260707 header.b=d6ZwuBjG
-Received: from mail-dl1-x122f.google.com (mail-dl1-x122f.google.com
- [IPv6:2607:f8b0:4864:20::122f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B3C6060794
- for <buildroot@buildroot.org>; Tue, 27 Oct 2026 15:12:06 +0000 (UTC)
-Received: by mail-dl1-x122f.google.com with SMTP id
- a92af1059eb24-157fe9d771bso5242161c88.0
- for <buildroot@buildroot.org>; Tue, 27 Oct 2026 08:12:06 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp3.osuosl.org; dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+Authentication-Results: smtp3.osuosl.org; dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=Varna9O5
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B0612605EA
+ for <buildroot@buildroot.org>; Tue, 27 Oct 2026 15:18:14 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-4a5720b0a57so6676585e9.0
+ for <buildroot@buildroot.org>; Tue, 27 Oct 2026 08:18:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20260707; t=1793113925; x=1793718725; darn=buildroot.org;
- h=content-transfer-encoding:content-type:in-reply-to:from
- :content-language:references:to:subject:user-agent:mime-version:date
- :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=FjElHJZTlKAAdVjtZFgXfS1rmqpGPjBoMPNZsxikCew=;
- b=d6ZwuBjGYf3Lu2IxvLRH0G7s3aiBOj44Fl9AlVX7+188fMsmFsMAwM0e3qTKPsf+2c
- XU2QMSbOtqqJV50gMaXjZP3utUQfFoL7sbooDARFU8EDKpj+To5kPfrdim3zOqmp1UOe
- 9k6R/4N22y/zno1ZTDMG7cZKEo1b8R5xnTGaWi0zIxgEsUq4o3i9m1MvoJtEr0JTuId5
- ilGsBYHfS04pcLpnU7njzHlfCqkKodO8A57VPSz2bkfBvEgnU9jbJybUK6pe3u5HSCs9
- 4bGlDhZrI5QitkC+hM57TCm5ZZa19rgAcaIK2B1WCTH3yjtzVCgVAxnHJaZSFt97UPKd
- 1u/A==
+ d=amarulasolutions.com; s=google; t=1793114293; x=1793719093;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=vbbvEmB7gcoc9igBFCn1vn50+DXAGz6hKOCYmQDvCgE=;
+ b=Varna9O5IyeT9EeZhcJBW4zBdQ6NmnYEPcYXl7Gn3n3As6aFc4O9AeGZzDlCZFDNyU
+ wxWtKuDV2QCpeDdU8WEiFgHc+qgMazQz/9u1Bc/aOXCeANI7swes7NqvY8O2AMS/I0Km
+ UV+TSE/Jq7bwcspk5q8phl+npALjFl2Zxr0sE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793113925; x=1793718725;
- h=content-transfer-encoding:content-type:in-reply-to:from
- :content-language:references:to:subject:user-agent:mime-version:date
- :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ d=1e100.net; s=20260707; t=1793114293; x=1793719093;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=FjElHJZTlKAAdVjtZFgXfS1rmqpGPjBoMPNZsxikCew=;
- b=KqI4XVGRFoXNqDabDRovoVaekGizPEiwRE0WUppJwFTVm2lS75/n8lUUbJHuxTx4+H
- vZV0Z/Efq7CpXKz2meU5cVpmIGolQUsfS1rxcJzALvKJGIvfut3KRgrYoyFkkDI59Nwb
- qMp8qlxnvpVrIXF1ZC7vkNdQzI4gNwCai4tes8W1ejbtVkTTcsvAbWyYwtjJJCXqxlU6
- jBIQN1FEkzSdZKDr+F0q8ak2rSdxWB9nPEinSzptRuOGORdt3c9A1OOK1AVKP/2TKuY8
- IUv+Mh8gQVWN7i1jT5WoDM3Geqh7/GM7O6+kTfJK6WyXqIeZxot9Fxot11U+fkvE/2/P
- tExA==
-X-Gm-Message-State: AFq9FYLzuJNBOp+MIlH4tC0SiWWrZ/hZUPWVRuEy4fIFseCss7iseaz3
- 63uxCCDcCOFWAue8V1t3cyoI/zuMRvPrcyVXT6PsspAUhBXyCDU5C8RLf4Eb9sJJ
-X-Gm-Gg: AYBFou2z/UuUlimxQBXTeTDwtUEX/0sm4GK899PtA8KMf5AISy2lnABOgTZ4GrYSY6F
- TSLsJ5davDh4l0oYbIqNIHfO6A5Edp+f+mNJH0CfEEZVoUetbl5gSOgQsr24t8+WNNO21iYdkMq
- BzalXIh+r9dTI94qsotZk3HfjTHnT6Oztm6/n20u0NIQcQ4zXua2bAZ5UD0X89O+1t2/91zPwVL
- NKY2jechlMrVaHr3PtNeFDYGBIyI1B9G5ktiVIN3wQOvXwyu++12NFg+ddo/arLuPnQbnuCJIIU
- z0kjAaIttRQU7TLnc5xEeRGUl5vOj0MHvV+1anQqH0YgAHNX1J1pzkIgG96VHY8xAsBi1ngEBo/
- Ra50zdGwhj73AA8813a/bOpeKhUc6h77HgIBradOc6ikGDiCztZNDkLXZgMtDRz68ez0JfrcxLv
- rG/csSbwjSqTlLs3UloDBzIbbpbEFS3qalmTJqLDFKzUqAasn6DMLcEAWzsYSylAjYcLA6cwt5x
- y865xSDdiQ15dspknm30bXlfo6qJMHz9gg0nTFUmcfL0X4bCbvuQilt4jcNdMAMrRJUn0E8m5Va
- r7cUA86rLn0OUCMW/+TuT2/S45Su/L7fBpZhXT3whzIduA==
-X-Received: by 2002:a05:7022:f50f:b0:186:5b49:90d8 with SMTP id
- a92af1059eb24-199292eef48mr14377444c88.4.1793113925106; 
- Tue, 27 Oct 2026 08:12:05 -0700 (PDT)
-Received: from [10.0.0.229] ([76.8.199.226]) by smtp.gmail.com with ESMTPSA id
- a92af1059eb24-1989ff2ee69sm46012448c88.4.2026.10.27.08.12.04
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 27 Oct 2026 08:12:04 -0700 (PDT)
-Message-ID: <960efb70-2bcb-461d-ae19-adabb9f78503@gmail.com>
-Date: Tue, 27 Oct 2026 09:12:02 -0600
+ bh=vbbvEmB7gcoc9igBFCn1vn50+DXAGz6hKOCYmQDvCgE=;
+ b=ZTzlHnAkb0KfRTLr4zeu0kdKaEsVJN3ubwzONChIeukphx08YwQMJAmnb81d7p6NO4
+ uNMsaHp+v5Efl7zeZBGHvJ68fOu8Zd4XvyGfobGUml2Xq1b1v1VOAm0KseW8ocLjiM3p
+ ugTNm43Yl5Kbxl15SM0+86agCCCugEfi0E1vRFIvEYJtBq5vNjTxEyEVSXpzyrC4SBGI
+ VkECcVTAWeOjc+ayN/plER/bB2fP+wIZ2KlfCSK6Wk3ZeisoQnDQHsrd/sLkpzBb+CgC
+ oHJl0KGUPpGNIB8oHn1SFQ4dBoPeMVnKAGRqJHoE5i5PmuqXvWyG0qoetWJLXgo5IpHe
+ 0T7A==
+X-Gm-Message-State: AFq9FYJ0M2KrVJ99KDD4yC+K1DIFZLwV61oSTzRdU5iONe+njX7SnMSd
+ neKHsuNkvxrg1y6hdG0/Wtzs8O4ogQYbvvfpq88vDSqcWOttEHEwv1CcE1CerOrlxoU660tVoH4
+ qL1vV
+X-Gm-Gg: AYBFou2H2bu8wlLQ12r9bzXKeXt+vAcvTQD9Lze/MMFNJVTn+VIyYKMCh3UJfhczHX5
+ wAY+h+ho8TYx8pwTiz1zTvGqo6icisspSh5P/GE/8pUYFgYCoVcwU69Zmei+I/SfT3fQFb+s4UC
+ 20p9xu0foKSeZirGgwf8PlSbn5Axg/ad5dmD+uNeBHpAXmDUrJsMFC33fKnQ79nd7RizGnoPI3E
+ JLsTeauzYi3qqrOnR5pIaWxLUvVpW+MHY1fWetZ/KN1h7MbCfkZWnaImyOAUXD9N+e0uokCX+qu
+ zE8iP5RghUCm9xzAoY+lDSRjOvxi55DDfZY9jAlMeXbY9e0/S6KRNaRc/rKZnOhW+30CADJrW+q
+ gMHSvkNMHqBx/g8tkd+frDartc1Ep8MT2yP6cInBUO/VqJsGctCUKbPGbg70fMMxhbZcoVz5+yE
+ UgiAsFP2slR1onRGPbPKV9/nAYZHpz0uwT3XF4X1AZzvObzUNe2XNIMmaZYhmkjjMGEHBaW5QEl
+ Cgpe1FBs1Pr9KIsc4BiHDNn2RYe3dBP9kd9jCsImQ881wNwMLjdc9C13o5BwlpQ7bWOdinCT8vj
+ 0lfwiC5D934x0nxG8uLZ5G8rcvVzF5mf2leaF2jElRVZi7AHB5FRUms/FQkc9QdDHLjnvVrrIFK
+ w+VIWFHASCePvOmJrySjuesaMcpbNcHJJVTiF+Q6avb25l4Ufv05s
+X-Received: by 2002:a05:600c:3c98:b0:4a0:20b4:ba93 with SMTP id
+ 5b1f17b1804b1-4a7c1c845a2mr67488075e9.16.1793114292645; 
+ Tue, 27 Oct 2026 08:18:12 -0700 (PDT)
+Received: from dario-ThinkPad-P14s-Gen-5.homenet.telecomitalia.it
+ (host-79-14-29-58.business.telecomitalia.it. [79.14.29.58])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4a35a09434esm271074635e9.0.2026.10.27.08.18.11
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 27 Oct 2026 08:18:12 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To: buildroot@buildroot.org
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date: Tue, 27 Oct 2026 16:18:09 +0100
+Message-ID: <20261027151809.1110228-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: buildroot@buildroot.org
-References: <20261024220915.2813680-1-alexander.sverdlin@gmail.com>
- <at5oC97YlhN98HHS@windsurf>
- <e34f4a3f8aaee192923e3ecdde4a287a1cfaabda.camel@gmail.com>
- <45a821b584840d1cabe6df1dfe083fb8@umbiko.net>
- <a4b6456aaf3f6454e8969b16a443dac45aae70f3.camel@gmail.com>
- <auBewZx3hr2_dgX1@windsurf>
-Content-Language: en-US
-From: Lance Fredrickson <lancethepants@gmail.com>
-In-Reply-To: <auBewZx3hr2_dgX1@windsurf>
-Subject: Re: [Buildroot] [PATCH v2] boot/syslinux: Bump to 6.04-pre2
+Subject: [Buildroot] [PATCH 1/1] package/drogon: fix CVE-2023-26137 and
+ CVE-2023-26138
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -180,32 +170,418 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-2.3 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=4.0.1
+X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Just wanted to chime in and say I'm using syslinux as well, and I'm glad 
-to see it will continue to be in buildroot. Thanks for maintenance work 
-you guys are doing.
+All drogon releases, including 1.9.14, are affected by two CRLF
+injection vulnerabilities, which upstream has fixed but not released
+yet.
 
-Lance
+- CVE-2023-26137: HTTP response splitting when untrusted input is used
+  to build header values in addHeader() and addCookie().
+  https://www.cve.org/CVERecord?id=CVE-2023-26137
+- CVE-2023-26138: CRLF injection when untrusted input is used to set
+  request headers in addHeader().
+  https://www.cve.org/CVERecord?id=CVE-2023-26138
 
-On 10/27/2026 2:20 AM, Thomas Petazzoni via buildroot wrote:
-> On Tue, Oct 27, 2026 at 06:57:44AM +0100, Alexander Sverdlin wrote:
->
->> If Thomas makes his mind about the existence of the original syslinux
->> package at all ;-)
-> Considering we have interest, it is pretty clear that we should keep
-> syslinux, so please go ahead with submitting new iterations :-)
->
-> Thomas
+Backport the upstream fix, which rejects CR and LF characters in header
+and cookie values, both in responses and in requests sent by
+HttpClient.
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
+ ...01-Fix-CVE-2023-26137-CVE-2023-26138.patch | 357 ++++++++++++++++++
+ package/drogon/drogon.mk                      |   3 +
+ 2 files changed, 360 insertions(+)
+ create mode 100644 package/drogon/0001-Fix-CVE-2023-26137-CVE-2023-26138.patch
+
+diff --git a/package/drogon/0001-Fix-CVE-2023-26137-CVE-2023-26138.patch b/package/drogon/0001-Fix-CVE-2023-26137-CVE-2023-26138.patch
+new file mode 100644
+index 000000000000..0b8e93df8731
+--- /dev/null
++++ b/package/drogon/0001-Fix-CVE-2023-26137-CVE-2023-26138.patch
+@@ -0,0 +1,357 @@
++From 3c068bd888c332b9a155ba45a102d5faba643211 Mon Sep 17 00:00:00 2001
++From: Dario Binacchi <45538935+passgat@users.noreply.github.com>
++Date: Tue, 27 Oct 2026 07:49:45 +0100
++Subject: [PATCH] Fix CVE 2023 26137 CVE 2023 26138 (#2630)
++
++CVE: CVE-2023-26137
++CVE: CVE-2023-26138
++Upstream: https://github.com/drogonframework/drogon/commit/3c068bd888c332b9a155ba45a102d5faba643211
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++---
++ lib/inc/drogon/HttpRequest.h          |  5 +++-
++ lib/inc/drogon/HttpResponse.h         |  8 +++--
++ lib/src/HttpRequestImpl.h             |  6 ++++
++ lib/src/HttpResponseImpl.h            | 10 +++++++
++ lib/src/HttpUtils.cc                  | 41 +++++++++++++++++++++++++
++ lib/src/HttpUtils.h                   | 15 ++++++++++
++ lib/tests/CMakeLists.txt              |  1 +
++ lib/tests/unittests/HttpHeaderTest.cc | 43 +++++++++++++++++++++++++++
++ lib/tests/unittests/HttpUtilsTest.cc  | 41 +++++++++++++++++++++++++
++ 9 files changed, 167 insertions(+), 3 deletions(-)
++ create mode 100644 lib/tests/unittests/HttpUtilsTest.cc
++
++diff --git a/lib/inc/drogon/HttpRequest.h b/lib/inc/drogon/HttpRequest.h
++index 2ffd4fc4b9b1..e27a0023a22f 100644
++--- a/lib/inc/drogon/HttpRequest.h
+++++ b/lib/inc/drogon/HttpRequest.h
++@@ -148,6 +148,8 @@ class DROGON_EXPORT HttpRequest
++      * @param field The field parameter is transformed to lower case before
++      * storing.
++      * @param value The value of the header.
+++     * @note The header is ignored if the field or the value contains CR or LF
+++     * characters, to prevent CRLF injection.
++      */
++     virtual void addHeader(std::string field, const std::string &value) = 0;
++     virtual void addHeader(std::string field, std::string &&value) = 0;
++@@ -468,7 +470,8 @@ class DROGON_EXPORT HttpRequest
++     /// For example, "content-type: text/plain\r\n"
++     virtual void setCustomContentTypeString(const std::string &type) = 0;
++ 
++-    /// Add a cookie
+++    /// Add a cookie. The cookie is ignored if its key or value contains CR or
+++    /// LF characters.
++     virtual void addCookie(std::string key, std::string value) = 0;
++ 
++     /**
++diff --git a/lib/inc/drogon/HttpResponse.h b/lib/inc/drogon/HttpResponse.h
++index f949bd0b033f..e0b1c1678b52 100644
++--- a/lib/inc/drogon/HttpResponse.h
+++++ b/lib/inc/drogon/HttpResponse.h
++@@ -264,15 +264,19 @@ class DROGON_EXPORT HttpResponse
++      * @param field The field parameter is transformed to lower case before
++      * storing.
++      * @param value The value of the header.
+++     * @note The header is ignored if the field or the value contains CR or LF
+++     * characters, to prevent HTTP response splitting.
++      */
++     virtual void addHeader(std::string field, const std::string &value) = 0;
++     virtual void addHeader(std::string field, std::string &&value) = 0;
++ 
++-    /// Add a cookie
+++    /// Add a cookie. The cookie is ignored if its key or value contains CR or
+++    /// LF characters.
++     virtual void addCookie(const std::string &key,
++                            const std::string &value) = 0;
++ 
++-    /// Add a cookie
+++    /// Add a cookie. The cookie is ignored if its key, value, domain or path
+++    /// contains CR or LF characters.
++     virtual void addCookie(const Cookie &cookie) = 0;
++     virtual void addCookie(Cookie &&cookie) = 0;
++ 
++diff --git a/lib/src/HttpRequestImpl.h b/lib/src/HttpRequestImpl.h
++index 1b397b7f12fc..39fb868739d4 100644
++--- a/lib/src/HttpRequestImpl.h
+++++ b/lib/src/HttpRequestImpl.h
++@@ -462,6 +462,8 @@ class HttpRequestImpl : public HttpRequest
++ 
++     void addHeader(std::string field, const std::string &value) override
++     {
+++        if (!isValidHeader(field, value))
+++            return;
++         transform(field.begin(),
++                   field.end(),
++                   field.begin(),
++@@ -471,6 +473,8 @@ class HttpRequestImpl : public HttpRequest
++ 
++     void addHeader(std::string field, std::string &&value) override
++     {
+++        if (!isValidHeader(field, value))
+++            return;
++         transform(field.begin(),
++                   field.end(),
++                   field.begin(),
++@@ -480,6 +484,8 @@ class HttpRequestImpl : public HttpRequest
++ 
++     void addCookie(std::string key, std::string value) override
++     {
+++        if (!isValidCookie(key, value))
+++            return;
++         cookies_[std::move(key)] = std::move(value);
++     }
++ 
++diff --git a/lib/src/HttpResponseImpl.h b/lib/src/HttpResponseImpl.h
++index beebe7fa8db2..f28d43b338b9 100644
++--- a/lib/src/HttpResponseImpl.h
+++++ b/lib/src/HttpResponseImpl.h
++@@ -193,6 +193,8 @@ class DROGON_EXPORT HttpResponseImpl : public HttpResponse
++ 
++     void addHeader(std::string field, const std::string &value) override
++     {
+++        if (!isValidHeader(field, value))
+++            return;
++         fullHeaderString_.reset();
++         transform(field.begin(),
++                   field.end(),
++@@ -203,6 +205,8 @@ class DROGON_EXPORT HttpResponseImpl : public HttpResponse
++ 
++     void addHeader(std::string field, std::string &&value) override
++     {
+++        if (!isValidHeader(field, value))
+++            return;
++         fullHeaderString_.reset();
++         transform(field.begin(),
++                   field.end(),
++@@ -215,16 +219,22 @@ class DROGON_EXPORT HttpResponseImpl : public HttpResponse
++ 
++     void addCookie(const std::string &key, const std::string &value) override
++     {
+++        if (!isValidCookie(key, value))
+++            return;
++         cookies_[key] = Cookie(key, value);
++     }
++ 
++     void addCookie(const Cookie &cookie) override
++     {
+++        if (!isValidCookie(cookie))
+++            return;
++         cookies_[cookie.key()] = cookie;
++     }
++ 
++     void addCookie(Cookie &&cookie) override
++     {
+++        if (!isValidCookie(cookie))
+++            return;
++         cookies_[cookie.key()] = std::move(cookie);
++     }
++ 
++diff --git a/lib/src/HttpUtils.cc b/lib/src/HttpUtils.cc
++index 5cfcbb7d2566..cd33975c1df1 100644
++--- a/lib/src/HttpUtils.cc
+++++ b/lib/src/HttpUtils.cc
++@@ -14,6 +14,7 @@
++ 
++ #include "HttpUtils.h"
++ #include <drogon/utils/Utilities.h>
+++#include <drogon/Cookie.h>
++ #include <trantor/utils/Logger.h>
++ #include <map>
++ #include <unordered_map>
++@@ -740,4 +741,44 @@ const std::vector<std::string_view> &getFileExtensions(ContentType contentType)
++     return it->second;
++ }
++ 
+++static bool containsCRLF(std::string_view str)
+++{
+++    return str.find_first_of("\r\n") != std::string_view::npos;
+++}
+++
+++bool isValidHeader(std::string_view field, std::string_view value)
+++{
+++    if (containsCRLF(field) || containsCRLF(value))
+++    {
+++        LOG_ERROR << "Header '" << field
+++                  << "' contains CR or LF characters, ignored";
+++        return false;
+++    }
+++    return true;
+++}
+++
+++bool isValidCookie(std::string_view key, std::string_view value)
+++{
+++    if (containsCRLF(key) || containsCRLF(value))
+++    {
+++        LOG_ERROR << "Cookie '" << key
+++                  << "' contains CR or LF characters, ignored";
+++        return false;
+++    }
+++    return true;
+++}
+++
+++bool isValidCookie(const Cookie &cookie)
+++{
+++    if (!isValidCookie(cookie.key(), cookie.value()))
+++        return false;
+++    if (containsCRLF(cookie.domain()) || containsCRLF(cookie.path()))
+++    {
+++        LOG_ERROR << "Cookie '" << cookie.key()
+++                  << "' contains CR or LF characters, ignored";
+++        return false;
+++    }
+++    return true;
+++}
+++
++ }  // namespace drogon
++diff --git a/lib/src/HttpUtils.h b/lib/src/HttpUtils.h
++index 16a6c21732d2..53f2c13cff53 100644
++--- a/lib/src/HttpUtils.h
+++++ b/lib/src/HttpUtils.h
++@@ -21,6 +21,8 @@
++ 
++ namespace drogon
++ {
+++class Cookie;
+++
++ const std::string_view &contentTypeToMime(ContentType contentType);
++ const std::string_view &statusCodeToString(int code);
++ ContentType getContentType(const std::string &fileName);
++@@ -43,6 +45,19 @@ inline std::string_view getFileExtension(const std::string &fileName)
++ 
++ const std::vector<std::string_view> &getFileExtensions(ContentType contentType);
++ 
+++/// Return false (and log an error) if the header field or value contains a CR
+++/// or LF character, which are not allowed in HTTP field names and values
+++/// (RFC 9110, section 5.5).
+++bool isValidHeader(std::string_view field, std::string_view value);
+++
+++/// Return false (and log an error) if the cookie key or value contains a CR or
+++/// LF character.
+++bool isValidCookie(std::string_view key, std::string_view value);
+++
+++/// Return false (and log an error) if the cookie key, value, domain or path
+++/// contains a CR or LF character.
+++bool isValidCookie(const Cookie &cookie);
+++
++ inline const std::vector<std::string_view> &getFileExtensions(
++     const std::string_view &contentType)
++ {
++diff --git a/lib/tests/CMakeLists.txt b/lib/tests/CMakeLists.txt
++index 10f42ede1693..514e8692e74e 100644
++--- a/lib/tests/CMakeLists.txt
+++++ b/lib/tests/CMakeLists.txt
++@@ -13,6 +13,7 @@ set(UNITTEST_SOURCES
++     unittests/ClassNameTest.cc
++     unittests/HttpDateTest.cc
++     unittests/HttpHeaderTest.cc
+++    unittests/HttpUtilsTest.cc
++     unittests/HttpResponseSwapTest.cc
++     unittests/HttpClientTimeoutTest.cc
++     unittests/MD5Test.cc
++diff --git a/lib/tests/unittests/HttpHeaderTest.cc b/lib/tests/unittests/HttpHeaderTest.cc
++index d10c8887e5f1..940622989b07 100644
++--- a/lib/tests/unittests/HttpHeaderTest.cc
+++++ b/lib/tests/unittests/HttpHeaderTest.cc
++@@ -16,6 +16,21 @@ DROGON_TEST(HttpHeaderRequest)
++     CHECK(req->getHeader("abc") == "");
++ }
++ 
+++DROGON_TEST(HttpHeaderRequestCRLFInjection)
+++{
+++    auto req = HttpRequest::newHttpRequest();
+++    req->addHeader("X-Test", "abc\r\nX-Injected: 1");
+++    req->addHeader("X-Test\r\nX-Injected", "abc");
+++    req->addHeader("X-Lf", std::string("abc\nX-Injected: 1"));
+++    CHECK(req->getHeader("X-Test") == "");
+++    CHECK(req->getHeader("X-Lf") == "");
+++    CHECK(req->headers().empty());
+++
+++    req->addCookie("key", "value\r\nX-Injected: 1");
+++    req->addCookie("key\nX-Injected: 1", "value");
+++    CHECK(req->cookies().empty());
+++}
+++
++ DROGON_TEST(HttpHeaderResponse)
++ {
++     auto resp = std::dynamic_pointer_cast<HttpResponseImpl>(
++@@ -37,6 +52,34 @@ DROGON_TEST(HttpHeaderResponse)
++     CHECK(resp->getHeader("abc") == "");
++ }
++ 
+++DROGON_TEST(HttpHeaderResponseCRLFInjection)
+++{
+++    auto resp = std::dynamic_pointer_cast<HttpResponseImpl>(
+++        HttpResponse::newHttpResponse());
+++    REQUIRE(resp != nullptr);
+++    resp->addHeader("X-Test", "abc\r\nSet-Cookie: injected=1");
+++    resp->addHeader("X-Test\r\nX-Injected", "abc");
+++    resp->addHeader("X-Lf", std::string("abc\nX-Injected: 1"));
+++    CHECK(resp->getHeader("X-Test") == "");
+++    CHECK(resp->getHeader("X-Lf") == "");
+++    CHECK(resp->headers().empty());
+++
+++    resp->addCookie("key", "value\r\nX-Injected: 1");
+++    Cookie cookie("key", "value");
+++    cookie.setPath("/\r\nX-Injected: 1");
+++    resp->addCookie(cookie);
+++    cookie.setPath("/");
+++    cookie.setDomain("example.com\nX-Injected: 1");
+++    resp->addCookie(std::move(cookie));
+++    CHECK(resp->cookies().empty());
+++
+++    resp->makeHeaderString();
+++    auto buffer = resp->renderToBuffer();
+++    auto str = std::string{buffer->peek(), buffer->readableBytes()};
+++    CHECK(str.find("injected") == std::string::npos);
+++    CHECK(str.find("X-Injected") == std::string::npos);
+++}
+++
++ DROGON_TEST(ResponseSetCustomContentTypeString)
++ {
++     auto resp = HttpResponse::newHttpResponse();
++diff --git a/lib/tests/unittests/HttpUtilsTest.cc b/lib/tests/unittests/HttpUtilsTest.cc
++new file mode 100644
++index 000000000000..182b10000d61
++--- /dev/null
+++++ b/lib/tests/unittests/HttpUtilsTest.cc
++@@ -0,0 +1,41 @@
+++#include "../lib/src/HttpUtils.h"
+++#include <drogon/Cookie.h>
+++#include <drogon/drogon_test.h>
+++using namespace drogon;
+++
+++DROGON_TEST(IsValidHeader)
+++{
+++    CHECK(isValidHeader("X-Test", "abc"));
+++    CHECK(isValidHeader("X-Test", ""));
+++    CHECK(isValidHeader("X-Test", "a: b; c=d"));
+++    CHECK(!isValidHeader("X-Test", "abc\r\nX-Injected: 1"));
+++    CHECK(!isValidHeader("X-Test", "abc\r"));
+++    CHECK(!isValidHeader("X-Test", "abc\nX-Injected: 1"));
+++    CHECK(!isValidHeader("X-Test\r\nX-Injected", "abc"));
+++    CHECK(!isValidHeader("X-Test\n", "abc"));
+++}
+++
+++DROGON_TEST(IsValidCookie)
+++{
+++    CHECK(isValidCookie("key", "value"));
+++    CHECK(isValidCookie("key", ""));
+++    CHECK(!isValidCookie("key", "value\r\nX-Injected: 1"));
+++    CHECK(!isValidCookie("key", "value\n"));
+++    CHECK(!isValidCookie("key\r", "value"));
+++
+++    Cookie cookie("key", "value");
+++    cookie.setDomain("example.com");
+++    cookie.setPath("/");
+++    CHECK(isValidCookie(cookie));
+++
+++    cookie.setValue("value\r\nX-Injected: 1");
+++    CHECK(!isValidCookie(cookie));
+++
+++    cookie.setValue("value");
+++    cookie.setDomain("example.com\r\nX-Injected: 1");
+++    CHECK(!isValidCookie(cookie));
+++
+++    cookie.setDomain("example.com");
+++    cookie.setPath("/\nX-Injected: 1");
+++    CHECK(!isValidCookie(cookie));
+++}
+diff --git a/package/drogon/drogon.mk b/package/drogon/drogon.mk
+index 03cba45ceb34..7850d754dc6e 100644
+--- a/package/drogon/drogon.mk
++++ b/package/drogon/drogon.mk
+@@ -12,6 +12,9 @@ DROGON_LICENSE = MIT
+ DROGON_LICENSE_FILES = LICENSE
+ DROGON_INSTALL_STAGING = YES
+ 
++# 0001-Fix-CVE-2023-26137-CVE-2023-26138.patch
++DROGON_IGNORE_CVES += CVE-2023-26137 CVE-2023-26138
++
+ DROGON_DEPENDENCIES = jsoncpp util-linux zlib
+ HOST_DROGON_DEPENDENCIES = host-jsoncpp host-util-linux host-zlib
+ 
+-- 
+2.43.0
 
 _______________________________________________
 buildroot mailing list
