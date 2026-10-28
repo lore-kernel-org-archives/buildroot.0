@@ -1,29 +1,29 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46BF4606A31A
-	for <buildroot@archiver.kernel.org>; Wed, 28 Oct 2026 22:31:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D83EF606A31C
+	for <buildroot@archiver.kernel.org>; Wed, 28 Oct 2026 22:32:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=pkJlpsZB;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=RdWYY5SX
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=h2+NhTu1;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=hMR10W+Q
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 27A83605D2;
-	Wed, 28 Oct 2026 22:31:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B991240743;
+	Wed, 28 Oct 2026 22:32:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K5W-289ajx8W; Wed, 28 Oct 2026 22:31:52 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org B610760709
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793226712;
-	b=olU0IXfxihiGVsRdVe5FWMXfGAeJEDvU3GqpRlcokuwR/jno2sYfPGxcD4be6xYFuQlR
-	 +LnhEOzTwImgId4vH1lWY3fAyJ4+LpZSRoM6zg1GnXbJeHPJ4XWZHpcBO69EqgAWef41A
-	 RMk5U3i0WjIlG0Rbu5hTUTGy6AtYzXSK4sq1Z9w4IF8Qpj83m2BUpj9ZwLB9H4Yk7/0tt
-	 M8M7dRYE06n9jIiHQgLGM861d5QYkTEGgNW5Q9oOa0HPHUJQlOHaxqhI796NSBOJ2grHi
-	 ZKvWHPo4vadIWRYmYXpBbZQJNRytl0mWjCdjBLhJ1w47IBlVIcbTGfTlZkL4BB0Hbag==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VUs0zmxs1I39; Wed, 28 Oct 2026 22:32:05 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org EA94140786
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793226725;
+	b=r0iTfKT6W0m+3XSQ1QU0jCjABolCLil3ahWu4uh+WHsmf19LI6j+6vGOATmDc0evpGyT
+	 zGe4MIxcYRpDlTpg4y69vdIMRJwyadrFqXSu+G8gbUQbJskjSMiNRuQ0RBnvZk++jPyZM
+	 Hh0KCw0JDqg3GewNGQJGPLUMbKmfI6aqWHSTWoUN79jBPsoWfZaBgeHmr+fUy+YB1k6OH
+	 Jc3sgMRm1ZqbPrS13BTkiqURpYG16/4vAmQBbrNrfM0CshVQ/m7ssRRgeqSYQfA5vhWCZ
+	 Mmx8YjzUgJ0dfD9XiKmv4TaSNvEo2pustOvI6vno4XLb0woAmIGqM205BEHkV8++Zcg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793226712;
+	c=relaxed/relaxed; t=1793226725;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -32,118 +32,117 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=aEtlX1oqNnTnB+oUITuBr04fPXS4mr0TbGhpiP7nv9w=;
-	b=hiPkA395ReCxXfRyw0vmyDC9vb/4olsxGKiQfqlE9oBZM4t13N5QTVnNEK8yq+2K09X2
-	 SFUaVf3AvuYdBHYfr0fph7vc2agE6Tz/XJB0WnQ0lAAsoCMH6ZROlITkMt0FrLbF5ntxa
-	 gENVYDx7l4wpIj7y8KfaZXvnYy8xuIL1g3kNTuBfqUyDl2Unwn/QxpcvnUaiBYOCtk7DP
-	 hFuxb7owXfo+cp8MfW3MfGeg2d1XI6b1pdxvy70YZt2FA7VcHJjdaj0Rx6n1YAkbCce9e
-	 CiXngYOddHHIiRkSuko8xGabaffV787A04CReHtHAqQnMMMQZ4F5FYIlTjMm8sEoM6A==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	bh=nlOtvmdst+oCb769zmCOS6DHYlsd5C0Bw8vPz04wQmk=;
+	b=Ui+W/gXC62kPxLi5Aul3lnV3HLHljIBNJhTJhm6as9v+haJTGZJFlA8Jnf88rdPZ5CKL
+	 Eu8r3k5DQZsPtrn2nFKGACKTXwmEpZEkwT9VpXZtaX8dWQuumtudZkK0DaAbCtUu6nHTZ
+	 Hd/18k7mS9wArHl1AQNEhXRpSwItTRkFLknr9DAIY2mC8HgRgdi1/OczdJGWlFdrCZYwf
+	 LW3AMgACvqwc1LIuKCGxPqmRq9sTJ9b4VLxkQzYIb1mIcy2zPDt5gliWTtr5pxfL+1Eff
+	 4DvnsXaDLu9yYrhxCpo5/3TbxpsKWnXIjFGCLzpb7OdFbgOuTaYm3namtX6Fx6ecDWw==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793226712;
-	bh=aEtlX1oqNnTnB+oUITuBr04fPXS4mr0TbGhpiP7nv9w=;
+	s=default; t=1793226725;
+	bh=nlOtvmdst+oCb769zmCOS6DHYlsd5C0Bw8vPz04wQmk=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=pkJlpsZBuYqILfN1y6DHFOKKLPsfv4A+SF/9pJNGP6rVXBMrK07+H7iOZ/+2QvQyL
-	 n7g3i1BQX7hpgG+vnkzBMfO8sIvAA9mDBjQbIvxZP5iWS7F2ukZXCMrKTPQTMhMbJS
-	 N6gAa3PRE95CNUZK1Q/N376xzmy5HZq06D6RG1Qu8wD3P/kkZW92sZrH+zbKcAmEZJ
-	 amNOYQb1OQPht+34BH8EpNgpOk+xx9ivHGMLGWDPDoaApJBn3p6r1Usr+veaYdtfH3
-	 be/X7algNDwPN1uzCkTy0/8NwIZSdO+YHClZBqB/EOTq4L1KDkPdocyB+lUMkdqkxm
-	 GY7Joy6X1ViFQ==
+	b=h2+NhTu1EZpz1Ca5fRrSJRrO2AznYKbJs9o3T/AZicAa6qhkclntH0Udi6/NK5Sxw
+	 79PNEwNQVRKgiUmeODsZOBYm7zIgDzmEKguqPW0J5hd5mKdH4fn3i4uL3TQcHSH4O2
+	 vKEKFhqDsQlfSnAInk6qN0LEWLtxzqQWGkxUTpIqa6EtU0FCbPS3FQ/+n81VDLFLto
+	 Xmc53PlUZtRJpRXNooq8DFwuNOd/YpprCffxuRYdmCOtb6PU04dUeXFQ9i06GSMZka
+	 sw/26aUosfRUzP5Yu5X9V9FtFlg15rJu3OLfU85K+JAawcQaWkNQIT7iG4YePaH+6x
+	 NMqKAB4/9QCVw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B610760709;
-	Wed, 28 Oct 2026 22:31:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 77B672A8
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 22:31:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EA94140786;
+	Wed, 28 Oct 2026 22:32:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 84F952A8
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 22:32:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 693B680F90
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 22:31:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6B368400B5
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 22:32:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0PeBA5jI82C2 for <buildroot@buildroot.org>;
- Wed, 28 Oct 2026 22:31:50 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 120F080A53
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793226710;
- b=fyz7TFqd8LwePKdgW5A52nmgA1Ut7jEhAutuxlmyzuM0O0zRgY9+A2HagiT/RWSRh733
- YA+NcYOpYL/PzVgWGK8o4V67j3po9CWTc8HYHKz7hPux8s4mZEdrgJwKqnUMz3bLCB+hy
- YX7lECQCAe16biBfKIeodKbOLD+zvZMfxeVp6uRLEnS6hFwovelR9Sgk97REm+E1oDVdE
- tT/B2bMRzTzHDJTvv8ZuRl8pG+wfqTY/O9IbaRPZqoKd0vlqga67c/1CMvqmbeb5y6Qyq
- ARmS4AnnBNx+tqFaZpwBjny3Xyfc/CyHisHXwOij5ql93IJc38E1wm7TyEGcHMTgS8Q==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AEdJlRqdqpWV for <buildroot@buildroot.org>;
+ Wed, 28 Oct 2026 22:32:03 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org AADF24004A
+Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793226723;
+ b=h835iElR6Dqcht0hzDPjVbiic+5OPw+AQOz1zarwKAG1l7Kj9RBnQ8LxwoO82sFE1Pb3
+ zkbrW0VtjCNA3zAUKt/eOlAGhzByBWcWWa38m3OCNjbUuYP+DQH3kCYb45gG4haM/8Cy9
+ 3v556PHjboA8PlzoMh8kAR7QX0IrrclgqXKrUpUxVGesZ6M34kT/qOIFtRJl4x5ZLAe6Z
+ WrfZQ7+y/WJpZnxxCgCX/mO65byu1m9N/zvtjWti3f5bQyPyMhA8XwDZN81guMpeKAw7a
+ 2JEWKstAXKI2YYPLrNrWheKVooh7NJuOGRd+TkEywkwSXQJR6G+DatX+pCMQ4tOFk6g==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793226710;
+ c=relaxed/relaxed; t=1793226723;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=SXYCIxlMLQZR42EIMam9mQ7ep7Gps1w/+ObvCSlLOIg=;
- b=iCHKzYrcRsuXm/I2iAzf7lo2z21ZdHL76+Ie+olIOswjBZMQXanrE+Rodw3j8DlaFoXm
- 6hwtkPiNT8yyXrxDVLsmkrDnSPnyi+x7OeZYfM6F1pXFAadu4e7aUpbLX9yN7y8MTFvpL
- 3VenGzOzPswH14Ce2PzkWeR9+N4ramDqqFrHsFxsoRcGH/H/4fm6TwM9DiADsru7zW60o
- zOFlDbaUAWs2LdYQ0LoNlzclbb3/KJLJl1wNrEHgA5nuRd6ylLigr2cI/MCW5PEcyRJHI
- ODogpeVAQrZ+96dykSrf8d+2e+yeAkGF29dtmuGBxrHl9iI+WDRs4V/Vz6FiLc/0d2Q==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ bh=pNZBPyZeOlBaRCbAAyVSNvXj1naepQ/zMPBj6+ASrAc=;
+ b=MlLO24CPVazZJOkKaREgb/ipi5pz3aYOrruOgh+vmqfHu4n7TsXsG9SxQHxI6gP+nn6e
+ UGgpX9nDLRAMOFPu5hpakp+YWhPL9YDgqhzTAj4DxZdDXqoYfiXe67bVy7NnvY9QsZYEh
+ rC0QyrB1SW4jGnFyZHa7NB+MbCFytbkpwgd0D4fD5sTVbrzxcFCQcK7iIWP32E9wPXlim
+ 1r66gtAa0d0YUSEZwb9hCPosmoRUTxZOhUtPFhhXYoaxEoUm4e39M3U253M9LrtGnzJI1
+ P2Jybx7/5RRzUqRxbZFzLWqIo91c57zR4mh7nuDaaX05GXbm0b9DFn6hFVOXTJJkXxA==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  dmarc=pass header.from=kuhls.net;
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=RdWYY5SX; 
+ header.s=kas202605290044 header.b=hMR10W+Q; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=RdWYY5SX
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=hMR10W+Q
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 120F080A53
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 22:31:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AADF24004A
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 22:32:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
  s=kas202605290044; t=1793226544;
- bh=SXYCIxlMLQZR42EIMam9mQ7ep7Gps1w/+ObvCSlLOIg=;
+ bh=pNZBPyZeOlBaRCbAAyVSNvXj1naepQ/zMPBj6+ASrAc=;
  h=From:To:Subject:Date:In-Reply-To:From;
- b=RdWYY5SXldDOOZbh/wR62x0LMvBQzZQkX4PPG+Fv+qfBKyM3P71O3S4nOLb0/8m8k
- duVAxwrM0zyU7664yuseKB66zoCJwl/QmsQ9tPOfxZa9+BYqR+fiFRmO6cAeSH/PRp
- yT0v6siyaNnvobj3LC17S6DHswYTLrqcdd3iLCPhq4FuZiLk7rSfnQoR6C7oQ49p1R
- SYSUP9wCEEygbwYrqWJnbUoG47NrE27pnNCWoSMu/PD8TokyMq75v6R9CCduB/9I4G
- PeY1tF//iwDg6LnjkcPRv8EAo+A2d8UDhk+bfcrgP4wqQLYuJIWst1kLDtWY6L0rQO
- WxWafn9yML0Ow==
+ b=hMR10W+Qk9Me8hOWehDo21Ixdm/MPY9w7XQM4tfCPAPuntv7pr8qlGJPr7SA5SwAw
+ o746HPrxkAFhsgeYYDsG2nTlB2o+nfreZWkfF8dlMP9WdkFsyvSFXaVStnHneKpQQz
+ f/jIdmG47nUNXQpToVtkphGPeSic0ILN524HDsSkRCoTKklk4OTOHK1ao7nVcY/O8b
+ aEgIYWtgXxxME9HYSfvBfovIp5bhi/i7u8MNfGasMlOqCfmiwM93CoVFlfRDIxiXYO
+ 1nWYtmyYtrghpmNI2MEjIo+U8Xs5Qm+LLz0sAIJIBRyfzNfOLsuYEzznSokL6eeU72
+ txVwNozg3PWXQ==
 X-KAS-Sym: v3:f51bdf72230551df:cTk2JoECzpqnGl/pf59mWisqZvMBXDYOA9XGs/chIxhpk
  tWelRTKRF/MM6j9c4LMiUUsl/7xnaot9wRDU7JV+E5sPbFnIbsth4GYwBy7SrVgIsDvKE6NeUR+
  ReiZDpU6m3mZXStAFKEkbGIqcXld4qyCPlISONxA0p1D1as1hnCqo5M4qV8BIt74q0d1pg+NXGo
  CwGP+VWPAHVhjYBPw8iTxRbcTiq8shEZiNVUGw3kIcW1sXWD66Pvc+KeoOHSLByVq85hA4A2C5a
  FlDr856MT8HS5m6OicpSpgJslOHnDDlK2Gcbl3hwTV3RSbZZMhMk/o6OaxvGf+5L7aVdVFXQ==:
- 9ZrHY/mFaziqqeV3KS0n584j3QbvQE13hPYq33Y1oOoQSpkP+wAzb2NVduSC/XnzIk6zbW1Mskx
- y49eU4e8/jbB58wURXMFknVjLgDULYhrniwA6u6+oE07WwhzL8vtToTYQZvxPCf7RtbK8nKzCfq
- UfuDofs/KnbuuobZxsXEeZnVpyrySJzuHTYyV9EJaaoTNT6PYTiC2cz0tx2SA0xaLJEf+0BzYAU
- LXczufERhcVZTCIUxJC+FBhWVQJiQGJhE7GJApOX0e6qxhGF68Imecp5tu0q+BeueuPXEMNLUzt
- lEpCKrtbYNUdlELaqhPtZnyvnIFO5xeF7nAdZV/c3ypR+LITM+lkuHDxx+mCjXjrg3VXlF+1+e+
- fQLTBO4bA7cHBBAzmXWUfec+TbAqmgubPE0iNkFM/9D6u4+9ddvJXqSVdqtakCMZ+gwbi3exypI
- nCztQeV/0RKfYYsjVmr/wF0yjc6BwHTKWk+yPuKB6lP8WoLp2EaMPYyQOgbvYPep+APXYIiyDoI
- nmPlF9LC0+Nj8hWN0BIsX9VYu9L+FkMZ3iFHmHIcWli/YofBaKNfnV23gev9FKEucQewG81fOVs
- xo1rKg==
+ IomPhyd+9Y0YImrDOPKgdh3uh7bUWvyHbYXEofwVYNjCJ2SnR3mnCRNRa0IKdEkuI3XcjaIaBM+
+ 4wC3hXnMcIG58n4tg+LH1Ug6FM1UNf2Su+QtNKoYLRFc+9AGBJDfKKu6+xjmPtjogIlY56JrOPu
+ LFmTpOeX8PoT12WemTlQuVwAe6YCj58A8KyEH98cVi1PNWJmQCe81O889PxS5udd3DIhpApSxM5
+ 7ePJPS/o8hb/XlhvoSiwS1tz6i4JBAbA85uXKSpModcozML0NCkfUAvXxZI7Cl6SAS76/T9QcfN
+ Rys4hmAcCoCWm4kYz+TEaiQzPrK8IUIYzOGVIlvqvU0d/ub+KaTe+2xCh7hiUYA7dPFNGXVRFB4
+ W9kmgb5i+t/H6moIHY7Tu0fqs/EEyfJm/DhxPO/eCej8p+Fg1hQ6k0VeWkIMl7meFxcu0fTSH8T
+ PfeUpjKC5+QS+l2SlG8iFscrB6SeAy1wTYS7XQm3b+QSLkHh8fz3xKyeR9z817nnpFWpEPzBSxq
+ hS6FOiDsZSCGa3A2pkss88Iz2INWs38shQiAQV4+Cod2HEXqS1ze01mtZ1ks9NvJ+mUDTuzHPuH
+ PHogXw==
 Received: from fli4l.lan.fli4l (p54a1ba05.dip0.t-ipconnect.de [84.161.186.5])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 1685FA4C6FDA
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 37C8DA4C6FDB
  for <buildroot@buildroot.org>; Wed, 28 Oct 2026 23:29:04 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:54844)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xMC8A-000000001Tt-01td
+ (envelope-from <bernd@kuhls.net>) id 1xMC8A-000000001Tt-11HB
  for buildroot@buildroot.org; Wed, 28 Oct 2026 22:28:26 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed, 28 Oct 2026 23:28:16 +0100
-Message-ID: <20261028222822.490779-16-bernd@kuhls.net>
+Date: Wed, 28 Oct 2026 23:28:17 +0100
+Message-ID: <20261028222822.490779-17-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261028222822.490779-1-bernd@kuhls.net>
 References: <20261028222822.490779-1-bernd@kuhls.net>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-X-Spamd-Bar: --
-Subject: [Buildroot] [PATCH 15/20] package/kodi-screensaver-*: mass version
- bump to Piers
+X-Spamd-Bar: /
+Subject: [Buildroot] [PATCH 16/20] package/kodi-skin-confluence: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -159,230 +158,39 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-16.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	TVD_SPACE_RATIO,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .../kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash  | 2 +-
- .../kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk    | 2 +-
- .../kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash  | 2 +-
- .../kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk    | 2 +-
- .../kodi-screensaver-biogenesis.hash                            | 2 +-
- .../kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk  | 2 +-
- package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash  | 2 +-
- package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk    | 2 +-
- .../kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash  | 2 +-
- .../kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk    | 2 +-
- .../kodi-screensaver-matrixtrails.hash                          | 2 +-
- .../kodi-screensaver-matrixtrails.mk                            | 2 +-
- .../kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash    | 2 +-
- package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk  | 2 +-
- package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash        | 2 +-
- package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk          | 2 +-
- package/kodi-screensaver-stars/kodi-screensaver-stars.hash      | 2 +-
- package/kodi-screensaver-stars/kodi-screensaver-stars.mk        | 2 +-
- 18 files changed, 18 insertions(+), 18 deletions(-)
+ package/kodi-skin-confluence/kodi-skin-confluence.hash | 2 +-
+ package/kodi-skin-confluence/kodi-skin-confluence.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
-index 0210157d2a..a68c3ca3b3 100644
---- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
-+++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.hash
+diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.hash b/package/kodi-skin-confluence/kodi-skin-confluence.hash
+index 9cde584da2..9974b4a3bc 100644
+--- a/package/kodi-skin-confluence/kodi-skin-confluence.hash
++++ b/package/kodi-skin-confluence/kodi-skin-confluence.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  468527220845a411af4dd021a907c6449327015fb848e61adfb46b47edde331a  kodi-screensaver-asteroids-21.0.2-Omega.tar.gz
-+sha256  5682dd86180706b6bee99a3b16797378b68d64832abf8fde180e6e5da741e07a  kodi-screensaver-asteroids-22.0.6-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
-index 878ab22c3b..f680a69cf5 100644
---- a/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
-+++ b/package/kodi-screensaver-asteroids/kodi-screensaver-asteroids.mk
+-sha256  ae7177ad7f06fdb38ba0e217b2ac3e4375cf29a7792f2eaa70003286410521a0  kodi-skin-confluence-b049aa8b6bab50518de72783efd219680047d6d9.tar.gz
++sha256  8043658a939e141305d6acd426a5a5be3a35ec1b94baba23fde069e4a1ff0f00  kodi-skin-confluence-da60e21de4a87581a8526c9409625e9f21cc7a33.tar.gz
+ sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.txt
+diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.mk b/package/kodi-skin-confluence/kodi-skin-confluence.mk
+index 31d6b37380..2a83eb5994 100644
+--- a/package/kodi-skin-confluence/kodi-skin-confluence.mk
++++ b/package/kodi-skin-confluence/kodi-skin-confluence.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_SCREENSAVER_ASTEROIDS_VERSION = 21.0.2-Omega
-+KODI_SCREENSAVER_ASTEROIDS_VERSION = 22.0.6-Piers
- KODI_SCREENSAVER_ASTEROIDS_SITE = $(call github,xbmc,screensaver.asteroids,$(KODI_SCREENSAVER_ASTEROIDS_VERSION))
- KODI_SCREENSAVER_ASTEROIDS_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_ASTEROIDS_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash
-index c63d3be3e8..c7bd9973da 100644
---- a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash
-+++ b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  de92f8773f23c77f388201d316273f1a06103965bdb9684cbda19a73180c1488  kodi-screensaver-asterwave-21.0.2-Omega.tar.gz
-+sha256  049ddd84606576439531a76f04bf6732ecab1776d151a5bfe7b69a1a488080ee  kodi-screensaver-asterwave-22.0.5-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
-index 90507bf8b0..90518360fc 100644
---- a/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
-+++ b/package/kodi-screensaver-asterwave/kodi-screensaver-asterwave.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_ASTERWAVE_VERSION = 21.0.2-Omega
-+KODI_SCREENSAVER_ASTERWAVE_VERSION = 22.0.5-Piers
- KODI_SCREENSAVER_ASTERWAVE_SITE = $(call github,xbmc,screensaver.asterwave,$(KODI_SCREENSAVER_ASTERWAVE_VERSION))
- KODI_SCREENSAVER_ASTERWAVE_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_ASTERWAVE_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
-index 865f31b201..9f163c5dd6 100644
---- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
-+++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  fdd5a5abf98318e01e22c88f81ae3838b2f3b76f99b39e01fc94af528a200849  kodi-screensaver-biogenesis-21.0.2-Omega.tar.gz
-+sha256  a67269b38cdb3d9d39f8c7ae5c014af6496159ede7701fdfc102e78280e1ac56  kodi-screensaver-biogenesis-22.0.6-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
-index 4455caedda..25cbfb8cbe 100644
---- a/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
-+++ b/package/kodi-screensaver-biogenesis/kodi-screensaver-biogenesis.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_BIOGENESIS_VERSION = 21.0.2-Omega
-+KODI_SCREENSAVER_BIOGENESIS_VERSION = 22.0.6-Piers
- KODI_SCREENSAVER_BIOGENESIS_SITE = $(call github,xbmc,screensaver.biogenesis,$(KODI_SCREENSAVER_BIOGENESIS_VERSION))
- KODI_SCREENSAVER_BIOGENESIS_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_BIOGENESIS_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
-index bb6918a03b..35e6186c19 100644
---- a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
-+++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  f56b57dfc8535331e36527462bd820e06e287a5a48ffdb33d00bdf1a2dc62b90  kodi-screensaver-cpblobs-21.0.2-Omega.tar.gz
-+sha256  c611deff379023ef3310f3a4eb75f0d1ae694310efa857fc79e35a178c751c01  kodi-screensaver-cpblobs-22.0.3-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
-index 8154bda2e1..0b97d3271e 100644
---- a/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
-+++ b/package/kodi-screensaver-cpblobs/kodi-screensaver-cpblobs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_CPBLOBS_VERSION = 21.0.2-Omega
-+KODI_SCREENSAVER_CPBLOBS_VERSION = 22.0.3-Piers
- KODI_SCREENSAVER_CPBLOBS_SITE = $(call github,xbmc,screensaver.cpblobs,$(KODI_SCREENSAVER_CPBLOBS_VERSION))
- KODI_SCREENSAVER_CPBLOBS_LICENSE = GPL-2.0
- KODI_SCREENSAVER_CPBLOBS_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash
-index df652f3286..034993ff3b 100644
---- a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash
-+++ b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  9ed9dba2040268bfd82648856b3e07da5cf51f39909c71c2579475221477e3a6  kodi-screensaver-greynetic-21.0.2-Omega.tar.gz
-+sha256  cb87ccf7c3cbbca7682196e0ed6b5556662a9b630cfa462536fe019ff8e7cdaa  kodi-screensaver-greynetic-22.0.6-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
-index e484305485..1049386374 100644
---- a/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
-+++ b/package/kodi-screensaver-greynetic/kodi-screensaver-greynetic.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_GREYNETIC_VERSION = 21.0.2-Omega
-+KODI_SCREENSAVER_GREYNETIC_VERSION = 22.0.6-Piers
- KODI_SCREENSAVER_GREYNETIC_SITE = $(call github,xbmc,screensaver.greynetic,$(KODI_SCREENSAVER_GREYNETIC_VERSION))
- KODI_SCREENSAVER_GREYNETIC_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_GREYNETIC_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
-index 27bba5d3ba..a339fd3932 100644
---- a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
-+++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  cc342d201606e682fc9def894a308784b74633f981209570c87d1bd206894311  kodi-screensaver-matrixtrails-21.0.2-Omega.tar.gz
-+sha256  906de731f0b1f559d27c874c29f3de8bcd82551a99547181ba5a3cbf4ab9dfb4  kodi-screensaver-matrixtrails-22.0.5-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
-index ab51a5bc2b..21b1a652b9 100644
---- a/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
-+++ b/package/kodi-screensaver-matrixtrails/kodi-screensaver-matrixtrails.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_MATRIXTRAILS_VERSION = 21.0.2-Omega
-+KODI_SCREENSAVER_MATRIXTRAILS_VERSION = 22.0.5-Piers
- KODI_SCREENSAVER_MATRIXTRAILS_SITE = $(call github,xbmc,screensaver.matrixtrails,$(KODI_SCREENSAVER_MATRIXTRAILS_VERSION))
- KODI_SCREENSAVER_MATRIXTRAILS_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_MATRIXTRAILS_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
-index 867ebf865a..2dbae3ef54 100644
---- a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
-+++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  4d7c15a0070e4792b4b56726d9a37ab6ca8c569186e0beebd256a57203d5e362  kodi-screensaver-pingpong-21.0.2-Omega.tar.gz
-+sha256  b2d773288bc4e07e695ba847805a498b43d35784fbc066f878f8d0217d422cb4  kodi-screensaver-pingpong-22.0.6-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
-index 5d1854b9a2..63b89a18d3 100644
---- a/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
-+++ b/package/kodi-screensaver-pingpong/kodi-screensaver-pingpong.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_PINGPONG_VERSION = 21.0.2-Omega
-+KODI_SCREENSAVER_PINGPONG_VERSION = 22.0.6-Piers
- KODI_SCREENSAVER_PINGPONG_SITE = $(call github,xbmc,screensaver.pingpong,$(KODI_SCREENSAVER_PINGPONG_VERSION))
- KODI_SCREENSAVER_PINGPONG_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_PINGPONG_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
-index 23d1e1b1f3..7a3f8c0642 100644
---- a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
-+++ b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  4a6b5d7efd789be40226ffe337bac8f64c47335c40085d940d624d42cdaa1be0  kodi-screensaver-pyro-21.0.2-Omega.tar.gz
-+sha256  70e519246b05bad18ef97f0973a082bc4796a438fd6054532b44a8af3bb4dcfc  kodi-screensaver-pyro-22.0.6-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
-index 72bbf2e913..6ffbf563b1 100644
---- a/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
-+++ b/package/kodi-screensaver-pyro/kodi-screensaver-pyro.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_PYRO_VERSION = 21.0.2-Omega
-+KODI_SCREENSAVER_PYRO_VERSION = 22.0.6-Piers
- KODI_SCREENSAVER_PYRO_SITE = $(call github,xbmc,screensaver.pyro,$(KODI_SCREENSAVER_PYRO_VERSION))
- KODI_SCREENSAVER_PYRO_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_PYRO_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-screensaver-stars/kodi-screensaver-stars.hash b/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
-index 6f9ca93d8d..c611a7cfd8 100644
---- a/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
-+++ b/package/kodi-screensaver-stars/kodi-screensaver-stars.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  86a479a4c6d0b27723a701330b83704f223566eabe7a25302ecf8f0a66e5b27e  kodi-screensaver-stars-21.0.2-Omega.tar.gz
-+sha256  45da0470fd95cc059356f87ae34db32a117ac11c9e30e4b65c7f018b942bc534  kodi-screensaver-stars-22.0.5-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-screensaver-stars/kodi-screensaver-stars.mk b/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
-index cff60ae5db..4dc7577b6b 100644
---- a/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
-+++ b/package/kodi-screensaver-stars/kodi-screensaver-stars.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_SCREENSAVER_STARS_VERSION = 21.0.2-Omega
-+KODI_SCREENSAVER_STARS_VERSION = 22.0.5-Piers
- KODI_SCREENSAVER_STARS_SITE = $(call github,xbmc,screensaver.stars,$(KODI_SCREENSAVER_STARS_VERSION))
- KODI_SCREENSAVER_STARS_LICENSE = GPL-2.0+
- KODI_SCREENSAVER_STARS_LICENSE_FILES = LICENSE.md
+-KODI_SKIN_CONFLUENCE_VERSION = b049aa8b6bab50518de72783efd219680047d6d9
++KODI_SKIN_CONFLUENCE_VERSION = da60e21de4a87581a8526c9409625e9f21cc7a33
+ KODI_SKIN_CONFLUENCE_SITE = $(call github,xbmc,skin.confluence,$(KODI_SKIN_CONFLUENCE_VERSION))
+ KODI_SKIN_CONFLUENCE_LICENSE = GPL-2.0
+ KODI_SKIN_CONFLUENCE_LICENSE_FILES = LICENSE.txt
 -- 
 2.47.3
 
