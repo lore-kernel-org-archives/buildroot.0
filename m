@@ -2,27 +2,27 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45D75606A31A
-	for <buildroot@archiver.kernel.org>; Wed, 28 Oct 2026 21:39:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 014CC606A31A
+	for <buildroot@archiver.kernel.org>; Wed, 28 Oct 2026 21:39:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=fU7QqMpc
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=nHZrt9Pd
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 24FC8409B9;
-	Wed, 28 Oct 2026 21:39:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D1B0C40A04;
+	Wed, 28 Oct 2026 21:39:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c4z8I57eICIj; Wed, 28 Oct 2026 21:38:59 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org C2953409E5
+ id yGpNfzJ3x_tU; Wed, 28 Oct 2026 21:39:30 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 0774D409EB
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793223537;
-	b=RSy2n9BiCxGfOhkCX53nz2Wx9fGex/gAmGQnqZT9zvc2BJ2mGzDaUJBs7/zCzObRKsEs
-	 AjULsgqp5zJMvdQHFPj+sVV9DrPiIgMro/w+xberzMKtapwoh2/9yw1zqB/YBL3vxlhCB
-	 +oqX11ruu3iUty/RxHXMFxc/fkoGvXLddl6Cnu3zpza/jX9SIx9t/tiaiK6yvpZkuOIx1
-	 dQCtOQneHPf/2rPI1fEubNr8JNrR1dS3rVRTt4FekkURCXRwUtxsb2uk9sD9+Va6LCoFA
-	 9WuSibOMh1jf1x5Tvh2lW6DAe5OCNyK81Kr9BpKXcOTwn1r16ssAB79Sq7H9kc7NxDQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793223570;
+	b=LTFL9Ije7+02/G6tvlQ9jPU/1tW1KEUZRIqMPSEijdviQEYcy7z2TWRT5ylkpXvZXY/y
+	 WdVG2aRcA+NTKCzHVCIR/g8S19EMDdokb33Mn7TS2ymuB0xOnlo8YbxGKa0OVkUJOJ/qu
+	 fS/mdjn3GxSE2Kew+Is34O+38ZifmImSMliIPHNjQg+jIK+ZppQb3LCC07lhD2rI/mR2g
+	 tV7k2EId+Wr09D1pEE3k4TiKWF54LS4yzit4vXPyppj/1uZTMIYEw9tnsQT0pq02KmS3z
+	 YAaQxbWEmSU5dIlAYkofLo8Km6FPMWrGPeAMQTIXYTjg86w2lceycPtO6pCwZ7MY0Bg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793223537;
+	c=relaxed/relaxed; t=1793223570;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -33,137 +33,138 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=+2fpU8cmLkfDD1KCqFJH+zpmzv7qxc/4lIbuUjNnsOU=;
-	b=iZtAX3HWe3mbjEpDRgtMJpLIpbMyl9EWvQx7sgB3VWj7wT7e6BPHXpoQeg2ehqSvJk3w
-	 JQPHqIAOlhCW0I1OoN8ZP+PZQjKNR8BsizP8qjUqYUfFAiULnFdEvnL+CfgrpLXtfzENN
-	 I4ssq8RhIu8IOW+P5MDJGAP3Kkm4qEK0Rwy3fOBrIqePyindvm1Ui7Bqh5aO3+5MFMEMw
-	 Hqb6TGWZyndn4NCQTd1CIj+Y+6ppCa9kHnbNxBdlr/mgRPi+6vpRuaNEjorR+Wbzfqs7e
-	 PLNXu0G+C7gVgXX9yC3rB9g0opjOUwYxJj5C3FTT4IG4L+T7OMCQWUsOolwK6CU3rhA==
+	bh=Bbiq47ON+8VBVpIB9NeeCfETJ+LofK9qlTZMk2zbVrA=;
+	b=BEPADcfj3JUIfH9eZg5CttHkOX605X6GQ540eQXT2KiDt6V/YtflY3DX3L0IBIRuOm8y
+	 3s5y8VIHO2M/AL7F4QZN2xkt/skIQDW0JyW22HXlUmxQZfaQzH5vRW7gnps7VS3U4NtVk
+	 DsBiu7zHl/MLL+7bR2pVmJJFwLAh20Fzwdexufuv1J1rvfa+oQTW5A/X547uooz4ewj+W
+	 nO2or/1XwvM49q8WfV40deVkY82l+PqWfpt6mB7bAz6hzg5LGU/Nn2hICwc5NkDWzf02T
+	 +6mcbY6MoyxQRF7maC4jrXHby0KmIrYAXS4npCs4O4KhSTAq7liZkAX7+StNFXLBQOA==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793223537;
-	bh=+2fpU8cmLkfDD1KCqFJH+zpmzv7qxc/4lIbuUjNnsOU=;
+	s=default; t=1793223570;
+	bh=Bbiq47ON+8VBVpIB9NeeCfETJ+LofK9qlTZMk2zbVrA=;
 	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=fU7QqMpc/gOENqWtYyIzOC4/zZuyFdroYoEHVRJrwEUBcLqxTUJ8QVK9pr1ikeB5k
-	 U4LIK4J5uZtE7UJLfgaxUCdqG3yzTZF0iP4Urkn4L+XZMqf9OmWaUin/M/ygCTSCwF
-	 oLNxzG62bAnOtkjekgVpeKdxKSon2ecEJSakIkpMAiSXQ63PtMlqFNc1iM3BTj/ENr
-	 EJDC4o1Z1vOXSDzJSOXpScKVf1gqdfdHcbG3UZiqBqvXN86vTs+Ly9EfVA8J1Yvn8D
-	 9A3wzRkGxDcMRh2W8fKJR0oLFB6gAsmHcE3vtwoPbzoXkJdQFpzNCxuQdH/EndRFXj
-	 F15Ec4mSM+jBA==
+	b=nHZrt9PdmX1cZ+RSta28RZSEdZRtiAQOZ6LYTfF5fHyik/lOjJJVvtAylnEqp2ASA
+	 dh6Nk/i7KxI3kn+Lr8qM4lAMnGSVAVjXYIs/ygB9eOMdOEpFwmKQiTUTp/MmSm/XMH
+	 E5RouVx1Q5wkkRAiocXt49W5ikvZZqT653WN3lUsca8DWZ4731FM5YiOJf4gYI+ajR
+	 /ZGZtd9B8sTisQhFmEP6COzKyhnjNM+1XiN3JOyKH+mVPATXgo2Ec8Y/qwlYnbM/DP
+	 fUGpYygTYTCLiN6n3RVX1Ea68ENTbLohwn4P1joi139Km8BH0i/iMomp5DivGHwPTo
+	 VGCPMQX9TiHFg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2953409E5;
-	Wed, 28 Oct 2026 21:38:57 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id CE9F3235
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 21:38:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0774D409EB;
+	Wed, 28 Oct 2026 21:39:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4B2012A8
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 21:39:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B496B400B5
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 21:38:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 48AE18176D
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 21:39:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w60pDjo6S4vU for <buildroot@buildroot.org>;
- Wed, 28 Oct 2026 21:38:53 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 3215A40234
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793223533;
- b=q5rX1aQRG5+1y3z4/IHCWo2QgEnAksKGxet8xbq5pfJalCwG0e6sUqpn0SjUc+yYCSI9
- R6TogSYsyms39x40oX/rw8SPTb6dBmyaqW+1fMyspZK8XPz1AROl/ndV74a+hx+/wlRKQ
- 7sgMpgXbn/9ae81DAK1OVTIFlD68HYG6Bnap4ZXf9LW4hTbqd7VpuntxuHQxeguSRJGSQ
- fXXe6oDeXbRyyKKH3WQpQmq3ARmFzxwcVOhRgJmA3W9OjCl6l+aGDUWIYkGNWAgjWNPkH
- ls9Zn6Zh7q3uSkS5VKihwgWet42y6DumTmtHM3JXtwU59kLPIRlJsivsyuIZEdq7Bfw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p9wfT1vy_g0q for <buildroot@buildroot.org>;
+ Wed, 28 Oct 2026 21:39:27 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 8EBF18176B
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793223567;
+ b=nkJsXpl3GSnuXxTnTkciCwIemDjvVcXnNCxaFiYKbLJNuyTjv8obvZnqwQ7s8fiDcyUS
+ LYVCeJHQaWTL64+Zl8aPPZw3e5GHgoUYRkdA2PZ4HkBgI46PE9mPHfMpY9pkpCV80P1/2
+ LxlIfVsbLepXm8O8pH96YgLBagw0MjaXjcqmga4xu3tmO2pRp0bR1zA7JassP4+8lkWLK
+ 7mRODDdiBFWBVuhTP90IzVa392Tga7GVKe/wJ44x2ATvLDGqnOzz0n5U/DRegFmyMv/dL
+ 32LYakenut32yLZACMWGV6Tcnc5ErbBO82bPkbjC+rJLoaiezQxBMwQoLwqOLxFszhA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793223533;
+ c=relaxed/relaxed; t=1793223567;
  h=Received-SPF:Received:X-Google-DKIM-Signature:X-Gm-Message-State:
  X-Gm-Gg:X-Received:Received:X-Relaying-Domain:X-CFilter-Loop:Received:
  DKIM-Signature:X-Received:X-Received:Received:From:To:Cc:Subject:Date:
  Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-DetectorID-Processed;
- bh=25nn/HkE7oyxhnjhncedQj/gdUoKQt+g0+dzDyG0QGw=;
- b=gNrsmxaR1RkpSZkgEy3RcxXyJFeTmbzWbWRIO3YU4fVBzqc+vZyAVOIVb09nmNq58Qv1
- NXHoEh6Unv2jwOrii/Xlt568pUzpNxEt0ONs3l4ZBkhQLcV9De65XdmJjUlf+tQ2VcOMj
- lAcFGO/zCb/y51nujJb+/BJBOK4Yha96RJi4Gm8ccgEbHmukIzqvVt/bZF1yWep1lKl+z
- S18FD1s4xK/MRw6HlLTIlgX0yPqW4qIbMHZIpInEg5S4LBJzZDBZFUy/ccuKXsp/pmhdq
- O9bDwhG5T4ggL6YHS7lHJF3+Da3vfC1NOhQphLO+FIG1EjMXjGhd5Y1b7xBufz5rVHA==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ bh=V4xeKQq1oy0P20f2dq1vP1ChiNYZt/CQik+/CmaHBVk=;
+ b=AGbRphEfgcVhdDvmcpgjibcJfZ/uEvI8wFUGT3ALxcYCznFod6wEJleb0NGEHOvHklgf
+ caoEs4tskBTSTqwIxYm32BjojxJBvH0XRDzgwuaPIZVqdMVxKCy2YpnWgjWYhDi3uWEqd
+ w+JGAXIlUCE7bghTYorlA1rJelRJ8L065A5CVrdhKM4n2r+lAynkQoUEqyo8Vzw6mUtJ2
+ iP08FHHddq40QERU+MVZTEA+jkcrvBx5bNS4uYbZvXqObHVsygwY+j8owqHd8IEXi6XAz
+ aPNzbTvn9dritgQOWjykC9buVAgNYSsEOGKucZWVe37KQrJdAEx+ICsbOKkVj282w1Q==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  dmarc=pass header.from=broadcom.com;
  dkim=pass header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256
- header.s=google header.b=RModEGFk; 
- arc=none smtp.remote-ip="2607:f8b0:4864:20::562"
+ header.s=google header.b=AYd0vLWU; 
+ arc=none smtp.remote-ip="2607:f8b0:4864:20::761"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::562; helo=mail-pg1-x562.google.com;
+ client-ip=2607:f8b0:4864:20::761; helo=mail-qk1-x761.google.com;
  envelope-from=florian.fainelli@broadcom.com; receiver=<UNKNOWN> 
-Received: from mail-pg1-x562.google.com (mail-pg1-x562.google.com
- [IPv6:2607:f8b0:4864:20::562])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3215A40234
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 21:38:52 +0000 (UTC)
-Received: by mail-pg1-x562.google.com with SMTP id
- 41be03b00d2f7-cc502d509c0so645003a12.2
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 14:38:52 -0700 (PDT)
+Received: from mail-qk1-x761.google.com (mail-qk1-x761.google.com
+ [IPv6:2607:f8b0:4864:20::761])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8EBF18176B
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 21:39:26 +0000 (UTC)
+Received: by mail-qk1-x761.google.com with SMTP id
+ af79cd13be357-93f20c3aaa5so129469985a.2
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 14:39:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793223532; x=1793828332;
+ d=1e100.net; s=20260707; t=1793223566; x=1793828366;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:dkim-signature:x-gm-gg
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
  :content-type;
- bh=25nn/HkE7oyxhnjhncedQj/gdUoKQt+g0+dzDyG0QGw=;
- b=BL5wm4XrL6xUnDY56v8biqGoPTsXvsi20Qj8brSr8JQMZwWOyCiCo8SgRxb1bgwPXK
- vH7nATTKzwyMyuHnQ/Mpbwm1tSh4GGw7wlM3doJo/HflSY7BgKTS+KpwujIly3JKG+eu
- /gqdyK2VPbqA0KtYG5+fqnyongZIkz3iPXiQZy5UcTzo+MBt+UmvFslzePp90Ne1EFvG
- XZw9s2GWVSqyZv55S60n01I7OeFX9rFR/CRmpudFMgJ7Vq0v/5z2PpxFTZoG1UrTra++
- Uskqkm/5jYYtidftQw8+03ScHv19FA5q5BcS/76JgkNmK4HJafsvfYW10H1uXiJ5BU5s
- 021g==
-X-Gm-Message-State: AFq9FYLR4Fqua+MnubJg+iIjnZANuAFrKDyW30mDugrAGw7okpFWjLCY
- gVWcaxlFdkOY5FavtlUu+UAehSDGhTvbEewasIRwo6H/hcAnl5UW8nYOQegCcs/+FLtcTpsrudF
- QW9TQfMXFHtyDbajDGEh3pVKfAPT8vtIGlGjLCpGILdlMiJwN6epeBrTLoS/LxahuEOsAy0yKPf
- waNJrAyk4xq0IUcBpnuDZlD0mhm/1cdm2BbILZu3jpTNpJ7c6RRQMmQyyej2otfWOPleHbpZbw+
- YrDrJWeAFnYkxCFiw==
-X-Gm-Gg: AYBFou0ouwQrZBwoUDb9sTbmpOlYGp2etwuC6XVExgFuYAKfvtGHogc4BU/j3VDoegT
- F+/z74RGpdnlvGKdG0pqdD32qZEIvrDm+6r6b3mfJP/8bXCQkskOav7kM3YgK3Oc5Lalz2Gxwsq
- nl2/GmA711lH40rFROzPqfWgf665+Lyo9eELn2hAXHBrbc97Atajsgj7guHPEdqBUMyefLYhGhH
- msB+6V1sOX9HZyEjpzcDk0YSRNYy+q1UfQzMQNkVibUxYqHVcnDK2ZLJDMNDTnwAtUTIXcCm2I3
- iOBQcOQZqIpNme8uYvUrZng07NwQCbw+6MYVHwpu+u6PYCyqsEioABDFggdagIrwokjJRHuA488
- SpWmsqUwU6lhYMan7gmJEGvwZly2b1XaG1FZhhl68GswWWpOB1ORUXHLMV1/wULPWdd0NAJUQOB
- 5tUHM63nji6xO8vqVm6dYnKjXW9/Wb/p9hr3O9F2bw
-X-Received: by 2002:a17:90b:2705:b0:3a8:7096:9b48 with SMTP id
- 98e67ed59e1d1-3ae57e357cfmr2668661a91.1.1793223531999; 
- Wed, 28 Oct 2026 14:38:51 -0700 (PDT)
+ bh=V4xeKQq1oy0P20f2dq1vP1ChiNYZt/CQik+/CmaHBVk=;
+ b=rJpuUbVyInPdy50t1RTR23BcJeqpyQoqKDEr9y/Meqc/GqXzfca6Nlit80BC5XXmnP
+ OsoRri+ZV1c3PQFLe7Ry4myibrlLElJ1HoGdK8PsuMcnG6teUhrR8rW8OXOTgVaWV29h
+ RPMXQ6Jttc+peQKbtpZ7fcb9o07iH/Oc+5nRZ0yhHksAf2lOfZU9nvlJaCBoCNoFj0HX
+ Q3sZvWMCd+KVgUPL5fdepNIuRg6N4LGilvNM1K+dQH2hc7IxzlL7HlbuuMle2JSh3r2A
+ cgRsdMTCcldn0r51uektguAmrVKij8ZpoyO5dTXjd6nKmkjO/HGSyeKQ63HOaM8vx4b+
+ 5ZlA==
+X-Gm-Message-State: AFq9FYJ2mWIJhuS62OqU5zazeioRT1+6nDfKB2BmU2fF1k9U8qGwKfeW
+ FIoOT6ZGQeBuhCjPBMwpxLFt5+FT1mRIVXbbPozaSogshQ2KD7lxqpSDowH5FyExUzXuMR5jyGf
+ o5zNCwHn2mQCG74i9i2l4Iebn72l3BEMA93ru9BBNf4WjXAnZt+TwRkfgjJXZ1udhNPn7h6kJaK
+ BJaVH7A6RlxpGFIvkN0ZqxHyEUYrSeFzXk5NQBuhlUJw7ucRXX8AZHS+bMRkzTA2nZdqbuVZvBL
+ J3jR6WMwdsEkXEPWg==
+X-Gm-Gg: AYBFou0GbtwMLu7CSbS6jWjv8AzJhXpfMQy0xcZk/uBRMBRP1XPOOQTawiD65KwlAL9
+ 0BvkY712HipTKs4LHMNepYM+tANtLgiVsofUL3kNPEF+almyB+f3oCH1sAzcrwgvLJGLHGEA/T7
+ IqHzXLEWob4gWQZTdIfWxM7TBMRi116RoiGu5LSbERYg7fbDNQD+GmtA5GX5hCsOUbUZ8YymylI
+ LQ1KUH5HJzdTjHEF0VRh92hxHeSJIWw5WgIjb51puVRqv18XK6kmAR2DEBw7CVs4pp3EkGBJG0g
+ 5FrKuwJP1h4TxNKCN8bQ7Csex597GgmJ8SWTSWDJRnFwSi/60geZsuX8oWB2o8FIHFP95H4Ryd8
+ FVPH22PSapCh9j5zKEhzehsVX7sZrbLcSSh1H7SfjFQ2+SS0GWzpfHftmRCSxHxv4wxR+sk3Mi2
+ fZZ7aPy5goPY5ELrJMI4iTW3VPUBB1rGtI1/1A/Jdl
+X-Received: by 2002:a05:620a:4515:b0:93e:6620:bde7 with SMTP id
+ af79cd13be357-94408cf3ed5mr570685985a.20.1793223565537; 
+ Wed, 28 Oct 2026 14:39:25 -0700 (PDT)
 Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com
- (address-144-49-247-28.dlp.protect.broadcom.com. [144.49.247.28])
+ (address-144-49-247-13.dlp.protect.broadcom.com. [144.49.247.13])
  by smtp-relay.gmail.com with ESMTPS id
- 98e67ed59e1d1-3ae55a6d629sm1103754a91.0.2026.10.28.14.38.51
+ af79cd13be357-940f0a8c19bsm197814285a.19.2026.10.28.14.39.25
  for <buildroot@buildroot.org>
  (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Wed, 28 Oct 2026 14:38:51 -0700 (PDT)
+ Wed, 28 Oct 2026 14:39:25 -0700 (PDT)
 X-Relaying-Domain: broadcom.com
 X-CFilter-Loop: Reflected
-Received: by mail-qt1-f197.google.com with SMTP id
- d75a77b69052e-5363763b556so32394031cf.3
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 14:38:50 -0700 (PDT)
-X-Received: by 2002:ac8:5fcf:0:b0:531:11ac:23cf with SMTP id
- d75a77b69052e-53fcb50534emr65429181cf.19.1793223530430; 
- Wed, 28 Oct 2026 14:38:50 -0700 (PDT)
-X-Received: by 2002:ac8:5fcf:0:b0:531:11ac:23cf with SMTP id
- d75a77b69052e-53fcb50534emr65428661cf.19.1793223529894; 
- Wed, 28 Oct 2026 14:38:49 -0700 (PDT)
+Received: by mail-qv1-f70.google.com with SMTP id
+ 6a1803df08f44-91c046843f1so10701696d6.1
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 14:39:25 -0700 (PDT)
+X-Received: by 2002:a05:6214:440a:b0:91c:7a28:ac2c with SMTP id
+ 6a1803df08f44-91c7d1c8ea8mr60274586d6.45.1793223564501; 
+ Wed, 28 Oct 2026 14:39:24 -0700 (PDT)
+X-Received: by 2002:a05:6214:440a:b0:91c:7a28:ac2c with SMTP id
+ 6a1803df08f44-91c7d1c8ea8mr60274106d6.45.1793223563926; 
+ Wed, 28 Oct 2026 14:39:23 -0700 (PDT)
 Received: from stbirv-lnx-1.igp.broadcom.net ([192.19.223.252])
  by smtp.gmail.com with ESMTPSA id
- d75a77b69052e-538394c38easm114397821cf.7.2026.10.28.14.38.46
+ 6a1803df08f44-91c6ed36451sm62806156d6.34.2026.10.28.14.39.21
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 28 Oct 2026 14:38:48 -0700 (PDT)
+ Wed, 28 Oct 2026 14:39:23 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Wed, 28 Oct 2026 14:37:30 -0700
-Message-Id: <20261028213744.511429-10-florian.fainelli@broadcom.com>
+Date: Wed, 28 Oct 2026 14:37:31 -0700
+Message-Id: <20261028213744.511429-11-florian.fainelli@broadcom.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20261028213744.511429-1-florian.fainelli@broadcom.com>
 References: <20261028213744.511429-1-florian.fainelli@broadcom.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
 X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
-Subject: [Buildroot] [PATCH v2 09/23] linux: build out of tree
+Subject: [Buildroot] [PATCH v2 10/23] packages: sync host and target patch
+ hooks
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -175,10 +176,11 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Florian Fainelli via buildroot <buildroot@buildroot.org>
 Reply-To: Florian Fainelli <florian.fainelli@broadcom.com>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Gary Bisson <bisson.gary@gmail.com>,
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
+ Eric Le Bihan <eric.le.bihan.dev@free.fr>,
  =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>,
  Florian Fainelli <florian.fainelli@broadcom.com>,
+ Gary Bisson <bisson.gary@gmail.com>, Romain Naour <romain.naour@gmail.com>,
  Bernd Kuhls <bernd@kuhls.net>, Thomas Perale <thomas.perale@mind.be>,
  Maxime Chevallier <maxime.chevallier@bootlin.com>,
  Refik Tuzakli <tuzakli.refik@gmail.com>,
@@ -189,7 +191,7 @@ Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
  Giulio Benetti <giulio.benetti@benettiengineering.com>,
  Pascal de Bruijn <p.debruijn@unilogic.nl>,
  Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Romain Naour <romain.naour@gmail.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
  Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
@@ -201,206 +203,37 @@ X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Introduce <pkg>_SUPPORTS_OUT_OF_TREE. A package that sets it is always
-built out of tree:
+From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
 
- - <pkg>_SRCDIR is $(SRC_DIR)/<basename>, i.e. output/source/..., where
-   the sources are extracted and patched, while <pkg>_BUILDDIR remains
-   in $(BUILD_DIR) and only contains generated files. Other packages
-   keep extracting in $(BUILD_DIR), so they are not affected;
- - when <pkg>_OVERRIDE_SRCDIR is set, <pkg>_SRCDIR is the overridden
-   directory, used in place: nothing is rsynced into $(BUILD_DIR), only
-   the pre/post rsync hooks still run, and the source-related stamp
-   files (rsynced, patched, ...) live in the build directory so that
-   nothing is created in the user's tree;
- - kconfig packages start from the source directory with O=<builddir>,
-   which makes kbuild generate its wrapper Makefile in the build
-   directory, so that all the existing -C $(LINUX_DIR) invocations keep
-   working unmodified;
- - <pkg>-dirclean and 'make clean' also remove the extracted sources.
+In preparation for the introduction of out-of-tree package build, it
+is important that we don't do different things in the patch hooks for
+the target and host variant of a given package, because the source
+tree will be shared between the target and host builds.
 
-Enable it for the Linux kernel. When the sources are overridden, the
-source tree must be clean (no in-tree .config, include/config,
-arch/*/include/generated).
+For the gawk, icu, python and python3 packages touched by this patch,
+there is no problem in running the target-only post-patch hook that
+already exists to the host variant, so we simply do that.
 
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+(cherry picked from commit 7d6a8f1ace39bbc96a1deab5c5c41d6c16ebf36a)
 Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
 ---
- Makefile               |  4 ++--
- linux/linux.mk         |  5 +++++
- package/pkg-generic.mk | 46 ++++++++++++++++++++++++++++++------------
- package/pkg-kconfig.mk |  6 +++++-
- 4 files changed, 45 insertions(+), 16 deletions(-)
+ package/icu/icu.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Makefile b/Makefile
-index c1f12a4bfc38..7aa43126540c 100644
---- a/Makefile
-+++ b/Makefile
-@@ -211,7 +211,7 @@ endif
- # Avoids doing the $(or...) everytime
- BR_GRAPH_OUT := $(or $(BR2_GRAPH_OUT),pdf)
- 
--SRC_DIR := $(BASE_DIR)/build
-+SRC_DIR := $(BASE_DIR)/source
- BUILD_DIR := $(BASE_DIR)/build
- BINARIES_DIR := $(BASE_DIR)/images
- BASE_TARGET_DIR := $(BASE_DIR)/target
-@@ -1133,7 +1133,7 @@ show-vars:
- .PHONY: clean
- clean:
- 	rm -rf $(BASE_TARGET_DIR) $(BINARIES_DIR) $(HOST_DIR) $(HOST_DIR_SYMLINK) \
--		$(BUILD_DIR) $(BASE_DIR)/staging \
-+		$(BUILD_DIR) $(SRC_DIR) $(BASE_DIR)/staging \
- 		$(LEGAL_INFO_DIR) $(GRAPHS_DIR) $(PER_PACKAGE_DIR) $(O)/pkg-stats.*
- 
- .PHONY: distclean
-diff --git a/linux/linux.mk b/linux/linux.mk
-index a90e09afe906..5734d78aa9a2 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -6,6 +6,11 @@
- 
- LINUX_VERSION = $(call qstrip,$(BR2_LINUX_KERNEL_VERSION))
- LINUX_LICENSE = GPL-2.0
-+
-+# The kernel is always built out of tree: the sources are in $(LINUX_SRCDIR)
-+# and the kernel is built in $(LINUX_BUILDDIR) with O=. When
-+# LINUX_OVERRIDE_SRCDIR is set, the sources are not rsynced.
-+LINUX_SUPPORTS_OUT_OF_TREE = YES
- LINUX_LICENSE_FILES = $(call qstrip,$(BR2_LINUX_KERNEL_LICENSE_FILES))
- 
- LINUX_CPE_ID_VENDOR = linux
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 138fe9ccef4f..0f4bf73fa064 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -171,7 +171,7 @@ endef
- ################################################################################
- 
- # Retrieve the archive
--$(SRC_DIR)/%/.stamp_downloaded:
-+$(BUILD_DIR)/%/.stamp_downloaded $(SRC_DIR)/%/.stamp_downloaded:
- 	@$(call step_start,download)
- 	$(call prepare-per-package-directory,$($(PKG)_FINAL_DOWNLOAD_DEPENDENCIES))
- 	$(foreach hook,$($(PKG)_PRE_DOWNLOAD_HOOKS),$(call $(hook))$(sep))
-@@ -196,7 +196,7 @@ $(SRC_DIR)/%/.stamp_downloaded:
- 	$(Q)touch $@
- 
- # Retrieve actual source archive, e.g. for prebuilt external toolchains
--$(SRC_DIR)/%/.stamp_actual_downloaded:
-+$(BUILD_DIR)/%/.stamp_actual_downloaded $(SRC_DIR)/%/.stamp_actual_downloaded:
- 	@$(call step_start,actual-download)
- 	$(call DOWNLOAD,$($(PKG)_ACTUAL_SOURCE_SITE)/$($(PKG)_ACTUAL_SOURCE_TARBALL))
- 	$(Q)mkdir -p $(@D)
-@@ -204,7 +204,7 @@ $(SRC_DIR)/%/.stamp_actual_downloaded:
- 	$(Q)touch $@
- 
- # Unpack the archive
--$(SRC_DIR)/%/.stamp_extracted:
-+$(BUILD_DIR)/%/.stamp_extracted $(SRC_DIR)/%/.stamp_extracted:
- 	@$(call step_start,extract)
- 	@$(call MESSAGE,"Extracting")
- 	$(call prepare-per-package-directory,$($(PKG)_FINAL_EXTRACT_DEPENDENCIES))
-@@ -219,19 +219,19 @@ $(SRC_DIR)/%/.stamp_extracted:
- 
- # Rsync the source directory if the <pkg>_OVERRIDE_SRCDIR feature is
- # used.
--$(SRC_DIR)/%/.stamp_rsynced:
-+$(BUILD_DIR)/%/.stamp_rsynced $(SRC_DIR)/%/.stamp_rsynced:
- 	@$(call step_start,rsync)
--	@$(call MESSAGE,"Syncing from source dir $(SRCDIR)")
-+	@$(call MESSAGE,"$(if $($(PKG)_OUT_OF_TREE),Using out-of-tree source dir,Syncing from source dir) $(SRCDIR)")
- 	@mkdir -p $(@D)
- 	$(foreach hook,$($(PKG)_PRE_RSYNC_HOOKS),$(call $(hook))$(sep))
- 	@test -d $(SRCDIR) || (echo "ERROR: $(SRCDIR) does not exist" ; exit 1)
--	rsync -au --chmod=u=rwX,go=rX $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(RSYNC_VCS_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D)
-+	$(if $($(PKG)_OUT_OF_TREE),,rsync -au --chmod=u=rwX,go=rX $($(PKG)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS) $(RSYNC_VCS_EXCLUSIONS) $(call qstrip,$(SRCDIR))/ $(@D))
- 	$(foreach hook,$($(PKG)_POST_RSYNC_HOOKS),$(call $(hook))$(sep))
- 	@$(call step_end,rsync)
- 	$(Q)touch $@
- 
- # Patch
--$(SRC_DIR)/%/.stamp_patched:
-+$(BUILD_DIR)/%/.stamp_patched $(SRC_DIR)/%/.stamp_patched:
- 	@$(call step_start,patch)
- 	@$(call MESSAGE,"Patching")
- 	$(foreach hook,$($(PKG)_PRE_PATCH_HOOKS),$(call $(hook))$(sep))
-@@ -390,6 +390,7 @@ $(BUILD_DIR)/%/.stamp_installed:
- $(BUILD_DIR)/%/.stamp_dircleaned:
- 	$(if $(BR2_PER_PACKAGE_DIRECTORIES),rm -Rf $(PER_PACKAGE_DIR)/$(NAME))
- 	rm -Rf $(@D)
-+	$(if $(filter $(SRC_DIR)/%,$($(PKG)_SRCDIR)),rm -Rf $($(PKG)_SRCDIR))
- 
- ################################################################################
- # virt-provides-single -- check that provider-pkg is the declared provider for
-@@ -559,13 +560,32 @@ ifndef $(2)_STRIP_COMPONENTS
+diff --git a/package/icu/icu.mk b/package/icu/icu.mk
+index 9b97011f5587..d17b610aeea4 100644
+--- a/package/icu/icu.mk
++++ b/package/icu/icu.mk
+@@ -67,6 +67,7 @@ define ICU_COPY_CUSTOM_DATA
+ 	cp $(ICU_CUSTOM_DATA_PATH) $(@D)/source/data/in/
+ endef
+ ICU_POST_PATCH_HOOKS += ICU_COPY_CUSTOM_DATA
++HOST_ICU_POST_PATCH_HOOKS += ICU_COPY_CUSTOM_DATA
  endif
  
- $(2)_SRCDIR = $$($(2)_DIR)
--$(2)_BUILDDIR = $$($(2)_DIR)
-+$(2)_BUILDDIR ?= $$($(2)_DIR)
- $(2)_SRCSUBDIR = $$($(2)_SRCDIR)/$$($(2)_SUBDIR)
- 
- ifneq ($$($(2)_OVERRIDE_SRCDIR),)
- $(2)_VERSION = custom
- endif
- 
-+# Packages that set <pkg>_SUPPORTS_OUT_OF_TREE = YES are always built out of
-+# tree: the sources live in $(SRC_DIR), and only the build directory lives in
-+# $(BUILD_DIR). When <pkg>_OVERRIDE_SRCDIR is set, the sources are used
-+# where they are (no rsync). The source-related stamp files must then not be
-+# created in the (user-owned) source directory, so they live in the build
-+# directory.
-+# Out-of-tree builds are disabled by default. A package infrastructure may
-+# set a different default before calling this macro.
-+$(3)_SUPPORTS_OUT_OF_TREE ?= NO
-+$(2)_STAMP_SRCDIR = $$($(2)_SRCDIR)
-+ifeq ($$($(3)_SUPPORTS_OUT_OF_TREE),YES)
-+$(2)_OUT_OF_TREE = YES
-+$(2)_SRCDIR = $$(SRC_DIR)/$$($(2)_BASENAME)
-+ifneq ($$($(2)_OVERRIDE_SRCDIR),)
-+$(2)_SRCDIR = $$(abspath $$(call qstrip,$$($(2)_OVERRIDE_SRCDIR)))
-+$(2)_STAMP_SRCDIR = $$($(2)_BUILDDIR)
-+endif
-+endif
-+
- ifndef $(2)_SOURCE
-  ifdef $(3)_SOURCE
-   $(2)_SOURCE = $$($(3)_SOURCE)
-@@ -844,11 +864,11 @@ $(2)_TARGET_INSTALL_IMAGES =	$$($(2)_BUILDDIR)/.stamp_images_installed
- $(2)_TARGET_INSTALL_HOST =	$$($(2)_BUILDDIR)/.stamp_host_installed
- $(2)_TARGET_BUILD =		$$($(2)_BUILDDIR)/.stamp_built
- $(2)_TARGET_CONFIGURE =		$$($(2)_BUILDDIR)/.stamp_configured
--$(2)_TARGET_RSYNC =		$$($(2)_SRCDIR)/.stamp_rsynced
--$(2)_TARGET_PATCH =		$$($(2)_SRCDIR)/.stamp_patched
--$(2)_TARGET_EXTRACT =		$$($(2)_SRCDIR)/.stamp_extracted
--$(2)_TARGET_SOURCE =		$$($(2)_SRCDIR)/.stamp_downloaded
--$(2)_TARGET_ACTUAL_SOURCE =	$$($(2)_SRCDIR)/.stamp_actual_downloaded
-+$(2)_TARGET_RSYNC =		$$($(2)_STAMP_SRCDIR)/.stamp_rsynced
-+$(2)_TARGET_PATCH =		$$($(2)_STAMP_SRCDIR)/.stamp_patched
-+$(2)_TARGET_EXTRACT =		$$($(2)_STAMP_SRCDIR)/.stamp_extracted
-+$(2)_TARGET_SOURCE =		$$($(2)_STAMP_SRCDIR)/.stamp_downloaded
-+$(2)_TARGET_ACTUAL_SOURCE =	$$($(2)_STAMP_SRCDIR)/.stamp_actual_downloaded
- $(2)_TARGET_DIRCLEAN =		$$($(2)_BUILDDIR)/.stamp_dircleaned
- 
- # default extract command
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index 8a63d55be033..5e46c62c58e6 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -147,8 +147,12 @@ $$($(2)_KCONFIG_FILE) $$($(2)_KCONFIG_FRAGMENT_FILES): | $(1)-patch
- 		fi; \
- 	done
- 
-+# For an out-of-tree build, the first kconfig run is what creates the
-+# wrapper Makefile in the build directory, so it must be started from
-+# the source directory.
- $(2)_KCONFIG_MAKE = \
--	$$($(2)_MAKE_ENV) $$($(2)_MAKE) -C $$($(2)_BUILDDIR) \
-+	$$($(2)_MAKE_ENV) $$($(2)_MAKE) \
-+	$$(if $$($(2)_OUT_OF_TREE),-C $$($(2)_SRCDIR) O=$$($(2)_BUILDDIR),-C $$($(2)_BUILDDIR)) \
- 		$$(PKG_KCONFIG_COMMON_OPTS) $$($(2)_KCONFIG_OPTS)
- 
- # The specified source configuration file and any additional configuration file
+ define ICU_REMOVE_DEV_FILES
 -- 
 2.34.1
 
