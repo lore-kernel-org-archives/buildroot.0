@@ -2,27 +2,27 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2352606A31A
-	for <buildroot@archiver.kernel.org>; Wed, 28 Oct 2026 21:40:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF81E606A31E
+	for <buildroot@archiver.kernel.org>; Wed, 28 Oct 2026 21:40:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=WhifisWn
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=in+KmXqJ
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A346B409C2;
-	Wed, 28 Oct 2026 21:40:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B966240AA0;
+	Wed, 28 Oct 2026 21:40:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p7wt3wNcvsYY; Wed, 28 Oct 2026 21:40:29 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 8ACAE40A9A
+ id PToCoir2_cnk; Wed, 28 Oct 2026 21:40:32 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 9CCCC40A8E
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793223629;
-	b=VmU4LGuyHIZ7bNcLnG8wIFSA9Zv39mFLtiYBSEOZoPUvDCGxkqWnkDrl27n/owM6y4N9
-	 QltHq9I8DusTehSnoywd5iElHY1tq1OoI1oFuNXonqRHI16804M4QXSIL2FQOO/AAMxQC
-	 BmiaMcyI2f9uHXXUQq/Elmb7kjVZ7KdnvONPmFb/nTFnbLrkBq2mcjVscKKo2wMS1w4HZ
-	 6/CyQV50iBDqca1Cu6i632nRGx7b/XZbL0YsbZJRPGAQLEYuptTnIf9BTq/1vwNYGi7f+
-	 woksuPoqE/lTRJOVVeQn25W48ZDKetlQCEiwz7YLQp5b+bkkv2MSdp86C3+ExsGYumA==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793223632;
+	b=CyIYBve5pp0Fn0PjpzdXmq2PAi/Hc1Hq5QNmICx2VbNAL/zxLZ4EQWzWL9kVDc4RCVEA
+	 sRs+n41gxMHw3AFSFSY6B1N5W6UrlsJYIBy4VsUvCRK5kJh8Fnx/wVp60oQEqZ6AhpSph
+	 r8OHsvDUPrAl20niaK9D24M44VKaZ+nxZX+B8I7gdzpCP57VZ+2jq6JO/Yco4IItWqH0f
+	 Qa7sR++Ua1dKq/jLas+csTM0SsLAw56CHOC/pChKE8Oc16NKoRpaYT1WYmaM9wpw2ZV9E
+	 NLfbLJpf9mlwwzrj0zzmIYZDucGk6vXIiYvAqpdl7OSryBDXyGMxC6I1n+phwV0c0UA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793223629;
+	c=relaxed/relaxed; t=1793223632;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -33,138 +33,138 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=t7pETImN3mlKDajJ39nsYmxqdfIgHKvSI77kwQM4v00=;
-	b=DE08FgPZFaba+I6WKwXG5O7W9mbLQInCmaVKPs9R9TejW2BZZHPc4x3smqwML+f96LJu
-	 sMJEJ6msX7pOP9Y+w/f46k3G2VTh0z1ZqjCfP1LeiR2jq1gvlMXa0ZOO1L+aafuhpcynE
-	 uvBKroEhzbajf05cxBg64wBh9/wgZrtaJhPIldB6ZTmxgSHMwk7P72bc2wxeWshbISLzQ
-	 iXM2zmQ0CF5IUhCMfNT2OOPyQOwkVa+LeEakrr6eRyaxOGeonsW+DtIuxRStAbuYwtV8g
-	 KWzC4FRA6zRlkxrqAozx1JEiD1SSpopUYPGm4E9tz0qMfemnYTr4MxWwJPBksFQp+ew==
+	bh=VCAGnvR0oRSL+ihimIfQhKKWT7t02nKRzW4+pMAa9DU=;
+	b=IsLewDjrB/qQmbSpHDkILFk8z6DX+jLNf3P7NIhwU5tGJg34OtXKZjq8K1d8nbkpKKdu
+	 ziVJlhdvT3EpXV3oZkZPPggHDNTyI4wu7kZDiEQ2qEnjIpHxw0OWlGa2VY2IR8Ubtq21Q
+	 BmHZyJy1998jizfJdEsOQ9WxKskfnCAULxymWmNMXInT4WTilJChxCmO7mVXgLstvowpy
+	 UqzUIfdvDfY+NwceUHC0lJAryzz2OpTqMTepNrU6EYZKKpcRB80tm591ebWdHZAui5+bg
+	 I/XnM8L2M5e9oNzAe1Ok5jVdGv9/3pHdPLeypu1NpPYSMfDcgRf0BoRh0YJPcAL5Fxg==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793223629;
-	bh=t7pETImN3mlKDajJ39nsYmxqdfIgHKvSI77kwQM4v00=;
+	s=default; t=1793223632;
+	bh=VCAGnvR0oRSL+ihimIfQhKKWT7t02nKRzW4+pMAa9DU=;
 	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=WhifisWnt5FVM1ig2zbDh/Xufo4ob0zT39UpEhecatMn2eUswVRGKplAGkBv8cwtg
-	 +97p2KNIPKhhjYxU/LwMCf9QWFjw2ISNETbHegCK1O3wRoH9RCpPqYk4xKnL7/qaOd
-	 65XfxmbBuZh9L2Tl1HvDPOPwhzzPjT+abb9TGHT8gp9tSVPqQ6E2dYulczRcZXch3/
-	 9NahnuMKH2j9fcJG1xQeOmcmZLx6EIQ0Ftl5Tzw0Hn4QvNyl2g6XOrFR6S0qkajvUu
-	 8E2AhxnSlG6JdwCigF65YSGmvv/M/dba6wLTGqnxD1kjEVT21JU4jPL1gzyqWozkkR
-	 z49z5h6TimEKg==
+	b=in+KmXqJWC7BBzG9DcXuNlYxknBPL3XK3/1U5qNt6H1NJ0DSPZbSVeng626Gagf/p
+	 yp+3ZuH0RG5P23K7o+ZMZM4ATMnLi4du6HynjQx/CWAEGjpjE4Uts8AvDDDGT/5zbf
+	 zdpADtOuTGEPSGBdhCHdExImqAp2KxwQ8h60HE4DSd/6wy0DUdg0IXaQLSBq2W/+RT
+	 ObRCc4HcIo1FN4YCxRxFGW74OKCQ/5vJ1TcvbXU5CQ56e3TCh1fXaYxGV7iD3cDeOe
+	 Yrv+kyTny9bwUJCQuei46qdO5ORtQ6/ld+5t9v3CRjRJq+zBLmrvQiYICiqz/YSWjf
+	 PGr7Lx8NbsTtA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8ACAE40A9A;
-	Wed, 28 Oct 2026 21:40:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 44C3F2E5
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 21:40:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9CCCC40A8E;
+	Wed, 28 Oct 2026 21:40:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id A50182A8
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 21:40:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3889C40A2C
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 21:40:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 96EAB40229
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 21:40:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pa74vDkyPwFA for <buildroot@buildroot.org>;
- Wed, 28 Oct 2026 21:40:24 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 39DBE40A16
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793223620;
- b=eByztFXuVsurK0BV6pm50Bw1sRFCnyZdePqmJMTgMKMD8QYNrgC1/DaN4orssX6+g1AV
- F5euAfl/3QXSDNpFN6yAbABJwtyeLI5UkEUGIfKX1mL1emuoxdVP+S1OYi1/w2oDKH06D
- IQx7wt/lpWpIHOVXjXEAwXWQRUI/XZ1i0QDbzzllDew4Lj/OcnbdQaaP1c2ePodnLUyN8
- dtnWrEmeS/2iliLn9dZfBlfuSS0ifZGDFe7+Jt/lKGvJfn0jGDvx/PUdNUFPRVUni6hH2
- JfSIQYbq4J5lQNTtouDa5RbtZKwcIJPRprtYuDMfutdZMiUk7gxZMb5akbouS9QzWsw==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id D3_e3ALYbVwO for <buildroot@buildroot.org>;
+ Wed, 28 Oct 2026 21:40:26 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org BB366400B5
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793223626;
+ b=hDt5RyvB4V/bEc5PvUvi6tJMS8cCj3hl1fbfVgjC2gt1fnnen96Lly1RphsKtSWHdfMl
+ tV2zAMU4FFeV1qrh1P8eAquQq8QQH8WlOtAKqTp7tElVo0WDZ1zUqeiqye0Hrj/8MOTew
+ wKtOm6EiTyQbMsIcoYUWQCdZgSaTfdeAHWLP/BkereByaLfErR/6Lzv4arSYlIx89cmly
+ 088xnGXbV/MSYwCnrJQisrmXAf7cAjNdxf9+VMKl4GSqRFwWlJz/kuMRSG2OnQqYrmbKL
+ qBAvpRvpY23UVN//vQP3RXKof7wYRwgwaQrnBS5USTRmXkN6Dq3BKUUCE+n4kbhA8PA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793223620;
+ c=relaxed/relaxed; t=1793223626;
  h=Received-SPF:Received:X-Google-DKIM-Signature:X-Gm-Message-State:
  X-Gm-Gg:X-Received:Received:X-Relaying-Domain:X-CFilter-Loop:Received:
  DKIM-Signature:X-Received:X-Received:Received:From:To:Cc:Subject:Date:
  Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-DetectorID-Processed;
- bh=SCDZk9Zs/UJzdTVV/SyqpSQF3PXgPM4HTHnym3C7ITI=;
- b=QAt9rM56TmbI0HPcmB7RJYDENsUVSE49iDIOVBrTaWMNSVCcMrodmn6UgfzwNJmdrRaw
- 0W1na2GLr7e11VS2p/buFtA8Tozw9WqwWRM5qyy+hmt2H6neaWuTPsMVZyW31xVAUoAlY
- maFlXI4FtQtcnbi3dtI8oPR9T0b6Gg7qc/Rc82kMxW+2FtqDE4+xte4GYuL3x4ERhva+d
- M6pXrAsPTXiSAmkiNwCgvXGkF8VhAeIxavhnqgUUAXyWgwzySVazXQy3mGCsBEKeBMFIf
- FM+tmBN5+dcAf5sKlHDMeoiVffBdES2GwTnL8GobohqpKUvue0kzdNkTR7OS/iLxOAA==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ bh=V5zXa+RWLTznikvBxVkCr7qr7WE5npX3hH3k8/FaSkQ=;
+ b=D8O0mOAXw8oeiOocSU46OzcyiCXxYs1dbU6XjtgIbMBsD0po474WAMaBBzC0ebM2EYTu
+ 38HOV6GO8N/2Ot0f95m36jyQMb9y3u+lwFoKmYyloEksQdEQ1LXRkZ7O9ASwTP+mAOMUI
+ gAXCSmFExwGEZB39OzlU+ZYTOQ6vzRf1l1FgKAGGM9yuKaX6B1z87F6Mcf8BDuyhRftnA
+ OktOZ6Pd8e5aFXLoHWaQaXG2DDWBvROm0GD/aEOAlJWDYd1bYfTEreMvWKvSA09S5dMGD
+ iz0duEN7JXGsOw1awNv2Cp06olEUT6Tjxzr7b1GDGxkia2eEE6SGO1zohaMV5E2ZNlQ==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  dmarc=pass header.from=broadcom.com;
  dkim=pass header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256
- header.s=google header.b=GVNAaoGG; 
- arc=none smtp.remote-ip="2607:f8b0:4864:20::761"
+ header.s=google header.b=e6uAceU5; 
+ arc=none smtp.remote-ip="2607:f8b0:4864:20::564"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::761; helo=mail-qk1-x761.google.com;
+ client-ip=2607:f8b0:4864:20::564; helo=mail-pg1-x564.google.com;
  envelope-from=florian.fainelli@broadcom.com; receiver=<UNKNOWN> 
-Received: from mail-qk1-x761.google.com (mail-qk1-x761.google.com
- [IPv6:2607:f8b0:4864:20::761])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 39DBE40A16
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 21:40:19 +0000 (UTC)
-Received: by mail-qk1-x761.google.com with SMTP id
- af79cd13be357-93e515769d3so121357885a.3
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 14:40:19 -0700 (PDT)
+Received: from mail-pg1-x564.google.com (mail-pg1-x564.google.com
+ [IPv6:2607:f8b0:4864:20::564])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BB366400B5
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 21:40:26 +0000 (UTC)
+Received: by mail-pg1-x564.google.com with SMTP id
+ 41be03b00d2f7-cd8ca57ef64so58482a12.0
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 14:40:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793223619; x=1793828419;
+ d=1e100.net; s=20260707; t=1793223626; x=1793828426;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:dkim-signature:x-gm-gg
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
  :content-type;
- bh=SCDZk9Zs/UJzdTVV/SyqpSQF3PXgPM4HTHnym3C7ITI=;
- b=reUeZKN192KGrdqBeAgw7xF0/rX6NLaLg1zQeFxFzmLT9W3eG4DIGJ3bdjas4DqRgJ
- KecB+c3nLaIfDW5le1YHBXx30+qXOtVXojEANdJtrvqnza8ZxlvX8aRKOjAVYbJoeHwn
- tDKdnibqUB+gGPAeiFDysFrqMFc4GhFUsj12aOg6bXHe/kOGFrwM47gHD1DdcGFosQiP
- nUOTTV+DMkE4i+9wDTQLQvIjgHbHkdL4zKrq89wSmL/N9+bS5nn762oaSEqARg1fvntq
- 4ig5+V6Ymqb221bxFC/auY9wUcYCSH58/v/7BugOj6LdXTfxQ67tnQv4uiDEjcGFCrj/
- Ei2A==
-X-Gm-Message-State: AFq9FYKqCuWnHiDeteJ7FJ3fD+tsojcLa7d320ZEPDJpqAoGKZsflWnl
- mralB54tA+d3j0+kAYGQtLg+aSdcJek46CwvrHyKRxk1HeT92TTXzfSb2CBw7eh1Oki9cIRugzo
- UcUgdkunVkk+NXEWrH/NggFLhq0FXV0jiw2BgdYvTeuBjzZkbTh1VUsSrL1o+k3rkqjSsFdtXuT
- H0QOJxRacUY/VwA/8XMMdX9VYjoMCBMOi7D5/DUGoLUcJk8I15EMVebgagXl+z12Ee3V6jksHSL
- 3t1bW9iwS5/beopYQ==
-X-Gm-Gg: AYBFou2SYX/yW4PzFxDstSPmfropCt0d9IbbIqYbYaVl/0awPJ3DiD8byH9eRGe366X
- INty1nlRmk0rf4yrPx9yrD2u584vJsG5OIUBFWuJtBpbw3kEnOupFDGdWSback5eV0FukFd2FhK
- B53WVbJhaUUZ/Eg0fu4wyh8zQRH83mkc7g53mIvzDUqtVQAD1M172P5PpmSUWpJJD9LlKEAsxkO
- 9aUWA7kZAMbwniYiTHh/WWSbf6/gfzfzlC0G9x9KV/iUCYh5cW+oCz8spyqdCCWwUULASBDc5RL
- QhyZTnZBHP0cVacs3nU9SzW8FHNsx4r9441sD5g3k0piHxoptzMFvknXKc+sfhoPBLWP1aDxzWN
- KZZZJOhoq04fBovY6vZWU5Igf1kvz2jbdGkZDwmh/vJTaecqoVuVCfFaqmTYnVNM34k8wiJJwE9
- 5oQwjjvdI+V0LrqynVEy3hRWrHnXlwWhI2Z6Hd1DU5kGo=
-X-Received: by 2002:a05:620a:371e:b0:93f:309a:ba5 with SMTP id
- af79cd13be357-94408cbd0cdmr592806185a.47.1793223618602; 
- Wed, 28 Oct 2026 14:40:18 -0700 (PDT)
+ bh=V5zXa+RWLTznikvBxVkCr7qr7WE5npX3hH3k8/FaSkQ=;
+ b=1xHUUa5Fie3IiNuBOy+xgnYSkay527VTlmLCCipPG5VFBZizODAuCYa6NzTy5Ml5+r
+ 8GfiRaEcHNfTguHi+muxeJ8hdC3381+B2vGBTOIKkrrwnRZR3/tKcEwMO3D61c2PflX6
+ +Tbk4i2odDvCGF0Xe76vN6BzzJQtwCJ7F/fDq2xYc+8kKTtgcYz8MvClEm4H33QsvhHc
+ CTRlLTKNEpx19Qn6j3YuAKeebBsEsrArcN3xWRen98oguQW+lPsSIK3Z1wjk4vPKg3S+
+ VTjkzdCX11a1MDlke6oDmzMNJg6cXaTvKUwn9t5l95BrTG94g2F/4rA338cfpk9MhADt
+ fPQQ==
+X-Gm-Message-State: AFq9FYKbhelqDpU9zRI3MKsaw+M98Prc7PUZ8LTaXFlcre01oynZb2h1
+ O71KPHIAsoCKeATg51Eq+gto8k4MGB8N7TFL8Mg0wixLmb/0sPDRPr79N8a6OjhTqs11/mpBLA4
+ nb4LdjsiWbxYFBRud/Q9+AxnVHVdZL58NT+Y8EHvESykFUoyH5b3VPg6wzK3eJi7z3+pQKQ8hkT
+ MGXLNrjG2Cpr1VJu5Cwy6X8cB/3hxat9C1LmC/wrx0XWWxuDOBgMeSjFw84XrZy/Ua0TG1tvARA
+ Uq4u3yJNhT/tV+AvA==
+X-Gm-Gg: AYBFou16OZKiqaTIT3Rv2vLFTncWj9YxgeJfqg4D4a4YU5vAzX5TR9CoF4JDQ2C7+YC
+ XMrnAHCz34a9ai+RZXy+YvTMRs1ZX39yVdKZsh/1BjCYFUDlRj2+LAWpsNbPLH/fJcAL489jVGS
+ OvF1inZwbSoBrec4yYQTS9WDvItiV/9CyQGTXyjlZ9JxCsFH8Vp+/Jc4zjNCaieubKAEaX79gnn
+ P5umpMxyeq+rUTKGpNQ348IaK4YQzvYJLMfga3Dt9crWN203ZL7qvmWnW688SbfV7CJO27y7w1A
+ TKJax2PSaqXX77jiSDh8D0SoKf5PSP1PQcDPUyL8c4fWve+PCcniW6yY5+DGS/UciKGixWh733n
+ qOgWZAQRSWnDHyiLiWvdHT14sckb2s5wv219wpvWZug52fZui3gtC9ZlmedVUcbMjLJGkjaJiZD
+ muriZsAGIgUx7kgs4+RBwihYtijvSCAKWMxoRTFcVP
+X-Received: by 2002:a17:90b:1d0a:b0:3a4:7195:ecba with SMTP id
+ 98e67ed59e1d1-3ae6ed2b1dcmr356014a91.20.1793223625583; 
+ Wed, 28 Oct 2026 14:40:25 -0700 (PDT)
 Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com
- (address-144-49-247-120.dlp.protect.broadcom.com. [144.49.247.120])
+ (address-144-49-247-28.dlp.protect.broadcom.com. [144.49.247.28])
  by smtp-relay.gmail.com with ESMTPS id
- af79cd13be357-940f0a75602sm200788585a.15.2026.10.28.14.40.18
+ 98e67ed59e1d1-3ae55d4f7e0sm875501a91.1.2026.10.28.14.40.24
  for <buildroot@buildroot.org>
  (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Wed, 28 Oct 2026 14:40:18 -0700 (PDT)
+ Wed, 28 Oct 2026 14:40:25 -0700 (PDT)
 X-Relaying-Domain: broadcom.com
 X-CFilter-Loop: Reflected
-Received: by mail-qk1-f197.google.com with SMTP id
- af79cd13be357-934963b2bc0so259296785a.3
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 14:40:18 -0700 (PDT)
-X-Received: by 2002:a05:620a:2955:b0:93e:c12c:4402 with SMTP id
- af79cd13be357-94408d65c91mr543563885a.79.1793223617713; 
- Wed, 28 Oct 2026 14:40:17 -0700 (PDT)
-X-Received: by 2002:a05:620a:2955:b0:93e:c12c:4402 with SMTP id
- af79cd13be357-94408d65c91mr543557585a.79.1793223616987; 
- Wed, 28 Oct 2026 14:40:16 -0700 (PDT)
+Received: by mail-qt1-f200.google.com with SMTP id
+ d75a77b69052e-5364f562140so3040541cf.0
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 14:40:24 -0700 (PDT)
+X-Received: by 2002:ac8:5c82:0:b0:536:68ca:af3a with SMTP id
+ d75a77b69052e-54119aa394bmr14149941cf.0.1793223623722; 
+ Wed, 28 Oct 2026 14:40:23 -0700 (PDT)
+X-Received: by 2002:ac8:5c82:0:b0:536:68ca:af3a with SMTP id
+ d75a77b69052e-54119aa394bmr14149361cf.0.1793223623028; 
+ Wed, 28 Oct 2026 14:40:23 -0700 (PDT)
 Received: from stbirv-lnx-1.igp.broadcom.net ([192.19.223.252])
  by smtp.gmail.com with ESMTPSA id
- 6a1803df08f44-91c47c16569sm140994586d6.18.2026.10.28.14.40.14
+ 6a1803df08f44-91c47c16569sm140994586d6.18.2026.10.28.14.40.20
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 28 Oct 2026 14:40:16 -0700 (PDT)
+ Wed, 28 Oct 2026 14:40:22 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Wed, 28 Oct 2026 14:37:38 -0700
-Message-Id: <20261028213744.511429-18-florian.fainelli@broadcom.com>
+Date: Wed, 28 Oct 2026 14:37:40 -0700
+Message-Id: <20261028213744.511429-20-florian.fainelli@broadcom.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20261028213744.511429-1-florian.fainelli@broadcom.com>
 References: <20261028213744.511429-1-florian.fainelli@broadcom.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
 X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
-Subject: [Buildroot] [PATCH v2 17/23] package/perl: apply the perl-cross
- even for the host variant
+Subject: [Buildroot] [PATCH v2 19/23] packages: replace $(PKG)_DIR with @D
+ where possible
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -176,26 +176,23 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Florian Fainelli via buildroot <buildroot@buildroot.org>
 Reply-To: Florian Fainelli <florian.fainelli@broadcom.com>
-Cc: Gary Bisson <bisson.gary@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Petr Vorel <petr.vorel@gmail.com>,
- Spenser Gilliland <spenser@gillilanding.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Maxime Chevallier <maxime.chevallier@bootlin.com>,
- Francois Perrad <francois.perrad.86@gmail.com>,
- Arnout Vandecappelle <arnout@rnout.be>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Thomas Perale <thomas.perale@mind.be>,
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
  Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Francois Perrad <francois.perrad@gadz.org>,
+ =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Gary Bisson <bisson.gary@gmail.com>, Romain Naour <romain.naour@gmail.com>,
+ Bernd Kuhls <bernd@kuhls.net>, Thomas Perale <thomas.perale@mind.be>,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>,
+ Refik Tuzakli <tuzakli.refik@gmail.com>,
+ Francois Perrad <francois.perrad.86@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Arnout Vandecappelle <arnout@rnout.be>, Petr Vorel <petr.vorel@gmail.com>,
+ Spenser Gilliland <spenser@gillilanding.com>,
  Giulio Benetti <giulio.benetti@benettiengineering.com>,
  Pascal de Bruijn <p.debruijn@unilogic.nl>,
- Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
- =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>,
- Bernd Kuhls <bernd@kuhls.net>, Refik Tuzakli <tuzakli.refik@gmail.com>,
- Romain Naour <romain.naour@gmail.com>
+ Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
@@ -208,69 +205,89 @@ X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-Currently, ther host and target variants have diffeerent source tree,
-because the target variant extracts perl-cross, while the host variant
-does not.
+Currently, packages that use $(FOO_DIR) (with FOO as the package name)
+expect it to be unspecifically either the source or build directory,
+with some packages even expecting that it is both. Because it currently
+is both.
 
-This goes against having a single source tree for both, to ease
-out-of-tree builds.
+But when we introduce out-of-tree build and shared host-target source
+trees, FOO_DIR will no longer exist, because it can no longer be both.
 
-However, extracting the perl-cross archive has no impact of the standard
-build; it only ever adds new files that are not used by the original,
-native-only buildsystem.
+So, In preparation of that, replace all occurences of $(FOO_DIR) with
+@(@D) which is always the dorectory that is the destination of the
+current rule.
 
-So, we can extrat perl-cross for the host variant as well, by re-using
-the same hook. We also need to apply the config.{sub,guess} hook.
+Note that in some cases, $(@D) is used as the source of a copy or a sed,
+and expected to be from the source directory. This will have to be
+carefully identified when source and build dirs are separated.
 
-Now that both variants extract perl-cross, the patch for perl-cross does
-not need to be applied by a target-only hook anymore: move it back to
-the package patch directory, so that it is applied for both variants, and
-drop the PERL_POST_PATCH_HOOKS hook introduced for it. This reverts
-8dea6e7c089c ("package/perl: apply perl-cross patch only on target perl").
-
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+[yann.morin.1998@free.fr:
+  - reabse on master, convert new packages, drop old ones
+  - add a commit log
+]
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Cc: Francois Perrad <francois.perrad@gadz.org>
-cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
-(cherry picked from commit d2ad97e0eeff39fc89a58b589f19094824402756)
+(cherry picked from commit a7e38cf17ada495c3abc1f9bbb377c883a9b4c5a)
 Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
 ---
- ...01-configure-keep-_GNU_SOURCE-in-build-flags.patch |  0
- package/perl/perl.mk                                  | 11 ++---------
- 2 files changed, 2 insertions(+), 9 deletions(-)
- rename package/perl/{perl-cross => }/0001-configure-keep-_GNU_SOURCE-in-build-flags.patch (100%)
+ package/linux-backports/linux-backports.mk | 2 +-
+ package/ncftp/ncftp.mk                     | 2 +-
+ package/pciutils/pciutils.mk               | 2 +-
+ package/php/php.mk                         | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl/perl-cross/0001-configure-keep-_GNU_SOURCE-in-build-flags.patch b/package/perl/0001-configure-keep-_GNU_SOURCE-in-build-flags.patch
-similarity index 100%
-rename from package/perl/perl-cross/0001-configure-keep-_GNU_SOURCE-in-build-flags.patch
-rename to package/perl/0001-configure-keep-_GNU_SOURCE-in-build-flags.patch
-diff --git a/package/perl/perl.mk b/package/perl/perl.mk
-index 43820cfcc33a..0892299ed00a 100644
---- a/package/perl/perl.mk
-+++ b/package/perl/perl.mk
-@@ -31,21 +31,14 @@ define PERL_CROSS_EXTRACT
- 	mv $(@D)/cnf/diffs/perl5-5.42.0 $(@D)/cnf/diffs/perl5-5.42.3
+diff --git a/package/linux-backports/linux-backports.mk b/package/linux-backports/linux-backports.mk
+index 8513a84487a8..e14cd4a1706b 100644
+--- a/package/linux-backports/linux-backports.mk
++++ b/package/linux-backports/linux-backports.mk
+@@ -33,7 +33,7 @@ LINUX_BACKPORTS_DEPENDENCIES = \
+ 	$(BR2_FLEX_HOST_DEPENDENCY)
+ 
+ ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_DEFCONFIG),y)
+-LINUX_BACKPORTS_KCONFIG_FILE = $(LINUX_BACKPORTS_DIR)/defconfigs/$(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG))
++LINUX_BACKPORTS_KCONFIG_FILE = $(LINUX_BACKPORTS_SRCDIR)/defconfigs/$(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_DEFCONFIG))
+ else ifeq ($(BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG),y)
+ LINUX_BACKPORTS_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_LINUX_BACKPORTS_CUSTOM_CONFIG_FILE))
+ endif
+diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
+index 4075449c53e1..1f33270adb92 100644
+--- a/package/ncftp/ncftp.mk
++++ b/package/ncftp/ncftp.mk
+@@ -37,7 +37,7 @@ NCFTP_DEPENDENCIES += ncurses
+ endif
+ 
+ define NCFTP_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0755 $(addprefix $(NCFTP_DIR)/bin/, $(NCFTP_TARGET_BINS)) $(TARGET_DIR)/usr/bin
++	$(INSTALL) -m 0755 $(addprefix $(@D)/bin/, $(NCFTP_TARGET_BINS)) $(TARGET_DIR)/usr/bin
+ 	$(NCFTP_INSTALL_NCFTP_BATCH)
  endef
- PERL_POST_EXTRACT_HOOKS += PERL_CROSS_EXTRACT
--
--# We need to patch perl-cross, but perl-cross is extracted over the
--# target perl sources only (and not the host variant). So we apply the
--# patch only for the target case using a post patch hook.
--define PERL_CROSS_PATCH
--	$(APPLY_PATCHES) $(@D) $(PERL_PKGDIR)/perl-cross \
--		0001-configure-keep-_GNU_SOURCE-in-build-flags.patch
--endef
--PERL_POST_PATCH_HOOKS += PERL_CROSS_PATCH
-+HOST_PERL_POST_EXTRACT_HOOKS += PERL_CROSS_EXTRACT
  
- # Even though perl is not an autotools-package, it uses config.sub and
- # config.guess. Up-to-date versions of these files may be needed to build perl
- # on newer host architectures, so we borrow the hook which updates them from the
- # autotools infrastructure.
- PERL_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
-+HOST_PERL_POST_PATCH_HOOKS += UPDATE_CONFIG_HOOK
+diff --git a/package/pciutils/pciutils.mk b/package/pciutils/pciutils.mk
+index ad32713d579f..52f92db78505 100644
+--- a/package/pciutils/pciutils.mk
++++ b/package/pciutils/pciutils.mk
+@@ -46,7 +46,7 @@ PCIUTILS_MAKE_OPTS += SHARED=yes
+ endif
  
- ifeq ($(BR2_PACKAGE_BERKELEYDB),y)
- PERL_DEPENDENCIES += berkeleydb
+ define PCIUTILS_CONFIGURE_CMDS
+-	$(SED) 's/wget --no-timestamping/wget/' $(PCIUTILS_DIR)/update-pciids.sh
++	$(SED) 's/wget --no-timestamping/wget/' $(@D)/update-pciids.sh
+ endef
+ 
+ define PCIUTILS_BUILD_CMDS
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 1bb25d086370..1dd979d7a2a4 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -343,7 +343,7 @@ PHP_POST_INSTALL_TARGET_HOOKS += PHP_EXTENSIONS_FIXUP
+ define PHP_INSTALL_FIXUP
+ 	rm -rf $(TARGET_DIR)/usr/lib/php/build
+ 	rm -f $(TARGET_DIR)/usr/bin/phpize
+-	$(INSTALL) -D -m 0755 $(PHP_DIR)/php.ini-production \
++	$(INSTALL) -D -m 0755 $(@D)/php.ini-production \
+ 		$(TARGET_DIR)/etc/php.ini
+ 	$(SED) 's%;date.timezone =.*%date.timezone = $(PHP_LOCALTIME)%' \
+ 		$(TARGET_DIR)/etc/php.ini
 -- 
 2.34.1
 
