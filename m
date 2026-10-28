@@ -2,151 +2,248 @@ Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62653606A31A
-	for <buildroot@archiver.kernel.org>; Wed, 28 Oct 2026 22:51:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF5D4606A31C
+	for <buildroot@archiver.kernel.org>; Wed, 28 Oct 2026 23:00:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=ktFtoKQ+;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=JCZjECAv
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=d9kr69iC;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=om5XCAH1;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=Z0JI/UN4
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 408156070C;
-	Wed, 28 Oct 2026 22:51:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C64826070D;
+	Wed, 28 Oct 2026 23:00:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uJ0LM_ltvf7B; Wed, 28 Oct 2026 22:51:18 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 09BA260710
+ id q9qw0ySqqU7i; Wed, 28 Oct 2026 23:00:32 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org D902260710
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793227878;
-	b=nC0Ihn81FFkAAeRHjEpi/uzKXYK1NaJFIg+KwcoSSK8YMVaXCvfWlTn+p4Abz9YQlaLe
-	 fvPY0yXxjPDb1ymwId5il2AaDFyD9uLkc6SxzHn35oZJ8pq3mPXH5ey2zlQG1zy49C6GU
-	 Y+sHxmqpckVlvrUymT6y3URiqICnOZXw9LrnNq2RaO/y7jjxBjlykh7MGsu+PNCNMnCK1
-	 DOt8upHsmispTh1f84YfNDx/AldW5jiofqhGlio067dzOB4Iq4reT6ESeMi3hLvtXq9Lm
-	 YALmu0G+s30EslE+XsUwke7NKwrkVogLSWq6X07YnwhGh6C7gFvssc6TooUVwfmEEXA==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793228432;
+	b=gk1ia8RYQBYuRK5EpN/P1qCqJ1MNa9FIZ+sJeww2Id0sExxJp0BtWvBPWiRZ0KR/1oKF
+	 oxg9vlap6yzNbulzR1idekzrX4tExHVRrGdxoMxUWc4c6YPCeBO3S05d9/vHvY49VlTfu
+	 J8RiFTo9Pg5+k1V43PjjQUFREtgt6LjUW9Q26Lu7yRS2e/Ar+ej1hhU1f+PVCt8wsKyX2
+	 URd0jAwPiDKMRc5K7Qm1dr0vvssOtlqR5ETTE30tpSD3IRHpHk+wpRATb2K1a26dTSAlo
+	 NMZlg+bTj5vp5LMXiTLqqC4vKwTWMasiiLx1sqPcyueTLvsYFqAy3iU2EvsT88AaJIA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793227878;
+	c=relaxed/relaxed; t=1793228432;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:X-Kas-Delay:X-Spamd-Bar:
-	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=+d6Dm8aKLGLy73tkNK1TcqqMU4dfYOVo+0lM9zA1foA=;
-	b=pF5+ya3Lv5bFamxzwprBcjLAqFBjNqbQYKn40UuagR37U/eIIeirmVqlC9oeT1GvqFFi
-	 ucsirZX9JQ9v3+U/dWSjRFDlxCf5lLtmdTxUccU3oduOD04qokUYTk8Gdz9VHVE/4tr/E
-	 cF6DbEZMo51Gc2B3rAaBpdZq2SsP8//CHSJmLB6GmvAKq6QSdHugce/KeJ7X9JUphIEC5
-	 XWjxbDHoldkb6f3n+LHkDMdGIdhCm6SSrDmljZ6F1agWffDBZEu3cv4kM4V8A+x4gRvIS
-	 lw9zFQeSsE5j7jMC35o4H8sSARdlkZeFFxqtJCaecBXcai1V2+nj+75nq8sxVAnJP1g==
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 DKIM-Signature:Received:Received:DKIM-Signature:
+	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 X-Received:Received:From:Date:MIME-Version:Message-Id:X-B4-Tracking:
+	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
+	 X-Proofpoint-GUID:X-Proofpoint-ORIG-GUID:X-Authority-Analysis:
+	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Spam-Info:
+	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=eiSQfdz+C7enkI/ua6q3uxzyp3GHf4X89TeTVjn4TgM=;
+	b=sHerXxJzDVokSW5/1dK5l7TkhJguu0iiPX07ywYEEGvI27vlw3hMnkLet1MPQfq+9r5W
+	 hWhb2RBm83mNVN1BO1YTxao46acFCvRQ1iuqsO5znj1ngI5GZKEfEB7LzmJnl4mScSK3h
+	 y76/DYrr9pcpLAiQZwsJ5eo+ZMg2SBOnVNpLTtToWCpiRs0r2/gqMWus0xd+K/bk0Yjj8
+	 Nn5Au6K6ZN1ioFp3cW4Odh7G43qY9CzbNs2EJOMW5S65XrrmAgU+VDQjV1M/6yxDm0e0+
+	 NZmCUUvzx1OxdD8T56ki6bSMp2hq9JZq8Eih4swNgOvLDnQr6wfrJLYmsfsuY5n3BrA==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
-	dmarc=pass header.from=kuhls.net;
-	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=JCZjECAv;
+	dmarc=pass header.from=oss.qualcomm.com;
+	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=om5XCAH1;
+	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b="Z0JI/UN4";
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793227878;
-	bh=+d6Dm8aKLGLy73tkNK1TcqqMU4dfYOVo+0lM9zA1foA=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=ktFtoKQ+ckid2XGXYghInXo9l+S6hUZOYcBMucxL0JACbSMtD4oTsX+45Abd8n4AF
-	 gj6fqMUyGEVknMEBjF/t+ksFCQ+WCczSYK4l7mER7BHqZQtY3A87fx0csJAAnq/8tW
-	 nrxpsmutSTcjzd2IOFKgXDa13e59MFXxJYONd2y89wMwhp3jct4axo8qwnZiU6keB6
-	 EjKuXPcInEsV0Vc+Ouc5+PrhhuMWtQvi6AW3a+PrNkyu2EHmksv1I14yhXVfcjnXw6
-	 Ekz/E14mONKwc+3e5BW4l5LkFcTjEZjUvI1CGWSfU2t07+L/R84nkpGHol33mmMSB5
-	 HZi4MCcRc3GLQ==
+	s=default; t=1793228431;
+	bh=eiSQfdz+C7enkI/ua6q3uxzyp3GHf4X89TeTVjn4TgM=;
+	h=From:Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=d9kr69iC8o8l3RlhLFMyGLGRfgyRI41E6OAxxkozjeGxDYs7a2/C3E9F7ao/xAsLu
+	 7ELUCVm2OH7NxWUO8EZdvu97kXSTn5i/sZj2iET6TBoL14rLfnyi8pG0B2RK6dqxwy
+	 aJzuVL3C5FfeBHF282Dti6pwA1g0Sg0DGfzpgD+p5OAyLHKjvjh/cyFKH4/u72tgz7
+	 EOL/zUd4lLWo22MUzUh2gLyudNOIWxdWD7zi9TgbyDXaS59RPOlkuTZxC5P3h+kR64
+	 eoUG0H+sFluf4tufxuo9NgTwJ8U230uHnom3G2k+oj5EzNdRrQRQYBQKJGwzz+lOba
+	 nX16DsYftyiTw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 09BA260710;
-	Wed, 28 Oct 2026 22:51:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D902260710;
+	Wed, 28 Oct 2026 23:00:31 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 64EC73AF
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 22:51:17 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 7E0113AF
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 23:00:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4B6796070C
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 22:51:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 636A760731
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 23:00:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H42k9zRQRBin for <buildroot@buildroot.org>;
- Wed, 28 Oct 2026 22:51:16 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 3F1D160710
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793227876;
- b=baLGAVuhBQlJeJkc3xmiib7eZ5OvOt89PN/ctdQrDNYzCXNW3sEEZE5E54o/XcGygnnS
- IKui7jkE+s+E9546RNQWIZpQpWGDAiLAiyiPP6zajovmd9vRU3sGhZ0eGcCCETDPklsJE
- NlshQ884kESuXhUHmJo4+FXJ1Dl9Ddf2fWvOd6LsAWiTKCw9EFZzN4V94TRvBf+Yq+xCW
- /C6AIs3pNxwzuGPaQTaY3IHwiX527jxW7+X6KfFrduy740chEBAuDjaEQ+maMfrMk3n+f
- NOvmYYUIuiaZWzNbwJBMfHmuwszL0L0bKF/0UQA5mr9sXPRQMEL7WPJhvbymuUd/CQg==
+ id 6G1S9HKr0CKN for <buildroot@buildroot.org>;
+ Wed, 28 Oct 2026 23:00:29 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org EE35160710
+Authentication-Results: smtp3.osuosl.org;
+ arc=none smtp.remote-ip=205.220.180.131
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793228429;
+ b=nCqV1up3QPFJBE4iZex2h4iKWfjxK0EhCKhApRASBHyCeHQ+DufQChK7GjycgkIjwtvC
+ 81RRZ1Wj5MyzG30OPtv3I1hjSjg0KTwV71XySgsUHf2ZK0EjfoVN3YH5R+O6zXH1tEys/
+ 0R8d6bhLpxHdzspZZnZCKW2J2R1dbW/c6tH+tDgFqZVvGsXt9UMFybebEYdt7ogQ7aMko
+ uGosM3eprQ/PfYrP2Jq2XfjDWSWQMcriF08CVSMBe+FD4Y5oFT2ZmeXlSphNc7pJ4B4xO
+ VM/7lTTEknywIfHYg0ufunmwxPw8jXd8J1RT95nWxG+xm5rmPSu56Vn/LfQ8ZQ6oi0Q==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793227876;
- h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:
- Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
- Content-Transfer-Encoding:X-Spam-Score:X-Kas-Delay:X-Spamd-Bar;
- bh=lqxQ1isYPHla7/ze6dNNsQ03dGsGHoVK2Q1mf0V6kxQ=;
- b=bF9xP2ul2ytLSxoa1VcqpHnikMlftbYEGsyuY8UyIuMOaiJZU1hoVAmgDmuhgW3zpuhd
- 6xw4kM7HsicWCU3NZeX5g/TBHYXRbp3zDzie/lhZTPNs6slb/VhtI9ttBqhvT/YHCvV0b
- 3vdTXWc9MeGX4LzHDaDZfyv2ICSN3Jmf3Ygs6pE1pJkMkKMwd///+XQgaC/oNyMFMlsuz
- D+YfHJeHYfniT+HYg4i++8o3fJvRHRYqjx29iKwcoWN7L15J2FT2euDwskzGdBqRzdCVD
- I2WCHphko/CmGTHDa5QWODrZeoYTmV94swnHkfNGff0Hh4JTl+xofXzS1SP7W1aiJXQ==
+ c=relaxed/relaxed; t=1793228429;
+ h=Received-SPF:Received:DKIM-Signature:Received:Received:
+ DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+ X-Received:X-Received:Received:From:Date:Subject:MIME-Version:
+ Content-Type:Content-Transfer-Encoding:Message-Id:X-B4-Tracking:
+ X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
+ X-Proofpoint-GUID:X-Proofpoint-ORIG-GUID:X-Authority-Analysis:
+ X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Spam-Info:
+ X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
+ bh=fcK1OkbmOlsEx3W+ZXyTnh4AGKS9m+ZEEv7D4onhos4=;
+ b=Op+eMce9pKg89K2MvGXVp4h1VsY/VrbTcYQcrdpLTjOMKnqIbNxT1rf1lXiqDrJVL5Kc
+ WpyEuAEfTvKnyohPX9kvWO5lcrDnvLzUC67E2+9UsmRG/KGeQK+6oHtpLmuQlF6TkOrGU
+ JeIw+FS+p6CyBNz/mJBiOMUe+vU2PBIGr9nvtdbzsEHwI07nWhUr14DDGRUEbK6Fk6aUl
+ AUofxdscygmqAHnmlvaSYQreDWiTMRbjw+hTB36HygmpDeA5jvNBtIXdrklruVibfyizF
+ ibSM9RJsebNnB5VmCeIpbxeO7aV+kJExNmtKEjwQ6RfJRNjECHzeNI7eBQTOCUtks7Q==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
- dmarc=pass header.from=kuhls.net;
- dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=JCZjECAv; 
- arc=none smtp.remote-ip=85.13.140.57
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+ dmarc=pass header.from=oss.qualcomm.com;
+ dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256
+ header.s=qcppdkim1 header.b=om5XCAH1; 
+ dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com
+ header.a=rsa-sha256 header.s=google header.b="Z0JI/UN4"; 
+ arc=none smtp.remote-ip=205.220.180.131
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=205.220.180.131;
+ helo=mx0b-0031df01.pphosted.com; envelope-from=chris.obbard@oss.qualcomm.com;
+ receiver=<UNKNOWN> 
+Authentication-Results: smtp3.osuosl.org; dmarc=pass (p=none dis=none)
+ header.from=oss.qualcomm.com
 Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=JCZjECAv
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3F1D160710
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 22:51:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1793226544;
- bh=lqxQ1isYPHla7/ze6dNNsQ03dGsGHoVK2Q1mf0V6kxQ=;
- h=From:To:Subject:Date:In-Reply-To:From;
- b=JCZjECAvt2QRwhoin/JWtScJQDU75tDlTbb5rdjVL3lOqEvHQ5UD9F5wRlw5BOCWW
- yFACPmeEBCOajpTK5sFkRolO8SBA+S8YQKvWt5Cw2Wpj3SfjihJD0DtaYTWvAiBBsl
- 6jNK1UoxzRS6YyxH0zPg3iROmlfT0BAckezfoj2Sv3EEHqvIQN55FhjXMx+Qm5Pnte
- Js8LdR082NuyhIcXf4cg8OqEW+wiar0BmKBPoBgQO4S56b+SVGo+Sa/rhS/Au5Kf95
- g1ZEDL4ras0z0n0xT7U0cq8VOM7MDKY1YnHwiOlpI8suCybVKZ7FIsj0KxNpgzCuV2
- qBzkKjIc7nkJw==
-X-KAS-Sym: v3:f51bdf72230551df:cTk2JoECzpqnGl/pf59mWisqZvMBXDYOA9XGs/chIxhpk
- tWelRTKRF/MM6j9c4LMiUUsl/7xnaot9wRDU7JV+E5sPbFnIbsth4GYwBy7SrVgIsDvKE6NeUR+
- ReiZDpU6m3mZXStAFKEkbGIqcXld4qyCPlISONxA0p1D1as1hnCqo5M4qV8BIt74q0d1pg+NXGo
- CwGP+VWPAHVhjYBPw8iTxRbcTiq8shEZiNVUGw3kIcW1sXWD66Pvc+KeoOHSLByVq85hA4A2C5a
- FlDr856MT8HS5m6OicpSpgJslOHnDDlK2Gcbl3hwTV3RSbZZMhMk/o6OaxvGf+5L7aVdVFXQ==:
- EcK/HOajenHyCrN6b9xRoYiKjF4ErHcNXpCC9yb6dEFMQEJhNioTkrD118VH+yKKPQs80CEGVcA
- bUXam20HUboXAJp1xkx9ejMwWrd83At37raseVK/u1aUqRFHY2jBMZiWoCQQf3nTfCkhyUjcYJi
- J5tlETCQ15GWNEUjoq7fCBkd0RGZ0fa/LBtK+aFFVd0JK5obzssVs147WJVDKdIjmgmwBwlh1g4
- uVt6n6AVdH3h+yrUjPorWleiHFaIOR3B9f8JWWSOhwaD2fxDf6rdYRdaPUgs9ZZ6yTT/LYjl77I
- eR2G0mdBnYTiRxz5lLvuDyc8/ApoHT2NCKU8GT4/b7DGBjf4zmRorPts5CzDy3PPtnG6xr7CWWH
- KVxPltGpXj96DeTLkXctoTOSImynuAPPx/ZIvSYOspJArA54X5jhpPDV4cFQ3qRmkhPZp1FhldW
- J0vsAVMVwNK2etSM6OglVeMQFPdJU3rSK7bUa9tOjhMo8KSzMbg+R3KeBBrCCEaOOoyGZemUM6x
- fTCARWipQwYLNBWJsHkIUuT9ngmg6/Pxhr6HZ8x7ZLDUQdQ5Z5XiXLgQN14Y2a6fmdCeBo+f99R
- IZb3lQ==
-Received: from fli4l.lan.fli4l (p54a1ba05.dip0.t-ipconnect.de [84.161.186.5])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 51BD7A4C6FDD
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 23:29:04 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:54844)
- by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xMC8A-000000001Tt-1kVq
- for buildroot@buildroot.org; Wed, 28 Oct 2026 22:28:26 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Wed, 28 Oct 2026 23:28:19 +0100
-Message-ID: <20261028222822.490779-19-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20261028222822.490779-1-bernd@kuhls.net>
-References: <20261028222822.490779-1-bernd@kuhls.net>
+ dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com
+ header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1
+ header.b=om5XCAH1; dkim=pass (2048-bit key,
+ unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com
+ header.a=rsa-sha256 header.s=google header.b=Z0JI/UN4
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com
+ [205.220.180.131])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EE35160710
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 23:00:28 +0000 (UTC)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+ by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id
+ 69SMAKEl1333227
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 23:00:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+ cc:content-transfer-encoding:content-type:date:from:message-id
+ :mime-version:subject:to; s=qcppdkim1; bh=fcK1OkbmOlsEx3W+ZXyTnh
+ 4AGKS9m+ZEEv7D4onhos4=; b=om5XCAH1wV1dQkgHiFy1TgDUGoXk/kHpWct5da
+ qeohLpG1XRJ3Pgs/cTAYM6dG4BXwky9zb0x+436Pn+ELprXPxBIcg19S7cP+UBPg
+ 1bxPjf5P6hBZT9i1482XKJWn4BsgttuMdK6qxzQ1isLugFujbue2FQJEdPi0pKz+
+ kJWSE6VT6hSpzBEZd0MvD7k/dGiMcJEmlceWc+HLBpteNGHwSzeqZN9ex3MxVqjv
+ g0ZpK+04KbDizPmobTvKDPoSah2XtxCUdLdAgjmpfrWeSBhx/wcKKo9/+412JSMy
+ WZP9vBXl9BYNP3u6XdrhFzjdzhnkzuwNmfYDI1XspbcGDgLA==
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72])
+ by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hkdsp39p9-1
+ (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 23:00:26 +0000 (GMT)
+Received: by mail-qv1-f72.google.com with SMTP id
+ 6a1803df08f44-91becce058aso31926786d6.0
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 16:00:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oss.qualcomm.com; s=google; t=1793228426; x=1793833226; darn=buildroot.org; 
+ h=cc:to:message-id:content-transfer-encoding:content-type
+ :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+ :reply-to:content-type;
+ bh=fcK1OkbmOlsEx3W+ZXyTnh4AGKS9m+ZEEv7D4onhos4=;
+ b=Z0JI/UN47LPhIi2lwyitnDNis8cUKpWrmo8zl7WCnGCMLepCaEacHiB6zNHNZHfrni
+ acwnRXqAjJSRt2Yi+bwZqonva8fhzzrlNercsd+su3hxUJHLxW01De90iPlijXIgIaIp
+ uQnsGs7TiKO0Z/Nq1beC6Dp+SnJHgMu0ca6DTqopJM9svRHn8Q47iY6itbHD5CQfKUSk
+ C9CeiAAZfWYAyjvsjYuQ+/EW60Ava37LxcVEsAtGYhtR5pdSZZskwIYO+EUnHLjBRgHE
+ QztTPq7hdIt8yNGk9PxkZX3I8NGyGs3pRftG5obrs053YIJPLM+kYr8K8IH7M3Af7zp8
+ YO2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1793228426; x=1793833226;
+ h=cc:to:message-id:content-transfer-encoding:content-type
+ :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+ :cc:subject:date:message-id:reply-to:content-type;
+ bh=fcK1OkbmOlsEx3W+ZXyTnh4AGKS9m+ZEEv7D4onhos4=;
+ b=Lvw+RXub93yFvNaxR9LVRdpPMox3RNuPoFSYug/xkXih0pTB/0+pLsYbrl9bTJmML/
+ ecEpyujmSDObaKCIvQff8AwTQPoQSIVoK4V6++h/1O2luxkR38c9PaVtBz8vm7S6QB40
+ gFqFozwB+yEiwLr2WF9DG0arDAibcHRcQnWLP7xwsL0hzhF+ypeRIQ1FGimV2PJoUI2o
+ N38zelKtJ4Ye0csNsp2sYGDaDpdVNJuIFCEXQYuaRhV9jBwW5a1zzMa4zZwNiHDEkS27
+ Fc+5BMro7LapaYqX6xIHDjG2TTiFxy0+1O3+3cbubC8z7mjPRG8UIxbfUqqV9o/CBuWg
+ sUWQ==
+X-Gm-Message-State: AFq9FYKT5tYN63TmDZDkToSoiIZeV4OZRC5vdURho6SJNCWGkvUEhzyU
+ MojYnn+DYkFrxC2FVTT6v6OFfwufVYu/oxNJ9sNFDeqxetW7kpW2ZBeXtfxHQDzfRBZJY2v2f/f
+ LQBnneDqoaHOS3yxmIwM7Lew8XInZ/3HLU9oqzZP8GhlnRjjAw0cgGZFiuzCu5AGcf0HG
+X-Gm-Gg: AYBFou1uotBuhvVr8Lu85yzfz3GeRj9hct/iq0SYtclMMFwY0UOfjfiK+gMaaBHrzyo
+ b1aBlJCfIeqKd4dEL2KE2DT5ltKwXeWkPFZlfni5vpgOJZxUS5rUOwNMyYPf4DN2Rhf2kc56Sih
+ QG+SMHyrvS7HCJ8zUDPEwpQ5eGLyg65fZf2GK0ZBEkKLMfIoJ29romhfT30CnYfYXxFPpuk2d1i
+ UEN6y6pECkVJJ7Zqn2Lwg9dEmdtYAimKz7M7CZijoS3BNJCNF82wSfvNn7neCf6SgjmNn/xYs0L
+ DZrfe5lVOHRLTScHKIzTYibe7o5PwwIhUS+WH6oL2Y9WJmsu04psCb6+18oyIZ0L4s3+2irrDjE
+ LQdu15hkZ9wTyt1rQoa1OsG80mdAQsk/2DYm3KuHcBq1I/uedaHz3+LXnUuXBnw==
+X-Received: by 2002:a05:620a:8906:b0:93f:2610:fb6f with SMTP id
+ af79cd13be357-94408aa13f0mr535477085a.20.1793228426090; 
+ Wed, 28 Oct 2026 16:00:26 -0700 (PDT)
+X-Received: by 2002:a05:620a:8906:b0:93f:2610:fb6f with SMTP id
+ af79cd13be357-94408aa13f0mr535466885a.20.1793228424844; 
+ Wed, 28 Oct 2026 16:00:24 -0700 (PDT)
+Received: from localhost ([2a00:23c4:e5c9:901:c496:8838:86d0:bc8c])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-48e3ecdd5b3sm30753429f8f.53.2026.10.28.16.00.22
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 28 Oct 2026 16:00:23 -0700 (PDT)
+From: Christopher Obbard <chris.obbard@oss.qualcomm.com>
+Date: Wed, 28 Oct 2026 23:00:16 +0000
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-X-Kas-Delay: 1793227744
-X-Spamd-Bar: +++++++
-Subject: [Buildroot] [PATCH 18/20] package/kodi-visualisation-*: mass
- version bump to Piers
+Message-Id: <20261028-wip-obbardc-package-dtui-update-3-1-0-v1-1-2ff61efecfed@oss.qualcomm.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXNywrCMBCF4Vcps3YgGUsVX0VcTJKpjkIbcqlC6
+ bub6vKDw39WyJJUMly6FZIsmnWeGuyhA//g6S6ooRnI0GDORPjWiLNznILHyP7FbRJKVawxcBE
+ 8okWDQqc+GGcHGQ20Vkwy6uf3c739nat7ii97HLbtC8Vu+fuJAAAA
+X-Change-ID: 20260822-wip-obbardc-package-dtui-update-3-1-0-e274d0b16ef0
+To: buildroot@buildroot.org
+Cc: Christopher Obbard <chris.obbard@oss.qualcomm.com>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1422;
+ i=chris.obbard@oss.qualcomm.com; h=from:subject:message-id;
+ bh=sP/VpCNIzR+ruHde8yYzLCvbn+qMukcUDkxZi9nKUC0=;
+ b=owEBbQKS/ZANAwAKAWNNxPBocEb4AcsmYgBq4n6BLdAJQQGUbFgn4qdPkIBc+dGxbpLtFQGKL
+ IKffUXgvi6JAjMEAAEKAB0WIQTxi9yLbCX5CqI9UXRjTcTwaHBG+AUCauJ+gQAKCRBjTcTwaHBG
+ +CabEACUm6fEva528D59ewUCBoecgOngO5quG4xGKqHvhDnrk5QUUfzrqfPJFVn4MapISwpY3La
+ 43cQYSn1iX/RgdjGGsf8gbCeW8z3iPxqS59KSBT0YKAWsU3i1SU4tCIpEXbORcDo0gwG+FTR5CI
+ +D5tZNUX9StHR3JGIZzp+ETxpcgY+QbSDnCZg9eBR2MX+9q0P9EMOUfTevZIFLjK8MmzReCIK0L
+ Ye4qnXX7P/ZHpJegAcnsGtDNQbseqaolqJR3/CEHKfKk1tHNkMWkFhQtgz5QxQhWAa8Z6YFa/CP
+ hMcDi19rO1hiB30keNtqlRXeimrL3IG7lJNaq9RO6mY4NmvLRdxgisDI+et88kT73+yMT1vwxvq
+ +Vw2ekLpQmEBnIUQIAkb8R3yP7Z6tYH4VaQFFS3enngGzPJRs6A/xTVjLmd+ade80Y7ak4+/Dau
+ IoRuBJ3IOlLLGRx715Vkq3hj85xCZrZ5G15Cy4ahfYtK3Xc1D3IgUcxICeepNxD3qzmhdBd/7BY
+ Dff5DGOc0r6lJ0vWgFqY6pG6aqdepIVsi2m+UninW0+Rg0xRry746APflGuQVp2FzqED5oSk+RL
+ +AAVuJccvl/OE3pIV7yR7t/nPMBNauMku/spTHbEHagRszLL8ZuKZfcq9ZLIr/D3hDdzSZ/c6mM
+ j5enCcJVXggg3wQ==
+X-Developer-Key: i=chris.obbard@oss.qualcomm.com; a=openpgp;
+ fpr=F18BDC8B6C25F90AA23D5174634DC4F0687046F8
+X-Proofpoint-GUID: ry8hbN1HEo9P7mqzAeiyrAr6rzBYxxEq
+X-Proofpoint-ORIG-GUID: ry8hbN1HEo9P7mqzAeiyrAr6rzBYxxEq
+X-Authority-Analysis: v=2.4 cv=Cssq4X4D c=1 sm=1 tr=0 ts=6ae27e8a cx=c_pps
+ a=7E5Bxpl4vBhpaufnMqZlrw==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=660iZSQnnn4A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=yx91gb_oNiZeI1HMLzn7:22 a=EUspDBNiAAAA:8
+ a=RaF8BXzzhcKCX23jQAgA:9 a=QEXdDO2ut3YA:10 a=pJ04lnu7RYOZP9TFuWaZ:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDI4MDA5MSBTYWx0ZWRfXz9lZA7a+/kI+
+ Ts8LskKcgo4RyGGLYETHZyfWAw8tHmawVX05jJ7Qk2XtdXMRLzn6GC1tcTRxZO8z1CnvnvHiygQ
+ jwFb58nuCMkP2dVJVxlA3dlUmMAJZQXBe9Twbaui1RD5zhRl2DZqOW3qBK5GICaLBFWg4gOkDuB
+ rBivfXnG9PVUPMa9OZYE+iSo01gNh6MzFJgTvl5G/lIbdZaIjIXYwmow4PZ/EpdEmLP20qWIbGU
+ SjmxwUFZnNLLopaVPRqIF0chf2XhFIFSXvm16xU0LFSLJ5XEaG0rki+RckfJI8dVV5fNiTpVLeo
+ z2/uO74enB+elHatWQ5DA55XUzggDPJLIiOxiWVjFL08fPqZlqu5iD9P9NGvXgMGIXawOvtpEdb
+ wRA7PJt7n6wv8TQyh599hmbreI1f9fA2WVlVIY9E0wSYeq/LINIx6ssaF9fAVQf+1/JdvvmM+xg
+ nvItXibayCeTabq3spw==
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMDI4MDA5MSBTYWx0ZWRfXwHmRruV5yN7Q
+ hvz1p6uvwrdduE3IiZ8yOBTUQ1m7DSwy7ZfkkRh1ZG9EaZ+hNc8E7AcO+gRpL4ixP7o2uoA9FJ4
+ 8WUTIg96Dzgfy+WyZBtUIChDnQg0CPs=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-10-28_07,2026-10-21_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 lowpriorityscore=0 priorityscore=1501 adultscore=0
+ impostorscore=0 malwarescore=0 bulkscore=0 phishscore=0 clxscore=1015
+ spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2610190000
+ definitions=main-2610280091
+Subject: [Buildroot] [PATCH] package/dtui: bump to version 3.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -166,180 +263,49 @@ X-Spam-Status: No, score=-16.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- .../kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash  | 2 +-
- .../kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk    | 2 +-
- package/kodi-visualisation-goom/kodi-visualisation-goom.hash    | 2 +-
- package/kodi-visualisation-goom/kodi-visualisation-goom.mk      | 2 +-
- .../kodi-visualisation-matrix/kodi-visualisation-matrix.hash    | 2 +-
- package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk  | 2 +-
- .../kodi-visualisation-shadertoy.hash                           | 2 +-
- .../kodi-visualisation-shadertoy.mk                             | 2 +-
- .../kodi-visualisation-spectrum.hash                            | 2 +-
- .../kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk  | 2 +-
- .../kodi-visualisation-starburst.hash                           | 2 +-
- .../kodi-visualisation-starburst.mk                             | 2 +-
- .../kodi-visualisation-waveform.hash                            | 2 +-
- .../kodi-visualisation-waveform/kodi-visualisation-waveform.mk  | 2 +-
- 14 files changed, 14 insertions(+), 14 deletions(-)
+Changes since 3.0.0:
+- Toggle tree nodes with Enter
+- Bump chumsky dependency to 0.13
+- Regenerate stale Cargo.lock (3.1.1)
 
-diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
-index 3f5f761968..7224b062aa 100644
---- a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
-+++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
+LICENSE is unchanged, so its hash stays the same.
+
+Signed-off-by: Christopher Obbard <chris.obbard@oss.qualcomm.com>
+---
+ package/dtui/dtui.hash | 2 +-
+ package/dtui/dtui.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/dtui/dtui.hash b/package/dtui/dtui.hash
+index e45f979934..b042812c73 100644
+--- a/package/dtui/dtui.hash
++++ b/package/dtui/dtui.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  d7433e4e88e29f1dd3524d2d0b660ce529852561f14f479f4b83a9c5ac436ffc  kodi-visualisation-fishbmc-21.0.2-Omega.tar.gz
-+sha256  e0ec1dd6832cd916a0ec8a2baa8be55c65670bb618c9be8747c7cadaf22c1535  kodi-visualisation-fishbmc-22.1.2-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
-index b1eb305620..393cf19700 100644
---- a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
-+++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
+ # Locally calculated
+-sha256  57bcf3a8b6681be2695762da17c20d2efb7c121131138868ba7a4485fa08c335  dtui-3.0.0-cargo6.tar.gz
++sha256  cff3895576d31a321e82ca63ac45f8a7dc2ae902ae2b9a3efa68438cc5d8aab3  dtui-3.1.1-cargo6.tar.gz
+ sha256  b7b3cd0d92fc6638f0a7bd2306d715c747d040c6d851ed821a45c5538663e57a  LICENSE
+diff --git a/package/dtui/dtui.mk b/package/dtui/dtui.mk
+index fad5f818b4..86bb0fa213 100644
+--- a/package/dtui/dtui.mk
++++ b/package/dtui/dtui.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_VISUALISATION_FISHBMC_VERSION = 21.0.2-Omega
-+KODI_VISUALISATION_FISHBMC_VERSION = 22.1.2-Piers
- KODI_VISUALISATION_FISHBMC_SITE = $(call github,xbmc,visualization.fishbmc,$(KODI_VISUALISATION_FISHBMC_VERSION))
- KODI_VISUALISATION_FISHBMC_LICENSE = GPL-2.0+
- KODI_VISUALISATION_FISHBMC_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
-index 71ce1c657e..72fd7ed709 100644
---- a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
-+++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  f87356122f91ea40d096d559d1180571e701e39867448768d14d6c2ba3b2e264  kodi-visualisation-goom-21.0.2-Omega.tar.gz
-+sha256  3bb77b47d26aaf1e6cca451bbb9c22f162101f3a43b014a1bfa3583329e08f44  kodi-visualisation-goom-22.1.2-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
-index 6b35c64a87..a4b7285589 100644
---- a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
-+++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+-DTUI_VERSION = 3.0.0
++DTUI_VERSION = 3.1.1
+ DTUI_SITE = $(call github,Troels51,dtui,v$(DTUI_VERSION))
  
--KODI_VISUALISATION_GOOM_VERSION = 21.0.2-Omega
-+KODI_VISUALISATION_GOOM_VERSION = 22.1.2-Piers
- KODI_VISUALISATION_GOOM_SITE = $(call github,xbmc,visualization.goom,$(KODI_VISUALISATION_GOOM_VERSION))
- KODI_VISUALISATION_GOOM_LICENSE = GPL-2.0+
- KODI_VISUALISATION_GOOM_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash
-index a924eaa6f8..aad763fadb 100644
---- a/package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash
-+++ b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  b1d1f3da5470d657e70c4b914a77445fe1d0a0ba35007fc402982a8b1b4cf9b0  kodi-visualisation-matrix-21.0.2-Omega.tar.gz
-+sha256  a0060d82a8a9e9cdf2fb30451116271d5ab1dd9196c27cda1f6ae7eb1f787b02  kodi-visualisation-matrix-22.1.1-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk
-index fd885712ad..05e4889c84 100644
---- a/package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk
-+++ b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_VISUALISATION_MATRIX_VERSION = 21.0.2-Omega
-+KODI_VISUALISATION_MATRIX_VERSION = 22.1.1-Piers
- KODI_VISUALISATION_MATRIX_SITE = $(call github,xbmc,visualization.matrix,$(KODI_VISUALISATION_MATRIX_VERSION))
- KODI_VISUALISATION_MATRIX_LICENSE = GPL-2.0+
- KODI_VISUALISATION_MATRIX_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
-index 508820876d..6de80abd30 100644
---- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
-+++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  30a5081365cea1dbdf49ccbb059076d4c7abc28604a58749fcd0d025e2faa760  kodi-visualisation-shadertoy-21.0.2-Omega.tar.gz
-+sha256  ec4881e0a71ef4a01ff33a0704bb0e53acb573d49cdeb5bd67a4948b85659e1a  kodi-visualisation-shadertoy-22.1.1-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
-index 32d6d6f056..d095247c2a 100644
---- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
-+++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_VISUALISATION_SHADERTOY_VERSION = 21.0.2-Omega
-+KODI_VISUALISATION_SHADERTOY_VERSION = 22.1.1-Piers
- KODI_VISUALISATION_SHADERTOY_SITE = $(call github,xbmc,visualization.shadertoy,$(KODI_VISUALISATION_SHADERTOY_VERSION))
- KODI_VISUALISATION_SHADERTOY_LICENSE = GPL-2.0+
- KODI_VISUALISATION_SHADERTOY_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
-index 6bbd7b8c9a..244d7f9881 100644
---- a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
-+++ b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  7b6635789d226ee4cd4e17d54d57e880731d0762835802835d0d5ac4f0084b99  kodi-visualisation-spectrum-21.0.2-Omega.tar.gz
-+sha256  dac63ce17984d48c8e20be136a840d2543cda184d12cf31c7839c8e810bcc537  kodi-visualisation-spectrum-22.1.1-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
-index 1946cf598a..646917697a 100644
---- a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
-+++ b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_VISUALISATION_SPECTRUM_VERSION = 21.0.2-Omega
-+KODI_VISUALISATION_SPECTRUM_VERSION = 22.1.1-Piers
- KODI_VISUALISATION_SPECTRUM_SITE = $(call github,xbmc,visualization.spectrum,$(KODI_VISUALISATION_SPECTRUM_VERSION))
- KODI_VISUALISATION_SPECTRUM_LICENSE = GPL-2.0+
- KODI_VISUALISATION_SPECTRUM_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
-index a362fbd23d..591c3883b5 100644
---- a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
-+++ b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  a3f70985fee6b1014e7e7599431e646f36bd3870ead78bbc8936151b805e4241  kodi-visualisation-starburst-21.0.2-Omega.tar.gz
-+sha256  35456e13ab3d82177dde6568b0ab6c09dd09a31acf851f4e141ab4062d787e94  kodi-visualisation-starburst-22.1.1-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
-index 6adb21687e..ec922016f0 100644
---- a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
-+++ b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_VISUALISATION_STARBURST_VERSION = 21.0.2-Omega
-+KODI_VISUALISATION_STARBURST_VERSION = 22.1.1-Piers
- KODI_VISUALISATION_STARBURST_SITE = $(call github,xbmc,visualization.starburst,$(KODI_VISUALISATION_STARBURST_VERSION))
- KODI_VISUALISATION_STARBURST_LICENSE = GPL-2.0+
- KODI_VISUALISATION_STARBURST_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
-index 1041fd5287..683f468cc3 100644
---- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
-+++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  fe6d2f3990ea5f2ea2d4a0a905f451b1c2c7f1300529d8957b5d93a97421f415  kodi-visualisation-waveform-21.0.2-Omega.tar.gz
-+sha256  050a184a37c1cef8f87fcf05d5dd90c6d11f33008164bc5a86e370aac1d866fb  kodi-visualisation-waveform-22.1.1-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
-index 819b064789..9a61a4d159 100644
---- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
-+++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_VISUALISATION_WAVEFORM_VERSION = 21.0.2-Omega
-+KODI_VISUALISATION_WAVEFORM_VERSION = 22.1.1-Piers
- KODI_VISUALISATION_WAVEFORM_SITE = $(call github,xbmc,visualization.waveform,$(KODI_VISUALISATION_WAVEFORM_VERSION))
- KODI_VISUALISATION_WAVEFORM_LICENSE = GPL-2.0+
- KODI_VISUALISATION_WAVEFORM_LICENSE_FILES = LICENSE.md
--- 
-2.47.3
+ DTUI_LICENSE = MIT
+
+---
+base-commit: 727b904c13bbc2a9a7a530b1f8e47d7d180c2768
+change-id: 20260822-wip-obbardc-package-dtui-update-3-1-0-e274d0b16ef0
+
+Best regards,
+--  
+Christopher Obbard
 
 _______________________________________________
 buildroot mailing list
