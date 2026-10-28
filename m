@@ -2,28 +2,28 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BADB7606A31E
-	for <buildroot@archiver.kernel.org>; Wed, 28 Oct 2026 22:31:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 132AE606A31C
+	for <buildroot@archiver.kernel.org>; Wed, 28 Oct 2026 22:31:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=QzMYsen1;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=nv/q1tDd
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=UpLym9M5;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=NQB2TyT2
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 990C680A53;
-	Wed, 28 Oct 2026 22:31:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E092B80A53;
+	Wed, 28 Oct 2026 22:31:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dGXxTWLJXCec; Wed, 28 Oct 2026 22:31:27 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org B3AB480F90
+ id n65LrbxAvQo7; Wed, 28 Oct 2026 22:31:41 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 6A68680F90
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793226687;
-	b=dyeMncBCHt6Xe4L614zr0kzutKag+Zj9d4fC4Hdhyk4/zQTB0aeKbAIHzpb1W04z/E8D
-	 PzKsPvs2Go9k9gXtKVR3o58RRMxMeRn/ahMPNnZWo6YrpnoJrYpAmEVlGS06pKWOGm2NI
-	 9IyiI+8gSU7dD5Y6BJCEm71IsDXShY7pgRiexhsNk32Oa6nwO9NqujCVPewRS3QJu4bUu
-	 MzoMpY5prnVWdWLQ0leTfdOfxDh9t3XY7wWss42C8+9Be+VpF3sEcbmJx5NVCYAmZg74L
-	 IP1IQypPgfVDnu3Q38DH8eG4zbAHz0AqfEUniN75ZPH0QPTjnxS5YWNh41y0GUSdeOw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793226701;
+	b=LSQ0rIjjIjX8Nt5jbSf0zmHvuorKAPbrFKJzTLIkPiNUQ/4HNnGRKdL0S7YWyCsM8fP8
+	 1jVxx37DgQYNcDoJGPD7btRG4xbSsAe7/caWDBhqswhvCcMXSjwZZ0pv3H6+gNfkkgR0Z
+	 24vkfsgSaTUmYlvacvp+mAniVyfy5w1GB3O5Wbk2gseX8VfHTDAwhd7DxTDhPRNVbD9Y/
+	 UmgV7gqpM6ReELcY0LnpSkSn2+Nq58HFlWBL3XCHyrCPm+MEpLjkf1uhjVRUMSDEvNKU3
+	 VS0nUR02CnfXV6DCUCq37oNuBfAANtrsNkTQroUbrgymToQnK3y6VWdmfG6n30Qvs9w==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793226687;
+	c=relaxed/relaxed; t=1793226701;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -32,120 +32,118 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=hREni2JAM+XG+iHTJZOWYcxDztc5XS1Pu+MmSo3lt/M=;
-	b=mhr7Q5obryZVuGknzxJfEfUo+GoM+j6rXAPH8picfAL6FhPNOS//57jRxwIWngjWGNfX
-	 J1gxU3QgNkurN0Dt+O5tKQt9iSxJDxqoZ/arRSGdR3hpXo3R16kts/y7q3Ji1Y09NwgEA
-	 L/3dnunUIOWLTkhMjQnAKaoyi8ubVRqywZCW6zHZsk/o72H+EMav5teWkGXyHoNzUAFII
-	 u91hYsFImTuRzoO3BFG3mqByO7x4kIdePKNebK2fFie4imwdXuBEKEcA8zlCZnHRim858
-	 Pb3+9EoAwSkAWZSPMNQ2at6YtqB73CSiEHB0ERy/yr7gwYMqrCJq/jpVgMVxBZJuVdg==
+	bh=zwQRU8xb1MG6XRN80wTE85MVerq/mPrMyAaKADrSNMY=;
+	b=mJ6KWAI2fvzGgUmwxqDuLh4w6zeEPGqgR0zdIGY7OFzxNWerBBKFhQQtXqq08jW8xepo
+	 ZzFa2lZYymJZlMNZmb/9UcblYw6/xNxb58dVMKEohiIaqorocajo4v4Fo0+sZtQWG9LjI
+	 r5+chngTidN1lHc/4iZwO9amW2/FHH/lRrU3sUeVQzVeixrGw4hKnUzfvbSePGr9aGiIO
+	 RXiZMFUl1E7RCoAB5ZvRy78vEmUhYL8erOPjfGhmhJ9Nw1vKIK+kuoWZocZDM5pmmp9u+
+	 rl5YYub8I5oV01v0FMBhnq4G8tn0gsNs8SBjR+Q9x+z+SiZlferHJjQ6TuKIFut7fqQ==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
-	dmarc=pass header.from=kuhls.net;
-	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b="nv/q1tDd";
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793226687;
-	bh=hREni2JAM+XG+iHTJZOWYcxDztc5XS1Pu+MmSo3lt/M=;
+	s=default; t=1793226701;
+	bh=zwQRU8xb1MG6XRN80wTE85MVerq/mPrMyAaKADrSNMY=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=QzMYsen19CW7e5lkv1eqWRmsTokupXFnZ3n/1DHJZN2LY7uaCeNJtbij2jinKDMUz
-	 lAwjjCk+mtyGZCJVlU6qaImmVL1cygaVidD1qKt2wbV6oXf+W7RoD5jECeJBH2jFlD
-	 W4RMiHAmL9adWCKNt7b/kVkfPXil1m4s4M+XVGc7Dg6BylF8iZBe8WLJkjwkligSuy
-	 ghEldnoQRYPrX5RH9fII7iaRqTXAOuQZtU4+KyNDzRDPZLK3lhjhG8EBlO0I2zF7Ld
-	 8EkkSMHhRpsLve6czgdc9L3/VR2hUNZtXfOg4MKnMMIh8d0RY6e6rb3Xce0UGDjgAy
-	 XlqIHaAAsN7qw==
+	b=UpLym9M5kZOPHlqsHKYuXHYZLUjVQGWk64FtFwf9xVGUNk0WeJ/Sn/oM54Wc0NHMk
+	 T5otGO0s8ioAryQevg5HRTnbKLEcFqzmcCyZwFKsqUihjOlgcWSDustNF0XVZyeu8O
+	 8RySkJw/YomvkHLcBD8l+Z85xsVlEA7EzYUQJ45OeiNtF4UfIhveN2AohJWTdDJgSY
+	 7lRQQdCaHqpvqq1pS6HlLub+872/H0qv4Am7ljA15KCAeZ6NW4cXfk4K3GC0Rllm+j
+	 xSsTyQs5gRGI6U8KkmvrSXRjwGeyGawXsqV+6tmcqTDey3S4CpT7tRppP01UvKGXUa
+	 aMgIBsknMjB8g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B3AB480F90;
-	Wed, 28 Oct 2026 22:31:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id E4A7A2E5
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 22:31:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A68680F90;
+	Wed, 28 Oct 2026 22:31:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 78DD52A8
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 22:31:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D54BF80F90
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 22:31:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5EE54606C2
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 22:31:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4KNOd0oR4i6A for <buildroot@buildroot.org>;
- Wed, 28 Oct 2026 22:31:25 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 34F7580A53
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793226685;
- b=RXevIQ2sKKMSej63Z79VPXmLY9RHW3q4INw7HI/3p5kUW2AZGlQCTfbQyUi/XKIDNj7w
- n8xlgSMxMp/QzB7P+Vo9wzDwBlcY3mw2Ctb5cERxIsXtOymU7p8Jk1/Du/W9VIvPO9GxY
- 0Kdhgh4baCzi1VYrU8HfOa6LHaSxRnTj1nIEo1rzj08gxDo4RFbF2/fiUtUGT98ci1Ju3
- G+5awY+T2MXBAiCkykVS9Rp9z2DI0gqzYZuceO4XCFFmYcbD6DN/HCa4VnyHVtMQO0+NG
- hi9V+AumhCbAT8WelRL2xp3ViSwIIflkKlI+tDR3uAZ27QxWEA7I9ds5v+9mOIlFFiw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WGI0s-inMuwH for <buildroot@buildroot.org>;
+ Wed, 28 Oct 2026 22:31:38 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org C26DA6070E
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793226698;
+ b=RtP/I556Nk4F4yZSg55kSMWIHV2iL1gAFGjXVomj+yCs2TjYW7SnuFoiWkkMwP6iDAKY
+ hvNuTqfr6DU7yXJzDi/wPIIkXuGxgJ+OwzJO9cnqJNPoO+hM1FdXxGZR/V2vOVgId5CfH
+ ffHQJ4n1+BSTmfG0KlBlo54H4RECBeI/6ddxmVNDTvQ94MYBI5RP6WWJ0Uw1/81Wh2NKG
+ zVs1+NO+3kKo1cmoG6BF1TJImAueTnaSkjkNiiB+47E+XkeB2zqldh92cYu5/hP9PBawV
+ 7sIYNYyfPAvP+LwHKnmakbmvuyz6NNWCxlD3AIpa8CX+ifTkMBsTDPnjppEWqfu6zTA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793226685;
+ c=relaxed/relaxed; t=1793226698;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=SmlS0BxVwJFLBeh12kyobDoULuQU7sbD43vRqZghdKw=;
- b=fz4h9HvDoLIziRBng/NM39DUQNnqem97Vmp1BxLRxleKiQdKKfaWKv0R109KaS/5KCMx
- UXThDqDvMG4TmbpEdfImILU59Tr+IXS9t8dUmMGQ8uAD8QcyWwubWW4NFHYuG3nBV8zIi
- ddrbIKg7f2L/5Gaamnd0rIzd6raEue9b9sfWiIeNsdDu9JYFgwRv8BdaYle2sSOcyvg2d
- tp4v6xX641eFEp6rA+Mry8XAPEuUltWHM1Hwk3EeHPAG3k5SvZ1zOdDy4kZPU41lH3OPs
- HAK2BV+2caPwEhEeCSfdOc3dKlqEcYF6gKf2fbARu9vxrF3l6RBbVluqoLb9uzbhuoA==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ bh=5+2ETS7ITeS4aOt0axM5v8SKeLc/8Mo+qMcToccSCPc=;
+ b=Vd/OTHTqLQKbazj15RNbeXoTNWxL8HqwPrvAEijsh88ypRhYiHQI+Gl98E6TyHB9zEBO
+ OdUOGh/IsH0JL2uZ6AhUiE7xzo0+brHeQ9aclKrN5JskirUGx3uN6HnUx5dYtg8n4TbQ4
+ Laq64RiNO/TK63MySpI1c2DP2z1DbWpMEAvZFquorJ3ot3YFyOpATLypKO52XRzAhirYx
+ 4zfi2dzHRcTp+Szl9VsAVTxRxiFTsNgNThcieKX4PYSr5eWDL1SYaFWg5rFKUWoig4HeN
+ FZgRlfayhxYw1QtxGfl3eWWzPhpPlthDwigxSdVpafXlF5CHf7ai2QdPe3U//dFfVTA==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
  dmarc=pass header.from=kuhls.net;
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b="nv/q1tDd"; 
+ header.s=kas202605290044 header.b=NQB2TyT2; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=nv/q1tDd
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=NQB2TyT2
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 34F7580A53
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 22:31:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C26DA6070E
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 22:31:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
  s=kas202605290044; t=1793226543;
- bh=SmlS0BxVwJFLBeh12kyobDoULuQU7sbD43vRqZghdKw=;
+ bh=5+2ETS7ITeS4aOt0axM5v8SKeLc/8Mo+qMcToccSCPc=;
  h=From:To:Subject:Date:In-Reply-To:From;
- b=nv/q1tDd2Bw3o35is5znzzFyJpPGHy6q2WTdNln3KifTcFus7HxqfoNLY4Uia8e2a
- 9reovPXoJTNHw/aoQz5ZGtaHHvweSlX5jPCt0yALL4QIxl+YZXTHnqW0Nt7T6Q+8Tb
- 2VhGrTNvsNZ2RPKDeOjq5B6y9mteVd/jaQlONHCbP7975h6FjxHhFygogWcH7TL8UN
- Kr0JvxsTT5ydHKcXfSU3OLJs5YxJnJYilJpbDr3sXEwx4PkAJnOLPfK/EIRt0tmiKW
- +GcD7E5TAWvFkAd/caYySAkzPI1cwu9+1JUqXzchzeYlv2RespBLZvzWldQtRi7Xbe
- pkMEiTqV1Sipg==
+ b=NQB2TyT2Uytw4wrLhBE0+wcVGHQKuFve3xA8Eu3RCplDFleKHFbOubBa0M05iEVlh
+ 0lpPhrODIf066iTnYHAADKw0q/aRtyDR9NoahKkmYSB7OdHbnqSDlEpft0eTIlUTKd
+ wNt1IdZNpij5oPXyGTYbh69rJpsIirw6ILaox3QNTw2nbh60+giN6h59JG0SW7BimX
+ 7MW2NNOggLbWix4Ll21vHdqIkD6ApuTAdY78euA5IeQtKbI1JCpWRnuuXXE6YDy8Ti
+ oKwoKOiEUXw4LRs8fDJqYsqEs3rwgPec2zeMlbBjMqqzRc4CACXPExUQrMPCL/5iv7
+ /Fk+2v6PnohQQ==
 X-KAS-Sym: v3:f51bdf72230551df:cTk2JoECzpqnGl/pf59mWisqZvMBXDYOA9XGs/chIxhpk
  tWelRTKRF/MM6j9c4LMiUUsl/7xnaot9wRDU7JV+E5sPbFnIbsth4GYwBy7SrVgIsDvKE6NeUR+
  ReiZDpU6m3mZXStAFKEkbGIqcXld4qyCPlISONxA0p1D1as1hnCqo5M4qV8BIt74q0d1pg+NXGo
  CwGP+VWPAHVhjYBPw8iTxRbcTiq8shEZiNVUGw3kIcW1sXWD66Pvc+KeoOHSLByVq85hA4A2C5a
  FlDr856MT8HS5m6OicpSpgJslOHnDDlK2Gcbl3hwTV3RSbZZMhMk/o6OaxvGf+5L7aVdVFXQ==:
- y9OzVqo5A9tSx6Hrvjxl35/0AMW6+UmFwSOrGJJEcVL3ifdwmbHgc4f/dMdLP6fQZoOghJpUNu4
- Yrxo7m9EuGWbCraPl7jy5oMBySq422a+j1AS59Ckx5yDa4OHdXKLOGQmf2Y/JUH9IdaJ/Q1ZGbk
- 0jmd863XBG1espDHnXbRPid9xIMyx9UtN1TCjc1LZ805RufAWxTnr0eeLjzV3FI8CfIOLNBjqbY
- ABPIf0wlaF7MGejN6v0Qrjda9HEn6GA/G7SzCI62ybFGk3Frp3Auqx7Y0SFYCZx/qlpeDexzRyW
- iMp7PN6Kx9tbVfaXuvvcAwvhZEJFRsQGuh5w5jsgNWIKrTnX6SfC2CK73mtS0BkDOzTje0fR6A5
- jXpcX1S8i1Y8jeZO2V6TCH11bM8bE+HUZylVVea2XtVhI+rZPhxd8hXTd/VhFVn7Fh4D5DVWcXW
- g/zrz6gqPh+C62xwE+aAZblgD2MQWaVlvIyo/21hByZQnXpY+6UMjXIxQTpkjeXPNA/QHz28MBI
- 6t31Kjf6UHiKlgiHS7zxu1eG0vk17vCmSqJLqQURqFM7Wbqu7ZfR8q1Bf9wozL1Jc+R3Do6USdH
- OmZSpQ==
+ /BFQLEBDo4NZH+KIp/tuam9HN8TausZ3NhYJTZyiODiOMm5qNdZisfnFytrDFWx/o3UoV0mUt1R
+ v+rVORDGFERkoJLp1mwvFT8rFBHOreiy96taBwKgUuFH1W4tePVou6gDHyFVEIZTBAPuwmCbOFO
+ n4+bBE/i7fkK6UdcS6CCJ+Njr3mhArA04v6OB/7OAO5/mepb5tvKNsMXBFUVsKC+2sl4+mxZ7zW
+ 3Uq8YhZsNozmhtdlqy1erpzouq6P9sAuvD9Q1CO8uT79RviHBBmzuwjP8PJT4C+lIKpL7Q2dyxA
+ HYNyn9XInslxI/GevGv6VWO4Yr6OXkxkqvim+uORmSCyyjbbD+fe6DvSNGDk3HnZl75UvNaJQox
+ PS7vtzcYa5DtoDKH+VVnws2j2o/jwa4ObgDT2Ue16ZQ+76CF+LJcRljGUnFmd+mNz0/ta43Ye51
+ /d1GELiMvrPMzpv+L+7sUWl34jdi185wcjMWgNdb23etz+r0pOkfS2Uz+xF4icV1XgaMVhLXAdC
+ 39XopsM7FlFeuDloSNTZ+XoKuVm3UK7u3tbV1tYq9YnT4kDHGTCPrTJiWgQEkCXn0w2Qtmqz/8y
+ UmYcWA==
 Received: from fli4l.lan.fli4l (p54a1ba05.dip0.t-ipconnect.de [84.161.186.5])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id AAF57A4C6FD8
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id D0A6AA4C6FD9
  for <buildroot@buildroot.org>; Wed, 28 Oct 2026 23:29:03 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:54844)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xMC89-000000001Tt-1aQH
+ (envelope-from <bernd@kuhls.net>) id 1xMC89-000000001Tt-35XW
  for buildroot@buildroot.org; Wed, 28 Oct 2026 22:28:25 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed, 28 Oct 2026 23:28:14 +0100
-Message-ID: <20261028222822.490779-14-bernd@kuhls.net>
+Date: Wed, 28 Oct 2026 23:28:15 +0100
+Message-ID: <20261028222822.490779-15-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261028222822.490779-1-bernd@kuhls.net>
 References: <20261028222822.490779-1-bernd@kuhls.net>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
 X-Spamd-Bar: --
-Subject: [Buildroot] [PATCH 13/20] package/kodi-pvr-*: mass version bump to
- Piers
+Subject: [Buildroot] [PATCH 14/20] package/kodi-screensaver-rsxs: bump
+ version to 22.0.5-Piers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -158,401 +156,398 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-16.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
+Removed patch which is included in this release.
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/kodi-pvr-argustv/kodi-pvr-argustv.hash                  | 2 +-
- package/kodi-pvr-argustv/kodi-pvr-argustv.mk                    | 2 +-
- package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash                  | 2 +-
- package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk                    | 2 +-
- package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash              | 2 +-
- package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk                | 2 +-
- package/kodi-pvr-filmon/kodi-pvr-filmon.hash                    | 2 +-
- package/kodi-pvr-filmon/kodi-pvr-filmon.mk                      | 2 +-
- package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash            | 2 +-
- package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk              | 2 +-
- .../kodi-pvr-mediaportal-tvserver.hash                          | 2 +-
- .../kodi-pvr-mediaportal-tvserver.mk                            | 2 +-
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash                    | 2 +-
- package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk                      | 2 +-
- package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash                  | 2 +-
- package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk                    | 2 +-
- package/kodi-pvr-njoy/kodi-pvr-njoy.hash                        | 2 +-
- package/kodi-pvr-njoy/kodi-pvr-njoy.mk                          | 2 +-
- package/kodi-pvr-octonet/kodi-pvr-octonet.hash                  | 2 +-
- package/kodi-pvr-octonet/kodi-pvr-octonet.mk                    | 2 +-
- package/kodi-pvr-pctv/kodi-pvr-pctv.hash                        | 2 +-
- package/kodi-pvr-pctv/kodi-pvr-pctv.mk                          | 2 +-
- package/kodi-pvr-stalker/kodi-pvr-stalker.hash                  | 2 +-
- package/kodi-pvr-stalker/kodi-pvr-stalker.mk                    | 2 +-
- package/kodi-pvr-vbox/kodi-pvr-vbox.hash                        | 2 +-
- package/kodi-pvr-vbox/kodi-pvr-vbox.mk                          | 2 +-
- package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash                | 2 +-
- package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk                  | 2 +-
- package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash                    | 2 +-
- package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk                      | 2 +-
- package/kodi-pvr-wmc/kodi-pvr-wmc.hash                          | 2 +-
- package/kodi-pvr-wmc/kodi-pvr-wmc.mk                            | 2 +-
- 32 files changed, 32 insertions(+), 32 deletions(-)
+ .../0001-Fix-build-with-CMake-4.x.patch       | 346 ------------------
+ .../kodi-screensaver-rsxs.hash                |   2 +-
+ .../kodi-screensaver-rsxs.mk                  |   2 +-
+ 3 files changed, 2 insertions(+), 348 deletions(-)
+ delete mode 100644 package/kodi-screensaver-rsxs/0001-Fix-build-with-CMake-4.x.patch
 
-diff --git a/package/kodi-pvr-argustv/kodi-pvr-argustv.hash b/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
-index a778272054..5e6a5af8cf 100644
---- a/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
-+++ b/package/kodi-pvr-argustv/kodi-pvr-argustv.hash
+diff --git a/package/kodi-screensaver-rsxs/0001-Fix-build-with-CMake-4.x.patch b/package/kodi-screensaver-rsxs/0001-Fix-build-with-CMake-4.x.patch
+deleted file mode 100644
+index e9f80a98c4..0000000000
+--- a/package/kodi-screensaver-rsxs/0001-Fix-build-with-CMake-4.x.patch
++++ /dev/null
+@@ -1,346 +0,0 @@
+-From f6ad95576920944e64a368ae4074812efbcedc4b Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd@kuhls.net>
+-Date: Wed, 11 Mar 2026 21:58:40 +0100
+-Subject: [PATCH] Fix build with CMake 4.x
+-
+-Fixes build errors with CMake 4.x:
+-
+-CMake Error at lib/Implicit/CMakeLists.txt:1 (cmake_minimum_required):
+-  Compatibility with CMake < 3.5 has been removed from CMake.
+-
+-CMake Error at lib/Rgbhsl/CMakeLists.txt:1 (cmake_minimum_required):
+-  Compatibility with CMake < 3.5 has been removed from CMake.
+-
+-CMake Error at lib/rsMath/CMakeLists.txt:1 (cmake_minimum_required):
+-  Compatibility with CMake < 3.5 has been removed from CMake.
+-
+-Raise minimum version for all addons.
+-
+-Upstream: https://github.com/xbmc/screensavers.rsxs/commit/0635422964b6797d693866483d16dff51bcf4b57
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- CMakeLists.txt                    | 2 +-
+- depends/common/bz2/CMakeLists.txt | 2 +-
+- lib/Implicit/CMakeLists.txt       | 2 +-
+- lib/Rgbhsl/CMakeLists.txt         | 2 +-
+- lib/kodi/gui/gl/CMakeLists.txt    | 2 +-
+- lib/rsMath/CMakeLists.txt         | 2 +-
+- src/biof/CMakeLists.txt           | 2 +-
+- src/busyspheres/CMakeLists.txt    | 2 +-
+- src/colorfire/CMakeLists.txt      | 2 +-
+- src/cyclone/CMakeLists.txt        | 2 +-
+- src/drempels/CMakeLists.txt       | 2 +-
+- src/euphoria/CMakeLists.txt       | 2 +-
+- src/feedback/CMakeLists.txt       | 2 +-
+- src/fieldlines/CMakeLists.txt     | 2 +-
+- src/flocks/CMakeLists.txt         | 2 +-
+- src/flux/CMakeLists.txt           | 2 +-
+- src/helios/CMakeLists.txt         | 2 +-
+- src/hufosmoke/CMakeLists.txt      | 2 +-
+- src/hufotunnel/CMakeLists.txt     | 2 +-
+- src/hyperspace/CMakeLists.txt     | 2 +-
+- src/lattice/CMakeLists.txt        | 2 +-
+- src/lorenz/CMakeLists.txt         | 2 +-
+- src/matrixview/CMakeLists.txt     | 2 +-
+- src/microcosm/CMakeLists.txt      | 2 +-
+- src/plasma/CMakeLists.txt         | 2 +-
+- src/skyrocket/CMakeLists.txt      | 2 +-
+- src/solarwinds/CMakeLists.txt     | 2 +-
+- src/spirographx/CMakeLists.txt    | 2 +-
+- src/sundancer2/CMakeLists.txt     | 2 +-
+- 29 files changed, 29 insertions(+), 29 deletions(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index e93c31bc..1a9ca89c 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- project(screensavers.rsxs)
+- 
+- set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR})
+-diff --git a/depends/common/bz2/CMakeLists.txt b/depends/common/bz2/CMakeLists.txt
+-index 6b1a0a56..b83f34dd 100644
+---- a/depends/common/bz2/CMakeLists.txt
+-+++ b/depends/common/bz2/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- project(bzip2)
+- 
+- if(NOT WIN32)
+-diff --git a/lib/Implicit/CMakeLists.txt b/lib/Implicit/CMakeLists.txt
+-index eef20e3b..14fb63d7 100644
+---- a/lib/Implicit/CMakeLists.txt
+-+++ b/lib/Implicit/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.0)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- 
+- project(Implicit)
+- 
+-diff --git a/lib/Rgbhsl/CMakeLists.txt b/lib/Rgbhsl/CMakeLists.txt
+-index 984ce9ba..ca01c592 100644
+---- a/lib/Rgbhsl/CMakeLists.txt
+-+++ b/lib/Rgbhsl/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.0)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- 
+- project(Rgbhsl)
+- 
+-diff --git a/lib/kodi/gui/gl/CMakeLists.txt b/lib/kodi/gui/gl/CMakeLists.txt
+-index 6fc4d87b..1b096d79 100644
+---- a/lib/kodi/gui/gl/CMakeLists.txt
+-+++ b/lib/kodi/gui/gl/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- 
+- project(kodiOpenGL)
+- 
+-diff --git a/lib/rsMath/CMakeLists.txt b/lib/rsMath/CMakeLists.txt
+-index cc31d308..76100e89 100644
+---- a/lib/rsMath/CMakeLists.txt
+-+++ b/lib/rsMath/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.0)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- 
+- project(rsMath)
+- 
+-diff --git a/src/biof/CMakeLists.txt b/src/biof/CMakeLists.txt
+-index 810bec46..ec344ba8 100644
+---- a/src/biof/CMakeLists.txt
+-+++ b/src/biof/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- project(screensaver.rsxs.biof)
+- 
+- message(STATUS "--------------------------------------------------------------------------------")
+-diff --git a/src/busyspheres/CMakeLists.txt b/src/busyspheres/CMakeLists.txt
+-index 41650ca6..cc829bd9 100644
+---- a/src/busyspheres/CMakeLists.txt
+-+++ b/src/busyspheres/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- project(screensaver.rsxs.busyspheres)
+- 
+- message(STATUS "--------------------------------------------------------------------------------")
+-diff --git a/src/colorfire/CMakeLists.txt b/src/colorfire/CMakeLists.txt
+-index 3667cbd4..f8da4884 100644
+---- a/src/colorfire/CMakeLists.txt
+-+++ b/src/colorfire/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- project(screensaver.rsxs.colorfire)
+- 
+- message(STATUS "--------------------------------------------------------------------------------")
+-diff --git a/src/cyclone/CMakeLists.txt b/src/cyclone/CMakeLists.txt
+-index 8af4172f..084f928b 100644
+---- a/src/cyclone/CMakeLists.txt
+-+++ b/src/cyclone/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- project(screensaver.rsxs.cyclone)
+- 
+- message(STATUS "--------------------------------------------------------------------------------")
+-diff --git a/src/drempels/CMakeLists.txt b/src/drempels/CMakeLists.txt
+-index 1ebd427f..d4c38a95 100644
+---- a/src/drempels/CMakeLists.txt
+-+++ b/src/drempels/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- project(screensaver.rsxs.drempels)
+- 
+- message(STATUS "--------------------------------------------------------------------------------")
+-diff --git a/src/euphoria/CMakeLists.txt b/src/euphoria/CMakeLists.txt
+-index d3f55ee3..de2e2f67 100644
+---- a/src/euphoria/CMakeLists.txt
+-+++ b/src/euphoria/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- project(screensaver.rsxs.euphoria)
+- 
+- message(STATUS "--------------------------------------------------------------------------------")
+-diff --git a/src/feedback/CMakeLists.txt b/src/feedback/CMakeLists.txt
+-index b37c430a..fd417d61 100644
+---- a/src/feedback/CMakeLists.txt
+-+++ b/src/feedback/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- project(screensaver.rsxs.feedback)
+- 
+- message(STATUS "--------------------------------------------------------------------------------")
+-diff --git a/src/fieldlines/CMakeLists.txt b/src/fieldlines/CMakeLists.txt
+-index de60dda8..b0dc30b6 100644
+---- a/src/fieldlines/CMakeLists.txt
+-+++ b/src/fieldlines/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- project(screensaver.rsxs.fieldlines)
+- 
+- message(STATUS "--------------------------------------------------------------------------------")
+-diff --git a/src/flocks/CMakeLists.txt b/src/flocks/CMakeLists.txt
+-index c2b4a793..a15db4d8 100644
+---- a/src/flocks/CMakeLists.txt
+-+++ b/src/flocks/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- project(screensaver.rsxs.flocks)
+- 
+- message(STATUS "--------------------------------------------------------------------------------")
+-diff --git a/src/flux/CMakeLists.txt b/src/flux/CMakeLists.txt
+-index a2de0b2a..6aeda787 100644
+---- a/src/flux/CMakeLists.txt
+-+++ b/src/flux/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- project(screensaver.rsxs.flux)
+- 
+- message(STATUS "--------------------------------------------------------------------------------")
+-diff --git a/src/helios/CMakeLists.txt b/src/helios/CMakeLists.txt
+-index d64a6194..6feb0ac2 100644
+---- a/src/helios/CMakeLists.txt
+-+++ b/src/helios/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- project(screensaver.rsxs.helios)
+- 
+- message(STATUS "--------------------------------------------------------------------------------")
+-diff --git a/src/hufosmoke/CMakeLists.txt b/src/hufosmoke/CMakeLists.txt
+-index 44d13231..b4fe79a5 100644
+---- a/src/hufosmoke/CMakeLists.txt
+-+++ b/src/hufosmoke/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- project(screensaver.rsxs.hufosmoke)
+- 
+- message(STATUS "--------------------------------------------------------------------------------")
+-diff --git a/src/hufotunnel/CMakeLists.txt b/src/hufotunnel/CMakeLists.txt
+-index b18ce736..f8c67c85 100644
+---- a/src/hufotunnel/CMakeLists.txt
+-+++ b/src/hufotunnel/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- project(screensaver.rsxs.hufotunnel)
+- 
+- message(STATUS "--------------------------------------------------------------------------------")
+-diff --git a/src/hyperspace/CMakeLists.txt b/src/hyperspace/CMakeLists.txt
+-index 6bd303e2..5733be37 100644
+---- a/src/hyperspace/CMakeLists.txt
+-+++ b/src/hyperspace/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- project(screensaver.rsxs.hyperspace)
+- 
+- message(STATUS "--------------------------------------------------------------------------------")
+-diff --git a/src/lattice/CMakeLists.txt b/src/lattice/CMakeLists.txt
+-index ef884e4c..9f9455f4 100644
+---- a/src/lattice/CMakeLists.txt
+-+++ b/src/lattice/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- project(screensaver.rsxs.lattice)
+- 
+- message(STATUS "--------------------------------------------------------------------------------")
+-diff --git a/src/lorenz/CMakeLists.txt b/src/lorenz/CMakeLists.txt
+-index ab3026f6..35f749d9 100644
+---- a/src/lorenz/CMakeLists.txt
+-+++ b/src/lorenz/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- project(screensaver.rsxs.lorenz)
+- 
+- message(STATUS "--------------------------------------------------------------------------------")
+-diff --git a/src/matrixview/CMakeLists.txt b/src/matrixview/CMakeLists.txt
+-index d98a8f14..d5f77ec7 100644
+---- a/src/matrixview/CMakeLists.txt
+-+++ b/src/matrixview/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- project(screensaver.rsxs.matrixview)
+- 
+- message(STATUS "--------------------------------------------------------------------------------")
+-diff --git a/src/microcosm/CMakeLists.txt b/src/microcosm/CMakeLists.txt
+-index d05b639d..65437c28 100644
+---- a/src/microcosm/CMakeLists.txt
+-+++ b/src/microcosm/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- project(screensaver.rsxs.microcosm)
+- 
+- message(STATUS "--------------------------------------------------------------------------------")
+-diff --git a/src/plasma/CMakeLists.txt b/src/plasma/CMakeLists.txt
+-index e7fc7956..fd25963f 100644
+---- a/src/plasma/CMakeLists.txt
+-+++ b/src/plasma/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- project(screensaver.rsxs.plasma)
+- 
+- message(STATUS "--------------------------------------------------------------------------------")
+-diff --git a/src/skyrocket/CMakeLists.txt b/src/skyrocket/CMakeLists.txt
+-index 8a89f28f..8e9e0500 100644
+---- a/src/skyrocket/CMakeLists.txt
+-+++ b/src/skyrocket/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- project(screensaver.rsxs.skyrocket)
+- 
+- message(STATUS "--------------------------------------------------------------------------------")
+-diff --git a/src/solarwinds/CMakeLists.txt b/src/solarwinds/CMakeLists.txt
+-index f1ef41c7..2417edf0 100644
+---- a/src/solarwinds/CMakeLists.txt
+-+++ b/src/solarwinds/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- project(screensaver.rsxs.solarwinds)
+- 
+- message(STATUS "--------------------------------------------------------------------------------")
+-diff --git a/src/spirographx/CMakeLists.txt b/src/spirographx/CMakeLists.txt
+-index 2ccb751d..41a245d4 100644
+---- a/src/spirographx/CMakeLists.txt
+-+++ b/src/spirographx/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- project(screensaver.rsxs.spirographx)
+- 
+- message(STATUS "--------------------------------------------------------------------------------")
+-diff --git a/src/sundancer2/CMakeLists.txt b/src/sundancer2/CMakeLists.txt
+-index a0e47a6d..a3bfbbe9 100644
+---- a/src/sundancer2/CMakeLists.txt
+-+++ b/src/sundancer2/CMakeLists.txt
+-@@ -1,4 +1,4 @@
+--cmake_minimum_required(VERSION 3.5)
+-+cmake_minimum_required(VERSION 3.5...4.0)
+- project(screensaver.rsxs.sundancer2)
+- 
+- message(STATUS "--------------------------------------------------------------------------------")
+--- 
+-2.47.3
+-
+diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
+index 86174991f0..b9378e1576 100644
+--- a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
++++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  8ec41a956a4348ded0ee650aaa20eb5ec746102b77da46515dcdfd5fa724c157  kodi-pvr-argustv-21.1.1-Omega.tar.gz
-+sha256  0bb56d70b866f205f382345f3c959bf9868b666e894975594e922bb1ed3e9277  kodi-pvr-argustv-22.3.5-Piers.tar.gz
+-sha256  76c1df60f3b4bf4c61f827e07ac61173e3b72defe6ab54d1a1fa34f1cd6f38ab  kodi-screensaver-rsxs-21.1.2-Omega.tar.gz
++sha256  4e44e6b6e804b81208c6d47f156e63e24d5af0e61fa46d5959c61e00ba2b36a8  kodi-screensaver-rsxs-22.0.7-Piers.tar.gz
  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-argustv/kodi-pvr-argustv.mk b/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
-index 71830f4413..f2deb2ca2f 100644
---- a/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
-+++ b/package/kodi-pvr-argustv/kodi-pvr-argustv.mk
+diff --git a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
+index dcca031b51..f04daed71c 100644
+--- a/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
++++ b/package/kodi-screensaver-rsxs/kodi-screensaver-rsxs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PVR_ARGUSTV_VERSION = 21.1.1-Omega
-+KODI_PVR_ARGUSTV_VERSION = 22.3.5-Piers
- KODI_PVR_ARGUSTV_SITE = $(call github,kodi-pvr,pvr.argustv,$(KODI_PVR_ARGUSTV_VERSION))
- KODI_PVR_ARGUSTV_LICENSE = GPL-2.0+
- KODI_PVR_ARGUSTV_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash
-index 8ff9d652a3..ac5679b1b5 100644
---- a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash
-+++ b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  7c436b7a9a4e991f99c01e1fbe69761a1792e4aa703ec95e29ecdb9b7f251ae6  kodi-pvr-dvblink-21.1.3-Omega.tar.gz
-+sha256  0ad2dea8f8932a2510f3fd9b0c41dc4bc4de5c6f621ce475c2bc14c45b8d7228  kodi-pvr-dvblink-22.3.2-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
-index 8f1b4c71b2..b2924a193e 100644
---- a/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
-+++ b/package/kodi-pvr-dvblink/kodi-pvr-dvblink.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_DVBLINK_VERSION = 21.1.3-Omega
-+KODI_PVR_DVBLINK_VERSION = 22.3.2-Piers
- KODI_PVR_DVBLINK_SITE = $(call github,kodi-pvr,pvr.dvblink,$(KODI_PVR_DVBLINK_VERSION))
- KODI_PVR_DVBLINK_LICENSE = GPL-2.0+
- KODI_PVR_DVBLINK_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
-index 18107198f8..73bd0e1c49 100644
---- a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
-+++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  9e567eb074b885621266d2eb1e67e79a19f47ef503aad110d9bf92ba2bd75084  kodi-pvr-dvbviewer-21.1.3-Omega.tar.gz
-+sha256  962c47a949377bf22f45b8af4c271fef409971ff06e24db1bfc379ada84cf7b2  kodi-pvr-dvbviewer-22.3.2-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
-index ec3cae5303..03fbac7f31 100644
---- a/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
-+++ b/package/kodi-pvr-dvbviewer/kodi-pvr-dvbviewer.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_DVBVIEWER_VERSION = 21.1.3-Omega
-+KODI_PVR_DVBVIEWER_VERSION = 22.3.2-Piers
- KODI_PVR_DVBVIEWER_SITE = $(call github,kodi-pvr,pvr.dvbviewer,$(KODI_PVR_DVBVIEWER_VERSION))
- KODI_PVR_DVBVIEWER_LICENSE = GPL-2.0+
- KODI_PVR_DVBVIEWER_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-pvr-filmon/kodi-pvr-filmon.hash b/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
-index ed2de1e5e0..99943aebc9 100644
---- a/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
-+++ b/package/kodi-pvr-filmon/kodi-pvr-filmon.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  323702037d65d2820dbe7c589f395d1d1321a4fec61738745dd104ae569088df  kodi-pvr-filmon-21.0.3-Omega.tar.gz
-+sha256  4003e6c76c0e3b08becfdfa66606d2c8d56c6e89a713c32226c5216ed69e407b  kodi-pvr-filmon-22.2.5-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-filmon/kodi-pvr-filmon.mk b/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
-index 7cb602a658..3abb8d11a0 100644
---- a/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
-+++ b/package/kodi-pvr-filmon/kodi-pvr-filmon.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_FILMON_VERSION = 21.0.3-Omega
-+KODI_PVR_FILMON_VERSION = 22.2.5-Piers
- KODI_PVR_FILMON_SITE = $(call github,kodi-pvr,pvr.filmon,$(KODI_PVR_FILMON_VERSION))
- KODI_PVR_FILMON_LICENSE = GPL-2.0+
- KODI_PVR_FILMON_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-index 56598d88f7..8a390cb5a1 100644
---- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-+++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  377fb3c69d39866c0b3b8a3a7d4c790241b15997b140f45443209c4e44e62418  kodi-pvr-iptvsimple-21.11.0-Omega.tar.gz
-+sha256  7efb36a0c48ae1a16fec14d1e705003c22abf13d2a318448ffb122fc0afcfa70  kodi-pvr-iptvsimple-22.6.5-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-index 0a4d9f5f1a..2d35a806a0 100644
---- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-+++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_IPTVSIMPLE_VERSION = 21.11.0-Omega
-+KODI_PVR_IPTVSIMPLE_VERSION = 22.6.5-Piers
- KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
- KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
- KODI_PVR_IPTVSIMPLE_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
-index 6fb3ce9b0e..20f1bcb277 100644
---- a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
-+++ b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  38727f8ea1ac350ced769b21919eb4b1409479f82ceeadf5140dbbdb7d5af415  kodi-pvr-mediaportal-tvserver-21.0.5-Omega.tar.gz
-+sha256  e2b6101e1bc2a11da2c91f5f0640590898ec27f7c87466cf3c1d74b89a5f8973  kodi-pvr-mediaportal-tvserver-22.2.5-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
-index bdad9ec36a..68bbdd2c3b 100644
---- a/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
-+++ b/package/kodi-pvr-mediaportal-tvserver/kodi-pvr-mediaportal-tvserver.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION = 21.0.5-Omega
-+KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION = 22.2.5-Piers
- KODI_PVR_MEDIAPORTAL_TVSERVER_SITE = $(call github,kodi-pvr,pvr.mediaportal.tvserver,$(KODI_PVR_MEDIAPORTAL_TVSERVER_VERSION))
- KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE = GPL-2.0+
- KODI_PVR_MEDIAPORTAL_TVSERVER_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-index 9ce2f1bdd0..cf0b8d523f 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  fff61cba963647e81ae273a974b31c2aab054e1a8c0e20278bb52623cd244921  kodi-pvr-mythtv-21.3.20-Omega.tar.gz
-+sha256  053b7206efe1c2fcaebd83176ac818f74c61c57417bf2fc9bc3837a7a08ea3fe  kodi-pvr-mythtv-22.3.18-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-index 1270fa5871..b18bca3447 100644
---- a/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-+++ b/package/kodi-pvr-mythtv/kodi-pvr-mythtv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_MYTHTV_VERSION = 21.3.20-Omega
-+KODI_PVR_MYTHTV_VERSION = 22.3.18-Piers
- KODI_PVR_MYTHTV_SITE = $(call github,janbar,pvr.mythtv,$(KODI_PVR_MYTHTV_VERSION))
- KODI_PVR_MYTHTV_LICENSE = GPL-2.0+
- KODI_PVR_MYTHTV_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
-index 95d487bdab..9e0af270d8 100644
---- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
-+++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  6315a7bfe038b02c80efe4fe3ee33f92ee2454af8668ce3847e9bcaca38d2147  kodi-pvr-nextpvr-21.3.2-Omega.tar.gz
-+sha256  5d5c9764a15242fd28bb81e88369f3ec61378c6bb90fab734046a15a727f4bae  kodi-pvr-nextpvr-22.6.2-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-index 56c8830606..5e7dfcd525 100644
---- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-+++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_NEXTPVR_VERSION = 21.3.2-Omega
-+KODI_PVR_NEXTPVR_VERSION = 22.6.2-Piers
- KODI_PVR_NEXTPVR_SITE = $(call github,kodi-pvr,pvr.nextpvr,$(KODI_PVR_NEXTPVR_VERSION))
- KODI_PVR_NEXTPVR_LICENSE = GPL-2.0+
- KODI_PVR_NEXTPVR_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-pvr-njoy/kodi-pvr-njoy.hash b/package/kodi-pvr-njoy/kodi-pvr-njoy.hash
-index b5933657c4..78abef0666 100644
---- a/package/kodi-pvr-njoy/kodi-pvr-njoy.hash
-+++ b/package/kodi-pvr-njoy/kodi-pvr-njoy.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  62d856e14b76aa6900c28d4679b13d79d891dc040c4ea87331b0eee373542644  kodi-pvr-njoy-21.0.2-Omega.tar.gz
-+sha256  3ec3c7d931eeafae79c0de45e3aa0bbcc8f3c7c5c5ea1ca9a521ea4996a83066  kodi-pvr-njoy-22.2.4-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-njoy/kodi-pvr-njoy.mk b/package/kodi-pvr-njoy/kodi-pvr-njoy.mk
-index da74a31de0..8f7db51ad0 100644
---- a/package/kodi-pvr-njoy/kodi-pvr-njoy.mk
-+++ b/package/kodi-pvr-njoy/kodi-pvr-njoy.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_NJOY_VERSION = 21.0.2-Omega
-+KODI_PVR_NJOY_VERSION = 22.2.4-Piers
- KODI_PVR_NJOY_SITE = $(call github,kodi-pvr,pvr.njoy,$(KODI_PVR_NJOY_VERSION))
- KODI_PVR_NJOY_LICENSE = GPL-2.0+
- KODI_PVR_NJOY_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-pvr-octonet/kodi-pvr-octonet.hash b/package/kodi-pvr-octonet/kodi-pvr-octonet.hash
-index f62f31cecd..130745417c 100644
---- a/package/kodi-pvr-octonet/kodi-pvr-octonet.hash
-+++ b/package/kodi-pvr-octonet/kodi-pvr-octonet.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  4fd97ff7f0fa021a45958dcd1f922e39dbf5e7366732a74caf782621b97aaa07  kodi-pvr-octonet-21.0.1-Omega.tar.gz
-+sha256  f2ba368d6066198691ca1b5d53bf94ba2288dadc2051ecb5be9013e9ca9a9012  kodi-pvr-octonet-22.2.1-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-octonet/kodi-pvr-octonet.mk b/package/kodi-pvr-octonet/kodi-pvr-octonet.mk
-index bbcd78f4c5..5317ace82c 100644
---- a/package/kodi-pvr-octonet/kodi-pvr-octonet.mk
-+++ b/package/kodi-pvr-octonet/kodi-pvr-octonet.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_OCTONET_VERSION = 21.0.1-Omega
-+KODI_PVR_OCTONET_VERSION = 22.2.1-Piers
- KODI_PVR_OCTONET_SITE = $(call github,DigitalDevices,pvr.octonet,$(KODI_PVR_OCTONET_VERSION))
- KODI_PVR_OCTONET_LICENSE = GPL-2.0+
- KODI_PVR_OCTONET_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-pvr-pctv/kodi-pvr-pctv.hash b/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
-index 2d9f739ad9..e66af0cccb 100644
---- a/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
-+++ b/package/kodi-pvr-pctv/kodi-pvr-pctv.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  d3527b88d3956fecf8dda40928bc01bd340a22c25a6c38f758af8d6d85153354  kodi-pvr-pctv-21.0.2-Omega.tar.gz
-+sha256  4f13cdb0092f3e1b979058d6a5594ef14138c906a539881f025242165c54e601  kodi-pvr-pctv-22.2.5-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-pctv/kodi-pvr-pctv.mk b/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
-index 52465471a4..232cbb56c6 100644
---- a/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
-+++ b/package/kodi-pvr-pctv/kodi-pvr-pctv.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_PCTV_VERSION = 21.0.2-Omega
-+KODI_PVR_PCTV_VERSION = 22.2.5-Piers
- KODI_PVR_PCTV_SITE = $(call github,kodi-pvr,pvr.pctv,$(KODI_PVR_PCTV_VERSION))
- KODI_PVR_PCTV_LICENSE = GPL-2.0+
- KODI_PVR_PCTV_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.hash b/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
-index 0cf4b7d9b1..63b4da5140 100644
---- a/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
-+++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  567b0d8bc7d79a166a65e3c47ecb3f73e3aa57db840465ea2e6c70c74421c162  kodi-pvr-stalker-21.1.3-Omega.tar.gz
-+sha256  98f5151e4b29c99b6723061bb7cc5514c6307853d8d050c784a5ce93d51142e9  kodi-pvr-stalker-22.2.7-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
-index cd910857a8..3fdb9dd1ed 100644
---- a/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
-+++ b/package/kodi-pvr-stalker/kodi-pvr-stalker.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_STALKER_VERSION = 21.1.3-Omega
-+KODI_PVR_STALKER_VERSION = 22.2.7-Piers
- KODI_PVR_STALKER_SITE = $(call github,kodi-pvr,pvr.stalker,$(KODI_PVR_STALKER_VERSION))
- KODI_PVR_STALKER_LICENSE = GPL-2.0+
- KODI_PVR_STALKER_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-pvr-vbox/kodi-pvr-vbox.hash b/package/kodi-pvr-vbox/kodi-pvr-vbox.hash
-index fb7ba291fd..d4bbc7002e 100644
---- a/package/kodi-pvr-vbox/kodi-pvr-vbox.hash
-+++ b/package/kodi-pvr-vbox/kodi-pvr-vbox.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  6550fa41f1d7312619dd9f4620a4b5b6c47240d71273df34a4300e580f617635  kodi-pvr-vbox-21.1.5-Omega.tar.gz
-+sha256  ee82a2dd9e01b91c0c095555aa0e257fc2754349060250d636715452b7ca9e4a  kodi-pvr-vbox-22.2.5-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-vbox/kodi-pvr-vbox.mk b/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
-index f4e069933f..db0b1016e9 100644
---- a/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
-+++ b/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_VBOX_VERSION = 21.1.5-Omega
-+KODI_PVR_VBOX_VERSION = 22.2.5-Piers
- KODI_PVR_VBOX_SITE = $(call github,kodi-pvr,pvr.vbox,$(KODI_PVR_VBOX_VERSION))
- KODI_PVR_VBOX_LICENSE = GPL-2.0+
- KODI_PVR_VBOX_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
-index 5b139bedb2..c187dd3e6f 100644
---- a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
-+++ b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  4608cfd2339cfc52470575f7caf153a97502cb360b44fcef2921c0623a931ef8  kodi-pvr-vdr-vnsi-21.1.3-Omega.tar.gz
-+sha256  7eda51eba53402e44f1702d6dc13c29ab41ccaefe8ab3e7d6cfec5ab58849bb1  kodi-pvr-vdr-vnsi-22.3.3-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
-index 9ab5c9de03..f1c815ef83 100644
---- a/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
-+++ b/package/kodi-pvr-vdr-vnsi/kodi-pvr-vdr-vnsi.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_VDR_VNSI_VERSION = 21.1.3-Omega
-+KODI_PVR_VDR_VNSI_VERSION = 22.3.3-Piers
- KODI_PVR_VDR_VNSI_SITE = $(call github,kodi-pvr,pvr.vdr.vnsi,$(KODI_PVR_VDR_VNSI_VERSION))
- KODI_PVR_VDR_VNSI_LICENSE = GPL-2.0+
- KODI_PVR_VDR_VNSI_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
-index abbffd0f17..6cd687574d 100644
---- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
-+++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  5d83bb04fdf6f41f3ebb63df19d9f5e21631de4726475df731fc665af789072c  kodi-pvr-vuplus-21.3.2-Omega.tar.gz
-+sha256  2c677b914be2262fe3114a01066efabb3d3450d4bbc76eeaf942b77f31cdc3c7  kodi-pvr-vuplus-22.3.7-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-index 57798af420..32e74a4f0e 100644
---- a/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-+++ b/package/kodi-pvr-vuplus/kodi-pvr-vuplus.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_VUPLUS_VERSION = 21.3.2-Omega
-+KODI_PVR_VUPLUS_VERSION = 22.3.7-Piers
- KODI_PVR_VUPLUS_SITE = $(call github,kodi-pvr,pvr.vuplus,$(KODI_PVR_VUPLUS_VERSION))
- KODI_PVR_VUPLUS_LICENSE = GPL-2.0+
- KODI_PVR_VUPLUS_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-pvr-wmc/kodi-pvr-wmc.hash b/package/kodi-pvr-wmc/kodi-pvr-wmc.hash
-index ae4de33649..50ceaec5af 100644
---- a/package/kodi-pvr-wmc/kodi-pvr-wmc.hash
-+++ b/package/kodi-pvr-wmc/kodi-pvr-wmc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  bee42bd2a55d00ab589db9ebcddfa75d9211571fda63d641ba484f5582934364  kodi-pvr-wmc-21.0.3-Omega.tar.gz
-+sha256  f5905bee24f0ed43aa18c4a9b20a88af6dcf352d95fc3ee80371c5b8ffa6f911  kodi-pvr-wmc-22.2.5-Piers.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-wmc/kodi-pvr-wmc.mk b/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
-index f0284ab8a5..45404286b1 100644
---- a/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
-+++ b/package/kodi-pvr-wmc/kodi-pvr-wmc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_PVR_WMC_VERSION = 21.0.3-Omega
-+KODI_PVR_WMC_VERSION = 22.2.5-Piers
- KODI_PVR_WMC_SITE = $(call github,kodi-pvr,pvr.wmc,$(KODI_PVR_WMC_VERSION))
- KODI_PVR_WMC_LICENSE = GPL-2.0+
- KODI_PVR_WMC_LICENSE_FILES = LICENSE.md
+-KODI_SCREENSAVER_RSXS_VERSION = 21.1.2-Omega
++KODI_SCREENSAVER_RSXS_VERSION = 22.0.7-Piers
+ KODI_SCREENSAVER_RSXS_SITE = $(call github,xbmc,screensavers.rsxs,$(KODI_SCREENSAVER_RSXS_VERSION))
+ KODI_SCREENSAVER_RSXS_LICENSE = GPL-2.0+
+ KODI_SCREENSAVER_RSXS_LICENSE_FILES = LICENSE.md
 -- 
 2.47.3
 
