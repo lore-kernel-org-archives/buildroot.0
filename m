@@ -1,95 +1,95 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E24C6606A31C
-	for <buildroot@archiver.kernel.org>; Wed, 28 Oct 2026 22:36:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E51606A31A
+	for <buildroot@archiver.kernel.org>; Wed, 28 Oct 2026 22:50:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=BbtLj2SE;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=jknNdo9V
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=AtbX49mu;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=RhH1dlb8
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B7E364087C;
-	Wed, 28 Oct 2026 22:36:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9EFB760710;
+	Wed, 28 Oct 2026 22:50:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D7kTgDBfMi1F; Wed, 28 Oct 2026 22:36:03 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org BCF8340856
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793226962;
-	b=nTpFvdjrE0SwOAbujbElt7Q5io2MhINbSqkGM7pyRRCMRaEkZ/JuqhgK3DVAu8doBJYN
-	 WFG7xWNgLBvxGES9JZg7sGYhhKt6uP9X8eoO+4Sayix9TjXx8UWwmQ39VGmksQLiW+tDg
-	 sG+gOdXCQWRQsDNki092ZozRPrKdItLJTvpgcdcLIb43Ts85Bip/4rhMW4KNubEKk3XaK
-	 YNsyMnxbLxUU4mLqF5xe/fFCnhimd+Pf39R77AbIsLZ7pGaMJx50JXr+ptBQfLzhU7cbB
-	 by/aHXgZADz44Fh/PYYNcH4WqWikK+9r7IHCJSS/b/SRbBWiRo/RDACCaZwdwINyOeg==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mwQkhdHKSxk1; Wed, 28 Oct 2026 22:50:53 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 4FC7960716
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793227853;
+	b=cHlUycKHVoAAQLbUozxGYbsTTUrTV6/aGmu3+OJyypsrZ5RlgfxPdFhVb0vMuenjPtIj
+	 DAHp8t+hoDqSDxjiMtBD76hdB6aFijBoSWHpQj+utDvc6vAR/FntqPOerCPKZP2hqqK2R
+	 L8SGdox1UGwgr2N3FwPgWu1uYtmYiUG+Kfmsv/JORcD6A/U10YkoLYOqgOo9SCFgy0wbu
+	 n+I3UkpvMq8yk/52PAWyuL4cysS6uFwBnQuuiGS4zXml7aG1QkvhFvD2tCkVp6TLnpszi
+	 NkIxf9aAorIycVf3jJfdS75BOPHaLk20XlUzt1WW4oYaCzk+YedE7ZCMEwFjTXKP+9g==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793226962;
+	c=relaxed/relaxed; t=1793227853;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
 	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Date:Message-ID:
-	 X-Mailer:In-Reply-To:References:MIME-Version:X-Spamd-Bar:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=ePAx+Hv44AwhQEzxm0NKu/LQHoZBBpGt5XYFbcFVQxo=;
-	b=Awq/G2ULYDDZLsAltLin2uy3Df9W47G+PCrQXlXnD1PlcxpFUoXcuwqnLoYTuqaE6lbM
-	 j7diZxR9QQ6cOXtQ7LGEgvEMqpqbopxe29QOjh9ZIAOyToJaI2mtRIXpBdml7mGLe4jTo
-	 yseeDdZkN6S+9cNaeVs196jivIbHZWotqNfjiLJhyuLZ6ZSWlE5rOoaMj0IFkDWbRAhvy
-	 SKrJw0/NEKsSlvjc0oYjb2cnyiMgtk2dBZLjIEUjSAlT+441b8gTqVTd/u6mejP44Kcm2
-	 YBI9tKExrGAsXOdvnybDNGHVFzPg+92j5vzx8buUHCROHxPw2qWF67LZdpakTQbkOFg==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	 X-Mailer:In-Reply-To:References:MIME-Version:X-Kas-Delay:X-Spamd-Bar:
+	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=+d6Dm8aKLGLy73tkNK1TcqqMU4dfYOVo+0lM9zA1foA=;
+	b=ahJs6rO3Ha3P7XqOVW92NhCf0M21ABmn4zzsHtWZVODsRoQnLtmWpptcCKC0GFgfi2zW
+	 IdVVzIFlLchtUefvHR5znGxE6/Ylhkn+FhZaGeiPeEArTp/NPAoqbKL7Q13ihzCz4v4Fb
+	 bYc6iyfrc7lTssIhzfV3iVh0qFj7HZWPSTltUSWplc2fG3i1QnGcxSA+5PIutnSPVydsC
+	 qF8g2ZdL2vXpUKoLj9MFFWYQNc1v0Z6aYLRg17jTexduQFeCYGmQr1R2VuWA+8NZcDSUX
+	 +ILIuc5rkJfZtuC22Cud9yuUPuKTnzNjeWigc2cE0Zu3qJwotYGvWJzqP5gQTLWGtmA==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793226962;
-	bh=ePAx+Hv44AwhQEzxm0NKu/LQHoZBBpGt5XYFbcFVQxo=;
+	s=default; t=1793227853;
+	bh=+d6Dm8aKLGLy73tkNK1TcqqMU4dfYOVo+0lM9zA1foA=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=BbtLj2SEfN6fTNSgehO5sDf8hUluL+bU7KoX5+VrEJNgNMyOmdip2+fCdxlWCMYIA
-	 aVIIVKSe9lwtfGEN0nHfyizeJGaVuGOJXM2gFnPnfLQ+p11GHldQq4fBGJUvGwAVZv
-	 SqXObCo3rPpgUjSE+/+eVRONOvq9OUMTqNX2qnmohF4mLTUzVgKIbtod6NhKbdAP8o
-	 UqQkUSDen84klMfmxdAA338jibdnpLTTMmZIGI2e86syP7cwykCPqL7IU6lbKULk48
-	 W9YqFrh2cW/HzEHrnTfNj3KOYluJef2pNXiQgWGzX6Zykn8QRTqmCPX0yTl8yk0qP4
-	 RxJJBb24zSlAw==
+	b=AtbX49muBbirgbCqxlX2KJxRfOkuIH3luFv2Z75KaYKSh6+CFNqufY424nkVsf9Xm
+	 nHaGUiDEZuWK4Xz647SMbRAEamors5ezGsRfLTa67y9ESM3f77yO7VZzMiJIO4vGSV
+	 iwi7VhNRBpC+x/Ile/NSP+LHH/BgbkhdIF1gc0kvR/AHGyObqGExw4HkFetpxFsAEa
+	 gCViRRhxS9yKzs1SVpW/oQ1VWlk7B9Hj6UIw6nC2pylbKKpfjKjZ0DlXaqfOPHKMmV
+	 c/hZCKrAQBBlVvmybqppyvxROs8b1XVNf+5gFzlQeZLi9VW1byR5JAho+sz/7UV2Np
+	 1yWRWUHF/B22A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BCF8340856;
-	Wed, 28 Oct 2026 22:36:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4FC7960716;
+	Wed, 28 Oct 2026 22:50:53 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id D34562A8
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 22:36:01 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 429DD2A8
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 22:50:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B9CBD400B5
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 22:36:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 28E56400B5
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 22:50:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pIu0XNVg6Qtk for <buildroot@buildroot.org>;
- Wed, 28 Oct 2026 22:36:01 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org E558D4004A
+ id 8qAkbW4vOnfT for <buildroot@buildroot.org>;
+ Wed, 28 Oct 2026 22:50:51 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 1E9F54004A
 Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793226961;
- b=Sca9SDxYvuJYujlQF4lez2/SKKlcOfj6XPCyyNX+Tipd7vx2kb48/8LlpHI1chaMnTeL
- SUcbSflTLl1q6bzxMxF4nxzNyn7qSlHWinSygqOwNSY3N5D9vraQx7bmqSchANf+LuHlw
- Cxt8FIBehmqTVbR2Vp6yR8PFhmU+HJzspKM+QYK0NO4E+Trm1G+bjpc2cXzhQ/ynP5VLW
- 5AlfRRPASn8TiYovVKG0DyAEgm63E+C1tc0aXAr1ivrt3RNKkgBGmIqP8wathVWiIc2Qy
- OaYHL8EC8L2JQveXzgQpZ2dt+8TI7AsazDd7TJDXNWMK+PQgtnpR4l2cpwutndM8HYA==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793227851;
+ b=YIRb2SjGpkiVzKRvwPdatFroRVrKpdmONywuIFUGiNKrps97OOhmLC3gJEgxeD4aNjaR
+ 1Cmy3M/aQ2ZEELP/vJ7df/ifIvQTuHf3KgiRTwbKU2CYeKxtImgOIN2dkFZnGfjtCbpHw
+ WI0rvTtkCP06ms0zaNXGLnnwZJUdn9EGBuStp2TBjLMvKMyI42V7ZRDIT281jplu+Fkn7
+ k4y3+qbeu+zqHafa33y/BpQDFnCjRw2UICbh5TNEkDA3HjRcXmIwcV31whNb/UCbJk+tG
+ aJF9NAXBl7zha9SFOdVMpOvGjJsZuCsRpk+ciLAl27rQbOAKaUVryQbt8ZshEdJTPaw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793226961;
+ c=relaxed/relaxed; t=1793227851;
  h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
- Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=GFB/BgmhdjHVjEKxDpqktrv8nPA4UyF2upJMJWXHAYU=;
- b=R8T8SXL1QmMQkKnXzsyPWR7t7iMfhn2tLIHwXqc7RyIkJxSGgs2WdPPwbd+B6Oo33TCh
- ymNonhLxnMQzHiCNXzmdXPiVwoVxm7b/es6YPpixUTYqbE0cgyTTob9pTotqfTHc8tsE2
- QzuJC7YtqH7ZsyeFT83hilWE2lUfmAcmp11hwcvJkBIefBMjtBQ4lIS3JmyPZbBzuj6+L
- 1xYF12eNfajWfTJmtDdZra2Np7rKTrMsRIGzkA9IA4abbpj8Mboja8giyASzeA8WJ7enl
- ZIT8AV0j0UzQhnD/Xqzbfs7RQxeOJvwt2HtASzodbwflJAPI8EkbadgdnBSm9ivvocA==
+ Content-Transfer-Encoding:X-Spam-Score:X-Kas-Delay:X-Spamd-Bar;
+ bh=lqxQ1isYPHla7/ze6dNNsQ03dGsGHoVK2Q1mf0V6kxQ=;
+ b=ECaIpe1WdHDRJ2wMHYbjPR7aJkr3yxWl8RlkkpotgwaDPtiyg83uM+EhBiGurdE7FFVU
+ UUQkC46VGrNTz7I3KQDJejH9O7go8xs9LxAc8WdtreqiZEJKVWj5JR755c4DGhX5i4b89
+ B9mAMalQdLxVpBbL1Iv1MdgH5nFsO1e4NSVe1Sytkqgc6d9Lj2E5UXqtDuFZJ6v+Dthn/
+ mFmwioYTngloG9MtKGUZxp8eHu46I639UDuCwQweDfFov5FRN1ERQatFkago+vtfeb7Ve
+ H3nuy1/nUxeDPId1XICTW92IudWAUUsKNtR1IHQqMwv28Ch6OOQ3b2l5TsVC0hzJNaw==
 ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  dmarc=pass header.from=kuhls.net;
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=jknNdo9V; 
+ header.s=kas202605290044 header.b=RhH1dlb8; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
@@ -97,53 +97,54 @@ Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
 Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=jknNdo9V
+ header.a=rsa-sha256 header.s=kas202605290044 header.b=RhH1dlb8
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E558D4004A
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 22:36:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1E9F54004A
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 22:50:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1793226602;
- bh=GFB/BgmhdjHVjEKxDpqktrv8nPA4UyF2upJMJWXHAYU=;
+ s=kas202605290044; t=1793226603;
+ bh=lqxQ1isYPHla7/ze6dNNsQ03dGsGHoVK2Q1mf0V6kxQ=;
  h=From:To:Subject:Date:In-Reply-To:From;
- b=jknNdo9VEgMXngi6shzKbB7Gs5Flq8nY/eZZ8DWSxceGX6iKE64N01AuahOcLEqpm
- vZGSsrsATUVcdnBsf2pHNSISO1j0Pd/YVPVHXRR8wmdhMC3UxUrBoGElLzBc3t5k87
- A5w2i1AH90RpbbiudC5XBGdddf1Cc5CG3ZPbVbrDDEfFTx3Gqx1pMsclXMzI4yocA4
- zsGE3DUzH/O93mKoXKZCy4XY1Q5PTT/Zqo4mF282yJdRN7xUUDc8fjcv+NdsJha5Bi
- G4XfI4iPZCIAaL3rH5D95YRE2riSDbWsmRUY9MzX+6RgmK0mvrlUn44azhYYa2CKbg
- YCUWx9FGOeikQ==
+ b=RhH1dlb8ar6v+tCmppO9CrjTrLVXPQgxqa4K+92l3/BEjNV1SR4xLfUGp4WTc/1T+
+ DjGTPoZRdDi2d6mMqvS6q7LaAywzyRfyO9RRhvJZ4rsU009H/s43QQLq0d5t7WcqbY
+ Yiin9LbRzp4gcH1kGE3qz8kgMjhBh0cxprCd3mRp84OXrcqOjux3tr8Ugic55YmSyk
+ cxCYcVLKpC78nTRT7Pl7MSUR/l8xOIDYJllRdfyEPZr0WbBoKFiJyeWKF8bdk1fz23
+ ECw64VdaX3dAj0ds8/Mqiseom7H467YNlTdL26z0a7yDgB1R6noQovfXMAD3b0AnaC
+ f7syjyN1WPi9Q==
 X-KAS-Sym: v3:f51bdf72230551df:cTk2JoECzpqnGl/pf59mWisqZvMBXDYOA9XGs/chIxhpk
  tWelRTKRF/MM6j9c4LMiUUsl/7xnaot9wRDU7JV+E5sPbFnIbsth4GYwBy7SrVgIsDvKE6NeUR+
  ReiZDpU6m3mZXStAFKEkbGIqcXld4qyCPlISONxA0p1D1as1hnCqo5M4qV8BIt74q0d1pg+NXGo
  CwGP+VWPAHVhjYBPw8iTxRbcTiq8shEZiNVUGw3kIcW1sXWD66Pvc+KeoOHSLByVq85hA4A2C5a
  FlDr856MT8HS5m6OicpSpgJslOHnDDlK2Gcbl3hwTV3RSbZZMhMk/o6OaxvGf+5L7aVdVFXQ==:
- SpNzN6MpNm4IuDe96Mv3WwWfhzeCO8Es11y6L9mGbFrHswrNJ+YKF8bTzwHp9KRqwfBFgjC7FAy
- azRn3bK1Cr6LIcAO75tNhecCVIPPcTomzq+qAxNKIIdD3zixKfLvDGn1FBrxQbhG7osSLm/eyow
- jY7oDneFF4KMjl4OgIN3Ep6gEB7BGxZSpynBRGIuYJFLcbsAY3Sc6YbnMB41TI3pS8sSw8n4Jv5
- J0DnnisHiewLdwiNeS4x5wnPh13ameaWjUWrVdFiQyydOL6tYkI7K9p9n6NBQIuko07RpsuqkGS
- JjCfKCimotCn/NBMSTm3bojv+i0JOIMfNhdrYfEed0XKTemsQbyCccUi/g0fACyD3kbFo149pDE
- 4lu2k4uyJFB4IhprBhZuWih0pnWBR7LBxYjzhUkKHvctGiXb3oDB2QatxNT8BLfcdzJzO7AW1pB
- FY8I3w7rxNwCUBI5adBKus6KgxGI7icbf/ku0w+JYLveXWnTRuhhciBKOQVsrfOYOUfEFW6TCC2
- tXChmvbSpar/Yj/4wx1O9BwcR6r8DEMs0hX+X8gLBRDI4Mrtb+4jSjcwoPKoLBfHb7OeeRq3Z13
- jTp7uw==
+ vlHWNcgrfBJY4fgjoxT3gH/PyZBzWONOfBqqHNruk+9e6sZyirzZllwI42AUbzznfjomaz4cbRx
+ 0mo5yR796Y6M/XivV1o6gEhPths/W4aFUFyPx/7WDeKP7f0ITp5k7hZYA5ZoJnkefA7CxrVltKz
+ VN/FRQFEdJA7q3B3OSoW9Z99dPeo3SYssS88NWneghIzw3gj/NPzz6OhtDui4PkLZgFJ5+StEzR
+ 7mkggmsfhR4cJIh4TB029spjherN0shc9kPzsbft19cHAABfyhteidDZLjrfrA6AoyKeR3QeANX
+ 1s607Ac9M0XG/yuFN0eYGaKDzMLlYeB9bhabQRUvhOwxqBYXKGGugnVJ3BcYdcm403X+GZT16CL
+ R/5U2Xx9a0SjqDYXSgQdUgjX8STaYd4an87SUHl4x810i/ls0JtlAxzqzQWvW39wlZQ3sSOwzE2
+ lzppSH2FfvW1plaLzaURICY9t9QGbByDkPOSJlWeRWEnc43ILMQu7BFTkXqJrHV9LEO+ZPY4a22
+ X/njjOtwKO3qapLibj4tZy+8H6MdOSeoOAUVWXHT0pFBTtNkcJMpuUZuYl3GVJcLKf3IFp2th9W
+ wkoKcA==
 Received: from fli4l.lan.fli4l (p54a1ba05.dip0.t-ipconnect.de [84.161.186.5])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id CBBA0A4C6FED
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id E8E93A4C6FEE
  for <buildroot@buildroot.org>; Wed, 28 Oct 2026 23:30:02 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:42186)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xMC9L-000000001i7-14CK
+ (envelope-from <bernd@kuhls.net>) id 1xMC9L-000000001i7-1Tdd
  for buildroot@buildroot.org; Wed, 28 Oct 2026 22:29:39 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Wed, 28 Oct 2026 23:29:34 +0100
-Message-ID: <20261028222936.514451-18-bernd@kuhls.net>
+Date: Wed, 28 Oct 2026 23:29:35 +0100
+Message-ID: <20261028222936.514451-19-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261028222936.514451-1-bernd@kuhls.net>
 References: <20261028222936.514451-1-bernd@kuhls.net>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-X-Spamd-Bar: --
-Subject: [Buildroot] [PATCH 17/18] package/kodi-vfs-*: mass version bump to
- Piers
+X-Kas-Delay: 1793227803
+X-Spamd-Bar: +++++++
+Subject: [Buildroot] [PATCH 18/18] package/kodi-visualisation-*: mass
+ version bump to Piers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -165,82 +166,176 @@ X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash | 2 +-
- package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk   | 2 +-
- package/kodi-vfs-rar/kodi-vfs-rar.hash               | 2 +-
- package/kodi-vfs-rar/kodi-vfs-rar.mk                 | 2 +-
- package/kodi-vfs-sftp/kodi-vfs-sftp.hash             | 2 +-
- package/kodi-vfs-sftp/kodi-vfs-sftp.mk               | 2 +-
- 6 files changed, 6 insertions(+), 6 deletions(-)
+ .../kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash  | 2 +-
+ .../kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk    | 2 +-
+ package/kodi-visualisation-goom/kodi-visualisation-goom.hash    | 2 +-
+ package/kodi-visualisation-goom/kodi-visualisation-goom.mk      | 2 +-
+ .../kodi-visualisation-matrix/kodi-visualisation-matrix.hash    | 2 +-
+ package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk  | 2 +-
+ .../kodi-visualisation-shadertoy.hash                           | 2 +-
+ .../kodi-visualisation-shadertoy.mk                             | 2 +-
+ .../kodi-visualisation-spectrum.hash                            | 2 +-
+ .../kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk  | 2 +-
+ .../kodi-visualisation-starburst.hash                           | 2 +-
+ .../kodi-visualisation-starburst.mk                             | 2 +-
+ .../kodi-visualisation-waveform.hash                            | 2 +-
+ .../kodi-visualisation-waveform/kodi-visualisation-waveform.mk  | 2 +-
+ 14 files changed, 14 insertions(+), 14 deletions(-)
 
-diff --git a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
-index e65ba18fa5..79e861b1aa 100644
---- a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
-+++ b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.hash
+diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
+index 3f5f761968..7224b062aa 100644
+--- a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
++++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  aab35cb6b03191609a7e97df02f2f102659c12e414f7b95595f9bb2047554daf  kodi-vfs-libarchive-21.0.2-Omega.tar.gz
-+sha256  378ac05a967e80dc02d36ddcaaff97dd8324ebd58c3ca7cc82b943037dec14a4  kodi-vfs-libarchive-22.0.3-Piers.tar.gz
+-sha256  d7433e4e88e29f1dd3524d2d0b660ce529852561f14f479f4b83a9c5ac436ffc  kodi-visualisation-fishbmc-21.0.2-Omega.tar.gz
++sha256  e0ec1dd6832cd916a0ec8a2baa8be55c65670bb618c9be8747c7cadaf22c1535  kodi-visualisation-fishbmc-22.1.2-Piers.tar.gz
  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
-index ee1ca59b52..7ee7547f2b 100644
---- a/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
-+++ b/package/kodi-vfs-libarchive/kodi-vfs-libarchive.mk
+diff --git a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
+index b1eb305620..393cf19700 100644
+--- a/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
++++ b/package/kodi-visualisation-fishbmc/kodi-visualisation-fishbmc.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_VFS_LIBARCHIVE_VERSION = 21.0.2-Omega
-+KODI_VFS_LIBARCHIVE_VERSION = 22.0.3-Piers
- KODI_VFS_LIBARCHIVE_SITE = $(call github,xbmc,vfs.libarchive,$(KODI_VFS_LIBARCHIVE_VERSION))
- KODI_VFS_LIBARCHIVE_LICENSE = GPL-2.0+
- KODI_VFS_LIBARCHIVE_LICENSE_FILES = LICENSE.md
-diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.hash b/package/kodi-vfs-rar/kodi-vfs-rar.hash
-index c69e57758f..eded39b35a 100644
---- a/package/kodi-vfs-rar/kodi-vfs-rar.hash
-+++ b/package/kodi-vfs-rar/kodi-vfs-rar.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  7492cf73d52299218acc982c4b35b020ea801d36d47e40460341f4dde712de50  kodi-vfs-rar-21.0.2-Omega.tar.gz
-+sha256  b640feaa5579afbf1ae911eeb47abed78501d2bc2bb177ecc06022da04707181  kodi-vfs-rar-22.0.5-Piers.tar.gz
- # License files
- sha256  6ecc1687808b7d66b24f874755abfed7464d9751ed0001cd4e8e5d9bf397ff8a  lib/UnrarXLib/license.txt
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-vfs-rar/kodi-vfs-rar.mk b/package/kodi-vfs-rar/kodi-vfs-rar.mk
-index 7cffe1274a..cc96dab863 100644
---- a/package/kodi-vfs-rar/kodi-vfs-rar.mk
-+++ b/package/kodi-vfs-rar/kodi-vfs-rar.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_VFS_RAR_VERSION = 21.0.2-Omega
-+KODI_VFS_RAR_VERSION = 22.0.5-Piers
- KODI_VFS_RAR_SITE = $(call github,xbmc,vfs.rar,$(KODI_VFS_RAR_VERSION))
- KODI_VFS_RAR_LICENSE = unrar, GPL-2.0+
- KODI_VFS_RAR_LICENSE_FILES = lib/UnrarXLib/license.txt LICENSE.md
-diff --git a/package/kodi-vfs-sftp/kodi-vfs-sftp.hash b/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
-index 3a59241d7b..be2471c77b 100644
---- a/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
-+++ b/package/kodi-vfs-sftp/kodi-vfs-sftp.hash
+-KODI_VISUALISATION_FISHBMC_VERSION = 21.0.2-Omega
++KODI_VISUALISATION_FISHBMC_VERSION = 22.1.2-Piers
+ KODI_VISUALISATION_FISHBMC_SITE = $(call github,xbmc,visualization.fishbmc,$(KODI_VISUALISATION_FISHBMC_VERSION))
+ KODI_VISUALISATION_FISHBMC_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_FISHBMC_LICENSE_FILES = LICENSE.md
+diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
+index 71ce1c657e..72fd7ed709 100644
+--- a/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
++++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  01a23958331cb0cd78fd2e9367d1269d4319c20b84db5b132632f9c1acd5f3c5  kodi-vfs-sftp-21.0.2-Omega.tar.gz
-+sha256  e0d54427f74874da2352afdea0288864dbaf8dc38ecc5bbc0b1711a129233e0c  kodi-vfs-sftp-22.0.6-Piers.tar.gz
+-sha256  f87356122f91ea40d096d559d1180571e701e39867448768d14d6c2ba3b2e264  kodi-visualisation-goom-21.0.2-Omega.tar.gz
++sha256  3bb77b47d26aaf1e6cca451bbb9c22f162101f3a43b014a1bfa3583329e08f44  kodi-visualisation-goom-22.1.2-Piers.tar.gz
  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-vfs-sftp/kodi-vfs-sftp.mk b/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
-index 18ea2bc099..c6eb220d18 100644
---- a/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
-+++ b/package/kodi-vfs-sftp/kodi-vfs-sftp.mk
+diff --git a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
+index 6b35c64a87..a4b7285589 100644
+--- a/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
++++ b/package/kodi-visualisation-goom/kodi-visualisation-goom.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_VFS_SFTP_VERSION = 21.0.2-Omega
-+KODI_VFS_SFTP_VERSION = 22.0.6-Piers
- KODI_VFS_SFTP_SITE = $(call github,xbmc,vfs.sftp,$(KODI_VFS_SFTP_VERSION))
- KODI_VFS_SFTP_LICENSE = GPL-2.0+
- KODI_VFS_SFTP_LICENSE_FILES = LICENSE.md
+-KODI_VISUALISATION_GOOM_VERSION = 21.0.2-Omega
++KODI_VISUALISATION_GOOM_VERSION = 22.1.2-Piers
+ KODI_VISUALISATION_GOOM_SITE = $(call github,xbmc,visualization.goom,$(KODI_VISUALISATION_GOOM_VERSION))
+ KODI_VISUALISATION_GOOM_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_GOOM_LICENSE_FILES = LICENSE.md
+diff --git a/package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash
+index a924eaa6f8..aad763fadb 100644
+--- a/package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash
++++ b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  b1d1f3da5470d657e70c4b914a77445fe1d0a0ba35007fc402982a8b1b4cf9b0  kodi-visualisation-matrix-21.0.2-Omega.tar.gz
++sha256  a0060d82a8a9e9cdf2fb30451116271d5ab1dd9196c27cda1f6ae7eb1f787b02  kodi-visualisation-matrix-22.1.1-Piers.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk
+index fd885712ad..05e4889c84 100644
+--- a/package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk
++++ b/package/kodi-visualisation-matrix/kodi-visualisation-matrix.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_VISUALISATION_MATRIX_VERSION = 21.0.2-Omega
++KODI_VISUALISATION_MATRIX_VERSION = 22.1.1-Piers
+ KODI_VISUALISATION_MATRIX_SITE = $(call github,xbmc,visualization.matrix,$(KODI_VISUALISATION_MATRIX_VERSION))
+ KODI_VISUALISATION_MATRIX_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_MATRIX_LICENSE_FILES = LICENSE.md
+diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
+index 508820876d..6de80abd30 100644
+--- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
++++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  30a5081365cea1dbdf49ccbb059076d4c7abc28604a58749fcd0d025e2faa760  kodi-visualisation-shadertoy-21.0.2-Omega.tar.gz
++sha256  ec4881e0a71ef4a01ff33a0704bb0e53acb573d49cdeb5bd67a4948b85659e1a  kodi-visualisation-shadertoy-22.1.1-Piers.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
+index 32d6d6f056..d095247c2a 100644
+--- a/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
++++ b/package/kodi-visualisation-shadertoy/kodi-visualisation-shadertoy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_VISUALISATION_SHADERTOY_VERSION = 21.0.2-Omega
++KODI_VISUALISATION_SHADERTOY_VERSION = 22.1.1-Piers
+ KODI_VISUALISATION_SHADERTOY_SITE = $(call github,xbmc,visualization.shadertoy,$(KODI_VISUALISATION_SHADERTOY_VERSION))
+ KODI_VISUALISATION_SHADERTOY_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_SHADERTOY_LICENSE_FILES = LICENSE.md
+diff --git a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
+index 6bbd7b8c9a..244d7f9881 100644
+--- a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
++++ b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  7b6635789d226ee4cd4e17d54d57e880731d0762835802835d0d5ac4f0084b99  kodi-visualisation-spectrum-21.0.2-Omega.tar.gz
++sha256  dac63ce17984d48c8e20be136a840d2543cda184d12cf31c7839c8e810bcc537  kodi-visualisation-spectrum-22.1.1-Piers.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
+index 1946cf598a..646917697a 100644
+--- a/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
++++ b/package/kodi-visualisation-spectrum/kodi-visualisation-spectrum.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_VISUALISATION_SPECTRUM_VERSION = 21.0.2-Omega
++KODI_VISUALISATION_SPECTRUM_VERSION = 22.1.1-Piers
+ KODI_VISUALISATION_SPECTRUM_SITE = $(call github,xbmc,visualization.spectrum,$(KODI_VISUALISATION_SPECTRUM_VERSION))
+ KODI_VISUALISATION_SPECTRUM_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_SPECTRUM_LICENSE_FILES = LICENSE.md
+diff --git a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
+index a362fbd23d..591c3883b5 100644
+--- a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
++++ b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  a3f70985fee6b1014e7e7599431e646f36bd3870ead78bbc8936151b805e4241  kodi-visualisation-starburst-21.0.2-Omega.tar.gz
++sha256  35456e13ab3d82177dde6568b0ab6c09dd09a31acf851f4e141ab4062d787e94  kodi-visualisation-starburst-22.1.1-Piers.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
+index 6adb21687e..ec922016f0 100644
+--- a/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
++++ b/package/kodi-visualisation-starburst/kodi-visualisation-starburst.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_VISUALISATION_STARBURST_VERSION = 21.0.2-Omega
++KODI_VISUALISATION_STARBURST_VERSION = 22.1.1-Piers
+ KODI_VISUALISATION_STARBURST_SITE = $(call github,xbmc,visualization.starburst,$(KODI_VISUALISATION_STARBURST_VERSION))
+ KODI_VISUALISATION_STARBURST_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_STARBURST_LICENSE_FILES = LICENSE.md
+diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
+index 1041fd5287..683f468cc3 100644
+--- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
++++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  fe6d2f3990ea5f2ea2d4a0a905f451b1c2c7f1300529d8957b5d93a97421f415  kodi-visualisation-waveform-21.0.2-Omega.tar.gz
++sha256  050a184a37c1cef8f87fcf05d5dd90c6d11f33008164bc5a86e370aac1d866fb  kodi-visualisation-waveform-22.1.1-Piers.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
+index 819b064789..9a61a4d159 100644
+--- a/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
++++ b/package/kodi-visualisation-waveform/kodi-visualisation-waveform.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_VISUALISATION_WAVEFORM_VERSION = 21.0.2-Omega
++KODI_VISUALISATION_WAVEFORM_VERSION = 22.1.1-Piers
+ KODI_VISUALISATION_WAVEFORM_SITE = $(call github,xbmc,visualization.waveform,$(KODI_VISUALISATION_WAVEFORM_VERSION))
+ KODI_VISUALISATION_WAVEFORM_LICENSE = GPL-2.0+
+ KODI_VISUALISATION_WAVEFORM_LICENSE_FILES = LICENSE.md
 -- 
 2.47.3
 
