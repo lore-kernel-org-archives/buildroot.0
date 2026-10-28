@@ -1,171 +1,165 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 189E5606A31E
-	for <buildroot@archiver.kernel.org>; Wed, 28 Oct 2026 11:33:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5595606A31D
+	for <buildroot@archiver.kernel.org>; Wed, 28 Oct 2026 11:34:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=InPfbo1n;
-	dkim=fail reason="signature verification failed" (1024-bit key, unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google header.b=PjFetXnb
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=orvLY/af;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256 header.s=20260707 header.b=EuWApKGI
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E2462405E6;
-	Wed, 28 Oct 2026 11:33:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8518D807BE;
+	Wed, 28 Oct 2026 11:34:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d30mUCKEQzgM; Wed, 28 Oct 2026 11:33:51 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 2473340402
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793187231;
-	b=QSQYI5YO0e+h7bQijSUB5ucLzg+tU4iUfsotTJhUA+Z30JuuY8ieMXfryX2rai8FNIEx
-	 eXzAgixNev5VrUUrdhwdT3J7R/qjYJtHTs6gigzeD1470sdvvMe0Lc1htQdwrClQmle0I
-	 rhmclWjzBnjfOsUpO76IRpL/ZVKiTwmgxVfHWqW1DcIfFXZ5IrARrXX14ARMYnndr1sih
-	 bDxcKMDCxDL2xmPP4+fBUDOwV7PsVNIyKji6myvydIT3ub4QgKFfkMcXVXwzyoBAnKcjp
-	 XHBA33jylxCdrE9G0zZqWJvKk6oD8x7AUmT4heZkGAbQAauIl3tU+f9Uq9Mf/rHmt7Q==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XiJNB7zfvOEe; Wed, 28 Oct 2026 11:34:31 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 86BB1807E1
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793187271;
+	b=ZBAol7Ar4a1mweSG4rjmnP3N7jfvzQ0cSCu8A8Sgi433p6CxN4KoRvuT9hHGuu6Wprre
+	 fb5VrlPHcA9qL5E4nD5cXd6LXiip81+sgDM6BOaVh1knj7AcPu+GGz9JJSgX4U8lRl4aE
+	 ixhk5hXJZHC+DUb68mkYMbz6MR4v3Zdu4tPWi1D9oO02E/d+dz7znptushcmNble2cBde
+	 1JJas+4fsif5fsSRYJnjpin90IA5K2WWH5NXDJxU6nhUTa/7eC1BlrHT1xJYldRbay4VK
+	 /cY6gnNs6N07cLt+xA1WiEkrjKQCU2wYWTHCAPAmJsEhKnu3Zy6OMk5dvMFLBoY6Etg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793187231;
+	c=relaxed/relaxed; t=1793187271;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
 	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:From:To:Date:Message-ID:X-Mailer:In-Reply-To:
-	 References:MIME-Version:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:Cc:Content-Type:Content-Transfer-Encoding:Errors-To:
-	 Sender;
-	bh=rMxWFscAbWgew/3snCo6CbWiPtAJHAS6iGxJXadCueY=;
-	b=WXz3R6g7uDyau5h6P88TlV1x9SnUzNA08akRkxJ7d/nN3DkBMwXKtPR6nsdvHJpvgqH2
-	 +Tr0y/OhEUd5Se835lIApGaRNwm0/laHVrsidrHHIDNkA5HiLqwwKeRD0+tmgtREZsxKQ
-	 IEMDDOQR6fsROWz8/pDr21AZ1ASw94PU0Q5GZE+/aBM5sCHp2P/p+ySSkZr9VuxBLpspg
-	 jXSIoPqOW0ZA3lwP5Qsx+UO1wvIYI7vd4EzPdrPT2mAqaV4yOuqGdGKCvIMFMgRKmEgLH
-	 UOoxS/BXmVILXBgGX3dy1NxEmCb+ubmvwPUJG/Cl2fko8BW0mW3yvUU7rTn9wzz1biQ==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	 X-Received:Received:From:To:Date:Message-Id:X-Mailer:MIME-Version:
+	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=8vnvKZh8DwLoZLAzQOnj7igarjW3exvS4ZYSK3uSK8A=;
+	b=px2lnOIEbBsdWHFMNPdXj5/B9uwo/jhLR24eFIBU/auzUveSewwQ4RyiPnuJ8ZVaFTLd
+	 zfKW9XdIr6JiBC07oRj9KLjgcH/Z2QEpnyQqgIz1fvWS5h0SWgq7eHGxG5Io2m4KeozB8
+	 nBvABk3KXrwBXItY4Qb5n/01uHE5N9lJTO+S2PlVcQmxQnic/PYGCAu8CwXJTzKEKPPsf
+	 qU+oARv3VDXrVPUiP1X7Up256BwYik9X2SZShbdS8ChQzdKWt5aC1mlpS0mhTL4+RD74/
+	 odtX9b9H8moyyN4pGqwycIad4mwUULtbvR0H4ZKZ/LsvS2lHSUu+u5tryk+RuXuXq4Q==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	dmarc=pass header.from=googlemail.com;
+	dkim=pass header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256 header.s=20260707 header.b=EuWApKGI;
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793187231;
-	bh=rMxWFscAbWgew/3snCo6CbWiPtAJHAS6iGxJXadCueY=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=InPfbo1ngBhK9Mzcx3YU9PmZOC1ScTcXX1gsfQDQ8pmbI32mxc+GZeg2hLIHTxqni
-	 +Q2Ppra+QjTWyH9qgPSH1krml3clfXma77i1+nKwqoOioHnzWWfifA9IcNt3UfGhxc
-	 AVNoP/YYBeE4bQW2+aQF8l63xF1OPw/l4e3uiNL2L7SeXFIg3FuiLidCsWMFPMP1/e
-	 kciSro7VJETUCw5x/NWWny0CBkG/Jjz5CTxEnvlPfFCo5kA4yRy6g/AYUSpUXnrwyH
-	 M4hYof1kFyRK2SaEzVBFGjsd3ZFCzoEabNP/NzqH9ETUiZHwFYKHqhUP2i3xdk5huF
-	 K2nBbdnjx/eJA==
+	s=default; t=1793187271;
+	bh=8vnvKZh8DwLoZLAzQOnj7igarjW3exvS4ZYSK3uSK8A=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=orvLY/afHlNxaiuBqzj48VuPY2mS58p8VziIRg0lpeliXfWJ/OLUxYH4nZJUdkarg
+	 0vEs8nibC7ASRo+9sGSjgvi/D/Yfz82Z8RSgdyp5DbDfWdUacnA/YDYuPTsF68VO8x
+	 DDm2gkxOIwaGBhDkrPlU/q3+DKDJWoqAT3dXa0opHtHcFWnMEqi2Mt539nsxQcbCyr
+	 AYvD2DD3LddJKkFS5iuGAxJWydaXPh14zD4oDcerc7eLiOx0iPRU/qlocbwrTcm/p2
+	 I5BAeQkcmDM079ofaSMbe6MPLcd3wbbD2oXIwccB/iWGTrO5iK5L5IMYlGjOM+hl5W
+	 LJZNWpU/pyU6A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2473340402;
-	Wed, 28 Oct 2026 11:33:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id BE517972
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 11:33:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 86BB1807E1;
+	Wed, 28 Oct 2026 11:34:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A0534529
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 11:34:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B075B40087
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 11:33:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 923C7807E1
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 11:34:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S5CmWiAj2jUV for <buildroot@buildroot.org>;
- Wed, 28 Oct 2026 11:33:40 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org EE787400D6
-Authentication-Results: smtp2.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::635"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793187220;
- b=E+PYhwSgCaoB27ZhO8BU5+k0z3IZvLOw2EkzmJKEeNg3pQMhqPDQM13V0GF5/fd3OqkA
- rzAAVxBjrA9zZPWEGkUt9chTZXUP/6G2kl4r2OzxkB+v4+Uzevx/iva25OSMpSiTzyAxz
- bhZHY2buJC5m2xS0+IZNKlDZqJYK1HdR7v+GXP7gaVFVKMM1aG9Ox1QiN+MhE/fG3QQ6y
- YwrI/K4/RWm1DlSPPxZ+sB6EkmQyBo5NCWVwtfXy1BJueOHT8LTXKcgcqLHyfXfxSucZ5
- BwVJRXGHGkSUGwkAKzkgI5D3tZW8i/bqM9nF7uP2A1d8W4iTdaBXvxphFokO1qGiV4Q==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EHGKFOlbUwjg for <buildroot@buildroot.org>;
+ Wed, 28 Oct 2026 11:34:28 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 5DD47806E8
+Authentication-Results: smtp1.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::631"
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793187268;
+ b=DIbBgbaKkULZC4JpGFijXlodq+xG++XuziDpeMhlSpst3p9YqbmHwOKDcmytj/hAnElL
+ 9i8J47PfgCc7RaR9NMs9L7RZXZOx5OCvcrxgl3uIY/zsM62loo+SBz/vjfKT/djepE7Ak
+ 5jjZId6Du3UzqosdupcQPqhB3PTAHomaq6koJFvBH1wQ/u8yV1yW+AcfC5F7g0IwWQY8f
+ uhT4J9oPPHWm4Y/5moVMlrCeVcXAGwuliANCHrU3I4K94SbCjwwhJEOjxpICet9KWJtof
+ nIIaiAInNT1MYBBjuFeSRzYqSElhE8kX2ltKdFSGMEmSmdYzPhO3iQaqZZtLtnbSrcw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793187220;
+ c=relaxed/relaxed; t=1793187268;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
- Content-Transfer-Encoding;
- bh=jroCrtxGeBp4lm5haLp6u//g8N3MCdOQEOLXxmIb7hk=;
- b=L7z/lCZ5tPYSwax+Giy+pa0EoIItdSwouGavjay9XfXhjZHeh23+fcjo0U2RUtkMoaz9
- ANjshL8Kw3OGe/QE/a+axDnQ69oU1kUWNHsmEygsqPbyermElKVMn0Wj4qbVNjEtMswaw
- R79f+t9r0DZHDGIFMxtaE0bfEcIX0MD7DH8mDeFpMigdPGn0d3+bi9CJviscWx2OWtVtQ
- FmFSn5S71FmtwDxfB1Z3ZiKqczAYwHTADEE2pTAqHxzvE98sw9A40Qd7Kini7emO35nhR
- 8CU7lN8ourmetk3GzfZOvgimZteKASJW3kL06hwuDjjMWFhHCAnCN4VqAxVSzbABGhQ==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
- dmarc=pass header.from=amarulasolutions.com;
- dkim=pass header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=PjFetXnb; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::635"
+ Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+ bh=Tm7PRyPBVfXxU00zkUkbyS8w3Pz0y2uVGJC66fHEMXs=;
+ b=ZmDDWn13c9rchdkbARoK3fZxHB8MX1/ttpPEpuLjq1crzyP/mEQ2sZG6Cs99W5oBhUXT
+ UK4zVmLa+XYoBXApfoHXF+ZiLmygGuZw0aXIysTk8HVD2BHFGZncOfYxJ6npSNrI9T0C+
+ 8oDgexAwADNYDfvSJLzxsSHifbd1olLxPBdyfv5fsoKnl0m27F4PfQLroyba1QCUIdNlo
+ W/P0BGp+iPYSh8efG98HKPnXlimN+ePkQSZMxrKCMFG8PFYF4JghXmyeW+NHcIvWB2FOx
+ Me4ada7uK/2k1WmbDi8m2kvys+Mv1jjUiPXdC2WK0X9u/WWf/yygkE6NFEDJpBbdOiw==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ dmarc=pass header.from=googlemail.com;
+ dkim=pass header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256
+ header.s=20260707 header.b=EuWApKGI; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::631"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::635; helo=mail-ej1-x635.google.com;
- envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org; dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=PjFetXnb
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
- [IPv6:2a00:1450:4864:20::635])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EE787400D6
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 11:33:39 +0000 (UTC)
-Received: by mail-ej1-x635.google.com with SMTP id
- a640c23a62f3a-c40db84b4b5so9862666b.1
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 04:33:39 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::631; helo=mail-ej1-x631.google.com;
+ envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp1.osuosl.org; dmarc=pass (p=quarantine dis=none)
+ header.from=googlemail.com
+Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
+ header.a=rsa-sha256 header.s=20260707 header.b=EuWApKGI
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
+ [IPv6:2a00:1450:4864:20::631])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5DD47806E8
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 11:34:26 +0000 (UTC)
+Received: by mail-ej1-x631.google.com with SMTP id
+ a640c23a62f3a-c414e5d282eso108308766b.1
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 04:34:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1793187218; x=1793792018;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=jroCrtxGeBp4lm5haLp6u//g8N3MCdOQEOLXxmIb7hk=;
- b=PjFetXnbyCpas0NynnjPjkJ5raNRs959Abap4tzuiHrADnEiw2IOR+BYSK7fgQNx1E
- CNuLI/LbKd3STlm/ddRJsALMMx6hkxk7gwgUunL8cKpnGJmIzIysce1u4JkwrCB7OVsf
- pMzu8ySuh5uge5O2aK33P46I6+2dtRFMkoYWc=
+ d=googlemail.com; s=20260707; t=1793187265; x=1793792065; darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=Tm7PRyPBVfXxU00zkUkbyS8w3Pz0y2uVGJC66fHEMXs=;
+ b=EuWApKGI+9JbSnNYWPvGwcVJEAurvDCwrHBQ5oBRoLnOJAaENpe9vxOc9vGbus2WX/
+ MZvyG8nMzdv3Xe+dCwtaVwwWbk2KLSRNChYkaYSIgmKPlRvOfA3A7YS/YKQzm9DukUe+
+ 4k/RZjhM6tkpZQnejmVPuO8uLUICfK8NmU5a1ZjEFOw6EQPbI4RENaOO9P0hJn88YwOz
+ lwG/qiIUSKaizV5GZ1UdCxDdCLauIk0oLJWBBHy8eLmIdN7SYY9jfsbS0Jy2fhHbMJzh
+ 8qEhO0Xos6dIKd+rEIp/6McrmmXbND7k0YXPWynDBjd5wa6k80fIEQ0rCLU2vD7cq+VD
+ KTSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793187218; x=1793792018;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=jroCrtxGeBp4lm5haLp6u//g8N3MCdOQEOLXxmIb7hk=;
- b=O/RJkAshwtv5LSugr4kHuwF4h9D//gv7mvpQwMuhMBiWv17wGgJu7EPQxOJVWZ4NrE
- VdYe2Vwk65c8C+3D++I7PQJjx04G4VveCEpYdMSN4zj5OMEgXGjBsF+DwNsAUVeFNGZR
- h/fsBInwBv1ZvPZFg08ANbx89m8l5QYwJB5ix5joNZNx4YHrx9jsWHMDs9AaNk6hzkdL
- CB3X3iD/0kmv379xBg68Y1sZhvLid2g1M1609LxV4swiLvdlt5SmQJe6jIngB2UWHjJm
- lvnG6bm4/ilil/+ZXStzU0wRRngl2ivAYgh/5Fa2D9CdLjKZMb30UAgqLsfpa01IU2ba
- zdtg==
-X-Gm-Message-State: AFq9FYJ/hYSwLQCO0bYaHVH/FFc8oUkihlQti4VR9Rin3UJ1ssBsRWSM
- E7lQJXW3ne2v3jt6L8d7Gmhm7A+wqqGfghb/Vm0NFGiru5c1yC+72v5QVdHSKEfyyZOvMJ7kA7u
- PToX+neI=
-X-Gm-Gg: AYBFou2Upp0nPfekXqo4mvxaVRPjOzXp+teFqaI55DCdZEzc511k1TG3zz2aY07JUrU
- 5gAc4q4vsRnfOv/G/JelRiPfWMnsrL/OrRpZlF2lR0tQHwuJRhh0iYIWrcqmKY9aVs4iQxVMnnt
- c683VHPhHONRwoDbuo3h6mtRwv3BCeB9T9jczkqEpsSbSYTMkeRuDX276lZh1McjByPLCCiyaO/
- St/2/KB5vZyAOz9pDCc05rtt5bEodB1RJI8yl4F6DAlwb3yadPwtUl9/LCyMxc7ZZ2gbfB9UUzm
- Sp20H79dYT1wnQwooyZhM+TjPTbAoe2KMfDieKdsi6tot4o1ZQpW+i3KaCeHLjMbX/9c1Hpa7IL
- 0LW/NO79xhJttb0mhGKhwi2UQ3GjMmSktNZhWjQaqM1GbuHHiGD5QP91LFItQWtrfkKgoiD3Xn8
- QBjJyZtUzWfDX0AyHqZawI+PWlxPuuowagfcAB5Z0RMoPtZiB4mbxbmteHgm5qnB3ktagiV4mTw
- FmDxCPyVX3ucKCsn1AuafXtBChkVe+fZ7emqM0dLvJgVizIuUriD9Yfh0DCoW3G37hw9JjfpTfm
- 4ruX/ms0nnPXyp4QFuNKtwjQ7BBYwjYhgHv5nkZWA8fiCdl5tlB36w97ReWQcrLd8WtTlHV7D+I
- ItegNmZAz3heCO2PY1LtUIczJasy4IILKEzZvwFR5J8kF1WerbwaCOM/VrlV7zmuhCz6Zoqvs4u
- z3kXAbdB4SNz3Bj0FBvP3OYhJFG23CMRFIENV7
-X-Received: by 2002:a17:907:d645:b0:c34:db91:aa1e with SMTP id
- a640c23a62f3a-c49bdfbbe19mr237413166b.4.1793187217445; 
- Wed, 28 Oct 2026 04:33:37 -0700 (PDT)
-Received: from adam-linux.amarulasolutions.com
- (2001-1c00-8181-e800-030c-182b-b2a8-e89d.cable.dynamic.v6.ziggo.nl.
- [2001:1c00:8181:e800:30c:182b:b2a8:e89d])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c46bd66c6f7sm592468866b.63.2026.10.28.04.33.36
+ d=1e100.net; s=20260707; t=1793187265; x=1793792065;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=Tm7PRyPBVfXxU00zkUkbyS8w3Pz0y2uVGJC66fHEMXs=;
+ b=HGLihdX/Dd2PHRZLyodlHhs6COYoqgZ7z1ANVCQQL+mnII/SAK1o/VBuHyYG9xSwEH
+ xB3ml2mUqS0mTJYcVxPiYeqxtAc7HqMGURzgzqhltEiaxsGden+lMO3VJ3FDCNm3R2/J
+ w+J57t5br/slX1lJ63ZkxvyXTyRdKqdpaZKPO/3n67o0/kKVA/WQxqT8Sw7Gj7u+w+dX
+ PSAzdmwSUiJh0g4xwXXjdMFCfsKJWOVMJcg2T+eVnmQAezmPgRxYsMrcqZinb3y5eVyL
+ rjQRRrv3PLGg7HIq6icpIbPGk74UCWGM4Gr8RsXRZq2cqgH+ldmnUIm1eCYLl8NL5T+3
+ wMuw==
+X-Gm-Message-State: AFq9FYLrlNG5LjxgIKzw+bfap+6fCfA3N5H9SG/TaRiR5YX7RE0pyltt
+ WUK/JsQfZkhXzqxODGR93N9XFG6tDEfaftxh/YZSAZRylzlgA3CkOBIeFkdvTA==
+X-Gm-Gg: AYBFou3Ut3I1k4SHlsIitjYTCDZ79sD+GJWHH3/qdtqEyLQn5ed2P30sdq0EvEz9DU0
+ +Qm1F+Q9ZyJF+olS/rAlTX6LqbIUAXLM9MnPjWv4yspxgjTKkrgZbkL/3yQeqQwtOsrAEIxrduj
+ wNMHMvErkdU/cP+z8XS/9YYRoB0qdXRT+tv7cTV46gTDVZ95NjJtDC4xgl0XQVD/rDeZHHBoC+0
+ zYDkB7Il0cvqMdcSsR/2hHKxvo7YqdkBS+pX2e6g+pjR6eS2hfv8jhevxJx1gu/L2vAjdrhk8YI
+ ELfDhtj3LPm29hFE21ecg2HJRe282JSSURDu/tQcEbf59n5ov+xI+6EZVB1vPeldBNXC/aM/9/B
+ wYE6cDyXQO6wWJByFQi6JWgIfIoJDAMrovNpk+cV1mipRv9P3SIrGAwDYgmcqnApzi+jI9Iwp88
+ AZoidqvJgQHBw3NVS4R0sh2ToZm+nVzr4m9TP+kynjNghcacHAAYlXLpVxZ8KMplNbQn5b93yCF
+ Aie2K+Q9/e9N6Rcv2RL6Fd4MxJ0l8q57c+++rGgTybmlLNsttliIJqcO3al+I2UPaUWLHu/5SpB
+ kMirIjKrpz8o/AvgXXi80yzg6w3KWVAkYJz8kPJP45wKMTFTX94L69KlDQj/jBh69Ap6rg+2yA1
+ EEWWLn6ysEQ==
+X-Received: by 2002:a17:906:eeca:b0:c31:be58:5dde with SMTP id
+ a640c23a62f3a-c49be013f12mr163790166b.40.1793187264482; 
+ Wed, 28 Oct 2026 04:34:24 -0700 (PDT)
+Received: from development2.visionsystems.local (mail.visionsystems.de.
+ [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-c46bd66c2e9sm594591266b.58.2026.10.28.04.34.23
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 28 Oct 2026 04:33:36 -0700 (PDT)
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
+ Wed, 28 Oct 2026 04:34:23 -0700 (PDT)
+From: Yegor Yefremov <yegorslists@googlemail.com>
 To: buildroot@buildroot.org
-Date: Wed, 28 Oct 2026 12:33:30 +0100
-Message-ID: <20261028113331.2960539-5-adam.duskett@amarulasolutions.com>
-X-Mailer: git-send-email 2.56.0
-In-Reply-To: <20261028113331.2960539-1-adam.duskett@amarulasolutions.com>
-References: <20261028113331.2960539-1-adam.duskett@amarulasolutions.com>
+Date: Wed, 28 Oct 2026 12:34:23 +0100
+Message-Id: <20261028113423.3132059-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.34.1
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 5/6] package/mender: bump to version 5.2.0
+Subject: [Buildroot] [PATCH] package/libical: fix build with toolchains
+ without SSP
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -175,993 +169,118 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
 	MENTIONS_GIT_HOSTING,SPF_HELO_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Starting with Mender version 4, the program is rewritten from Go to C++ using
-CMake.
+Since version 4.0.0, libical enables the OpenSSF compiler hardening
+options, including -fstack-protector-strong, whenever
+check_compiler_flag() succeeds. That check only compiles a test
+program, but GCC also adds -lssp_nonshared -lssp when linking with
+-fstack-protector-strong if the C library doesn't provide the stack
+protector. With a toolchain without SSP support, the check therefore
+succeeds but the link fails:
 
-The current package provided by Buildroot is 3.5.3, which is quite old, having
-been released on 12/6/2024. Since then, several changes have occurred,
-necessitating a substantially large patch with many changes all at once.
+[ 50%] Linking C shared library ../../lib/libical.so
+ld: cannot find -lssp_nonshared: No such file or directory
+ld: cannot find -lssp: No such file or directory
 
-The following is a list of changes:
+Add a patch, submitted upstream, to also check the flag with
+check_linker_flag() and only use it if linking with it works.
 
-MAJOR:
-  - Mender is now a C++ project
-  - Mender depends on systemd
-  - Drops sysvinit support
-  - Mender is split into two binaries:
-      - mender-authd
-      - mender-updated
+This issue has been present since commit 410b9c87c26d
+("package/libical: bump to version 4.0.7"), which bumped libical from
+3.0.20, which did not have the OpenSSF hardening options yet. It does
+not affect any release yet.
 
-MINOR:
+Fixes:
+https://autobuild.buildroot.org/results/36a8ce7ee6581bd24ec013d8564bc3214400faaa
 
-  - Drop the 0001-openssl-v4-update.patch.
-  - Add 0001-src-common-crypto-platform-openssl-crypto.cpp-fix-bu.patch
-    Which allowd building without OpenSSL engine support.
-
-    This patch is tested against OpenSSL 4.0.2 which is not yet applied
-    to the master branch.
-
-  - The following busyboxy options are required by the rootfs module and are
-    enabled by default:
-    - flock
-    - stat
-    - stat_format
-    - sync_fancy
-    - wget
-    - wget_https
-    - wget_openssl
-      Note: While sync_fancy isn't strictly necessary, enabling this feature
-            prevents several messages about sync ignoring all arguments.
-
-  - New dependencies are as follows:
-    - boost
-    - dbus
-    - libarchive
-    - libglib2
-    - lmdb
-    - openssl
-    - systemd
-    - yaml-cpp
-
-The configs/mender_x86_64_efi_defconfig file is updated to
-use systemd by default.
-
-Mender is configured with -DBUILD_SHARED_LIBS=OFF as the bundled
-libyaml and tiny-process-library .so files are not installed when
--DBUILD_SHARED_LIBS=ON is selected.
-
-The support/testing/tests/package/test_mender.py is updated:
-  - Uses systemd
-  - Bumped kernel version to 6.18.59
-  - Adds a simple network as mender-authd requires network-online.target
-  - Drops sysvinit tests
-
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Fixes: 410b9c87c26d5d5eaf44b2b2362452febf887b06 ("package/libical: bump to version 4.0.7")
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
-v2 -> v3:
-  - Removed documentation update (see first patch in this series)
-  - Use an external toolchain for mender_x86_64_efi_defconfig [Thomas]
-  - Dropped jq selection for mender_x86_64_efi_defconfig [Thomas]
-  - Dropped yaml-cpp selection (bundled and linked statically in mender source code)
-  - Cleaned up various make commands [Thomas]
-  - Removed kernel fragment used during debugging [Thomas]
-  - Add 0001-src-common-crypto-platform-openssl-crypto.cpp-fix-bu.patch [Thomas]
+ ...k-that-fstack-protector-strong-links.patch | 61 +++++++++++++++++++
+ 1 file changed, 61 insertions(+)
+ create mode 100644 package/libical/0001-openssf-check-that-fstack-protector-strong-links.patch
 
- board/mender/x86_64/linux.config              |  11 +
- configs/mender_x86_64_efi_defconfig           |   7 +-
- package/mender/0001-openssl-v4-update.patch   | 191 ------------------
- ...o-platform-openssl-crypto.cpp-fix-bu.patch |  69 +++++++
- package/mender/Config.in                      |  39 ++--
- package/mender/S42mender                      |  44 ----
- package/mender/mender-client.service          |  13 --
- package/mender/mender.hash                    |  52 ++---
- package/mender/mender.mk                      | 146 ++++++-------
- package/mender/server.crt                     |  22 --
- support/testing/tests/package/test_mender.py  |  96 ++++-----
- 11 files changed, 249 insertions(+), 441 deletions(-)
- delete mode 100644 package/mender/0001-openssl-v4-update.patch
- create mode 100644 package/mender/0001-src-common-crypto-platform-openssl-crypto.cpp-fix-bu.patch
- delete mode 100644 package/mender/S42mender
- delete mode 100644 package/mender/mender-client.service
- delete mode 100644 package/mender/server.crt
-
-diff --git a/board/mender/x86_64/linux.config b/board/mender/x86_64/linux.config
-index b758c6d45a..f980ec39ab 100644
---- a/board/mender/x86_64/linux.config
-+++ b/board/mender/x86_64/linux.config
-@@ -1,4 +1,8 @@
- CONFIG_SYSVIPC=y
-+CONFIG_CGROUPS=y
-+CONFIG_CGROUP_SCHED=y
-+CONFIG_CFS_BANDWIDTH=y
-+CONFIG_USER_NS=y
- CONFIG_SMP=y
- CONFIG_HYPERVISOR_GUEST=y
- CONFIG_PARAVIRT=y
-@@ -15,18 +19,22 @@ CONFIG_NETFILTER_XTABLES_LEGACY=y
- CONFIG_IP_NF_IPTABLES_LEGACY=y
- CONFIG_IP_NF_IPTABLES=y
- CONFIG_IP_NF_FILTER=y
-+CONFIG_NET_SCHED=y
-+CONFIG_NET_SCH_FQ_CODEL=y
- CONFIG_CFG80211=m
- CONFIG_CFG80211_WEXT=y
- CONFIG_MAC80211=m
- CONFIG_PCI=y
- CONFIG_DEVTMPFS=y
- CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_DMI_SYSFS=y
- CONFIG_VIRTIO_BLK=y
- CONFIG_BLK_DEV_SD=y
- CONFIG_SCSI_VIRTIO=y
- CONFIG_ATA=y
- CONFIG_NETDEVICES=y
- CONFIG_VIRTIO_NET=y
-+CONFIG_E1000E=y
- CONFIG_ATH9K=m
- CONFIG_ATH9K_HTC=m
- CONFIG_CARL9170=m
-@@ -57,8 +65,11 @@ CONFIG_VIRTIO_INPUT=y
- CONFIG_VIRTIO_MMIO=y
- CONFIG_VIRTIO_MMIO_CMDLINE_DEVICES=y
- CONFIG_EXT4_FS=y
-+CONFIG_AUTOFS_FS=y
- CONFIG_FUSE_FS=y
- CONFIG_VFAT_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
- CONFIG_SQUASHFS=y
- CONFIG_NLS_CODEPAGE_437=y
- CONFIG_NLS_ISO8859_1=y
-diff --git a/configs/mender_x86_64_efi_defconfig b/configs/mender_x86_64_efi_defconfig
-index f10a461770..9cd68e5f62 100644
---- a/configs/mender_x86_64_efi_defconfig
-+++ b/configs/mender_x86_64_efi_defconfig
-@@ -1,7 +1,6 @@
- BR2_x86_64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
--BR2_INIT_SYSV=y
--BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
-+BR2_TOOLCHAIN_EXTERNAL=y
-+BR2_INIT_SYSTEMD=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
- BR2_ROOTFS_OVERLAY="board/mender/x86_64/overlay"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/mender/x86_64/post-build.sh"
-@@ -42,7 +41,7 @@ BR2_PACKAGE_MENDER_GRUBENV=y
- BR2_PACKAGE_MENDER_GRUBENV_DEFINES="board/mender/x86_64/mender_grubenv_defines"
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
--BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
-+BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
- # BR2_TARGET_ROOTFS_TAR is not set
- BR2_TARGET_GRUB2=y
- BR2_TARGET_GRUB2_X86_64_EFI=y
-diff --git a/package/mender/0001-openssl-v4-update.patch b/package/mender/0001-openssl-v4-update.patch
-deleted file mode 100644
-index 65443614d5..0000000000
---- a/package/mender/0001-openssl-v4-update.patch
-+++ /dev/null
-@@ -1,191 +0,0 @@
--Description: Fix build compatibility with OpenSSL 4.0
-- Include <openssl/x509v3.h> in hostname.c and hostname.go before checking
-- #ifndef X509_CHECK_FLAG_ALWAYS_CHECK_SUBJECT, preventing fallback to
-- legacy OpenSSL < 1.0.2 code that attempts to directly access opaque
-- ASN1_STRING fields.
-- Also add preprocessor guards around deprecated protocol methods
-- (SSLv3_method, TLSv1_method, TLSv1_1_method, TLSv1_2_method) in shim.c
-- and ENGINE functions (ENGINE_by_id, ENGINE_init, ENGINE_free,
-- ENGINE_finish, ENGINE_load_private_key, ENGINE_load_builtin_engines)
-- in shim.c, shim.h, engine.go, key.go to prevent implicit declaration
-- and undefined reference errors when building against OpenSSL 4.0.
--Author: Frank Heimes <frank.heimes@canonical.com>
--
--Downloaded from Ubuntu:
--https://git.launchpad.net/ubuntu/+source/golang-github-mendersoftware-openssl/tree/debian/patches/0004-openssl-v4-update.patch?h=applied/ubuntu/stonking-devel
--
--Upstream: not applicable, upstream moved to c++ in newer versions
--
--[Bernd: rebased for vendored download by buildroot infra]
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
--
--diff -uNr mender-3.5.3.orig/vendor/github.com/mendersoftware/openssl/engine.go mender-3.5.3/vendor/github.com/mendersoftware/openssl/engine.go
----- mender-3.5.3.orig/vendor/github.com/mendersoftware/openssl/engine.go	2024-05-24 12:07:27.000000000 +0200
--+++ mender-3.5.3/vendor/github.com/mendersoftware/openssl/engine.go	2026-09-20 18:37:50.270612314 +0200
--@@ -15,6 +15,7 @@
-- package openssl
-- 
-- /*
--+#include "shim.h"
-- #include "openssl/engine.h"
-- */
-- import "C"
--@@ -33,18 +34,18 @@
-- 	cname := C.CString(name)
-- 	defer C.free(unsafe.Pointer(cname))
-- 	e := &Engine{
---		e: C.ENGINE_by_id(cname),
--+		e: C.X_ENGINE_by_id(cname),
-- 	}
-- 	if e.e == nil {
-- 		return nil, fmt.Errorf("engine %s missing", name)
-- 	}
---	if C.ENGINE_init(e.e) == 0 {
---		C.ENGINE_free(e.e)
--+	if C.X_ENGINE_init(e.e) == 0 {
--+		C.X_ENGINE_free(e.e)
-- 		return nil, fmt.Errorf("engine %s not initialized", name)
-- 	}
-- 	runtime.SetFinalizer(e, func(e *Engine) {
---		C.ENGINE_finish(e.e)
---		C.ENGINE_free(e.e)
--+		C.X_ENGINE_finish(e.e)
--+		C.X_ENGINE_free(e.e)
-- 	})
-- 	return e, nil
-- }
--diff -uNr mender-3.5.3.orig/vendor/github.com/mendersoftware/openssl/hostname.c mender-3.5.3/vendor/github.com/mendersoftware/openssl/hostname.c
----- mender-3.5.3.orig/vendor/github.com/mendersoftware/openssl/hostname.c	2024-05-24 12:07:27.000000000 +0200
--+++ mender-3.5.3/vendor/github.com/mendersoftware/openssl/hostname.c	2026-09-20 18:32:37.854514981 +0200
--@@ -6,6 +6,7 @@
--  */
-- 
-- #include <openssl/x509.h>
--+#include <openssl/x509v3.h>
-- 
-- #ifndef X509_CHECK_FLAG_ALWAYS_CHECK_SUBJECT
-- 
--diff -uNr mender-3.5.3.orig/vendor/github.com/mendersoftware/openssl/key.go mender-3.5.3/vendor/github.com/mendersoftware/openssl/key.go
----- mender-3.5.3.orig/vendor/github.com/mendersoftware/openssl/key.go	2024-05-24 12:07:27.000000000 +0200
--+++ mender-3.5.3/vendor/github.com/mendersoftware/openssl/key.go	2026-09-20 18:38:13.462370202 +0200
--@@ -303,7 +303,7 @@
-- 	keyID := C.CString(id)
-- 	defer C.free(unsafe.Pointer(keyID))
-- 
---	key := C.ENGINE_load_private_key(e.e, keyID, nil, nil)
--+	key := C.X_ENGINE_load_private_key(e.e, keyID, nil, nil)
-- 	if key == nil {
-- 		return nil, errors.New("cannot load private key, ENGINE_load_private_key error")
-- 	}
--diff -uNr mender-3.5.3.orig/vendor/github.com/mendersoftware/openssl/shim.c mender-3.5.3/vendor/github.com/mendersoftware/openssl/shim.c
----- mender-3.5.3.orig/vendor/github.com/mendersoftware/openssl/shim.c	2024-05-24 12:07:27.000000000 +0200
--+++ mender-3.5.3/vendor/github.com/mendersoftware/openssl/shim.c	2026-09-20 18:36:02.855038372 +0200
--@@ -382,7 +382,9 @@
-- 	int rc = 0;
-- 
-- 	OPENSSL_config(NULL);
--+#if OPENSSL_VERSION_NUMBER < 0x40000000L && !defined(OPENSSL_NO_ENGINE)
-- 	ENGINE_load_builtin_engines();
--+#endif
-- 	SSL_load_error_strings();
-- 	SSL_library_init();
-- 	OpenSSL_add_all_algorithms();
--@@ -403,6 +405,46 @@
-- 	return 0;
-- }
-- 
--+ENGINE *X_ENGINE_by_id(const char *id) {
--+#if OPENSSL_VERSION_NUMBER < 0x40000000L && !defined(OPENSSL_NO_ENGINE)
--+	return ENGINE_by_id(id);
--+#else
--+	return NULL;
--+#endif
--+}
--+
--+int X_ENGINE_init(ENGINE *e) {
--+#if OPENSSL_VERSION_NUMBER < 0x40000000L && !defined(OPENSSL_NO_ENGINE)
--+	return ENGINE_init(e);
--+#else
--+	return 0;
--+#endif
--+}
--+
--+int X_ENGINE_free(ENGINE *e) {
--+#if OPENSSL_VERSION_NUMBER < 0x40000000L && !defined(OPENSSL_NO_ENGINE)
--+	return ENGINE_free(e);
--+#else
--+	return 0;
--+#endif
--+}
--+
--+int X_ENGINE_finish(ENGINE *e) {
--+#if OPENSSL_VERSION_NUMBER < 0x40000000L && !defined(OPENSSL_NO_ENGINE)
--+	return ENGINE_finish(e);
--+#else
--+	return 0;
--+#endif
--+}
--+
--+EVP_PKEY *X_ENGINE_load_private_key(ENGINE *e, const char *key_id, UI_METHOD *ui_method, void *callback_data) {
--+#if OPENSSL_VERSION_NUMBER < 0x40000000L && !defined(OPENSSL_NO_ENGINE)
--+	return ENGINE_load_private_key(e, key_id, ui_method, callback_data);
--+#else
--+	return NULL;
--+#endif
--+}
--+
-- void * X_OPENSSL_malloc(size_t size) {
-- 	return OPENSSL_malloc(size);
-- }
--@@ -480,7 +522,7 @@
-- }
-- 
-- const SSL_METHOD *X_SSLv3_method() {
---#ifndef OPENSSL_NO_SSL3_METHOD
--+#if OPENSSL_VERSION_NUMBER < 0x40000000L && !defined(OPENSSL_NO_SSL3_METHOD) && !defined(OPENSSL_NO_DEPRECATED_1_1_0) && !defined(OPENSSL_NO_DEPRECATED_3_0)
-- 	return SSLv3_method();
-- #else
-- 	return NULL;
--@@ -488,11 +530,15 @@
-- }
-- 
-- const SSL_METHOD *X_TLSv1_method() {
--+#if OPENSSL_VERSION_NUMBER < 0x40000000L && !defined(OPENSSL_NO_TLS1_METHOD) && !defined(OPENSSL_NO_DEPRECATED_1_1_0) && !defined(OPENSSL_NO_DEPRECATED_3_0)
-- 	return TLSv1_method();
--+#else
--+	return NULL;
--+#endif
-- }
-- 
-- const SSL_METHOD *X_TLSv1_1_method() {
---#if defined(TLS1_1_VERSION) && !defined(OPENSSL_SYSNAME_MACOSX)
--+#if OPENSSL_VERSION_NUMBER < 0x40000000L && defined(TLS1_1_VERSION) && !defined(OPENSSL_SYSNAME_MACOSX) && !defined(OPENSSL_NO_TLS1_1_METHOD) && !defined(OPENSSL_NO_DEPRECATED_1_1_0) && !defined(OPENSSL_NO_DEPRECATED_3_0)
-- 	return TLSv1_1_method();
-- #else
-- 	return NULL;
--@@ -500,7 +546,7 @@
-- }
-- 
-- const SSL_METHOD *X_TLSv1_2_method() {
---#if defined(TLS1_2_VERSION) && !defined(OPENSSL_SYSNAME_MACOSX)
--+#if OPENSSL_VERSION_NUMBER < 0x40000000L && defined(TLS1_2_VERSION) && !defined(OPENSSL_SYSNAME_MACOSX) && !defined(OPENSSL_NO_TLS1_2_METHOD) && !defined(OPENSSL_NO_DEPRECATED_1_1_0) && !defined(OPENSSL_NO_DEPRECATED_3_0)
-- 	return TLSv1_2_method();
-- #else
-- 	return NULL;
--diff -uNr mender-3.5.3.orig/vendor/github.com/mendersoftware/openssl/shim.h mender-3.5.3/vendor/github.com/mendersoftware/openssl/shim.h
----- mender-3.5.3.orig/vendor/github.com/mendersoftware/openssl/shim.h	2024-05-24 12:07:27.000000000 +0200
--+++ mender-3.5.3/vendor/github.com/mendersoftware/openssl/shim.h	2026-09-20 18:38:33.117854985 +0200
--@@ -40,6 +40,13 @@
-- /* shim  methods */
-- extern int X_shim_init();
-- 
--+/* Engine methods */
--+extern ENGINE *X_ENGINE_by_id(const char *id);
--+extern int X_ENGINE_init(ENGINE *e);
--+extern int X_ENGINE_free(ENGINE *e);
--+extern int X_ENGINE_finish(ENGINE *e);
--+extern EVP_PKEY *X_ENGINE_load_private_key(ENGINE *e, const char *key_id, UI_METHOD *ui_method, void *callback_data);
--+
-- /* Library methods */
-- extern void X_OPENSSL_free(void *ref);
-- extern void *X_OPENSSL_malloc(size_t size);
-diff --git a/package/mender/0001-src-common-crypto-platform-openssl-crypto.cpp-fix-bu.patch b/package/mender/0001-src-common-crypto-platform-openssl-crypto.cpp-fix-bu.patch
+diff --git a/package/libical/0001-openssf-check-that-fstack-protector-strong-links.patch b/package/libical/0001-openssf-check-that-fstack-protector-strong-links.patch
 new file mode 100644
-index 0000000000..e596f1b5f3
+index 0000000000..03f085a052
 --- /dev/null
-+++ b/package/mender/0001-src-common-crypto-platform-openssl-crypto.cpp-fix-bu.patch
-@@ -0,0 +1,69 @@
-+From dcc218c6857e080e760b4a9c04acc79390151eb3 Mon Sep 17 00:00:00 2001
-+From: Adam Duskett <adam.duskett@amarulasolutions.com>
-+Date: Wed, 28 Oct 2026 12:07:07 +0100
-+Subject: [PATCH] src/common/crypto/platform/openssl/crypto.cpp: fix build
-+ without engine support
++++ b/package/libical/0001-openssf-check-that-fstack-protector-strong-links.patch
+@@ -0,0 +1,61 @@
++From 83314b5b234e8775e787aef0e6f713dc8b105ded Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Wed, 28 Oct 2026 06:07:44 +0100
++Subject: [PATCH] openssf - check that -fstack-protector-strong links
 +
-+OpenSSL 4.0 removed ENGINE support entirely and always defines
-+OPENSSL_NO_ENGINE. Its engine.h still declares the ENGINE_* functions
-+for source compatibility, but only provides stub definitions when
-+OPENSSL_ENGINE_STUBS is defined, so linking mender-auth fails with:
++check_compiler_flag() only compiles the test program with the given
++flag. However, GCC also adds -lssp_nonshared -lssp when linking with
++-fstack-protector-strong if the C library doesn't provide the stack
++protector itself, e.g. uClibc-ng built without SSP support. In that
++case the check succeeds, but linking libical fails:
 +
-+  undefined reference to `ENGINE_by_id'
-+  undefined reference to `ENGINE_free'
-+  undefined reference to `ENGINE_init'
-+  undefined reference to `ENGINE_load_builtin_engines'
-+  undefined reference to `ENGINE_load_private_key'
++  ld: cannot find -lssp_nonshared: No such file or directory
++  ld: cannot find -lssp: No such file or directory
 +
-+The same happens with OpenSSL 3.x configured with no-engine.
++All the checks following it fail as well, as their test programs are
++now linked with -fstack-protector-strong.
 +
-+Guard the ENGINE calls with OPENSSL_NO_ENGINE, and return an error
-+from LoadFromHSMEngine() when an SSL engine is configured but not
-+available.
++Also check the flag with check_linker_flag(), so that it is only used
++if linking with it works.
 +
-+Upstream: https://github.com/mendersoftware/mender/pull/2037
-+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
++Assisted-by: Claude:claude-opus-5-5
++Upstream: https://github.com/libical/libical/pull/1472
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 +---
-+ src/common/crypto/platform/openssl/crypto.cpp | 9 +++++++++
-+ 1 file changed, 9 insertions(+)
++ cmake/modules/openssf-c.cmake   | 4 +++-
++ cmake/modules/openssf-cpp.cmake | 4 +++-
++ 2 files changed, 6 insertions(+), 2 deletions(-)
 +
-+diff --git a/src/common/crypto/platform/openssl/crypto.cpp b/src/common/crypto/platform/openssl/crypto.cpp
-+index b31e6c8..5f6a4b9 100644
-+--- a/src/common/crypto/platform/openssl/crypto.cpp
-++++ b/src/common/crypto/platform/openssl/crypto.cpp
-+@@ -103,9 +103,11 @@ auto bn_free = [](BIGNUM *bn) {
-+ 	}
-+ };
-+ auto engine_free_func = [](ENGINE *e) {
-++#ifndef OPENSSL_NO_ENGINE
-+ 	if (e) {
-+ 		ENGINE_free(e);
-+ 	}
-++#endif // OPENSSL_NO_ENGINE
-+ };
-+ 
-+ auto password_callback = [](char *buf, int size, int rwflag, void *u) {
-+@@ -153,6 +155,12 @@ string GetOpenSSLErrorMessage() {
-+ }
-+ 
-+ ExpectedPrivateKey LoadFromHSMEngine(const Args &args) {
-++#ifdef OPENSSL_NO_ENGINE
-++	return expected::unexpected(MakeError(
-++		SetupError,
-++		"Failed to get the " + args.ssl_engine
-++			+ " engine. OpenSSL was built without engine support"));
-++#else
-+ 	log::Trace("Loading the private key from HSM");
-+ 
-+ 	ENGINE_load_builtin_engines();
-+@@ -190,6 +198,7 @@ ExpectedPrivateKey LoadFromHSMEngine(const Args &args) {
-+ 	auto handle = unique_ptr<OpenSSLResourceHandle, void (*)(OpenSSLResourceHandle *)>(
-+ 		new OpenSSLResourceHandle {std::move(engine)}, resource_handle_free_func);
-+ 	return std::make_unique<PrivateKey>(std::move(private_key), std::move(handle));
-++#endif // OPENSSL_NO_ENGINE
-+ }
-+ 
-+ #ifdef MENDER_CRYPTO_OPENSSL_LEGACY
++diff --git a/cmake/modules/openssf-c.cmake b/cmake/modules/openssf-c.cmake
++index 7f30d5b4..c701d078 100644
++--- a/cmake/modules/openssf-c.cmake
+++++ b/cmake/modules/openssf-c.cmake
++@@ -89,7 +89,9 @@ if(C_SUPPORTS_FSTACK_CLASH_PROTECTION)
++   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-clash-protection")
++ endif()
++ check_compiler_flag(C "-fstack-protector-strong" C_SUPPORTS_FSTACK_PROTECTOR_STRONG)
++-if(C_SUPPORTS_FSTACK_PROTECTOR_STRONG)
+++# the stack protector may need libssp at link time, which is not always available
+++check_linker_flag(C "-fstack-protector-strong" C_LINKER_SUPPORTS_FSTACK_PROTECTOR_STRONG)
+++if(C_SUPPORTS_FSTACK_PROTECTOR_STRONG AND C_LINKER_SUPPORTS_FSTACK_PROTECTOR_STRONG)
++   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-protector-strong")
++ endif()
++ check_compiler_flag(C "-fcf-protection=full" C_SUPPORTS_FCF_PROTECTION_FULL)
++diff --git a/cmake/modules/openssf-cpp.cmake b/cmake/modules/openssf-cpp.cmake
++index f6cc7975..c38dd6c8 100644
++--- a/cmake/modules/openssf-cpp.cmake
+++++ b/cmake/modules/openssf-cpp.cmake
++@@ -89,7 +89,9 @@ if(CXX_SUPPORTS_FSTACK_CLASH_PROTECTION)
++   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-clash-protection")
++ endif()
++ check_compiler_flag(CXX "-fstack-protector-strong" CXX_SUPPORTS_FSTACK_PROTECTOR_STRONG)
++-if(CXX_SUPPORTS_FSTACK_PROTECTOR_STRONG)
+++# the stack protector may need libssp at link time, which is not always available
+++check_linker_flag(CXX "-fstack-protector-strong" CXX_LINKER_SUPPORTS_FSTACK_PROTECTOR_STRONG)
+++if(CXX_SUPPORTS_FSTACK_PROTECTOR_STRONG AND CXX_LINKER_SUPPORTS_FSTACK_PROTECTOR_STRONG)
++   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-protector-strong")
++ endif()
++ check_compiler_flag(CXX "-fcf-protection=full" CXX_SUPPORTS_FCF_PROTECTION_FULL)
 +-- 
-+2.56.0
++2.34.1
 +
-diff --git a/package/mender/Config.in b/package/mender/Config.in
-index c9b9d0b757..8f16e2312f 100644
---- a/package/mender/Config.in
-+++ b/package/mender/Config.in
-@@ -1,9 +1,20 @@
- config BR2_PACKAGE_MENDER
- 	bool "mender"
--	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
--	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_PACKAGE_HOST_GO
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_7 # (bundled yaml-cpp)
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # boost-log
-+	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-log
-+	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-log
-+	depends on BR2_USE_MMU # libglib2
-+	depends on BR2_USE_WCHAR # boost, libarchive, libglib2
-+	depends on BR2_PACKAGE_SYSTEMD
-+	select BR2_PACKAGE_BOOST
-+	select BR2_PACKAGE_BOOST_FILESYSTEM
-+	select BR2_PACKAGE_BOOST_LOG
-+	select BR2_PACKAGE_CA_CERTIFICATES
-+	select BR2_PACKAGE_LIBARCHIVE
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_LMDB
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
- 	select BR2_PACKAGE_LIBOPENSSL_ENGINES
-@@ -21,16 +32,13 @@ config BR2_PACKAGE_MENDER
- 	    - uboot-tools must be selected.
- 	    - fw_printenv must be functional on the device.
- 	  The Mender Uboot patches are at:
--	  https://github.com/mendersoftware/meta-mender/
-+	  https://github.com/mendersoftware/meta-mender/tree/master/meta-mender-core/recipes-bsp/u-boot/patches
- 
- 	  For more information on Manual U-Boot integration, see:
--	  https://docs.mender.io/2.6/system-updates-yocto-project/board-integration/bootloader-support/u-boot/manual-u-boot-integration
-+	  https://docs.mender.io/3.4/system-updates-yocto-project/board-integration/bootloader-support/u-boot/manual-u-boot-integration
- 
- 	  For systems using Grub2 as the bootloader:
- 	    - Mender depends on the mender-grubenv package.
--	    - The mender-grubenv package provides a fw_printenv script,
--	      which is not compatible with the uboot-tools fw_printenv
--	      script.
- 
- 	  The mender project recommends using uboot to load Grub2 as a
- 	  secondary bootloader whenever possible. Using Grub2 as a
-@@ -39,7 +47,12 @@ config BR2_PACKAGE_MENDER
- 
- 	  https://github.com/mendersoftware/mender
- 
--comment "mender needs a toolchain w/ threads"
--	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
--	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS
-+comment "mender needs systemd"
-+	depends on !BR2_PACKAGE_SYSTEMD
-+
-+comment "mender needs a toolchain w/ C++, NPTL, wchar, not affected by GCC bug 64735"
-+	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
-+	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-+		!BR2_TOOLCHAIN_HAS_THREADS_NPTL
-diff --git a/package/mender/S42mender b/package/mender/S42mender
-deleted file mode 100644
-index 70116ed4eb..0000000000
---- a/package/mender/S42mender
-+++ /dev/null
-@@ -1,44 +0,0 @@
--#!/bin/sh
--#
--# Starts mender service.
--#
--DAEMON="mender"
--DAEMON_PATH="/usr/bin/mender"
--PIDFILE="/var/run/${DAEMON}.pid"
--DAEMON_ARGS="daemon"
--
--start() {
--	printf "Starting mender service: "
--	umask 077
--	start-stop-daemon -bmSqp "$PIDFILE" -x ${DAEMON_PATH} -- ${DAEMON_ARGS}
--	status=$?
--	[ "${status}" = 0 ] && echo "OK" || echo "FAIL"
--}
--
--stop() {
--	printf "Stopping mender service: "
--	start-stop-daemon -Kqp "$PIDFILE"
--	status=$?
--	[ "${status}" = 0 ] && echo "OK" || echo "FAIL"
--}
--restart() {
--	stop
--	start
--}
--
--case "$1" in
--	start)
--		start
--		;;
--	stop)
--		stop
--		;;
--	restart|reload)
--		restart
--		;;
--	*)
--		echo "Usage: $0 {start|stop|reload|restart}"
--		exit 1
--esac
--
--exit $?
-diff --git a/package/mender/mender-client.service b/package/mender/mender-client.service
-deleted file mode 100644
-index 47e439993c..0000000000
---- a/package/mender/mender-client.service
-+++ /dev/null
-@@ -1,13 +0,0 @@
--[Unit]
--Description=Mender OTA update service
--After=systemd-resolved.service
--
--[Service]
--Type=idle
--User=root
--Group=root
--ExecStart=/usr/bin/mender daemon
--Restart=on-abort
--
--[Install]
--WantedBy=multi-user.target
-diff --git a/package/mender/mender.hash b/package/mender/mender.hash
-index 17fe08c827..1aa8fb63bd 100644
---- a/package/mender/mender.hash
-+++ b/package/mender/mender.hash
-@@ -1,47 +1,27 @@
- # Locally computed:
--sha256  35e369759b8d4f012153e538b5daf1e0cebe842205811e708332c5a092270ac5  mender-3.5.3-go2.tar.gz
-+sha256  436ae559358f29c672b98ca77b953936ba6ef51455466fb5ed0ced7ae77fc226  mender-5.2.0.tar.gz
-+sha256  4d3409e4f8f7f3b9de5da7fee7c03e36a2381a02b2e318702485fc993a735cc9  LIC_FILES_CHKSUM.sha256
- 
- # Vendor licenses
- # Generated with sed '/^[A-Za-z0-9_]/s/^/sha256  /' LIC_FILES_CHKSUM.sha256
- 
- # Apache-2.0 license.
--sha256  d0f406b04e7901e6b4076bdf5fd20f9d7f04fc41681069fd8954413ac6295688  LICENSE
--sha256  52b2497ce07650b825015e80ca7a5d40c360c04c530234ca6d950b0f98bca23a  vendor/github.com/mendersoftware/mender-artifact/LICENSE
--sha256  73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68  vendor/github.com/mendersoftware/openssl/LICENSE
--sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/minio/sha256-simd/LICENSE
--sha256  8f5d89b47d7a05a199b77b7e0f362dad391d451ebda4ef48ba11c50c071564c7  vendor/github.com/mendersoftware/progressbar/LICENSE
-+sha256  d7e8fd4ad05371007d60285c309ba7a7ce3e61029b843f949fbb9ec79dc9eb47  LICENSE
- #
--# BSD 2 Clause license.
--sha256  8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86  vendor/github.com/pkg/errors/LICENSE
--sha256  e4646a82a976369d7ae8f6ed5c11d35dc0af18433a8ccc24c85b459ad8b95128  vendor/github.com/godbus/dbus/LICENSE
--sha256  2be1b548b0387ca8948e1bb9434e709126904d15f622cc2d0d8e7f186e4d122d  vendor/github.com/gorilla/websocket/LICENSE
-+# MIT clause license
-+sha256  d64d1b4d948aa7751cfb613c02dc246aab7b358d760053e6580f01affe946906  src/common/vendor/json/LICENSE.MIT
-+sha256  7920c8620b1e073a79a667c44f9149c25724eb9f0f6b220b3c8d9564e2d40a43  src/common/vendor/json/docs/mkdocs/docs/home/license.md
-+sha256  2aefa40fa7e1c0fab18fbad5b15b02406eea1399d3cca42cc1012b65b4a56f74  src/common/vendor/tiny-process-library/LICENSE
-+sha256  aa6fcc27be034e41e21dd832f9175bfe694a48491d9e14ff0fa278e19ad14f1b  src/common/vendor/yaml-cpp/LICENSE
- #
--# BSD 3 Clause license.
--sha256  0d9e582ee4bff57bf1189c9e514e6da7ce277f9cd3bc2d488b22fbb39a6d87cf  vendor/github.com/klauspost/compress/LICENSE
--sha256  2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477  vendor/github.com/pmezard/go-difflib/LICENSE
--sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/sys/LICENSE
--sha256  0634b008cee55ca01f0888d2f5aba2d34e66c3f52c31a4e16a5d5d33d0c2a03e  vendor/github.com/bmatsuo/lmdb-go/LICENSE.md
--sha256  87640bc4df2ceb1559f268a3db1ba859ab780f7ba5b1b4545173d4680a3d918b  vendor/github.com/remyoudompheng/go-liblzma/LICENSE
--sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/term/LICENSE
-+# UNLICENSE
-+sha256  7e12e5df4bae12cb21581ba157ced20e1986a0508dd10d0e8a4ab9a4cf94e85c  src/common/vendor/lmdbxx/UNLICENSE
- #
--# ISC license.
--sha256  1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251  vendor/github.com/davecgh/go-spew/LICENSE
-+# CC0 1.0 Universal
-+sha256  a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499  src/common/vendor/expected/COPYING
- #
--# MIT license.
--sha256  6d2de1cde19c4d2bd8bcd9aaa1d581f4cfa3db9cf71896140330eaa2f2687685  vendor/github.com/klauspost/pgzip/LICENSE
--sha256  f69f157b0be75da373605dbc8bbf142e8924ee82d8f44f11bcaf351335bf98cf  vendor/github.com/klauspost/compress/internal/snapref/LICENSE
--sha256  f566a9f97bacdaf00d9f21dd991e81dc11201c4e016c86b470799429a1c9a79c  vendor/github.com/klauspost/compress/zstd/internal/xxhash/LICENSE.txt
--sha256  5d966570d7a442d4e969892860a914e542c97f262c873baee8f0aa48e1f40212  vendor/github.com/klauspost/cpuid/v2/LICENSE
--sha256  51a0c9ec7f8b7634181b8d4c03e5b5d204ac21d6e72f46c313973424664b2e6b  vendor/github.com/sirupsen/logrus/LICENSE
--sha256  f8e536c1c7b695810427095dc85f5f80d44ff7c10535e8a9486cf393e2599189  vendor/github.com/stretchr/testify/LICENSE
--sha256  ffa15bdce332058a03a1d923910864fb6e58bf6df66a0e3914284725b327183e  vendor/github.com/ungerik/go-sysfs/LICENSE
--sha256  da277af11b85227490377fbcac6afccc68be560c4fff36ac05ca62de55345fd7  vendor/github.com/urfave/cli/v2/LICENSE
--sha256  b2663894033a05fd80261176cd8da1d72546e25842d5c1abcc852ca23b6b61b0  vendor/github.com/stretchr/objx/LICENSE
--sha256  d18f6323b71b0b768bb5e9616e36da390fbd39369a81807cca352de4e4e6aa0b  vendor/gopkg.in/yaml.v3/LICENSE
--sha256  08eab1118c80885fa1fa6a6dd7303f65a379fcb3733e063d20d1bbc2c76e6fa1  vendor/github.com/mattn/go-isatty/LICENSE
-+# Boost Software License
-+sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  src/common/vendor/optional-lite/LICENSE.txt
- #
--# OpenLDAP Public License
--sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
--
--# sha256 of all the vendor licenses combined
--sha256  86407bd98d5ea7fb0f09ab771c3333e975d06565b809a2dd95f864dc1e3a09b3  LIC_FILES_CHKSUM.sha256
-+# BSD-3
-+sha256  9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138  src/common/vendor/yaml-cpp/test/googletest-1.16.0/LICENSE
-diff --git a/package/mender/mender.mk b/package/mender/mender.mk
-index 76dc28d547..e20fec8aa9 100644
---- a/package/mender/mender.mk
-+++ b/package/mender/mender.mk
-@@ -4,107 +4,107 @@
- #
- ################################################################################
- 
--MENDER_VERSION = 3.5.3
--MENDER_SITE = $(call github,mendersoftware,mender,$(MENDER_VERSION))
--MENDER_LICENSE = Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT, OLDAP-2.8
-+MENDER_VERSION = 5.2.0
-+MENDER_SITE = https://github.com/mendersoftware/mender/releases/download/$(MENDER_VERSION)
-+MENDER_LICENSE = Apache-2.0, BSL-1.0, BSD-3-Clause, CC0-1.0, MIT, Unlicense
- MENDER_CPE_ID_VENDOR = northern.tech
--# CVE-2024-46948 only affects mender-server
--MENDER_IGNORE_CVES = CVE-2024-46948
- 
- # Vendor license paths generated with:
- #    awk '{print $2}' LIC_FILES_CHKSUM.sha256 | grep vendor
- MENDER_LICENSE_FILES = \
- 	LICENSE \
- 	LIC_FILES_CHKSUM.sha256 \
--	vendor/github.com/mendersoftware/mender-artifact/LICENSE \
--	vendor/github.com/mendersoftware/openssl/LICENSE \
--	vendor/github.com/minio/sha256-simd/LICENSE \
--	vendor/github.com/mendersoftware/progressbar/LICENSE \
--	vendor/github.com/pkg/errors/LICENSE \
--	vendor/github.com/godbus/dbus/LICENSE \
--	vendor/github.com/gorilla/websocket/LICENSE \
--	vendor/github.com/klauspost/compress/LICENSE \
--	vendor/github.com/pmezard/go-difflib/LICENSE \
--	vendor/golang.org/x/sys/LICENSE \
--	vendor/github.com/bmatsuo/lmdb-go/LICENSE.md \
--	vendor/github.com/remyoudompheng/go-liblzma/LICENSE \
--	vendor/golang.org/x/term/LICENSE \
--	vendor/github.com/davecgh/go-spew/LICENSE \
--	vendor/github.com/klauspost/pgzip/LICENSE \
--	vendor/github.com/klauspost/compress/internal/snapref/LICENSE \
--	vendor/github.com/klauspost/compress/zstd/internal/xxhash/LICENSE.txt \
--	vendor/github.com/klauspost/cpuid/v2/LICENSE \
--	vendor/github.com/sirupsen/logrus/LICENSE \
--	vendor/github.com/stretchr/testify/LICENSE \
--	vendor/github.com/ungerik/go-sysfs/LICENSE \
--	vendor/github.com/urfave/cli/v2/LICENSE \
--	vendor/github.com/stretchr/objx/LICENSE \
--	vendor/gopkg.in/yaml.v3/LICENSE \
--	vendor/github.com/mattn/go-isatty/LICENSE \
--	vendor/github.com/bmatsuo/lmdb-go/LICENSE.mdb.md
--
--MENDER_DEPENDENCIES = host-pkgconf openssl
--
--MENDER_LDFLAGS = -X github.com/mendersoftware/mender/conf.Version=$(MENDER_VERSION)
--
--MENDER_UPDATE_MODULES_FILES = directory single-file
-+	src/common/vendor/json/LICENSE.MIT \
-+	src/common/vendor/json/docs/mkdocs/docs/home/license.md \
-+	src/common/vendor/tiny-process-library/LICENSE \
-+	src/common/vendor/yaml-cpp/LICENSE \
-+	src/common/vendor/lmdbxx/UNLICENSE \
-+	src/common/vendor/expected/COPYING \
-+	src/common/vendor/optional-lite/LICENSE.txt \
-+	src/common/vendor/yaml-cpp/test/googletest-1.16.0/LICENSE
-+
-+MENDER_DEPENDENCIES += \
-+	host-pkgconf \
-+	boost \
-+	dbus \
-+	libarchive \
-+	libglib2 \
-+	lmdb \
-+	openssl \
-+	systemd
-+
-+MENDER_INSTALL_TARGET_OPTS = \
-+	install-bin \
-+	install-dbus \
-+	install-dbus-service-files \
-+	install-identity-scripts \
-+	install-inventory-network-scripts \
-+	install-inventory-scripts \
-+	install-modules \
-+	install-rootfs-image-module \
-+	install-systemd
- 
- define MENDER_INSTALL_CONFIG_FILES
--	$(INSTALL) -d -m 755 $(TARGET_DIR)/etc/mender/scripts
--	echo -n "3" > $(TARGET_DIR)/etc/mender/scripts/version
--
- 	$(INSTALL) -D -m 0644 $(MENDER_PKGDIR)/mender.conf \
- 		$(TARGET_DIR)/etc/mender/mender.conf
--	$(INSTALL) -D -m 0644 $(MENDER_PKGDIR)/server.crt \
--		$(TARGET_DIR)/etc/mender/server.crt
- 
--	$(INSTALL) -D -m 0755 $(@D)/support/mender-device-identity \
--		$(TARGET_DIR)/usr/share/mender/identity/mender-device-identity
--	$(foreach f,bootloader-integration hostinfo network os rootfs-type, \
--		$(INSTALL) -D -m 0755 $(@D)/support/mender-inventory-$(f) \
--			$(TARGET_DIR)/usr/share/mender/inventory/mender-inventory-$(f)
--	)
-+	$(INSTALL) -D -m 0644 $(@D)/support/demo.crt \
-+		$(TARGET_DIR)/etc/mender/server.crt
- 
- 	$(INSTALL) -D -m 0755 $(MENDER_PKGDIR)/device_type \
- 			$(TARGET_DIR)/etc/mender/device_type
- 
--	mkdir -p $(TARGET_DIR)/var/lib/mender
--	$(foreach f,$(MENDER_UPDATE_MODULES_FILES), \
--		$(INSTALL) -D -m 0755 $(@D)/support/modules/$(notdir $(f)) \
--			$(TARGET_DIR)/usr/share/mender/modules/v3/$(notdir $(f))
--	)
-+	mkdir -p $(TARGET_DIR)/var/lib
- endef
--
- MENDER_POST_INSTALL_TARGET_HOOKS += MENDER_INSTALL_CONFIG_FILES
- 
-+# The vendored tiny-process-library and yaml-cpp are built as part of
-+# mender but never installed, so always link them statically.
-+MENDER_CONF_OPTS += \
-+	-DBUILD_SHARED_LIBS=OFF \
-+	-DMENDER_EMBED_MENDER_AUTH=OFF \
-+	-DMENDER_USE_DBUS=ON \
-+	-DMENDER_VERSION=$(MENDER_VERSION)
-+
-+ifeq ($(BR2_PACKAGE_GZIP),y)
-+MENDER_DEPENDENCIES += gzip
-+MENDER_CONF_OPTS += -DMENDER_ARTIFACT_GZIP_COMPRESSION=ON
-+else
-+MENDER_CONF_OPTS += -DMENDER_ARTIFACT_GZIP_COMPRESSION=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_XZ),y)
- MENDER_DEPENDENCIES += xz
-+MENDER_CONF_OPTS += -DMENDER_ARTIFACT_LZMA_COMPRESSION=ON
- else
--MENDER_TAGS += nolzma
-+MENDER_CONF_OPTS += -DMENDER_ARTIFACT_LZMA_COMPRESSION=OFF
- endif
- 
--ifeq ($(BR2_PACKAGE_DBUS)$(BR2_PACKAGE_LIBGLIB2),yy)
--MENDER_DEPENDENCIES += libglib2
--define MENDER_INSTALL_DBUS_AUTHENTICATION_MANAGER_CONF
--	$(INSTALL) -D -m 0755 $(@D)/support/dbus/io.mender.AuthenticationManager.conf \
--		$(TARGET_DIR)/etc/dbus-1/system.d/io.mender.AuthenticationManager.conf
--
--	$(INSTALL) -D -m 0755 $(@D)/support/dbus/io.mender.UpdateManager.conf \
--		$(TARGET_DIR)/etc/dbus-1/system.d/io.mender.UpdateManager.conf
--endef
--MENDER_POST_INSTALL_TARGET_HOOKS += MENDER_INSTALL_DBUS_AUTHENTICATION_MANAGER_CONF
-+ifeq ($(BR2_PACKAGE_ZSTD),y)
-+MENDER_DEPENDENCIES += zstd
-+MENDER_CONF_OPTS += -DMENDER_ARTIFACT_ZSTD_COMPRESSION=ON
- else
--MENDER_TAGS += nodbus
-+MENDER_CONF_OPTS += -DMENDER_ARTIFACT_ZSTD_COMPRESSION=OFF
- endif
- 
--define MENDER_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -D -m 0644 $(MENDER_PKGDIR)/mender-client.service \
--		$(TARGET_DIR)/usr/lib/systemd/system/mender-client.service
-+define MENDER_INSTALL_MODULES_GEN
-+	$(MAKE) -C $(@D) DESTDIR=$(HOST_DIR) install-modules-gen
-+endef
-+MENDER_POST_INSTALL_TARGET_HOOKS += MENDER_INSTALL_MODULES_GEN
-+
-+define MENDER_INSTALL_TARGET_CMDS
-+	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR=$(TARGET_DIR) $(MENDER_INSTALL_TARGET_OPTS)
- endef
- 
--define MENDER_INSTALL_INIT_SYSV
--	$(INSTALL) -D -m 755 $(MENDER_PKGDIR)/S42mender \
--		$(TARGET_DIR)/etc/init.d/S42mender
-+# Needed for rootfs-image-module
-+define  MENDER_BUSYBOX_CONFIG_FIXUPS
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_FLOCK)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_STAT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_STAT_FORMAT)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_SYNC_FANCY)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_WGET)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_WGET_HTTPS)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_FEATURE_WGET_OPENSSL)
- endef
- 
--$(eval $(golang-package))
-+$(eval $(cmake-package))
-diff --git a/package/mender/server.crt b/package/mender/server.crt
-deleted file mode 100644
-index 79a57e15e7..0000000000
---- a/package/mender/server.crt
-+++ /dev/null
-@@ -1,22 +0,0 @@
-------BEGIN CERTIFICATE-----
--MIIBfTCCASOgAwIBAgIJAJOS76a0qWuZMAoGCCqGSM49BAMCMBsxGTAXBgNVBAMM
--EGRvY2tlci5tZW5kZXIuaW8wHhcNMTYxMjE0MTk1MjQ2WhcNMjYxMjEyMTk1MjQ2
--WjAbMRkwFwYDVQQDDBBkb2NrZXIubWVuZGVyLmlvMFkwEwYHKoZIzj0CAQYIKoZI
--zj0DAQcDQgAE7AVYis6MWGPGQYU1/tlLEnskRifDIhvkRb8Y4nQPekRkLkiBYYT3
--iJ46wHrnejbHaLstU9GRdKWOmOuU6HGdO6NQME4wHQYDVR0OBBYEFGOIU4q++Vz8
--9HuT1jg9V+wFeJcyMB8GA1UdIwQYMBaAFGOIU4q++Vz89HuT1jg9V+wFeJcyMAwG
--A1UdEwQFMAMBAf8wCgYIKoZIzj0EAwIDSAAwRQIhAPLnEeWPNeN7eDCEYRitBfyO
--X1yf2kzOm4ohBE5GY9gzAiBCq7HOSkzQDkelmQCCCpGXf/UwYNgQJjSoeGfk0j1a
--TQ==
-------END CERTIFICATE-----
-------BEGIN CERTIFICATE-----
--MIIBhDCCASmgAwIBAgIJALQrf4QDot4IMAoGCCqGSM49BAMCMB4xHDAaBgNVBAMM
--E3MzLmRvY2tlci5tZW5kZXIuaW8wHhcNMTYxMjE0MTk1MjQ2WhcNMjYxMjEyMTk1
--MjQ2WjAeMRwwGgYDVQQDDBNzMy5kb2NrZXIubWVuZGVyLmlvMFkwEwYHKoZIzj0C
--AQYIKoZIzj0DAQcDQgAEEc/Y3T+l3DvINePkpvVZORMIdHVs29jgsl48ia7z/NRX
--HlKtKxVGJyFN5Y7sBZeLgBYH3F4Bo3KfmxI7ad0tI6NQME4wHQYDVR0OBBYEFIUm
--cip00QZYpe4ULflbGNJan+Y9MB8GA1UdIwQYMBaAFIUmcip00QZYpe4ULflbGNJa
--n+Y9MAwGA1UdEwQFMAMBAf8wCgYIKoZIzj0EAwIDSQAwRgIhANHij9VZBDHOUPaC
--pFiagnWnYL2HBR72W1xTKQbrLLTXAiEAvpwA4HzSnGmLd3010+jqQuMRHArN5WaX
--h0fy7niBbIQ=
-------END CERTIFICATE-----
-diff --git a/support/testing/tests/package/test_mender.py b/support/testing/tests/package/test_mender.py
-index 14440c9527..44196d6a96 100644
---- a/support/testing/tests/package/test_mender.py
-+++ b/support/testing/tests/package/test_mender.py
-@@ -3,45 +3,69 @@ import os
- import infra.basetest
- 
- 
-+# gitlab-runner: large
- class TestMenderInfra(infra.basetest.BRTest):
--    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
--             """
--             BR2_PACKAGE_MENDER=y
--             BR2_PACKAGE_HOST_MENDER_ARTIFACT=y
--             BR2_TARGET_ROOTFS_CPIO=y
--             BR2_ROOTFS_POST_BUILD_SCRIPT="{}"
--             BR2_ROOTFS_OVERLAY="{}"
--             """.format(
--                 infra.filepath("tests/package/test_mender/post-build.sh"),
--                 # overlay to add a fake 'fw_printenv', used by Mender
--                 infra.filepath("tests/package/test_mender/rootfs-overlay"))
-+    # infra.basetest.BASIC_TOOLCHAIN_CONFIG cannot be used as it does
-+    # not include BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
-+    # needed by mender. This config also uses an ext4 rootfs as
-+    # the default 128MB is too small for an image with mender and systemd.
-+    config = \
-+        """
-+        BR2_x86_64=y
-+        BR2_x86_corei7=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_X86_64_CORE_I7_GLIBC_STABLE=y
-+        BR2_INIT_SYSTEMD=y
-+        BR2_SYSTEM_DHCP="eth0"
-+        BR2_LINUX_KERNEL=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.59"
-+        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/mender/x86_64/linux.config"
-+        BR2_PACKAGE_MENDER=y
-+        BR2_ROOTFS_POST_BUILD_SCRIPT="{}"
-+        BR2_ROOTFS_OVERLAY="{}"
-+        BR2_PACKAGE_HOST_MENDER_ARTIFACT=y
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_4=y
-+        BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """.format(
-+           infra.filepath("tests/package/test_mender/post-build.sh"),
-+           # overlay to add a fake 'fw_printenv', used by Mender
-+           infra.filepath("tests/package/test_mender/rootfs-overlay"))
- 
-     def base_test_run(self):
--        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
--        self.emulator.boot(arch="armv5", kernel="builtin",
--                           options=["-initrd", cpio_file])
-+        drive = os.path.join(self.builddir, "images", "rootfs.ext4")
-+        kern = os.path.join(self.builddir, "images", "bzImage")
-+        self.emulator.boot(arch="x86_64",
-+                           kernel=kern,
-+                           kernel_cmdline=["root=/dev/vda console=ttyS0 net.ifnames=0"],
-+                           options=["-cpu", "Nehalem",
-+                                    "-m", "256M",
-+                                    "-net", "nic,model=virtio",
-+                                    "-net", "user",
-+                                    "-drive", f"file={drive},if=virtio,format=raw"])
-         self.emulator.login()
- 
-     def run_mender_test(self):
--        self.assertRunOk("ps aux | egrep [m]ender")
-+
-+        # mender-authd requires systemd-resolved.service to be up,
-+        # so wait for eth0 to get its DHCP address before querying.
-+        cmd = "while ! ifconfig eth0 | grep -q 'inet addr'; do sleep 1; done"
-+        self.assertRunOk(cmd, timeout=30)
-+
-+        output, _ = self.emulator.run("systemctl is-active mender-updated")
-+        self.assertEqual(output[0], "active")
- 
-         # Check if a simple Mender command is correctly executed
--        self.assertRunOk("mender -log-level debug show-artifact")
--        self.assertRunOk("mender -log-level debug show-artifact | grep 'RUNTIME_TEST_ARTIFACT_NAME'")
--        cmd = "mender show-artifact 2>&1 | grep -i 'err'"  # Check if no 'error' among the traces
-+        self.assertRunOk("mender-update --log-level debug show-artifact")
-+        self.assertRunOk("mender-update --log-level debug show-artifact | grep 'RUNTIME_TEST_ARTIFACT_NAME'")
-+        cmd = "mender-update show-artifact 2>&1 | grep -i 'err'"  # Check if no 'error' among the traces
-         _, exit_code = self.emulator.run(cmd)
-         self.assertEqual(exit_code, 1)
- 
- 
--class TestMenderRW(TestMenderInfra):
--    def test_run(self):
--        TestMenderInfra.base_test_run(self)
--
--        # Check if the Daemon is running
--        self.assertRunOk("ls /var/run/mender.pid")
--        self.run_mender_test()
--
--
- class TestMenderRO(TestMenderInfra):
-     config = \
-         """
-@@ -51,22 +75,4 @@ class TestMenderRO(TestMenderInfra):
- 
-     def test_run(self):
-         TestMenderInfra.base_test_run(self)
--
--        # Check if the Daemon is running
--        self.assertRunOk("ls /var/run/mender.pid")
--        self.run_mender_test()
--
--
--# gitlab-runner: large
--class TestMenderSystemd(TestMenderInfra):
--    config = \
--        """
--        {}
--        BR2_INIT_SYSTEMD=y
--        """.format(TestMenderInfra.config)
--
--    def test_run(self):
--        TestMenderInfra.base_test_run(self)
--        output, _ = self.emulator.run("systemctl is-active mender-client")
--        self.assertEqual(output[0], "active")
-         self.run_mender_test()
 -- 
-2.56.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
