@@ -1,165 +1,171 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 422AC606A323
-	for <buildroot@archiver.kernel.org>; Wed, 28 Oct 2026 11:33:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58880606A31A
+	for <buildroot@archiver.kernel.org>; Wed, 28 Oct 2026 11:33:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=T0+ywggv;
-	dkim=fail reason="signature verification failed" (1024-bit key, unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google header.b=dAUtmHER
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=mjNeohwp;
+	dkim=fail reason="signature verification failed" (1024-bit key, unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google header.b=qOjZD1sb
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E529780F50;
-	Wed, 28 Oct 2026 11:33:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3322E405B6;
+	Wed, 28 Oct 2026 11:33:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GBzt-cT6KLDA; Wed, 28 Oct 2026 11:33:40 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org DA63180F71
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793187220;
-	b=bGP88PSwuEoevEVAoxuQaVA/ziRPbSwuC8+O7k5qHmi7BGw8vCtFjW85Ng9NVysWwqAq
-	 tzslzeVwVpib6uUOxHmm03q/0RI6ctK/L/FvbO+CG3nk7TU2SaNURrz4r8Y0Bnxqwx3gr
-	 4z2FnSp4/r0P1MLPy/3gWmsQFJ+u/ckdhuWUOBeknO+U/YOqjUe9/70o8u2KaKF2DPZFf
-	 sy9TJ4pHhphFxS80kO2/anhIrGECL8UoHj01J4BvhshMM63wwKnu1okMk055H2rvf5OJw
-	 F7xdTQpQXBMOwAZfTc/PiPZiXmI0ofrZidA2lCSNoDbk6HBCdcqyrnOx3iXQoFJUHDA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nOTY6eTM2UKv; Wed, 28 Oct 2026 11:33:42 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 4A5A1405E6
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793187222;
+	b=cjKzxzGB+MW+CnEaFldEJ7JFWHYccMDZezZTaqUDnc4wksS6hSLgZnXYTyw86xhzsLjd
+	 8tDav760ZNH7qcri/ZuLdxX8nXLWlXm4+1yRl73+880s5sGcr0kHFIr2zUPsc3fjMzhBY
+	 MowZTC1bZAhb9Ito3DvVxD2XmxWNspkX1i8X1Npz4h9fnPKGUBpQignppcbBzW9k5L1Tl
+	 tSAFkyZu/viDkEcC5lu2edChcL4iwgBdZywHsGG6d76ow4X/yUiq1eYYFXcF+n/38MeqG
+	 dDe5SOtb7iGbHtfqQYB5f+RArbtvcvtRlpt8YeUJ01NyjzxDdByTZHtFqL9KiANMuyw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793187220;
+	c=relaxed/relaxed; t=1793187222;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
 	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:From:To:Date:Message-ID:X-Mailer:MIME-Version:
-	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:Cc:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=nW9VMdKTZx4j7nozLrAe2tIk92aD7u15nDRgJHzJRII=;
-	b=Gb3cE0YmRCojxsWMH1YNUMNl15W8ShZOFIp0yFlAxfqVR4rr75UJSvwtlntpOo99OC5I
-	 v6aDJnmzY5WGEmX0EYP4pPk660nP3LUT7K00gQc2fgjEIMqn0t96XsXcugJOIcJ5UlAU1
-	 odnrDN+ufnAilsNSv63/v62gipW5PjBU4cwoZQfeH0X/J9HHVpbdo4FDFwh39HHSJQnq1
-	 LppZxcgDUhWlc+beixYg3zpK3cIhlTrvxJq90j6j0+T6+De1Ja6URhdN5uuAox21WgLqM
-	 Qy8dkDzAsTgaWAgPAasA2PGHhuM1kBaRcZJRR/dxNHN1To2oDVX1PqkkwPw7jkhvigw==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	 X-Received:Received:From:To:Date:Message-ID:X-Mailer:In-Reply-To:
+	 References:MIME-Version:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:Cc:Content-Type:Content-Transfer-Encoding:Errors-To:
+	 Sender;
+	bh=CwkthyYkXBD2Wv7IN/qzuLGCidHf38gKxL6MEDBZZJ4=;
+	b=L5Tllr5F3ofXsf2hpjly5MRbgQPn/JcHWKMww6IEdEg3wzt1c0hAkW2s0aK+3loFXqgB
+	 DEAuAJujDYy+Db2E1oyoel69G6EdkwlwxB5Sxhu2ymJd5ZJGohr6gkrBLzSRkeofsTyWW
+	 wnuv1b4uuKeZqyDc9lp3/Fzgx3+JAT7sdsAmeld9mmvHSpI6jXOCmeoTlQLJEoDZYKUTY
+	 QcE2SJUvXlASSqLm/CLoliW7w70Fmf4pVNtS2eRMWiS7D74ycwmSTUi3OVWtMtmlW9Dqp
+	 Q4+FSso/QYsShZz1sJ2mUzGywY/aB0km3nuyZnG41hwexar1qtcyCSnr/LNJ1V+Y09w==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793187219;
-	bh=nW9VMdKTZx4j7nozLrAe2tIk92aD7u15nDRgJHzJRII=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=T0+ywggv3Il3SBcdICmI71Uehw6nSYCvjIRE5fmnW5ZHdPowmy+zqWgDPPpNCCJd/
-	 5T7tdCPYBHw2kwixVMePaLfHw1mQKiy09bLwjSsN/f5DntP0cXSWCQRmr/IF9xC4IR
-	 gUNL3I6CtcngGnQ/GvXInpsGFXdDKScdFbSMrYAjC00JuHcO6J5oVUEEDuQNhPzxxB
-	 KxVmv65R66K6nWPmE434lhN/5H8ZqJ/GaMs0ib53LRchF36CIx1o2+cIo788soYhJr
-	 +R44ZyYYSc4FA3GW4BL9iHL6enoqgkmMWALiYYEJSa1/Lo9qy7vjyabQ7Klf4JnMQv
-	 MfBZZ39qAzHAQ==
+	s=default; t=1793187222;
+	bh=CwkthyYkXBD2Wv7IN/qzuLGCidHf38gKxL6MEDBZZJ4=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Cc:From;
+	b=mjNeohwpxksKi6FiRzUltHm34rVflQVELmAfwyvm2bv4JaboFRqunu1+RkvXQPKRF
+	 77eu+nmb49GfbIgQ0fGtgYXNeV+JvoYly53vt8ih1qfkuOzR5uJ81Z7VBETpxxjuXp
+	 NRn2ku63CJJemkMhwW7KN8ARsvrtb6dKEoRmDlUqy6qASVmkvUX00MdaqdLCSWSJq7
+	 B8naSTHrb/rmyz6M5YFWQSi+RtgG06hvzoxMcnXWjizmGM8vITR3ZU9IMGVajfPHfs
+	 UFH/Cr64NA0PkaKDmMFKMZZC9Lb098GZHobZcYSIHgR75MNBob0b/Bhth73Ap1dWhr
+	 NL6PqvYxOQhxQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DA63180F71;
-	Wed, 28 Oct 2026 11:33:39 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 2C541972
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 11:33:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A5A1405E6;
+	Wed, 28 Oct 2026 11:33:42 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 15128529
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 11:33:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 11F13605DF
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 11:33:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 076B5400FF
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 11:33:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cz8_t5F8ntA9 for <buildroot@buildroot.org>;
- Wed, 28 Oct 2026 11:33:37 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org B3898605D4
-Authentication-Results: smtp3.osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u919z5vvfi_w for <buildroot@buildroot.org>;
+ Wed, 28 Oct 2026 11:33:38 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 08C3D40087
+Authentication-Results: smtp2.osuosl.org;
  arc=none smtp.remote-ip="2a00:1450:4864:20::631"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793187217;
- b=YF1bRA7lCtjaXED9RKcy/KfrL10JsiYq9+d3NUtKqWjsad9OoJSIusPKghmEeV67Gx2H
- XPJ5PPH3pgvZFmj9bX2VHOt5XUJi9rUWKPnQsSw5KOTn86xhz3CmErI4P9tRIiV+iR6mc
- XX1R0esbWL+eAJyHL0M/h4VQP45qwtqELYD7Qu3RMTkYx62j8bEVYr1UGiC6A3XYpAu75
- EcVhz2v6R+Ed/9vLGGmRjo6DTGWp+b0mBfaOHnjAaFTBDY//5frfVd/tCZuL+8+F7AvZw
- kz05o+SLqyPrKXqNduTbawmjxRAvMHpVqGTlneu+fixomu9ZA5g+Ufp5kFp6HrRb7Ug==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793187218;
+ b=YIsIOkn8/I1JbMYnnet8k+5pAmhO/WK+gJ5YpWHdhQS83cpyjZ05TJ3y0rfvVI+rHK01
+ qB8tAcP2bZ3m9rr5I9XALrO5jcSiMA1z7KE8HAVFRPKJcuG3gj93TxvVedZk6g1jT0b35
+ +JxrFN/5LrkqqVX5Lnl5Er4eAhzXU+qBm6XJbIB6VfoHuptUHWdsiYWgiFWOmEpEFCpdo
+ k5omACwUCOyhSs0Nlo37HVUqaj6QK1PtYFeg9C5K1XNtPbtij7HPI8lLYoxt9tuS19SYH
+ l9xqXHv9+t4iziQxRiumUMUS2mViOC43UkJBQXigVXh5ms/GwPrukOivmspR2LYJwVQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793187217;
+ c=relaxed/relaxed; t=1793187218;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
- bh=hJ7E0Ze3Zq2O3SIlPaKHS7DGOB6suoJ+UvRPu9KYgCY=;
- b=I9UGq+bF5JnDmeK9XkxOjGjftqHw7i03fBnNHLXHCMAR5y7HZAHf54ZnbN4lQgmNkiC9
- 7ftQIK69BVVDlBBIe4cGaaVQ8A5095dYBIe1ENrwT9QoVaKvPV8f+eYHKP5CmRWd8pxK+
- I72NOnpzDqqlY5KALw8/uz3N9ayQSS68K1zR5KlDH0QkNPPhs5loSxnpUGEJkzK/m94dI
- RwZ3qxLd0h9cQK4COArA5R77gzy1IupA0KQ8U+glIuHe72BOA7GuYj7IvOCqVFSLz9XKV
- YAyNzMozCnOgyGiQuABIfb1QJDeLkssgmJlEYtEpxpWxd0UCZbxLnM5o4rOc8cVbkGw==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+ Content-Transfer-Encoding;
+ bh=Ij7WEie85yHogAoMV+7A5q9xGrKrwXap3tP662pOefE=;
+ b=MKUZwaO44QU09CnSo7XoORGwSSZu/AGdzTdYWRUKBT42VjVp61qy0E07LBApW2HWhrrz
+ YoCVMN3drEzd5FCiLZMOWdUc7vGcZt6nNuqntpqYDxrC6bb2VurQDz9En4PG/uhNm37eE
+ 1TD/WqpkSdK/H0tp9DpOVdacTdAJxnyFn9IHzuqFuOYqGgu39Cj7hLSzilYF9R8sv1y57
+ Nnzzc41vHfwB5GOl2Rqknm2ETe2gYLMzpdB90ytTr8oEgCSV90HoJ4/vJ4fhw84qx8E3u
+ CpMMdD/Hj4JeIbmKrMxQE/hk5NoNtJYg5nRro5UnCZ7ag+dRHUVzeFkoF8Bp9XJ98BA==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  dmarc=pass header.from=amarulasolutions.com;
  dkim=pass header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=dAUtmHER; 
+ header.a=rsa-sha256 header.s=google header.b=qOjZD1sb; 
  arc=none smtp.remote-ip="2a00:1450:4864:20::631"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a00:1450:4864:20::631; helo=mail-ej1-x631.google.com;
  envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org; dmarc=pass (p=none dis=none)
+Authentication-Results: smtp2.osuosl.org; dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-Authentication-Results: smtp3.osuosl.org; dkim=pass (1024-bit key,
+Authentication-Results: smtp2.osuosl.org; dkim=pass (1024-bit key,
  unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=dAUtmHER
+ header.a=rsa-sha256 header.s=google header.b=qOjZD1sb
 Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com
  [IPv6:2a00:1450:4864:20::631])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B3898605D4
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 11:33:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 08C3D40087
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 11:33:37 +0000 (UTC)
 Received: by mail-ej1-x631.google.com with SMTP id
- a640c23a62f3a-c499b5be0f1so9127766b.0
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 04:33:36 -0700 (PDT)
+ a640c23a62f3a-c40aa03a96fso8274266b.1
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 04:33:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1793187214; x=1793792014;
+ d=amarulasolutions.com; s=google; t=1793187216; x=1793792016;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=hJ7E0Ze3Zq2O3SIlPaKHS7DGOB6suoJ+UvRPu9KYgCY=;
- b=dAUtmHERpSrG6nPNqcy59xaVULPtHE7uwbz/07/1bm/LQcxTqGu8jPDQz+IIt3T5Cg
- cOIiWIaOhkUQNFyil+tM8qwaMI/WFS50ZEum4SyyNmEGUuIhxJXLRQyKBXOzrQw7aaPq
- 8YUtBUiq7PPfpApTkfVy1K8qaMqtijXOShyMQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793187214; x=1793792014;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=hJ7E0Ze3Zq2O3SIlPaKHS7DGOB6suoJ+UvRPu9KYgCY=;
- b=uTinP95dpr9nPDU8MxXjoH70rfGARtoVnieiwl9yXqiMmplousdOL/nTrBgiBvbKdB
- QAYXFiafHoOAkasl5ajKMgmo9C+Wvmx9xmbtM8Cf6U5YV/j4zoKdkHBdpJEZ820vTu8X
- LWH3apvbIzJiYL3oFkciRnWJvw9J0iLRhSzaCOrvZbfWMO1Sd55HC4bksgbvydpvJf8U
- j5Hq9KwQo3YFXT9JQn0SnRGkqoeXM14xWNpo4n0ufYIwDBsiVIPkp3bQNv3NXes2+EFB
- xcuC3oJoBZB7/dBf0MG2J6KWLQAk90lOaxI6AS1UKy1o6L/X63HTTa+wP9SSBtHc8IQK
- JJpA==
-X-Gm-Message-State: AFq9FYJ31lQxxLAAGEvVY+ZQy2s2GENi5hzCKGjTciACpRlNm6a2q/ie
- CxNk57bZ59VtbFxGGQ3fFr4NAAo+BqH79EQMkDOn1eJLNV7ro2OGu8XetbfVmqi9LbhVrVO3+n7
- 345qfAU0=
-X-Gm-Gg: AYBFou3v/QY5Hdeosh9BV3zeOg5z6dcmnY4F2v8cpgo4lXp9J4d8GqAGMbhOc/d01bh
- y65ppev/jLxXiG7WD3ZJA6RZIVN3bhO6W9LNWEN8Sug/3eZVzeWRB6/BNpng8CimVc0C3+trrBc
- qzbRT1/pZoAqLMC0mAtjI3Cjr9OGH3t2QgSdGPGUzqS4mVEnONcXtPM9+zgBTtyMZOoFk9kpxvH
- QxCEfZA1pn4F9If6xgHP48MWs2gpn/btyD/0eeiDvORV3wslHboR5ujYpfzVxt5JFFc0CycTml7
- kLULE1AQxle0Yh8A8CI5AY6r8J4Ig0miQsSGuK2Vm7OwT+IcZ/RFPSgHukXuKmjA/it45lerrKV
- nwQhNvsizdWhqTixKy6Y+SrlpZyV+/3jmctxNi7SZsfXoBX0IJZMIVZb10jLQKVinwbRNjLDir7
- iQn3HpVbhOwj8TkH+xTgEHJBwuIuDrDs22sYEkGdNmosa3jKcl8v5cisjO3Gsm3gaq27/BDXuza
- +ehFxEldslgHJX48oEgbkPsGcViuYt+RCodsqvOs67QV+g7GiLJJ3aj2oE0Q2s1uDZ5d022kUIz
- FSjKmJRsCUMRcuEB2JkeKSHDOzaZjgAx6KP98crdq5bfY5YRQxlBHIQeu/X10RihEBIvLnfG+hZ
- RAype0fuD3U2s9u0pENu0tvH+mx0opEpK7lr7mkLjNKcTeMQe7sCM7yLad4+N+kO77YrrBEQGsv
- GXGpF6QmTA2w372442ljHKhck/zDDJaQOxIL/lJA==
-X-Received: by 2002:a17:907:9543:b0:c2e:8801:9139 with SMTP id
- a640c23a62f3a-c49bdd5a5a5mr165007866b.1.1793187214122; 
- Wed, 28 Oct 2026 04:33:34 -0700 (PDT)
+ bh=Ij7WEie85yHogAoMV+7A5q9xGrKrwXap3tP662pOefE=;
+ b=qOjZD1sb1IxQWvT6iW7FYnBaw2iRotkBsTiM1f2oFfCR3nYYFk/9HeOtuDubw2GYUS
+ FBoxB6vaWZUmNm5Bq0p3j03h0C27kTM0nluIbcJ1Rl5nT8FNklmDiqobnr68UXZDj32d
+ Y8ZtpdoqulsQxNrrg0ygGTG4zuBGMGGrfc1lQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1793187216; x=1793792016;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to:content-type;
+ bh=Ij7WEie85yHogAoMV+7A5q9xGrKrwXap3tP662pOefE=;
+ b=loZlJYHtqU88Odh1sgcRpOVbSNA34EbxF6TbCjt6b0QziVe90fcu88UXgroSDib3ah
+ k+cNFMbm4YWD51k1cbfEVZ4H7aneZMgPAfQalaUPimXrKfrmb/Nb5suieDQWHRWBZkiU
+ cLExGr+JYeOlFVNhZXeAYcHFoiNYBxLeIuO/wh+kbHQcfOo6zgOh7tmj+3bJ2AaBwwBs
+ EJ/A7rTAAX8oDlfZUL8D7gPYUOt0fTchlbVgaOKrTsAVggW0CQIMfKZQkB/JZlalAP2f
+ X9UicZPdPS8JjHoReq7XqBlBWrmrXMv3zaVBG/mVqrB5TlyjjFF+vYXmOJfJ0doRtLZ/
+ 659Q==
+X-Gm-Message-State: AFq9FYJHvQ5gHOO6lzZUgj0HAGqTYJBCsmTG7sHx9cjZr4EVBtLBKdSV
+ RVhIlSH6p+ZvMclMvEvXdbe5TbKgLvDAd4sxaG4fWG/fdBUK/5dLkNUTWUxY+6ZcJYUKTQI+bQC
+ Cnbc1UXc=
+X-Gm-Gg: AYBFou0S6HepitI/PeY97mW8jTohEQms1cJPRHwJIQAXJCLSgxdAuegLOE8lAPZ3gUz
+ fEVlqwIs+C4H+nj+WHTc3LBKiBQAGD4v66sYDPR+CUja5ffVuIZZsstnyARlEYSjnmeQnXbEX+n
+ yfq+g8VEdBgAATV+vC8m0B3nm6okVfp+blAI++Hsh7wb4evn9KApenalSfoePHwowA+KDVkHatF
+ VGUkGsmOd6uXmejYT0drK3j6jnJRNuGjGwPxN7Vfsyph6+PLhtFQbf0223dCgoD+rXsNcxJHoT4
+ 4w/YtOGu11q08Y/8Ey5FzeYd51CLxSeB7eqI+SV3sUSdmew0Uwu4ZcDMMSkr1/wB15NAY/Huroc
+ WrRiUicripnZyqdcIkmbEJhQKp31KoD3o0w3nb7/dyiBr6EIqvsV4JGB1tPJJ6nF31qSEcdizMn
+ oYB6AoWtzqBp+fcH2oJ40SgPHqDgcgLO35vLZu2VQoxMbP8sguorUFMj/WWkz2wtshA2Put+e6s
+ gI/8RTGzN1Z0OHcabFk+nGDmKeOoEAK/8+Ucc8kfMrTVlkYH8GKqfB37XwOwkyEQUpK7UjNaD1B
+ w5kZn7zyKR8tBFiV4cdL1VxKTIX9C0nmX90LBRtHvLj2mHyCo9uWb4a72wnbzQs1O0jvdCYYfK4
+ QZu2nSOL1Fp44b8rK6ubkeTNFGmS0FWINnRwHjOp3CY2T/vKxSpIi9QPngKVG8xfO5YwYv39kUi
+ 8SCo4/lhgh5WvJ+SpuoDXr3yli1/V1IuLvJjJY4FdvLhFskA9lyHpvK6fVXg==
+X-Received: by 2002:a17:907:180b:b0:c25:2ded:ad36 with SMTP id
+ a640c23a62f3a-c49bda65ea2mr242472066b.0.1793187215709; 
+ Wed, 28 Oct 2026 04:33:35 -0700 (PDT)
 Received: from adam-linux.amarulasolutions.com
  (2001-1c00-8181-e800-030c-182b-b2a8-e89d.cable.dynamic.v6.ziggo.nl.
  [2001:1c00:8181:e800:30c:182b:b2a8:e89d])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c46bd66c6f7sm592468866b.63.2026.10.28.04.33.33
+ a640c23a62f3a-c46bd66c6f7sm592468866b.63.2026.10.28.04.33.35
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 28 Oct 2026 04:33:33 -0700 (PDT)
+ Wed, 28 Oct 2026 04:33:35 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Wed, 28 Oct 2026 12:33:26 +0100
-Message-ID: <20261028113331.2960539-1-adam.duskett@amarulasolutions.com>
+Date: Wed, 28 Oct 2026 12:33:28 +0100
+Message-ID: <20261028113331.2960539-3-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261028113331.2960539-1-adam.duskett@amarulasolutions.com>
+References: <20261028113331.2960539-1-adam.duskett@amarulasolutions.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 1/6] package/mender-update-modules: add
- banner module
+Subject: [Buildroot] [PATCH v3 3/6] board/mender/x86_64: add a udev rule to
+ create /dev/root
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -174,60 +180,41 @@ Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-16.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
+As /dev/root does not appear automatically, add a rule to
+create /dev/root. Without this rule, even running a simple command
+such as `mender -version` outputs the following warning:
+
+```
+WARN[0000] Could not resolve path link: /dev/root Attempting to continue
+WARN[0000] Could not resolve path link: /dev/root Attempting to continue
+```
+
+Note: This rule is only guaranteed to work properly with the
+mender_x86_64_efi_defconfig example configuration.
+
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
-v2 -> v3: Fixed github link [Thomas]
+v2 -> v3: Added a comment that this change is only guaranteed to work
+          with the mender_x86_64_efi_defconfig [Thomas]
 
- package/mender-update-modules/Config.in              | 12 ++++++++++++
- .../mender-update-modules/mender-update-modules.mk   |  4 ++++
- 2 files changed, 16 insertions(+)
+ .../mender/x86_64/overlay/etc/udev/rules.d/99-root-symlink.rules | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 board/mender/x86_64/overlay/etc/udev/rules.d/99-root-symlink.rules
 
-diff --git a/package/mender-update-modules/Config.in b/package/mender-update-modules/Config.in
-index 0c00ce2933..01439b30a4 100644
---- a/package/mender-update-modules/Config.in
-+++ b/package/mender-update-modules/Config.in
-@@ -16,6 +16,18 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES
- 
- if BR2_PACKAGE_MENDER_UPDATE_MODULES
- 
-+config BR2_PACKAGE_MENDER_UPDATE_MODULES_BANNER
-+	bool "banner"
-+	help
-+	  The Banner Update Module manages the system's message of
-+	  the day (MOTD) displayed when users log in via SSH or
-+	  console. It uses metadata-driven updates to change the
-+	  banner text without requiring any file payload, supports
-+	  rollback functionality, and operates without requiring
-+	  system reboots.
-+
-+	  https://github.com/mendersoftware/mender-update-modules/tree/master/banner
-+
- config BR2_PACKAGE_MENDER_UPDATE_MODULES_DFU
- 	bool "DFU"
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
-diff --git a/package/mender-update-modules/mender-update-modules.mk b/package/mender-update-modules/mender-update-modules.mk
-index c0b69de7e6..f3ea0e15cd 100644
---- a/package/mender-update-modules/mender-update-modules.mk
-+++ b/package/mender-update-modules/mender-update-modules.mk
-@@ -12,6 +12,10 @@ MENDER_UPDATE_MODULES_DEPENDENCIES = host-mender-artifact mender
- 
- MENDER_UPDATE_MODULES_MODULES = script
- 
-+ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_BANNER),y)
-+MENDER_UPDATE_MODULES_MODULES += banner
-+endif
-+
- ifeq ($(BR2_PACKAGE_MENDER_UPDATE_MODULES_DFU),y)
- MENDER_UPDATE_MODULES_MODULES += dfu
- endif
+diff --git a/board/mender/x86_64/overlay/etc/udev/rules.d/99-root-symlink.rules b/board/mender/x86_64/overlay/etc/udev/rules.d/99-root-symlink.rules
+new file mode 100644
+index 0000000000..7d2ae8cb89
+--- /dev/null
++++ b/board/mender/x86_64/overlay/etc/udev/rules.d/99-root-symlink.rules
+@@ -0,0 +1 @@
++SUBSYSTEM=="block", ACTION=="add|change", PROGRAM="/bin/grep -q root=/dev/%k /proc/cmdline", SYMLINK+="root"
 -- 
 2.56.0
 
