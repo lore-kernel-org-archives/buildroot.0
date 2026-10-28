@@ -2,27 +2,27 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BE0A606A31E
-	for <buildroot@archiver.kernel.org>; Wed, 28 Oct 2026 21:39:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E6BB606A31A
+	for <buildroot@archiver.kernel.org>; Wed, 28 Oct 2026 21:39:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=icDrArpC
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Kh35MC5a
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1980140A14;
-	Wed, 28 Oct 2026 21:39:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4A874409F1;
+	Wed, 28 Oct 2026 21:39:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2o3KJ_GXLTMq; Wed, 28 Oct 2026 21:39:37 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org C4BF7409F5
+ id QH6Gbg31sCXN; Wed, 28 Oct 2026 21:39:40 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 3E9A340A2C
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793223576;
-	b=DkdBJXSQ4LWczr99l63xlvcqazKo4zls+igvRK34XiH6tZ1CqkgoZouylhffu0li8ae/
-	 tjJrlabVpXwNYodAPaBa8Slmt9rRK1Jon0qLzBzVdk1uzgkgL/zTPBsNKLQa8VPk5UheS
-	 +Pb1byj3NpKBar+LQULm/5q2Vvs0xYNmqmDuqhFLpW8zYVwufRLVrGV+vZy8KMfrwD1PN
-	 Hha5D+jojSNibIze3DZspN5p7lxMfb6SrxPSfpY47Wq2f/c+PFuBTrDCgro7JhaYhbI+f
-	 e/r6jwJq0g3GkBB+bqHRs2MItXPPvQGbFb9zuq0tDEdCVSWLm885ud6+P87QaF8ZCjg==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793223580;
+	b=OTSuxHghDn39BXAQca/eFTJ9gdnyTZJOt2Rvmdw2Dq9hF/A5RH6eDIS7MV4GvxOOiiig
+	 IxXeWgCyUJadVWi9tEEDySH8MV2wrkAXUgYNMcE8FMJXlCqP2AgwH8gbGTNHLcHIkOLZc
+	 xkjXijJucN1A6oY5AnzS4MVjiIVVofiqrfG9oPO0E9X1ZSZrgAqUAWoaHKDrEmebf6GA7
+	 dTm9mYfV6VMPa+qP57b/pCSjjJ2eqfQ7W3IO9txNEI0VIfewtX9cEd+SfdjX6xGvOMRUG
+	 P2l7dAMnjFD197slCkEpUA4yYRLE7Ribv67DWOwAqzQ2H9Owk1csBh8Er0qc/u3mUxA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793223576;
+	c=relaxed/relaxed; t=1793223580;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -33,137 +33,138 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=UjGB0/leKUmgcPeYwDYlwyXRNsh0vMX/UaCmdqP+/RM=;
-	b=Dg8XuSTgNP23FYffjxzHJdR3M06eIkuR3x3kAR6aQtknP9YVvQoG5m/pC6OTKZn3B/du
-	 1qUnJT+5Xpkp5nfoecNGoFaxMFtAg0VVIp3q6rnzj3748xNC5tnlTf9EPpqQuA+ACSV6n
-	 bO8fQFjps8Aljy3Fec3K5GeeBatvlIZj5DUVs658T13kx7b6A7LfdCxURY6S4LAeH4ArS
-	 FN0rl5YgB5WWyoWIKaV0qziB4c7YzhZeA/WCZZr3lsJI7pofBxmAfpfz9tVsX134fTeQE
-	 uKndy4Twg10yg2fmpviFe4/9PDtJNorZjM+IM/bUdNwCIzLqdQIJdHBB5t9YYkCpgpA==
+	bh=jHPfN6vY2Njp2Qqy4oCVd1ALRY8zT87uQDyQexm7rks=;
+	b=BBu3Fgmt8pQdZhl6xAoJDr8PidWWVA0vOkoeO9iFlUoDx2Qv22kzFjqwV42gBo3aRUDE
+	 Qr1tuVU/WLQcGn8a1ToVII3cNqJges/8mblF4z+aI1jLNwGTgyBZph1TomtrBP0v7aG5G
+	 g3xoALb3tbA5hyy4XA7/HIAPND+wxPN36IEr6D7vIEBGeZprQa9iUxJDmPMHtKkdV+8ZE
+	 IDqxCUUGu5+OF8zyKQ+bS8Dyhq20GCVqMsm5ds9XxuBGFRfF6YXU7FSduALB0JW1GdbYS
+	 /Bwg1fs+ihoTyeP8RsFeqA5qYkb9eHW1Z6D0ZCRlfTtrcciNvFO1to1EHQghPzyWQ4Q==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793223576;
-	bh=UjGB0/leKUmgcPeYwDYlwyXRNsh0vMX/UaCmdqP+/RM=;
+	s=default; t=1793223580;
+	bh=jHPfN6vY2Njp2Qqy4oCVd1ALRY8zT87uQDyQexm7rks=;
 	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
 	 From;
-	b=icDrArpCCmCZOZeM0SrzAp4o/uZ7zPRTAb5glSaJWeVpid093Z7xGpp1rlk9t9OYI
-	 PoINh+6duLq8nxfN90XaAxz/c02i6kWtSR0091iAmUke1k94CXwjih5yB00kG6L0P5
-	 Kbe4W4WgI0EOD6Ic2VzifAogpMi7eVLud+wMs9D0Do3nFGcjl1HLj6OUbJ7HfyIM0w
-	 GJZkHvtggWFzo2qK+mitWDfJnxMfUzaAnsKRlKbctGQJAD+7/+lBAZrcePQGCYqDrA
-	 wy4EJBG9VO7uVRbRkGIIaQxjGW2gRE5aumYY1rGxtItaaSXYy1N4kGZBcpeHXteigI
-	 CAvHfXvKtBGSg==
+	b=Kh35MC5aZ1u6sAmtuwIacLYHXnLs4uOM2h1AsSiSDT+w1x1RHKNlEVh0Lj1+1sHMv
+	 BohXDQXQsspufUYKXF/pUGJDFzZfgIhrcnA+v2GB70g28ru+QB1ryDh+snjOtwnjLM
+	 0TC8BzLPXcAjt2eVzZXOfKaaki5C/MbZki/Qcu+x6qP8Xo/2kfA1+k6E8TjPqxansL
+	 Z83TzTdOVLuLYWPX1YdONxKltsBIZwjyufKHWS7mS2C75lHZ91uiQulQC0f8xrxOiV
+	 zVPfTf2Aps1/M7L/GhYrB1I271SB5Q2+Dl6dvy06fYKVBSn8UDiFnFDIjOjw1ZRfqn
+	 utGKVACfX0R3A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C4BF7409F5;
-	Wed, 28 Oct 2026 21:39:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 80DD3120
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 21:39:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3E9A340A2C;
+	Wed, 28 Oct 2026 21:39:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 25029120
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 21:39:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 671D760725
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 21:39:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 16B408176B
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 21:39:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Wf6lTNZ1Gm2Y for <buildroot@buildroot.org>;
- Wed, 28 Oct 2026 21:39:34 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 6C49660718
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793223574;
- b=KciYdb1aggyJn4egcmiT/0kV6IKF7f827uBYSGzx8XlakdWYr4zsq8OP1iSZIjAIhM8p
- BrsQguvCikzjokCQh3POz4/frG8xmdFm9hgh/M8Io4MrfeltPrh6wIvBkrCz8Bcbk0Hyk
- o+z7kMQCkXQjN6LT+heLc6SP7LWMdyii+Gj4RvznQRFFMnSlSix0tBhqhWpC6tEA8B2H5
- gD3ERgQQ0tDFNewlVsPGlJwMEm5GFEkNJIpLKey+tbVd9+H39qtrq1vdnRAnA6wkbiipf
- 8c2icCk4LpdOrO5HzQz6jW386lYi7CzcvikgM/9NKTGmDmG3L8puLqePpMy6a6oJphA==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QZRlY6_4TQva for <buildroot@buildroot.org>;
+ Wed, 28 Oct 2026 21:39:37 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 2DB588176D
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793223577;
+ b=H9TReucG1IdBKyYU3PC1sxL4UH1J1RWyShYHgTLRtKnyTAIBVuvLrxcS31/o23VJcjnO
+ gl3xuzDjE0QgFYtUg3PTCvAYpPbPB0ShiNxcLO3xhl012yYqViKTUi8uTMkvEf57xM1Ix
+ Oico2bTDJ18GVVXxLkT0IKIuHvo+9eoLk/LWhMyIf8Lu+qPX7ExwhIINn4nVNnbx+z4LC
+ 3NLd25MdcqvjWektIXTvNlqj0rPlK+mwNUZCKQ68VBkTZRIYvk8tC6lXjN5ga0Jtvk23v
+ AlMKJy4Slteex3QfSbcTDc79xoNCIusDjSKNXN3iMIqPGpBHWj0iO3gkO4ihQccoa0Q==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793223574;
+ c=relaxed/relaxed; t=1793223577;
  h=Received-SPF:Received:X-Google-DKIM-Signature:X-Gm-Message-State:
  X-Gm-Gg:X-Received:Received:X-Relaying-Domain:X-CFilter-Loop:Received:
  DKIM-Signature:X-Received:X-Received:Received:From:To:Cc:Subject:Date:
  Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-DetectorID-Processed;
- bh=PZZhaRL4+XUl122xdmrQDp7NVh3dphLPUT+YP8vXKGY=;
- b=Dg7nj2SeWIIzN/EGRZU0vAcbA6SPwffdwIXp+qff/1RH6daQvUeD6XyIuhYfmsRau/Ec
- F7g0+qvFgwOaPRfhynOsUTnmosu+iY+KryILAMRVYabBYsNs5pajpT5X/VIWE8lqpyP9F
- cGuDijVgOjeNqLUPWKAUMi2OfgIL1HiLI5B+R26OzcolS/5FElbdBMUiRJyEVBo3iuQ1Y
- jjP0ka3UtnK95MyLygpGPlvbwdsz2vO7FGb3KtWYglpYgp+rY/ntUgF7XySHawzXhEXzJ
- +VC0SspzRmhMYUU7UhjIxW9aBW9UPegOEIRDslsE1Vqy0dEXyoJ/ujfyjsQEFWBSOKA==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ bh=RAr1wLzdeHQ2NKSPyLMhmW8psOQ8qYi6MxT58s3FTyA=;
+ b=J9kDn8VbjtYIMK2SbHJEAiDj3LqmuB5C/QDFBOk5W6CDRwVAuSuxgv/eQ4+uPIMJVRqE
+ HxFg6YGm76wcCJ1MRXMJZFPr1ZR+0V4rA7AK9Rvs+Pc5WqF8gSe+Z6D7UhHgL0kKsyBoF
+ i7qIHn3lW8VND6Z/H6+sqD75gyY9y8NqtZzS/QhLGuqcev29jasuGnz4qhmouZlUxwBJ9
+ +5db4EFGKdnJMn3fkzSu7Bd4i6wEwxliEn+WONtWhRIY2o36oWSw3ziQE32YLBfscnlUo
+ BJU08/+aM1PBrumKDR33rFVDsF6RbShecL09xVT9/t+VvOX76H9t23rNAPIBjUSsNPw==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  dmarc=pass header.from=broadcom.com;
  dkim=pass header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256
- header.s=google header.b=TEMDGzmn; 
- arc=none smtp.remote-ip="2607:f8b0:4864:20::562"
+ header.s=google header.b=ByzC8jjX; 
+ arc=none smtp.remote-ip="2607:f8b0:4864:20::564"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::562; helo=mail-pg1-x562.google.com;
+ client-ip=2607:f8b0:4864:20::564; helo=mail-pg1-x564.google.com;
  envelope-from=florian.fainelli@broadcom.com; receiver=<UNKNOWN> 
-Received: from mail-pg1-x562.google.com (mail-pg1-x562.google.com
- [IPv6:2607:f8b0:4864:20::562])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6C49660718
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 21:39:33 +0000 (UTC)
-Received: by mail-pg1-x562.google.com with SMTP id
- 41be03b00d2f7-cc4aa18f9afso735682a12.3
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 14:39:33 -0700 (PDT)
+Received: from mail-pg1-x564.google.com (mail-pg1-x564.google.com
+ [IPv6:2607:f8b0:4864:20::564])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2DB588176D
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 21:39:36 +0000 (UTC)
+Received: by mail-pg1-x564.google.com with SMTP id
+ 41be03b00d2f7-cc4c02ddd62so1056085a12.0
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 14:39:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793223573; x=1793828373;
+ d=1e100.net; s=20260707; t=1793223576; x=1793828376;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:dkim-signature:x-gm-gg
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
  :content-type;
- bh=PZZhaRL4+XUl122xdmrQDp7NVh3dphLPUT+YP8vXKGY=;
- b=H8bgQLz1Q05P9urZJRNdGi9OZbif6HHFiBCCCcR0ir9CQsxGZd2q56PeK2fCRV1uOJ
- dNbN6Bh87+ph/FF5FFSpHX/PJNQGxKHTgl/8Fr6LeDXfYyZa9vOGBPJX7rJ6K94XtgRW
- QeJgMVZwv/ZTPoF1D+7J1vgcdH0kf9dAmj+ZfVfxWzNZlIGF8/pbQF1hu07S+RsSpbxV
- nF+CWVTiPQS7s5AMuaet8eRu3bcaU3tHQ44nx3aOvHmqix2EQiCB9MIgWYlbjIT66UAv
- 1Yo98J+cZTrnhtIbJRtnktBauWA1BfrQ5MM3f/BA0Kut2Mzif70h+YARoffGtjvotQdF
- PZpA==
-X-Gm-Message-State: AFq9FYJ9s6BUUY6qQAapzBaxOG3qHwDwmXn7m95i6MZ8hY3XCZg7pVxf
- FIDgqI8tGvaHGkyUv03HQrjvdcaQenZYwcgo3DUrzie0ZSXCIufGtXKYTemqMqgaJWOJZ2F4zXC
- UfaA9sA4FXlqELTtdsknS8GEFrq/Nmp8GZ/2lkvO+TjMtLKZbnQgz8o5u7pWTKv4lLqI5vzLQIM
- uXKQ+lNdMPRM85mbctXNRROkoJwVu3lIwcoSi9vgFvRwmLlm3X7lANIks8Oci+pa9P03UqOV71M
- cktybiIZLEUKbClRQ==
-X-Gm-Gg: AYBFou3o2MocnRHF5LgcmZvmQ4/zZSfJgeSRnBMEeGzvlMbP9/btt3Siqkns0XLZcGG
- uqN1Dlvf7S6SYfAR9XFDXudrhCaz0NS2N02cgx8OHPXWtOtE5oDUPVrw1+JFI2/UprKiiXkOvFX
- mB9jF9GovgTzlYh5LgD+gMvzF4cJK5ugkaD8sh1sO7cPo7urXSUq9ds8HmGgZn9hWxmNEdS2pvg
- /DO3hK8r5We1DKNVeK1/ZLvefivuoWkpTPuMGeUI7Jss8ZZkkeC8CNJCSTW/wWM8n0hvZZRwAo8
- 4hOOr9HGQpMP0sb+6V9cuUnGlnS64YeOXwFzszcYcNyWKWTalmWgakn7M+T+KUmk0rPDIq/EibF
- Taajs8nOzhw7vYlywOlosUERP1Ty04vr2hJ5nOk2MDLsYI1WK+LeedzPmidgG52QeSGJ/NpW4uz
- TAnTW5R8E4y23aPe3X+YCKfpLyc0SRoryBuQpcsUijecI=
-X-Received: by 2002:a17:90b:5345:b0:3ac:a7ee:6780 with SMTP id
- 98e67ed59e1d1-3ae58316552mr2786255a91.66.1793223573217; 
- Wed, 28 Oct 2026 14:39:33 -0700 (PDT)
+ bh=RAr1wLzdeHQ2NKSPyLMhmW8psOQ8qYi6MxT58s3FTyA=;
+ b=qpTJkHKxduEfXQyE/MQq0bBTvTf3yc5lvk3hJwbAZ+j6nbPyXsWM144vnPOT1tyVTW
+ BOZUw3tl4TMMaUE283jZS98DxQTWeFtPRB7/z+1idMyorUB52GowAbKyR9mURiZXUyRb
+ Eslad9lHJE9jVTg0B6JodTyFv+cRvc50UbUDk5uBBLWr0Lc9f0wgLOyQ+enFCKYzsBoK
+ Gt0mMj4yfy/RWWekDm6gRiCwlvZ/g0qfFcdRSmlfwlMzZxvNeG4a9PDaq7PsiVsPi3qE
+ RoSQSpQS21vxnmt0Qpl/n7IaTQSoVyA4K8kB8Nkq3YXqp7iuq317mCH2bebgPl9/Xacz
+ tGUQ==
+X-Gm-Message-State: AFq9FYItLUFoG7fTWqLl3aGs/VbWqzn44MAqkSd8iJgI7DmfPxYfyUf1
+ ziDZ3zNtTGNFXZQWr7vwrnWcAIvI0HP1yGKWCR0oB38V57JvF33w5w/5TnhHdDLJVIElFjxZfcw
+ PZ8ZK6TU7nxW3GKPwvUe2w2ktLFdeY5CpoI4HAl2arkixMuWaxLb6mv9NIFD+D4g49ysvlz40xb
+ 5RQ3G654Q4MUPPjmf88Qs+awBPfeeiA8s9uuvixSQ+ovgymqPD5g8zkHB6wYdxziA4g9x9NvlUm
+ wW9CwBeVMjtWjjFaw==
+X-Gm-Gg: AYBFou1GLSI0Li44BjxkQ/Bt5xH7lazaKSMYrr9L78tkah2/58BjVjB6g3M7qm2spSg
+ ghxADxUjD3JMFOa92SeYyQ6iwfK9P6WQyCR7sEQnojgyVgJx7hmzt/S7RuUw/e4eplqhQAtQD/D
+ asyWNDKpEfAWU5pK6eA7Qu+63iyBQhC50MFl6S+dwKOXuLZO4XjrIGQXjmk2OayCMYrUb82FhbL
+ wCbfPQZGftRiEaU8XQTVeCQXTUA1ps+DEH09Tmfy14k5fGD6YAHnjqp5+6zXooTLXYa6+IOZ2WP
+ ELqu+2tQcvx3VkK+rPla3xNk6b7CVhquBRBCZN2zw3zqfLkQOt4DgKs/aDUkkvPlou8GNPCg1DI
+ yE16u2gGZWl/LPBZRmx3ESaUSEmqtEGl+RzIFModJa8vXGhDIRBkP64tlIVDfOE0EbSqSqTE0XP
+ a08rtbrVqVaDctQnJbQGY9IzApG1cUh/Dr4kz7WCWVEKk=
+X-Received: by 2002:a17:90b:54cd:b0:3a4:6f38:f2a2 with SMTP id
+ 98e67ed59e1d1-3ae580f1940mr2697284a91.25.1793223576058; 
+ Wed, 28 Oct 2026 14:39:36 -0700 (PDT)
 Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com
  (address-144-49-247-120.dlp.protect.broadcom.com. [144.49.247.120])
  by smtp-relay.gmail.com with ESMTPS id
- 98e67ed59e1d1-3ae57b4c0d8sm1196001a91.3.2026.10.28.14.39.32
+ 98e67ed59e1d1-3ae6e803953sm542044a91.4.2026.10.28.14.39.35
  for <buildroot@buildroot.org>
  (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
- Wed, 28 Oct 2026 14:39:33 -0700 (PDT)
+ Wed, 28 Oct 2026 14:39:36 -0700 (PDT)
 X-Relaying-Domain: broadcom.com
 X-CFilter-Loop: Reflected
-Received: by mail-qk1-f197.google.com with SMTP id
- af79cd13be357-93f1e62510cso350202485a.1
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 14:39:32 -0700 (PDT)
-X-Received: by 2002:a05:620a:319e:b0:93e:c12c:9b6d with SMTP id
- af79cd13be357-94408d3bbbfmr587204685a.72.1793223571754; 
- Wed, 28 Oct 2026 14:39:31 -0700 (PDT)
-X-Received: by 2002:a05:620a:319e:b0:93e:c12c:9b6d with SMTP id
- af79cd13be357-94408d3bbbfmr587197685a.72.1793223571039; 
- Wed, 28 Oct 2026 14:39:31 -0700 (PDT)
+Received: by mail-qv1-f72.google.com with SMTP id
+ 6a1803df08f44-91c84af45c8so18502336d6.3
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 14:39:35 -0700 (PDT)
+X-Received: by 2002:a05:6214:1bcd:b0:91b:8025:6827 with SMTP id
+ 6a1803df08f44-91c7cf9f368mr56990026d6.21.1793223574705; 
+ Wed, 28 Oct 2026 14:39:34 -0700 (PDT)
+X-Received: by 2002:a05:6214:1bcd:b0:91b:8025:6827 with SMTP id
+ 6a1803df08f44-91c7cf9f368mr56989456d6.21.1793223574059; 
+ Wed, 28 Oct 2026 14:39:34 -0700 (PDT)
 Received: from stbirv-lnx-1.igp.broadcom.net ([192.19.223.252])
  by smtp.gmail.com with ESMTPSA id
- 6a1803df08f44-91c6ed36451sm62806156d6.34.2026.10.28.14.39.27
+ 6a1803df08f44-91c6ed36451sm62806156d6.34.2026.10.28.14.39.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 28 Oct 2026 14:39:29 -0700 (PDT)
+ Wed, 28 Oct 2026 14:39:33 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Wed, 28 Oct 2026 14:37:33 -0700
-Message-Id: <20261028213744.511429-13-florian.fainelli@broadcom.com>
+Date: Wed, 28 Oct 2026 14:37:34 -0700
+Message-Id: <20261028213744.511429-14-florian.fainelli@broadcom.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20261028213744.511429-1-florian.fainelli@broadcom.com>
 References: <20261028213744.511429-1-florian.fainelli@broadcom.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
 X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
-Subject: [Buildroot] [PATCH v2 12/23] lua: rework post-patch hook usage
+Subject: [Buildroot] [PATCH v2 13/23] infra: host packages inherit the
+ target extra downloads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -175,26 +176,23 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Florian Fainelli via buildroot <buildroot@buildroot.org>
 Reply-To: Florian Fainelli <florian.fainelli@broadcom.com>
-Cc: Gary Bisson <bisson.gary@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Petr Vorel <petr.vorel@gmail.com>,
- Spenser Gilliland <spenser@gillilanding.com>,
- Francois Perrad <fperrad@gmail.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Maxime Chevallier <maxime.chevallier@bootlin.com>,
- Francois Perrad <francois.perrad.86@gmail.com>,
- Arnout Vandecappelle <arnout@rnout.be>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Thomas Perale <thomas.perale@mind.be>,
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
  Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Romain Naour <romain.naour@gmail.com>,
- Pascal de Bruijn <p.debruijn@unilogic.nl>,
- Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
  =?UTF-8?q?J=C3=A9r=C3=B4me=20Pouiller?= <jezz@sysmic.org>,
- Bernd Kuhls <bernd@kuhls.net>, Refik Tuzakli <tuzakli.refik@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Gary Bisson <bisson.gary@gmail.com>, Romain Naour <romain.naour@gmail.com>,
+ Bernd Kuhls <bernd@kuhls.net>, Thomas Perale <thomas.perale@mind.be>,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>,
+ Refik Tuzakli <tuzakli.refik@gmail.com>,
+ Francois Perrad <francois.perrad.86@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Arnout Vandecappelle <arnout@rnout.be>, Petr Vorel <petr.vorel@gmail.com>,
+ Spenser Gilliland <spenser@gillilanding.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Pascal de Bruijn <p.debruijn@unilogic.nl>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
@@ -205,188 +203,87 @@ X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-From: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 
-In preparation for the introduction of out-of-tree package build, it
-is important that we don't do different things in the patch hooks for
-the target and host variant of a given package, because the source
-tree will be shared between the target and host builds.
+Some packages need extra downloads, which are then extracted in their
+source trees. Up until now, this was only used by target packages.
 
-For lua, the post patch hook was modifying luaconf.h before the build
-to get a 32 bits Lua build. However, passing just -DLUA_32BITS like we
-do for other Lua compile time options is not sufficient since
-LUA_32BITS should also be defined in the installed luaconf.h so that
-other packages linking against lua get this defined as well. So, this
-patch changes the post-patch hook to passing -DLUA_32BITS in
-LUA_CFLAGS *and* changing the installed luaconf.h in a
-post-install-staging hook.
+For example, perl will need perl-cross.
 
-The host variant also modified luaconf.h, to set LUA_ROOT to the host
-directory. Since the host and target variants share the same sources,
-this can not be done in a hook for the host variant only. Instead, the
-Buildroot patch that sets LUA_ROOT now allows it to be overridden on the
-compiler command line, which the host variant does with its CFLAGS, and
-the installed host luaconf.h is adjusted in a post-install hook.
+But with the upcoming merge of the host and target soruce trees, we
+will also need those extra downloads for the host variants.
 
-Cc: Francois Perrad <fperrad@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+Update the three packages that already duplicated the host extra
+downloads from the target ones.
+
+There are three packages left that define host extra downloads, but
+those packages  do not have a target variant, so we can leave them
+as-is.
+
 Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
-(cherry picked from commit 827ed461ba2b00acfebcbd01e53d93a148594833)
+Cc: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+(cherry picked from commit 01540f0ee0cf07f77ef0dbf99d3d74f95b17f121)
 Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
 ---
- package/lua/5.1.5/0001-root-path.patch | 24 +++++++++---------------
- package/lua/5.3.6/0001-root-path.patch | 15 +++++++++++----
- package/lua/5.4.9/0001-root-path.patch | 11 +++++++++--
- package/lua/lua.mk                     | 18 ++++++++++++++----
- 4 files changed, 43 insertions(+), 25 deletions(-)
+ package/android-tools/android-tools.mk | 1 -
+ package/binutils/binutils.mk           | 1 -
+ package/gdb/gdb.mk                     | 1 -
+ package/pkg-generic.mk                 | 6 ++++++
+ 4 files changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/package/lua/5.1.5/0001-root-path.patch b/package/lua/5.1.5/0001-root-path.patch
-index 41de4ba2b938..81c5eefa3d90 100644
---- a/package/lua/5.1.5/0001-root-path.patch
-+++ b/package/lua/5.1.5/0001-root-path.patch
-@@ -1,31 +1,25 @@
--Adjust installation location to /usr.
-+Adjust installation location to /usr, and allow LUA_ROOT to be overridden
-+from the compiler command line.
-+
-+The host variant needs a different LUA_ROOT than the target variant. As
-+both variants share the same sources, it can not be set by modifying
-+luaconf.h, so it is passed in the CFLAGS instead.
- 
- Upstream: N/A specific for Buildroot build
- Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
- 
--Index: b/etc/lua.pc
--===================================================================
----- a/etc/lua.pc
--+++ b/etc/lua.pc
--@@ -8,7 +8,7 @@
-- R= 5.1.5
-- 
-- # grep '^INSTALL_.*=' ../Makefile | sed 's/INSTALL_TOP/prefix/'
---prefix= /usr/local
--+prefix= /usr
-- INSTALL_BIN= ${prefix}/bin
-- INSTALL_INC= ${prefix}/include
-- INSTALL_LIB= ${prefix}/lib
- Index: b/src/luaconf.h
- ===================================================================
- --- a/src/luaconf.h
- +++ b/src/luaconf.h
--@@ -94,7 +94,7 @@
-+@@ -94,7 +94,9 @@
-  	".\\?.dll;"  LUA_CDIR"?.dll;" LUA_CDIR"loadall.dll"
-  
-  #else
- -#define LUA_ROOT	"/usr/local/"
-++#if !defined(LUA_ROOT)
- +#define LUA_ROOT	"/usr/"
-++#endif
-  #define LUA_LDIR	LUA_ROOT "share/lua/5.1/"
-  #define LUA_CDIR	LUA_ROOT "lib/lua/5.1/"
-  #define LUA_PATH_DEFAULT  \
-diff --git a/package/lua/5.3.6/0001-root-path.patch b/package/lua/5.3.6/0001-root-path.patch
-index b41df3ecb74c..f6273349be27 100644
---- a/package/lua/5.3.6/0001-root-path.patch
-+++ b/package/lua/5.3.6/0001-root-path.patch
-@@ -1,4 +1,9 @@
--Adjust installation location to /usr.
-+Adjust installation location to /usr, and allow LUA_ROOT to be overridden
-+from the compiler command line.
-+
-+The host variant needs a different LUA_ROOT than the target variant. As
-+both variants share the same sources, it can not be set by modifying
-+luaconf.h, so it is passed in the CFLAGS instead.
- 
- Upstream: N/A specific for Buildroot build
- Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-@@ -7,12 +12,14 @@ Index: b/src/luaconf.h
- ===================================================================
- --- a/src/luaconf.h
- +++ b/src/luaconf.h
--@@ -200,7 +200,7 @@
--
-+@@ -200,7 +200,9 @@
-+ 
-  #else			/* }{ */
--
-+ 
- -#define LUA_ROOT	"/usr/local/"
-++#if !defined(LUA_ROOT)
- +#define LUA_ROOT	"/usr/"
-++#endif
-  #define LUA_LDIR	LUA_ROOT "share/lua/" LUA_VDIR "/"
-  #define LUA_CDIR	LUA_ROOT "lib/lua/" LUA_VDIR "/"
-  #define LUA_PATH_DEFAULT  \
-diff --git a/package/lua/5.4.9/0001-root-path.patch b/package/lua/5.4.9/0001-root-path.patch
-index cec9066eee98..69d142a8f242 100644
---- a/package/lua/5.4.9/0001-root-path.patch
-+++ b/package/lua/5.4.9/0001-root-path.patch
-@@ -1,4 +1,9 @@
--Adjust installation location to /usr.
-+Adjust installation location to /usr, and allow LUA_ROOT to be overridden
-+from the compiler command line.
-+
-+The host variant needs a different LUA_ROOT than the target variant. As
-+both variants share the same sources, it can not be set by modifying
-+luaconf.h, so it is passed in the CFLAGS instead.
- 
- Upstream: N/A specific for Buildroot build
- Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-@@ -7,12 +12,14 @@ Index: b/src/luaconf.h
- ===================================================================
- --- a/src/luaconf.h
- +++ b/src/luaconf.h
--@@ -223,7 +223,7 @@
-+@@ -223,7 +223,9 @@
-  
-  #else			/* }{ */
-  
- -#define LUA_ROOT	"/usr/local/"
-++#if !defined(LUA_ROOT)
- +#define LUA_ROOT	"/usr/"
-++#endif
-  #define LUA_LDIR	LUA_ROOT "share/lua/" LUA_VDIR "/"
-  #define LUA_CDIR	LUA_ROOT "lib/lua/" LUA_VDIR "/"
-  
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 6dbdc950021b..752b67b45333 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -66,19 +66,29 @@ endif
+diff --git a/package/android-tools/android-tools.mk b/package/android-tools/android-tools.mk
+index 20e26839f977..e30fce8ab7e3 100644
+--- a/package/android-tools/android-tools.mk
++++ b/package/android-tools/android-tools.mk
+@@ -8,7 +8,6 @@ ANDROID_TOOLS_SITE = https://launchpad.net/ubuntu/+archive/primary/+files
+ ANDROID_TOOLS_VERSION = 4.2.2+git20130218
+ ANDROID_TOOLS_SOURCE = android-tools_$(ANDROID_TOOLS_VERSION).orig.tar.xz
+ ANDROID_TOOLS_EXTRA_DOWNLOADS = android-tools_$(ANDROID_TOOLS_VERSION)-3ubuntu41.debian.tar.gz
+-HOST_ANDROID_TOOLS_EXTRA_DOWNLOADS = $(ANDROID_TOOLS_EXTRA_DOWNLOADS)
+ ANDROID_TOOLS_LICENSE = Apache-2.0
+ ANDROID_TOOLS_LICENSE_FILES = debian/copyright
+ ANDROID_TOOLS_DEPENDENCIES = host-pkgconf
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index c6a6380be99e..4b376f393bbd 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -137,7 +137,6 @@ endef
+ BINUTILS_POST_EXTRACT_HOOKS += BINUTILS_XTENSA_OVERLAY_EXTRACT
+ BINUTILS_EXTRA_DOWNLOADS += $(ARCH_XTENSA_OVERLAY_URL)
+ HOST_BINUTILS_POST_EXTRACT_HOOKS += BINUTILS_XTENSA_OVERLAY_EXTRACT
+-HOST_BINUTILS_EXTRA_DOWNLOADS += $(ARCH_XTENSA_OVERLAY_URL)
  endif
  
- ifeq ($(BR2_PACKAGE_LUA_32BITS),y)
-+# We adjust the CFLAGS for the build of Lua itself, and then the
-+# installed luaconf.h so that package using Lua also see LUA_32BITS
-+# defined.
-+LUA_CFLAGS += -DLUA_32BITS
- define LUA_32BITS_LUACONF
--	$(SED) 's/\/\* #define LUA_32BITS \*\//#define LUA_32BITS/' $(@D)/src/luaconf.h
-+	$(SED) 's/\/\* #define LUA_32BITS \*\//#define LUA_32BITS/' \
-+		$(STAGING_DIR)/usr/include/luaconf.h
- endef
- 
--LUA_POST_PATCH_HOOKS += LUA_32BITS_LUACONF
-+LUA_POST_INSTALL_STAGING_HOOKS += LUA_32BITS_LUACONF
+ # Hardlinks between binaries in different directories cause a problem
+diff --git a/package/gdb/gdb.mk b/package/gdb/gdb.mk
+index cfec0585da9d..f33cc2ed7c57 100644
+--- a/package/gdb/gdb.mk
++++ b/package/gdb/gdb.mk
+@@ -39,7 +39,6 @@ endef
+ GDB_POST_EXTRACT_HOOKS += GDB_XTENSA_OVERLAY_EXTRACT
+ GDB_EXTRA_DOWNLOADS += $(ARCH_XTENSA_OVERLAY_URL)
+ HOST_GDB_POST_EXTRACT_HOOKS += GDB_XTENSA_OVERLAY_EXTRACT
+-HOST_GDB_EXTRA_DOWNLOADS += $(ARCH_XTENSA_OVERLAY_URL)
  endif
  
-+# The host and target variants share the same sources, so the sources can
-+# not be modified for the host variant only. LUA_ROOT is overridden in the
-+# CFLAGS when building host-lua, and in the installed luaconf.h.
- define HOST_LUA_LUACONF
--	$(SED) 's|#define LUA_ROOT.*|#define LUA_ROOT "$(HOST_DIR)/"|' $(@D)/src/luaconf.h
-+	$(SED) 's|#define LUA_ROOT.*|#define LUA_ROOT "$(HOST_DIR)/"|' \
-+		$(HOST_DIR)/include/luaconf.h
- endef
--HOST_LUA_POST_PATCH_HOOKS += HOST_LUA_LUACONF
-+HOST_LUA_POST_INSTALL_HOOKS += HOST_LUA_LUACONF
- 
- HOST_LUA_CFLAGS = -Wall -fPIC -DLUA_USE_DLOPEN -DLUA_USE_POSIX
-+HOST_LUA_CFLAGS += -DLUA_ROOT='\"$(HOST_DIR)/\"'
- ifeq ($(BR2_PACKAGE_LUA_5_3),y)
- HOST_LUA_CFLAGS += -DLUA_COMPAT_5_2
+ ifeq ($(GDB_FROM_GIT),y)
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 0f4bf73fa064..b9808bb624f7 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -608,6 +608,12 @@ ifndef $(2)_PATCH
+  endif
  endif
+ 
++ifndef $(2)_EXTRA_DOWNLOADS
++ ifdef $(3)_EXTRA_DOWNLOADS
++  $(2)_EXTRA_DOWNLOADS = $$($(3)_EXTRA_DOWNLOADS)
++ endif
++endif
++
+ $(2)_MAIN_DOWNLOAD = \
+ 	$$(if $$($(2)_SOURCE),$$($(2)_SITE_METHOD)+$$($(2)_SITE)/$$($(2)_SOURCE))
+ 
 -- 
 2.34.1
 
