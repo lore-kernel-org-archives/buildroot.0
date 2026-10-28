@@ -1,111 +1,105 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 476E0606A31C
-	for <buildroot@archiver.kernel.org>; Wed, 28 Oct 2026 18:43:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76068606A320
+	for <buildroot@archiver.kernel.org>; Wed, 28 Oct 2026 19:21:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=II0kUG66
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=f9ld6pgj
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1E30C81E2A;
-	Wed, 28 Oct 2026 18:43:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4B93F40A2E;
+	Wed, 28 Oct 2026 19:21:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nHCTHWD6QeXh; Wed, 28 Oct 2026 18:43:06 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org EA17681CE7
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793212986;
-	b=sMvlS7kFUzrL3tIFjtCXxUJotvzhJyIGIL5e5jJoGOO1VS0u3rP/+eaUV1mU3dRZQsE5
-	 o4z/XEi5o50d6tcm31NSOXfXFSL2Kil76UFlJT2Hok+cZXOWXGOxwmIf4hKwf2aXIvs6l
-	 EYOhiP9NoUEpo45UzHYSl2jAepdadsMY1xvAlBHQxmfA+CgvwhnRYrZVsYn9qfzg1bmR1
-	 BeUP/u6hzZXTvYg/6lvxrvo55KeL42Cgmxjz3WIbUe3qVHoo0QkAaJ2qQrfHaDTEKZSSr
-	 BxJDKirJHbSQ9mNGRb47lhpKaruqhN9QCQc94I+pHaQn697nMBvytPWDE/4v6xtv+jA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7XvS0YQUuxU4; Wed, 28 Oct 2026 19:21:18 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 60EA540A08
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793215278;
+	b=R2Xe8AypSIEnv20/PoXv9iwaJDsYVJ4smjlmjLkLHjy8GexPKfuon9KbE3p6lHjBEq3m
+	 +U14NBxRV0iA9PbhYpGMnvN32NaDedO+BJHXhYdW9tpP7iiZrtJNv8Imnyft5zyRzJ6XE
+	 4k2qbcFltzDy8pLMWMRzW31sjxtR2vZVs2DSfMThWi9M6dMOF8j7LgqfYlCwm6zM4zER/
+	 TgkF+aO9jMSecIqdBxPnB4Tv4Wuet6OpjfEFJts60O77HcXbnuvjplHcqobns5o8oLMwq
+	 n8WUSRUFagnQDn35Hh1qKnP5MeS9lddsSWamQ2BEQHervpasDBStd9d90KogV2M/r3w==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793212986;
+	c=relaxed/relaxed; t=1793215278;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=rJvC9lh8iulUyvkZrprp5rs2qe05b535YY7Ppgy5ctw=;
-	b=LfwcrYihS3bHdJcxA49F6muLkVimj8yhqL8TP5cdYlzPNiQ4sp7HqweNDcZLFK4vCM79
-	 /o8esLY3ArKOqTIMtLXgBYKqr26nOQWPEH2l/E6uDedhzXOMzi50JlAxNew8hysunyyDO
-	 2dM6TsaTARlEszvNJR6sn2ueD3P+dPh85+MFpDFscnIu6HpMbl4nbdwhNXVXD4of9tXTr
-	 STzU7r8sbbT93YtiwyL/5vN0ear1Ice+Koikj3IJYKEyVYdj4rK3wQHMA3vjZ+i7F3Mwd
-	 bFrB/Tnq2fPeRpoHiUyg0MxRXq01dxVcXW8bm3IWyVgjDLAv3QzkikKP404P7tQl54g==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=SuGM6/guMuzBgGZnZ73udnh/8zKrCfTz9je+QRGsKCk=;
+	b=Tq+2nGM5i/sU4SKaHQCJ2KdOnHrwsPmqa5gxhJgn0aTxZrwDwbrhQquUdLZjxAD0HzvV
+	 8cPFsG78/77hTCiOcAtpJlHWbdLYrSAviErLwi8d97D2OK1rtcbYjODdX2OosV9r510eh
+	 T0VfVZYw3MqvLEt+7IvHZmyux0dedKiCNjoIXtPYDtkEVl/vP6SX22GmDxvxyxVN6REYY
+	 yNafhOrneYNKwXjL92udjOzqLion3HRxkbE4L6VPOwNauHzfUmJ9KmznvGXQu8hDtRy1y
+	 egqCWWgjYTjzDtwU4Kp1C0dvTCfcWEwJ7VBTOiCzeVysbqBF7ScT+xeBu5BXbWRz2og==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793212986;
-	bh=rJvC9lh8iulUyvkZrprp5rs2qe05b535YY7Ppgy5ctw=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=II0kUG6638hb0J8Exoaz5amaxG7EdNLprhQfdu8ukKc+CHGfNjmAPkiae0z925um1
-	 bEg016dyAFX8/BSNsdyutrQW14R0G0shgv0ctJAhd1qpFS6e44cLBPUk/lsBfKYbIW
-	 SBP/CtJz0V3fcF3yV80OpWFya43tp2mzkrOyf/SUTpX+gmU9q5uetuzPsEE2MG+Pc8
-	 APk7ZGIkiZaRZWhlIhZ80K6GmuwMX3pgeBrKxViU3OxmbOitDw5Z+H7B6P3pITERIL
-	 X17d63Q8gs/+6Td59klPXZheg1REafpNhwCuCpeWO7gG6O1C0xxVkBuSFqx5fSVjI8
-	 qUbjBEE7A7O4g==
+	s=default; t=1793215278;
+	bh=SuGM6/guMuzBgGZnZ73udnh/8zKrCfTz9je+QRGsKCk=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=f9ld6pgjud14hpbi1N/SWPVxAZKNoVPWsc/EWwyFHFc2aqiodBOKEbzG1ZD2ti7yy
+	 JfBHWeZeJpiNpus2p6fvzzXcPxtijRNW+zG5HMSuR/vYIqhdGdhuxzD0h0Db002PhG
+	 cns6Po4VJU/Lrhojgozn1QiVxtys57BZUQYI1Oxincpl/X7Xvvq2RPmkwZBT4ScxX8
+	 DEFGcfW0Ftp+XkILRumcWcN49015cSx/2QcPQbdUquk9LxvdGo5JTTYrXuxlqH2i88
+	 CsLC3Cqd2ClkcZKEfeQlh01XSK43kXYmYKBw4OXcDyhtH+mnP/ED6aYRVG9RGVKyEw
+	 Yz9YKU2KlcBSg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EA17681CE7;
-	Wed, 28 Oct 2026 18:43:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 41422356
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 18:43:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 60EA540A08;
+	Wed, 28 Oct 2026 19:21:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 208E6120
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 19:21:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2708F81E2A
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 18:43:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 02B3C8186B
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 19:21:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h6fnJhbberEF for <buildroot@buildroot.org>;
- Wed, 28 Oct 2026 18:43:04 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 1CF4A81A29
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793212984;
- b=LmHniTSBOfQ4EFwkm9f+EVM2epLZGjbY5xTZeYqwArPUzFyjFcGD/BHfQa6BOXErsZOP
- 5q2zdsLsbHa/eZHbYHBTF2AwnTo+Y7ZdYQVXOjxp1mP+mSHXtQJGwbYBH/hwsKnhb3npy
- mZn4W7Cz5dVACKlTCyrXNDPMft6JMfBtS1v+jOUte+yJJkTJ2VA8YyqLQtGR6F30FMfe9
- v1v4gFrKjb0O3iXjHl19A/JjmUbZCiBxo37bZ3LNtf6XTfnG3L+KroJdSNXemIqcLxFAv
- novUff9d1uPNC3Or5MaLepOjdi74JsUla8xnEU94im1lYB2ys0nZifpc+LThE5egXwQ==
+ id q-K5xee6DASd for <buildroot@buildroot.org>;
+ Wed, 28 Oct 2026 19:21:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 1BA59816DC
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793215276;
+ b=FYf29O6rFRlKNBhKXDgKGX2cUk3eMyKCsWcnaESLdoMynPPTB8Op3pUWOlv0dg0Rxotq
+ 64j171FgDTU0JH80ZfigOs4gxHtes56aB+xLX8UH+q0FwBZunYXyQUCpI/5CfU2LPvBkJ
+ EHAEApcmkbp0tcw32MjSDaCM10YOmdt/6t7XrEaEnkVYjoXlwdUtr9UkF7p9quFkihRrP
+ nAwggB4elD+RJI47LxlybqeXBdB085wPTehP2tnnZP2h/m+gRtshkjHEv04Iqs6SXKilH
+ Df8S/W3p/ovHupW7KPbBZgDmkADG9+6ifH/8YdAXhx87XPaBKWabiAyO5UNfDXHsOWQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793212984;
- h=Received-SPF:Received:Received:DKIM-Signature:From:To:Cc:Subject:
- Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
- bh=Ir7ZScSB4k6lrYkBWVZIdakK8awBa4fPivFdBG79YZk=;
- b=ip9QDcilnD7TupdWeApaIQNtN2h007P1w9vZRJUbnqOtJB+lOY8Gyu9avNtKueDRGMIk
- 2lZFkEufGufQ3/xGmN5jeV/PYdOnJ0c3WHs0fRL1N0L1uVh8p+rY1xQUUOgWvln5/oENT
- V1/TrF04vZnjO3dpnkEP8DbhfDR/OloKAYZlqIPWHPNmcsLoNK8wC37mVAPltnQgyyK3k
- 68D9hUMRoA6gUm+dtPkcqQ+ARyFL/UyGYgTdZvdbe0FFThnXaaBa/xs/vHuHPDqHV3jhW
- MHQZzhxTO6hlIIFJP37R80EPozXqDjJfNoxGIcUPpedyMH4n5Ng5oIffPeaQvHeRM+g==
+ c=relaxed/relaxed; t=1793215276;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=SvE1thUroNEoSWgMCx+NmjrZmaG9Lg+YofLVHGWrcBg=;
+ b=T+RjSVEtp4Wl17fOuVR4Utu/nFnhL9daz1AIgJu6569xgo14dFOOc5sVjihPX8ZN6cWO
+ P2UjIqABNSp5bg7xfZK/5+dA7Fjg7s3Bs25la9j4CvYclqR0Ng99W+7VTdUtMGHwrtaQ/
+ Wz6tg3Z5K0q+M8MzqcA0LlRMXBC2rus019/SjXkGixmsmV7/Qf2liNJ8hTXxYUzr1QmPn
+ i5DlIrbQpaF6ONSpWt2Ick4uw5IPvuEkMP6bT3PW//0NuFsDH6n9Z8cIub+NtMKYIqA8U
+ hKR8LT7qgSSP9KbYCs5Mrw331KVcoteOpzAF2EvJZlBb6wgcgSBqmNmbgUmjLvA0fnw==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
- dmarc=pass header.from=kernel.org;
- dkim=pass header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256
- header.s=k20260515 header.b=Gcr9eSmU; 
- arc=none smtp.remote-ip=172.234.252.31
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=172.234.252.31;
- helo=sea.source.kernel.org; envelope-from=dinguyen@kernel.org;
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from sea.source.kernel.org (sea.source.kernel.org [172.234.252.31])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1CF4A81A29
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 18:43:03 +0000 (UTC)
-Received: from smtp.kernel.org (quasi.space.kernel.org [100.103.45.18])
- by sea.source.kernel.org (Postfix) with ESMTP id D4AD943FD7;
- Wed, 28 Oct 2026 18:43:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A9FB1F031E0;
- Wed, 28 Oct 2026 18:43:02 +0000 (UTC)
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1BA59816DC
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 19:21:16 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 11EB29D232; Wed, 28 Oct 2026 19:19:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Cc: dinguyen@kernel.org,
-	thomas.petazzoni@bootlin.com
-Date: Wed, 28 Oct 2026 13:42:57 -0500
-Message-ID: <20261028184257.635621-1-dinguyen@kernel.org>
-X-Mailer: git-send-email 2.42.0.411.g813d9a9188
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
-Subject: [Buildroot] [PATCH RESEND] config: add socfpga_agilex5_defconfig
+Date: Wed, 28 Oct 2026 20:00:27 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0d2b3e19bc26be5a60c9a05825e29e43602afa85
+X-Git-Newrev: 7af7e73ca4b485ba77105d745feaae4fe93cb45d
+X-Patchwork-Hint: ignore
+Message-Id: <20261028191949.11EB29D232@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ntpsec: security bump version to
+ 1.2.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -115,202 +109,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Dinh Nguyen via buildroot <buildroot@buildroot.org>
-Reply-To: Dinh Nguyen <dinguyen@kernel.org>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Build Linux, U-Boot, and TF-A for the Agilex 5 SoC Development Kit
-from the QPDS 26.1.1 GSRD sources.
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7af7e73ca4b485ba77105d745feaae4fe93cb45d
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+- bump version to 1.2.6 (for details see [1])
+- fixes CVE-2026-102486, CVE-2026-102483, CVE-2026-102484, CVE-2026-102485
+
+[1] https://lists.ntpsec.org/pipermail/devel/2026-October/011062.html
+
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- board/altera/agilex5/genimage.cfg   | 27 ++++++++++++++++
- board/altera/agilex5/linux.fragment |  4 +++
- board/altera/agilex5/readme.txt     | 50 +++++++++++++++++++++++++++++
- board/altera/agilex5/uboot.fragment |  4 +++
- configs/socfpga_agilex5_defconfig   | 49 ++++++++++++++++++++++++++++
- 5 files changed, 134 insertions(+)
- create mode 100644 board/altera/agilex5/genimage.cfg
- create mode 100644 board/altera/agilex5/linux.fragment
- create mode 100644 board/altera/agilex5/readme.txt
- create mode 100644 board/altera/agilex5/uboot.fragment
- create mode 100644 configs/socfpga_agilex5_defconfig
+ package/ntpsec/ntpsec.hash | 2 +-
+ package/ntpsec/ntpsec.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/altera/agilex5/genimage.cfg b/board/altera/agilex5/genimage.cfg
-new file mode 100644
-index 0000000000..720d646546
---- /dev/null
-+++ b/board/altera/agilex5/genimage.cfg
-@@ -0,0 +1,27 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"Image",
-+			"socfpga_agilex5_socdk.dtb",
-+			"u-boot.itb"
-+		}
-+	}
-+
-+	size = 64M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition boot {
-+		partition-type = 0xc
-+		bootable = "true"
-+		image = "boot.vfat"
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext2"
-+	}
-+}
-diff --git a/board/altera/agilex5/linux.fragment b/board/altera/agilex5/linux.fragment
-new file mode 100644
-index 0000000000..7c8f9dec31
---- /dev/null
-+++ b/board/altera/agilex5/linux.fragment
-@@ -0,0 +1,4 @@
-+# QSPI access fails when 4K sectors are enabled (ES-14728).
-+# CONFIG_MTD_SPI_NOR_USE_4K_SECTORS is not set
-+# Marvell PHY on the SoC Development Kit Ethernet ports.
-+CONFIG_MARVELL_PHY=y
-diff --git a/board/altera/agilex5/readme.txt b/board/altera/agilex5/readme.txt
-new file mode 100644
-index 0000000000..4460e43477
---- /dev/null
-+++ b/board/altera/agilex5/readme.txt
-@@ -0,0 +1,50 @@
-+Altera SoCFPGA Agilex 5 SoC Development Kit
-+
-+Intro
-+=====
-+
-+This configuration builds a Linux system for the Agilex 5 SoC Development
-+Kit (socfpga_agilex5_socdk) from the QPDS 26.1.1 Golden System Reference
-+Design component versions:
-+
-+  https://github.com/altera-fpga/linux-socfpga          QPDS26.1.1_REL_GSRD_PR
-+  https://github.com/altera-fpga/u-boot-socfpga         QPDS26.1.1_REL_GSRD_PR
-+  https://github.com/altera-fpga/arm-trusted-firmware   QPDS26.1.1_REL_GSRD_PR
-+
-+The HPS first-stage bootloader is packaged by Quartus into the FPGA
-+configuration file. This defconfig builds the software that the HPS loads
-+after that: U-Boot (u-boot.itb, with TF-A BL31), the kernel Image, the
-+socfpga_agilex5_socdk device tree, and a root filesystem.
-+
-+Build
-+=====
-+
-+    make socfpga_agilex5_defconfig
-+    make
-+
-+output/images will contain:
-+
-+    Image
-+    socfpga_agilex5_socdk.dtb
-+    u-boot.itb
-+    u-boot-spl-dtb.hex
-+    bl31.bin
-+    rootfs.ext2
-+    rootfs.tar.gz
-+    sdcard.img
-+
-+sdcard.img has a FAT boot partition (Image, device tree, u-boot.itb) and
-+an ext4 root filesystem on the second partition.
-+
-+Creating a bootable SD card
-+===========================
-+
-+Copy a fabric configuration file named ghrd.core.rbf onto the FAT
-+partition if the design needs the FPGA loaded before Linux starts. U-Boot
-+skips that step when the file is absent.
-+
-+    dd if=output/images/sdcard.img of=/dev/sdX
-+
-+Program the HPS first-stage bootloader with Quartus, using
-+output/images/u-boot-spl-dtb.hex as the HPS handoff file. Boot the HPS
-+from the SD card. The serial console is ttyS0 at 115200 8n1.
-diff --git a/board/altera/agilex5/uboot.fragment b/board/altera/agilex5/uboot.fragment
-new file mode 100644
-index 0000000000..1e3327555c
---- /dev/null
-+++ b/board/altera/agilex5/uboot.fragment
-@@ -0,0 +1,4 @@
-+CONFIG_USE_BOOTARGS=y
-+CONFIG_BOOTARGS="console=ttyS0,115200 root=/dev/mmcblk0p2 rw rootwait"
-+CONFIG_USE_BOOTCOMMAND=y
-+CONFIG_BOOTCOMMAND="if fatload mmc 0:1 ${loadaddr} ghrd.core.rbf; then fpga load 0 ${loadaddr} ${filesize}; bridge enable; fi; mmc rescan; fatload mmc 0:1 82000000 Image; fatload mmc 0:1 86000000 socfpga_agilex5_socdk.dtb; setenv bootargs console=ttyS0,115200 root=/dev/mmcblk0p2 rw rootwait; booti 0x82000000 - 0x86000000"
-diff --git a/configs/socfpga_agilex5_defconfig b/configs/socfpga_agilex5_defconfig
-new file mode 100644
-index 0000000000..25d5beaded
---- /dev/null
-+++ b/configs/socfpga_agilex5_defconfig
-@@ -0,0 +1,49 @@
-+BR2_aarch64=y
-+BR2_cortex_a55=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
-+BR2_TOOLCHAIN_BUILDROOT_CXX=y
-+BR2_PACKAGE_HOST_GDB=y
-+BR2_TARGET_GENERIC_HOSTNAME="agilex5"
-+BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-+BR2_SYSTEM_DHCP="eth0"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT_ARGS="-c board/altera/agilex5/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_GIT=y
-+BR2_LINUX_KERNEL_CUSTOM_REPO_URL="https://github.com/altera-fpga/linux-socfpga.git"
-+BR2_LINUX_KERNEL_CUSTOM_REPO_VERSION="QPDS26.1.1_REL_GSRD_PR"
-+BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/altera/agilex5/linux.fragment"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="intel/socfpga_agilex5_socdk"
-+BR2_LINUX_KERNEL_INSTALL_TARGET=y
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_PACKAGE_GDB=y
-+BR2_PACKAGE_DROPBEAR=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="512M"
-+BR2_TARGET_ROOTFS_TAR_GZIP=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_GIT=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_URL="https://github.com/altera-fpga/arm-trusted-firmware.git"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_REPO_VERSION="QPDS26.1.1_REL_GSRD_PR"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="agilex5"
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_GIT=y
-+BR2_TARGET_UBOOT_CUSTOM_REPO_URL="https://github.com/altera-fpga/u-boot-socfpga.git"
-+BR2_TARGET_UBOOT_CUSTOM_REPO_VERSION="QPDS26.1.1_REL_GSRD_PR"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="socfpga_agilex5"
-+BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/altera/agilex5/uboot.fragment"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+BR2_TARGET_UBOOT_USE_BINMAN=y
-+# BR2_TARGET_UBOOT_FORMAT_BIN is not set
-+BR2_TARGET_UBOOT_FORMAT_ITB=y
-+BR2_TARGET_UBOOT_SPL=y
-+BR2_TARGET_UBOOT_SPL_NAME="spl/u-boot-spl-dtb.hex"
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
--- 
-2.42.0.411.g813d9a9188
-
+diff --git a/package/ntpsec/ntpsec.hash b/package/ntpsec/ntpsec.hash
+index 768ee75a86..4bfe81aaae 100644
+--- a/package/ntpsec/ntpsec.hash
++++ b/package/ntpsec/ntpsec.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  48717ea84a8c89bfa082ab5d0dc58b44e6328158632e77d2a74c85b7a509e498  ntpsec-NTPsec_1_2_5.tar.bz2
++sha256  c82f213532d2a5b5e9c368127287ba69a20e3116bc134e64a5c767f7c96565d8  ntpsec-NTPsec_1_2_6.tar.bz2
+ sha256  074e6e32c86a4c0ef8b3ed25b721ca23aca83df277cd88106ef7177c354615ff  LICENSES/Apache-2.0.txt
+ sha256  991d8a58e0b4be84a174a9bd333a8ca33807a0c1ce6d23a2e25a21f7ece482d0  LICENSES/Beerware.txt
+ sha256  899261d6eb6c922cf8f051225411f27b738ba0014be18c2eaf6afbf30d421bb1  LICENSES/BSD-2-Clause.txt
+diff --git a/package/ntpsec/ntpsec.mk b/package/ntpsec/ntpsec.mk
+index 0fa8a3f527..a67308af4a 100644
+--- a/package/ntpsec/ntpsec.mk
++++ b/package/ntpsec/ntpsec.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-NTPSEC_VERSION = 1.2.5
++NTPSEC_VERSION = 1.2.6
+ NTPSEC_SOURCE = ntpsec-NTPsec_$(subst .,_,$(NTPSEC_VERSION)).tar.bz2
+ NTPSEC_SITE = https://gitlab.com/NTPsec/ntpsec/-/archive/NTPsec_$(subst .,_,$(NTPSEC_VERSION))
+ NTPSEC_LICENSE = Apache-2.0, \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
