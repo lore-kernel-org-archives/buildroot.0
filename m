@@ -2,27 +2,27 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52EF5606A31A
-	for <buildroot@archiver.kernel.org>; Thu, 29 Oct 2026 07:28:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0803606A31A
+	for <buildroot@archiver.kernel.org>; Thu, 29 Oct 2026 08:13:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=UZM0+44S
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=CUkID/nr
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1B1EF406AF;
-	Thu, 29 Oct 2026 07:28:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 91ED2405AD;
+	Thu, 29 Oct 2026 08:13:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PT7dUBD91y-X; Thu, 29 Oct 2026 07:28:51 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 0EEFD40755
+ id ZRo_LIZRkyUp; Thu, 29 Oct 2026 08:13:18 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 86CDF405B5
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793258931;
-	b=FNd8hpT6OhK8zE1CREzgwP2lyYVDjZaF+2zrAfwVL9ACRCZa2MaiZMdSUtzBwyNZPvvT
-	 6zP7PZeb2jnvyhWFUw1mchdCZ7nAfjsCHeR1PTvLovDR3puKaXiERqZvCzxREGIA9OVA9
-	 HoqGYNf5mYMNwguKLdk/m6zNFYOuHJ6iBVEvlz6yWTIGjfjotY/dz+6xZa7miqODxL90+
-	 rMRP16Iq97gTcAu+LQhQ0M6XbUWbGLRoEbZe1xplLpbf0xapSBZdwMVeuI8CytqHjNo5v
-	 AwdyQPAhqz37BUGY4Fhx0cvGN1983gkbLRZnlMvBko54M6eeUuEBxWaoPn5gGWHMsdA==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793261598;
+	b=Z9D1BhoI+tynTExnCHiqjS8674Q1JmsP9f+UAhXa2TbJykiBoCJbyuVCoewkcKRa3mQO
+	 41g6jM3OvFwJyLEJmHaFib6Vz99tS03vH6UIVMZHdMGFqpQyFLjNMC0lWuPG+XXCjTdfA
+	 MHRxeHwkoIyZtLQVy8eOB0T7XJydeJ7sbDeRJnvGMpp/FpNz8Wu9HHdqKuaGGrjCzKsYa
+	 1T8Lqeq6XqRRnrKK8jn/+1Mr4mQNNaJh+P1L66zf0F6mm28JaHe1OAPFqRmQNGMOiQuBs
+	 tPRuU0cAvrGPynHuvk4EZ5AmzdT/tpgWs0L8PR1EdB/Ga4FwutnaHJqR2AKrSV2blVA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793258931;
+	c=relaxed/relaxed; t=1793261598;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,113 +31,113 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=xmLiChG4ObXLMXr0P4hp8ejTNte4wX/b6uu1t6D47QY=;
-	b=ZLf+WB6P8ajr2us2BCnDyZRlVl2rrk3YdzkSK0ytDq0LzLh2jap6eWxYJxxnuGAcYH09
-	 J5KWBJdb1tzHKat/ihZoajpdFiz/8fJvSwliFtm2PkaoF5VaE93bsYVyXgUyNHPGYLh0i
-	 P2zBWIEkbAGSlqHIbJcWfVK+nlJyO/MKjMlITFbNKORQGZn2RPQ9kmWXnQo5P1PQ001OB
-	 Lc765Wl2olqqbv+1XzLOQZz9OvBDJ8z0j+Q8BtsG0rEbxk/4isRj1ak4KoTVI2aiObzF8
-	 WPXbgP7Lfe3N/RyopqjQu+ERd2XpGK2B3QnbG+6qfGgk5qLDzE+j9GdzsYouRwx2IkQ==
+	bh=gdoXN69lFacTBZrG3l/TyTRCuXo5pT0zOPOTPGn93to=;
+	b=pOE1Ba10i4fnXi/x7fMqgCVlaj9cxu1cIza5aDYtqtqbwxSIskunqLjZbRaQpcaPMraz
+	 FiZ2aJu0+e449rY0O49xLcfWlWcVr6fWcUR2C+my5Jufg3+x5Hb0sNl23eFAILvrTVgfG
+	 gswvzRvBCNR/mdyZwBDCXM9jXlUavJLB/PvVOsdWX6FD68DzyrsoZ0LK/67uSTUTKKXnn
+	 zk8vZl6jm/deAMt+T2Zv7/DeY7lgf5aN67FhNkPdHGYXKbh1gA58kCD8m77Y1dE7WwbUU
+	 Wt94RKBN+7wsgWl3nd6PZTcAEDfQcFDaGGrTHdhkV9I92pfcuejyxNuyk6OHXpi6eqA==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793258931;
-	bh=xmLiChG4ObXLMXr0P4hp8ejTNte4wX/b6uu1t6D47QY=;
+	s=default; t=1793261598;
+	bh=gdoXN69lFacTBZrG3l/TyTRCuXo5pT0zOPOTPGn93to=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=UZM0+44Sgx//feQ5CLig7qIhAxviFuiSEz3jO24RVIjw2u3bTXsNSPA8/I7oUgcCj
-	 ZDZ7WuMZ6HQRceAj1eBVY1RvLj+YeLicrWKS0Z6wwIybdzssLAXnP8m0mWgfkk3LPR
-	 TlhmazuedpMjVLwQgZFJDqFV89BDYvodken55pJyiINzWbZxz6EAPUi5c0BiLgp2Uw
-	 LrzQ6HdjPirf+kNMqCXaAwctv5t/ZbJ1oW5TsGzge/HmQe+Z8vVn5PZq8iXzZivxY8
-	 poE75ZQkR3XeAkTQx3/3uQ2//szm0s+4Ig8MZWQ7VkHXrMxliHwbnrcoAW6ahKyS3W
-	 XTPfiFbfaRj6Q==
+	b=CUkID/nrWoVNTkA4amAJDHB7egSeeXu5xIREmMv3vDs+iNPd9Nz89OqaFbx7RnqG8
+	 DHweLaKbEKUv5c+Hg/XvwJrmUTIxLJi9eJDWrkUHvhXQjM80lcYdJk+jjFp2KMedWY
+	 5DnN6VURVmQacI9sYQH4sbPlOQZfKOsnKkqnpYb1oGSyDfLcy2gk3gE6g3zpncaTo5
+	 hYR64uQpJx42Vu6AKJYWbr7Ro+/q8ZVO7n33Uipqnf6xGhLHcMITN91LWeSv1ym+u3
+	 Z8j8V+VgDzqBDyug7XsfsiR0lxaxeAaUsE3PUQpSC0d01b1i58C2ALNcPpbKOd8oyy
+	 FZaUEt2Wd10Rw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0EEFD40755;
-	Thu, 29 Oct 2026 07:28:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 92F242FE
- for <buildroot@buildroot.org>; Thu, 29 Oct 2026 07:28:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 86CDF405B5;
+	Thu, 29 Oct 2026 08:13:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1F1B3472
+ for <buildroot@buildroot.org>; Thu, 29 Oct 2026 08:13:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 84DBB40176
- for <buildroot@buildroot.org>; Thu, 29 Oct 2026 07:28:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 10C924032E
+ for <buildroot@buildroot.org>; Thu, 29 Oct 2026 08:13:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fTFjaU_HzosW for <buildroot@buildroot.org>;
- Thu, 29 Oct 2026 07:28:49 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 41BBF40080
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793258929;
- b=Ox5aLDKTcnm4nVt8zjJBOhsKqLJTyJzjzHiPdFtNVcVVG8GhkmO85Mgtv8G++0aQExAT
- kb8rAQnHicZMkvh2tdyoLlU3i+ymZRLy44NpoVChXN5PAnaXu5Wh5h9SKNMQWQUZp1MyU
- Zm4DDSYu6wCRLaxmPi4lNapySlCUBT+S1GWAGpFgJWGTdZBPBigW98iHEJrVSJbvFreNr
- sIC3N/s9Tr5fOOs+NkjqbHGJiG0x+Ct0ZeE6kCH0EffQ8QwsP9lDyQI6enWkKn8rhSRf1
- lEDVyTuKmAJkq8yUHHPM//vmtLcHov9frRzIV1hvWQuT5XyjzTAEDntpxm/ILebIWSA==
+ id 0FRouLb3ejuE for <buildroot@buildroot.org>;
+ Thu, 29 Oct 2026 08:13:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org D298E40024
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793261596;
+ b=V5mzfu+9Mnk39eigoAKPzQ/2S33T8lRWJMc1CMn9s+ahpPMQd1OXLNHpg/vH+4Sek7uq
+ Y753EkQ/AJbE9MSHSfa24WKotbntV0haaKduqZNjxDz/fKUZ+YiVYW0+6mZLoJHRay4Y/
+ DxX4gg3Pw0iGtww2hnT+8QvphpQQX6q9iwX/y+AVbDDbP8chYRr4gTAjc2KxvIqA2fy6J
+ lZmIeEZpGn87p7SKkn4tIKy/BAZ0Sm35/iBZU4rzo3u1fD5LO+9fkyPLJaAVB0RH+/efN
+ sB162Sj0WLdKHOsWfsv7g5VQrgGaPq5zDEIfigB1z/D+7YyEvy+Do81pVqlIdDcdi2w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793258929;
+ c=relaxed/relaxed; t=1793261596;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
- bh=eBMBo4Kc4hFyIg9htnzERR7i2EbT8jObxZ/ZPJfoquU=;
- b=HUj1hbai+yKQGqIrsuPmjoKbSztrNvr2itYNrR8f7ojrl3oTr5tuAtgAilbtOFMNcVSu
- 11SNyEIIQQzW3c814LdEmA/ymsfJ6HXt07mjHeEgDoe6htjJq9vVdrMD0fH/dnwt1LJk1
- tcsW60mv4cAoRf8ZG+3jAbp5VA/CjiXAvDXSLjEPYw4GNlcqT+ZKc2nZiIj15ff7Ppz8P
- Kbtk298kfF3MiUjwH7NMP+EshTi8NpJ5fU+SYF5fWpmNj1TNQlClwEUqG8EIaUZf//Yjp
- DwCO046mN95u/eaQuHKksTFliKHFcqXCOBCd/0/8OZpXSBvM1d9gLewb59Tmc4vgHeA==
+ bh=XXn3lsWaMPtzIyv9WHGc+zgde2ry4g57H5FMbDlXpwM=;
+ b=WDw2jHtlV0OksivK31dHQohIzr9fP5I4bpdvmdW370ZHCsZogsh3r4VTT8RlOCGlYHhr
+ odi/ybmTu4gbHjj/YOdWUuEUvHWvP9qoe80zFcfH6fGWM4zgqFM+yemKrB6DRD0l3s+It
+ WGZIL9Isd8KnZ5vC3dHN3mAsc5eLIOTEOst7dTjW59H5DK7sNxILJzj66mj1d7gLgmpLE
+ wvvh48Wn1FopNP/wkDCxH37xDoj6MRqeJcMzinFtJTIPk08REnx5dU94YIGYDFxiNZZMJ
+ KZOD4DLvLZCjz6exRSNN2+e/bCBs0uJy6Ra1MdHFYggAIcO0XbL65YeXuUKd7gv8KpA==
 ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  dmarc=pass header.from=googlemail.com;
  dkim=pass header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256
- header.s=20260707 header.b=Vhn4a7ec; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::52d"
+ header.s=20260707 header.b=gfJkpOpR; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::534"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::52d; helo=mail-ed1-x52d.google.com;
+ client-ip=2a00:1450:4864:20::534; helo=mail-ed1-x534.google.com;
  envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
- [IPv6:2a00:1450:4864:20::52d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 41BBF40080
- for <buildroot@buildroot.org>; Thu, 29 Oct 2026 07:28:48 +0000 (UTC)
-Received: by mail-ed1-x52d.google.com with SMTP id
- 4fb4d7f45d1cf-6af9a9451daso2195663a12.0
- for <buildroot@buildroot.org>; Thu, 29 Oct 2026 00:28:48 -0700 (PDT)
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
+ [IPv6:2a00:1450:4864:20::534])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D298E40024
+ for <buildroot@buildroot.org>; Thu, 29 Oct 2026 08:13:15 +0000 (UTC)
+Received: by mail-ed1-x534.google.com with SMTP id
+ 4fb4d7f45d1cf-6afbc363efeso2779626a12.3
+ for <buildroot@buildroot.org>; Thu, 29 Oct 2026 01:13:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793258927; x=1793863727;
+ d=1e100.net; s=20260707; t=1793261593; x=1793866393;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=eBMBo4Kc4hFyIg9htnzERR7i2EbT8jObxZ/ZPJfoquU=;
- b=dtCHjP+zd7QFc4wPdQlrnJ80gSQsgl9OtX5efPZR0Yo5x53EWv9XqAAdLuZyEVsxvI
- ylJW4eEoKd0lCBVLcStXCzubhIz8BN++NoxisGaQTImtVFsWz/bePl7HRym98uTn75S8
- 0pQ3f+LZ/wSDM6IqMDY3PIct6h51heaTMry8IWXhOaJCy7Iiku3fThpR8shqIoh9aqhe
- hAHG3o5cva58dYkufaswIAT5aCtQeC1uG+T8TFFIKS+q0y3r495Bj4HjlEbSGJGwp2I2
- A7h8C8lAcUpxiydtXvziMyqpj6bTHJzouStqYn80jK03ddJh3wUl6Hf8UZsNhEVnZW/I
- 5V2Q==
-X-Gm-Message-State: AFq9FYICxQtnPwrQJU+4x+ZVndDXFK/GZkGUpkCp8yEceXT4thbB57PH
- B7xLxuVXoD4jCZI+ceMDcdUjkZAc8cZnUFiuEYXCXU/ie3qYv8tY9RJUrRrhZA==
-X-Gm-Gg: AYBFou2LjntgC7ugPqkOHcxxjukn4EnL3h2W2QmJ6Yr5gzgt+2dop9mswK0PJVrnj+c
- 1iaK6vTTM+MBY4kqbEL8P0F/OgB6rB8ROgWFgwCQpPtP6weDSX/VwXslMtF9M1p40a/odn67xt6
- tXF5mRNgAgdCOV9Nt32J1Gu8nbZKFHGd+AuIKVz1suI8Unkaglyph2weLwSoAoFLMmYQGPlF78M
- ucV5lTdgHXSyKjzQs6I+byzf0eTcwUyvXF5QeswEdfwLeyMHN9GqK8LZ9ZQGOZc9kpOslY4BjAj
- 6osXzsJbgb292RbXczVlY90RK0Yc6LGu6w7RXDaOQzcmajKpkQ8Z5yz/cFW55O3QHqXGHfcIlq2
- rrIK5pbXjXURxOBXRJsIZoTkfQE/IXg0jhKhWkM9B6GYpCDEKBlrOilGjelbzQSr95am2B5o6IP
- 5kPoxPT0vQrCiT1GvLUrL8MuBzQsgIKFx3prG/Xm+GnPUxA9xWtsKW/t9B0SyBWYHsSGB4eliDb
- dnR1LTTnfbxEWkmolgostrlwTsIFchM0sv6lHDzXgfCVlibx+almRvKmri698JWV7ay3AoFMN00
- LgnPu+tA4dPNOPuv9lVXW8EOygn3RYrE+8d+Hghet8H2cuzaEUW2gVLYdptFT4dsZDyaa8FmZds
- 1qd/1fm9D
-X-Received: by 2002:aa7:c957:0:b0:6b4:746a:1dcf with SMTP id
- 4fb4d7f45d1cf-6b49cc2044fmr2356256a12.43.1793258926449; 
- Thu, 29 Oct 2026 00:28:46 -0700 (PDT)
+ bh=XXn3lsWaMPtzIyv9WHGc+zgde2ry4g57H5FMbDlXpwM=;
+ b=MeeVMJAJ9IYKAug8ZuD46kPOQdV+DjHmjG290ZbjRiHF8Z+PcNABq0dnYq2npMLx1V
+ 8lShzp9+rqFHjymdr7V57+R+gYKLkWgaOWYwXg270Mvfrlh9R0pIH614FS+cxNP1iJY7
+ hK0ptYKheV8hlJ0SEN9ZvKhqTtlaBD5H4ehZnfuHbwNBSi7szHY6ZuowU20QaXBYZXPB
+ bMAnmp9RLpig5iWHeBoLDtZbkmJ/rMFfmctBoCP9OzxN/4DuUmJXSbPwTB9gVc/Lv1D8
+ f/B4Zv6q84VAdXzL1WxKrNzq6svkx0yCWLBPtZqHinmVr3qc+3dbSUZDxF3W8YnKmpB3
+ R+ZQ==
+X-Gm-Message-State: AFq9FYLHme9TNYo+QetrQ3SIOi0p3f5P8VkEiRkRHiqkYHkMhDTMkGH9
+ aO2lESiP+GoyExP7mBYDfg0IehR5CBEq1J5ZGxxaz73F0cCPVfkA5GsEZfuoLg==
+X-Gm-Gg: AYBFou3Ur0cATqrfY5KTlQXUDEwKPYoH53232O0Slk14vPPHM7pe+rFfdOhxMGVMMdn
+ Fj7TK2xhDciAMWnCRM7+Agzxv+DOqQKquWFi7zH6mX2LUTCZ4o6cRWFfBQcm3ttYE/3jv/bJjgQ
+ TCCUt3MSyQ11umPY0q0av5i7o4EP0hBlBM4UNnChyOSv61JifoffAr2v9U8gBhQLKN5A3ZVioOM
+ oFyuQZQco5GZG5GdvU6fAyUmfd3G61T1NWUO0r8L2iC1DdyF3v7hOIazVJgGsAYbti/dmUxynuc
+ pOhEF9EjtnacqUf26UZM/UB0xduDYf9V88VBGfahGWy10zIeJccmaFnT/VMCA1cgFOBSIu2Ahzd
+ 96bH33gS5qIjo6OkQm07tNSV/hQJHNvggxDuoBymp3hYmIXKY1ft2NMpGer6Sx+Sq8BPbYoLv/m
+ dyvsFQSnZHzpfeUpvfC20/lSny6lVoQOCoP2NrkZFFIt0wY/cG5gvf6PWLV5ir7c5vB+1PnoOzx
+ ZYGwikcmQY8bMMpl2PQQGrwZVMCALedNUvB50Pf3iSRXhY2N/rybbJFds3hLzzGqXNkvrv4flrn
+ ym0hIBUUcMIWwARF4Ns6vs+fcP2+3o1F2oHOxsVo36DxhoQsCrSmXS9CMzloZP71GAVPsH20LEc
+ pTGwg3uV/dQ==
+X-Received: by 2002:aa7:c2cc:0:b0:6b1:bbbf:c8da with SMTP id
+ 4fb4d7f45d1cf-6b49cbec0b6mr2286710a12.17.1793261592983; 
+ Thu, 29 Oct 2026 01:13:12 -0700 (PDT)
 Received: from development2.visionsystems.local (mail.visionsystems.de.
  [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-6b4964601f2sm2382343a12.37.2026.10.29.00.28.45
+ 4fb4d7f45d1cf-6b49809df6esm2359494a12.20.2026.10.29.01.13.12
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 29 Oct 2026 00:28:45 -0700 (PDT)
+ Thu, 29 Oct 2026 01:13:12 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Thu, 29 Oct 2026 08:28:44 +0100
-Message-Id: <20261029072844.511701-1-yegorslists@googlemail.com>
+Date: Thu, 29 Oct 2026 09:13:12 +0100
+Message-Id: <20261029081312.523050-1-yegorslists@googlemail.com>
 X-Mailer: git-send-email 2.34.1
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/valgrind: fix build on mips64 n32 for
- non-R2 CPUs
+Subject: [Buildroot] [PATCH] package/usb_modeswitch: fix static build with
+ jimtcl's zlib or openssl support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -154,127 +154,113 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-When Valgrind's configure detects the MIPS64 n32 ABI, it
-unconditionally sets FLAG_M64 to "-march=mips64r2 -mabi=n32" and
-prepends it to the compiler flags. Buildroot appends
--march=$(GCC_TARGET_ARCH) to CFLAGS to build Valgrind for the right
-ISA, so for any CPU other than mips64r2 (here mips64), GCC is given two
-conflicting ISAs and the build fails:
+With BR2_STATIC_LIBS, the usb_modeswitch static dispatcher fails to link
+when jimtcl is built with its zlib extension or ssl support:
 
-  mips64el-linux-gcc ... -march=mips64r2 -mabi=n32 ... -march=mips64 -c -o priv/libvex_mips64_linux_a-main_globals.o priv/main_globals.c
-  cc1: error: '-mips64r2' conflicts with the other architecture options, which specify a mips64 processor
+  [...]/sysroot/usr/lib/../lib64/libjim.a(jim-zlib.o): in function `Jim_Compress':
+  jim-zlib.c:(.text+0x3d8): undefined reference to `deflateInit2_'
+  [...]
+  make[1]: *** [Makefile:41: dispatcher-statlink] Error 1
 
-The same failure was reported for n64 in
-https://bugs.kde.org/show_bug.cgi?id=400975 and fixed upstream in
-Valgrind 3.15.0 by commit e61d13087 ("mips: if revision is specified,
-use it for compilation"), which makes configure skip its own -march
-when CFLAGS already contains one. That fix only covered o32 and n64,
-though, and the n32 code paths still hardcode -march=mips64r2.
+The dispatcher is linked with -l:libjim.a only, not with the libraries
+libjim.a depends on.
 
-Add a patch doing the same for n32, so only -mabi=n32 is added and
-Buildroot's -march is used. As the patch touches configure.ac,
-autoreconf the package.
+Add a patch, sent upstream, adding the libraries listed by jimtcl's
+pkg-config file for static linking, and add the missing host-pkgconf
+dependency, as the Makefile uses pkg-config.
 
-This issue has been present since commit 1172a68ae888 ("valgrind: bump
-version to 3.14.0"), which brought in Valgrind's n32 support with the
-hardcoded -march=mips64r2, conflicting with the -march added by commit
-4fc3a6fd7472 ("valgrind: build for the right MIPS ISA revision level").
-It therefore affects 2018.11 and later, including all current
-maintenance branches (2025.02.x and later).
+Since commit 283821fc31c4 ("package/jimtcl: bump to version 0.83"),
+jimtcl enables its zlib extension and ssl support when zlib and openssl
+are found, so this failed whenever they happened to be built before
+jimtcl. Since commit a416a8ef0972 ("package/jimtcl: fix optional
+openssl and zlib dependencies"), which made them proper dependencies of
+jimtcl, it fails every time zlib or openssl is enabled. The issue
+therefore affects 2025.11 and later (randomly), and fails consistently
+on master.
 
 Fixes:
-https://autobuild.buildroot.org/results/c562eef960c049f1523ed1c6a30c0d5eacf905ea
+https://autobuild.buildroot.org/results/40e1490b9b64f96b5574bd8cd1ceaa4e6d50b7ca
 
-Fixes: 1172a68ae88849834dcb1b6adddc06c836aa7109 ("valgrind: bump version to 3.14.0")
+Fixes: a416a8ef097250ad6acb9b073880ed2a44f7df62 ("package/jimtcl: fix optional openssl and zlib dependencies")
 Assisted-by: Claude:claude-opus-5-5
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- ...c-don-t-override-march-on-mips64-n32.patch | 57 +++++++++++++++++++
- package/valgrind/valgrind.mk                  |  2 +
- 2 files changed, 59 insertions(+)
- create mode 100644 package/valgrind/0004-configure.ac-don-t-override-march-on-mips64-n32.patch
+ ...e-static-dispatcher-with-jimtcl-s-de.patch | 47 +++++++++++++++++++
+ package/usb_modeswitch/usb_modeswitch.mk      |  2 +-
+ 2 files changed, 48 insertions(+), 1 deletion(-)
+ create mode 100644 package/usb_modeswitch/0002-Makefile-link-the-static-dispatcher-with-jimtcl-s-de.patch
 
-diff --git a/package/valgrind/0004-configure.ac-don-t-override-march-on-mips64-n32.patch b/package/valgrind/0004-configure.ac-don-t-override-march-on-mips64-n32.patch
+diff --git a/package/usb_modeswitch/0002-Makefile-link-the-static-dispatcher-with-jimtcl-s-de.patch b/package/usb_modeswitch/0002-Makefile-link-the-static-dispatcher-with-jimtcl-s-de.patch
 new file mode 100644
-index 0000000000..5ba01fa30c
+index 0000000000..df63117048
 --- /dev/null
-+++ b/package/valgrind/0004-configure.ac-don-t-override-march-on-mips64-n32.patch
-@@ -0,0 +1,57 @@
-+From 170ac7684d52f44ddbb40e38c1887e870319526d Mon Sep 17 00:00:00 2001
++++ b/package/usb_modeswitch/0002-Makefile-link-the-static-dispatcher-with-jimtcl-s-de.patch
+@@ -0,0 +1,47 @@
++From 10fa184cd0f5cb347fbb60d92ca0cb9834db0103 Mon Sep 17 00:00:00 2001
 +From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Wed, 28 Oct 2026 12:45:25 +0100
-+Subject: [PATCH] configure.ac: don't override -march on mips64 n32
++Date: Mon, 26 Oct 2026 09:36:18 +0100
++Subject: [PATCH] Makefile: link the static dispatcher with jimtcl's
++ dependencies
 +
-+When building for the MIPS64 n32 ABI, configure unconditionally sets
-+FLAG_M64 to "-march=mips64r2 -mabi=n32", even if the user already
-+selected an ISA through CFLAGS. For o32 and n64 the -march/-mips probe
-+is skipped in that case, but not for n32.
++The static dispatcher links libjim.a with -l:libjim.a, but not with the
++libraries it depends on. When jimtcl is built with optional features
++using external libraries, such as its zlib extension or ssl support in
++the aio extension, the link then fails:
 +
-+As FLAG_M64 comes first on the compiler command line and the user's
-+CFLAGS come later, a build with e.g. CFLAGS="-march=mips64" ends up
-+with two different ISAs, which GCC rejects:
++  jim-zlib.c:(.text+0xcf): undefined reference to `inflateInit2_'
 +
-+  cc1: error: '-mips64r2' conflicts with the other architecture
-+  options, which specify a mips64 processor
++Add the libraries listed by jimtcl's pkg-config file for static linking.
++If pkg-config doesn't know jimtcl, nothing is added, as before.
 +
-+Only add -march=mips64r2 to FLAG_M64 for n32 when no -march/-mips
-+option was found in CFLAGS, as is already done for o32 and n64 since
-+commit e61d13087 ("mips: if revision is specified, use it for
-+compilation"), which fixed the same issue for n64 (bug 400975).
-+
-+Upstream: https://bugs.kde.org/show_bug.cgi?id=527958
++Upstream: sent to Josua Dietze <usb_admin@draisberghof.de> on 2026-10-29
++Assisted-by: Claude:claude-opus-5-5
 +Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 +---
-+ configure.ac | 11 +++++++++--
-+ 1 file changed, 9 insertions(+), 2 deletions(-)
++ Makefile | 3 ++-
++ 1 file changed, 2 insertions(+), 1 deletion(-)
 +
-+diff --git a/configure.ac b/configure.ac
-+index 54f9d31..ca777fb 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -2661,7 +2661,11 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
-+ #endif
-+ ]])], [
-+ VGCONF_ABI=N32
-+-FLAG_M64="-march=mips64r2 -mabi=n32"
-++# Don't override the ISA if the user already set one in CFLAGS.
-++FLAG_M64="-mabi=n32"
-++if test -z "$ARCH"; then
-++  FLAG_M64="-march=mips64r2 $FLAG_M64"
-++fi
-+ AC_MSG_RESULT([yes])
-+ ], [
-+ AC_MSG_RESULT([no])
-+@@ -2708,7 +2712,10 @@ if test "$ARCH_MAX" = "mips64" -a "x$VGCONF_ABI" = "x"; then
-+         return 0;
-+     ]])], [
-+     VGCONF_ABI=N32
-+-    FLAG_M64="-march=mips64r2 -mabi=n32"
-++    FLAG_M64="-mabi=n32"
-++    if test -z "$ARCH"; then
-++      FLAG_M64="-march=mips64r2 $FLAG_M64"
-++    fi
-+     AC_MSG_RESULT([yes])
-+     ], [
-+     AC_MSG_RESULT([no])
-diff --git a/package/valgrind/valgrind.mk b/package/valgrind/valgrind.mk
-index 6dca6252d9..c118bb7286 100644
---- a/package/valgrind/valgrind.mk
-+++ b/package/valgrind/valgrind.mk
-@@ -14,6 +14,8 @@ VALGRIND_CONF_OPTS = \
- 	--disable-ubsan \
- 	--without-mpicc
- VALGRIND_INSTALL_STAGING = YES
-+# 0004-configure.ac-don-t-override-march-on-mips64-n32.patch
-+VALGRIND_AUTORECONF = YES
++diff --git a/Makefile b/Makefile
++index fc2c0cd..41a15e7 100644
++--- a/Makefile
+++++ b/Makefile
++@@ -3,6 +3,7 @@ VERS        = 2.6.1
++ CC          ?= gcc
++ CFLAGS      += -Wall -Wno-deprecated-declarations
++ LIBS        = `pkg-config --libs --cflags libusb-1.0`
+++JIMLIBS     = `pkg-config --static --libs jimtcl 2>/dev/null`
++ RM          = /bin/rm -f
++ OBJS        = usb_modeswitch.c
++ PREFIX      = $(DESTDIR)/usr
++@@ -38,7 +39,7 @@ dispatcher-dynlink: dispatcher.c dispatcher.h
++ 
++ dispatcher-statlink: dispatcher.c dispatcher.h
++ 	DISPATCH=dispatcher-statlink
++-	$(CC) dispatcher.c $(LDFLAGS) -l:libjim.a -ldl -Ijim -o usb_modeswitch_dispatcher $(CFLAGS)
+++	$(CC) dispatcher.c $(LDFLAGS) -l:libjim.a $(JIMLIBS) -ldl -Ijim -o usb_modeswitch_dispatcher $(CFLAGS)
++ 
++ dispatcher.h: usb_modeswitch_dispatcher.tcl
++ 	./make_string.sh usb_modeswitch_dispatcher.tcl > $@
++-- 
++2.34.1
++
+diff --git a/package/usb_modeswitch/usb_modeswitch.mk b/package/usb_modeswitch/usb_modeswitch.mk
+index aa5646adee..08c29fe58c 100644
+--- a/package/usb_modeswitch/usb_modeswitch.mk
++++ b/package/usb_modeswitch/usb_modeswitch.mk
+@@ -7,7 +7,7 @@
+ USB_MODESWITCH_VERSION = 2.6.2
+ USB_MODESWITCH_SOURCE = usb-modeswitch-$(USB_MODESWITCH_VERSION).tar.bz2
+ USB_MODESWITCH_SITE = http://www.draisberghof.de/usb_modeswitch
+-USB_MODESWITCH_DEPENDENCIES = libusb
++USB_MODESWITCH_DEPENDENCIES = host-pkgconf libusb
+ USB_MODESWITCH_LICENSE = GPL-2.0+, BSD-2-Clause
+ USB_MODESWITCH_LICENSE_FILES = COPYING
  
- # Valgrind must be compiled with no stack protection, so forcefully
- # pass -fno-stack-protector to override what Buildroot may have in
 -- 
 2.34.1
 
