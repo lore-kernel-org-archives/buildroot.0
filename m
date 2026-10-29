@@ -1,28 +1,28 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A369606A31A
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:06:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 112B5606A31D
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:06:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=a2QkAwrW
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=efoxAZBO
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1AA1360B10;
-	Fri, 30 Oct 2026 14:06:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E4C6A40B44;
+	Fri, 30 Oct 2026 14:06:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1b8d3qjKU5a4; Fri, 30 Oct 2026 14:06:25 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 34E4D60ADC
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369185;
-	b=K9iP1t9W/kYZwW6NSid1pXQafg8W5maf3TffkstB5Dvsgu5nNEAhQLKSs4s3MizvqJ4R
-	 AboQTJiorT0p6JZWwi1I0m7zW+A9Ejvg+cXOWFtaQaocvYEBLafJmjP7x8SUf5MyycBm2
-	 8wtxYU22bdv21BsYBH34s84ymDDqaawm5SZT3xv84usXYGfD0KrkoGPy7ABtcMhlXHJw0
-	 418gty4hXxS/Ta7YCkQdqusImfrdyr4KOEsW1sP5CNJ2aaH6R+UUClWC/qWwdVxUr8u0S
-	 DGQimL3QFrN4sBLONbd8BhD7nLZvWEJjoV96iQPVhUjJRMH06xTdSGxo76mILe96U2g==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3sUpza6Sajvm; Fri, 30 Oct 2026 14:06:27 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org D35ED40B45
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369187;
+	b=SdPtYgfnIYnv/YiSf7SIG4e+UUJRRHcyOfAiXUnpBBnITNg4dxnBt6V8Rai1dcQjw2/1
+	 uARIkQ5VgzJYZ9mrEBYQR6gG7AH+GbphohVV5/KBj9XqKdDamjAnoc9otY3QOqdiGvyb6
+	 Sy+YojEgYiGZcsQh6nZImnzwxEUR1LELA9dtBlYJwTlbwXdjLU8WtOYTXuw5/JQzcxebi
+	 KdxincxJq8M8Fd972kJBP2dAkGbxCKKfNxRP9vZ4rctUYmZDMpl5p/rgxj+w0wJS+UcaE
+	 5TtdIyjqhlUsHP+BljREv0kKffNx7jCJ5Bip3Bd/UHo/2BK1xfaW/t2BiQRBJRRK3wg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793369185;
+	c=relaxed/relaxed; t=1793369187;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=UWMd1Gb0NsPiNUO/ndnTWHansNsAYtvjv65llPa0HGo=;
-	b=GL+U4W0c96mZsRSFN1QBX6q/M0sAt8MrV1oJ4CfZ6Q9ly0Ap+fMznma5+Lkn73EOeqYn
-	 mTKDi7eWPv4b/V79Qlj4bHqsyF4l7X7OxT7KBiAuUzDmT8NEiagLEjPBKQX3eFXvDm2WF
-	 1KwHMICIrsxmJbLebmvme3KOLjuKuGClW9Vsp/iiKzcQJQ6xOFb+nOCYmv7sD37GCMMcp
-	 5dVIDD9Fi6sZJP0iSfUUfSCTdofu7cG5ORI7zGznRUWCMlDZuBDeS72mj0KP/on275Ixo
-	 Uo7Rn8JyUVXHF3Hv6BgdcubrwI33DPIFA0piDJWN6IdM8yGoKWg+8kl1E38CEHHVJyQ==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	bh=63XJXjYI8LXZ4/qZq6V6QpK8lB86rdK5D/PNUTIBDiY=;
+	b=olJkvKPDei6epIVRAt7p2XER3i3FbYv00qxIsobjgrNO7zhbJfRdNQ0WqJTAHw+q+1CV
+	 7Zb7F15XyaT97/2zMP2HYY29MtZvm4w9Y8YTQYAHlsfB+o5vBNKnB5uyfKAomeu+un2Y8
+	 gC9W75DcuBKOJE0OKLEcDQQh7ZYYlo8+oL2Xcz2u8+tr9piJN/xKM3/8g5ld656nyJ+iG
+	 hMfk0bqESsYcM8OBbyIGFRfTQ4W9xxFk0OIusB0vLjh7EKjFY5T+LSQvP1IaAigs8CTog
+	 PUn3T9lMcKbAW+Wd7c3hjPe2dqIIrbjzp1T+g3PvaSafvJu52hdgVs2jnPhjPh75RMw==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793369185;
-	bh=UWMd1Gb0NsPiNUO/ndnTWHansNsAYtvjv65llPa0HGo=;
+	s=default; t=1793369186;
+	bh=63XJXjYI8LXZ4/qZq6V6QpK8lB86rdK5D/PNUTIBDiY=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=a2QkAwrW9wHZ7nAri4rCHTiVaj2Vb9rxQlrdErfR1NCNxd+WztHZXe461dYLiZUA3
-	 8MP+l2bICBSH9R76xBnnj1WdrGEJakmB0flKtNhpTMRmQi1cn126Mblwx3djnhCBS7
-	 bVJe5PZb7ZPCmw4HCzKQPC3DDG2DL4LLboYpN2gOPqAYKp8fdhWq1NoMG3BjCiV8Xx
-	 kjBsCrCfuGeSMPxPQz4vIv3qY8DyABfft/IoYfCSldRSdiUdsx7XXMcBOLtR2nAUyZ
-	 IXOUVg+A4rpsOYzT+o23cIv0awVRoCeialRRJoTRUfAYGeaKSq9+GQmcMjGAv8EuqT
-	 gyfGDj8qMxYeQ==
+	b=efoxAZBOLqnrvkMX7rEAHIZtKteO4OF46NvJUol/h9qYi0MgStftNh8BLqF9D264j
+	 /sQT8H6czCBiJRHMEtq5/3jNnMsWMwu9P46joEzSB+/EDmac5wkNhQTkKi4sROCvxb
+	 Y3T5WdoLbdRT+Vid4pyGXBC0q6ibha+qxF2hSmld0oFJ6DASuNpc9mBHpsVSaL7c3E
+	 xzaMCvshccxfqdtZkoXLf0B5ly2okDL1UsrhPwuFzbcdrBzEAMFqlaoR9cPGSdI+EV
+	 EW7gbhbrz+j1JoNyU7d/R9EcNdsYerXYbCLWjP55WFSCxR4Ik2XKJN4lH1WqQivhhB
+	 mhXuIwbZUW5LA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 34E4D60ADC;
-	Fri, 30 Oct 2026 14:06:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D0CD7362
+	by smtp4.osuosl.org (Postfix) with ESMTP id D35ED40B45;
+	Fri, 30 Oct 2026 14:06:26 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 001A6362
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:05:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B6CCE60ADC
+ by smtp4.osuosl.org (Postfix) with ESMTP id D889E40B26
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:05:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KPw0vg_k8RIG for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tUXZnVZRSvta for <buildroot@buildroot.org>;
  Fri, 30 Oct 2026 14:05:58 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 12FA4607A0
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 0613840AFD
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793369158;
- b=oZRXecrXMDMGYsH91wkxB+jL+ymg3NiSvRt41Qng0/ktOgcvTwNEg4hbV6cLxhv4MVOO
- +O/e1tZ77PhOYG2es8Jtoix936ahA2ByqRj5ntpqpGEjltMW3C5GZpIpGzdNnmCgYKXXZ
- vlJbS5bbG4C8p1DRuE/JwVByVFOKkD4mS0kkCDdRSbrQW+nc1FWWRIoCGJg6ZCplXQ1gi
- GVGo/FqmOGuEA+3hrc9DBZuTXLkKycMNZDC7O8Re0gKtQlHEGB7dGnKmQymURjrl1X2Qe
- gXdGC3+rFdYiDkoVvbsE5PW12sNYfMyjIuJw1Ysj4ujATcfcrMCVThXwRCC55lVr0SA==
+ b=N4S2McZaOicEOfOYmy//F5YAsHkYEm3dgKLkEKCsY7CTv7jC3h/jhODuhCUvseO1rk9p
+ iAAM5IvjyUrpYErqk1v+SnRnKUxxBBtadvqqHtknwW5nJpCDS8MrRWEAWeIZU1OZn+Xbg
+ UzdE7Wv9ik+OF45wOnl5pSA8A7GsDEnkEev1cujHVrLpsDbvnjptNssAsSt19H7puJ8dl
+ v4ptQMeSc20Tfw6oEf8Ad0T/YNZDAtK2HWeJMAzb9BaWhbAW4gV3xbnLtZM63dMOeCWJL
+ EbNhNYGGYs/vOlT6AmfI8GookucP7/a+HoLR3kO/OTBhej9stvC/Ln7Eq0DTOHPXi8A==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1793369158;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=DiD+ChZby4JTZZNyh2T4N83nGqjfRrO3o2bDBCaaUP8=;
- b=kkViXFCd4mgqzc62kMnxe+PNA5m6PhdUrSHvlKz/5Fd8qdk/z4vBLFsvF7gCEYsrqN/c
- sbqjP4ixPNwgDkU5QziQtRDWaQNsP5RRHpFXiIaqwwj8kwAXqgMm6UrQDgFdE59YHqexU
- pUPkQL1G6TYtYEkpc7HnzhAjHt6lzlrNlBThL2X0o7MSdw9rsDbDemtFRhNDcxwEf6yMM
- r3Wk3zVn02k7LnkrWGSWV10W30sHZuuVDAoE0SVsw1zEUe4wzrHwBsa9JNZ632vLJe+p0
- zwceAPLwCdh1U9NyJBDPzOrQQwtoPXAQt/O96P9ETeH4ZqoZrZsJzz4va83JfpvlcRQ==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ bh=Ifo6+Chwqqiw4ouQESKkk9wJL3/nMG2gII1g0Ce+scg=;
+ b=OosXdUgLDD8P8UNLHv73bfKHIb8xwvf7CsmL+b355P0X4fWGHJQqFIPrbHseZxH290ZH
+ gOJxiwg4URzD2Yw/mg29nQe1z2SCFWRMKt7GHnfLUj9xJNZwq8ydpHO4P42hrF1YyakQC
+ I6Jo8TKSEmDeRPhniVo6VcmQtboLVuqabCF13sSYU2yO5H5FjXTlOEe9OFYIA7TBITEYX
+ qS1UPeJDRk2UBxPfpJWywrnGU/TYebx9jkc0+Y8m2YxiKxLSk+mSqIRYito21gwwiVmj9
+ mvdc9tRj9b0izw0Iq+c3ZNqzOSQz2KSnWe1tLHvQfu6H3cuRt/lNs0mfxZlF8hqlpOQ==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 12FA4607A0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0613840AFD
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:05:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 32ED09D38A; Fri, 30 Oct 2026 14:04:30 +0000 (UTC)
+ id 25E989D388; Fri, 30 Oct 2026 14:04:30 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 29 Oct 2026 21:19:54 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: e9d4fc79827b7f054e749899d54b73bf719379e2
-X-Git-Newrev: 53c783f266c8f4f27251f96bdcf10b9b8979856d
+X-Git-Oldrev: 073cd35212a4891fa030413d4c4f3fef39b57759
+X-Git-Newrev: e9d4fc79827b7f054e749899d54b73bf719379e2
 X-Patchwork-Hint: ignore
-Message-Id: <20261030140430.32ED09D38A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- utils/bump-stable-kernel-versions: fix newline in commit message
+Message-Id: <20261030140430.25E989D388@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/pkg-golang.mk:
+ make GOPROXY configurable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,86 +114,94 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3254281984896061133=="
+Content-Type: multipart/mixed; boundary="===============2275740676470596167=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_NONE autolearn=ham autolearn_force=no
+	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_PASS autolearn=ham autolearn_force=no
 	version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============3254281984896061133==
+--===============2275740676470596167==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/53c783f266c8f4f27251f96bdcf10b9b8979856d
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/e9d4fc79827b7f054e749899d54b73bf719379e2
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-By default (xpg_echo disabled) bash's echo doesn't expand escapes,
-which results in a literal '\n' being inserted in the commit
-message. For example:
-Update the latest kernel releases to:\n - 6.18.53 -> 6.18.54
+BR2_GOPROXY now configures the Go module proxy URL used to download Go modules
+specified in project go.mod and go.sum files. By default, it uses Google's
+official Go module mirror at proxy.golang.org, falling back to direct downloads
+if the module is not found in the mirror.
 
-Commit da01b7271a ("utils/bump-stable-kernel-versions: update for
-split hash file") added the '\n' line, but at that point the variable
-was never printed.
+The default value from the toolchain can be read with "go env GOPROXY"
 
-The bug became visible in
-fab50ed3b1 ("utils/bump-stable-kernel-versions: automatically commit
-result"), when echo "${updated_versions}" was introduced.
+We rely on package developers to audit their dependencies in go.mod and go.sum.
 
-Since the script already uses bash arrays and the list of updated
-versions fits an array well, use one. This allows us to easily print
-its content with actual newlines without storing them in a variable.
+The value can be configured to:
+- A comma-separated list of proxy URLs
+- "off" to disable all downloads
+- "direct" to download directly from source repositories
 
-The fixed string initially contained in 'updated_versions' is also
-moved to an echo call, so that 'updated_versions' really contains only
-the list of updated versions.
+For more details on Go module proxies:
+https://go.dev/ref/mod#module-proxy
 
-Fixes: fab50ed3b1532037fa67582a6b47ac4084daaa88 ("utils/bump-stable-kernel-versions: automatically commit result")
-Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-(cherry picked from commit 1e1d973a205771ffdeb03543bcba1c55f464bbb8)
+Discussion:
+https://lore.kernel.org/all/CADvTj4pXO2rwJ8oCzzGNY+OxLuo3uJnDT2PAxbyquw0L6dhfiA@mail.gmail.com/T/#t
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Christian Stewart <christian@aperture.us>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit f14e138f6f643d208455c500ca3ba7cfa9de30b4)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- utils/bump-stable-kernel-versions | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ Config.in             | 16 ++++++++++++++++
+ package/pkg-golang.mk |  2 +-
+ 2 files changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/utils/bump-stable-kernel-versions b/utils/bump-stable-kernel-versions
-index af85d32852..b02b854d95 100755
---- a/utils/bump-stable-kernel-versions
-+++ b/utils/bump-stable-kernel-versions
-@@ -27,7 +27,7 @@ echo "${latest_version} -> ${latest_release_version}"
+diff --git a/Config.in b/Config.in
+index 0bfe6d1ab5..d8f78f094a 100644
+--- a/Config.in
++++ b/Config.in
+@@ -339,6 +339,22 @@ config BR2_LUAROCKS_MIRROR
  
- updated_files_list=()
- updated_releases_list=''
--updated_versions='Update the latest kernel releases to:'
-+updated_versions=()
+ 	  See http://luarocks.org
  
- update_linux_hash() {
-     HASHFILE="$1"
-@@ -85,7 +85,7 @@ update_linux_hash() {
-                 fi
++config BR2_GOPROXY
++	string "Go module proxy"
++	default "https://proxy.golang.org,direct"
++	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	help
++	  The Go module proxy URL used to download Go modules. By
++	  default, it uses the official Go module mirror, falling back
++	  to direct downloads if the module is not found in the mirror.
++
++	  The value can be one of:
++	    - Comma-separated list of proxy URLs
++	    - "off" to disable all downloads
++	    - "direct" to download directly from source repositories
++
++	  See https://go.dev/ref/mod#module-proxy
++
+ config BR2_CPAN_MIRROR
+ 	string "CPAN mirror (Perl packages)"
+ 	default "https://cpan.metacpan.org"
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index d1bb1a5ff5..00aa10360b 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -88,7 +88,7 @@ $(2)_POST_PATCH_HOOKS += $(2)_GEN_GOMOD
+ $(2)_DOWNLOAD_POST_PROCESS = go
+ $(2)_DL_ENV += \
+ 	$$(HOST_GO_COMMON_ENV) \
+-	GOPROXY="https://proxy.golang.org,direct" \
++	GOPROXY=$$(call qstrip,$$(BR2_GOPROXY)) \
+ 	$$($(2)_GO_ENV)
  
-                 updated_releases_list="${updated_releases_list} ${release_version}.x"
--                updated_versions="${updated_versions}\n - ${old_version} -> ${new_version}"
-+                updated_versions+=("${old_version} -> ${new_version}")
-             fi
-         else
-             # Different line: Reset hash list and just copy this line over as is.
-@@ -111,7 +111,8 @@ if [ -n "${updated_releases_list}" ]; then
-     git commit --verbose --edit --signoff --file=<( {
-         echo "{linux, linux-headers}: bump${updated_releases_list//.x /.x, } series"
-         echo
--        echo "${updated_versions}"
-+        echo 'Update the latest kernel releases to:'
-+        printf ' - %s\n' "${updated_versions[@]}"
-     } )
- else
-     echo '>>> Nothing happened.'
+ # Because we append vendored info, we can't rely on the values being empty
 
---===============3254281984896061133==
+--===============2275740676470596167==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -204,4 +212,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============3254281984896061133==--
+--===============2275740676470596167==--
