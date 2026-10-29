@@ -1,28 +1,28 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91C64606A31A
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:20:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF88606A31A
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:20:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=AM+gjTM6
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=dT30OzFg
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6AD5040DFA;
-	Fri, 30 Oct 2026 14:20:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A65668176A;
+	Fri, 30 Oct 2026 14:20:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IkeiWLCgp4GH; Fri, 30 Oct 2026 14:20:16 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 681E340DF5
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793370016;
-	b=g2PVr6GehqsKGGHeED1TKNPD2ytBg7Wo3FkLawG9l5zEL/qv220PCddjP8DyGrHGDUEg
-	 YBaFWgHnqTr6+P1SzXLVW2oH3c/5/ficLnt2RaW6Jdo4WgsJofMCKLsKfK94K63kbTKR6
-	 NBdSBZhChtwBTbC0yj5oi8wmSpMUSBC7kYF4be4K0sfqGRZkAG22rxkoZgl5YelRjcvuQ
-	 7QkPNPklkj0aTV5GATekefyy1cLvYMOas6H1toCj5EMSXgoVzdJEy9gWyzHqc668wiyPi
-	 mnXsqTrMhDpBJfu7i0S0l5F2x9hDl7KhI1Ow+WPGpHKIIa48qhuQgwwWTpMXlJ/w/pw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rhZc1xj5uW-Z; Fri, 30 Oct 2026 14:20:18 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org CE77081757
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793370017;
+	b=Lbj+db9gbmFu+OQnpot+3ut8NfiUuh8sA2G4jjmqr5kNP+26xvTHeIunyKiqC7Mo+HDi
+	 xh87edv1HYozbvcnKAlyiebxQqICG25eH1LicjMvyoD/1xJHh4teaNEai6S0MRXq0J16q
+	 QHWSDBRDNYpF6/PEEDX46qkVYaOKe7Z0tK2kSbykgrtruHWq0IhiQwTSSUshDVs3Sg+qN
+	 7LEmUPrl8uLu0/rxLgEg+JnGBmzEBBKBdSYc12xt4ICgAOMuMIFuKuQ5lvKYs/doRAT1L
+	 HJHYxEGtBw7jq/qdXbI2wT2JiolFDhnvkUF8hkSXeyMwkV706o1dKtAYnXL5x31Z/6A==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793370016;
+	c=relaxed/relaxed; t=1793370017;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=1pVJ3fdV/AESXYmz4T2zDernX8LP3YcsD0Jw0JcJizo=;
-	b=nZxjBZtiiXGQzAsA3Y+ITsV8uguS+Kv7kkxSdnhImwVEUEWZFVLUyqLT+iiuJ7jl7jVI
-	 Si0DgVem0oDtWtAWEzrMip8Y4IKlSivFeZ0FpcSVjTEEXXcwS4uiBmwpwpkU5Ic+o21m1
-	 fImjlWVhTltm5njUaLFrfZcfLwWT81zllDtcVE7Pngzm6R6ipWL1eXX7lyzH/7zyHHIH8
-	 yKYsQg8mAKKusc8U9yXwfmMKEH7SGHHVrEvyWHnghiYLDpaOS9Lrn/F4QhC/dLnFFHQX9
-	 S1Egcwgz3s4JGkyAfZcglDih80/lwv41JQtiSBhmlO5Tao2Ucgu8+4kPJys26OHPe4w==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=lDsojkt6tDarql8B5uyrFCYgPJjtMD16goo9f/Xdbpw=;
+	b=quE//lJi524Nc5IQNhiVsO0LgPUfRdv97EuhQ3cESWIXB55EFdZYMhwirhBh49g5QWpY
+	 z1H0NkyPO7+QyJp4A2MKGULPh8OIvgAvbxy/SDfTJG9Zhk71EzgibfC9+xmrmSo3Nz0nu
+	 HwoRVGAo0vdt9/2vstlljgBTfEe+Coevs33pcqOqobhNpvV8NJ+s9Tn4qcHzys97XnE/h
+	 HcLhZSlSKUtK5Og+g1qBZrGrNp4OtpGkT+A4uCMmUJ8R5YdFmAd9p5/b6retoFFMkVU9I
+	 KQTHdg42mP5qVANzodULHe3FCJ+sj6MFdIXEdsFO5rx9wp0u8oLrIBrENO5ffCflUeA==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793370016;
-	bh=1pVJ3fdV/AESXYmz4T2zDernX8LP3YcsD0Jw0JcJizo=;
+	s=default; t=1793370017;
+	bh=lDsojkt6tDarql8B5uyrFCYgPJjtMD16goo9f/Xdbpw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=AM+gjTM6NYG1XkJACGswypCbrZ+aJLMbNIDDjEK3lkZtAFWiRQfotIHyiCLWEijRS
-	 GWZOA+GD9iIZQQuWYvQzA65Bttkgon6MN/gq0jGgHAteESkPdOfgFQZNKwf3LaUd2e
-	 f74xJM3DI0oYc3ij4nlKr6ohdT86BM3/AxnE9QM45jylPxsEWFPsFYwO1M5N7YXi0B
-	 6VfzDR8YD7zyhmPrPQxWeOX0QnvqMNxcYDgsGrbU5z1/5qN0jCPPdiPTFSPsUlhXG1
-	 dmO3hp/pTVJCUkvPtkn69c18eTt4LK7lvHYHjRHgNxajY/hLcrHCMePbpglz10Z1Hg
-	 ttVhEcvtHfKxw==
+	b=dT30OzFg6bMdpu0io5Y4JRu6wyR+b4CFN+YFCPJ9JAy1pfW737QFjj2fpeDCzEAn8
+	 kftHN+BfN/0Gr01RoYw1Cs+rg3dGAHi2ti48KXXnwOK7rM6YSaIBjQObS7UhCN4OsK
+	 37bs+JBOouHEQIG4dYdlyC6DH4txPRJRrXRYRrXK/4IwuPtZGAFWF5AhaXPJpwcpg4
+	 HbfmkxwUWTrDHtbKUbwVa4mTN7mo2K2nQljJOo1rjOBhwtyb23mljlgeaqgx3IAo8+
+	 RUISDbfF+HTFEf370KkxI/Jy/QY/6bad7muHEyqcFLBF4fXvh0UWAzUMYQHA+Raono
+	 g4cvs8ICTT0Nw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 681E340DF5;
-	Fri, 30 Oct 2026 14:20:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id B5FB2712
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CE77081757;
+	Fri, 30 Oct 2026 14:20:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 25685712
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A7E2F810B7
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0012540BCC
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WNaEiq1SmehT for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wzAT0Dq0xkEH for <buildroot@buildroot.org>;
  Fri, 30 Oct 2026 14:18:07 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org F34C5808AE
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 399C840BD1
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793369887;
- b=bychu/tV/YZEQq1Ga5m89mwDxr60evGTVRqdf2sf7maymJ7bFeceLRfq4tHBSf8OCrQe
- jF9AZ2BLlSn7xnB0rDubuNKMpTGdzSth2GE+edk661hApXz9APyrxGxP0CBTPj3ckasg8
- 36mIDvq4kDqYFAHYxzx0An6jajw2rtMikk7SHveizLjz6n0FvbHh+A3JMOxuB4rcHKbuR
- FLzk0AbCF+gFdHvSTtDfD1UxccGP1Fmu1lpkNM7yAFRRSpSQH9wgmdl69OVOuXcHt7poK
- wh94q3dKdPqEQEYoQQSH1o2ZxB7pcOu3o3km96ZTJFrSsJ40n/TyPHM3oCSDPm6Ufyg==
+ b=B/f1ywV2cNMojH8qcdail/aDGRRsehCmgPk/qcOHLZJJL6PN187CvuNgcfKdMinOPozF
+ lHrh/Qgaa8dj5OOsbXul/f9jBZRDNWfmjezMto1DDkBPonJnSDEmKeGE2ayzXx78y7BN+
+ FDgMW3ZWtwC+2bZIuFgZZgLQ00WBN+MCOUibIUvXxjGOMQT7oeWS5pCPmeckgScKHkcLY
+ 1r3a6kImML+8OS1BaQN7uA6G5qXJtxzKUpT8inRAehARaejis5/f5ANVgJkzDxP9GjUq9
+ OtKj1J/ehTmp+UWdQrp1BKX7LOydXyBYGuVgUqZc4J+dK4DOVo2xZ8jkYapXZzFXD0Q==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1793369887;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=9E/9Bygxg89HgyXfh4fRZkW5Sx8IJJncqdciEOxdiz8=;
- b=ehJwn6+TRfGkOqePFRGKnmX15/U78Hdd3QJtdo8mGjoYqidjUx14ccQsi5QJIK2lgSgc
- 6q2BuDBhJ5MfFSb+kaAaYSo87X16nWIFyJKQRmRACzca+j8e5AVjcZt5ze6jDJFOgy6l4
- bqiVNQK+4WYw7M0Kwflwqd3bY0iH7WM7I1gru2p26pIIEsLZxbi815tkyOZwSqOF0dywH
- jT6mad+M1dA8ASOMZTL0kjuo8p6YNB5RydIHnGZyzGCBaEKdxOjlZ8O0QO6NEcvZcg/gI
- hVeejPHCcjuNCK1yPgUEvIzEstUx0LnDd5oIOJjBpgpgrjWAzc57AjCx+osxrbFVM6Q==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ bh=j0wl0vyR2TG2UvRG1lY3/yubzNlg6SJzmvf5oHTelJk=;
+ b=cd/HWJlVniovEFVUV9rmFyy3AIY2kgds6lt8N+4iEgWfD+cH9Kgo7La1q1mRBVbBIgFU
+ eU8F2jpgJhTt4LkmqIT7rs81gZl+JxyxW6mpvy1sAi8JEjl2ksdm/H2hskEcmsZ9v3aiM
+ xPB/zEecm3QarP+D7W0IAYPDOnTdGLaeW/ovDme84Ro2wnUvfqCKuAXcpmfQ+LQc77SNd
+ 1Qt29T6n0gMYp5JbDHqg2e91jwLHyck7gQzhsj0SVMoIPREmJoh9x2IyYYZM1G97XlW09
+ V//+UWMgNm9Eh7qMxOZWmTwPPyFdpX5JjmB5Je8ss1pRNs0vj3mJHGe0sW8qLp/LUOA==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id F34C5808AE
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 399C840BD1
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1D29A9D388; Fri, 30 Oct 2026 14:16:39 +0000 (UTC)
+ id 45BD09D388; Fri, 30 Oct 2026 14:16:39 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 29 Oct 2026 21:21:07 +0100
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: 62788bfac49bb62b8c70d76a7a2fa77596581164
-X-Git-Newrev: b5125bfc4fabf7926c1aa5c97a405971bb8eb3ff
+X-Git-Oldrev: b5125bfc4fabf7926c1aa5c97a405971bb8eb3ff
+X-Git-Newrev: 39221d29e9b99a987c3157b9b68ecdf6e02b8ef6
 X-Patchwork-Hint: ignore
-Message-Id: <20261030141639.1D29A9D388@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] utils/genrandconfig:
- implement secondary configurations filter
+Message-Id: <20261030141639.45BD09D388@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/xxhash: make sure
+ installed .pc file is correct
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,137 +114,70 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6646606123234159118=="
+Content-Type: multipart/mixed; boundary="===============2903280041567251536=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_NONE autolearn=ham autolearn_force=no
+	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_PASS autolearn=ham autolearn_force=no
 	version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============6646606123234159118==
+--===============2903280041567251536==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b5125bfc4fabf7926c1aa5c97a405971bb8eb3ff
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/39221d29e9b99a987c3157b9b68ecdf6e02b8ef6
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-Buildroot commit [1] marked a set of target configurations as
-"secondary", with the intent to test those less frequently in
-autobuilders. This was implemented by adding a Kconfig "depends on
-!BR2_HIDE_SECONDARY_TARGET_OPTIONS" which was controlled by an
-environment variable that could be set by the "autobuild-run"
-script. It turns out that "make randconfig" is not selecting random
-configs amongst the available options (i.e. following the
-dependencies). Instead, it selects fully random options, and if a
-dependency could not be met, the default choice is taken. As a
-result, every time a secondary architecture needed to be filtered
-out, the default architecture was selected instead, which is
-currently i686 at the time of this commit.
+The libxxhash.pc installed by our xxhash package is incorrect as it
+contains:
 
-This commit reimplement the list of secondary configurations
-initially made in commit [1] as a filter in the
-"utils/genrandcondig" script. This commit also adds the following
-x86 i586 CPUs which were missed in commit [1]:
-c3, geode, pentium_mmx, winchip2, winchip_c6
+prefix=/usr/local
 
-Since "utils/genrandcondig" is called from "autobuild-run",
-this commit fixes the too frequent i686 architecture issue.
+while the library is installed in /usr. This causes for example a
+build failure of libplacebo when xxhash is built before:
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/ddce0814a794b27a6449b144f85c90fa53e92ac6
+output/build/libplacebo-v7.360.1/src/meson.build:247:6: ERROR: Include dir /home/thomas/projets/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/local/include does not exist.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+The problem comes from the fact that the .pc file is generated during
+the build step from .pc.in template, and we don't pass PREFIX=/usr at
+the build step. To fix, we pass PREFIX=/usr during the build step, not
+just during the install step.
+
+The problem has probably existed since we started installing the
+libxxhash library in commit
+cc0c90aa83821d817ae2cbe01ad2c8d22ea30ba8 ("package/xxhash: install in
+staging"), but we tested in 2025.02.x, and the problem exists so this
+patch should be backported to 2025.02.x.
+
+Fixes:
+
+  https://autobuild.buildroot.net/results/344af8504a77ae96e4009d76a77572180cf49b14/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d3f718b33612ef2ab09640dcfd41cf417312302a)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 75a1aea9b420ac97b9dd3058db172e6d0c46a812)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- utils/genrandconfig | 49 +++++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 47 insertions(+), 2 deletions(-)
+ package/xxhash/xxhash.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 5cea529354..e6655fe189 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -99,7 +99,46 @@ class SystemInfo:
-         return not missing_requirements
+diff --git a/package/xxhash/xxhash.mk b/package/xxhash/xxhash.mk
+index 51bf6ce855..fc2084c878 100644
+--- a/package/xxhash/xxhash.mk
++++ b/package/xxhash/xxhash.mk
+@@ -31,7 +31,7 @@ endif
  
+ define XXHASH_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
+-		MOREFLAGS=-DXXH_NO_INLINE_HINTS $(XXHASH_TARGETS)
++		PREFIX=/usr MOREFLAGS=-DXXH_NO_INLINE_HINTS $(XXHASH_TARGETS)
+ endef
  
--async def fixup_config(sysinfo, configfile):
-+def is_secondary_config(configlines):
-+    """Identify secondary configurations.
-+
-+    This function identifies configurations considered as
-+    "secondary". This classification can be used to skip those less
-+    frequent configurations.
-+
-+    Returns: 'True' if the configuration is considered as "secondary",
-+    or 'False' otherwise.
-+    """
-+
-+    secondary_configs = [
-+        # Secondary architectures (including all CPUs)
-+        "arcle", "armeb", "aarch64_be", "hppa", "loongarch64", "m68k",
-+        "microblazeel", "microblazebe", "mips", "mipsel", "mips64",
-+        "or1k", "powerpc", "powerpc64", "s390x", "sh", "sparc",
-+        "sparc64", "xtensa",
-+        # Secondary CPUs:
-+        # Armv4 CPUs:
-+        "arm920t", "arm922t", "fa526", "strongarm",
-+        # Older 32bit CPUs before i686:
-+        "x86_c3", "x86_geode", "x86_i486", "x86_i586",
-+        "x86_pentium_mmx", "x86_winchip2", "x86_winchip_c6",
-+        "x86_x1000",
-+        # All RISC-V 32-bit:
-+        "RISCV_32"
-+    ]
-+    for cfg in secondary_configs:
-+        if f"BR2_{cfg}=y\n" in configlines:
-+            return True
-+
-+    # We also mark RISC-V 64-bit noMMU as secondary
-+    if "BR2_RISCV_64=y\n" in configlines and \
-+       "BR2_RISCV_USE_MMU=y\n" not in configlines:
-+        return True
-+
-+    return False
-+
-+
-+async def fixup_config(sysinfo, configfile, skip_secondary_configs=True):
-     """Finalize the configuration and reject any problematic combinations
- 
-     This function returns 'True' when the configuration has been
-@@ -113,6 +152,9 @@ async def fixup_config(sysinfo, configfile):
- 
-     ROOTFS_SIZE = '5G'
- 
-+    if skip_secondary_configs and is_secondary_config(configlines):
-+        return False
-+
-     # libffi not available on ARMv7-M, but propagating libffi arch
-     # dependencies in Buildroot is really too much work, so we handle
-     # this here.
-@@ -530,6 +572,9 @@ async def gen_config(args):
-     else:
-         configfile = os.path.join(args.outputdir, ".config")
- 
-+    # Skip secondary configurations 90% of the time
-+    skip_secondary_configs = randint(0, 9) != 0
-+
-     # Now, generate the random selection of packages, and fixup
-     # things if needed.
-     # Safe-guard, in case we can not quickly come to a valid
-@@ -553,7 +598,7 @@ async def gen_config(args):
-         if ret:
-             return ret
- 
--        if await fixup_config(sysinfo, configfile):
-+        if await fixup_config(sysinfo, configfile, skip_secondary_configs):
-             print("  configuration valid")
-             break
- 
+ define XXHASH_INSTALL_STAGING_CMDS
 
---===============6646606123234159118==
+--===============2903280041567251536==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -255,4 +188,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============6646606123234159118==--
+--===============2903280041567251536==--
