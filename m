@@ -1,28 +1,28 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00906606A31E
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:18:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 658D7606A31A
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:18:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=oK3RlR1j
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=rBPmrarb
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CF19981546;
-	Fri, 30 Oct 2026 14:18:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3E8CC60BFC;
+	Fri, 30 Oct 2026 14:18:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5IEk0XXNTAyY; Fri, 30 Oct 2026 14:18:48 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org A674F81570
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369928;
-	b=dQZK2a9OeXNTO7jUahM6SoB9kGmHwCyvboxhSAb6IK+fpIMMl61RKrdnF86csKljy6gu
-	 cCNF/kI6sqEYKnPCl9AHchbfhAC7PdLr4VwTQYZwYtTkz+dckjZVO2HG7gXor1N3IYtkm
-	 B4f2TIpdWOCbjdV2cLO1eM6KxSZsBHScUH6hH8qvssk+qCtjavCtK4vAPbwvRWjO47j1/
-	 Bk7sYJJOnTDIUXqdX3mlMMif3j4Z9rO3JBrN8IrsQedjdK3sJ2jYXek74DM1qjDHVMkcb
-	 2s39qiEpAlS8I2ZWzuO5kTGPMK6gThi1bWIuxZwveHx1jeOm5wezTppByaZw8zvrz3Q==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1xq5ubKja3Lw; Fri, 30 Oct 2026 14:18:50 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 1C9F460BF7
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369930;
+	b=ciqo8tnVVJYsbddR+QcKSrJSgjHzScgppM2KCdTeWSMESiR1hUwajl2v3F70XECqoB8s
+	 xLL0b3dnyhI1CQ9fTlbYQwnloMbMxzk337kUeasCn/0DiBzTqSLKf/mdLLbzS1A2DpkIE
+	 wB2Ka3NhJo9Fl1Iy1+xUL6LMUzGaUpp9xojTB5kEQsL+fCZPGq3KOrFKLAoTQvhYYhZsN
+	 qCwkI4r8sjTUlBopbv0NV7KhJowIGQUz+wWHHYrGbzhiLWI66PWcpiz+k7x/G7P96b+xq
+	 Yse7AsJT5YQePGIlxP/84HzK+/r2U/SGVDqGWamWHgz6hUgC44S6oO2Byw3OUi24Y6g==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793369928;
+	c=relaxed/relaxed; t=1793369930;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=rio+WHqPA4wPkAXOb1klnawWWHpovgjwzXrlRSRejU8=;
-	b=hrUGE1sLRADJaoYIoMmMjE9szIy3kLDP0gahRdUncqHZjsSfVkRTSZk4swUygI3cd+59
-	 bM8mz1dC0M7H4IQfHeK4KNhP1chG2wZWSwQOoKgK9qYSD9tEAnDCSk9Qt8okWp+0gDuv6
-	 m4RrV/+aVPd6eArO82oUQHjZtuelbMLXgoMB+H8mIOqSNxskgSCAQRfDCq3wF+XLMIE49
-	 KeeWkpmWQkFxS3E9EFrArNgYubif8ekFOssr3iOuDqIuNxAKMmKWjoNa911SEsEJvMus6
-	 6NVLTqmAsU7xBNU4YqdTXU1ie3WQ0zm7X/s2mOXQNO1dFqAxWK30MxbiN6hiEp/QWvw==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	bh=/RfqogbMkGSi3XlWJsTrducMXrzLqKVtADfBnlXl6+s=;
+	b=UX5FkL/lrulXmSZHyiz+NOY2DRjj3BMbcfFzjyxxd0zlx8oMZgBscFFANsttmzlnyq8r
+	 Ox03sbJOu7fCcpHG6U15IOsrMYbspLqWWFwEDaZ2BRXuegZLsqWMibsbDem+xGkewALsX
+	 cQblBR59hJegAMt9MhdzDp0ye5/WoslhvDc2YPbLfKnXrzG5CL2arNyt3CXeMttKZyMXv
+	 YBPJof9mIUXeCuMEvr/BU3BnZ8AMwJNAMTeJv5n/8Oyc1JrgoWroeocsr5njXze6B7weN
+	 V1zBpz2r4mUxmhitGzEgyf5H/usjaoAVeFZDNaJ1icmEgZFE5yvaadzc2hJJ4aG9J8Q==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793369928;
-	bh=rio+WHqPA4wPkAXOb1klnawWWHpovgjwzXrlRSRejU8=;
+	s=default; t=1793369930;
+	bh=/RfqogbMkGSi3XlWJsTrducMXrzLqKVtADfBnlXl6+s=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=oK3RlR1jv8c6IN1GqXLChb0ySzRBne5EMRyEwZvRRCgSG6QmfPFECzsLierO3RJm4
-	 vyyUbSsopMmZXCjrojZ2CX09KtJZFWmir4yT0Ug7++oa2zaHtOCHMn9tfgqw7i9xL5
-	 eXrkk/jOW+SE3Cs5DmDBV7BM1lZG9Ic/oM1YVf8fzwT/9Ye928pPoN/Y8eacF7NkRh
-	 mVi8d7aB82aL0gczoXoE1eqbd6lNoCm+PkpaCgmqPsYTUkAQtfNVvHNu7j/Sd9Gjzg
-	 t2G1mo1PhI7nZXYou6zA1j3gsxUAOkNfIbkAaVUqDYi9sXhLDkdeKVw5uxTKBrYnat
-	 bK9pQtt8mOgHw==
+	b=rBPmrarbZz1NOuZENIF51yzwtHMtzMG1/tfzk/ycdK2kw3iXOyn5BeG3AxIUwugl1
+	 E49ZQN8y0BZ2NwgSB/5Oi1BLFdb8xWR05idkJSDPi+qFCKISdA5LLsRwaClKs0Llmt
+	 uXxwVyzaL8VwOwW1XabK4UV1tJkq3g0Hc8yaL9+ZxNychYKcQHIE6ah6zyHu03Pk2W
+	 WyP3cgKpAk3qhmqWLclBQevGgKQc0RYKolxDCLpRjkth8+JjzIHSvl1MxVo/CFjSAi
+	 7MQ7gYs3mVeEG53DoDtQzS1ZhEZTK0xFPBClzhKGGJvpBQvza6cJ/B+WmSz+9/9Pay
+	 ggsGZMl+9Edbw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A674F81570;
-	Fri, 30 Oct 2026 14:18:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C9F460BF7;
+	Fri, 30 Oct 2026 14:18:50 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 311A5D47
+ by lists1.osuosl.org (Postfix) with ESMTP id 3AB01712
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 23239810B7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3663A810B7
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6e9K_liDTvdn for <buildroot@buildroot.org>;
+ id hHlO18h1gWim for <buildroot@buildroot.org>;
  Fri, 30 Oct 2026 14:18:05 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 30852812C5
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793369885;
- b=aFrM8OD0Lf39DkdhsMlOpIcelnK8WiOALoMWBpt/aQyV04G/6mKffcOQenlrRNGKL8If
- K9KyxS1j1NZ7tK1bzO4/K97geyBNpyINF933dyo1zIqq1XJCBDJO73Xg9eXMHnG7CcfRt
- Z9N3A1onl7+5aBMr6+FjIA71zBjgB1Eip+iUOoddAimvfSGFT8XDZAXzNvudUgr2wf3t8
- Bs4u/kW26U85Rql0ADqvdWWfq4flwcg1pvDRhzUlfBJQtOcHvxzMLw88r2jZWdwbrXWlE
- u0j3k6QwXpWlzw4Qc465nx6dt101ucrupDBRfC7yJQb6F9uvwRchNbFYBRIaoLMs3SQ==
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org DCF63808AE
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793369884;
+ b=L0sqdGnicOOcNngafGbqLvtn2EHFU6dtF0BXU5ZW2YB35C39wnOSddJ08eVIpWCx2WB1
+ e6jBuvdjYDW7FL0nklNSzUcDd7pq+R6H1QPhktpmWB8+ZyhHZctPwzR0RRonrMXaOkukW
+ ujxDYxfhFtCs0gZSlsBDkFhCh6Kyg47freoI8MlBXXqDFRe7lE47+OrPKnVr/L1cNNqjE
+ xBcpzpvdLCH6mpa04BnVMaihg6NTdQacNEl2UYVXJOTJAcISuwYt+XR724Zr51ejucfpx
+ Bz1cs/R7khsXuuWKRj5NG4gmwUH7yDHwn9yrVr1PLUOAADjXwug4iQhSjiDZGp0LMNg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793369885;
+ c=relaxed/relaxed; t=1793369884;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=DrmAKsdAfIB2BOynp8AoBBs8zXn+ZT23BxIGvOiInOM=;
- b=noqHM8kqKOjHeVxh9ERfm3hkvrM6dq/4P5aIf495YlRuyzbLtSgkH71XP8hax7APTukM
- KYNTDTAEFKySmVobTYWsNoF1psxXmHD3G410iAnmQUYf6/a0telXDna2GRHcMgFAHDMDf
- o2/foGJfzOAM8X3uYiFZkrWBXhjdTnQ4bVy68+BBt0uPQtdyvyCWFAcivuliQvBi9g1IU
- dig/KsC4jBG4pEmIX/6xGgd+lbiz758cC5zBBAbY2DxvRrZdePjeuCAvfqy7E9Eja5YCB
- cWbXb0cvfn56xisekV5sMPfH9OACrXhay272SVtYD7qmbdqWRKeo4OWzs4+PqqWae2A==
+ bh=khHBAvRgKGzRajMnBy5U/MUtc0n0g0j9KpaxxrKHF08=;
+ b=QB/I9+jqsD9OmxcunVZ/sEWVMh1+W54V8IxhsQd+M70qgXflyh3iKqR5g2e9LR676f1c
+ KJm0exn9I1boDcMHum8ZlxGDM6ZXV2Gc+5q0PXtrfx3MyUU389CSm8a8K2FH9+iKmn7m9
+ J7Bd4ktmNEqAPoZ14vU/Z1mRDDGzZfAqwum4PeYwdTTktY7lpqU52Goq/kRz598oMXleF
+ 1MYJ67NXQc9trtlHLLn/29ziHRSS+8djDDb+WzIqWb8yHGbyL2NT9CmXGAs93tb+vfYH0
+ nAcF+VNFnrQHSfnFCoJE2zP3tXU0V0ZczidbSxTfDmXmw9AyV/UinvzU+AgpYPI5VUg==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 30852812C5
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DCF63808AE
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4F79F9D388; Fri, 30 Oct 2026 14:16:37 +0000 (UTC)
+ id 084139D388; Fri, 30 Oct 2026 14:16:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 29 Oct 2026 21:21:06 +0100
+Date: Thu, 29 Oct 2026 21:21:05 +0100
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: 31aa81e84f6c26670e59880ebfe6338c5bd6bacf
-X-Git-Newrev: 49ff530efe939e59479ac06a090963d7443055e0
+X-Git-Oldrev: b6e74d2e8bf5de1c0663a3efd0d8db0f09e8f192
+X-Git-Newrev: 10df8e9c96751420cb0234efd9294dc7b3bd27b4
 X-Patchwork-Hint: ignore
-Message-Id: <20261030141637.4F79F9D388@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/musl: add
- upstream security patch for CVE-2026-107891
+Message-Id: <20261030141637.084139D388@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/libressl:
+ security bump version to 4.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,7 +114,7 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1982966017258106465=="
+Content-Type: multipart/mixed; boundary="===============3668256558418729895=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
@@ -124,224 +124,152 @@ X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============1982966017258106465==
+--===============3668256558418729895==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/49ff530efe939e59479ac06a090963d7443055e0
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/10df8e9c96751420cb0234efd9294dc7b3bd27b4
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-CVE-2026-107891: musl libc: multiple integer overflow in regcomp,
-possibly leading to incorrect allocation sizes and out-of-bounds heap
-writes
-https://www.openwall.com/lists/musl/2026/10/21/1
+https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-4.0.0-relnotes.txt
+"- The mips32 platform is no longer actively supported."
 
-The upstream announcement states: "The vulnerable code has been
-present since version 0.5.0. All subsequent versions up through 1.2.6
-are affected." So the patch needs to be backported to all Buildroot
-stable branches.
+https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-4.0.1-relnotes.txt
+Fixes CVE-2025-9230.
 
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-4.1.0-relnotes.txt
+"- Fixed compilation for mips32 and reenable CI."
+
+https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-4.1.1-relnotes.txt
+https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-4.1.2-relnotes.txt
+https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-4.2.0-relnotes.txt
+https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-4.3.0-relnotes.txt
+https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-4.3.1-relnotes.txt
+
+https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-4.3.2-relnotes.txt
+"This is the first stable release of the 4.3.x branch"
+
+Rebased patch 0001.
+Removed patch 0002 which is included in this release.
+
+Updated license hash due to upstream commit
+https://github.com/libressl/portable/commit/30598098a5df3059332327fa0c2bb5877740ac5d
+
+Force OpenSSL for sscep due to the usage of NCONF_default()[1] which
+was removed from LibreSSL 4.0.0:
+https://github.com/libressl/openbsd/commit/646547a8a28c7b6931751a2ab064fd70d5d8cf92
+
+and will cause build errors with this bump.
+
+[1] https://github.com/certnanny/sscep/blob/v0.10.0/src/configuration.c#L37
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 77473256bd9a49f2120d1efedbc412aaf4501ecd)
+(cherry picked from commit d6a3f70beeac58b7ac3748a0fd3ea0b2b79e1182)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- .../0007-regex-avoid-int-overflow-in-regcomp.patch | 171 +++++++++++++++++++++
- package/musl/musl.mk                               |   3 +
- 2 files changed, 174 insertions(+)
+ .../0001-always-expose-SSL_OP_NO_TLSv1_3.patch     |  4 +++-
+ ...MakeLists-txt-Fix-HOST-variable-for-ppc64.patch | 26 ----------------------
+ package/libressl/libressl.hash                     |  4 ++--
+ package/libressl/libressl.mk                       |  2 +-
+ package/sscep/Config.in                            |  5 +++--
+ 5 files changed, 9 insertions(+), 32 deletions(-)
 
-diff --git a/package/musl/0007-regex-avoid-int-overflow-in-regcomp.patch b/package/musl/0007-regex-avoid-int-overflow-in-regcomp.patch
-new file mode 100644
-index 0000000000..aafb71cdfe
---- /dev/null
-+++ b/package/musl/0007-regex-avoid-int-overflow-in-regcomp.patch
-@@ -0,0 +1,171 @@
-+From 7813e9119eb5fe681b6750b8a033a0490bca0941 Mon Sep 17 00:00:00 2001
-+From: Szabolcs Nagy <nsz@port70.net>
-+Date: Thu, 23 Apr 2026 21:22:18 +0000
-+Subject: [PATCH] regex: avoid int overflow in regcomp
-+
-+regcomp has many int arith ops that may overflow. before tre_expand_ast
-+int values are limited by 2x the input length n, e.g.:
-+
-+  input ERE        int field    max value
-+  aaaaaaaaaaaa...  position     n
-+  ()()()()()()...  submatch_id  n/2+1
-+  ()||||||||||...  num_tags     2n-3
-+
-+so overflow before expand requires large n (and a lot of memory). later
-+some values can become big due to repetitions:
-+
-+  input ERE                     int field that overflows
-+  (((a{255}){255}){255}){255}   position
-+  ((a|b*){255,}){255,}          num_transitions
-+
-+num_transitions and memory use can be big without {k,} repetitions too:
-+
-+  input ERE        what             max value
-+  (a|a|a|a...|a)*  num_transitions  n^2/4
-+  (()|a|a|...|a)*  sum tnfa tags    > n^3/16 - n^2
-+
-+so memory can run out quickly as n grows (with 31bit va space 1700 long
-+input is enough even without {k,}) about half is tnfa and half is ast
-+firstpos/lastpos data. but overflow can happen before allocations fail.
-+
-+fix early overflow by limiting n. the stack usage is in [n,11n] without
-+repetitions, usually 7n, so the stack limit got adjusted too. the limit
-+is such that almost all inputs that worked before still work.
-+
-+overflows during and after expand are fixed by explicit checks via a
-+check_add helper and xcalloc instead of xmalloc.
-+
-+CVE: CVE-2026-107891
-+Upstream: https://git.musl-libc.org/cgit/musl/commit/?id=7813e9119eb5fe681b6750b8a033a0490bca0941
-+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-+---
-+ src/regex/regcomp.c | 41 +++++++++++++++++++++++++++++++++++------
-+ 1 file changed, 35 insertions(+), 6 deletions(-)
-+
-+diff --git a/src/regex/regcomp.c b/src/regex/regcomp.c
-+index b4b81968..a7115b12 100644
-+--- a/src/regex/regcomp.c
-++++ b/src/regex/regcomp.c
-+@@ -1680,6 +1680,12 @@ tre_add_tags(tre_mem_t mem, tre_stack_t *stack, tre_ast_node_t *tree,
-+   AST to TNFA compilation routines.
-+ */
-+ 
-++/* check if a+b overflows for a,b in [0,INT_MAX] */
-++static int check_add(unsigned a, unsigned b)
-++{
-++	return a + b > INT_MAX;
-++}
-++
-+ typedef enum {
-+   COPY_RECURSE,
-+   COPY_SET_RESULT_PTR
-+@@ -1731,6 +1737,8 @@ tre_copy_ast(tre_mem_t mem, tre_stack_t *stack, tre_ast_node_t *ast,
-+ 		    /* XXX - e.g. [ab] has only one position but two
-+ 		       nodes, so we are creating holes in the state space
-+ 		       here.  Not fatal, just wastes memory. */
-++		    if (check_add(pos, *pos_add))
-++		      return REG_ESPACE;
-+ 		    pos += *pos_add;
-+ 		    num_copied++;
-+ 		  }
-+@@ -1826,6 +1834,8 @@ tre_copy_ast(tre_mem_t mem, tre_stack_t *stack, tre_ast_node_t *ast,
-+ 	  break;
-+ 	}
-+     }
-++  if (check_add(*pos_add, num_copied))
-++    return REG_ESPACE;
-+   *pos_add += num_copied;
-+   return status;
-+ }
-+@@ -1870,6 +1880,8 @@ tre_expand_ast(tre_mem_t mem, tre_stack_t *stack, tre_ast_node_t *ast,
-+ 		tre_literal_t *lit= node->obj;
-+ 		if (!IS_SPECIAL(lit) || IS_BACKREF(lit))
-+ 		  {
-++		    if (check_add(lit->position, pos_add))
-++		      return REG_ESPACE;
-+ 		    lit->position += pos_add;
-+ 		    if (lit->position > max_pos)
-+ 		      max_pos = lit->position;
-+@@ -1998,6 +2010,8 @@ tre_expand_ast(tre_mem_t mem, tre_stack_t *stack, tre_ast_node_t *ast,
-+ 	      }
-+ 
-+ 	    iter_depth--;
-++	    if (check_add(pos_add_total, pos_add - pos_add_last))
-++	      return REG_ESPACE;
-+ 	    pos_add_total += pos_add - pos_add_last;
-+ 	    if (iter_depth == 0)
-+ 	      pos_add = pos_add_total;
-+@@ -2010,6 +2024,8 @@ tre_expand_ast(tre_mem_t mem, tre_stack_t *stack, tre_ast_node_t *ast,
-+ 	}
-+     }
-+ 
-++  if (check_add(*position, pos_add_total))
-++    return REG_ESPACE;
-+   *position += pos_add_total;
-+ 
-+   /* `max_pos' should never be larger than `*position' if the above
-+@@ -2711,9 +2727,19 @@ regcomp(regex_t *restrict preg, const char *restrict regex, int cflags)
-+   /* Parse context. */
-+   tre_parse_ctx_t parse_ctx;
-+ 
-++  /* Limits: before tre_expand_ast, int values like position, subid or
-++   * num_tags are bounded by 2x input length, used stack entries are
-++   * bounded by 16x input length. input length is checked upfront to
-++   * avoid overflows before expand. later, values that can grow big are
-++   * bounds checked via check_add and xcalloc. */
-++  const int input_limit = 1024000;
-++  const int stack_limit = 8*input_limit;
-++  if (strnlen(regex, input_limit) >= input_limit)
-++    return REG_ESPACE;
-++
-+   /* Allocate a stack used throughout the compilation process for various
-+      purposes. */
-+-  stack = tre_stack_new(512, 1024000, 128);
-++  stack = tre_stack_new(512, stack_limit, 128);
-+   if (!stack)
-+     return REG_ESPACE;
-+   /* Allocate a fast memory allocator. */
-+@@ -2801,9 +2827,12 @@ regcomp(regex_t *restrict preg, const char *restrict regex, int cflags)
-+ 	   for example "a*" or "ab*".	Figure out a simple way to detect
-+ 	   this possibility. */
-+   tmp_ast_l = tree;
-+-  tmp_ast_r = tre_ast_new_literal(mem, 0, 0, parse_ctx.position++);
-++  tmp_ast_r = tre_ast_new_literal(mem, 0, 0, parse_ctx.position);
-+   if (tmp_ast_r == NULL)
-+     ERROR_EXIT(REG_ESPACE);
-++  if (check_add(parse_ctx.position, 1))
-++    ERROR_EXIT(REG_ESPACE);
-++  parse_ctx.position++;
-+ 
-+   tree = tre_ast_new_catenation(mem, tmp_ast_l, tmp_ast_r);
-+   if (tree == NULL)
-+@@ -2813,22 +2842,22 @@ regcomp(regex_t *restrict preg, const char *restrict regex, int cflags)
-+   if (errcode != REG_OK)
-+     ERROR_EXIT(errcode);
-+ 
-+-  counts = xmalloc(sizeof(int) * parse_ctx.position);
-++  counts = xcalloc(sizeof(int), parse_ctx.position);
-+   if (counts == NULL)
-+     ERROR_EXIT(REG_ESPACE);
-+ 
-+-  offs = xmalloc(sizeof(int) * parse_ctx.position);
-++  offs = xcalloc(sizeof(int), parse_ctx.position);
-+   if (offs == NULL)
-+     ERROR_EXIT(REG_ESPACE);
-+ 
-+-  for (i = 0; i < parse_ctx.position; i++)
-+-    counts[i] = 0;
-+   tre_ast_to_tnfa(tree, NULL, counts, NULL);
-+ 
-+   add = 0;
-+   for (i = 0; i < parse_ctx.position; i++)
-+     {
-+       offs[i] = add;
-++      if (check_add(add, counts[i] + 1))
-++        ERROR_EXIT(REG_ESPACE);
-+       add += counts[i] + 1;
-+       counts[i] = 0;
-+     }
-+-- 
-+2.55.0
-+
-diff --git a/package/musl/musl.mk b/package/musl/musl.mk
-index 5384a08abf..cb9f7f8870 100644
---- a/package/musl/musl.mk
-+++ b/package/musl/musl.mk
-@@ -34,6 +34,9 @@ MUSL_IGNORE_CVES += CVE-2026-6042
- # 0006-qsort-fix-shift-UB-in-shl-and-shr.patch
- MUSL_IGNORE_CVES += CVE-2026-40200
+diff --git a/package/libressl/0001-always-expose-SSL_OP_NO_TLSv1_3.patch b/package/libressl/0001-always-expose-SSL_OP_NO_TLSv1_3.patch
+index 48f3fa16e0..1efb25f1fa 100644
+--- a/package/libressl/0001-always-expose-SSL_OP_NO_TLSv1_3.patch
++++ b/package/libressl/0001-always-expose-SSL_OP_NO_TLSv1_3.patch
+@@ -12,6 +12,8 @@ ssl.c:98:18: error: 'SSL_OP_NO_TLSv1_3' undeclared (first use in this function);
  
-+# 0007-regex-avoid-int-overflow-in-regcomp.patch
-+MUSL_IGNORE_CVES += CVE-2026-107891
-+
- # musl does not build with LTO, so explicitly disable it
- # when using a compiler that may have support for LTO
- ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_4_7),y)
+ Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ Fetched from: https://github.com/libressl-portable/openbsd/pull/124
++[Bernd: rebased for 4.2.1]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ ---
+  include/openssl/ssl.h | 4 ----
+  1 file changed, 4 deletions(-)
+@@ -20,7 +22,7 @@ diff --git a/include/openssl/ssl.h b/include/openssl/ssl.h
+ index 46f24b2ea..4048a6e63 100644
+ --- a/include/openssl/ssl.h
+ +++ b/include/openssl/ssl.h
+-@@ -412,11 +412,7 @@ typedef int (*tls_session_secret_cb_fn)(SSL *s, void *secret, int *secret_len,
++@@ -402,11 +402,7 @@ typedef int (*tls_session_secret_cb_fn)(SSL *s, void *secret, int *secret_len,
+  #define SSL_OP_NO_TLSv1					0x04000000L
+  #define SSL_OP_NO_TLSv1_2				0x08000000L
+  #define SSL_OP_NO_TLSv1_1				0x10000000L
+diff --git a/package/libressl/0002-CMakeLists-txt-Fix-HOST-variable-for-ppc64.patch b/package/libressl/0002-CMakeLists-txt-Fix-HOST-variable-for-ppc64.patch
+deleted file mode 100644
+index 8da8fedae2..0000000000
+--- a/package/libressl/0002-CMakeLists-txt-Fix-HOST-variable-for-ppc64.patch
++++ /dev/null
+@@ -1,26 +0,0 @@
+-From e6c7de3f03c51fbdcf5ad88bf12fe9e128521f0d Mon Sep 17 00:00:00 2001
+-From: OPNA2608 <opna2608@protonmail.com>
+-Date: Fri, 19 Jul 2024 11:41:46 +0200
+-Subject: [PATCH] CMakeLists.txt: Fix HOST variable for ppc64
+-
+-The code here defined HOST_PPC64, but the rest of the build system expects HOST_POWERPC64.
+-
+-Upstream: https://github.com/libressl/portable/commit/e6c7de3f03c51fbdcf5ad88bf12fe9e128521f0d
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- CMakeLists.txt | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index c496ad97b5..670aa9a1a0 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -373,7 +373,7 @@ elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "mips")
+- elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "powerpc")
+- 	set(HOST_POWERPC true)
+- elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "ppc64")
+--	set(HOST_PPC64 true)
+-+	set(HOST_POWERPC64 true)
+- elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "riscv64")
+- 	set(HOST_RISCV64 true)
+- elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "sparc64")
+diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
+index 692dce28e3..70fe19dce9 100644
+--- a/package/libressl/libressl.hash
++++ b/package/libressl/libressl.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
+-sha256  7b031dac64a59eb6ee3304f7ffb75dad33ab8c9d279c847f92c89fb846068f97  libressl-3.9.2.tar.gz
++sha256  edf01aee24c65d69e6a9efcb9d44bcda682ff9d4f3bbbd95e794e1dfa90847b5  libressl-4.3.2.tar.gz
+ # Locally computed
+-sha256  5c63613f008f16a9c0025c096bbd736cecf720494d121b5c5203e0ec6e5955b1  COPYING
++sha256  9853507b8821c3f277aa60bf554eade41441ef06b2df538d247183ad28789b7f  COPYING
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index 7e92ea3a11..2b4e97abf3 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBRESSL_VERSION = 3.9.2
++LIBRESSL_VERSION = 4.3.2
+ LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
+ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
+ LIBRESSL_LICENSE_FILES = COPYING
+diff --git a/package/sscep/Config.in b/package/sscep/Config.in
+index 549c65274b..2e85ea7709 100644
+--- a/package/sscep/Config.in
++++ b/package/sscep/Config.in
+@@ -1,8 +1,9 @@
+ config BR2_PACKAGE_SSCEP
+ 	bool "sscep"
+-	select BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH if BR2_PACKAGE_LIBOPENSSL
+-	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_BLOWFISH
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES
+ 	select BR2_PACKAGE_OPENSSL
++	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
+ 	help
+ 	  SSCEP is a client-only implementation of the SCEP
+ 	  (Cisco System's Simple Certificate Enrollment Protocol).
 
---===============1982966017258106465==
+--===============3668256558418729895==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -352,4 +280,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============1982966017258106465==--
+--===============3668256558418729895==--
