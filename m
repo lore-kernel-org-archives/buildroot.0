@@ -1,28 +1,28 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46149606A31A
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:18:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7435606A31A
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:18:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=aDR6daTJ
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=sZkgoFXN
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1DED060B53;
-	Fri, 30 Oct 2026 14:18:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9E71440C02;
+	Fri, 30 Oct 2026 14:18:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kAFU-roxeZ_c; Fri, 30 Oct 2026 14:18:10 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 2DDE760AFF
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369890;
-	b=mK8r5KlFNN2sCs+paiCK956wl76unUhDASuCDnnyTNhepshbq9lwbA5QqTWL5u7jzh1i
-	 j8csU30saESkVGeS4rOB9oEBqiJrVxeFe08WIzXPff2luPv2vh0iECfv6o5eEjJR9XKac
-	 JpC9Aj70/3kISuW0ITuTzRlIq5drykUalhYMKIEDT9RmQ8CSWnGkERwddc8cr+mX+sAXc
-	 WVqWIzU9KBkHjv0Tqdpkga2jY9XavnERFM1zOu90yrysOpjMF0/nx2OFNcAPpKUz5a6C7
-	 6xCL4p5sMiuVhZDc7sbnBkDrO/UmmJbDL+24KV91W5UjxnTlYoXn8LP+hmZUcTyjNVA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1Xlmo8R7X2wE; Fri, 30 Oct 2026 14:18:11 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org A5D4740BDB
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369891;
+	b=oq8Vm77pQCHYFsHTdr+QavfZ8scPWLOJF6CFrZ9HiLuzv3V1/InroPkFqoY0owSlOHBJ
+	 CS8DhA2e6jNwRA5QbwyB82JRTwaKx3RpNUPJp1itd6d3BXDWaAThCAW8MfD+9whKe8PX2
+	 Pb2LSAFEsnxOvRC54Dk3F218l0abBrIp/HYBIcIDP2fV4ulNy0il3+uULP0UiP/pbEED8
+	 TFTPoxtLP9ckUsHiBjE70NeDtBB0opvOtzsz8y01CDw0FKtTggY4NHtx/OUKky6ED5Jij
+	 kWNnd2x0E6kgKhzYd19z5S67yAT4I5WqdysH+yx5xGFMKOAZXF0/uIVuP3WJX+G8CmA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793369890;
+	c=relaxed/relaxed; t=1793369891;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=rgdNH1c4E1tb568w3HfO1VaUeLpo2dz87Lwf6eteRWI=;
-	b=ByGSEawkmtRSRQ7rqu7EuuHeIU8vsTweI9VeJMh5LxNXu3MMEi5pdgd/X0kZT57ZKGTS
-	 ffGF8J1zX7tLyp5DQ6S09kw+ctAbnqx36E3g2LhrctsMR3PKi0kBRqmEi57/8s4c2syAo
-	 bcDjCQxBGxZxv6f8z36xK6H2qY5jSdMcjIgCtSgz5EWqJQmtf4WLL5n8EJV6owHrYZWji
-	 O9UhrGBVAoWG6nkSvOHPbXm6H2xf0bHBJAFAQ+sn2IMwQDmxlZ7RpvhP0+XCled3/D+Y1
-	 rM4bxQOFD5EuCNEhz6cThPAS1KZWULDXRuMwt740TRBFBK5A4xevAKf782CRUQijOag==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	bh=j53ZKDO5CSibMRmqu0WVVCiW6zbwy/aLFJJCuCyMzKM=;
+	b=ByeFgLAXIs9nOT5PzultelAhs8WhtPNDXTiyIqEB4xUScFdOxv8o24lD0q13n6OX3XL7
+	 3aCby0ndybnHx7vuAsFMit0tRgE9UyxnDJJQlwXBXhfXJS1/avewgdCWGy4JH56nnTY5C
+	 I+9G6J6u8vl7dCXqbu17GmUaK5zZ6pbqIwNbTMNPd5jrDFT8LYlRlopy4qTRfbIIwhxWh
+	 m90hTNy1Ahw/4+8c9U8gftIM3fAKmc1M8Bdp6MxKAQFA5t6886VT5x49xzbIMtDMOdp2V
+	 +34PEBgMdLEGqHwVssQDdKlPHIKo/Xr/wJPVsxIiQFCU8Mq3AcOYuQ2kaYU9+BaBTjA==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793369890;
-	bh=rgdNH1c4E1tb568w3HfO1VaUeLpo2dz87Lwf6eteRWI=;
+	s=default; t=1793369891;
+	bh=j53ZKDO5CSibMRmqu0WVVCiW6zbwy/aLFJJCuCyMzKM=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=aDR6daTJzjuPDXokZp2hVRusdqkVqNTXWBhCsS9/ILkgSVHKPtOjapPO+fVocsipg
-	 JhwoiOk9T5189eQIHikKW8mICVaNwqXstO3MYDPz3HnItPiyVjpmGAcN1Zk+0VeT3h
-	 FFqeVBqSld+IDYswWY9OHefBwybq5D1sRAyghPFO4iKHHvRXCcchOO2Wb6qObKDcco
-	 vR/c2w+W6ovoYL+TbkjbUVVH9/HNDhf5N6/zMqeIHQZ9wchSWAHebOpPTKtRndO0uM
-	 wRpt3uA2K+F1TNB7atuijvjxg9jv2S10VwnVgpijtypyetJOhkELdFNW3EKmBvqCJU
-	 gy/5RQIKJNfCQ==
+	b=sZkgoFXN/GkDMp9W18jbgQSMLSH+Hnel3j+RrppyGqOUqrHCXfjhZ5rrnbhL0l2mf
+	 GFNwK15V00eF3F6iCKo90+3KH00SDcl/y7B3f+5oFQTpgAZ41pKCPTRzpckPpBfix2
+	 pCJCoukzqU2rxPRWBH9WWYuTasONVHwTnUOsAnSWT1nWnnAynvBAsS0egYP42g+yxN
+	 76h9Q9W9TN4qpm1aWE+fjk4gXzKNw/TfCHrwv2LltBeU9yekViukG3vpRA6IaCzq/u
+	 JSOYkTp7EAi43eDSLMQ1Rqanw3xYpK0LjA1h1mPyHgP372q9PohhViQntMYnhcLv2A
+	 DjsV7Z/36nhZg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2DDE760AFF;
-	Fri, 30 Oct 2026 14:18:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6FA99362
+	by smtp4.osuosl.org (Postfix) with ESMTP id A5D4740BDB;
+	Fri, 30 Oct 2026 14:18:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7B283D44
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5469C812C8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6D676400D5
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wCOlE-VZ66bP for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KyKQTm2SDKfW for <buildroot@buildroot.org>;
  Fri, 30 Oct 2026 14:18:03 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org A6FA1812B1
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org AF80940243
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793369883;
- b=M9CSIwvohcrnaxqyUkRK3CqqERedqkzsqHHXhb/NLkjXkAeadzVG4uSnEMrckYF0Dci1
- 5K9gJoEOS0hKrGoQrFjPvT/hCqSPDSKQjrTXr+hVGvloP23u7a3i06TlsXeGkPVPVwKjb
- YZfUCLDYS5MP1uou9oqB/Iq0UVm49dqsRFxi4mZPRb81g65NjFbOtnn/G6qG0kNvw28dV
- liLJMDYS5zu2QQLlHuHQXESUOFcmE8x9ARHMYY9JqF2leOngPh0Ckf8n0lZwbklYSsnOK
- oFo2/w0uVm2/uM1k0V1rTGOQ0L/hoZETa3c4FbopdCVaL2mfHqi3DnbDE+3Pck5cWbw==
+ b=b7nE41uBqh8SdR5D3UfXZhHX9WzwqURRuMqUvvMBKHEdvYbuDoXPHjRI7+s7SnVwiqrw
+ TZCAM5vpINcB3F+u0Y3Qatnlra2PwZCWuI7UzitxzVkzfckPU8c2xUWWrXMcNROIa16yV
+ tjblkzynyb4eSqQYHOeacAZXFpavMQWWlsnaGLhP26VyQqyzLj7oG1FQVUW5cgHTTxRzT
+ yUrN+7gdIFk0IHQGwz6eZ5FYHtfIr+FGjBZcANXq6VhvcvKMG2ozp3N4f96RA3gfKdfbb
+ v9ds9sM06h9P0F1CjU9sMfEfNaqI/2HDAO3wweej0j/tE4CtnYbuDrJMwh5ru6x72Kw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1793369883;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=YAni+OJr7rZJjnRvfZ0MidM4GTZ5vvNGx4gFfz9HspU=;
- b=G6V+l4uGrzZLikr2k08gu7/7/QpK8s4B3WxbqunutsY124m8b475UfBfIVYRmVmNb2Jl
- V8EzGh/YVyPNGHAEFo0tlx2+pDINbxydDlFyil+Vz2xP4/NKEFe+mkMqF1HlFIcGaDXdF
- NrLPi23LgGugAdCFnhIFAmT5C+gEAOxS+GnhAD7TVzD6HygFxBr7Wx1lJUy0kei3g29ID
- sfbd81bo021qLLF2lSTPb9E13nDtiu/iTqxhri89zoe/wUElEzPbezwOq3AJRgAxZzLPV
- KHnL7kVnAjWqTu3z25zJz2BAaBaFRlCRdEwg68tV/vAE0Sp8vHjAcsaIDo0rf+3tXBA==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ bh=mWUVRqTwKuWnRBRFGdD8LRKjyKoyM1fnQneKVyBq8wQ=;
+ b=EA2spo4ZtyrKHjsfpoq2afDBetsbnHUOC7YgMjbuuY98daau2IKqHl41JoFSy6e23IA5
+ d8A4WBSIeUvJrK92nwRe4Rvgre2OAsfYM1EbqjXeaoPNoILBLpeuDZMc1tUZ+A/TKStEr
+ kJMcPVis9hbQwP7TIAhDAUVIV7/ptwfqToEihm4l6aX8VR+koGCm+/zr6Foinlgv8ulUl
+ nkIscBWjX2GUset29DB3AVWNM/jKjx0cwrJsBORXsRf4+AS1Se+eNZljHjV5Oaf2NL4oR
+ ddIjK0mNWjl/ZZVTWOol+URL/X2GKcHzEZPKhyWhmfTwiaRDd4SN8tQeL3NLEw+FQ1g==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A6FA1812B1
+ by smtp2.osuosl.org (Postfix) with ESMTP id AF80940243
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A3FFE9D388; Fri, 30 Oct 2026 14:16:35 +0000 (UTC)
+ id CAEBC9D38B; Fri, 30 Oct 2026 14:16:35 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 29 Oct 2026 21:21:03 +0100
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: 32bc11c9bcb2c2c5474b678f35b584bf56e79908
-X-Git-Newrev: cbdf080d4c2316cff4985f00a75729ca8d4de9e5
+X-Git-Oldrev: bad8be6c65ce4c0d225b295b150a257c05881501
+X-Git-Newrev: 7674709e657f8b5d70619a2ed14f3ee0485f388e
 X-Patchwork-Hint: ignore
-Message-Id: <20261030141635.A3FFE9D388@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] support/testing: use host
- entropy for ARMv7 emulation
+Message-Id: <20261030141635.CAEBC9D38B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x]
+ package/mender-update-modules: add missing BR2_USE_MMU dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,7 +114,7 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8061825628554969659=="
+Content-Type: multipart/mixed; boundary="===============2564493071096080665=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
@@ -124,52 +124,74 @@ X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============8061825628554969659==
+--===============2564493071096080665==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/cbdf080d4c2316cff4985f00a75729ca8d4de9e5
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7674709e657f8b5d70619a2ed14f3ee0485f388e
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-When running tests depending on entropy pool being ready on armv7 (eg:
-test_openscap.py, which runs the 'oscap' binary, which tries to get
-random bytes, even with simple commands), the test may fail on timeout
-due to the entropy pool not being ready; this is confirmed by the test
-being blocked until "crng init done" line appears in the kernel logs.
+BR2_PACKAGE_MENDER_UPDATE_MODULES_RPM selects BR2_PACKAGE_RPM without
+replicating its BR2_USE_MMU dependency.
 
-A solution could be to just increase the test timeout to a value large
-enough to make sure that the entropy pool will be ready in most cases,
-but it may be hard to find a value that fits all use cases, and all
-tests depending on entropy being ready would deserve the same fix.
+BR2_PACKAGE_MENDER_UPDATE_MODULES_SWU selects BR2_PACKAGE_SWUPDATE
+without replicating its BR2_USE_MMU dependency.
 
-Another solution is to replicate what commit 7acb32dabb80
-("support/testing: add builtin armv5 kernel 4.19 with entropy") did: it
-added the virtio-rng-pci argument to allow the guest machine to use host
-entropy. The armv7 kernel used for testing seems to be built with the
-relevant virtio configuration to allow a similar pass-through, so pass
-virtio-rng-device to armv7 kernel when running tests.
+This commit fixes that by properly propagating the missing
+dependencies. There is in practice no functional change:
+BR2_PACKAGE_MENDER_UPDATE_MODULES depends on
+BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS and go is only supported on
+MMU-capable CPU architectures. But since there is no formal
+relationship between BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS and
+BR2_USE_MMU, automatic validation cannot infer that
+BR2_PACKAGE_MENDER_UPDATE_MODULES cannot be selected on !MMU systems.
 
-Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
+Fixes: a474642fdcd8c69e12126bbe8304479aa855d916 ("package/mender-update-modules: new package")
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b53c724eb25c32ba73e68e61219fc53f601b18f4)
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 24590006a64e09a52ea6ed254c706877b9706e61)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- support/testing/infra/emulator.py | 1 +
- 1 file changed, 1 insertion(+)
+ package/mender-update-modules/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
-index 3702ee2d48..d690949120 100644
---- a/support/testing/infra/emulator.py
-+++ b/support/testing/infra/emulator.py
-@@ -98,6 +98,7 @@ class Emulator(object):
-                                          "vexpress-v2p-ca9-5.10.202.dtb")
-                     qemu_cmd += ["-dtb", dtb]
-                     qemu_cmd += ["-M", "vexpress-a9"]
-+                    qemu_cmd += ["-device", "virtio-rng-device"]
-                 elif arch == "armv5":
-                     kernel = infra.download(self.downloaddir,
-                                             "kernel-versatile-5.10.202")
+diff --git a/package/mender-update-modules/Config.in b/package/mender-update-modules/Config.in
+index 88e0805976..dac83c47ec 100644
+--- a/package/mender-update-modules/Config.in
++++ b/package/mender-update-modules/Config.in
+@@ -208,6 +208,7 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_RPM
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+ 	depends on BR2_PACKAGE_LUA && !BR2_PACKAGE_LUA_5_1
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_MMU # rpm
+ 	select BR2_PACKAGE_RPM
+ 	help
+ 	  The Rpm Update Module updates software on the device using
+@@ -220,6 +221,7 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_RPM
+ 	  https://github.com/mendersoftware/mender-update-modules/tree/master/rpm
+ 
+ comment "rpm needs a toolchain w/ dynamic library, threads and lua >= 5.3"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
+ 		|| !BR2_PACKAGE_LUA || BR2_PACKAGE_LUA_5_1
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+@@ -228,6 +230,7 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_SWU
+ 	bool "swupdate"
+ 	depends on !BR2_STATIC_LIBS
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # swupdate
++	depends on BR2_USE_MMU # swupdate
+ 	select BR2_PACKAGE_JQ # runtime
+ 	select BR2_PACKAGE_SWUPDATE
+ 	help
+@@ -240,6 +243,7 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_SWU
+ 	  https://github.com/mendersoftware/mender-update-modules/tree/master/swu
+ 
+ comment "swupdate support needs a toolchain w/ dynamic library"
++	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_STATIC_LIBS
+ 
 
---===============8061825628554969659==
+--===============2564493071096080665==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -180,4 +202,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8061825628554969659==--
+--===============2564493071096080665==--
