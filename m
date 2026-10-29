@@ -1,28 +1,28 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20524606A31A
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:08:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93FC3606A31C
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:08:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=lnSaRIQ7
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=lSMIkggQ
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EF12281182;
-	Fri, 30 Oct 2026 14:08:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6FA9160B8C;
+	Fri, 30 Oct 2026 14:08:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SLQMer8x7y2q; Fri, 30 Oct 2026 14:08:01 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org DB3A2812C3
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369281;
-	b=Q7U7v90WLluUMLAs3PHroYe5RuO8WAY8Nrx8yrsf53AQ6CXy7jAalReFqfvtYY84JR4P
-	 4y6WtfmZG8go3M2lCFKov8AvVKwhM7t7D3eOuTit3PuJkGCxzAFQMoFF7eJUBsWtNsH53
-	 khc9E6udW7hlO+S65HVjyjvrBNn0T/BVgxmeRJz4P3PttQEHFSIT9QOFrzBQY4Z2oox8y
-	 eIp4hzU1zKfxChRZ+KG1mg1pmN9ZI2DIGZLtQ0xMXB72tuGlRrGq6GgF+riKjcvWT472W
-	 WAYgUV8gTI0mUsQcIxGoC/lXVvEGHF69Zlk7eDvVN8D1BlfdJERULCTuhfSOT+HTyyA==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id beMKCtn7NQKV; Fri, 30 Oct 2026 14:08:02 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 3E44760B92
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369282;
+	b=kHfxJ7gAdnQLJDQbWCEmEhIMLl9UMHFWjFy6ZmNdcgOPrdhoLbqlyINkpUdscayxLkgG
+	 krVbuS9Un6XBgMaY0OsKIwYklnNGGo7EL1M6g7w1127+S1BtjImFJr+NiMvuUqF6kBEo2
+	 2Od0xOXBYhHXqr8GuFViDMFYcO/XqKoNCyAf5+F7UXEd5MwEwYhsPx0fNyv6FG99LLeRz
+	 9rFZPWjhNhlCM/2yGxYUc6qFOEo4QzB3U574GpF+KsbBzW18NpJEJOPAMeYP924Um3n+i
+	 D3RruDS4ML+NKXtLUtxz6cefrXxtKxsRs3VAICoXE/pXNluACfsd+9bapoZRflHtDHg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793369281;
+	c=relaxed/relaxed; t=1793369282;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=fnMf1XNaZ5SOcYIq5HEzqOA7DTQeoi6crxb9GFbEgS8=;
-	b=PrBnRgEsi1jsfFlRy57USr/eeJqW1kOdi+h+TfVjKo1yC2VAe+uXR/yq1s5bcu3jKGVL
-	 /TvGmuKFGMLNxZ+UseDZS8eRCMlABsr/Rz5hCjPcEhDOyrKyH1ezTk2zkEep/UdEXyv0b
-	 dxnOF8wjMpq7wWrDZ2mIfqgxAcYjg59UuHTG9y2Uggp3aU7lzZ1mZyOkfNcj6D8cFFrkn
-	 892TQXHNoWvvePUSyM2mDFOhyLirlaxmz9a7+qzTh0P/thFFGreE60wmA7BGE7NrGBJtB
-	 7PUI2rjFo6xRdGohftZNHqNdN6NdeNC0pWVbIVGF9K+DYq+9hdZBonN1xnN4dz7XehQ==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	bh=lEKF+DM7RIHVJzITN9rbcryqjnMdTasVmzFMMDzypmU=;
+	b=D+NEK1plehVeNo0s6mJWgaS3fMJv5vggnvZGFsfrSUPDi49y4QdN5SLHoCWLyuPM8PCu
+	 uuqQCDL5PV8QShIm+SHcZZ5/3+A1J5+yK0JDVIIMPUyLxuw1BAPTTcXpElX6tjSI5UbLM
+	 5sIovVCQYKQ89x8IMcDgIxRkJCyyHd3Lr4IXI3mFvC47ner1D+dgC+XQfPeNkRhZY2CvD
+	 B6atJ31OhdwGLHdKgnIJApFrmd775fDqt+DqJfnFVcf7baLcA89gdlD3OIZlR9BjxKfNW
+	 1TNdhVrVkEpT+WiftgNGEhoaH5fwFqcwU6gPWytLZuItgykh1GPTge087vaM40B7WNg==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793369280;
-	bh=fnMf1XNaZ5SOcYIq5HEzqOA7DTQeoi6crxb9GFbEgS8=;
+	s=default; t=1793369282;
+	bh=lEKF+DM7RIHVJzITN9rbcryqjnMdTasVmzFMMDzypmU=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=lnSaRIQ7QZYIWd1fEQv0ptEdfLhO/1Ov1vS46hupPtInmQWj/2uHnV1U5QWIvaNg0
-	 P175N8rScKG9VB/2iJN6LP0kI02XOR3qTymtNdgfXLzX80AVAKEslm8NuI5yzp1t2/
-	 yE84MGuTmRCpMz/bF4Hz2hLQhocKvcUiFGwtABnuxkE+9Kjswl1/CyhmhoKkoXlCmY
-	 a7mGp45JnYytqiCu/2PRbg6R/zENcPiLYrWbBKDuEs3AbpHd3dNPmrHoVRKY9lWeon
-	 MqnIW3qVyFLf9Oci3e2F3YiyeAjEqWkRGrYJqZGthiuHIYW1o02neXtAVw8VKJowGg
-	 DxMPy8tt5GpJA==
+	b=lSMIkggQKAVJCVmFlXQIrgA839su6+Pds11YYlvrVelGXdYQPnaON9CQWgkyhEH1B
+	 StPvGLn+njbVTas8uSuY9JPysXYOadT/sEPxmmDa5TZIUly1WQVSgw9BAm0KsgSZAN
+	 scm3nWmEtm9R50Wg5bm9+QJZIQFDwoZV6x51953o3y+SQTWBmCf4XIaWyBbmX+PEjb
+	 Go0i2LpsGLx3a0TrpQef9XqiZSCmf05b7G20Z7Jg/7N0nA+a6BzQ3hbJ1yLXCQdHP0
+	 pixMx7ewhiT/+/uOGcWnQY7yAfFPZkFazq2UyQ8NZ6GdVbnL7DFU1eeXDaG6Ncl1lZ
+	 oqg0pnW0TEPKQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DB3A2812C3;
-	Fri, 30 Oct 2026 14:08:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3EE07D43
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3E44760B92;
+	Fri, 30 Oct 2026 14:08:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7888E362
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:06:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 23C6881180
+ by smtp1.osuosl.org (Postfix) with ESMTP id 66D0181180
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:06:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XOXFosx4_YjH for <buildroot@buildroot.org>;
+ id XuwV3oRLFBsq for <buildroot@buildroot.org>;
  Fri, 30 Oct 2026 14:06:07 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 2BE028119F
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 64CBD81136
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793369167;
- b=WpmYBgg7Hubhc7ZG5iacTlq7cbPnavWwTNfRYwT1QBZ/YpAFIK4KHZEf1m1eLvT0gSRr
- 6KeG2lvE8pL0Nl3NF5Q2zzf2LmnzUAcjh6Vg3SaiHtLQMtbwST0cFZ+GjCz2A5KLFiY4G
- 34J21xiUb/3o6pu0HAqDN8PDS/ryFb2WD/QBqvvDKnc701BiXzOLOt2xc1xOC/wycRiZZ
- RLqQSq60ELksDBYzbWZYYpDv952YdxFkRJXesWncRnEkh+c2I3TmGbLKoQvV8YP9TZLh9
- CMUYqj2Nugd89qfL8uIcJGDnP1c0iiHGhKcjVCZr5tNSxZXvqaUCtCu0CxzDmftDAvw==
+ b=U30bvVmQR/aFthxxa4iRuM5WJnF/srZfyOI6GToxGKLlBmIcMkluWupdKs8Tf/C0lMw7
+ uNpkmtbhl467C3EwQFUR1N6YdAa225kpsrmfFIy0oYGPfaxbmXtyzEWmvpGiGUQ/gIU4v
+ OFNBdLlPAIbwcIE9AZxj0ug6irA4ArXywwfdAK4qOqENFXOGe2z2Jl7P1lwvFB77Cohvd
+ PZ3BG0EPigaoSkxjS9r/OjBakywIhxJhQbV/+SLRPOI3i8RWpgIgNtGL3fUyG0XoOXOrM
+ zAJxkRZKtg9i+IzoUXRSlEkZT2TAr4xYQAgkEuxEOFhueNGvbjotNFlZu3pLxTiiJRA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1793369167;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=+nWmUyhy6733WySU1fSplxwnM468z+nG2SD2zQqChJA=;
- b=BwErXby/c71gCv32wuVooBvACXafwQtYF/1iaNzomiIP/7/g7sHXPg8ghOXk06OffNlK
- LESIJKFATTjA8VH6sCadGIlZoK7rneBX167e3EiI06Ck5DlkYeDjQwM/ZybEm8EBofqap
- 2/9bSh6kTSLU55pB1+RAHah+kgEvvlAHNwMpBYuV135tOjMdAN7wZOSxYJuf2FNTGLSPJ
- EW573eieEbZLj4xdefbmlbTQ1Z3yZa9w2hbMI/sgATZFiSh0aALfUeyrDQgu/gK0x+P5e
- I8Pk74dEfzL2HGkrV2ZjBfpW2JJzLnaOz40llF9txS3HUiy6vcEzceBBRQ6QQ8qX3TQ==
+ bh=KgelcUmqmBedTQ0e9PR8jbeaeXtf8fYDUNnraJpBlC8=;
+ b=Evs56RTlRN2ApQm/Z8Eu+HKLWyop+PXIwVuv8yPuLpDzA8ifU0QZ5zYaX4rZT7JsEb0Z
+ J6HC6U4t6YHQV0lozmj+CaySZbwc/rFJ21PvROP310BulPReXd9Vfhp+1U11jdYYZRvxt
+ 2lpThw1FoPfizxC7kM4rty4Rv1An2b9VYdLKDR4NtHyYq3tkaFeVnnvEeiDvm6u3djmK0
+ h1c6M+wOT6NU8MT21xIh7GP7vxHyfUuMTGPox2Q/TfQGjrio3ODL1EnGrCxZoJsNs3IPR
+ ihIlaRh0WiQb1c2SCPCMBmclGz16JYEj7yVZecvxpIaWOxVc70IO34KhIP2KEvdT1FA==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2BE028119F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 64CBD81136
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:06:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 48E819D389; Fri, 30 Oct 2026 14:04:39 +0000 (UTC)
+ id 824AB9D389; Fri, 30 Oct 2026 14:04:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 29 Oct 2026 21:19:59 +0100
+Date: Thu, 29 Oct 2026 21:20:00 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: bb0ff90cc62bf9eeecf2cc86320a63b394856691
-X-Git-Newrev: 0c6bc2f7f8e15ace15b7b61385812d2929647dac
+X-Git-Oldrev: 6f8daa05a02fb73e9fa470a3aab834cf9d9e772d
+X-Git-Newrev: 8605f7585dd02ded3a7a6c2d50ac9af9182fbb4d
 X-Patchwork-Hint: ignore
-Message-Id: <20261030140439.48E819D389@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libnss: bump
- version to 3.129
+Message-Id: <20261030140439.824AB9D389@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/libepoxy: needs
+ dynamic library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,187 +114,197 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8882473196703354768=="
+Content-Type: multipart/mixed; boundary="===============0439993427321861335=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_PASS autolearn=ham autolearn_force=no
+	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_NONE autolearn=ham autolearn_force=no
 	version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============8882473196703354768==
+--===============0439993427321861335==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0c6bc2f7f8e15ace15b7b61385812d2929647dac
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8605f7585dd02ded3a7a6c2d50ac9af9182fbb4d
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Drop local patch that has been upstreamed.
+Buildroot commit cd2583ca0a993cb44e8822966f101e820ac2619e removed the
+dependencies to gl/egl which revealed that libepoxy needs a toolchain
+with dynamic library:
 
-For release notes since 3.127, see:
-https://hg-edge.mozilla.org/projects/nss/file/NSS_3_128_RTM/doc/src/releases/nss_3_128.md
-https://hg-edge.mozilla.org/projects/nss/file/NSS_3_129_RTM/doc/src/releases/nss_3_129.md
+../src/dispatch_common.c:166:10: fatal error: dlfcn.h:
+ No such file or directory
+  166 | #include <dlfcn.h>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-[Julien: add link to 3.128 release notes in commit log]
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit dc1f1818d9e603b67164c20ae8dfe423e14abc4f)
+This patch disables static builds and propagates reverse dependencies.
+
+Fixes:
+https://autobuild.buildroot.net/results/9d5/9d56cb52eb57df61184e26cea9604f1521d135f4/
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit dc270b1ac31551bbfada680727ad1f743ef5d8cb)
+[
+Raphaël: fix conflicts.
+qemu and virglrenderer hunks dropped (not in 2025.02.x).
+libfm/pcmanfm/xscreensaver/menu-cache hunks dropped (still on libgtk2)
+]
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- ...-Fix-build-failure-due-to-missing-gcm-stu.patch | 116 ---------------------
- package/libnss/libnss.hash                         |   4 +-
- package/libnss/libnss.mk                           |   2 +-
- 3 files changed, 3 insertions(+), 119 deletions(-)
+ package/libepoxy/Config.in                        | 4 ++++
+ package/libgtk3/Config.in                         | 2 +-
+ package/libgtk4/Config.in                         | 4 +++-
+ package/vte/Config.in                             | 4 +++-
+ package/webkitgtk/Config.in                       | 2 +-
+ package/wpebackend-fdo/Config.in                  | 2 +-
+ package/wpewebkit/Config.in                       | 2 +-
+ package/x11r7/xdriver_xf86-video-amdgpu/Config.in | 5 +++--
+ 8 files changed, 17 insertions(+), 8 deletions(-)
 
-diff --git a/package/libnss/0002-Bug-2027768-Fix-build-failure-due-to-missing-gcm-stu.patch b/package/libnss/0002-Bug-2027768-Fix-build-failure-due-to-missing-gcm-stu.patch
-deleted file mode 100644
-index f2c48c8fee..0000000000
---- a/package/libnss/0002-Bug-2027768-Fix-build-failure-due-to-missing-gcm-stu.patch
-+++ /dev/null
-@@ -1,116 +0,0 @@
--From 897ebeb9c38d4dc4844f5f414db5aaa17c261eee Mon Sep 17 00:00:00 2001
--From: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Date: Mon, 30 Mar 2026 17:06:14 +0200
--Subject: [PATCH] Bug 2027768 - Fix build failure due to missing gcm stubs if
-- on big endian
--
--Building gcm on Big Endian architectures lead to linking failure due to
--missing gcm stubs. This is because those stubs are guarded by
--DHAVE_PLATFORM_GHASH that at the moment is defined for every architecture
--that provides acceleration. But at the moment we can also build without
--acceleration but DHAVE_PLATFORM_GHASH is defined in any case.
--So let's add to coreconf/Linux.mk a runtime test to find out which
--endianness toolchain is by setting the new introduced LITTLE_ENDIAN
--variable. And later on, in lib/freebl/Makefile let's guard
--DHAVE_PLATFORM_GHASH definition depending on LITTLE_ENDIAN VARIABLE.
--
--Upstream: https://bugzilla.mozilla.org/show_bug.cgi?id=2027768
--Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
--[Giulio: rebased to version 3.127]
-----
-- nss/coreconf/Linux.mk   |  8 ++++++++
-- nss/lib/freebl/Makefile | 28 ++++++++++++++++++++++------
-- 2 files changed, 30 insertions(+), 6 deletions(-)
--
--diff --git a/coreconf/Linux.mk b/coreconf/Linux.mk
--index dcb432415f..cf1f62378d 100644
----- a/nss/coreconf/Linux.mk
--+++ b/nss/coreconf/Linux.mk
--@@ -188,6 +188,14 @@ endif
-- endif
-- endif
-- 
--+# Test toolchain for endianness and set LITTLE_ENDIAN variable accordingly
--+ENDIANNESS := $(shell echo | $(CC) -dM -E - | grep __BYTE_ORDER__)
--+ifeq ($(findstring __ORDER_LITTLE_ENDIAN__,$(ENDIANNESS)),__ORDER_LITTLE_ENDIAN__)
--+    LITTLE_ENDIAN := 1
--+else
--+    LITTLE_ENDIAN := 0
--+endif
--+
-- USE_SYSTEM_ZLIB = 1
-- ZLIB_LIBS = -lz
-- 
--diff --git a/lib/freebl/Makefile b/lib/freebl/Makefile
--index 0ab50b093a..21c3cf62d8 100644
----- a/nss/lib/freebl/Makefile
--+++ b/nss/lib/freebl/Makefile
--@@ -112,7 +112,10 @@ endif
-- # NSS_X64 means the target is a 64-bits 64 CPU architecture
-- # NSS_X86_OR_X64 means the target is either x86 or x64
-- ifeq (,$(filter-out i386 x386 x86 x86_64,$(CPU_ARCH)))
---        DEFINES += -DNSS_X86_OR_X64 -DHAVE_PLATFORM_GHASH
--+        DEFINES += -DNSS_X86_OR_X64
--+        ifeq ($(LITTLE_ENDIAN),1)
--+            DEFINES += -DHAVE_PLATFORM_GHASH
--+        endif
--         EXTRA_SRCS += ghash-x86.c aes-x86.c
-- $(OBJDIR)/ghash-x86.o: CFLAGS += -mpclmul -maes
-- $(OBJDIR)/aes-x86.o: CFLAGS += -mpclmul -maes
--@@ -138,7 +141,10 @@ endif
-- endif
-- ifeq ($(CPU_ARCH),aarch64)
--     ifdef CC_IS_CLANG
---        DEFINES += -DUSE_HW_AES -DUSE_HW_SHA1 -DUSE_HW_SHA2 -DHAVE_PLATFORM_GHASH
--+        DEFINES += -DUSE_HW_AES -DUSE_HW_SHA1 -DUSE_HW_SHA2
--+        ifeq ($(LITTLE_ENDIAN),1)
--+            DEFINES += -DHAVE_PLATFORM_GHASH
--+        endif
--         EXTRA_SRCS += aes-armv8.c ghash-aarch64.c sha1-armv8.c sha256-armv8.c
--     else ifeq (1,$(CC_IS_GCC))
--         # GCC versions older than 4.9 don't support ARM AES. The check
--@@ -146,11 +152,17 @@ ifeq ($(CPU_ARCH),aarch64)
--         # and then rejects any major versions prior to 5. Note that
--         # there has been no GCC 4.10, as it was renamed to GCC 5.
--         ifneq (,$(filter 4.9,$(word 1,$(GCC_VERSION)).$(word 2,$(GCC_VERSION))))
---            DEFINES += -DUSE_HW_AES -DUSE_HW_SHA1 -DUSE_HW_SHA2 -DHAVE_PLATFORM_GHASH
--+            DEFINES += -DUSE_HW_AES -DUSE_HW_SHA1 -DUSE_HW_SHA2
--+            ifeq ($(LITTLE_ENDIAN),1)
--+                DEFINES += -DHAVE_PLATFORM_GHASH
--+            endif
--             EXTRA_SRCS += aes-armv8.c ghash-aarch64.c sha1-armv8.c sha256-armv8.c
--         endif
--         ifeq (,$(filter 0 1 2 3 4,$(word 1,$(GCC_VERSION))))
---            DEFINES += -DUSE_HW_AES -DUSE_HW_SHA1 -DUSE_HW_SHA2 -DHAVE_PLATFORM_GHASH
--+            DEFINES += -DUSE_HW_AES -DUSE_HW_SHA1 -DUSE_HW_SHA2
--+            ifeq ($(LITTLE_ENDIAN),1)
--+                DEFINES += -DHAVE_PLATFORM_GHASH
--+            endif
--             EXTRA_SRCS += aes-armv8.c ghash-aarch64.c sha1-armv8.c sha256-armv8.c
--         endif
--     endif
--@@ -183,7 +195,9 @@ ifeq ($(CPU_ARCH),aarch64)
-- endif
-- ifeq ($(CPU_ARCH),arm)
-- ifndef NSS_DISABLE_ARM32_NEON
---    DEFINES += -DHAVE_PLATFORM_GHASH
--+    ifeq ($(LITTLE_ENDIAN),1)
--+        DEFINES += -DHAVE_PLATFORM_GHASH
--+    endif
--     EXTRA_SRCS += ghash-arm32-neon.c
-- endif
--     ifdef CC_IS_CLANG
--@@ -316,7 +330,9 @@ ifeq ($(CPU_ARCH),arm)
--     MPI_SRCS += mpi_arm.c
-- endif
-- ifeq ($(CPU_ARCH),ppc)
---    DEFINES += -DHAVE_PLATFORM_GHASH
--+    ifeq ($(LITTLE_ENDIAN),1)
--+        DEFINES += -DHAVE_PLATFORM_GHASH
--+    endif
--     EXTRA_SRCS += ghash-ppc.c
-- ifdef USE_64
--     DEFINES += -DNSS_NO_INIT_SUPPORT
---- 
--2.47.3
--
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index b87c3376b4..1851b1e5fd 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_127_RTM/src/SHA256SUMS
--sha256  5a899cad21ae2c9d3c5132de79726eda8df3b7fdf18eeb239fc544d43b87338b  nss-3.127.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_129_RTM/src/SHA256SUMS
-+sha256  38baa3b0a18a3f674843473b549753c96419a0151abd1e7a9b214ce0493d0785  nss-3.129.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 734376f61b..42021503f7 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libepoxy/Config.in b/package/libepoxy/Config.in
+index 4b23497d46..269b43be85 100644
+--- a/package/libepoxy/Config.in
++++ b/package/libepoxy/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_LIBEPOXY
+ 	bool "libepoxy"
++	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	select BR2_PACKAGE_XUTIL_UTIL_MACROS
+ 	help
+ 	  Epoxy is a library for handling OpenGL function pointer
+@@ -10,3 +11,6 @@ config BR2_PACKAGE_LIBEPOXY
+ 	  OpenGL entry points at runtime.
  
--LIBNSS_VERSION = 3.127
-+LIBNSS_VERSION = 3.129
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+ 	  https://github.com/anholt/libepoxy
++
++comment "libepoxy needs a toolchain w/ dynamic library"
++	depends on BR2_STATIC_LIBS
+diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
+index f7618832f1..79f00703fe 100644
+--- a/package/libgtk3/Config.in
++++ b/package/libgtk3/Config.in
+@@ -24,7 +24,7 @@ config BR2_PACKAGE_LIBGTK3
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
+ 	depends on BR2_PACKAGE_HAS_LIBEGL || \
+ 		BR2_PACKAGE_HAS_LIBGL
+-	depends on !BR2_STATIC_LIBS # at-spi2-core
++	depends on !BR2_STATIC_LIBS # at-spi2-core, libepoxy
+ 	select BR2_PACKAGE_AT_SPI2_CORE
+ 	select BR2_PACKAGE_CAIRO
+ 	select BR2_PACKAGE_CAIRO_PNG
+diff --git a/package/libgtk4/Config.in b/package/libgtk4/Config.in
+index 0092e1043f..5a9c5700b1 100644
+--- a/package/libgtk4/Config.in
++++ b/package/libgtk4/Config.in
+@@ -1,8 +1,9 @@
+-comment "libgtk4 needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
++comment "libgtk4 needs a toolchain w/ dynamic library, wchar, threads, C++, gcc >= 4.9"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
++		BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
+ 
+ comment "libgtk4 needs an OpenGL(ES) EGL backend"
+@@ -16,6 +17,7 @@ config BR2_PACKAGE_LIBGTK4
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2, graphene
+ 	depends on BR2_USE_MMU # glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP # pango
++	depends on !BR2_STATIC_LIBS # libepoxy
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
+ 	# Even in the case of X11/OpenGL, libgtk4 needs epoxy built
+diff --git a/package/vte/Config.in b/package/vte/Config.in
+index 8a231a21af..af6bfae890 100644
+--- a/package/vte/Config.in
++++ b/package/vte/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_VTE
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_STATIC_LIBS # libepoxy -> libgtk3
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # C++20
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL
+@@ -22,12 +23,13 @@ config BR2_PACKAGE_VTE
+ 
+ 	  http://github.com/GNOME/vte
+ 
+-comment "vte needs a uClibc or glibc toolchain w/ wchar, threads, C++, gcc >= 10"
++comment "vte needs a uClibc or glibc toolchain w/ dynamic library, wchar, threads, C++, gcc >= 10"
+ 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
++		BR2_STATIC_LIBS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_10 || \
+ 		BR2_TOOLCHAIN_USES_MUSL
+ 
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index 8d07092d22..50a3a49aff 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -28,7 +28,7 @@ comment "webkitgtk needs libgtk3 or libgtk4 and a toolchain w/ C++, wchar, NPTL,
+ 
+ config BR2_PACKAGE_WEBKITGTK
+ 	bool "webkitgtk"
+-	depends on !BR2_STATIC_LIBS # wayland
++	depends on !BR2_STATIC_LIBS # libepoxy, wayland
+ 	depends on !BR2_BINFMT_FLAT # icu
+ 	depends on BR2_PACKAGE_HAS_LIBEGL
+ 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
+diff --git a/package/wpebackend-fdo/Config.in b/package/wpebackend-fdo/Config.in
+index 9b4dd28741..026a18e8ed 100644
+--- a/package/wpebackend-fdo/Config.in
++++ b/package/wpebackend-fdo/Config.in
+@@ -4,7 +4,7 @@ comment "wpebackend-fdo needs a toolchain w/ C++, wchar, threads, dynamic librar
+ 
+ config BR2_PACKAGE_WPEBACKEND_FDO
+ 	bool "wpebackend-fdo"
+-	depends on !BR2_STATIC_LIBS # wayland
++	depends on !BR2_STATIC_LIBS # libepoxy, wayland
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, libglib2
+ 	depends on BR2_USE_WCHAR # libglib2
+diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
+index ace1771ee5..c4fac4e6a1 100644
+--- a/package/wpewebkit/Config.in
++++ b/package/wpewebkit/Config.in
+@@ -31,7 +31,7 @@ comment "wpewebkit needs an OpenGL ES w/ EGL-capable Wayland backend"
+ 
+ config BR2_PACKAGE_WPEWEBKIT
+ 	bool "wpewebkit"
+-	depends on !BR2_STATIC_LIBS # wayland
++	depends on !BR2_STATIC_LIBS # libepoxy, wayland
+ 	depends on !BR2_BINFMT_FLAT # icu
+ 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
+ 	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz, icu
+diff --git a/package/x11r7/xdriver_xf86-video-amdgpu/Config.in b/package/x11r7/xdriver_xf86-video-amdgpu/Config.in
+index fb23fc1fdf..e5adb73663 100644
+--- a/package/x11r7/xdriver_xf86-video-amdgpu/Config.in
++++ b/package/x11r7/xdriver_xf86-video-amdgpu/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_AMDGPU
+ 	bool "xf86-video-amdgpu"
++	depends on !BR2_STATIC_LIBS # libepoxy
+ 	depends on BR2_USE_MMU # libdrm
+ 	depends on BR2_PACKAGE_HAS_LIBGBM
+ 	select BR2_PACKAGE_LIBDRM
+@@ -10,6 +11,6 @@ config BR2_PACKAGE_XDRIVER_XF86_VIDEO_AMDGPU
+ 	help
+ 	  AMD GPU video driver
+ 
+-comment "xf86-video-amdgpu needs GBM"
++comment "xf86-video-amdgpu needs GBM and a toolchain w/ dynamic library"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_PACKAGE_HAS_LIBGBM
++	depends on !BR2_PACKAGE_HAS_LIBGBM || BR2_STATIC_LIBS
 
---===============8882473196703354768==
+--===============0439993427321861335==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -305,4 +315,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8882473196703354768==--
+--===============0439993427321861335==--
