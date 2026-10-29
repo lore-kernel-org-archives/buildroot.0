@@ -1,28 +1,28 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 366DB606A31A
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:08:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFCC4606A31A
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:08:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=LZ+P0ezl
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=SViZLFSd
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0DE8040C59;
-	Fri, 30 Oct 2026 14:08:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9C2F78146D;
+	Fri, 30 Oct 2026 14:08:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ekJ58CZZWIZK; Fri, 30 Oct 2026 14:08:21 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 35FD740C4C
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369301;
-	b=fnzvtPTqn3xPNuVoPETIT3H9kavKLlll6i1/lqxMcdRag9yr///RKtUiSDDFXygc8sEI
-	 CELLg6OM3nM/cX4yB1wVvI7R0a5figJVbiGJl/JL9+oIPm6PeIG8SB7JfrDk+UWnXunqh
-	 Fu5xQsCNwgtLumwkO8aEtH7/Qn/dosBytONf3jA1gJyL8rcAcx+xqQaVv9QU34rIAn7PF
-	 K+fluMR2iWo/oCKfQZd30LKuQCRIC06ajQ4t1fxrbJSXfY6YGEJIAsHMWuBbYyBZ5hNKM
-	 nO3bJpCaXZfswySUNYYBZGdaBRDuedxAW0t2QuE0XczB0jvjZAxmudS7dJZg4JwYhHg==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9oCX60FxPAuY; Fri, 30 Oct 2026 14:08:22 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 94A158128C
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369302;
+	b=KjFng1bnldVZrP2Xj/P1Lu+9TX1VT8XaUIhnNp9TWwSMO/zXlFW8alIrGIzXTawAaKry
+	 prPHRpyVrnRARMlXRFBc6qaEs91hrY1huM28oROlEab9Owqd90TouWh5L7vbZoyOUOPTF
+	 q56FH5Yt9FyjseISzbK5aOC1LBs4q/HClLQuz1cke4xAi1yMNGCU2N5wr7m39mY8CGYRM
+	 gGuNnKfpgWZk/wevT81t3UuijcLb4JC0RLkHC9xsZ+zSJ4G+3+ncamB+hbfAxgem0MPLk
+	 9hvqdqJAGrjqdJ/sKMr4zkkVKiikZuazWijFGslorVQ3MX+zOCQeLrUThEjO0kmtTSA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793369301;
+	c=relaxed/relaxed; t=1793369302;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=YHqUvZjErvrHYVeJVeZFVmPe9pLi+/Rh6rX5Ydt+O3E=;
-	b=ISsNfQXA3kcffcbehvSvhcVMAAESpTeNDz2NAVy8hdZ79QIXq44Bc1r5Cd+sVqDelrxE
-	 sulTJUrmAiltXmKU19+bvHIaEt6kykN9HfdiNHX200ZM2feu2HJlT9DlQNGdVz3K/dD+4
-	 sDOdAbxA6t4pCltLB2KgHdZnSgNy5IAbx/vIJ/v/FFk6dA30/VQJeQ0grRpZWPll3QsaH
-	 6MwsHzPQFP24WYKtvk1EAPl1jKSYdKCCIppjiVmzCSEHO/nwPVsPh0LqSDU8BVo0E06IA
-	 IaLWmMCjbFtzGq1b90md9Oam6VBcRDCuSRGBtFRyMqjWemQVvu1/e3Sd3uXNWCEBhXg==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=LP4+HNilzVOvh8iqu68u+C0bgo9UE/rZF6YJCO1MSxk=;
+	b=Qi4S3OiBInwWKLTjZ+VzCU9aVV/BDZ7Eil2yC+mT8cLo+H9zCh4iHOm9h5Igr0JNra/P
+	 kPbik5pclbMnsFnYwN1yLrKGFZ4sHouXiAA0jGIMhDgVj1d8+HjeQmsXIOiVovNmr/dBH
+	 OkRC8rruzAHQ+CDMjWJbEuQghp6IrNK6acOt5cLK3ioO1gloPD5Z6xPGuIgERfDgWmyiD
+	 qR8d4l2VFPjb3x4XEXPz6HbHx+8t4jscLivVnGTauarPwfVtD21ZcCdKdhW1oA9UPoJhk
+	 LsnHf7ClsAVKKq3BgRPYvYm/23OtIMCM9hWQ29Eg7+6j1Gc96JotxtuKZe7Omtfw0Xg==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793369301;
-	bh=YHqUvZjErvrHYVeJVeZFVmPe9pLi+/Rh6rX5Ydt+O3E=;
+	s=default; t=1793369302;
+	bh=LP4+HNilzVOvh8iqu68u+C0bgo9UE/rZF6YJCO1MSxk=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=LZ+P0ezlwyk+47OxT2KK0oDH+QpQf58jwsbwIIdtO3SzSyy3/MOsPxi5epaIOiHQC
-	 zxVVFXDqIp1RlorEvL77vX3nuuwdB+qPmy00mfstB1ydY9ZGsfXRwcm53QkmpjmN+x
-	 M0J5jXYQpA+VTlS4SZT1VxtdHvAKrGm0YIKZ4ohxr4OZP7LvlE2wYmPmUkSea8AdIe
-	 BWGR5827WW+FbeF0PNNipKvt+ivF8NgywV9QZMTkSrrHHIkl9/pQkUeXFYiz/Tjc/v
-	 E6u8BAaQSjyH5ktfEp/0xHDATc+/NpxBSklb4f1GRQjo9pnmOmsKavh0Q+JG0PMmqC
-	 p9surH03xhXug==
+	b=SViZLFSdy/RTBv/9nYIcUoLKQeilUj79VBMkp/jjSf1HxqRnKrIR+UInwcmseEOOZ
+	 wnJVLV/73DnDkmRD6YaF3BYW41X9lEX9dIzcXuNbeo3PuxG+7Qi7yWYgcHjhp2VQWB
+	 T1eY/Fct9GrCflWsr0BjI+uJFSaa8E1uK73dPhdBb5ydBCEeU4leJIlPW48Uz5qRR3
+	 02LGZri3wP/8r805rYbeepmOjH48fTTuc8R62+e/lOGOIhJV8OFSm3brm+TBxoMmqo
+	 XNS1ElubjNwG0vsPU6XHlwKgHjbpmzXsszJIjgJ2cegfADma7SJVQx+N3ZeZEABghq
+	 XiCfVYpw2U81Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 35FD740C4C;
-	Fri, 30 Oct 2026 14:08:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 94A158128C;
+	Fri, 30 Oct 2026 14:08:22 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 8ACDBD38
+ by lists1.osuosl.org (Postfix) with ESMTP id A6A16D38
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:06:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 70F498118D
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8966B81172
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:06:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C328rx72VL6X for <buildroot@buildroot.org>;
+ id 5AhobpFd5b69 for <buildroot@buildroot.org>;
  Fri, 30 Oct 2026 14:06:08 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org CDF9B81172
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org ADC5881136
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793369168;
- b=NFNd5NhswgUJij0L0A6FKth+1nDeAh39aiT/fkObphj8y0GQGMK7O5EE2Bu16X4td15P
- b+qpvvBU9foJR4LtSOCUX8CmXybSY+H1jjH7zBJ4FPyWkDyrFBAs37NArEIzLEt00o57B
- FoEk1PZiqcpbowoB6hgXa5nUsnmd5g5CELrwObAM1KC/gVCpuCj98UN7mtxIwvXwCQfuM
- yVFMOcZTpUokwL6KzZsKsu3kqcf7hGLls3J/ga8a29MC5rAnxs7OygSspUxzWz8odYbFq
- 1moBvzXMH8jzaKrhjS1lWEqOpHgu0jQCBzPAR1AKPaqiqo2ZZxM7rQMdwD0lwVIrXkA==
+ b=rxJ53kuAxzqFipOPD/A+CkO08JAsqvGMhw93Dek5VPiVDJLs5h/VbO84Zm6JlJkniYc/
+ ItYnntDfetjtLpe/RcpfACIcizTonU8g/RkEsESHJS1PwQRLmvBpsEjCtnvksBprQ7EqU
+ G5EqHHfMXZYRO/JOf/9ddxCGsHXCc6xrvpetTXyepYmbWhxmNXtq6bfpMIWmHrordqlO0
+ 0iSIOVtUMgNpZtLRGovR/2cbEBY7NmZihHcB5RLdM53zbf8RE+7qs3zYkbbS3kPC8k+ov
+ WmftO8wcCiXyRiVrTaMNdMMjg6GT4E+ZGtL5f/f04JeYW0PuSVprpkMDnG31+xWnYHQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1793369168;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=xLx0C6Ezbp7iU4nfQ5+lqVDBj3nFfAkadDWaEtv7/jE=;
- b=PXRLiDfm7StSmq4WjvJKx6Ik0qu4pCFBW+l/NNPddQA7UWSKTI2te7Tw0qWyREjxKKx5
- /SPuyHinzokWHe1RXUUDHzYjp5BAdO9EtnXKRtHs/Cq0MF2jl/LM7lWjsWPG6tOpMIxMi
- pIH2MDOAZpNG8m7F3dwhY+OtEU3fXNDbmV212DPg1QP5ajIjBmyQg8l57zeALkRikrOpk
- sFda3rdEBFitqR2o84z8siWBicqiUnDwx7ZcBjpsU/Yj0mNqHxnLXAnn4VCxNBBQivgbY
- 8bZGWYepZoWyvvPXvYHTxoCRjLVhdJ1VCz7hVhLvdEKL+f1GLf/LPZYvkuin+P2QA/w==
+ bh=jMUHoE0730hV4EDHAJoM4MDmhpikhbhamcMY3r3Vy4I=;
+ b=NJWOSl4bMuZZGO6P0XTEYcBrYfVC//VnMXoHcB9Xw6Tm9/xWrQs+5Y2K0Vsx/25FEd6c
+ dK8Q5sE/yu4419QlBr3fQIdEdO244G7hQHpXZA9t3XAQ6Xs6huN3Cz9VRgFcjZHZu7AAB
+ fbGC9zZhC/WoRwjkIgvYNncKTovJUFWwOf2Rx/h1rqDZeifToWlZhN/66IkoT74xzN+/M
+ eeO7sTOtAA9o8uTstYfOikzZSHoNnw5oQJPHhsfYasdFizkEFWhVcLOgIVp7ERoqjv2MF
+ 0Elu1iWMUCs3LQ8XvGgraW2cQMdHEcWoGkM+G5YGaBhoAEkYofp//nH4PTccg0Nn5tQ==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CDF9B81172
+ by smtp1.osuosl.org (Postfix) with ESMTP id ADC5881136
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:06:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EDE069D389; Fri, 30 Oct 2026 14:04:40 +0000 (UTC)
+ id CDC629D389; Fri, 30 Oct 2026 14:04:40 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 29 Oct 2026 21:20:01 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 60f01615f91dcf7b755199f87c439d2cdbac269a
-X-Git-Newrev: cb125666dfdac541059efc0931e843a89cdcbe08
+X-Git-Oldrev: 9704b4f0fc2e47f0f19ebf597e9447b4e6ceaeec
+X-Git-Newrev: 547c0e9c8c5c4e2b557557ee2da52fe5d986f3a0
 X-Patchwork-Hint: ignore
-Message-Id: <20261030140440.EDE069D389@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/cups: bump
- version to 2.4.19
+Message-Id: <20261030140440.CDC629D389@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/uclibc: declare
+ wcsdup() for POSIX.1-2008
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,7 +114,7 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2407175941468762877=="
+Content-Type: multipart/mixed; boundary="===============6982875818126210510=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
@@ -124,51 +124,99 @@ X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============2407175941468762877==
+--===============6982875818126210510==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/cb125666dfdac541059efc0931e843a89cdcbe08
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/547c0e9c8c5c4e2b557557ee2da52fe5d986f3a0
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-https://github.com/OpenPrinting/cups/blob/v2.4.19/CHANGES.md
+hidapi fails to build with uClibc-ng and GCC >= 14:
 
-Added sha256 tarball hash provided by upstream.
+  hid.c: In function 'utf8_to_wchar_t':
+  hid.c:116:32: error: implicit declaration of function 'wcsdup'; did you mean 'wcscmp'? [-Wimplicit-function-declaration]
+    116 |                         return wcsdup(L"");
+  hid.c:116:32: error: returning 'int' from a function with return type 'wchar_t *' {aka 'long int *'} makes pointer from integer without a cast [-Wint-conversion]
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit ca673af9efd9ff80106adbfedebbde079add9b3b)
+wcsdup() is part of POSIX.1-2008 and glibc declares it under
+__USE_XOPEN2K8, but uClibc-ng only declares it under __USE_GNU. hidapi's
+Linux hidraw backend doesn't define _GNU_SOURCE, so wcsdup() is
+implicitly declared, which GCC 14 turned into an error. With older
+compilers, the returned pointer was silently truncated to int on 64-bit
+targets.
+
+Backport the upstream commit moving the wcsdup() declaration under
+__USE_XOPEN2K8, which is enabled by default (_DEFAULT_SOURCE) and by
+_GNU_SOURCE. This fixes the issue for any package relying on the POSIX
+declaration, not only hidapi.
+
+This issue has been present since commit 5eb0203cb05c ("package/gcc: add
+version 14.x"), as GCC 14 made implicit function declarations an error
+while uClibc-ng has always hidden wcsdup() behind _GNU_SOURCE. It
+therefore affects 2024.05 and later, including all maintained branches
+(2025.02.x, 2025.11.x, 2026.02.x, 2026.05.x and 2026.08.x).
+
+Fixes:
+https://autobuild.buildroot.org/results/eba842f15d96e483e0d16b12028da2ce10dcdeb0
+
+Fixes: 5eb0203cb05c0a65bdb7f89a2644eef7cff2dd27 ("package/gcc: add version 14.x")
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 339a4809172efd1fe5a0f6e28d69c0bb9d4eb90a)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/cups/cups.hash | 3 ++-
- package/cups/cups.mk   | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+ ...7-wchar.h-declare-wcsdup-for-POSIX.1-2008.patch | 41 ++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/package/cups/cups.hash b/package/cups/cups.hash
-index e421c6457b..7cb25fc4dd 100644
---- a/package/cups/cups.hash
-+++ b/package/cups/cups.hash
-@@ -1,4 +1,5 @@
-+# From https://github.com/OpenPrinting/cups/releases/tag/v2.4.19
-+sha256  820984b12a67f98705785aae2dd1347fe0ac097828001d4583ff64574aed6389  cups-2.4.19-source.tar.gz
- # Locally calculated:
--sha256  89c703238de210d4f4f4e5d4269e3d60c4b2f487aad75a8a1eaecd659e4d0b77  cups-2.4.17-source.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
- sha256  977206f041b9a6f47ac00531e1242c0fab7063da71178f8d868b167b70866b6d  NOTICE
-diff --git a/package/cups/cups.mk b/package/cups/cups.mk
-index f79e3846df..0df4f411bb 100644
---- a/package/cups/cups.mk
-+++ b/package/cups/cups.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CUPS_VERSION = 2.4.17
-+CUPS_VERSION = 2.4.19
- CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
- CUPS_SITE = https://github.com/OpenPrinting/cups/releases/download/v$(CUPS_VERSION)
- CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
+diff --git a/package/uclibc/0007-wchar.h-declare-wcsdup-for-POSIX.1-2008.patch b/package/uclibc/0007-wchar.h-declare-wcsdup-for-POSIX.1-2008.patch
+new file mode 100644
+index 0000000000..9cdbbaf2e8
+--- /dev/null
++++ b/package/uclibc/0007-wchar.h-declare-wcsdup-for-POSIX.1-2008.patch
+@@ -0,0 +1,41 @@
++From 936a08b682e761afba98ef3800265add951201fc Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Thu, 22 Oct 2026 13:55:32 +0200
++Subject: [PATCH] wchar.h: declare wcsdup() for POSIX.1-2008
++
++wcsdup() is part of POSIX.1-2008, and glibc declares it under
++__USE_XOPEN2K8, but uClibc-ng only declares it under __USE_GNU.
++
++As a consequence, code that doesn't define _GNU_SOURCE (for example
++hidapi's Linux hidraw backend) gets an implicit declaration of wcsdup().
++With GCC >= 14 this is an error:
++
++  hid.c:116:32: error: implicit declaration of function 'wcsdup'; did you mean 'wcscmp'? [-Wimplicit-function-declaration]
++
++and with older compilers the returned pointer is silently truncated to
++int on 64-bit targets.
++
++Move the declaration under __USE_XOPEN2K8, which is also enabled by
++default (_DEFAULT_SOURCE) and by _GNU_SOURCE.
++
++Assisted-by: Claude:claude-opus-5-5
++Upstream: https://github.com/wbx-github/uclibc-ng/commit/936a08b682e761afba98ef3800265add951201fc
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ include/wchar.h | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/include/wchar.h b/include/wchar.h
++index 2e6ff77c0..0056f93da 100644
++--- a/include/wchar.h
+++++ b/include/wchar.h
++@@ -210,7 +210,9 @@ extern size_t wcsxfrm_l (wchar_t *__s1, const wchar_t *__s2,
++ libc_hidden_proto(wcsxfrm_l)
++ 
++ #endif /* __UCLIBC_HAS_XLOCALE__ */
+++#endif
++ 
+++#ifdef __USE_XOPEN2K8
++ /* Duplicate S, returning an identical malloc'd string.  */
++ extern wchar_t *wcsdup (const wchar_t *__s) __THROW __attribute_malloc__;
++ #endif
 
---===============2407175941468762877==
+--===============6982875818126210510==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -179,4 +227,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============2407175941468762877==--
+--===============6982875818126210510==--
