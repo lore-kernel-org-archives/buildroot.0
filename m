@@ -1,249 +1,161 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF5D4606A31C
-	for <buildroot@archiver.kernel.org>; Wed, 28 Oct 2026 23:00:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18A53606A31A
+	for <buildroot@archiver.kernel.org>; Thu, 29 Oct 2026 04:27:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=d9kr69iC;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=om5XCAH1;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b=Z0JI/UN4
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=pgq1LvMf;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Ytl/+RS0
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C64826070D;
-	Wed, 28 Oct 2026 23:00:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D90EA80F66;
+	Thu, 29 Oct 2026 04:27:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q9qw0ySqqU7i; Wed, 28 Oct 2026 23:00:32 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org D902260710
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793228432;
-	b=gk1ia8RYQBYuRK5EpN/P1qCqJ1MNa9FIZ+sJeww2Id0sExxJp0BtWvBPWiRZ0KR/1oKF
-	 oxg9vlap6yzNbulzR1idekzrX4tExHVRrGdxoMxUWc4c6YPCeBO3S05d9/vHvY49VlTfu
-	 J8RiFTo9Pg5+k1V43PjjQUFREtgt6LjUW9Q26Lu7yRS2e/Ar+ej1hhU1f+PVCt8wsKyX2
-	 URd0jAwPiDKMRc5K7Qm1dr0vvssOtlqR5ETTE30tpSD3IRHpHk+wpRATb2K1a26dTSAlo
-	 NMZlg+bTj5vp5LMXiTLqqC4vKwTWMasiiLx1sqPcyueTLvsYFqAy3iU2EvsT88AaJIA==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vtQErFiB2tFW; Thu, 29 Oct 2026 04:27:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org AAC5C80F55
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793248036;
+	b=knhbs5V50HiBvRCaD13bDlwTRZRiKBPmb5itb9c1N0NJBp26rtSPmm1qkaygZyDRPMHe
+	 /5xUzS8RbQ36EuOOz1x6qPyOmSGB0IUpS95+TB6jvAb/Vxu85ZICtF9Rn+7uC2O1jjwwH
+	 0rVVLhwVpKej0r0g+LjzEfP6oEAWdyv1HIDzSO66f0vYjUABATH/mozWvevJb+KEffD6W
+	 e6dt50XV3Me4YQvjKJjvXnb1nmI3dTvPJl2FHNxbqOpfylcYolX0CGFHfMXKJxM+bJLCA
+	 n8gxwVAJig/bZcAocgvmynh4mIM+/NV1Bn/OrW6D969ZKpU9vZTlm/FdalQ44jIdFYQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793228432;
+	c=relaxed/relaxed; t=1793248036;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:Received:Received:DKIM-Signature:
-	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 X-Received:Received:From:Date:MIME-Version:Message-Id:X-B4-Tracking:
-	 X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
-	 X-Proofpoint-GUID:X-Proofpoint-ORIG-GUID:X-Authority-Analysis:
-	 X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Spam-Info:
-	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details:Subject:
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:Received:Message-ID:MIME-Version:To:From:Date:Subject:
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=eiSQfdz+C7enkI/ua6q3uxzyp3GHf4X89TeTVjn4TgM=;
-	b=sHerXxJzDVokSW5/1dK5l7TkhJguu0iiPX07ywYEEGvI27vlw3hMnkLet1MPQfq+9r5W
-	 hWhb2RBm83mNVN1BO1YTxao46acFCvRQ1iuqsO5znj1ngI5GZKEfEB7LzmJnl4mScSK3h
-	 y76/DYrr9pcpLAiQZwsJ5eo+ZMg2SBOnVNpLTtToWCpiRs0r2/gqMWus0xd+K/bk0Yjj8
-	 Nn5Au6K6ZN1ioFp3cW4Odh7G43qY9CzbNs2EJOMW5S65XrrmAgU+VDQjV1M/6yxDm0e0+
-	 NZmCUUvzx1OxdD8T56ki6bSMp2hq9JZq8Eih4swNgOvLDnQr6wfrJLYmsfsuY5n3BrA==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
-	dmarc=pass header.from=oss.qualcomm.com;
-	dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=om5XCAH1;
-	dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.a=rsa-sha256 header.s=google header.b="Z0JI/UN4";
+	bh=BgfMz6bfAtQj++pD550fINqNRzW3cBzHyMY+0ZmeuUI=;
+	b=q8PaAlqe0NPFcsAqpZC/bAl7qKu5KsZqEl5EsPz8dregGecKuVcD7tI7/zHyetbH2URO
+	 CZ9aAWyPNVmCc8ABWE0G2Zaew/hQHca4gS1AuWoYCj2kg5YlG0fvIYZS83j96BP7SxXCF
+	 nmR788KqxhUnd6cYh6mxf4hxEtuGJUoWZsvU28St5q7YlqXZldmusOtP4CEaJhWrnnRwf
+	 OlDGZHAAaKckrJAc/pPEiT3PorO4ei0doybqooT/pKunvKjOA83Ax9tJ4vCRF151/08Uh
+	 BsYLxJXCPMUngWIFF5ur1JYKN2Wiejsu+Mp4+8d1SoRNrkwsziH9aHF4eC152BOKA3Q==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793228431;
-	bh=eiSQfdz+C7enkI/ua6q3uxzyp3GHf4X89TeTVjn4TgM=;
-	h=From:Date:To:Cc:Subject:List-Id:List-Unsubscribe:List-Archive:
+	s=default; t=1793248036;
+	bh=BgfMz6bfAtQj++pD550fINqNRzW3cBzHyMY+0ZmeuUI=;
+	h=To:From:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=d9kr69iC8o8l3RlhLFMyGLGRfgyRI41E6OAxxkozjeGxDYs7a2/C3E9F7ao/xAsLu
-	 7ELUCVm2OH7NxWUO8EZdvu97kXSTn5i/sZj2iET6TBoL14rLfnyi8pG0B2RK6dqxwy
-	 aJzuVL3C5FfeBHF282Dti6pwA1g0Sg0DGfzpgD+p5OAyLHKjvjh/cyFKH4/u72tgz7
-	 EOL/zUd4lLWo22MUzUh2gLyudNOIWxdWD7zi9TgbyDXaS59RPOlkuTZxC5P3h+kR64
-	 eoUG0H+sFluf4tufxuo9NgTwJ8U230uHnom3G2k+oj5EzNdRrQRQYBQKJGwzz+lOba
-	 nX16DsYftyiTw==
+	b=pgq1LvMfw3MbiB4whqvudad/t4s5crGLO4nJZ64TYcmjHZq0ps8PuIWDbF8/94AXB
+	 fSXhuSlt1QqzQkSoEnYW4+NdtOJSRpaA8hHut4GFGlqQsJUxsyahaPvaOknwdiGeb9
+	 G9eRmkbgqJPgaSfw7L4cuWuH0jJKPcb0kNZqu4DwnB6dHHM0I7AVR1FJ6eKXq6GXpf
+	 yooBjziXYSp1grPF+D7AwY3bQdHjnzYk6ouvDj31FwqLJUtn6+iuI4l+VMCwIZBFqK
+	 K7oMr7Mw2+f99P7kjHmme2e0CCb9d2sfIvuk6baHYP2k1JQ86iAvrA0OTo9iO4LjCJ
+	 9YCGsntWGZcKg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D902260710;
-	Wed, 28 Oct 2026 23:00:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7E0113AF
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 23:00:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AAC5C80F55;
+	Thu, 29 Oct 2026 04:27:16 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 77BD7235
+ for <buildroot@buildroot.org>; Thu, 29 Oct 2026 04:27:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 636A760731
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 23:00:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 68AD040310
+ for <buildroot@buildroot.org>; Thu, 29 Oct 2026 04:27:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6G1S9HKr0CKN for <buildroot@buildroot.org>;
- Wed, 28 Oct 2026 23:00:29 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org EE35160710
-Authentication-Results: smtp3.osuosl.org;
- arc=none smtp.remote-ip=205.220.180.131
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793228429;
- b=nCqV1up3QPFJBE4iZex2h4iKWfjxK0EhCKhApRASBHyCeHQ+DufQChK7GjycgkIjwtvC
- 81RRZ1Wj5MyzG30OPtv3I1hjSjg0KTwV71XySgsUHf2ZK0EjfoVN3YH5R+O6zXH1tEys/
- 0R8d6bhLpxHdzspZZnZCKW2J2R1dbW/c6tH+tDgFqZVvGsXt9UMFybebEYdt7ogQ7aMko
- uGosM3eprQ/PfYrP2Jq2XfjDWSWQMcriF08CVSMBe+FD4Y5oFT2ZmeXlSphNc7pJ4B4xO
- VM/7lTTEknywIfHYg0ufunmwxPw8jXd8J1RT95nWxG+xm5rmPSu56Vn/LfQ8ZQ6oi0Q==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id boh78jpf2So5 for <buildroot@buildroot.org>;
+ Thu, 29 Oct 2026 04:27:14 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org DA48540176
+Authentication-Results: smtp2.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::336"
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793248034;
+ b=C5Xm19MKSAj9pJNYr90c7dXZAqqU2HyZMrstSIi0P4r1Cf/7jH+r6tw+cXRJgPHEn+lC
+ tj9D2ALhUv8Jt9buToe0mpeiYXTEKSawHIxh1C2iIEjjzHzHAOddNiWbX49RDY/RBf4k2
+ WDGRYEHJ5x8rfFmFO1Vd5svl04KuuUuZWncWhqLbItFrLT4qeV2mtkY1Pn7yhoVp/hmVb
+ 7e0SF8p//w1iaVoT3bI8oF841kRAEwbxtNh4LKb/f9AXocAJhMmyW89o22Sqi+jaLCQpd
+ PvpYz+7f2LM2j3HH/6KRmsPI0IVJlclf1gvqf1dFkqvYDYei+qK9dNMQvA+b7fBn7dA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793228429;
- h=Received-SPF:Received:DKIM-Signature:Received:Received:
- DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
- X-Received:X-Received:Received:From:Date:Subject:MIME-Version:
- Content-Type:Content-Transfer-Encoding:Message-Id:X-B4-Tracking:
- X-Change-ID:To:Cc:X-Mailer:X-Developer-Signature:X-Developer-Key:
- X-Proofpoint-GUID:X-Proofpoint-ORIG-GUID:X-Authority-Analysis:
- X-Proofpoint-Spam-Details-Enc:X-Proofpoint-Spam-Info:
- X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details;
- bh=fcK1OkbmOlsEx3W+ZXyTnh4AGKS9m+ZEEv7D4onhos4=;
- b=Op+eMce9pKg89K2MvGXVp4h1VsY/VrbTcYQcrdpLTjOMKnqIbNxT1rf1lXiqDrJVL5Kc
- WpyEuAEfTvKnyohPX9kvWO5lcrDnvLzUC67E2+9UsmRG/KGeQK+6oHtpLmuQlF6TkOrGU
- JeIw+FS+p6CyBNz/mJBiOMUe+vU2PBIGr9nvtdbzsEHwI07nWhUr14DDGRUEbK6Fk6aUl
- AUofxdscygmqAHnmlvaSYQreDWiTMRbjw+hTB36HygmpDeA5jvNBtIXdrklruVibfyizF
- ibSM9RJsebNnB5VmCeIpbxeO7aV+kJExNmtKEjwQ6RfJRNjECHzeNI7eBQTOCUtks7Q==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
- dmarc=pass header.from=oss.qualcomm.com;
- dkim=pass header.d=qualcomm.com header.i=@qualcomm.com header.a=rsa-sha256
- header.s=qcppdkim1 header.b=om5XCAH1; 
- dkim=pass header.d=oss.qualcomm.com header.i=@oss.qualcomm.com
- header.a=rsa-sha256 header.s=google header.b="Z0JI/UN4"; 
- arc=none smtp.remote-ip=205.220.180.131
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=205.220.180.131;
- helo=mx0b-0031df01.pphosted.com; envelope-from=chris.obbard@oss.qualcomm.com;
- receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org; dmarc=pass (p=none dis=none)
- header.from=oss.qualcomm.com
-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key, unprotected) header.d=qualcomm.com
- header.i=@qualcomm.com header.a=rsa-sha256 header.s=qcppdkim1
- header.b=om5XCAH1; dkim=pass (2048-bit key,
- unprotected) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com
- header.a=rsa-sha256 header.s=google header.b=Z0JI/UN4
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com
- [205.220.180.131])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EE35160710
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 23:00:28 +0000 (UTC)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
- by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id
- 69SMAKEl1333227
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 23:00:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
- cc:content-transfer-encoding:content-type:date:from:message-id
- :mime-version:subject:to; s=qcppdkim1; bh=fcK1OkbmOlsEx3W+ZXyTnh
- 4AGKS9m+ZEEv7D4onhos4=; b=om5XCAH1wV1dQkgHiFy1TgDUGoXk/kHpWct5da
- qeohLpG1XRJ3Pgs/cTAYM6dG4BXwky9zb0x+436Pn+ELprXPxBIcg19S7cP+UBPg
- 1bxPjf5P6hBZT9i1482XKJWn4BsgttuMdK6qxzQ1isLugFujbue2FQJEdPi0pKz+
- kJWSE6VT6hSpzBEZd0MvD7k/dGiMcJEmlceWc+HLBpteNGHwSzeqZN9ex3MxVqjv
- g0ZpK+04KbDizPmobTvKDPoSah2XtxCUdLdAgjmpfrWeSBhx/wcKKo9/+412JSMy
- WZP9vBXl9BYNP3u6XdrhFzjdzhnkzuwNmfYDI1XspbcGDgLA==
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72])
- by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4hkdsp39p9-1
- (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 23:00:26 +0000 (GMT)
-Received: by mail-qv1-f72.google.com with SMTP id
- 6a1803df08f44-91becce058aso31926786d6.0
- for <buildroot@buildroot.org>; Wed, 28 Oct 2026 16:00:26 -0700 (PDT)
+ c=relaxed/relaxed; t=1793248034;
+ h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
+ X-Gm-Message-State:X-Gm-Gg:X-Received:Received:Message-ID:
+ Content-Type:MIME-Version:Content-Transfer-Encoding:Subject:To:From:
+ Date; bh=2l93ljaCCLBeGS5qt1Sfvq9mtpPA91H2TZ7N4RY8esw=;
+ b=h1yM1xRmWBjoEWRgQrVzR51m2usKim9gjfgQTJx7PIIq0qw8HdnXFIkbLZNDg/MPVDcs
+ BGOv3lwCAMQQ4sO+pKALiu7jLCyWWTileDPy+Sf3/notcoX+WyyOazWU8jrq1MMVQmK3c
+ lkcQnflLabDRxSSZdf4/rku/PRvQfBrm+328rPewA9UloX1HpEoQdRWjmazkg00MCmWDO
+ fNwli63OgWr4d2XmQHopEJQ9xrs2TfQpxfxURpsy5SMQKPa1vLSJ162Nti1rU60iFQmLy
+ E1+IWwTJFIsAItExKqSBG4Jw5YmJze4kvkI1bJx3bZYy2m0K5YaSh3Y10HLeOOCqrRw==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ dmarc=pass header.from=gmail.com;
+ dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20260707 header.b="Ytl/+RS0"; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::336"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20260707 header.b=Ytl/+RS0
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DA48540176
+ for <buildroot@buildroot.org>; Thu, 29 Oct 2026 04:27:13 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-4a59100fa83so14611385e9.0
+ for <buildroot@buildroot.org>; Wed, 28 Oct 2026 21:27:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oss.qualcomm.com; s=google; t=1793228426; x=1793833226; darn=buildroot.org; 
- h=cc:to:message-id:content-transfer-encoding:content-type
- :mime-version:subject:date:from:from:to:cc:subject:date:message-id
- :reply-to:content-type;
- bh=fcK1OkbmOlsEx3W+ZXyTnh4AGKS9m+ZEEv7D4onhos4=;
- b=Z0JI/UN47LPhIi2lwyitnDNis8cUKpWrmo8zl7WCnGCMLepCaEacHiB6zNHNZHfrni
- acwnRXqAjJSRt2Yi+bwZqonva8fhzzrlNercsd+su3hxUJHLxW01De90iPlijXIgIaIp
- uQnsGs7TiKO0Z/Nq1beC6Dp+SnJHgMu0ca6DTqopJM9svRHn8Q47iY6itbHD5CQfKUSk
- C9CeiAAZfWYAyjvsjYuQ+/EW60Ava37LxcVEsAtGYhtR5pdSZZskwIYO+EUnHLjBRgHE
- QztTPq7hdIt8yNGk9PxkZX3I8NGyGs3pRftG5obrs053YIJPLM+kYr8K8IH7M3Af7zp8
- YO2Q==
+ d=gmail.com; s=20260707; t=1793248031; x=1793852831; darn=buildroot.org;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :content-type:message-id:from:to:cc:subject:date:message-id:reply-to
+ :content-type; bh=2l93ljaCCLBeGS5qt1Sfvq9mtpPA91H2TZ7N4RY8esw=;
+ b=Ytl/+RS02Y1yM2VAUlduobmx9/a5hgKpcIUtUITjd6noOhPdqVGWx88JJ+SLGX2Hoa
+ 1tjoGGXJz6jxNoiO6cNWvlpiMOXvIiCEiSsKmYrB210aR1RDTv164rWIzitBSfW5Je5c
+ K1j3GTmAA026P4fwHa/PbHJXkszzkk4S3Qq45+rkhbVzFT4E5nSnUyr6CiRdTgtaL9Ni
+ 13PqJHJLw7yN3mygJ6aVvTATDENe3Fn+/qlGsEz0Gxs5TW3G3ZdSPE+dtbbpzByUeLEr
+ wrvBOxwte9U1g50TjuGhlO3WJ1bIeN//HWO09OPtvYLvxNpCaK14qJqdGgOVaJxOQCbY
+ z9+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793228426; x=1793833226;
- h=cc:to:message-id:content-transfer-encoding:content-type
- :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
- :cc:subject:date:message-id:reply-to:content-type;
- bh=fcK1OkbmOlsEx3W+ZXyTnh4AGKS9m+ZEEv7D4onhos4=;
- b=Lvw+RXub93yFvNaxR9LVRdpPMox3RNuPoFSYug/xkXih0pTB/0+pLsYbrl9bTJmML/
- ecEpyujmSDObaKCIvQff8AwTQPoQSIVoK4V6++h/1O2luxkR38c9PaVtBz8vm7S6QB40
- gFqFozwB+yEiwLr2WF9DG0arDAibcHRcQnWLP7xwsL0hzhF+ypeRIQ1FGimV2PJoUI2o
- N38zelKtJ4Ye0csNsp2sYGDaDpdVNJuIFCEXQYuaRhV9jBwW5a1zzMa4zZwNiHDEkS27
- Fc+5BMro7LapaYqX6xIHDjG2TTiFxy0+1O3+3cbubC8z7mjPRG8UIxbfUqqV9o/CBuWg
- sUWQ==
-X-Gm-Message-State: AFq9FYKT5tYN63TmDZDkToSoiIZeV4OZRC5vdURho6SJNCWGkvUEhzyU
- MojYnn+DYkFrxC2FVTT6v6OFfwufVYu/oxNJ9sNFDeqxetW7kpW2ZBeXtfxHQDzfRBZJY2v2f/f
- LQBnneDqoaHOS3yxmIwM7Lew8XInZ/3HLU9oqzZP8GhlnRjjAw0cgGZFiuzCu5AGcf0HG
-X-Gm-Gg: AYBFou1uotBuhvVr8Lu85yzfz3GeRj9hct/iq0SYtclMMFwY0UOfjfiK+gMaaBHrzyo
- b1aBlJCfIeqKd4dEL2KE2DT5ltKwXeWkPFZlfni5vpgOJZxUS5rUOwNMyYPf4DN2Rhf2kc56Sih
- QG+SMHyrvS7HCJ8zUDPEwpQ5eGLyg65fZf2GK0ZBEkKLMfIoJ29romhfT30CnYfYXxFPpuk2d1i
- UEN6y6pECkVJJ7Zqn2Lwg9dEmdtYAimKz7M7CZijoS3BNJCNF82wSfvNn7neCf6SgjmNn/xYs0L
- DZrfe5lVOHRLTScHKIzTYibe7o5PwwIhUS+WH6oL2Y9WJmsu04psCb6+18oyIZ0L4s3+2irrDjE
- LQdu15hkZ9wTyt1rQoa1OsG80mdAQsk/2DYm3KuHcBq1I/uedaHz3+LXnUuXBnw==
-X-Received: by 2002:a05:620a:8906:b0:93f:2610:fb6f with SMTP id
- af79cd13be357-94408aa13f0mr535477085a.20.1793228426090; 
- Wed, 28 Oct 2026 16:00:26 -0700 (PDT)
-X-Received: by 2002:a05:620a:8906:b0:93f:2610:fb6f with SMTP id
- af79cd13be357-94408aa13f0mr535466885a.20.1793228424844; 
- Wed, 28 Oct 2026 16:00:24 -0700 (PDT)
-Received: from localhost ([2a00:23c4:e5c9:901:c496:8838:86d0:bc8c])
+ d=1e100.net; s=20260707; t=1793248031; x=1793852831;
+ h=date:from:to:subject:content-transfer-encoding:mime-version
+ :content-type:message-id:x-gm-gg:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to:content-type;
+ bh=2l93ljaCCLBeGS5qt1Sfvq9mtpPA91H2TZ7N4RY8esw=;
+ b=1QrqSmVbvSPjadgohRZe5sJhDMGSvlpA3Y2CeQBoh/WPFuPPoxlhpFxMUnaZbRZy7f
+ 4MUoclqlbKyxnumm2t4y2fY3mbvvkYay3LC2QfRAR4THFtW9b2dq4FTjeGrYP9rDJ1V5
+ pfXnWO/qyk0Aluih3XRScaAN9euHgrg1d24rtNpUzPX/g72nbFGGMVzgShBmQAIj6gf6
+ uDSBCbHMzjo+ZsqU9QZtnlGcvqL8OB7KCgyKdAt4CoExuimA3A+zhsqeEsC82IbcxaFv
+ HeACoumJWXUFT/0Uo70AM0U72SvhXnku5b4y72MT2GijoqAQJiAw+zzPcmwMNzJ30KDo
+ pN+A==
+X-Gm-Message-State: AFq9FYJUHFgz1QuO+h7uHFmCyW78iPVZ0KYKeCw05R0xyy3oBQKxlzvI
+ MwCNxD76wj0TwGbeuTonim8CNYtCVK6higr3l1rN729OmUhscvb/takR+U4spdDg
+X-Gm-Gg: AYBFou0/Xf0HtWDUHC1sFL6cYTGLIVh8WwWbxVULUZGg/WVp02O7xIRDTCgR1Csf/kK
+ viMVcgrmNLCFsZxSVG72slhYmm2RDVp34zq/LTKVahRzetnIbrlzNKaUul7ed8gZv0fqitWAx6V
+ HMbxcYce30l7UjI+bKopIm17zR4YCJO+sDJJKC+AUcVcArp5CrIwdYLIuCy8uEgEL5BhU83DfNS
+ RLZHmwhaMgxF7WhWUgO/te4qGJcJmWkruau0LKL6XaKf4bT9DOR76YyBkiqXQokjVRTcJFyxC7O
+ KI4In37QeaFoHXOftmRcNCG1ZtP/m6Bt16KvcqZtJ7FtZ/bIyvrvQY9Whek9DhLredWjCj93Mw6
+ S1ZIKpinOqouMBwlHEa1W0os5CMOfr4oFNc8B6pV6j8Dks3jCEIr4cvH0mDsvpET8Tamu8Xvia6
+ roz651Wo2e5+OhrtWYNIgbUjiFlpieo9/rz6NtimPJ2dPkc911upCCxo+PdhfylEHI3Vcq6Nm1Y
+ LdMEx7ntPjITIK1uxeWQtnCUcLQYDwNutSrDiiesvCVyLQ+i3rNQom50H+onK/QDpSb6bt8KQBg
+ rrj5L9kKx/CUt86aQxA7zNxqq7cYuHYp5bZB
+X-Received: by 2002:a05:600c:348f:b0:4a1:fa27:df7c with SMTP id
+ 5b1f17b1804b1-4a9678c68c3mr94151665e9.34.1793248031125; 
+ Wed, 28 Oct 2026 21:27:11 -0700 (PDT)
+Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48e3ecdd5b3sm30753429f8f.53.2026.10.28.16.00.22
+ 5b1f17b1804b1-4aa7fead817sm36074865e9.12.2026.10.28.21.27.10
+ for <buildroot@buildroot.org>
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 28 Oct 2026 16:00:23 -0700 (PDT)
-From: Christopher Obbard <chris.obbard@oss.qualcomm.com>
-Date: Wed, 28 Oct 2026 23:00:16 +0000
+ Wed, 28 Oct 2026 21:27:10 -0700 (PDT)
+Message-ID: <6ae2cb1e.ef735cbd.21420e.a28d@mx.google.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Message-Id: <20261028-wip-obbardc-package-dtui-update-3-1-0-v1-1-2ff61efecfed@oss.qualcomm.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXNywrCMBCF4Vcps3YgGUsVX0VcTJKpjkIbcqlC6
- bub6vKDw39WyJJUMly6FZIsmnWeGuyhA//g6S6ooRnI0GDORPjWiLNznILHyP7FbRJKVawxcBE
- 8okWDQqc+GGcHGQ20Vkwy6uf3c739nat7ii97HLbtC8Vu+fuJAAAA
-X-Change-ID: 20260822-wip-obbardc-package-dtui-update-3-1-0-e274d0b16ef0
 To: buildroot@buildroot.org
-Cc: Christopher Obbard <chris.obbard@oss.qualcomm.com>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1422;
- i=chris.obbard@oss.qualcomm.com; h=from:subject:message-id;
- bh=sP/VpCNIzR+ruHde8yYzLCvbn+qMukcUDkxZi9nKUC0=;
- b=owEBbQKS/ZANAwAKAWNNxPBocEb4AcsmYgBq4n6BLdAJQQGUbFgn4qdPkIBc+dGxbpLtFQGKL
- IKffUXgvi6JAjMEAAEKAB0WIQTxi9yLbCX5CqI9UXRjTcTwaHBG+AUCauJ+gQAKCRBjTcTwaHBG
- +CabEACUm6fEva528D59ewUCBoecgOngO5quG4xGKqHvhDnrk5QUUfzrqfPJFVn4MapISwpY3La
- 43cQYSn1iX/RgdjGGsf8gbCeW8z3iPxqS59KSBT0YKAWsU3i1SU4tCIpEXbORcDo0gwG+FTR5CI
- +D5tZNUX9StHR3JGIZzp+ETxpcgY+QbSDnCZg9eBR2MX+9q0P9EMOUfTevZIFLjK8MmzReCIK0L
- Ye4qnXX7P/ZHpJegAcnsGtDNQbseqaolqJR3/CEHKfKk1tHNkMWkFhQtgz5QxQhWAa8Z6YFa/CP
- hMcDi19rO1hiB30keNtqlRXeimrL3IG7lJNaq9RO6mY4NmvLRdxgisDI+et88kT73+yMT1vwxvq
- +Vw2ekLpQmEBnIUQIAkb8R3yP7Z6tYH4VaQFFS3enngGzPJRs6A/xTVjLmd+ade80Y7ak4+/Dau
- IoRuBJ3IOlLLGRx715Vkq3hj85xCZrZ5G15Cy4ahfYtK3Xc1D3IgUcxICeepNxD3qzmhdBd/7BY
- Dff5DGOc0r6lJ0vWgFqY6pG6aqdepIVsi2m+UninW0+Rg0xRry746APflGuQVp2FzqED5oSk+RL
- +AAVuJccvl/OE3pIV7yR7t/nPMBNauMku/spTHbEHagRszLL8ZuKZfcq9ZLIr/D3hDdzSZ/c6mM
- j5enCcJVXggg3wQ==
-X-Developer-Key: i=chris.obbard@oss.qualcomm.com; a=openpgp;
- fpr=F18BDC8B6C25F90AA23D5174634DC4F0687046F8
-X-Proofpoint-GUID: ry8hbN1HEo9P7mqzAeiyrAr6rzBYxxEq
-X-Proofpoint-ORIG-GUID: ry8hbN1HEo9P7mqzAeiyrAr6rzBYxxEq
-X-Authority-Analysis: v=2.4 cv=Cssq4X4D c=1 sm=1 tr=0 ts=6ae27e8a cx=c_pps
- a=7E5Bxpl4vBhpaufnMqZlrw==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=660iZSQnnn4A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=yx91gb_oNiZeI1HMLzn7:22 a=EUspDBNiAAAA:8
- a=RaF8BXzzhcKCX23jQAgA:9 a=QEXdDO2ut3YA:10 a=pJ04lnu7RYOZP9TFuWaZ:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMDI4MDA5MSBTYWx0ZWRfXz9lZA7a+/kI+
- Ts8LskKcgo4RyGGLYETHZyfWAw8tHmawVX05jJ7Qk2XtdXMRLzn6GC1tcTRxZO8z1CnvnvHiygQ
- jwFb58nuCMkP2dVJVxlA3dlUmMAJZQXBe9Twbaui1RD5zhRl2DZqOW3qBK5GICaLBFWg4gOkDuB
- rBivfXnG9PVUPMa9OZYE+iSo01gNh6MzFJgTvl5G/lIbdZaIjIXYwmow4PZ/EpdEmLP20qWIbGU
- SjmxwUFZnNLLopaVPRqIF0chf2XhFIFSXvm16xU0LFSLJ5XEaG0rki+RckfJI8dVV5fNiTpVLeo
- z2/uO74enB+elHatWQ5DA55XUzggDPJLIiOxiWVjFL08fPqZlqu5iD9P9NGvXgMGIXawOvtpEdb
- wRA7PJt7n6wv8TQyh599hmbreI1f9fA2WVlVIY9E0wSYeq/LINIx6ssaF9fAVQf+1/JdvvmM+xg
- nvItXibayCeTabq3spw==
-X-Proofpoint-Spam-Info: AW1haW4tMjYxMDI4MDA5MSBTYWx0ZWRfXwHmRruV5yN7Q
- hvz1p6uvwrdduE3IiZ8yOBTUQ1m7DSwy7ZfkkRh1ZG9EaZ+hNc8E7AcO+gRpL4ixP7o2uoA9FJ4
- 8WUTIg96Dzgfy+WyZBtUIChDnQg0CPs=
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
- definitions=2026-10-28_07,2026-10-21_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 lowpriorityscore=0 priorityscore=1501 adultscore=0
- impostorscore=0 malwarescore=0 bulkscore=0 phishscore=0 clxscore=1015
- spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2610190000
- definitions=main-2610280091
-Subject: [Buildroot] [PATCH] package/dtui: bump to version 3.1.1
+From: Buildroot Notifications <buildroot.notifications@gmail.com>
+Date: Thu, 29 Oct 2026 04:27:10 -0000
+Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2026-10-28
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -256,57 +168,182 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-16.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-0.8 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Changes since 3.0.0:
-- Toggle tree nodes with Enter
-- Bump chumsky dependency to 0.13
-- Regenerate stale Cargo.lock (3.1.1)
+Hello,
 
-LICENSE is unchanged, so its hash stays the same.
+Autobuild statistics for 2026-10-28
+===================================
 
-Signed-off-by: Christopher Obbard <chris.obbard@oss.qualcomm.com>
----
- package/dtui/dtui.hash | 2 +-
- package/dtui/dtui.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+      branch |  OK | NOK | TIM | TOT |
+  2025.02.x  |  9  | 14  |  0  | 23  |
+  2026.05.x  |  0  |  5  |  0  |  5  |
+  2026.08.x  |  2  |  2  |  0  |  4  |
+    master   | 33  | 37  |  0  | 70  |
 
-diff --git a/package/dtui/dtui.hash b/package/dtui/dtui.hash
-index e45f979934..b042812c73 100644
---- a/package/dtui/dtui.hash
-+++ b/package/dtui/dtui.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  57bcf3a8b6681be2695762da17c20d2efb7c121131138868ba7a4485fa08c335  dtui-3.0.0-cargo6.tar.gz
-+sha256  cff3895576d31a321e82ca63ac45f8a7dc2ae902ae2b9a3efa68438cc5d8aab3  dtui-3.1.1-cargo6.tar.gz
- sha256  b7b3cd0d92fc6638f0a7bd2306d715c747d040c6d851ed821a45c5538663e57a  LICENSE
-diff --git a/package/dtui/dtui.mk b/package/dtui/dtui.mk
-index fad5f818b4..86bb0fa213 100644
---- a/package/dtui/dtui.mk
-+++ b/package/dtui/dtui.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DTUI_VERSION = 3.0.0
-+DTUI_VERSION = 3.1.1
- DTUI_SITE = $(call github,Troels51,dtui,v$(DTUI_VERSION))
- 
- DTUI_LICENSE = MIT
+Classification of failures by reason for master
+-----------------------------------------------
 
----
-base-commit: 727b904c13bbc2a9a7a530b1f8e47d7d180c2768
-change-id: 20260822-wip-obbardc-package-dtui-update-3-1-0-e274d0b16ef0
+              esp-hosted-1.0.6 | 3 
+              host-rust-1.99.1 | 3 
+                   perl-5.42.3 | 2 
+                 rtl_433-25.12 | 2 
+                   bird-2.15.1 | 1 
+                  chawan-0.5.1 | 1 
+        edk2-edk2-stable202608 | 1 
+host-am335x-pru-package-5f3... | 1 
+    host-mender-artifact-4.4.2 | 1 
+host-python-charset-normali... | 1 
+          host-xfsprogs-6.19.0 | 1 
+             librdkafka-2.16.0 | 1 
+               libvorbis-1.3.7 | 1 
+               linux-pam-1.7.2 | 1 
+                   linux-tools | 1 
+                  lldpd-1.0.22 | 1 
+               madplay-0.15.2b | 1 
+                  mender-3.5.3 | 1 
+                    mraa-2.2.0 | 1 
+                  pdmenu-1.3.6 | 1 
+               python3-3.14.10 | 1 
+raw2rgbpnm-f28b903ca63b4c22... | 1 
+rtmpdump-6f6bb1353fc84f4cc3... | 1 
+        s6-linux-utils-2.6.2.1 | 1 
+         s6-networking-2.7.0.4 | 1 
+               tcf-agent-1.8.0 | 1 
+uclibc-ng-test-132c6134d691... | 1 
+                       unknown | 1 
+          usb_modeswitch-2.6.2 | 1 
+               valgrind-3.27.1 | 1 
+                  xxhash-0.8.4 | 1 
 
-Best regards,
---  
-Christopher Obbard
 
+Detail of failures for master
+-----------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+   x86_64    |          bird-2.15.1           | NOK | https://autobuild.buildroot.org/results/faead7603e1d56278c54a458cef1a7060111e83a |     
+    arm      |          chawan-0.5.1          | NOK | https://autobuild.buildroot.org/results/5b04fd2b6e0037cbbf63d81e652f17d8b2f1ac1a |     
+    i686     |     edk2-edk2-stable202608     | NOK | https://autobuild.buildroot.org/results/93638d96a458c4e85076762542f5b64d5ce4bd8b |     
+  riscv64    |        esp-hosted-1.0.6        | NOK | https://autobuild.buildroot.org/results/9670d8ae6c8a443d92d74a3230fbad1e21abf4ac |     
+powerpc64le  |        esp-hosted-1.0.6        | NOK | https://autobuild.buildroot.org/results/4bdf11bbae72d4501301520a0f57591bcb7091f2 |     
+    arm      |        esp-hosted-1.0.6        | NOK | https://autobuild.buildroot.org/results/73dfe379673a3ac506ab96ee7bacc9172a3aa66a |     
+    arm      | host-am335x-pru-package-5f3... | NOK | https://autobuild.buildroot.org/results/3d81a93487a6139b9f42d481164a9736f569fa51 |     
+  mips64el   |   host-mender-artifact-4.4.2   | NOK | https://autobuild.buildroot.org/results/ac955c67490ce8d58f0b373aecec85068b4e3b07 |     
+   x86_64    | host-python-charset-normali... | NOK | https://autobuild.buildroot.org/results/d4793ce4ade5e6254a3535bc4583b795e542fa0e |     
+   x86_64    |        host-rust-1.99.1        | NOK | https://autobuild.buildroot.org/results/c45150e56f5ba7fcc346bbc10dbd0a1350fb17b4 |     
+   x86_64    |        host-rust-1.99.1        | NOK | https://autobuild.buildroot.org/results/5351175990a6d072209b6346bc2a1af432f85c67 |     
+   x86_64    |        host-rust-1.99.1        | NOK | https://autobuild.buildroot.org/results/d53b2bc7c0fe8908b2fa42884b81a2626073b53a |     
+powerpc64le  |      host-xfsprogs-6.19.0      | NOK | https://autobuild.buildroot.org/results/885ad11368e416baf2d63b85c706c95e161cd782 | ORPH
+    arm      |       librdkafka-2.16.0        | NOK | https://autobuild.buildroot.org/results/996859c3ab9e5f66cefb6030925c483f652c9cad |     
+  aarch64    |        libvorbis-1.3.7         | NOK | https://autobuild.buildroot.org/results/1b129ffba19dd2c0d84a5cb9238e894f1c10fea7 |     
+  mips64el   |        linux-pam-1.7.2         | NOK | https://autobuild.buildroot.org/results/049f4199d5a1ec4ad1d108cc3162ecb8785cd0eb | ORPH
+  mips64el   |          linux-tools           | NOK | https://autobuild.buildroot.org/results/0f911aaaf30f8f4aeec935f14908af6a6b9f8d7d | ORPH
+    m68k     |          lldpd-1.0.22          | NOK | https://autobuild.buildroot.org/results/6e77aa757cd0571c88bb4d87fbe1f7d1ee596988 | ORPH
+powerpc64le  |        madplay-0.15.2b         | NOK | https://autobuild.buildroot.org/results/918210517bb3de52dfe3ab0fed5647b81c3ae91e | ORPH
+  aarch64    |          mender-3.5.3          | NOK | https://autobuild.buildroot.org/results/01eefdca2c295d14fd0852d2dd4386e7254aa5f3 |     
+  aarch64    |           mraa-2.2.0           | NOK | https://autobuild.buildroot.org/results/7fcad13102a974ff4a325d42d824bdaedef56845 |     
+  sparc64    |          pdmenu-1.3.6          | NOK | https://autobuild.buildroot.org/results/c41b5f74067c44b4a48f7c6231c66ba25e377fa3 |     
+  mips64el   |          perl-5.42.3           | NOK | https://autobuild.buildroot.org/results/93d94534f687f2a359d363d91252bcc86aba611b |     
+  aarch64    |          perl-5.42.3           | NOK | https://autobuild.buildroot.org/results/c344b05a26cd091c3cfc65f7330eb0619a7122bf |     
+   x86_64    |        python3-3.14.10         | NOK | https://autobuild.buildroot.org/results/ca64f93e85191779d0ef4daf44f1519ad75be6db |     
+    arm      | raw2rgbpnm-f28b903ca63b4c22... | NOK | https://autobuild.buildroot.org/results/2e158547d0dff265bdd4e4063d572b43a9d30b68 |     
+    i686     |         rtl_433-25.12          | NOK | https://autobuild.buildroot.org/results/315e8bf9dcd7ae0fc19e0283a1412862de0778b6 |     
+    arm      |         rtl_433-25.12          | NOK | https://autobuild.buildroot.org/results/80cc49ceab2ec8ad046911237e9bea83335f0e50 |     
+  aarch64    | rtmpdump-6f6bb1353fc84f4cc3... | NOK | https://autobuild.buildroot.org/results/6a7e36b3950013931ae9904362fb0435d99adcb0 |     
+  aarch64    |     s6-linux-utils-2.6.2.1     | NOK | https://autobuild.buildroot.org/results/7addb258537705debbe555c49633f6238bf589e1 |     
+   armeb     |     s6-networking-2.7.0.4      | NOK | https://autobuild.buildroot.org/results/5026ce3ea03120e6080c43d08d1fb1f2dd2569fb |     
+powerpc64le  |        tcf-agent-1.8.0         | NOK | https://autobuild.buildroot.org/results/517fe7a0a77932fb864997385c3c177faaa0466b |     
+powerpc64le  | uclibc-ng-test-132c6134d691... | NOK | https://autobuild.buildroot.org/results/c560ac27639250da4e50da8e148c0c040fc0f77f |     
+   x86_64    |            unknown             | NOK | https://autobuild.buildroot.org/results/d209a72d062b9f1514eb6306bce2f68725d74d90 |     
+  aarch64    |      usb_modeswitch-2.6.2      | NOK | https://autobuild.buildroot.org/results/31bd2edc5643c7fcc073aeac993651f6b7ab8c99 | ORPH
+  mips64el   |        valgrind-3.27.1         | NOK | https://autobuild.buildroot.org/results/a7b1ddaf9887613edd6f137679961175d46bb256 | ORPH
+    i686     |          xxhash-0.8.4          | NOK | https://autobuild.buildroot.org/results/34b8bb323a0f7ac424c366b16ba01b9131cf440d | ORPH
+
+
+Classification of failures by reason for 2026.08.x
+--------------------------------------------------
+
+                   dante-1.4.4 | 1 
+      libabseil-cpp-20260107.1 | 1 
+
+
+Detail of failures for 2026.08.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    i686     |          dante-1.4.4           | NOK | https://autobuild.buildroot.org/results/56bda829c8ed1f78483c29fa425c15cc8ef65ad0 | ORPH
+    i686     |    libabseil-cpp-20260107.1    | NOK | https://autobuild.buildroot.org/results/ce00c347abef5b77a48a87d6dfe21f0914912b58 |     
+
+
+Classification of failures by reason for 2026.05.x
+--------------------------------------------------
+
+              fluent-bit-4.2.0 | 1 
+            jpeg-turbo-3.1.4.1 | 1 
+               linux-pam-1.7.2 | 1 
+        ltp-testsuite-20260130 | 1 
+                 xenomai-3.2.5 | 1 
+
+
+Detail of failures for 2026.05.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    i686     |        fluent-bit-4.2.0        | NOK | https://autobuild.buildroot.org/results/58d6309a08096db6cc2289e19dec9f56ceb9c28a |     
+    i686     |       jpeg-turbo-3.1.4.1       | NOK | https://autobuild.buildroot.org/results/d621ba0e95dc745fd71a95828ca1128ea8f64698 |     
+microblazeel |        linux-pam-1.7.2         | NOK | https://autobuild.buildroot.org/results/5fc8b5cd159183db13f9216e24be1f3ca024fc6f | ORPH
+    i686     |     ltp-testsuite-20260130     | NOK | https://autobuild.buildroot.org/results/09f47bdc6130aa12b5123c3b90217a8582fed522 |     
+    i686     |         xenomai-3.2.5          | NOK | https://autobuild.buildroot.org/results/8e536d947b1747f952cc6f76aa4ef2db209323cb |     
+
+
+Classification of failures by reason for 2025.02.x
+--------------------------------------------------
+
+package/linux-headers/linux... | 3 
+                memtest86-7.20 | 2 
+             fluent-bit-3.2.10 | 1 
+                freerdp-2.11.8 | 1 
+        host-python-lxml-5.3.0 | 1 
+               libepoxy-1.5.10 | 1 
+               libnpupnp-4.2.2 | 1 
+                libnvme-1.11.1 | 1 
+python-remi-2022.7.27-37-g1... | 1 
+rtl8723ds-52e593e8c889b68ba... | 1 
+                       unknown | 1 
+
+
+Detail of failures for 2025.02.x
+--------------------------------
+
+    arch     |             reason             | OK? |                                       url                                       | orph?
+-------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
+    i686     |       fluent-bit-3.2.10        | NOK | https://autobuild.buildroot.org/results/34993b49084ed16de4283e6d1a0e33fe5b3a7da9 |     
+powerpc64le  |         freerdp-2.11.8         | NOK | https://autobuild.buildroot.org/results/d79495b11219d84587750e697e730f4e0cb30c61 | ORPH
+   arceb     |     host-python-lxml-5.3.0     | NOK | https://autobuild.buildroot.org/results/1b8a5db7a67e2dcd3b80c8719afeb0b38c1fd064 |     
+ aarch64_be  |        libepoxy-1.5.10         | NOK | https://autobuild.buildroot.org/results/a5147423d8f426233dbe64883d43da21937c704a |     
+    i686     |        libnpupnp-4.2.2         | NOK | https://autobuild.buildroot.org/results/6d6219456b9cbab7d535d693ac1cc751c2bcec51 |     
+    i686     |         libnvme-1.11.1         | NOK | https://autobuild.buildroot.org/results/cb182ae163e82e1462ddb375710899440369bb12 |     
+    i586     |         memtest86-7.20         | NOK | https://autobuild.buildroot.org/results/4ecd077551e4547f2b0c9f547c7495b62f08b891 |     
+    i686     |         memtest86-7.20         | NOK | https://autobuild.buildroot.org/results/a9a07792ea2fa071cde8d7904d1b7b5a48976170 |     
+    i686     | package/linux-headers/linux... | NOK | https://autobuild.buildroot.org/results/f18c288cfcf94ce2224824f2de59eec0ae32daa6 |     
+  riscv64    | package/linux-headers/linux... | NOK | https://autobuild.buildroot.org/results/e542f8a5c2e1daaa54b202746de8442c458fa88c |     
+    i686     | package/linux-headers/linux... | NOK | https://autobuild.buildroot.org/results/0e308549f56637f4c599cb5731a6ed16344e3b25 |     
+    i686     | python-remi-2022.7.27-37-g1... | NOK | https://autobuild.buildroot.org/results/3193f8b6931664e9098ef81deab1a73ef067fd46 |     
+    arm      | rtl8723ds-52e593e8c889b68ba... | NOK | https://autobuild.buildroot.org/results/eeb26763c71c76c1cffe0c0fc2a6ffeb2be3f3ed |     
+    i686     |            unknown             | NOK | https://autobuild.buildroot.org/results/4f112fd70e9dcab9c11c38b54c7530f4fefe1bce |     
+
+
+
+-- 
+https://autobuild.buildroot.org
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
