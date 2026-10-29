@@ -1,180 +1,162 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78D63606A330
-	for <buildroot@archiver.kernel.org>; Thu, 29 Oct 2026 09:58:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2209606A31A
+	for <buildroot@archiver.kernel.org>; Thu, 29 Oct 2026 11:01:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=O/sqTSP/;
-	dkim=fail reason="signature verification failed" (1024-bit key, unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google header.b=l8FJZISD
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=KGDUTOJX;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256 header.s=20260707 header.b=hWLze23M
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4789660710;
-	Thu, 29 Oct 2026 09:58:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC73380F72;
+	Thu, 29 Oct 2026 11:01:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dnS3kJMcVzAa; Thu, 29 Oct 2026 09:58:27 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org BC48C60686
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=3; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793267906;
-	b=VoHZGoUmYEgYki2XEAs+lFuXsq9EPysXzQSqpdm1TZOp3oIfhetu3LN/0v9sNrGfeAFP
-	 SDzloZCxN5wyXClVwxSTzZuKXICErgacoEt7dMs/92DRAL/WROVyVorKXbgymHsDOvOsi
-	 Ei+c6iXsuFqLJtYOD3RHbfk7kH6piIv3jAeG51DygIzwkb9NEz2KWEogJ5XnvqybLevwt
-	 Z2UkeTZBAmDj7MR36fi644/hvTn1dr1glsOqs8+XjOChOhOctRVqUBmJOeTHZ1Lx+2OpT
-	 MFPlTqfv2hNki1fcn7nMwl1wdT0Qy5be1b51GqG8InuYL//GTqxp7rmQ67ooET3uklQ==
-ARC-Message-Signature: i=3; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793267906;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DijBIQVqUIqi; Thu, 29 Oct 2026 11:01:20 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 1AF3680F90
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793271680;
+	b=oTfrdwJORH4qnPNxyWYfB+zx5vPRY6VBLhrzVbFLVSWIKIB4ZbRvCzYKIaH7/AuILhG3
+	 clN3GiEQFMJpSsM+8q+aG6ZR5IlVGS8S7oTIOwA9Srp2DSAQBOep7CbGEJCOgXfTv55zb
+	 1kilvryGvb1oFMINC4WHW5ZU9rwATdkC1fw7Fjzn9XDvh1ad7MGxwwF9wqUYLOa2QCAue
+	 W/IdEZiXtgEu9/q5Qoc/QzspKZgwLW5rAqiZ5utSno95awRxeoIjEqB/URGbgrgH7sZca
+	 ycNWNs04UoPBfx99dkIIQAaE/KnuPjh1HvL3DpvpbSVRpEYzyiOoqFR1f2YmMGL7q6g==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1793271680;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
 	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:MIME-Version:References:In-Reply-To:From:Date:
-	 X-Gm-Features:Message-ID:To:Cc:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:Content-Type:Errors-To:Sender;
-	bh=xb9QeQjw7YBA8T2P9RuhF0abr3HwkrG/VYALp1AmgeI=;
-	b=jL17u3NhqRLbWYd9QohvojNJNDiNlrb90FG1SQWiyMHtFpmXQ+GzQwKaOetlc6pHLwgx
-	 O4C3UMED/cgf9dZLpaEfCWkW+kMRHAJFqtCiau5337hyL6OH6UHnI6brAI25i+J2sE0N7
-	 NNMcVfkFzn8tXxaiUzKwVERCgKvimnTS4VuAh5VMUXuZRQvrOAUqCzZgA47J5DiVix+Ue
-	 1NZs09tOUr1AGdIUeG2JicgMr4PomWB0URlAhQKXhvGV1Fa41q9bLDtP3z475qoPTAEV8
-	 EEIGDboWbwDKl0h9VbxtXrYN3OpGHvIJvtWOJ6TYmxBJKaT2c/ZDBdKx5MT3vqYILyg==
-ARC-Authentication-Results: i=3; smtp3.osuosl.org; 
+	 X-Received:Received:From:To:Date:Message-Id:X-Mailer:MIME-Version:
+	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=tigvJM21YPLhpmqxYC8bu9z3oLl9Lgp3C9AHOKiiHfg=;
+	b=pscbHCgzg6J15IA+FFQrcAmClaDiSEQZs05N+0Hd3lGyfffXRkNa3ZOjufsRVjuaLPzL
+	 mbbCjZUU15w2HoG2Q5+23sYfiBcrNZ+7qe7hLq+5KRnfcbLI/DudaU9pwKXocXBtRH+ad
+	 VUhGRA0hV5KB+P15fpLz2/+qMCVPb0Ij8d7IzQChtQjC7lN7ZlpLpbZZhla3nyMoDeGAw
+	 JD6jjI1RPOt/xNy5StQFLQCQv4nDva532WSHC6tH5Lk93bRhJ0FzvoOGtYFMPg5sX3bhX
+	 TF5wTFW6RKRhvuscqU+0hhU9iI992nZFLftIuzKJ+T3slqG7uK/ZCgwCLJMOAq3ML4Q==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793267906;
-	bh=xb9QeQjw7YBA8T2P9RuhF0abr3HwkrG/VYALp1AmgeI=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=O/sqTSP/n9Ks6IsN+uMxlegf0cWOdEMMuQfcmClkgBnDlWljtrVlL0n15vyuUy+1T
-	 QazmH/KBAuA/EyoGvsv4rTn3jjsubplY2wAPjQKEI6Pvm46ktFNRf8MTASjvTjUX3W
-	 1qO1V5RDaiZ5IONc+9/bDe2+0bIny+r6IiXUey+mtbinZEQOfPDeaBfVgyBGWyszpi
-	 jDjoSlnhOjsIW+htaf8P1SltSfAvKXptPZTllAU2YVr5HBs+P384X61T4BDDATxeYe
-	 hIHXCDKkpnKPqdgLuSwAICdH3Pddpop383zjuQLztXehU1R/vjM33AGZUtKOuYbFut
-	 SBnoSA0SJOaOw==
+	s=default; t=1793271680;
+	bh=tigvJM21YPLhpmqxYC8bu9z3oLl9Lgp3C9AHOKiiHfg=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=KGDUTOJXKLfxgqblH27ky7Jj3fk+DjbBwg1qcJ5WTIIG3MCocswVk9Yk7pY17TXgW
+	 xIsT2YvSxR41aGYKVVA6BuC8ODQ5UHGX/UdUorSrMIZudwKWCNdgU25K072zEkmu2x
+	 PW4vNjcvgVSnqFPxu0Ax8CMaxHD2GVYDuhEhNF05cUE0EsKvdq6E4gsZCMi441IYbY
+	 ArY7W6S1IvuqCn/8A3eZEkw0j41oLf2ULYoJDSpyNvXtbOWqVcq8cXo8Z+B3azt7Xu
+	 8oIeUE/9BSjLFQsEKsT5cVXxSeB/urT110OiIdhUqoc3BoYHvYTc9t5gSDoYv0QoT9
+	 Qy6KK+up5YOzA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BC48C60686;
-	Thu, 29 Oct 2026 09:58:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B3CAD356
- for <buildroot@buildroot.org>; Thu, 29 Oct 2026 09:58:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1AF3680F90;
+	Thu, 29 Oct 2026 11:01:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id E9677D22
+ for <buildroot@buildroot.org>; Thu, 29 Oct 2026 11:01:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A54704032E
- for <buildroot@buildroot.org>; Thu, 29 Oct 2026 09:58:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CF8F0606BD
+ for <buildroot@buildroot.org>; Thu, 29 Oct 2026 11:01:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vY07NeUbpZDb for <buildroot@buildroot.org>;
- Thu, 29 Oct 2026 09:58:24 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 6762A40024
-Authentication-Results: smtp2.osuosl.org; arc=pass header.oldest-pass=0
- smtp.remote-ip="2607:f8b0:4864:20::b12f"
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=pass; t=1793267904;
- b=HfRDFG5ghxp9tTZK30UYa0bEn8NuNo9pF7vOinksuz4BeWtRi8bHSvo46Eq7ycimPt6u
- R1lbN3mvRhuBOV62Wm6w3TuD0ODgOiHbYSCZQDvsYFAERYgR+DVtRjhlLbJejA2PD0ILQ
- 386bgzix5yvjFSZidyHYGrODAlQlcw9NSrYZ/BwVOxTdeZr/6MFkp3CPxgka2YATAyLTV
- SCyWT6FfymBoBpfGS0rz8HPwgltHZYzo6lUNFN9IW/XyppBKG9m7miDTzRFTdLA1+1MZl
- hv0cFZSwfaFnI+HhS6yBN7i9zXkR8WsF7VqPDts//5V22Bi45rR5ZHhmU9+87hrZIJQ==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793267904;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sOkoOh8x4FXV for <buildroot@buildroot.org>;
+ Thu, 29 Oct 2026 11:01:17 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 067016069F
+Authentication-Results: smtp3.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::534"
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793271677;
+ b=iZv+Mds53iA31nH3FQCUOEmeTSFucCP5KCu2/a+b+LP3DgoiERGLbYF1gVDWeXEDDdaH
+ 5m4Jwj0IyhXq5DtG6eu5/6bgjVxgpg68UO8iLa6blN5LOtYghtx/tQqNf5CSWF5YfNtPK
+ r2eLT5zukBIVO7O1ixezdPtDw3OCxAyEEzZwNVPK9Nrbt1Ypv8+nq43Qd1pgwdreD10sC
+ qCctrSda7xcFTvheUQtG9usd6dD6nlGo6ZckcUlIIeNTxElUpYL8VspLa/ILfFzLKIxRL
+ Pt2iMUWwGIuoIP0aE8zZxcOFvUmzzqhSWtvguK2yzajTT0Gpo8jZA00lTnmLszVGnHg==
+ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
+ c=relaxed/relaxed; t=1793271677;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:MIME-Version:References:
- In-Reply-To:From:Date:X-Gm-Features:Message-ID:Subject:To:Cc:
- Content-Type;
- bh=5rpsqrHaIuB/GR6EQMLo2EExzcwQxfuGI8m7lYnSEVE=;
- b=P4m5BAAmSToUFjAEnm/2e4wz1KvOi36nA9IUdRplWLiW3o0K42epn4HqrRhjO+1MglpA
- ziVSfXMKclyNUnKkml0zbz9UxbSuOU5Vq/2jUCFaQKHHs3cXlOsDWq+/Ab/JvXy3icdlR
- 3kenOXaBIJJa+CvwwHwoFFhsvsfyYeFu+rSpx4YeG4aeqQQwx3qqORGr+3n1XcrNhGf8n
- u/YIVfgWimdycHo+BqFLAvwG//l+huaPSEQc9C6t1V8DhIrsNIahf+4Q5OvXSYDz5TVVh
- eneR5ZZ06DtQ0d/5uLdhMXuO1oYhyVZipGDZ0UbnB6z42guF5WF9XRISuvtjoe1cTMQ==
-ARC-Authentication-Results: i=2; smtp2.osuosl.org; 
- dmarc=pass header.from=amarulasolutions.com;
- dkim=pass header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=l8FJZISD; 
- arc=pass header.oldest-pass=0 smtp.remote-ip="2607:f8b0:4864:20::b12f"
+ X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+ Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+ bh=ZLLTDRy+X8TENAdY+fTuP+GbuFO6evkJBRXrSkNzH1I=;
+ b=F6pRgF4yZa/siIxFsF/Umvhu38lzLkS1P53GCPsZHsUxRY1vC/n0xJx55w/EVR0gEa6x
+ S62OFoQOASbA7Efq0swTEbdGTwV5xf5PXR2TopyyVpnZof35wo3BiI1ZTXIfT65ckvP6E
+ ydL4d7W0vGWyQtenOzI/fOBnRVWj5L8zpl0ZhLnID8euVtdWWoPCZbdn7BJMi43T/Qr6v
+ EqDhLMkzyPpAJq3OHtNpMK9FyHfXH6H7Mv6tpgLakIaqTZ0Ik/xtdL37a86RxlrJjPRoB
+ dyO9kRvejlQ2zImWqCY/0q0I7gegMtLemieWSggJyFj9onbvrn97hyfZvHW3IEG4TRQ==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ dmarc=pass header.from=googlemail.com;
+ dkim=pass header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256
+ header.s=20260707 header.b=hWLze23M; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::534"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::b12f; helo=mail-yx1-xb12f.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org; dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-Authentication-Results: smtp2.osuosl.org; dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=l8FJZISD
-Received: from mail-yx1-xb12f.google.com (mail-yx1-xb12f.google.com
- [IPv6:2607:f8b0:4864:20::b12f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6762A40024
- for <buildroot@buildroot.org>; Thu, 29 Oct 2026 09:58:23 +0000 (UTC)
-Received: by mail-yx1-xb12f.google.com with SMTP id
- 956f58d0204a3-677d35fd1d2so2023620d50.1
- for <buildroot@buildroot.org>; Thu, 29 Oct 2026 02:58:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1793267903; cv=none;
- d=google.com; s=arc-20260327;
- b=fcSBikh3n8QxNtYsO4ijliVC68uJIWXPeYF4mY7G7KWJC4XQsXxxnogjmEIXqD1KCV
- 1rG2LJDdFaJtkEol3lNLBEKuR0d37BR0ZEtuy0/AvXK4dEHkvA3UpJNUhJxZ+Irp5jW1
- srQC87EF1Lriwd6u0hj8pxPuMiyO9/HCrw9PUdxylpOxpMFw7PZ2E2srUdHmOApJ8INu
- 6wIG6un17Ui2A8nlqRH9hsOyrwjcXgdMO7oCGdLP5GvJLAPuGx4YgOy4Ab/OT+LSRls2
- YRr42zyrj2iT1aVZwK71OiQUUw2RwAFgc4Fr9x3etuiy64KFiVp+iJ4sQWyx05B9HgjO
- xjDw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com;
- s=arc-20260327; 
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:dkim-signature;
- bh=5rpsqrHaIuB/GR6EQMLo2EExzcwQxfuGI8m7lYnSEVE=;
- fh=t1HKz4FGwg2rlpSa7EUNbKGYl/IKyrvQ/1p5yhNuG2o=;
- b=lyj/KQIbkSWAOxQD848efQR0PsbsYRdc8fD1TeccToo5UWjTOVeIDVC+QALp+70Q0t
- YZaH/1kWuzYmxojINHUCoWcfx/ULsgWfL90Kmq0hin+A8Cag70WdFc9JBnNNqoDnyywN
- My/v+2IB3VIHlHM2ijBm1h2QIECQD5/voZpixIVtcWNeK9uhE8Arf8K4hP592Arqco6S
- QSEKaF/clbemgJwgdE6Vre5xGhsqPpNqZX9Vy88FH8lQ6DNGRI8XLlJShNdHluf0MaZV
- gFWhRDTdORpz5xxb61tbTF5dacL+45irjb+NMKyKqvqixTf5agOycrFC/IFssodqyyTX
- QYWQ==; darn=buildroot.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+ client-ip=2a00:1450:4864:20::534; helo=mail-ed1-x534.google.com;
+ envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp3.osuosl.org; dmarc=pass (p=quarantine dis=none)
+ header.from=googlemail.com
+Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
+ header.a=rsa-sha256 header.s=20260707 header.b=hWLze23M
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com
+ [IPv6:2a00:1450:4864:20::534])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 067016069F
+ for <buildroot@buildroot.org>; Thu, 29 Oct 2026 11:01:16 +0000 (UTC)
+Received: by mail-ed1-x534.google.com with SMTP id
+ 4fb4d7f45d1cf-6b4883643ccso2493684a12.1
+ for <buildroot@buildroot.org>; Thu, 29 Oct 2026 04:01:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1793267903; x=1793872703;
- darn=buildroot.org; 
- h=content-type:cc:to:subject:message-id:date:from:in-reply-to
- :references:mime-version:from:to:cc:subject:date:message-id:reply-to
- :content-type; bh=5rpsqrHaIuB/GR6EQMLo2EExzcwQxfuGI8m7lYnSEVE=;
- b=l8FJZISDQFty9b9LfFUM96+zXrMHWgFLtAZ/t5FztyVqbebpStuCqevinDYG86JP+P
- xDNz00perCRKIxpSw/RgWchrG6RuLkTQW/yYD+lLskWBOhJiuXBmGylegDI4rsf+TzBm
- X0aAOG+nfuIUNsoHV/Pci3M2CLiAD+nvTYPtw=
+ d=googlemail.com; s=20260707; t=1793271674; x=1793876474; darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=ZLLTDRy+X8TENAdY+fTuP+GbuFO6evkJBRXrSkNzH1I=;
+ b=hWLze23MKXhMfejifN6aCl0+7SyYotAQwLG7jfLjF7qV67iCzsZRNzColSSSv1GGnT
+ gCf+b/Uhv35FbQqT7dL13vtbp4U+rlLb/yncyyVIo4a2pxw5IkX1Pzdjy7HpKvoNBuHU
+ 4mIGvGR4LMTuPs/WApZGCaE7vo2Qt1cfzIDAVVUKAcBvbNlbTpdoqMFYWaJVHbhPzd6M
+ fv4gW0IpXanhp0zSkKGyJ+Tsh160n7zGJz+4DsCLwnY8ETcD5/RuvbCBE7NGJT/sf+DL
+ 4G02LYUdBQwBZ+DSvxrCfWMeG1SjEiI0fKjM4fytoT+gDr4xPnlf2G9gIbPFqQOdFltK
+ Gdmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793267903; x=1793872703;
- h=content-type:cc:to:subject:message-id:date:from:in-reply-to
- :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to:content-type;
- bh=5rpsqrHaIuB/GR6EQMLo2EExzcwQxfuGI8m7lYnSEVE=;
- b=Xx3dwDrbS5uPJ0neeiAKOr2bxlb3ha1U+FqX8El1EPlhCLEnwX9mHm8r1qk0kfOIuY
- 3i05Ehlsc+1ENTqVYk1Uhzkxp9Nz8fSzVcK3Cpm+xOexpp62kZLvmNtMI+tHzSQp4297
- a4ENTNJLRVo1S4iLLMr4/dq/72oyzcvVcFLJGf3CSSK+umLLgo2B+Q3LvnCtJT78ijhm
- vxWi4etkHRTlON0auXglGXjZ5nPo8jA/gEIfjiZBJNrTMnduoofoGXmI3hNJZ4IhESE0
- UthnMBiZ0g34TN2pT4F6g0zDAM+W0Ph7dU4p9+y7b45Qv5Pnhx11NTDZWTfUJkRKsSi7
- H0Fw==
-X-Gm-Message-State: AFq9FYK/Y0RYwVGzx2tl6Qcx+dM1A3zY+io0UlY3J7qKY/gwpJDD9z+y
- oMen2Y4HXrzTJB1WE6CJROqgpT9795QpwM+eeAZa8/OjYd8nweAmoFV3hbDtOEg5/vKP4lQnI2B
- 90hlVfy18UB7KSQMs26+o/g2GV/Qr7eQMEyDvXogFu7dFLx7ZM926758=
-X-Gm-Gg: AYBFou0h2qkaO7dDjrXtYgLF7F9kEUbYWWwdmyfei6TBpFJH3vzEj58w0ryE1qc2f83
- d+Ws216NTU3MoLZm75eJ0hN8WYD4/aukK2rSE5jQz9mMmUjisT90AlPg5wViXeAVI4eUiwp/uw+
- 8DIvmZMmdjWzavgnNKnCXvmHamozTXoTVkri9CQgTQNqdUEZIu8T3rQxm3LXCuJWw0dZ4SrXQVU
- 4qam4V5xhvumbMRsrupNeHJVnscozqdrF1h3fOqkN+Gr9W1kr3Iu4G2CeFtked6Mp1ZuVWir9Xj
- HHXxzayfyCXwJjH5QZY2xOvJ1feyT8GkzsiT8PLDDGOeGe5rn4rKLzUO1225ocwE6RljgK0V52j
- 2KemvdOwlAoUSmxc8mK5jvQQke8jfzqjKuwMPyzyYTU0rryMiMRcJj/+UMdL6k6DscA==
-X-Received: by 2002:a05:690e:1443:b0:66f:94c4:51ea with SMTP id
- 956f58d0204a3-67a7bcaa621mr3435095d50.47.1793267901511; Thu, 29 Oct 2026
- 02:58:21 -0700 (PDT)
+ d=1e100.net; s=20260707; t=1793271674; x=1793876474;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=ZLLTDRy+X8TENAdY+fTuP+GbuFO6evkJBRXrSkNzH1I=;
+ b=RqNzc7gZz/ViFOjvmLtiFrr6UNhwpzh5VWDOfFP38H09TvS+4z/Rajb289SDji6pCK
+ cpVX7ZOYcvrktObdskDsd6b2FyV1mwQhfgV7wOBcKlVm4rkvShKGzHy7B65pznk7afuQ
+ tFpTy4qktgVMoJkf8TkYEJooxOObDZDN3IyCHRby0qTDxoYK2VQ/NPwYkhhQivTtvMkk
+ sbcidEW8CLvoTLfxDsR40Wg6NuFSWuWh9YhkbBrwbiYk0OXeZ0+ff8zzAmFPOHsUEiPA
+ UbE2GIQT07OYXUwVjxeOWOP5qbN11az8MOmO+BPR4NpcfqEPv+oRDWa+VLBzU9LrvBhK
+ ZDnA==
+X-Gm-Message-State: AFq9FYILGsjXCKUCNaD1v+cL251LlWh5C59EK27NlTvg9iu+xijmfKg3
+ G0P6alwnP87IfK2E6FO/HAEIaIpexB1NY70ogM/BCH04s/BWc/RHMXBvzMfkew==
+X-Gm-Gg: AYBFou3p3rr/bUeH3PPTxHPinBhKRApa5W9QfYXUzOhXlgtM1DdXA3V8F6hPErpwXc0
+ ImWLZGb/6CvRVZQqQz/7guHXh0Rx9Jx0PECAYGF4dklYvsurSBK/ybXR1EZCZ9itk4cWKSSsXjI
+ dysxVgBYYhJ8yrcgvPm7n0XtkKffZ5BKvOzkmah66V8MNh89xZ5ybZ34ZR9W20xLUkRjSlyudOa
+ KGjMAjkd9Cjg8an9mlZJA8O6b5JWR4XOOQy1qQv4hx8AKQh19Zu27M2ISHJ4iPxCmgVzuuBCNDB
+ blq9u7xndM0E+vmshIOF9GwzfHjmiCViE0u2mi59Ock1ooGPMnJoMb3ESuCsRcPdXFKeN17sU3x
+ 0aDTo2KgQ//ManRhygh3cyBGFpktkqXfQSMNsncYX0z3WotDUNv81b80McGrF3XRnGKAioxucy8
+ veuLPorSlCs6YLtjO9hzTNrncKY0eRRDT0S1ZCzOCdLV+ru1Cryv1JOD+MoDxhAFcs8ZYOEJREb
+ mieciHdTQzw5Au0G9vUh8FkCJ+H9Vi/6Tp0npU2MdtWejPGNHVQ+XPih0QxskJT+t9SMjBzMUYK
+ 7FQlYAnJdD/m9Mbdave6lu3FR8fd8rf54dQAiZdHz1Ndzd8qyJpGLVlrs6pG0wp6uQ6TPAQY1tT
+ 6a75iF72I
+X-Received: by 2002:a17:906:9fcf:b0:c46:7ec3:fdfd with SMTP id
+ a640c23a62f3a-c49bdf2b6b9mr452366366b.14.1793271672907; 
+ Thu, 29 Oct 2026 04:01:12 -0700 (PDT)
+Received: from development2.visionsystems.local (mail.visionsystems.de.
+ [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-c46bd66c6dbsm716028666b.59.2026.10.29.04.01.11
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 29 Oct 2026 04:01:11 -0700 (PDT)
+From: Yegor Yefremov <yegorslists@googlemail.com>
+To: buildroot@buildroot.org
+Date: Thu, 29 Oct 2026 12:01:11 +0100
+Message-Id: <20261029110111.560829-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.34.1
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-References: <20261027144159.1097876-1-dario.binacchi@amarulasolutions.com>
- <20261027144159.1097876-2-dario.binacchi@amarulasolutions.com>
- <auDQxqNkGAR3F3JJ@windsurf>
-In-Reply-To: <auDQxqNkGAR3F3JJ@windsurf>
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Thu, 29 Oct 2026 10:58:09 +0100
-X-Gm-Features: AclHuK-HfR0QWx7uubgHG--nEtlBLHaXAk2VRnhkDCeGJZfpADLJnOk5lZV5U1E
-Message-ID: <CABGWkvq6-B8ETC79RY3pXJX2SY0-FB9o7cGdgQ6MkNrGeZLT0g@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Subject: Re: [Buildroot] [PATCH 2/2] package/drogon: fix build with LibreSSL
+Subject: [Buildroot] [PATCH] package/madplay: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -184,178 +166,444 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============5098866685342465148=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-10.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
-	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	SPF_HELO_PASS autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============5098866685342465148==
-Content-Type: multipart/alternative; boundary="00000000000041cef7065ef7b837"
+madplay has not seen a release since 0.15.2b in 2004, and the MAD
+project is no longer maintained upstream.
 
---00000000000041cef7065ef7b837
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+It now fails to build with musl toolchains, as its bundled getopt
+implementation uses old-style declarations that are rejected with the
+C23 default of recent compilers:
 
-Hi Thomas
+  getopt.c:400:21: error: too many arguments to function 'getenv'; expected 0, have 1
+  .../sysroot/usr/include/unistd.h:127:5: error: conflicting types for 'getopt'; have 'int(int,  char * const*, const char *)'
 
-On Tue, Oct 27, 2026 at 5:27=E2=80=AFPM Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
+Rather than carrying more patches for a dead package, remove it. mpg123
+is a maintained alternative to play MPEG audio from the command line.
 
-> On Tue, Oct 27, 2026 at 03:41:58PM +0100, Dario Binacchi wrote:
-> > The trantor library bundled in drogon 1.9.14 fails to build against
-> > LibreSSL, because it uses SSL_CTX_set_cert_cb(), which LibreSSL does
-> > not provide.
-> >
-> > Add the patch submitted upstream, which disables that call when
-> > building against LibreSSL. The patch description explains the details.
-> >
-> > Fixes:
-> >  -
-> https://autobuild.buildroot.org/results/f1c7a336f3fabb2d2a2793930573b69bc=
-47c3ee7
-> >  -
-> https://autobuild.buildroot.org/results/795c9ab125a029f0d90a267147cb6d6d8=
-0887688
-> >
-> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
->
-> I am not super comfortable applying this one, I'd really like to see
-> upstream's feedback before applying. Of course, if another Buildroot
-> maintainer is comfortable with what the patch is doing, don't hesitate
-> to apply.
->
+The libmad and libid3tag libraries are still used by other packages and
+are kept.
 
-The fix has now been merged upstream, unchanged:
-https://github.com/an-tao/trantor/commit/a77cc3651d5950f2f8aeceab80f74f3187=
-0f4017
+Fixes:
+https://autobuild.buildroot.org/results/89e78429da964c08c91f51d3df5a477746649cc7
 
-I sent a v2 that points to the upstream commit.
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ .checkpackageignore                           |   4 -
+ Config.in.legacy                              |   8 +
+ package/Config.in                             |   1 -
+ .../madplay/0001-switch-to-new-alsa-api.patch | 173 ------------------
+ .../0002-configure-ac-automake-foreign.patch  |  16 --
+ ...ure-ac-use-pkg-config-to-find-id3tag.patch |  23 ---
+ ...4-configure-ac-call-AM_MKINSTALLDIRS.patch |  23 ---
+ package/madplay/Config.in                     |  21 ---
+ package/madplay/madplay.hash                  |   4 -
+ package/madplay/madplay.mk                    |  34 ----
+ 10 files changed, 8 insertions(+), 299 deletions(-)
+ delete mode 100644 package/madplay/0001-switch-to-new-alsa-api.patch
+ delete mode 100644 package/madplay/0002-configure-ac-automake-foreign.patch
+ delete mode 100644 package/madplay/0003-configure-ac-use-pkg-config-to-find-id3tag.patch
+ delete mode 100644 package/madplay/0004-configure-ac-call-AM_MKINSTALLDIRS.patch
+ delete mode 100644 package/madplay/Config.in
+ delete mode 100644 package/madplay/madplay.hash
+ delete mode 100644 package/madplay/madplay.mk
 
-Thanks and regards,
-Dario
-
-
-> Best regards,
->
-> Thomas Petazzoni
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
->
-
-
---=20
-*Dario Binacchi*
-Senior Embedded Software Engineer
-M. +39 328 0625246
-dario.binacchi@amarulasolutions.com
-=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=
-=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95
-Amarula Solutions SRL
- Via Felice Cavallotti 25D, 41012 Carpi, MO, IT
-info@amarulasolutions.com
-www.amarulasolutions.com
-
---00000000000041cef7065ef7b837
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><div dir=3D"ltr">Hi Thomas</div><br><div class=3D"gmail_qu=
-ote gmail_quote_container"><div dir=3D"ltr" class=3D"gmail_attr">On Tue, Oc=
-t 27, 2026 at 5:27=E2=80=AFPM Thomas Petazzoni &lt;<a href=3D"mailto:thomas=
-.petazzoni@bootlin.com">thomas.petazzoni@bootlin.com</a>&gt; wrote:<br></di=
-v><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;borde=
-r-left:1px solid rgb(204,204,204);padding-left:1ex">On Tue, Oct 27, 2026 at=
- 03:41:58PM +0100, Dario Binacchi wrote:<br>
-&gt; The trantor library bundled in drogon 1.9.14 fails to build against<br=
->
-&gt; LibreSSL, because it uses SSL_CTX_set_cert_cb(), which LibreSSL does<b=
-r>
-&gt; not provide.<br>
-&gt; <br>
-&gt; Add the patch submitted upstream, which disables that call when<br>
-&gt; building against LibreSSL. The patch description explains the details.=
-<br>
-&gt; <br>
-&gt; Fixes:<br>
-&gt;=C2=A0 - <a href=3D"https://autobuild.buildroot.org/results/f1c7a336f3f=
-abb2d2a2793930573b69bc47c3ee7" rel=3D"noreferrer" target=3D"_blank">https:/=
-/autobuild.buildroot.org/results/f1c7a336f3fabb2d2a2793930573b69bc47c3ee7</=
-a><br>
-&gt;=C2=A0 - <a href=3D"https://autobuild.buildroot.org/results/795c9ab125a=
-029f0d90a267147cb6d6d80887688" rel=3D"noreferrer" target=3D"_blank">https:/=
-/autobuild.buildroot.org/results/795c9ab125a029f0d90a267147cb6d6d80887688</=
-a><br>
-&gt; <br>
-&gt; Signed-off-by: Dario Binacchi &lt;<a href=3D"mailto:dario.binacchi@ama=
-rulasolutions.com" target=3D"_blank">dario.binacchi@amarulasolutions.com</a=
->&gt;<br>
-<br>
-I am not super comfortable applying this one, I&#39;d really like to see<br=
->
-upstream&#39;s feedback before applying. Of course, if another Buildroot<br=
->
-maintainer is comfortable with what the patch is doing, don&#39;t hesitate<=
-br>
-to apply.<br></blockquote><div><br></div>The fix has now been merged upstre=
-am, unchanged:<br><a href=3D"https://github.com/an-tao/trantor/commit/a77cc=
-3651d5950f2f8aeceab80f74f31870f4017">https://github.com/an-tao/trantor/comm=
-it/a77cc3651d5950f2f8aeceab80f74f31870f4017</a><br><br>I sent a v2 that poi=
-nts to the upstream commit.<br><br>Thanks and regards,<br><div><span style=
-=3D"background-color:transparent">Dario</span>=C2=A0</div><div><br></div><b=
-lockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-le=
-ft:1px solid rgb(204,204,204);padding-left:1ex">
-<br>
-Best regards,<br>
-<br>
-Thomas Petazzoni<br>
--- <br>
-Thomas Petazzoni, co-owner and CEO, Bootlin<br>
-Embedded Linux and Kernel engineering and training<br>
-<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
-//bootlin.com</a><br>
-</blockquote></div><div><br clear=3D"all"></div><div><br></div><span class=
-=3D"gmail_signature_prefix">-- </span><br><div dir=3D"ltr" class=3D"gmail_s=
-ignature"><div dir=3D"ltr"><font color=3D"#888888"><font color=3D"#000000" =
-face=3D"Times New Roman"><span style=3D"font-size:14px"><b>Dario Binacchi</=
-b></span></font><br style=3D"color:rgb(0,0,0);font-family:&quot;Times New R=
-oman&quot;;font-size:medium"><span style=3D"color:rgb(0,0,0);font-family:&q=
-uot;Times New Roman&quot;;font-size:12px">Senior Embedded Software Engineer=
-<br></span></font><span style=3D"color:rgb(0,0,0);font-family:&quot;Times N=
-ew Roman&quot;;font-size:12px">M. +39 328 0625246</span><font color=3D"#888=
-888"><span style=3D"color:rgb(0,0,0);font-family:&quot;Times New Roman&quot=
-;;font-size:12px"><br><a href=3D"mailto:dario.binacchi@amarulasolutions.com=
-" style=3D"color:rgb(17,85,204)" target=3D"_blank">dario.binacchi@amarulaso=
-lutions.com</a></span><br style=3D"color:rgb(0,0,0);font-family:&quot;Times=
- New Roman&quot;;font-size:medium"><span style=3D"font-family:&quot;Times N=
-ew Roman&quot;;font-size:12px;color:rgb(241,194,50)">=E2=80=95=E2=80=95=E2=
-=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95=E2=80=
-=95=E2=80=95=E2=80=95=E2=80=95=E2=80=95</span><br style=3D"color:rgb(0,0,0)=
-;font-family:&quot;Times New Roman&quot;;font-size:medium"><span style=3D"c=
-olor:rgb(0,0,0);font-family:&quot;Times New Roman&quot;;font-size:12px"><sp=
-an style=3D"font-weight:700">Amarula Solutions SRL</span><br>=C2=A0Via Feli=
-ce Cavallotti 25D, 41012 Carpi, MO, IT<br><a href=3D"mailto:info@amarulasol=
-utions.com" style=3D"color:rgb(17,85,204)" target=3D"_blank">info@amarulaso=
-lutions.com</a><br><a href=3D"http://www.amarulasolutions.com/" style=3D"co=
-lor:rgb(17,85,204)" target=3D"_blank">www.amarulasolutions.com</a></span></=
-font></div></div></div>
-
---00000000000041cef7065ef7b837--
-
---===============5098866685342465148==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/.checkpackageignore b/.checkpackageignore
+index a8c1baacbd..0d0c47ee60 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -567,10 +567,6 @@ package/lvm2/0002-log-use-freopen-to-reopen-standard-streams.patch lib_patch.Ups
+ package/lzma/0001-Remove-static-from-LDFLAGS.patch lib_patch.Upstream
+ package/lzop/0001-allow-overriding-modification-time.patch lib_patch.Upstream
+ package/macchanger/0001-Fix-missing-include-for-caddr_t.patch lib_patch.Upstream
+-package/madplay/0001-switch-to-new-alsa-api.patch lib_patch.Sob lib_patch.Upstream
+-package/madplay/0002-configure-ac-automake-foreign.patch lib_patch.Upstream
+-package/madplay/0003-configure-ac-use-pkg-config-to-find-id3tag.patch lib_patch.Upstream
+-package/madplay/0004-configure-ac-call-AM_MKINSTALLDIRS.patch lib_patch.Upstream
+ package/makedumpfile/0002-Handle-__mips64.patch lib_patch.Upstream
+ package/mariadb/0001-add-extra-check-for-librt.patch lib_patch.Upstream
+ package/mariadb/S97mysqld Shellcheck lib_sysv.Indent lib_sysv.Variables
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 29c9b7f9e7..c24aa507c3 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,14 @@ endif
+ 
+ comment "Legacy options removed in 2026.11"
+ 
++config BR2_PACKAGE_MADPLAY
++	bool "madplay has been removed"
++	select BR2_LEGACY
++	help
++	  madplay has been removed, as it is no longer maintained
++	  upstream (last release in 2004) and fails to build with
++	  recent compilers. Consider using mpg123 instead.
++
+ config BR2_PACKAGE_MESA3D_OPENCL
+ 	bool "Mesa3D OpenCL support is now provided by RustiCL"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 796c4f1ad6..71e99cffe2 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -29,7 +29,6 @@ menu "Audio and video applications"
+ 	source "package/jack2/Config.in"
+ 	source "package/kodi/Config.in"
+ 	source "package/lame/Config.in"
+-	source "package/madplay/Config.in"
+ 	source "package/minimodem/Config.in"
+ 	source "package/miraclecast/Config.in"
+ 	source "package/mjpegtools/Config.in"
+diff --git a/package/madplay/0001-switch-to-new-alsa-api.patch b/package/madplay/0001-switch-to-new-alsa-api.patch
+deleted file mode 100644
+index 60d7bd3799..0000000000
+--- a/package/madplay/0001-switch-to-new-alsa-api.patch
++++ /dev/null
+@@ -1,173 +0,0 @@
+-Switch madplay to the new API. This is done thanks to a patch written
+-by Micha Nelissen <micha@neli.hopto.org> and available at
+-http://article.gmane.org/gmane.comp.audio.mad.devel/729.
+-
+---- madplay-0.15.2b/audio_alsa.c	2008-10-18 15:10:16.000000000 +0200
+-+++ madplay-0.15.2b/audio_alsa.c.new	2008-10-18 15:03:27.000000000 +0200
+-@@ -28,31 +28,30 @@
+-
+- #include <errno.h>
+-
+--#define ALSA_PCM_OLD_HW_PARAMS_API
+--#define ALSA_PCM_OLD_SW_PARAMS_API
+- #include <alsa/asoundlib.h>
+-
+- #include <mad.h>
+-
+- #include "audio.h"
+-
+--char *buf	= NULL;
+--int paused	= 0;
+-+#define BUFFER_TIME_MAX     500000
+-
+--int rate	= -1;
+--int channels	= -1;
+--int bitdepth	= -1;
+--int sample_size	= -1;
+--
+--int buffer_time		= 500000;
+--int period_time		= 100000;
+--char *defaultdev	= "plughw:0,0";
+-+unsigned char *buf  = NULL;
+-+int paused	    = 0;
+-+
+-+unsigned int rate           = 0;
+-+unsigned int channels	    = -1;
+-+unsigned int bitdepth	    = -1;
+-+unsigned int sample_size    = -1;
+-+
+-+unsigned int buffer_time;
+-+unsigned int period_time;
+-+char *defaultdev	    = "plughw:0,0";
+-
+- snd_pcm_hw_params_t *alsa_hwparams;
+- snd_pcm_sw_params_t *alsa_swparams;
+-
+--snd_pcm_sframes_t buffer_size;
+--snd_pcm_sframes_t period_size;
+-+snd_pcm_uframes_t buffer_size;
+-
+- snd_pcm_format_t  alsa_format = -1;
+- snd_pcm_access_t  alsa_access = SND_PCM_ACCESS_MMAP_INTERLEAVED;
+-@@ -66,14 +65,20 @@
+- 		 snd_pcm_hw_params_t *params,
+- 		 snd_pcm_access_t access)
+- {
+--	int err, dir;
+--	
+-+	int err;
+-+
+- 	/* choose all parameters */
+- 	err = snd_pcm_hw_params_any(handle,params);
+- 	if (err < 0) {
+- 		printf("Access type not available for playback: %s\n", snd_strerror(err));
+- 		return err;
+- 	}
+-+	/* set the access type */
+-+	err = snd_pcm_hw_params_set_access(handle, params, alsa_access);
+-+	if (err < 0) {
+-+		printf("Sample format not available for playback: %s\n", snd_strerror(err));
+-+		return err;
+-+	}
+- 	/* set the sample format */
+- 	err = snd_pcm_hw_params_set_format(handle, params, alsa_format);
+- 	if (err < 0) {
+-@@ -87,29 +92,38 @@
+- 		return err;
+- 	}
+- 	/* set the stream rate */
+--	err = snd_pcm_hw_params_set_rate_near(handle, params, rate, 0);
+-+	err = snd_pcm_hw_params_set_rate(handle, params, rate, 0);
+- 	if (err < 0) {
+- 		printf("Rate %iHz not available for playback: %s\n", rate, snd_strerror(err));
+- 		return err;
+- 	}
+--	if (err != rate) {
+--		printf("Rate doesn't match (requested %iHz, get %iHz)\n", rate, err);
+--		return -EINVAL;
+--	}
+-+	err = snd_pcm_hw_params_get_buffer_time_max(params, &buffer_time, NULL);
+-+        if (err < 0) {
+-+                printf("Unable to retrieve buffer time: %s\n", snd_strerror(err));
+-+                return err;
+-+        }
+-+        if (buffer_time > BUFFER_TIME_MAX)
+-+                buffer_time = BUFFER_TIME_MAX;
+- 	/* set buffer time */
+--	err = snd_pcm_hw_params_set_buffer_time_near(handle, params, buffer_time, &dir);
+-+	err = snd_pcm_hw_params_set_buffer_time_near(handle, params, &buffer_time, 0);
+- 	if (err < 0) {
+- 		printf("Unable to set buffer time %i for playback: %s\n", buffer_time, snd_strerror(err));
+- 		return err;
+- 	}
+--	buffer_size = snd_pcm_hw_params_get_buffer_size(params);
+-+        if (period_time * 4 > buffer_time)
+-+                period_time = buffer_time / 4;
+- 	/* set period time */
+--	err = snd_pcm_hw_params_set_period_time_near(handle, params, period_time, &dir);
+-+	err = snd_pcm_hw_params_set_period_time_near(handle, params, &period_time, NULL);
+- 	if (err < 0) {
+- 		printf("Unable to set period time %i for playback: %s\n", period_time, snd_strerror(err));
+- 		return err;
+- 	}
+--	period_size = snd_pcm_hw_params_get_period_size(params, &dir);
+-+        /* retrieve buffer size */
+-+	err = snd_pcm_hw_params_get_buffer_size(params, &buffer_size);
+-+        if (err < 0) {
+-+                printf("Unable to retrieve buffer size: %s\n", snd_strerror(err));
+-+                return err;
+-+        }
+- 	/* write the parameters to device */
+- 	err = snd_pcm_hw_params(handle, params);
+- 	if (err < 0) {
+-@@ -123,6 +137,7 @@
+- int set_swparams(snd_pcm_t *handle,
+- 		 snd_pcm_sw_params_t *params)
+- {
+-+        unsigned int start_threshold;
+- 	int err;
+-
+-         /* get current swparams */
+-@@ -136,13 +151,7 @@
+-         if (err < 0) {
+-                 printf("Unable to set start threshold mode for playback: %s\n", snd_strerror(err));
+-                 return err;
+--										        }
+--        /* allow transfer when at least period_size samples can be processed */
+--        err = snd_pcm_sw_params_set_avail_min(handle, params, period_size);
+--        if (err < 0) {
+--                printf("Unable to set avail min for playback: %s\n", snd_strerror(err));
+--                return err;
+--												        }
+-+	}
+-         /* align all transfers to 1 samples */
+-         err = snd_pcm_sw_params_set_xfer_align(handle, params, 1);
+-         if (err < 0) {
+-@@ -190,7 +199,7 @@
+- 	rate		= config->speed;
+-
+- 	if ( bitdepth == 0 )
+--		config->precision = bitdepth = 32;
+-+		config->precision = bitdepth = 16;
+-
+- 	switch (bitdepth)
+- 	{
+-@@ -241,7 +250,7 @@
+- 		return -1;
+- 	}
+-
+--	buf = malloc(buffer_size);
+-+	buf = malloc(buffer_size * sample_size);
+- 	if (buf == NULL) {
+- 		audio_error="unable to allocate output buffer table";
+- 		return -1;
+-@@ -279,7 +288,7 @@
+- int play(struct audio_play *play)
+- {
+- 	int err, len;
+--	char *ptr;
+-+	unsigned char *ptr;
+-
+- 	ptr = buf;
+- 	len = play->nsamples;
+-
+diff --git a/package/madplay/0002-configure-ac-automake-foreign.patch b/package/madplay/0002-configure-ac-automake-foreign.patch
+deleted file mode 100644
+index 38d1630987..0000000000
+--- a/package/madplay/0002-configure-ac-automake-foreign.patch
++++ /dev/null
+@@ -1,16 +0,0 @@
+-configure.ac: don't require GNU-specific files when running automake
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-
+-diff -durN madplay-0.15.2b-orig/configure.ac madplay-0.15.2b/configure.ac
+---- madplay-0.15.2b-orig/configure.ac	2019-02-14 21:34:01.507212449 +0100
+-+++ madplay-0.15.2b/configure.ac	2019-02-14 21:34:23.439336353 +0100
+-@@ -26,7 +26,7 @@
+- 
+- AC_CONFIG_SRCDIR([madplay.c])
+- 
+--AM_INIT_AUTOMAKE
+-+AM_INIT_AUTOMAKE([foreign])
+- 
+- AM_CONFIG_HEADER([config.h])
+- 
+diff --git a/package/madplay/0003-configure-ac-use-pkg-config-to-find-id3tag.patch b/package/madplay/0003-configure-ac-use-pkg-config-to-find-id3tag.patch
+deleted file mode 100644
+index 47645edd4c..0000000000
+--- a/package/madplay/0003-configure-ac-use-pkg-config-to-find-id3tag.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-configure.ac: use pkg-config to find id3tag
+-
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-
+-diff -durN madplay-0.15.2b-orig/configure.ac madplay-0.15.2b/configure.ac
+---- madplay-0.15.2b-orig/configure.ac	2019-02-14 21:34:01.507212449 +0100
+-+++ madplay-0.15.2b/configure.ac	2019-02-15 23:24:00.079876087 +0100
+-@@ -182,12 +182,13 @@
+- *** environment variable to specify its installed location, e.g. -L<dir>.])
+- ])
+- 
+--AC_CHECK_LIB(id3tag, id3_tag_parse, :, [
+-+PKG_CHECK_MODULES(ID3TAG, id3tag, [
+-+	CFLAGS="$CFLAGS $ID3TAG_CFLAGS" LIBS="$LIBS $ID3TAG_LIBS"], [
+- 	AC_MSG_ERROR([libid3tag was not found
+- *** You must first install libid3tag before you can build this package.
+- *** If libid3tag is already installed, you may need to use the LDFLAGS
+- *** environment variable to specify its installed location, e.g. -L<dir>.])
+--], [-lz])
+-+])
+- 
+- AC_FUNC_VPRINTF
+- AC_CHECK_FUNCS(madvise localeconv)
+diff --git a/package/madplay/0004-configure-ac-call-AM_MKINSTALLDIRS.patch b/package/madplay/0004-configure-ac-call-AM_MKINSTALLDIRS.patch
+deleted file mode 100644
+index 448139e0ba..0000000000
+--- a/package/madplay/0004-configure-ac-call-AM_MKINSTALLDIRS.patch
++++ /dev/null
+@@ -1,23 +0,0 @@
+-configure.ac: call AM_MKINSTALLDIRS to substitute @MKINSTALLDIRS@
+-
+-MKINSTALLDIRS is obsolete and doesn't get automatically called.
+-
+-Force call AM_MKINSTALLDIRS() macro to substitute every @MKINSTALLDIRS@
+-occurrence in *.in files.
+-
+-Signed-off-by: Giulio Benetti <giulio.benetti@micronovasrl.com>
+-
+-diff -urpN madplay-0.15.2b.orig/configure.ac madplay-0.15.2b/configure.ac
+---- madplay-0.15.2b.orig/configure.ac	2019-04-16 12:06:03.781018755 +0200
+-+++ madplay-0.15.2b/configure.ac	2019-04-16 12:07:48.399162610 +0200
+-@@ -146,6 +146,10 @@ ALL_LINGUAS="en es fr hr no"
+- AM_GNU_GETTEXT([use-libtool])
+- AM_GNU_GETTEXT_VERSION(0.14.1)
+- 
+-+dnl Substitute MKINSTALLDIRS
+-+
+-+AM_MKINSTALLDIRS()
+-+
+- dnl Checks for header files.
+- 
+- AC_HEADER_STDC
+diff --git a/package/madplay/Config.in b/package/madplay/Config.in
+deleted file mode 100644
+index a3373057a1..0000000000
+--- a/package/madplay/Config.in
++++ /dev/null
+@@ -1,21 +0,0 @@
+-config BR2_PACKAGE_MADPLAY
+-	bool "madplay"
+-	select BR2_PACKAGE_LIBMAD
+-	select BR2_PACKAGE_LIBID3TAG
+-	help
+-	  Command-line front-end to libmad, a high-quality MPEG audio
+-	  decoder.  It currently supports MPEG-1 and the MPEG-2
+-	  extension to lower sampling frequencies, as well as the de
+-	  facto MPEG 2.5 format. All three audio layers - Layer I,
+-	  Layer II, and Layer III (i.e. MP3) - are fully implemented.
+-
+-	  http://www.underbit.com/products/mad/
+-
+-if BR2_PACKAGE_MADPLAY
+-
+-config BR2_PACKAGE_MADPLAY_ALSA
+-	bool
+-	default y
+-	depends on BR2_PACKAGE_ALSA_LIB
+-
+-endif
+diff --git a/package/madplay/madplay.hash b/package/madplay/madplay.hash
+deleted file mode 100644
+index 227702976b..0000000000
+--- a/package/madplay/madplay.hash
++++ /dev/null
+@@ -1,4 +0,0 @@
+-# Locally computed:
+-sha256  5a79c7516ff7560dffc6a14399a389432bc619c905b13d3b73da22fa65acede0  madplay-0.15.2b.tar.gz
+-sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
+-sha256  915bfd70548f31d11f9b4ffb21f343d1196af96c79d6aaac5663ea46c39dd3a3  COPYRIGHT
+diff --git a/package/madplay/madplay.mk b/package/madplay/madplay.mk
+deleted file mode 100644
+index b9162dd2fd..0000000000
+--- a/package/madplay/madplay.mk
++++ /dev/null
+@@ -1,34 +0,0 @@
+-################################################################################
+-#
+-# madplay
+-#
+-################################################################################
+-
+-MADPLAY_VERSION = 0.15.2b
+-MADPLAY_SITE = http://downloads.sourceforge.net/project/mad/madplay/$(MADPLAY_VERSION)
+-MADPLAY_LICENSE = GPL-2.0+
+-MADPLAY_LICENSE_FILES = COPYING COPYRIGHT
+-MADPLAY_DEPENDENCIES = host-pkgconf libmad libid3tag $(TARGET_NLS_DEPENDENCIES)
+-
+-# Force autoreconf to be able to use a more recent libtool script, that
+-# is able to properly behave in the face of a missing C++ compiler.
+-# Also 0003-configure-ac-use-pkg-config-to-find-id3tag.patch
+-MADPLAY_AUTORECONF = YES
+-
+-# madplay uses libmad which has some assembly function that is not present in
+-# Thumb mode:
+-# Error: selected processor does not support `smull r8,r9,r2,r4' in Thumb mode
+-# so, we deactivate Thumb mode
+-ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
+-MADPLAY_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
+-endif
+-
+-# Check if ALSA is built, then we should configure after alsa-lib so
+-# ./configure can find alsa-lib.
+-ifeq ($(BR2_PACKAGE_MADPLAY_ALSA),y)
+-MADPLAY_CONF_OPTS += --with-alsa
+-MADPLAY_DEPENDENCIES += alsa-lib
+-MADPLAY_CONF_ENV += LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs alsa`"
+-endif
+-
+-$(eval $(autotools-package))
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5098866685342465148==--
