@@ -1,105 +1,105 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEC4A606A31A
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:18:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D19C606A31C
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:18:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=aV5es18w
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Kxh9kfLy
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C4B04607B6;
-	Fri, 30 Oct 2026 14:18:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1959740BD1;
+	Fri, 30 Oct 2026 14:18:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AqpUo-B_NyKT; Fri, 30 Oct 2026 14:18:05 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org B31BC60AF3
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369885;
-	b=fEVFyTKrQUW2r5ccg4UsG9hBGvDWW+I1Vi/I+6aLb4vJCQByLlProe83oKIpuICOwWhc
-	 Wj2lXCzk/PeZvC0RzW87U9PsfwNdvOGfygYIUQxkHfIZAATAbo2/nRQHpWkwoSQ4onffJ
-	 8JXhmxrAkgv/y7dCg5+yLR13+d5NFnR+LwC/JfeXe1I6+xuSvZKfgj4/Jp3EwqziqXTUy
-	 C7Tly0gdlAccPlm47YCoMg2oADBLvcJBY+QHmGSjxfsMKijpttXNXuUCRNOHVaL2oMPHL
-	 MIPSacc95/E29FJcYUyG54xfNgm/QIgfkU/q912BEzX6kAs5w3++VXu+nWx6cRPL4jQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7jdDsYPpE-LO; Fri, 30 Oct 2026 14:18:07 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 1767140BD0
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369887;
+	b=A3G3gfovE1p4s0eX0rL+J2Tho0AKGsbxYXye5+SDQEVUxE1BFR2cM6d+DA+zroPbfhDV
+	 Q9roCQs/4msd1hVqH75Aqmmyx3hqDo6/Fa34sUxGGE11hk36gGffURDFDY8La/ViA/1jF
+	 lOO4Vbk7oI+Rtqd0x8PZIDaCKKpIno0zO+z9J98gUyeK94r3TxTDCYiVu5el1LoHI3Tgg
+	 p/L3bSjIONtYbDxF7hgK/XSCX4O7htyhvbrctrVfJ9QzSVkkKL06u7p5XKGca7dSEN9w0
+	 255vTTtkPD+VhD9V1eVUG2UtEBnpB5/T0zyrbtYb2ZwnR9zxjzXWNHli4u3vuerjjMA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793369885;
+	c=relaxed/relaxed; t=1793369887;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
 	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=KPoH9WzWkAo55aC8W7zlWWNKL08MjAgs4qc/V0wSndw=;
-	b=FRDTFl5BoP87lPP49aN0bsMfUWxLQ6R/Xi3hIDjriDh4NuZs9jlLBPuIw0gAahm1mNVV
-	 A4Y9C7U6BssS42tzl8pCe006RSbEb4z8vB8/OIluHPsIe6zuCTBv3FXwKB9vcnenJHrrd
-	 mtyB0gnXzSGLJ9eux93+5MpSBgKX+qfACGGFowjJh+lOJBwPK+Tz+51cjsy2erg0WLnFv
-	 Pomb0K09ZT+C+Dy/8Vhl3aMEQOyI3PCHtNIpheaXnjKK5CSTT3YqLZqEHmNstfFNFdEg2
-	 JuPKAleEMqs4A7iFS5i9cabdBe92nQJV2uGPnF3/RMmG9NTEW0SUloLEqDO+6RfWdHw==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
+	 Sender;
+	bh=v8toHTAOVyuz5c88cbQ7vb/Qd/ZA1KfxF5e0D6eIok0=;
+	b=eA/HMEZLJ6g7g4K9o9KWLFp6YLQFukTZ2m3E4n9C4ldyfMMRmkOd3ivK6rrP+ZiAW3X3
+	 ZPm/jX1F58W9rpBW5sEppjt3XgpbVB2WySs8w7kXUQ46KAHYRbdSHb7C7ZXw/SdlWb96Y
+	 QGaqqBm2JN6R4uGG6KEnS1fLUJbH6BTnjxyObm2LGRmue0mxi4EzoJaseOwQeJMDUidbm
+	 q4nEO6WROWixH0E/KDCN3kwENNhRsfmTs8U0sJr0lxLbV33NTwcHNWpjRo4UeuXr72hLu
+	 6PhEUW9jC/1eW1FCMtenaeXcrYv/q6rAYnlCVVHig3op4Jl6xcvWtdcnF3P120B/SOA==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793369885;
-	bh=KPoH9WzWkAo55aC8W7zlWWNKL08MjAgs4qc/V0wSndw=;
+	s=default; t=1793369887;
+	bh=v8toHTAOVyuz5c88cbQ7vb/Qd/ZA1KfxF5e0D6eIok0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=aV5es18wQl0lKVwbRJopzK4uDOVFuUCPj1sJc21pqCgj1drt2LG10XEEv8bh1RL37
-	 wmFF6mf86xQHMnE4Ew4PWxFlkF8cddVw/mci9iGX8JMgqSwZaE7aiXQrzahLPmWUNW
-	 DZHEjhTGHnJGU7RkBC0CZpmfoTJi4nGxNkJtinJz7dq8QyktagMTDY6mk2m891AdcC
-	 i+h3EpOxXq7CQ31Qp4CSg3Pxin7q+Rf2j/zIKatBMU12y5bPsNZ0J8KlipzFgDAfEn
-	 CD34d6oPLdxwc0S/ixRTmrfSYhiUIvfhXeXYUXSzcbRiZdYp2X27ocMRroloi53cVS
-	 rMVKSzfP33GHQ==
+	b=Kxh9kfLy8SzryQla10ATH1vMcsyjRAwuY3UrkVzaXZXD1K7T5Mt/ll9CSlT21UliR
+	 yQn/n+hI/K30sEyIYlD3T2wP6h63nZ/6Yw1TZ1qGMy5z2xfYEl2Mn+fSzp/+8d7JO/
+	 BZh7mirrJPEApYmDX8cFFfEXGdrB3xUYvQ82dJ1y8pg8FSQ9h8H10te6cx5gFUlKbI
+	 k5nOr5yT0fy2/qARRoDRG8FVQ5BdbmGM5SGH0ckOUHkM9ut7mvSvW8y0F2Witb1jR+
+	 fjFFPcNXsK9okqHEsklPskYhcanJ6hxggQas5gccEDYCNgH5Nm/J2uYbRBtJCI2EKg
+	 7z5n+h4vaITpw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B31BC60AF3;
-	Fri, 30 Oct 2026 14:18:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4BAD3712
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1767140BD0;
+	Fri, 30 Oct 2026 14:18:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 549D3362
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3D73A812C6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3A91140530
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qHHLmAzSJ36r for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uLal55SxFq4I for <buildroot@buildroot.org>;
  Fri, 30 Oct 2026 14:18:03 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 6C3C4810B7
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 75D0B400D5
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793369883;
- b=W1V8UVkpuPvZTHvvgl8UId92oKwxylWHdb0EdFkoDn+tP2LNSDI7G3AAyZAejthord5y
- WdMF4kdMksRzuGgzVFptbNOdeLs+Mp85dVdr9NbGkTYxef7YlGmnrVE+Mfvgc0BBnb/P5
- HOSy1DIDrkQwIqCtgDaUwMIsCYAT4XiFEK743gxeoSTfxb8DpiOqx6O08yY5PM9/fvm3J
- m93g7+9aR43L+FO+af+x7eWI1jmsg/PF/AcaTbsq++Ro1YGgDXMimwK55l0jx1xTKNxHM
- svz4k8Q27QCxIKy5Ij187Le5TNZEF/4t+H6Tm9+p74l5OT8deaYsNX6ZtJzclTUJUiQ==
+ b=W9e2ngdIpTWKqjHcz014iE5HLwk2QK0z+n89UkNurOCN93ecvTZLwtDGjM0z9RawUXZd
+ h4P7du3orIcEjtB5GxM67A0I/26DMPNPJUTznn3wS1JWq0Te1WlSRuRBf8ZiPZH6kXsdN
+ EkJPycGVDLtLTBTwvgrNv8LRDkDVquUTAMinSJifzhnF+aLkuYoVT4XSBhrUKeLPvvKcm
+ EMgUKuIM2Ez8copIN4mRIwlgMgGTbLsVyKYdTId96sL46flYgBe+EqBTJJL3qNiBmK00f
+ /57CqzpJD4CtbMtVd5BDfuKp2duvsnCHTYLN01JwNt2cuALlW6CvNL/M+BBUCjxSTEw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1793369883;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=cKFqR3vZNNn/ZZpB4x5vhWDjCD8KhxIeZ6f2waPYsh8=;
- b=VqZlddJ2QqghhDHjTs0+sMBebM5MNYyAGnjbLls5paXW++R0tztxyS5XOL1W52ckh+Qr
- o/PSEsTalKd6m4y+RGTd5O0vYfXK8C50zuIIIaPzBXdmiNAfy8K34Pl+GF8pKpzA2I9dr
- hrZLU5aoY+vno6IzovCh4Zjir/V826QCJgdZdLYRqY3iCVVJyZBuM0PqBzFuEFyXpKEmQ
- Qs3PZSh7dUPLDKOLUyy0n9pfuDcKlXf0WybXrDn1yCTchFlLVIRddrrZ/q6RMYlp/uS8H
- 8BJuF3AYGdgqXhoNQBFfzEtL0GJ5yKg6jC4CN411n9bXXtSYt1w+0QsAB8EYnidup5w==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ bh=ds5i3mxZV5klMfFKiwa072zIuerR2FpQJIUS73f6+dM=;
+ b=bsVxjGOpHO6Py8vl+ExuKgM0ge62JySrXtxJNQW4xAwpZL37s+zTR8rnGnq5akRgDvS+
+ i9JNv7BhN2gFPrjJwZPZgrTw0S/4CB78Bz6/NUd/a5QOGevyBeouumkTQ75S9UXSHqwtU
+ y4Mu3JhL7N95Y5gtWuuAb+4WTZV2ghjgWpmz0Xckd5ts7+4CYjNi9L+OcYJ+rzfhwWvQg
+ IsNARskTaOEn0rxFXB2B2cRo/JmFlgGu8OKyh5yybGXvwzw7WvsiEopH9P+bEqUPbj45i
+ IDQHrW8LxAyQj56IJ8HXl0ASSLeRv/Z9NFN5XerF9wDsp/DOmTa86YmWs37WxYArjbA==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6C3C4810B7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 75D0B400D5
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7A5669D388; Fri, 30 Oct 2026 14:16:35 +0000 (UTC)
+ id 870599C645; Fri, 30 Oct 2026 14:16:35 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 29 Oct 2026 13:52:48 +0100
+Date: Thu, 29 Oct 2026 21:21:03 +0100
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: 8b238854d909c9cce32ef9671d968b03e323b55d
-X-Git-Newrev: 0f04a915e60a752f5aa33f0b59c78ab5d88a64b1
+X-Git-Oldrev: 0f04a915e60a752f5aa33f0b59c78ab5d88a64b1
+X-Git-Newrev: 3f5f2fc67282b18e658dd0dbe52eb3ecd8e62191
 X-Patchwork-Hint: ignore
-Message-Id: <20261030141635.7A5669D388@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] {linux,
- linux-headers}: bump 5.{10, 15}, 6.{1, 6, 12, 18} series
+Message-Id: <20261030141635.870599C645@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/sysprof: fix
+ build on 32-bit x86 with AVX2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,125 +109,124 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Titouan Christophe via buildroot <buildroot@buildroot.org>
-Reply-To: Titouan Christophe <titouan.christophe@mind.be>
+From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
+ <buildroot@buildroot.org>
+Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1234812962446740670=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_24_48,
+X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
-	autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_PASS autolearn=ham autolearn_force=no
+	version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0f04a915e60a752f5aa33f0b59c78ab5d88a64b1
+--===============1234812962446740670==
+Content-Type: text/plain
+
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3f5f2fc67282b18e658dd0dbe52eb3ecd8e62191
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-Update the latest kernel releases:
-    - 5.10.271 -> 5.10.272
-    - 5.15.222 -> 5.15.223
-    - 6.1.189 -> 6.1.190
-    - 6.6.158 -> 6.6.160
-    - 6.12.112 -> 6.12.114
-    - 6.18.55 -> 6.18.59
+The bundled CRoaring code enables its x64 specific code paths as soon
+as __AVX2__ (or __POPCNT__ and __SSE4_2__) is defined, which also
+happens on 32-bit x86 targets such as i686 with BR2_x86_haswell. This
+results in calls to 64-bit only intrinsics:
 
-Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+  roaring.h:260:18: error: implicit declaration of function '_mm_popcnt_u64'; did you mean '_mm_popcnt_u32'? [-Wimplicit-function-declaration]
+
+Backport the upstream patch that defines DISABLE_X64 when building
+for 32-bit x86, so that the portable implementation is used instead.
+
+This issue has been present since commit 0d57555407 ("package/sysprof:
+update to version 46.0"), which switched to the new sysprof code base
+bundling CRoaring in contrib/eggbitset. It therefore affects 2024.08
+and later.
+
+Fixes:
+https://autobuild.buildroot.org/results/f00d523aa13923c9eb73ae4e1b1f04f297512351
+
+Fixes: 0d57555407 ("package/sysprof: update to version 46.0")
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 145bbce3eac839e55183db7f09b07e5af2ecaf12)
+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- linux/before-6.17/linux.hash                 | 10 +++++-----
- linux/from-6.17/linux.hash                   |  2 +-
- package/linux-headers/{5.10.271 => 5.10.272} |  0
- package/linux-headers/{5.15.222 => 5.15.223} |  0
- package/linux-headers/{6.1.189 => 6.1.190}   |  0
- package/linux-headers/{6.12.112 => 6.12.114} |  0
- package/linux-headers/{6.18.55 => 6.18.59}   |  0
- package/linux-headers/{6.6.158 => 6.6.160}   |  0
- package/linux-headers/Config.in.host         | 12 ++++++------
- 9 files changed, 12 insertions(+), 12 deletions(-)
+ ...tset-disable-x64-code-paths-on-32-bit-x86.patch | 53 ++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
 
-diff --git a/linux/before-6.17/linux.hash b/linux/before-6.17/linux.hash
-index bd821b0800..8be46f25a9 100644
---- a/linux/before-6.17/linux.hash
-+++ b/linux/before-6.17/linux.hash
-@@ -1,10 +1,10 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  164dc9d1f6c93c61a15e1f071c48379b467f2b17c469cce7223471968208ed03  linux-6.12.112.tar.xz
--sha256  9eb33173b0e04e898d431587c78c47ee6e19e3fdf2ea007323de82af14bb2a4f  linux-6.6.158.tar.xz
--sha256  3ec834a2fefc9a08aac62f993525d7acd10163db6f01d63b4549cbff3f5c9439  linux-6.1.189.tar.xz
-+sha256  7a8589912bd7a8adb07fed074283652cf482a35facef8954554654f0154b4af3  linux-6.12.114.tar.xz
-+sha256  b24c40a9e2188695803358567edda51c4080176424a57dbefca45e5ac44ec225  linux-6.6.160.tar.xz
-+sha256  8aa50daca0412a3d0a61a87af3744f39773d40b3132635fb7bc9be652cdb7b0c  linux-6.1.190.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  4d6ec07679bd008524391cb67597106018646c6378b3953c23ec69b9259cdf84  linux-5.15.222.tar.xz
--sha256  a1b8dfbc0c533694d474caeb156cee47992781e6832ab108bd4266b48ccc252f  linux-5.10.271.tar.xz
-+sha256  c1faba89652ec4af585fb96131fdb70d99e891c2b368cbf6d9c1e5fb7f156c23  linux-5.15.223.tar.xz
-+sha256  e7e6e7db0fc009fa223ed10bb37be059042c463593f35f50b5c5cc4a70351614  linux-5.10.272.tar.xz
- # Locally computed
- sha256  bd5db7fe3b0475cce4fc72db7a7f7df1c22b970aabe5ebff6ddd48098973bdf2  linux-cip-5.10.254-cip72.tar.gz
- sha256  97d7d5139900c10ff7435779be4857dda531e7cf6abba52c12a5f39aae195411  linux-cip-5.10.254-cip72-rt32.tar.gz
-diff --git a/linux/from-6.17/linux.hash b/linux/from-6.17/linux.hash
-index 89bd681573..cb46fca50f 100644
---- a/linux/from-6.17/linux.hash
-+++ b/linux/from-6.17/linux.hash
-@@ -2,7 +2,7 @@
- sha256  614d95fafdcb5cce2b6620e7edc6afbb606bffd4655405586815d84687841ad7  linux-7.1.13.tar.xz
- 
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  f410638061a165c12f42ab871d2f3fcd525515359b5faeee80969cff84524df9  linux-6.18.55.tar.xz
-+sha256  53a55ac9863a5547e292b8e381d4e4c2240dd1127d5428a7c44dbc550be23963  linux-6.18.59.tar.xz
- 
- # Licenses hashes
- sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
-diff --git a/package/linux-headers/5.10.271 b/package/linux-headers/5.10.272
-similarity index 100%
-rename from package/linux-headers/5.10.271
-rename to package/linux-headers/5.10.272
-diff --git a/package/linux-headers/5.15.222 b/package/linux-headers/5.15.223
-similarity index 100%
-rename from package/linux-headers/5.15.222
-rename to package/linux-headers/5.15.223
-diff --git a/package/linux-headers/6.1.189 b/package/linux-headers/6.1.190
-similarity index 100%
-rename from package/linux-headers/6.1.189
-rename to package/linux-headers/6.1.190
-diff --git a/package/linux-headers/6.12.112 b/package/linux-headers/6.12.114
-similarity index 100%
-rename from package/linux-headers/6.12.112
-rename to package/linux-headers/6.12.114
-diff --git a/package/linux-headers/6.18.55 b/package/linux-headers/6.18.59
-similarity index 100%
-rename from package/linux-headers/6.18.55
-rename to package/linux-headers/6.18.59
-diff --git a/package/linux-headers/6.6.158 b/package/linux-headers/6.6.160
-similarity index 100%
-rename from package/linux-headers/6.6.158
-rename to package/linux-headers/6.6.160
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 8c39ef70be..06ef72b5b6 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -472,12 +472,12 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "5.10.271"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.222"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.189"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.158"	if BR2_KERNEL_HEADERS_6_6
--	default "6.12.112"	if BR2_KERNEL_HEADERS_6_12
--	default "6.18.55"	if BR2_KERNEL_HEADERS_6_18
-+	default "5.10.272"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.223"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.190"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.160"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.12.114"	if BR2_KERNEL_HEADERS_6_12
-+	default "6.18.59"	if BR2_KERNEL_HEADERS_6_18
- 	default "7.1.13"	if BR2_KERNEL_HEADERS_7_1
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+diff --git a/package/sysprof/0001-contrib-eggbitset-disable-x64-code-paths-on-32-bit-x86.patch b/package/sysprof/0001-contrib-eggbitset-disable-x64-code-paths-on-32-bit-x86.patch
+new file mode 100644
+index 0000000000..2b2c6cb6cb
+--- /dev/null
++++ b/package/sysprof/0001-contrib-eggbitset-disable-x64-code-paths-on-32-bit-x86.patch
+@@ -0,0 +1,53 @@
++From 22c10f0dbd3c357e96f83f430ebe05d24a25c536 Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Sat, 17 Oct 2026 22:47:15 +0200
++Subject: [PATCH] contrib/eggbitset: disable x64 code paths on 32-bit x86
++
++roaring.h enables USEAVX (and thus IS_X64) whenever __AVX2__ is defined,
++and USESSE4 whenever __POPCNT__ and __SSE4_2__ are defined.  This also
++happens on 32-bit x86 targets such as i686 built with -march=haswell,
++where 64-bit only intrinsics like _mm_popcnt_u64() and
++_mm256_extract_epi64() are not available, so the build fails with:
++
++  roaring.h:260:18: error: implicit declaration of function
++    '_mm_popcnt_u64'; did you mean '_mm_popcnt_u32'?
++    [-Wimplicit-function-declaration]
++  roaring.h:1011:23: error: implicit declaration of function
++    '_mm256_extract_epi64'; did you mean '_mm256_extract_epi8'?
++    [-Wimplicit-function-declaration]
++
++Define DISABLE_X64 from the build system when building for 32-bit x86 so
++that the portable implementation is used instead. This keeps the bundled
++CRoaring sources unmodified, making future updates a plain copy.
++DISABLE_X64 is only set for x86, as it also guards the NEON detection
++used on ARM.
++
++Upstream: https://gitlab.gnome.org/GNOME/sysprof/-/commit/22c10f0dbd3c357e96f83f430ebe05d24a25c536
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ contrib/eggbitset/meson.build | 9 +++++++++
++ 1 file changed, 9 insertions(+)
++
++diff --git a/contrib/eggbitset/meson.build b/contrib/eggbitset/meson.build
++index 82cd8a40..f2f81685 100644
++--- a/contrib/eggbitset/meson.build
+++++ b/contrib/eggbitset/meson.build
++@@ -6,9 +6,18 @@ libeggbitset_deps = [
++   gio_dep,
++ ]
++ 
+++libeggbitset_c_args = []
+++
+++# roaring.h enables its x64 code paths based on __AVX2__/__SSE4_2__ alone,
+++# but they rely on intrinsics only available on 64-bit x86.
+++if host_machine.cpu_family() == 'x86'
+++  libeggbitset_c_args += ['-DDISABLE_X64']
+++endif
+++
++ libeggbitset_static = static_library('eggbitset', libeggbitset_sources,
++   gnu_symbol_visibility: 'hidden',
++            dependencies: libeggbitset_deps,
+++                 c_args: libeggbitset_c_args,
++ )
++ 
++ libeggbitset_static_dep = declare_dependency(
+
+--===============1234812962446740670==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1234812962446740670==--
