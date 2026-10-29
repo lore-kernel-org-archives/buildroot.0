@@ -1,28 +1,28 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D93F3606A31A
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:06:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A369606A31A
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:06:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=ML1XJOdf
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=a2QkAwrW
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B4AEB811B9;
-	Fri, 30 Oct 2026 14:06:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1AA1360B10;
+	Fri, 30 Oct 2026 14:06:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jiuCJ6CgYHT9; Fri, 30 Oct 2026 14:06:23 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org A924C81180
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369183;
-	b=I3NB2ygZLgaWsnG6aR/2bP0n8kcjvKMry12tzOyxxpm1yx8O/8qS+LidvCHACGK7hrSm
-	 Z4sPtONAy3NeiIeuzYJHjz4DSP5hlyB6PwihWkd/vVqs6+cRskSpm48+yxAgDlG3a34l+
-	 8zyQc2RNBKX5pRFPddVgCn+Wq82T8VBtEPhn+6Ey0XrKwX+whFjPDABXymKb1H8iuTdIs
-	 z1Yz2u5LurbvPhPLtqXqZY4LHvl4G77aCKJ9tJz9jSiDKLt+s2Gd83VXqTnBW6KBrWqSY
-	 eH4Hxt9ed0ZVIxKIHBJPkKpanegz2ROmBXaHD2KTsEN1x0YrDbfdQqCVKc7IWrpeUbg==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1b8d3qjKU5a4; Fri, 30 Oct 2026 14:06:25 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 34E4D60ADC
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369185;
+	b=K9iP1t9W/kYZwW6NSid1pXQafg8W5maf3TffkstB5Dvsgu5nNEAhQLKSs4s3MizvqJ4R
+	 AboQTJiorT0p6JZWwi1I0m7zW+A9Ejvg+cXOWFtaQaocvYEBLafJmjP7x8SUf5MyycBm2
+	 8wtxYU22bdv21BsYBH34s84ymDDqaawm5SZT3xv84usXYGfD0KrkoGPy7ABtcMhlXHJw0
+	 418gty4hXxS/Ta7YCkQdqusImfrdyr4KOEsW1sP5CNJ2aaH6R+UUClWC/qWwdVxUr8u0S
+	 DGQimL3QFrN4sBLONbd8BhD7nLZvWEJjoV96iQPVhUjJRMH06xTdSGxo76mILe96U2g==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793369183;
+	c=relaxed/relaxed; t=1793369185;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=1OfuhQO4YSCuuf8ncMH01IZdeZIMBAi34n5XXvXfOpQ=;
-	b=AZNODNn5YIPonTo5s90xRvjsHFPB++1AObaRO936S2Wd2t+XWlkFxA1EptTvQKnm1egu
-	 dfN348iWPc+gV/u6c4PLKQEPvTyGfcrJUeDR/2tASamZ2ULzBJIeb44rq6jBh4DtTeF01
-	 pjXVlOlKOiPUCdJ/8SVz5bhgORa7lE99KfDS1bT4fIGB68uqQCUiDu5FBN/2MN2owU+L3
-	 Mnfro2u+meJ7QcUqkU7vDCe4Pk5SdytphCRsPHjPDcKNeweyHKlBt1vgu/eQvM36IrsxM
-	 ZlkG61K5IazuYslDPm0swQJUq0rBeE6YGMiV7E916yqWhgE3Af4grNGAxvYiEiKBICA==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	bh=UWMd1Gb0NsPiNUO/ndnTWHansNsAYtvjv65llPa0HGo=;
+	b=GL+U4W0c96mZsRSFN1QBX6q/M0sAt8MrV1oJ4CfZ6Q9ly0Ap+fMznma5+Lkn73EOeqYn
+	 mTKDi7eWPv4b/V79Qlj4bHqsyF4l7X7OxT7KBiAuUzDmT8NEiagLEjPBKQX3eFXvDm2WF
+	 1KwHMICIrsxmJbLebmvme3KOLjuKuGClW9Vsp/iiKzcQJQ6xOFb+nOCYmv7sD37GCMMcp
+	 5dVIDD9Fi6sZJP0iSfUUfSCTdofu7cG5ORI7zGznRUWCMlDZuBDeS72mj0KP/on275Ixo
+	 Uo7Rn8JyUVXHF3Hv6BgdcubrwI33DPIFA0piDJWN6IdM8yGoKWg+8kl1E38CEHHVJyQ==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793369183;
-	bh=1OfuhQO4YSCuuf8ncMH01IZdeZIMBAi34n5XXvXfOpQ=;
+	s=default; t=1793369185;
+	bh=UWMd1Gb0NsPiNUO/ndnTWHansNsAYtvjv65llPa0HGo=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ML1XJOdf33nwWBnF+TWTNDlPi4r73n9s4JrhQzJswj985f6GbJaX3gaV8Izxoekou
-	 yx2S7zEsFebv/Y/zqG5CYbyrm2W1mnFJTCw0LnuEE6j4i+lvj9W8Og+QykkCcrHjbg
-	 rJSee//vAWOMOyDcMfYzKvE2E09n8yq0xaAeeioWHabY2UA4j0R1npxwpGBHrekCiL
-	 ONCCpWKmr7W9jsTovaVE9eaVFWW+ajDey9J61x+8F1bTtESFcy/i4sQW4sRbwWyvg5
-	 yMyqOa6PTbFBCCh+//Be28tYDzAoCP/yyp/CgeKLFy4Gx23CvT8KS0jb82ILLydVe3
-	 BJ6lRnKlPixYw==
+	b=a2QkAwrW9wHZ7nAri4rCHTiVaj2Vb9rxQlrdErfR1NCNxd+WztHZXe461dYLiZUA3
+	 8MP+l2bICBSH9R76xBnnj1WdrGEJakmB0flKtNhpTMRmQi1cn126Mblwx3djnhCBS7
+	 bVJe5PZb7ZPCmw4HCzKQPC3DDG2DL4LLboYpN2gOPqAYKp8fdhWq1NoMG3BjCiV8Xx
+	 kjBsCrCfuGeSMPxPQz4vIv3qY8DyABfft/IoYfCSldRSdiUdsx7XXMcBOLtR2nAUyZ
+	 IXOUVg+A4rpsOYzT+o23cIv0awVRoCeialRRJoTRUfAYGeaKSq9+GQmcMjGAv8EuqT
+	 gyfGDj8qMxYeQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A924C81180;
-	Fri, 30 Oct 2026 14:06:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id AB0BED44
+	by smtp3.osuosl.org (Postfix) with ESMTP id 34E4D60ADC;
+	Fri, 30 Oct 2026 14:06:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id D0CD7362
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:05:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9058140B1F
+ by smtp3.osuosl.org (Postfix) with ESMTP id B6CCE60ADC
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:05:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RqM0fJ69ME9c for <buildroot@buildroot.org>;
- Fri, 30 Oct 2026 14:05:57 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 037BA40B18
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793369157;
- b=WYtvMs8auPKQKaxi9LE1iMl5WILS08BdKEYpE+r91mYWyc62KYUkzy1O63qQA5dpQVCP
- iGITZHTnfnfGWRg8nwqjEIUsuEn2jTxD3ECW9MT4T8HMp3HMLTdtW3uQkwNWFgiwKxSLA
- g8EYMrz+jsKiL4biV+oEAy/XIPOGao23lQaurnq07OpYE41By8h2T+1kY1rZ/QQscGaJ9
- ooP4zWhOlvQ+ubqbWSjhNuu8YPbHnwkEJ3pDpLmhInQ/pucPU7MSd6iu7IefORFg+8P1D
- fUvW6E/UgdM22hwq8NQ4sFBhXYqMsubFs/WYzrsaq0DOWwH+RO3JpZzszdr5Sw5Kn5Q==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KPw0vg_k8RIG for <buildroot@buildroot.org>;
+ Fri, 30 Oct 2026 14:05:58 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 12FA4607A0
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793369158;
+ b=oZRXecrXMDMGYsH91wkxB+jL+ymg3NiSvRt41Qng0/ktOgcvTwNEg4hbV6cLxhv4MVOO
+ +O/e1tZ77PhOYG2es8Jtoix936ahA2ByqRj5ntpqpGEjltMW3C5GZpIpGzdNnmCgYKXXZ
+ vlJbS5bbG4C8p1DRuE/JwVByVFOKkD4mS0kkCDdRSbrQW+nc1FWWRIoCGJg6ZCplXQ1gi
+ GVGo/FqmOGuEA+3hrc9DBZuTXLkKycMNZDC7O8Re0gKtQlHEGB7dGnKmQymURjrl1X2Qe
+ gXdGC3+rFdYiDkoVvbsE5PW12sNYfMyjIuJw1Ysj4ujATcfcrMCVThXwRCC55lVr0SA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793369157;
+ c=relaxed/relaxed; t=1793369158;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=z/TNqRETR6rbbJ3xQucNvzRJvAnwNXDnuBm8UdN5Xe0=;
- b=QUYlv0RULyA4ycDoQY51qUKnGpJJr+8he6XRiQxeZf2YnxuWShx18Td6A0Tlvw3oi6mB
- rfdZYMR+ehZtoqN1p+sMDoQs9E33iJjIt1+Cn4NWTzzOr8qoFU62XCDyoOpluTVOX7eCS
- oKvKOmEOmGiykknzX5AXgESVywlQAJN7Rd9yZUwcwykzyh6zkkmDWTuB6t6yOslPVr1Jc
- RNTaPTzN4WiuXzU64qMIbv4ewId/jcvbIe0sYL+fP+FvFAU3hloqSlXzOizfoQC5yWe0D
- eCTRFDvBC0857mYSxGK5LvlV1+oOIKyxdXD7jHltKUdwiierrlPvaZGupF11CHA/dEw==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ bh=DiD+ChZby4JTZZNyh2T4N83nGqjfRrO3o2bDBCaaUP8=;
+ b=kkViXFCd4mgqzc62kMnxe+PNA5m6PhdUrSHvlKz/5Fd8qdk/z4vBLFsvF7gCEYsrqN/c
+ sbqjP4ixPNwgDkU5QziQtRDWaQNsP5RRHpFXiIaqwwj8kwAXqgMm6UrQDgFdE59YHqexU
+ pUPkQL1G6TYtYEkpc7HnzhAjHt6lzlrNlBThL2X0o7MSdw9rsDbDemtFRhNDcxwEf6yMM
+ r3Wk3zVn02k7LnkrWGSWV10W30sHZuuVDAoE0SVsw1zEUe4wzrHwBsa9JNZ632vLJe+p0
+ zwceAPLwCdh1U9NyJBDPzOrQQwtoPXAQt/O96P9ETeH4ZqoZrZsJzz4va83JfpvlcRQ==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 037BA40B18
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:05:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 12FA4607A0
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:05:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1FA449D388; Fri, 30 Oct 2026 14:04:29 +0000 (UTC)
+ id 32ED09D38A; Fri, 30 Oct 2026 14:04:30 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 29 Oct 2026 21:19:53 +0100
+Date: Thu, 29 Oct 2026 21:19:54 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: add8a63fe0c3b3f72ac03066d8bedfb073b3141d
-X-Git-Newrev: f118b1d4459b60cca4ee5b5ccf18845ab37dc477
+X-Git-Oldrev: e9d4fc79827b7f054e749899d54b73bf719379e2
+X-Git-Newrev: 53c783f266c8f4f27251f96bdcf10b9b8979856d
 X-Patchwork-Hint: ignore
-Message-Id: <20261030140429.1FA449D388@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/ncftp: fix cross
- compilation detection
+Message-Id: <20261030140430.32ED09D38A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x]
+ utils/bump-stable-kernel-versions: fix newline in commit message
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,7 +114,7 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4284774765163680447=="
+Content-Type: multipart/mixed; boundary="===============3254281984896061133=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
@@ -124,162 +124,76 @@ X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============4284774765163680447==
+--===============3254281984896061133==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f118b1d4459b60cca4ee5b5ccf18845ab37dc477
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/53c783f266c8f4f27251f96bdcf10b9b8979856d
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-ncftp still ships a configure script generated with autoconf 2.13, which
-determines whether it is cross compiling by simply trying to run a
-trivial program built with $CC, instead of looking at --host/--build.
-That heuristic breaks when the build machine is able to execute the
-binaries produced by the cross compiler, which is typically the case
-when building for x86/x86-64 on an x86-64 machine:
+By default (xpg_echo disabled) bash's echo doesn't expand escapes,
+which results in a literal '\n' being inserted in the commit
+message. For example:
+Update the latest kernel releases to:\n - 6.18.53 -> 6.18.54
 
-  checking whether the C compiler (...) is a cross-compiler... no
+Commit da01b7271a ("utils/bump-stable-kernel-versions: update for
+split hash file") added the '\n' line, but at that point the variable
+was never printed.
 
-configure then takes the AC_TRY_RUN path for the remaining tests. Those
-tests link against the target libraries but are executed on the build
-machine, so they fail as soon as more than the bare C library is
-involved. The most visible victim is the curses detection, which links
-the test program against the target libncurses and then runs it:
+The bug became visible in
+fab50ed3b1 ("utils/bump-stable-kernel-versions: automatically commit
+result"), when echo "${updated_versions}" was introduced.
 
-  checking for curses library headers... checking for ncurses.h... yes
-  checking for curses.h... yes
-  checking for curses library... no
+Since the script already uses bash arrays and the list of updated
+versions fits an array well, use one. This allows us to easily print
+its content with actual newlines without storing them in a variable.
 
-With no curses library, ncftpbookmarks is silently dropped from the
-build and installation later fails with:
+The fixed string initially contained in 'updated_versions' is also
+moved to an echo call, so that 'updated_versions' really contains only
+the list of updated versions.
 
-  install: cannot stat '.../build/ncftp-3.3.0/bin/ncftpbookmarks': No such file or directory
-
-Other checks are mis-detected the same way, e.g. the 64-bit integral
-type checks, which end up breaking the build itself:
-
-  checking how to scan a 64-bit integral type... cannot scan
-  io_get.c:763:96: error: expected ')' before 'PRINTF_LONG_LONG'
-
-So add a patch making the generated configure script follow what
-autoconf has been doing since 2.50, and consider the build cross
-compilation as soon as --host is given and differs from --build,
-regardless of whether the produced binaries happen to be runnable.
-
-Regenerating configure instead is not an option: the macros in
-autoconf_local/aclocal.m4 rely on autoconf 2.13 internals (AC_LANG used
-as a value, AC_FD_CC, __oline__, ...) and upstream generates configure
-with a patched autoconf 2.13 (see autoconf_local/acgeneral-2.13.m4.patch
-and acspecific-2.13.m4.patch). A modern autoconf fails with:
-
-  configure.in:53: error: AC_LANG: unknown language:
-
-This regression was introduced by commit
-f8bc27111531e9607f79121414f61c0c2d5f83c0 ("package/ncftp: bump to
-version 3.2.9"). Before it, a pre-configure hook regenerated configure
-with autoconf precisely because the bundled script "doesn't detect
-cross-compilation correctly". With 3.2.9 that regeneration started to
-fail, so the hook was dropped, which brought the broken detection back.
-That commit left the host-autoconf dependency behind though, so drop it
-now.
-
-The issue is present since 2025.05, and in 2025.02.x since 2025.02.1,
-where the 3.2.9 bump was backported as commit
-6b0e4d82c31ee04e8a6abb48323252a7cd97c177.
-
-Fixes:
-https://autobuild.buildroot.org/results/ab25f98d7ab8b397e2aa4f87af9cf1d814f3d6cc/
-
-Fixes: f8bc27111531e9607f79121414f61c0c2d5f83c0 ("package/ncftp: bump to version 3.2.9")
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c65582cfd29a1c12457fb506014673bee727e9b8)
+Fixes: fab50ed3b1532037fa67582a6b47ac4084daaa88 ("utils/bump-stable-kernel-versions: automatically commit result")
+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+(cherry picked from commit 1e1d973a205771ffdeb03543bcba1c55f464bbb8)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- ...tect-cross-compilation-from-host-and-buil.patch | 60 ++++++++++++++++++++++
- package/ncftp/ncftp.mk                             |  1 -
- 2 files changed, 60 insertions(+), 1 deletion(-)
+ utils/bump-stable-kernel-versions | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/ncftp/0001-configure-detect-cross-compilation-from-host-and-buil.patch b/package/ncftp/0001-configure-detect-cross-compilation-from-host-and-buil.patch
-new file mode 100644
-index 0000000000..c3ecd61d1f
---- /dev/null
-+++ b/package/ncftp/0001-configure-detect-cross-compilation-from-host-and-buil.patch
-@@ -0,0 +1,60 @@
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Thu, 3 Sep 2026 10:00:00 +0200
-+Subject: [PATCH] configure: detect cross compilation from --host and --build
-+
-+ncftp still ships a configure script generated with autoconf 2.13, which
-+determines whether it is cross compiling by simply trying to run a
-+trivial program built with $CC. That heuristic breaks when the build
-+machine is able to execute the binaries produced by the cross compiler,
-+which is typically the case when building for x86/x86-64 on an x86-64
-+machine: configure then concludes it is not cross compiling and starts
-+using AC_TRY_RUN based tests.
-+
-+Those tests link against the target libraries but are executed on the
-+build machine, so they fail as soon as more than the bare C library is
-+involved. The most visible victim is the curses detection, which links
-+the test program against the target libncurses and then runs it:
-+
-+  checking for curses library headers... checking for ncurses.h... yes
-+  checking for curses.h... yes
-+  checking for curses library... no
-+
-+With no curses library, ncftpbookmarks is silently dropped from the
-+build and installation later fails with:
-+
-+  install: cannot stat '.../build/ncftp-3.3.0/bin/ncftpbookmarks': No such file or directory
-+
-+Follow what autoconf has been doing since 2.50 and consider the build
-+cross compilation as soon as --host is given and differs from --build,
-+regardless of whether the produced binaries happen to be runnable.
-+
-+Note: configure is not regenerated during the build, hence the generated
-+script is patched directly.
-+
-+Upstream: N/A, patching a generated file (upstream has neither a public
-+VCS nor a bug tracker)
-+
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ configure | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure b/configure
-+index d955e20..2311c73 100755
-+--- a/configure
-++++ b/configure
-+@@ -845,8 +845,13 @@ int main(void){return(0);}
-+ EOF
-+ if { (eval echo configure:847: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
-+   ac_cv_prog_cc_works=yes
-++  # If --host was given and differs from --build, we are cross compiling,
-++  # even when the build machine happens to be able to run the binaries
-++  # produced by the cross compiler.
-++  if test "$host" != NONE && test "$host" != "$build"; then
-++    ac_cv_prog_cc_cross=yes
-+   # If we can't run a trivial program, we are probably using a cross compiler.
-+-  if (./conftest; exit) 2>/dev/null; then
-++  elif (./conftest; exit) 2>/dev/null; then
-+     ac_cv_prog_cc_cross=no
-+   else
-+     ac_cv_prog_cc_cross=yes
-diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
-index c56fc86848..4075449c53 100644
---- a/package/ncftp/ncftp.mk
-+++ b/package/ncftp/ncftp.mk
-@@ -11,7 +11,6 @@ NCFTP_TARGET_BINS = ncftp
- NCFTP_LICENSE = ClArtistic
- NCFTP_LICENSE_FILES = doc/LICENSE.txt
+diff --git a/utils/bump-stable-kernel-versions b/utils/bump-stable-kernel-versions
+index af85d32852..b02b854d95 100755
+--- a/utils/bump-stable-kernel-versions
++++ b/utils/bump-stable-kernel-versions
+@@ -27,7 +27,7 @@ echo "${latest_version} -> ${latest_release_version}"
  
--NCFTP_DEPENDENCIES = host-autoconf
- NCFTP_CONF_OPTS = --disable-ccdv
+ updated_files_list=()
+ updated_releases_list=''
+-updated_versions='Update the latest kernel releases to:'
++updated_versions=()
  
- ifeq ($(BR2_PACKAGE_NCFTP_GET),y)
+ update_linux_hash() {
+     HASHFILE="$1"
+@@ -85,7 +85,7 @@ update_linux_hash() {
+                 fi
+ 
+                 updated_releases_list="${updated_releases_list} ${release_version}.x"
+-                updated_versions="${updated_versions}\n - ${old_version} -> ${new_version}"
++                updated_versions+=("${old_version} -> ${new_version}")
+             fi
+         else
+             # Different line: Reset hash list and just copy this line over as is.
+@@ -111,7 +111,8 @@ if [ -n "${updated_releases_list}" ]; then
+     git commit --verbose --edit --signoff --file=<( {
+         echo "{linux, linux-headers}: bump${updated_releases_list//.x /.x, } series"
+         echo
+-        echo "${updated_versions}"
++        echo 'Update the latest kernel releases to:'
++        printf ' - %s\n' "${updated_versions[@]}"
+     } )
+ else
+     echo '>>> Nothing happened.'
 
---===============4284774765163680447==
+--===============3254281984896061133==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -290,4 +204,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============4284774765163680447==--
+--===============3254281984896061133==--
