@@ -1,148 +1,104 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B9DE606A31A
-	for <buildroot@archiver.kernel.org>; Thu, 29 Oct 2026 17:33:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E369E606A31A
+	for <buildroot@archiver.kernel.org>; Thu, 29 Oct 2026 19:02:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=j3Ha1Zgg;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=aFlu5awS
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=FdQdNgcn
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D24C60710;
-	Thu, 29 Oct 2026 17:33:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B79CD8101D;
+	Thu, 29 Oct 2026 19:02:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pqh7AIvwfPiw; Thu, 29 Oct 2026 17:33:19 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org C912560A6F
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793295199;
-	b=QUsMjpBhTwmjBaYKNpHlu0OWS/FzOYEnPBjd5vOueuNNGBle5utfieR/LdUUmnZ0ZskJ
-	 hiuoPHEQ2akg78fQUJaj41gFzr5otjgkXuE9LjfOuXloKkd7xJmDSbmBuuje1Sd1zZGzA
-	 ukY+GnuAxUye+2TA48jDzU4YURKr1gysqCyvr7PSfmmZZKUV9wnosJYaW7Um+wP4CO6z4
-	 neTgW3Nt8N7XgbBblcL6aZNZ/PKLbJlUYnOEF9UnpJxNc3LZfxkGf062UNfX3wb0utPMo
-	 WlXx4Z6sbAjRPtCkS1n+q3uCVTcTficR67rox7WLU9B5fBwReh6wDfDzzR+YmeMIv4Q==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nFAQAQMJx6nC; Thu, 29 Oct 2026 19:02:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org D60298100F
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793300536;
+	b=gDcb5rO3TRJYpI3wm0UlxWgQIovuPWv0odtOfnyLfEQ3hjQM3PRrfEyzSYRze2m7Ld7T
+	 ib+y8zhFezPES2otQfgim+AZhHibjDiz3SBA8xt5179vjczLiFiV8J/tDlUzlguj0PsbL
+	 nQMMaxHRepMaG2Io0KpmOkcDEaV6E9n+yAIlj00MaORM3VUKo86EcY9Ksj0YrbF2Nk+mZ
+	 c8W9abyREkbWgHKGXakrYI+IFJHT3rHXCTFWUoAlFPtG2dhxgNfub7PBTwww1u6uKTeS+
+	 E1qS6vvHRYFUKlwxM4nLiZEqxyF4737Xu7i0gLfY6OfCOdb6ZfLuepyDzItwy4EsRCg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793295199;
+	c=relaxed/relaxed; t=1793300536;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Date:Message-ID:
-	 X-Mailer:MIME-Version:X-Spamd-Bar:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:Content-Type:
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=bTfgj6ChebMylOAuWgfWkr8sz/eiIW/KRfxFuQnK770=;
-	b=jLLD2m4GbPIZYhYqoI+oBezOHZCcA4elC4624kGCTPgeATgTES4csjKrWqo7bBA5/9Df
-	 1CuxS/dyBijMPGTtC4EdTaWx/ZO63fHVfo+3LhSUFtkbUDmDGv5i2hjvBtJk0sKiRkda9
-	 kWTVqdCHOKsChWJqgkjpV06e3Bms+KivPCWTbN9GXvYt4cPerZWJfzo3zFXNZiyNhgaxd
-	 i6Bh7hvRRvaCO+fFWgyXRBhLR5y8LlAXpApPLyMvup6Ya6Kan0bI5M9cyNkG7DHypQuqB
-	 jPTHzosFiERxVp0DyScD922v5R0UKutWmEzOrism0KJU1HtfDNLH2QXI4qRV0Dwf2Cg==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
-	dmarc=pass header.from=kuhls.net;
-	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=aFlu5awS;
+	bh=auUVcjkPby5D259p4Pfp1JuWDpqJOlc5SpHPsxe1WIg=;
+	b=PI275qT7IAfdO6tcoMfAK9ZBhOWUMh4hQdhtKDx5MKVWtXNJJw9+S98JSph0KkBTjE7h
+	 SI/ZDAtyPpVPiIrw5Njhlve+3vptOwhWwLryV2kT/SLgb3u+5vvg+7G5ju7xwgtvOz2gE
+	 UgkBVztqqaKN+C6yZ53OhyJ3Dx5otvorT8V7Je0yx0GNbFJt+jGkCneAvvedr+mkvVcGL
+	 g0crDIHdElMwx0yBsfHdGugitNWqYhSAtT8UuSV4swfL561w0ows9bi5Pj425C4OCjFef
+	 +gadpirY3fgN+nP8CFY2qo33v6vVM/W3u1oiEafX9GYGRO/vBMgZwlWq57fY2HR+VqQ==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793295199;
-	bh=bTfgj6ChebMylOAuWgfWkr8sz/eiIW/KRfxFuQnK770=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=j3Ha1ZggeGqfbgPATjESMIAI0GZZQgX5r2ZGlo28DZdPzd/4PpxtlHMo/UNibXLaH
-	 E0IYsl+YnYf54L1NcLP6p8MsFCBIgK/jS2YVQ95yg+hHnyGNf6dIB+GV4VAyL3HNFo
-	 4JeyG+00A467O4qiDLydM6JA6SfU3uLuvS2xhlMMCkWXn9NIRyzTsvfvuFv2VEmnab
-	 paJ7jYnzwBqybazsgu4jw3Zel6xeNWt6ZxMMkRuXL7E8nhKTIuO5zxzu4k6HfRoH2j
-	 fN5zJ2Bzy8sPrc+34uQEpNLWXNAh3TOVyM/J4ZlT/AtRt7TQ+S1nmp9VVagZW/Ft89
-	 LM3P/geB1goNg==
+	s=default; t=1793300535;
+	bh=auUVcjkPby5D259p4Pfp1JuWDpqJOlc5SpHPsxe1WIg=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=FdQdNgcnP3HIl2DMiVfF5AV+tcjfSbQ+TH2xGxDZIUmBu33eOCICG49kAkkU3sQe/
+	 sV6WiiYhfU3FvGYBGn2EGMCoNMCngDs+f5Ms9VtLfP2O8H4iOtL3m7IroFgmT5KmVw
+	 fvPeBOad+jQ/59uZlrIm0v5JqdKH4SC7bTxWnQBJUpqoG6eXmIBQ2vyM7GVoGnrM0S
+	 d68d3vymvIoMdWQ/OPixXb/eJYM+5ZO7c3NFw5GWXt4dlJvXjalPQQEYbD/dN7ckxX
+	 3nTQxNwU8IznCqbgn6qeWyp25IkHj+CYD4tv6EU8IdNWF0QGpq6qZkVFykj02Y9pOy
+	 lGgnMuD5tTvAg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C912560A6F;
-	Thu, 29 Oct 2026 17:33:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 92C54712
- for <buildroot@buildroot.org>; Thu, 29 Oct 2026 17:33:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D60298100F;
+	Thu, 29 Oct 2026 19:02:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 733931DE
+ for <buildroot@buildroot.org>; Thu, 29 Oct 2026 19:02:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 787A660A6F
- for <buildroot@buildroot.org>; Thu, 29 Oct 2026 17:33:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 650EC400C7
+ for <buildroot@buildroot.org>; Thu, 29 Oct 2026 19:02:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7ktRGU3CINyW for <buildroot@buildroot.org>;
- Thu, 29 Oct 2026 17:33:15 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 3CF0260710
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793295195;
- b=mxpMh71iur3xKUernbfEkbUz40+s4l/g192mlMBAZSEUjRAR3r6kStWFvX/eHgpcpnJX
- mDiJJ6TAG6TaG7TR6sx62va8hqAHw1nhWgC4c/s9BjMcs33zpHyx5EWF7Ho39B1YhVBTA
- W47GjUcwHsbTI7EIMPjHNdWpDexNNz6i2dWyUPd/TR1d+DDA/ClnioGYSQx51RHhZu1pq
- lissm1LMhReLZTwsMS8GqREhdlGctOzuRipEpTNm61+rKUBcHbVMXhfc4vPzYJsAnYIMV
- AlUyLPxxbqp3cpA9VbcDWZM0d1nlP67H3fKhr0oIufcXRikrjtDPdty3A9q/joAZUNQ==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id yc87vjblx4OU for <buildroot@buildroot.org>;
+ Thu, 29 Oct 2026 19:02:13 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 7531F40048
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793300533;
+ b=hkqozXxaWWbSwrbcODCIzS1UX/eAJSoFHW8L5/C9Sunfpj6SOX1I0blZFv0ekHs22KEK
+ +DOkqHzqIQ5fCy8oSrvaMiSUGYHxYb8QwNoBZ9xqih1w5GV3MuwRAu9+lSV5Tl0hXnGn8
+ tvb1t+VaXCqw3Pin8NI+0vYVOHSHhGG77iZf/TQRo1g71l3WHSZriTpZmozYGRFaC3pq0
+ dIRwPthBe1NNO95O/09EyyHJDqUZAdzjc8dNnYAsz3NEaGnX3yZt0zaeGsyYFL6RRJmbB
+ +00gGLp/oSljZ1bSM+B8Pe2EclfC7b7AZLDSJv1iFoqbQYQZ4jv7L3HP8pwNGrVIVYA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793295195;
- h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
- Subject:Date:Message-ID:X-Mailer:MIME-Version:
- Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=a6Rf57QYcEU1R44BYUuMwowxU7v7UxTJuO7qScfR7Ts=;
- b=ev0aCdav+L8bjjlk0QD+rF1YrbMhGIJ82GP0OO7uT0jcwkzk3bGjBmt8C/HrIMu0XOed
- dCHwYWD7DisnktVYfwz5rNB+BL7f+gZCktHWr2qMfF2T4gApcu60XvSUceh3mvkRkobll
- +R7cxDCciThQKIWBR+l9u3/oYvXTdNnrNeKisD+wIEFQDRuYSsV9qbjIDKsbhEFGTG6pW
- qGB/80S+ULbs/ACo+oxa1SVQArZWEaRGmMFYjoAucyVZlK6H/A1Ft4l+L1YIWNYzG7XXr
- II7qG6YMuKlAWyMHJD5iMWb27PcBe/+/WANuSGN2DREV5sQFBKUH9dl5uWYFczBcEkw==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
- dmarc=pass header.from=kuhls.net;
- dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=aFlu5awS; 
- arc=none smtp.remote-ip=85.13.140.57
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=aFlu5awS
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3CF0260710
- for <buildroot@buildroot.org>; Thu, 29 Oct 2026 17:33:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1793295190;
- bh=a6Rf57QYcEU1R44BYUuMwowxU7v7UxTJuO7qScfR7Ts=;
- h=From:To:Cc:Subject:Date:From;
- b=aFlu5awS4wycMM+kdJH7/EPmnMMfsfS2wklwY6MPM82A/ZOFeUmqSb7GjFjHkdf0P
- 995AFYh1QKIgoZhYUPLD6BpgtVg2I5ae9Vjolof0GTQSq3b5wsX4S6bvQIBQwySPP3
- tGI+wxt0RnCJfy5ljxJEwnvWjGEkx4LMFGmSQFCIlGwws/h0vIl1zgHrVV/FUNk7Oa
- +EJOLUxrgc1uzSUPETeMq6MZvAL+bORRBXOhBBMVVMsNIBWFaMosXUYf/YzN3aDHr8
- 3Frkz2h+beZAG0ENrRolcX2XguNC4kTGZLzgw0OTeZYC8rbqTV0D2McZWE8A9s47F8
- AUVxRMLIhanWw==
-X-KAS-Sym: v3:f51bdf72230551df:nQhJQDYoqOyB4dVoZj/uksNUesJgYlvvtiprTW4GsNZxj
- gc5g6zaKSFoIxBUUw3kQiSsMI55IhU0V27DLgEA5ovtUN4fsdhYm5Hv0FecR79TTJJ5BZK2VFJ3
- BQzrxk/bCn4wTZWf8KWXDQ2mcXgfSWuKSX+mvgv7Yggz8zA6nPsMxDQMaZwYlTKeX1gD1Qx0Ard
- b/Q0kSvaRManU+se9SP1Df0wPsCsVv4ddYAtQ7Mie7Fj1mh09EHn2YzhWzYGl8w6rRgDbRLsnv/
- 5CoriLgiSi4dTXEdypLj8rkIJSzRhtdh302aQXdbE2bvqIo1WScN6WRR2lrY1lJRXrImAMhw==:
- Xxj5rFrEyjvBBUKBKijgia0IUnLOQEKyf2QKRFU0JqIWtY0Kl+WrJKUo/KcaHaYaL1W4BQbm63+
- X5BtaVKQDfxNENPeRokYdQlfeqM4ZIF0WANbzZBmAdGy3aj4IL7nhlNxwyz+E0ZXGMChKoL7jMH
- XQv/JOA+VkJbX6b+wDzCDVI7HNQdX+G/Zblhsok5Cd4ATqWESg6q3lRJjKSepNni9maPJz1AOwH
- 0jQnJKM6aRo7HjGA6lV7ufrZClD/R5Tdrw0xUJGNEjabYUmyuv4UcyEqwyn1cZGEMxOnCW05u+v
- QspHFJn8kFxxBcYUhADAhnHd7haoRdMltWwHUJYicGsoaC5+JFYjjLf+dF2DHp0lsEMPkb2aCk/
- KMHmDTCjXD7BOdIWkS3c4VFOp7fpD931ZvDXme50emWTvwR6abMUAz3+HZeWEaQWJ9mWRD5NXZC
- L6EbDn5vz7UU2CIHGpD0PubwmgxRhwxRWL57bgFk/3WOyDGMHDcsqJKZbczXcnmhldo7ZS36NrR
- +oawW14eBEiNmrAoCp/BfMY1SNNGwnEZTisVv5kKV7HTWYAN61H/xtn4OWYaF9U0iStD0WqR317
- hV/3KaiFPM8m4lSwTJh1bHqlbjh67+f7D893p657VUNHiTdH6feY6fHMPCLJw8ve4ljhCZMo/1p
- Anx+P3N3+1y8x51uoZw==
-Received: from fli4l.lan.fli4l (p54a1ba05.dip0.t-ipconnect.de [84.161.186.5])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 02F3BA4C6B08;
- Thu, 29 Oct 2026 18:33:09 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:34570)
- by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xMTzx-000000001WY-3e0w;
- Thu, 29 Oct 2026 17:33:09 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ c=relaxed/relaxed; t=1793300533;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=tk2h4S4tmwEeuiQZkZA6h0bbbESsQLbQe88PsrvmJJc=;
+ b=cZMGK3nEUfuc9VvcBMjT73esMBVMCIgDytZLlgLPmgdNb2nVykfDXJ3Ljou1avKfrCb1
+ v8AKA48sd8ihPahMMmHSpvpPmfW6LX+aEH/B4OIEcLPnoQCppGt8SEjgMqkb+S194wxPM
+ +gZgSoCKz9dFh+3xQ/dy2Q9ZwMEo/2jazR/2eSu2buOypg3lwWo96I4Rq9WtMGpWQOEgp
+ R04T3cHJWC0ZiQnpfGjJnPvgglRmnYyj3vkc6XdsWIMTNH2nA94Sm0XBhaZTs9ZX6mHm6
+ qQtfSEqYn/VDOa584ClE+77QmSiOnqk63MxpklATMmou5UriRX+VXJebWXzwE+emk3Q==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7531F40048
+ for <buildroot@buildroot.org>; Thu, 29 Oct 2026 19:02:13 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id F149C9D2BD; Thu, 29 Oct 2026 19:00:45 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 29 Oct 2026 18:33:09 +0100
-Message-ID: <20261029173309.1785913-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
-X-Spamd-Bar: /
-Subject: [Buildroot] [PATCH 1/1] package/python3: fix non-NPTL build
+Date: Thu, 29 Oct 2026 19:57:11 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 727b904c13bbc2a9a7a530b1f8e47d7d180c2768
+X-Git-Newrev: bc0ff4011c15928e49a891f920d15538076474a8
+X-Patchwork-Hint: ignore
+Message-Id: <20261029190045.F149C9D2BD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dtui: bump to version 3.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -152,66 +108,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
 	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Upstream commit
-https://github.com/python/cpython/commit/1bcc0d165ae66f5d88db5c5bcab82908d9a49537
-first included in version 3.14.10 added the usage of
-__builtin_thread_pointer which is only available with NPTL and causes
-build error with linuxthreads:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/bc0ff4011c15928e49a891f920d15538076474a8
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-./Include/internal/mimalloc/mimalloc/prim.h: In function '_mi_prim_thread_id':
-./Include/internal/mimalloc/mimalloc/prim.h:312:21: error: implicit
- declaration of function '__builtin_thread_pointer'; did you mean
- '__builtin_extend_pointer'? [-Wimplicit-function-declaration]
+Changes since 3.0.0:
+- Toggle tree nodes with Enter
+- Bump chumsky dependency to 0.13
+- Regenerate stale Cargo.lock (3.1.1)
 
-Buildroot commit 3736eda341337a2ddd824111a5f065c84d44c584 bumped the
-package to 3.14.10.
+LICENSE is unchanged, so its hash stays the same.
 
-Upstream offers an user override
-https://github.com/python/cpython/blob/v3.14.10/Include/internal/mimalloc/mimalloc/prim.h#L270
-with the define MI_USE_BUILTIN_THREAD_POINTER. To fix the problem we
-disable MI_USE_BUILTIN_THREAD_POINTER when NPTL is not available.
-
-Fixes:
-https://autobuild.buildroot.net/results/ca6/ca64f93e85191779d0ef4daf44f1519ad75be6db/
-
-Fixes: 3736eda341337a2ddd824111a5f065c84d44c584
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Christopher Obbard <chris.obbard@oss.qualcomm.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python3/python3.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/dtui/dtui.hash | 2 +-
+ package/dtui/dtui.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index c24020af9b..a892cdad3b 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -186,6 +186,10 @@ ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_81426),y)
- PYTHON3_CFLAGS += -O0
- endif
+diff --git a/package/dtui/dtui.hash b/package/dtui/dtui.hash
+index e45f979934..b042812c73 100644
+--- a/package/dtui/dtui.hash
++++ b/package/dtui/dtui.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  57bcf3a8b6681be2695762da17c20d2efb7c121131138868ba7a4485fa08c335  dtui-3.0.0-cargo6.tar.gz
++sha256  cff3895576d31a321e82ca63ac45f8a7dc2ae902ae2b9a3efa68438cc5d8aab3  dtui-3.1.1-cargo6.tar.gz
+ sha256  b7b3cd0d92fc6638f0a7bd2306d715c747d040c6d851ed821a45c5538663e57a  LICENSE
+diff --git a/package/dtui/dtui.mk b/package/dtui/dtui.mk
+index fad5f818b4..86bb0fa213 100644
+--- a/package/dtui/dtui.mk
++++ b/package/dtui/dtui.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifeq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),)
-+PYTHON3_CFLAGS += -DMI_USE_BUILTIN_THREAD_POINTER=0
-+endif
-+
- PYTHON3_CONF_ENV += \
- 	CFLAGS="$(PYTHON3_CFLAGS)"
+-DTUI_VERSION = 3.0.0
++DTUI_VERSION = 3.1.1
+ DTUI_SITE = $(call github,Troels51,dtui,v$(DTUI_VERSION))
  
--- 
-2.47.3
-
+ DTUI_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
