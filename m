@@ -1,28 +1,28 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05983606A31A
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:19:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 883D5606A31A
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:19:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=qcxr51Ej
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=lZ4s1Mtz
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D83E460BBA;
-	Fri, 30 Oct 2026 14:19:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 61FCC40DAA;
+	Fri, 30 Oct 2026 14:19:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MCifjUN4kI97; Fri, 30 Oct 2026 14:19:49 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 1140F60C17
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369989;
-	b=enKwdU3nVIB9WN765GhxsEG1kf0Tn5FBITgPKs6EK8mlXG50IrJbioAj0J5U9URM56mQ
-	 h4OE4XYqmKega3o1Vto81z2g6gzL5/oYvqUryS364ZDv1cx9dmHEAMW0gu7+MH2kzj/bq
-	 ja9gW9r30HSwYYnCLAtOLCIRr0sRgGCW/ZeMtdHPvxn5fYnIIN03QxK3zK/0QbUuLsTPZ
-	 MbpwS5rRlZMAbD0ZJp5OOq4SBq1RZixnm7fqSohekD1B6F2laALk+L4CXlEP+Zn9vBrsl
-	 9FLM3lrEYPlrdK+HrF0qAuN+Sgx8dXmays72rmX8Po9Ka287uOdKnaPQOi8VM3j8YxQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WFGxwr9-Ie3B; Fri, 30 Oct 2026 14:19:50 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 7C57940D9A
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369990;
+	b=Tfwy0vbrwNM6tzElAmT1UgmX0RHGnCro8Klo67PINSUwK0rU3QLFiIG3DlHZIF3F+Bhc
+	 m6w/AhyPMAKLPFkgF5c91/1U8hoygt8aSbnQ78upWNjNrHNXiaw7sRrkfKfCAa5L/WS3b
+	 6KKbKLt0LkA6nt0G1xYFgVWumChtUjfolxGwYoPKtI/gF6O5DHPoM9/QJWnsYS73Xjuly
+	 lxNToN2A2ectzvjJjFoPLv65HzB0tUfynJZUtPB1X2pUMdLe5rWdJ5QoEXe5tTDZygHaI
+	 BrlUtiDTrHpj7/+ZlZyiQ8VFBUAeC46VMufoST97CSvJVSbMzKaz/okcK8V6xJL5jDg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793369989;
+	c=relaxed/relaxed; t=1793369990;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=p5OP0kmwoRzs4oRumEeg7xNZzsN0zBbLRa+v7iBdESE=;
-	b=LjRTZvFBZcS3417hFRY3CIxYtCwMNSGQOCaSjHS/hs1DJDUfA4aLV5Os8csrU0BDojBe
-	 KgNIntPX4IlXXLDxK7LNdYQAotncf4fVJxa0x6KbVZKaKIRLG8E5pqe7t96Z2hqRySAYG
-	 jyEGkJnjnuB1Y50/mCYaZf6LABRhmPN+waDQq5RRFVwfklerOji7YWHlNwCoNrSKnyWzN
-	 nRgltl/u/IVY6BHgKHvV66+jNSgIOC1cjosuWupYNLa/SK2m1ppsqYMM5/zNF4i1AgC1m
-	 38OxLfVozjRj3RC/5qCp1edQASmv8X0XT/NUbx64k8BJOIvVhHbOkC5cscFXJbC87sg==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	bh=gztOWf7zOhPqAnloTALfDTAYi23lV3KxlTH2kWPfTpQ=;
+	b=C4G3zUG0LsJoAk85s7P41Rxt2qh2E0Hxon7dbCnhpQNkcpYUlG3pHDgVGas93AUvNw1M
+	 GGy2jy4BxkIDS13LLqx8HyWiSNO2xEt0G1jt01fGeY0u1/dAgilgsAnZmX6O/LBMZqJjJ
+	 GG4R/kQf5zo6pCCA4uURURjt8p04Js2CQ4Ti8ZjT9HKSZye8rheo2yA4Ws8+Q8iY9vDRy
+	 lDZy4agYaYNr3gqA62l8KgP+0EWSyLr7hWh52OEjOlJcoU+kRykM2Za/wcN6qPlgm6qjX
+	 TQNpE1Fs64Gn44+T6E4ohf4FtoCR8V9yCrGkW8BILS7XPruFFBCScG0eS5vWq25SpiQ==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793369989;
-	bh=p5OP0kmwoRzs4oRumEeg7xNZzsN0zBbLRa+v7iBdESE=;
+	s=default; t=1793369990;
+	bh=gztOWf7zOhPqAnloTALfDTAYi23lV3KxlTH2kWPfTpQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=qcxr51Ejlohycm2I6bxpEBya1/nf+O4YNSZiqiD9OGyEAIHFcG+sRDFkY4jageyxo
-	 ylnRycXzt0zMMbdn07UlBp6IwkvCTQaV0UNKQsyrL5+Cjyhlgo8oHNjJ7gTBRnZkjL
-	 pzlsqp1jgDE0H/qQokLvv5VOA37/865JeoYOHfy/bp5dNMP6t2jMQRWwKKIwT2dp9u
-	 s/u9W4LNj6VPAY70k/oG95IvIcJCrbB2GYeoIsz8MtQA/umrHpBoIR6+Z+fI5PBETy
-	 EoAWhUCie06/gZPUG6Q/rGTc2+J2+cB6uWAmEVGLO/DX8pGeyZhZycdoYcKO03jV4u
-	 PQfckMyTc8jMA==
+	b=lZ4s1MtzVrtdKsAIUyYXAnxPPeosPdClZnQscppoZpN8/VOygGp/Sc6i+WVVaM/D5
+	 RjJtGKJ9EBsQjybdDL/N/8itz/UrI0jJIBqrwvzo2l01QPJyneLXpbmT0Dv3+6uY2b
+	 EEw4ODGmjXh5icIaEB3wGEyiuRuns8rN7nbGrJsE2+Gw09CaoZgm6kgIJRSNAAE5IQ
+	 wcT0f7iew0761/7Xg7mH2ULFrouBs1IYIrj4lYJvPoPAmuY6B084QgjUkYSGzxIMhL
+	 hdqoNFkObNeYY0muO/QtQLY5iRYyjxO5p5HVADEtY1+PnZwUAe5LGUoDCqNg55VjP/
+	 N3A6Sa95Q2sEg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1140F60C17;
-	Fri, 30 Oct 2026 14:19:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 933C4362
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7C57940D9A;
+	Fri, 30 Oct 2026 14:19:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9EC3C712
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 903704053E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 90A844053F
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bp-SQZUBnxnH for <buildroot@buildroot.org>;
- Fri, 30 Oct 2026 14:18:13 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org B6D4D400D5
+ id 6CeRPAy3_467 for <buildroot@buildroot.org>;
+ Fri, 30 Oct 2026 14:18:14 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org DEDE740243
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793369893;
- b=bng3NljNIYfOOhAWLSZ+pA+Du3UGuBy1LZ4Tzq3MHyMLGeC8hSpXltFYUBvfCA0z7C25
- cnaFBKeqmwDAd/KYeRycJo3fKY7WlphHqgOmBT1ARrx4W3FJexzgmcK4fhlw0/SmFWgs8
- Zc21NTyDe4B3Rk+8VfQLkr+Qxi22Z3FEUnOc7X3wIXCzBzd/sIIHzKfxVbxCWoxiV/pi/
- HZrLIQw9pnRNaFW4TULXxZHck0vUXTgkdclWUjPXq07nad624lsWnDJvp90UwSfz+8Icc
- 2/p8Wqwp+xo2n+mMW8/EvkpdqSyzNVM/LF6//arKgWOxVgpalOM5Mh1oZbVMorZbW1A==
+ b=Q4MnDt7DIw01VPCWODhETbZXKnha5l7LQHah/e1qpd+m5VBs9Y/pHKmK2OZwxMlZ31I8
+ yc6IDHEpn1JCeyxv6xlcOapuCOg6s3cv8RB8/ikTkrKT2a1guXWZylXY4NlZRBUcNtnsW
+ oLnxqdQzqqkRYoI51yVtsU+lto4qztbUoX/fFVVxmPp3COQzReyjDaH2vl+ivg3l9oAtH
+ cSUomR4BJ7b3zQ65Y5lK1JkwbWAZIiPifXstQIbmHR4h9+CW5G9kZU1aK4XcohuUcfI4J
+ lx8cVySB7dU9TVDY3jHu5IV8wxbLjDBi5DPvZI3pXHrGuIVfuaKbtZlz2jW5D5aEefw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1793369893;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=W4Dno5NI1e1CbncF3NB5WBoPnOorwG2tjM8GJaXCaL4=;
- b=GN9E47kJ7nzxHHpkNz6wvjRwATfoZK9C82ds1GKxaS2xP0GQchhxLwN79ju8LknlC6UV
- boKsp6I3UyWCPlAq0hIeFYVSKy3g6NV/PkU1aCrKwFAyN9runJ7jAUxfmaFyWrfDYInXJ
- XyMRZeF8p01JisMWyClXC6MCQp0YGuui9+2NDJDUy7QDabigHHOW+J6YLQS0WjEZPk9t5
- I5YPytQEW0hmt16SbqOGBMRJ7auaD4X0ehg5D7ZkcQ/kyyUytWat9yxDd02Ec2Di8sfok
- 1Pl9I4eI6COBzkKe23pjwJuytRauhMBk9YCHDmABiHyA7aOP4EfMHVg29Hj+eCOMW/Q==
+ bh=XReY5HDS3eLh59DlUQpbnfGiwhq0I5rlINvfjbngBeQ=;
+ b=DosNeK0cQaA+F1kMMX1Zb6kLOsCYOkSntkUn3smZNwZElpfBX2BBlWQ83rkTSwRx20zQ
+ kn36Q8IrzhG2lgc/M+xhEtipb7fQPsWzWAWc8tssGHjvzVIdGbwmZ2eKtKnSJaVgG1cdW
+ SVmQkVdS+0H+qpSD6fIm67ngK56bwYf4FiDT//hdl3+uEV+DazJ8Y9M/hIdy4zKLhiZ7M
+ xu403ps4UpJZl2r+bwz2Spm/72wE9HSagUGKJeYDBai+ry9lYuEJB0GFSRaeW3ucW80fr
+ fS8HkPTlK6fzTgOFH61hzcfZWeQziwHaWOJEjL/9342stw82IARtHFFDqAus+vUI54Q==
 ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B6D4D400D5
+ by smtp2.osuosl.org (Postfix) with ESMTP id DEDE740243
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C9F1D9D389; Fri, 30 Oct 2026 14:16:45 +0000 (UTC)
+ id F1EE59D389; Fri, 30 Oct 2026 14:16:45 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 29 Oct 2026 21:21:08 +0100
+Date: Thu, 29 Oct 2026 21:21:09 +0100
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: dbc9c7e2d46beefbd8bb0f70486fb9fa5deb8252
-X-Git-Newrev: f00633f3d9655f0fcfab5a70c55ac47d33a03423
+X-Git-Oldrev: 45d25787543a53360dcfd8ee19b4054942631c07
+X-Git-Newrev: fb3144a2a1ea5743f89a0cf741f5cb20058f645e
 X-Patchwork-Hint: ignore
-Message-Id: <20261030141645.C9F1D9D389@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/nghttp2: security
- bump version to 1.70.0
+Message-Id: <20261030141645.F1EE59D389@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/brotli: security
+ bump to version 1.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,69 +114,65 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0393756336825112253=="
+Content-Type: multipart/mixed; boundary="===============5882408320622861560=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_NONE autolearn=ham autolearn_force=no
+	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_PASS autolearn=ham autolearn_force=no
 	version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============0393756336825112253==
+--===============5882408320622861560==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f00633f3d9655f0fcfab5a70c55ac47d33a03423
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/fb3144a2a1ea5743f89a0cf741f5cb20058f645e
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-CVE-2026-58055 [1]: nghttp2's nghttpx proxy through 1.69.0 forwards an
-HTTP/1.1 Upgrade request that also carries a Content-Length header and
-body onto reusable keep-alive backend connections, re-adding the
-Upgrade and Connection headers while passing Content-Length
-verbatim. A backend that resolves the resulting ambiguous message in
-the attacker's favor enables HTTP request/response smuggling and
-cross-client response-queue poisoning.
+Fixes the following vulnerability:
 
-Upstream changelogs (no specific mentions of security):
-https://github.com/nghttp2/nghttp2/releases/tag/v1.70.0
-https://github.com/nghttp2/nghttp2/releases/tag/v1.69.0
+CVE-2026-111497: out-of-bounds write permits remote code execution
 
-[1] https://nvd.nist.gov/vuln/detail/cve-2026-58055
+https://github.com/advisories/GHSA-9v8h-qqgm-4m35
 
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 15c73cbb31768c24849333f2a793ac712e89bf26)
+https://github.com/google/brotli/releases/tag/v1.2.1
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit f6dd7e28aec579e318b1f63dbaa1fd719f71e84c)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/nghttp2/nghttp2.hash | 2 +-
- package/nghttp2/nghttp2.mk   | 2 +-
+ package/brotli/brotli.hash | 2 +-
+ package/brotli/brotli.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/nghttp2/nghttp2.hash b/package/nghttp2/nghttp2.hash
-index 6af7b3eecb..f77eb6a67a 100644
---- a/package/nghttp2/nghttp2.hash
-+++ b/package/nghttp2/nghttp2.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  6abd7ab0a7f1580d5914457cb3c85eb80455657ee5119206edbd7f848c14f0b2  nghttp2-1.68.1.tar.xz
-+sha256  e05cb1388eaca3830aded4ccf20044b6e1ac1a61411dcca11b0437c4285c8bc2  nghttp2-1.70.0.tar.xz
- sha256  6b94f3abc1aabd0c72a7c7d92a77f79dda7c8a0cb3df839a97890b4116a2de2a  COPYING
-diff --git a/package/nghttp2/nghttp2.mk b/package/nghttp2/nghttp2.mk
-index 50b94582e1..7d02877561 100644
---- a/package/nghttp2/nghttp2.mk
-+++ b/package/nghttp2/nghttp2.mk
+diff --git a/package/brotli/brotli.hash b/package/brotli/brotli.hash
+index 9ec1f79c7d..a777737338 100644
+--- a/package/brotli/brotli.hash
++++ b/package/brotli/brotli.hash
+@@ -1,5 +1,5 @@
+ # Locally generated:
+-sha512  f94542afd2ecd96cc41fd21a805a3da314281ae558c10650f3e6d9ca732b8425bba8fde312823f0a564c7de3993bdaab5b43378edab65ebb798cefb6fd702256  v1.2.0.tar.gz
++sha512  460591287d428c8b5a8a2766b5b424d14501fcda12c7118b8f3cc4bfae44b90ac75ca156557f07b6e22542612724d904533e5f70019be07dbbb604c46f03ab69  v1.2.1.tar.gz
+ 
+ # Hash for license files:
+ sha512  bae78184c2f50f86d8c727826d3982c469454c42b9af81f4ef007e39036434fa894cf5be3bf5fc65b7de2301f0a72d067a8186e303327db8a96bd14867e0a3a8  LICENSE
+diff --git a/package/brotli/brotli.mk b/package/brotli/brotli.mk
+index aded9cf17b..c040878c36 100644
+--- a/package/brotli/brotli.mk
++++ b/package/brotli/brotli.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--NGHTTP2_VERSION = 1.68.1
-+NGHTTP2_VERSION = 1.70.0
- NGHTTP2_SOURCE =  nghttp2-$(NGHTTP2_VERSION).tar.xz
- NGHTTP2_SITE = https://github.com/nghttp2/nghttp2/releases/download/v$(NGHTTP2_VERSION)
- NGHTTP2_LICENSE = MIT
+-BROTLI_VERSION = 1.2.0
++BROTLI_VERSION = 1.2.1
+ BROTLI_SOURCE = v$(BROTLI_VERSION).tar.gz
+ BROTLI_SITE = https://github.com/google/brotli/archive
+ BROTLI_LICENSE = MIT
 
---===============0393756336825112253==
+--===============5882408320622861560==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -187,4 +183,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0393756336825112253==--
+--===============5882408320622861560==--
