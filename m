@@ -1,28 +1,28 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13FFE606A31A
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96AC6606A31D
 	for <buildroot@archiver.kernel.org>; Thu, 29 Oct 2026 20:23:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Qcdng109
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=r5iP611P
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B22BD81021;
-	Thu, 29 Oct 2026 20:23:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6E46940A76;
+	Thu, 29 Oct 2026 20:23:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pgqJcU3BKfrl; Thu, 29 Oct 2026 20:23:26 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 13BC081004
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793305406;
-	b=oQWb60zdPUuSTG1HVb7KHhONiXNN3oLOApNiZ2xhS4JRFqfD4CH1L8KFHlE47T9TJ6iZ
-	 4afaV/cMEDKlEkRdBdfkrF6OggyNtx0GvejmOuIvUCS0bz663uk/lxRtZwuH0CzEgEcHm
-	 Xrc+couDGuKYFA86wawhvhs6cJby1fnJMWdmzy8Ng7Ct/kfr8JdBpg+L1q+qaq7TzkVad
-	 12oAtIOZUWMAZVwi81b9KEFqFO6Bo81HEve+IgOL9l6esZBBgmq7atA90paHA03Hi81bg
-	 TPt7Q1dI94z0amTR3y2S3cyv9Gve6RTY3nDoyiyDIEhbVtzSUI6YPIIFyIf6yJkN6Bg==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CP0MNnF8Xsri; Thu, 29 Oct 2026 20:23:27 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 775E640A68
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793305407;
+	b=V/UB1kw4Hg49DDYnnynvZigzwlb+TOn7l76hK2Ef5olCbCvVVVGbZUPTNezFcY3CX/ct
+	 QKXQX31FOlu6btXcS59bMMMnPqLCAwGtq6nK32NwngoozqWkINMf3uyoAA1dDUqNcohEO
+	 xX0JTXZo1qgUGFtS3rBZaDnI5tG9KTiVMYbONn1DzlYLQJP3prLV1eyKGtLiKH5eI3MI+
+	 6nRWmDiK2E4fCr9OeM0h73zYdLu/ccBcICghTnE0DX9vufO7zEo6sfHxNjtUgxbfE8WP6
+	 +3VvK64yXOEvAUDtgcr7gF08r93ZtI6Q17mX5wDuJXerKZtigBLi1/VCcxp9v4zkO8A==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793305406;
+	c=relaxed/relaxed; t=1793305407;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,75 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=LkhBZaIC9RxFqeYOdKoWs8MPmZs20BZvraqA6wEJBEI=;
-	b=S6s7rDwZKWXONO1XWKvWL7rSc7EIPTS0g18OpJnx4FjT7a3jnaS73itWo79MqPRv8xF2
-	 /KsdALW/Ci79DB+2ZN0xzwo8Jy0S9U1/oNmxYs1Nui2Xamaw34sIo25u/7xL8nOhm0hqj
-	 wGc1hn2gIVD8qQni8zBz9DjYUJUkFx+4XW9BvIAKuw4H2FzlUEJFu9pRZXm+XoA9pd5ka
-	 eLlIFuFX8mYMD77I40kDNxPPRz9WtzF4mwV4OZp3N0jq7ZJ4gUDx/v5/KjcV5iAfzK7tY
-	 M+bdKM+mxUtNKUzxFqf8eoNGVXv9Ba93z9MygHAI2jrduxhadKY9a063bC87vM1BCWw==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	bh=fwOFUkkRS8DT+VD4KqrH28oVlP5HcitJgksWENkkmZY=;
+	b=CqzYvmIRsglV+IjAPfuq/swnEMdIc8lhyIgBpylPZOE/DAz2k8qxLGNMXBj1MwJC/qIB
+	 g1H0XpIUGW0PGqNCGUm1rctLIqd8db2nHw+gqG+3M5GJIKfFB1WQtcZRw0usqAQ4zDy8v
+	 BgcWK2C6QmY+znLBVB7ezbBzsHybP2QsWXyvBMMlEKjG8u9Z3BOompNl7Ew88vhMNtime
+	 fDt65PZHOy1y3wLvPZEPe6CPF1QYwtERSGNaRBfUZx3+hTKC4C5Qc4VNlVj6SuuIVCU+N
+	 6baVaYWL8PD2glqAL8dNF1rbzVlQ+7Exn6riIO1aaOw7W2MwdE8kR20BnLDNcz5FiWQ==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793305406;
-	bh=LkhBZaIC9RxFqeYOdKoWs8MPmZs20BZvraqA6wEJBEI=;
+	s=default; t=1793305407;
+	bh=fwOFUkkRS8DT+VD4KqrH28oVlP5HcitJgksWENkkmZY=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Qcdng109bKkSTYZdJZfrSFTT0Fs4n/WG4F8ro5zN0ErdIRFCsUOQI5yLBiLMThbz/
-	 vCFjZtuRE0TBjyqTdYx0qsJivqbi2gLExNlKmrEsyZ75G4kKGduHiexMRwJObJQXlT
-	 Zhk+235SiNOx688grkZPUXpqWF/4H3yNlnei5mY1Yoy641Hy4TDM2SS1bBOTAp0vO1
-	 ITf0Go3SlaUInVitGvg1aJzuzDCWKgs1pGznH/+lz/aC2aicizpjB5gMFiZsp6Q4o8
-	 Nmu2ohp3XQnqbVvYSaLIu4AO5VK/glzkrykgQ8xhUsyW959oapcNsxPQAfBuxEkT6e
-	 1QL3p5SSU1fWg==
+	b=r5iP611P5EO3B3CQYiMeCytQWIb60lGZ7Ge/P2yO87KW9mn1c97+Uc8y4oJwJd912
+	 E21tsx1lN588Ne5wUwMwQ4syu9htGm8F7/iJi4EwBvbNbeUyRpA0CssRl8YdEA6xoh
+	 e/ElaJ01PIYuAYbx8Xfpkz7KtuhTYmgkuyZtRPGOxKvbredewF+DYEg122YUwCPy+I
+	 A64OAHTeLwotgzpGqdSHA15TS/6YDg9JmKMF1aOerBIplrJSYwbAHeGvojeVr7v+T6
+	 eK65mwpI/+wqMGkypMm1ghtJdpSGApL6qUFDYeSk/8bFbmbx0Wx5LFHTtPwR/jqQXr
+	 tOxKxC0rh0wRw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 13BC081004;
-	Thu, 29 Oct 2026 20:23:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 76ABD972
+	by smtp4.osuosl.org (Postfix) with ESMTP id 775E640A68;
+	Thu, 29 Oct 2026 20:23:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7C227D36
  for <buildroot@buildroot.org>; Thu, 29 Oct 2026 20:23:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5D0DF80DAB
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7A50280DAB
  for <buildroot@buildroot.org>; Thu, 29 Oct 2026 20:23:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WWwp7CWsXzNn for <buildroot@buildroot.org>;
+ id F1lhNupUdMLK for <buildroot@buildroot.org>;
  Thu, 29 Oct 2026 20:23:20 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 465E781004
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org A1F4C81011
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793305400;
- b=ceH/SBqt1iAMhM+unuk45cMWQqmOmJWkD0lOI3x7ofxD4SXrOPapK2U936sb2s7yxX11
- uFCTP7HqLu2u0yqOax+TdZJC6JURTKRmzNnAss5KMfUacQf+JyfHsW4dIx9rOCx4fBdUT
- 3x5dSRTBcfXn7wfkuLzl3jN0GJ9GNbMLDPhj3EcKUx8H46AvGwxH3+sTReC+pRyMLSAW5
- epeOXglDTL0pATEn+OsrI5dXiG1L8fU0Vd6KSpqyF0Z8P0zOQZcgDLLbGeiGFMD+lt0KD
- ffmMBbmfF7B7GGtKxGG435gpbjlTL13HhgE8kgux4zw6zdp+vyEKySYTDtgj9wmjvBA==
+ b=C22esPZKKjuy2LmTdEcXo7K3SWcvmgVG72FYLKX21r4RKV4A20xGg6m7bYp3nD+sM6+z
+ DCotIR5BGdWi6N2Cz3APyscXrWVzGJoFW2aFirFkQzpFKZMdOR6JjowsV9uy7i1FMEeBg
+ Wb8VCqpVEYczuklplf4BdTxAfXOQv8OBpqdTDa4y5p8J3eNlAuMgI5lABrPpcUw+jn/0W
+ oYrTMnI5385rx/erXdMTXLonqhUJwipFkKsXjC4wKnFtkpuzYZ5z8HpT7sRBwAKcZaFSi
+ 2ItQ5YC1rhTlZnU30PLE8GaHbBqRWLMDIzQ82kh4nU732S9upinX/D7Cfdzrrd2VILg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1793305400;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=AfhssDE/Ebkzsep7bQ4LMfXzNmzKjx3jv2mukdijddg=;
- b=XEdRUcLdjIrkyGfDGdnk+SD4gS5KmlhW4/UB+TSyeWiwtNygruh4FYWDBIZjrXu/bwZr
- mYyWlM9gTYBSBOx0kxpm9SsDHLL0KbIiTrP4IcbEEnEle7NUiDSQBHJrChO7bUL/hB2hJ
- MljN1mo28+sTvUWYpA7ndLr1I/bHpoiw0YOiJcouL+Ifq9mlWijDTgxm+enM+qTTfQS2m
- pzr6FJkQblQov4aFN9gsgOIHANn0tZaXKLfDALpDfSPbdUx96+kCyF5lddAv68yxyEEoc
- 5nhvPrp4jp+yrgQQqtc9s/kptp/Erh92TCBFUQhW3yeUKr6MP9deaku8B4xBzybQERw==
+ bh=PRMFWU74D7tc/XZ0Tdat/Bko3t+m+osGOyef2NbsagA=;
+ b=UTiB5/lj3S2uqblPEr+Slo08YB04IIcIrHlJmGBPbGu/xbZ62N4P8JljehcS6KMJy0F0
+ CJeprcap7S8IY/Zpqe6ovfhQudIzVL096AJzu86UvQqNaAWCrm1nXQfw35j38hlRcV6bJ
+ tSkHbop5fb1Sweq53MfUPGF7lpBpRidF5cJjmgAUSlIJ/t/Ju9k7VCAUJXomyc8rsZZJn
+ 2CseWHDcesHviQJybnvn1Yc6aqblFoHke2uO1Tuxw0y1+Y9ymGKYVN3IN+/Ak2/Sd9/P1
+ Dg5mmBq5Y4BE4HKy+ejREzztDZW05SDu1345Y/lkn3aGDlwZlXtN1FzQ9GS9G9Gt6kw==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 465E781004
+ by smtp1.osuosl.org (Postfix) with ESMTP id A1F4C81011
  for <buildroot@buildroot.org>; Thu, 29 Oct 2026 20:23:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B9AB29D2EE; Thu, 29 Oct 2026 20:21:52 +0000 (UTC)
+ id 2667A9D2EE; Thu, 29 Oct 2026 20:21:53 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 29 Oct 2026 20:26:16 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cf07cc26b0b4e3d858654dcd966dda3ae2bae580
-X-Git-Newrev: ea3448a675f622cf5511d2d2051d4a601d99f2bd
+X-Git-Oldrev: 98cfc2d6ffaab58a868e324e17a5220f67a69126
+X-Git-Newrev: 5def659d99f73a2e879eb612f087456d9c14f3f0
 X-Patchwork-Hint: ignore
-Message-Id: <20261029202152.B9AB29D2EE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi: bump to 22.0rc1-Piers
+Message-Id: <20261029202153.2667A9D2EE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-inputstream-*: mass version
+ bump to Piers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,81 +118,69 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
 	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ea3448a675f622cf5511d2d2051d4a601d99f2bd
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5def659d99f73a2e879eb612f087456d9c14f3f0
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-Removed patch from kodi-texturepacker which is included in this release.
-
-Removed patches 0002-0015 which are included in this release.
-
-Added patches 0002-0004 to fix build with ffmpeg 7.0.3.
-
-Added dependency to exiv2:
-https://github.com/xbmc/xbmc/commit/197a3e6d2e80878f5f3f827b3a9073118b59bd51
-
-Replaced dependency rapidjson with nlohmann-json:
-https://github.com/xbmc/xbmc/commit/d6d2cac380ea127c2a64a998a31622debe149d3b
-
-The mandatory dependency to libcdio was moved to optional optical drives
-support:
-https://github.com/xbmc/xbmc/commit/11289a597a88d809f39d3c23aa7eae6325a5263c
-
-Remove -DCMAKE_MODULE_PATH from host-kodi-texturepacker, which was used
-to find FindLzo2.cmake, after upstream commit
-https://github.com/xbmc/xbmc/commit/3eb5196bf79759682aa0eb20b0b4830c083f81a5
-added a version of FindLzo2.cmake specifically for the host build of
-texturepacker.
-
-Bumped versions of libdvd libraries following upstream commit:
-https://github.com/xbmc/xbmc/commit/8550a0079481de6de1a1e9eb55cc6aec822e3ffe
-
-Upstream commit
-https://github.com/xbmc/xbmc/commit/4719e45848e3aeda84f07247fcad03b0744d6833
-switched to the generation of Python bindings directly with SWIG and
-dropped the usage of Java/Groovy.
-
-Removed configure option PYTHON_EXECUTABLE due to upstream commit
-https://github.com/xbmc/xbmc/commit/45c6459b6ea6d2ecb6a1ae7d4056ca4fb96535cf
-
-Removed wayland-scanner options due to upstream commits
-https://github.com/xbmc/xbmc/commit/8611aef2a092c0027d7bb22a93721cc11bfcc76b
-https://github.com/xbmc/xbmc/commit/34e7dd3d166eaa8d0d57c4552129b05281e27142
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../kodi-jsonschemabuilder.mk                      |   2 +-
- ...TexturePacker-allow-build-with-giflib-6.x.patch |  71 ---
- package/kodi-texturepacker/kodi-texturepacker.mk   |   3 +-
- ...TexturePacker-allow-build-with-giflib-6.x.patch |  71 ---
- .../0002-VAAPI-fix-build-with-ffmpeg-7.1.5.patch   | 117 +++++
- ...EncoderFFmpeg-fix-build-with-ffmpeg-7.0.3.patch |  67 +++
- .../kodi/0003-RegExp-remove-unused-methods.patch   | 127 ------
- ...utStreamAddon-fix-build-with-ffmpeg-7.0.3.patch |  49 +++
- package/kodi/0004-Introduce-PCRE2-dependency.patch | 192 --------
- ...hreadImplLinux-uClibc-ng-provides-gettid.patch} |   0
- ...005-Migrate-PCRE-to-PCRE2-and-remove-PCRE.patch | 486 ---------------------
- .../0006-cmake-Set-ARCH-to-CPU-by-default.patch    |  41 --
- package/kodi/0007-Update-to-7.0.patch              | 338 --------------
- ...deprecated-use-of-FF_API_INTERLACED_FRAME.patch |  98 -----
- ...09-Remove-deprecated-use-of-avcodec_close.patch |  30 --
- ...ve-deprecated-use-av_stream_get_side_data.patch | 113 -----
- ...-Remove-CrystalHD-hw-acceleration-strings.patch |  47 --
- ...ideoPlayerignoredtsinwav-advanced-setting.patch |  51 ---
- ...0013-Use-new-audio-DTS-and-ATMOS-profiles.patch |  98 -----
- package/kodi/0014-Update-to-7.0.patch              |  47 --
- ...bject-Use-sysconf-_SC_PAGESIZE-to-retriev.patch |  42 --
- package/kodi/Config.in                             |   8 +-
- package/kodi/kodi.hash                             |  15 +-
- package/kodi/kodi.mk                               |  52 +--
- 24 files changed, 262 insertions(+), 1903 deletions(-)
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
+ package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 2 +-
+ package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash         | 2 +-
+ package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk           | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+index cfd0b62fe6..146457ef55 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  c4a458045bf4edfe51a1f9f03ac777c7101c9b00e0e72c76ac51a2b3f530779a  kodi-inputstream-adaptive-21.5.25-Omega.tar.gz
++sha256  4aa567ce2de1eafcac02e341a726ecd0fb91be81c8c06f9e503cb6d36f818eec  kodi-inputstream-adaptive-22.3.23-Piers.tar.gz
+ sha256  48632d57fbb6ab8f50cbf4deced5c91e733fa7ff292687c4816b77f28e483df9  LICENSE.md
+ sha256  02f864f3e07456785625968022ce811c5640301bfd2ae70963efea89d306790a  LICENSES/README.md
+ sha256  0b7f5dcb3d2c28ff78d999786028930e762df0baa2f52955782e378ec5b636a8  LICENSES/BSD-2-Clause-Views
+diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+index 8aab0c88e8..08db94c031 100644
+--- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
++++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.5.25-Omega
++KODI_INPUTSTREAM_ADAPTIVE_VERSION = 22.3.23-Piers
+ KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
+ KODI_INPUTSTREAM_ADAPTIVE_LICENSE = \
+ 	BSD-2-Clause-Views \
+diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
+index 497efef7cf..c19949135f 100644
+--- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
++++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  b7223a30d2774e4c7cbd6c4f8a266bf4d186d160590077be627bd0490d80645c  kodi-inputstream-rtmp-21.1.2-Omega.tar.gz
++sha256  4980297ade011d9c9f34c668702d5ae9528650bb4dbeff34cfa640d3a86f57ec  kodi-inputstream-rtmp-22.1.3-Piers.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+index 7aef9c815d..7b487564b8 100644
+--- a/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
++++ b/package/kodi-inputstream-rtmp/kodi-inputstream-rtmp.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_INPUTSTREAM_RTMP_VERSION = 21.1.2-Omega
++KODI_INPUTSTREAM_RTMP_VERSION = 22.1.3-Piers
+ KODI_INPUTSTREAM_RTMP_SITE = $(call github,xbmc,inputstream.rtmp,$(KODI_INPUTSTREAM_RTMP_VERSION))
+ KODI_INPUTSTREAM_RTMP_LICENSE = GPL-2.0+
+ KODI_INPUTSTREAM_RTMP_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
