@@ -1,28 +1,28 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AAB9606A31C
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:20:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7883B606A31C
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:20:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=FIvU2VVx
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=qz/SAUXm
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D6D9D81A34;
-	Fri, 30 Oct 2026 14:20:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5703860D90;
+	Fri, 30 Oct 2026 14:20:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 78NIr22mU-4o; Fri, 30 Oct 2026 14:20:53 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 0B3E9817FF
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793370053;
-	b=MPCYXkzPuQszWweqlNTbeIslIV3FzfH1b4j201E/3soApXn/aOsDYX1/4degIAhwHIyA
-	 gKmR6LF8DrDgxcRjaythoo2BE2cwMM1pl+abSbrJEhQQOaQ70pkQ5Z88l09JAcjMZ8AMv
-	 EbrB2neyXF4ze4Rkeg4Dmd95xaOn/Puov3XTqbfKMVSIoa1WwgirbnBLncDkh3BDnB1ll
-	 LkdY6mUywmlDQ2j0USZhTtlzSNYYfDGz17HbCYtgPvltChHXIsk7Stneos84VuGEu8BjH
-	 NgJEttLcvl3rSoAqQXIBdBHqWyxDrWcmrBeesPsj14jPpITSa1j8+8fAUvYl3A6i7GA==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FrLaCqDhHjHQ; Fri, 30 Oct 2026 14:20:54 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 8096260DBF
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793370054;
+	b=CvbKYZl+FmjANeanpJwLc57WoLsxyxzWTz6n7mjy/h9oJR/8qu62tFo0ppub59WMLZ70
+	 iX40E69jF4F0KTWBLwRl/k0ypEHKnFRqp/xPDi2lCqg1h6fBjHzRPZzHDCeL0hnSbOjhq
+	 fZDMecGJGy6VYWDq/spZaakVRwn+3pcOAzsMXdcfNvlyNitRe6W3XLmoZODI5kU1fHeDg
+	 0xZi9KQhsXM37gbqpv3t4E0yVQYDVNKbANP1Sbk1ujHdB07eCyvKQVcoByWkrR3yAgzJw
+	 R89VNhM9UVD/CDlgEP149VweQgQ+e4uBrbsvuMDkLx99zFweKW2DePACl+81QqheZ7g==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793370053;
+	c=relaxed/relaxed; t=1793370054;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=fPIjUl+rEGf23UQMugkAApYuQiDyS6+uZv2XW855Poc=;
-	b=R5JvbJNogiINp0DzEc9Grm3taHqWfvpGnNSpIhg96ppNgccIxRab9NlLam3E7yHS4Sn9
-	 A7qv4/MjBqEK5dstUnV1ECNFmnr4uH4fzVxwocSX6YI36QBfjtVXmOW0jZEMkPkaC++Es
-	 2K6qYgFe5vfYuWZvx2FmawIB1MFWnhUdHqfmE4oMFhY2CPD4jyJQ+Hn5q4Mu3IvN9ZFaj
-	 Rp+7IWpMCpq5R1ysiDi4DOWieQxEc5Oc/9NJs0Agg0oD4GcAegUJXITNhmk5Xw8EJeUeH
-	 rhYJWF1eUsL+1EdKKVdAl7IskjDdTaMwO+shkd0t8KpCZ/s6MFSP6yQjCYSk0yn2Ypw==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	bh=kH/SwPFlMzU8tr0P9ocGR4h1wZHbI4b0H/B3lygSedk=;
+	b=aLGb29yM4AvzBDL+F0bA7Dtzrp0iaK3b0wIvZqy+crPeN+6aAo8bvATF+zfP3eO7cCkb
+	 YiLghmKcA0SlD9GQOFK/KISkMXILl8/X4U9WKgKEerB3d97bYs2h0VemNkwmVTayHJ1rf
+	 6UZ9STFO1wvjKKQRvWfUzlBYemkcgEccllHe02r5Y1qdqjaOPlMEdzuuXP7st+0c+NIl6
+	 2FwIz1T4ZYd94BOSYH33SDMT/F0cBi4gsHGhA0GkBfkZ5Z4sIzC5oSLZ0zoQX3B/FGNbT
+	 lFbSuXhdA5Brs1kP7LCe+PAFcOBnaNsd3mrqdjX3p3D9e77TEJM7jrD8WuoQYaeWv7A==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793370053;
-	bh=fPIjUl+rEGf23UQMugkAApYuQiDyS6+uZv2XW855Poc=;
+	s=default; t=1793370054;
+	bh=kH/SwPFlMzU8tr0P9ocGR4h1wZHbI4b0H/B3lygSedk=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=FIvU2VVxwgvIGAhizTB7+OfD+fa6IsEdj3u6oyLVCclKrOVF1V740zUvMfpzzbNJY
-	 Txvig/XHbO5k4FJvEWZg62vehDD3PIWfwPQt+AAXnoqqAj6XL5h7OiTCbjFeR84dAB
-	 jWgDCjNSwKYXYMxXzXnb7aBtg1XNezN12+XGe/nt4SQbyjqlL7Bv/dhzhXbZlanc35
-	 ocOBZz1oPZGSa3d2zJNWfKgADr1AmxGjGzNqeHtev1i4S0FiY/yXE79h2e53pmxeLr
-	 1rAceM1pzbt+3gRsG3hbP3d9rlrHyjumaj6l+46mWukTLK8i//9+H2aUd2Lk6AVeYZ
-	 5j5nuPCm1Q4Uw==
+	b=qz/SAUXmGneqTZXbuW04skUc4JGF6QwqrMTw/q0eC88ka3ivPhmR/RVvgO3sq/ukm
+	 fCmieYSlSrN0wse0mKw/m2+MGOYbJjhnJuZMPXYTrom2vli2SD7F8KhifFHnAWsfYL
+	 IZhrOndR4gIbSg1kWd0t9DQYV9pcfduKGk/tcfcRAV+kfSRhyfCFzAWxnUe9X4KEnl
+	 s8DLeX3z941xhv5SmeGZbTYNEqn0t+uQHfmD7EnqE8dzNAUpyaJFpe1t+rybRIOUtR
+	 a1G3RauoTJJSe1sU27OzrPVTGx2mDfmv74cW676PDNKVFkWYdcNvslaxXX5hbE7vxn
+	 Pja6otUaGQn7g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0B3E9817FF;
-	Fri, 30 Oct 2026 14:20:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id D742A712
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8096260DBF;
+	Fri, 30 Oct 2026 14:20:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id F2C33D43
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BCFB160AEC
+ by smtp3.osuosl.org (Postfix) with ESMTP id E4D2B60AEC
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8F8X-Gmf4s7i for <buildroot@buildroot.org>;
+ id Y863jS9I6GKQ for <buildroot@buildroot.org>;
  Fri, 30 Oct 2026 14:18:17 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 0728F60B96
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 3797760B72
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793369897;
- b=axH/KimHhn3ZEKgY9S6oc0fI5a4HJfDs1hcEKIyMy+uAynfiEMRyTr8M3fD71RG4hyOJ
- D++tLvrWquweIz43PnTKCPEuPufY32p9h7I6bAkuGsYC4GF7PIUdf7sVBjMtASeIOuA43
- r32z122Gmgh3keZOsoyzuAhkaUPgwem4v0jHY2Syx0jCHfbMmFx63drz0fQnZMp+q9oG6
- RwR076FcB5n50IklfqZCSU6xm6u7nqpTQizam0+I0WNHSYduqWwgGPU3NEfuQOfGh7866
- 3j7sjlcTAu+siCwOptk8M6UI8FWFKzLYxzd/nMKaFlPQpeaoQake9uT1AbrgA5viW4Q==
+ b=H/7co7qgvMYG1/IB0gtw6BQzGeOkRmFvSsE1Cg/uz7uInyN+cXxKxwUY9j2Gl6lR9Xcr
+ 2x2d+F6u7G2i9VdVbqdXVfNOVz6QZfNvua+y1A6++tVEDiF3Js8tKrS8o6s+8OKSn+zJA
+ mklEqZDTRacBdp0CkEpTcqPVZq3yyCr8dNs6oxaNHDx9zztxATfgQkvlq0nuoOluO0v2I
+ AT3g/NqTzp/jQfvqEP8ANiYQlMayNFzDANTG/ZV1DKJt8g21QPpom8ZlWzcJ0rpsk9YCq
+ 2B32RSYDP3lrm2ECINI2wNLQ7n2RtXk2OTz3nfXJ96tgU/Ryou90XE7wdrNXBkGyjeA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1793369897;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=wbYsxp0gfUbw9Ode4vesSytkxnGahD++y6ByK9IksI0=;
- b=S5Nd1kN5Rso0rd9/5qZvHfow3F/p7y8HX24GwTPh/SJeSHz5Jhdt+dDUB/750AYiwk12
- mTxtZBHuNLnb4DfDwo6Ocw9cYfkDBez/c2WkeZxeyPTqC7JjSBu/sSOydH4OTTWDwKs4o
- 4x8SfHGFSWd6mfymSF8X1JZKBgZGl6PeZRJCkYnjbOQPl//CxP8vpUAagt0Yhu4EUPPoI
- qjR2yd5erDrTmiF31EDByYnPRx9W+0Jvzqw7p4G1pT8gPt4RbHlUpAT2gROx5kVEu9f2o
- uZS8Puw2Lb6hRWpg4J48JP64qKOg+tgaZLyyQ57EzBBisvvWr1XsdtLqxrzJRn3pzUg==
+ bh=PCdwWHzot0Dy/gZu+COahelMzYfq7ioxY4E31XSbNRs=;
+ b=FhXnyDoSxFl03M30+d6tT/v70X89X8L6qehSpt9yz5KSnbeFjY0YxWBWl6yACruWYqg+
+ yfFMtobHKwMZxPCEXPVkuxiH7/jsYJPjdIHNRjwiR16FGVAnORqXnnyXHZJZwZVcb9W7F
+ dDjbotqmMFJUkxRKqseAMIVVXPdQy56+3R8zx+YqK3hS/cWKs3OkCGoiow83/m8IyPHx1
+ wpr5m60UtJriKeyV4a7qsmiwL/IZL8jVptzO+MypfB1AYTCVpGk9B3ZgtuZbq7nkOR2Vj
+ WvqYCyMBNMymOAHTA5ikfJKl40HQD0ZbWWRdh8ldBGhqLEu0RYU0wFBbAGfhJerNZrQ==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0728F60B96
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3797760B72
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ED6C99D389; Fri, 30 Oct 2026 14:16:48 +0000 (UTC)
+ id 47A959D388; Fri, 30 Oct 2026 14:16:49 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 29 Oct 2026 21:21:12 +0100
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: 1df505db94eb6215fa99706a3658c382f1fd9afc
-X-Git-Newrev: 0506298debac131229d13fb5175429c2de764dd6
+X-Git-Oldrev: 0506298debac131229d13fb5175429c2de764dd6
+X-Git-Newrev: 39c9692236ab6212836e3dffa802f3d88bc1bb53
 X-Patchwork-Hint: ignore
-Message-Id: <20261030141648.ED6C99D389@busybox.osuosl.org>
+Message-Id: <20261030141649.47A959D388@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2026.08.x] package/avrdude: fix
- readline dependency
+ libserialport dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,75 +114,74 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0315197584118133036=="
+Content-Type: multipart/mixed; boundary="===============8135328446496088544=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_NONE autolearn=ham autolearn_force=no
+	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_PASS autolearn=ham autolearn_force=no
 	version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============0315197584118133036==
+--===============8135328446496088544==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0506298debac131229d13fb5175429c2de764dd6
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/39c9692236ab6212836e3dffa802f3d88bc1bb53
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-avrdude automatically detects and links against readline when it finds
-libreadline in the sysroot (find_library(HAVE_LIBREADLINE ...) in
-CMakeLists.txt; AC_CHECK_LIB([readline], [readline]) with the former
-autotools build system), and there is no option to disable it.
+Since version 8.0, avrdude automatically detects and links against
+libserialport when it finds it in the sysroot
+(find_library(HAVE_LIBSERIALPORT ...) in CMakeLists.txt), and there is
+no option to disable it.
 
-Buildroot never declared this dependency, so the result depended on
-whether readline happened to be built before avrdude. Even worse, some
-external toolchains (e.g. the Bootlin ones) ship libreadline in their
-sysroot. In that case avrdude ends up linked against it without
-BR2_PACKAGE_READLINE being enabled:
+Buildroot doesn't declare this dependency, so whether avrdude gets
+libserialport support depends on the build order. With
+BR2_PACKAGE_LIBSERIALPORT=y, building avrdude before libserialport
+gives:
 
-  $ readelf -d target/usr/bin/avrdude | grep readline
-   0x0000000000000001 (NEEDED)    Shared library: [libreadline.so.8]
+  HAVE_LIBSERIALPORT:FILEPATH=HAVE_LIBSERIALPORT-NOTFOUND
 
-but libreadline is not installed to the target, so avrdude fails to
-run.
+while building libserialport first links avrdude against it. This
+makes the build non-reproducible.
 
-Add readline to the dependencies when it is enabled, and otherwise
-pass -DHAVE_LIBREADLINE=OFF, so that find_library() skips the search
-and readline support is disabled.
+Add libserialport to the dependencies when it is enabled, and
+otherwise pass -DHAVE_LIBSERIALPORT=OFF, so that find_library() skips
+the search and libserialport support is disabled.
 
-This issue has been present since commit dc776f0d0546 ("avrdude: new
-package"), as avrdude has always detected readline automatically. It
-therefore affects 2014.02 and later, including all maintained
-branches.
+This issue has been present since commit 0e16ff09e953
+("package/avrdude: bump to version 8.0"), as avrdude 8.0 added
+libserialport detection. It therefore affects 2025.05 and later.
 
-Fixes: dc776f0d0546900b22d1552f3e522be2080016c6 ("avrdude: new package")
+Fixes: 0e16ff09e9538d46c9726f8998080d55dfa5d41f ("package/avrdude: bump to version 8.0")
 Assisted-by: Claude:claude-opus-5-5
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3ab71cafc0e69f128fc3bee62fa995c5d65d1c50)
+(cherry picked from commit 8f74cfc46c1346a481e6742f8d94cf5d6784e64f)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
  package/avrdude/avrdude.mk | 6 ++++++
  1 file changed, 6 insertions(+)
 
 diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
-index 8f451a7fdb..6d9ffe8625 100644
+index 6d9ffe8625..0ce26934d2 100644
 --- a/package/avrdude/avrdude.mk
 +++ b/package/avrdude/avrdude.mk
-@@ -29,4 +29,10 @@ ifeq ($(BR2_PACKAGE_HIDAPI),y)
- AVRDUDE_DEPENDENCIES += hidapi
+@@ -25,6 +25,12 @@ else ifeq ($(BR2_PACKAGE_LIBFTDI),y)
+ AVRDUDE_DEPENDENCIES += libftdi
  endif
  
-+ifeq ($(BR2_PACKAGE_READLINE),y)
-+AVRDUDE_DEPENDENCIES += readline
++ifeq ($(BR2_PACKAGE_LIBSERIALPORT),y)
++AVRDUDE_DEPENDENCIES += libserialport
 +else
-+AVRDUDE_CONF_OPTS += -DHAVE_LIBREADLINE=OFF
++AVRDUDE_CONF_OPTS += -DHAVE_LIBSERIALPORT=OFF
 +endif
 +
- $(eval $(cmake-package))
+ ifeq ($(BR2_PACKAGE_HIDAPI),y)
+ AVRDUDE_DEPENDENCIES += hidapi
+ endif
 
---===============0315197584118133036==
+--===============8135328446496088544==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -193,4 +192,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0315197584118133036==--
+--===============8135328446496088544==--
