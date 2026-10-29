@@ -1,28 +1,28 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1888B606A31A
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:08:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FC30606A31C
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:08:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=WalpTPj8
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=dVCReZnO
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5A1060B9C;
-	Fri, 30 Oct 2026 14:08:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4D59640C19;
+	Fri, 30 Oct 2026 14:08:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c8j_UjeEkCMr; Fri, 30 Oct 2026 14:08:07 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org CECA160BB0
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369287;
-	b=pdfbhvyJgbD3sDoba1pVUV272uL6+SWOjVk/Aa6aLZTsgHymoYEvPSYsTLaq9qk3BTkB
-	 9zVZ9HyU6+kUeHSlbU3DrxpeqLI6ZeLhQLTaIQDPA7B5q4junSG7Uyl+AfCiIeZ+6D7xd
-	 AMFUXmYm1aA919adCk1QMRseuqch2L7UxGfDnDuXNhHtLQCR/LHD55/+nb3YDKKt3w1p0
-	 aPWG+BiBbHF7ZlPBd2Y2QgqjEUFIBkYG9cEkxuWB5fCCmn3desdJr2jSyixPIfx6h7Jgn
-	 kY1klfm+5/kHiAjyLpvzpL6TI+LaMwCElmVdpWVCT7WcP5dIqyp6HyH9IbnSeyrOLPw==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hQC1ZgJwFMWi; Fri, 30 Oct 2026 14:08:08 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 3782B40C40
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369288;
+	b=K4H9PPU9k4UNQTsygTw3bNs1zy8V7nxeG/N7MK0RnObOaKZTtqFViujE98OJPu/T3NfQ
+	 EKOdj8D0Ooan05zfqK0Hbh8xBLIw4r0NhYCn7Urnwzh9zB4frNGwr1rjof1tnTAshVl0B
+	 S4zrDAsf46/4PvhB0r6h9JSGsX1HNwuhHnayE8H+3RzypBvU40YwNM+zOmfiNSE90s2RX
+	 GkEcEHPnMinvuyVTR4/PmFZVZbvuGyUj1jMXF+BGGii/4OdmMRb3OWypGl85iqkdEeRtV
+	 8ufaNZs2nolcI1oEws9s0O1JO8pqTXeJQhOalY0fK+pKimH7tVZ8GAfQWMNOF90yV5w==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793369287;
+	c=relaxed/relaxed; t=1793369288;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=S5PcP1FDAar7NLfK9rrYtGV2jOsf1MIh5lU2aIwsPaE=;
-	b=a5peQINEkvS6XlfXKuaZv+U1/a9Zk629z4Zg0Gieezd2JHnu6DabrD14s07uS4WIDAqW
-	 6+u46a0UwlPqdvXzXWqpX8MBAt/mMCguqHIQ0s/KHwIgIgHa/cLhm30KT+XY68V2sQf0H
-	 nF9yY7IvwwV+YOeYWkWWucLMc0ItkeMyOFrpucGR3ncyvXfqTPCpkNCMi7U2gk3BFhYxy
-	 M8UMTxDdu/ZPF1Ld8AtX9+k93eIuWaxVp9s9Fs1GixKAJjga0mDrnTLOjAHtMsefF+rlw
-	 O8pPd0OUnsCgIahg1oXoqAHKXFoBqH5FcnV49pWbNjM9ucyzZ83KpdcT8fPOnbgzBvA==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	bh=wqIj7uEBpcHS+AFVmSw6qjOxs1ZU7s2jx2lFAbqtyX8=;
+	b=GaximWGhFMlvEk5/4ocjtctCnYGf5JA6gtab7WcuF4UeVhG2LCRKqIcWi7Jz72ZJIL2o
+	 zNQP4vgV6Jr5euWwdNmIUONRQsQrJYqfXocM/kejn58aT4mI4w4nuSWaqeFVnb4B62ESI
+	 dG12Kn/wwnw6j/XUs4Tz89V1IPvjHH/APhkleLqTgjVSUZaeVJmzLufFtaS5526JgpQ4+
+	 WQZqWq5BERdBB7zp/cHGK8AoQGEaOCX3ullZYLGZa0cGyW9wRpc9uL+7lw/FJl61XkWyv
+	 VZDCYguIk+Z0xrT+xu87lf0LGHSZB+xBJ28vapJNOr3AU0+4QmiPDPhYIsxiplyO3Kg==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793369286;
-	bh=S5PcP1FDAar7NLfK9rrYtGV2jOsf1MIh5lU2aIwsPaE=;
+	s=default; t=1793369288;
+	bh=wqIj7uEBpcHS+AFVmSw6qjOxs1ZU7s2jx2lFAbqtyX8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=WalpTPj8iRWfg3wKzKN1kDSk3nBJGE4OXwS442KbXjwo/FHbm3VyKNPDeAicLXsKk
-	 wUkBc9BvSp6Yb+qnj98fWKyTsRnamMkoObW0EXWnhjh621DNfHq9BEc2WZa9jOIyGs
-	 faKkSpnhxoUAeqRuTc3MNhY/QNlFTz+rMlKJnRgdKVsWusuehGCKVtQHevYI692NGz
-	 uC2VHv45HaOPnE/aCHffpJmyqraKG1Qt8cQpqACU/16ELUYLz1QVMW5+9w82UW8oZf
-	 qCAVm4Zy4FW+T8pFEx8vXijuhbpmmR/kT5JQBxPf03dO7uOS7m/MYIuAVD7HnJ1lIv
-	 BBPgYSt6d+gWQ==
+	b=dVCReZnOLkGydmerUcfjySdq6fRFyxAzzLb6RSBrNkvh5Yx41yF81ae9SpHba7p/z
+	 MFeISnY5mqctZctdchiPlypDDryEO4h9oOhpXQea3A1r1nk6VS3O8X1S0Sz0vaB9/V
+	 /2YL1nA3T9WL3H2hab1MhtIUaJ3bz2KNXwoo24J4RPVBGTZxNPjyiMrukUYx19sDrw
+	 F6c3HalxsCA2dorVq8y6omt9J95tttVN0phUc1IgNyDMS8L4jgP77VP5R3TuGeFlWr
+	 1M00Hig+8BHWXPPl1C/Wjioi0teu9plfkzvKgIPotJBpG+vOtuBvvqMgf0FgpY1t0d
+	 9+3OV89mLu8DA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CECA160BB0;
-	Fri, 30 Oct 2026 14:08:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9E631D43
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3782B40C40;
+	Fri, 30 Oct 2026 14:08:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id ADFB4D44
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:06:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8BAEA40B36
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8C9B040B39
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:06:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x822f4sOjkkg for <buildroot@buildroot.org>;
+ id jlw8OG904LVU for <buildroot@buildroot.org>;
  Fri, 30 Oct 2026 14:06:07 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 947B440B1A
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 5005640B34
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793369167;
- b=KS+zJYrZrnH0LD8B4R9bhUIkWiUcTK0QKwJMycqsjos1NLK3nU03VxrKr8UW8ECdSSwY
- A2oNPJZCzQse+CeYTjALzqXeaLd6Tep3WjfOOkuhMi/PJdqucAmVUGYGWvBFqoWIAghNS
- GNeFJvpd0PFgmiIIdbYSqVrZYHBdMid/Plr7k9a2q12Sle4BvXIP8YZjtrKdR65JSHPE6
- T8NsYRnYANhq3l8EGbratcSTI8HV3bK/FHRDY5Bup+PDgNt0t3E6fZgFhukcgFQexxWbe
- 8/kSUK5DUGsI0cTE96D0t2Se9PvcyPA/jyMjZ+sRUCUx3HDXLlInFjs0RASJexOfSfg==
+ b=fmuuRZlbAXWeAd+QPbNc1hWCLoO+3RLrMhIcuvQFR3EmnOICHdA3999Isne7vyEvqUAc
+ piGqXRXqjXob8DdPgW9ECTnqVJptdnYGRGCE8sh8TwhHZcaTgyudof9sHb+aQEJi9LDC6
+ hpPjPS8b+ynwqk5Nzrp3ahx34FQoD/WB0x/sNFGIkSe4fOhYMyqAtt+E+xUMjCiwuDouU
+ cje00BsQnfhXD75g6Mb/ZlOfOMh6qjjaiyohUilDnEoEtGeKK6vPN/r+vGe1HtnvFBx6B
+ OD/Rd2dLdp22rDAI5ViZcXhkvVQohDB0l6zKPLs3l/pQFgM56wq35qHwz4JQRa4aBSA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1793369167;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=RpU++yIOwEKiQRnc17GfygwPDvp75gGVikYwoSoKnVc=;
- b=bZrqX5EE3a+ClAtPV56XbdjM4Z/NH1qWr+BSmOC9ChQLTvHkgD1io5/hu1F4epQI4BLW
- xyCfLBsykFXzf7PDua8p4s8P9g3tup7zEfbKQwTdyptiHn1YAwq9LQfc6W9YVA+7VmSFN
- T1OSn7G88iwYVtcYwMq7C96Nza2nOD0VwBCXATL/ew09HkULkvGXv/HnoQhZl6T7mWpss
- qeoSEbFwDAm64JHKPGHoGXfA+pWSBnCDzNu6cP4qHrkvoY+BKmHNuW+ROyrJbU+JsDvl4
- LUVffVdw4U6j4tEC8st+0O19z9m09RJa4ruoWaoP9gfl+GSiHBALz6aj2/rCNLp8rYA==
+ bh=DKtRCv9Grwh+xAw/489/WUjiGpnKlUrcxM04hbJ4vFY=;
+ b=maT6iPQD4pKBwz7L82mkAhVS2F6BH0G03sHmp+hDd7Z7uBRHeMWXC7bYCPZh4/+fCWa7
+ MWDjb0xh8+kh9Mhyl8RaLokxWjrlAKVOO9HHPbBlUy8exIYDqNIAyVFZ6CifgYI+yX8vO
+ hjevnQbC+6UT9h+y0etLTq+Je/+ZEzhOwSKk9HmFwSJZOIKieePVwYaIxzVJymYETalPB
+ BmLJE0ybuG0czcJoO7DEWTB5AkCpdwVLMNcIschHIidOEnjJ0gLBTfJZxiAsckgnIOKSh
+ TAu3GxHPapcMSumSEn4C+68ZqCEcALglWhzrpMnQousIJQjnL/pBV0bnMoxXQHp2++w==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 947B440B1A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5005640B34
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:06:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B412E9D388; Fri, 30 Oct 2026 14:04:39 +0000 (UTC)
+ id 703C19D388; Fri, 30 Oct 2026 14:04:39 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 29 Oct 2026 21:20:00 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 7e8a291ec9c0fca3bdfee9e91875292c3ea310d7
-X-Git-Newrev: 5e7ed9819755d07ea00989e8dbdcd23f96fe4cf8
+X-Git-Oldrev: 071b1fa150b74ae8b06c1ccd6a8b7a7e06fc61d7
+X-Git-Newrev: 6f8daa05a02fb73e9fa470a3aab834cf9d9e772d
 X-Patchwork-Hint: ignore
-Message-Id: <20261030140439.B412E9D388@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/python-certifi:
- security bump to version 2026.10.23
+Message-Id: <20261030140439.703C19D388@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] Revert "arch: mark a set
+ of target configurations as secondary"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,72 +114,242 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8973084257940964557=="
+Content-Type: multipart/mixed; boundary="===============1987476085777209200=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_PASS autolearn=ham autolearn_force=no
+	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_NONE autolearn=ham autolearn_force=no
 	version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============8973084257940964557==
+--===============1987476085777209200==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5e7ed9819755d07ea00989e8dbdcd23f96fe4cf8
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6f8daa05a02fb73e9fa470a3aab834cf9d9e772d
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-This version removes two more eMudhra CAs relative to version
-2026.10.19, "emSign Root CA - C1" and "emSign ECC Root CA - C3". Both
-had been removed before in 2026.10.18 [1], and then restored in
-2026.10.19 as "unaffected" [2]. Version 2026.10.23 is in line with NSS
-1.131.1 [3] in this regard.
+The initial attempt to make secondary configurations to be selected
+less frequently by autobuilders is not working as expected. It was
+observed that the i686 architecture was selected most of the time,
+because it is currently the default choice. We revert this
+implementation to propose a new one.
 
-[1] https://github.com/certifi/python-certifi/commit/5cb238caeeb6c30ec1a7309ad3e16a5aa7b10ce8
-[2] https://github.com/certifi/python-certifi/commit/662df63d7906df66f1f07c0751a3dfe9da14d914
-[3] https://firefox-source-docs.mozilla.org/security/nss/releases/nss_3_131_1.html
+This reverts commit cf01628aa3cdedf73aa811252d238be4a09c9c96.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-[Fiona: rewrite commit message to describe security context & release history]
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
-(cherry picked from commit cb7884163e44a33a049acf2129f9b0b34aa04e81)
+(alternative to commit 41f52f982a2c974258f23cf16c3722aba1bcb343)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/python-certifi/python-certifi.hash | 4 ++--
- package/python-certifi/python-certifi.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ arch/Config.in       | 17 -----------------
+ arch/Config.in.arm   |  5 -----
+ arch/Config.in.riscv |  2 --
+ arch/Config.in.x86   |  1 -
+ 4 files changed, 25 deletions(-)
 
-diff --git a/package/python-certifi/python-certifi.hash b/package/python-certifi/python-certifi.hash
-index a583c17bae..96b977a4e4 100644
---- a/package/python-certifi/python-certifi.hash
-+++ b/package/python-certifi/python-certifi.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/certifi/json
--md5  f64fcaadfe9a0ced492ccbfe88bc4a27  certifi-2026.10.19.tar.gz
--sha256  035c1e85572b141bf1c3a3eff0e33a8eb74917522f2559075ff8d2fea780a1ae  certifi-2026.10.19.tar.gz
-+md5  9380cf82be7f2a74885ca68665b4b12b  certifi-2026.10.23.tar.gz
-+sha256  a9895e6e2758b371e0545e321a3a8fd1fcfd9829ada8824a936dfb16aaaf36cd  certifi-2026.10.23.tar.gz
- # Locally computed sha256 checksums
- sha256  e93716da6b9c0d5a4a1df60fe695b370f0695603d21f6f83f053e42cfc10caf7  LICENSE
-diff --git a/package/python-certifi/python-certifi.mk b/package/python-certifi/python-certifi.mk
-index bdfb8ed12a..38fa5c8f22 100644
---- a/package/python-certifi/python-certifi.mk
-+++ b/package/python-certifi/python-certifi.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/arch/Config.in b/arch/Config.in
+index de15944eb2..6b54c65df9 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -23,7 +23,6 @@ choice
  
--PYTHON_CERTIFI_VERSION = 2026.10.19
-+PYTHON_CERTIFI_VERSION = 2026.10.23
- PYTHON_CERTIFI_SOURCE = certifi-$(PYTHON_CERTIFI_VERSION).tar.gz
--PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/a6/bd/1436c50cc46699de0230fbaacc1d1de7bfec413176099949e9d5112e88f2
-+PYTHON_CERTIFI_SITE = https://files.pythonhosted.org/packages/fd/11/b524cbd9bbdaca58608e4cf4053fd463417549e1959fa8d3aa18319f9555
- PYTHON_CERTIFI_SETUP_TYPE = setuptools
- PYTHON_CERTIFI_LICENSE = ISC (Python code), MPL-2.0 (cacert.pem)
- PYTHON_CERTIFI_LICENSE_FILES = LICENSE
+ config BR2_arcle
+ 	bool "ARC (little endian)"
+-	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ 	select BR2_USE_MMU
+ 	help
+ 	  Synopsys' DesignWare ARC Processor Cores are a family of
+@@ -50,7 +49,6 @@ config BR2_arm
+ 
+ config BR2_armeb
+ 	bool "ARM (big endian)"
+-	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ 	select BR2_USE_MMU
+ 	help
+ 	  ARM is a 32-bit reduced instruction set computer (RISC)
+@@ -69,7 +67,6 @@ config BR2_aarch64
+ 
+ config BR2_aarch64_be
+ 	bool "AArch64 (big endian)"
+-	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ 	select BR2_ARCH_IS_64
+ 	help
+ 	  Aarch64 is a 64-bit architecture developed by ARM Holdings.
+@@ -85,7 +82,6 @@ config BR2_i386
+ 
+ config BR2_m68k
+ 	bool "m68k"
+-	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ 	# MMU support is set by the subarchitecture file, arch/Config.in.m68k
+ 	help
+ 	  Motorola 68000 family microprocessor
+@@ -93,7 +89,6 @@ config BR2_m68k
+ 
+ config BR2_microblazeel
+ 	bool "Microblaze AXI (little endian)"
+-	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ 	select BR2_USE_MMU
+ 	help
+ 	  Soft processor core designed for Xilinx FPGAs from Xilinx. AXI
+@@ -103,7 +98,6 @@ config BR2_microblazeel
+ 
+ config BR2_microblazebe
+ 	bool "Microblaze non-AXI (big endian)"
+-	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ 	select BR2_USE_MMU
+ 	help
+ 	  Soft processor core designed for Xilinx FPGAs from Xilinx. PLB
+@@ -113,7 +107,6 @@ config BR2_microblazebe
+ 
+ config BR2_mips
+ 	bool "MIPS (big endian)"
+-	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ 	select BR2_USE_MMU
+ 	help
+ 	  MIPS is a RISC microprocessor from MIPS Technologies. Big
+@@ -123,7 +116,6 @@ config BR2_mips
+ 
+ config BR2_mipsel
+ 	bool "MIPS (little endian)"
+-	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ 	select BR2_USE_MMU
+ 	help
+ 	  MIPS is a RISC microprocessor from MIPS Technologies. Little
+@@ -133,7 +125,6 @@ config BR2_mipsel
+ 
+ config BR2_mips64
+ 	bool "MIPS64 (big endian)"
+-	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ 	select BR2_ARCH_IS_64
+ 	select BR2_USE_MMU
+ 	help
+@@ -154,7 +145,6 @@ config BR2_mips64el
+ 
+ config BR2_or1k
+ 	bool "OpenRISC"
+-	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ 	select BR2_USE_MMU
+ 	help
+ 	  OpenRISC is a free and open processor for embedded system.
+@@ -162,7 +152,6 @@ config BR2_or1k
+ 
+ config BR2_powerpc
+ 	bool "PowerPC"
+-	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ 	select BR2_USE_MMU
+ 	help
+ 	  PowerPC is a RISC architecture created by Apple-IBM-Motorola
+@@ -172,7 +161,6 @@ config BR2_powerpc
+ 
+ config BR2_powerpc64
+ 	bool "PowerPC64 (big endian)"
+-	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ 	select BR2_ARCH_IS_64
+ 	select BR2_USE_MMU
+ 	help
+@@ -203,7 +191,6 @@ config BR2_riscv
+ 
+ config BR2_s390x
+ 	bool "s390x"
+-	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ 	select BR2_ARCH_IS_64
+ 	select BR2_USE_MMU
+ 	help
+@@ -213,7 +200,6 @@ config BR2_s390x
+ 
+ config BR2_sh
+ 	bool "SuperH"
+-	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ 	select BR2_USE_MMU
+ 	help
+ 	  SuperH (or SH) is a 32-bit reduced instruction set computer
+@@ -224,7 +210,6 @@ config BR2_sh
+ 
+ config BR2_sparc
+ 	bool "SPARC"
+-	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ 	select BR2_USE_MMU
+ 	help
+ 	  SPARC (from Scalable Processor Architecture) is a RISC
+@@ -235,7 +220,6 @@ config BR2_sparc
+ 
+ config BR2_sparc64
+ 	bool "SPARC64"
+-	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ 	select BR2_ARCH_IS_64
+ 	select BR2_USE_MMU
+ 	help
+@@ -256,7 +240,6 @@ config BR2_x86_64
+ 
+ config BR2_xtensa
+ 	bool "Xtensa"
+-	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ 	# MMU support is set by the subarchitecture file, arch/Config.in.xtensa
+ 	help
+ 	  Xtensa is a Tensilica processor IP architecture.
+diff --git a/arch/Config.in.arm b/arch/Config.in.arm
+index 6996f3d7ca..f01dcc4d5a 100644
+--- a/arch/Config.in.arm
++++ b/arch/Config.in.arm
+@@ -112,27 +112,22 @@ choice
+ 
+ if !BR2_ARCH_IS_64
+ comment "armv4 cores"
+-	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ config BR2_arm920t
+ 	bool "arm920t"
+-	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV4
+ config BR2_arm922t
+ 	bool "arm922t"
+-	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_HAS_THUMB
+ 	select BR2_ARM_CPU_ARMV4
+ config BR2_fa526
+ 	bool "fa526/626"
+-	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_ARMV4
+ config BR2_strongarm
+ 	bool "strongarm sa110/sa1100"
+-	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ 	select BR2_ARM_CPU_HAS_ARM
+ 	select BR2_ARM_CPU_ARMV4
+ 
+diff --git a/arch/Config.in.riscv b/arch/Config.in.riscv
+index f7ffd5fdc3..23d095d1a6 100644
+--- a/arch/Config.in.riscv
++++ b/arch/Config.in.riscv
+@@ -51,12 +51,10 @@ choice
+ 
+ config BR2_RISCV_32
+ 	bool "32-bit"
+-	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ 
+ config BR2_RISCV_64
+ 	bool "64-bit"
+ 	select BR2_ARCH_IS_64
+-	select BR2_RISCV_USE_MMU if BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ 
+ endchoice
+ 
+diff --git a/arch/Config.in.x86 b/arch/Config.in.x86
+index 3870bd6215..6e79b35b05 100644
+--- a/arch/Config.in.x86
++++ b/arch/Config.in.x86
+@@ -50,7 +50,6 @@ choice
+ 
+ config BR2_x86_i486
+ 	bool "i486"
+-	depends on !BR2_HIDE_SECONDARY_TARGET_OPTIONS
+ 	depends on !BR2_x86_64
+ config BR2_x86_i586
+ 	bool "i586"
 
---===============8973084257940964557==
+--===============1987476085777209200==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -190,4 +360,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8973084257940964557==--
+--===============1987476085777209200==--
