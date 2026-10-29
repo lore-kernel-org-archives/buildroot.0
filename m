@@ -1,28 +1,28 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF88606A31A
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:20:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85C08606A31C
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:20:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=dT30OzFg
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=L5bH5Yt2
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A65668176A;
-	Fri, 30 Oct 2026 14:20:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5ED2960D8A;
+	Fri, 30 Oct 2026 14:20:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rhZc1xj5uW-Z; Fri, 30 Oct 2026 14:20:18 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org CE77081757
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793370017;
-	b=Lbj+db9gbmFu+OQnpot+3ut8NfiUuh8sA2G4jjmqr5kNP+26xvTHeIunyKiqC7Mo+HDi
-	 xh87edv1HYozbvcnKAlyiebxQqICG25eH1LicjMvyoD/1xJHh4teaNEai6S0MRXq0J16q
-	 QHWSDBRDNYpF6/PEEDX46qkVYaOKe7Z0tK2kSbykgrtruHWq0IhiQwTSSUshDVs3Sg+qN
-	 7LEmUPrl8uLu0/rxLgEg+JnGBmzEBBKBdSYc12xt4ICgAOMuMIFuKuQ5lvKYs/doRAT1L
-	 HJHYxEGtBw7jq/qdXbI2wT2JiolFDhnvkUF8hkSXeyMwkV706o1dKtAYnXL5x31Z/6A==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pIZbrBWIK9dF; Fri, 30 Oct 2026 14:20:19 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 6D60D60D7B
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793370019;
+	b=AzOkCe4Ot9NWRfLn4iSMDusJYB5EshTSqkyqWErhe3Cz82iIdYh6zK/ASC82xUGfST9E
+	 SeX8HFWTHu+i0ZtLiVVa3jX+JNvDjfCsI0CAZd81oJEikssdogwzNnBFxCJLyEq7fauLx
+	 /QjPjQlqE15WZpz9at3auKo4uOG7cGkPI2dylDDX1Z1FXtmDCNNRp2EmiOj8frZ6yQNfL
+	 NpYWcDa6wfz6Ghbhco0qn3JIbAAjwbLFVJgguQL/CxHRZ+fwU8lCkRLGLKu53FlZmZF1q
+	 P9NHQVBZ2SUrB9elKI6lAhYAHtFPSwMjKQuAEIQe3WYGcYrirPzwsHnUuEq3kOODUcA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793370017;
+	c=relaxed/relaxed; t=1793370019;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=lDsojkt6tDarql8B5uyrFCYgPJjtMD16goo9f/Xdbpw=;
-	b=quE//lJi524Nc5IQNhiVsO0LgPUfRdv97EuhQ3cESWIXB55EFdZYMhwirhBh49g5QWpY
-	 z1H0NkyPO7+QyJp4A2MKGULPh8OIvgAvbxy/SDfTJG9Zhk71EzgibfC9+xmrmSo3Nz0nu
-	 HwoRVGAo0vdt9/2vstlljgBTfEe+Coevs33pcqOqobhNpvV8NJ+s9Tn4qcHzys97XnE/h
-	 HcLhZSlSKUtK5Og+g1qBZrGrNp4OtpGkT+A4uCMmUJ8R5YdFmAd9p5/b6retoFFMkVU9I
-	 KQTHdg42mP5qVANzodULHe3FCJ+sj6MFdIXEdsFO5rx9wp0u8oLrIBrENO5ffCflUeA==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	bh=Wd2PB9CTIDVMeqQ4Foq5swRIpxfsxPB2DbkwmP2Z48A=;
+	b=bQcZO+YqkR8qcTvubi01wrFx+EM1LF+2jFKKczklTCDGACU5AtNlCEQN962NE0OSX1yn
+	 WmBmeCF0o8PeKB/lIV5sRgLmvyWVRS8V82d9WviS3Ksp8gp4rwSqJQfs3GYxUnxQx1J9Y
+	 oyUlSDvf16v9jys7t8c8hXSR2RKkSt5llegYutTtBdsYkgIKbJ+fDB+rjovKV2FxmrSbq
+	 8agP9/B3S5ev5wFdva1DgScNci9hCzZS0ydo38QYtjmpM/rgJssC8RpTq8ZAF47YZUo8Q
+	 q+bDr/ENSjs9/UvyyO1lX0TFhSiOaiQAAdt2yhMn+B0/CM7vgCmhUFjkRtMgjpb0I6A==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793370017;
-	bh=lDsojkt6tDarql8B5uyrFCYgPJjtMD16goo9f/Xdbpw=;
+	s=default; t=1793370019;
+	bh=Wd2PB9CTIDVMeqQ4Foq5swRIpxfsxPB2DbkwmP2Z48A=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=dT30OzFg6bMdpu0io5Y4JRu6wyR+b4CFN+YFCPJ9JAy1pfW737QFjj2fpeDCzEAn8
-	 kftHN+BfN/0Gr01RoYw1Cs+rg3dGAHi2ti48KXXnwOK7rM6YSaIBjQObS7UhCN4OsK
-	 37bs+JBOouHEQIG4dYdlyC6DH4txPRJRrXRYRrXK/4IwuPtZGAFWF5AhaXPJpwcpg4
-	 HbfmkxwUWTrDHtbKUbwVa4mTN7mo2K2nQljJOo1rjOBhwtyb23mljlgeaqgx3IAo8+
-	 RUISDbfF+HTFEf370KkxI/Jy/QY/6bad7muHEyqcFLBF4fXvh0UWAzUMYQHA+Raono
-	 g4cvs8ICTT0Nw==
+	b=L5bH5Yt2qqh2VLREVDkMZKtmgSvlKYwfQ4rJTNOh33NfhgSQQszWUEozWGg+RX78r
+	 kuW6hf5n4bS1IYw78pdtla47ztt85pkmLM7vOvnKJaAmMIFPsxgOiQBcM5/8+H2Aij
+	 gi2IxnPON+VZnfm5QR68GcVb5W2D2GyDdXa7Ilr4W3oRD312Rxbgkn45amtFUHh6tE
+	 PpwPMe3Hewh6l8zSljtp9iwDQOofOpeznK2S93UPNBEqSosAwQIw+ThF/SJcn0qPCU
+	 r6+cd2fni/se+L7FjfF8PMp/3qWurbTGoqkS9ONEjse6EyIEkvHdTYEdE0McnLID9X
+	 YfJ+9JoRX59MA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CE77081757;
-	Fri, 30 Oct 2026 14:20:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 25685712
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6D60D60D7B;
+	Fri, 30 Oct 2026 14:20:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3B9C0362
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0012540BCC
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 217ED4053F
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wzAT0Dq0xkEH for <buildroot@buildroot.org>;
- Fri, 30 Oct 2026 14:18:07 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 399C840BD1
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793369887;
- b=B/f1ywV2cNMojH8qcdail/aDGRRsehCmgPk/qcOHLZJJL6PN187CvuNgcfKdMinOPozF
- lHrh/Qgaa8dj5OOsbXul/f9jBZRDNWfmjezMto1DDkBPonJnSDEmKeGE2ayzXx78y7BN+
- FDgMW3ZWtwC+2bZIuFgZZgLQ00WBN+MCOUibIUvXxjGOMQT7oeWS5pCPmeckgScKHkcLY
- 1r3a6kImML+8OS1BaQN7uA6G5qXJtxzKUpT8inRAehARaejis5/f5ANVgJkzDxP9GjUq9
- OtKj1J/ehTmp+UWdQrp1BKX7LOydXyBYGuVgUqZc4J+dK4DOVo2xZ8jkYapXZzFXD0Q==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CGJ0ne_kLdrT for <buildroot@buildroot.org>;
+ Fri, 30 Oct 2026 14:18:10 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 63D10400D5
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793369890;
+ b=pXKWPSiurpkRFkJSIuVAldUcMNKRH3ewSY3Kn/dx3gzCD1DYqxcN5I97VfDeTP+r2Pdx
+ 7lwdLANShItk3DjmrwOgBfu+qjwIWBG5sEwbQrctJjwAx0HFFefbj490UVkaRAD2ZyoPz
+ 8q1T28Oy7fUX3bBwkBhwVsAqTrda+V3v+8JVvMBe+B0Mbvvxq6HLaTYpGonCa/XVQ9/n1
+ Ooipn5zQtw/tVXX1Jul21saRweLeuUJervzUDhx4PeDHunYMS6ITrApft+rrHMAYthdj6
+ H+jM2plu2VnZt5Y6sn6eWpAZYri1OUzFKrc6BU8G7cHpmdknXPCW50ykRyquPilusZg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793369887;
+ c=relaxed/relaxed; t=1793369890;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=j0wl0vyR2TG2UvRG1lY3/yubzNlg6SJzmvf5oHTelJk=;
- b=cd/HWJlVniovEFVUV9rmFyy3AIY2kgds6lt8N+4iEgWfD+cH9Kgo7La1q1mRBVbBIgFU
- eU8F2jpgJhTt4LkmqIT7rs81gZl+JxyxW6mpvy1sAi8JEjl2ksdm/H2hskEcmsZ9v3aiM
- xPB/zEecm3QarP+D7W0IAYPDOnTdGLaeW/ovDme84Ro2wnUvfqCKuAXcpmfQ+LQc77SNd
- 1Qt29T6n0gMYp5JbDHqg2e91jwLHyck7gQzhsj0SVMoIPREmJoh9x2IyYYZM1G97XlW09
- V//+UWMgNm9Eh7qMxOZWmTwPPyFdpX5JjmB5Je8ss1pRNs0vj3mJHGe0sW8qLp/LUOA==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ bh=rUxgL4VPpUgSkgFjCCjjusAbNFG2moqAG6330t8F5Nk=;
+ b=gt8qRBlTqWyHOtEWFHot5YF1H1TdT3Hiy0FdAuteC/vw3zz0OYRiSzAjNaBDwAK096f2
+ vUTYKHxYi+oAiSvbAcO4fQdLApnQuaIDUi5MJqDxvlbTUnKEQ5r+/lnZSsgYF6LaWIXHI
+ YPmyyVNvT3alho2nXomicBYTxIllILoeP15XXq9Far5ItWCNpiOo92VzFP/5bZyBxc1yx
+ 3afujq1tKFZp1zZnIAMlSJQzEHhuSu1drbpZ1qloT7vXtmyL15KgW6j4qfiZ3v5fDq97B
+ UwtPLNOtkemlxM30BVN7wQuXKZvq3MpAJonwyPN1K3pW8Kv6Uur8TolpvdGwVdMip7w==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 399C840BD1
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 63D10400D5
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 45BD09D388; Fri, 30 Oct 2026 14:16:39 +0000 (UTC)
+ id 81E7C9D389; Fri, 30 Oct 2026 14:16:42 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 29 Oct 2026 21:21:07 +0100
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: b5125bfc4fabf7926c1aa5c97a405971bb8eb3ff
-X-Git-Newrev: 39221d29e9b99a987c3157b9b68ecdf6e02b8ef6
+X-Git-Oldrev: 1b21ef98296af5540a59075d21bed163b7b3d8db
+X-Git-Newrev: d2b9fcad0df1e1d6813206fe45f7999e908a9c2e
 X-Patchwork-Hint: ignore
-Message-Id: <20261030141639.45BD09D388@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/xxhash: make sure
- installed .pc file is correct
+Message-Id: <20261030141642.81E7C9D389@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/pkg-golang: use
+ external linking on ARM Thumb
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,70 +114,72 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2903280041567251536=="
+Content-Type: multipart/mixed; boundary="===============5400028015414422132=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_PASS autolearn=ham autolearn_force=no
+	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_NONE autolearn=ham autolearn_force=no
 	version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============2903280041567251536==
+--===============5400028015414422132==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/39221d29e9b99a987c3157b9b68ecdf6e02b8ef6
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d2b9fcad0df1e1d6813206fe45f7999e908a9c2e
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-The libxxhash.pc installed by our xxhash package is incorrect as it
-contains:
+On ARMv5, runtime/cgo calls __sync_synchronize, which comes from
+libgcc.a. When cgo objects have unresolved symbols, the Go internal
+linker loads libgcc.a itself to resolve them. With
+BR2_ARM_INSTRUCTIONS_THUMB=y, gcc is built with --with-mode=thumb, so
+libgcc.a contains Thumb code, which the internal linker rejects:
 
-prefix=/usr/local
+  link: R_ARM_THM_CALL, are you using -marm?
 
-while the library is installed in /usr. This causes for example a
-build failure of libplacebo when xxhash is built before:
+Go already passes -marm when it compiles the cgo C sources, so adding
+-marm to CGO_CFLAGS does not help. The call from ARM code into Thumb
+code must switch the processor to the other instruction set, which the
+internal linker cannot do. Force external linking instead: GNU ld can,
+by rewriting the call to BLX or routing it through a small stub.
 
-output/build/libplacebo-v7.360.1/src/meson.build:247:6: ERROR: Include dir /home/thomas/projets/buildroot/output/host/aarch64-buildroot-linux-gnu/sysroot/usr/local/include does not exist.
+Fixes: https://autobuild.buildroot.org/results/7534211959577546c3777939d11e411d8a417baa
 
-The problem comes from the fact that the .pc file is generated during
-the build step from .pc.in template, and we don't pass PREFIX=/usr at
-the build step. To fix, we pass PREFIX=/usr during the build step, not
-just during the install step.
-
-The problem has probably existed since we started installing the
-libxxhash library in commit
-cc0c90aa83821d817ae2cbe01ad2c8d22ea30ba8 ("package/xxhash: install in
-staging"), but we tested in 2025.02.x, and the problem exists so this
-patch should be backported to 2025.02.x.
-
-Fixes:
-
-  https://autobuild.buildroot.net/results/344af8504a77ae96e4009d76a77572180cf49b14/
-
+Signed-off-by: Christian Stewart <christian@aperture.us>
+Reviewed-by: Yann E. MORIN <yann.morin@orange.com>
+Tested-by: Yann E. MORIN <yann.morin@orange.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 75a1aea9b420ac97b9dd3058db172e6d0c46a812)
+(cherry picked from commit d2d3833f1d4d4bba742bafee3197fc456d41ec42)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/xxhash/xxhash.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/pkg-golang.mk | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/package/xxhash/xxhash.mk b/package/xxhash/xxhash.mk
-index 51bf6ce855..fc2084c878 100644
---- a/package/xxhash/xxhash.mk
-+++ b/package/xxhash/xxhash.mk
-@@ -31,7 +31,7 @@ endif
+diff --git a/package/pkg-golang.mk b/package/pkg-golang.mk
+index 3e388cb257..cf12dd56b0 100644
+--- a/package/pkg-golang.mk
++++ b/package/pkg-golang.mk
+@@ -146,6 +146,17 @@ ifeq ($(BR2_aarch64),y)
+ $(2)_EXTLDFLAGS += -fuse-ld=bfd
+ endif
  
- define XXHASH_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
--		MOREFLAGS=-DXXH_NO_INLINE_HINTS $(XXHASH_TARGETS)
-+		PREFIX=/usr MOREFLAGS=-DXXH_NO_INLINE_HINTS $(XXHASH_TARGETS)
- endef
- 
- define XXHASH_INSTALL_STAGING_CMDS
++ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS),yy)
++# On ARMv5, runtime/cgo calls helpers such as __sync_synchronize that
++# come from libgcc.a. With BR2_ARM_INSTRUCTIONS_THUMB, libgcc.a is built
++# as Thumb code while Go emits ARM code. A call between the two must
++# switch the processor to the other instruction set, which Go's
++# internal linker cannot do: it aborts on the R_ARM_THM_CALL relocation.
++# The external linker (GNU ld) can, by rewriting the call to BLX or
++# routing it through a small stub, so use it.
++$(2)_LDFLAGS += -linkmode=external
++endif
++
+ ifneq ($$($(2)_EXTLDFLAGS),)
+ $(2)_LDFLAGS += -extldflags '$$($(2)_EXTLDFLAGS)'
+ endif
 
---===============2903280041567251536==
+--===============5400028015414422132==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -188,4 +190,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============2903280041567251536==--
+--===============5400028015414422132==--
