@@ -1,28 +1,28 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43A91606A31A
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:18:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3B56606A31A
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:18:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Bx1b5Au9
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=cMU9bmQR
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1837740C58;
-	Fri, 30 Oct 2026 14:18:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8C27C810E3;
+	Fri, 30 Oct 2026 14:18:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 99iAKtCpe8Qn; Fri, 30 Oct 2026 14:18:34 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 3628E40C34
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369914;
-	b=YtF5z5RsQFsNlYFlIVPT4Lszfnl227XeOWjRtzZkexlm+18ypNBkiLnm2OuYJBi2QvTz
-	 NpW42pBD9BY8jTboBAOL8+VxVTwAMOAW2jaJJ1M9CkaB5WkYKAyAet+ZhqnYjsZiTFW/m
-	 m4mF0Sv3Md/zwcAiMwyCpfNvPuePODffCItBwwAhMpG9eQPbAbRKjMSAbxwxAsMXbG9Eo
-	 4Z4puvuT1dlTMEYezVSN0tvVR8VWY2/UCwkH9xgn38dsvQtImA9uTz5vE2ICPI0M/k6cr
-	 /tpLAcqzfjkOhryxs3Vsy+CM/qaqAm3gh4he9Caoz1cF4HBe7vlsBLOuh5iQSlaAaxA==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EDTSYBlXCNYT; Fri, 30 Oct 2026 14:18:35 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org B1EDF80F0E
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369915;
+	b=aKI3ioCgCSaFZiY2BvJjSgU1IHLgegotrQB+ObWDBbxFFzRYNW1PoKgzO2K5O0IZ7LaN
+	 jDvSutaTGxjRFT2L1NRBQZg99Un/rBCOF3BqNdSseBwb1sN9fohT0OcqpWJX8QgyeaaPr
+	 8dK5DKAzyf5Ou5/zGR8VTVBxQeVs1H7x+j6Ddev3UzHbRKx32MpbU4lPS6ZA/pEVltusX
+	 7bsgNOt17f61rLsEiCpixvdX0bBefzFS2iBpRz6VS/6giI1XtSezDYiptqJ5YV65a24uZ
+	 pMnL7pHD4dcaQ4z7TDW9h/Ajfqh5+qQSB6pWZrn2ie5sDPuL/LvEkeCIX1La76mrLdg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793369914;
+	c=relaxed/relaxed; t=1793369915;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=G1zpIGu+mZrS74xS/ZkWQAvv97+CoAt7ja4b88g8BlY=;
-	b=k21mX2MebLcfR6L2c3eooHyDxxam68HY9krLnLTGKqybVPMPxYJgGKU6lMtr+CdwCnXF
-	 KnuWGxDH8IEffWPgbEFUsTRB4pjwoVe1P+ZJq1fwlU1cxMKAOgVc/k/lpN5TQebfsD/Pq
-	 L2PNu1YuLBQdOomIk+tIfrb9kccVvmJaaY55geC3gMOvvhMILNlDtzx3/IQsSE5pcO4PK
-	 tdluKW6+IEdX1gc6qvRQqbvxo/Tcl6DgqLEjeg5+e0+b6gGPIVpLcd/86fNnAufoxf8e9
-	 KjOuxqtA1MdMDhvv/tzi9yoh3SeXfJWeDGlftX2taaZNOtyS62cTp+U472wiZXVUW3g==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=mrauX0WQ868a2h4KPrVhmm6dvX8cJ5yeeWvBkISOg44=;
+	b=LwpzjYHGfP2DiAQuA26BeZQX8Mrj1qjz8vwYKKgrUi/dHnX6RgIn9rKw0Fo7HX9OIIAg
+	 Sk20fXSQhObKbtWl0K7rzuAj/ftlPzVry3VOzQXXwec7y46J7zqTZ31u0WXMjE653i07J
+	 YDsKqWTYN7BtKeXIBMjYu6/vCV/3rT3niDlzQe7YkvdQZP4BGR1UceD1zFzug9gw91rrH
+	 9JiEUNbDJsffGK9k49psR4MnHDZdfamKGZrTl6L5aK0akY/pLVNO8LP0RnJs8Gd4geJb4
+	 ziRYVy9xwDJ7zsxcJ/om9uSFI8jBmKa33aLL8SZq7AF3SltPuXW52Ln31xKusZ2TGlg==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793369914;
-	bh=G1zpIGu+mZrS74xS/ZkWQAvv97+CoAt7ja4b88g8BlY=;
+	s=default; t=1793369915;
+	bh=mrauX0WQ868a2h4KPrVhmm6dvX8cJ5yeeWvBkISOg44=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Bx1b5Au9YtRhbWQKygr4dFHN3lTQ4Y0KRSbz1OPTujQHAWMoGYP5F684hx1jn/ubd
-	 TqEuJJVZT6NsrtcP4WMjafwg1+UAJuqk4TgM3kC3Buhw8oC8ZNNYxMURRajFC0Q8Zi
-	 V3/+LY1U5cR8+yibSl7U3P3iKtrOrZ/8WxJ3HJ6O/t3MK2rev5Lo2xHHE9NBrxDt+H
-	 FSOEQRJXQcglxTFndIX4JC12TWCOyO9ljRGvgPlpeeYisf6lyho1OAU+JXKUgF3gFw
-	 rVrVlxHlLkPdfllz2R78HxUBYHE8cpjftEJNo7eY14FcHlL9c5rWbT4Mveca6bsmUi
-	 zKpWTmQcG2Z9w==
+	b=cMU9bmQRArEue5wFABRbbrnN608x3lAaoT6YZBoxlfQgGGW7FocSvMFzgGveeWVq9
+	 1qw9WA1NQH1vkQ4k7HzkHe3DZh03xzj9EKmFz754UFnj8DtuJg5ShUVzVLhtPTmxjh
+	 lJKPEtJJxdA/rOmkW5OP20S4YacJwt3iMREWypB1xmZClSrF2VIzj8baSHfLQj0oM9
+	 YyuT7mOZW9OZW3ZvDxEx1bcXH6KVBoegBrOINvC4V6UUrGJJEMGYWO864sFV6Ck1sH
+	 qmRJXda9YHfw5FEJLvfT5PUKWGpcP1L1sGIjE4gXigY2IiSmMlwI6pBYSUIQY80mRD
+	 d3KNBR/eZYQeg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3628E40C34;
-	Fri, 30 Oct 2026 14:18:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 71AC2D43
+	by smtp1.osuosl.org (Postfix) with ESMTP id B1EDF80F0E;
+	Fri, 30 Oct 2026 14:18:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7287DD46
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5F02160AEC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5F4DE4052F
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1We6rW2TGT3l for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id d05T76YWj0OB for <buildroot@buildroot.org>;
  Fri, 30 Oct 2026 14:18:04 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org B3E6C607B6
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org C6C2F400D5
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793369884;
- b=WIkJ1Ik1CdZP8npu5xh/mdIjRFikO8I+HCJt0C08W5fGl36a2jVKB/4Q0iJiK4tseLaP
- cgklYVC/BQUdmnh1MyxMQKuT9W3YLso8B/vveDXjamHU27Zw7R7YaUn/4TidV1s22rHLR
- rWAbLpOSrh5gspNxGEhrPhRPYmU5UXr+EUBqYtZszd+GE4o8K1K1rjlj0FlpyFJIJw7rl
- sN7tnenLAuJ7F6E0bCed9vSjgBGKlRn/BwMtczbuv3OTPV3YYMZL6j02QZFp2goPImvOG
- KB54F0aKBN82slhsLbCA+rpDgxOysCPbmcA7xlK/XH4j5l/bPh6IZFXH9UYxiqwN19Q==
+ b=pF5MhMd5ayDxBMoEIiodBJqRwcedlpNNKr+RoS7vsp+z9IQ2vFIStrdTqTfoG4ADb0Hx
+ 2rLwusLaD17MO+4IQquEaAsbCH9dwF8c039ZtUmQEyoPpMDe1U4HuFIplUMrqxQqdOceZ
+ D31TtGVfBS5FK+LkFzJF2u1CLC+awuvaNn8avHw+Jt2Mz4bP20goBxatHUpO1lWJ1vKpA
+ 7juu1Srr7rijBqo7iov0s33pF7qMlgieCf3+4bYrMj5p7kQfOiq2t0e0igZhPtYQsE8Iq
+ 4oWEa3/MIRlAwySC6qjvV+ZvuPqxUdGMjWG8SFIg3DaqSyawHAKzJWz2Mzj2tW0TGyg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1793369884;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=dIx+ZzzP8e31nOR2NVCauPNRoMz+vMuBV8Ew4aIUct8=;
- b=lEW1w6ZAMI5UvtBgHE0H3roPf6rGcuVLcJi2Z9sbvWEOCckidRwCTIHCBHOHt15glzcW
- S3j3Zh+v5V7OH0GmyC7C6hYt/zJ2HNXD5I3vjjdzIpiA7s9jK/25kmiZtQviPjxikAL0e
- DvfMf+BNC/3PTltL3RHSsMiEt9jl7iJ0Mxm6lBxMtrQc3FUwyoSE+t0xE4pQFB+On5N3D
- pA4HEz9vchkRKfC4+eeFeGF88rOu2AjggwgSkwBFgGxwyMObt+sRXBwCiueqwUGaR84Nt
- UE7jqsGvfusweuCcbSl501sM9w/5Vdh3hqrsvciQ0U0U6jxIIGJ+D010PRPXy7wQ0AQ==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ bh=1azuflDl0ySHJmAAT34sbDNTJg/EbxfjPEZ6B1aJnVU=;
+ b=gUtFWVTvLJkI+/VgtHCXGFA8OKL+nN0N3QucKihspmbA4yE0moZAZ0FQERQTjNVYdXYm
+ 0s9TUQkvmzhOUAGaBIRTAfHoyfR/vE7lTLhlpUXHhYdXuFImy8EQboLg8hbwMS8H4/t//
+ +1O8bR2sEVH72y5/Xgvo39jcg4CZIauNC7gbbgKkOLeSAOiCOblMK13gHRhTW+xXsml9Y
+ AmqKPsiY55XvwyzKsOW15MN8Pj4Z+RnoiH3pTgeYSsDyf4npXe0Fe01MvDX5bpq6jtgNa
+ ZiiGmJpZxX81P0qe18Nl0r9oZ4iRvd+Fucq9PjMCvEPn7cuh5IiegzL3qFtbl1Oe9/A==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B3E6C607B6
+ by smtp2.osuosl.org (Postfix) with ESMTP id C6C2F400D5
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C627E9D388; Fri, 30 Oct 2026 14:16:36 +0000 (UTC)
+ id E4A5A9D38A; Fri, 30 Oct 2026 14:16:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 29 Oct 2026 21:21:04 +0100
+Date: Thu, 29 Oct 2026 21:21:05 +0100
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: b353abf467a52b017ec4d486284ba3407ddba7c5
-X-Git-Newrev: 646c6348c192b4808af5858ea0dc6e565a76a65b
+X-Git-Oldrev: ee525a6ae43a0ad2f7a485f4417a9f47f235f9de
+X-Git-Newrev: b6e74d2e8bf5de1c0663a3efd0d8db0f09e8f192
 X-Patchwork-Hint: ignore
-Message-Id: <20261030141636.C627E9D388@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/network-manager:
- rework jansson handling
+Message-Id: <20261030141636.E4A5A9D38A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/pkg-hare:
+ refactor build command
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,7 +114,7 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7544910514982563105=="
+Content-Type: multipart/mixed; boundary="===============0216328122645133441=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
@@ -124,49 +124,45 @@ X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============7544910514982563105==
+--===============0216328122645133441==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/646c6348c192b4808af5858ea0dc6e565a76a65b
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b6e74d2e8bf5de1c0663a3efd0d8db0f09e8f192
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-jansson is needed for BR2_PACKAGE_NETWORK_MANAGER_OVS (which selects
-BR2_PACKAGE_JANSSON), but practically speaking, network-manager's
-meson.build detects jansson regardless of ovs=true. So we make this
-jansson optional dependency explicit.
-
-This commit doesn't fix anything, it only makes the dependency more
-explicit.
+In order to avoid duplicating the build command, use an intermediate
+"target" shell variable to store the make target to be invoked for the
+build. This is in preparation to extending the build command.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Acked-by: Francois Perrad <francois.perrad.86@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 450a2c4857f381251f5613e1c6234462c4521ab4)
+(cherry picked from commit 69cb418bc80276d602ae9e4fe5a30b10ee0a957d)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/network-manager/network-manager.mk | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ package/pkg-hare.mk | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
-index c96f613831..932009e6c5 100644
---- a/package/network-manager/network-manager.mk
-+++ b/package/network-manager/network-manager.mk
-@@ -110,9 +110,13 @@ else
- NETWORK_MANAGER_CONF_OPTS += -Dmodem_manager=false
+diff --git a/package/pkg-hare.mk b/package/pkg-hare.mk
+index 14e0cfce5a..15dc769311 100644
+--- a/package/pkg-hare.mk
++++ b/package/pkg-hare.mk
+@@ -49,10 +49,9 @@ ifndef $(2)_BUILD_CMDS
+ # but in real world, the target "all" is not always the default one
+ define $(2)_BUILD_CMDS
+ 	if grep "^all:" $$($(2)_SRCDIR)Makefile > /dev/null; then \
+-		$(MAKE) -C $$($(2)_SRCDIR) HARE="$$(HARE_RUN_CMD)" HAREFLAGS="$$(HARE_ARCH_OPT) $$(HARE_LIBDIR_OPT)" all; \
+-	else \
+-		$(MAKE) -C $$($(2)_SRCDIR) HARE="$$(HARE_RUN_CMD)" HAREFLAGS="$$(HARE_ARCH_OPT) $$(HARE_LIBDIR_OPT)"; \
+-	fi
++		target=all ; \
++	fi ; \
++	$(MAKE) -C $$($(2)_SRCDIR) HARE="$$(HARE_RUN_CMD)" HAREFLAGS="$$(HARE_ARCH_OPT) $$(HARE_LIBDIR_OPT)" $${target}
+ endef
  endif
  
-+ifeq ($(BR2_PACKAGE_JANSSON),y)
-+# No option available to explicitly enable/disable
-+NETWORK_MANAGER_DEPENDENCIES += jansson
-+endif
-+
- ifeq ($(BR2_PACKAGE_NETWORK_MANAGER_OVS),y)
- NETWORK_MANAGER_CONF_OPTS += -Dovs=true
--NETWORK_MANAGER_DEPENDENCIES += jansson
- else
- NETWORK_MANAGER_CONF_OPTS += -Dovs=false
- endif
 
---===============7544910514982563105==
+--===============0216328122645133441==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -177,4 +173,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============7544910514982563105==--
+--===============0216328122645133441==--
