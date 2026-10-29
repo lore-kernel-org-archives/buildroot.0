@@ -1,28 +1,28 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A96606A326
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:08:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DF38606A330
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:08:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=k4fdXr61
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=NIigb+ez
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4F98640A6B;
-	Fri, 30 Oct 2026 14:08:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 757D980879;
+	Fri, 30 Oct 2026 14:08:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DLbjNotxKEek; Fri, 30 Oct 2026 14:08:30 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 29B5E40611
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369310;
-	b=E0WGd1zXTi+biX9Enj2xPhUrcEZZaqtlwTBnCAlD9u+91NYfc5SD1ruTQZlCR9Hk+X9w
-	 Sugt/q1bOsyivteYII13pj9GZXBiurM3905Fk6RW78/aL5LHDhp66YizF4xXGdY61QtQv
-	 L3rn5vD/B1tFcQOumManQglWPUPmzwPz6/ijA01nnNcLXKWw6kiGVPKOKA3WnLOoPu4/V
-	 D8LW6JL7V4Mf0qtNZaZdYjJyuJm2JxATvk9f1aS7KvYvYXrkx5X1Z8d+KMieI2eRzqLs/
-	 3w6A4E1n0+dNsYcqlk0dCeWCm+Eqb4ZTvwGb7ccPon0DMUSkcQY6MVKy3AE33yaI+Gg==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6iJdueXQfcqi; Fri, 30 Oct 2026 14:08:31 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 7D6B3814B1
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369311;
+	b=rcdBA0ZhjGoaqGqC/K0XmRFP9rF3b4zkDr9vqbPE5lovt7xDAUreW5pwdjMF5izQe582
+	 I88Zkc474EyuC4WgbLcHX1+HTkNTMxmcOFJaali1ux1B+hoU85Tt988XALxjQyM2G1Mnn
+	 ExMiNePXCA0U5zlz6PXLVKpl7F22L4ZCzxKAk5b8SpqGFCZrWFknSDD83+aJn4AfQt1v+
+	 W0q5DFKKVbAmPDdNR5K1Y9bZYvgFiNf9xkG0BeBbYjwRZjMIwxa91idK9xi8j60mpT69n
+	 ey1BhV/ZrBFqivqNEQKHerspJEhhvOw3Tx16dANu2XXoN/1/Nr5r7lvhxKsh48DOz8Q==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793369310;
+	c=relaxed/relaxed; t=1793369311;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=7FYNPyFvg0xcvlzY70SI2J/EqSiK00tOQcjZW5bQPPs=;
-	b=qwN0A/WWy+y0k4jPqDelE04RlfIxM3G943yf3r+NIam40j4Tcmt31age27Z2nG5gM8C2
-	 9SlKA/PNzi74GXCeee2ZDyvwzpYt8agiIHfLnKsMIe5/O9H1dgC8nFdFctFLxU+FiDf/S
-	 JzZp6H+1VB12cQRclUhWFC5ORfZbrSehCs0ucgcf/zpJYCexxhOnrvso+Py4Dba2Vx/OO
-	 gJuW3w3Zg+4PPkGAu4tPxB18VkhNymQJYEO1/DO123ZuDyCIzubWuJhw4DNA+c6y571zv
-	 XgyEchCRZevCn5kzYg8UEMx34MZQXyiGfd7ycqAS2ktNQg2YXmpdEH6+OTupm1kmeiw==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=yqcTDRLhS2nWFB0CjsUpWa9LqqDXM5suuY+vvPxsZ/M=;
+	b=orfvRxtVp9uBG1nJwzziaKpgKS6eQKXSOKgCnqRCn2MXaHKBZhO8Y5GpLg2jKwVk/fyv
+	 vjDX2Gm9ChDHC8tyV7/36eOTvRbhqM2OziN1eoIxEWZJkxsQVxjDF/cbyehhjRL+TzwDd
+	 /6H0cNazJeRci6XIwo6rmmkxMa05wVazFB3clRongxqVsVhOVQiyvMaxtPPWuQex8xsT+
+	 gKAZWbkLR38zjFrT9ASvi+TaubWtRhSY7gh0rwaSS4BoTxbWEk89VrFBZpJvdPuNcd2yC
+	 X5DbAGpPwI5GrpCjAXZyRZsdQLPp64jmh516UV/l6JnyMGIjN2Ce9jhUH0eicsyo3sA==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793369310;
-	bh=7FYNPyFvg0xcvlzY70SI2J/EqSiK00tOQcjZW5bQPPs=;
+	s=default; t=1793369311;
+	bh=yqcTDRLhS2nWFB0CjsUpWa9LqqDXM5suuY+vvPxsZ/M=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=k4fdXr61x+zBMC69JGDmvzWLv+CI2n7gztkTH3K7dGPI6gkPCBWbqOF9lurCQ02dl
-	 YCG6xesjEIuzORGajUYAqWF0GK8HnxdzFVuH5C+1ynP/s/GycilK6CNHqxOMWUZVgA
-	 c4OHlGZhMmrFzEFk0LdcPeiMZmrGjq6Yh+g3StkcLS3kyeRZeYS6AoCFc6+BxHAgAU
-	 7bRscMWOQttIm6riGRj7hDLvBijgecMoDeELlT4tRz2iGsVDPTEnRS3HDjDNtYxNeL
-	 JzzxOydONk6Qhzq07m5KID+v/MKgSr52F3slbE30gUNSBYW9IJ71L9ZWRuxhD77KGI
-	 TUk5mdJCRsl3Q==
+	b=NIigb+ezDtQ7vVUlClvkFQuYfryYvnQtGrxWsUaEGRhsOkpYMSSQXzF6lTTtdMmyQ
+	 MgvA+GY19cgwPx3askcbSWRgbgLBsnxykJRJ+rMlq+6ebiGryC1NtVncsdwnYZ++u6
+	 /Nk6O60+n/o25h0PebmC58QZvdPqNCsj99tY+qlU+O40Pynu3zSAz7fJ7Ioq4iH/um
+	 j12O53H9wUMRncSnO6q9dIlpKMD0AfX8j2LUJpJxJL2IMblvV3BmcNfskXSCBEJNla
+	 UM2AZCW+K01t0Gn3cNJ8SOG2G4kcGebeA1eqOAAWZdSa3oYG+qBVATCvLg1cRWCLzG
+	 BFx1DViYHyYGg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 29B5E40611;
-	Fri, 30 Oct 2026 14:08:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7D6B3814B1;
+	Fri, 30 Oct 2026 14:08:31 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 0AA3F362
+ by lists1.osuosl.org (Postfix) with ESMTP id 17693D43
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:06:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F061381180
+ by smtp1.osuosl.org (Postfix) with ESMTP id F24218118D
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:06:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uNTyHfsbGe-6 for <buildroot@buildroot.org>;
+ id izNNozz-cHXe for <buildroot@buildroot.org>;
  Fri, 30 Oct 2026 14:06:09 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 282358116F
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 48D9981185
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793369169;
- b=GWBy3aQ2+p2Iuyqc+CyZWngywvtsb6+XgdFje4Rotz1pcTev9if/oRR350FKNSBv8+ZO
- 1zd8+0yghP2/YRi621dL5dSXbMzFBRlhIorTlsN39hII5jdRompWsITSaix8+K24h1RBu
- eU2kLZeA7bzIwT5dbKnii1baUT/hTIYO4D+Ydg7WKTtqLsIeH06HFEUjsya4gI7la3oH+
- 8ckIZGXRkuTxvRMphBsq7tlCafVDbeUB15JhRb+3HVG9b3XEwnl5tLXUoYkBs6Kc3EqRh
- Ww989Ptn60QMktB1rIilcNyZxt+wCdKP89+M18oxOCRSTH6d+7nXenaBBfeWLRypTaQ==
+ b=sqv7APXqcgkeKfB0YUJKk95PneuqVyRhl5y3ud1ttF5131v5Kn8J2K1K7JORSxwAT/fV
+ GBuI6T19SbFCFo4oyWJ7X5glstOZJJhNfng8pkDlUOlgh2DeKjX7RGUUFWqtyleyWlg4S
+ eGYthyU3l766oIQeBmo73pXuLTCpbHqWm0K5JgKh2x7sBrO+f9fbHRNanGbWvG4ZBUGig
+ GuFLP8OUkdIGsbyrPpHLbb/M35SZmYzLqfAkC2a0yv9eHsI/dEyBXgDKo19in0RE98wUt
+ pU7AiKJAmEgY0eqctcP3FM9s75DZ42I2UyUXPLYDPmgeEAA4wrIUrbqpZ+/OTln7SQQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1793369169;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=z26S5kK7dXMk5mNE/myDkhwHXEQ6Ugjb5BsbMEHSEQA=;
- b=aMzgb2A/nUY83686hI68eOGkw3jsigdqGRMQ3qJ27U0mhQZfJOLvPNwxg49iufqSK1pB
- nB2CgtVQXEZJWSfBMyMCXLjbnMyis2dIYqlyCZs5sINzCBtwG+PVEZBtralvhI8UE1hwp
- PRYJwfVoLbcTmnvusVvfjF/+2Qy7kSZh9+HRq1povEyMyET6n7S4Uj0FSo8qkLAI7nNbu
- yqzbNvRDSowh4xvAU1IkQEdwdzOCAPNoxHzCwl2IeqSzTfNm5O6lztYge96+ahmceWbiT
- l2cbC9onlL4ii9RuaDcZhQDHWKV5Aou23Pr52NKbrNhDFqD9gY31F4oiBJluJrYhQyQ==
+ bh=UBQClqTspB8VtgC2Gv/cD+a5R7jIwpkQFc/gzNaMy8E=;
+ b=DnsMaCm9lfIXcpUzFlBZWYYhm2nIOf9wEcvRdfmBaQnO7EwfZD+n/Klal42tD+u3+j0u
+ jka1KQXnH3l9A0qIgryxiEvArMCH2TzpzGF4Y1NhS0+Elt1B2G9CLGnl4KxHQSsfPzVEr
+ F2s7Fq3cjScvfDDHmJl+0XdtH/1f34vZwj1lzSG0XoPQeTztsXI2KJeJPFrC+k9SFW/xP
+ 9ZMIR+e6Z9kyFvVjsD6Yw/0bBmGUlSvorZ8NNSQ+ZqzvDh58KnFTl+NX0f+fAmdtuHSM0
+ WG11dxAcuJRlrae1FwKiyHgPioBTPmWP4OyLmtYYY9Pnj3vm/QLkZrBWaivTe0op0mw==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 282358116F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 48D9981185
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:06:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 47C049D389; Fri, 30 Oct 2026 14:04:41 +0000 (UTC)
+ id 687EF9D389; Fri, 30 Oct 2026 14:04:41 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 29 Oct 2026 21:20:01 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: c26db32f9a30c897541608afbe3705c6252fd738
-X-Git-Newrev: 419b96be31207e6849ee850b72c1ac9276607665
+X-Git-Oldrev: 2d973a59edfb43820ec1a84d14a503bc0b15cdb2
+X-Git-Newrev: 3a36492ccd7638793ff21928764474706f283f29
 X-Patchwork-Hint: ignore
-Message-Id: <20261030140441.47C049D389@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- package/linux-tools/linux-tool-perf.mk.in: fix doc build issue
+Message-Id: <20261030140441.687EF9D389@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/python3: security
+ bump to v3.12.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,7 +114,7 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5477857050087944592=="
+Content-Type: multipart/mixed; boundary="===============2863920793699023287=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
@@ -124,85 +124,59 @@ X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============5477857050087944592==
+--===============2863920793699023287==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/419b96be31207e6849ee850b72c1ac9276607665
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3a36492ccd7638793ff21928764474706f283f29
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Address potential document build issue when BR2_PER_PACKAGE_DIRECTORIES
-is enabled.
+This is an expedited security release to address the compromised eMudhra
+intermediate CA keys. These keys are now blocked by the ssl module as a
+last resort against their use. Normal uses of pip, including to upgrade
+pip itself, are now safe from attacks based on those compromised keys,
+even if pip hasn't been updated yet.
 
-The perf package wants to prevent the documentation from being built,
-since it won't be installed anyway. The trick is to create an empty
-GNUmakefile in the proper place. It did this by using a POST_PATCH hook.
+This fixes the following vulnerabilities:
+- CVE-2026-115557: Distrust compromised eMudhra intermediate CA keys
+- CVE-2026-77214 CVE-2026-102633: Update bundled Expat to 2.9.0
+- CVE-2024-3220: Don't read mimetypes.knownfiles by default on Windows
+- CVE-2026-114583: Reject links replacing the destination in tarfile.tar_filter
 
-The reason this approach works when BR2_PER_PACKAGE_DIRECTORIES is off
-is that the build system ensures only one package builds at a time, so
-Linux's "extract" stage and Linux Tool's "patch" stage can never execute
-in parallel.
+See the release notes: https://www.python.org/downloads/release/python-31216/
 
-However, with per-package builds enabled, there is no guarantee that
-Linux has finished extracting by the time the linux-tool's POST_PATCH
-hook runs. This means the creation of GNUmakefile could silently be
-skipped if that portion of the source code hadn't been extracted yet.
-If, in addition to this, asciidoc happened to be installed on the build
-host (/usr/bin/asciidoc), perf would detect this and enable the doc
-build stage. At actual build time, it would use host-python3 (not the
-host's system Python), which does NOT have asciidoc, and the build would
-fail.
-
-  INSTALL libperf_headers
-  SYSHDR  /local/users/jenkins/workspace/[...]/libperf/arch/[...]/unistd_64.h
-  INSTALL libbpf_headers
-fatal: not a git repository: '.'
-  ASCIIDOC /local/users/jenkins/workspace/[...]/tools/perf/perf-amd-ibs.xml
-fatal: not a git repository: '.'
-[...]
-  ASCIIDOC /local/users/jenkins/workspace/[...]/tools/perf/perf-data.xml
-/local/users/jenkins/workspace/buildroot/[...]/host/bin/python3:
-No module named asciidoc
-make[5]: *** [Makefile:275: [...]/perf-data.xml] Error 1
-
-Turning the POST_PATCH hook into a PRE_CONFIGURE hook solves this timing
-problem and guarantees that the "fake" GNUmakefile can be injected into
-$(LINUX_DIR)/tools/perf/Documentation as intended.
-
-Signed-off-by: Markus Mayer <markus.mayer@broadcom.com>
-Tested-by: Florian Fainelli <florian.fainelli@broadcom.com>
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 49e3806198097567ca57a0b75d9c7d7a258b794d)
+(alternative to commit 3736eda341337a2ddd824111a5f065c84d44c584)
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/linux-tools/linux-tool-perf.mk.in | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/python3/python3.hash | 4 ++--
+ package/python3/python3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
-index 3238948d76..08aeafd9d7 100644
---- a/package/linux-tools/linux-tool-perf.mk.in
-+++ b/package/linux-tools/linux-tool-perf.mk.in
-@@ -140,12 +140,17 @@ endif
- # distributions.
- # We name it 'GNUmakefile' so that GNU make will use it instead of
- # the existing 'Makefile'.
-+#
-+# This must be a PRE_CONFIGURE hook, not a POST_PATCH hook. Only the
-+# configure step is ordered after "linux" (via LINUX_TOOLS_DEPENDENCIES).
-+# For a POST_PATCH hook, tools/perf/Documentation/Makefile is not
-+# guaranteed to exist yet.
- define PERF_DISABLE_DOCUMENTATION
- 	if [ -f $(LINUX_DIR)/tools/perf/Documentation/Makefile ]; then \
- 		printf "%%:\n\t@:\n" >$(LINUX_DIR)/tools/perf/Documentation/GNUmakefile; \
- 	fi
- endef
--LINUX_TOOLS_POST_PATCH_HOOKS += PERF_DISABLE_DOCUMENTATION
-+LINUX_TOOLS_PRE_CONFIGURE_HOOKS += PERF_DISABLE_DOCUMENTATION
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+index 7949607fb7..0f456ccf94 100644
+--- a/package/python3/python3.hash
++++ b/package/python3/python3.hash
+@@ -1,3 +1,3 @@
+-# From https://www.python.org/downloads/release/python-31215/
+-sha256  c2c4321961fab0fb999d66e0cecf521c2ab3994c7992873ea99e306c1094fd5a  Python-3.12.15.tar.xz
++# From https://www.python.org/downloads/release/python-31216/
++sha256  b5796915dc45ff745cfb4e990a7e7c93d6f546328a102ce31448d69ebc37575c  Python-3.12.16.tar.xz
+ sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index a2371b1a92..ed49fd6bb3 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- # O must be redefined here to overwrite the one used by Buildroot for
- # out of tree build. We build perf in $(LINUX_DIR)/tools/perf/ and not just
+ PYTHON3_VERSION_MAJOR = 3.12
+-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).15
++PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).16
+ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
 
---===============5477857050087944592==
+--===============2863920793699023287==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -213,4 +187,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============5477857050087944592==--
+--===============2863920793699023287==--
