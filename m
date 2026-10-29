@@ -1,28 +1,28 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7883B606A31C
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:20:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C8A6606A31C
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:20:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=qz/SAUXm
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=LyM5M6N9
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5703860D90;
-	Fri, 30 Oct 2026 14:20:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EED3040E7E;
+	Fri, 30 Oct 2026 14:20:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FrLaCqDhHjHQ; Fri, 30 Oct 2026 14:20:54 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 8096260DBF
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793370054;
-	b=CvbKYZl+FmjANeanpJwLc57WoLsxyxzWTz6n7mjy/h9oJR/8qu62tFo0ppub59WMLZ70
-	 iX40E69jF4F0KTWBLwRl/k0ypEHKnFRqp/xPDi2lCqg1h6fBjHzRPZzHDCeL0hnSbOjhq
-	 fZDMecGJGy6VYWDq/spZaakVRwn+3pcOAzsMXdcfNvlyNitRe6W3XLmoZODI5kU1fHeDg
-	 0xZi9KQhsXM37gbqpv3t4E0yVQYDVNKbANP1Sbk1ujHdB07eCyvKQVcoByWkrR3yAgzJw
-	 R89VNhM9UVD/CDlgEP149VweQgQ+e4uBrbsvuMDkLx99zFweKW2DePACl+81QqheZ7g==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SnHFhreziK1V; Fri, 30 Oct 2026 14:20:56 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org E596140E71
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793370056;
+	b=YBKwmdkF7cAXH4Jwtw65JKad1Ndd6id2oC3wvYOaX6MSI2VBI0QdOMk/tHRyaN+1vnFk
+	 hd+J6siRZ8ma5J7x5/W/dm7bs3IBMJuIDXW2MZnHqJYDn/0zu9vpmGhTHKFt6MTUePpZN
+	 tWmBTFwdxuRlKZ8c5GRYbDGMngItA7eBGoPbZbokLH0PvnBH802fZTRcu0ZhfRq4CIsFS
+	 Zq3KZOJhiQcqnQ5qwKakpPMvznIqXRr0mClN0AZhaUrC4xVZlOy40+Uk176ZMO+XZQ2To
+	 tLh8ng8/S9qlbPf819PXK1oEb36PPQB6JjXlNsHI5qtlzU7BZ5NCmm7wsXww8PfiTPw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793370054;
+	c=relaxed/relaxed; t=1793370056;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=kH/SwPFlMzU8tr0P9ocGR4h1wZHbI4b0H/B3lygSedk=;
-	b=aLGb29yM4AvzBDL+F0bA7Dtzrp0iaK3b0wIvZqy+crPeN+6aAo8bvATF+zfP3eO7cCkb
-	 YiLghmKcA0SlD9GQOFK/KISkMXILl8/X4U9WKgKEerB3d97bYs2h0VemNkwmVTayHJ1rf
-	 6UZ9STFO1wvjKKQRvWfUzlBYemkcgEccllHe02r5Y1qdqjaOPlMEdzuuXP7st+0c+NIl6
-	 2FwIz1T4ZYd94BOSYH33SDMT/F0cBi4gsHGhA0GkBfkZ5Z4sIzC5oSLZ0zoQX3B/FGNbT
-	 lFbSuXhdA5Brs1kP7LCe+PAFcOBnaNsd3mrqdjX3p3D9e77TEJM7jrD8WuoQYaeWv7A==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	bh=TK093jgqzfX2dATWNclnh8oAha0dXn2LKgx2FM7XY94=;
+	b=WGVsmwTvSx4Iaj1rHuSGEqT8qC/wjyM+alSt4LR83MH2W3cDP3Xv+gGE5JSZH0jCsUIU
+	 aDx//0p9+qnmyEhw6XLhFj+Rg72k/175w2LOL4ih5R4S8xmlvzCGhcIUOiYI4xcRxSPQX
+	 G2WCroPJH9WYVWEXgNrrcp/tRnEcubms8Gq1t9hmZ9fGlXRCyagV788M61VH5sMH6CxLR
+	 AECeWQcZu/JAjnm4JlFDaOVAlReXvjUowb9exewZEbZaUE4l1MPzSYn/ycgU5Dcju7IfU
+	 6sjJPtqvAKHHvDWX0qddBD9cfHCaQL9fwfEnqBxsfI2fYpJwlarC/VJo/s3FSqCYdjw==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793370054;
-	bh=kH/SwPFlMzU8tr0P9ocGR4h1wZHbI4b0H/B3lygSedk=;
+	s=default; t=1793370056;
+	bh=TK093jgqzfX2dATWNclnh8oAha0dXn2LKgx2FM7XY94=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=qz/SAUXmGneqTZXbuW04skUc4JGF6QwqrMTw/q0eC88ka3ivPhmR/RVvgO3sq/ukm
-	 fCmieYSlSrN0wse0mKw/m2+MGOYbJjhnJuZMPXYTrom2vli2SD7F8KhifFHnAWsfYL
-	 IZhrOndR4gIbSg1kWd0t9DQYV9pcfduKGk/tcfcRAV+kfSRhyfCFzAWxnUe9X4KEnl
-	 s8DLeX3z941xhv5SmeGZbTYNEqn0t+uQHfmD7EnqE8dzNAUpyaJFpe1t+rybRIOUtR
-	 a1G3RauoTJJSe1sU27OzrPVTGx2mDfmv74cW676PDNKVFkWYdcNvslaxXX5hbE7vxn
-	 Pja6otUaGQn7g==
+	b=LyM5M6N937sqgLkl0xGKNELW0Fqadw+DTQK1XTSzujtmaAx8xE423JZPMjBHL/QHh
+	 WLtyNz4V7vHHojbMQbbFN1j+SqZth4tpTcHZP6FGaOWa5+AA8TFbmPYsK+IIjOlBPw
+	 ZWBi+vzCKXoFUfTTEA47eeFoOGGIHlSmDwv/25mgtaVcR51CR3GFsqXlDgyWp4DdKE
+	 1ZqVZ9ey5MUoODKu9IwOV+391M0l4NAFoPT9WBzPUi2crLLKh26oQjEPNWxx53rNbo
+	 3h5K+ZBA/Tr5VKVYBgPkAR+kmC8z/nZUmsJ69fAc/ve2wTWarSqKionT01f4bEml+1
+	 vYT6FBwfrNrdQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8096260DBF;
-	Fri, 30 Oct 2026 14:20:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id F2C33D43
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E596140E71;
+	Fri, 30 Oct 2026 14:20:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 24D70362
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E4D2B60AEC
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1666760AEC
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y863jS9I6GKQ for <buildroot@buildroot.org>;
+ id q8Uj2Jtiu0u4 for <buildroot@buildroot.org>;
  Fri, 30 Oct 2026 14:18:17 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 3797760B72
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 36E9A60AFF
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793369897;
- b=H/7co7qgvMYG1/IB0gtw6BQzGeOkRmFvSsE1Cg/uz7uInyN+cXxKxwUY9j2Gl6lR9Xcr
- 2x2d+F6u7G2i9VdVbqdXVfNOVz6QZfNvua+y1A6++tVEDiF3Js8tKrS8o6s+8OKSn+zJA
- mklEqZDTRacBdp0CkEpTcqPVZq3yyCr8dNs6oxaNHDx9zztxATfgQkvlq0nuoOluO0v2I
- AT3g/NqTzp/jQfvqEP8ANiYQlMayNFzDANTG/ZV1DKJt8g21QPpom8ZlWzcJ0rpsk9YCq
- 2B32RSYDP3lrm2ECINI2wNLQ7n2RtXk2OTz3nfXJ96tgU/Ryou90XE7wdrNXBkGyjeA==
+ b=BZfJv7L+2FTVXQdwuDKfiZisbEoErMitc4E978RZUm/koe2mmXC2C1fmausm1W5KRZl8
+ MKcidMbqOQHeJquX3LYVvFnfvb+Eb/YSeC32gTCEdbHGw1gvqula4rsdFbdWp/Lm+WG63
+ xFHhDiNNkEe4LSViOatiOOawv6qr5rzgX36X29KKvVX4ANayPO4RqwxPgITtXRiZ3fS/C
+ vq60eMv9XdEiAR2VsODVs5HZB4gBmZkt55iKMDm4/HOTcEzPYRXU9u2DhTed3qSvGUGIy
+ C/CYVneabj7jgt1JFPEKtvw1/8MN/Ikhg+ROrkMgAFGmkWPOlvCwvE1f9uJrdf3NVcQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1793369897;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=PCdwWHzot0Dy/gZu+COahelMzYfq7ioxY4E31XSbNRs=;
- b=FhXnyDoSxFl03M30+d6tT/v70X89X8L6qehSpt9yz5KSnbeFjY0YxWBWl6yACruWYqg+
- yfFMtobHKwMZxPCEXPVkuxiH7/jsYJPjdIHNRjwiR16FGVAnORqXnnyXHZJZwZVcb9W7F
- dDjbotqmMFJUkxRKqseAMIVVXPdQy56+3R8zx+YqK3hS/cWKs3OkCGoiow83/m8IyPHx1
- wpr5m60UtJriKeyV4a7qsmiwL/IZL8jVptzO+MypfB1AYTCVpGk9B3ZgtuZbq7nkOR2Vj
- WvqYCyMBNMymOAHTA5ikfJKl40HQD0ZbWWRdh8ldBGhqLEu0RYU0wFBbAGfhJerNZrQ==
+ bh=91QmA3/dUjZNxgPb0yza0PWNe0Qo6Irl9SkeXSwUyHs=;
+ b=T/2g4vEeEC+HjJkXjLhUv5FGDtLZLOXmhsIH2B/R/udoEdZHlqvyr/va/p+4W7AwxswY
+ 9U8RlgrU0uL/pY0aNgK+FozuHW8WOdG31qcEUJ3i6BRtdKdYvPeianY7aZxCa3wxIpU8w
+ kfhTCc9qvGG/vy6sSXcoSQMOclafiVudzQJNrpmdXOvsTp9M25XlEumE3BemzcRmpTgXT
+ mU87HFcKoB1vw+RgfJaz7eoEmbECg+XYLSZcbYgeSz8XH/+732cpzobCGhixrHrroo5UR
+ +C20Dnpq/cvKFZNX4Me6BwQFiLZqzuFD39A5GsYnxBFQtELX9ePDNcc0JokZ9NcnocQ==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3797760B72
+ by smtp3.osuosl.org (Postfix) with ESMTP id 36E9A60AFF
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:18:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 47A959D388; Fri, 30 Oct 2026 14:16:49 +0000 (UTC)
+ id 554339D389; Fri, 30 Oct 2026 14:16:49 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 29 Oct 2026 21:21:12 +0100
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: 0506298debac131229d13fb5175429c2de764dd6
-X-Git-Newrev: 39c9692236ab6212836e3dffa802f3d88bc1bb53
+X-Git-Oldrev: 39c9692236ab6212836e3dffa802f3d88bc1bb53
+X-Git-Newrev: d09335179f82122f90b75bfeb801e50256f36d34
 X-Patchwork-Hint: ignore
-Message-Id: <20261030141649.47A959D388@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/avrdude: fix
- libserialport dependency
+Message-Id: <20261030141649.554339D389@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x]
+ package/linux-tools/linux-tool-perf.mk.in: fix doc build issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,74 +114,95 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8135328446496088544=="
+Content-Type: multipart/mixed; boundary="===============7090946740313821966=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_PASS autolearn=ham autolearn_force=no
+	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_NONE autolearn=ham autolearn_force=no
 	version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============8135328446496088544==
+--===============7090946740313821966==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/39c9692236ab6212836e3dffa802f3d88bc1bb53
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d09335179f82122f90b75bfeb801e50256f36d34
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-Since version 8.0, avrdude automatically detects and links against
-libserialport when it finds it in the sysroot
-(find_library(HAVE_LIBSERIALPORT ...) in CMakeLists.txt), and there is
-no option to disable it.
+Address potential document build issue when BR2_PER_PACKAGE_DIRECTORIES
+is enabled.
 
-Buildroot doesn't declare this dependency, so whether avrdude gets
-libserialport support depends on the build order. With
-BR2_PACKAGE_LIBSERIALPORT=y, building avrdude before libserialport
-gives:
+The perf package wants to prevent the documentation from being built,
+since it won't be installed anyway. The trick is to create an empty
+GNUmakefile in the proper place. It did this by using a POST_PATCH hook.
 
-  HAVE_LIBSERIALPORT:FILEPATH=HAVE_LIBSERIALPORT-NOTFOUND
+The reason this approach works when BR2_PER_PACKAGE_DIRECTORIES is off
+is that the build system ensures only one package builds at a time, so
+Linux's "extract" stage and Linux Tool's "patch" stage can never execute
+in parallel.
 
-while building libserialport first links avrdude against it. This
-makes the build non-reproducible.
+However, with per-package builds enabled, there is no guarantee that
+Linux has finished extracting by the time the linux-tool's POST_PATCH
+hook runs. This means the creation of GNUmakefile could silently be
+skipped if that portion of the source code hadn't been extracted yet.
+If, in addition to this, asciidoc happened to be installed on the build
+host (/usr/bin/asciidoc), perf would detect this and enable the doc
+build stage. At actual build time, it would use host-python3 (not the
+host's system Python), which does NOT have asciidoc, and the build would
+fail.
 
-Add libserialport to the dependencies when it is enabled, and
-otherwise pass -DHAVE_LIBSERIALPORT=OFF, so that find_library() skips
-the search and libserialport support is disabled.
+  INSTALL libperf_headers
+  SYSHDR  /local/users/jenkins/workspace/[...]/libperf/arch/[...]/unistd_64.h
+  INSTALL libbpf_headers
+fatal: not a git repository: '.'
+  ASCIIDOC /local/users/jenkins/workspace/[...]/tools/perf/perf-amd-ibs.xml
+fatal: not a git repository: '.'
+[...]
+  ASCIIDOC /local/users/jenkins/workspace/[...]/tools/perf/perf-data.xml
+/local/users/jenkins/workspace/buildroot/[...]/host/bin/python3:
+No module named asciidoc
+make[5]: *** [Makefile:275: [...]/perf-data.xml] Error 1
 
-This issue has been present since commit 0e16ff09e953
-("package/avrdude: bump to version 8.0"), as avrdude 8.0 added
-libserialport detection. It therefore affects 2025.05 and later.
+Turning the POST_PATCH hook into a PRE_CONFIGURE hook solves this timing
+problem and guarantees that the "fake" GNUmakefile can be injected into
+$(LINUX_DIR)/tools/perf/Documentation as intended.
 
-Fixes: 0e16ff09e9538d46c9726f8998080d55dfa5d41f ("package/avrdude: bump to version 8.0")
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Markus Mayer <markus.mayer@broadcom.com>
+Tested-by: Florian Fainelli <florian.fainelli@broadcom.com>
+Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 8f74cfc46c1346a481e6742f8d94cf5d6784e64f)
+(cherry picked from commit 49e3806198097567ca57a0b75d9c7d7a258b794d)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/avrdude/avrdude.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/linux-tools/linux-tool-perf.mk.in | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
-index 6d9ffe8625..0ce26934d2 100644
---- a/package/avrdude/avrdude.mk
-+++ b/package/avrdude/avrdude.mk
-@@ -25,6 +25,12 @@ else ifeq ($(BR2_PACKAGE_LIBFTDI),y)
- AVRDUDE_DEPENDENCIES += libftdi
- endif
+diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
+index 3238948d76..08aeafd9d7 100644
+--- a/package/linux-tools/linux-tool-perf.mk.in
++++ b/package/linux-tools/linux-tool-perf.mk.in
+@@ -140,12 +140,17 @@ endif
+ # distributions.
+ # We name it 'GNUmakefile' so that GNU make will use it instead of
+ # the existing 'Makefile'.
++#
++# This must be a PRE_CONFIGURE hook, not a POST_PATCH hook. Only the
++# configure step is ordered after "linux" (via LINUX_TOOLS_DEPENDENCIES).
++# For a POST_PATCH hook, tools/perf/Documentation/Makefile is not
++# guaranteed to exist yet.
+ define PERF_DISABLE_DOCUMENTATION
+ 	if [ -f $(LINUX_DIR)/tools/perf/Documentation/Makefile ]; then \
+ 		printf "%%:\n\t@:\n" >$(LINUX_DIR)/tools/perf/Documentation/GNUmakefile; \
+ 	fi
+ endef
+-LINUX_TOOLS_POST_PATCH_HOOKS += PERF_DISABLE_DOCUMENTATION
++LINUX_TOOLS_PRE_CONFIGURE_HOOKS += PERF_DISABLE_DOCUMENTATION
  
-+ifeq ($(BR2_PACKAGE_LIBSERIALPORT),y)
-+AVRDUDE_DEPENDENCIES += libserialport
-+else
-+AVRDUDE_CONF_OPTS += -DHAVE_LIBSERIALPORT=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_HIDAPI),y)
- AVRDUDE_DEPENDENCIES += hidapi
- endif
+ # O must be redefined here to overwrite the one used by Buildroot for
+ # out of tree build. We build perf in $(LINUX_DIR)/tools/perf/ and not just
 
---===============8135328446496088544==
+--===============7090946740313821966==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -192,4 +213,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============8135328446496088544==--
+--===============7090946740313821966==--
