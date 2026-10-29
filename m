@@ -1,28 +1,28 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4DDC606A31A
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:08:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E0E2606A31A
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:08:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=ZM4p/T2V
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=bu6ZTzgI
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C6B6740BAC;
-	Fri, 30 Oct 2026 14:08:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0BDEE812CB;
+	Fri, 30 Oct 2026 14:08:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LoJ5KgxkosvK; Fri, 30 Oct 2026 14:08:25 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org B56E940C6E
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369305;
-	b=eobfhDB5yH3OO18Li37qNjskcOCwg0xKjaxC0vVYMNdlEuq8hEzgy/24KM/1ojIsEoYr
-	 3adsX7hEXL2/c0YKAgoIsUEH6Y0qC9wvCfIH5uMx2WfS7YJfe5+2BRgnHa8jTE+zS2kbs
-	 wDuPbAzj2brrSDZQiGvyQum36NOB+3n2CBrquibjFIku8rJa+hOkZ5IJ/m23lyfkZRwuI
-	 Jg+uQjeUTwHVcbUaxH/KjfWLgQIluVw/4uGSV6rgCq6uGJoHl/u8LWEiy2WIMZvtbeleC
-	 RAsAOyBz0T57/SrBMICZcVdAz8KwxJMF+xLvGUNIW+OUyPtZisFCCAM/+PhvBrVcr/w==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HL1EMyfsq8mm; Fri, 30 Oct 2026 14:08:27 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 1D02A812BD
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369307;
+	b=WSqun+n8Y82NrFJtk4UkZuEL3hKmO2oXuJX8AAidLpRnlVDgi14DGnLBHxrOAvTAVFDp
+	 YWIfUWSSccQwCqDbGqV9KatpmHYNOsT9pv0kCApgh1yuKqwsx5L5WYCT63awWs5omFOzS
+	 rKerzUyGBJp6WEQNCqJqtP4AmmCDoCVLC9ANOoWKhw8+QH94CawTlo3xyc6krkQGxuHZo
+	 ItOCXgAyiovxZ3ltzdhOUPBjBs+C9xvAv+TKT30wkY54Dwka3Af9zryHzQJYwgpKs/w1P
+	 O31E6Ef6aJOlU2mRs2KqCR7KR6brec2yH+DcRSCCeF30hvsZZYfH2x/AAIQ9VXZaO6g==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793369305;
+	c=relaxed/relaxed; t=1793369307;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=dugYht1tknKIzyU+uOvhTWmFsdOL56P3180Y5+a/cJI=;
-	b=teFuMNfMr15O7389XqKNGPchRqr3htS4vp3oNYc+9BCrWg1oxYRIZGKAGKgps7IL8DtB
-	 MTmg9tAGeVHjAmocDO1pI4EC0TBNZuD5EVBbZMxZudlxzmJr8hD1H8Sm2cxEsGoE1foWy
-	 QT5tpzxv7sxnFhBBToacJIc36zi90VSgUzX0FxVrJ5zYfCQHib+v7dm7Su61XV43QNo8o
-	 dBBLGrcOYnmeVZDxmrCfEnGEsQKVh10FZrLGuqHXzIGVYh7LCxrTrQQ6YYFbo0PggsaFG
-	 OF/keWMtGscumYG0De6WliWM4+AAYbiHY1DpU20L4cAksIB+yzZ+DRk2TGUu9cOf+iw==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=A5H4HH3unMip90lg09IRqe0ZAAwlAJucRFvDOSWGU9E=;
+	b=QvBH77yXo4HOBZXzW3Hm4mfHzgq+I/kcwmhau4YjzHTURNCbXa3r56TLaWgZFVrXFh27
+	 n0tiUhqjDOkoPDUSQ1lgrzAHPzPqOjuZjWU+ZjIeVADHozCRl5MAwWeUxTWW7hwogv3Ql
+	 Q7hJorERw6NJMFGMH2tDRw0lPIL4/+MA8b0sWdkRF992A5CHv44s34Dm3zZi69MMRuWMU
+	 L9Lf63nDMKj4r6GQps19G2TfG6PGyD+1QqBBxuwoddbIw4FA8PzeyjhcSZwPvxm5Zs9Ni
+	 m/OblrzpGvzB+7+1iUaggBoS+B0peE/Bv1n86t2UluiUQ5SoByOkfc7y2D8rgI4P0pA==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793369305;
-	bh=dugYht1tknKIzyU+uOvhTWmFsdOL56P3180Y5+a/cJI=;
+	s=default; t=1793369307;
+	bh=A5H4HH3unMip90lg09IRqe0ZAAwlAJucRFvDOSWGU9E=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=ZM4p/T2VsT5/oqpKMa6dkUgw0KtfG+1z4Ay4elYluk9ymyWFpRtmkXbSSXrnmBnLX
-	 KONRXKfCsnRz9j6NC7fX70KcQs0ei5nJAbD+2BINfcnyAAFCBLunlCSUId3PZNF/nj
-	 wpTEYg7GbsJNoD0jZdbINBXfMWsxjyZIVibddpn/i/ahYvmnh1P51G3WsPNbwQWgZQ
-	 wsUQzVN/lmA6tFizmhqL/RJDrqxnNJLiCo5Dg96tigFe0Ip/qrZ48UCGdQY/n56SZH
-	 kxQZan6Htabv9nvQi4ESTkAredaTg4hPZz1tZRhBQHfyWjhaICQFSk/pmxV3/3T/L4
-	 vfX/cPpY3xaWg==
+	b=bu6ZTzgIwBvuS2eIwW762iPkysPOMyrdYzPTxAWr2BJuyRgxy/ZEB7DPMl9WJPmZv
+	 boGCnZA7//XR+8izLHv9XMwEXhmAzETHiZz1y9QpR1kSUSFcPYBwW3WL906eF6ego+
+	 icKcNvp4yIL0akiiaRcCZ0mmtSTOglMdq3Xv2FHe0uuxaP6gZpvK/E77M4QIC7e29U
+	 SuqHlxVHrclfFZuBNH8pJ8eLwZ5t+9Hm+JDqqWk4d92S7CAq/BezRzhvFBUnf5owm4
+	 PFFySGAlbkLuXenQ3IailH0ONnSq/sZeUT8nqByubRQ4bL/PfQ1cGhYXY3DNo5dZFz
+	 dMjS0Ys7t1XxA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B56E940C6E;
-	Fri, 30 Oct 2026 14:08:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1D02A812BD;
+	Fri, 30 Oct 2026 14:08:27 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C0987D43
+ by lists1.osuosl.org (Postfix) with ESMTP id C56DCD38
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:06:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A39B540B26
+ by smtp4.osuosl.org (Postfix) with ESMTP id B612A40B34
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:06:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p_g7GSFBCINM for <buildroot@buildroot.org>;
+ id R_v_W6VSdE0c for <buildroot@buildroot.org>;
  Fri, 30 Oct 2026 14:06:08 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 9AEC140B34
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org C19FF40B2E
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793369168;
- b=XyUYmbuuRhyqaj1fAKPeZEhOq6LP+Dmv0mgV/I23YIw+d4fJ/eLk8WQbmDPwVdzGRnnM
- i8uxAPtbeFX4rkd1gWSkovqmreehp2MI743ubHVvbv5+qOUR87ZO0SyXPK7/ciXxgctEZ
- 9RYPiF5sGwlABvwKsgcT1LjJzxw5YL7qH3RSozSrVy4At/aHxGb4TVj10TS6h32zhbu3R
- AqWaElOqJIgzwU7NXSctLA4lZUxWaxnRWaTyp2R/YvT+gqYdsyz6Rkz4udky3nlOa96g+
- f74Rkeu19E+OF+Nf6tRFnZdg7eTMys9LL3OJUn8hOF7g+MWHD+vdkf6BtK0ueExdrUw==
+ b=RaH5nfPowDujX8vGSKAvg4Fl+096rWN63jSDpxS9aM8fc0HckyyPjpsDUlhmMIou/zaG
+ tH6gZlpgOzQQ6RWbBEoEwkw8KysaYmhLclKuK7KpZ5PBh0KHHxZSnig/RpyxxbU30ZPYO
+ SLtldlXVPJCM0NcMsVQNn8JpyLZ6coC4YNorh5pVvC0i95x3ZlONvZ4Iq4iRPPEkD7FVS
+ 0ZddVsrQs7A6GgnGs3MDnBQa7EB+NzTWhNqOe/dASBmi7Z6aYEgJyrBUNQnOMkzZYVLC9
+ gTjnJ5odWtYmXgowvvbcJc9XhUoWPJtvHTvLa0myKcew6ELUDDz7lgkeSIpMWgejdYg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1793369168;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=PEldzyuTICwfQUgfB7zMWTsfVl1Hv0hJVg0dbyV40jU=;
- b=T75wQwY7eUUVWP2CgugKXNt6EWb7TFiUug572BjRrodDPnNG3x4FXLN8+eSVLObvSvJg
- 1zFVa1NBM5HDJwXEDMCZPkpEHRqXGpTEEUFfweBH9ePISuNvf7wuKd03GMba3K6Y7rxLe
- K77BHt8w3eRnLJeEp8SRfKvQDeTuNNZv7Af4A0pdzIkNsqiBPMyWyOb3hXwh8y13cKqXo
- qJFmAhqFOLVX+IstM+D+PUFdDDJsNVQHytzOHZHitasejjXdOPGHheo96itm2GaHzAoMq
- 3NoOR4y9bJV7AzD1/9VcZHR9LW/j7m2Og5ff+KQ5qBy8s3Fk9bdGHnR87Y0NALamvbA==
+ bh=QPsE8ocgYsd2O/l6JSONoM2r/tJc5E1n7PBehErjuLY=;
+ b=jMR+gIzISE+2Z2+f1NfJ0/egfS5t8fuUrPIG03R/Mf0GqWSSCEEkUv2M8rVEz4D44ReX
+ y+V3LASAjdjQZas+lqMg3/WxewEN+QMg+f6ODtNA3WXKN7Fbt/x5ndZdF4yrKCSMlCg5i
+ b+FoGuVXc6arwTo/ogTyReLCFzGhf9sPzPDx2hmeVOFBfRFh/x7dDA52PqJ6ZO6yRXil9
+ ScobcXW9M5tuEvqqNrnHeMp8LiTCEPgptHiy09mUlm0smYAv1S5pvenvNv9IEB5oPtkAo
+ 6vv2KuMLMvumCf91V4Zvl8LIp1q6P0JRHgT2mB3wxtyBAGy46q5OjjpZy/vYCkw3yWg==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9AEC140B34
+ by smtp4.osuosl.org (Postfix) with ESMTP id C19FF40B2E
  for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:06:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BB6489D388; Fri, 30 Oct 2026 14:04:40 +0000 (UTC)
+ id E0FC19D388; Fri, 30 Oct 2026 14:04:40 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 29 Oct 2026 21:20:01 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: c58f9838f5bad3b8fc7886d7de3a44d7e39819ed
-X-Git-Newrev: 9704b4f0fc2e47f0f19ebf597e9447b4e6ceaeec
+X-Git-Oldrev: 547c0e9c8c5c4e2b557557ee2da52fe5d986f3a0
+X-Git-Newrev: 60f01615f91dcf7b755199f87c439d2cdbac269a
 X-Patchwork-Hint: ignore
-Message-Id: <20261030140440.BB6489D388@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/kodi: fix build
- errors with uClibc-ng
+Message-Id: <20261030140440.E0FC19D388@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/docker-cli: needs
+ NPTL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,7 +114,7 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0315139795119858291=="
+Content-Type: multipart/mixed; boundary="===============8138621508768284163=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
@@ -124,138 +124,82 @@ X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============0315139795119858291==
+--===============8138621508768284163==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9704b4f0fc2e47f0f19ebf597e9447b4e6ceaeec
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/60f01615f91dcf7b755199f87c439d2cdbac269a
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-uClibc-ng 1.0.58 includes commit
-https://github.com/wbx-github/uclibc-ng/commit/487af14988c3c923aa661f204642597cff356a83
-which removes "#define PAGE_SIZE" causing build errors detected by the
-Gitlab pipelines for all uClibc-ng toolchains:
+pthread_unix.c: In function 'x_cgo_getstackbound':
+pthread_unix.c:96:9: error: implicit declaration of function
+ 'pthread_getattr_np'; did you mean 'pthread_attr_init'?
+ [-Werror=implicit-function-declaration]
 
-/builds/bkuhls/buildroot/br-test-pkg/bootlin-powerpc-e500mc-uclibc/build/kodi-21.3-Omega/xbmc/utils/UDMABufferObject.cpp:26:12:
- error: expected unqualified-id before numeric constant
+Fixes:
+https://autobuild.buildroot.net/results/756/756ceb50b78218ac6085e0143d9f358f97d9568d/
 
-Patch 0015 fixes the problem.
-
-Buildroot commit f82f5fe177b7f884d424c7ce22aff670ed13f359 bumped uClibc
-to version 1.0.56 which includes gettid() causing a build error. Patch
-0016 fixes the problem.
+The build error occured already in 2023:
+https://autobuild.buildroot.net/results/c0b/c0ba9647824dd2dc811c31e7b999167f04d0be49/
+A backport to LTS branches should be considered.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4d91f8d7df30250a92afefda697530ced4d8bc22)
+(cherry picked from commit fb0438aaf67da07027b1d9e734450ae5a333da23)
+[Raphaël: drop mender-update-modules]
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- ...bject-Use-sysconf-_SC_PAGESIZE-to-retriev.patch | 42 +++++++++++++++++++
- ...ThreadImplLinux-uClibc-ng-provides-gettid.patch | 47 ++++++++++++++++++++++
- 2 files changed, 89 insertions(+)
+ package/docker-cli-buildx/Config.in | 6 +++---
+ package/docker-cli/Config.in        | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/kodi/0015-UDMABufferObject-Use-sysconf-_SC_PAGESIZE-to-retriev.patch b/package/kodi/0015-UDMABufferObject-Use-sysconf-_SC_PAGESIZE-to-retriev.patch
-new file mode 100644
-index 0000000000..3b7e359844
---- /dev/null
-+++ b/package/kodi/0015-UDMABufferObject-Use-sysconf-_SC_PAGESIZE-to-retriev.patch
-@@ -0,0 +1,42 @@
-+From da89dfce2da4c68ef3a7f89a4fba1cd6f861e363 Mon Sep 17 00:00:00 2001
-+From: fossdd <fossdd@pwned.life>
-+Date: Sat, 22 Feb 2025 22:52:11 +0100
-+Subject: [PATCH] [UDMABufferObject] Use sysconf(_SC_PAGESIZE) to retrieve page
-+ size
-+
-+getpagesize() is deprecated and legacy since POSIX.1-2001 and is not available
-+on architectures where PAGESIZE is not defined. Instead query the
-+current page size at runtime.
-+
-+Upstream: https://github.com/xbmc/xbmc/commit/da89dfce2da4c68ef3a7f89a4fba1cd6f861e363
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ xbmc/utils/UDMABufferObject.cpp | 4 +---
-+ 1 file changed, 1 insertion(+), 3 deletions(-)
-+
-+diff --git a/xbmc/utils/UDMABufferObject.cpp b/xbmc/utils/UDMABufferObject.cpp
-+index 2b8336bcea..f6ba81c18f 100644
-+--- a/xbmc/utils/UDMABufferObject.cpp
-++++ b/xbmc/utils/UDMABufferObject.cpp
-+@@ -23,8 +23,6 @@
-+ namespace
-+ {
-+ 
-+-const auto PAGESIZE = getpagesize();
-+-
-+ int RoundUp(int num, int factor)
-+ {
-+   return num + factor - 1 - (num - 1) % factor;
-+@@ -93,7 +91,7 @@ bool CUDMABufferObject::CreateBufferObject(uint32_t format, uint32_t width, uint
-+ bool CUDMABufferObject::CreateBufferObject(uint64_t size)
-+ {
-+   // Must be rounded to the system page size
-+-  m_size = RoundUp(size, PAGESIZE);
-++  m_size = RoundUp(size, sysconf(_SC_PAGESIZE));
-+ 
-+   m_memfd = memfd_create("kodi", MFD_CLOEXEC | MFD_ALLOW_SEALING);
-+   if (m_memfd < 0)
-+-- 
-+2.47.3
-+
-diff --git a/package/kodi/0016-CThreadImplLinux-uClibc-ng-provides-gettid.patch b/package/kodi/0016-CThreadImplLinux-uClibc-ng-provides-gettid.patch
-new file mode 100644
-index 0000000000..87c71a525e
---- /dev/null
-+++ b/package/kodi/0016-CThreadImplLinux-uClibc-ng-provides-gettid.patch
-@@ -0,0 +1,47 @@
-+From 6b2fd8c0691426be9e8d36276e5f3a8153fa3262 Mon Sep 17 00:00:00 2001
-+From: Bernd Kuhls <bernd@kuhls.net>
-+Date: Fri, 23 Oct 2026 08:03:18 +0200
-+Subject: [PATCH] CThreadImplLinux: uClibc-ng provides gettid()
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+https://github.com/xbmc/xbmc/commit/b5b2be7121f750b5f27d205e2b11ce0179b388cf
-+added gettid() back in 2022 for older glibc and all uClibc versions.
-+
-+uClibc-ng added gettid() in version 1.0.56:
-+https://github.com/wbx-github/uclibc-ng/commit/47c15dbb50f07be1ef5a1ffc9559205584078fbc
-+
-+causing a build error now:
-+
-+/builds/bkuhls/buildroot/br-test-pkg/bootlin-x86-64-uclibc/build/kodi-22.0rc1-Piers/xbmc/platform/linux/threads/ThreadImplLinux.cpp:
-+ In constructor ‘CThreadImplLinux::CThreadImplLinux(std::thread::native_handle_type)’:
-+/builds/bkuhls/buildroot/br-test-pkg/bootlin-x86-64-uclibc/build/kodi-22.0rc1-Piers/xbmc/platform/linux/threads/ThreadImplLinux.cpp:76:43:
-+ error: call of overloaded ‘gettid()’ is ambiguous
-+
-+To fix the problem the kodi implementation of gettid() should only be
-+used for older glibc versions.
-+
-+Upstream: https://github.com/xbmc/xbmc/pull/30055
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ xbmc/platform/linux/threads/ThreadImplLinux.cpp | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/xbmc/platform/linux/threads/ThreadImplLinux.cpp b/xbmc/platform/linux/threads/ThreadImplLinux.cpp
-+index 8c7edbb591..ebf4ebe82b 100644
-+--- a/xbmc/platform/linux/threads/ThreadImplLinux.cpp
-++++ b/xbmc/platform/linux/threads/ThreadImplLinux.cpp
-+@@ -52,7 +52,7 @@ constexpr int ThreadPriorityToNativePriority(const ThreadPriority& priority)
-+   }
-+ }
-+ 
-+-#if !defined(TARGET_ANDROID) && (defined(__GLIBC__) || defined(__UCLIBC__))
-++#if !defined(TARGET_ANDROID) && defined(__GLIBC__) && !defined(__UCLIBC__)
-+ #if defined(__UCLIBC__) || !__GLIBC_PREREQ(2, 30)
-+ static pid_t gettid()
-+ {
-+-- 
-+2.47.3
-+
+diff --git a/package/docker-cli-buildx/Config.in b/package/docker-cli-buildx/Config.in
+index 486f1196c3..d1f9bc2804 100644
+--- a/package/docker-cli-buildx/Config.in
++++ b/package/docker-cli-buildx/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_DOCKER_CLI_BUILDX
+ 	bool "docker-cli-buildx"
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # docker-cli
+ 	select BR2_PACKAGE_DOCKER_CLI
+ 	help
+ 	  buildx is a Docker CLI plugin for extended build
+@@ -10,7 +10,7 @@ config BR2_PACKAGE_DOCKER_CLI_BUILDX
+ 
+ 	  https://github.com/docker/buildx
+ 
+-comment "docker-cli-buildx needs a toolchain w/ threads"
++comment "docker-cli-buildx needs a toolchain w/ NPTL"
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/docker-cli/Config.in b/package/docker-cli/Config.in
+index 52e7f7c871..2befb87578 100644
+--- a/package/docker-cli/Config.in
++++ b/package/docker-cli/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_DOCKER_CLI
+ 	bool "docker-cli"
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	select BR2_PACKAGE_HOST_GO
+ 	help
+ 	  Docker is a platform to build, ship,
+@@ -20,7 +20,7 @@ config BR2_PACKAGE_DOCKER_CLI_STATIC
+ 
+ endif
+ 
+-comment "docker-cli needs a toolchain w/ threads"
++comment "docker-cli needs a toolchain w/ NPTL"
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
 
---===============0315139795119858291==
+--===============8138621508768284163==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -266,4 +210,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0315139795119858291==--
+--===============8138621508768284163==--
