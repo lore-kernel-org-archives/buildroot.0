@@ -1,28 +1,28 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0790E606A321
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 15:28:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 072EC606A322
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 15:28:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=ELhpWrey
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=THIX+7iz
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DCC1C8156B;
-	Fri, 30 Oct 2026 15:28:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D41CA40CE7;
+	Fri, 30 Oct 2026 15:28:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9rh-h_5dylXt; Fri, 30 Oct 2026 15:28:02 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org C794F816DB
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793374081;
-	b=AEkfXe3gl1RbGyoQ+buHh4mWF12LKrFbbDnB98MBY94FlZ5j4cbFbPlNW4Sq72YID/H9
-	 gAsXNQLjNIl/LMv7dSB11BkWqa0mH+yD/Fw8u7K6kQR81Lp/W6/zjyZwvB+uAhv6Xq7ek
-	 YcW0+ybSuVyd220+z8h8dzaFCa48anWwJgnAPmQ/fUSqFvvsUpj+GCfxTfOm1bwUL4L/s
-	 EmhPATwsRhU4+tQRfsoHP6YV7/fuLvae2GGJ2MXb7mXZiLZT5E02qDQ83louWENOyWmdX
-	 FVfP62EIjkW7YkzWtwl0K4ZyP74jbmxwkqMT6a/TWP9elXOnt1rrBgbd9W28haZsKuA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YeQPmO46rHlG; Fri, 30 Oct 2026 15:28:03 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 335E740CDE
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793374083;
+	b=luz9Nj/oG8pgfdIKd5BTLFsE+61bj9slT2spIxnMDO5ECFm2A1uZsia6hgp/fS3uSPIH
+	 e+k9vIP3S4bCervrov/XXdrbh6CVZte2vdBqar5JU0drI/azjKft0RsIxlfJwk1fR6jwP
+	 Yb5d4Jfm1pzPXJf/nf75tVM9ZnxNb8pi/s4KE61BD4VBy3OFptLbWVt2EI5fUW0c5r4m6
+	 2xXKhEh8x4Ow8VpVGnBV4QKc6lyjVYGERCCx0PaWn9GB+tD5EXEZ2SmjZFuKHdLMvsWp0
+	 KgZp2IAukIwfqtONYdbQdJJn/om6D8VPoB+57587g4K0RywUN08Pza01493S3wAOjoQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793374081;
+	c=relaxed/relaxed; t=1793374083;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,119 +31,120 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=jx/RYUuNX+HDblhqHla6Zdb2FM3W56jK0syK6WyNfKE=;
-	b=o38huS56IrM62ASFHQR8peWkj/ccxaACsLJTXIukDTPc9fqBR6y4EOmOc58/wVdaQZPy
-	 k+H+4t1ko46RjHOGlkz4wHsDsdNbkPfL1si5sWvuUfcWEpOIeQU/VTaA3Jy4EQQAJfou5
-	 4TuysuzbK7781UNCLO2GrxyqWm99evZPq/4rppvDNQNEdif0lyiONXqxYmEanARQg5rUv
-	 spmM7fRQeu0LK2ljjA4jyrYQkbE5rhyUoJJAO3fwzmwm/L9jvyCfQaimahKiBY+zF3L71
-	 YvRQknPqlJ/OIcSB+78v7dXM+1r8QTEt/hGV/uOWzic7jZuammI2+G3vV4rRMq95YWw==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	bh=uDkhPvAVdX4JtaiX1wWhAZHeTZtqNZF3dES9nn015YU=;
+	b=mu3AC10t0IzM7PTCPm3heA7jcvfdWKPYlfq+0j5tB4T9qceuC25Admvz/SGLD+W9kWMX
+	 dBIsiAXWL40VXBmeHQK1Y7/RVE6wAVKrCK3QzErPYfQo/aoflpdjgdlKNtijd2DXJMZYk
+	 xrjAaAZcDmVcNOlQ8wR1mOq3mRnWxuc2rJOu3Fyc3Ia7NZC13ovj4IfjA0K0Rs3SwQ9O1
+	 bDVM2guTsA26LNcFQ2NqtONgjL6r8grfJhKTnH63NKAXaevRnLWb/hpv/NypEuzYpcODC
+	 fffDolNcW+X8/e8f5fNuYJqbE93Wd1FG6d2MXYNMo+U5J2DXGGazUk4PUdWbMDijXpA==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793374081;
-	bh=jx/RYUuNX+HDblhqHla6Zdb2FM3W56jK0syK6WyNfKE=;
+	s=default; t=1793374083;
+	bh=uDkhPvAVdX4JtaiX1wWhAZHeTZtqNZF3dES9nn015YU=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=ELhpWreywYuh//8qIh2QuRQhFyRiqE16GtGRm9bT9YgWjmbHMRv6U3Bc2V15sK9yX
-	 T8jxbVHxAHy5dhY9lyNzdycoaGJzhZzSZskIxDrRKBxnIP8nhr0g16SP7osc72AYfc
-	 eJlFnvyv3XK/KCrIpdYPeknNxxiqq34pIbWeraIHDuc3OfLZxlzyH28SqxSwFykzP4
-	 eIOsIx8Pp0FwYGGuvCzqK9fXIUQLq4Ai8TM7GJpae5ohXRQsAZ2KXPpNu2DV7Sq/C5
-	 W0RfkSIr3k3/lbPSU5A95mnHUfA3LAoC/+RABIIKTvoeb5lhlmpYR2dPhII8ejlF9/
-	 Nn6dbcXg6coUQ==
+	b=THIX+7izCl6XTh2xrxJNnQc1QevA/NbfUYwbfaQVUITL1LkSqQWQlIJZycTvSDAc5
+	 5vxyCwBBHy+qvsgg6Aju6N7p0oIDunVRC73JklfDCpvq6bcOuchzJIK9r408nPiqe2
+	 myxGg4dj07TZMXn3C1OPYNJJuYryr7bBSrHd93/IUXcfiJKqOhEEBDCJv1nFbg5OA7
+	 5029HSxxwkbhOmBE5RRI2n4WGQ1Qa6SnNb6ykVVeEdK8frgj1Uy8tfaux+oFTzmzEk
+	 otEyR/eT+uVVRKjNfLdQXant/tFAuiwwjqoKC4149+/O1zC85HFt9xilHQO+vzq+2W
+	 fKquh9Z35WWeA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C794F816DB;
-	Fri, 30 Oct 2026 15:28:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 34746235
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:27:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 335E740CDE;
+	Fri, 30 Oct 2026 15:28:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 101B9235
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:27:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2673940211
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:27:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 01A7360B0F
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:27:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BJE7w8TH_yE0 for <buildroot@buildroot.org>;
- Fri, 30 Oct 2026 15:27:38 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org E31AC4053E
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793374058;
- b=WVrvCSu+K09lnOqGuRwTJGT6wpL/rDXhDEZJ+BzGKpCo5qzKozHPB51vkfxZAR91K2jN
- 2ocWQIuFsQ5clebRPGUj5WbYxIA2WajwpmCeL42L2RZZsmtfMWXKegESqPFKeazDjNERB
- VvmJzBse1oAwfrMX9HPQ1LQqrjcB0NRRTz0iKJv1f79orGvRTeNJAhGl0R9596trByOqL
- WsiNqB3qjcRdEaBimWsTvhf8GVZkWO8b39P+Dsaxo6kg2b4fUYYBliouk6Co7zEcPxrOc
- +PF+jEQCa012ZLwrIVcob1nV+jzEC0zWYXzJ+L0lIkLLV472YnzXsaYxCep51qa0Q5Q==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g1yUBHtyFh2v for <buildroot@buildroot.org>;
+ Fri, 30 Oct 2026 15:27:42 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org B4BA260B0C
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793374062;
+ b=DK/48U5Yv+U8eigygYO+sHAj79yzfOkGOdK/1EfT269g6GklVcCd9sVkPQHohe7sUsz+
+ 4Rp5yNZijLOc8IAWFGX2iYXQFFcJYjr1hA0a4vv+yNl6+2s5MQwnscQG0NUS4+hdVe2Yd
+ BlpMqhfHxGhScMnvrMQqoWP/LsJd2ZShnqHoBoBpuWhTEx8roTMPMmyvv8HEESjItAKFL
+ NQeC07rx/EzPVQiFhlpPBuQixo5d2ZI5/8KAgZmFahmYy1oRhrcYMyAhwQIpJ3VTxoJ4g
+ NENCdELG1MMpzpFrOrTtYCKPR4FiKYSxNI0w6KiDcNWGJqxkklhtca3RO182nazlfaw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793374058;
+ c=relaxed/relaxed; t=1793374062;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=SPl2zFLY3j7BL/EMLxHsSbLJ2KAqMHTJOmcMux/DiIQ=;
- b=tF9P3QFlt2TvzbxoDJndDVe163QhZG0eL1nk0z0Hx7DhqAhHpXyJqBm/7XwipYo/VQpY
- O9CflIdh4uVcHr3vf5AqdLuRkDQNv+T9N1a2smTP7Mp90AvRrPSVZ9vpWDSLYlOdrivuI
- v+dCKAeazg8j0wveQ/K+HiRhB0u2oF/7wo81yPp3XKCfmNmXH63jH7TY4iI3y1+9peOqy
- kSFsvifIh3k0tKxDTExUMVkFUTj9lCAGR3iP4eyl+nIxNd64JGBWqTKI4ScnwqcOI10Xw
- 11eOLPvctOO/9PDIkZ0l+DNsosPi1CdqLya/b+IQwVvD3BABdwSQasoRZCkNiydDnoQ==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ bh=45b4lrgyp5BKqS4djvkbGxLAfWcBaNkXsZTKY5w4Ji0=;
+ b=C5FR3Q4HkLuoLikUEk/atr0w2VB9a9VJ0IQDiMRjbC5d89VPVxMqtr11qEI1q23JJZQu
+ XQUL4sfxYpwVQKI0PxILCY1kcLBpWzGONPnUPpODNmn27uQmFpPwUqA67pe/vifMxw5M1
+ e1vKkTopSFo7PbnM4aEaeZosHSdEBfv/BH8lHfWDHFqXGmuyKcmxkJRiZgdD2kw9Q9DIw
+ n6qpVmtpBrM7zQaI2RH3h6CO/NqiWxjdSvCtjDIR6RpC+D6quHNxZSkve3oL56ybr0vQU
+ DdMhHKT0odTWpDh81EGOHAxlu2BLwdiR4GzAM+0+9RUCWFPAv5ZrbO1QyiNrhkFZsTQ==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
  dmarc=pass header.from=mind.be;
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=eXdRvyFG; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::42f"
+ header.s=google header.b=dY0bOw56; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::336"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E31AC4053E
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:27:37 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id
- ffacd0b85a97d-48e46e449e8so540803f8f.3
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 08:27:37 -0700 (PDT)
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B4BA260B0C
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:27:41 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-4a60f9474c4so9235575e9.0
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 08:27:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793374056; x=1793978856;
+ d=1e100.net; s=20260707; t=1793374059; x=1793978859;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=SPl2zFLY3j7BL/EMLxHsSbLJ2KAqMHTJOmcMux/DiIQ=;
- b=F5eQf/Yca74TqWnhz831hKJ1xxqgqiHHRpc/NrNC0p/qla+bXSq/8Kd51SmF6vgsRz
- Gv5nNBtG46AaHk/qHJ5KiFaX2CFWsrp7jV/xh1lOQXJuzlS19LmSeI04iQGx1LU1FH9b
- qEwlnIcen4zUmxiRxCv1Wf2qS/R0VEvLjJUEphERKHlLq010Cr54/Vp/YT+YC9RsCAjy
- AjoEcovBYVv9wLZ6VvydqK3hIA63heWbIl/ob2YBwLeBj3Z4CbdiCW9rbjQqfuIL91GA
- Cu6qSZsoWeZvAvUf94Zvt4yhb1BNOe/+v3BTCyVcru/YX0oOsp4IgGdycaeRcjQXvddJ
- 6jBA==
-X-Gm-Message-State: AFq9FYLkQIasCEpzPF1iW5301YLam1SCf3KjBKFYYpxfnYZtLJPGHy1b
- QnVpW/o7GeMeqDZWerN/zakJoD66+Dt5VHRqoKOXSUpGQcxJvSoUnsCfXuL1sgpq7KqkshgQR16
- Z8OcPzoE=
-X-Gm-Gg: AYBFou0+CMN76ygNG/0B7GX9djg/3hX30CyYQwt+x/yy5g3qFeubCPzdLhffAtzHGxF
- Y8+ak+8NfrjWkVIjiu990AZDMKGLJ5oowrBHA8m0jM5oleg9g+gfjAOaXz6EvHkvqFdhwhy+idm
- RgHnD/LHYW8wR50Y35VtRlQrqaTmh6SShsJ4Mzy55/85xvzrYpSVE6Xy7p69546N6kkJn1V4nO9
- eEE7WxgAo3fGLPn0pXl64uxkcT/UiO5PLwjiBItiGjvIuNsX1Qsj5/JDWfgQ1/87qMhr3b9K3H8
- evCx5ZksfnnnFe3OGlNzKquc3j+sHFiIzPThhr9lGnlVDIVOg4PFm/6CNTmpxhvxVefNc6C1FrO
- B1sr3rqa6vcb5SMEqygJswOv0+tCcc4I/CSDeNPk59mb62nA3LJM3cbhIt3Glu4y+nPGx58QkRG
- FiaobcjlpDEkTKPlv358eWPZ6MdDX4bPGlNG6sx87/mzBP5HQQhPvCcmrvrOarezuqbeTO8uhX/
- kOd9M8UCXJTJtjsGOStWJavs5pCA0uk0ksM0dMxF2dusOTwz7+HR67LnncmUK9wsY3/IE1dHA4f
- 98s6/SjnZJSYAiLa7jHwHj2MnF41aLiwsxWUvCV86uQdPwApQ8si5Nji0wNXEuqzPFL+S5pL
-X-Received: by 2002:a05:6000:41c3:b0:48c:4658:602b with SMTP id
- ffacd0b85a97d-48e6e4f5605mr6087697f8f.10.1793374055675; 
- Fri, 30 Oct 2026 08:27:35 -0700 (PDT)
+ bh=45b4lrgyp5BKqS4djvkbGxLAfWcBaNkXsZTKY5w4Ji0=;
+ b=wktvkhokrOEtD8/Rwr5KHs8NWwtBtx4Io0yY5JB6mwes61xnbJB4kYhe1UWQ7h/k+R
+ 4xC5LE5UUcYaH+kqKfq0lHqXB5spQe44E5gZf8ifPdw6Qcku1VrEeKliJAcRnaDD10sJ
+ 9MZTFr9vOs394A2LgAF2ZqEvNo4OJNhCdANTkzGjssFPkTHTONgT38El5MaMNnmGYyiB
+ zBLXvORdT4y+LcjEk23A7YU8TF3Vpho6xLANSCz10BKdFcF8J/EnQadf1z9H3sSh6PW2
+ v382jMhBDnidFukOWrTGK3wsmGKK8F3ldGxMvEr9nhh/gWxq3io7TljhXA/ZPNE7a0CQ
+ Txhw==
+X-Gm-Message-State: AFq9FYJ1qvu/IJCj9dulZP1A91/Djo7tp+qYa/tKnUpSUC5dx/bsI33W
+ i4eAFtDcSCrOyixlsI6JbJgKQ6X1gEWiMjHhlOGIBFiOdqE3WDDhSP7pCmb/uFLWVxCBwTiK3Pq
+ DlRDQRos=
+X-Gm-Gg: AYBFou2UPhrv3FMxlVFWuaV/rJ4p2+d4kr5r6DGUwgez0tUdyBHD6iVedwRxyR8jhkr
+ K1a0eLRCYEL2Rcjy9jhtdV4E7xnU3SMvMuo81FEkhljlHIW1kvQnC39YdFZ9Il7l/Dt6x4pBvAG
+ 6hjc40Ioefkobrkbjmo4sTI/qLtRGCcjWCBUFRthjfVAq+RBV/eMtis9ZwJnRQPRvr3H04Im/Ky
+ eyPn0iBjvgUfj4XMcEsSs3VAX83QqH7t1bMOVB65k67POZSO/+tsi/WEast0mVcyaqhNKXOYLHG
+ 9ClOeGRO77M+xV7yFw4WIUWhJsb/q3sefnhNAMxcEDJpGzJuBuDLQhBckDdE1mN5iN9ee82ineG
+ Pxw2AjgcRZKXJkrdJ7CbktnEWjJbGpxLWMpeKnrmPYc6mPMaFmGaB0hQbD0WjXiRNx+Oy1QBfqn
+ YHyBV8iP6pig1ZqbwclseyYidCf/4z1U7rhP7khnUvpwc07vgxy8FK3Ho4M5PNfD/HT4Fcvr9iy
+ Y1+6B5W7LicI9NTMxlsa5r7HB5BxZC2l9NHP37TRAr5xg9pdbi6i0OejGUV6VhiyiKRcLYdr49q
+ RVuwtVvzHO4rmWhyaTpm19OJciNZ0CcZpcRiaqOpkrv4e8/LT78lJED4kzY0ZZHfWpzXj2hnsQ=
+ =
+X-Received: by 2002:a05:600c:34d1:b0:4a0:b6:4619 with SMTP id
+ 5b1f17b1804b1-4ac12475a61mr57766375e9.0.1793374059296; 
+ Fri, 30 Oct 2026 08:27:39 -0700 (PDT)
 Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
  [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48e71b964desm3763846f8f.46.2026.10.30.08.27.35
+ 5b1f17b1804b1-4ac08b72578sm26451215e9.2.2026.10.30.08.27.38
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 30 Oct 2026 08:27:35 -0700 (PDT)
+ Fri, 30 Oct 2026 08:27:38 -0700 (PDT)
 To: buildroot@buildroot.org,
-	Julien Olivain <ju.o@free.fr>
+	Yegor Yefremov <yegorslists@googlemail.com>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 30 Oct 2026 16:27:32 +0100
-Message-ID: <20261030152734.1906832-1-raphael.melotte@mind.be>
+Date: Fri, 30 Oct 2026 16:27:36 +0100
+Message-ID: <20261030152738.1906860-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261020202639.1094960-3-ju.o@free.fr>
+In-Reply-To: <20261020221309.4194290-1-yegorslists@googlemail.com>
 References: 
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 3/4] utils/genrandconfig: implement
- secondary configurations filter
+Subject: Re: [Buildroot] [PATCH v2] package/gobject-introspection: fix host
+ build when /bin/sh warns
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -159,127 +160,123 @@ Reply-To: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
 In reply of:
-> Buildroot commit [1] marked a set of target configurations as
-> "secondary", with the intent to test those less frequently in
-> autobuilders. This was implemented by adding a Kconfig "depends on
-> !BR2_HIDE_SECONDARY_TARGET_OPTIONS" which was controlled by an
-> environment variable that could be set by the "autobuild-run"
-> script. It turns out that "make randconfig" is not selecting random
-> configs amongst the available options (i.e. following the
-> dependencies). Instead, it selects fully random options, and if a
-> dependency could not be met, the default choice is taken. As a
-> result, every time a secondary architecture needed to be filtered
-> out, the default architecture was selected instead, which is
-> currently i686 at the time of this commit.
+> host-gobject-introspection is built with LD_LIBRARY_PATH pointing to
+> $(HOST_DIR)/lib. When g-ir-scanner calls pkg-config, which in Buildroot
+> is a /bin/sh wrapper script, the shell inherits that LD_LIBRARY_PATH.
+> On hosts where /bin/sh is bash linked against the system libreadline
+> (e.g. Arch Linux), and host-ncurses has already been built, the
+> dynamic loader picks up Buildroot's libncursesw, which has no symbol
+> versioning, and warns on stderr:
 > 
-> This commit reimplement the list of secondary configurations
-> initially made in commit [1] as a filter in the
-> "utils/genrandcondig" script. This commit also adds the following
-> x86 i586 CPUs which were missed in commit [1]:
-> c3, geode, pentium_mmx, winchip2, winchip_c6
+> /bin/sh: .../host/lib/libncursesw.so.6: no version information available (required by /usr/lib/libreadline.so.8)
 > 
-> Since "utils/genrandcondig" is called from "autobuild-run",
-> this commit fixes the too frequent i686 architecture issue.
+> giscanner merges pkg-config's stderr into its stdout and parses the
+> result as compiler flags, so the build fails with:
 > 
-> [1] https://gitlab.com/buildroot.org/buildroot/-/commit/ddce0814a794b27a6449b144f85c90fa53e92ac6
+> gcc: error: /bin/sh:: linker input file not found: No such file or directory
+> gcc: error: .../host/lib/libncursesw.so.6:: linker input file not found: No such file or directory
+> gcc: error: no: linker input file not found: No such file or directory
+> ...
 > 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> Backport the pending upstream merge request, so that giscanner only
+> parses pkg-config's stdout.
+> 
+> This issue has been present since commit 8270fca228b1
+> ("package/gobject-introspection: fix host-linking"), which started
+> setting LD_LIBRARY_PATH for the build, while giscanner has been
+> merging pkg-config's stderr since 2018. It only shows up on some build
+> hosts, when host-ncurses is built before host-gobject-introspection.
+> It therefore affects 2020.05 and later, including 2025.02.x and
+> 2026.02.x.
+> 
+> Fixes:
+> https://autobuild.buildroot.org/results/615b6701c6c200f6e6f3081e784f981e4f4f644e
+> 
+> Fixes: 8270fca228b1892b699801536ce136460e4892e9 ("package/gobject-introspection: fix host-linking")
+> Assisted-by: Claude:claude-opus-5-5
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 Applied to 2025.02.x, 2026.08.x. Thanks
 
 > ---
->  utils/genrandconfig | 49 +++++++++++++++++++++++++++++++++++++++++++--
->  1 file changed, 47 insertions(+), 2 deletions(-)
+> Changes v1 -> v2:
+>   - backport the earlier upstream MR !561 by Franciszek Stachura,
+>     which makes the same change, instead of my duplicate MR !568
 > 
-> diff --git a/utils/genrandconfig b/utils/genrandconfig
-> index 5cea529354..e6655fe189 100755
-> --- a/utils/genrandconfig
-> +++ b/utils/genrandconfig
-> @@ -99,7 +99,46 @@ class SystemInfo:
->          return not missing_requirements
->  
->  
-> -async def fixup_config(sysinfo, configfile):
-> +def is_secondary_config(configlines):
-> +    """Identify secondary configurations.
+>  ...2-giscanner-Do-parse-stderr-as-flags.patch | 56 +++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+>  create mode 100644 package/gobject-introspection/0002-giscanner-Do-parse-stderr-as-flags.patch
+> 
+> diff --git a/package/gobject-introspection/0002-giscanner-Do-parse-stderr-as-flags.patch b/package/gobject-introspection/0002-giscanner-Do-parse-stderr-as-flags.patch
+> new file mode 100644
+> index 0000000000..f19d8ce092
+> --- /dev/null
+> +++ b/package/gobject-introspection/0002-giscanner-Do-parse-stderr-as-flags.patch
+> @@ -0,0 +1,56 @@
+> +From 5685062db8924fe0a58a9a2a3f435217614dcc9f Mon Sep 17 00:00:00 2001
+> +From: Franciszek Stachura <fbstachura@gmail.com>
+> +Date: Thu, 20 Aug 2026 20:23:16 +0200
+> +Subject: [PATCH] giscanner: Do parse stderr as flags
 > +
-> +    This function identifies configurations considered as
-> +    "secondary". This classification can be used to skip those less
-> +    frequent configurations.
+> +check_output in pkgconfig.py returns stdout with stderr. If pkg-config
+> +prints something to stderr (ex. dynamic linker warnings, or warnings
+> +from program passed in PKG_CONFIG), it may get parsed as flags and
+> +passed to the compiler.
 > +
-> +    Returns: 'True' if the configuration is considered as "secondary",
-> +    or 'False' otherwise.
-> +    """
+> +Do not capture stderr in check_output at all.
 > +
-> +    secondary_configs = [
-> +        # Secondary architectures (including all CPUs)
-> +        "arcle", "armeb", "aarch64_be", "hppa", "loongarch64", "m68k",
-> +        "microblazeel", "microblazebe", "mips", "mipsel", "mips64",
-> +        "or1k", "powerpc", "powerpc64", "s390x", "sh", "sparc",
-> +        "sparc64", "xtensa",
-> +        # Secondary CPUs:
-> +        # Armv4 CPUs:
-> +        "arm920t", "arm922t", "fa526", "strongarm",
-> +        # Older 32bit CPUs before i686:
-> +        "x86_c3", "x86_geode", "x86_i486", "x86_i586",
-> +        "x86_pentium_mmx", "x86_winchip2", "x86_winchip_c6",
-> +        "x86_x1000",
-> +        # All RISC-V 32-bit:
-> +        "RISCV_32"
-> +    ]
-> +    for cfg in secondary_configs:
-> +        if f"BR2_{cfg}=y\n" in configlines:
-> +            return True
+> +Upstream: https://gitlab.gnome.org/GNOME/gobject-introspection/-/merge_requests/561
+> +Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> +---
+> + giscanner/pkgconfig.py          |  2 +-
+> + tests/scanner/test_pkgconfig.py | 10 ++++++++++
+> + 2 files changed, 11 insertions(+), 1 deletion(-)
 > +
-> +    # We also mark RISC-V 64-bit noMMU as secondary
-> +    if "BR2_RISCV_64=y\n" in configlines and \
-> +       "BR2_RISCV_USE_MMU=y\n" not in configlines:
-> +        return True
+> +diff --git a/giscanner/pkgconfig.py b/giscanner/pkgconfig.py
+> +index 39db41d61..19c5953ea 100644
+> +--- a/giscanner/pkgconfig.py
+> ++++ b/giscanner/pkgconfig.py
+> +@@ -31,7 +31,7 @@ def check_output(flags, ignore_errors, command=None):
+> +     argv = command[:]
+> +     argv.extend(flags)
+> +     try:
+> +-        return subprocess.check_output(argv, universal_newlines=True, stderr=subprocess.STDOUT)
+> ++        return subprocess.check_output(argv, universal_newlines=True)
+> +     except subprocess.CalledProcessError as e:
+> +         output = e.output or ''
+> +         if ignore_errors:
+> +diff --git a/tests/scanner/test_pkgconfig.py b/tests/scanner/test_pkgconfig.py
+> +index 8b654e38e..5da0eb4fc 100644
+> +--- a/tests/scanner/test_pkgconfig.py
+> ++++ b/tests/scanner/test_pkgconfig.py
+> +@@ -104,6 +104,16 @@ class PkgConfigTest(unittest.TestCase):
+> +             flags = pkgconfig.cflags(['bar-3.0'], command=command)
+> +             self.assertEqual(flags, ['-DLOG="HELLO"'])
+> + 
+> ++    def test_pkgconfig_stderr(self):
+> ++        s = """
+> ++        import sys
+> ++        print('warning: test', file=sys.stderr)
+> ++        print('-ltest')
+> ++        """
+> ++        with pkg_config_script(s) as command:
+> ++            flags = pkgconfig.cflags(['foo-2.0'], command=command)
+> ++            self.assertEqual(flags, ['-ltest'])
+> ++
+> + 
+> + if __name__ == '__main__':
+> +     unittest.main()
+> +-- 
+> +GitLab
 > +
-> +    return False
-> +
-> +
-> +async def fixup_config(sysinfo, configfile, skip_secondary_configs=True):
->      """Finalize the configuration and reject any problematic combinations
->  
->      This function returns 'True' when the configuration has been
-> @@ -113,6 +152,9 @@ async def fixup_config(sysinfo, configfile):
->  
->      ROOTFS_SIZE = '5G'
->  
-> +    if skip_secondary_configs and is_secondary_config(configlines):
-> +        return False
-> +
->      # libffi not available on ARMv7-M, but propagating libffi arch
->      # dependencies in Buildroot is really too much work, so we handle
->      # this here.
-> @@ -530,6 +572,9 @@ async def gen_config(args):
->      else:
->          configfile = os.path.join(args.outputdir, ".config")
->  
-> +    # Skip secondary configurations 90% of the time
-> +    skip_secondary_configs = randint(0, 9) != 0
-> +
->      # Now, generate the random selection of packages, and fixup
->      # things if needed.
->      # Safe-guard, in case we can not quickly come to a valid
-> @@ -553,7 +598,7 @@ async def gen_config(args):
->          if ret:
->              return ret
->  
-> -        if await fixup_config(sysinfo, configfile):
-> +        if await fixup_config(sysinfo, configfile, skip_secondary_configs):
->              print("  configuration valid")
->              break
->  
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
