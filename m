@@ -1,28 +1,28 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48250606A31A
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 15:30:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF8AB606A31F
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 15:30:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=bJzEzRBw
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=XjKEqUAF
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2526681CAD;
-	Fri, 30 Oct 2026 15:30:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D08BA40EBE;
+	Fri, 30 Oct 2026 15:30:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AZQhW2X9lLmT; Fri, 30 Oct 2026 15:30:06 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 19B1E81BF4
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793374206;
-	b=IzSvy4tkHj0RbzwWhq8xvCeUTvBiPPXnS8SbzJ18pAVA+pRTB9qQW3oJAe/73Fdujdlw
-	 AFVEfpqfm/9UrRCTuXhcCVR+pLPnengsPLJMHXLuXljn7VfEYSVYIedrCAHGQ1Dy/Ycaa
-	 +J/cPgfYxM+jy2OieqQoukXukFOllx9Mbe+Kd4yDZ+yFq6nJIqZqPMwYTTu8+DTqSRIe1
-	 YReVkq7nYl+SzL2XB30+mV6BwYAG4f2XVjmxoXx8sNXJsgmY7+AQJqVPL1/fmv3uX1T5a
-	 mSQdLBTPJohkF/AJPLOlLGlIuBthuEJku84vfF6kup9vtYRB2nJVYrF0kxxRxgoSklQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Pltb3qcu8eCQ; Fri, 30 Oct 2026 15:30:07 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 9BC3240ED9
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793374207;
+	b=Iee+aykYOBCalhEnoRZnKeDTveQEhSklm8pX3p1niY41rU304PQn2qpNsspEfPaBpFIC
+	 MancOKJh/NzoWUvC1Q42UUEckYE5Csec4xxKEeaqX05h34gHIDtB9498EO4e2cvvtIDjF
+	 qBLT16YrvmED+zXW2LDMTHX7rH9ZP6xz8/YiU+9/vvyNiLynjsWzsizn55XChk9Ohf8R0
+	 NYZjT9j/HCcwfCvBjVlfNvWtbKui+SkSOQA2CHt9TGOUd6mxuJ2dwPBR1Gjy4O1Jm+OLO
+	 ud8RMP7v5HYkIkvagWNsE6h/HE5xGCzQ+nQaCjFI8grxfEcN7Ek7ak5SID+MlPUHHdA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793374206;
+	c=relaxed/relaxed; t=1793374207;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,120 +31,118 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=by9A86H4CqrO37xheZca2Il9Jj/j6asOxwDUVp95xG0=;
-	b=nDvnYCLeq0tZU+w+mY7klqAZi4plwk0akoYBT72kFDBNJClilSBm9dVRJAJ6Q1ldGKXm
-	 2RdwGlqrXRqdo6GjK0Z8b8HlSIvcbbOqCDeLnOGda24JYNSeFYgEgAzkoNJAlv1xm9a+8
-	 BoC+NRFlE/kzVizmnX4lNcQs/D0JHJYDpn8cBWldKOWEyba6/M5VnRaIGAHiUX/aEXkgf
-	 C1/x/aieq+L9OepapLsEZK4d+tq6JKjC/uHTNcu9H8aKDyoCtadZnEgTLUHuk55dk9MPT
-	 RX99HSTv0k8N9kaarGOukW9N7rnUUsJoTwlkw8J9IdfqpVPoP8limibjG564fOuK3LQ==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	bh=h9+dGo8aTuYQocqwOUzeIvD9Oa3nh4gGqEi2wUQuwIk=;
+	b=JrAMXpjRayiFBGAFOGOPLa/qI+IGJSa9OcDXHIsxxBGUK9BYcguanarKP5/CpbyPBmK3
+	 K2wWGOXMH9xN1tqe5txQSNwKUYOJsEYrs1zZEQmTxn9qXym9PF+BLN0RmeChZPbWzyHFw
+	 xBiWcnGOOt8g+NlqKYep+ZL6GNiD8FC34I45GZM2v64NnkK+3PPpInSKsuJve96G8/Snw
+	 GY+hxuNSGmZlCsI9VzQW56rvPz8Yq+ACEprwZzflih3+GVDIpyES6OlA4zmeI2c9sTRzl
+	 iuJ4udN/7Egm2/gvPZP12q3pcT2el/CsNTzjDGmoKCrHITn2ZsmABv05TBtvn7pRtAA==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793374206;
-	bh=by9A86H4CqrO37xheZca2Il9Jj/j6asOxwDUVp95xG0=;
+	s=default; t=1793374207;
+	bh=h9+dGo8aTuYQocqwOUzeIvD9Oa3nh4gGqEi2wUQuwIk=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=bJzEzRBwIRur0OJeecjeMasTTf2Nv195HAwd5IFwGujhaQoTuJJ/W9K7JGFx5375S
-	 yizz5iELUols228icsjCmNZUMK4FtzgwZUthyAaSacpgTsp4mhZU5ofkaKWjxe7Dlk
-	 yPotk9ZUIRm+PPdK2ZSp1on37OvSdmq/eBWl+xPTbbo9meSMgLrd9s8Tyl4A2CPk7k
-	 6G5AuVFlB+QN4hHhBjG63Dszit47WD5O/QPewzteFGRXgl9A6IFE+sVGjQHMslv2ED
-	 4UczmBIqE5BghTVDlw2GfE99fnfooUGc8WDhc8PXNQO25yKpdFlAAwZjydh0pveJAx
-	 4SYf5Fht5bA2Q==
+	b=XjKEqUAFOk4gyHvZ5fKG1P5lAsai3Tq1O21J/e84JIUhTeg2Ci+e1n1nZDsE+VlRh
+	 l2CwhhM+wu2SoFcnIcl2eAr9ML3f4F+ij7+f70AFKn/hbqCXbQdL4pfL51025FIO/n
+	 t13RcrnkS4b6yS08J++PF7U/oo7DopBP/36bLTth+1pk1VHRpnWvkzEp4PyCz6pD33
+	 N/kD7kgXKv/cReP3Sf1CtekVN1OdWxvxAKwyuGLlN4HQt7SdS9MXnXfGDbIYCbabPl
+	 VrGgQ0vuXvEI7fOC87rfo4fuzJciD77L9Ry8lTYgnGyIfs2fL8RXfmcopH/WA/L1Xb
+	 bOY9jg3b+f+ng==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 19B1E81BF4;
-	Fri, 30 Oct 2026 15:30:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id ADAB5235
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9BC3240ED9;
+	Fri, 30 Oct 2026 15:30:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 97BB3235
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 92C1360B55
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 86C0140D7A
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jw8zUEUiRsUw for <buildroot@buildroot.org>;
- Fri, 30 Oct 2026 15:29:39 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 2D5C460B23
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793374179;
- b=a+xqKdcXaxmgTYZfL/B8ZvxY08PCXgzRHvFy8Xiq9PX8h1KV7WefslktRIZjORPFNEvM
- GU/7GGC6YccpaxoSaqDyiFiyp409Ta8lmfAzbTlfuhttgPRK7/2J8KrfoHMyQ4FXu0+ae
- XrNUCqOHy4+lZ9xGSgcMBqEQiWvbrpmsdBxRmUWfW8ScyBYWTsgXn2c44gKW83y5oPOSr
- rPjIEc0M3wHgq2jJ401zoU1WDq9/JDv60/OkDSnxxc36vnGSxSrfqO6I/FrK0hVS1R+VI
- 2oJJMbEHHJlBCEy+ESkud0K3I6vwnZse7NgtpeGb/tzPKmMgZpm2H4arsLWfFN4uUEQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aAhdLEy9ZaBU for <buildroot@buildroot.org>;
+ Fri, 30 Oct 2026 15:29:42 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 3EE1D40E26
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793374182;
+ b=PFx8Z8dG6gJnQYHwpsoptORggVsb8fBJyuYBjggOyDCZxmLde7t5jmI7LyoW7ceS7ToS
+ z3rTsRns39X2qUNkIP7QfUs74CyUxk2LACB4eYbWQdPQN+aAqWDPbMrIcQUYQyMgsGF1u
+ nmi8Cmn/Ls/1v2X+GEoAK4SdOTN9bg5NQM7LLquXoeyY9aq6UdOU0oNJdhBsMgokSTzwr
+ Rs7X15BRHs6gPskbjT9Mgc9axy4F2ZnwqszGMqOeUIYR1flpdAi85WUmRCvYSUT13PKiy
+ hxBbonLQEK9PRNX170dXa5rTqroGCp1KhZ0bErO11zWixrxr+3BOcg1Qf1TKx7zDL6Q==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793374179;
+ c=relaxed/relaxed; t=1793374182;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
- Content-Type:Content-Transfer-Encoding;
- bh=7//46CaK6Va7+9KFYCDDgVwITynEs0u1HtJnnGJP6j8=;
- b=hnzAndgihdn0X9wGQgUixCCyCg/WpqbKqUWy4GiHHOyxhYW9mVdlgpc7UGeHYhcO3At+
- 3cZ4P9kDxW8+M5Yh1+KbUHC/hTmpkbMsayzvYGcNnf/YoqNeH6VVulp0D+8mh83CMLZUj
- AZfvcxxpkkWec2D2shwmn4KRyEtzRslQUyHJhjmElvjER2xF5KJuKv1i0I5wVGE0rEDUp
- 70oSJ4TBuJgjdLwnLY3evu7ncInYZzkjmapVUnt3nwLb92IN0sz2V5IDtc5nyf6QKxFBY
- uawjq84Ae+3LYmGDXmSRUmUb4vBsqCeRM/4ej0apns2iDT7py6ypSz8IGt2wMAwKlaA==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ Content-Transfer-Encoding;
+ bh=3alobzvn5hUKw8EhMBkhMtqcJlgXKPgYvm+8jN4Cm2M=;
+ b=s9G6aqEv9jG0IQac2hkmD24lI7LpDd/vNZHPl7IquYO+t61htzB9rO72kWcknlKX69ke
+ sP7Jh83VjkG4EobnAxTvoGYe6cAPIBcQkY7vypCVXPA8T2eeJ/63rA4sg87uPxPsU0lGx
+ 1bQRsZng0NCsLbD5WASXxBBW/5JWLpoCCM+WamqYmo8UkAgQtX4rVJwjw3M6U3jbn6waW
+ mVwNEDPtLJ0AlFlvzr1wjq02ALnZ+2mDdBK1zJahiDN0etn/baptOndckKe2BwP/CPobm
+ vB1cbRquUukCyPxNIzPhFD86nhTBEHyziIyBeNhPISNFoixgNVFJDPJAuObiZu8oMsw==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
  dmarc=pass header.from=mind.be;
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=ZKkbR4BQ; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::336"
+ header.s=google header.b=hvmc8Zsn; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::335"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2D5C460B23
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:38 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-4a2d6d01ecbso5447095e9.0
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 08:29:38 -0700 (PDT)
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3EE1D40E26
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:41 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-4a4d7ae1ae9so7969835e9.1
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 08:29:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793374177; x=1793978977;
- h=content-transfer-encoding:content-type:mime-version:references
- :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
- :content-type;
- bh=7//46CaK6Va7+9KFYCDDgVwITynEs0u1HtJnnGJP6j8=;
- b=vvbbzpfs+6hGA/LeUmg+tm598OZgyUa95RhBVHxL381rlYmPafnIfJSmn/oVzV77w2
- yOuMnyEp+aYiQQJjA9ucda2aMqCqAiarWyRsNf7FqNKZw6ZDF3KGycGVm5sU092cAbap
- Xe9Fsllsam2b69Cn8LRQ6tuJqCDUbvpmPlCcNtJ0d+XDP/WewdVv/TmMoWo5JXcNwv+b
- E8unocJCsMgesqr1mK7oTQNp2gNIS/u6SHYjVVBX8Mim0mYSE6WZ8ZdT9HB0oxrfJRWt
- Hi7tQNUDy3wOH9X6KHRKiDMRfKB+ei3Nf/UhFsZtmEWffjezOtGPUO0c7ytbvfELu/Ts
- 19Aw==
-X-Gm-Message-State: AFq9FYLFz2KBk0M5wJbPGzPx20mGQ7pT0+aE7q4oOJ6tBFcWQSQJpFef
- x0hQDjXxEqMyRK8QCbCYBcsLdSI9Y4gYtsDbopkhoGDU7DalpJWB+pN/n9i0NhY/DUyVzJjYxpf
- d+rz0ZKs=
-X-Gm-Gg: AYBFou3BA/hp1fy1f+QQmzHLauBkwm3jAv7avWmdON94P7U9G3xnbQNAyoN8ujluQgL
- VZV3tbKxuAcvzUB3N5YNOa/4qVR3teC6z0yqXq/4OEF/wxBHRj9p4NgEpbsX0mx6FcG8PPKHUSa
- PrPNRPwgivbBPSIW0C68ZnmasOJgMo/R08zR9Yq5ZBjBmiCdfgxqzi9JxfHG1TqZendpJxScxgw
- Je+E1pV8K28Ow/rBCYrNL3OCEfG/s1dCpeVrk05MD3tFcvXkyCokdYIoCb4LF0/hIV4RC/Tzy4g
- bAROTpgNyznpJqaBb87C7zh3TTCNaXqiXo7hjh6R7b2ii53lkAurWX1Mm/xv6aKT3lQS+fxkCGH
- 4J3YSxL7gsIwiceiPHT5BmBZFBQ4zSSfw3sENpQBQuhbk3BlxG+R0G09vsh4r9SXhEcliJ4W2gg
- QsA++Mb4zhbT54bKzEQY5T5oDeK6rnOcvqxVkyM5JfUvEPjSuGySxaOfiol30Jd1cvt1D+SAtMr
- kogzUltDYRw4uFIs2SFM+f9Ss7naI1aGqtBIDEj0tMPEbbbndmXDsexCJNmDHlFPcGAdvsITAag
- z9DBGVuqftFapi9BfIfVYhrgTl7h6c5iscWlTMYct3cWXaNhgUvyr3lkftdRnVOaf7BPWolu
-X-Received: by 2002:a05:600c:19c9:b0:4a1:f377:5c68 with SMTP id
- 5b1f17b1804b1-4ac18a8911amr59276755e9.34.1793374176972; 
- Fri, 30 Oct 2026 08:29:36 -0700 (PDT)
+ d=1e100.net; s=20260707; t=1793374180; x=1793978980;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to:content-type;
+ bh=3alobzvn5hUKw8EhMBkhMtqcJlgXKPgYvm+8jN4Cm2M=;
+ b=hKhGlfRMuU7NaY5tBADbm7n0x+w9qDhl7p4AiB1pS09wGLRerl/blqjyqhNeHE57oL
+ sC2kzAdnhd3fDjn7imJwfxUuA1D9dZLdI73RUE3x8/KAA01zhuFgzto6KAiZTKCRx/d+
+ letrCzw6Hkti4/cXOIT5D1b0CM+5NSnyOdkPUh+Dgg1zcww0bkCbJOUGS+9ZiIIFOlWj
+ tqEbMaK3p/O0Reo3JU8L6+9I3t1NcU+WNIqdqirV3TQ95xkvy9P9YquFWPTLv19GJVCL
+ v1Z8hZJHHleZYNgeMM7XYmc/AWqsT+uGRGhi5tDAezGjd8eSSSUUaohP39XPutN0Qpxi
+ EBUQ==
+X-Gm-Message-State: AFq9FYL9KmgmGIfvbvazKySsDuRXrjqvougLu/3fgwgpyJWcj67tnEcv
+ bH5q/cDEkDmrDFiXrl3fxg9GXWMNvmiDqGHWHar3QOP6v2SvG51YzORXXFnZ87542X0KlvLc21A
+ cy5QZLys=
+X-Gm-Gg: AYBFou1htEZ9KpuAa0OWOGj7xpPxgrjmU1BUIFOCUtPJnhU1yRpfsZ3Wq0YjFRufgoz
+ SH0VQ52cP4tBPZHLbiy4ODbrICsGGrs5lGmUHaPtkNWEiUNC/GEerZIU6/vPowq2yyPQaHWDlqU
+ 7h4DUGm2M+5UbeAEYuKn06HRIdFuzEl4tfRvrJFo4R0EaECq2H6W1f3U4L8OsL0zNk36OQGcsdf
+ X7CbOFykbDt5EzxyrYWPFkl6ySYi8Ff3XURXuaKMZZ5uhMgZMXsTI8Fc9x6+fQv/1MuWBlH31nR
+ isj/x/1JEP47paqUBuD6CVGTNJQgXNLrtg6/G2jlxNWrMWK4MknxTgG/GY34UhTvpcY8w+WSNUm
+ SGPhItqU7eb1Ibz6qRKQbiVH+HnEHgLw+GFKc4IT5LpLgC7R2X8BTms+GmgVuaf6RvN5y1FkFz4
+ zh7BNrxd7X18TOXG8Oo7E/t7x6eK/VkIuZ+O1apVOo0870ZbMK376F7O5ZHnqdWx25/sMQYj303
+ eTC6LS6rcVGsdruwKZSurY2qkWM6rQ8IWx4HqLBRn+1cx+7tFNJn90eMlTzsrc5KCVX06/obRbo
+ LrCIUOsk1Dlu4l26kLEK7jPO8ksdf/90TfPY9K4XVl2RSnyvFuD7e992zKPuh2NYRZde7Jgg
+X-Received: by 2002:a05:600c:8116:b0:4a2:150f:160f with SMTP id
+ 5b1f17b1804b1-4ac1913eecdmr56953025e9.25.1793374180100; 
+ Fri, 30 Oct 2026 08:29:40 -0700 (PDT)
 Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
  [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4ab61d8b9f4sm104385655e9.12.2026.10.30.08.29.36
+ 5b1f17b1804b1-4abf0b36853sm61413855e9.0.2026.10.30.08.29.39
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 30 Oct 2026 08:29:36 -0700 (PDT)
+ Fri, 30 Oct 2026 08:29:39 -0700 (PDT)
 To: buildroot@buildroot.org,
-	Bernd Kuhls <bernd@kuhls.net>
+	Yegor Yefremov <yegorslists@googlemail.com>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 30 Oct 2026 16:29:33 +0100
-Message-ID: <20261030152935.1908008-1-raphael.melotte@mind.be>
+Date: Fri, 30 Oct 2026 16:29:37 +0100
+Message-ID: <20261030152938.1908036-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261024090225.3987962-1-bernd@kuhls.net>
+In-Reply-To: <20261024132350.3708324-1-yegorslists@googlemail.com>
 References: 
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/kodi: fix build errors with
- uClibc-ng
+Subject: Re: [Buildroot] [PATCH] package/libgpiod2: fix static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -157,112 +155,195 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: =?utf-8?q?Rapha=C3=ABl_M=C3=A9lotte_via_buildroot?=
  <buildroot@buildroot.org>
 Reply-To: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-SW4gcmVwbHkgb2Y6Cj4gdUNsaWJjLW5nIDEuMC41OCBpbmNsdWRlcyBjb21taXQKPiBodHRwczov
-L2dpdGh1Yi5jb20vd2J4LWdpdGh1Yi91Y2xpYmMtbmcvY29tbWl0LzQ4N2FmMTQ5ODhjM2M5MjNh
-YTY2MWYyMDQ2NDI1OTdjZmYzNTZhODMKPiB3aGljaCByZW1vdmVzICIjZGVmaW5lIFBBR0VfU0la
-RSIgY2F1c2luZyBidWlsZCBlcnJvcnMgZGV0ZWN0ZWQgYnkgdGhlCj4gR2l0bGFiIHBpcGVsaW5l
-cyBmb3IgYWxsIHVDbGliYy1uZyB0b29sY2hhaW5zOgo+IAo+IC9idWlsZHMvYmt1aGxzL2J1aWxk
-cm9vdC9ici10ZXN0LXBrZy9ib290bGluLXBvd2VycGMtZTUwMG1jLXVjbGliYy9idWlsZC9rb2Rp
-LTIxLjMtT21lZ2EveGJtYy91dGlscy9VRE1BQnVmZmVyT2JqZWN0LmNwcDoyNjoxMjoKPiAgZXJy
-b3I6IGV4cGVjdGVkIHVucXVhbGlmaWVkLWlkIGJlZm9yZSBudW1lcmljIGNvbnN0YW50Cj4gCj4g
-UGF0Y2ggMDAxNSBmaXhlcyB0aGUgcHJvYmxlbS4KPiAKPiBCdWlsZHJvb3QgY29tbWl0IGY4MmY1
-ZmUxNzdiN2Y4ODRkNDI0YzdjZTIyYWZmNjcwZWQxM2YzNTkgYnVtcGVkIHVDbGliYwo+IHRvIHZl
-cnNpb24gMS4wLjU2IHdoaWNoIGluY2x1ZGVzIGdldHRpZCgpIGNhdXNpbmcgYSBidWlsZCBlcnJv
-ci4gUGF0Y2gKPiAwMDE2IGZpeGVzIHRoZSBwcm9ibGVtLgo+IAo+IFNpZ25lZC1vZmYtYnk6IEJl
-cm5kIEt1aGxzIDxiZXJuZEBrdWhscy5uZXQ+CgpBcHBsaWVkIHRvIDIwMjUuMDIueCwgMjAyNi4w
-OC54LiBUaGFua3MKCj4gLS0tCj4gR2l0bGFiIHBpcGVsaW5lcyBwYXNzZWQ6Cj4gaHR0cHM6Ly9n
-aXRsYWIuY29tL2JrdWhscy9idWlsZHJvb3QvLS9jb21taXRzLzM2OTk1OTAzZDI3ODlkZTBmNTQx
-YjU0M2M0YzdmOTg5MGIyOGY1ZDYKPiAKPiAgLi4uLVVzZS1zeXNjb25mLV9TQ19QQUdFU0laRS10
-by1yZXRyaWV2LnBhdGNoIHwgNDIgKysrKysrKysrKysrKysrKysKPiAgLi4uZEltcGxMaW51eC11
-Q2xpYmMtbmctcHJvdmlkZXMtZ2V0dGlkLnBhdGNoIHwgNDcgKysrKysrKysrKysrKysrKysrKwo+
-ICAyIGZpbGVzIGNoYW5nZWQsIDg5IGluc2VydGlvbnMoKykKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0
-IHBhY2thZ2Uva29kaS8wMDE1LVVETUFCdWZmZXJPYmplY3QtVXNlLXN5c2NvbmYtX1NDX1BBR0VT
-SVpFLXRvLXJldHJpZXYucGF0Y2gKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2Uva29kaS8w
-MDE2LUNUaHJlYWRJbXBsTGludXgtdUNsaWJjLW5nLXByb3ZpZGVzLWdldHRpZC5wYXRjaAo+IAo+
-IGRpZmYgLS1naXQgYS9wYWNrYWdlL2tvZGkvMDAxNS1VRE1BQnVmZmVyT2JqZWN0LVVzZS1zeXNj
-b25mLV9TQ19QQUdFU0laRS10by1yZXRyaWV2LnBhdGNoIGIvcGFja2FnZS9rb2RpLzAwMTUtVURN
-QUJ1ZmZlck9iamVjdC1Vc2Utc3lzY29uZi1fU0NfUEFHRVNJWkUtdG8tcmV0cmlldi5wYXRjaAo+
-IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uM2I3ZTM1OTg0NAo+IC0t
-LSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL2tvZGkvMDAxNS1VRE1BQnVmZmVyT2JqZWN0LVVz
-ZS1zeXNjb25mLV9TQ19QQUdFU0laRS10by1yZXRyaWV2LnBhdGNoCj4gQEAgLTAsMCArMSw0MiBA
-QAo+ICtGcm9tIGRhODlkZmNlMmRhNGM2OGVmM2E3Zjg5YTRmYmExY2Q2Zjg2MWUzNjMgTW9uIFNl
-cCAxNyAwMDowMDowMCAyMDAxCj4gK0Zyb206IGZvc3NkZCA8Zm9zc2RkQHB3bmVkLmxpZmU+Cj4g
-K0RhdGU6IFNhdCwgMjIgRmViIDIwMjUgMjI6NTI6MTEgKzAxMDAKPiArU3ViamVjdDogW1BBVENI
-XSBbVURNQUJ1ZmZlck9iamVjdF0gVXNlIHN5c2NvbmYoX1NDX1BBR0VTSVpFKSB0byByZXRyaWV2
-ZSBwYWdlCj4gKyBzaXplCj4gKwo+ICtnZXRwYWdlc2l6ZSgpIGlzIGRlcHJlY2F0ZWQgYW5kIGxl
-Z2FjeSBzaW5jZSBQT1NJWC4xLTIwMDEgYW5kIGlzIG5vdCBhdmFpbGFibGUKPiArb24gYXJjaGl0
-ZWN0dXJlcyB3aGVyZSBQQUdFU0laRSBpcyBub3QgZGVmaW5lZC4gSW5zdGVhZCBxdWVyeSB0aGUK
-PiArY3VycmVudCBwYWdlIHNpemUgYXQgcnVudGltZS4KPiArCj4gK1Vwc3RyZWFtOiBodHRwczov
-L2dpdGh1Yi5jb20veGJtYy94Ym1jL2NvbW1pdC9kYTg5ZGZjZTJkYTRjNjhlZjNhN2Y4OWE0ZmJh
-MWNkNmY4NjFlMzYzCj4gKwo+ICtTaWduZWQtb2ZmLWJ5OiBCZXJuZCBLdWhscyA8YmVybmRAa3Vo
-bHMubmV0Pgo+ICstLS0KPiArIHhibWMvdXRpbHMvVURNQUJ1ZmZlck9iamVjdC5jcHAgfCA0ICst
-LS0KPiArIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgMyBkZWxldGlvbnMoLSkKPiAr
-Cj4gK2RpZmYgLS1naXQgYS94Ym1jL3V0aWxzL1VETUFCdWZmZXJPYmplY3QuY3BwIGIveGJtYy91
-dGlscy9VRE1BQnVmZmVyT2JqZWN0LmNwcAo+ICtpbmRleCAyYjgzMzZiY2VhLi5mNmJhODFjMThm
-IDEwMDY0NAo+ICstLS0gYS94Ym1jL3V0aWxzL1VETUFCdWZmZXJPYmplY3QuY3BwCj4gKysrKyBi
-L3hibWMvdXRpbHMvVURNQUJ1ZmZlck9iamVjdC5jcHAKPiArQEAgLTIzLDggKzIzLDYgQEAKPiAr
-IG5hbWVzcGFjZQo+ICsgewo+ICsgCj4gKy1jb25zdCBhdXRvIFBBR0VTSVpFID0gZ2V0cGFnZXNp
-emUoKTsKPiArLQo+ICsgaW50IFJvdW5kVXAoaW50IG51bSwgaW50IGZhY3RvcikKPiArIHsKPiAr
-ICAgcmV0dXJuIG51bSArIGZhY3RvciAtIDEgLSAobnVtIC0gMSkgJSBmYWN0b3I7Cj4gK0BAIC05
-Myw3ICs5MSw3IEBAIGJvb2wgQ1VETUFCdWZmZXJPYmplY3Q6OkNyZWF0ZUJ1ZmZlck9iamVjdCh1
-aW50MzJfdCBmb3JtYXQsIHVpbnQzMl90IHdpZHRoLCB1aW50Cj4gKyBib29sIENVRE1BQnVmZmVy
-T2JqZWN0OjpDcmVhdGVCdWZmZXJPYmplY3QodWludDY0X3Qgc2l6ZSkKPiArIHsKPiArICAgLy8g
-TXVzdCBiZSByb3VuZGVkIHRvIHRoZSBzeXN0ZW0gcGFnZSBzaXplCj4gKy0gIG1fc2l6ZSA9IFJv
-dW5kVXAoc2l6ZSwgUEFHRVNJWkUpOwo+ICsrICBtX3NpemUgPSBSb3VuZFVwKHNpemUsIHN5c2Nv
-bmYoX1NDX1BBR0VTSVpFKSk7Cj4gKyAKPiArICAgbV9tZW1mZCA9IG1lbWZkX2NyZWF0ZSgia29k
-aSIsIE1GRF9DTE9FWEVDIHwgTUZEX0FMTE9XX1NFQUxJTkcpOwo+ICsgICBpZiAobV9tZW1mZCA8
-IDApCj4gKy0tIAo+ICsyLjQ3LjMKPiArCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uva29kaS8wMDE2
-LUNUaHJlYWRJbXBsTGludXgtdUNsaWJjLW5nLXByb3ZpZGVzLWdldHRpZC5wYXRjaCBiL3BhY2th
-Z2Uva29kaS8wMDE2LUNUaHJlYWRJbXBsTGludXgtdUNsaWJjLW5nLXByb3ZpZGVzLWdldHRpZC5w
-YXRjaAo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMDAwMDAwMDAwMC4uODdjNzFhNTI1
-ZQo+IC0tLSAvZGV2L251bGwKPiArKysgYi9wYWNrYWdlL2tvZGkvMDAxNi1DVGhyZWFkSW1wbExp
-bnV4LXVDbGliYy1uZy1wcm92aWRlcy1nZXR0aWQucGF0Y2gKPiBAQCAtMCwwICsxLDQ3IEBACj4g
-K0Zyb20gNmIyZmQ4YzA2OTE0MjZiZTllOGQzNjI3NmU1ZjNhODE1M2ZhMzI2MiBNb24gU2VwIDE3
-IDAwOjAwOjAwIDIwMDEKPiArRnJvbTogQmVybmQgS3VobHMgPGJlcm5kQGt1aGxzLm5ldD4KPiAr
-RGF0ZTogRnJpLCAyMyBPY3QgMjAyNiAwODowMzoxOCArMDIwMAo+ICtTdWJqZWN0OiBbUEFUQ0hd
-IENUaHJlYWRJbXBsTGludXg6IHVDbGliYy1uZyBwcm92aWRlcyBnZXR0aWQoKQo+ICtNSU1FLVZl
-cnNpb246IDEuMAo+ICtDb250ZW50LVR5cGU6IHRleHQvcGxhaW47IGNoYXJzZXQ9VVRGLTgKPiAr
-Q29udGVudC1UcmFuc2Zlci1FbmNvZGluZzogOGJpdAo+ICsKPiAraHR0cHM6Ly9naXRodWIuY29t
-L3hibWMveGJtYy9jb21taXQvYjViMmJlNzEyMWY3NTBiNWYyN2QyMDVlMmIxMWNlMDE3OWIzODhj
-Zgo+ICthZGRlZCBnZXR0aWQoKSBiYWNrIGluIDIwMjIgZm9yIG9sZGVyIGdsaWJjIGFuZCBhbGwg
-dUNsaWJjIHZlcnNpb25zLgo+ICsKPiArdUNsaWJjLW5nIGFkZGVkIGdldHRpZCgpIGluIHZlcnNp
-b24gMS4wLjU2Ogo+ICtodHRwczovL2dpdGh1Yi5jb20vd2J4LWdpdGh1Yi91Y2xpYmMtbmcvY29t
-bWl0LzQ3YzE1ZGJiNTBmMDdiZTFlZjVhMWZmYzk1NTkyMDU1ODQwNzhmYmMKPiArCj4gK2NhdXNp
-bmcgYSBidWlsZCBlcnJvciBub3c6Cj4gKwo+ICsvYnVpbGRzL2JrdWhscy9idWlsZHJvb3QvYnIt
-dGVzdC1wa2cvYm9vdGxpbi14ODYtNjQtdWNsaWJjL2J1aWxkL2tvZGktMjIuMHJjMS1QaWVycy94
-Ym1jL3BsYXRmb3JtL2xpbnV4L3RocmVhZHMvVGhyZWFkSW1wbExpbnV4LmNwcDoKPiArIEluIGNv
-bnN0cnVjdG9yIOKAmENUaHJlYWRJbXBsTGludXg6OkNUaHJlYWRJbXBsTGludXgoc3RkOjp0aHJl
-YWQ6Om5hdGl2ZV9oYW5kbGVfdHlwZSnigJk6Cj4gKy9idWlsZHMvYmt1aGxzL2J1aWxkcm9vdC9i
-ci10ZXN0LXBrZy9ib290bGluLXg4Ni02NC11Y2xpYmMvYnVpbGQva29kaS0yMi4wcmMxLVBpZXJz
-L3hibWMvcGxhdGZvcm0vbGludXgvdGhyZWFkcy9UaHJlYWRJbXBsTGludXguY3BwOjc2OjQzOgo+
-ICsgZXJyb3I6IGNhbGwgb2Ygb3ZlcmxvYWRlZCDigJhnZXR0aWQoKeKAmSBpcyBhbWJpZ3VvdXMK
-PiArCj4gK1RvIGZpeCB0aGUgcHJvYmxlbSB0aGUga29kaSBpbXBsZW1lbnRhdGlvbiBvZiBnZXR0
-aWQoKSBzaG91bGQgb25seSBiZQo+ICt1c2VkIGZvciBvbGRlciBnbGliYyB2ZXJzaW9ucy4KPiAr
-Cj4gK1Vwc3RyZWFtOiBodHRwczovL2dpdGh1Yi5jb20veGJtYy94Ym1jL3B1bGwvMzAwNTUKPiAr
-Cj4gK1NpZ25lZC1vZmYtYnk6IEJlcm5kIEt1aGxzIDxiZXJuZEBrdWhscy5uZXQ+Cj4gKy0tLQo+
-ICsgeGJtYy9wbGF0Zm9ybS9saW51eC90aHJlYWRzL1RocmVhZEltcGxMaW51eC5jcHAgfCAyICst
-Cj4gKyAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKPiArCj4g
-K2RpZmYgLS1naXQgYS94Ym1jL3BsYXRmb3JtL2xpbnV4L3RocmVhZHMvVGhyZWFkSW1wbExpbnV4
-LmNwcCBiL3hibWMvcGxhdGZvcm0vbGludXgvdGhyZWFkcy9UaHJlYWRJbXBsTGludXguY3BwCj4g
-K2luZGV4IDhjN2VkYmI1OTEuLmViZjRlYmU4MmIgMTAwNjQ0Cj4gKy0tLSBhL3hibWMvcGxhdGZv
-cm0vbGludXgvdGhyZWFkcy9UaHJlYWRJbXBsTGludXguY3BwCj4gKysrKyBiL3hibWMvcGxhdGZv
-cm0vbGludXgvdGhyZWFkcy9UaHJlYWRJbXBsTGludXguY3BwCj4gK0BAIC01Miw3ICs1Miw3IEBA
-IGNvbnN0ZXhwciBpbnQgVGhyZWFkUHJpb3JpdHlUb05hdGl2ZVByaW9yaXR5KGNvbnN0IFRocmVh
-ZFByaW9yaXR5JiBwcmlvcml0eSkKPiArICAgfQo+ICsgfQo+ICsgCj4gKy0jaWYgIWRlZmluZWQo
-VEFSR0VUX0FORFJPSUQpICYmIChkZWZpbmVkKF9fR0xJQkNfXykgfHwgZGVmaW5lZChfX1VDTElC
-Q19fKSkKPiArKyNpZiAhZGVmaW5lZChUQVJHRVRfQU5EUk9JRCkgJiYgZGVmaW5lZChfX0dMSUJD
-X18pICYmICFkZWZpbmVkKF9fVUNMSUJDX18pCj4gKyAjaWYgZGVmaW5lZChfX1VDTElCQ19fKSB8
-fCAhX19HTElCQ19QUkVSRVEoMiwgMzApCj4gKyBzdGF0aWMgcGlkX3QgZ2V0dGlkKCkKPiArIHsK
-PiArLS0gCj4gKzIuNDcuMwo+ICsKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9y
-ZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+In reply of:
+> libgpiod 2.3 switched to meson, and builds its libraries with
+> both_libraries(), so the shared library is always built, even with
+> -Ddefault_library=static. With BR2_STATIC_LIBS, linking it with -static
+> then fails, e.g. on ARC:
+> 
+>   FAILED: [code=1] lib/libgpiod.so.3.1.2
+>   [...] crtbeginT.o: relocation R_ARC_32_ME against `__TMC_END__' can not be used when making a shared object; recompile with -fPIC
+>   [...] BFD (GNU Binutils) 2.47.20260726 assertion fail elf32-arc.c:1815
+>   collect2: fatal error: ld terminated with signal 11 [Segmentation fault], core dumped
+> 
+> Add a patch, sent upstream, using library() instead, so that the
+> libraries follow default_library and only the static ones are built.
+> As a side effect, shared builds no longer install the unused static
+> libraries to staging.
+> 
+> This issue has been present since commit 1d132d04fc0e
+> ("package/libgpiod2: bump to version 2.3.1"), which switched to the
+> meson build system. It therefore affects 2026.08 and later.
+> 
+> Fixes:
+> https://autobuild.buildroot.org/results/7dc84554b75a370136bfa2451f4b4c3dde0d92e8
+> 
+> Fixes: 1d132d04fc0ecac014be003b7e1662c47672328b ("package/libgpiod2: bump to version 2.3.1")
+> Assisted-by: Claude:claude-opus-5-5
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+
+Applied to 2026.08.x. Thanks
+
+> ---
+>  ...ult_library-for-the-installed-librar.patch | 138 ++++++++++++++++++
+>  1 file changed, 138 insertions(+)
+>  create mode 100644 package/libgpiod2/0002-build-honor-default_library-for-the-installed-librar.patch
+> 
+> diff --git a/package/libgpiod2/0002-build-honor-default_library-for-the-installed-librar.patch b/package/libgpiod2/0002-build-honor-default_library-for-the-installed-librar.patch
+> new file mode 100644
+> index 0000000000..f369ee4248
+> --- /dev/null
+> +++ b/package/libgpiod2/0002-build-honor-default_library-for-the-installed-librar.patch
+> @@ -0,0 +1,138 @@
+> +From a92938c5d7bbb5a918937657a8940dc6072929ca Mon Sep 17 00:00:00 2001
+> +From: Yegor Yefremov <yegorslists@googlemail.com>
+> +Date: Sat, 24 Oct 2026 10:28:49 +0200
+> +Subject: [PATCH] build: honor default_library for the installed
+> + libraries
+> +
+> +The installed libraries (libgpiod, libgpiodcxx, libgpiod-glib and
+> +libgpiodbus) are built with both_libraries(), so the shared variant is
+> +always built, even with -Ddefault_library=static. When the toolchain
+> +or the environment requests a fully static link (e.g. LDFLAGS=-static,
+> +as done by Buildroot for static-only builds), linking the shared
+> +library then fails:
+> +
+> +  FAILED: lib/libgpiod.so.3.1.2
+> +  [...] crtbeginT.o: relocation R_ARC_32_ME against `__TMC_END__' can not be used when making a shared object; recompile with -fPIC
+> +
+> +Use library() instead, which follows default_library, and set
+> +default_library=both in the project's default options, so that a
+> +default build still installs both the shared and static libraries. As
+> +library() returns an object behaving like the shared library when both
+> +are built, the users of these objects (link_with, pkgconfig.generate,
+> +generate_gir, full_path) keep working as before.
+> +
+> +With a default build, the only change in the installed files is that
+> +libgpiotools, already declared with library(), is now also installed as
+> +a static library, like the other libraries.
+> +
+> +Fixes: 97bab4cc87dd ("build: replace autotools with meson & ninja")
+> +Assisted-by: Claude:claude-opus-5-5
+> +Upstream: https://lore.kernel.org/linux-gpio/20261024123124.3700266-1-yegorslists@googlemail.com/
+> +Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> +---
+> + bindings/cxx/meson.build  | 3 +--
+> + bindings/glib/meson.build | 3 +--
+> + dbus/lib/meson.build      | 3 +--
+> + lib/meson.build           | 3 +--
+> + meson.build               | 1 +
+> + 5 files changed, 5 insertions(+), 8 deletions(-)
+> +
+> +diff --git a/bindings/cxx/meson.build b/bindings/cxx/meson.build
+> +index 92625b5..a23c70a 100644
+> +--- a/bindings/cxx/meson.build
+> ++++ b/bindings/cxx/meson.build
+> +@@ -3,7 +3,7 @@
+> + 
+> + cxx_inc = include_directories('.', '../../include')
+> + 
+> +-libgpiodcxx_both = both_libraries('gpiodcxx',
+> ++libgpiodcxx_lib = library('gpiodcxx',
+> +   sources: [
+> +     'chip.cpp',
+> +     'chip-info.cpp',
+> +@@ -29,7 +29,6 @@ libgpiodcxx_both = both_libraries('gpiodcxx',
+> +   soversion: libgpiodcxx_soversion,
+> +   install: true,
+> + )
+> +-libgpiodcxx_lib = libgpiodcxx_both.get_shared_lib()
+> + 
+> + install_headers('gpiod.hpp')
+> + 
+> +diff --git a/bindings/glib/meson.build b/bindings/glib/meson.build
+> +index 0ccd8e8..17e071c 100644
+> +--- a/bindings/glib/meson.build
+> ++++ b/bindings/glib/meson.build
+> +@@ -61,7 +61,7 @@ glib_public_headers = files(
+> + 
+> + glib_inc = include_directories('.', '../../include')
+> + 
+> +-libgpiod_glib_both = both_libraries('gpiod-glib',
+> ++libgpiod_glib_lib = library('gpiod-glib',
+> +   sources: glib_sources + [gen_enum_c, gen_enum_h],
+> +   include_directories: glib_inc,
+> +   c_args: ['-DG_LOG_DOMAIN="gpiod-glib"', '-DGPIODGLIB_COMPILATION'] + profiling_c_args,
+> +@@ -71,7 +71,6 @@ libgpiod_glib_both = both_libraries('gpiod-glib',
+> +   soversion: libgpiod_glib_soversion,
+> +   install: true,
+> + )
+> +-libgpiod_glib_lib = libgpiod_glib_both.get_shared_lib()
+> + 
+> + install_headers('gpiod-glib.h')
+> + 
+> +diff --git a/dbus/lib/meson.build b/dbus/lib/meson.build
+> +index 9acf5e1..12cff4a 100644
+> +--- a/dbus/lib/meson.build
+> ++++ b/dbus/lib/meson.build
+> +@@ -14,7 +14,7 @@ generated_dbus = gnome.gdbus_codegen('generated-gpiodbus',
+> + 
+> + dbus_lib_inc = include_directories('.', '../../include')
+> + 
+> +-libgpiodbus_both = both_libraries('gpiodbus',
+> ++libgpiodbus_lib = library('gpiodbus',
+> +   sources: ['gpiodbus.h', generated_dbus],
+> +   include_directories: dbus_lib_inc,
+> +   c_args: ['-DG_LOG_DOMAIN="gpiodbus"'],
+> +@@ -22,7 +22,6 @@ libgpiodbus_both = both_libraries('gpiodbus',
+> +   soversion: 1,
+> +   install: true,
+> + )
+> +-libgpiodbus_lib = libgpiodbus_both.get_shared_lib()
+> + 
+> + install_data('io.gpiod1.xml',
+> +   install_dir: get_option('datadir') / 'dbus-1' / 'interfaces',
+> +diff --git a/lib/meson.build b/lib/meson.build
+> +index ea1d92c..fb09b71 100644
+> +--- a/lib/meson.build
+> ++++ b/lib/meson.build
+> +@@ -1,7 +1,7 @@
+> + # SPDX-License-Identifier: GPL-2.0-or-later
+> + # SPDX-FileCopyrightText: 2026 Qualcomm Technologies, Inc. and/or its subsidiaries
+> + 
+> +-libgpiod_both = both_libraries('gpiod',
+> ++libgpiod_lib = library('gpiod',
+> +   sources: [
+> +     'chip.c',
+> +     'chip-info.c',
+> +@@ -22,7 +22,6 @@ libgpiod_both = both_libraries('gpiod',
+> +   soversion: libgpiod_soversion,
+> +   install: true,
+> + )
+> +-libgpiod_lib = libgpiod_both.get_shared_lib()
+> + 
+> + pkgconfig = import('pkgconfig')
+> + pkgconfig.generate(libgpiod_lib,
+> +diff --git a/meson.build b/meson.build
+> +index 7045d29..7633702 100644
+> +--- a/meson.build
+> ++++ b/meson.build
+> +@@ -6,6 +6,7 @@ project('libgpiod', 'c',
+> +   license: 'LGPL-2.1-or-later',
+> +   default_options: [
+> +     'c_std=gnu89',
+> ++    'default_library=both',
+> +     'cpp_std=gnu++17',
+> +     'warning_level=2',
+> +   ],
+> +-- 
+> +2.34.1
+> +
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
