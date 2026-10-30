@@ -1,142 +1,163 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F132C606A31A
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 10:26:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDE30606A31D
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 11:29:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=oFCoTuU9
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=JVZ7tLwA;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=baylibre.com header.i=@baylibre.com header.a=rsa-sha256 header.s=google header.b=hK0DYAGW
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EA21440AE4;
-	Fri, 30 Oct 2026 10:26:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B1B8F6079D;
+	Fri, 30 Oct 2026 11:29:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k3uQhGLJGSh5; Fri, 30 Oct 2026 10:26:55 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 6860740A9F
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793356015;
-	b=oziGLbl9bR7PsRdpI2xuOZK67cLvmiA8mhMaUol5MiD/qWrDK0Lf1b581hP5HCgsi2+l
-	 Ft4AQ4W1dQ0yV/sNCOZ7FIwSJBKBbuVPa3wMP5aNcN33c81oKM61ezVkqpCKBZESYd7L3
-	 05pWCu4CF3915cuFfZjEz4Nr5Kff8YLMT6h0Zkcy31WSIoV56s+fBleJC3LuMhDOLY9qv
-	 Lrn04re8O0COo7U4dJbKhMWSfKlVn0MyRAd3OWVv0cpWi8E5e9RgvYZgiDYX+WcJBVLhk
-	 PBpTuFF8SEhrefq3OFhkm9IqvJedZ40V/2xZMO1ZUxVkIr9l/URK9XhJwDD0xeiytrw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iioDIK9aS1Pm; Fri, 30 Oct 2026 11:29:57 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org A1A1C60667
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793359797;
+	b=Qn5eM3UJS62p+buUASlav3zZ5iXjWz+dhOwrOqrS2ePl/Xl8Hj99jilKcZByhsUOhvnV
+	 nilvLlohqaQdZ2J9X9eDIamKBlkNS4jVKJB/sBswSORDSPUI66LlcH5rB6AMSqEN7BnWR
+	 GpDmKX53rO00l0yc56ddqzH4E0KoMrRQnj9uoEXnCXtDRRIBh9Vn5qEuRFMLV/3xTvFhL
+	 LvLK6l/wBzBAW+qKeAt3eYzdEwtaXpI6y4rAA4JTTiDUOZIoOYFQRnce320cEqyvCXxPg
+	 t/caJnUk1pWLykcLoRl+/avAoJldZro9cQnanix5SzTunJIjovNnzpJStulVz0eIByg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793356015;
+	c=relaxed/relaxed; t=1793359797;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 Received:To:Date:Message-Id:X-Mailer:MIME-Version:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=FcynKRkU8+b/9AvPb+btPPhpSoJMmsXOix52cvvmT2Q=;
-	b=LWDKKCH3mhAtp5lzK0/HU2ulj8jv7xiMluotiv7tqeDTgMv06OkkmzpEAeR5p6kazpVz
-	 XF7EQ3U6+lHPs7kRF15SLnXf39Z5k+91wZ4hDFboF4RbxRdYJEnFfmSeVuBVUzej2yEhX
-	 rlpzBPGIbU5UojyKjW9oX0CF6sRoe4X3jBfYATxDw7O3SgQRp60rjah6vfdcb4ngh4j4Y
-	 8Vc05fXqloIHiBNU7QxFzoUpHVz2xa/yI+EiSjkSYtHuAMxurYlqZQr9XG7veczdXHlEJ
-	 j9ae+2FdtgzVvufJ34IfS5JlCZ649K1c4XJhkxp9tsMoTRB7YSgL/HF6ZO5BlugPIyw==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:Received:From:To:Date:Message-ID:X-Mailer:MIME-Version:
+	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:Cc:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=D8WRu5pwi3dBaBrn+YJaFYg1FnfAoxXmmV/GkDfHs9Y=;
+	b=KlbuxpeF6FGnFGpSxuadrbvTeLG3WgOVtsg/6RC2GtRKCpEleNPT06W9mts4AOWCnqHe
+	 APycNU/2Np2oERoQWcz52nIZn8lyQgKro34V0sSRqvsTtMvd72+ta6p4zmwFdWdOJ1HtV
+	 rfsNRqKajQrh8RrQYb39wtBWaPfxBxVmIzkl96pLY4KaSm3rvVsuVAoHVf3W6CImO2UCR
+	 81RJtHethyDmB8eWCABgkx5n90aJd33BsZrttFHd4+RQpUTb5sdEQJDOP/2m6c24dQfmI
+	 6f6+Wn6f5yov4s/Tg0RczyL3J2/G0S4R3rPusNo/QLR3khzSxdocDECqlmBWmPWa54w==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793356015;
-	bh=FcynKRkU8+b/9AvPb+btPPhpSoJMmsXOix52cvvmT2Q=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=oFCoTuU9/wvSpEnsXnRVreGHd369rb6tVbDQgn30+k7xl7Sev+R5oaLlBDmSXXRNs
-	 cYSeVwSUKwLMLQy9LYfebTLeREbAJwn2F1s+pe4FuAjnOGoK/ATeYCHjYGOGYe2wlI
-	 44Tk6wteQYfsMqkr4+6WCmrCbvwWg/8h5pmKPFFtSZxZOXVLkLC4mto0Kuyca0Cevv
-	 pqciZq8ts1nPWu/1va+jv64G2Ljce8fqEsbr3FHtDKxe24W4IYgUpWFeI8HTGbm0eB
-	 vmoAYzMQjPQl9ACqqAv7f7wDrHaru1aWzv+Qb+o74ikkg01Duvh1wgzMnEARzfirKz
-	 WC10NZv/DK5Jg==
+	s=default; t=1793359797;
+	bh=D8WRu5pwi3dBaBrn+YJaFYg1FnfAoxXmmV/GkDfHs9Y=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=JVZ7tLwADtUJbxqJDktcFyUdhyEr42QoG0643yeQnFQirJVDg6LkZKVyJAPexdmjC
+	 uM0umYx9cwtIdYOOiaqsN2jW16WkVzjMOmWSD5AB+mVRKu4J0YSTE0HfaiSzIJP/ds
+	 sboOGbEVztsnglbvPTwHGeSFbeKG0IINsnF9llQExpOXus1GZhsuIEHV1EGk4VwgLh
+	 mQyLf0VbeAIySNncWoGlRvAF9RFWWjTG7NV1pQqt81shjctqdnY0UUB6Ak+xSdGy2v
+	 St4sKpjVmcxh4HKpAMzJ/9WA73sYaCPCKCiO8awg3qnwel1pNm28XVX0deEkKZnHGj
+	 1ke2/pOZyaWvA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6860740A9F;
-	Fri, 30 Oct 2026 10:26:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A1A1C60667;
+	Fri, 30 Oct 2026 11:29:57 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3D0452C7
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 10:26:53 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 501541DE
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 11:29:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2350340A8C
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 10:26:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4D55E4066F
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 11:29:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lByUJ74sKZVQ for <buildroot@buildroot.org>;
- Fri, 30 Oct 2026 10:26:52 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org CCCFA40A90
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793356012;
- b=TwQnaT9LbnIVtvJkI6NfkkPBZInoBDBX3680Nr8obfOQaObsohTppJqAoZXRN6wsz62k
- PJVQArlq58Izfl0DJk4ArwC6kE571XadbDhab4fPWK+xw6IH9pQG9GE9erSl8fBt4GGQ+
- 9GwhbmHdbjcvJpAX7c6rfTmF4HV7/6BSaGjkkVRIn4B1A4qMshvoF3ufGu0lcf4YN9JE8
- xocr5Tmbenel/01DhOaltBkWUULA3JLU7Yq+x10ToadsV6QFwws1qIroCiX2gXMLrsUOn
- qwqMR5hW5zxwH/ztuabcrp+9p5lWDz8lRvHuPjZSZBQ7XwoCrSa6Mz4nfd8ic5Ii5VQ==
+ id lib-mMgq_h1K for <buildroot@buildroot.org>;
+ Fri, 30 Oct 2026 11:29:55 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org EC0EA4067A
+Authentication-Results: smtp4.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::32f"
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793359795;
+ b=clW5TGF9c8CKXOx+l+kU4DX8AvAhigUW2w/8nQHa9bZmB7JsUtUzsQL34uHbyV970ATZ
+ v1k/jQ+lb7kXTzy3VpYuyxifG7hhuGf8cF6XP9NYnTUMSJmBEQGBo2ahEtj3fkWDAW7eR
+ pNwhR/7eHmuKAfhej8XA1b0eZe8Lom5Zv8fvbXZ/gDR/J0332h9wYAdlta11ZQAbDR2HT
+ ZoPErH94NAF2FOdHJU+DOwZ/pes4TFYIvP4BG4FkdW8Dy0V8VM+ydoeHpVdiK1Km9a3QH
+ r0RhMtyLShiBudqCTz9Y3wn3GMduOdmwynPERanmuhFHXwFUBr2LedPngk+WzV7vWdQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793356012;
+ c=relaxed/relaxed; t=1793359795;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
- bh=FMt4VykRd8S9fYCweCBhAfKLH98Hn9Re9HCSPwF8Sjc=;
- b=MTncosWZHzKw+tp66EkhH1J6JcyZveyDDFCpWo5UEoDFnqlpZE1/VFuzTX/OGZRJiFnL
- J/qtaZ1IS3LZkcQ7SjchboWHKa8y2LY5lnqnpiQzTRIiDZ22Oq7sQUjokIhjsptEJz4w5
- zXKe1yjqNdS1YqP/ZwSZIZyL1ROvEVZqO8nFDB1cNobtuqUH/abCVpNdk/1hrI4DGDkEW
- ETjIwCTFv21qMOtOqjd5X7j3ybBWy/HCtLEOYWWNZaWOyuVzSLqeDakN0c0rcFTRINmiC
- hCvZunqOlg3GwHAHPMFzko+0sfqezmOlVBx8qk4JT4+GlyAI53KW3nTfMaqjWu7wZKA==
+ Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+ bh=GkmRg3h6VpWB9K2OqmjDMXPgzclDiqzDwuy0K762aME=;
+ b=tcUhHkoOtHLQ6g5jEmcCgUQgZ9oFzBlhQQ5ZzQLURYhIoApnY0MTSPz0hTzgZd+xSEc4
+ OVgVUwNMuTkDFDzOJkkR4dZHjpceX+qoEXz0XagcoaKdfp4dunRhuOJOEvJ+tF0dgmiI6
+ mf5emfFwgsSmNbnLeRxIPjjceAFZHggZxkoQ2hHH8LmC0BN+oxS+kYweG1h4830j/jZIC
+ mTtHhfm2grhWNTgZd1mpy00dO1hPlJEwbx1YC2fheNPZ6400WpFUDvpJ3kmNBy0QJBkPx
+ xxW8K5TRVFAK1XRMJrmT/z5EQ10P/4FpxAmq679T6aWIgxLZHF45EaPiOJoT1rTGxNA==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
- dmarc=pass header.from=googlemail.com;
- dkim=pass header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256
- header.s=20260707 header.b=zKkl475c; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::630"
+ dmarc=none header.from=baylibre.com;
+ dkim=pass header.d=baylibre.com header.i=@baylibre.com header.a=rsa-sha256
+ header.s=google header.b=hK0DYAGW; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::32f"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::630; helo=mail-ej1-x630.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CCCFA40A90
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 10:26:51 +0000 (UTC)
-Received: by mail-ej1-x630.google.com with SMTP id
- a640c23a62f3a-c468bd799ecso59870266b.1
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 03:26:51 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ envelope-from=ddrake@baylibre.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com
+ header.a=rsa-sha256 header.s=google header.b=hK0DYAGW
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EC0EA4067A
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 11:29:54 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-4a214af2076so3974205e9.0
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 04:29:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=baylibre.com; s=google; t=1793359792; x=1793964592; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=GkmRg3h6VpWB9K2OqmjDMXPgzclDiqzDwuy0K762aME=;
+ b=hK0DYAGWg/CraZ+qti0s/0PUhmK3IKxltbuUXEGOEDdiGQbJHV2zgUNNpPc8L0R2OD
+ hABh3QT5+0wOvvSr7M1ptyoMUXnNFL/kmpzvSBymsRNXyiuTiFge8wBSvloGx8L9yWNN
+ lV1i/481zqCsW3GYmd2fpfmdYsM90O17NROeS8r7aUC0yBoN3giqU85d60YeybfXdzJ5
+ LaYqT652V+P+4T3TdG8VlEi/TRAAzGOVdsARMDzrk2hVUbzAgVoAOJiGuWrIfdkorRS4
+ pgqIUND46Og0A/tERHZqewavJxbXjm4dC71ODCqgp3otxjT4s2RgB213LpmdQhN9nIvk
+ Ztqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793356009; x=1793960809;
+ d=1e100.net; s=20260707; t=1793359792; x=1793964592;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=FMt4VykRd8S9fYCweCBhAfKLH98Hn9Re9HCSPwF8Sjc=;
- b=aVvUN9He5WyQSZQ6XJWx6EXw8h3yEbTwD6FOTovEhx+M2c+KhDa2OaNqckYqfRF6P7
- Ief/7xiw9qiSCPVvu5tUgCxY53hT8B3h0YEOM0126YDk8yZfLvMfuUHpOSoLG5gNUuju
- 8URf23FJAMzbX2G517n+54YwhoX29A5g2XoVZlpCCqVPe+MH1Az7E+MzIxx6PUZOYOEo
- GO5F7nfbplYPSh8u0caZ7E/Ztdys42UfGjAELRFI5kLuJGRBLkssFXRpye3c/TmntbOa
- A2WkXtWUBFpLi6kKKT3NesD99SNzcNhKzSLjy2j8gDy3GMrmTuQ5OSd7KKaV59eVch8C
- QrrA==
-X-Gm-Message-State: AFq9FYK6e7VwaIjU8lMnuCvbguv21f1QnDiPdu9uzo325MAtolhbUh9l
- zxQi4OlU1VjIEe/2SiZFgo1TvgHNXRYAEsEz+n3Sm36/BUynWvtcKI/gs5g4qw==
-X-Gm-Gg: AYBFou2dbLTVInrhrp9atcY3l5BUQ50Dsg5PJ4hA2ZVniEo/MZHYjhIULJ+5pDoNMSI
- 06IXAqvtA6Q8fibnxR0M7Edu09Wh9Lk5CxRWX5GUGQGpnqe0RXlAJbnutW4Drd2dZaRWhotmLgG
- rhlClXmzVkVTHiMK8fwfL7wLj8GKch8XZtDnkQJTUffY1bsO1HXDRD04pDAlYlVAQ6FsFVxp3Ck
- Taxkk8JWNfYmlsksNs3lQuP3hUMwd0GxhE0w7MGElMRvdvfcTqQ9fJEqCrqx25rrjpDd1cYpsRA
- +3uUMcFlamr0alm+FX9wUY6jdVqX2SCcbOlGUneVhkf+5DX3BcmoyBclcJGUdmhIsbITGpBoW6a
- n0P0zKXa7hjLztiIh/oz66y/71mzdsx591Vv4wzCbRI0jhx8lKTqUAYJvOFSmLsw22kSEmcvKFM
- T2oenNZ+Pt2Ru0Q29B0+BDX3aM9D4iYJxP6Sj5EbjDqawnKArjnBcq7xJMoKE2JqtbG9spXIdsO
- oO6RC71bkj0uTNGZcC0O3697dpuF22PydWwxUqy+97mxsYVjTb2g5JIOyPWzPstUi6ctMaDWDES
- PAJHVlv6vM/H2XUmn6PqNEI4WKz3cSxBDYidwhSZlPOiQBO+ypsqA2gsgldZ2+/VUdAmfK0vImQ
- m3b+K6zK8
-X-Received: by 2002:a17:906:ef06:b0:c41:1e13:8891 with SMTP id
- a640c23a62f3a-c4ca7a43c0fmr167022866b.9.1793356009166; 
- Fri, 30 Oct 2026 03:26:49 -0700 (PDT)
-Received: from development2.visionsystems.local (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-6b4d7ae6c7asm479199a12.6.2026.10.30.03.26.47
+ bh=GkmRg3h6VpWB9K2OqmjDMXPgzclDiqzDwuy0K762aME=;
+ b=UHhQWhbnuhIRhKI7uL94u+JclxILBNUquea2mMPrpF+blzi8wBRW8bhlsdz4pONWOy
+ Crqe9i1P+Iucr2mwj80m2lsGFEWDN0l/HT2ZbZEPTwjSF8rHXBo6p/k2RzF614i118pw
+ LYtF07vyjBjAJosMXOHyzmcNmG8o9nkNYL1ElMLfTp7E8SuZZq66J9Ek+tLxeLFBLe9a
+ i564KksEgjcvZWo3ANLOKg/41kWh31najTHH2V0274HgEGL3MeH5v3oNTbzViRbzsW7d
+ j/bDAyn45GBWsu1FSILikuWd7XKKR8edw0nLSqCC5xkm3Kg0CFgGccvQjl8QwWq3NEKN
+ V2fA==
+X-Gm-Message-State: AFq9FYKbJKcm0F2wrlW1IkiO/MJz92guD11PdLPs3t4SO5ywqVKY6YuI
+ K0U7K+1v92/HnJOca2kXCQ6i9pPZZ0DKenrBPVVn1/SUhItasVlDi4pvTkx+nW+pVl8DjA5gYZR
+ Hw6pH2oM=
+X-Gm-Gg: AYBFou3afWIPpJn2fUTcQ+gwAwubaw1Lr8522cLXfTqkTgWkgeg2YFp1i/gIs4CGAY4
+ hPWGzf7POJ2QIBzyS04qSf2dMiqz5VjEPqHXTUjOCPz1sdThioL8Li9csa2/v96Rotbd8FHaVGk
+ o9FzrHunFzMk49zbkYFMtDV7QS81jYm9im6dQoua7n1nVTW+PS3ykDsqP86Fl2ftEP0N1TNnV3C
+ p07gW0bu2Fc4me1kbDMB2VqBQBE6jw4gwYwP0gQ0+35CNeE68UDWoPGUxDWTR52lUlcPvx6QWek
+ DjSDNGeL8gqOts+fzqt7Y1cp0LSOhyNUhX+xVwQCErId7wxp+mUYIEtfdVdRs/h7CQ6ls4C9bVh
+ /AxZmIMrBtG1Q2Z6zPGwRbDxEy1hsXr1JBEV9Rqn51x7qJbby4/1eXkbEpBu3HEIZVRzyzjHKkt
+ t2UJiN2YWuwfJmW4c5odpt6z/G8YPtbB78GyhhXcq6mTzrpUNAzKY6jRnWGOsZmmMcGDrTzmFaz
+ 68MOhFLxLf7wMnrFWhVbAzYN/pD71OVx1jETvjDOFoAuIvCCUeyFRqtP8gFLDkKJIH+kQcJjV2t
+ bEdt/DrKXYph8/l3aHdj6E1NMV0=
+X-Received: by 2002:a05:600c:83c5:b0:4a2:148b:c88c with SMTP id
+ 5b1f17b1804b1-4ac17191017mr40407455e9.8.1793359792179; 
+ Fri, 30 Oct 2026 04:29:52 -0700 (PDT)
+Received: from numbers ([2001:8a0:d6cd:9000:86f4:4e71:9fc8:3183])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4ac09bcc967sm38172315e9.3.2026.10.30.04.29.51
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 30 Oct 2026 03:26:47 -0700 (PDT)
+ Fri, 30 Oct 2026 04:29:51 -0700 (PDT)
+From: Daniel Drake <ddrake@baylibre.com>
 To: buildroot@buildroot.org
-Date: Fri, 30 Oct 2026 11:26:47 +0100
-Message-Id: <20261030102647.927989-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Fri, 30 Oct 2026 11:29:40 +0000
+Message-ID: <20261030112940.45635-1-ddrake@baylibre.com>
+X-Mailer: git-send-email 2.56.0
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/open62541: bump to version 1.5.10
+Subject: [Buildroot] [PATCH] configs/imx93frdm_defconfig: fix U-Boot build
+ without host GnuTLS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -146,204 +167,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
-Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: Daniel Drake <ddrake@baylibre.com>, Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+X-Spam-Status: No, score=-16.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
 	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Release notes:
-https://github.com/open62541/open62541/releases/tag/v1.4.0
-https://github.com/open62541/open62541/releases/tag/v1.5.0
-https://github.com/open62541/open62541/releases/tag/v1.5.10
+The mkeficapsule tool is enabled in the U-Boot config for this board,
+which needs GnuTLS. If GnuTLS is not present on the build host, it fails
+with:
 
-The UA_ENABLE_PUBSUB_DELTAFRAMES, UA_ENABLE_PUBSUB_INFORMATIONMODEL_METHODS
-and UA_ENABLE_PUBSUB_ETH_UADP CMake options were removed in 1.4.0: the
-information model methods are now always built with the PubSub
-information model, and Ethernet support is part of the POSIX event loop
-on Linux. Drop the corresponding Buildroot options and add legacy
-entries for them.
+  tools/mkeficapsule.c:20:10: fatal error: gnutls/gnutls.h: No such file or directory
 
-Since 1.5.0, event monitoring (UA_ENABLE_SUBSCRIPTIONS_EVENTS, enabled
-by default) requires JSON encoding, otherwise configuration fails with:
+Enable BR2_TARGET_UBOOT_NEEDS_GNUTLS, as the other i.MX93 defconfigs do.
 
-  CMake Error at CMakeLists.txt:955 (message):
-    Event Filter Parsing require JSON to be enabled
-
-Enable JSON encoding by default, as upstream does, so events stay
-available as with 1.3.x, and disable event monitoring when JSON
-encoding is turned off.
-
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Fixes: 638c9592cf ("configs/imx93frdm_defconfig: new defconfig")
+Signed-off-by: Daniel Drake <ddrake@baylibre.com>
 ---
- Config.in.legacy                 | 22 ++++++++++++++++++++++
- package/open62541/Config.in      | 29 ++++-------------------------
- package/open62541/open62541.hash |  2 +-
- package/open62541/open62541.mk   | 25 +++++--------------------
- 4 files changed, 32 insertions(+), 46 deletions(-)
+ configs/imx93frdm_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 29c9b7f9e7..185160f1b7 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,28 @@ endif
- 
- comment "Legacy options removed in 2026.11"
- 
-+config BR2_PACKAGE_OPEN62541_PUBSUB_DELTAFRAMES
-+	bool "open62541 pubsub deltaframes option removed"
-+	select BR2_LEGACY
-+	help
-+	  open62541 no longer has a separate option for PubSub
-+	  deltaframes since version 1.4.0.
-+
-+config BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL_METHODS
-+	bool "open62541 pubsub information model methods option removed"
-+	select BR2_LEGACY
-+	help
-+	  open62541 always enables the PubSub information model
-+	  methods together with the PubSub information model since
-+	  version 1.4.0.
-+
-+config BR2_PACKAGE_OPEN62541_PUBSUB_ETH_UADP
-+	bool "open62541 pubsub ethernet option removed"
-+	select BR2_LEGACY
-+	help
-+	  Since version 1.4.0, open62541 always builds PubSub over
-+	  Ethernet support as part of its POSIX event loop.
-+
- config BR2_PACKAGE_MESA3D_OPENCL
- 	bool "Mesa3D OpenCL support is now provided by RustiCL"
- 	select BR2_LEGACY
-diff --git a/package/open62541/Config.in b/package/open62541/Config.in
-index a5c07d5043..024067f6bb 100644
---- a/package/open62541/Config.in
-+++ b/package/open62541/Config.in
-@@ -71,25 +71,18 @@ config BR2_PACKAGE_OPEN62541_DISCOVERY
- 
- config BR2_PACKAGE_OPEN62541_JSON_ENCODING
- 	bool "json encoding"
-+	default y
- 	help
--	  Enable JSON encoding
-+	  Enable JSON encoding. This is also needed for event
-+	  monitoring support.
- 
- config BR2_PACKAGE_OPEN62541_PUBSUB
- 	bool "publish/subscribe"
- 	help
--	  Enable the experimental OPC UA PubSub support. The option
--	  will include the PubSub UDP multicast plugin.
-+	  Enable the OPC UA PubSub support.
- 
- if BR2_PACKAGE_OPEN62541_PUBSUB
- 
--config BR2_PACKAGE_OPEN62541_PUBSUB_DELTAFRAMES
--	bool "publish/subscribe deltaframes"
--	help
--	  The PubSub messages differentiate between keyframe (all
--	  published values contained) and deltaframe (only changed
--	  values contained) messages. Deltaframe messages creation
--	  consumes some additional resources.
--
- config BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL
- 	bool "publish/subscribe information model"
- 	depends on BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_REDUCED || \
-@@ -98,20 +91,6 @@ config BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL
- 	  Enable the information model representation of the PubSub
- 	  configuration.
- 
--if BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL
--
--config BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL_METHODS
--	bool "publish/subscribe information model methods"
--	help
--	  Enable PubSub informationmodel methods
--
--endif
--
--config BR2_PACKAGE_OPEN62541_PUBSUB_ETH_UADP
--	bool "publish/subscribe UADP"
--	help
--	  Enable publish/subscribe UADP over Ethernet
--
- endif # BR2_PACKAGE_OPEN62541_PUBSUB
- 
- endif
-diff --git a/package/open62541/open62541.hash b/package/open62541/open62541.hash
-index 3beead1a20..fcf8f26412 100644
---- a/package/open62541/open62541.hash
-+++ b/package/open62541/open62541.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  a8719f299505b144bd68bf557ad0b023fa28faf8862ff2d0b171381c8bd278c3  open62541-v1.3.15-git4.tar.gz
-+sha256  6c218091f334fc458126635d0c7c3106b47b8f6fedd6c648defe06950654380f  open62541-v1.5.10-git4.tar.gz
- sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE
-diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
-index 8d9c5e44bf..ac0a33bf87 100644
---- a/package/open62541/open62541.mk
-+++ b/package/open62541/open62541.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--OPEN62541_VERSION_UPSTREAM = 1.3.15
-+OPEN62541_VERSION_UPSTREAM = 1.5.10
- OPEN62541_VERSION = v$(OPEN62541_VERSION_UPSTREAM)
- OPEN62541_SITE_METHOD = git
- OPEN62541_SITE = https://github.com/open62541/open62541.git
-@@ -58,7 +58,10 @@ endif
- ifeq ($(BR2_PACKAGE_OPEN62541_JSON_ENCODING),y)
- OPEN62541_CONF_OPTS += -DUA_ENABLE_JSON_ENCODING=ON
- else
--OPEN62541_CONF_OPTS += -DUA_ENABLE_JSON_ENCODING=OFF
-+# Event filter parsing requires JSON encoding
-+OPEN62541_CONF_OPTS += \
-+	-DUA_ENABLE_JSON_ENCODING=OFF \
-+	-DUA_ENABLE_SUBSCRIPTIONS_EVENTS=OFF
- endif
- 
- ifeq ($(BR2_PACKAGE_OPEN62541_PUBSUB),y)
-@@ -67,30 +70,12 @@ else
- OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB=OFF
- endif
- 
--ifeq ($(BR2_PACKAGE_OPEN62541_PUBSUB_DELTAFRAMES),y)
--OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_DELTAFRAMES=ON
--else
--OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_DELTAFRAMES=OFF
--endif
--
- ifeq ($(BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL),y)
- OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL=ON
- else
- OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL=OFF
- endif
- 
--ifeq ($(BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL_METHODS),y)
--OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL_METHODS=ON
--else
--OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL_METHODS=OFF
--endif
--
--ifeq ($(BR2_PACKAGE_OPEN62541_PUBSUB_ETH_UADP),y)
--OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_ETH_UADP=ON
--else
--OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_ETH_UADP=OFF
--endif
--
- # Remove unneeded files
- define OPEN62541_REMOVE_UNNEEDED_FILES
- 	$(RM) -r $(TARGET_DIR)/usr/share/open62541
+diff --git a/configs/imx93frdm_defconfig b/configs/imx93frdm_defconfig
+index f5a5f973a0..e97eb28c02 100644
+--- a/configs/imx93frdm_defconfig
++++ b/configs/imx93frdm_defconfig
+@@ -31,6 +31,7 @@ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2026.10"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx93_frdm"
++BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
 -- 
-2.34.1
+2.56.0
 
 _______________________________________________
 buildroot mailing list
