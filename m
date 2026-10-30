@@ -1,29 +1,29 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5525A606A31A
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 15:24:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1034A606A31D
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 15:24:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=NXoMfYiJ;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=0XC/NE4J
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=j9ETc0zO;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=cVVmte7h
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2532A40B3E;
-	Fri, 30 Oct 2026 15:24:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E34756087F;
+	Fri, 30 Oct 2026 15:24:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Lwbakai54qWB; Fri, 30 Oct 2026 15:24:49 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 20A7440B36
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793373889;
-	b=dH9Ek9EGj09rYpyx2JnFulmmydq13rrqWwYa2GXkZnwgM+YoF0ctZfV1ziAchK8EKXDp
-	 +QhHyMm/ScnOweKJgiw2GYdCiXoalJSEKukttADefS+ntsdJTq3XmPIEJtj+ntBOuk5r8
-	 xE0K+ucPjvtE/lGds5M9YF0Q9h5iIvchNjA4ZAWM32Ga3F+VN7fbI4xU0dEpH5ArDVlkw
-	 CGyNahAwL/GqO1royZBTs4RimyT+rChY5y7l9QfQp03Qk20pvIxJ7HENtzVpJJCNcjWSw
-	 Pz3mCRd1F+AMMb8Uxi+q0sz2pvCXuz8F6HvlO28Br4Y6sWBt47kADThSdBsw0Qc3dVg==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id luOYlqPHeHuc; Fri, 30 Oct 2026 15:24:52 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 95D3360A90
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793373892;
+	b=e2s0+ZyN7saWcKvfraJjUUS3ygRhgrXh7ExBE4iB3MDi4yQuNsPA+pIHHGlHMvz6UMhB
+	 yTsWTCx09G6mfDKk7QLxoMxOibUqhQBKYHMByEkCoOZDhD9SdZ6sior8ZTNAsTPD3WuF1
+	 vHxHMKjtemglR3Mqz7qkOlLoUx+Aar5X/mToi4JpbFGN1yifAGBVDn3XsFsUdvIi2Pfxk
+	 ZPioV/9E4qDfiFLAJBoBg2GOxxEVNWgUB4/0gEVQQBSnn/7efx4SPyxv7wqQmeE9yrO+e
+	 jWTRHbKzZ5dnWB7xdz3hyW25uu2JGqt/O6BimEpwEMUO0qBHxTEi9CchslvBOUpQZrw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793373889;
+	c=relaxed/relaxed; t=1793373892;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -33,138 +33,138 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
 	 Sender;
-	bh=SVB6jB//BS7r4+SUHySzsWYIN/w5lej6ziQaOPf9gQY=;
-	b=NRmsL4A4UGCjdVfLhsPZfDVICI0EMRIrZ3KLeq2YFqorWubu+DVwllIbFkMI/EjOWC1/
-	 ijr1PpvSYSgNWIrlKZCE87S5WQBv0s7L2hb8EOE/+Sns2wbmiE4sxoCuRi5RriPGIzW6A
-	 yhvjqZ2kl/eu9RnjAG5tLAZTmbz/19pSKZZw4sk/2032ZmR/Z9oOvu258MPwMu6Zb3cZz
-	 NG2W4qtSlbzSDl26zptTHJ3/67t/2ggO6mtHzLqyQo+Qfuapk2hCr4dgkEXsv8uEW/oxK
-	 sZfCc1YB/5WuZQHEOi2naJCbtROPX6em6LzwKomNHi0oueKlCEqOzbE/giS0NwYp6rQ==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=Ymc18u4nbhYlHAuSiNdbr1Avm2RFUG3cxOgtU0ggDKs=;
+	b=hy7fvXDV4FznMIDvyqP60oB0GP2aG10zmQ/O3OaGZM690gyt/oWdEWuPJbCU7LzEZWGx
+	 2zAPi0WC4hwc8YY/7pEmudcYhUEozqvCpnkCqyd/F6D3binkyFI22MoKW9l6/ozQxh8Hu
+	 aALT6Am5zefX1CFtDkS9Sqi0js6tJahpXb0NfELBGkD6XBVC9C1N6/ybCwhZVHeJqyX2F
+	 SWYxUWvcNQodTe3C4y4aBFQ9Ewfx085yH3al2lwjxWNXSXbv56v2k86mAT5toY68q1vzz
+	 F2XEtLtWAdHgWmRbzhIYMB9Igo6amBo3nZ0sxXy/IeuoASS/aHKes6yGRr9OZweQmXQ==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793373889;
-	bh=SVB6jB//BS7r4+SUHySzsWYIN/w5lej6ziQaOPf9gQY=;
+	s=default; t=1793373892;
+	bh=Ymc18u4nbhYlHAuSiNdbr1Avm2RFUG3cxOgtU0ggDKs=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=NXoMfYiJmEGdr0jKbfkYO7ftQUi6ijicc4TBwT5CbPeETzmuviObgEe93pGK+h2aL
-	 kjxhuvjkHglB2N5m7nypb4GbidEqufYDkDnFRGwgkQB+fygqPnV72vjrGDFaFRrE5c
-	 96GqYSmc6G2st7KXecjBMTEVnwQ1wYWBjbkK5Yn59GY//CmYk+ugq2FspMe+QmlvJm
-	 05mX0+oy3tkatzed2zFwSRwZxmRfvOs+BQWKWDLitkc3i1SDVkv6PsuHpFP/OVFl7C
-	 6ODAjPmYQJ+yb+WZJLjxs7wartRSA+ZGZkOJgkkhRzTLov9b0sTn0yaQx0HzCo55fb
-	 RbccUZaBQn5PQ==
+	b=j9ETc0zOApNxAUXh1NkjARxV/pPHHb3vQAw0HMGEWUmBL7Xs0tec8XPIEj8H8ltDo
+	 7h2F+yR1ibzol7oRFv6Fbr3NjTw1CS2J2+Yra+3kN7tSnWh/CjYLOfoimqH6FU3vxH
+	 yUmpfBqCGH/MMFo/pIBgS5LwMsGv4/rwzRF/50Gs2go2dBZCuDriqL9LB9DWVazbH/
+	 LuiXr3bFfg8++AQSQW+aHjCSANBpGmpQuFgugUSSf6gVG38I08MKTpZUlCE3abWWAG
+	 QzMv6e0U/YXvouVIEFA2QCgHISf8M8U5MzfvfwbI9oVn00Ghb5M4ZTabaI7Y8DrWfV
+	 Uwwe4jPhTGJUw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 20A7440B36;
-	Fri, 30 Oct 2026 15:24:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 47A483AF
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:24:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 95D3360A90;
+	Fri, 30 Oct 2026 15:24:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3EB553AF
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:24:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 39DDB81250
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:24:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 30CED40530
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:24:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OcGMQmQJZBgN for <buildroot@buildroot.org>;
- Fri, 30 Oct 2026 15:24:44 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 4D78B8125B
-Authentication-Results: smtp1.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::436"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793373884;
- b=piThfVLZPRyIV7JVeWCztcLcoSU5E858GH+uTvJmXlbttUrdjMccLuMne0yDg2q1hLF3
- q6Cb0zk0jLyoLalA+oQT8FbV0LERqvA4bwl3TwoBCGgg1bmyRibCHytcDLESfegK1bLQW
- pC18IB7SU89gF3qOdr+lUDmkQhigRkkvDvODZ3JEKkrEKiIOIMkQJQkzqw/zHhjLA+4wT
- heS++IbERRGEk5pBAnEHEL/IgSzZQlsg8COOJ2/553GO6Dkv22QNKQvMvMbCPiu4x7doZ
- uxdE1lbGq9YXSTpyq0iicuKcDnhsnRxKVC81VQppIyB7BN4jSSZwFViENNY3RqvUaPA==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gk_IVn4awKLW for <buildroot@buildroot.org>;
+ Fri, 30 Oct 2026 15:24:46 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org BBDE540211
+Authentication-Results: smtp2.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::434"
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793373886;
+ b=QF5q32D5AE6CYue4/KTNt11YWqr92FBQNDj7JcNbTX3ZTsaem1E2ElSpwIMKBNp6Atbi
+ ROKmDaPAxw6lmML9GGSXKRw4nvi+otRRKv6+0azSCCE0xcHsSF8n0fOAzhKy0xvnrTx1i
+ bAMuvNxOenkXplHeen+0n0HM7qFvVOic5ZL4qmNFsqBWCHyrkjpQkqKmrn7QAyp8jq3hh
+ 657hUbz26T+tzK5HQJ5oiOm4aIyT+CtT+0UbdiKBBc47GQsokTVdgY9wlJWNlACJBEZz+
+ gxvNnXN6ZFpv6vSoUbFDQfKOUCU5mxu7XYGl7nVntBYMQBbVmjWZQWUoR1gcGPP7ezg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793373884;
+ c=relaxed/relaxed; t=1793373886;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=4hwbgEadYnvmNjZNfF8NWDnc4kzHEI549hld5n3cyNE=;
- b=VE+rwWC8oaxTXRVVh5iDGJC4F2eLJ10zl+pkbM9T8BgbuS7S7QolsRHFm3vWSIBdEURu
- nd8VQ2YfV2meTM/CNicvRf+kDO072UOeYZCfZDqXbVKaD2kn/OAIqMiNcUAlO3w9Q1nIA
- TUoOoydaJms6+A684y7Pn/m/EjQxssM8i4tod/ZNhQv58iJOT0djxSWCKa4Y/tU3FfuHt
- FvZKB/79Z1yDIRPrhQly8s22HsuTo6xozbQpEwt9gaq9tY6GB/rewvtexbeGB9VBJBNsi
- DipAWjMjAJray74ay28iYdRF9qPi05uMF7tbDkHD3H+ishXy/St3zAycEJ4D2gR/+5A==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ bh=pAC9FIy2HzYSBijyCsCo5z8td8UhdDzrOzh+xU0PdaI=;
+ b=Qm8tX0Vy2IDFFv4wduV0SDOSlnzSfqcISCdh8Uy9gQzx0jAext6Hi874VE0KbIaUtEUh
+ IpPx9a0km6CijYtNU0cGa3veqwjEztk+XRyYoC8Tb/b7OmIelivJvesDVnAAobcd9ZFKy
+ 3HKJddX3iJhRaG0iTO6JBZau11xnNZH6/MenxyxxRsKCnFUTkEcwyGVjtYADv3GCeCo6L
+ pEGhlf0Et3uH4ijssYVbo5Z8oCpSlueNPHeYp0jt55BBJkxYauzvvzFv8lUTzbqDT3PjS
+ 8i7jyDDvjIO9i4kJJltrz24uEqfnIdi/FCU7/nzozzHOGPhWLSXbYMJdRHB1ccY6j9Q==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  dmarc=pass header.from=gmail.com;
  dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20260707 header.b="0XC/NE4J"; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::436"
+ header.s=20260707 header.b=cVVmte7h; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::434"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
+ client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
  envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20260707 header.b=0XC/NE4J
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
- [IPv6:2a00:1450:4864:20::436])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4D78B8125B
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:24:43 +0000 (UTC)
-Received: by mail-wr1-x436.google.com with SMTP id
- ffacd0b85a97d-48b042c0728so238824f8f.1
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 08:24:42 -0700 (PDT)
+Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20260707 header.b=cVVmte7h
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BBDE540211
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:24:45 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id
+ ffacd0b85a97d-48dfc0421d9so719665f8f.1
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 08:24:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20260707; t=1793373881; x=1793978681; darn=buildroot.org;
+ d=gmail.com; s=20260707; t=1793373883; x=1793978683; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=4hwbgEadYnvmNjZNfF8NWDnc4kzHEI549hld5n3cyNE=;
- b=0XC/NE4JLU2q3l2P9UGI4w22nb0CNp5Xpe/a3k7U9u7LbRjy4eLeXcGwoZUHdX9FCM
- eMT6dEOaaYSazLSDx9oBVJbamGhnXLMrZsnGvjTjP0umd3q7DZr+xuS+G7rQ24GCSDEc
- G/B+aFwikO9VrB04lpg0lbC5458H2HPquPDPz3cVHLI4naTMbvKlWVTQHx/hzrsDwMDb
- Nn4+KzLavY8AbWjXJGxN9HQYnXclW+qcvGVi7zMDDRuzWL93d9jAMvaKmKwwAVOo+RFH
- rEMH6S2y+iv4MtNGxQrtlno9ux3oatwyG4J2xQ6EsV1/lDGjng9p7US9NnvDajUlAiBv
- hM7A==
+ bh=pAC9FIy2HzYSBijyCsCo5z8td8UhdDzrOzh+xU0PdaI=;
+ b=cVVmte7hUgzIP65S/XnJHn/vghTK7/HyT6q00ZxN3vxENuy4x3rZLJznDOeIN6FHu+
+ HNpWRqYEO2iHQAsg7xYjK/sjjVSgidtl39OI7Sc6Zx3EnOs17WeGlmBtIJsutHz9nlbg
+ mUeR8HYGh0xUVSlnxurxR0d3hmLvWrYxHkXyNCTtZxLp05tyKdJzl29i/8qCF3k94rQh
+ mUVCZhs71TqZlm2YENKYqTfuArpyJlZ6v6y+EPEPqTdC1HOscEqrYDhRf6sop4GVRfIT
+ 8db1Bnx6iZ41Jq5pP1Fo+5NWeh699MrcZxZUjNqFRzgRghKt/YRzdCfIFB8T6z1k3vKx
+ 9tDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793373881; x=1793978681;
+ d=1e100.net; s=20260707; t=1793373883; x=1793978683;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=4hwbgEadYnvmNjZNfF8NWDnc4kzHEI549hld5n3cyNE=;
- b=ZmmRQG5nx+7qYYNzYLLzDDPyN4wYBhFm9/7BZ6wjK6rg3P1NEogXUZlipOv1yemBD2
- wlXxCws7cGn6XqL3v6CFBlqi3ZGEgVgFNtlIeFozISH8GEPPwU40AWBV7ORUjeeGf1Pj
- X/4FEeh5vHr3np+ge6fLPMiNbb/vIi0EvObwxx9JtG5LlIm0MP8Cx0qjyVdcb+bfGg4t
- KtHHyPrkwXKrHI3XdUVqH5yGh/dGknKfqUWw2Z6BbaiXHa1oZ/z3Q227xi3YAIUYYwps
- zIBsUVD5A3QskjrQzxf8uMwjwdamMyvvLdlS1c/hCrIoWA5LfC6ly5fbTs4m81amZBGY
- NoZA==
-X-Gm-Message-State: AFq9FYLiJmTvnLdm2XWPf9nThN8Y5YFRjGYnzpMXhHDmfvdJkQnY/cXl
- tXxP1a8jOsD6dXR94l/3qDp8gitsrLx7tutggIvkGF8VeHyedHxlt6fg5bjHXQ==
-X-Gm-Gg: AYBFou2RQGrJCyJEJMYKKTVz/rchrYQ9eJWtLzALxUtKEzxHrrR5mONR74Yk9+FN+US
- gcx9xepw18MqG2RjMbocAy5gBUXmZWxkrxqi4hjhN0vF4rOmJxlCBwY0qZgPDDEnfBXl7q1WZrk
- 7Aide7zhSVpPfeMpAcBYe05WdgaI7DxorgfPyezFOnUP/obeTDVxyMJKOKrR9/wGs1wBXf+px6h
- XXfMaNB7kJRP+fKkmW3WcRmWFkinTFTfCwnF+63cGFKqRPBOOGxp03fEx74ILLNVILEEFqSqYxn
- cWzf8xLKiT8YGn28JBxFIN5mxj98VYKsvn8wOCQdxR74c/HJAFEPzguMqbtwgKhfPhGg+fnYOBA
- ZxaY4lxm1/5ZUFgnBOY8Xf3ZYjbUhlmu7AGuLBfxFt2OuaMQ7o3AKVBQTPJt8/8Jb4Qz49YQpRH
- 4aWT4YlDUp9jJvcq+3vmPRA1bjxpA+K/4xhD2GgMhtF4/+e6iBFfmVjfeKQrYHPhwl067i0lpFb
- X19rQouW4Y0T+y6yw3px98P7ztgbERdRLx3HPCp+l8EpqSotCzTGvkYk4TjWxb+Bb0Bs8o9vbfb
- cyrEtkv9P7qjkullADses5x4qX5GhFYSNj0vNdDk0P9Mk2LAJsGY7w==
-X-Received: by 2002:a05:6000:642:b0:48e:1421:ed63 with SMTP id
- ffacd0b85a97d-48e6e2ebd36mr5689701f8f.15.1793373880982; 
- Fri, 30 Oct 2026 08:24:40 -0700 (PDT)
+ bh=pAC9FIy2HzYSBijyCsCo5z8td8UhdDzrOzh+xU0PdaI=;
+ b=CLQLHo3regVon2GPUL0PecEzX6pFucChAwdy4XO4x0XXyX3rl4Op7zWP7nEM6BU5aK
+ W8jto81nZrntQ2S68eFXNFdoHq+b5iK7Sy6nbvuiigrLC8+hUECTiip73ikm/SQUPmw8
+ yRBD3vm1D5kFCO4U9V8ckmOGKWhRueWNzpzmC7YC+6peYzes+2roS6uoum2TjtSWyUnE
+ 2uAgCfiqOhEziOF03LjRVrLtlz8hMfOqtTxE7dZ3Yz1t81K6CkISlh3Qk/QlMY0a3boh
+ h43IH9h4QEbuqcSZxXPJFelU2uFgH5wRmn9Jk6yQLOMm8/c0lVPp2sSCP9KyJDtzZFla
+ 6k5A==
+X-Gm-Message-State: AFq9FYLV4Nus/1Sh50jeNF56h4fevB9yXSs6OXES3CwsEyTkk0M6lYMe
+ KA9VhqACCobh8radMOMosBdJN9e/aj/Mi8bnowdVj6Guaqu0I1IikujPAOUsvA==
+X-Gm-Gg: AYBFou1+kv+8G5bh5GjKKieiZnN3/lN0iP+JR0lwvBwIIVHl2n7nyLdY3G5j4jAL66t
+ TkySMK6p+pxjOrXvB9qkIekJZt8wOCsS7jVgoaCK7t1c+KyxCZB7lMJNVLx8BgBQrEWVEbuzHyO
+ ftmi5bwSjzJaS24ch4PZNbQWyvqy3un450e2Ob2uat+qZuP/52yUcMoEDicbAyyiayBXldrjnBw
+ 5HqwKSYccFbwtFc/Y6B8x8Aq95C8pSBx4Hggbpv2TKTMzHiXrcsSEzSau38JO6f3MQXIUi8/V2f
+ JPgEl5T5vCqVanhppb0aT8XA9ElLhi3QKtWXJ++tx64PLMG+ieFGA1B8GI8YzVdL1WfVO/t2s5L
+ CStXaTI8bwZwQv013GjKmCKJeMS8pyHYoAZrwz3CqkYeb/6yXr1htQ1zznMwnKOPYLY9+V1Ki2G
+ N/hfqToZaIkwAopXDQrmy1cnDKbPHcQBDL3M59QW/R99Oai8chADp121RhtZdhu4VIdx4azSmuI
+ nj7CGhrmWDi2vOI7qP0LYf50mc2wehM858L7yVrr/+8FZYCvMnYTWS0nbFmgZXtAWuX4Ws8asEx
+ QEjCj076uBjWrQWQozqLhQp5tevy+k4juXYRfTccCpUTwiLxWYRhZKM47/0T5V4hGeDeTQTY1RQ
+ =
+X-Received: by 2002:a05:6000:160b:b0:48e:7476:9205 with SMTP id
+ ffacd0b85a97d-48e74769219mr1685838f8f.31.1793373883327; 
+ Fri, 30 Oct 2026 08:24:43 -0700 (PDT)
 Received: from angelo-Precision-7550.. ([94.154.175.53])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48e71b8c0b6sm3540180f8f.41.2026.10.30.08.24.40
+ ffacd0b85a97d-48e71b8c0b6sm3540180f8f.41.2026.10.30.08.24.42
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 30 Oct 2026 08:24:40 -0700 (PDT)
+ Fri, 30 Oct 2026 08:24:42 -0700 (PDT)
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 To: buildroot@buildroot.org
 Cc: Francis Laniel <flaniel@linux.microsoft.com>,
  Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Fri, 30 Oct 2026 16:24:28 +0100
-Message-Id: <20261030152434.3738285-3-angelo.compagnucci@gmail.com>
+Date: Fri, 30 Oct 2026 16:24:30 +0100
+Message-Id: <20261030152434.3738285-5-angelo.compagnucci@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20261030152434.3738285-1-angelo.compagnucci@gmail.com>
 References: <20261030152434.3738285-1-angelo.compagnucci@gmail.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 3/9] package/libabseil-cpp: allow building with
- musl
+Subject: [Buildroot] [PATCH 5/9] package/sysdig: bump to version 0.41.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -177,53 +177,212 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
 	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-libabseil-cpp depends on BR2_TOOLCHAIN_HAS_UCONTEXT, which is not set
-for musl, as it doesn't provide the {get,make,set}context functions.
+sysdig 0.41.4 needs falcosecurity-libs 0.21.0 (whose driver is the same
+as the 8.1.0+driver one sysdig requires), and links to libsinsp through
+pkg-config, as supported upstream since sysdig 0.40.0, with all the
+bundled dependencies disabled.
 
-However, absl/debugging/internal/examine_stack.cc only uses the ucontext
-data structures, to get the program counter from the signal context,
-and never calls those functions. musl provides those data structures,
-so allow building with musl.
+lua, which runs the chisels, is now a direct dependency.
 
-On 32-bit powerpc, examine_stack.cc assumes the glibc layout of
-mcontext_t (uc_mcontext.uc_regs), which is different with musl, so keep
-it disabled there.
+Patches:
+- allow to disable the container plugin, which is either downloaded as
+  a prebuilt binary or built with Go; it can be provided by a separate
+  package in a following patch
+- only include the zlib CMake module with the bundled falcosecurity
+  libs, as it comes from them
 
-examine_stack.cc was build-tested with the Bootlin musl toolchains for
-aarch64, armv7, i686, x86-64, m68k, mips32el, powerpc64, powerpc64le,
-riscv32, riscv64, s390x and sh4, and libabseil-cpp, re2, protobuf, grpc
-and webrtc-audio-processing with the aarch64 and armv7 musl toolchains.
+Release notes:
+https://github.com/draios/sysdig/releases/tag/0.41.4
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- package/libabseil-cpp/Config.in | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ ...llow-to-disable-the-container-plugin.patch | 37 ++++++++++++++++
+ ...-only-include-zlib-with-the-bundled-.patch | 43 +++++++++++++++++++
+ package/sysdig/Config.in                      |  2 +-
+ package/sysdig/sysdig.hash                    |  2 +-
+ package/sysdig/sysdig.mk                      | 32 +++++++-------
+ 5 files changed, 97 insertions(+), 19 deletions(-)
+ create mode 100644 package/sysdig/0001-CMakeLists.txt-allow-to-disable-the-container-plugin.patch
+ create mode 100644 package/sysdig/0002-userspace-sysdig-only-include-zlib-with-the-bundled-.patch
 
-diff --git a/package/libabseil-cpp/Config.in b/package/libabseil-cpp/Config.in
-index aba065fca7..ea037f5de2 100644
---- a/package/libabseil-cpp/Config.in
-+++ b/package/libabseil-cpp/Config.in
-@@ -13,7 +13,11 @@ config BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- 	default y if BR2_sh
- 	default y if BR2_sparc || BR2_sparc64
- 	default y if BR2_x86_64
--	depends on BR2_TOOLCHAIN_HAS_UCONTEXT
-+	# Only the ucontext data structures are used, not the
-+	# {get,make,set}context functions, so musl is supported, except
-+	# on 32-bit powerpc, where the glibc mcontext_t layout is assumed.
-+	depends on BR2_TOOLCHAIN_HAS_UCONTEXT || BR2_TOOLCHAIN_USES_MUSL
-+	depends on !(BR2_powerpc && BR2_TOOLCHAIN_USES_MUSL)
- 	# absl/base/internal/direct_mmap.h only implements DirectMmap()
- 	# with mmap2 for the o32 ABI on MIPS, and its 64-bit fallback
- 	# fails to build with the n32 ABI, where long is 32-bit
+diff --git a/package/sysdig/0001-CMakeLists.txt-allow-to-disable-the-container-plugin.patch b/package/sysdig/0001-CMakeLists.txt-allow-to-disable-the-container-plugin.patch
+new file mode 100644
+index 0000000000..e13ed4bb65
+--- /dev/null
++++ b/package/sysdig/0001-CMakeLists.txt-allow-to-disable-the-container-plugin.patch
+@@ -0,0 +1,37 @@
++From 64f286b765da1335369c3d27fad298f0b3f525c5 Mon Sep 17 00:00:00 2001
++From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
++Date: Fri, 30 Oct 2026 10:15:11 +0100
++Subject: [PATCH] CMakeLists.txt: allow to disable the container plugin
++
++The container plugin is either downloaded as a prebuilt binary, for the
++build host architecture, or built from sources using Go, and both can't
++be done when cross-compiling or without network access.
++
++As the container plugin is only loaded when available, add an option to
++not download nor build it.
++
++Upstream: https://github.com/draios/sysdig/pull/2191
++Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
++---
++ CMakeLists.txt | 5 ++++-
++ 1 file changed, 4 insertions(+), 1 deletion(-)
++
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index 68344a3..9ef0f9a 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -163,7 +163,10 @@ endif()
++ include(falcosecurity-libs)
++ include(yaml-cpp)
++ include(nlohmann-json)
++-include(container_plugin)
+++option(BUILD_SYSDIG_CONTAINER_PLUGIN "Download or build the container plugin" ON)
+++if(BUILD_SYSDIG_CONTAINER_PLUGIN)
+++	include(container_plugin)
+++endif()
++ 
++ if(CMAKE_SYSTEM_NAME MATCHES "Linux")
++ 	if(NOT DEFINED DRIVER_VERSION)
++-- 
++2.34.1
++
+diff --git a/package/sysdig/0002-userspace-sysdig-only-include-zlib-with-the-bundled-.patch b/package/sysdig/0002-userspace-sysdig-only-include-zlib-with-the-bundled-.patch
+new file mode 100644
+index 0000000000..e4f580dbd5
+--- /dev/null
++++ b/package/sysdig/0002-userspace-sysdig-only-include-zlib-with-the-bundled-.patch
+@@ -0,0 +1,43 @@
++From f61de224af8121847cd3aa9b1745b87fce52e351 Mon Sep 17 00:00:00 2001
++From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
++Date: Fri, 30 Oct 2026 11:05:48 +0100
++Subject: [PATCH] userspace/sysdig: only include zlib with the bundled
++ falcosecurity libs
++
++When building with shared falcosecurity libs, the falcosecurity libs
++CMake modules are not added to CMAKE_MODULE_PATH, so including the zlib
++module fails:
++
++  include could not find requested file:
++
++    zlib
++
++sysdig doesn't use zlib directly, the module is only needed to build the
++bundled falcosecurity libs, so only include it in that case.
++
++Upstream: https://github.com/draios/sysdig/pull/2190
++Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
++---
++ userspace/sysdig/CMakeLists.txt | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/userspace/sysdig/CMakeLists.txt b/userspace/sysdig/CMakeLists.txt
++index 4acbb030..416b8f83 100644
++--- a/userspace/sysdig/CMakeLists.txt
+++++ b/userspace/sysdig/CMakeLists.txt
++@@ -20,7 +20,11 @@ if(NOT WIN32)
++ 	include(ncurses)
++ endif() # NOT WIN32
++ 
++-include(zlib)
+++# zlib is only needed to build the bundled falcosecurity libs, and its
+++# CMake module comes from them.
+++if(USE_BUNDLED_FALCOSECURITY_LIBS)
+++	include(zlib)
+++endif()
++ include(luajit)
++ 
++ include_directories("${PROJECT_BINARY_DIR}/userspace/sinspui")
++-- 
++2.34.1
++
+diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
+index 3c96bda73e..5dff37251a 100644
+--- a/package/sysdig/Config.in
++++ b/package/sysdig/Config.in
+@@ -21,7 +21,7 @@ config BR2_PACKAGE_SYSDIG
+ 	  Think of it as strace + tcpdump + lsof + awesome sauce.
+ 	  With a little Lua cherry on top.
+ 
+-	  https://github.com/draios/sysdig/wiki
++	  https://github.com/draios/sysdig
+ 
+ comment "sysdig needs a glibc or musl toolchain w/ C++, threads, wchar, gcc >= 10, dynamic library, a Linux kernel, and luajit or lua 5.1 to be built"
+ 	depends on BR2_PACKAGE_FALCOSECURITY_LIBS_ARCH_SUPPORTS
+diff --git a/package/sysdig/sysdig.hash b/package/sysdig/sysdig.hash
+index cda3de5e7c..4a55afe1da 100644
+--- a/package/sysdig/sysdig.hash
++++ b/package/sysdig/sysdig.hash
+@@ -1,3 +1,3 @@
+ # sha256 locally computed
+-sha256  6b96797859002ab69a2bed4fdba1c7fe8064ecf8661621ae7d8fbf8599ffa636  sysdig-0.29.3.tar.gz
++sha256  36daa6a06705569fcc9b0579992e2457494003aea0065eabf54b3e16d67511f7  sysdig-0.41.4.tar.gz
+ sha256  a88fbf820b38b1c7fabc6efe291b8259e02ae21326f56fe31c6c9adf374b2702  COPYING
+diff --git a/package/sysdig/sysdig.mk b/package/sysdig/sysdig.mk
+index bafe534a16..d04f67a97b 100644
+--- a/package/sysdig/sysdig.mk
++++ b/package/sysdig/sysdig.mk
+@@ -4,35 +4,33 @@
+ #
+ ################################################################################
+ 
+-SYSDIG_VERSION = 0.29.3
++SYSDIG_VERSION = 0.41.4
+ SYSDIG_SITE = $(call github,draios,sysdig,$(SYSDIG_VERSION))
+ SYSDIG_LICENSE = Apache-2.0
+ SYSDIG_LICENSE_FILES = COPYING
+ SYSDIG_CPE_ID_VENDOR = sysdig
+-SYSDIG_CONF_OPTS = \
+-	-DENABLE_DKMS=OFF \
+-	-DUSE_BUNDLED_DEPS=OFF \
+-	-DCREATE_TEST_TARGETS=OFF
+ SYSDIG_SUPPORTS_IN_SOURCE_BUILD = NO
+ 
+ SYSDIG_DEPENDENCIES = \
+ 	falcosecurity-libs \
+-	ncurses \
++	host-pkgconf \
+ 	json-for-modern-cpp \
++	luainterpreter \
++	ncurses \
+ 	yaml-cpp
+ 
+-# Don't build the driver as part of the 'standard' procedure, it has been built
+-# by falcosecurity-libs.mk.
+-# grpc_cpp_plugin is needed to build falcosecurity libs, so we give the host
+-# one there.
+-SYSDIG_CONF_OPTS += -DFALCOSECURITY_LIBS_SOURCE_DIR=$(FALCOSECURITY_LIBS_SRCDIR) \
+-	-DBUILD_DRIVER=OFF \
+-	-DGRPC_CPP_PLUGIN=$(HOST_DIR)/bin/grpc_cpp_plugin \
+-	-DDRIVER_NAME=$(FALCOSECURITY_LIBS_DRIVER_NAME) \
+-	-DENABLE_DKMS=OFF \
++# The driver is built by falcosecurity-libs, which only supports the
++# kernel module.
++SYSDIG_CONF_OPTS = \
+ 	-DUSE_BUNDLED_DEPS=OFF \
+-	-DWITH_CHISEL=ON \
+-	-DVALIJSON_INCLUDE=$(BUILD_DIR)/valijson-0.6/include/valijson \
++	-DCREATE_TEST_TARGETS=OFF \
++	-DBUILD_SYSDIG_MODERN_BPF=OFF \
+ 	-DSYSDIG_VERSION=$(SYSDIG_VERSION)
+ 
++# 0001-CMakeLists.txt-allow-to-disable-the-container-plugin.patch
++# The container plugin is either downloaded as a prebuilt binary or
++# built with Go, so it is disabled. It can be provided by a separate
++# package in a following patch.
++SYSDIG_CONF_OPTS += -DBUILD_SYSDIG_CONTAINER_PLUGIN=OFF
++
+ $(eval $(cmake-package))
 -- 
 2.34.1
 
