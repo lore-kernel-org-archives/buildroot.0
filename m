@@ -1,133 +1,168 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C942F606A31A
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 05:39:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCC0D606A332
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 09:15:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=a8OIg6Um;
-	dkim=fail reason="signature verification failed" (1024-bit key, unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256 header.s=mail header.b=jH4KrX9m
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=UHv8cwDx;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Fd8BXIU+
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A52C860AA0;
-	Fri, 30 Oct 2026 05:39:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B32DE810E3;
+	Fri, 30 Oct 2026 09:15:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jvBGtzx4UNM8; Fri, 30 Oct 2026 05:39:35 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 3D7C060A70
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793338775;
-	b=beSpr0SxLlmhWDXKzZG9h56LhY0MH06ksKgCTfvbXu3GuH2ef5ytVsCoTnKBPzlVXnpl
-	 QnNEhiB1Gv4MxLH+OWYb5VL2ZRc8GeJbKV3SihWwoES8ILC4JqtTpJymfezr5EbXrNJLs
-	 SY3lPc3uDL039fkiJjW8KVJzrwGHNtj4iCJXQ3yqobhzkfCuZIQNE+lVgx5VbXPpWZu2S
-	 I0yywyuhaygANV4vFdyzuphedzAjOI3W93fYCb1fIIqpcEqJTC5dzgZLneKOWacW7aIoR
-	 Yp0lCHT2LQHfxHwU9Art+osgbIu00KCGviKj8LNbPmyPgYv8PmtfaPC3MdSiv7JMvRg==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qfrWeuNYtnad; Fri, 30 Oct 2026 09:15:52 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org A7AAD810EA
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793351752;
+	b=MK1Y+6eO2MTBAIMWL0nsX35ZMp5r6bzUJgO6GO/ldttZqMwRaPw6UwlFAam+OO42f5gG
+	 52eHbgeN9ZbQn9WSip/j73SFvhCCOAdFBE5Bq2qXeonDlE9a0Cw7z+Wab3oG1kFbauSaN
+	 udTm408kz1bz+2XZ7ro1UcCKge8YThvCw+XRqoOKDTPzJFKzM3EcT6MzMIUZaK3wK3g8z
+	 oVVaWCTujKDv4utk2eTy19se66nhHCSpHQIi4AsYYsojdVT+INGxpKbXg5NlKxWVz3o0k
+	 rJh0MqJsyi+5pinM30lfojZnvWHICUaiGhoyNgFI8nzgK0ArhlkgA7fwz6gJYrCtEzA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793338775;
+	c=relaxed/relaxed; t=1793351752;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:Received:MIME-Version:Date:From:To:Cc:In-Reply-To:
-	 References:Message-ID:X-Sender:X-Virus-Scanned:X-Virus-Status:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:
-	 Content-Transfer-Encoding:Content-Type:Errors-To:Sender;
-	bh=dVvuisjSnZf7DF61BKoSLLHH4VryN/1TZY3e7EexqRc=;
-	b=oH+M2Thk0TpAt81MCPWFLqtlthMMnsA84PSPA5uG6IjNGQdXXt6WFHFz8xeVS0blvHRa
-	 vfchl0E/Mlya/f7aXpqIJws6vWjWx7+kJ9PBsXlfdnXf9/NiyA13TCZy+TnFqStUbArfS
-	 nCUA+nW/CwA8+Jxq8/tL91H3Yl8RQsyp1qNU40lquixnQvOlgY/2sw4X+AzBOUovBRGnm
-	 Lrp/ztXwoPM4YdvlXkwre4W0oRN8lvgRWB+NapZwF7Ts4dFp5R05qCB+uS9pePV8dFNB9
-	 cymNIjAsg8mz8Dn9BcKDFtQKZk4S+c1b9LKVdc4p8C/rUfnKfETH9SqbTzQpATppDJg==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
-	dmarc=none header.from=umbiko.net;
-	dkim=pass header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256 header.s=mail header.b=jH4KrX9m;
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:Received:From:To:Cc:Date:Message-Id:X-Mailer:In-Reply-To:
+	 References:MIME-Version:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
+	 Sender;
+	bh=5EnBa2N1WxJhkMrizkGAS30yqExiLLCnVbHronaDaCE=;
+	b=L84+rY6KwyjFZwXjnE+9LbMA+YSGijmxW8kqZMdOiRfuj/VuFHFM2xW3R6jYmrSMSbsT
+	 mLF1uodyg0kkExBF6s8DyRM4874xRnLh7FzxKHECD7bJ7cORv5lGJ6RorWJJnSKGJ5NjN
+	 9s6thVYFJW98nmhlYMCXpIEZE2ts21FFcTm+HxZ4jr1M/xgShpapn3o/9AxCtknzJb18i
+	 bshR7BdGp9Iqf07IoMFBa+YFM2KaXGCKOPITdsion3TObm6cVTIQWRYk5Au+C+DuXwkzG
+	 CHm5XHzWyQmC9eNXb5bJG40+h8Zjf5CIUTgnMVp+8T1DNNVPvObgERgQzHtE8DMtHIQ==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793338775;
-	bh=dVvuisjSnZf7DF61BKoSLLHH4VryN/1TZY3e7EexqRc=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1793351752;
+	bh=5EnBa2N1WxJhkMrizkGAS30yqExiLLCnVbHronaDaCE=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=a8OIg6UmknVZ/pvyaZdKQ21MT9Sz25BgUF7GXYLZrO0tS95nFJqUTWKqYO3mmMtoE
-	 B7/lqqP/Vij5tK5HqFgqKLe6sbBNWJ6A97vdCTYunbUKl+5bfvXaPgAlUJsbQSzHY6
-	 X6T4INdUEi9GJPk+ncFzggE3h+xXqsbsFGfr9nJhMfuvTRILhN2IUdkZlbAKTV58Ur
-	 gxZvjVeKFfo6SOqGsCTRt54k2/8LY1IeAkQ2Sf7yvWIxP7cFvZMySTmMvRiMnn5N3T
-	 wuUM5l3hFC95UtvMc6ESa3uGk6oJQ/Q/X5IuBP0X6AZW0ZvnG+aHPW3PqeNE9eNVlf
-	 G0xV0dpCVPy3w==
+	b=UHv8cwDxlkae5bm925t3pSx1A7NptK+tvnDzGvWGsZnYvK9dh3f64XZ5o5r+oUPJN
+	 uaQriJvityupclcBKaLvcOFvcaHw3JPEAKOcntwLFNK1+p/YLT8IKXeRrd0U+1BNQ9
+	 HyGz1YI/b2XsZY5m/qhF9i7cnQkHKHHSeX5BatPuRlc7o6ei06Tq/07eAPbPyPIRMX
+	 YK/Kbkot/s0BZj4XDsxCw1Jqr0wcOAqBkAPhthzIu4G4qKi3ekpkTCw8aD36Je0rKE
+	 8AMsstTJNtJ3HYBnXbOMiFMPWj9BcGN3uddbuiZcy6yaXSXY4BJdhOUPp6bb4QtXr+
+	 +vlGCXxcKoW/w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D7C060A70;
-	Fri, 30 Oct 2026 05:39:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8D1B02C7
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 05:39:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A7AAD810EA;
+	Fri, 30 Oct 2026 09:15:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 756822C7
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 09:15:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7E8CB60A70
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 05:39:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5B9B84008B
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 09:15:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HXLMll9i3z8r for <buildroot@buildroot.org>;
- Fri, 30 Oct 2026 05:39:32 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org E4C2E606D3
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=176.9.89.163
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793338772;
- b=A/R87EEXajmWsdjMhQJW/KSOQC9j3KjCLam1upWjOHYaANNP7mnzdc9EPrmwQg+GiVgQ
- vrjr5LgXlB2vkq7/zh+SX/hhfgURRzLrzxQfaAhwTcfJ3u677ejvfwZ6AvtwJEhOXvuSL
- 2mROsb3eTQVaOt9oJzm0oG3H5lMEHc939g9LJk8gIvFTaJOgdLTdLTAvF6lXCuFG21UXb
- AJQkTb+83xb9PJ/N64b1GvDIW6lkLTFkjCp9zn8rN7jo/1oc/AM7bkJ0aMPG0grde83kK
- D88jmBIrQkQ3C4eZoLQAfLUtOelJij8wOAl3x+QdqsrojQHKckzB0OEE3Kt+oGEFxBg==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 71CGypC6JVeZ for <buildroot@buildroot.org>;
+ Fri, 30 Oct 2026 09:15:48 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 4521240063
+Authentication-Results: smtp2.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::334"
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793351748;
+ b=P5VcjGUL7TxL+cI6wUHhC08CKpoEsBYjZzZ71FW5GhPvcaD2yvE0Fk/Z0P63xKMKdigF
+ xPtQAkCle2gwCeB/VetRQ/AEGoh2xAqIyFogl3y39XmxEWjVQ8lX4Lj9y44FuWFg811C1
+ 4B81FwyYXh8dmjq8ujQvRRbwy+pFZl8pmi3J4Frq8o8c7/8rCS3dauOa5Rzo8ftUMpWXj
+ xiis34y4DjHzKKK1dBbh4EZuynXf2FtjVq2Ty339ultRxytOzJyxU9ptckxD7ZvTSoPne
+ 250TBayAdw+6nGdHYS/t3dHnosb2q9icC/9/BXY5OQKN6Y+omYbfn4O6xMfzm/x8dig==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793338772;
- h=Received-SPF:DKIM-Signature:Received:MIME-Version:Date:From:To:Cc:
- Subject:In-Reply-To:References:Message-ID:X-Sender:Content-Type:
- Content-Transfer-Encoding:X-Virus-Scanned:X-Virus-Status;
- bh=SzgVOR933lB8dSpsJcCW53Z2Gjvxu2Ji7lxsx3hd/LI=;
- b=dwsL+rRCzwBfCZj+ddtcxt7pgLiEspy/4lj1vGXg/NW8RgR3tNBtGHH9iUYTexQ1e3xn
- CI6Dt1sWqbX8fV5PICLpTDKOWenIkTb38oKFFoGePyHs8AYT2zKu/3GXoQKbVJGSf4ub3
- VbtAXEhWOuGMtUAgvkOwFXNgzeqQ/nvQCn5s/ImrYTB9LFB8F3cQn5JmJF9C0QvJphYeZ
- 8K+t0ePIp/g45xen6yH1UPTZS/98RQ/nfMSuHKOKAq3IkkeR37iZfGG9YGTF7dYiwTF5c
- hJllLyi0akWZ/z5Awn05YVSrcyNvBpV7Z5w5MXd/B1GDM5VN35UKL90mEk0KS7rk00A==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
- dmarc=none header.from=umbiko.net;
- dkim=pass header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
- header.s=mail header.b=jH4KrX9m; 
- arc=none smtp.remote-ip=176.9.89.163
-Received-SPF: None (mailfrom) identity=mailfrom; client-ip=176.9.89.163;
- helo=serv15.avernis.de; envelope-from=br025@umbiko.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none) header.from=umbiko.net
-Authentication-Results: smtp3.osuosl.org; dkim=pass (1024-bit key,
- unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
- header.s=mail header.b=jH4KrX9m
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E4C2E606D3
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 05:39:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=umbiko.net; s=mail;
- t=1793338767; bh=UfWARAiPDIy2XrqWCH3OOScoto6JHTJI6qAJ3mXi2lQ=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References;
- b=jH4KrX9mfi4F4+lD234SDddXJG3/ANRTMknNb/F0tS2NDUBBVaIX/Txb3eRtPESfd
- c1XMIxWXwyVLkzQ9K5sWg0jhTscLS8E+6RaDumcKHdxaRPBEvIof7Z357Lr0LGXJbZ
- xCfshzLsHFRsezurAsI3ZcR5iZMESoFC6tFBn39A=
-Received: by serv15.avernis.de (Postfix) with ESMTPSA id B402EBDE28EC;
- Fri, 30 Oct 2026 06:39:26 +0100 (CET)
+ c=relaxed/relaxed; t=1793351748;
+ h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
+ X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+ Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
+ Content-Transfer-Encoding;
+ bh=XARvOB8VSVXuXXCSYZ2UzSc24btK9RUHwOXBxZcd5CY=;
+ b=C9EORbejY+sbR/N7eIXDTKZItcmHtoQr9GUm0lCFZSo9Xdt/9oX03d4XBD/9rVO/qPn3
+ AfXnXCa9mXhsV7IyHBJ4XXqrKpzu/yj7677Y/iz9mqgB/L9lOmaq6jPmckFo0ZFfNUpAY
+ bXyKNTaFJkoOs811fMrIm0Hhx1JlekEapd01OPqh3M5zw2U2O6IRSN7lMWrOozrhZvkUv
+ HFkwrVA8yOcskJmREB9qPTgJhBeMQtGYEuo5wu1E8NcoscXn8uXYBx/pbAZA5aCOsm+yd
+ oYiJfNKPcUERnwprsfNwN3rGHidmdWInxle35Icyv4f8xiAy/23l5dlFS9jRvo7q9FQ==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ dmarc=pass header.from=gmail.com;
+ dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20260707 header.b=Fd8BXIU+; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::334"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20260707 header.b=Fd8BXIU+
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4521240063
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 09:15:46 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-4a2000d5fb1so2247225e9.1
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 02:15:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20260707; t=1793351745; x=1793956545; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=XARvOB8VSVXuXXCSYZ2UzSc24btK9RUHwOXBxZcd5CY=;
+ b=Fd8BXIU+rSBELEPpfG/sQsdDDICt1y3toF2Qx8G6rRwQenbf72Gk+vLTRhRhsf4f/K
+ tRMUpacbRIqNUDfiTqr1J3fDGVKYnqf6XlyjnyyKP4ogM62/w3CHUY12q0pnpZ0M9gau
+ z6zIQrr6v4GCFucNcqqSsAHKe0FPNo3xNWR/EMh3Z04vTRzsF20jwVyBpA+94veO+ZOB
+ H9yTqo4yLYBADR3ipaBEj0xYuPPbBs42yqIxjvn7uAjhiR4Bk9CT9NkdKDqW1Km9FuZ4
+ pj0bOn4a2TnzALsYaIcf6Qi/wSUCa1pduy0tkqDiCJ/o4uLUUzJ+IdnoLlAz999uR+ts
+ O4mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1793351745; x=1793956545;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to:content-type;
+ bh=XARvOB8VSVXuXXCSYZ2UzSc24btK9RUHwOXBxZcd5CY=;
+ b=bxXPDe/j6mh4wBBj6hgT4r5m4MpNLFIzFKPQKQ/iVZWG9CLrSu7FEQdrefNHsOVOmI
+ JcT/3w8PvdRJksNOFN+45iPFhLv4STSAKDDuhNWP72rRB8VVVpyvhhm2u5Dzz89dOsfJ
+ MyJJ7dnGc4FU6IoWgkV8NwqjGPxs7RlY0wPtyO0Ir6IxqwIkP95dl0+fpf1NinaDxXxO
+ G8w0ns0jyqzRbQUoJZITCN7yIhqu15YHE0iUMvnnPDorLUiIlEKiVPGQk8EYyISQo77P
+ 4sKIAMlsbKCoKsz99vJMFzIoL7/3zaTiTYB0U0D5RiGn0AGhwm8J8JhB3wzp8TBb3oos
+ HetQ==
+X-Gm-Message-State: AFq9FYJWiWEBwAEOdTXbn56o1kZmE83kjmaGTZZVZkLr7aJmxD745jTS
+ l5uwjALy2yiFqCZVdvp75TXz3rvGBl49qDUw90dofygJwfv3884adDb8mI2SPQ==
+X-Gm-Gg: AYBFou3L0z19gEzC6os6P0qArx1EYIaVehxaBEIyhLQsUThZg+PQ+2+MjCSju5H1kZE
+ R9UilNlmr4+Tou8mt2CD12TxUaq40EdPXSrMvvYXYY4VE76uZf44R5/iA73heS41mzwD/Fm+svv
+ brWlXPmI7l8UtGIbmsywPCJ6s+AvkmdiYrhlMp97pcBr1PZP+WTSm0NKq4z5bDkSmYlKATHTNAQ
+ d5Au8GFTNIfNjn5sVOM7WlI9J5I4hvCgei4VLjkVsVd4i/Cxr6RhSjvJPxAhdq1bUwZGj0H/xOG
+ nfzDQ8ELrG3qsPDhj7jru0emLGCCXtLsWKrcy5/rgHQpji8t96N3zQljU2lUk91HOCsAegW1X4N
+ YTjIdn46sTv/7CffL5w5Kq+39HB4vCKmd5OnnMJCGxzgO+iANXtZsjnaHoLYAmh3ZPTzEoHL0Ux
+ gzmTjZneL9Vf+y5Wq1hHaZRaOwLDzqWq0qnvOt/7wFNTeRvIa0Sbq1jcZsGtjjQjdYFxK6CCopU
+ a5Kll2KYv9C9m+wvKFBmJI4emrzA8fprWHMA3aSPugHFsok87pgXABH6XhDb9XbqpxsaXO+bxfp
+ KXh6q2Qg191akJnpRDQ9MxmDIGs82lfkgsDY7BP51x2kBwSYMnN8ZA==
+X-Received: by 2002:a05:600c:a012:b0:4a1:d675:b031 with SMTP id
+ 5b1f17b1804b1-4ac17b2bc4dmr32868995e9.6.1793351744597; 
+ Fri, 30 Oct 2026 02:15:44 -0700 (PDT)
+Received: from angelo-Precision-7550.. ([94.154.175.53])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-48e71b7815fsm2106312f8f.22.2026.10.30.02.15.42
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 30 Oct 2026 02:15:43 -0700 (PDT)
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+To: buildroot@buildroot.org
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Fri, 30 Oct 2026 10:15:33 +0100
+Message-Id: <20261030091538.1773417-1-angelo.compagnucci@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250820163921.1968030-1-angelo.compagnucci@gmail.com>
+References: <20250820163921.1968030-1-angelo.compagnucci@gmail.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Date: Fri, 30 Oct 2026 05:39:26 +0000
-From: Andreas Ziegler <br025@umbiko.net>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>, buildroot@buildroot.org
-In-Reply-To: <auOsS9x90TIovctY@windsurf>
-References: <20261024220915.2813680-1-alexander.sverdlin@gmail.com>
- <at5oC97YlhN98HHS@windsurf>
- <e34f4a3f8aaee192923e3ecdde4a287a1cfaabda.camel@gmail.com>
- <45a821b584840d1cabe6df1dfe083fb8@umbiko.net> <auBeTP2NwmLiaDGR@windsurf>
- <ec78e4b982b6b8b0a3ccc04fc9b70ca5@umbiko.net> <auOsS9x90TIovctY@windsurf>
-Message-ID: <ce4ac926e3a892fc92bd7fb9e532bbaa@umbiko.net>
-X-Sender: br025@umbiko.net
-X-Virus-Scanned: clamav-milter 1.4.3 at serv15.avernis.de
-X-Virus-Status: Clean
-Subject: Re: [Buildroot] [PATCH v2] boot/syslinux: Bump to 6.04-pre2
+Subject: [Buildroot] [PATCH v3 0/5] Bump cups-filters to the latest version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -137,75 +172,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_PASS autolearn=no autolearn_force=no
-	version=4.0.1
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-On 2026-10-29 20:30, Thomas Petazzoni wrote:
-> On Wed, Oct 28, 2026 at 04:48:51AM +0000, Andreas Ziegler wrote:
->> On 2026-10-27 08:19, Thomas Petazzoni wrote:
->> > On Tue, Oct 27, 2026 at 04:54:45AM +0000, Andreas Ziegler wrote:
->> >
->> > > Yes, there is still interest in this software, and I sadly mourn the
->> > > absence
->> > > of the don't-delete-host-syslinux patch.
->> >
->> > Not sure to understand this one. Could you clarify? Is Alexander's
->> > patch dropping some feature that exists today in boot/syslinux/ and
->> > that is important for you?
->> 
->> The v1 of this patch was a series, which contained one additional 
->> patch: 
->> https://patchwork.buildroot.org/project/buildroot/patch/20260830181907.106154-2-alexander.sverdlin@gmail.com/
->> . This unfortunately did not meet the upstream requirement. This 
->> change
->> would make a messy (and dangerous) installation of syslinux on the 
->> build
->> machine obsolete.
-> 
-> Which change? Your proposed change at
-> https://patchwork.buildroot.org/project/buildroot/patch/20260830181907.106154-2-alexander.sverdlin@gmail.com/
-> ? Sorry, I'm still not following you. Could you perhaps bring a bit
-> more context?
+Since version 2.0, cups-filters has been split by OpenPrinting into
+several projects:
+- libcupsfilters: the filter functions library
+- libppd: the legacy PPD support library
+- cups-browsed: the browsing daemon
+- cups-filters: the remaining filters and backends
 
-Yes, I was referring to the change initiated by the patch.
+This series adds the new packages and bumps cups-filters to 2.0.1.
 
-Alexander originally sent two patches
+libcupsfilters 2.2.x replaced qpdf and Poppler with PDFio and is now
+written only in C, so the series also adds a pdfio package and the
+toolchain dependencies coming from qpdf (gcc >= 10, atomic) go away:
+libppd, still partly C++, only needs gcc >= 7 for C++17.
 
-   [1/2] boot/syslinux: Bump to 6.04-pre2 [1]
-   [2/2] boot/syslinux: Don't delete host syslinux installer [2]
+Changes v2 -> v3:
+  - drop the qpdf bump, qpdf is not needed anymore (and master is
+    already at 12.3.2)
+  - new pdfio package, needed by libcupsfilters 2.2.x
+  - new cups-browsed package, with the init script moved from
+    cups-filters [Thomas]
+  - address all the review comments, see each patch for details
 
-2/2 used a pattern already used in other patches (0004, 0005, 0011) to 
-build the syslinux binary. This was flagged because it should have been 
-up-streamed. Since this is not possible (project discontinued, 
-implementation is a buildroot-specific workaround), Alexander chose to 
-discontinue it for now.
+Answers to the questions on v2 [Thomas]:
+  - CPE vendors: libcupsfilters, libppd and cups-browsed all use the
+    openprinting vendor in the NVD (CVE-2024-47076, CVE-2024-47175,
+    CVE-2024-47176), pdfio uses msweet
+  - zlib is mandatory for libppd, as it's used by the rastertops
+    filter function
+  - all the optional features that configure enables by default are
+    now explicitly enabled or disabled
+  - LIBPPD_SELINUX_MODULES was a leftover and has been dropped
 
-host/bin/syslinux needs to be executed to make a partition bootable. If 
-Buildroot does not supply the binary, the corresponding host package has 
-to be installed.
+Build tested on ARM (Bootlin bleeding-edge glibc toolchain, gcc 16.2)
+with a minimal configuration and with a full one (dbus, avahi,
+poppler, cairo, png, tiff, jpeg, fontconfig, libexif), and pdfio also
+with a static-only musl toolchain.
 
-Kind regards,
-Andreas
+Angelo Compagnucci (5):
+  package/pdfio: new package
+  package/libcupsfilters: new package
+  package/libppd: new package
+  package/cups-browsed: new package
+  package/cups-filters: bump to version 2.0.1
 
-> Thanks!
-> 
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
+ DEVELOPERS                                    |   4 +
+ package/Config.in                             |   4 +
+ package/cups-browsed/Config.in                |  22 ++
+ .../S82cups-browsed                           |   0
+ package/cups-browsed/cups-browsed.hash        |   4 +
+ package/cups-browsed/cups-browsed.mk          |  36 +++
+ ...ecv-instead-of-system-CVE-2023-24805.patch | 209 ------------------
+ ...x-infinite-loop-caused-by-crafted-f.patch} |  33 ++-
+ ...ilters-Fixed-building-with-QPDF-11.x.patch |  57 -----
+ ...ated-code-to-be-built-with-QPDF-12.x.patch | 165 --------------
+ ...x-out-of-bounds-write-in-pdftoraster.patch |  41 ----
+ package/cups-filters/Config.in                |  42 ++--
+ package/cups-filters/cups-filters.hash        |   5 +-
+ package/cups-filters/cups-filters.mk          |  94 ++------
+ package/libcupsfilters/Config.in              |  19 ++
+ package/libcupsfilters/libcupsfilters.hash    |   4 +
+ package/libcupsfilters/libcupsfilters.mk      |  89 ++++++++
+ package/libppd/Config.in                      |  19 ++
+ package/libppd/libppd.hash                    |   4 +
+ package/libppd/libppd.mk                      |  42 ++++
+ package/pdfio/Config.in                       |   8 +
+ package/pdfio/pdfio.hash                      |   4 +
+ package/pdfio/pdfio.mk                        |  22 ++
+ 23 files changed, 329 insertions(+), 598 deletions(-)
+ create mode 100644 package/cups-browsed/Config.in
+ rename package/{cups-filters => cups-browsed}/S82cups-browsed (100%)
+ create mode 100644 package/cups-browsed/cups-browsed.hash
+ create mode 100644 package/cups-browsed/cups-browsed.mk
+ delete mode 100644 package/cups-filters/0001-beh-backend-Use-execv-instead-of-system-CVE-2023-24805.patch
+ rename package/cups-filters/{0002-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch => 0001-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch} (61%)
+ delete mode 100644 package/cups-filters/0003-libcupsfilters-Fixed-building-with-QPDF-11.x.patch
+ delete mode 100644 package/cups-filters/0004-Updated-code-to-be-built-with-QPDF-12.x.patch
+ delete mode 100644 package/cups-filters/0005-fix-out-of-bounds-write-in-pdftoraster.patch
+ create mode 100644 package/libcupsfilters/Config.in
+ create mode 100644 package/libcupsfilters/libcupsfilters.hash
+ create mode 100644 package/libcupsfilters/libcupsfilters.mk
+ create mode 100644 package/libppd/Config.in
+ create mode 100644 package/libppd/libppd.hash
+ create mode 100644 package/libppd/libppd.mk
+ create mode 100644 package/pdfio/Config.in
+ create mode 100644 package/pdfio/pdfio.hash
+ create mode 100644 package/pdfio/pdfio.mk
 
-[1] 
-https://patchwork.buildroot.org/project/buildroot/patch/20260830181907.106154-1-alexander.sverdlin@gmail.com/
-[2] 
-https://patchwork.buildroot.org/project/buildroot/patch/20260830181907.106154-2-alexander.sverdlin@gmail.com/
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
