@@ -1,28 +1,28 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0A70606A31C
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 15:29:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92DB6606A31A
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 15:29:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=XHU5pNFe
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=siXA3YZz
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C9A040E5B;
-	Fri, 30 Oct 2026 15:29:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 69D9081B0A;
+	Fri, 30 Oct 2026 15:29:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KQaBs71Z0Ajv; Fri, 30 Oct 2026 15:29:49 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org B5C0F40D7A
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793374184;
-	b=PEDHJ4Z5LdpmPbTxay23s2NomIirs2R8I7iWSFTWgzwgSgtqa6+M5yKtquAzn80q7/Qm
-	 4TWSTckkoQ6J9H/AcQo5yNUPxG7+yEiJAsNzqm0eZWIhKuWlnMAVwnS1gCcKZdNY9YQSj
-	 WsQZa/4IDGeLFIHblWl0DtYVl1UBQtiQiqMtPCH1UAUa0dAmnx1aBx6U4BzlbLuPVAkt+
-	 WxRLKurvtsMSOORqC/UOvLguyuIH0qAUaWw2yyyypl/3ElpOppINTPZ8F637GxGypMj1x
-	 Ztja9T5bsNEFOwHacV3UCjONDMUEs1N3C1529AVhwoXahVpDXH8/b86HeHVSZxsx7cw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 08LMrCcL_NW2; Fri, 30 Oct 2026 15:29:50 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 746B081B35
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793374190;
+	b=GfUDdLA2dK2eHljDIAMlRtv9jBCVZPmHrmI13JjIEEcVqejJ1p8l//3dbx3QQr5RYbhj
+	 3SGhyCL8u7Tc90BCjCJF41URxf+gpnnsKIgyjrVGEz/J5RUz5PnazGFNRn6kSs3mzgZv1
+	 wbjODB4eVDDddvKpgkxtpl+MrjA+pKROKgRzkdYT38a1FWR88BxdIt1nYL08vM4BcYq+p
+	 OZB9zg4Y2ERjdWsqBve0tFK4tYVfxBlFcXAUUKCI6V1vGjmKvK0XDRKDpPZjx1nFPS1WG
+	 yIeg872YV4icbIbioye/YTDPYx79rQXNSe+VHs4YMgog9jZq1Gf+H4VrdvjEQMeycWA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793374184;
+	c=relaxed/relaxed; t=1793374190;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,120 +31,119 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=UShou21nnL/GmtsJdhZEGo2Sm9F+qjpUAk/1TE8dWEw=;
-	b=BIOy/V1cuORmZgbzuF7QLLqUWq8jM+eIQuqKJdHiDp63uq+5euLMQCw8BWHZzKMKy1Ik
-	 NcRn6sFsH+yynHqpWQEChuEm8gC3n8cTZD5X5umFBbld8mhdFsxvVDWzgcIn12kvcqakq
-	 TrjpBy6TskSxc5LTuPcUrZKDLhDdvN6mpSmxPYv8o2H7NZjdVrEaMxXzeb7If4TW3ZgXN
-	 ZInscs5+cMqNwwe1ONztMGF23L0Os+qiPAkAHNre00vAVc3/gfeAhfls71t4/NHXVGKSk
-	 XQVfyY8PvMakQxbuUM6pEVV8MstwUj0BpvIJrJWtAij9v2IZ55WEQgsT8vCMugeQlag==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=IOE4twp1TMvgPcnYIRJgMgpXbRXfpV2CPZvHt/PjX2Q=;
+	b=VcPp+Iywpsn/oUd4/fM/McE6MPJwS+uiWDLXb6XkQf/YCoZ2aDdR66VG2AlGi5NCUqGm
+	 jOdo56bb06fi5w3cQpru/70xgfKLPdyg5B1+mw/YBdj7PCie8zHMPpTqeRcfDt+/iLhp0
+	 KNo2cvh17hG8GaOD8EqGXfA63B7rpSlh+RgB+pzhJ+Wbn3I+LcgWxBV9KDnGSLawPLDB+
+	 ItrpRw+05xLKj60Xkm84rIVnb4gMueViSPyjBuaguRHrXk+38rvZ5T3U5Stg8l2NDk5Rm
+	 yAkOitiSbpAtskRarAJguooSU92ILyG4PnM/vwCbN3EbLWz0MKgvG7FgFJfs72596Kw==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793374184;
-	bh=UShou21nnL/GmtsJdhZEGo2Sm9F+qjpUAk/1TE8dWEw=;
+	s=default; t=1793374190;
+	bh=IOE4twp1TMvgPcnYIRJgMgpXbRXfpV2CPZvHt/PjX2Q=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=XHU5pNFeHMVBIaH+P63un1AdUzHI3VmAb+LOkBydkzvygrLxBtHM7AA0w+JXk12ET
-	 EmYFXOwNwqukuNfFrw+gKNV2aJJ0UR4EwcnFUerzxQNovFgih2Tls11GKTB+tD0v4o
-	 Xzyl7XCdUeBtNvPaBRcfo14VNATLfzzZhEXvIU50yYTH268sSq03il2v1W+Af3eje+
-	 DjypOMJy77WEqO6yT4gHIT7s/XaKpww8e1o9mcxe06/QueQnLthDP8nCAx7zzSDhxA
-	 6oEvgpr2Ce1zAoN9YIb4JwrkBgFKwGLB81BOhSBMk1F3kq5asCHEnQ8SMZX3+rbQZV
-	 M14hQwg7T3AGg==
+	b=siXA3YZz+WW5fojDp1kSXdKjZWKteJkLk0DQfm9I5s4C+FGvyvgqFvaC3lCugtTl2
+	 gy2E7QcXleeF9BsNQVitFurMh5nXYbYThyvG9iAWpYOzgffROx9zBWO+ah1mxFziJx
+	 rm44exonp0njMTP05Ab2oDC2iPnlNl2+LK7B5fHknktOGDFnktST9hYSw1hIU/8SMD
+	 f23eZwG4FNxqPtU2V96zaIMY1X7VAs+vk/K+zKk7QTb2ZMvFKnHi0WvSXtRxXaMlu1
+	 lMlw94PFtpLRR5lIsmvijQ0X+mknCkrHS1MPGKYXzEXmoNFwntMXzaxNbrrZGaeXgM
+	 bKDcT4cctaShA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B5C0F40D7A;
-	Fri, 30 Oct 2026 15:29:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 746B081B35;
+	Fri, 30 Oct 2026 15:29:50 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3F7A1D38
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:12 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 92418235
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 309C960B55
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 776A560B55
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YoaU1_KkhFXM for <buildroot@buildroot.org>;
- Fri, 30 Oct 2026 15:29:10 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 34CED60B23
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793374150;
- b=GuMKrHYxSzbOku8f8bzwskGg5uH9McvmB2BURVzzVR2bdwRsOviCKsmgRKTrF4xKRnex
- WTu9WTGtn9GUt+4aYn8ZH3CNVkdcZHCkVUbJ2fw+OTfAFJJGS/UjNS/2ChIBp1Ij7j68j
- xhawYVLi+E6UDnmWcsB39MTQTn4DT7KEG2spMljsrM+FBVmr4kKPmyjq9EL9wFNSwVIvW
- hLKu1P0FqBtCisnaZ4GgCX0R9V8OdjUtY31pWkjF+Q/snppc9zaoxZH33PfV0+KBvwany
- qkZF5yGcpdglR6/lsMdB8ncZjpTbGzDo31azCW99xSX3FHSDAZItJB4MpuLJjY9S5BQ==
+ id IpVfUFtOww_e for <buildroot@buildroot.org>;
+ Fri, 30 Oct 2026 15:29:22 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 8420760B23
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793374161;
+ b=ht9UzXO+ITXfZw1CenvHU8ahLZcvvPOg+4S5Puual3plvxmia3qrU7qf/x2YBW9jPx8e
+ E4Ro1YGOcPULvhLcmXyBl4gcNvHtCy2DRLnz9ldIr55rfXqXszrmbG3jdA//wKjJi3+Vs
+ ltFHkzRjhwr1VHT9i5uh57rgtGKOgSX1O77QWBROqCd+0dQRPrqYtEFK+VHXsxlAlyISi
+ GPYGH8Fy5gUws7+T9ohMEKtQvpUP+/BKCO3U0uhoCkY+pjgZ7qnWDYHYiU+lNo3N7dXUB
+ 4cdwyOj40UB+wuiG0/Fd9ykkU3nSXEi1c6xuqB4WtFHkoH//K1jTEWe+tSIuQcBbKog==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793374150;
+ c=relaxed/relaxed; t=1793374161;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=nKHfOQ0S+u/HRtpmtkzX3SNZZR50y+nrMXHO+T+dsm0=;
- b=ktUpPbfTbKod662cJGZVUH4pWH53Uf2QYwQhLb6LYE+866KZpmAvUc0rlXgtjzhBni8I
- g8mjNZ4hb8ZwPwnP1l6D5sKzmjPEkBR4M7HX6KoZEJ+OxKPomEr6eQCD1e6qGXar7iaiG
- izyj/TXNvzCfvE2tdpYtHj3SRwPOpSr6RKg9MTuEdp6fMJGN69vHg/oB8mQIGix6ZHPsC
- l99x99FPW68Cl8WegDFL8gOpm9ucYDvLD9SzTNRcVMvgGOL7SPYxHtE8EGaqeQn2fxv2s
- /L3v6yGN023VLiEyoZvm0wYMlZQ3kPxxuErYpAHxPoJupDPoXpOojmWMf1Ya/q/Bp7Q==
+ bh=OYZWyeD7Pb4vA/x+x8Hmpt7HCRFyKjkaHVvlO1hJNCs=;
+ b=WSqilPJ1hfLSRy4mJlVXG9vpbamLR2HVJIULOGKDUPpLkzlqqTnuWyZmCk6Jgx+rm5Kx
+ VMb9QBlhE/lPU9yCjPGPYsJTZK8sjRbHNDyO+xQVDBQERSMH+gYVEgWxFn1d+ZKxfk533
+ pff7vW2GbtU6LPevuJo0KAZvMfBgVNEKCflcpIOQOj3sdRKoxETB3pSAe0ZR2GCoS4j8e
+ Gpiqk9ohhi3QNHRREmJ5MpgaD7h85PrYSwV0PPr/YL2aUlkeigFureTpQZ0nMnhkVsrD+
+ wLofKn5QXuABElN1YFEa0xH21B22WbNX7VID2uTEsrhOBi7yPVkOGqlWFgnVuFzGZmg==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
  dmarc=pass header.from=mind.be;
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=gr8QvRUy; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::332"
+ header.s=google header.b="It75hla/"; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::330"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 34CED60B23
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:09 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-4a4d7ae1ae9so7963045e9.1
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 08:29:09 -0700 (PDT)
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8420760B23
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:21 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-4a35ac4475dso5925265e9.2
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 08:29:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793374148; x=1793978948;
+ d=1e100.net; s=20260707; t=1793374159; x=1793978959;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=nKHfOQ0S+u/HRtpmtkzX3SNZZR50y+nrMXHO+T+dsm0=;
- b=M9fG4/AgvObrbTXgvV6Kg9lkB92psdi7ZfR3s78rd1uzpP4Tpg+gBrR60PHzdz/0u8
- yc3GWyAfQds4Ca6+z5KKwdJgbEbQWAR1RXebrjIjuij/iH6V1umbARUOvH7uiBpRz3J+
- xQzqajPwd+q2fIUxzTbhatnUvUWDjus7QJoU6hz3jWdtYBvE3fF3OJSI5Mstaet6uG5Z
- VkX7+4pDIjLG6eVXocby82nRPkrRmvrVS4cwa7XFIvfdjxo2P1bdYbncwsxvCbARUn6e
- GnNusK1TNSm8IhT/62r3it9yrhJh04uASmPJOJw/RvJrmfPxA3f2l4XhlQF+zikDbJkd
- QX9w==
-X-Gm-Message-State: AFq9FYLPSZ+LtRp9slxEAmwauZmLK75NI1//IXuHnh6mGPYNoS4zDYXA
- RZHRJGPUhBiinvEeJ80PKVOXBJ85hrC4Lz+qyphJuvij/wVFFV7ccdXd5HHvd5ZBD2vWFviuGpR
- zjMdQ3vI=
-X-Gm-Gg: AYBFou0Tl3wsH/es7KZ2UW2fuH/J+PaEIO9nV0pwlcEakUwy9QfveAEuDjBvnXGXEw9
- 2xrsDyT5OwZfDzlzvVZ6XiAvOU3mEMBT0/BOOk2bdh1bjXrutbI9+X/1Isp9nj1xprMJtqNbX+9
- /PF2HT62Lp85/FBR1x8kepCv7NY0QgUmOK4II8eu41iAl6iatC2XGUErdgE0SaJEtbVkykkdTGk
- 2id+tn5qKzOKh/GmgTqJQ/oEvD2bk7LedzB/ihHvqjG5OMD0/yxV274C0+iECTUHWJaHyVZAKSW
- Epn19MsBvEGd+wD36TiDOyq6ZkybYt5Qchq9k8gIk4vWfLW0iEd0x0XzYMR+WFFc5e0MHCuJDf3
- E7vXmKqDwE9MUf31STF7WIbOdwda5io79jY5tfLMVgsJMyA2D9kusLVXcI7fiv9hGM9b/zlD8Ty
- 0/eWftZawsWlPKUDErQbCOLzWyoPzhxI59zo6ze0IJqcrqq/xcgdAYPQYO3NbpmVULo0D1JxmYh
- WUg34iiYct+0THa562nLI+OfwAOuZTrd0Ir/HoFvvSdNEayV00tUIbtYvPq2xRN0VCqXc4SzHZf
- FgICTT1+1xzQmj3rYsZbQdSOLbGy6R5agOrjXCFjucXg8uKLJ+O0bgKWbYt7NYxU28ANw//+zNl
- cPMLQFz1eo7MgQc3OoQ==
-X-Received: by 2002:a05:600c:1d23:b0:4a2:167a:c946 with SMTP id
- 5b1f17b1804b1-4ac185bccfbmr60667015e9.13.1793374148035; 
- Fri, 30 Oct 2026 08:29:08 -0700 (PDT)
+ bh=OYZWyeD7Pb4vA/x+x8Hmpt7HCRFyKjkaHVvlO1hJNCs=;
+ b=xoxbhWqAatYGaEXKxEKqXf2SyHh7XVzAjAlRZemB/Urv/l0WATPMcYMdnAoELzr6XP
+ VwhUw/3s8O6b9MCuj2oQoRazrTgqm5Lh3TntvcfZQLlVyQXLzRP8CAH1pAmP1JFBlZws
+ uDOCvTsnKcrTQQWnrT38FPC5KqiCeXctbDpvCap5F7/SRmIZE+GfF56EPCQT5G+SE1uo
+ vXOzx0kAPNuEzpDM0lsx6IIL5otuz5BoOZ7m7lve8qcLi3oMDI8zfiwpjkD05cS6qWMT
+ cQSU5eBNOFlLnK5Tq6W3XJkdkS/pKWJFLfpC6vlEnk7xyfH5jUZpZ3yqoWt/rWsmKAUx
+ hCHg==
+X-Gm-Message-State: AFq9FYKKVT7+ZByrYDCRNJjEp5Q7+Hxho4u/3+bR8WsnbbamB3ODEqoS
+ QKGdPyVor4iSacujhaq7c5/zgrC7pWAPLGPylsHEWXs+wgxhoezeSqwlZJIxpbE1E+b5G8bjfiC
+ G3CUEFDI=
+X-Gm-Gg: AYBFou3nCmnR6RmhpGsBXAB5YcwrF2OG8kNnemEGehfqQ7PYvaFkWr9S65W03jZASzh
+ nkv1Wzle4PNQWFcU7s5O4urigs7BbWlInE4PphvC5XUPJBgxOEeBG/zOrRTtvgaDONYJgop/6ix
+ lSF31lzRkxI0/qILDem/qya8gQ+Uw0e549kdioHIGHRLvS9NPj0jzeT5OwryGbU8I69tWkEdUkz
+ +tem4zPdxeuO4M4PEDh1CIrhixBupgrc7/MM9c4X/ISQcCGUdDgQHglFNac3DSTY1sQfzjyZ3um
+ fkLNJc4Jv0nPBAPTE/rrjbJPOCCkBlAT9muP/QaDPJr5t7onV5BLhAo833aTALiyD2sgT4lSNPQ
+ YU/XjL4r/vZZROW9P6tVq96+kztJpFYMorC2FQ1lUFUL/0TLF2SU4fD2ShQdeevxypdM9VhWDrS
+ zOx/Mt5CbJvzot4AZBfy7nuljRwm1tT0JTrBDbNaYBF4+7EZZy1cbhyyZHh6ij+juCIiqipcD3m
+ MRenpgu6ZmDbcryWsYbYh5uaMaY++AB3z++zkE4u/8d3SWc5/samKXAwVzWyZWUeDQv0kh6Ji7M
+ 9v3dAAwIvDVqb4mbq6DmFv//fsjFqYg4aNcpd3gLkwrSw/bQ7Mi5bp21Ye/V8is67pvxQSYt
+X-Received: by 2002:a05:600c:6285:b0:4a1:fa27:df7c with SMTP id
+ 5b1f17b1804b1-4ac182dc8f6mr59878065e9.34.1793374159262; 
+ Fri, 30 Oct 2026 08:29:19 -0700 (PDT)
 Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
  [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4abf67aa704sm64423085e9.8.2026.10.30.08.29.07
+ 5b1f17b1804b1-4abf5b289f7sm67262725e9.5.2026.10.30.08.29.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 30 Oct 2026 08:29:07 -0700 (PDT)
+ Fri, 30 Oct 2026 08:29:18 -0700 (PDT)
 To: buildroot@buildroot.org,
-	Bernd Kuhls <bernd@kuhls.net>
+	Yegor Yefremov <yegorslists@googlemail.com>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 30 Oct 2026 16:29:05 +0100
-Message-ID: <20261030152907.1907719-1-raphael.melotte@mind.be>
+Date: Fri, 30 Oct 2026 16:29:16 +0100
+Message-ID: <20261030152918.1907835-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261023211622.2096562-2-bernd@kuhls.net>
+In-Reply-To: <20261023225751.2614512-2-yegorslists@googlemail.com>
 References: 
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v3 2/5] package/mesa3d: precomp-compiler
- does not need target llvm
+Subject: Re: [Buildroot] [PATCH v2 2/2] package/avrdude: fix libserialport
+ dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -160,183 +159,67 @@ Reply-To: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
 In reply of:
-> Inspired by and fixes
-> https://gitlab.com/buildroot.org/buildroot/-/work_items/180
+> Since version 8.0, avrdude automatically detects and links against
+> libserialport when it finds it in the sysroot
+> (find_library(HAVE_LIBSERIALPORT ...) in CMakeLists.txt), and there is
+> no option to disable it.
 > 
-> To build binaries provided by the host-mesa3d package we do not need to
-> build llvm packages for the target arch.
+> Buildroot doesn't declare this dependency, so whether avrdude gets
+> libserialport support depends on the build order. With
+> BR2_PACKAGE_LIBSERIALPORT=y, building avrdude before libserialport
+> gives:
 > 
-> Added configure options for rtti support to fix build error when
-> BR2_PACKAGE_LLVM_RTTI is not enabled:
+>   HAVE_LIBSERIALPORT:FILEPATH=HAVE_LIBSERIALPORT-NOTFOUND
 > 
-> output/build/host-mesa3d-26.2.3/meson.build:2042:8: ERROR: Problem
->  encountered: LLVM was built without RTTI, so Mesa must also disable
->  RTTI. Use an LLVM built with LLVM_ENABLE_RTTI or add cpp_rtti=false.
+> while building libserialport first links avrdude against it. This
+> makes the build non-reproducible.
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Add libserialport to the dependencies when it is enabled, and
+> otherwise pass -DHAVE_LIBSERIALPORT=OFF, so that find_library() skips
+> the search and libserialport support is disabled.
+> 
+> This issue has been present since commit 0e16ff09e953
+> ("package/avrdude: bump to version 8.0"), as avrdude 8.0 added
+> libserialport detection. It therefore affects 2025.05 and later.
+> 
+> Fixes: 0e16ff09e9538d46c9726f8998080d55dfa5d41f ("package/avrdude: bump to version 8.0")
+> Assisted-by: Claude:claude-opus-5-5
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 Applied to 2026.08.x. Thanks
 
 > ---
-> v3: no changes
-> v2: added note about new rtti configure options (Romain)
+> Changes v1 -> v2:
+>   - new patch
 > 
->  package/mesa3d/Config.in | 46 +++++++++++++++++++++++-----------------
->  package/mesa3d/mesa3d.mk |  8 ++++++-
->  2 files changed, 33 insertions(+), 21 deletions(-)
+>  package/avrdude/avrdude.mk | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> index cb86e6a2a4..feed6b68fe 100644
-> --- a/package/mesa3d/Config.in
-> +++ b/package/mesa3d/Config.in
-> @@ -23,8 +23,7 @@ config BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS
->  
->  config BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
->  	bool
-> -	select BR2_PACKAGE_SPIRV_LLVM_TRANSLATOR
-> -	select BR2_PACKAGE_SPIRV_TOOLS
-> +	select BR2_HOST_CMAKE_AT_LEAST_3_20 # host-llvm
->  
->  config BR2_PACKAGE_MESA3D_LLVM
->  	bool "llvm support"
-> @@ -147,15 +146,17 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915
->  
->  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
->  	bool "Gallium iris driver"
-> -	depends on BR2_PACKAGE_MESA3D_LLVM
-> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # host-llvm
-> +	depends on BR2_HOST_GCC_AT_LEAST_7 # host-llvm
->  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
->  	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
->  	select BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER
->  	help
->  	  Mesa driver for iris-based Intel GPUs.
->  
-> -comment "iris driver needs llvm"
-> -	depends on !BR2_PACKAGE_MESA3D_LLVM
-> +comment "iris driver needs host gcc >= 7"
-> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-> +	depends on !BR2_HOST_GCC_AT_LEAST_7
->  
->  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA
->  	bool "Gallium lima driver"
-> @@ -189,15 +190,17 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_NOUVEAU
->  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_PANFROST
->  	bool "Gallium panfrost driver"
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
-> -	depends on BR2_PACKAGE_MESA3D_LLVM
-> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # host-llvm
-> +	depends on BR2_HOST_GCC_AT_LEAST_7 # host-llvm
->  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
->  	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
->  	select BR2_PACKAGE_MESA3D_RUSTICL_SUPPORTED_DRIVER
->  	help
->  	  Mesa driver for ARM Mali Midgard and Bifrost GPUs.
->  
-> -comment "panfrost driver needs llvm"
-> -	depends on !BR2_PACKAGE_MESA3D_LLVM
-> +comment "panfrost driver needs host gcc >= 7"
-> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-> +	depends on !BR2_HOST_GCC_AT_LEAST_7
->  
->  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R300
->  	bool "Gallium Radeon R300 driver"
-> @@ -360,46 +363,49 @@ config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_IMAGINATION
->  	bool "Vulkan imagination driver"
->  	depends on BR2_arm || BR2_aarch64
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
-> -	depends on BR2_PACKAGE_MESA3D_LLVM
-> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # host-llvm
-> +	depends on BR2_HOST_GCC_AT_LEAST_7 # host-llvm
->  	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
->  	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
->  	help
->  	  Vulkan imagination driver.
->  
-> -comment "imagination vulkan needs llvm"
-> -	depends on !BR2_PACKAGE_MESA3D_LLVM
-> +comment "imagination vulkan driver needs host gcc >= 7"
-> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-> +	depends on !BR2_HOST_GCC_AT_LEAST_7
->  
->  config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL
->  	bool "Vulkan Intel driver"
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # memfd.h
->  	depends on BR2_TOOLCHAIN_USES_GLIBC # ifunc, static_assert
-> -	depends on BR2_PACKAGE_MESA3D_LLVM
-> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # host-llvm
-> +	depends on BR2_HOST_GCC_AT_LEAST_7 # host-llvm
->  	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
->  	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
->  	help
->  	  Vulkan driver for Intel hardware from Ivy Bridge onward.
->  
-> -comment "intel vulkan needs llvm"
-> -	depends on !BR2_PACKAGE_MESA3D_LLVM
-> -
-> -comment "intel vulkan needs a glibc toolchain w/ headers >= 3.17"
-> +comment "intel vulkan driver needs a glibc toolchain w/ headers >= 3.17, host gcc >= 7"
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7
-> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
->  	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 || \
-> -		!BR2_TOOLCHAIN_USES_GLIBC
-> +		!BR2_TOOLCHAIN_USES_GLIBC || !BR2_HOST_GCC_AT_LEAST_7
->  
->  config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_PANFROST
->  	bool "Vulkan panfrost driver"
->  	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
-> -	depends on BR2_PACKAGE_MESA3D_LLVM
-> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # host-llvm
-> +	depends on BR2_HOST_GCC_AT_LEAST_7 # host-llvm
->  	select BR2_PACKAGE_LLVM_RTTI if BR2_PACKAGE_MESA3D_LLVM
->  	select BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER
->  	select BR2_PACKAGE_MESA3D_VULKAN_DRIVER
->  	help
->  	  Vulkan panfrost driver.
->  
-> -comment "panfrost vulkan needs llvm"
-> -	depends on !BR2_PACKAGE_MESA3D_LLVM
-> +comment "panfrost vulkan driver needs host gcc >= 7"
-> +	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-> +	depends on !BR2_HOST_GCC_AT_LEAST_7
->  
->  config BR2_PACKAGE_MESA3D_VULKAN_DRIVER_SWRAST
->  	bool "Vulkan swrast driver"
-> diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
-> index c103345e86..04112eea8e 100644
-> --- a/package/mesa3d/mesa3d.mk
-> +++ b/package/mesa3d/mesa3d.mk
-> @@ -178,7 +178,7 @@ endif
->  
->  ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_PRECOMP_COMPILER),y)
->  MESA3D_CONF_OPTS += -Dmesa-clc=system -Dprecomp-compiler=system
-> -MESA3D_DEPENDENCIES += host-mesa3d spirv-llvm-translator spirv-tools
-> +MESA3D_DEPENDENCIES += host-mesa3d
+> diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
+> index 476f031c99..fbad44a191 100644
+> --- a/package/avrdude/avrdude.mk
+> +++ b/package/avrdude/avrdude.mk
+> @@ -25,6 +25,12 @@ else ifeq ($(BR2_PACKAGE_LIBFTDI),y)
+>  AVRDUDE_DEPENDENCIES += libftdi
 >  endif
 >  
->  ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),)
-> @@ -347,6 +347,12 @@ HOST_MESA3D_CONF_OPTS = \
->  	-Dglx=disabled \
->  	-Dvulkan-drivers=""
->  
-> +ifeq ($(BR2_PACKAGE_LLVM_RTTI),y)
-> +HOST_MESA3D_CONF_OPTS += -Dcpp_rtti=true
+> +ifeq ($(BR2_PACKAGE_LIBSERIALPORT),y)
+> +AVRDUDE_DEPENDENCIES += libserialport
 > +else
-> +HOST_MESA3D_CONF_OPTS += -Dcpp_rtti=false
+> +AVRDUDE_CONF_OPTS += -DHAVE_LIBSERIALPORT=OFF
 > +endif
 > +
->  HOST_MESA3D_DEPENDENCIES = \
->  	host-libclc \
->  	host-libdrm \
+>  ifeq ($(BR2_PACKAGE_HIDAPI),y)
+>  AVRDUDE_DEPENDENCIES += hidapi
+>  endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
