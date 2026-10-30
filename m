@@ -2,27 +2,27 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72788606A31E
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 15:29:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41C7A606A323
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 15:29:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=iU+AssBI
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=eQQyPYl6
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 33C5F40DC2;
-	Fri, 30 Oct 2026 15:29:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 16CB840D66;
+	Fri, 30 Oct 2026 15:29:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NaIlN12e9_io; Fri, 30 Oct 2026 15:29:22 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 9603A40D44
+ id zB7Ecz799tEv; Fri, 30 Oct 2026 15:29:25 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org DCE7940DCC
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793374161;
-	b=e38BMetfsaf6lRijlAP2CoONOSGqQ/xd/1pw19PHhpCACpYfhIi3bTpy2DmqU2Ol5sPP
-	 RmaZgwKi/x5AnuOFF6Mq44S0Mrwe9mIg+agUC5/u06n3oLUA1XnDgVceErXWHBR3swk1U
-	 f8TcUJ6hTKPOzzu9D1b/RiOG6K9FSpAElBbVt2abJglEZWOyPSBxkEopiC5vHi1bsdsLe
-	 Q/YkzCljNAvMv5CsjivdIIoJw3CIcLOS1pxON40Iy3j0lpuTNYQExxG1/UothTc0+ZM2O
-	 /hvWC4VkFcT6cgYeT9xv5tQwrKqJzB4AeBpxaZooSUo28p6adv5jSB9bctZBpIQBwRQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793374165;
+	b=QN5LPNW4o54zKoCr68TlmUsrCaQDV7taneMdliHKLRI99JoVrdqJlUSFS/C4TSLQPIXE
+	 hA26qs2atnOe93z1qcIdxmzDC3lIzqIv9lJa44F9DQw+Zr/DdSo/B8SOjj/DyYwceuyXG
+	 RLJloN/+GbjOsUihkzk4Ak9gh3nvp6dp8H3s/ZNAPTTAbXZud9/3rrzYHdRa4ul3rEDUP
+	 OyQ9nZgoyofDgmPweBvmQPj094tIvwRjvWXT3EvxO4xzMuWpXCm7idP2ItemjQ/9mc58G
+	 5IBmjV6smMQPt83btMvVu5XMUlow8uHdXqrD/mk0p2Smc/rMlCyS76QyxvwlA/1KKGw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793374161;
+	c=relaxed/relaxed; t=1793374165;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,120 +31,119 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=av8xPIimJfJArr6CBGe5u+GB+7JvzpmOsYtaVPMF9bg=;
-	b=Od7/BxeufjPpyosB0Lkvl+dV2MEmtHktjU3sNtg+pQ0Hv2/uAqezB7QsYCsMTBLigCUJ
-	 fHZcgkXWM3frvw0TgsH+1f9UR4PZ9DNwgKgKsEYGisxjTf0Jao1mAZCDgHL7xyDaxBWJZ
-	 RCnvog7N9b3UYsHqxNJYrjQI6Ee9EPuib2px874ti2m8fo6hOWjWO2vFiY8zvMS/bgpdv
-	 I5DewRqUZlKxUlgfKmBzV5U0VLUAhrFW42ZdqNOFdBCEZvN65u36jQkDHh4W+WUNsxfm1
-	 qN2lufibYFJtInTtrUdA6hwIMUL7mityNl+Ghzsd2RXQ3Idk9ySZhMTACT7Owe9cQqA==
+	bh=DfqEdy95OuI+EhF+GupO0wYyTNQc5Pmd/4GbRNLHRqc=;
+	b=UOrELW96w9h018hNgZONCINt0K7ItXsLxkRY29bJUZSdxWYhH++mD2E6jw/woM9TWHJW
+	 aWIiqbAgP9wBDx/kUIceO3bbvV6mLJZU8OLdYMQZirHrRWEaXRrye2T6pRFe0/Y81gzA/
+	 6CuXV9kVPB6J1X9Oxi/zia7kql2KnKR/qpmupQYTEsvcXz4qH5fVgiAv/KPEu1TmgTuj3
+	 Xb7CuCiNQr5YoFBeuaemk8gAs1j0R6mt06m2Q2zh5YDP/Z4yY/5R5ZK/UX9lbtyMYWqEJ
+	 w/qPAaDaz7aYrdpNJCFavOwk79ahjQDV32pFFGnkar2aEK6atdDXMyb2m9hglXkeafQ==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793374161;
-	bh=av8xPIimJfJArr6CBGe5u+GB+7JvzpmOsYtaVPMF9bg=;
+	s=default; t=1793374165;
+	bh=DfqEdy95OuI+EhF+GupO0wYyTNQc5Pmd/4GbRNLHRqc=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=iU+AssBIIaRsw29/45jWfTBCMd80bYUzn/CKlVZyykA1SvQ+bQRLotOpBqe08a+vr
-	 m3U/AKakao7OZ3Dw1RdCeKChQaysc2zkK8xbdUO17cRjgtIjQWjke8wb+aXVSc/Wqm
-	 Wjye2MlvE43Q7vjtnKrbxbQpQkXYNTSy6vXPdAE6ObFcmrXxX5u8vdjpEVGD4HAf5l
-	 6Upmj7z8OvrSBhTw4+YZt8n3zZJmdKfgHPaJZQ8+c5PlugrPulqjkGKC0PDQO9ny6+
-	 9XEAgGAwDQihWFDWmFwwq/65u3JI7fWAGLoJUS2+c30POMJ2tbDB23EG5YC2QiuB0x
-	 d4PWaveZ5ZZ7Q==
+	b=eQQyPYl6vzBqfeC00zYUY/kDGrUG621a4Nq6KdaEn7Ve3Q1G5Qd5LRrW5AJfPNNOI
+	 /LedbQ+Gyk3BD0r0mjIYAkDGeI0m0PSmyNnmX3yd1aBBdrjCkQmBzW/2x7zUHOt0EV
+	 soJIs6EVqYbdHWT+XcmIgTPJILde6lIZA1iGNGMFykG6OV9Y+O2zrIsDJ/YaCv54J8
+	 xgn4ZhSKP5ETv6XopMDe0MdMw5TQkuFys3i9r7UZ7RNQB/Qa6MJTw89gdE4KYnh+Sv
+	 MaBgztdjWtN+AkATmEwO1sg7AfVobMzGbViL4tHew45qVZKW4b1gpJcepmlgJqmTqz
+	 NyzZDsMyPS3lQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9603A40D44;
-	Fri, 30 Oct 2026 15:29:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1D5CDD38
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:28:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DCE7940DCC;
+	Fri, 30 Oct 2026 15:29:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B924DD43
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:28:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0317D40530
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:28:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9F06B81680
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:28:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y3Q3P0WW4ueY for <buildroot@buildroot.org>;
- Fri, 30 Oct 2026 15:28:30 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 627DD40211
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793374110;
- b=V+AKvRu0bIF0/8fGTtb9Nopq7fyrWVjXhUUgVlXRYomUzWxrJkva9LS7IclI2QXSdhnf
- EgToSko25JMbmgt6hPp8wlSmWsrSTsMo3utlqdYrtKbxipXBNTcqrZPreSFLo906MmcCc
- kgFmPdJyuU9HpEel1MlIjODi0kmqdtX/YQBIYKUcvNd9FllUs+1fs9ngMQo9MxJ43FojP
- LzH5tDjdkNdTyTTgkBFfHL/RhzyqZrGQRELfeIS6x7LWBur9kCQCGeR5C79DutWo7GkZQ
- sZiDbqbdd0EY7vswkRmZ7PPt38gbmQNgR6TqEFc85PRvXAq3+Hnru3j4tsR7xZP/BzA==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2ZETHztyyhrO for <buildroot@buildroot.org>;
+ Fri, 30 Oct 2026 15:28:37 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 99D5B81331
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793374117;
+ b=EVtSw7oN53ypkmLsQ/r4/AWbldbBdCfsbrWDOOVbPm1IQQRf9PfoK9xpVM48e7v4GXE7
+ DwnDuwYeJBhMcp96zjUIUarbfofFMsKwibxTSwdgg9NTe8Z8fS0X8+wKv3goDn+AkE1uU
+ lh1BMyg4YioP+DexA3HyGVGPc1b1DM/VuJR1spY+SIZCXfJUeO8S/m/fdmsDzHFo2Os3V
+ MkKKCO1sB7TlfFONV9x9aysk1te8zs+OC3AC5y7au3vuu93PAz6ac7wjONJxQIFdDXBew
+ lx+XT1HIzST6N+n6nbU7vSkEOCOwlB4owkngRBKxQbHyjL0iOXgAfv+kBD7TCi6HOcw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793374110;
+ c=relaxed/relaxed; t=1793374117;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=/qVkaBLIVHurJ1bWwDERbFWGl+X+28a0z435r1n8yyk=;
- b=U5Y1r4kc+kzIyKpz79bVa4QRBAzZEQnhioDmfE5vqumS+2ew0l4Bkxgp95QkM8H941Yr
- 6YMAPU+KptMDOc65kbqH/aEdIKdIeAAgA2hj3BZ3b6brKxUv90hF0+TG3jiqbS5MvaYk0
- 8NIx56XQR1mP8R0nAuj1uBdOy2Vq4v/m3WMG73X2WH+zYjaOHXZVg1ztZQMnTn94nXVAl
- V7sP85mX8Z0hkeCAjz8Rx6ag/y6Y+FNrWrjqi8Pwzgf4JHdwMk8LyP3/6/uEwy2Q1X3dF
- 2DtMcXhnSeKsBt94TX33j5wV3aHhJmkzTYDdd6S1HC53Mi+eMoEnsqwJzQ79fhCFDDA==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ bh=IkXsWh+taURWZ6qmXHYiQUO/m9fQSTdbqxATCRPmg3o=;
+ b=kmlZKXZRwummsB3ONLxOq05nnRkbMFcTKxmBCj2Kw1CKKRPL1QxsQnDvFkFElupaw1iH
+ 4D8J7ZPP+fBbpP38Y2JyjZS4sdGjzmmOqGiGGLkAwDTLyyrUQpAmpKXB1o91dkLC2j1qi
+ +0lhT+x3P16Go/tjqZ+VqOWSR184OcP0kfqHbPU1xsCDlgQN/x4XDc0faMfaiBEX9ZUoc
+ Op2ThC8WIyzxL6/szFqqWgxy8mTwFj2LIZDp3oX2mVSF2yNdFFsQeGN3htfmbbeqW2iiV
+ y7uK6sXDroLWl1Kska7zv0VhaCe5qftp2hZNgUMlkp/snC8EX0JgKPk4UsgvbOw3q9g==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  dmarc=pass header.from=mind.be;
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=KZd3NrxG; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::32d"
+ header.s=google header.b=FX5oWtqj; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::32a"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 627DD40211
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:28:29 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-4a4d7ae1ae9so7955625e9.1
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 08:28:29 -0700 (PDT)
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 99D5B81331
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:28:36 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-4a214af2076so6371615e9.0
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 08:28:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793374108; x=1793978908;
+ d=1e100.net; s=20260707; t=1793374114; x=1793978914;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=/qVkaBLIVHurJ1bWwDERbFWGl+X+28a0z435r1n8yyk=;
- b=d7/fHL9rBjYJrtft71ztiyoQe7jmP3uUgzvMeeNq6vL6idpThMq/RaQVlaDIleiJXV
- IqgVWv+o3u+myywGb8vEf6lWg3ICSMt1HWGLfMjZd6NmlfEP5hr6zr73HLz0rTMON3pk
- L6RTVumQ7K5Te8eRXh51d9XHYdeO1XdBAEvZNS+4o7PMyGOmpLOLzbbRtVJTVueNmIai
- OaHhCstiJk1M/5YV9vvb1csyRzmMrgiYqmKo0laqsj4yagKPhwK3bh7CtrKgDYK0lBOR
- cQEMaPbv2U91cUcqUlt3Lc16IBMmJO5SBcZaTbm0meVcx4sXEaT3wC3f/FONZZf8fYm3
- bK/A==
-X-Gm-Message-State: AFq9FYKrv8fXxI00fvWLE7fEmRIBo+/4toQH3GGwT+EukE8DReWmwIY/
- ecNSurYlEr4xM4rnkNbPXcRTZBWuwm9ElhjG7q1wpIKMbigkCr86AGSp7oHrtJXJOnIp3t7udxy
- /CGA6XoI=
-X-Gm-Gg: AYBFou2uEVylUlRXFogdtC+xuW9BCoUbjp8i5a9Rz3iJfylXbuGQy4GxzTG0j/F/Plg
- Y7Ga73GMhGUsnCgxliAdARM2Q8JTBv6J99OUnJw6bqKm4JynyF1cdWp7BV8jA1IuXHxBOrwshpM
- PTg92GOY2zDcnBVpuf5nljXxnP+16ygOICjlqyMpuZaqXDCnHgSa5PEZa0fg8X3vmnW3lIwIJuH
- 3PtlnHx2DA4/Ri1x5r6UTj+XeQdDmj7Qorw+rIQtSGzcGNIpgpn804/3gM91Ufi3q0rA9N4JNqh
- ophmRfRAK6yv5h6grCtuNf+Crsgv6WOCy8EQPE1Hh4itEyjx1IBiGGIVJNXiETnVjnGit6MPuPA
- vFcAziPNGdbFI5ua1+Oxx13fAsAMZXoi2qPjSh0dltSsnLOfD4zs1k/D8IlfJJ6bKJla5onwIne
- Sudm2ipvZPAfSEkO9bsTpcFfDXq7feqWP5QQENz/1InRfIDWFrN94GuQu4aXF3QepLMWGNjyWv1
- tdEf4zAIxXB8JqeADfeKUADOEQmOsvN7SfRra3FEWkfR1URD4a0AVJ6s27VK4chp4WcfbItfB1o
- +H5TjD2u9W+OsH6naOwvTF0IMDaXabkYJ5Dm4+hwI79Sw29snB8Z9+KvBpNtKCrQg6uahH024g=
- =
-X-Received: by 2002:a05:600c:a00b:b0:4a2:180b:3153 with SMTP id
- 5b1f17b1804b1-4ac185bcc7dmr66438085e9.14.1793374108267; 
- Fri, 30 Oct 2026 08:28:28 -0700 (PDT)
+ bh=IkXsWh+taURWZ6qmXHYiQUO/m9fQSTdbqxATCRPmg3o=;
+ b=GFLyCzf1xBy9swpUGZ7BpRjsByO3dThT3pqTzHKlB1/fTk1A7NeskR3OUia8ZzliNN
+ Fn4YdxBEjUCqWwNpWFj+jqwx00UM9vBiZLkYXeO+qnv+cg4bWp26u+aCSEfXLyYqJTkl
+ 3ni8ozUuXk0dPhA3eC+AOdl2RFJg99jqSunO4EDVlDxGtmSgaFDR1BJ/cp3lbOBxVJzb
+ YzTrKIXdSVkCsQXSmg5P1Xn2GViVfjCIiJ60rQx2xIg/ZqYdyj2gLRpQ7yv0iG6i9Alo
+ KNAl0mEgocofwYWEiVUtvkFKc6O6PgQ5MriUgtAdO4yZR7u7hVG6nPTCRdaoxDmNTLUM
+ 3J1A==
+X-Gm-Message-State: AFq9FYI29jvIwuefPBFH5ZYG0+JUbqpHRJw54j2Dlaps0uY1Izh+z9tr
+ WfoHtTr+3AwyVVJTI1+5na+6md2d/61poqbfL086U5ZUbAID2Y11WxuDlDu4QkFptevq8zd+Rwp
+ UkyWPVSU=
+X-Gm-Gg: AYBFou2IefIOLQl2z35W6BowEQu2HQV6Od4nfSj2Dl4rPnoEgXLUpFIJjAd13NIOSuL
+ qvUenMFpCXmWbRVrJodMEBBM8uvJmiaK493MCG5rEJDhIdwhemASgQkcFTBYGYWBW0qUK7VFqPB
+ TkFAoS/uBBmFlj+HgPiOIV+aRRt+YC/iYI2ZvDs1I9hh8I8OIG1Ur+tdtgfQldA/pCg6CaM7vMg
+ L6zUBkO88X7+hKeJYMep8PQZ44Xe3BqOlinzcGNj/LsmHxxtciwYJO4DXWCF9G3TfBDoxfm+GaX
+ K3BaACGbxMO0CBqjiICfIXd0uQJ2l7MtmeCLY8pemWmcX0PeL8Y42dURtAWI6CGWXzKslMpgAqq
+ tpIc0NIOQpNEMIfZmbTmZe2634RxIXCqtlntgexNsLGgaq1WG4mnukNmfLCWZgkyPZjOKomusvy
+ it5AJhJpKI8PzoARAtqBUBxGpQBlnU6DRqONQlM5fU6osCH6lyCXo0yQl5cSu/TZbLGuKeKJ92G
+ 6pSPuuC3YXqnfD9H9B0srEzL8T1fJmiM6TFHBP7s0HMeq+eolUKmPDLJ0ul3nXj2xKvy43YZ+gW
+ y82qaszizjjMkKOzENtVUE7rrtiLNi1jX77g0f7qHAdsBduApIqTno1I3NQtKWJ4b0FyxHEa
+X-Received: by 2002:a05:600c:1d07:b0:4a5:87a:50ba with SMTP id
+ 5b1f17b1804b1-4ac18e5dbaamr57331915e9.33.1793374114368; 
+ Fri, 30 Oct 2026 08:28:34 -0700 (PDT)
 Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
  [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4ac09fadb75sm39819285e9.3.2026.10.30.08.28.27
+ 5b1f17b1804b1-4ac0a762bc1sm27670995e9.4.2026.10.30.08.28.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 30 Oct 2026 08:28:27 -0700 (PDT)
+ Fri, 30 Oct 2026 08:28:34 -0700 (PDT)
 To: buildroot@buildroot.org,
-	Bernd Kuhls <bernd@kuhls.net>
+	Yegor Yefremov <yegorslists@googlemail.com>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 30 Oct 2026 16:28:25 +0100
-Message-ID: <20261030152827.1907335-1-raphael.melotte@mind.be>
+Date: Fri, 30 Oct 2026 16:28:31 +0100
+Message-ID: <20261030152833.1907394-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261022211048.1243312-1-bernd@kuhls.net>
+In-Reply-To: <20261022222752.3530250-1-yegorslists@googlemail.com>
 References: 
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/bind: security bump version to
- 9.20.30
+Subject: Re: [Buildroot] [PATCH 1/2] package/iozone: fix parallel build of
+ the linux-noaio target
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -160,54 +159,99 @@ Reply-To: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
 In reply of:
-> https://ftp.isc.org/isc/bind9/9.20.30/doc/arm/html/notes.html#notes-for-bind-9-20-30
+> With uClibc, iozone is built with the linux-noaio target, which lists
+> libbif.o as a prerequisite although libbif.o is built by the
+> iozone_linux-noaio.o rule. With a parallel build, make also builds
+> libbif.o with its built-in rule, without -DHAVE_ANSIC_C, so the K&R
+> code path is used, which fails with GCC >= 15 (C23):
 > 
-> Fixes CVE-2026-19630, CVE-2026-94300, CVE-2026-96888 & CVE-2026-97313.
+>   libbif.c:191:1: error: number of arguments doesn't match prototype
+>   libbif.c:170:1: error: prototype declaration
+>   libbif.c:193:9: error: too many arguments to function 'do_eof'; expected 0, have 1
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> Commit d7233ae04854 ("package/iozone: Fix parallel build problem")
+> fixed the same issue for the linux targets only. Add a patch doing the
+> same for the linux-noaio and linux-noth targets, which were added by
+> 0001-Add-new-targets-for-iozone.patch.
+> 
+> This issue has been present since commit 75891397abe6 ("package/gcc:
+> add support for GCC 15.x"); before GCC 15, libbif.c built with the
+> wrong flags but didn't fail. It therefore affects 2025.08 and later,
+> i.e. 2025.11.x, 2026.02.x, 2026.05.x and 2026.08.x when GCC 15 is used.
+> 
+> Fixes: 75891397abe60dbe3d82a1ec39654ff81d1b1406 ("package/gcc: add support for GCC 15.x")
+> Assisted-by: Claude:claude-opus-5-5
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Applied to 2025.02.x, 2026.08.x. Thanks
+Applied to 2026.08.x. Thanks
 
 > ---
-> Gitlab pipelines passed:
-> https://gitlab.com/bkuhls/buildroot/-/commits/16191cc29d01d60a67849a754c3bbc27a0df448e
+>  ...from-linux-noaio-and-linux-noth-deps.patch | 48 +++++++++++++++++++
+>  1 file changed, 48 insertions(+)
+>  create mode 100644 package/iozone/0005-remove-libbif.o-from-linux-noaio-and-linux-noth-deps.patch
 > 
->  package/bind/bind.hash | 4 ++--
->  package/bind/bind.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-> index 8129fa2d2b..2d6aa2fde4 100644
-> --- a/package/bind/bind.hash
-> +++ b/package/bind/bind.hash
-> @@ -1,4 +1,4 @@
-> -# Verified from https://ftp.isc.org/isc/bind9/9.20.27/bind-9.20.29.tar.xz.asc
-> +# Verified from https://ftp.isc.org/isc/bind9/9.20.30/bind-9.20.30.tar.xz.asc
->  # with key 706B6C28620E76F91D11F7DF510A642A06C52CEC
-> -sha256  587029508b3b1b43229fae416c97e5543aba45809cefaca98a5004a02a5736c1  bind-9.20.29.tar.xz
-> +sha256  9e1443a40a72a30272cbc3196d020a6b2e26937111c83e59e101e82e1e3b4fef  bind-9.20.30.tar.xz
->  sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
-> diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-> index a05ef6c362..7fb07fc83c 100644
-> --- a/package/bind/bind.mk
-> +++ b/package/bind/bind.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -BIND_VERSION = 9.20.29
-> +BIND_VERSION = 9.20.30
->  BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
->  BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
->  BIND_INSTALL_STAGING = YES
+> diff --git a/package/iozone/0005-remove-libbif.o-from-linux-noaio-and-linux-noth-deps.patch b/package/iozone/0005-remove-libbif.o-from-linux-noaio-and-linux-noth-deps.patch
+> new file mode 100644
+> index 0000000000..0c4987d4df
+> --- /dev/null
+> +++ b/package/iozone/0005-remove-libbif.o-from-linux-noaio-and-linux-noth-deps.patch
+> @@ -0,0 +1,48 @@
+> +From 3bfbc2fe58400d32aabbceaa19a4348981931d9d Mon Sep 17 00:00:00 2001
+> +From: Yegor Yefremov <yegorslists@googlemail.com>
+> +Date: Thu, 22 Oct 2026 22:59:56 +0200
+> +Subject: [PATCH] remove libbif.o from linux-noaio and linux-noth deps
+> +
+> +libbif.o is built by the iozone_linux-noaio.o and iozone_linux-noth.o
+> +rules, with -DHAVE_ANSIC_C. Listing it as a prerequisite of the
+> +linux-noaio and linux-noth targets lets make build it in parallel with
+> +its built-in rule, without -DHAVE_ANSIC_C, so the K&R code path is
+> +used, which fails with GCC >= 15 (C23):
+> +
+> +libbif.c:191:1: error: number of arguments doesn't match prototype
+> +libbif.c:193:9: error: too many arguments to function 'do_eof'; expected 0, have 1
+> +
+> +Do the same as the previous patch did for the linux targets.
+> +
+> +Upstream: N/A, linux-noaio and linux-noth are Buildroot-specific targets
+> +Assisted-by: Claude:claude-opus-5-5
+> +Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> +---
+> + src/current/makefile | 4 ++--
+> + 1 file changed, 2 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/src/current/makefile b/src/current/makefile
+> +index ba5759f..168fe93 100755
+> +--- a/src/current/makefile
+> ++++ b/src/current/makefile
+> +@@ -180,7 +180,7 @@ linux:	iozone_linux.o fileop_linux.o pit_server.o
+> + #
+> + # GNU 'C' compiler Linux build with threads, largefiles
+> + #
+> +-linux-noaio: iozone_linux-noaio.o libbif.o fileop_linux.o pit_server.o
+> ++linux-noaio: iozone_linux-noaio.o fileop_linux.o pit_server.o
+> + 	$(CC)  $(CFLAGS) $(LDFLAGS) iozone_linux-noaio.o libbif.o \
+> + 		-lpthread -lrt -o iozone
+> + 	$(CC)  $(CFLAGS) -Dlinux fileop_linux.o -o fileop
+> +@@ -189,7 +189,7 @@ linux-noaio: iozone_linux-noaio.o libbif.o fileop_linux.o pit_server.o
+> + #
+> + # GNU 'C' compiler Linux build with largefiles
+> + #
+> +-linux-noth: iozone_linux-noth.o libbif.o fileop_linux.o pit_server.o
+> ++linux-noth: iozone_linux-noth.o fileop_linux.o pit_server.o
+> + 	$(CC)  $(CFLAGS) $(LDFLAGS) iozone_linux-noth.o libbif.o \
+> + 		-lrt -o iozone
+> + 	$(CC)  $(CFLAGS) -Dlinux fileop_linux.o -o fileop
+> +-- 
+> +2.34.1
+> +
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
