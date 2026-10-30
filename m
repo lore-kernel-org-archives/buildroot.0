@@ -1,28 +1,28 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E40606A31F
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 15:26:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8892606A320
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 15:26:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=lUEJBQKl
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=XmvsUDDX
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3345340BC0;
-	Fri, 30 Oct 2026 15:26:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 88CD760B13;
+	Fri, 30 Oct 2026 15:26:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ymq3pkB-5O2t; Fri, 30 Oct 2026 15:26:43 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 400BC40BD0
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793374003;
-	b=GWLj25ITTW/Ffjp5hUGMEfx4jjYG+oTk7Oo2jifJYuP5klXGtPzEIYmHe0htreSK1YmG
-	 hBsEPa/VN7dFq2USF0lBuUtYnzIWgJIe7zgHho4O5aN9zo7tIyYI9Oekv1gCmeMmxkTjS
-	 L2a1rowPZn9fSlViqcHpwJCmNsOzKjmGUePcIFl9SdjF4R1cp6zvb2igFksejcstrYnlW
-	 UXB7QluhH+oeGV5izbhuGXuEDT5skqdwDVxpJY9BvoPiuLvx4BQyTxHNeklajSFSRnooS
-	 kHuCVh5X03Daw91Byv4uusP8UXZmECvW6cWZaifWibMZL0LbTg+glQybuP4cHNLe+vQ==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lK98qDUSCG0C; Fri, 30 Oct 2026 15:26:44 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 9446F60B0E
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793374004;
+	b=FEogWYFUa1ROyTN3vPdAUKRIa367BwSEYY0XbFe3Uz229aq9cWPH8BcRCyoyIpLp72mk
+	 4tfr6iN9ML+xZtzvVHWMjlHRUut8OqC7hBMSb897S7DL11grIMlLGuVJnhmw67EfPmknn
+	 9GxAuWQBXHjDl0FB8NpekDkRpHYbTSA5diw1njA70lOj4MiCJZVVKZxdDnk0Irsh/b9Y0
+	 LTTa4zh8A8o5rZL6EftLAhS8ylySprxlFGSnyCn58YsDrjEt15P8X2KSiibS3rc7vDBUn
+	 xmeKzC8YnNr9VQb+7fPyvO/OREgLAbJ6NQ1k0ur7jvgGzHjSwZbu42ezdWqNDFLcygw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793374003;
+	c=relaxed/relaxed; t=1793374004;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,119 +31,119 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=FkOAhlPnaeb4ao3UR73dAUC/aIEeTtgqWPM9oXgAsiw=;
-	b=TnQ3FV5x1uTMz28WYz9U91YzzqFi1cr55Fkft9t/nrBsUOa+YoIMwouniHbuuzVleGtQ
-	 lapozn0BEFMwp8cymPpAQ6E5PgTHr3Ae+O9Xq4e9dLOxAjaDJdVW2EYrm/Euxs24EUoBh
-	 nUeHdoje+QHUna27cbW3pMD+IV61APcjhnZ9lD7P2UQvm0NoO1D1tPCkbUww+SQvjybQf
-	 9R1hg8JfRODz8k5yuu910WavqdlxqnlPfkGqylqCuFU1fh5UbnCisI77MNhBsSW9Fh6HD
-	 ZoCyDAQSbFZT7YYbOyTuKJKpU3HxxGtm57EPVE9LHqWAiedq4zFr5+oD8rExjGWDUlw==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=db7Z3n1N2gaBBreWEmMBFlFxfCOQSLnjHNyXSH9y0B0=;
+	b=GwjIVgtJK0pO+U2OXky4xiuRoL46YgOZPVTQXlC4144C7sAj+OgHjzqrXi6m/RFIy6Or
+	 P1TpKDGjPgiJp3a3WEnefPhkHdFNyHeAgHAUPfYR1zY14gSw+M2nLhHEyLKfJGfo8ihhi
+	 RQm4A4XeeThdWSmxmggid1RS/IL2ecnBAXZnYQ5D3B9kVB1eA+83PhRo/mE3EzWzu8Kxc
+	 A5KGQ+keKEF3kIPXk+blDZhL06DGmmey2j9KkLc2COv23Z7H9ag8Gvp55gIlUdtUbr83I
+	 8gSKxSah9Op/fivUsuX8RR5s6Iixe1aqAv0e4pucA/KjF2vjnfOgPO+mQvP0s85uKSw==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793374003;
-	bh=FkOAhlPnaeb4ao3UR73dAUC/aIEeTtgqWPM9oXgAsiw=;
+	s=default; t=1793374004;
+	bh=db7Z3n1N2gaBBreWEmMBFlFxfCOQSLnjHNyXSH9y0B0=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=lUEJBQKlE+/WrdPccsrDXK6ej958fdy0abRijOL1RbgDvecNsTET7vfR62X0/5UBJ
-	 syWIUTF0lKzs3ILqxotTzG+vyG50dlVNQhsMwPiZ2UiZMTW+AvKNJXfA/NWrbyYAr5
-	 m+A0gEhWJinOrBDG/7cmMZMr+N8p60gR+BMUvf6RwvhjEnpNWI8bTW6zgKU3LHEjYW
-	 8msxLStG2aVxaNoftXvgYRJJa8oFjp+bvBQiQe3qroq2IhaP/Y/6V6UabpC5p02Zc7
-	 2BJZqeA3OoVld9/VjYMwlUe35cLHPUSIWJ9x/Z0x/c/UjK8GX2mjPdPBvFYMSJAi6O
-	 4mYmTnU7TpQKg==
+	b=XmvsUDDXq8qmWXzAz/zU4Dx3iR/lNpqMULyJG8nMcrBRcEa3hIXmWtJiRA0W5Jk9I
+	 ncXS10MZ0LHwpB2LBJ2trvBqnm59xl0hLGe4flCVD+U3pe04WMhPCIV06edO4r19ap
+	 UWBOoF6gC8+JNFFevvMejbsuruoPeED+I06MOKH/x67NszUv9MdeaPpGhEmR5/2iZM
+	 L+Ey6/33p5dGFCFmvvzSvipm2dmQVcfGp8bLw3yPC17+xBl6YWYP5YQLXGKxOHyqEX
+	 1e10VO5r1E/gflp97Rk0HDZC/FqMK0axBwQu08txh5/hv7DCfO7BAvsm6BU0c0QYyp
+	 uG7r+mYVZP7WQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 400BC40BD0;
-	Fri, 30 Oct 2026 15:26:43 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 647A0D43
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:26:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9446F60B0E;
+	Fri, 30 Oct 2026 15:26:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 475F03AF
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:26:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 568804053E
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:26:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 394374053F
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:26:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UBfsEylhBwVP for <buildroot@buildroot.org>;
- Fri, 30 Oct 2026 15:26:29 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 1A89D40211
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793373989;
- b=Ci2CItzhRY35AKNd+qASpRSlCMhYiRjoJ1O2MbkAWyyEhIk6xeLmHfmi/NM3KdxQ8rbU
- WOdsmXflFqx1fZAwRxdVwzStHEE8HHL2c/9PPP5QCfuBPK5pT9YNr8RvL9Zn1QIF9v/y0
- 3PLRi/INuvalHKCENk95rYVjrQtt9AW7Ey/7wBlQsMi/MY9iSut35Xf+yGcfj/Js+bXF7
- FJk1/roANwx3DwyiYo2d/I9PDh5wwT4s756RcjBkeBt7ZGgRrSZ/tvSwmqRoIHX0AhBZT
- IepXH+9aTieWmng/qu5qTtD7CAwUXRxKVvpQ2eM5/A9oFi6WMl6Cwr+lgHekmSq+ctQ==
+ id 6z4GOlNmi2iQ for <buildroot@buildroot.org>;
+ Fri, 30 Oct 2026 15:26:32 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 2673740530
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793373992;
+ b=JqwzYeQi9kY2xp2cV434a4a1IyvxTU9h1YtkCahzTOq+avM6SSuZ7ql26ID4jx22tM6H
+ jKcPyYmWJ3K72of+wcouY7GqYA5ORNTYqpP4FLTVwfg8kXy2Rc5XQY5WY6j/GBnkC9neE
+ COEnVli4ziT/kuUR9KA1Xic2YJcX48gTBlJ9afMWmgNvO8hl6+YZy3alDd4p9U7VcAHIR
+ JmRLUwFojmbp9n9/X0pq7Gj/Aj04og6q5wwA7/aUXEPXUZUDNTy+9V8MSMwaB9WPovO0q
+ VhwOjonIhaYboO41dWbWy/1LpnC4m4S9WXScsrbm+7tN65OkJ9/9dRhXf2u25dDuQiw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793373989;
+ c=relaxed/relaxed; t=1793373992;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=nDOM2yLpR6ZnMkrsU9XpisfHVS0emiUkLrujV1w0fC4=;
- b=Sg3oB8AZcPf8OPjGv8P8QnHWkey53XD4m//Hj+oKghqFg0TdcwMCAvVnbfpfb4/m7zGf
- nc/tW5x/1JwGCo0ONBERG4rbpsNbP+NV7OJniM/lU+NsoJ4WCzV16OlS0CIg1gs0wVswM
- rCyuQVxz+JKBy8wVFvhZ9CWIYASrVtT80+e/q5g1CDh/ni1F01IK8UTTT/ubC7/xsZDdG
- U2e/+2lgkrdLKuOx3KD+fdfUZzBgx/zxk1vupXUrLx1D0quV3mjRcJ70/hQyY3GG1Uy3E
- UPKLu2Mh99MJHDJ8BYFJHRDD8BHg0Jlk/ALPS9m4oWj79SZr4dDDQz9HYsyNMcH6IYg==
+ bh=2VmjM6U6lCxJUxosumwi5CiV15LYHP9vxSTed+ZAn2U=;
+ b=YR7hW4+ZaEcWtY+OWfcg6CEHUQLilc7uQfOrm3purVKxYzzigUDeDHJPdwP7kQVboeZT
+ SF9RmSzWjn4/vXboE/+at7rpxRXdr+vFP0Ikoit/De/yHRIV97YJ8CqNkJeg3Ktze8v5I
+ LfuRM57/VupSgnRqZLzKG49WDwDZDUZ0W7cbFvnYqqK/XNQRSCi5L73PDYuRBgLpl5yv2
+ mktbu2Tw7+Rtb2Ny6XJBTHS+mAahh608R7SlyjjYUzo0zX23iq7wDXh3c6mdppb09HZC4
+ 9E7kCcvSytG6yFz8hT2T8Zr4r3Q+m6SnOnxWd0esHoP2exJJGJI/0GTq5r0+7eC6yFw==
 ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
  dmarc=pass header.from=mind.be;
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=SJJatcZ6; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::433"
+ header.s=google header.b=dCYhZzTs; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::335"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1A89D40211
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:26:28 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id
- ffacd0b85a97d-48bbb06e746so423853f8f.3
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 08:26:28 -0700 (PDT)
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2673740530
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:26:31 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-4a2000d5fb1so4907385e9.1
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 08:26:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793373987; x=1793978787;
+ d=1e100.net; s=20260707; t=1793373990; x=1793978790;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=nDOM2yLpR6ZnMkrsU9XpisfHVS0emiUkLrujV1w0fC4=;
- b=h9hvYzy9pdGPeNHFh91rFNv+TzPljxvUsDz+EbzcdcwioksP6tlE/5JsTse47/uily
- 3iFs9BJL4QpAQ+MZ3D6fYHNqx86kS+wUJfl8jX6JvBE6wFg2i1/iYmOXQZVDpGpeIHEd
- FPPf2K19R6vTmg5bgZ9dI0CgvLjckgr4ElXMkzW/v8SYbehGlGIIZnSXpnQeqQ9tsg9l
- uj6FC46OD4/PqMn89DTD75MPuZGXwV4gGTQFaiCVAjqwe2eOofnIOUrlg3M3aXYDeDnu
- hD237kIV6F6QX6qfoYdHFu339kVRZ9+GArxdeudIE9b9FsMIo6j3QiutkibtOHQRmEO3
- pkvA==
-X-Gm-Message-State: AFq9FYLMiyZYNcAUkEu+YUWwMJDynDtaHQIGF2oQZupeYVL4lWx3BxZl
- yJUEvvGtW+0oxyDEdBe+FRu22GWr1jXnERcMqICRY2c6Gks1YygZDo0/RIxgMI3umIEX5fJNxon
- qYcziFTc=
-X-Gm-Gg: AYBFou3i0/y/dK0FU+TtAkY1seDNwmuUrc611+0RVJxw1sxUeekvjE4gNJcGseZj4wd
- SNsjM2+7HA5qb//bTYNWHX0KkOtQFUliwsPkRtyYRafFyMRgPBC8RICVRTEN/VuAhjEnb2Hnxbm
- JBHQOAdS5OwuWuFvWnotUZ3ffVn/xoDUsPTWbAlYaNMZZYujxP8qvWkPzHBk83Ug/G0aIlwYRKi
- coPHdSCWzwp7Xmhxjn17mga4GZkZA2NgOB62J1pp6EgxPZt1MLcLt7/IV6f0ro28rUWQcydmp8v
- WFuQS1WKjkLEwIEZCyMW852IEr8kbpW/OMkPVep0/PCDBP1hhTJF1J7l+poYK782tgrvV2D/CPT
- 4SsH3/4EYappVbW0tVFlrTL7xpJIB7HJp//IPPYDPDzqQlcr0/zHmvmwD5IUQmwW8Gh0/TechLM
- V9q/QRuX5TTanMCHoyfd9K2aJuCTphpe/ofMvmM3hkxwOQimhr1kbVRpp2P1r+xWc9aUqbsw5Wt
- dVgvJEub8lAlhuZbwisT9rAG5rOHxymTczHA8iLEYe3x+mwFLVzpkmNzOTzeLJc4nwdbRiIFvFZ
- 4BuPmU1uR5ChMXGXmtIezqSu0QTJ+ydDZDkDanWAm5E8N/fFaWJXBbd8oqL6dNtWl5CUAI97
-X-Received: by 2002:a05:6000:178c:b0:487:b50:101c with SMTP id
- ffacd0b85a97d-48e6e2bc04cmr6931783f8f.5.1793373986933; 
- Fri, 30 Oct 2026 08:26:26 -0700 (PDT)
+ bh=2VmjM6U6lCxJUxosumwi5CiV15LYHP9vxSTed+ZAn2U=;
+ b=qIW+qXBGGZ50/TQTdlKLRQT4yY1FhwaXx603ytVic7MFGoZKm0HZzK/9cL8L0L/2cP
+ LFnUDjzp2FDP6nCOst+nA97Y4C0cjUBmVobuFVIjoIehMSVGHFgWgBGAuNzeb7rBIU+Q
+ Lm5FEPGVucb8DcvAgWF7zJ9qqLsvXY2MTci3R+C2hwKoUAi906XstV4sd4nenzSgfpYA
+ /cBV9/S1Jos7s30wg7tx2wOBHoyUPCUVoGAH5A0Ec3rCKOoK9vd3OJD/oH4qfXIATpFt
+ 9+L2juxTBjI6GIM1HwYzSP9XFbQF9A+uyfnLU+CHEKhr+rT6k0vEqHhTCkQp7mGGuWiU
+ sutg==
+X-Gm-Message-State: AFq9FYJxD4LjK+DGEMTsH9vQ6qCCP7kF65LWnC63VuF8S4hMUxmVyU8x
+ 6R9o+M901W+Cbuf45gJsYFAZs5Dl+QBGxhuZDlZX3XtUOVmHMrqEix6So8vdiQwhnPaDPS6KO+j
+ iaxsZ3Rw=
+X-Gm-Gg: AYBFou3GZd81yqrEBFlzKEY9E8be3Tt5Oqw6SWl9a+GADuz/faqk3RhY3WGQyAUrnEf
+ gUaUNDs2JmaGQr4AR+J9Gqn5V2Xmzr/mylS5O3iTo4VrtWsKSPz24FxuUZTbOhhHXITzndsUfky
+ +9fOp36anZ521e4vr8KsE62VnIO/0XZ7KFe36RX0/XhtWyogrW54mpzhaqAomo9CShOw2909Em/
+ boqWWrNNz2py9zQElbgyc0MZBZm3HNr9u8xb3uEDlYhSJ3e+bmeJzZmfHP/HSVPAEBSHRYJfh7Z
+ QIENn02Pfbq8dq0v2BLsGytW3jyQgNQl4hSBWJelgD1lbaBKDemxQQVz4HWnTn0dTd0TCzV6UqX
+ /aJbzgRWtkWPGFGltmZuXyfI/kbvbI86rLJaVbHMMObOxOG+4ulQA40ag4HYsDoeWzAyUNXxY1A
+ KCUhVaPAFkk405RnGSV3bT6XjZq7qLvk7C8ZYP+2ANMoLavTYlCsKdv4XPyOqypzGKh70fBb/4a
+ pkLQM/Qej3NMJ80K0c18R1DE4vMgCqPmOcRCEJb1+LS+ImIdRHmo7f5z6/E4Gtmr8pjZmXqrzO2
+ 42lXntXR7cDkXlmAxRkebWXVIsOQ5nrYtOgc4bFwiROw7XHHQHdhjktlCFTp9PhbBIkR2Ebg
+X-Received: by 2002:a05:600c:4e49:b0:4a4:6fdb:cc42 with SMTP id
+ 5b1f17b1804b1-4ac17b2c38bmr60396005e9.11.1793373990018; 
+ Fri, 30 Oct 2026 08:26:30 -0700 (PDT)
 Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
  [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48e71b723b4sm4051728f8f.17.2026.10.30.08.26.26
+ ffacd0b85a97d-48e71a4d5dfsm4280322f8f.3.2026.10.30.08.26.29
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 30 Oct 2026 08:26:26 -0700 (PDT)
+ Fri, 30 Oct 2026 08:26:29 -0700 (PDT)
 To: buildroot@buildroot.org,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 30 Oct 2026 16:26:23 +0100
-Message-ID: <20261030152626.1906184-1-raphael.melotte@mind.be>
+Date: Fri, 30 Oct 2026 16:26:27 +0100
+Message-ID: <20261030152629.1906216-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261014214158.535942-2-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20261014214701.537626-1-thomas.petazzoni@bootlin.com>
 References: 
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/2] package/podman: propagate missing
- dependency inherited from shadow
+Subject: Re: [Buildroot] [PATCH] package/mender-update-modules: add missing
+ BR2_USE_MMU dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -161,87 +161,72 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
 In reply of:
-> BR2_PACKAGE_PODMAN selects BR2_PACKAGE_SHADOW, but forgot to propagate
-> its !BR2_STATIC_LIBS dependency. This commit fixes this inconsistency.
+> BR2_PACKAGE_MENDER_UPDATE_MODULES_RPM selects BR2_PACKAGE_RPM without
+> replicating its BR2_USE_MMU dependency.
 > 
-> We also propagate it to the only reverse dependency of podman, which
-> is mender-update-modules.
+> BR2_PACKAGE_MENDER_UPDATE_MODULES_SWU selects BR2_PACKAGE_SWUPDATE
+> without replicating its BR2_USE_MMU dependency.
 > 
-> Fixes: ebbaac08e3f462bf023c12077f739ed1c0543eb2 ("package/podman: new package")
+> This commit fixes that by properly propagating the missing
+> dependencies. There is in practice no functional change:
+> BR2_PACKAGE_MENDER_UPDATE_MODULES depends on
+> BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS and go is only supported on
+> MMU-capable CPU architectures. But since there is no formal
+> relationship between BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS and
+> BR2_USE_MMU, automatic validation cannot infer that
+> BR2_PACKAGE_MENDER_UPDATE_MODULES cannot be selected on !MMU systems.
+> 
+> Fixes: a474642fdcd8c69e12126bbe8304479aa855d916 ("package/mender-update-modules: new package")
 > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Applied to 2026.08.x. Thanks
 
 > ---
->  package/mender-update-modules/Config.in | 6 ++++--
->  package/podman/Config.in                | 6 ++++--
->  2 files changed, 8 insertions(+), 4 deletions(-)
+>  package/mender-update-modules/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
 > diff --git a/package/mender-update-modules/Config.in b/package/mender-update-modules/Config.in
-> index cf2929dc69..4c60aece14 100644
+> index 4c60aece14..1fd7384f59 100644
 > --- a/package/mender-update-modules/Config.in
 > +++ b/package/mender-update-modules/Config.in
-> @@ -136,6 +136,7 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_PODMAN
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14  # podman
->  	depends on BR2_TOOLCHAIN_HAS_THREADS  # podman
->  	depends on BR2_USE_WCHAR  # podman
-> +	depends on !BR2_STATIC_LIBS # podman
->  	select BR2_PACKAGE_JQ # runtime
->  	select BR2_PACKAGE_PODMAN
+> @@ -212,6 +212,7 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_RPM
+>  	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+>  	depends on BR2_PACKAGE_LUA && !BR2_PACKAGE_LUA_5_1
+>  	depends on BR2_TOOLCHAIN_HAS_THREADS
+> +	depends on BR2_USE_MMU # rpm
+>  	select BR2_PACKAGE_RPM
 >  	help
-> @@ -151,7 +152,7 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_PODMAN
+>  	  The Rpm Update Module updates software on the device using
+> @@ -224,6 +225,7 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_RPM
+>  	  https://github.com/mendersoftware/mender-update-modules/tree/master/rpm
 >  
->  	  https://github.com/mendersoftware/mender-update-modules/tree/master/podman
+>  comment "rpm needs a toolchain w/ dynamic library, threads and lua >= 5.3"
+> +	depends on BR2_USE_MMU
+>  	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
+>  		|| !BR2_PACKAGE_LUA || BR2_PACKAGE_LUA_5_1
+>  	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+> @@ -232,6 +234,7 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_SWU
+>  	bool "swupdate"
+>  	depends on !BR2_STATIC_LIBS
+>  	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # swupdate
+> +	depends on BR2_USE_MMU # swupdate
+>  	select BR2_PACKAGE_JQ # runtime
+>  	select BR2_PACKAGE_SWUPDATE
+>  	help
+> @@ -244,6 +247,7 @@ config BR2_PACKAGE_MENDER_UPDATE_MODULES_SWU
+>  	  https://github.com/mendersoftware/mender-update-modules/tree/master/swu
 >  
-> -comment "podman support needs a toolchain w/ headers >= 4.14, threads, wchar"
-> +comment "podman support needs a toolchain w/ headers >= 4.14, threads, wchar, dynamic library"
->  	depends on BR2_USE_MMU
->  	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
->  	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS || BR2_PACKAGE_CRUN
-> @@ -160,7 +161,8 @@ comment "podman support needs a toolchain w/ headers >= 4.14, threads, wchar"
->  	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
->  	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14 \
->  		|| !BR2_TOOLCHAIN_HAS_THREADS \
-> -		|| !BR2_USE_WCHAR
-> +		|| !BR2_USE_WCHAR \
-> +		|| BR2_STATIC_LIBS
+>  comment "swupdate support needs a toolchain w/ dynamic library"
+> +	depends on BR2_USE_MMU
+>  	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+>  	depends on BR2_STATIC_LIBS
 >  
->  config BR2_PACKAGE_MENDER_UPDATE_MODULES_REBOOT
->  	bool "reboot"
-> diff --git a/package/podman/Config.in b/package/podman/Config.in
-> index a8c625c5b1..2f20f77507 100644
-> --- a/package/podman/Config.in
-> +++ b/package/podman/Config.in
-> @@ -9,6 +9,7 @@ config BR2_PACKAGE_PODMAN
->  	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14  # shadow
->  	depends on BR2_TOOLCHAIN_HAS_THREADS  # conmon
->  	depends on BR2_USE_WCHAR  # conmon
-> +	depends on !BR2_STATIC_LIBS # shadow
->  	select BR2_PACKAGE_HOST_GO
->  	select BR2_PACKAGE_CA_CERTIFICATES  # runtime
->  	select BR2_PACKAGE_CGROUPFS_V2_MOUNT if !BR2_PACKAGE_CGROUPFS_MOUNT && !BR2_INIT_SYSTEMD  # runtime
-> @@ -89,7 +90,7 @@ endchoice
->  
->  endif
->  
-> -comment "podman needs a toolchain w/ headers >= 4.14, threads, wchar"
-> +comment "podman needs a toolchain w/ headers >= 4.14, threads, wchar, dynamic library"
->  	depends on BR2_USE_MMU
->  	depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
->  	depends on BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS || BR2_PACKAGE_CRUN
-> @@ -98,4 +99,5 @@ comment "podman needs a toolchain w/ headers >= 4.14, threads, wchar"
->  	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
->  	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_14 \
->  		|| !BR2_TOOLCHAIN_HAS_THREADS \
-> -		|| !BR2_USE_WCHAR
-> +		|| !BR2_USE_WCHAR \
-> +		|| BR2_STATIC_LIBS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
