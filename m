@@ -2,265 +2,108 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FC8F606A322
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 15:59:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98C1C606A31C
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 17:17:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=o9ufrdRC
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=lsrn5v6H
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 17932809BD;
-	Fri, 30 Oct 2026 15:59:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6D90581335;
+	Fri, 30 Oct 2026 17:17:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jF2d6yTrPGNl; Fri, 30 Oct 2026 15:59:01 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 05D1980962
+ id TFjqlV33uFvm; Fri, 30 Oct 2026 17:17:46 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org B0D568130A
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793375941;
-	b=kjOPku+rdfPn4ibXs9tCsfPlbHecCM3oO/l/BJFGeuKNp33qRrmu8b2NDp0Sq5xgytC0
-	 U0+58ZN7PvZyzpbPUA9Rni+wH8jW1E41BX6hO2juoO+uts80SId7zB3wmOxEp8Ab4uz2G
-	 3eujjAeP7OtehaL+C1PGzlJ0VGlT9/ilKBKosNmTSEq7nhThFP34XH/HJBPUelBTsFy8O
-	 VoZk4cQfFNyiblukFUtSJdqPPgsLFj5QRyoU83EL7A1XoOl4XltR0q37eBEfxDZMF8ZQz
-	 3YU3yvwbZ/ok06fj//VpNr7dfrlo2c5gw6JmSXPn0UyeunStv9d+dBT71iRJ/2pAOOQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793380666;
+	b=A0lVtJ08tg8TZCHIhHXPx4dp3xlh3xdfIzabVdNA+RJVad0ABz3urap1Yk8NK7cl2gsw
+	 6b/cLC3jiwJlsfkoGGas6fO3Xo0wDWPS2RpJe7rkCP+pVNONV8u+Y3WSgGgpY1x886876
+	 mSZBTPj7DJ0WmpOTflfBrPvXMuofCjFaXQAgwlvkvbEF4EMdVQFgsWtX6RcZxVxcUCRIo
+	 c004hykLn8tGh3l9Ca2XgzdW0p710OOLwzHV612D2Lks+pUz/0rmM/akFLnUZ5LrN14lN
+	 dinEFlcplks+m9LacXoGx/dxehPvt3bRtTgS41DLLOaTyhy0DNRXiprENWEiD9h5Z2Q==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793375941;
+	c=relaxed/relaxed; t=1793380666;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 X-UI-Sender-Class:Received:Message-ID:Date:MIME-Version:User-Agent:To:
-	 Cc:References:Content-Language:Autocrypt:In-Reply-To:X-Provags-ID:
-	 UI-OutboundReport:Subject:X-BeenThere:X-Mailman-Version:Precedence:
-	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
-	 Errors-To:Sender;
-	bh=2PiLXy4SnRi0pF89g9JWdGZzOtIjGDV3+f3kMC2P1OA=;
-	b=cXttlaD6kitRKEI+WNgasUVy+Enn+VjongodmOx+MGmV28vtWcepentDol4FuOZ6qvjs
-	 FYXenvXtyqrR9VYBqOUPSCrXUJ0tbC5c/ia6XkyporkcqWkBa+86N5seVKu0f/zJbmNQR
-	 77aLSKRiUamxoox3h8P3DGFo+tWUSo+/Zmhri2mTSf2CNKrmde+yQWtL8f1X20eNOaNDj
-	 L/dEuBFjwJSBkAMOYoPN8ZJR2qkN2087pCALM8RjHnKRiK+18+c2TfVhWBuZkJ2SEYrnN
-	 V6k/jBED5y8ylCbQrYqxGHoQjGIt/Mq3YsUYnRkd9kwyXIbH2tbKjRfmB8IdIzFTXpQ==
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:To:
+	 Date:Message-ID:X-Mailer:MIME-Version:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=sqvk9y+xTFWHpCgM5H9Ko7hGpgBTvKSCtt+jSraCsII=;
+	b=K+pFEfCLNu4zBItdFL6qoV1XVrXrhv78lLso81fkgHVYNTpW8p2dV0cgi+LkmFv6ZLK5
+	 TmYQRPuNzJT4VXZwpjkgKstvsu1XtNtzAm/2uo3+YxnriXyq3j/71fccEXGjriiBXaUkj
+	 iAMzG/+J6eLYABI/mUQ+7wZlanGX8eNh2yLGLlWQcQmpYbiIXq2E8Znz/gMyXLQ7zR7VJ
+	 LsR23Ac2EAk4qxqM4577EUJfse73nZonEb9X6GzgNMtWlP+FxpBHAQrhNOQRZVdXKmPlG
+	 L98o9Qq/Q9iqVb46EIEnHQeDsSTrcPYHNt+cIJ+wgG6mrWN2NjyJfKH4EgaK5MT0Iow==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793375941;
-	bh=2PiLXy4SnRi0pF89g9JWdGZzOtIjGDV3+f3kMC2P1OA=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=o9ufrdRCIzLYQN2fEwAodybI60PnO0qQhkFN9RFAg+JhMoNvcXC7ofX0Fy7tx03iE
-	 D1RODKuQXYzfkGaPK8bIHHV0SkZl+6kQ1q9tKUMp1+8KkTBSvAafwr0pF9utg1jgeW
-	 lfSniOfBy5vx3QVOA6cCi8wn53bPGWPf3XxUUWPooOgVPvXaIlDoTzcXocRX6r6RGT
-	 ZwHGs9+hUtcYcw15LkGvB1E5ULBKUsM9o3ae1vpZLkDx0YVk1PnJBRug6Awy5IOjiI
-	 E5oueXZcBlbJrWYm1W/aAgiKttqRJeXJwZFEo6qmcMuqzPkHnD4HkJyA+L1xEeTcex
-	 Rj8YSgEfktQ0A==
+	s=default; t=1793380666;
+	bh=sqvk9y+xTFWHpCgM5H9Ko7hGpgBTvKSCtt+jSraCsII=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=lsrn5v6HQK38NbS1zX9GlRE8cHwxncGp+Lwa6oGblfgJmkn2AHWTKRMHnICVIdXJ0
+	 lQTbB9LZ9DEZXnL4eKT+XhL61cDvprbwdE/eGaZUsiLmL7VYUlQjTzz2fvGQLgSjUM
+	 Bg4adUX18m8lCz/nd+91HMUCcKQ92sMCgpXNEqOLH7Om+WdqZGNKd8X6w/lMgU00ob
+	 AcGWnh4FoDJ2ZDriJa2AQja9QvJdTYQK8lp49k1LTFtE7451ZNX2jhx/XJaXg7YkNu
+	 aB616STUBD+6laUYP3AKXfR0iwcp/xDjb5ly6yN/KoRZFeH2L2PAmnaFrJmoMz6KwV
+	 6gzBZwSPifR4A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 05D1980962;
-	Fri, 30 Oct 2026 15:59:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B0D568130A;
+	Fri, 30 Oct 2026 17:17:46 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 30117D38
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:58:59 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id E3DA8362
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 17:17:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 153C440542
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:58:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id BE460403EA
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 17:17:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6Z_Sf6NbxQ8u for <buildroot@buildroot.org>;
- Fri, 30 Oct 2026 15:58:58 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 89A2540541
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793375938;
- b=VRAEi5b1FlP0wO9saQGXJIseSd7AwM/7BuXuYb68+IkNKO5wUiCqmq3JmVWFFmb3n/FX
- BGuSmU+PLyVaNIOyvEcphSA98OO06g3fbOg/fvpLUIj8pDqW6RtgT0tMw7+KIJBU5ksVZ
- R8LN500oYStpNnL+aR2wFDqYSh/7lNvlkmSmO+mb76xz2g1TDm51lgJLyQWXapooukJOE
- AfYQrwYRZySpFn8ezE2V8m81OtG9jlmqS38XpDnc+ktR0DeldQ7SD6yZ0pZP+3MsU0Zr6
- U0mQEnxIPMltrCoVZLnGaUQ2WaPngvT0obQcRZC6dMsK3B3t1+nxIC1VArOqTllWvEQ==
+ id K9D86u0SMTlZ for <buildroot@buildroot.org>;
+ Fri, 30 Oct 2026 17:17:42 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 3910C400AF
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793380662;
+ b=krz3ikQyqh/+kAxKW9iLlVKeYQGAwDwsZIyO/H3yFpbsA3VhYbP0Rz+hSjlLBMN0zW98
+ x53hLJ6+PMFmjkJNj14txCUMMO6k3e0OIYbqxSB1eqQC+zfZYWxoXMllUY7/ZI8cpV1TA
+ hqN0GlUD71ulJVdBCkJkfdB0QLymNt+5gzNUG1F112ml8U4WkGNs/Ib52F2nP6zc2dEmF
+ bkRJShsTrsR1Vxfzm1/9LntDFvXh8aPlKrkah4M5/u5Uw7bbA4woRRUXMwkeAzr4KG/NR
+ k1PKiP2wVWIswalaA5bHbp/tGlW8qUzcblqUsL49KFu7WttyjQqIMm6ILUekMLEUhdw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793375938;
- h=Received-SPF:DKIM-Signature:X-UI-Sender-Class:Received:Message-ID:
- Date:MIME-Version:User-Agent:Subject:To:Cc:References:
- Content-Language:From:Autocrypt:In-Reply-To:Content-Type:
- Content-Transfer-Encoding:X-Provags-ID:X-Spam-Flag:UI-OutboundReport;
- bh=rIqaLyLkChoKW/HYz3GRPpWa+FjM+3QeYJQvS+4xnu0=;
- b=YyvVc2VNfh4OOh/m0cgrj6nwo/h+xsfPQUmg6eRt4lK3ez8YXEqEVucrfQaJHxvXAjSs
- 5ECXdTZYVgouS6bUZhF6DMN8s0wMSw4bTLEZfSBXuURHoXoDyLl/3M0UscNEEE8bBtVpc
- M+zp+Utb5Ko4c8ECVhPHdSzSug8E6Uwgu5NYmZVrr2lduGZcvkfWipxsCRAS+yKzMFa1+
- fMbo6AF2Fh2sz34CS16bcWhKuB4JDWzKuqqeiRJ6AIvF5zTBDDPvbaSKmyKIhpE/TQ8sj
- EtE1RKUyBHbUze0I/cMVGXwmDdZHHWsfvjXrY1fFyav5RiEFe8LB3WWCDZMTFwswe2g==
+ c=relaxed/relaxed; t=1793380662;
+ h=Received-SPF:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+ Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+ bh=ol5g7ygJ4pSU5L/SQ8uIgL5quk4d1zuI1gm5nFG8vMY=;
+ b=pHCKChn4DAEo3dhQGPTOZaNb4b1HpE0AK0CGYIfe722kvkFZ0gjbMDPHctpFwJV8KEiW
+ IS0NjYNSfZq4OH1Av/J083DbnaX9p3Pqy6DCINYj/EVm1pS26NDFZkcxwifDzB72GugRh
+ KPXyNQ20Xwm6oPpse5YblPGOIGONWTPdGNEO0XCB6vbY5mffxmcbasOrSOcgllYziIKZK
+ J4NINBPXH26bZHqfzp1n151rQVJ53LKZhiZVoXlylV3MoxbcFQwxFOwjMPorOQjPErBAm
+ 1BIT9p0w4xux3ERobTBEc+aGvQHzmCdSnx5LBW72g2j5SECk8PM31HrL0kOugpkoErA==
 ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
- dmarc=pass header.from=gmx.de;
- dkim=pass header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=JZdZcu41; 
- arc=none smtp.remote-ip=212.227.15.19
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 89A2540541
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:58:56 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MgvrL-1wtEPL0Pc5-00hLJ5; Fri, 30
- Oct 2026 16:58:54 +0100
-Message-ID: <7624e18f-85a2-4381-85ed-2037979c8943@gmx.de>
-Date: Fri, 30 Oct 2026 16:58:53 +0100
+ dmarc=pass header.from=free.fr;
+ dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=nB6hLEbO; 
+ arc=none smtp.remote-ip=212.27.42.5
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3910C400AF
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 17:17:41 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:1065:2100:52d9:65fe:2df3:c492])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 22C6460134;
+ Fri, 30 Oct 2026 18:16:51 +0100 (CET)
+To: buildroot@buildroot.org
+Date: Fri, 30 Oct 2026 18:16:32 +0100
+Message-ID: <20261030171632.206916-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.56.0
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Angelo Compagnucci <angelo.compagnucci@gmail.com>, buildroot@buildroot.org
-Cc: Francis Laniel <flaniel@linux.microsoft.com>
-References: <20261030152434.3738285-1-angelo.compagnucci@gmail.com>
-Content-Language: en-US, de-DE-1901, de-DE
-Autocrypt: addr=fiona.klute@gmx.de; keydata=
- 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
-In-Reply-To: <20261030152434.3738285-1-angelo.compagnucci@gmail.com>
-X-Provags-ID: V03:K1:7ODxDpAUaN1h0XwcEmQ034qXRbkMsLUlKULqmjC3Cxw9n1wuzQF
- +QCpZSYy8AVYG7LqdecVYpJRkEzdWyP1NToBofNM3BOE/hECjmCXjz0N7KsqLwoYySCpar5
- raR0LJSqxFpC+4JinUSrU8nvrQvPqM8IlXxFTmqnwhREcg4lFe5POsQu26tOeZ5I+RIoNQI
- Sr3C59aJVrOath3wLYDeg==
-UI-OutboundReport: notjunk:1;M01:P0:iBgwIc5eeh4=;2et3UdyZV/grmwO6A+hujgxcPVz
- 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
-Subject: Re: [Buildroot] [PATCH 1/9] package/uthash: new package
+Subject: [Buildroot] [PATCH 1/1] configs: remove undeeded BR2_aarch64=y now
+ it is the default
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -270,134 +113,1002 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
+Cc: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@laposte.net>,
+ Bryan Brattlof <bb@ti.com>, Meena Murthy <meena.murthy@amarulasolutions.com>,
+ Masahiro Yamada <yamada.masahiro@socionext.com>,
+ Marcin Niestroj <m.niestroj@grinn-global.com>,
+ Joachim Wiberg <troglobit@gmail.com>, Heiko Thiery <heiko.thiery@gmail.com>,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ Fabio Estevam <festevam@gmail.com>, Javad Rahimi <javad321javad@gmail.com>,
+ Sergey Matyukevich <geomatsi@gmail.com>, Romain Naour <romain.naour@gmail.com>,
+ Brandon Maier <brandon.maier@collins.com>,
+ Roberto Medina <robertoxmed@gmail.com>,
+ Jagan Teki <jagan@amarulasolutions.com>, Neal Frager <neal.frager@amd.com>,
+ Michael Trimarchi <michael@amarulasolutions.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Kilian Zinnecker <kilian.zinnecker@mail.de>,
+ Gary Bisson <bisson.gary@gmail.com>,
+ =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay+rtone@gmail.com>,
+ Patrik Olsson <johan.patrik.olsson@gmail.com>,
+ =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>,
+ Vincent Jardin <vjardin@free.fr>, Julien Olivain <ju.o@free.fr>,
+ Dagg Stompler <daggs@gmx.com>, Michael Durrant <mdurrant@arcturusnetworks.com>,
+ Gilles Talis <gilles.talis@gmail.com>, Akhilesh Nema <nemaakhilesh@gmail.com>,
+ Xuanhao Shi <X15000177@gmail.com>, Michael Walle <michael@walle.cc>,
+ Stefan Nickl <Stefan.Nickl@gmail.com>,
+ Stephane Viau <stephane.viau@oss.nxp.com>, Dick Olsson <hi@senzilla.io>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Bilal Wasim <bilalwasim676@gmail.com>, Anand Gadiyar <gadiyar@ti.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-22.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=4.0.1
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Hi Angleo,
+Buildroot commit [1] changed the default CPU architecture from i386
+to Arm AArch64. Since Buildroot defconfigs are supposed to be kept
+in their minimal form as generated by "make savedefconfig", all
+defconfigs using the AArch64 architecture are now including a
+superfluous BR2_aarch64=y.
 
-when you send a new version of a patch (or series) you sent before, 
-please make sure to set the version when generating the patches (git 
-format-patch -v N), and note the changes between the two in the patch 
-notes (and cover letter, if any). It's confusing if there are two (or 
-more) patches with identical titles in the mailbox.
+This commit removes BR2_aarch64=y from all defconfigs using AArch64
+architecture.
 
-Best regards,
-Fiona
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/86240fa45d11e3388968520b4a35f0a40954c132
 
-Am 30.10.26 um 16:24 schrieb Angelo Compagnucci:
-> uthash is a set of C macros implementing hash tables, linked lists,
-> dynamic arrays and other data structures, provided as headers only.
-> 
-> It is needed by falcosecurity-libs, which otherwise downloads uthash.h
-> at build time.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
->   DEVELOPERS                 |  1 +
->   package/Config.in          |  1 +
->   package/sysdig/Config.in   |  2 +-
->   package/uthash/Config.in   |  8 ++++++++
->   package/uthash/uthash.hash |  3 +++
->   package/uthash/uthash.mk   | 19 +++++++++++++++++++
->   6 files changed, 33 insertions(+), 1 deletion(-)
->   create mode 100644 package/uthash/Config.in
->   create mode 100644 package/uthash/uthash.hash
->   create mode 100644 package/uthash/uthash.mk
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index b4ada4e1f9..8ca72bec84 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -261,6 +261,7 @@ F:	package/sam-ba/
->   F:	package/sshguard/
->   F:	package/sunwait/
->   F:	package/sysdig/
-> +F:	package/uthash/
->   
->   N:	Andy Shevchenko <andy.shevchenko@gmail.com>
->   F:	package/fb-test-app/
-> diff --git a/package/Config.in b/package/Config.in
-> index 796c4f1ad6..02932e5ac1 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -2323,6 +2323,7 @@ endif
->   	source "package/tllist/Config.in"
->   	source "package/tz/Config.in"
->   	source "package/tzdata/Config.in"
-> +	source "package/uthash/Config.in"
->   	source "package/uvw/Config.in"
->   	source "package/volk/Config.in"
->   	source "package/xapian/Config.in"
-> diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-> index 73ac03e240..038a9734aa 100644
-> --- a/package/sysdig/Config.in
-> +++ b/package/sysdig/Config.in
-> @@ -24,7 +24,7 @@ config BR2_PACKAGE_SYSDIG
->   
->   	  https://github.com/draios/sysdig/wiki
->   
-> -comment "sysdig needs a glibc toolchain w/ C++, threads, wchar, gcc >= 10, dynamic library, a Linux kernel, and luajit or lua 5.1 to be built"
-> +comment "sysdig needs a glibc or musl toolchain w/ C++, threads, wchar, gcc >= 10, dynamic library, a Linux kernel, and luajit or lua 5.1 to be built"
->   	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
->   	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
->   	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
-> diff --git a/package/uthash/Config.in b/package/uthash/Config.in
-> new file mode 100644
-> index 0000000000..e19c277abd
-> --- /dev/null
-> +++ b/package/uthash/Config.in
-> @@ -0,0 +1,8 @@
-> +config BR2_PACKAGE_UTHASH
-> +	bool "uthash"
-> +	help
-> +	  uthash is a set of C macros implementing hash tables, linked
-> +	  lists, dynamic arrays and other data structures, provided as
-> +	  headers only.
-> +
-> +	  https://troydhanson.github.io/uthash/
-> diff --git a/package/uthash/uthash.hash b/package/uthash/uthash.hash
-> new file mode 100644
-> index 0000000000..37a5a66aba
-> --- /dev/null
-> +++ b/package/uthash/uthash.hash
-> @@ -0,0 +1,3 @@
-> +# Locally computed
-> +sha256  387ba027946d7c64e9aa19cc53b2edcd714f8f9dca9fa8e3aaef17e0e8e3d736  uthash-2.4.0.tar.gz
-> +sha256  40f48f89e1d0095bf1c5fb4d00affd74959c3ff77463b672cf7fac547d1d6465  LICENSE
-> diff --git a/package/uthash/uthash.mk b/package/uthash/uthash.mk
-> new file mode 100644
-> index 0000000000..2107a90d56
-> --- /dev/null
-> +++ b/package/uthash/uthash.mk
-> @@ -0,0 +1,19 @@
-> +################################################################################
-> +#
-> +# uthash
-> +#
-> +################################################################################
-> +
-> +UTHASH_VERSION = 2.4.0
-> +UTHASH_SITE = $(call github,troydhanson,uthash,v$(UTHASH_VERSION))
-> +UTHASH_LICENSE = BSD-1-Clause
-> +UTHASH_LICENSE_FILES = LICENSE
-> +UTHASH_INSTALL_STAGING = YES
-> +UTHASH_INSTALL_TARGET = NO
-> +
-> +define UTHASH_INSTALL_STAGING_CMDS
-> +	$(INSTALL) -d $(STAGING_DIR)/usr/include
-> +	$(INSTALL) -m 0644 $(@D)/src/*.h $(STAGING_DIR)/usr/include
-> +endef
-> +
-> +$(eval $(generic-package))
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ configs/aarch64_efi_defconfig               | 1 -
+ configs/arcturus_ucls1012a_defconfig        | 1 -
+ configs/arm_foundationv8_defconfig          | 1 -
+ configs/arm_fvp_ebbr_defconfig              | 1 -
+ configs/avnet_rzboard_v2l_defconfig         | 1 -
+ configs/beagleboneai64_defconfig            | 1 -
+ configs/beagleplay_defconfig                | 1 -
+ configs/beagley_ai_defconfig                | 1 -
+ configs/chromebook_elm_defconfig            | 1 -
+ configs/coolpi_4b_defconfig                 | 1 -
+ configs/engicam_px30_core_defconfig         | 1 -
+ configs/freescale_imx8dxlevk_defconfig      | 1 -
+ configs/freescale_imx8mmevk_defconfig       | 1 -
+ configs/freescale_imx8mnevk_defconfig       | 1 -
+ configs/freescale_imx8mpevk_defconfig       | 1 -
+ configs/freescale_imx8mqevk_defconfig       | 1 -
+ configs/freescale_imx8qmmek_defconfig       | 1 -
+ configs/freescale_imx8qxpmek_defconfig      | 1 -
+ configs/freescale_imx91evk_defconfig        | 1 -
+ configs/freescale_imx91frdm_defconfig       | 1 -
+ configs/freescale_imx93evk_defconfig        | 1 -
+ configs/freescale_imx93frdm_defconfig       | 1 -
+ configs/friendlyarm_nanopi_r2s_defconfig    | 1 -
+ configs/friendlyarm_nanopi_r3s_defconfig    | 1 -
+ configs/globalscale_espressobin_defconfig   | 1 -
+ configs/imx8mm-evk_defconfig                | 1 -
+ configs/imx8mmpico_defconfig                | 1 -
+ configs/imx8mn-ddr4-evk_defconfig           | 1 -
+ configs/imx8mn_bsh_smm_s2_defconfig         | 1 -
+ configs/imx8mn_bsh_smm_s2_pro_defconfig     | 1 -
+ configs/imx8mp-evk_defconfig                | 1 -
+ configs/imx8mqevk_defconfig                 | 1 -
+ configs/imx91frdm_defconfig                 | 1 -
+ configs/imx93-evk_defconfig                 | 1 -
+ configs/imx93frdm_defconfig                 | 1 -
+ configs/iot-gate-imx8_ebbr_defconfig        | 1 -
+ configs/khadas_vim3_defconfig               | 1 -
+ configs/kontron_bl_imx8mm_defconfig         | 1 -
+ configs/kontron_smarc_sal28_defconfig       | 1 -
+ configs/lafrite_defconfig                   | 1 -
+ configs/ls1028ardb_defconfig                | 1 -
+ configs/ls1043a-rdb_defconfig               | 1 -
+ configs/ls1046a-frwy_defconfig              | 1 -
+ configs/ls1046a-rdb_defconfig               | 1 -
+ configs/nexbox_a95x_defconfig               | 1 -
+ configs/nitrogen8m_defconfig                | 1 -
+ configs/nitrogen8mm_defconfig               | 1 -
+ configs/nitrogen8mn_defconfig               | 1 -
+ configs/nitrogen8mp_defconfig               | 1 -
+ configs/nvidia_bf3_defconfig                | 1 -
+ configs/odroidc2_defconfig                  | 1 -
+ configs/olimex_a64_olinuxino_defconfig      | 1 -
+ configs/orangepi_5_plus_defconfig           | 1 -
+ configs/orangepi_pc2_defconfig              | 1 -
+ configs/orangepi_zero2w_defconfig           | 1 -
+ configs/orangepi_zero3_defconfig            | 1 -
+ configs/orangepi_zero_plus2_defconfig       | 1 -
+ configs/orangepi_zero_plus_defconfig        | 1 -
+ configs/pine64_defconfig                    | 1 -
+ configs/polyhex_debix_model_a_defconfig     | 1 -
+ configs/qemu_aarch64_ebbr_defconfig         | 1 -
+ configs/qemu_aarch64_sbsa_defconfig         | 1 -
+ configs/qemu_aarch64_virt_defconfig         | 1 -
+ configs/raspberrypi2_64_defconfig           | 1 -
+ configs/raspberrypi3_64_defconfig           | 1 -
+ configs/raspberrypi4_64_defconfig           | 1 -
+ configs/raspberrypi5_defconfig              | 1 -
+ configs/raspberrypicm4io_64_defconfig       | 1 -
+ configs/raspberrypicm4io_64_uboot_defconfig | 1 -
+ configs/raspberrypicm5io_defconfig          | 1 -
+ configs/raspberrypizero2w_64_defconfig      | 1 -
+ configs/roc_pc_rk3399_defconfig             | 1 -
+ configs/rock4se_defconfig                   | 1 -
+ configs/rock5b_defconfig                    | 1 -
+ configs/rockpro64_defconfig                 | 1 -
+ configs/rockpro64_ebbr_defconfig            | 1 -
+ configs/solidrun_clearfog_gt_8k_defconfig   | 1 -
+ configs/solidrun_macchiatobin_defconfig     | 1 -
+ configs/ti_am62ax_sk_defconfig              | 1 -
+ configs/ti_am62px_sk_defconfig              | 1 -
+ configs/ti_am62x_sk_defconfig               | 1 -
+ configs/ti_am64x_sk_defconfig               | 1 -
+ configs/ti_tda4vm_sk_defconfig              | 1 -
+ configs/versal2_vek385_defconfig            | 1 -
+ configs/versal_vck190_defconfig             | 1 -
+ configs/versal_vek280_defconfig             | 1 -
+ configs/versal_vpk120_defconfig             | 1 -
+ configs/versal_vpk180_defconfig             | 1 -
+ configs/zynqmp_kria_kd240_defconfig         | 1 -
+ configs/zynqmp_kria_kr260_defconfig         | 1 -
+ configs/zynqmp_kria_kv260_defconfig         | 1 -
+ configs/zynqmp_zcu102_defconfig             | 1 -
+ configs/zynqmp_zcu104_defconfig             | 1 -
+ configs/zynqmp_zcu106_defconfig             | 1 -
+ 94 files changed, 94 deletions(-)
+
+diff --git a/configs/aarch64_efi_defconfig b/configs/aarch64_efi_defconfig
+index 78292c0cc4..81475b5f07 100644
+--- a/configs/aarch64_efi_defconfig
++++ b/configs/aarch64_efi_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+diff --git a/configs/arcturus_ucls1012a_defconfig b/configs/arcturus_ucls1012a_defconfig
+index 72f308c86d..a67c36b108 100644
+--- a/configs/arcturus_ucls1012a_defconfig
++++ b/configs/arcturus_ucls1012a_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_4=y
+ BR2_TARGET_GENERIC_HOSTNAME="ucls1012a"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to uCLS1012A-SOM"
+diff --git a/configs/arm_foundationv8_defconfig b/configs/arm_foundationv8_defconfig
+index 61e2f359ce..ff71c9f3e5 100644
+--- a/configs/arm_foundationv8_defconfig
++++ b/configs/arm_foundationv8_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_15=y
+ BR2_GLOBAL_PATCH_DIR="board/arm/foundation-v8/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+diff --git a/configs/arm_fvp_ebbr_defconfig b/configs/arm_fvp_ebbr_defconfig
+index 665f59c130..531c48de13 100644
+--- a/configs/arm_fvp_ebbr_defconfig
++++ b/configs/arm_fvp_ebbr_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+diff --git a/configs/avnet_rzboard_v2l_defconfig b/configs/avnet_rzboard_v2l_defconfig
+index 285aef39bc..69c5ebf293 100644
+--- a/configs/avnet_rzboard_v2l_defconfig
++++ b/configs/avnet_rzboard_v2l_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a55=y
+ BR2_KERNEL_HEADERS_5_10=y
+ BR2_TARGET_GENERIC_HOSTNAME="rzboard_v2l"
+diff --git a/configs/beagleboneai64_defconfig b/configs/beagleboneai64_defconfig
+index b41ea09f3e..13ab2da213 100644
+--- a/configs/beagleboneai64_defconfig
++++ b/configs/beagleboneai64_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a72=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+diff --git a/configs/beagleplay_defconfig b/configs/beagleplay_defconfig
+index 9e45680c31..6fe15740cf 100644
+--- a/configs/beagleplay_defconfig
++++ b/configs/beagleplay_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+diff --git a/configs/beagley_ai_defconfig b/configs/beagley_ai_defconfig
+index d0a3bf58c4..14f5163561 100644
+--- a/configs/beagley_ai_defconfig
++++ b/configs/beagley_ai_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_ARM_FPU_VFPV4=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+diff --git a/configs/chromebook_elm_defconfig b/configs/chromebook_elm_defconfig
+index a43b620e1b..b38df203ed 100644
+--- a/configs/chromebook_elm_defconfig
++++ b/configs/chromebook_elm_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a72_a53=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_GLOBAL_PATCH_DIR="board/chromebook/elm/patches"
+diff --git a/configs/coolpi_4b_defconfig b/configs/coolpi_4b_defconfig
+index c9b5a86758..85ee513b3a 100644
+--- a/configs/coolpi_4b_defconfig
++++ b/configs/coolpi_4b_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a76_a55=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_14=y
+ BR2_GLOBAL_PATCH_DIR="board/coolpi/coolpi-4b/patches"
+diff --git a/configs/engicam_px30_core_defconfig b/configs/engicam_px30_core_defconfig
+index d59effa96f..e485ab9272 100644
+--- a/configs/engicam_px30_core_defconfig
++++ b/configs/engicam_px30_core_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a35=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_GLOBAL_PATCH_DIR="board/engicam/px30core/patches"
+diff --git a/configs/freescale_imx8dxlevk_defconfig b/configs/freescale_imx8dxlevk_defconfig
+index 5ec0860a52..74e99a7eb2 100644
+--- a/configs/freescale_imx8dxlevk_defconfig
++++ b/configs/freescale_imx8dxlevk_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a35=y
+ BR2_ARM_FPU_VFPV3=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+diff --git a/configs/freescale_imx8mmevk_defconfig b/configs/freescale_imx8mmevk_defconfig
+index f37c9ca935..8c479d94b5 100644
+--- a/configs/freescale_imx8mmevk_defconfig
++++ b/configs/freescale_imx8mmevk_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_ARM_FPU_VFPV3=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/freescale/imx8mmevk/patches"
+diff --git a/configs/freescale_imx8mnevk_defconfig b/configs/freescale_imx8mnevk_defconfig
+index 057f2eff87..fa8beee4e0 100644
+--- a/configs/freescale_imx8mnevk_defconfig
++++ b/configs/freescale_imx8mnevk_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_ARM_FPU_VFPV3=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/freescale/imx8mnevk/patches"
+diff --git a/configs/freescale_imx8mpevk_defconfig b/configs/freescale_imx8mpevk_defconfig
+index 9a5759ca04..33294760a9 100644
+--- a/configs/freescale_imx8mpevk_defconfig
++++ b/configs/freescale_imx8mpevk_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_ARM_FPU_VFPV3=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/freescale/imx8mpevk/patches"
+diff --git a/configs/freescale_imx8mqevk_defconfig b/configs/freescale_imx8mqevk_defconfig
+index 7a7d8f7e86..eaa768b51c 100644
+--- a/configs/freescale_imx8mqevk_defconfig
++++ b/configs/freescale_imx8mqevk_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_ARM_FPU_VFPV3=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/freescale/imx8mqevk/patches"
+diff --git a/configs/freescale_imx8qmmek_defconfig b/configs/freescale_imx8qmmek_defconfig
+index 6740d3915f..fb5e11cd64 100644
+--- a/configs/freescale_imx8qmmek_defconfig
++++ b/configs/freescale_imx8qmmek_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_ARM_FPU_VFPV4=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/freescale/imx8qmmek/patches"
+diff --git a/configs/freescale_imx8qxpmek_defconfig b/configs/freescale_imx8qxpmek_defconfig
+index ef5bef7dc6..e6136c4cbb 100644
+--- a/configs/freescale_imx8qxpmek_defconfig
++++ b/configs/freescale_imx8qxpmek_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a35=y
+ BR2_ARM_FPU_VFPV3=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+diff --git a/configs/freescale_imx91evk_defconfig b/configs/freescale_imx91evk_defconfig
+index 479ff6a2e0..1d751a26ef 100644
+--- a/configs/freescale_imx91evk_defconfig
++++ b/configs/freescale_imx91evk_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a55=y
+ BR2_ARM_FPU_VFPV4D16=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+diff --git a/configs/freescale_imx91frdm_defconfig b/configs/freescale_imx91frdm_defconfig
+index 4e94b29075..a4e8e9e726 100644
+--- a/configs/freescale_imx91frdm_defconfig
++++ b/configs/freescale_imx91frdm_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a55=y
+ BR2_ARM_FPU_VFPV4D16=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+diff --git a/configs/freescale_imx93evk_defconfig b/configs/freescale_imx93evk_defconfig
+index 0a39859342..09957b213a 100644
+--- a/configs/freescale_imx93evk_defconfig
++++ b/configs/freescale_imx93evk_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a55=y
+ BR2_ARM_FPU_VFPV4D16=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+diff --git a/configs/freescale_imx93frdm_defconfig b/configs/freescale_imx93frdm_defconfig
+index 788af67e37..c25fb57758 100644
+--- a/configs/freescale_imx93frdm_defconfig
++++ b/configs/freescale_imx93frdm_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a55=y
+ BR2_ARM_FPU_VFPV4D16=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+diff --git a/configs/friendlyarm_nanopi_r2s_defconfig b/configs/friendlyarm_nanopi_r2s_defconfig
+index 6250237707..551f0cf2be 100644
+--- a/configs/friendlyarm_nanopi_r2s_defconfig
++++ b/configs/friendlyarm_nanopi_r2s_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_ARM_FPU_VFPV4=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+diff --git a/configs/friendlyarm_nanopi_r3s_defconfig b/configs/friendlyarm_nanopi_r3s_defconfig
+index 971a0ae851..5bbc2de911 100644
+--- a/configs/friendlyarm_nanopi_r3s_defconfig
++++ b/configs/friendlyarm_nanopi_r3s_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a55=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+diff --git a/configs/globalscale_espressobin_defconfig b/configs/globalscale_espressobin_defconfig
+index 5b4f6dcf55..321ca4904f 100644
+--- a/configs/globalscale_espressobin_defconfig
++++ b/configs/globalscale_espressobin_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_ARM_FPU_VFPV4=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Marvell ESPRESSObin"
+diff --git a/configs/imx8mm-evk_defconfig b/configs/imx8mm-evk_defconfig
+index 00fe2fa761..9f701d934c 100644
+--- a/configs/imx8mm-evk_defconfig
++++ b/configs/imx8mm-evk_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_ARM_FPU_VFPV3=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/freescale/imx8mm-evk/patches"
+diff --git a/configs/imx8mmpico_defconfig b/configs/imx8mmpico_defconfig
+index d1836db61a..5355eaec9b 100644
+--- a/configs/imx8mmpico_defconfig
++++ b/configs/imx8mmpico_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ BR2_GLOBAL_PATCH_DIR="board/technexion/imx8mmpico/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+diff --git a/configs/imx8mn-ddr4-evk_defconfig b/configs/imx8mn-ddr4-evk_defconfig
+index 66c95315f0..6255ede0c1 100644
+--- a/configs/imx8mn-ddr4-evk_defconfig
++++ b/configs/imx8mn-ddr4-evk_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_ARM_FPU_VFPV3=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/freescale/imx8mn-evk/patches"
+diff --git a/configs/imx8mn_bsh_smm_s2_defconfig b/configs/imx8mn_bsh_smm_s2_defconfig
+index 3364ad15cf..761ed2a615 100644
+--- a/configs/imx8mn_bsh_smm_s2_defconfig
++++ b/configs/imx8mn_bsh_smm_s2_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/bsh/common/imx8mn-bsh-smm-s2/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+diff --git a/configs/imx8mn_bsh_smm_s2_pro_defconfig b/configs/imx8mn_bsh_smm_s2_pro_defconfig
+index 17f834130d..482aeea3bb 100644
+--- a/configs/imx8mn_bsh_smm_s2_pro_defconfig
++++ b/configs/imx8mn_bsh_smm_s2_pro_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/bsh/common/imx8mn-bsh-smm-s2/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+diff --git a/configs/imx8mp-evk_defconfig b/configs/imx8mp-evk_defconfig
+index 2cb7ecbbde..12db057a44 100644
+--- a/configs/imx8mp-evk_defconfig
++++ b/configs/imx8mp-evk_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_ARM_FPU_VFPV3=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/freescale/imx8mp-evk/patches"
+diff --git a/configs/imx8mqevk_defconfig b/configs/imx8mqevk_defconfig
+index bac68f40a6..aa23296bfd 100644
+--- a/configs/imx8mqevk_defconfig
++++ b/configs/imx8mqevk_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_ARM_FPU_VFPV3=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+diff --git a/configs/imx91frdm_defconfig b/configs/imx91frdm_defconfig
+index e77d6bfd03..5ea7429a72 100644
+--- a/configs/imx91frdm_defconfig
++++ b/configs/imx91frdm_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a55=y
+ BR2_ARM_FPU_VFPV4D16=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+diff --git a/configs/imx93-evk_defconfig b/configs/imx93-evk_defconfig
+index cf03bbe3c7..8fd428dc79 100644
+--- a/configs/imx93-evk_defconfig
++++ b/configs/imx93-evk_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a55=y
+ BR2_ARM_FPU_VFPV4D16=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+diff --git a/configs/imx93frdm_defconfig b/configs/imx93frdm_defconfig
+index e97eb28c02..07b024ad3c 100644
+--- a/configs/imx93frdm_defconfig
++++ b/configs/imx93frdm_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a55=y
+ BR2_ARM_FPU_VFPV4D16=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+diff --git a/configs/iot-gate-imx8_ebbr_defconfig b/configs/iot-gate-imx8_ebbr_defconfig
+index 460494302a..f9f9bbabbf 100644
+--- a/configs/iot-gate-imx8_ebbr_defconfig
++++ b/configs/iot-gate-imx8_ebbr_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+diff --git a/configs/khadas_vim3_defconfig b/configs/khadas_vim3_defconfig
+index 32e39fc64b..7e88af270d 100644
+--- a/configs/khadas_vim3_defconfig
++++ b/configs/khadas_vim3_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a73_a53=y
+ BR2_ARM_FPU_VFPV4=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+diff --git a/configs/kontron_bl_imx8mm_defconfig b/configs/kontron_bl_imx8mm_defconfig
+index ba3c58693b..b36693e722 100644
+--- a/configs/kontron_bl_imx8mm_defconfig
++++ b/configs/kontron_bl_imx8mm_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_ARM_FPU_VFPV3=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_16=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc2"
+diff --git a/configs/kontron_smarc_sal28_defconfig b/configs/kontron_smarc_sal28_defconfig
+index b1e175b7b2..08ff88e8a5 100644
+--- a/configs/kontron_smarc_sal28_defconfig
++++ b/configs/kontron_smarc_sal28_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a72=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+diff --git a/configs/lafrite_defconfig b/configs/lafrite_defconfig
+index f23fd0ca99..73a033ab1d 100644
+--- a/configs/lafrite_defconfig
++++ b/configs/lafrite_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+diff --git a/configs/ls1028ardb_defconfig b/configs/ls1028ardb_defconfig
+index ec3828e74a..9cdc16fd66 100644
+--- a/configs/ls1028ardb_defconfig
++++ b/configs/ls1028ardb_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a72=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
+ BR2_GLOBAL_PATCH_DIR="board/freescale/ls1028ardb/patches"
+diff --git a/configs/ls1043a-rdb_defconfig b/configs/ls1043a-rdb_defconfig
+index e40fade23b..44d5221e9e 100644
+--- a/configs/ls1043a-rdb_defconfig
++++ b/configs/ls1043a-rdb_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+ BR2_GLOBAL_PATCH_DIR="board/freescale/ls1043a-rdb/patches"
+diff --git a/configs/ls1046a-frwy_defconfig b/configs/ls1046a-frwy_defconfig
+index 346931bc2d..f7a56fa7d3 100644
+--- a/configs/ls1046a-frwy_defconfig
++++ b/configs/ls1046a-frwy_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a72=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+diff --git a/configs/ls1046a-rdb_defconfig b/configs/ls1046a-rdb_defconfig
+index b604f1f33a..5a43f37ef4 100644
+--- a/configs/ls1046a-rdb_defconfig
++++ b/configs/ls1046a-rdb_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a72=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
+ BR2_TOOLCHAIN_BUILDROOT_CXX=y
+diff --git a/configs/nexbox_a95x_defconfig b/configs/nexbox_a95x_defconfig
+index 2c7ddd98b6..5f270e108d 100644
+--- a/configs/nexbox_a95x_defconfig
++++ b/configs/nexbox_a95x_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ BR2_SYSTEM_DHCP="eth0"
+diff --git a/configs/nitrogen8m_defconfig b/configs/nitrogen8m_defconfig
+index 92d50051ba..3066dcbc52 100644
+--- a/configs/nitrogen8m_defconfig
++++ b/configs/nitrogen8m_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+diff --git a/configs/nitrogen8mm_defconfig b/configs/nitrogen8mm_defconfig
+index 91cdcd7a96..1189b43103 100644
+--- a/configs/nitrogen8mm_defconfig
++++ b/configs/nitrogen8mm_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+diff --git a/configs/nitrogen8mn_defconfig b/configs/nitrogen8mn_defconfig
+index 746c9faf29..57b7143539 100644
+--- a/configs/nitrogen8mn_defconfig
++++ b/configs/nitrogen8mn_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+diff --git a/configs/nitrogen8mp_defconfig b/configs/nitrogen8mp_defconfig
+index 867ce7c4eb..c634a6d82a 100644
+--- a/configs/nitrogen8mp_defconfig
++++ b/configs/nitrogen8mp_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+diff --git a/configs/nvidia_bf3_defconfig b/configs/nvidia_bf3_defconfig
+index 42bcb1299d..51705c1c09 100644
+--- a/configs/nvidia_bf3_defconfig
++++ b/configs/nvidia_bf3_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a78=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_11=y
+ BR2_GLOBAL_PATCH_DIR="board/nvidia/bf3/patches"
+diff --git a/configs/odroidc2_defconfig b/configs/odroidc2_defconfig
+index acb6a03bf0..28a7e24c05 100644
+--- a/configs/odroidc2_defconfig
++++ b/configs/odroidc2_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_7=y
+ BR2_TARGET_GENERIC_HOSTNAME="odroidc2"
+ BR2_TARGET_GENERIC_GETTY_PORT="ttyAML0"
+diff --git a/configs/olimex_a64_olinuxino_defconfig b/configs/olimex_a64_olinuxino_defconfig
+index 6173fc8c20..017004b1ee 100644
+--- a/configs/olimex_a64_olinuxino_defconfig
++++ b/configs/olimex_a64_olinuxino_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_ARM_FPU_VFPV4=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
+ BR2_GLOBAL_PATCH_DIR="board/olimex/a64-olinuxino/patches"
+diff --git a/configs/orangepi_5_plus_defconfig b/configs/orangepi_5_plus_defconfig
+index 53a633f639..dccbfc353d 100644
+--- a/configs/orangepi_5_plus_defconfig
++++ b/configs/orangepi_5_plus_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a76_a55=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-5-plus/patches"
+diff --git a/configs/orangepi_pc2_defconfig b/configs/orangepi_pc2_defconfig
+index 180c744bae..df16cdab8a 100644
+--- a/configs/orangepi_pc2_defconfig
++++ b/configs/orangepi_pc2_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_ARM_FPU_VFPV4=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Orangepi PC2"
+diff --git a/configs/orangepi_zero2w_defconfig b/configs/orangepi_zero2w_defconfig
+index b5702e48f0..f532eff8c9 100644
+--- a/configs/orangepi_zero2w_defconfig
++++ b/configs/orangepi_zero2w_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_ARM_FPU_VFPV4=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-zero2w/patches"
+diff --git a/configs/orangepi_zero3_defconfig b/configs/orangepi_zero3_defconfig
+index 53c542ab1e..fd70471553 100644
+--- a/configs/orangepi_zero3_defconfig
++++ b/configs/orangepi_zero3_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_ARM_FPU_VFPV4=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-zero3/patches"
+diff --git a/configs/orangepi_zero_plus2_defconfig b/configs/orangepi_zero_plus2_defconfig
+index 2b7ad2064d..6433517be8 100644
+--- a/configs/orangepi_zero_plus2_defconfig
++++ b/configs/orangepi_zero_plus2_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_ARM_FPU_VFPV4=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/orangepi/orangepi-zero-plus2/patches"
+diff --git a/configs/orangepi_zero_plus_defconfig b/configs/orangepi_zero_plus_defconfig
+index 48c8e993f0..7b1f101f70 100644
+--- a/configs/orangepi_zero_plus_defconfig
++++ b/configs/orangepi_zero_plus_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_ARM_FPU_VFPV4=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Orangepi Zero Plus"
+diff --git a/configs/pine64_defconfig b/configs/pine64_defconfig
+index 9a77452a51..26fb1ec69a 100644
+--- a/configs/pine64_defconfig
++++ b/configs/pine64_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_ARM_FPU_VFPV4=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+diff --git a/configs/polyhex_debix_model_a_defconfig b/configs/polyhex_debix_model_a_defconfig
+index 6f8ec49410..9d4d02aa6f 100644
+--- a/configs/polyhex_debix_model_a_defconfig
++++ b/configs/polyhex_debix_model_a_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_ARM_FPU_VFPV3=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/polyhex/debix-model-a/patches"
+diff --git a/configs/qemu_aarch64_ebbr_defconfig b/configs/qemu_aarch64_ebbr_defconfig
+index 8d20813044..fcbe7ae1ab 100644
+--- a/configs/qemu_aarch64_ebbr_defconfig
++++ b/configs/qemu_aarch64_ebbr_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+diff --git a/configs/qemu_aarch64_sbsa_defconfig b/configs/qemu_aarch64_sbsa_defconfig
+index 56c160c85a..880a21a739 100644
+--- a/configs/qemu_aarch64_sbsa_defconfig
++++ b/configs/qemu_aarch64_sbsa_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_neoverse_n2=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+diff --git a/configs/qemu_aarch64_virt_defconfig b/configs/qemu_aarch64_virt_defconfig
+index 19c8b86ae6..3fb87a064d 100644
+--- a/configs/qemu_aarch64_virt_defconfig
++++ b/configs/qemu_aarch64_virt_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
+ BR2_GLOBAL_PATCH_DIR="board/qemu/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+diff --git a/configs/raspberrypi2_64_defconfig b/configs/raspberrypi2_64_defconfig
+index f8cadcb731..2fa5523883 100644
+--- a/configs/raspberrypi2_64_defconfig
++++ b/configs/raspberrypi2_64_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_ARM_FPU_VFPV4=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
+index 31568129ac..b1b171ed05 100644
+--- a/configs/raspberrypi3_64_defconfig
++++ b/configs/raspberrypi3_64_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_ARM_FPU_VFPV4=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+diff --git a/configs/raspberrypi4_64_defconfig b/configs/raspberrypi4_64_defconfig
+index ce79952ff7..2f7476f05d 100644
+--- a/configs/raspberrypi4_64_defconfig
++++ b/configs/raspberrypi4_64_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a72=y
+ BR2_ARM_FPU_VFPV4=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+diff --git a/configs/raspberrypi5_defconfig b/configs/raspberrypi5_defconfig
+index 63432f45d5..6043db67da 100644
+--- a/configs/raspberrypi5_defconfig
++++ b/configs/raspberrypi5_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a76=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+diff --git a/configs/raspberrypicm4io_64_defconfig b/configs/raspberrypicm4io_64_defconfig
+index 53f5193db4..dab24c1e8f 100644
+--- a/configs/raspberrypicm4io_64_defconfig
++++ b/configs/raspberrypicm4io_64_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a72=y
+ BR2_ARM_FPU_VFPV4=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+diff --git a/configs/raspberrypicm4io_64_uboot_defconfig b/configs/raspberrypicm4io_64_uboot_defconfig
+index 84ce16b993..01c95a0efe 100644
+--- a/configs/raspberrypicm4io_64_uboot_defconfig
++++ b/configs/raspberrypicm4io_64_uboot_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a72=y
+ BR2_ARM_FPU_VFPV4=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+diff --git a/configs/raspberrypicm5io_defconfig b/configs/raspberrypicm5io_defconfig
+index 706f759832..adb92805e1 100644
+--- a/configs/raspberrypicm5io_defconfig
++++ b/configs/raspberrypicm5io_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a76=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+diff --git a/configs/raspberrypizero2w_64_defconfig b/configs/raspberrypizero2w_64_defconfig
+index e926f6f23d..66b070e43f 100644
+--- a/configs/raspberrypizero2w_64_defconfig
++++ b/configs/raspberrypizero2w_64_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_ARM_FPU_VFPV4=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+diff --git a/configs/roc_pc_rk3399_defconfig b/configs/roc_pc_rk3399_defconfig
+index c5c6771bdf..636e986f04 100644
+--- a/configs/roc_pc_rk3399_defconfig
++++ b/configs/roc_pc_rk3399_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a72_a53=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
+ BR2_GLOBAL_PATCH_DIR="board/firefly/roc-rk3399-pc/patches"
+diff --git a/configs/rock4se_defconfig b/configs/rock4se_defconfig
+index c4e13f6a39..8956a10cfa 100644
+--- a/configs/rock4se_defconfig
++++ b/configs/rock4se_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a72_a53=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+diff --git a/configs/rock5b_defconfig b/configs/rock5b_defconfig
+index bef12adaa4..87aa1e74b5 100644
+--- a/configs/rock5b_defconfig
++++ b/configs/rock5b_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a76_a55=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_12=y
+ BR2_GLOBAL_PATCH_DIR="board/radxa/rock5b/patches"
+diff --git a/configs/rockpro64_defconfig b/configs/rockpro64_defconfig
+index c31365ca6b..fae585f446 100644
+--- a/configs/rockpro64_defconfig
++++ b/configs/rockpro64_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a72_a53=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+diff --git a/configs/rockpro64_ebbr_defconfig b/configs/rockpro64_ebbr_defconfig
+index 0a8fc46e58..f1fc40e61c 100644
+--- a/configs/rockpro64_ebbr_defconfig
++++ b/configs/rockpro64_ebbr_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a72_a53=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+diff --git a/configs/solidrun_clearfog_gt_8k_defconfig b/configs/solidrun_clearfog_gt_8k_defconfig
+index 4187f68c2b..72c0f1006b 100644
+--- a/configs/solidrun_clearfog_gt_8k_defconfig
++++ b/configs/solidrun_clearfog_gt_8k_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_TARGET_GENERIC_HOSTNAME="clearfog-gt-8k"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for SolidRun Clearfog GT-8K"
+diff --git a/configs/solidrun_macchiatobin_defconfig b/configs/solidrun_macchiatobin_defconfig
+index ed511bda99..2a5005ebf4 100644
+--- a/configs/solidrun_macchiatobin_defconfig
++++ b/configs/solidrun_macchiatobin_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
+ BR2_TARGET_GENERIC_HOSTNAME="mcbin"
+ BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for Marvell MacchiatoBin"
+diff --git a/configs/ti_am62ax_sk_defconfig b/configs/ti_am62ax_sk_defconfig
+index a4c35a106e..804900d6a7 100644
+--- a/configs/ti_am62ax_sk_defconfig
++++ b/configs/ti_am62ax_sk_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+diff --git a/configs/ti_am62px_sk_defconfig b/configs/ti_am62px_sk_defconfig
+index c91f3094a2..1c64b7389d 100644
+--- a/configs/ti_am62px_sk_defconfig
++++ b/configs/ti_am62px_sk_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+diff --git a/configs/ti_am62x_sk_defconfig b/configs/ti_am62x_sk_defconfig
+index 72df755117..ed4fbf0ba1 100644
+--- a/configs/ti_am62x_sk_defconfig
++++ b/configs/ti_am62x_sk_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+diff --git a/configs/ti_am64x_sk_defconfig b/configs/ti_am64x_sk_defconfig
+index f914436d2d..1166d91ed2 100644
+--- a/configs/ti_am64x_sk_defconfig
++++ b/configs/ti_am64x_sk_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+diff --git a/configs/ti_tda4vm_sk_defconfig b/configs/ti_tda4vm_sk_defconfig
+index be2529fb37..795ecf4919 100644
+--- a/configs/ti_tda4vm_sk_defconfig
++++ b/configs/ti_tda4vm_sk_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a72=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+diff --git a/configs/versal2_vek385_defconfig b/configs/versal2_vek385_defconfig
+index 89d2385d1d..5fe5ecdc62 100644
+--- a/configs/versal2_vek385_defconfig
++++ b/configs/versal2_vek385_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a78=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+diff --git a/configs/versal_vck190_defconfig b/configs/versal_vck190_defconfig
+index 5499f1a229..e8c775ec3a 100644
+--- a/configs/versal_vck190_defconfig
++++ b/configs/versal_vck190_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a72=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+diff --git a/configs/versal_vek280_defconfig b/configs/versal_vek280_defconfig
+index 4072e7cb22..1fba1a268c 100644
+--- a/configs/versal_vek280_defconfig
++++ b/configs/versal_vek280_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a72=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+diff --git a/configs/versal_vpk120_defconfig b/configs/versal_vpk120_defconfig
+index 37f353fb21..b817720a75 100644
+--- a/configs/versal_vpk120_defconfig
++++ b/configs/versal_vpk120_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a72=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+diff --git a/configs/versal_vpk180_defconfig b/configs/versal_vpk180_defconfig
+index 1a67d54bbc..71f94fdf84 100644
+--- a/configs/versal_vpk180_defconfig
++++ b/configs/versal_vpk180_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_cortex_a72=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+diff --git a/configs/zynqmp_kria_kd240_defconfig b/configs/zynqmp_kria_kd240_defconfig
+index 52359fcd07..46cbe60ecb 100644
+--- a/configs/zynqmp_kria_kd240_defconfig
++++ b/configs/zynqmp_kria_kd240_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+diff --git a/configs/zynqmp_kria_kr260_defconfig b/configs/zynqmp_kria_kr260_defconfig
+index bf5fdfe544..3da0e62204 100644
+--- a/configs/zynqmp_kria_kr260_defconfig
++++ b/configs/zynqmp_kria_kr260_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
+index a0a1d3557b..2d6b4d2370 100644
+--- a/configs/zynqmp_kria_kv260_defconfig
++++ b/configs/zynqmp_kria_kv260_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
+index 623d37140d..ef81f9ebad 100644
+--- a/configs/zynqmp_zcu102_defconfig
++++ b/configs/zynqmp_zcu102_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+diff --git a/configs/zynqmp_zcu104_defconfig b/configs/zynqmp_zcu104_defconfig
+index 68213bbabf..fcb144a1d5 100644
+--- a/configs/zynqmp_zcu104_defconfig
++++ b/configs/zynqmp_zcu104_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
+index da3af3c6bb..813095ed6a 100644
+--- a/configs/zynqmp_zcu106_defconfig
++++ b/configs/zynqmp_zcu106_defconfig
+@@ -1,4 +1,3 @@
+-BR2_aarch64=y
+ BR2_TOOLCHAIN_EXTERNAL=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
+ BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_AARCH64_GLIBC_STABLE=y
+-- 
+2.56.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
