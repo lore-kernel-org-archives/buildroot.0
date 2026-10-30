@@ -1,105 +1,158 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90BE4606A31D
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:08:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D75F606A31D
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 14:09:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=TqAwpLF6
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=ER2z/mOZ
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6EA6E40CAA;
-	Fri, 30 Oct 2026 14:08:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 468CC60650;
+	Fri, 30 Oct 2026 14:09:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lT_92YzYKTJp; Fri, 30 Oct 2026 14:08:39 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org EF83F40C91
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369319;
-	b=ZoAp90Qs97D9G8DLUq63L+pbuzxCHqFeKYyIn7WC8Vu1E2X3qUwanPGBbLGQQyUpsvSp
-	 liP7NnAaKAi6xTqQX1BnVHiz2GM3SpJNtEJ9GFdfUjA/6GkArOy5CQHuRtkoVfJklcYPw
-	 cP3Ebz5RaVIApBQQmD4t5jhYEc9pgICscXecopO4o/X3xZD6rfE1AwNWrp/w0NpRtIedg
-	 FA8cpvPJMnbNjRL+kQ5gcYu6dL4Piqz4Mh2g5AN3ApRozynql2kedjwS1r2+D2AnlcgJJ
-	 apQuosm/quqZQlJE0iSyEADbzLRfFxWwouxrR0uO8jJUQjlPmLOSiydakd53DC9RGPw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NJ0b4YlzQP74; Fri, 30 Oct 2026 14:09:22 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 87AA560ACF
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793369362;
+	b=TTXUrHQe71fxxRZF/FTLpLVRpcv2CD776giaNzf/o81K+DmLcB2GIsrsxvUrfueRgQon
+	 gKJtcGmpvyroEZkTV9mL0QP7Y6WHiLcgyyJcq5WTOJWGHMS3dav/Oj6Wgvvy1qtvxn0DG
+	 UV6kVQCF6r6cyVOEBcEyiljky41b2lkaejAbsgO5rOdHimFLp8eGNFxw4mm3kHUH9Zcin
+	 srbKCN8g6z/P2Zafnkvlaf+FIaA7hlhaLLkK6PIWZIxvSXvkCVUIEK6yxwTVO5WN+31wd
+	 j95lshE4u7DKAwyrkPb4iflJwszYqlQNnLHoImG9D2cV7ZoCWDrhcz9s5l4WQ8VSVQg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793369319;
+	c=relaxed/relaxed; t=1793369362;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
-	 Sender;
-	bh=pQvmrfMod+bIwVns7BM2tEswnYtPMxW5cw4Azh4qW3g=;
-	b=P4R2ZDfFzQsCJ0VEFHOiOz/EE2JJ2lxKLXoxBqAl7eHRE1fXSwozbu3ghLkmZfM716Iy
-	 Scdoc3qB5+T2N73NIJmEWkUTEbv8W/ywJOzYJxakTe7fhpv2e1qJ+zpVgHAulp2+VY2A4
-	 F+4KylwqkjEHpddaZ+BgivjJYJgwDjwRp/mTXxyuF8LoP0zgRU7/sgJwWf7NoXsR/8KLz
-	 Oz+2dVlq6EkJT+1l6eawko7tjv0WgiifeRi3JaFirUZYC6MfQAtdO1MeD+n+NUPvV0O7e
-	 4tW+a5GF9BgQZ3FrwO/CQEkGU9jU7hKO/Iw+cbEyjkHURBvwKN0qBLSQZ1rUzcAWrSw==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 X-Google-DKIM-Signature:X-Forwarded-Encrypted:X-Gm-Message-State:
+	 X-Gm-Gg:X-Received:Received:Message-ID:Date:MIME-Version:User-Agent:
+	 To:References:Content-Language:In-Reply-To:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 Content-Transfer-Encoding:Content-Type:Errors-To:Sender;
+	bh=9r7ADrhCqdtr7lakZSfv6kX1cWXZVWFxYR+SOLvlSnI=;
+	b=mYpDD40ywvg2Fj1oXxMrwLpvWJyXAXga3aJ2kn4x7EBv9azQazeODrtoPuRHuIWQRYTY
+	 6XnAywIQc4BBhdL0zlbUvHH4GTk4gDhTrz2fvaL7a3qUQsWXVHwj2ELW0GlzjK/J1xjiN
+	 b8ag4Fw4xEuVl9TnhguLggxa4/9BTPXzrRbP2jdC5gD/iKiLKyZMt7B3PD7cW8DVpMdwa
+	 q/Nuzv6Hretex3fZAniQNOKNGoWM4Paq4QFRD/qpR6vqt8OC1hMwc+Un18Yy3b04S5qpr
+	 K4ce+xhsD+nv1p5PlLtjmS85IFh+sf6M+8nB9f/mSueY32Sw717wW5qzGINbM3co4Lg==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793369319;
-	bh=pQvmrfMod+bIwVns7BM2tEswnYtPMxW5cw4Azh4qW3g=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=TqAwpLF6cVZ+C0pu4s9vouc67b2+s2AX1/bI/HKca9MPWxpWt+wuZYQ5nixXganH3
-	 WpYMLu7Sld47c0/OAtRYYYnXYQUkihNiArQ3xpbRn0Wd8bPj4aT8DK6HZ6ZuX3uEw4
-	 YGYXOjSaYcor5oyF0toQX711gQeAXnrfmA2oP3d7XRYski+YJlttL1uAeRApk7EyDE
-	 fc8taG8/0cT7h+gMdjPqKOGUeLKW3Ijk+CTz5LkvC475VIZFr2/TbE+HlD4msJ9Gb6
-	 5uU2aHGcWjYciT5Pu8UOLUmFCfeApr0SGs9UJTB29cdVpWx6e5LfDhz+tpqnuuYebx
-	 70qm4RsgpNhWA==
+	s=default; t=1793369362;
+	bh=9r7ADrhCqdtr7lakZSfv6kX1cWXZVWFxYR+SOLvlSnI=;
+	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=ER2z/mOZ6Hx9WnNnvdhj01EY527UdgXmH1Wtle2KmXEfs0tQhO1rPc6jP35+26E/1
+	 LktiAfZfGtT6bIAFW+McV1svFsJFlnBid36EprMg/jSNMRGvHBDoQZxNuuAG7syjS5
+	 bVnCFLpyXlos1SHGuMj6Hf+cDe0nDNNuiuEOXDtGJWOxqnzydTudc70HUd/WTF1KBH
+	 LiufFnP9cP4Jh+NTe9DB1DOWfzCG/+JmqU7BsDmrPe6hqnRLRP60rZEYcipB0illTY
+	 EhTUTu2Y9aoJHUG2h6MgHJ3mNt19zQoqI/P+NGiWxjjOLfL+E/mvnih2sS+s0i8nLa
+	 UKeNwUZV907CA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EF83F40C91;
-	Fri, 30 Oct 2026 14:08:38 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1009A362
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:06:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 87AA560ACF;
+	Fri, 30 Oct 2026 14:09:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6A039D38
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:09:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 09A0C40B2C
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:06:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4E33680E33
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:09:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VFyCYdg5n25B for <buildroot@buildroot.org>;
- Fri, 30 Oct 2026 14:06:09 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 3A9C840B33
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793369169;
- b=dSIRTqEDtZMVQhIWXICIMYHbX4ZuSyk3yjq3qhwHasmmFbcz8nyBeQG/iVSbxHJPI7Df
- 8foufV0eUQ3g7TQYUf5LQpLggsBVL50GcGt4OD0XEtvmQOhmdtOodUO/pSBgb4TdZ+QNW
- ylTkF4gRV5Lw5iSy9d5bpfi5MvNRYbtcMz1shzv3CepzN5Yz8qQPO/WjUqsyJv8MG5pdU
- uEgAh3kYDyDC6SSa3yvm31gTx8m7aUKb4RJqWya2VmYARVAF1ySK1gV0giQCsP8h0tIMs
- VHlaYjx5jdGX7S63IOSLYBr/Gp4gjmJkqQOhM75FnL16lbOoslW6E01zPRHnJVcEDZQ==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iqe3SMjpAvrd for <buildroot@buildroot.org>;
+ Fri, 30 Oct 2026 14:09:17 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 74FDE807A1
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793369357;
+ b=tQoRRmp6FUuWlHvx09ltMXc6zhZ3KnwX4TncGLQAt1iVpphNQIkI799QBppy3BKmD0nB
+ XRH2nRTgmFVw/K7kHcgb+P0o55d9av1/7/MmVWZiXuApaqVQWwaEx3xEhr9ntr4UMHbl7
+ kNsHk6E92VqUBNz7C0nroezR3yEDtnnTZv/HC0VpUTkNXxD+uxCjLGjIrZwYL50BS/eOz
+ FGdv2+HvC05mLUlh8aA54+e3dXAjkQEnEKF83XqlERNmyS8TmSCxNE/ecaXeN8dFUU2wE
+ O5Yg3CTE8Fx4GOIVfOjJ7KyTiCTGvkrjEzTXK3Dfe7SiQ1YB2/1EjEz85jXTTRRzVtg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793369169;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=fBngTzRuTRN+g+M0nubP3izECOquubKwUjCA27/w66U=;
- b=rFpgGXFQ9MmQQtLWaP/u8UJfdh/e62DUnu1QOyclV7aaNTxSxA1j11gcMYQ9T8O8ofdf
- B8wir74zsow4K94ukK6ENiPalSf2YhlO2jWkLVEITpimuySw/Q50dLNfy0YQYPe9wGggS
- TeQTec9VBsIBPf3Vzu4rcDO2GRXXaiTFx5NsPYu6EUvk+yLcDTQYp9KfVs9e50Yw3Nfej
- ttis7u11DUOIjvWZmmMUpqVnWDwjhg+EJPsQ0w8fcQAuXwuY08XV5EW+1aCpSj+ZTs5XM
- hFRLYjnTIp7cHj/M5UewEoOaWFGsAKutMQK4iLyAv4N5ImfQCNFudYPaH+U7EozXg5g==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3A9C840B33
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:06:09 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5972B9D388; Fri, 30 Oct 2026 14:04:41 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 29 Oct 2026 21:20:01 +0100
-X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 419b96be31207e6849ee850b72c1ac9276607665
-X-Git-Newrev: 2d973a59edfb43820ec1a84d14a503bc0b15cdb2
-X-Patchwork-Hint: ignore
-Message-Id: <20261030140441.5972B9D388@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/libabseil-cpp:
- require wchar
+ c=relaxed/relaxed; t=1793369357;
+ h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
+ X-Forwarded-Encrypted:X-Gm-Message-State:X-Gm-Gg:X-Received:Received:
+ Message-ID:Date:MIME-Version:User-Agent:Subject:To:Cc:References:
+ Content-Language:From:In-Reply-To:Content-Type:
+ Content-Transfer-Encoding;
+ bh=YWR+iJKUZK+kmRRnulrGieFGJNqbv+MaE1Y5KDfibnk=;
+ b=MpmS2Qj2lh4V4EgDVr4ycbFmLsD5VH9zlB6HzNA8/ospLEr7ms0eJa+v4NjAaamhntI5
+ KB9xd12718kqD70Gk/mzIMLdOuuo1NcqQ2oYVxnbdy6NjNP8qDtm7APxefkqtqNfex9rd
+ JrD+vzqGbfmlE+RtkZc6+FnSLclx4aqID88luDmabGP9lVOXhidGiDehbtpQaHzQpR0hv
+ tTCVpVUU9gn8ZOSLMGFNGkp91g45J91Rofn9R7HThRa1+d8qgvicrztr80uffrgcLaEja
+ wglMqgVX9j5z3+vinhaPi4JpH5mDgMhkyxhWcLc6lIsWUdaw+zXw4t7XBrnrwFKHO1w==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ dmarc=pass header.from=mind.be;
+ dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=K1lDp2Uv; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::32b"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 74FDE807A1
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 14:09:16 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-4a140e7405dso7690905e9.3
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 07:09:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1793369355; x=1793974155;
+ h=content-transfer-encoding:content-type:in-reply-to:from
+ :content-language:references:cc:to:subject:user-agent:mime-version
+ :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=YWR+iJKUZK+kmRRnulrGieFGJNqbv+MaE1Y5KDfibnk=;
+ b=nK4om1shE7CFAaRndA2EmJBj4lrd8vLPGHis1z4n/NJV+K5sWzz+H3KO31TjoH5EB7
+ XmJ6rkRFi8H/RE3QVZ6b0gSdg3W5v79Zt915nsonjJDCihRciQ1el9ZHbqKUbjeS93hW
+ mOMZT4Oji0dc6JIUjk72f7wlzGw4IpgJMwRqKtuHKjn9GqEI6Iekk9nPFOblCj0vqnGs
+ uewCoLgwjZ92kf1p4ydq97m2iRCyUQFWKB+PKQMADozGnSrPJkHce48x0yaFdd3NakTc
+ 9VpGCzdeAGlgkvGNczqH5V6poQA4N1SEFN8WO+DFDUti6Dmi3PDHSL0dFI7qxVwil/bx
+ BJ2g==
+X-Forwarded-Encrypted: i=1;
+ AKwUvBztdQ3RdPfbGh0l6i2yinILCVPOVJoF/g2H+VfUNB/IzBJqhFTt1CGAoqi6YxHrjrijss8+7z5IHLA=@buildroot.org
+X-Gm-Message-State: AFq9FYKTxW0m3QF2rFqfWlc3CJB9gbcoiE4kpW9NA3BEio8LpgSP7kId
+ Em3dEWJcdxinsgKOLK8IduDM69SJgmXUfL2yIVRU7KyHBk28Xjoa2K2y76tVqH6lVKTeokfPERH
+ vq86CBOc=
+X-Gm-Gg: AYBFou2GO8BENQ8BbLEfIC+D2+wanVwXpjj6OjV/G4Iow0OyIZcA9emDIcTUUgU59Ac
+ LwVZVrayWbzAqLGmBR7W/SOibiJubnxASyV4uuLDukexnHY2OeFLptMdoFx2S7OOI1J/jLnHDLo
+ uWssSxbepDK818tbTfr7JkBldHVCbkpG8clET3yMhoIAbq7A8hDUerc6tn5urizCtDh64cmc9c5
+ c8DYBPTlSJc6cuypiKcE29F+J2TgIxwcApGaYO9HnsOTDg9EbMPXH/IfGyh1yU5b6dq6aKddbFz
+ ArbDOhCS9I1mlHs1XpymJMJC9ih32yJbGGeVTxyRqYsjbdKc0kFmsyZWvmq7vvwlsWBwFzLN+UJ
+ sznUgYZ6jF5HXdSm0xOQ+PKd4jFcwJS5XNdpBx0MnpcFHQzDFRyT4/oh549gG5HsM5/JI2HC0z7
+ pF0oQpwK01vaPqXhhzpjMci8lRymytPbxVSfPhBLnzqkP1oC+Dj1bsIoczDU6Jhe8IZZEghs/ix
+ ub+GNOXGmdXyymYfhMX+bLtH+jSwxKZjgzH3YELlYXzRQtUmFFm87nccPECm9nX9zdtGHCvPl2P
+ bVWQDCW++zTPETjdzYLE250Ozmoy4D2s+Jf9Mt2o06lP9bKCkwHerX/h0VoU8Cu7yHbWwE2Kc7c
+ =
+X-Received: by 2002:a05:600c:46ce:b0:4a6:7d6:821f with SMTP id
+ 5b1f17b1804b1-4ac189928e9mr54061125e9.29.1793369354908; 
+ Fri, 30 Oct 2026 07:09:14 -0700 (PDT)
+Received: from [10.42.0.118] (ip-94-140-185-241.reverse.destiny.be.
+ [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4abf60f1076sm66520565e9.6.2026.10.30.07.09.14
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 30 Oct 2026 07:09:14 -0700 (PDT)
+Message-ID: <123ede9f-2534-48bc-b46b-95cbb069f532@mind.be>
+Date: Fri, 30 Oct 2026 15:09:14 +0100
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Vincent Fazio <vfazio@xes-inc.com>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+References: <20261005154047.413898-2-raphael.melotte@mind.be>
+ <20261028161447.330533-1-raphael.melotte@mind.be>
+ <20261028161447.330533-2-raphael.melotte@mind.be>
+ <BN0P110MB1609B62896FCDB1B0B31BDD99F6DA@BN0P110MB1609.NAMP110.PROD.OUTLOOK.COM>
+Content-Language: en-US
+In-Reply-To: <BN0P110MB1609B62896FCDB1B0B31BDD99F6DA@BN0P110MB1609.NAMP110.PROD.OUTLOOK.COM>
+Subject: Re: [Buildroot] [PATCH v3 2/2] package/mupdf,
+ python-pymupdf: bump to versions 1.28.5 and 2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -109,372 +162,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
+From: =?utf-8?q?Rapha=C3=ABl_M=C3=A9lotte_via_buildroot?=
  <buildroot@buildroot.org>
-Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4481854119170977101=="
+Reply-To: =?UTF-8?B?UmFwaGHDq2wgTcOpbG90dGU=?= <raphael.melotte@mind.be>
+Cc: James Hilliard <james.hilliard1@gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_NONE autolearn=ham autolearn_force=no
-	version=4.0.1
+X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============4481854119170977101==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2d973a59edfb43820ec1a84d14a503bc0b15cdb2
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
-
-absl::StrFormat() unconditionally includes <cwchar>. So a toolchain
-with wchar support is required.
-
-This was introduced to abseil in [0] and landed in buildroot with the
-bump to 20240722.0.
-
-[0] https://github.com/abseil/abseil-cpp/commit/5dc2cc1a6a992e09d9cf930cdce7984640e2b7e0
-
-Fixes:
-https://autobuild.buildroot.org/results/948/948463b01ce52456179b06ae17d4ace9a823f92b//
-
-Fixes: 0d40b47866 ("package/libabseil-cpp: bump to version 20240722.0")
-Assisted-by: Github Copilot:GPT-6 Luna
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3cb3f451a5b6ddf6dfff9f83c7f65c738df6d90a)
-[Raphaël: resolve conflicts (gcc8)]
-Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
----
- package/collectd/Config.in                    | 6 ++++--
- package/falcosecurity-libs/Config.in          | 1 +
- package/grpc/Config.in                        | 6 ++++--
- package/gstreamer1/gst1-plugins-bad/Config.in | 6 ++++--
- package/kismet/Config.in                      | 5 +++--
- package/libabseil-cpp/Config.in               | 5 +++--
- package/netdata/Config.in                     | 5 +++--
- package/protobuf/Config.in                    | 5 +++--
- package/re2/Config.in                         | 5 +++--
- package/sysdig/Config.in                      | 6 ++++--
- package/tensorflow-lite/Config.in             | 5 +++--
- package/usbguard/Config.in                    | 5 +++--
- package/webrtc-audio-processing/Config.in     | 6 ++++--
- 13 files changed, 42 insertions(+), 24 deletions(-)
-
-diff --git a/package/collectd/Config.in b/package/collectd/Config.in
-index 59ca62867b..f02e5ffc32 100644
---- a/package/collectd/Config.in
-+++ b/package/collectd/Config.in
-@@ -692,13 +692,15 @@ config BR2_PACKAGE_COLLECTD_GRPC
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # grpc -> protobuf
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # grpc -> libabseil-cpp
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS # grpc
-+	depends on BR2_USE_WCHAR # grpc -> libabseil-cpp
- 	select BR2_PACKAGE_GRPC
- 	help
- 	  Send/receive values using the gRPC protocol.
- 
--comment "grpc needs a toolchain w/ C++, gcc >= 8"
-+comment "grpc needs a toolchain w/ C++, wchar, gcc >= 8"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_8 || \
-+		!BR2_USE_WCHAR
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS # grpc
- 
-diff --git a/package/falcosecurity-libs/Config.in b/package/falcosecurity-libs/Config.in
-index 1c3e4d9bb8..91a5b47aac 100644
---- a/package/falcosecurity-libs/Config.in
-+++ b/package/falcosecurity-libs/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_FALCOSECURITY_LIBS
- 	bool
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS # grpc
-+	depends on BR2_USE_WCHAR # grpc -> libabseil-cpp
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
- 	depends on BR2_LINUX_KERNEL
- 	depends on BR2_INSTALL_LIBSTDCPP # jsoncpp, protobuf, tbb
-diff --git a/package/grpc/Config.in b/package/grpc/Config.in
-index 7664948b40..11d31350b9 100644
---- a/package/grpc/Config.in
-+++ b/package/grpc/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_GRPC
- 	depends on !BR2_STATIC_LIBS # protobuf, libabseil-cpp, re2
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
-+	depends on BR2_USE_WCHAR # libabseil-cpp
- 	select BR2_PACKAGE_C_ARES
- 	select BR2_PACKAGE_LIBABSEIL_CPP
- 	select BR2_PACKAGE_OPENSSL
-@@ -19,9 +20,10 @@ config BR2_PACKAGE_GRPC
- 
- 	  http://github.com/grpc/grpc
- 
--comment "grpc needs a toolchain w/ C++, threads, dynamic library, gcc >= 8"
-+comment "grpc needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 8"
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
-+		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8 \
-+		|| !BR2_USE_WCHAR
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index 89db860f87..359ba652ab 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -677,6 +677,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTCDSP
- 	# All depends from webrtc-audio-processing
- 	depends on BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
-+	depends on BR2_USE_WCHAR # libabseil-cpp
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
-@@ -685,11 +686,12 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WEBRTCDSP
- 	help
- 	  WebRTC echo-cancellation, gain control and noise suppression
- 
--comment "webrtcdsp needs a toolchain w/ C++, NPTL, dynamic library, gcc >= 8"
-+comment "webrtcdsp needs a toolchain w/ C++, NPTL, wchar, dynamic library, gcc >= 8"
- 	depends on BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
--		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
-+		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8 \
-+		|| !BR2_USE_WCHAR
- 
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_WPE
- 	bool "wpe"
-diff --git a/package/kismet/Config.in b/package/kismet/Config.in
-index 65c17baeaf..d03bf199f4 100644
---- a/package/kismet/Config.in
-+++ b/package/kismet/Config.in
-@@ -34,6 +34,7 @@ if BR2_PACKAGE_KISMET
- config BR2_PACKAGE_KISMET_PYTHON_TOOLS
- 	bool "Install python tools"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
-+	depends on BR2_USE_WCHAR # protobuf
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-numpy
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
- 	depends on BR2_PACKAGE_PYTHON3
-@@ -52,12 +53,12 @@ comment "python tools needs python3"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
- 
--comment "python tools needs a glibc or musl toolchain w/ dynamic library, gcc >= 8"
-+comment "python tools needs a glibc or musl toolchain w/ wchar, dynamic library, gcc >= 8"
- 	depends on BR2_STATIC_LIBS
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
- 	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL) || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || !BR2_USE_WCHAR
- 
- config BR2_PACKAGE_KISMET_SERVER
- 	bool "Install server"
-diff --git a/package/libabseil-cpp/Config.in b/package/libabseil-cpp/Config.in
-index 0750dc5495..73d09df8ad 100644
---- a/package/libabseil-cpp/Config.in
-+++ b/package/libabseil-cpp/Config.in
-@@ -26,6 +26,7 @@ config BR2_PACKAGE_LIBABSEIL_CPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_STATIC_LIBS # uses dlfcn.h
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
-+	depends on BR2_USE_WCHAR
- 	help
- 	  Abseil is an open-source collection of C++ library code
- 	  designed to augment the C++ standard library. The Abseil
-@@ -35,7 +36,7 @@ config BR2_PACKAGE_LIBABSEIL_CPP
- 
- 	  https://github.com/abseil/abseil-cpp
- 
--comment "libabseil-cpp needs a toolchain w/ gcc >= 8, C++, threads, dynamic library"
-+comment "libabseil-cpp needs a toolchain w/ wchar, gcc >= 8, C++, threads, dynamic library"
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
-+		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8 || !BR2_USE_WCHAR
-diff --git a/package/netdata/Config.in b/package/netdata/Config.in
-index 2c7d456528..65eba65ac0 100644
---- a/package/netdata/Config.in
-+++ b/package/netdata/Config.in
-@@ -23,14 +23,15 @@ if BR2_PACKAGE_NETDATA
- config BR2_PACKAGE_NETDATA_PROMETHEUS
- 	bool "prometheus remote write backend"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-+	depends on BR2_USE_WCHAR # protobuf
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10 # protobuf
- 	select BR2_PACKAGE_PROTOBUF
- 	select BR2_PACKAGE_SNAPPY
- 	help
- 	  Enable prometheus remote write backend
- 
--comment "prometheus remote write backend needs a toolchain w/ gcc >= 10"
--	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_10
-+comment "prometheus remote write backend needs a toolchain w/ wchar, gcc >= 10"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_10 || !BR2_USE_WCHAR
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 
- endif
-diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
-index 633201b38c..8cc674e3ac 100644
---- a/package/protobuf/Config.in
-+++ b/package/protobuf/Config.in
-@@ -45,6 +45,7 @@ config BR2_PACKAGE_PROTOBUF
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-+	depends on BR2_USE_WCHAR # libabseil-cpp
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libabseil-cpp
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_LIBABSEIL_CPP
-@@ -55,7 +56,7 @@ config BR2_PACKAGE_PROTOBUF
- 
- 	  https://developers.google.com/protocol-buffers
- 
--comment "protobuf needs a toolchain w/ C++, threads, dynamic library, gcc >= 8"
-+comment "protobuf needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 8"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
-+		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8 || !BR2_USE_WCHAR
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
-diff --git a/package/re2/Config.in b/package/re2/Config.in
-index b79e711ad3..31f2001d45 100644
---- a/package/re2/Config.in
-+++ b/package/re2/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_RE2
- 	bool "re2"
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
-+	depends on BR2_USE_WCHAR # libabseil-cpp
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++14
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-@@ -14,8 +15,8 @@ config BR2_PACKAGE_RE2
- 
- 	  https://github.com/google/re2
- 
--comment "re2 needs a toolchain w/ C++, threads, dynamic library, gcc >= 8"
-+comment "re2 needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 8"
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
--		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
-+		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8 || !BR2_USE_WCHAR
-diff --git a/package/sysdig/Config.in b/package/sysdig/Config.in
-index 3a3670f5cb..b791470d8f 100644
---- a/package/sysdig/Config.in
-+++ b/package/sysdig/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_SYSDIG
- 	bool "sysdig"
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS # falcosecurity-libs
-+	depends on BR2_USE_WCHAR # falcosecurity-libs -> libabseil-cpp
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # falcosecurity-libs
- 	depends on BR2_LINUX_KERNEL # falcosecurity-libs
- 	depends on BR2_INSTALL_LIBSTDCPP
-@@ -23,12 +24,13 @@ config BR2_PACKAGE_SYSDIG
- 
- 	  https://github.com/draios/sysdig/wiki
- 
--comment "sysdig needs a glibc toolchain w/ C++, threads, gcc >= 8, dynamic library, a Linux kernel, and luajit or lua 5.1 to be built"
-+comment "sysdig needs a glibc toolchain w/ C++, threads, wchar, gcc >= 8, dynamic library, a Linux kernel, and luajit or lua 5.1 to be built"
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_LINUX_KERNEL || !BR2_INSTALL_LIBSTDCPP \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_8 || BR2_STATIC_LIBS \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_8 || !BR2_USE_WCHAR \
-+		|| BR2_STATIC_LIBS \
- 		|| !BR2_TOOLCHAIN_USES_GLIBC \
- 		|| !BR2_PACKAGE_LUAINTERPRETER_ABI_VERSION_5_1
-diff --git a/package/tensorflow-lite/Config.in b/package/tensorflow-lite/Config.in
-index 4c448b0352..993540c8e3 100644
---- a/package/tensorflow-lite/Config.in
-+++ b/package/tensorflow-lite/Config.in
-@@ -11,6 +11,7 @@ config BR2_PACKAGE_TENSORFLOW_LITE
- 	bool "tensorflow-lite"
- 	depends on BR2_PACKAGE_TENSORFLOW_LITE_ARCH_SUPPORTS
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_USE_WCHAR # libabseil-cpp
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libabseil-cpp
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # cpuinfo
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
-@@ -31,8 +32,8 @@ config BR2_PACKAGE_TENSORFLOW_LITE
- 
- 	  https://www.tensorflow.org/
- 
--comment "tensorflow-lite needs a glibc toolchain w/ gcc >= 8, C++, threads, dynamic libraries"
-+comment "tensorflow-lite needs a glibc toolchain w/ gcc >= 8, C++, threads, wchar, dynamic libraries"
- 	depends on BR2_PACKAGE_TENSORFLOW_LITE_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_USES_GLIBC || !BR2_INSTALL_LIBSTDCPP || \
- 			!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || !BR2_TOOLCHAIN_HAS_THREADS || \
--			BR2_STATIC_LIBS
-+			BR2_STATIC_LIBS || !BR2_USE_WCHAR
-diff --git a/package/usbguard/Config.in b/package/usbguard/Config.in
-index 254209ff64..07ae109ae9 100644
---- a/package/usbguard/Config.in
-+++ b/package/usbguard/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_USBGUARD
- 	bool "usbguard"
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
-+	depends on BR2_USE_WCHAR # protobuf
- 	depends on BR2_INSTALL_LIBSTDCPP # protobuf
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libqb, protobuf
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf, C++17 filesystem
-@@ -18,9 +19,9 @@ config BR2_PACKAGE_USBGUARD
- 
- 	  https://usbguard.github.io/
- 
--comment "usbguard needs a toolchain w/ C++, threads, dynamic library, gcc >= 8"
-+comment "usbguard needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 8"
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
-+		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8 || !BR2_USE_WCHAR
- 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
- 
- comment "usbguard needs a toolchain not affected by GCC bug 64735"
-diff --git a/package/webrtc-audio-processing/Config.in b/package/webrtc-audio-processing/Config.in
-index cb3b21367b..ff7985d562 100644
---- a/package/webrtc-audio-processing/Config.in
-+++ b/package/webrtc-audio-processing/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING
- 	bool "webrtc-audio-processing"
- 	depends on BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
-+	depends on BR2_USE_WCHAR # libabseil-cpp
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libabseil-cpp
- 	# pthread_condattr_setclock
-@@ -18,8 +19,9 @@ config BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING
- 
- 	  http://freedesktop.org/software/pulseaudio/webrtc-audio-processing/
- 
--comment "webrtc-audio-processing needs a toolchain w/ C++, NPTL, dynamic library, gcc >= 8"
-+comment "webrtc-audio-processing needs a toolchain w/ C++, NPTL, wchar, dynamic library, gcc >= 8"
- 	depends on BR2_PACKAGE_WEBRTC_AUDIO_PROCESSING_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
--		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
-+		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8 \
-+		|| !BR2_USE_WCHAR
-
---===============4481854119170977101==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4481854119170977101==--
+SGkgVmluY2VudCwKCk9uIDEwLzMwLzI2IDI6NDcgUE0sIFZpbmNlbnQgRmF6aW8gd3JvdGU6Cj4g
+SSByYW4gdGhlIGJ1aWxkIGFuZCBQeU11UERGIHVuaXQgdGVzdCBvbiBtYXN0ZXIgYW5kIG9uIHRv
+cCBvZiBCZXJuZCdzIFB5dGhvbiAzLjE1LjIgcGF0Y2ggYW5kIGNhbiBjb25maXJtIHRoZXkgYm90
+aCBwYXNzLgo+IAo+IFRlc3RlZC1ieTogVmluY2VudCBGYXppbyA8dmZhemlvQHhlcy1pbmMuY29t
+PgoKR29vZCB0byBrbm93LCB0aGFua3MgZm9yIHRlc3RpbmcgaXQhCgoKUmFwaGHDq2wKX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxp
+bmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
+cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
