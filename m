@@ -1,28 +1,28 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C2B8606A31C
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BA36606A31A
 	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 15:31:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=itbplpQL
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=lYyLQZma
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D937340F2E;
-	Fri, 30 Oct 2026 15:31:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C57881DE8;
+	Fri, 30 Oct 2026 15:31:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rBuG3WaToyvE; Fri, 30 Oct 2026 15:31:40 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 638E640F1B
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793374300;
-	b=E/9tBlSXTiXP02avQ5IYlVG798A+Y/xuCFnx/UV5IBV2Ott2PkxwAYD4Vog2rODfYI7O
-	 R8+tnDz2vEliTOp0O2Kct74MpkjF9MNmfDVc7q2OBosKD9BHvQrGRkZ9sPRGCjmapPxY2
-	 My0Nghx8rrfPtIP/0M0BIR4DhTMVipDbINWIscPYNWEl+v+IKn7qMqZ/zpOP0BOVvh5d/
-	 qhoqHTplS39rNdLEQ6KLEd6fy1ohyK82VJFShaQMK5BtxGdN9OjKDxWnQXJcLFBFExs2y
-	 00VUMTuBwXvQD9gfHwPIueAeCxPNK5UefW+kH2V1YGB4YlHW4YrxX/kuj2VfpXe8jVw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cJeFUqKC7zh3; Fri, 30 Oct 2026 15:31:42 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 569A781D65
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793374302;
+	b=NQU8dM5HXD7nMJcYLITiWR53ICY5IOd0xJXDhyiYlbLKjRFrIEO+eA6+ZfiU1ToTceDE
+	 zht07mcOxeJ2zp98e6/crmDSEj/fhpzVgpURVx7f9SeP17t+4TeffBCxIlfTH3oS1HTBd
+	 LCVHHiMt6v5Yi0VF6cEMrLM45e9suBc8xHiGmVMqjAZGTKQLOZyFVYxpx9qIffxkOeINP
+	 byEKchmuRde6+JwTrOhYm45od63LhVSbItaZb2ReKbsdd/IIPwHqWI5vPw6WtQ+6GJo8e
+	 pWJcuuKUm1Sfa0BK/kofAE2JHpVIN0HKGsxTqISjrqSJxiQ/loGdziGs2kEji9/5M7g==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793374300;
+	c=relaxed/relaxed; t=1793374302;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,119 +31,119 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=rW2pc+uJ0giZHh00/DwKf1ShikFRKL508GMkito8DqQ=;
-	b=M5g6o74JbT0cTuiSI+YNT3l+iTmcX0DCQY5PKXvaPqSMfqgo1FaV/CHV3J9meWhwH8Gh
-	 0n5/Z/68b+GdIhp+tf2Acs2bNyWyvqNx2H06oDLOjV1NJRC+YF1scgQYH5BLMeaanO+6p
-	 Lbbw+gMTV0xyhqTyLKi/blrOSBwwnlO/gNa1alnXF3IJloDFHHcsdq4wxJDI5B8mDBLJ/
-	 ZjH22PXpiBcQQij3Nhu6MHTfEeF/X+MnhkAndz/Ibz0XQEZw1taZTFykHLlixuP/ne22z
-	 K8cuhT94t7OzdOBK+OFqL9L/b/3UtjkNWvYKUMB5nmgWKiVoNKhJCiFiC5TPvQLs/tg==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=isogonfSmJKEaEnAg0tPLCfOwjelj2ttlM3JeYHjFAM=;
+	b=e64xPqEbJ5/XwDgy8YlHhbTwXaOQlTwOCHO5F1Y1yoWqk2Z42uHVOeBNpJsEkZ1x/MBI
+	 m07zcJhoWMFIM+dw1FfcejTwK4CHccPKLhzIMBjDCqYLK9l5BKrCqDF06tJLNyGYMbuj3
+	 8V8QYNTNMv7zfoipWdeqAFkvyzxZossQ5jSW+I0leF8vI5af2tXHbnnpILD6/XedCjca6
+	 4AoI+8zAUdYIh2e3UTwv7uBzIzuK2tq6etJaSvkxTaq6tcHqEM4qle5FoB9o1QNI5hMIV
+	 0pIfIgj+zAazjqbgtJqsnRUnT9AsyCFeoT42zrhgSocJ2Fx9PekFxRmuFdEhHzqhebQ==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793374300;
-	bh=rW2pc+uJ0giZHh00/DwKf1ShikFRKL508GMkito8DqQ=;
+	s=default; t=1793374302;
+	bh=isogonfSmJKEaEnAg0tPLCfOwjelj2ttlM3JeYHjFAM=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=itbplpQLdA23NZD5mcaP2H9/6dVm20mrLPaNjaj7xmS/QoxjVfhmoGjSDQBNfa635
-	 zC7KcZ+7hPGBXO9nGhTQpmdsyd1+F7fDeSKDs/zEC/UvrwupPnMrsfhVlJ+NK7oySS
-	 VrwE/SMGad/Ezxs+sC22qtXQokLKJXZXT31TkzjPWmrQQGt2vmwWI4XJ+jzPw06JJi
-	 r8HNNMDdiUZLmqBBq5vVxoPmyaORCQV1EFpOybmok6r1qLCYns/HuBX2Gq3A02aRS+
-	 IeN3T6+rRRleMjXW8q3vmnErH4FDFAHAv1ruV95TL+6xUZickgXaKaEcUP/B4hbAMN
-	 SISO9Nd5+wlzQ==
+	b=lYyLQZma5UIucXpS9li+VgDqcWi8kWXUDz5Z4QRF3kr4HLTrjAEKydHj12X0CAaJM
+	 DCHR1UlhqWqbh0mG1CS+II3Fh0zaJnGvnZTvz1KWBDafly22SnFMFoI0wa4+SNC4Vk
+	 0r+iAHSaP++0FvpxN7O4dkjGGv4N1mpHmqdlA3iA8IHHSNNWdHxTlJ5ArmzLx9vTkY
+	 9RSdNGIeTGTluUpg9IZXhTe9I41a/L85Xs7GrxV+p8HxxECCzP4otjpE1drRBtqgUb
+	 QHYkHIO991qWn4sjdBq/Cr0RabiFvgqBxFFWsWAIeidXwOukDjeQuNlWOsbWeHX5SP
+	 M4GYpTvXtwhOQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 638E640F1B;
-	Fri, 30 Oct 2026 15:31:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 705E8D38
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 569A781D65;
+	Fri, 30 Oct 2026 15:31:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C9366D38
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 564AE40211
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BA7D481C19
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gvfuMPFqj-Ds for <buildroot@buildroot.org>;
- Fri, 30 Oct 2026 15:29:49 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 3728A40530
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793374189;
- b=PPHkXyJUuQDVQbxtuM8WqApFHTh60bHM6B+zS6KHxcNipMS4m3xO3huG4tVxh5bKmFNg
- Yoq1A+/4kqtBXgQjxlgmC+3vA22+KYvH796B3zceps4SCOB/JZLgExCIU0us7/5foBg5T
- Cktq4JjwDJ0oHqLOzvzElkBCdpof8ZuXtoC9XF5A8sdW87N6TwTbdo95ia8/Z3Tlb6A20
- 2UGVES+WH1Mm9Nxyhmd0K95isLkve5bkz2nL9NvjFq85rDDD+vB9kT0dW6azKszIJpVw5
- wtH4v8xHMb/PCC7U3fCu1AdwOD9CmeKFAKtRqRboXQVWxHqem3NQyR8lJMmSe6ZXrfg==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sgouddB5Fc6a for <buildroot@buildroot.org>;
+ Fri, 30 Oct 2026 15:29:53 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 94D9081B35
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793374193;
+ b=BkDrPWkNeUeG4eAydJfXEdKxHDX5PY4S5tTuS8c6dEEw9AMRkrf3JESVw+l0+E1i+Emb
+ AUjYJDP/r8Z1Ee8nreDBJE9AhqQnB1JYWRo2XK8c3IhtCR4YtdEm7revco/4XSJUBjRsf
+ 9S5EovI2i7XE5Kr7RvIVFmyT6GOnimoKAOF45636e/ddTT0iebxdDJx1FTKB1LNAHeSp6
+ 6V52cEUJyYWET5lNpvdm5vCPp3ChEzj2Gq803WE0dQzO45O9myygX45pDo9B6Fe9k+fda
+ pd6YAbKiAdGAKK6u4V0Mgd8M9bP0T0OM4tpzCSVpns5FzaldOh2x8h0orLZDOCmrFzg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793374189;
+ c=relaxed/relaxed; t=1793374193;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=/eTQao1juv2f3Ij5m9XWtMv+aGVoI2hw1RUM29jlneg=;
- b=Nh7sOZeVfah7UYtIp3wdq+tBeTISHXHMPE7vIeaYnHesMVSfkACtFcdej0Fjp0QBCgzi
- /859T6x164njLhDVqTRrLk09QLIvOTKNku+wZ5irqob0onecsZa2+rKOb46nyAohAlLmM
- x4qmEIafYJ3VElZISbGrOm74zs60k8Psb7MS+8uW5I5BN7VDudE33iHBpBqPjIJlNdVS9
- Fp3gXNwNopgCl+eu6VfrOiTruqL5yUr3xTqzITrNnM72QHrXAmkjApWaxL6lGK/v0GOAh
- +g9kSZrilDOUVtskv2B12nq46JKwbis5GoKaGWdPopTUnKvddJFnILAo8q6hCjDYExQ==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ bh=k3/GdCeANniBE/dBGuPsotM9Y2Ddi5J6GXq7Q9IG4oo=;
+ b=he8GywCQxprsZhCyaoHK3/rPu+r9iOLNfdEgp6XTto4rEGsZ1e6aTi8ga0jDXfAvsoHb
+ g+aCEKWMazeQ/DeqWTjCST+mZtbQGY7Rjs5YiEfVo9J14A0relK8J7CDxOGr3wwguXFUS
+ BbkgvA1+xvQAKVNWPxI0WCO/TglJ39xO0kL2ltTmx1ExR2Na/j/uIQWzELXsf9bhvbJ2X
+ LSCvKnfFRazZwyiZmXBIm2m5QBsT8ODSB1qF5LGmahXZpYC6bpJCWCmCg21FWEGg+wybl
+ UCv6kowoRW9Re3gKj8mGZvIKuGTm3fb/qYSGCPuRVpgkYfAgovtAbsqU7ePbNYGD7Ug==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  dmarc=pass header.from=mind.be;
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=D+VTWZmO; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::333"
+ header.s=google header.b=ienHZa8M; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::42b"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3728A40530
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:48 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-4a5720b0a57so11074815e9.0
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 08:29:48 -0700 (PDT)
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 94D9081B35
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:51 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-48e1d0e5dafso1087791f8f.1
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 08:29:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793374187; x=1793978987;
+ d=1e100.net; s=20260707; t=1793374190; x=1793978990;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=/eTQao1juv2f3Ij5m9XWtMv+aGVoI2hw1RUM29jlneg=;
- b=azxHPhnZ+VzJBL5MwSSGb7g3LDEjftQQcer8EHOI/doUD7bjMK7C6S2jzUAPgi4qW+
- 7DuIS6x+3qT3vghs1BY8LtFkVZbl0wl4k3udMVcuw6vVfEHoGiOjh516OQLfIcYdVhxd
- fSwC+vCBmOKjDzfV9l0KzYxSNLM9bgPRJhxRTF7nu38zXqSPImtnCQcoFKSr+89N2O/e
- DGQ43HiiT2m5It111VSX6nVExWoODEw9t1nEn80vM81rWUQ5SBH3fNsLfPjOaH3XN8HD
- Gj29QPE/oV/aZ6VikYfPYD7O2Xg/XCEDZUtLyZKKc/SQIGKjTcFI8krCxbt3evIys3qH
- qC4g==
-X-Gm-Message-State: AFq9FYJrYxoGmyP5iwLYa9umkoxxtE9z8fFLbPMqKknCSzzPNxCh8qOa
- ieuBUex/NzM1E6qOqeabxUWbw/RLnl6i/S734xxyzBVLhuKeN/ckI1lOoBLKR0vw+9XYI4IoNCX
- I4M3n+6Y=
-X-Gm-Gg: AYBFou0502b1BXbNzMHdSdjpS71obgqGfNGoV8rPSxaN0EyoLhXZf12V2Y8APkK8ZLF
- Wlz4ICR3ZyzSp1XOUFYttykyAkSCPz65hrdirtPEfAwEUdoONSnytw/lXK3rVgsO2Euiif7Q/RI
- kNjEDOWptz+quIoPYmFg5DCXFjT8qfJkfkmbw6TtPwvGbKBGTU7dIVUsbq9xi2w3CZZo3n5GpUN
- njvaVmp2oUJSTYRAHVuGd4GF8Ux93810Qc6QSdb45P3C0vJ0Lrr665x+QtMAsHD96sXbgntjD0k
- 0NWSrRgH9TYhX3dXoYfHT512j0o+46XVvkobHZhx1wgKvIEF+Rnb8f9Db3YjX9tUzarCdbDluGc
- mYfSFP9WHNvt/9nuFfnDrFuJ4GMSAWR2RHcl5jTe7lxGeVBb56LiyMlnfAYzmSpXnJycej9jUVb
- ixfPdtuP7NL389Fao2VQjGs/2wRcIhrLPv9WBFvUoQ8A7SZ/xP3Q3eO919+05uRAyO6xXh4Mui6
- NCtQeHFvLeKOdvS813GjNqGLHgXfWk3vCY+uLKn/fbDxM3WsG8qu7zEC0wCfImDiUjUjMd7SiBG
- KPp9lcKqSwsfYuS+m68fKLl4J4nkOM/FPky0QwJjWjk/StmKc6mNJ/8Mz14ianGt1Q6ctzbM
-X-Received: by 2002:a05:600c:1387:b0:4a1:88df:8a2a with SMTP id
- 5b1f17b1804b1-4ac1793e81cmr62145165e9.13.1793374186635; 
- Fri, 30 Oct 2026 08:29:46 -0700 (PDT)
+ bh=k3/GdCeANniBE/dBGuPsotM9Y2Ddi5J6GXq7Q9IG4oo=;
+ b=NLfjCigpJQWZNWt5xlFnXIas3ihZ+eWfcLglYRIAdlPwMDsGc1eY40XPw3Uks2buTy
+ LXzfO5Ae+OO1rPvMvdLL+GzO9umAV7jFQjEnlMd6h4CMvSKWar1DMOiM05hV1TBwrRT/
+ uQmLDHTQtPOaR/ze5i5+saXdw6Aai+ihH6dVkjB2aU9Az6Oeed/NPQPHGltNayjp4Brw
+ lWb6pn9sZ/GWRsRuL+PoWnp8AIc79Q7gxFaFIu5iMnwniKdHtlkusakIpmi4GRGymNbU
+ q1GsoH1oRGKhttpRKmsD3l9EILDU9pwMdXND2ffFtVtTAjcl157dGsxRTf/D1cKWsanC
+ AQyA==
+X-Gm-Message-State: AFq9FYJCzaFBUCUMf3v1QQzk8Zmc3gjDdywV95DyAOv171xNK6OIaaAq
+ Yc3ggxBEcDVuDnOgSSKCEpmQY0Kw6dvI1aspeP3RMgK/BJu3s3heBCY89zGT9sLa+/Bf99/W2B9
+ hLapBMwY=
+X-Gm-Gg: AYBFou2CSoCxp8VJjTBgdfMHrkKDH1/TDJ/oqMEINapNWnkmke6IeU5bue0jWZ9lNXC
+ kQFK51XrkH9XQHgsKmJHpOI1+XBxdeXFPK25PA8vvO4FYX2eU2CboUY1lBiJVK9j2sUBY0LdfYq
+ IPeXTr2wEbMqAan/fYNvFUjdsgiVaFQolFUf8/AgzAbF9Mh1RkmKwXQA/9iHgjmVQqEFdNqxvak
+ BNkZJj9cFRuvy7S6GNtGmbHMB4ftgz2e5ydm4eCqVPRRiekzEpbcAxc+ChmIHBpt1fQEsqq3dT7
+ 7voYgYGElw9/bJrnWHavC963Rtk68PIQU7gAvohBKIgl3vd5EU1t4cEnXAPbNSuRdi2xXfMf6I/
+ Uiz3z9IjMYDKSKWoA+ZLkCyc3xtOx8KF+YTv6ont9Phbv63ed/SmG2+yKpWi5QbcgYuu+p/0sds
+ vam6GID7LLo9ng+syu6JhVQhEVSTCR7Xg2XffusYj3jQuTASR85Y1GYpNQEktNkb6JH9WWfM2lX
+ vNGx20Q+Spx9ISR26ehXbNYFCEKbGDKPhDjH298h4ywT9zCgQn2l6xt4zT7aOOaIq/GZ/TBiDqZ
+ DemMmb0EzdQjPs6MdS6xJSwkalKOBpgTTiMCw9DUtGkP8ATnWqGtuEFIllsEy0NhoegjmKl6
+X-Received: by 2002:a5d:498b:0:b0:48d:f1b3:7e67 with SMTP id
+ ffacd0b85a97d-48e64cb316emr11636866f8f.18.1793374190070; 
+ Fri, 30 Oct 2026 08:29:50 -0700 (PDT)
 Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
  [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4aa7c5063e3sm141465705e9.0.2026.10.30.08.29.45
+ ffacd0b85a97d-48e71b78c10sm3585100f8f.25.2026.10.30.08.29.49
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 30 Oct 2026 08:29:46 -0700 (PDT)
+ Fri, 30 Oct 2026 08:29:49 -0700 (PDT)
 To: buildroot@buildroot.org,
-	Bernd Kuhls <bernd@kuhls.net>
+	Yegor Yefremov <yegorslists@googlemail.com>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 30 Oct 2026 16:29:43 +0100
-Message-ID: <20261030152945.1908100-1-raphael.melotte@mind.be>
+Date: Fri, 30 Oct 2026 16:29:46 +0100
+Message-ID: <20261030152949.1908130-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261024195254.3299917-1-bernd@kuhls.net>
+In-Reply-To: <20261024215009.1004860-1-yegorslists@googlemail.com>
 References: 
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/libarchive: security bump
- version to 3.8.10
+Subject: Re: [Buildroot] [PATCH 1/2] toolchain: introduce
+ BR2_TOOLCHAIN_HAS_GCC_BUG_104820
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -159,56 +159,61 @@ Reply-To: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,USER_AGENT_GIT,
+	WEIRD_PORT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
 In reply of:
-> https://github.com/libarchive/libarchive/releases/tag/v3.8.10
-> "Libarchive 3.8.10 is a security, bugfix and minor feature release."
+> -fzero-call-used-regs is broken on MIPS before R6, which still has the
+> hi/lo registers: gcc either rejects -fzero-call-used-regs=used for
+> functions using them:
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+>   sorry, unimplemented: argument 'used' is not supported for '-fzero-call-used-regs' on this target
+> 
+> or, depending on the code, the ABI and the optimization level, ICEs:
+> 
+>   during RTL pass: zero_call_used_regs
+>   channels.c:437:1: internal compiler error: in int_mode_for_mode, at stor-layout.cc:408
+> 
+> This has been reported upstream, and is still present in gcc 15.3.0:
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=104820
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=104817
+> 
+> MIPS R6 doesn't have hi/lo and is not affected.
+> 
+> Assisted-by: Claude:claude-opus-5-5
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 Applied to 2025.02.x, 2026.08.x. Thanks
 
 > ---
-> Gitlab pipelines passed:
-> https://gitlab.com/bkuhls/buildroot/-/commits/683e8c7946cc42fe0054f26c840d7e9ff3d4fc56
+>  toolchain/Config.in | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
->  package/libarchive/libarchive.hash | 6 +++---
->  package/libarchive/libarchive.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/libarchive/libarchive.hash b/package/libarchive/libarchive.hash
-> index acd4b9ef22..cd5943ebb2 100644
-> --- a/package/libarchive/libarchive.hash
-> +++ b/package/libarchive/libarchive.hash
-> @@ -1,6 +1,6 @@
-> -# From https://github.com/libarchive/libarchive/releases/tag/v3.8.9
-> +# From https://github.com/libarchive/libarchive/releases/tag/v3.8.10
->  # After verifying the pgp signature from:
-> -# https://www.libarchive.de/downloads/libarchive-3.8.9.tar.xz.asc
-> -sha256  888c934f9d95648ecb9163dc8e23ab80a476ecb81a8f1154704a227b5b676dde  libarchive-3.8.9.tar.xz
-> +# https://www.libarchive.de/downloads/libarchive-3.8.10.tar.xz.asc
-> +sha256  56cad765459d5ee25a3b761f90c47d99379d28297fbfb72d908880d6b875fb96  libarchive-3.8.10.tar.xz
->  # Locally computed:
->  sha256  30e556b3959e3985d66efefec5eaac51d4995053caa1d3cffe6eb916f146f229  COPYING
-> diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-> index 88dbf2a48e..75cc034f6d 100644
-> --- a/package/libarchive/libarchive.mk
-> +++ b/package/libarchive/libarchive.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> diff --git a/toolchain/Config.in b/toolchain/Config.in
+> index 4e6a8d7927..5f4c5f5fb7 100644
+> --- a/toolchain/Config.in
+> +++ b/toolchain/Config.in
+> @@ -210,6 +210,16 @@ config BR2_TOOLCHAIN_HAS_GCC_BUG_104028
+>  	bool
+>  	default y if BR2_m68k
 >  
-> -LIBARCHIVE_VERSION = 3.8.9
-> +LIBARCHIVE_VERSION = 3.8.10
->  LIBARCHIVE_SOURCE = libarchive-$(LIBARCHIVE_VERSION).tar.xz
->  LIBARCHIVE_SITE = https://www.libarchive.de/downloads
->  LIBARCHIVE_INSTALL_STAGING = YES
+> +# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=104820
+> +# ICE: on MIPS: in int_mode_for_mode, at stor-layout.cc:408 during
+> +# RTL pass: zero_call_used_regs. MIPS before R6 also rejects
+> +# -fzero-call-used-regs=used in functions using the hi/lo registers.
+> +# This bug still exists in gcc = 15.3.0
+> +config BR2_TOOLCHAIN_HAS_GCC_BUG_104820
+> +	bool
+> +	default y if (BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el) \
+> +		&& !BR2_MIPS_CPU_MIPS32R6 && !BR2_MIPS_CPU_MIPS64R6
+> +
+>  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=107728
+>  # https://sourceware.org/bugzilla/show_bug.cgi?id=29621
+>  config BR2_TOOLCHAIN_HAS_GCC_BUG_107728
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
