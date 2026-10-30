@@ -2,28 +2,28 @@ Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64EF5606A31E
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 12:03:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7190F606A326
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 12:04:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Y6CBG8Sl;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=f/Nq36tk
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=N4tTBiYs;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gTiNNX1v
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 40707607A0;
-	Fri, 30 Oct 2026 12:03:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 49B8B60633;
+	Fri, 30 Oct 2026 12:04:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VnS8vHj7TJPM; Fri, 30 Oct 2026 12:03:40 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 6292E606B0
+ id XnLTE75_Xwpe; Fri, 30 Oct 2026 12:04:11 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 3A48D6079D
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793361820;
-	b=lTXePZbpC5fAsr05pHJHq1HFu+ef9QrB9qK3+JnJmiAPYOeqRi96C1GZGXjkwCcWdu1y
-	 tvtV19NsXIHVsXaLf102TKhI3rQ0fnnWJfxgNNovj/RVy1eLX1GbjChhRh2LZXQehSX2z
-	 CIpHDKK2E/IThHhcvZQXPIX//qlC/WPTzjxiEHxoLXOoq2jf9nEtUNm1XtO/b8ovXkhgD
-	 oeo9+67Q2mFT7e2T0KvVCeqr0Dsuf5vMM7k4HjTxfIS77mk8tPVN7NqugMRaD0ytr4NgO
-	 7M5VljWZDtt1M+leMXC4roGWjN4gTl7ko2UhIonJQHiLbR3rtLcbQqurvTMi+okENJQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793361851;
+	b=ZaTunyqU3HA80tMolYfN2wBfzXrXJFtZ95dBz3LUrIy8NruBA6c6pguB+rXs5Mbf5K9h
+	 zxL6LRbhoArBfHdj70iQmmhKxAUFouahlDFlkUKHCvUtVqLQZXwi1ItOj9cDbOgZKnV1h
+	 Pa96pe65Q9VAMlCYL4LBvtXiWPUOUAZeOK3Z0h1mSnzkKaK4ki5yDuck35sSJG0NlqnE+
+	 6VQtqjaHZ3vuSYYFdrRQI8sgcmLyJJjjCDRfUtXvKxVFD2VvG0tglX3OCbl6fn9GkwTqt
+	 vAUinu173Gc8i7nlhyawCezA2mTOJYV27abvIsp1AZa8PGel9ZJn97XdoKh9Sr//Myg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793361820;
+	c=relaxed/relaxed; t=1793361851;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -32,134 +32,134 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=IXPvo1ta7cKl1hc0QsoLc0oRzh8dPVFwZRgWtzSh5nA=;
-	b=HUipS9hwThAHqNPJty8Ok+YykZWXx/cvj3o9IaGdZh8VtDVRtmd4tO5bJp+fmRhNrD6P
-	 QVMtc23NDEW+YUuHUjfFZMp33hCZ6CiR2W9QmFvLWEEXTNmpumLSO/yU6n7Ok3BuWCF26
-	 M9lhIEEy9SXEvz9+yY9KZKUhq76pyxQEiAZddjQaWflK/5wXN/FEtwgp5FtAt/XkKV9H2
-	 doO1/ZzO/trLkKhUzshc5cq/n+KhwKFX82z5xedkVd7f68coEJWpMeuD+UNQaUl21O6pg
-	 Wqpu/M4w+q9+SRbQKPe31xWqYxcf4ZS4VOjQlE3p4lJ+b0QD45Op8jEPQf1kSleNuig==
+	bh=mLQ/Dh1ycs0X3ztyAJPOJyT0nUopNxoaa2U6NTzNyro=;
+	b=EMaRLl9MYbHNItWc/RFN5xhaJeMGRZ9C+RuOSwQqzbFD/3YA+cfsS5Kui3R6cmllsrbc
+	 4YhcZ9p3VfZDg6Iwf/OeWaoxZ09RxCA0k1dsP+4TypAu/Oa2NLh4k3p3dzqxbkikKMmLW
+	 S5CEKsmQxX0Q0JXbVTWVaO8xHvveBN+Gjm67FLHSMaPMYiJVed1RLTLzhI4s8Z0jalHEB
+	 VrYA1Im+7k+Uy4Y4SksNvvLNRNxTeAgT/SlhdWDQyzVctBd0mNP4agCtjveSYvqTL3QML
+	 brs5AElVwpm927S1MtSqTY71QoCMlHkTJHv5h2E57E0YgoubMQHC/J+xBSYr0W66tuQ==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	dmarc=pass header.from=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="f/Nq36tk";
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gTiNNX1v;
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793361820;
-	bh=IXPvo1ta7cKl1hc0QsoLc0oRzh8dPVFwZRgWtzSh5nA=;
+	s=default; t=1793361851;
+	bh=mLQ/Dh1ycs0X3ztyAJPOJyT0nUopNxoaa2U6NTzNyro=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=Y6CBG8SlXiYZGNEqunJLo4VKTr0xN90WRI8eiBLl8H6S/W4AEZzG/BK2RvcTVO9e9
-	 ++GE6zz+1txUiEbTHQRmwbnZrNYbLBTJDWPbflkXVzu2LKZHklSGPeZcW8FiZtkSmA
-	 4e2MD9JbhMLQbLVYMeJTDfzXPs3NzTTPHU8upIiLU6xNUV8AgZTJWSZW7fH5sxrrLZ
-	 qpNQ+sE1iTcf0V7t8GW+HKcfnls1d8DL1Tu6SOe4VM2xB3oUJDTaYCJBD6vKi4tw/d
-	 kvcDvyllAsyLr6lR2lV2cOei/bz3cRVfJfIXqOX7LX8stEbYTHaWq4r8MCb7j4hI5k
-	 i+yU5BEhJRGAg==
+	b=N4tTBiYs2vEpjIFYGeDBXMIOH2kbmLpGdEOoJEBMG9H1BlkRonAvP7OTSXxe+RCPe
+	 cU2BIyrdZcpasBN4oO4lRyBtRP0g7++hGe/+fSt8jRT0tQyKR/T3YHBCgP8/Nyc/pS
+	 UWp1HvFaBbOprDhImONzsn04oDyn1DNFIEIyVRtDIhO3DVK8tRSB6+rrPaVYpk9XRJ
+	 rV6sCs9NDnQzkFlhgGgHoA9FlENrUHjmxeuQEWN6JyfEHdXTM1mT27MfynfEwK9KAI
+	 aYPNx+MSp3HwExsgOq+qQ/RS7cRUoDqjbAc+9tMHg4Vg5nTWw7i+4UVCJ0yyjnSIh6
+	 IYvT5LjPUu95Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6292E606B0;
-	Fri, 30 Oct 2026 12:03:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A48D6079D;
+	Fri, 30 Oct 2026 12:04:11 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6C17D362
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 12:03:39 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 996CA4BC
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 12:04:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5226D606B0
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 12:03:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8B6CA605F7
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 12:04:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VGxTIfEQmCD6 for <buildroot@buildroot.org>;
- Fri, 30 Oct 2026 12:03:38 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 4A244605F7
+ id CUm9gITzpEQb for <buildroot@buildroot.org>;
+ Fri, 30 Oct 2026 12:04:08 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 4846960633
 Authentication-Results: smtp3.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::329"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793361818;
- b=fIcTjgsTG1ZQzYxPWUrjToew/+b9nA36EsS7RabERHrKqo4OystwZ9bddhg5Zsh3fvG5
- ZbRNmpAkhwi/aol5+IWpsRg/XD94PO0Ym+4UqELyGscCtA2xr0Ub4iV0VwIrCZTUSBr2P
- OVScD/DF6Iw0tr6njUOJtv6se297QOmql0yjoZLMhSpIHXunKM7Fjmi5nz/YUYbnOrDGz
- irroGjLwz4YFR/NIOKLxhSjXVsAZQ5e6EEsGwiJaLIPyLOcqwmGeDgRTmqqPEAlI61x3p
- 78Q6EcPgrZP5CPm/oJoCfPiTx0Atum5eznltOmZuXZleIg06cl/x+R/TveztRohz0cg==
+ arc=none smtp.remote-ip="2a00:1450:4864:20::634"
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793361848;
+ b=rPqWJkJmsaZ1BzDEdahhTL1derBQaZoDXbpoRIX0lc8Ay6Qu046QhkT/P+JbqbAUvaed
+ +jycXlxRWGkfgpXDPDObfsTsxa6ZGjKnM7H8/+ByUKFqoGORAtD2u7aWSqs0X9wRQ60VK
+ L+FDjHx8c32gOT344QxycERMw64c2n+rQPeO5JoURZ5NKgAWIa+JC2pULNFD2+fh7v/7P
+ HstmBaXG/Ez5KN3qVghxTG3TZMJwscIOlDoNYNt8uRlU5UMks7WESbAIKXD/BQrRqsNgP
+ Q3ynMDB2OKWkaHTy7qUDjTkcr44Cul1S39lqhPCjQonZ3L+yj614eadA2TsvTe3z/zg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793361818;
+ c=relaxed/relaxed; t=1793361848;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
- bh=A2LqYbhRe2aDRtxOFFM7FzIyNnHyoujh98hwKn1TUzY=;
- b=jmfYbXu8uafCmmTtPexiCP9HsRchiZL08pKHt1lexnz28AThg2l9zCloRU0cWVrFYTTJ
- oB7hFG2ajqlxpGbYWPj9ZvGSato9xLNnKwZWT5wpyBud7nO7c4qFlPA715W3jqNtSJi1Z
- 05nLS/q/TvoRBrUn4b7FzbMWqqV2dzvJNDivNX/9l1kTGL+xx95NtwWy3xthWf0mj+7Yu
- R3sKEFlogBud48SUVaMC7xlO56l+PY189kLIdMRJjUtaPABsQZdrCe+my5bmjmfXQeBAh
- SU+TYbfn8GuNqxCpOEnlfmTFDDgk6SPuI2xq/veORBaSxMnY98/YytskIZ210+kFO2g==
+ bh=rHRVtlCWHAeR6Drzc2kZf+yqCs15z0ktj5WUve17wXo=;
+ b=D/3BLgYo8eHWIiUQWC/ZJyOkicn4TYdR0OkvtlciIKvgbHjqR95dd5hDNpDNTpVBQ/lP
+ W81m22ST735/NydRDIty4I6OyJxCVYPJyunL2UWeKaEGMgg080TZuAzSADpUU9GFxJVXd
+ VvbcSZv2KOA6Dn1g1MRNLfytNCvNHC91G8+xGMzF2s8kY4sg+ZwcMvelzAcuAXoWd5zhh
+ 7QZiwV7fFz6wy5x1ZSEpUG8K3fytJXJWQ+m5RWp+XBODwRpVLkf7zMeJWO9SlRxlmKTQb
+ 5cDrJ5p9JAhXasj8yAPjKVMR7WWycD4Pf4ON33hFXU6r4vdc1tPBOK8XhWZ1LI3li0Q==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
  dmarc=pass header.from=gmail.com;
  dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20260707 header.b="f/Nq36tk"; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::329"
+ header.s=20260707 header.b=gTiNNX1v; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::634"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ client-ip=2a00:1450:4864:20::634; helo=mail-ej1-x634.google.com;
  envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
 Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20260707 header.b=f/Nq36tk
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4A244605F7
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 12:03:37 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-4a35ac4475dso4160555e9.2
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 05:03:37 -0700 (PDT)
+ header.a=rsa-sha256 header.s=20260707 header.b=gTiNNX1v
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
+ [IPv6:2a00:1450:4864:20::634])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4846960633
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 12:04:07 +0000 (UTC)
+Received: by mail-ej1-x634.google.com with SMTP id
+ a640c23a62f3a-c46822eefb6so75859066b.2
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 05:04:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20260707; t=1793361816; x=1793966616; darn=buildroot.org;
+ d=gmail.com; s=20260707; t=1793361846; x=1793966646; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=A2LqYbhRe2aDRtxOFFM7FzIyNnHyoujh98hwKn1TUzY=;
- b=f/Nq36tkeWr1X/e4J1K2nLjCQtEyQ035VSgLCMnCre6UaAccqTH4lnzBLpgK51exkG
- Y0vXN7c510PfkSz7ccu7LLOI6X/5ZdXXwZ07wpSMnYABHtW+VpblICZkgBtXHGYSXF/K
- skcIbPK6ZL4EpdNTYg+PxOsmwLH5gxwTftfgTh0wIdlwNUtbV2/dH9CcqEnMYdtar1AL
- apxD8kVuZGdZ8xnXygxw9jt7ybm3RBS+Zye5UVn6P4LSAvQuDku3GOg4zNuSAPL9tjpw
- ytOAjYxIbrywGzXpL/KtH+P4f8WS42u6vjTTrfGQqvbzzEUoZM9Sln2yNco9UGA2WqwF
- Rmzw==
+ bh=rHRVtlCWHAeR6Drzc2kZf+yqCs15z0ktj5WUve17wXo=;
+ b=gTiNNX1v9rgVB+eJ5tQ9zD7tz9hoa3bEXLyR3aJWK8TbOiPnsecE+zwknZ30WMWvPI
+ n8Kt9EFJAgO/pUen9snrgA3jjxAeuIUTRjAZsGn+nSoqa9Uu+DbK4ip6li03oPQWn1JM
+ K7sIoNoqWKs62hn0uQ/rvYT4ayHONwfzv8yqsZBEB5U4SW4W78K90OMW8RnZtQoqU69A
+ f9OxrSE3471EJHq2Lsg8aegiIaNJXLAenm2X8ZFTxHlPsqXM9e7709k5g4SIZTgkK+7c
+ Ct2m/EeS7aLSAz1tsg64hvBd7bYiZ1nw9zLxHDX0C4lhtaJPjR7B9vUgPH8SlISL0iaC
+ X5Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793361816; x=1793966616;
+ d=1e100.net; s=20260707; t=1793361846; x=1793966646;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=A2LqYbhRe2aDRtxOFFM7FzIyNnHyoujh98hwKn1TUzY=;
- b=vR7xDOMjYulgPAT6ghy0EbJgRNurHK/MfYxgc7vBoyT0siVT52dLrkQv8Ne0dhZFYd
- qhf9390GadSn5pPn7AK9OV4NdNpDNcjs0OQuLVYodlc5QpkTmm9wW/NgtkwrUG1BUPTb
- 5CIM25/w8VBtebsLTqwjoXSQM9Kvi11C/dl50iJL87KWgPKVHnwFkJseSdThOZWntyNM
- UuqtHKo/CC3pHdA2cWfNPF/6QnsnjKS/uL875S1418keR2dEaW5LVWCAxCQQVDgigafD
- 2UNzdAFsL2TeRPB7VQWKV2sbCFowU+QJ1RRqn6XOPCwZM7fcE/ikDzb7jZDD/Sna+nqh
- bUeg==
-X-Gm-Message-State: AFq9FYKiu3+vRlUHO8CCjbjxL7hrgD+LXZME3TOJqmvphZHlYq+c/rle
- Sp0TXki6g69GZ11GMf9a5TCQjxqqGZj6BzqQz/87ztbwfyV61SgdGa27Xn8IMA==
-X-Gm-Gg: AYBFou1EXUGXZYKCqJn1eALd0D4uAueBCmKhy9RIOxglOCM0KWgCzyfZI9cd4VgodRS
- GVvu5kJPin18CKADRyeEU2BCZ2YhMQtyW6iIqg9Q2Pjw5I03HdMyNev4ZdnVlz01oJ++aN6Zn6A
- agFdZ5G4l3Yeo7bkkZ+9YcFkC3C1cyAynJKnnfTnS+rzpoucWJPNt+8XcwEtNiYeTvVNS1hv20t
- ymJJv6ZZmj9lepqb6hS7DzWVaIxuGFVGZYIEWGDjYcyp64XFJhcGYXtK/D9F9doTGxvNagQphYa
- qldxp0WV0skGBqu9GzFSw0+XiYTBaD88nAOq4gB1bGJB1La1nA8yEZyyyHezt6cBvVC95N8OC4a
- qg7KWSbESfcnudOCn5tp43I2QI0mqPQuo6TBymZgFBUYR9rEVPjMoCbF3Bv7Baiw09FWJu3D62k
- msM7gHV5oRTQtPwTuRBdei62WzamWNnH91ZKVZ12wY2BicV3DcY7dwqacpxRb5Mhiy4nYCkHMJt
- z3ibQjV6CNbV7dJ3fW0pylAG4nxTnxOzKpD6ctOKuYcRLlMQM+l6EfyVVC3wmiwOXsAaqGmcVxr
- nygq/BvLTICTEre2HyOXtj2CA+dM33qsIBlUUXI9bv821zbEoUiLgdA9ipMPsuPYiw44XaKtppf
- W
-X-Received: by 2002:a05:600c:4ece:b0:4a2:40:8d2c with SMTP id
- 5b1f17b1804b1-4ac17b2c396mr42622635e9.26.1793361815686; 
- Fri, 30 Oct 2026 05:03:35 -0700 (PDT)
+ bh=rHRVtlCWHAeR6Drzc2kZf+yqCs15z0ktj5WUve17wXo=;
+ b=hIbq8885T4+lyrVH/QphGhWz59gPy9Xv8lUtP9dGFOHTG9+a4VWXPUWcSlgopy1Yu9
+ rjC32G5lj+gxWWHnOZlHWtB4/85rhyjwczG9dpjUAaOy0SFS5KJ5MqdQC+GPVL3JMBfi
+ WH7zzawefwIo6/2XPIf7wFMPLBm5Itjv6VCuJ1zWHF9XVODJNJ9pR/8yoIZ9QIL+5CgY
+ +bqIQNfkfNECrk6ZRJj7ruFbcXXJUndIhX/3QbIsFml2Jm5R6Yj7OEreG5hzZqe70YdN
+ 9738vnVzA6eHstTDq0vjkdG+8yWRphiQjXNpWez5oWhErtNVE0uOph9A02Iz6YdDBUVo
+ hYUw==
+X-Gm-Message-State: AFq9FYJXwV+WlUy+VgBmZfGsnVJUCOYEDAejDKW/ue0AjLFh2ZvIfFDd
+ wzSybQeXNW2+yc1Yxi5eySiSLJ0/H8gdyBE236b9/Xfnhwb3KTBfoNpkM/xbDA==
+X-Gm-Gg: AYBFou0E/hZGx/Jo6WrKyvMMcPiF0g6EEitMbJCDOdlQF6gaMkxtjAg8BtN/bpVrx/u
+ paJqlBISf0Atj0advT7f2mjiVb9LzJTPkDfvCz/QHyKk3HfucW5ho6dcdgxcDrMOtn6hnuDvG9r
+ 0PmSpoMwm5sRvatDoXnDtyjlV2uNWblUqowdro9azqYLC+iaWZgmfGT9CqaukowacGUss+JuLBG
+ f8zHx7uzW5FVUoo0ASNSthz6o5pYqGUgZ+on+WMv8DGCsn9N/2ITxRM2vZfpq1Js9XaEWfNHXa7
+ //LHoBGgNe9GqoSgd21u3YaZHb5v3k42HChcPF7i9Rt6JZifNQ83u/RvFHhBLoI3iQ8nNr1HQkI
+ WmV9cHxWJDS/HkTaRVWGPRTp7fSCf6yF2PCzoFWD2oIxwSWEf9MA1aEhK8BoakuehOwiD4G/mO5
+ sVRWxNNcMlCCak21VWGLB9H22JdN/kMRYCaAOrDyOS/lySftI7TCepFMu/Zk73H9HfhAaoXR17/
+ V+C70zvVghQu0PQOn7VZ2d7N7USzcVtH0A6o3f62Xl20t70lOSohGF2JM3tsP34lSZeRscozLyl
+ 8m8MKjYYo9h3SL24A7pZeOa4V/IjD3sTHWLoFfp0PPQf7tnzdBuWCozrbKBoAGuwN3XExPVhews
+ =
+X-Received: by 2002:a17:907:d64a:b0:c3e:f39b:2298 with SMTP id
+ a640c23a62f3a-c4ca7a0dca5mr197946366b.16.1793361845752; 
+ Fri, 30 Oct 2026 05:04:05 -0700 (PDT)
 Received: from angelo-Precision-7550.. ([94.154.175.53])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4aa80f047bfsm132576205e9.3.2026.10.30.05.03.34
+ ffacd0b85a97d-48e71b81c74sm2848917f8f.36.2026.10.30.05.04.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 30 Oct 2026 05:03:35 -0700 (PDT)
+ Fri, 30 Oct 2026 05:04:05 -0700 (PDT)
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 To: buildroot@buildroot.org
 Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Fri, 30 Oct 2026 13:03:32 +0100
-Message-Id: <20261030120332.3169390-1-angelo.compagnucci@gmail.com>
+Date: Fri, 30 Oct 2026 13:04:01 +0100
+Message-Id: <20261030120402.3171912-1-angelo.compagnucci@gmail.com>
 X-Mailer: git-send-email 2.34.1
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/sam-ba: bump to version 3.9.2
+Subject: [Buildroot] [PATCH] package/mono: bump to version 6.14.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -181,49 +181,112 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Version 3.9.2 is not available on the Microchip website, download it
-from the GitHub releases instead. Use the build linked against the
-oldest glibc, to support as many hosts as possible.
+The patch removing mono and the related packages [1] wasn't accepted,
+so bump the package to the latest version instead.
 
-Use the sha512 hash provided upstream.
+Mono is now maintained by the Wine project, download it from the new
+upstream location.
+
+Drop patch 0002, merged upstream.
+
+LICENSE hash changed due to the "MIT X11 License" section being
+renamed to "MIT License", the license text is unchanged.
+
+The corlib version is unchanged, so monolite does not need an update.
 
 Release notes:
-https://github.com/atmelcorp/sam-ba/releases/tag/v3.9.2
+https://gitlab.winehq.org/mono/mono/-/releases/mono-6.14.1
+
+[1] https://patchwork.buildroot.org/project/buildroot/patch/20250818140518.964728-1-angelo.compagnucci@gmail.com/
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- package/sam-ba/sam-ba.hash | 5 +++--
- package/sam-ba/sam-ba.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ .checkpackageignore                           |  1 -
+ ...0002-Ongoing-work-on-the-cmake-build.patch | 34 -------------------
+ package/mono/mono.hash                        |  4 +--
+ package/mono/mono.mk                          |  4 +--
+ 4 files changed, 4 insertions(+), 39 deletions(-)
+ delete mode 100644 package/mono/0002-Ongoing-work-on-the-cmake-build.patch
 
-diff --git a/package/sam-ba/sam-ba.hash b/package/sam-ba/sam-ba.hash
-index 252a60dbb8..38716e0ce5 100644
---- a/package/sam-ba/sam-ba.hash
-+++ b/package/sam-ba/sam-ba.hash
-@@ -1,3 +1,4 @@
--# sha256 locally computed
--sha256  d295567701914e21318f4c48ff3a57374c7c91f65f0814158e84bb07dd4d07c2  sam-ba_v3.7-linux_x86_64.tar.gz
-+# From https://github.com/atmelcorp/sam-ba/releases/download/v3.9.2/sam-ba_v3.9.2-linux_x86_64-20.04.tar.gz.sha512
-+sha512  f703720a93f9c22c11fd3cda0d1344defdbebd66c37c8743669c1560a7d1a779923a16b389ee8a38f4beea556ed2d89c30714e83f44a76dc53ed50a369abebe4  sam-ba_v3.9.2-linux_x86_64-20.04.tar.gz
-+# Locally computed
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.txt
-diff --git a/package/sam-ba/sam-ba.mk b/package/sam-ba/sam-ba.mk
-index 0928c8f9ca..cdd806c76e 100644
---- a/package/sam-ba/sam-ba.mk
-+++ b/package/sam-ba/sam-ba.mk
-@@ -4,9 +4,9 @@
+diff --git a/.checkpackageignore b/.checkpackageignore
+index a8c1baacbd..92da0a1858 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -598,7 +598,6 @@ package/monit/0001-Do-not-force-building-a-statically-linked-binary.patch lib_pa
+ package/mono-gtksharp3/0001-Fixes-MONO_PROFILE_ENTER_LEAVE-undeclared.patch lib_patch.Upstream
+ package/mono-gtksharp3/0002-Mono-compilation-error-branch.patch lib_patch.Upstream
+ package/mono/0001-Fix-linkage-with-a-system-libatomic_ops-shared-library.patch lib_patch.Upstream
+-package/mono/0002-Ongoing-work-on-the-cmake-build.patch lib_patch.Upstream
+ package/motion/S99motion Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/mpir/0001-mpn-arm-udiv.asm-workaround-binutils-bug-14887.patch lib_patch.Upstream
+ package/mraa/0001-include-Declare-gVERSION-global-as-extern.patch lib_patch.Upstream
+diff --git a/package/mono/0002-Ongoing-work-on-the-cmake-build.patch b/package/mono/0002-Ongoing-work-on-the-cmake-build.patch
+deleted file mode 100644
+index afe618f193..0000000000
+--- a/package/mono/0002-Ongoing-work-on-the-cmake-build.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 17650f7e0f571287bb14bb9b4fbde7b91d842bb4 Mon Sep 17 00:00:00 2001
+-From: monojenkins <jo.shields+jenkins@xamarin.com>
+-Date: Thu, 24 Sep 2020 12:17:34 -0400
+-Subject: [PATCH] Ongoing work on the cmake build. (#20428)
+-
+-* Fix some warnings.
+-* Avoid creating netcore/config.make.
+-* Fix CPU_COUNT test.
+-* Add missing source file.
+-
+-Co-authored-by: vargaz <vargaz@users.noreply.github.com>
+-
+-[Retrieved (and updated to keep only update of icall.c) from:
+-https://github.com/mono/mono/commit/17650f7e0f571287bb14bb9b4fbde7b91d842bb4]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- mono/metadata/CMakeLists.txt | 1 +
+- mono/metadata/icall.c        | 2 +-
+- mono/mini/CMakeLists.txt     | 5 +++++
+- 3 files changed, 7 insertions(+), 1 deletion(-)
+-
+-diff --git a/mono/metadata/icall.c b/mono/metadata/icall.c
+-index fa991bc72e57..f2c003ac1ff1 100644
+---- a/mono/metadata/icall.c
+-+++ b/mono/metadata/icall.c
+-@@ -9605,7 +9605,7 @@ mono_create_icall_signatures (void)
+- 	int n;
+- 	while ((n = sig->param_count)) {
+- 		--sig->param_count; // remove ret
+--		gsize_a *types = (gsize*)(sig + 1);
+-+		gsize_a *types = (gsize_a*)(sig + 1);
+- 		for (int i = 0; i < n; ++i) {
+- 			gsize index = *types++;
+- 			g_assert (index < G_N_ELEMENTS (lookup));
+diff --git a/package/mono/mono.hash b/package/mono/mono.hash
+index 1010f6d0ab..06a45e0fd1 100644
+--- a/package/mono/mono.hash
++++ b/package/mono/mono.hash
+@@ -1,5 +1,5 @@
+ # sha256 locally computed
+-sha256  57366a6ab4f3b5ecf111d48548031615b3a100db87c679fc006e8c8a4efd9424  mono-6.12.0.182.tar.xz
+-sha256  923c7053ad0d430cd9b0b69a0ccf3abb7170a1ce50ecbf01915b565a35823d10  LICENSE
++sha256  3024c97c0bc8cbcd611c401d5f994528704108ceb31f31b28dea4783004d0820  mono-6.14.1.tar.xz
++sha256  844242559dbdb96cb9cbe103b06c2bc8a349f19ad0b89d5c3cf830a8914333f6  LICENSE
+ sha256  fc488f3ec9f36856bea8cce5cdde1449176341ef93a3962b691970f8981799f4  mcs/COPYING
+ sha256  2c3c3ef532828bcd42bb3127349625a25291ff5ae7e6f8d42e0fe9b5be836a99  external/Newtonsoft.Json/Tools/7-zip/copying.txt
+diff --git a/package/mono/mono.mk b/package/mono/mono.mk
+index aead85bac0..0c833fe9ba 100644
+--- a/package/mono/mono.mk
++++ b/package/mono/mono.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--SAM_BA_VERSION = 3.7
--SAM_BA_SITE = https://ww1.microchip.com/downloads/aemDocuments/documents/MPU32/ProductDocuments/SoftwareLibraries/Firmware
--SAM_BA_SOURCE = sam-ba_v$(SAM_BA_VERSION)-linux_x86_64.tar.gz
-+SAM_BA_VERSION = 3.9.2
-+SAM_BA_SITE = https://github.com/atmelcorp/sam-ba/releases/download/v$(SAM_BA_VERSION)
-+SAM_BA_SOURCE = sam-ba_v$(SAM_BA_VERSION)-linux_x86_64-20.04.tar.gz
- SAM_BA_LICENSE = GPLv2
- SAM_BA_LICENSE_FILES = LICENSE.txt
- 
+-MONO_VERSION = 6.12.0.182
+-MONO_SITE = http://download.mono-project.com/sources/mono
++MONO_VERSION = 6.14.1
++MONO_SITE = https://dl.winehq.org/mono/sources/mono
+ MONO_SOURCE = mono-$(MONO_VERSION).tar.xz
+ MONO_SELINUX_MODULES = mono
+ MONO_LICENSE = GPL-2.0 or MIT (compiler, tools), MIT (libs) or commercial
 -- 
 2.34.1
 
