@@ -1,28 +1,28 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96499606A32A
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 15:27:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 047D6606A31F
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 15:27:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=JZou/stg
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=iF2DhBCX
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7215460ACD;
-	Fri, 30 Oct 2026 15:27:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BCAB9813C6;
+	Fri, 30 Oct 2026 15:27:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FSDVIiVsMKKP; Fri, 30 Oct 2026 15:27:19 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 4008960B14
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793374039;
-	b=qbyieOSJQjjZcnZ3hZS01WcyeJcou4LuCD3mHKaMImc4funos1owNz7k4YIM/t+JSxvv
-	 HYg1ds5DEOgobbArj3BKytWUdQErvLe3iIimJV6xp48VBAWYjZJMNNdr5ZCOz8xIvhlLd
-	 9XeLeC27t+O0SohXa5aXZyjVlRAmCRsLYWgFYYtUvJjjjPQXQZrM6MdfrBhrlA54PC6og
-	 WEeEnLeTqD4w351iCmvSmhe1RWIkhVoqbJ2lEF02WADcGIQOTWhHQB3iFSnPFOyW8EUBD
-	 +9VSH3INbXLKKy5Cn0JG5zMCtFQCj3kCrvE9gJD8IgMhhlFb9qO1ITI2Wz4XpVN/gqw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XkvePHP4AxQl; Fri, 30 Oct 2026 15:27:21 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org C78B881654
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793374040;
+	b=VenKiIYE541FaqUflkZec5ZI11E/LwTZzn+fCMn8xdG0koxwXtgDWPXLe6Eid8d1mDOJ
+	 NQeX4XaZgg5C7Ro9iBm9s00R7bfE+wecReu8P2WP3KXA4sPvckdgl6IMHiimeGtyZpIkS
+	 w9QfweLq5fSd3smaeFfwS90c5X7h8n0JqwVMkw3DWd9T2+bpm5Db+NyfjPZfB/BoNWxXq
+	 km6zWGWVEc46ezZnTRSPO8g9oAX4NXxvU1sEo0PAII7Ppo2iySjTOtH2OYm9irwUIAHmo
+	 NEM0+NtvT22MEUp8uhy7Vdl+66E4nVqD5WDSY31rsVxUiE7/6p4HuJ7Cp0yDDjQjhdg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793374039;
+	c=relaxed/relaxed; t=1793374040;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,119 +31,118 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=5jAOtYtUezGV7wH/F/KfODMfDWWB7tmwL4Gg55iXEdc=;
-	b=Q1tPrvDGebks+Bxfv0gfrzyL8h1ntsYbhsYp+bxghmWLcTk4vMuLdiceZ04JVGPPMLib
-	 KKv6PrkHA3c0SMYppCqpwrlF5bky//voxovjmbq32iTUrsEoEMl6R4/vgtTWE1u39XfyZ
-	 ASAuzkd5cTdvCkvXquKXbdeETOARvEB/sRubD6ifoI9AyM3MoPrJTXqKUJoRFeBly245w
-	 AhBHE5m+fK3YNHlD7IG1CZJFGNFk9N1JP2/f93Fi3bLZY3k3Y4GTxEgsVZeS11rf4m2rm
-	 3Lo1TchCh/MoHjPM7u62DNf3CFGJGXcQ8AZPrhu4Ly90zkEdVD/VDTnw5KjH043l7Hg==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	bh=nMPyVLIWayekgNq1z4D9sTUTe9DK7AL66iK155UWtAw=;
+	b=rxlpXh1Wk9J/hX6wROufKQQOKVS+GPAULSrHRGCpxbtdq9G9E5lyZL0UFnn9Sx33SOuN
+	 GHzofLdzGn1I1lqXpu0IGRrBp73ZAp+pyGFzOjyAv6l0a0rE04zFNi2isBHGykW8GSsDL
+	 i8T8nAMLZV7WeNO75CwcBqCiFal6qSglYcTizEchDMSVCvQSLS4nK4e27m/2QPcOTOx5s
+	 Z6eSN9aD8BAdysf78QGZz+0A6AcXMnbWbu5KWgIahqVXPcykfrH+4tfT6TGKLF4KeE1r7
+	 EMTOB2zaoZN4ImhQwx6efiLMxw6p1YfszItqehA/so0FZOIfLHjLOaTih5Xqg5wV+vA==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793374039;
-	bh=5jAOtYtUezGV7wH/F/KfODMfDWWB7tmwL4Gg55iXEdc=;
+	s=default; t=1793374040;
+	bh=nMPyVLIWayekgNq1z4D9sTUTe9DK7AL66iK155UWtAw=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=JZou/stg9ArluDPqxI8NA264EiC9A9c9tR5wz/amuOH6oaK1iiFvRWYncto8bqsqI
-	 Q9xyMQjE8nzB56blGGVu8mLzSvTYm5OYeAmVcRHC6mVSmdTV4kF16wwx13RYFnV6T4
-	 b6Aab1iyvNTUplUn7DRsbPPiEwLXYtFR6H+2deb4fOAV10t570MxDel08MwU5xhkLE
-	 mvfjM42QVUOc0cqnV1R9M4YBKWejmpyTpO5ndg8oTaGp1eZH58cluI7xghmWYROn9O
-	 00W30+Z10UcvYfJLFZY3pqGLLYmAI0ORUiNIPVkB9Q/HE6eKUeR6WBLqpDEjs20GUB
-	 Mj/Fp6ch0vveg==
+	b=iF2DhBCXykS/BCWFX2x8cS075s31VJnIY4D8YveOOsGcZJM3lgdHap44/nKHc/3gX
+	 Kn7+Aki+Ug/cYNoot9i5mzIj6Lt3fI94cgJUSSlrgg1AQtDRZ0s17vwlne6GxsloID
+	 P4/qneAYgVE9jiR/EeV9KrV1GatyabYU64hMXOEZ4mok5uzBt0BspyPIAVdStBbg0j
+	 B1jcXB/A4S9PLk8YbeYPWw3XMy2CwNCyIkka+XVDb6tllXvZ2pvGtOydMchDU1Fyx3
+	 KZwoWfGC98gFOA/ZWXev/tHtyTEqdz49WZsi8rgKbK/3wWo+KTaD/hjw7abyihJcax
+	 8C+OL/IkFqDGA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4008960B14;
-	Fri, 30 Oct 2026 15:27:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id CECF0D38
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:26:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C78B881654;
+	Fri, 30 Oct 2026 15:27:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 35A4F3AF
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:26:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B4D4240211
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:26:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1A86681509
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:26:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g4tHY24ATizK for <buildroot@buildroot.org>;
- Fri, 30 Oct 2026 15:26:52 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 6725940530
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793374012;
- b=lIP3YstOHl1Vssp6E1AnSgt38Acy6e0Y3jdeLtp4mohJqbvSej5XvzGIAM6mB5caDK7T
- NTktv1xoIwMygE+OXfRAv8obAuOHTo5/n/6cX4MA3psv78cXQSPnD6cH7ULLO9WBBeSiv
- KGQyA5vvCLMrL4eQoO3lMdBEv4XFwpHCjB4+xvhzZ+S2jSrg0mkN9fprEkHMuxZPvTMqy
- bMT3ZtA4WMgNTJAq45HZIJaZQxHH+JTIewY/r0ahp+LeZpn5nRJLTX7spRZgc90MDViS+
- xkh+8J+bcz1AHX9NBh4rLDysreQ5CYuYOUo0YPhnlr1ZjgaWB1iGSCSLQudEDF9e8tA==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QkBur-07O0Vp for <buildroot@buildroot.org>;
+ Fri, 30 Oct 2026 15:26:55 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 31753814C9
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793374015;
+ b=hA8Z2iStjlUSeq1bOpVbxXdOmwvR5bUqz+QbQgbtFMh3wcTnt4jyRi63I/oqzfXVXiWW
+ B6ttohD/oUVi/p0s+pFbAOd4kVwNRDdWXAYa5tSU2KzM5C2+fnhOSlAh10ua283RnZNyb
+ 2m22vL0MaxogAVptiPIt8fTQI6qrDiHBQaiXzxVUJgTYAZ/RoaSV227irLO+16h4C/dMq
+ JdIvD3GjaOmFjINIg076QjmYRESRxI5eq7oUbKBuBHmh//FmtV7JhLROEq4qjLibW+ubf
+ TNw59suO6r5FnpUqnUvW4OB0ZePSTyHluwW4sQXrp71FnV4lY1BhNXBprGyuJWjGOYA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793374012;
+ c=relaxed/relaxed; t=1793374015;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=4PBxz5HpNb60YdQFKbYdWPyF4VChC+P8wz1BmNa/Mo8=;
- b=pdYLfEIHhkkbwWiXSon3zNDIK3G7E4eEohyyr1BD7gT4xUwfgW5dhJTHHu72iowL20ze
- VXVcHROucitI8aPxkbReOMEwp+URv+WKY03BChslpBQLJEvthpioquO+6g2RwoB26+/FX
- J6+AKlBkfSc9wJdWIBJcX4/KOHR24Y20WUmC2nsy+4uh0tgkl91Po02RnrV2qhK84YuJU
- bNN+Dfo/oq3u9CDh6FLwnatBetzHMAhukOLqzVdLsRT4eRxfkGRFod8OjwojB1aW/H5sC
- F0gIHKtv0V0su0gGo8ANaElJsPbh+QNmVa6HbyergWHCvxiuEUx37LjXZGDMWFQax4A==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ bh=50fxAbyKDlZlssb+vC1Xb9QQTlR9OrbHgfB82JWZW+c=;
+ b=JzzFbGIAcevlCskdgJsxg2PNvloS3xMJvtm4dUkCo+bjWaA3pNvq/fvNLFV6/f83qj21
+ z2VBYQfrhbSAXFxPe2NC6Jsk4yQ1Ny/V/ku0j9z37bBKyhHK+iJcXa+XBzjUrQ1Qt7JJ7
+ hc7I7zs/GaX6XN9ol4K/naCl+RdhQ8sTOjhQAqWh4uiMUn6HzDGuyyeLzt4OPKxXL3ne0
+ TCE5xEYuuI+9kjlcoDm0gT6VCLf0OPnTuZX+CdexOXT+Aq8YTG7DPiW7Aexhqt9oJV2Qu
+ WItG89NPtnRpO8AO+8n/grFRIQsgujL6WYphsTh0Lly4ut9jCfA4H5reEAoK81rimAQ==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  dmarc=pass header.from=mind.be;
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=Q34R54Yi; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::42f"
+ header.s=google header.b=bzBglYW5; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::32a"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6725940530
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:26:51 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id
- ffacd0b85a97d-48e47347279so567560f8f.1
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 08:26:51 -0700 (PDT)
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 31753814C9
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:26:54 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-4a140e7405dso8714295e9.3
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 08:26:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793374010; x=1793978810;
+ d=1e100.net; s=20260707; t=1793374013; x=1793978813;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=4PBxz5HpNb60YdQFKbYdWPyF4VChC+P8wz1BmNa/Mo8=;
- b=ydOINZaMcG8gVTFguB2/OOPMkUli5PpPDNTFb6wvpTJ4lruev05NuohOCFovltpI9g
- /nMehOcitCOAboN7Sj0NJcsLMjNCxLScZP+wABSBUePNp7ZWgUUqhpyZclmmqwcytB6S
- P3dk4HVHHb9V8XQWr73WpNZl9g6lwFx/zdxS5YJrCGu56b+9u6BWoOcSbRPF5UldQZ6G
- +UDcpIphEztcI39ku44l5vkSVX/jNo7/5Q+A2qAnCUHkrenMCls+AbCbmjptJKVJqD2A
- hW0iJI1JhUKpPqc3qVvGQFITyReSf2lh6yt7z8lKHaehINu7/eBwas6p28R4sAPDIJrP
- 6TZg==
-X-Gm-Message-State: AFq9FYJ+a2AiFEUgZWf4fLDgshsNZHxEYIPNC+ZdwL05V30S3p6WT2SI
- sCUwFdT1afGLvDAbu21BSqrEJyX5YzjuOz80bYGgAukrR9fn0EzuQTSWxVnnSr62O9u34x9lEyl
- pRxB9OJU=
-X-Gm-Gg: AYBFou0AOQK5MFcNdqttDHsVx3BvxU5J+BaeINzxCRWTbp3p2TbAn490lghzHy71ly3
- MfM8/5g1nAYEQj+FFpKNjRB/5jhxXRj4nx9HqKRQ0o/ju3THNbTNS03KczLpTsSQpR9QTr425gr
- ltn5KLl7ZAdIMnwW5x7yp/EyiMZniBuly56SZ+JE+DE8xsymt+BdnIAzDkQ3I7eyXQXPTWkrfBG
- HRz3SLR8lozXAtEho14C8Yaxd4MEZAFnuvyN5BRp4mP6tyosqPRQLKX8JrlVbDN/sHZbPzDTNhb
- t/B8kUy9//w0UiTB6IeXr8ONaQoO2FZKyHQALM7gA4QQguFUWqb9zXWj9HPGFWfYoznG/eA2st6
- tDw0wLuvzBFJARLGaB4whKmL7Dp1vr5/2ODLzezZjZ/inaPICmANLwrN7KxNE0tmeVoQ/cctrRS
- /kegVSVHn6pUuRnPzgPgOnTPhaFxtWaTb1sHS3BHtNI8SaE0PiwCVNI8x6uOdcWQEhqn9Hxo+Y7
- 9WzNX7f68bvB8RPkJfUHUxLNq1qhFSgiAPgUZ6I5qjU5Zw8861nXvuiJ0J2JqvtTn5Sdqk/WyN7
- 6WBz+Mrs8GyVFITUv1yfyjLIvz/rtgoQyv938rtwZdszpi//eUvKJripHesNynWQ7m7qIblu
-X-Received: by 2002:a05:6000:4b18:b0:48e:6092:deb9 with SMTP id
- ffacd0b85a97d-48e6e2fa4e1mr6112983f8f.14.1793374009968; 
- Fri, 30 Oct 2026 08:26:49 -0700 (PDT)
+ bh=50fxAbyKDlZlssb+vC1Xb9QQTlR9OrbHgfB82JWZW+c=;
+ b=vUqqCZdX1pRSjsDT4UPQH6K8TKy/fwsxIyTB89i65HL7iGearfFyXusjs3sIbO/hki
+ TBQiY+pWDENbq/zDspbXHSfL2j+yJAlBW/7tECcs9LhlHRncR4Z5KBxs7uFHKP3tYfF1
+ flj196Q3CoONthgvpscPvZCt11yXge6U0dzUg1cwdG3f8z4bSCWyo2CGbbOmQEYDd0S6
+ VtBoepgDdEahBAuv9K504DSLZCCQDKEIlSBsOuWYuS1reJhPSdniEDJegWBn922wvIzd
+ dCuWBwCHe2e75NPxzEMB0Oo7eeQIFo07WzpJqEA5kdX6ucfkH6oFasUngVQ7i6/aSDJD
+ GX5g==
+X-Gm-Message-State: AFq9FYLUj1zuDy0VLZ9T1LhnQd17KWLzgNpo/3swgdYyAf5mA9g3uaAv
+ j3bdVSAmUtiBqgVHwvX2+S5p7HVil2bcG7ivBLQSHQ/BV/L8nQzg8BCGIRYaG+iYLrFtrxKQUbX
+ 1oOP9LFk=
+X-Gm-Gg: AYBFou1T0UtncXcBUqP5aL4azcVHhPSPvGO6otgUvpnM5EyDHnXJX3CGt2N9B2KvVIq
+ HoVOx337SJ4NpKuOFdusYeowiXxbAUhTvLTKtAAtEw+u+oVEtrlakVc8lVK4ckKNxDZkcD+SvvO
+ gW0YGEwgyirpsgLnDQRj1sdenOyKAW/oDdlU6/LtjdGAQZksluODUhQAH9IZT/dYFS61IN28zdl
+ BZt5j7B8WBrMVX5KJwqfnA/ibRwH28UEc058jKri/esFtzO/r1QuZgO5aWLoTbCS6VMyoqDtZsK
+ wSLm68JpEyOgqnOt8aZWgUB81MEskR6I7ILGVJJfWmM50dF/uh83c3xxY0hPNYyHt2kX4dePnYi
+ WAyrysF4XXLo6mHPZtS4Rehyx48M6xKfIkx0BTOTV3aYWWdA0sK5TL3Mh4tgJV4dkI5v7o9C9Dk
+ XfTNhRbdbdAjv1EAFL89E+jvWI6ICNwEy2ZNuSlbudTViqnV7XX9lPlNA1TX2SF8Ed97hVSC0zR
+ 1FTCBUY9omyWxFFbUOyoJYS3qK3lBs2jtkGfwb5RIMuRlFM3pXfvJksUCxi7DityqVS02+na2Vd
+ yyudrM4zk1pwwE2NFSx4tsf6yeR09hTONLaEApiKEb22oPYZUQQGEi+HFPS85TpSKGg+5y6+
+X-Received: by 2002:a05:600c:354a:b0:4a3:5a55:f454 with SMTP id
+ 5b1f17b1804b1-4ac17e10ac3mr61467365e9.19.1793374013069; 
+ Fri, 30 Oct 2026 08:26:53 -0700 (PDT)
 Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
  [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48e71b77f06sm3816338f8f.21.2026.10.30.08.26.49
+ ffacd0b85a97d-48e71b7815fsm3648137f8f.22.2026.10.30.08.26.52
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 30 Oct 2026 08:26:49 -0700 (PDT)
+ Fri, 30 Oct 2026 08:26:52 -0700 (PDT)
 To: buildroot@buildroot.org,
-	Yegor Yefremov <yegorslists@googlemail.com>
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 30 Oct 2026 16:26:46 +0100
-Message-ID: <20261030152648.1906391-1-raphael.melotte@mind.be>
+Date: Fri, 30 Oct 2026 16:26:50 +0100
+Message-ID: <20261030152652.1906422-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261019141801.1653017-1-yegorslists@gmail.com>
+In-Reply-To: <20261019193044.900785-1-thomas.petazzoni@bootlin.com>
 References: 
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v3] package/ncftp: fix cross compilation
- detection
+Subject: Re: [Buildroot] [PATCH 1/3] utils/genrandconfig: add missing newline
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -161,168 +160,65 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
 In reply of:
-> ncftp still ships a configure script generated with autoconf 2.13, which
-> determines whether it is cross compiling by simply trying to run a
-> trivial program built with $CC, instead of looking at --host/--build.
-> That heuristic breaks when the build machine is able to execute the
-> binaries produced by the cross compiler, which is typically the case
-> when building for x86/x86-64 on an x86-64 machine:
+> The line:
 > 
->   checking whether the C compiler (...) is a cross-compiler... no
+>   configlines.remove('BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y')
 > 
-> configure then takes the AC_TRY_RUN path for the remaining tests. Those
-> tests link against the target libraries but are executed on the build
-> machine, so they fail as soon as more than the bare C library is
-> involved. The most visible victim is the curses detection, which links
-> the test program against the target libncurses and then runs it:
+> would fail with:
 > 
->   checking for curses library headers... checking for ncurses.h... yes
->   checking for curses.h... yes
->   checking for curses library... no
+> Traceback (most recent call last):
+>   File "/home/thomas/projets/buildroot/./utils/genrandconfig", line 650, in <module>
+>     ret = asyncio.run(gen_config(args))
+>   File "/usr/lib64/python3.14/asyncio/runners.py", line 205, in run
+>     return runner.run(main)
+>            ~~~~~~~~~~^^^^^^
+>   File "/usr/lib64/python3.14/asyncio/runners.py", line 128, in run
+>     return self._loop.run_until_complete(task)
+>            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+>   File "/usr/lib64/python3.14/asyncio/base_events.py", line 720, in run_until_complete
+>     return future.result()
+>            ~~~~~~~~~~~~~^^
+>   File "/home/thomas/projets/buildroot/./utils/genrandconfig", line 556, in gen_config
+>     if await fixup_config(sysinfo, configfile):
+>        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>   File "/home/thomas/projets/buildroot/./utils/genrandconfig", line 255, in fixup_config
+>     configlines.remove('BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y')
+>     ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> ValueError: list.remove(x): x not in list
 > 
-> With no curses library, ncftpbookmarks is silently dropped from the
-> build and installation later fails with:
+> because all configlines end with a newline, so this needs to be fixed
+> to:
 > 
->   install: cannot stat '.../build/ncftp-3.3.0/bin/ncftpbookmarks': No such file or directory
+>   configlines.remove('BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y\n')
 > 
-> Other checks are mis-detected the same way, e.g. the 64-bit integral
-> type checks, which end up breaking the build itself:
-> 
->   checking how to scan a 64-bit integral type... cannot scan
->   io_get.c:763:96: error: expected ')' before 'PRINTF_LONG_LONG'
-> 
-> So add a patch making the generated configure script follow what
-> autoconf has been doing since 2.50, and consider the build cross
-> compilation as soon as --host is given and differs from --build,
-> regardless of whether the produced binaries happen to be runnable.
-> 
-> Regenerating configure instead is not an option: the macros in
-> autoconf_local/aclocal.m4 rely on autoconf 2.13 internals (AC_LANG used
-> as a value, AC_FD_CC, __oline__, ...) and upstream generates configure
-> with a patched autoconf 2.13 (see autoconf_local/acgeneral-2.13.m4.patch
-> and acspecific-2.13.m4.patch). A modern autoconf fails with:
-> 
->   configure.in:53: error: AC_LANG: unknown language:
-> 
-> This regression was introduced by commit
-> f8bc27111531e9607f79121414f61c0c2d5f83c0 ("package/ncftp: bump to
-> version 3.2.9"). Before it, a pre-configure hook regenerated configure
-> with autoconf precisely because the bundled script "doesn't detect
-> cross-compilation correctly". With 3.2.9 that regeneration started to
-> fail, so the hook was dropped, which brought the broken detection back.
-> That commit left the host-autoconf dependency behind though, so drop it
-> now.
-> 
-> The issue is present since 2025.05, and in 2025.02.x since 2025.02.1,
-> where the 3.2.9 bump was backported as commit
-> 6b0e4d82c31ee04e8a6abb48323252a7cd97c177.
-> 
-> Fixes:
-> https://autobuild.buildroot.org/results/ab25f98d7ab8b397e2aa4f87af9cf1d814f3d6cc/
-> 
-> Assisted-by: Claude:claude-opus-5-5
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Fixes: b07d21ab984d10cbabeb186fbd47d446e027c03b ("utils/genrandconfig: handle BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y")
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Applied to 2025.02.x, 2026.08.x. Thanks
 
 > ---
-> Changes v2 -> v3:
->   - identify the commit that introduced the regression and the affected
->     releases, including 2025.02.x (Thomas)
+>  utils/genrandconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Changes v1 -> v2:
->   - explain why configure is patched rather than regenerated (Thomas)
->   - drop the leftover host-autoconf dependency
-> 
->  ...cross-compilation-from-host-and-buil.patch | 60 +++++++++++++++++++
->  package/ncftp/ncftp.mk                        |  1 -
->  2 files changed, 60 insertions(+), 1 deletion(-)
->  create mode 100644 package/ncftp/0001-configure-detect-cross-compilation-from-host-and-buil.patch
-> 
-> diff --git a/package/ncftp/0001-configure-detect-cross-compilation-from-host-and-buil.patch b/package/ncftp/0001-configure-detect-cross-compilation-from-host-and-buil.patch
-> new file mode 100644
-> index 0000000000..c3ecd61d1f
-> --- /dev/null
-> +++ b/package/ncftp/0001-configure-detect-cross-compilation-from-host-and-buil.patch
-> @@ -0,0 +1,60 @@
-> +From: Yegor Yefremov <yegorslists@googlemail.com>
-> +Date: Thu, 3 Sep 2026 10:00:00 +0200
-> +Subject: [PATCH] configure: detect cross compilation from --host and --build
-> +
-> +ncftp still ships a configure script generated with autoconf 2.13, which
-> +determines whether it is cross compiling by simply trying to run a
-> +trivial program built with $CC. That heuristic breaks when the build
-> +machine is able to execute the binaries produced by the cross compiler,
-> +which is typically the case when building for x86/x86-64 on an x86-64
-> +machine: configure then concludes it is not cross compiling and starts
-> +using AC_TRY_RUN based tests.
-> +
-> +Those tests link against the target libraries but are executed on the
-> +build machine, so they fail as soon as more than the bare C library is
-> +involved. The most visible victim is the curses detection, which links
-> +the test program against the target libncurses and then runs it:
-> +
-> +  checking for curses library headers... checking for ncurses.h... yes
-> +  checking for curses.h... yes
-> +  checking for curses library... no
-> +
-> +With no curses library, ncftpbookmarks is silently dropped from the
-> +build and installation later fails with:
-> +
-> +  install: cannot stat '.../build/ncftp-3.3.0/bin/ncftpbookmarks': No such file or directory
-> +
-> +Follow what autoconf has been doing since 2.50 and consider the build
-> +cross compilation as soon as --host is given and differs from --build,
-> +regardless of whether the produced binaries happen to be runnable.
-> +
-> +Note: configure is not regenerated during the build, hence the generated
-> +script is patched directly.
-> +
-> +Upstream: N/A, patching a generated file (upstream has neither a public
-> +VCS nor a bug tracker)
-> +
-> +Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> +---
-> + configure | 7 ++++++-
-> + 1 file changed, 6 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/configure b/configure
-> +index d955e20..2311c73 100755
-> +--- a/configure
-> ++++ b/configure
-> +@@ -845,8 +845,13 @@ int main(void){return(0);}
-> + EOF
-> + if { (eval echo configure:847: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
-> +   ac_cv_prog_cc_works=yes
-> ++  # If --host was given and differs from --build, we are cross compiling,
-> ++  # even when the build machine happens to be able to run the binaries
-> ++  # produced by the cross compiler.
-> ++  if test "$host" != NONE && test "$host" != "$build"; then
-> ++    ac_cv_prog_cc_cross=yes
-> +   # If we can't run a trivial program, we are probably using a cross compiler.
-> +-  if (./conftest; exit) 2>/dev/null; then
-> ++  elif (./conftest; exit) 2>/dev/null; then
-> +     ac_cv_prog_cc_cross=no
-> +   else
-> +     ac_cv_prog_cc_cross=yes
-> diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
-> index c56fc86848..4075449c53 100644
-> --- a/package/ncftp/ncftp.mk
-> +++ b/package/ncftp/ncftp.mk
-> @@ -11,7 +11,6 @@ NCFTP_TARGET_BINS = ncftp
->  NCFTP_LICENSE = ClArtistic
->  NCFTP_LICENSE_FILES = doc/LICENSE.txt
+> diff --git a/utils/genrandconfig b/utils/genrandconfig
+> index 8437d6342d..597602f257 100755
+> --- a/utils/genrandconfig
+> +++ b/utils/genrandconfig
+> @@ -252,7 +252,7 @@ async def fixup_config(sysinfo, configfile):
 >  
-> -NCFTP_DEPENDENCIES = host-autoconf
->  NCFTP_CONF_OPTS = --disable-ccdv
+>      if 'BR2_LINUX_KERNEL=y\n' in configlines and \
+>         'BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y\n' in configlines:
+> -        configlines.remove('BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y')
+> +        configlines.remove('BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y\n')
 >  
->  ifeq ($(BR2_PACKAGE_NCFTP_GET),y)
+>      if 'BR2_PACKAGE_LINUX_BACKPORTS=y\n' in configlines and \
+>         'BR2_PACKAGE_LINUX_BACKPORTS_USE_CUSTOM_CONFIG=y\n' in configlines and \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
