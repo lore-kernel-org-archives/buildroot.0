@@ -2,27 +2,27 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF8AB606A31F
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 15:30:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A5CA606A321
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 15:31:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=XjKEqUAF
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=R5vfcbfK
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D08BA40EBE;
-	Fri, 30 Oct 2026 15:30:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 222FC40E4E;
+	Fri, 30 Oct 2026 15:31:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Pltb3qcu8eCQ; Fri, 30 Oct 2026 15:30:07 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 9BC3240ED9
+ id glALHvi_G0DQ; Fri, 30 Oct 2026 15:31:15 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 1C56D40E41
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793374207;
-	b=Iee+aykYOBCalhEnoRZnKeDTveQEhSklm8pX3p1niY41rU304PQn2qpNsspEfPaBpFIC
-	 MancOKJh/NzoWUvC1Q42UUEckYE5Csec4xxKEeaqX05h34gHIDtB9498EO4e2cvvtIDjF
-	 qBLT16YrvmED+zXW2LDMTHX7rH9ZP6xz8/YiU+9/vvyNiLynjsWzsizn55XChk9Ohf8R0
-	 NYZjT9j/HCcwfCvBjVlfNvWtbKui+SkSOQA2CHt9TGOUd6mxuJ2dwPBR1Gjy4O1Jm+OLO
-	 ud8RMP7v5HYkIkvagWNsE6h/HE5xGCzQ+nQaCjFI8grxfEcN7Ek7ak5SID+MlPUHHdA==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793374275;
+	b=XVH2XU3PSOOe89CMOgsAB1XrU+t5mIVYFfznH8le9O/YPcX5nIYf7M2O7fVbWLe59wTM
+	 gKHId7v5rdtvNNaUYnX3o/KvrRG/2qkG9vNtgxtjKnbq41sg8SBCrDpmXHBSQvtZ1oU7M
+	 nVT97dS3doSrzP+rqLo5ZDAuP7J+21udzi77szd5PFzxnINLkhvAtTFQDPMebCj0wkFJi
+	 jeTYT/jUPcEX8yFqgpDhovyRlXcX2m/1sF7PdI2i0glvv7UDrln5hmOSiseINZNRlaN5S
+	 ixzqbMp9/5zboUcnBwY8N6ShpxuTySUQwrn2rQnlI8Sqvu7OIfv1nWur8NXYqiL0t/w==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793374207;
+	c=relaxed/relaxed; t=1793374275;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,118 +31,120 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=h9+dGo8aTuYQocqwOUzeIvD9Oa3nh4gGqEi2wUQuwIk=;
-	b=JrAMXpjRayiFBGAFOGOPLa/qI+IGJSa9OcDXHIsxxBGUK9BYcguanarKP5/CpbyPBmK3
-	 K2wWGOXMH9xN1tqe5txQSNwKUYOJsEYrs1zZEQmTxn9qXym9PF+BLN0RmeChZPbWzyHFw
-	 xBiWcnGOOt8g+NlqKYep+ZL6GNiD8FC34I45GZM2v64NnkK+3PPpInSKsuJve96G8/Snw
-	 GY+hxuNSGmZlCsI9VzQW56rvPz8Yq+ACEprwZzflih3+GVDIpyES6OlA4zmeI2c9sTRzl
-	 iuJ4udN/7Egm2/gvPZP12q3pcT2el/CsNTzjDGmoKCrHITn2ZsmABv05TBtvn7pRtAA==
+	bh=EbJXOXNUTYOAo36WDo2q8qbtWsrt9UVTGNUY45LcRto=;
+	b=r6URSpCmOMNK+rR6vx115rTyly1lCH2ZmD8hqJ4InaagaDzwa72gjRMbRBcDDt8guFd1
+	 8Rj/SFT6NeXABGQdvoAq3t923o10QL5YTjlQrHoJ3fOXz3gHq95/5FfZIDg5sI36bstKS
+	 b1OgCHqb6+u7PApyy+S5BwJPvDdScx5hx4Fb98U7Ak5p1xn33SDBmrxEMKrPukhteA5O8
+	 FyFDMkaTG+WSLFshjH9s5tCFU4It7HmBiM9hpJtXKKevuehyostoALjVy50/3ckXDKpje
+	 ajfK3Ka6B+BFOHuAixAGNAl08waf+iZDw4JFwgNmLliQdx2wMBXk5RiKyhU4lEADZTA==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793374207;
-	bh=h9+dGo8aTuYQocqwOUzeIvD9Oa3nh4gGqEi2wUQuwIk=;
+	s=default; t=1793374275;
+	bh=EbJXOXNUTYOAo36WDo2q8qbtWsrt9UVTGNUY45LcRto=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=XjKEqUAFOk4gyHvZ5fKG1P5lAsai3Tq1O21J/e84JIUhTeg2Ci+e1n1nZDsE+VlRh
-	 l2CwhhM+wu2SoFcnIcl2eAr9ML3f4F+ij7+f70AFKn/hbqCXbQdL4pfL51025FIO/n
-	 t13RcrnkS4b6yS08J++PF7U/oo7DopBP/36bLTth+1pk1VHRpnWvkzEp4PyCz6pD33
-	 N/kD7kgXKv/cReP3Sf1CtekVN1OdWxvxAKwyuGLlN4HQt7SdS9MXnXfGDbIYCbabPl
-	 VrGgQ0vuXvEI7fOC87rfo4fuzJciD77L9Ry8lTYgnGyIfs2fL8RXfmcopH/WA/L1Xb
-	 bOY9jg3b+f+ng==
+	b=R5vfcbfKxLvQO6fPnuhF9tijsyTMwCSRHrtfuVgsettGGj4nEcpetCmqYHACh1SHg
+	 lGjjg0Wf/pdxbRLv0X8f5ZZQUno8VhnJRr9DF/n/Gkmu698nyE0tdngLjHnuB0vgXo
+	 3P5e/Ukk8Tvq6W6oPEGqG+3bab9qS2LrNCz9plwvyaa2+E5P0q7aXXyt0sTY3HBBZY
+	 AZw7FJbgfTyMbBlWxkgi0bYWar3wraXcaBhjLWE4vnBXfvVxi6jOgiuyyTCV9RfEYK
+	 OtNDC9g4Pa0DO6njJwFulgwHxpYCPtWOnTpXx/i1F6tYVCM1/JOR1FAVNAyf1oysCV
+	 NIY0nusvGZPsA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9BC3240ED9;
-	Fri, 30 Oct 2026 15:30:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 97BB3235
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C56D40E41;
+	Fri, 30 Oct 2026 15:31:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 0ABE5D38
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:30:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 86C0140D7A
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E45B440E7D
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aAhdLEy9ZaBU for <buildroot@buildroot.org>;
- Fri, 30 Oct 2026 15:29:42 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 3EE1D40E26
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793374182;
- b=PFx8Z8dG6gJnQYHwpsoptORggVsb8fBJyuYBjggOyDCZxmLde7t5jmI7LyoW7ceS7ToS
- z3rTsRns39X2qUNkIP7QfUs74CyUxk2LACB4eYbWQdPQN+aAqWDPbMrIcQUYQyMgsGF1u
- nmi8Cmn/Ls/1v2X+GEoAK4SdOTN9bg5NQM7LLquXoeyY9aq6UdOU0oNJdhBsMgokSTzwr
- Rs7X15BRHs6gPskbjT9Mgc9axy4F2ZnwqszGMqOeUIYR1flpdAi85WUmRCvYSUT13PKiy
- hxBbonLQEK9PRNX170dXa5rTqroGCp1KhZ0bErO11zWixrxr+3BOcg1Qf1TKx7zDL6Q==
+ id 44fctbPTphwj for <buildroot@buildroot.org>;
+ Fri, 30 Oct 2026 15:29:59 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org AEA8440E95
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793374196;
+ b=YeitPxZJuIh1u8I5RapZHRDACkEo8OM4MPGbtDtzZmhht9IW7XzdoATKTMR7ZHhOEaic
+ c435g876MuYV9QKdfnOxop4Yj43BsnGXDZK7b+91Tu9PZxf7K7LziUDdM9+y1SCXy8myy
+ vxM/L824hq4PraOs/GNQvMuMsBdbJCX1j3COEPjQIyK7ljNrgplAlIvLKLmjC6NrLKKf4
+ RtKbpHiAUlBGamhBR6Io/90DOFbmQsoHEmkymX+1T4lwuIPxu1DFIRQqXalCat401yZ3y
+ WU+moYcTJhZMKWIP2mKpQ7E5cvU3z85pbbZxko66Ik9R1l0MQ0JzvPlwOvh+Yd+n8CA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793374182;
+ c=relaxed/relaxed; t=1793374196;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=3alobzvn5hUKw8EhMBkhMtqcJlgXKPgYvm+8jN4Cm2M=;
- b=s9G6aqEv9jG0IQac2hkmD24lI7LpDd/vNZHPl7IquYO+t61htzB9rO72kWcknlKX69ke
- sP7Jh83VjkG4EobnAxTvoGYe6cAPIBcQkY7vypCVXPA8T2eeJ/63rA4sg87uPxPsU0lGx
- 1bQRsZng0NCsLbD5WASXxBBW/5JWLpoCCM+WamqYmo8UkAgQtX4rVJwjw3M6U3jbn6waW
- mVwNEDPtLJ0AlFlvzr1wjq02ALnZ+2mDdBK1zJahiDN0etn/baptOndckKe2BwP/CPobm
- vB1cbRquUukCyPxNIzPhFD86nhTBEHyziIyBeNhPISNFoixgNVFJDPJAuObiZu8oMsw==
+ bh=pGzqBHmP0ApX4QtrwN8qkYrZQp5ahqWWdFI/CcucU/g=;
+ b=hu36YN0vFxAOAqV43AGDfKsX0kAgKSwDYA7jZ3i0amU0V8OrLnqs3SUpKTramWq//NmH
+ X+8U3v8UamxturR91LSccjanhTM2hD0nzhJzgWYsgUyBWZslOsq/wNWMPUrTCU9UqLeN5
+ mawOmNlAeF0vfvTV71JMQQHHJnU01FNjYr+anzvsxjm93k4o+kTOttP5DU//nlP+86H3h
+ GTzYNVU8deuE8RMOZLoQORlkuhAKwFnLXW5V/BQq7657nLA265wJbPn41lIWE1ff+Rfdi
+ BwZOZdW68V6g6u6A/51YAlpfNhC+bvQdp1M5aZ+2139pPRLfC2xcw59DbFLAS0yAZpA==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
  dmarc=pass header.from=mind.be;
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=hvmc8Zsn; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::335"
+ header.s=google header.b=h6hcPg0Y; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::32b"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3EE1D40E26
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:41 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-4a4d7ae1ae9so7969835e9.1
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 08:29:41 -0700 (PDT)
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AEA8440E95
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:54 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-4a59100fa83so7601615e9.0
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 08:29:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793374180; x=1793978980;
+ d=1e100.net; s=20260707; t=1793374193; x=1793978993;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=3alobzvn5hUKw8EhMBkhMtqcJlgXKPgYvm+8jN4Cm2M=;
- b=hKhGlfRMuU7NaY5tBADbm7n0x+w9qDhl7p4AiB1pS09wGLRerl/blqjyqhNeHE57oL
- sC2kzAdnhd3fDjn7imJwfxUuA1D9dZLdI73RUE3x8/KAA01zhuFgzto6KAiZTKCRx/d+
- letrCzw6Hkti4/cXOIT5D1b0CM+5NSnyOdkPUh+Dgg1zcww0bkCbJOUGS+9ZiIIFOlWj
- tqEbMaK3p/O0Reo3JU8L6+9I3t1NcU+WNIqdqirV3TQ95xkvy9P9YquFWPTLv19GJVCL
- v1Z8hZJHHleZYNgeMM7XYmc/AWqsT+uGRGhi5tDAezGjd8eSSSUUaohP39XPutN0Qpxi
- EBUQ==
-X-Gm-Message-State: AFq9FYL9KmgmGIfvbvazKySsDuRXrjqvougLu/3fgwgpyJWcj67tnEcv
- bH5q/cDEkDmrDFiXrl3fxg9GXWMNvmiDqGHWHar3QOP6v2SvG51YzORXXFnZ87542X0KlvLc21A
- cy5QZLys=
-X-Gm-Gg: AYBFou1htEZ9KpuAa0OWOGj7xpPxgrjmU1BUIFOCUtPJnhU1yRpfsZ3Wq0YjFRufgoz
- SH0VQ52cP4tBPZHLbiy4ODbrICsGGrs5lGmUHaPtkNWEiUNC/GEerZIU6/vPowq2yyPQaHWDlqU
- 7h4DUGm2M+5UbeAEYuKn06HRIdFuzEl4tfRvrJFo4R0EaECq2H6W1f3U4L8OsL0zNk36OQGcsdf
- X7CbOFykbDt5EzxyrYWPFkl6ySYi8Ff3XURXuaKMZZ5uhMgZMXsTI8Fc9x6+fQv/1MuWBlH31nR
- isj/x/1JEP47paqUBuD6CVGTNJQgXNLrtg6/G2jlxNWrMWK4MknxTgG/GY34UhTvpcY8w+WSNUm
- SGPhItqU7eb1Ibz6qRKQbiVH+HnEHgLw+GFKc4IT5LpLgC7R2X8BTms+GmgVuaf6RvN5y1FkFz4
- zh7BNrxd7X18TOXG8Oo7E/t7x6eK/VkIuZ+O1apVOo0870ZbMK376F7O5ZHnqdWx25/sMQYj303
- eTC6LS6rcVGsdruwKZSurY2qkWM6rQ8IWx4HqLBRn+1cx+7tFNJn90eMlTzsrc5KCVX06/obRbo
- LrCIUOsk1Dlu4l26kLEK7jPO8ksdf/90TfPY9K4XVl2RSnyvFuD7e992zKPuh2NYRZde7Jgg
-X-Received: by 2002:a05:600c:8116:b0:4a2:150f:160f with SMTP id
- 5b1f17b1804b1-4ac1913eecdmr56953025e9.25.1793374180100; 
- Fri, 30 Oct 2026 08:29:40 -0700 (PDT)
+ bh=pGzqBHmP0ApX4QtrwN8qkYrZQp5ahqWWdFI/CcucU/g=;
+ b=bw50OwdOjDazk/eaGi8IaTdKm1pK41fzINt8bJTpXXhY3BxPK/eG8kd0SIwN6REJXC
+ m+ivlS5BdgylVwLRloP7qmF3Jgpbkt2j2/3MEWSRCNpxHiMzep77yExgDnvZtbc+pDEs
+ h83cQBPvVsD24bTNOFswzDbPfx/r15ZRjt6ReABz7J5/NRRCu6trYl0APn3FeF7aiNKf
+ wNI6HUC9aXRSYlVj4Xvmj3iNpUSSjH8r2z8fDMVp0PkAZb4SdgDbASrF0OIO0FGDoWXZ
+ Q9QiKmPGHxNZPQrDaCLlWUmpTw/r02SeVa76sfX3GgnNaUFEXubW7arziq3tKSRMugZb
+ S5dg==
+X-Gm-Message-State: AFq9FYKyR8D3elQRvcVsgf1d//FOqZcxEwG57Jw/Cx4Mm3nlD6+aqYHO
+ rcxJ5iLnSe7cULcldq++9sg+DWJPYgi1NFI0pMgufwP0e/Bw8jn7lC3O9m7QYjxXngQ8ZIVCVZd
+ v1T7qDFM=
+X-Gm-Gg: AYBFou2FDGU1lZNqa7pcg/LqPBChQJB5WOjR6CqEkBhCFjZnAAEpR1AR8h6Dz/e+dtf
+ LfYJBSVfGHVyFBIpW02i9bnl/cc71y7+pwawfc2owm0gDMtxFnznfl2ESzP9Cc4bXurQZ1H8fuY
+ HqmgRxXffKougs9ZMtu5TAu1U6//kAReBakdqtOGU2a8IAFFnVznITW/HudsOJzicsGUUyj9+Hq
+ giv+w5IRsz/8jy4uBcI6Hi2vKADcL3uAPEfEB3RAh9nVAHsURkDi6wsQldGyuJMeOnVdecDE3BD
+ rdENT0/IJ57wpYeh9aJHydhNTK3b4QLr75Hgrhx7+oKQrqrgwJw7PoNyPJ0h1Amcxf+xUiWHUe0
+ Hosg1OPN8tF6XiO+mTd71nDSrUzQlVUBRAEqCwKlkvSlyOm61Xj5qJSIXTYvYf/r2Mcp7u1iIas
+ Yw8AlI3oCiC9G1RgH3lGPC9lBUCO7WVQ/ae1gp/3A6Qkyh7QByFed8AYIDzZIagESDLgneKOV5p
+ 4indDC4zPUhRjniYHAOjVnNBqCgcreaDygv7b+LCFnPeyhHlLfjP0XmgFRjdHfwh0y2a1CXlBv7
+ nMX0NqwwGbtIHObyYzksSqRKzjGdVuURK9WHUtBAPXF9b/2YazMwbyuoJkk2AjNmGfIXuGxbhw=
+ =
+X-Received: by 2002:a05:600c:4ece:b0:4a2:40:8d2c with SMTP id
+ 5b1f17b1804b1-4ac17b2c396mr57474215e9.26.1793374193143; 
+ Fri, 30 Oct 2026 08:29:53 -0700 (PDT)
 Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
  [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4abf0b36853sm61413855e9.0.2026.10.30.08.29.39
+ 5b1f17b1804b1-4aa8213ead6sm142504885e9.14.2026.10.30.08.29.52
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 30 Oct 2026 08:29:39 -0700 (PDT)
+ Fri, 30 Oct 2026 08:29:52 -0700 (PDT)
 To: buildroot@buildroot.org,
 	Yegor Yefremov <yegorslists@googlemail.com>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 30 Oct 2026 16:29:37 +0100
-Message-ID: <20261030152938.1908036-1-raphael.melotte@mind.be>
+Date: Fri, 30 Oct 2026 16:29:50 +0100
+Message-ID: <20261030152952.1908157-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261024132350.3708324-1-yegorslists@googlemail.com>
+In-Reply-To: <20261024215009.1004860-2-yegorslists@googlemail.com>
 References: 
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/libgpiod2: fix static build
+Subject: Re: [Buildroot] [PATCH 2/2] package/openssh: fix build on MIPS
+ before R6 at -O0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -160,189 +162,65 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,USER_AGENT_GIT,
+	WEIRD_PORT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
 In reply of:
-> libgpiod 2.3 switched to meson, and builds its libraries with
-> both_libraries(), so the shared library is always built, even with
-> -Ddefault_library=static. With BR2_STATIC_LIBS, linking it with -static
-> then fails, e.g. on ARC:
+> openssh fails to build on MIPS64 (n32/n64 ABI) before R6 with
+> BR2_OPTIMIZE_0:
 > 
->   FAILED: [code=1] lib/libgpiod.so.3.1.2
->   [...] crtbeginT.o: relocation R_ARC_32_ME against `__TMC_END__' can not be used when making a shared object; recompile with -fPIC
->   [...] BFD (GNU Binutils) 2.47.20260726 assertion fail elf32-arc.c:1815
->   collect2: fatal error: ld terminated with signal 11 [Segmentation fault], core dumped
+>   during RTL pass: zero_call_used_regs
+>   channels.c: In function 'channel_set_xtype':
+>   channels.c:437:1: internal compiler error: in int_mode_for_mode, at stor-layout.cc:408
 > 
-> Add a patch, sent upstream, using library() instead, so that the
-> libraries follow default_library and only the static ones are built.
-> As a side effect, shared builds no longer install the unused static
-> libraries to staging.
+> Since version 9.6p1, openssh builds with -fzero-call-used-regs=used if
+> the compiler supports it. On MIPS before R6, gcc rejects this option or
+> ICEs on functions using the hi/lo registers (gcc bug 104820). The
+> configure check usually catches this, but at -O0 its test program
+> builds fine with n32/n64, so the option ends up being used.
 > 
-> This issue has been present since commit 1d132d04fc0e
-> ("package/libgpiod2: bump to version 2.3.1"), which switched to the
-> meson build system. It therefore affects 2026.08 and later.
+> Disable -fzero-call-used-regs on MIPS before R6, through the configure
+> cache variable already used for powerpc64le. This doesn't lose anything,
+> as the option is never usable there.
+> 
+> This issue has been present since commit 3c047ea463e2
+> ("package/openssh: security bump to version 9.6p1"), which switched
+> from -fzero-call-used-regs=all (always rejected by the configure check
+> on MIPS before R6) to -fzero-call-used-regs=used. It therefore affects
+> 2024.02 and later, including all maintained branches. The cache
+> variable only exists since openssh 10.1, so for branches with an older
+> openssh, --without-hardening would be needed instead.
 > 
 > Fixes:
-> https://autobuild.buildroot.org/results/7dc84554b75a370136bfa2451f4b4c3dde0d92e8
+> https://autobuild.buildroot.org/results/68d260341341afb0dfb7244f641f5196df3649a8
 > 
-> Fixes: 1d132d04fc0ecac014be003b7e1662c47672328b ("package/libgpiod2: bump to version 2.3.1")
+> Fixes: 3c047ea463e27ceaafde76d64406862c3322daa0 ("package/openssh: security bump to version 9.6p1")
 > Assisted-by: Claude:claude-opus-5-5
 > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Applied to 2026.08.x. Thanks
+Applied to 2025.02.x, 2026.08.x. Thanks
 
 > ---
->  ...ult_library-for-the-installed-librar.patch | 138 ++++++++++++++++++
->  1 file changed, 138 insertions(+)
->  create mode 100644 package/libgpiod2/0002-build-honor-default_library-for-the-installed-librar.patch
+>  package/openssh/openssh.mk | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/libgpiod2/0002-build-honor-default_library-for-the-installed-librar.patch b/package/libgpiod2/0002-build-honor-default_library-for-the-installed-librar.patch
-> new file mode 100644
-> index 0000000000..f369ee4248
-> --- /dev/null
-> +++ b/package/libgpiod2/0002-build-honor-default_library-for-the-installed-librar.patch
-> @@ -0,0 +1,138 @@
-> +From a92938c5d7bbb5a918937657a8940dc6072929ca Mon Sep 17 00:00:00 2001
-> +From: Yegor Yefremov <yegorslists@googlemail.com>
-> +Date: Sat, 24 Oct 2026 10:28:49 +0200
-> +Subject: [PATCH] build: honor default_library for the installed
-> + libraries
-> +
-> +The installed libraries (libgpiod, libgpiodcxx, libgpiod-glib and
-> +libgpiodbus) are built with both_libraries(), so the shared variant is
-> +always built, even with -Ddefault_library=static. When the toolchain
-> +or the environment requests a fully static link (e.g. LDFLAGS=-static,
-> +as done by Buildroot for static-only builds), linking the shared
-> +library then fails:
-> +
-> +  FAILED: lib/libgpiod.so.3.1.2
-> +  [...] crtbeginT.o: relocation R_ARC_32_ME against `__TMC_END__' can not be used when making a shared object; recompile with -fPIC
-> +
-> +Use library() instead, which follows default_library, and set
-> +default_library=both in the project's default options, so that a
-> +default build still installs both the shared and static libraries. As
-> +library() returns an object behaving like the shared library when both
-> +are built, the users of these objects (link_with, pkgconfig.generate,
-> +generate_gir, full_path) keep working as before.
-> +
-> +With a default build, the only change in the installed files is that
-> +libgpiotools, already declared with library(), is now also installed as
-> +a static library, like the other libraries.
-> +
-> +Fixes: 97bab4cc87dd ("build: replace autotools with meson & ninja")
-> +Assisted-by: Claude:claude-opus-5-5
-> +Upstream: https://lore.kernel.org/linux-gpio/20261024123124.3700266-1-yegorslists@googlemail.com/
-> +Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-> +---
-> + bindings/cxx/meson.build  | 3 +--
-> + bindings/glib/meson.build | 3 +--
-> + dbus/lib/meson.build      | 3 +--
-> + lib/meson.build           | 3 +--
-> + meson.build               | 1 +
-> + 5 files changed, 5 insertions(+), 8 deletions(-)
-> +
-> +diff --git a/bindings/cxx/meson.build b/bindings/cxx/meson.build
-> +index 92625b5..a23c70a 100644
-> +--- a/bindings/cxx/meson.build
-> ++++ b/bindings/cxx/meson.build
-> +@@ -3,7 +3,7 @@
-> + 
-> + cxx_inc = include_directories('.', '../../include')
-> + 
-> +-libgpiodcxx_both = both_libraries('gpiodcxx',
-> ++libgpiodcxx_lib = library('gpiodcxx',
-> +   sources: [
-> +     'chip.cpp',
-> +     'chip-info.cpp',
-> +@@ -29,7 +29,6 @@ libgpiodcxx_both = both_libraries('gpiodcxx',
-> +   soversion: libgpiodcxx_soversion,
-> +   install: true,
-> + )
-> +-libgpiodcxx_lib = libgpiodcxx_both.get_shared_lib()
-> + 
-> + install_headers('gpiod.hpp')
-> + 
-> +diff --git a/bindings/glib/meson.build b/bindings/glib/meson.build
-> +index 0ccd8e8..17e071c 100644
-> +--- a/bindings/glib/meson.build
-> ++++ b/bindings/glib/meson.build
-> +@@ -61,7 +61,7 @@ glib_public_headers = files(
-> + 
-> + glib_inc = include_directories('.', '../../include')
-> + 
-> +-libgpiod_glib_both = both_libraries('gpiod-glib',
-> ++libgpiod_glib_lib = library('gpiod-glib',
-> +   sources: glib_sources + [gen_enum_c, gen_enum_h],
-> +   include_directories: glib_inc,
-> +   c_args: ['-DG_LOG_DOMAIN="gpiod-glib"', '-DGPIODGLIB_COMPILATION'] + profiling_c_args,
-> +@@ -71,7 +71,6 @@ libgpiod_glib_both = both_libraries('gpiod-glib',
-> +   soversion: libgpiod_glib_soversion,
-> +   install: true,
-> + )
-> +-libgpiod_glib_lib = libgpiod_glib_both.get_shared_lib()
-> + 
-> + install_headers('gpiod-glib.h')
-> + 
-> +diff --git a/dbus/lib/meson.build b/dbus/lib/meson.build
-> +index 9acf5e1..12cff4a 100644
-> +--- a/dbus/lib/meson.build
-> ++++ b/dbus/lib/meson.build
-> +@@ -14,7 +14,7 @@ generated_dbus = gnome.gdbus_codegen('generated-gpiodbus',
-> + 
-> + dbus_lib_inc = include_directories('.', '../../include')
-> + 
-> +-libgpiodbus_both = both_libraries('gpiodbus',
-> ++libgpiodbus_lib = library('gpiodbus',
-> +   sources: ['gpiodbus.h', generated_dbus],
-> +   include_directories: dbus_lib_inc,
-> +   c_args: ['-DG_LOG_DOMAIN="gpiodbus"'],
-> +@@ -22,7 +22,6 @@ libgpiodbus_both = both_libraries('gpiodbus',
-> +   soversion: 1,
-> +   install: true,
-> + )
-> +-libgpiodbus_lib = libgpiodbus_both.get_shared_lib()
-> + 
-> + install_data('io.gpiod1.xml',
-> +   install_dir: get_option('datadir') / 'dbus-1' / 'interfaces',
-> +diff --git a/lib/meson.build b/lib/meson.build
-> +index ea1d92c..fb09b71 100644
-> +--- a/lib/meson.build
-> ++++ b/lib/meson.build
-> +@@ -1,7 +1,7 @@
-> + # SPDX-License-Identifier: GPL-2.0-or-later
-> + # SPDX-FileCopyrightText: 2026 Qualcomm Technologies, Inc. and/or its subsidiaries
-> + 
-> +-libgpiod_both = both_libraries('gpiod',
-> ++libgpiod_lib = library('gpiod',
-> +   sources: [
-> +     'chip.c',
-> +     'chip-info.c',
-> +@@ -22,7 +22,6 @@ libgpiod_both = both_libraries('gpiod',
-> +   soversion: libgpiod_soversion,
-> +   install: true,
-> + )
-> +-libgpiod_lib = libgpiod_both.get_shared_lib()
-> + 
-> + pkgconfig = import('pkgconfig')
-> + pkgconfig.generate(libgpiod_lib,
-> +diff --git a/meson.build b/meson.build
-> +index 7045d29..7633702 100644
-> +--- a/meson.build
-> ++++ b/meson.build
-> +@@ -6,6 +6,7 @@ project('libgpiod', 'c',
-> +   license: 'LGPL-2.1-or-later',
-> +   default_options: [
-> +     'c_std=gnu89',
-> ++    'default_library=both',
-> +     'cpp_std=gnu++17',
-> +     'warning_level=2',
-> +   ],
-> +-- 
-> +2.34.1
-> +
+> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+> index 6808db9962..a0cd3168e0 100644
+> --- a/package/openssh/openssh.mk
+> +++ b/package/openssh/openssh.mk
+> @@ -36,7 +36,9 @@ define OPENSSH_PERMISSIONS
+>  	/var/empty d 755 root root - - - - -
+>  endef
+>  
+> -ifeq ($(BR2_powerpc64le),y)
+> +# -fzero-call-used-regs=used is not supported on powerpc64le and makes
+> +# gcc ICE on MIPS before R6
+> +ifneq ($(BR2_powerpc64le)$(BR2_TOOLCHAIN_HAS_GCC_BUG_104820),)
+>  OPENSSH_CONF_ENV += ossh_cv_cflag__fzero_call_used_regs_used=no
+>  endif
+>  
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
