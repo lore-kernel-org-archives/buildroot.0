@@ -1,28 +1,28 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3893606A31A
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 15:31:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F414606A31C
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 15:31:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=IK7PPDW8
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=CWeN65al
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F01640EF0;
-	Fri, 30 Oct 2026 15:31:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB79B81DAB;
+	Fri, 30 Oct 2026 15:31:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NpHonlI9YKwR; Fri, 30 Oct 2026 15:31:19 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 6BB1D40E5F
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793374279;
-	b=rPJNYrD4im/t6W3fWnMzqBrn9kI5cf3LQ7rod+V9Z97dZu7tBx++WjK1dFhZmZyddPKv
-	 U5oYnlxMX2bQ3xq57C33AskdF54qpZIFina5Kk+I/QeAh4iKUN9NQODzaap4nVN6Wx/R4
-	 hCYxDMfQKqP8MBfqG2Yf1bMIEhJQjLN3+KaHnXJHiotKLib3iSQcChS992ZvuecL6A7w0
-	 5qBoGqDIP+0nYZOPrEOSl6LW2THXlZ+RQlX5U2+4J/OASlbC6a798jyQGlDyhPPOTfVw3
-	 53D7pfKT1TTzqtBbq5RPrqMv808hiQZH2MHHtnhrtdXGxFur1OiXB3Q+4fB1UgRxeWg==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fz9Vbwsf9fuy; Fri, 30 Oct 2026 15:31:21 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 26C5F81D65
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793374281;
+	b=jfmwJVzcXOUSWpsoOJxdP9zoVl5A5PUIeiQ5sksXAIS5a7jUEgEk6Vazu1JE9Ds6ueSp
+	 m0LN/Hv7H7Ssp2JXBkArtRS310xwSEi+c9au8QcuorQRtVkVqzF065dxq5HKfxEdq7z+p
+	 ekA+GLBiA56PGDk73Iho/iThZT8EhmOlCZHIT/rO3pjUDIw8018Sv/2a3XobqmhoDDKeB
+	 hJMXSKqkd/oy50fIfI2PvA0sxDkmiuIx7VsALy6t+dJyRGnvXW5VxOzjlU7y2LSy/o9xW
+	 sP+H12uLoTJ1d/KH4e4E3F5k9mdo7SSqH8TWSvC9caYMgr7NsF4uw36GwOgUy+yTh5g==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793374279;
+	c=relaxed/relaxed; t=1793374281;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,119 +31,118 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=jYCE0Xj6W902DSjBFLHQON3jhqxj9bVF9b8ZboKVn1k=;
-	b=q0bilYGUnxeSN2bt52HIrb+8k683e90TplbYhxtISt2S4JLhjsvKrKKwNzKu8SCKGc3Q
-	 7HYFzUAHRm4wRMKh1fSawQ1XdS1nCaMiB2C7488pE4uiX0B1mV8U3/RdmD486lA0TcySX
-	 4XKpxp1rKzMoPO4gvz3z8cAOkyMc5XBSfGRi2e+5dEp7r2sjNiTfXpDt8c5Zg4LrXGcNM
-	 LDQRbVATgdh+9waifSoSTbG0ZgY4m2WxJ4zSt4W3mc1BfvxuvhV0/dP2e/mKgkjbDVErQ
-	 OxPngeEsqkejd6VDxTGtCBjYKjwNx84Qx1T+mBZ/DmPirYoGAImcijRswMaeqRtHmHg==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=5iU8ad0NP49ByKKfVuL/NqzPma4aXKgLn4UwAVdeP7M=;
+	b=oBfgDv9zOGWe6BEIUDq2qaTospQHwwzuhvouOhBKFQRpQe8yjXXaEP370mPkb8IWPr8O
+	 iN9nwMiILmRrGSqgJNfIWr370/LxpGHP7vu/5m1HbGT99YvmWUTm2T3YccDCpirWQYW4N
+	 9TNThu9BDo3N/qsYW9rox66sdMcHs7CX2bwXWX2QGL45JPKz+OvAdXRnfzM7hL/rObM/D
+	 8uFO0j8A10lbWGy74DZgIZom+4vVY+hu/ZxN1Vr/qq+nKD1+Z6qeTSGzA98VXJz9XW91u
+	 q3hxBTWO7tlPZVUOytoBO0BgYpRy/EXOqavLXllsNBIJERgpkMPDAqG1fIniRw5o4MQ==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793374279;
-	bh=jYCE0Xj6W902DSjBFLHQON3jhqxj9bVF9b8ZboKVn1k=;
+	s=default; t=1793374281;
+	bh=5iU8ad0NP49ByKKfVuL/NqzPma4aXKgLn4UwAVdeP7M=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=IK7PPDW8+qAxhEJl8WyilA7eNPhM4wxFe407yEDPHlafRgzAylAkUcrTDQIl2m+ts
-	 jXYm/oBCB+yxeoRWV64BYYgSMCgUHHHgROX2QqaYw6N4lgPFG14A5AKNcAwtymvaRC
-	 uK53fMQXfgKzQTxSAK0fb0QseMmWZGjrCowN38unLLmQvJyJvoBlbSw7ZpIchhCe8y
-	 OPwriJ/VuxU/3i8aFnOSTfJjMUEozpjVTeb1AoB0QOwY7bzInAlektHpBtmri05/uW
-	 Cy0+XjvzcLc4hQtWfu0JTDX3OwDn/9CsYQk524HdUVQ6t59Poeyn6uL/FsycgXBitU
-	 krk90V4I6rO8A==
+	b=CWeN65alCjD/yW5bByzVgwEMQ5BBg9ej8NtoDU1aFNudJF0WpEGTZy2MpKlq3bw5B
+	 73wu5EfJ648z7pJWal4+TJvDZD9y3ValrExA2Wp6p/K13a19130+H/rJOlc2z2CC7B
+	 imGUR+Im6ifyELG2cOhrtM/7Q2Vjw8JV28Ntwvq63oVAOBB9/gJmWFTQ8/HZ63fCsZ
+	 ZG3N0DaC23vW23tpoXl72bU5Yo0j9KjuOWZ1yYTKWTK3y4vBJkq9u8giDDDzy/94XM
+	 +LEOeYVZ5lC41PJTERbwJxKFZ49JCdCdAlU6MNlvxFYv4i541aGOW3tZ5vPjRBkKzY
+	 STlJLUGOqOi2A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6BB1D40E5F;
-	Fri, 30 Oct 2026 15:31:19 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 97AA9235
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:30:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 26C5F81D65;
+	Fri, 30 Oct 2026 15:31:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1CCC7D38
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:30:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 895FF40541
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:30:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E83D081CD0
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:30:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CEvReh--Zm96 for <buildroot@buildroot.org>;
- Fri, 30 Oct 2026 15:30:08 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org A0EF54053E
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793374208;
- b=POwFHNoGu5082aHQ2aaXRWtPiS9DbiNB9RH/j0/MPB2hNY7F3kHyGfUvkbzLu3fVQa93
- guQSO1ipKcV96BZIbWRbajo/K6qNk5QyJRnZEYb+FqA49yKUvJFlUqx4POau8H50+kGS+
- URVG9eDuH2mYOR+OAbedDQhIw8RD/BPjWdzXS8ca9pLwVDkrLo7WTYBCopx4P2hU/BjUj
- RcYb3enTTp9q96+qvatCLudZAfuzJRSD7GQwelN7CaIAY6wKRjVOY5Hf8vP3MixJ4gQU9
- x6Sj8mprPm2jddgxX2MxZv5izD3+kg0hj9mf8GAmp64SSma0U/o+n2QQKjPGbo7IeCw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XjrKmr_MOqXz for <buildroot@buildroot.org>;
+ Fri, 30 Oct 2026 15:30:13 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 8346081683
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793374212;
+ b=ZspqM4RQea66jNCo5TuHqD0a6DEXs4prmYN02Luufn6UeUWtjnFnVJgUDT7mKsCQ19HI
+ HGI/o3CD+6rM6RRSHZyf2Ik6idldq02V7D0x1U3y3J6VbDNd9bldsOSaPWy12xCIKC5B+
+ TpcJQRPHlHzhLGBOsndKVO+EpxeYcwmHhRzMXQYHa9MncSKjq+vvNOrQoeWDMhbc9LDRa
+ TO3Lav+WUmVdUuVbSFOznyeQF/003HSD9VQLGWfChmC4JCQ1TyS88iwSSfafBt/7YgZvG
+ n7fmCd/uv7nQYhlKr3EipR/XIcaLMTVCnkjHvgpQGjHkbjPC8I0RJmLsJrTOcVdeShA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793374208;
+ c=relaxed/relaxed; t=1793374212;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=tdHAnCPMjMJ65LwTkBqgZXbxDdbd/vc6DiL836snJFc=;
- b=ganBhn3RyE+2NYdJ+U7bxebNB5q3jETChD83jwYan+90OQLkNSCcFzAh0yhUK321Hc+M
- UyqZ4l46D8yZkAMPZLbVYnF6168c+zoUSMQPMDGrEhtlNXbkvpZawbvbsMeGS45oQ7EXO
- 0CVmw6H8BjnYLZrihzaVmNG06ZHEizgMKS79RB0BpKY74hh/5O8kQSqf0RQ57D2YbXHUv
- OVt38Y1OtyT9oCxcq8ncs7TWLoWiMa+osDS6upmrrvPIFSO7d5OAwZ0m2k0vzNaDTHvoQ
- lCTfal4x8YM07ujhAQrzmwKN65Nt6SZpVGd+YUr17+OIwhR5dh4A8JnC/pAF1weSijw==
-ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ bh=H/hYX55yYDA9INtAyYQ13QsP2UsBklYrIJ1OQBcCbBo=;
+ b=ptf71b61owWo+ofLIdRv0JdK+s5wLFdIdMNuD4SRr0rUTqqrbwc7A2PmTFG1VJLKj9FZ
+ MhrpVoZtbXrzVrzCTIX7hHFu0fk9eRNWOw1Ujgp/bdfa4ACaHtKtRTO7n1ZYveREyc6Yk
+ BJTs6wOZim+qHwDutxPsWRqXV4JnGQANWS4IYU8yqzgqob5GpZIsTK0qQASYOvuFKWBlG
+ GeTHAX5zcNpZsxYh6mn5pT0o+QA9AKUb9ULO9BqQBPCqGRpn6/1MYbhZnyJbrWjCJZmzH
+ gwC9aJfSjOHEKk+bP283p6F1sRMla275paJQ35VvHr/MfwP/wJPir2dlR3kBoZ2UjEQ==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  dmarc=pass header.from=mind.be;
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=ELsW9sVH; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::32e"
+ header.s=google header.b=EUXs6JEh; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::429"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A0EF54053E
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:30:07 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-4a210470b49so6460985e9.2
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 08:30:06 -0700 (PDT)
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8346081683
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:30:10 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-48e4831c028so821036f8f.0
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 08:30:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793374205; x=1793979005;
+ d=1e100.net; s=20260707; t=1793374208; x=1793979008;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=tdHAnCPMjMJ65LwTkBqgZXbxDdbd/vc6DiL836snJFc=;
- b=SDMetTVPs8+YsuEUO8nUOC9FzroGcC9o8HoqnqzYnkybaBn3ast9liVdEE1dAncAtC
- wSJRSLJ/sHd+TaLltcCDFaB5vFCf4FoWZNxG3uvYdp4wiJMTW45HlFCP68DSo22mdAWB
- qcqUMNydR3zKQfX8U/NVSbS4yHEZcgNZryymr+HwE50k66L7bMf4aLLjOyuz87vhi4mR
- 9zPaLLvSeHFGmBhALvwz2yn/VYPDYb/xg97WJh/5lA12rZ5mykeLJkiwrYmrocXjf0sL
- 932a1anyBUWaNO5Rn2qiWPAVDo9pfps55TR//kBBYyqZAMJQWOBSsveY7FUob/OPKbMj
- e3qg==
-X-Gm-Message-State: AFq9FYLz6f/zLWzlVScfss9meACBMyypWSSmD42mNzC4iEQWsyHH8yAJ
- BFOA4iSuSTNbjGwY8vvNwga4Jr/3z2AFm4Kbe+V5MfgOPhyGOFd2SSExmNoWD7eA/9DNYXo4c2c
- Po6jnPlk=
-X-Gm-Gg: AYBFou3FDQY9ytHMa6wrk2uoayn2ZNgD98r1CJAskw6B71PGu+KRmiMNJcmq3t1oVLM
- IBl723G28hQdBbv5c5VbNa0qrLDb/oX4t8hX5/Di7WkL5PEwVWIgKcoMp+QrfRH1Ksz8+pWs7j4
- itPhKrElELETVovlZ29UBsqLP89GIZeQ1xzP3lCCdrqy3UUSrXi5WabuzSa5Cp8Dcb2KWWuDOTC
- AlMmZSPyo3Daw2pSWPg2nVqBFQjUenMcWsJyi9nuMm7hxAtCmk4mG5xaYL2pRiKH1RFaS00DGl4
- WOFymeVASSpJqIolkhMva404SE9gmTv//3w1YI0bPVbWb75z3gFDsYCeLG5S6fG7SH13E8O1Ceo
- u85BkhJuh6aU4+yOFoYx5eiW378wem+NKH5ukNaj0JIfOTPag+ZAb1/wkhu9aEfxci/+kzp0KAB
- eJlTctUh0hFdxmS4+o4NTtt39BG43JnYOUq+AFyBhUNFy9qpGpXUV6zgmHfANUms+zrSoC+t94j
- 0oxstbJlKlNc4HHyT5vsK68ZOlvxjfGUQaPdDPWLmZfkJYuDm0fzOH9d312jmpV/Z5qjBLLpSDF
- oZD0q2eVPALKEOL5jExkwEtjc5hpY43T5svMe+bJCIsmOqu2OD1r6eI0p0ghAI2sPpt5y+uNLG/
- RH7GjZBqcPe8c2DzEuw==
-X-Received: by 2002:a05:600c:4714:b0:4a6:30c3:1114 with SMTP id
- 5b1f17b1804b1-4ac180f1c7amr57994315e9.12.1793374205226; 
- Fri, 30 Oct 2026 08:30:05 -0700 (PDT)
+ bh=H/hYX55yYDA9INtAyYQ13QsP2UsBklYrIJ1OQBcCbBo=;
+ b=ZlNAvwNc3XiWID0mF61H7WnRTC9T6xELdUgGQHgx29Sr1COhIAe21W6kbsfbyg4dZ6
+ 9xpasObwKeMfwZ0YdDEp9VnO6Yn8DfWt8S+4PB6+Rwx6MbqEQaPINUzEbG3xkRd8ArQ3
+ 2vNuxmoqFXx9/bcheVKgvb358cvxRWRXdxcqEcz+TX0Q39xYIqvJxVUjRD+W8sz+5qXD
+ S7HkSPaYIeNb+1HxitQTNc5w5SG9XTUg9tA3SOaw+DHFmVYdvNi2+9mOw9lSp5TpKNV7
+ bMMkuX1UkaxG6NxTgWjYYseS7U/9znMLQkE9djUtHyjQxHNKIM5UTmqgPfjqnmXqzvMl
+ z9aQ==
+X-Gm-Message-State: AFq9FYJ+Ot82ybgs+bby81vWhUfqNHgzfq3OMXiNQLnXVa8Q/4QqHhJd
+ i4ivvcskd5hOP8b+EqRlTV6zwVQN9uUxNwG2NtC6bvAsQa51VPuN2JBY2w+YCODLsSya7vo70qY
+ VIaI6Z2I=
+X-Gm-Gg: AYBFou1czPyBWKBG2fd8J3z1c+Az98vGP7LjHlHqpxTM17FOMRET2LwuXH9Wi9lWkHA
+ agRJ0PBBWTzmLF94SRLthprhVF5y0ye8purW3BC1iVIwRU31QzKlXkccvw4vktc+12k/f2kr/Mp
+ q1SH5UBlosTKP3e55dLsEOO7c/kZXqfz9dd320XlgGTIoPRMSFlD7jD6bnVKB53AQ6HSa4b9SzE
+ EHMZyArSXgt2o5K2AjzOs6tQMVmW1G+Mi2lQG5i7zg6oDeXphBH1yuGf2aGjR1rG5kBV2r0+QmR
+ 9tNdEvrYfr4/BWeONjkdxXpVbwav8OQLhPXhthfJA292dnik36V4saDmq2VH0NCLhzIEbPDhJBa
+ uhdQksHUMNt58x3z8bcQEGsqcpqWWyyRhT3N9s9k4X2Mgtxe4ZMzLfvP9O2o2IwCLVzqfGa5087
+ ojePnHv2apowvAOm/GNklnJ9LCSSRBG5S+0BcP5PTS5zMBrhE057tIamRdKtonqHYdIfpIY4PbC
+ CK+lqZsJmiie8xhkqmf3xhJEosOAQMlwmHthVoMgzIutSuAw4KeDApO1+B3qfQvNywYZT7VysMh
+ DpadiAC1fqRlNQzQgTqeRGdmojY2xVAFvdzFjQ0dgls/eqncVGyT7zVLWWUbxynvgESMF5HJ
+X-Received: by 2002:a05:600c:470d:b0:4a7:9006:b176 with SMTP id
+ 5b1f17b1804b1-4ac17471285mr58437065e9.7.1793374208488; 
+ Fri, 30 Oct 2026 08:30:08 -0700 (PDT)
 Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
  [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4aa8213ead6sm142518595e9.14.2026.10.30.08.30.04
+ ffacd0b85a97d-48e71a4d3e9sm4109810f8f.6.2026.10.30.08.30.07
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 30 Oct 2026 08:30:04 -0700 (PDT)
+ Fri, 30 Oct 2026 08:30:08 -0700 (PDT)
 To: buildroot@buildroot.org,
-	Bernd Kuhls <bernd@kuhls.net>
+	Thomas Perale <thomas.perale@mind.be>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 30 Oct 2026 16:30:02 +0100
-Message-ID: <20261030153004.1908275-1-raphael.melotte@mind.be>
+Date: Fri, 30 Oct 2026 16:30:05 +0100
+Message-ID: <20261030153007.1908308-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261025131531.45754-1-bernd@kuhls.net>
+In-Reply-To: <20261025174835.190885-1-thomas.perale@mind.be>
 References: 
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/mesa3d: radeonsi needs wchar
+Subject: Re: [Buildroot] [PATCH 1/1] package/cups: security bump to v2.4.20
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -159,49 +158,190 @@ Reply-To: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
 In reply of:
-> BR2_PACKAGE_MESA3D_LLVM depends on BR2_USE_WCHAR, so does
-> BR2_PACKAGE_ELFUTILS.
+> See the release note:
 > 
-> Buildroot commit a24698054b4cf6c994c91d49513bbe5e7b270201 removed the
-> dependency to BR2_PACKAGE_MESA3D_LLVM from the radeonsi driver but
-> forgot to propagate the dependency to BR2_USE_WCHAR needed by elfutils
-> which still is a dependency for the radeonsi driver.
+> - https://github.com/OpenPrinting/cups/releases/tag/v2.4.20
 > 
-> Fixes Kconfig warning:
+> The additional patch is required to fix the build with the option
+> `--with-dnssd=no`. This build error can be triggered by not enabling the
+> package `BR2_PACKAGE_AVAHI_LIBAVAHI_CLIENT` [1].
 > 
-> WARNING: unmet direct dependencies detected for BR2_PACKAGE_ELFUTILS
->   Depends on [n]: BR2_USE_WCHAR [=n] && !BR2_STATIC_LIBS [=n] && BR2_TOOLCHAIN_HAS_THREADS [=y]
->   Selected by [y]:
->   - BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI [=y] && BR2_PACKAGE_MESA3D [=y] && BR2_USE_MMU [=y] && (BR2_i386 [=n] || BR2_x86_64 [=y])
+> Fixes the following vulnerabilities:
 > 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> - CVE-2026-55453:
+>     OpenPrinting CUPS is an open source printing system for Linux and
+>     other Unix-like operating systems. Prior to 2.4.20, the backend/ipp.c
+>     quote_string() function preserves carriage-return and line-feed
+>     characters in a remote printer-controlled marker-message before
+>     report_attr() writes the value to the scheduler status stream. The
+>     scheduler can parse an injected newline as a separate PPD: control
+>     line and persist an attacker-selected PPD keyword. The reporter
+>     demonstrated that a later print job on a Foomatic-backed queue could
+>     consume an injected FoomaticRIPCommandLine value and execute in the
+>     filter context as lp.
+>     https://www.cve.org/CVERecord?id=CVE-2026-55453
+> 
+> - CVE-2026-55467:
+>     OpenPrinting CUPS is an open source printing system for Linux and
+>     other Unix-like operating systems. Prior to 2.4.20, the cupsdCreateJob
+>     option-string builder in scheduler/job.c maps attacker-controlled
+>     destination-uri and pre-dial-string values from a configured fax queue
+>     to the phone and faxPrefix options. Unlike ordinary IPP job
+>     attributes, these mapped fax values bypass the control-character
+>     sanitizer and are copied directly into the filter options argument. A
+>     user permitted to submit a job can therefore inject control characters
+>     into the downstream option stream. The reporter states that a
+>     downstream fax filter passing these values to a shell or modem command
+>     could execute code as lp, while the maintainer states that CUPS has no
+>     confidentiality or integrity impact because the only known code-
+>     executing filter is optional Foomatic and addressed separately,
+>     leaving possible disruption of the affected queue.
+>     https://www.cve.org/CVERecord?id=CVE-2026-55467
+> 
+> - CVE-2026-55480:
+>     OpenPrinting CUPS is an open source printing system for Linux and
+>     other Unix-like operating systems. Prior to 2.4.20, copy_model() in
+>     scheduler/ipp.c creates a predictable TempDir/<connection-number>.ppd
+>     path in an lp-group-writable directory and opens it as root without
+>     O_EXCL or O_NOFOLLOW. Exploitation requires an lp-group process able
+>     to write that directory to predict the connection-derived name and
+>     plant a symlink before the root open, while a privileged add-printer
+>     or modify-printer operation using a model PPD triggers copy_model().
+>     The reporter treats an existing lp foothold and the privileged
+>     operation as distinct prerequisites, while the maintainer assesses
+>     high privileges because installing the relevant filter or
+>     administering the printer requires root or print-administrator access.
+>     If the race succeeds, the root scheduler follows the symlink and
+>     truncates or overwrites a root-writable target with generated PPD
+>     data, compromising file integrity or availability.
+>     https://www.cve.org/CVERecord?id=CVE-2026-55480
+> 
+> - CVE-2026-61702:
+>     OpenPrinting CUPS is an open source printing system for Linux and
+>     other Unix-like operating systems. Prior to 2.4.20, copy_banner() in
+>     scheduler/ipp.c uses the attacker-controlled IPP attributes-natural-
+>     language value as a directory component beneath DataDir/banners when
+>     processing a job-sheets banner. The job-sheets value must first match
+>     a registered banner basename, and the traversed path must contain a
+>     matching reachable basename; selecting an arbitrary target as
+>     demonstrated additionally requires pre-positioned path state such as a
+>     symlink with that basename. Subject to the scheduler's filesystem and
+>     sandbox access, path separators in the language value can escape the
+>     intended banner directory, make the root scheduler open the reachable
+>     file, and copy its bytes into a job-sheet spool object that a
+>     configured backend can deliver to an attacker-observable endpoint.
+>     https://www.cve.org/CVERecord?id=CVE-2026-61702
+> 
+> - CVE-2026-87875:
+>     The cupsUTF32ToUTF8() function in CUPS's cups/transcode.c lacks a
+>     source-length bound and can read past the end of the source buffer,
+>     resulting in a heap out-of-bounds read. This is reachable via SNMP
+>     supply-description parsing in backend/snmp-supplies.c with attacker-
+>     controlled content.
+>     https://www.cve.org/CVERecord?id=CVE-2026-87875
+> 
+> - CVE-2026-87876:
+>     Two case-insensitive comparisons on request-derived usernames outside
+>     the main authorization path in CUPS's scheduler (printer ACL
+>     validation and private-attribute filtering) could allow bypass of
+>     username-based access controls in certain configurations.
+>     https://www.cve.org/CVERecord?id=CVE-2026-87876
+> 
+> - CVE-2026-105326:
+>     An argument injection flaw was found in CUPS. When email notification
+>     is configured, the CUPS scheduler accepts printer subscription
+>     requests that supply a mailto notify-recipient-uri. The mailto
+>     notifier passes the recipient address to the configured sendmail
+>     program without ensuring it cannot be interpreted as command-line
+>     options. A remote attacker who can reach the CUPS service could supply
+>     a crafted recipient value starting with "-" to influence sendmail
+>     behavior. Successful exploitation depends on the installed mail
+>     transfer agent and CUPS network exposure, and may lead to execution of
+>     attacker-controlled commands with the privileges of the CUPS service
+>     user.
+>     https://www.cve.org/CVERecord?id=CVE-2026-105326
+> 
+> [1] https://github.com/OpenPrinting/cups/pull/1740
+> 
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
-Applied to 2026.08.x. Thanks
+Applied to 2025.02.x, 2026.08.x. Thanks
 
 > ---
->  package/mesa3d/Config.in | 1 +
->  1 file changed, 1 insertion(+)
+>  ...stination-enumeration-without-DNS-SD.patch | 29 +++++++++++++++++++
+>  package/cups/cups.hash                        |  4 +--
+>  package/cups/cups.mk                          |  2 +-
+>  3 files changed, 32 insertions(+), 3 deletions(-)
+>  create mode 100644 package/cups/0005-Fix-destination-enumeration-without-DNS-SD.patch
 > 
-> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-> index d1b6a38858..7fafc598ea 100644
-> --- a/package/mesa3d/Config.in
-> +++ b/package/mesa3d/Config.in
-> @@ -253,6 +253,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
->  	bool "Gallium Radeon SI driver"
->  	depends on BR2_USE_MMU # libdrm
->  	depends on BR2_i386 || BR2_x86_64
-> +	depends on BR2_USE_WCHAR # elfutils
->  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
->  	select BR2_PACKAGE_MESA3D_GALLIUM_VA_SUPPORTED_DRIVER
->  	select BR2_PACKAGE_MESA3D_HOST_NATIVE_CONTEXT_SUPPORTED_DRIVER
+> diff --git a/package/cups/0005-Fix-destination-enumeration-without-DNS-SD.patch b/package/cups/0005-Fix-destination-enumeration-without-DNS-SD.patch
+> new file mode 100644
+> index 0000000000..b342427023
+> --- /dev/null
+> +++ b/package/cups/0005-Fix-destination-enumeration-without-DNS-SD.patch
+> @@ -0,0 +1,29 @@
+> +From 23a183b63a4c94ae7cd0f36c63ee7eb905be60fd Mon Sep 17 00:00:00 2001
+> +From: Rui Chen <rui@chenrui.dev>
+> +Date: Mon, 5 Oct 2026 22:55:47 -0400
+> +Subject: [PATCH] Fix destination enumeration without DNS-SD
+> +
+> +Add the local destination fields used by cups_enum_dests to the non-DNS-SD callback data structure.
+> +
+> +Fixes #1739
+> +
+> +Signed-off-by: Rui Chen <rui@chenrui.dev>
+> +Upstream: https://github.com/OpenPrinting/cups/commit/a197d30e27b5dd4d8c41d7a8ab136727290ed7de
+> +Signed-off-by: Thoams Perale <thomas.perale@mind.be>
+> +---
+> + cups/dest.c | 2 ++
+> + 1 file changed, 2 insertions(+)
+> +
+> +diff --git a/cups/dest.c b/cups/dest.c
+> +index dac26f119e..676470e70c 100644
+> +--- a/cups/dest.c
+> ++++ b/cups/dest.c
+> +@@ -125,6 +125,8 @@ typedef struct _cups_getdata_s
+> + {
+> +   int		num_dests;		/* Number of destinations */
+> +   cups_dest_t	*dests;			/* Destinations */
+> ++  int		num_local;		/* Number of local cupsd queues */
+> ++  cups_dest_t	*local_dests;		/* Local cupsd queues */
+> +   char		def_name[1024],		/* Default printer name, if any */
+> + 		*def_instance;		/* Default printer instance, if any */
+> + } _cups_getdata_t;
+> diff --git a/package/cups/cups.hash b/package/cups/cups.hash
+> index 7cb25fc4dd..eb029e8683 100644
+> --- a/package/cups/cups.hash
+> +++ b/package/cups/cups.hash
+> @@ -1,5 +1,5 @@
+> -# From https://github.com/OpenPrinting/cups/releases/tag/v2.4.19
+> -sha256  820984b12a67f98705785aae2dd1347fe0ac097828001d4583ff64574aed6389  cups-2.4.19-source.tar.gz
+> +# From https://github.com/OpenPrinting/cups/releases/tag/v2.4.20
+> +sha256  ab4d9cd7f3e58060091d2b24972223d6401675f11c49b65abf4f6ef31dea22ff  cups-2.4.20-source.tar.gz
+>  # Locally calculated:
+>  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+>  sha256  977206f041b9a6f47ac00531e1242c0fab7063da71178f8d868b167b70866b6d  NOTICE
+> diff --git a/package/cups/cups.mk b/package/cups/cups.mk
+> index 3e85a2eecf..2fbf65e58e 100644
+> --- a/package/cups/cups.mk
+> +++ b/package/cups/cups.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -CUPS_VERSION = 2.4.19
+> +CUPS_VERSION = 2.4.20
+>  CUPS_SOURCE = cups-$(CUPS_VERSION)-source.tar.gz
+>  CUPS_SITE = https://github.com/OpenPrinting/cups/releases/download/v$(CUPS_VERSION)
+>  CUPS_LICENSE = Apache-2.0 with GPL-2.0/LGPL-2.0 exception
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
