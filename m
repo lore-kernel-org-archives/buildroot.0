@@ -2,145 +2,161 @@ Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D17A9606A31C
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 11:35:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D586D606A31C
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 11:40:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Rdjg04Tp
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=P1NPkShF;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=eLldXnVW
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ADC7B608FE;
-	Fri, 30 Oct 2026 11:35:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A78AD6079D;
+	Fri, 30 Oct 2026 11:40:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AAHLp_WstFOX; Fri, 30 Oct 2026 11:35:22 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org ECCD56079D
+ id z-Hbu7F9dFc0; Fri, 30 Oct 2026 11:40:52 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org A8DB460679
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793360122;
-	b=kDgD+6o0K2E5ZkHQGp33bznHwgvFqJZdRiVjqY3EVzXTumwbPHr1PEx6cl4+h19l4aRe
-	 ppt80U4Ixck/jh6kTp+s6DjQ/UGZ+J8xs/raJSdFWQAX7Kzc5rXhg6Gnd7fFyheV7O98q
-	 DSq5tva+gFKO8rJ/LlT9e7xGfPjsM7W3hNQbY6qzsYe3EeROMeLswnbz4uH6WjUPSc2sj
-	 mh8ksR+j+xTpryoXL/7P66RYa8KIxWPm9d+UidHfRZEffQxuC2PPlRxYjJdorOBhELOTS
-	 HCBUrEyvufgKbG44hSL2skFrb4Evgx0BloLZzri1sW5as7Tg/yvCvsH65buLZolhJkw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793360452;
+	b=FLzNLYCqs5WYZ3T/iKxYIS+Lk8cJ6/7v9VICkY/NRMLEhdza/YcyKkFHBll1Tc58Fh5I
+	 6OBgh+gMdpZkLIHZ79hNLfU/w8mv6Q6brm1BxEvtCEpbJcMxUbaL892zzjelSya59MCjf
+	 Ca2ZYJolkNqKb77wU4qNnNnv/c6HN90Qh79HHSjTLO2cz8Jf4nnSYpFQygm5ydgFMlyfw
+	 jkqIJfAA5CcKcX6ncBlizQIJ6uKshfCLYKB+dpB78RPSDUv6tA+almnQmOeRjpTW6+qVL
+	 54vwaPhGzL2iX91/k0toWrKkm/49qxd0gOykwmzwHXUn0uhnDsnoAyFZJJynhblDiIg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793360122;
+	c=relaxed/relaxed; t=1793360452;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 Received:To:Date:Message-Id:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
-	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=EE4UbJoPcfU5NRQFdQLOD7ox6vwoWoPVubGtmKkLqZ4=;
-	b=DJpGQc++DR6neOwAggZMvlp6NWo+ghmdsmq0c4u6/YidZ79nt3GFZcI/yKieZHgN+3n2
-	 JIWWGt55wy35LpRfjWRiHU0wsuyR5MbXCOEfyvSZFmPY7Ma8q+fsgmdC9P426lzJxrnWw
-	 475iRMsW7bGohPAFjnriaL3anNRmrv5XzjpHwzhKlo36i29i0cqSDyvmHGy4kablE5gDx
-	 q7HNHk3Q40W8veE7+qJuByQYJc/IE74uDIkGdWSSOvsqqYoQmLeyMnG/1uy/moqeKf/10
-	 5/25/NLG6BpYTWksmxpy8BKn626F0YHnhee8kHbXS2elNqlcqchZJ7/ldhcky7Ee/KA==
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:Received:From:To:Cc:Date:Message-Id:X-Mailer:MIME-Version:
+	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=KI6FIFzZ0y1v3Foqs54IsvyPD7vHPWcCIdsfcLWhDzk=;
+	b=HVliRUaN56kH7fwv4eRIFa2VAZ5TU7IQHyDZzm8n83+fKIotLzV2sixhRZ5Hm8kMlyUX
+	 Rc/usVog1FUr0UT4o9YEWsiF1fph+qKOMXTdEMKcFZG60vN5oGFBBnR+isPlfJomReP4O
+	 7MkXdqVDPm5k8/knuEZDzmP58AF/KESGZuhhb3KI7WJBdEIm7zoLI7I5kkGRgr/PejxwS
+	 82MuoBs01AZaQiqJDAGyoukjZNFg6SbZNaFHAGWesuhJBDQ0SguebFsVHfDv0uhsoPuSN
+	 /jImYaGFXR8lq/AH29RJN3WKh+D5ltjswqjq8df6fUUuttQQUGdCI7CU1W7nHVhkubw==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793360122;
-	bh=EE4UbJoPcfU5NRQFdQLOD7ox6vwoWoPVubGtmKkLqZ4=;
-	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=Rdjg04Tp+NezKl10sQXFBPt/I3/kBicJzHTlfVrSh+kfs8iiugPQ4zRlq/PMAvO2K
-	 eEVcQKMuDRm6AWp4B8vkQm7k6fko7AqQNoB+5XqKsq6PmCQWdL3K49uhPCHSvwst/b
-	 nO3wX0kG0OfXa3+h4m6/SoTY5U/fnmlMFllnpLyJ+Mkb/Vu+oMjNge81oSWCNnMIYX
-	 Nb8gz2NxvDm7/kxTDyc/5t0dU4/IsgZSU1q5j85AB8H+xq2noLC5MRNWq8IPneCsj5
-	 BONlhwzS63jZEfCENH61IwPYiNjaji3y4oa8hV/LebW+k+8uqEED1yaAw82SrabhfR
-	 5lyrcbvMC6ZSQ==
+	s=default; t=1793360452;
+	bh=KI6FIFzZ0y1v3Foqs54IsvyPD7vHPWcCIdsfcLWhDzk=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=P1NPkShFcSQEvZuntWIAVQwNGtboBYENqtM9eL4Q9plVE+UCrVEKgoYS8zOXYzuui
+	 OI8avvN0+w2LvbEjvKducNb8aVX+zXp7478VFahonP5J6wqdEISiDue44120uleIEN
+	 9EIP7gDRpKmF6/y18nNOSkckRBZrSaXJm0Kn4wzZQHf2kYjAfJf0nHWp8TPIRj5c+j
+	 pUVLeLLrOUjSbVJCoGfGzgDCbh7fpltCZVKFDxt4swg5/mKhfP++hobyr/oOZ6TgMz
+	 05X1VHaZzUZYtDG8GV2d+tSrnitbkCQVPxbdAz1wXTsg2EKI8hvE/RsilcVaKMJNjR
+	 DLVtg5Wu6Nj3Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ECCD56079D;
-	Fri, 30 Oct 2026 11:35:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id A5FB44BC
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 11:35:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A8DB460679;
+	Fri, 30 Oct 2026 11:40:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id DC52B4BC
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 11:40:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 96EA880FA2
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 11:35:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C27CA810E2
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 11:40:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IaZJJeShHAe3 for <buildroot@buildroot.org>;
- Fri, 30 Oct 2026 11:35:18 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 6DD7680F47
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793360118;
- b=tKxOVuvQPPRTPmtxs8f8OHT724RqBWXDgj0Xg6mh2RbxKllzpg10wnYyOVZhZwT+VHHh
- VWTl9UEvZqb+YRWIVkkaL7Z+KaynxJ/lcH+P/NA45lAhfo5tlzaGEuuKsJvUjqhbAzbIR
- jWdnKdqKC3t694/JYzQRziWEUHPdN+Mj665NG/74ojMbE+pPhk7Z751a8gR6+4ryI86KM
- Mbr8zQdoUSkum2WeAoDL2FobNhfBb2NrauDRhvcocFPIhbxZt0OM+QKbOpJT+U1yjZuIJ
- /Gicx5B3umJTtk3GgzhjIIe2FRjafNjTEC3HG0QYp7nYxc9NEz4p3aTuz+Cjwk1ajdg==
+ id hJIr6dY3EXvk for <buildroot@buildroot.org>;
+ Fri, 30 Oct 2026 11:40:50 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org B3B8A810DA
+Authentication-Results: smtp1.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::329"
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793360450;
+ b=pcBYNs0mnMHBsjQdZMoHFDC08RWMg9WaAcDWzaONHYAjEKQAZUatIOzUgELqYHJQN/EY
+ dSYr1vEYnlNrMB3lgZSvai66CwrtMT34OTveo2El1X7b08dwvvgPzts1uMKCLvfN/6CLe
+ NCQCnqHIglNWyuNvrTwN8CKFpFKau4z9UpXx2miyA7oxq8WlCCU7M+JEGAU+42KuuAa9J
+ 1H/IsIIDvLykmwoFemQtZ/fm4AuoiDV7xqQqljvBcbujkqbJmX4f+gm7ESA6z4PPP/Ak6
+ AFgNW6yHGr2SklVqTMtz6h5BOtRCXsP0bvK4g79dx5nMhWkMhnaWR061Xkf/Dbq264w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793360118;
+ c=relaxed/relaxed; t=1793360450;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
- Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
- Content-Transfer-Encoding;
- bh=4S0G+dj6wI+iGe09fxVe55a9kZgbn3D3xMZQxVRCCQI=;
- b=pWVjoHUgPwjX/AXoqsRYY/dAgAuwjo1fpWBCjYsdi9BZQt+fUH3wqsm0/1ghVp3+mmUp
- cwlHd9Bh2SaSp2156xLCxxvH+A4Fl8lZrQFD3DsBIM03GefXTnPDvb1EJKPQw6uTXMiJe
- EqHwVyaemSYmmTs6BRcnQfoQeJZbad90kRnmNVgR6H5En9HpRfnjVSu9UKhOa5ffcqh1X
- o1xar4XQRqJ4zH9GH9C1uX2cmmDIv31oJlCj5XF3dC9YSZ7CUFW/on1biOiAyw7luPTbW
- QmnnV1kQpjMjZB2FXrBMwTXoJS2p4oQp5x64G2xcL367MmNKXU1/lSWcoZnUQM7cu2A==
+ Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+ bh=02ZO7bq95sFKzJEoOmRwU9NB8eXwpdInIMxEV1Z5dRY=;
+ b=QYWG3ZFv32CQXTO7ADRO6NjiDTkh7w5gmnJe/on27fQaQ2/B359Qt6JazCJhPv8v+cGU
+ bzy6uY0xSXp8iHXiH9+DG2EYtL7IkuYMJaId/16DQrCyv9GLZgZ4MckPy0P8NoqEabskL
+ SRsnaaS5mh8eds5MxHDCIiCTonZ2w3jTEQfDN/dDVGlFTJGV8v0OO/UtUL7ZR1wcBPX/n
+ 7Q0RMSIsGeKR80YnMJM5HklC8AsnTfxdJ+5FwhnURG09gOylsDBtBTDZU5wFzU5W9IG7Z
+ j1jIhU0CSXfBeciXOiWMQssjY3JqgZ+SXTDv9DBK+T98rOho/3Jb6v/fY5C0GPvzFBw==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
- dmarc=pass header.from=googlemail.com;
- dkim=pass header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256
- header.s=20260707 header.b=mVLoOty8; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::629"
+ dmarc=pass header.from=gmail.com;
+ dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20260707 header.b=eLldXnVW; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::329"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::629; helo=mail-ej1-x629.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6DD7680F47
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 11:35:17 +0000 (UTC)
-Received: by mail-ej1-x629.google.com with SMTP id
- a640c23a62f3a-c468bd799ecso68155066b.1
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 04:35:17 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20260707 header.b=eLldXnVW
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B3B8A810DA
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 11:40:49 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-4a2153c8525so3474095e9.3
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 04:40:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20260707; t=1793360447; x=1793965247; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=02ZO7bq95sFKzJEoOmRwU9NB8eXwpdInIMxEV1Z5dRY=;
+ b=eLldXnVWQ10uhW5WMEOyf1oa/vaBGbQCpgWJdLJeJydktg8gd0NW1rj95KwO6z2q04
+ HGfN4C3rAz2kQkLDb2M6ipYMmjN4X/nN/AwerUj45OsecLnQCFYwDNHhVXiF5FpcaG00
+ /bRRv8hx3K4wMYMUVwMsI+IeVLLYn1FOrbyFL7tvmgSPmj3825v6m+/oxI/YQOUPP3yI
+ Rwvn30Y9ZUkzNaNY1qsvjrO5r9/ZE3gw6s4HZaj8BWIm7PtoT6A5GsZGxrVVd76datr3
+ s9m8pe609hC0cJ0cMzGDmxEAR6kXV4GvltifRy0XKI/rc8TpWT7+Xs2SAbvgn5E6SFDC
+ 9Uow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793360116; x=1793964916;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=4S0G+dj6wI+iGe09fxVe55a9kZgbn3D3xMZQxVRCCQI=;
- b=N+l7Rsk24iygaxqsA9wXAn/J2tjh6OOZTZHVb3s7cKSD+RpHtyuJcgsjqDabG8GZFQ
- 7AnZOKS3TVFHHSdXgZooMN+DO2nqZh4Dy3mawmB2zA1nSY6MpsJ/GQ9QfJz1C6/Z0HM8
- I5Q8qA2ttYYkC7gM852cLUNbZem4Z8oMARuk02o1OyHH3F3hFAd/7ipS2gIppCylEKcC
- wXcnnJwNVoxcs87hEGqWYAxFKUBRlsMfQ68NnUbSSmCI6viExkfddMAr6pTbLwfpmjMD
- g8cb+6cU079mkzW4q17Mf7mzEypwNdUaiIhfibkHoF4yeiVw7K5U8Ip9r1gGLHCfrYSX
- 6RHg==
-X-Gm-Message-State: AFq9FYLUosswIJQmzibmT/+Wy9zC9zAhnfCLk60qwlQrcpA+LG/QtNAp
- 9hJ8OXCZS2w+fYo09oZljR1D1OEqSRhnE93gvpXtaLqAzRSy3Uv14Oo/2/ZUXQ==
-X-Gm-Gg: AYBFou1axKRziqR7VVrRdMJpbLPPcuZa3eM93xAlBNZEw1EbqjUpWH+I8RNiI7Fqafw
- trV2Tvp5PyP3pah1YCWyFAPHc/KoRbWv7vrDQ6TfpFdZhP4jG841GW89/YyKfBaUYKlPxXLKicF
- voQm82kp54f+a9ayyEbf6Xlp9EWTSxutyB+GdUtJ9Nw7JX4AMq2exwl1z0ZfTJ0O9Y7cHx/Jhfe
- VmWFMTS0oikcjtVU/sPVa5G2AH7PO3rmmdH5hKP+AY3pQKAyZm+8YZwzd0ySIzJN7LLnG7PySL8
- 3zJgXQiuEYMsECuMjl14AQzmB4KjJjZiNA4qHYUGtENWg3VTv3tQ/DIEJH4kBfqcBD/FzvvPg/S
- TbUUAVTQkaidfwqQR25rG2eUw/LLlzQ8GdesQboeRi5A0l8XFJ3ae2fTlve3esu+Nq90/zSiPsS
- zcYKfrYYbvb7mp0il85PrhwOhGbXuJtUBbOJzbLjb7QPYIGjSoNLvPR8f2ch1o7JVzeknjZbala
- a/lb8y6AOM+Rd2aBNIpsdwgz2czN556xDqMkuRoAQ27uAfTWDkVOjkj7Bh8YIwPInSSWGcMD2V/
- zFNsJLszY/8ipZc6RPmcSWNb67gpmBXa+LYq2InyZhQO6YlhJnMHgitKcbc5VNxXnDbZFeJiK+E
- SbfHL/56M
-X-Received: by 2002:a17:907:5c5:b0:c3f:8c92:3b5a with SMTP id
- a640c23a62f3a-c4ca7a41ac2mr184279866b.12.1793360115817; 
- Fri, 30 Oct 2026 04:35:15 -0700 (PDT)
-Received: from development2.visionsystems.local (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c4cab9dc577sm57195466b.0.2026.10.30.04.35.15
+ d=1e100.net; s=20260707; t=1793360447; x=1793965247;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=02ZO7bq95sFKzJEoOmRwU9NB8eXwpdInIMxEV1Z5dRY=;
+ b=Htf6reGRsCXqmayDy/O7hq0bntOdUG8rstCQmHHQKFBn5jbbWTotvoRQkMx6r/AX9x
+ NzieKWsiwuk7KNVaJpYm1a7S9AgJR5xCKoo6jddnnxL6/lEi8XK9oQxzFdKi8ZhP4Xjl
+ IWQR4kWHXNdi1FtoCJbtvJqsGlANwQOFXR8IcP491sBjh0p7Slc4CxpEz7jwR8B57y96
+ zV1D9aPFJNm5Rq9GAkUaAXAwNrd0I1m4mSAeT6FGAIr4+gHCsmIhsOQJsA1VNQWDvc0j
+ 93ol+bZ515SSV+PljxGZEqmwjRJ7aXTCKehUNssSWDacH+0xd0b5VEMk6PvTqZYBshF1
+ HBuw==
+X-Gm-Message-State: AFq9FYLJwam/k3QkFdcqrTtKVPvY1x4Zk62imiut17RFbf85jHppsN8t
+ 6xpYgthpwT9pnx4giZPG2MqCdGH/aLwfYdJDvruqjlOJCkJqzpYQb9tR6Oj3xQ==
+X-Gm-Gg: AYBFou0vULec7lRjzkZMnGnCfxt3YzJ7ehXSKyJ75wI4hpCVryH81AAR73/iOp95GHS
+ YC4MUpcHkd807xoa9UPP7jMPdE4x4ATcwWmLIs9YSZ7d3/WD3INxz5pXBBwLtkqKqqO90UqjqM4
+ STwVOtVUFajWD/Z1x2Dh8SHB5kH6FTPoUAvi4o4Ii2eoofb+/r5JGLputgko09FsRDLWEHUcXev
+ MghEo57GZJbknAOOIOit7lqNr09SfKecf788ye9kWmwINnHWT1j3kKwq81oz3nUw3Ro7qHJe8nq
+ 7BnfJWijf3QCrth09+HkP6RItuX9Xc5J5j55S2M1PhPjFHCG05APQvD7Tb3gXV2ifIN79E90Jje
+ PcJwrPjZ4j48UgUWHQVO4cDsCDRiCLO7mvozkO5VnZ5nZUhP4oYF4ZWYHEmROvrzyxinq9uU6oM
+ ZZ63T32qYQymAYMjm0GjY/4OCkE1HTEQgyfVHH4dbzoXdd++jG/YL7U4JYxF7J76qwxm4/8PE1X
+ G8kdJ+nqa8OPb7c0VcwuiO+LQMejV1McGcPJE5DqAfVxtk7PEXB3S7HfecIGIgN6kkctRWJjnpZ
+ Mo4WitByr6JOnV2Y7PJ3r+Ppuf7LgVWw4uC7ksx4K6yqvLQdIUEBlw==
+X-Received: by 2002:a05:600c:630d:b0:4a1:fae2:a8ab with SMTP id
+ 5b1f17b1804b1-4ac150b38abmr41183125e9.3.1793360447305; 
+ Fri, 30 Oct 2026 04:40:47 -0700 (PDT)
+Received: from angelo-Precision-7550.. ([94.154.175.53])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-48e71a4d404sm3227388f8f.5.2026.10.30.04.40.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 30 Oct 2026 04:35:15 -0700 (PDT)
+ Fri, 30 Oct 2026 04:40:46 -0700 (PDT)
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 30 Oct 2026 12:35:14 +0100
-Message-Id: <20261030113514.1090450-2-yegorslists@googlemail.com>
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Fri, 30 Oct 2026 12:40:39 +0100
+Message-Id: <20261030114039.2909636-1-angelo.compagnucci@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261030113514.1090450-1-yegorslists@googlemail.com>
-References: <20261030113514.1090450-1-yegorslists@googlemail.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/libaio: fetch from Codeberg
+Subject: [Buildroot] [PATCH] package/qpdf: bump to version 12.4.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -150,77 +166,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
-Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-pagure.io was shut down in 2026 and is now a read-only snapshot that
-no longer serves release tarballs, so the download fails:
+Release notes:
+https://github.com/qpdf/qpdf/releases/tag/v12.4.2
 
-  HTTP ERROR response 404 Not Found [https://releases.pagure.org/libaio/libaio-0.3.113.tar.gz]
-
-libaio moved to https://codeberg.org/jmoyer/libaio, whose releases
-carry the original tarballs together with their sha512sum files. The
-0.3.113 tarball is identical: it matches the existing hash. Point the
-hash file comment and the homepage there too.
-
-This is not caused by a Buildroot commit: libaio has been fetched from
-releases.pagure.org since 2018.11, and all maintenance branches
-(2025.02.x, 2025.11.x, 2026.02.x, 2026.05.x, 2026.08.x) use the same
-version and URL.
-
-Fixes:
-https://autobuild.buildroot.org/results/0019c80cc07db35d11241c516c04a0ad3e00ca57
-
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- package/libaio/Config.in   | 2 +-
- package/libaio/libaio.hash | 2 +-
- package/libaio/libaio.mk   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/qpdf/qpdf.hash | 4 ++--
+ package/qpdf/qpdf.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libaio/Config.in b/package/libaio/Config.in
-index eed843f44b..6796035122 100644
---- a/package/libaio/Config.in
-+++ b/package/libaio/Config.in
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_LIBAIO
- 	help
- 	  Library for doing asynchronous I/O
- 
--	  https://pagure.io/libaio/
-+	  https://codeberg.org/jmoyer/libaio
-diff --git a/package/libaio/libaio.hash b/package/libaio/libaio.hash
-index 4ddc97334f..f37e4cf4f4 100644
---- a/package/libaio/libaio.hash
-+++ b/package/libaio/libaio.hash
-@@ -1,4 +1,4 @@
--# From https://releases.pagure.org/libaio/CHECKSUMS
-+# From https://codeberg.org/jmoyer/libaio/releases/download/libaio-0.3.113/libaio-0.3.113.tar.gz.sha512sum
- sha512  65c30a102433bf8386581b03fc706d84bd341be249fbdee11a032b237a7b239e8c27413504fef15e2797b1acd67f752526637005889590ecb380e2e120ab0b71  libaio-0.3.113.tar.gz
- 
- # Hash for license file:
-diff --git a/package/libaio/libaio.mk b/package/libaio/libaio.mk
-index 16cb502f16..0512c6a728 100644
---- a/package/libaio/libaio.mk
-+++ b/package/libaio/libaio.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/qpdf/qpdf.hash b/package/qpdf/qpdf.hash
+index 81bee9e58c..dad4fbeb5b 100644
+--- a/package/qpdf/qpdf.hash
++++ b/package/qpdf/qpdf.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/qpdf/qpdf/releases/download/v12.3.2/qpdf-12.3.2.sha256
+-sha256  6cba2f9f2cd887d905faeb99e0e51a307b217920d1bbf3e9cfbb2e8178a2deda  qpdf-12.3.2.tar.gz
++# From https://github.com/qpdf/qpdf/releases/download/v12.4.2/qpdf-12.4.2.sha256
++sha256  8a58af5b6141319287c1883bec8bd1bd545b7567b7fc5e6ce5d25a1c85f36397  qpdf-12.4.2.tar.gz
+ # Locally computed:
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+ sha256  fb929ac30decb4dc3a2eea2bec6c43296a797c5d2d602deb3784ee39430583d5  Artistic-2.0
+diff --git a/package/qpdf/qpdf.mk b/package/qpdf/qpdf.mk
+index c11b42f60c..659204de6f 100644
+--- a/package/qpdf/qpdf.mk
++++ b/package/qpdf/qpdf.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- LIBAIO_VERSION = 0.3.113
--LIBAIO_SITE = https://releases.pagure.org/libaio
-+LIBAIO_SITE = https://codeberg.org/jmoyer/libaio/releases/download/libaio-$(LIBAIO_VERSION)
- LIBAIO_INSTALL_STAGING = YES
- LIBAIO_LICENSE = LGPL-2.1+
- LIBAIO_LICENSE_FILES = COPYING
+-QPDF_VERSION = 12.3.2
++QPDF_VERSION = 12.4.2
+ QPDF_SITE = https://github.com/qpdf/qpdf/releases/download/v$(QPDF_VERSION)
+ QPDF_INSTALL_STAGING = YES
+ QPDF_LICENSE = Apache-2.0 or Artistic-2.0
 -- 
 2.34.1
 
