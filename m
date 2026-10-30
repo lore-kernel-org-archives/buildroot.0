@@ -1,29 +1,29 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8408F606A31C
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 11:57:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 082B7606A321
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 12:03:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=KNfBAXXQ;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=oOSvuUgX
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=oo0V4H5X;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=d6yOFi8G
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3BD2060679;
-	Fri, 30 Oct 2026 11:57:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D4CD681113;
+	Fri, 30 Oct 2026 12:03:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pnvdNsSWwtaw; Fri, 30 Oct 2026 11:57:52 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org BCDED605F3
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793361472;
-	b=SoDdvjOmlWzpCnnPul2gm3zSqLDCsnJQV9V26L+CUKdMaGH+XyfvUDnk/53v+m9aXwAk
-	 fox7fzRo3oto2ri4k4ANjjxCbGEhN1sgFi6ELwCu5ziY2xXsYMgZ1/jx6onLCxCaoqcYp
-	 cLhCVILnOrcbbwBGsSASB1yL994KAryF5MbTD3myqliSY+EAuqxeq+yGOZXFfexwb8w1t
-	 USRkFMfwH0y9AXacVx/A4tBT/ghUy1sp1e9KhXDvB9hYHfiF0Q60GF2IGent0EaAQVbMN
-	 owYbYOssgiz1QHqi7Doqt+Yi4BzZIhzzTOfHBte+AHwU30fLaiJ7ZiA14T+iQRX6z9A==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZP1Rgaz6mCcE; Fri, 30 Oct 2026 12:03:27 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 17587810F5
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793361807;
+	b=oBaq3QDaakl5Ic6R29/ennjSIqgMGHD7u71t6YX36f+oxJCQH23ad5h1cJhT0CQq1z+3
+	 wMgnlhIQbC8iOJmSMok42xOEgNGfibjZpfVpybtuoETBctHNybPbymgnl3NdgpQk2qCrf
+	 M3al4MXgaCH+c5kXHtb5O8zAg7HfZJnKaZCRQYDDiz8bcu+3B6Hr3JcFIdwMZz5h8qlpH
+	 rJt9jFAoG8UiSaBs9PR0lJKhf+N8g1gXKeXEIf1C580tZ2CkU7siKy6yIIuGha3vkbVX+
+	 a1tDxSb2LAzVIYyEhQZvaVQ6cWRwKXaJ67UL2qR2SLTUQOKiTx35AF9xdzRnvaV+fkQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793361472;
+	c=relaxed/relaxed; t=1793361807;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -32,132 +32,133 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=vp3Wk5EuuL4GKQpJtCY1/eO3Mykd4+7tKLpFcJ0mZzI=;
-	b=WTwzKdru7wM5SnrQnYn/TRZkFDU95pIwg+UuS/AoXxappBcyjgYjwyy+jK+ipXBCP1jr
-	 /AdZdMxFuLROGHhivu3F6J7Y+D3HBaDAd/NQRjyPVmq3SfSGewt4KxAjDbMB4WF4gidn6
-	 6XMjHMd3x/mDDe82UQTcX9d7WDhDup5sDefheVJVzTZ61Y5a4FekrGMB8NepfVDYIVLsV
-	 CK0GbVMSnSdxSOZiwt8SwHKynRZ85XC7mna5JN00FoDKSgAwJqI464Kp0MnUxlazzKfpt
-	 +JmSEvfFeKR2PuBJyCQAC0T59LeGGoJ/Jc1ngiayg9OmllINAmX78M2rpe5aNlPp40A==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	bh=ag77Up/R4hQ6zaiYHORugmSg2UwxeiQMNHoxYpE7Y1g=;
+	b=eTFOErqMMkm+CuuJZxCD3uhM08lYbhHwLmdWjAMX8xct01/GPWWf6I9zc0LOJ/KCG0TQ
+	 lw3aboG060s7GTtmVaj734Zj7KhvC5veoOtYKL/0coXAUDu0Fyuv4OApw0NWpl160w7ip
+	 StssUdMSsV9a8xJ7NDIWrKa9C2kkpYL0oO35nA+3Q1O1goUiHXQNJt67MbwJPqIzZrbsV
+	 Qv+XxBV/VHzMtDV2tRXcO/qG9HI7gLQMiY53S2dQWepbpKYoWNjYs+R773hAD9P3GmLeo
+	 /XUVjQhbVIEh5jGU1yA5JezkDGhmVqw/DnjJPhYuXuxUdeC8zESkVvhPuq59VAR8rpw==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	dmarc=pass header.from=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=d6yOFi8G;
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793361472;
-	bh=vp3Wk5EuuL4GKQpJtCY1/eO3Mykd4+7tKLpFcJ0mZzI=;
+	s=default; t=1793361807;
+	bh=ag77Up/R4hQ6zaiYHORugmSg2UwxeiQMNHoxYpE7Y1g=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=KNfBAXXQCEES3LfICU9bcnk2BOPqWb//qfy7DUMFiRrkpgHh28OJonhELZgr6bApz
-	 pjWOp77Oaaje5QXBWThO80QxqyYtGPhXrkflvqjJsjA0X4njTIrUYhbrfjL1mrT3eM
-	 7bwKyUFZkYzeiYn1+mfKfODxu5xlr0uManKZGQroVicxfaz8Pz/lJv48qXIKSIKmku
-	 w64pbm7Ry3de3WPuTsFcmaFtpZ0RlQzVqddmjEihTPhwt9N0GtnZmCYA+/I8my10+x
-	 lJe0XkMp3LkEkLYGzydtERz3xXnQY9kxLeo4oIWi7nLiYk1aWPH8ybI9w3GM/R9irX
-	 fhAlx63Su1d8g==
+	b=oo0V4H5XFyWTzaF2mfmOj4Cj33yz/efY80GCjMvYDH575GzBR3JtR8R3Brl314k8N
+	 WpVUz9RqopCn1ha56O0HoNY/jr7VXe8/MwIxx6Qa+/A9TpvcNzbeoqJXAimQ1KddRI
+	 dtW7udVHgSsOK6jwsX1Do0Rw7tO9IXdiis2htGoLk4GSF3hMtfYwA5Ek8u2TnkbBqY
+	 UYanMzsTcvgs7E3/GQZcdMR64nmkEyZuTjuOnI1RuYV9GxTHYjFtc90uZL6vVzn46z
+	 TuKl/0nqH8pkCRk/w3wHPDaTIjmcDKf6tVaTuR36AkZUw/55+tJHwBJ9vk0MSvfSD9
+	 nHfuoIuv6Gqhw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BCDED605F3;
-	Fri, 30 Oct 2026 11:57:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 17587810F5;
+	Fri, 30 Oct 2026 12:03:27 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id CDEEE529
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 11:57:49 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 86E57362
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 12:03:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BDC1481107
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 11:57:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 68AEA810F5
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 12:03:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ditQaX7Fo5x9 for <buildroot@buildroot.org>;
- Fri, 30 Oct 2026 11:57:49 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 8EBDA81105
+ id guZkwlAMkbhw for <buildroot@buildroot.org>;
+ Fri, 30 Oct 2026 12:03:24 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 3755180F55
 Authentication-Results: smtp1.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::331"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793361469;
- b=HIUaNjRcF92cH7V2VuuVXJnMrzadMLPlQP6ML36A1yVjGA9pxTzF8jJ5wbNKZs+Ij/L3
- WmN82S2tQJlsl+irsLSauwLwlpRxPL4yLeCwphPaoeBefWy/4ZQIeqc6hj3dqKy9pHqf6
- og2QE5hyURpCG+PsRQZQ3hzpfHyTN5L64OCzmPos/6l2/IRRMP+F3jzUjUGQv4X9zR5Du
- iGpQ3cXozrK8Fc8bT++oNoqmgY16IfXoF2EnwUnJjS6tHKZDsHwG33rOWs7Q8Y25IDC/5
- BgF6aU5XR5+1bdu8JMJd5e71V3ipeQsW+QuJJ/i68zSzLrMnuzhAgPsfxM7WNjtPHsA==
+ arc=none smtp.remote-ip="2a00:1450:4864:20::332"
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793361804;
+ b=iDWNY26nwvB0i8ySaD7o7uBRnprh9Df0r8EbzQq24LgxnKpGlGv9tbcCbQzfPMwxsllK
+ VEFBpEqm0NXyABGZQwKYL3nwb/tpIB/MQCaG9YNEdJBPSZuh3giULqn8qRJg0XCf8vtCH
+ MWbVfBGyY8mG3tkOZekQ07J07HUuSpSrmv+hqnE0peeQHRi9p+Fn3MVnaiBTkMFcC3meO
+ tQ/Y1gf9VKtgav8/eMwwh4P1KRIhB0TuqmSJb6rRhmEZR/tm5SCUlxHjTUeHTg+bj76pN
+ dMUAnId5s5W2zXi45YYgEy3BS7H6JKPCDr5PGv7dVycChqWk16+jPsXA1wOtR26dTdA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793361469;
+ c=relaxed/relaxed; t=1793361804;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
- bh=j6hTXiWaVgMyJaFwGaCgjS8wLg+n5kv3IftzDTP0FLI=;
- b=FG3y2en3w59QcKEP97zcAaO5dXAD1UNvaHvTGoh6v2jje9ZEi+sL06wEWwUXwephxLmu
- m2Dy5MlFBMtiza1YZuk3HnxH+w6XTnWKcHHitIqFgQpgyxAwoX2xyxOwq+me+bFfKGxFN
- MWVGAkpVES9VXmZSccb7KzgMxKXlKDI4OGslsIubaZD/+TVqFGTpLs0Ox/iOxjDwE4qFk
- gGjODUZ7Bhc9f63HRv8BJGD2HCuCUurbwEO7fIpPKFWhk8NAKB5uERlzOHgULIDPmThdt
- x/E2ZoTluYWVxEI2Nvp1ItmWzMnFpatzkS/S2LWN/7a9n5t/s9PbbupblbsJ3UW4wmA==
+ bh=O41H6+/16ThM3aNPBFVLIR+QOvCMYulFxnJlCHM8jW0=;
+ b=OfeRpWXAKcjO8eDL+VSDUsIsJOCdlK0mOV0OICMmn7hSGZgsqAUC8PL4H8rjIOPU4kYt
+ f2Pw0Gn/dLGnq1Rbr5z2bukyULH0BhiPeH3bj6P62Vvc6qHl/HH0LKPv7KA28cqmRttqy
+ lWjzOzYeeI3h3xeN9qga79q9V8arhFCSKMHnmG4NB7A0i45zfyI10xTbR5QVud9I92fYV
+ 0az+4X5B5cWZdGnZW0fveWLAk+F4s4YjIZwS9SBWL/dx2qfViwv40Gy1CsZmVQvejGxay
+ +Pry7w9xbJ90YSzjCgt2TFovMUGqywAaV/oEmzQzyWFLh1i3dEmZWKs00Gg6GEnf6rw==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  dmarc=pass header.from=gmail.com;
  dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20260707 header.b=oOSvuUgX; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::331"
+ header.s=20260707 header.b=d6yOFi8G; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::332"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
  envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
 Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20260707 header.b=oOSvuUgX
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8EBDA81105
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 11:57:48 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-49d05d51553so3431675e9.2
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 04:57:47 -0700 (PDT)
+ header.a=rsa-sha256 header.s=20260707 header.b=d6yOFi8G
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3755180F55
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 12:03:22 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-4a20bde60a0so4685495e9.3
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 05:03:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20260707; t=1793361466; x=1793966266; darn=buildroot.org;
+ d=gmail.com; s=20260707; t=1793361801; x=1793966601; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=j6hTXiWaVgMyJaFwGaCgjS8wLg+n5kv3IftzDTP0FLI=;
- b=oOSvuUgXBOEnH9rgs2dy93LMOxePeaOqmVvmVdPFmju0PoZwWyA5kSw9NwjDBCLYB4
- 7nypA5BKuvxX0ZD9UI9n6kvpUPbIFPIu9EcfdadrUdKCv7G9iy4ILpMwCe4SHvNniNXh
- zcpevLToWgD2KSpRAWLMrgvuQToZzCiyT3d2srUAv/37a9VQQ1xJ3ZqQH3F1YO11c9++
- xMhMoss4cnhbzUkq88JRh2GdoWEsn0lKhEFUuS5rXi+61SdJnyThP6xomzOjP2inH2PM
- gTJn5WA4Pz7vqMAwSXUdCrPAKTBgWZh44KOzBhgBC1sPeKULduaAExhHRiNrkTtgyFok
- VQNA==
+ bh=O41H6+/16ThM3aNPBFVLIR+QOvCMYulFxnJlCHM8jW0=;
+ b=d6yOFi8GnnrPUTlRhm92SHlJ6G3KF8pThOHqcCGg1U81PW/l2m91jFkPVJL4PdobfT
+ lYSDCk8+fJdLyFxHOg0HmUV/5fEq2ul2LejQdEBXnl16BH44ivKZZDn6bwBS9hIXJeNw
+ NnMh6bhMGndPaX78u3raMcJCWB4E1bbjt3YGW1ufHUirdnV4MRcV8/N6xWa1z6ar1Ekn
+ vY1pyAO0V+D+3lCChkkQqWtjWVkWqg3jrFrrJr0N9xUjgbRyeSDf+NmYK2loqVKYCxIh
+ lxdsdggJEFd0BNQiC6iQJdDDeo6g0eHKd+Q8+X2Fyy4eTi5tK6dAKLnHUR72A60JctAi
+ 0rhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793361466; x=1793966266;
+ d=1e100.net; s=20260707; t=1793361801; x=1793966601;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=j6hTXiWaVgMyJaFwGaCgjS8wLg+n5kv3IftzDTP0FLI=;
- b=xSNujAuV56yhULPWgrGTmwGuwRhRsssFMoIrwcHfUnTTEQNMuRUGRWnai0hq2XM+y5
- psVxQbPuX8RDMteJWrvMUc0cqTCmsR6JYHNY8i1Uawv5SjFSMkIDtq2IwkCm4T5DqUW5
- O9BOgVYi9qJIMade0tEpPQxw0HNurxQSwsPbTw7KHf0urj26x1tHnWfrqrAnQISrKThl
- 5Bxn6XUwlzwgxW/7yCgxucIalkOOq3wjGWBTDEoeJx16y+67yAar/4hyd5lUwDfnVheA
- ISs8ZpS6fPtAmxkFKOfQSldCAVag7sm0NHZ2UR8vNqlrxyFvgfjQaGYxqQ8Mm/D3MEzw
- tDnA==
-X-Gm-Message-State: AFq9FYKiLWJ+BUHwmi4e8axBufNrs3YKVkiS8ktLwiAmvrRTqOVeti7r
- /6PVmYYbz4OaeleIZKB6dmNBB+B4bjD1Ho5M2alfN18fg8vsAqhRsUxISbeGRw==
-X-Gm-Gg: AYBFou1ULNgQJ1MRHeCm9SvfKN03uGFHK97xcWGJJmBNnDKjZPh1dOZDU5Gqklm2zSr
- 2NH5NPLnxkCCgj30gtfRmFCQO2sLNomWsMwooIXkGjBI4AiOTIEUZy+U/wdmKp8Prx21aNvp7PG
- NtiVbNfWV8d/wrJW9XOLegFCmm2wssWLM3IpsZgOjiWYGRqXQdNN9WTPcHqxGirW9ej/vnP/Zw6
- d4M4LVLpM0m9XddpeRWWzRQG5VTW8TIW1sVcw+Pag+Dgqnob2uxRokZ2x7ZcEoKeJGpgTC6rOk0
- Wtnb4ax/5xbFCEh6HOZ6ggMymDqhJER9PIiVuLG8fZV8TJLInEuBo5hJLn+0U7MF4gAl1RYKz05
- fs7x97YEAHZVtDjexe9Lsnf/nCTqYvyy9J/yGLG2+KUG8P2TqKAqy8C+d/OMNqd+LFQcRChO/Nr
- FBtH+Ix3EkOO9XIOShZ398xa0Kk23bHqfv8nt5TFCTnhRKb+vBL52DH91vUomRqx2J0n9IkvNh4
- I0jj6vAAprw0mpk/LTNFJK72DILFMbfM115MWdVP0QCvo3wlOka8CrD73C8O5mPMDoRn9NZmoP1
- 7ZV83xFO6UQexdet+xHH47Z/L8wMTEqXr1abE7jNO1SuAELNliLIB96y6wC2NLCW0RJo/MPzsng
- =
-X-Received: by 2002:a05:600c:c16a:b0:4a1:fbd2:f689 with SMTP id
- 5b1f17b1804b1-4ac16fa352emr43498425e9.7.1793361466033; 
- Fri, 30 Oct 2026 04:57:46 -0700 (PDT)
+ bh=O41H6+/16ThM3aNPBFVLIR+QOvCMYulFxnJlCHM8jW0=;
+ b=pudlcuhtpa6oVbFVAHd0N8oo3fcfG7rfI+L+v7uy+X8knfzCzdSXf8yv0NwHsqD4zz
+ tqws0aR37248U4OudOyXiG0KcRc6iK7i7NZVTP8gRfQWpW0/Q79ACKolCXQNpvZQ+Y9Q
+ hhyGQHBl0csAZzTnyb67UDemeOBwtkeTZbZW+jgYpWUC5wXXzL0B76ANMSAgf4zqpaw6
+ VqolrlbfK1P4agilTjZoKHbcGqD2Z/sNU8KwZQc1uu2OXabpoOriH/2RoRRjzEKlbsoF
+ +U6OM9sXcEPdy+4iPicvHP2LSzr6Ztf8tDvBOTQWY/X2pSUqDlHTxnwgf7+Xp3vWX3/h
+ BGkg==
+X-Gm-Message-State: AFq9FYJ7dJfuIyrdNd9n3J061kP4UvzfY8Kx8vKBp6XAv1/t9vaB168R
+ dZBPETPr2I3VxZzCuRWUB0y1aY8g5pscP5r/GYK6OPLga3lmS94cQ5GND2hZ8g==
+X-Gm-Gg: AYBFou3o4ONNViKr57BcV6iZAPRm/LeTtS3oCwbpAOzywA/90e8pb45XJFbrt2wKCb0
+ pOMBYz7KWLz1nn1Ok2OQ0+ckD2IwBMfstGWe83HEta+LRXMT4qUfEJeGieZbNXBPzY+2U3fodkp
+ H/iwFZh7zD1DMYmqWi9a8CmobB0N8JEScFPS1Z36QgHSDbhUTbguKulMZ/6EW5VReSRp3M48jiT
+ l4a26C0flgMRv4UWT2wPSx30bQJXjGWaDwScpeCPx5YLrZSWXbXb231sz0KrGDTcaPotKTmW4R0
+ IWW8Z1ULXDa4esZUdHwSy5om+s/uGchna3mBoo+8AyBBxVzWiGFkNQ4/d7XEVd6+WUM8jx/4E9G
+ 2r5eIWEClOkYh+31Ihh7hZJVkK1MouDoNajdB8LXJCp/jaMm9FWsRrg+Cyv7djUa1bvaie9mzvA
+ MJQXItikWTPXZSIOylzac5lpGbwKZl3GSRvQt+pWkK+AqsQ9wtD7WI8SM/Ick0zZTxKWVLb2rGi
+ YuNw2dscuH9Xp38SbZ8wyZUpPqYBQXGZyxivUweb/aFzWSQlO6cdOdH0GmbU4Gy5FfJ1C+KaG9S
+ 8sbHIg/dSM6TjUYp+OsUf19iposPDAXNuxcnAwQPyUVXsXAKw1lt//4=
+X-Received: by 2002:a05:600c:a4e:b0:4a1:e57b:667c with SMTP id
+ 5b1f17b1804b1-4ac183d1edamr43906805e9.26.1793361800640; 
+ Fri, 30 Oct 2026 05:03:20 -0700 (PDT)
 Received: from angelo-Precision-7550.. ([94.154.175.53])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4abf6e63e0esm73659075e9.12.2026.10.30.04.57.44
+ 5b1f17b1804b1-4aa820492cesm143738465e9.13.2026.10.30.05.03.19
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 30 Oct 2026 04:57:45 -0700 (PDT)
+ Fri, 30 Oct 2026 05:03:19 -0700 (PDT)
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 To: buildroot@buildroot.org
 Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Fri, 30 Oct 2026 12:57:41 +0100
-Message-Id: <20261030115741.3139047-1-angelo.compagnucci@gmail.com>
+Date: Fri, 30 Oct 2026 13:03:06 +0100
+Message-Id: <20261030120306.3167071-1-angelo.compagnucci@gmail.com>
 X-Mailer: git-send-email 2.34.1
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/fail2ban: bump to version 1.1.1
+Subject: [Buildroot] [PATCH] package/sunwait: bump to latest git version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -179,133 +180,61 @@ X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Drop patches 0002 and 0003, merged upstream.
-
-Regenerate patch 0001, as one of its context lines changed in the new
-release and patches are applied with a fuzz factor of 0.
-
-Release notes:
-https://github.com/fail2ban/fail2ban/releases/tag/1.1.1
+Upstream switched from C++ to C, so drop the C++ toolchain dependency
+and use the C compiler.
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- ...001-setup.py-fix-data-relative-paths.patch |  6 ++---
- ...lter-for-openssh-9.8-new-daemon-name.patch | 24 -------------------
- ...shd.conf-ungroup-unneeded-for-daemon.patch | 24 -------------------
- package/fail2ban/fail2ban.hash                |  2 +-
- package/fail2ban/fail2ban.mk                  |  2 +-
- 5 files changed, 5 insertions(+), 53 deletions(-)
- delete mode 100644 package/fail2ban/0002-adjust-sshd-filter-for-openssh-9.8-new-daemon-name.patch
- delete mode 100644 package/fail2ban/0003-filter.d-sshd.conf-ungroup-unneeded-for-daemon.patch
+ package/sunwait/Config.in    | 4 ----
+ package/sunwait/sunwait.hash | 2 +-
+ package/sunwait/sunwait.mk   | 3 +--
+ 3 files changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/package/fail2ban/0001-setup.py-fix-data-relative-paths.patch b/package/fail2ban/0001-setup.py-fix-data-relative-paths.patch
-index 75bd9aafac..922df9c578 100644
---- a/package/fail2ban/0001-setup.py-fix-data-relative-paths.patch
-+++ b/package/fail2ban/0001-setup.py-fix-data-relative-paths.patch
-@@ -32,10 +32,10 @@ Upstream: N/A [breaks traditional setuptools installation]
-  1 file changed, 7 insertions(+), 7 deletions(-)
+diff --git a/package/sunwait/Config.in b/package/sunwait/Config.in
+index e141c778a3..ea0ec171cb 100644
+--- a/package/sunwait/Config.in
++++ b/package/sunwait/Config.in
+@@ -1,11 +1,7 @@
+ config BR2_PACKAGE_SUNWAIT
+ 	bool "sunwait"
+-	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  Sunwait calculates sunrise or sunset times with civil,
+ 	  nautical, astronomical and custom twilights.
  
- diff --git a/setup.py b/setup.py
--index 91f71cf2..99ba2e32 100755
-+index ee8f392..26181b5 100755
- --- a/setup.py
- +++ b/setup.py
--@@ -238,26 +238,26 @@ setup(
-+@@ -220,26 +220,26 @@ setup(
-  				for f in w[2]]
-  	} if with_tests else {},
-  	data_files = [
-@@ -68,7 +68,7 @@ index 91f71cf2..99ba2e32 100755
- +		('var/lib/fail2ban',
-  			''
-  		),
-- 	] + data_files_extra,
-+ 	] + data_files_extra
- -- 
- 2.34.1
- 
-diff --git a/package/fail2ban/0002-adjust-sshd-filter-for-openssh-9.8-new-daemon-name.patch b/package/fail2ban/0002-adjust-sshd-filter-for-openssh-9.8-new-daemon-name.patch
-deleted file mode 100644
-index 9841d09240..0000000000
---- a/package/fail2ban/0002-adjust-sshd-filter-for-openssh-9.8-new-daemon-name.patch
-+++ /dev/null
-@@ -1,24 +0,0 @@
--From 2fed408c05ac5206b490368d94599869bd6a056d Mon Sep 17 00:00:00 2001
--From: Fabian Dellwing <fabian.dellwing@mbconnectline.de>
--Date: Tue, 2 Jul 2024 07:54:15 +0200
--Subject: [PATCH] Adjust sshd filter for OpenSSH 9.8 new daemon name
+ 	  https://github.com/risacher/sunwait
 -
--Upstream: https://github.com/fail2ban/fail2ban/commit/2fed408c05ac5206b490368d94599869bd6a056d
--Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-----
-- config/filter.d/sshd.conf | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/config/filter.d/sshd.conf b/config/filter.d/sshd.conf
--index 1c8a02deb5..a1fd749aed 100644
----- a/config/filter.d/sshd.conf
--+++ b/config/filter.d/sshd.conf
--@@ -16,7 +16,7 @@ before = common.conf
--
-- [DEFAULT]
--
---_daemon = sshd
--+_daemon = (?:sshd(?:-session)?)
--
-- # optional prefix (logged from several ssh versions) like "error: ", "error: PAM: " or "fatal: "
-- __pref = (?:(?:error|fatal): (?:PAM: )?)?
-diff --git a/package/fail2ban/0003-filter.d-sshd.conf-ungroup-unneeded-for-daemon.patch b/package/fail2ban/0003-filter.d-sshd.conf-ungroup-unneeded-for-daemon.patch
-deleted file mode 100644
-index 521d899640..0000000000
---- a/package/fail2ban/0003-filter.d-sshd.conf-ungroup-unneeded-for-daemon.patch
-+++ /dev/null
-@@ -1,24 +0,0 @@
--From 50ff131a0fd8f54fdeb14b48353f842ee8ae8c1a Mon Sep 17 00:00:00 2001
--From: "Sergey G. Brester" <serg.brester@sebres.de>
--Date: Wed, 3 Jul 2024 19:35:28 +0200
--Subject: [PATCH] filter.d/sshd.conf: ungroup (unneeded for _daemon)
--
--Upstream: https://github.com/fail2ban/fail2ban/commit/50ff131a0fd8f54fdeb14b48353f842ee8ae8c1a
--Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-----
-- config/filter.d/sshd.conf | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/config/filter.d/sshd.conf b/config/filter.d/sshd.conf
--index a1fd749aed..3a84b1ba52 100644
----- a/config/filter.d/sshd.conf
--+++ b/config/filter.d/sshd.conf
--@@ -16,7 +16,7 @@ before = common.conf
--
-- [DEFAULT]
--
---_daemon = (?:sshd(?:-session)?)
--+_daemon = sshd(?:-session)?
--
-- # optional prefix (logged from several ssh versions) like "error: ", "error: PAM: " or "fatal: "
-- __pref = (?:(?:error|fatal): (?:PAM: )?)?
-diff --git a/package/fail2ban/fail2ban.hash b/package/fail2ban/fail2ban.hash
-index 8627e01f05..abb1ca19b3 100644
---- a/package/fail2ban/fail2ban.hash
-+++ b/package/fail2ban/fail2ban.hash
+-comment "sunwait needs a toolchain w/ C++"
+-	depends on !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/sunwait/sunwait.hash b/package/sunwait/sunwait.hash
+index 8396fa27dd..6f9286373a 100644
+--- a/package/sunwait/sunwait.hash
++++ b/package/sunwait/sunwait.hash
 @@ -1,3 +1,3 @@
  # sha256 locally computed
--sha256  474fcc25afdaf929c74329d1e4d24420caabeea1ef2e041a267ce19269570bae  fail2ban-1.1.0.tar.gz
-+sha256  4be0ea0488e32de260058462a44a040f0542cd26a9fb6fa6d2514f9dd8ec1609  fail2ban-1.1.1.tar.gz
- sha256  a75fec0260742fe6275d63ff6a5d97b924b28766558306b3fa4069763096929b  COPYING
-diff --git a/package/fail2ban/fail2ban.mk b/package/fail2ban/fail2ban.mk
-index a77e5fad6c..4b9188ad86 100644
---- a/package/fail2ban/fail2ban.mk
-+++ b/package/fail2ban/fail2ban.mk
-@@ -4,7 +4,7 @@
+-sha256  ef26ed05882d5286a64a37c4044f99b877cc54f58a46f0e37ca60c93398df910  sunwait-7326b53e5406c7ebd552ae6dc0fc659252a18e7f.tar.gz
++sha256  ac69169fa8b1ce332682f1af540c648bdec849c255df46aebc145d0ec46fc80d  sunwait-151d8340a748a4dac7752ebcd38983b2887f5f0c.tar.gz
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  LICENSE
+diff --git a/package/sunwait/sunwait.mk b/package/sunwait/sunwait.mk
+index 4b27e8267a..1dc4d82b8a 100644
+--- a/package/sunwait/sunwait.mk
++++ b/package/sunwait/sunwait.mk
+@@ -4,14 +4,13 @@
  #
  ################################################################################
  
--FAIL2BAN_VERSION = 1.1.0
-+FAIL2BAN_VERSION = 1.1.1
- FAIL2BAN_SITE = $(call github,fail2ban,fail2ban,$(FAIL2BAN_VERSION))
- FAIL2BAN_LICENSE = GPL-2.0+
- FAIL2BAN_LICENSE_FILES = COPYING
+-SUNWAIT_VERSION = 7326b53e5406c7ebd552ae6dc0fc659252a18e7f
++SUNWAIT_VERSION = 151d8340a748a4dac7752ebcd38983b2887f5f0c
+ SUNWAIT_SITE = $(call github,risacher,sunwait,$(SUNWAIT_VERSION))
+ SUNWAIT_LICENSE = GPL-3.0
+ SUNWAIT_LICENSE_FILES = LICENSE
+ 
+ SUNWAIT_MAKE_OPTS = \
+ 	$(TARGET_CONFIGURE_OPTS) \
+-	C=$(TARGET_CXX) \
+ 	CFLAGS="$(TARGET_CFLAGS) -c" \
+ 	LDFLAGS="$(TARGET_LDFLAGS) -lm"
+ 
 -- 
 2.34.1
 
