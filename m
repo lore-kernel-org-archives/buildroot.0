@@ -1,28 +1,28 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92DB6606A31A
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 15:29:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C02AD606A31A
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 15:29:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=siXA3YZz
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=hA8HOzXL
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 69D9081B0A;
-	Fri, 30 Oct 2026 15:29:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6A7D540E79;
+	Fri, 30 Oct 2026 15:29:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 08LMrCcL_NW2; Fri, 30 Oct 2026 15:29:50 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 746B081B35
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793374190;
-	b=GfUDdLA2dK2eHljDIAMlRtv9jBCVZPmHrmI13JjIEEcVqejJ1p8l//3dbx3QQr5RYbhj
-	 3SGhyCL8u7Tc90BCjCJF41URxf+gpnnsKIgyjrVGEz/J5RUz5PnazGFNRn6kSs3mzgZv1
-	 wbjODB4eVDDddvKpgkxtpl+MrjA+pKROKgRzkdYT38a1FWR88BxdIt1nYL08vM4BcYq+p
-	 OZB9zg4Y2ERjdWsqBve0tFK4tYVfxBlFcXAUUKCI6V1vGjmKvK0XDRKDpPZjx1nFPS1WG
-	 yIeg872YV4icbIbioye/YTDPYx79rQXNSe+VHs4YMgog9jZq1Gf+H4VrdvjEQMeycWA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gg3n0Tw6Kwpq; Fri, 30 Oct 2026 15:29:51 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 7F4ED40E50
+Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793374187;
+	b=FIy4TXMrl+dYN4bYpmdYKBwbfV1WebL7lIb9eogerN3aXDprg+v0HhIdThrg9yyvPbNE
+	 FRhQhpLN75C+aOiUkxjDDpnqWVVPUzj3RZd7ZZVrJdMrrTwEkB4RFsXQ+YoqMU4VBeXuE
+	 MOOcDMBuasSHVC4ye3YT2zZPV0QZcHjLBv3fDXdkBSNujnLevbLr1jhEgieAQ0wNM9jtx
+	 KobzRQoZuVyC4pmyMoakbrgl+xUE6ztY2GZ3v4RwrSxlowL56QUOKMvIGqQijjv2Gvyrg
+	 QL9/7eoF2IFbjIEB1KwH7z40VBDhoaobHtnfoty/L5EkjC7GWwQ9qOfhr+X0BUSZreA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793374190;
+	c=relaxed/relaxed; t=1793374187;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,119 +31,120 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=IOE4twp1TMvgPcnYIRJgMgpXbRXfpV2CPZvHt/PjX2Q=;
-	b=VcPp+Iywpsn/oUd4/fM/McE6MPJwS+uiWDLXb6XkQf/YCoZ2aDdR66VG2AlGi5NCUqGm
-	 jOdo56bb06fi5w3cQpru/70xgfKLPdyg5B1+mw/YBdj7PCie8zHMPpTqeRcfDt+/iLhp0
-	 KNo2cvh17hG8GaOD8EqGXfA63B7rpSlh+RgB+pzhJ+Wbn3I+LcgWxBV9KDnGSLawPLDB+
-	 ItrpRw+05xLKj60Xkm84rIVnb4gMueViSPyjBuaguRHrXk+38rvZ5T3U5Stg8l2NDk5Rm
-	 yAkOitiSbpAtskRarAJguooSU92ILyG4PnM/vwCbN3EbLWz0MKgvG7FgFJfs72596Kw==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	bh=xNsTiomDzMgaWdF7P6VB8pSPpTMKiUMzUiQXyxVTUgE=;
+	b=IRt7NyWacLMTih7I+X2dMUzT03O+ZlFpUVUlaBrZ1LVJNdF8e1ls1adtQECILz8r8uiq
+	 OLgckBfDVE7i584WuoIqkXkFACML/ZDn7w0qc0MbgLNdaugnkk/alA8Sdyjn8enO/tqA1
+	 Q9/ZnLdZ0rZB7ueSyve0n2dIxVh3670Ai08moVnnOHqe9U2FvIP1LZlhHhvLwvydewAAA
+	 xczSBzfz1H4Idx90JQiHgv3xJ4gQvmo0eeRrCfZwzzVxpLFhRLQc96KipLcELZbFnfZsy
+	 At8W0lolLNfe/J1iUSu52ujtic+vlBirfW4yL5pXj8BZ5u/HhuIUE7RFcIhZWGqzOTw==
+ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793374190;
-	bh=IOE4twp1TMvgPcnYIRJgMgpXbRXfpV2CPZvHt/PjX2Q=;
+	s=default; t=1793374187;
+	bh=xNsTiomDzMgaWdF7P6VB8pSPpTMKiUMzUiQXyxVTUgE=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=siXA3YZz+WW5fojDp1kSXdKjZWKteJkLk0DQfm9I5s4C+FGvyvgqFvaC3lCugtTl2
-	 gy2E7QcXleeF9BsNQVitFurMh5nXYbYThyvG9iAWpYOzgffROx9zBWO+ah1mxFziJx
-	 rm44exonp0njMTP05Ab2oDC2iPnlNl2+LK7B5fHknktOGDFnktST9hYSw1hIU/8SMD
-	 f23eZwG4FNxqPtU2V96zaIMY1X7VAs+vk/K+zKk7QTb2ZMvFKnHi0WvSXtRxXaMlu1
-	 lMlw94PFtpLRR5lIsmvijQ0X+mknCkrHS1MPGKYXzEXmoNFwntMXzaxNbrrZGaeXgM
-	 bKDcT4cctaShA==
+	b=hA8HOzXLeG9PNFWuts0RafG84ydCQ6pFNip5mBsCMC8vydbHHsIITie+eqJIuKh9j
+	 ScLCen07pWcjxEZxz0uS4TNZKJGKBNsopFssc+7VHRc0wwofBBOVcp/YztnNGzSv9Y
+	 CqNbustq5coiOPwSj3waUXov+oycVIUVT/0QbUM82bwtKJoG777aRQsKxuUVDL8LXf
+	 0ONukAtUA4OwEVxcn9pJq8Y7P4HpesJ6/7impPaIfS1vSMcBeLGBUSNuw9IHG1dNgN
+	 fmINfMevGcMgr00Th+TehW9Aok6NE7wvSW4t+yEzVu7seUI+j4dGr/6PGfAWKMfLrt
+	 uAwrch/5bjFfg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 746B081B35;
-	Fri, 30 Oct 2026 15:29:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 92418235
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7F4ED40E50;
+	Fri, 30 Oct 2026 15:29:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 53DBF235
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 776A560B55
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3A2CF81852
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IpVfUFtOww_e for <buildroot@buildroot.org>;
- Fri, 30 Oct 2026 15:29:22 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 8420760B23
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793374161;
- b=ht9UzXO+ITXfZw1CenvHU8ahLZcvvPOg+4S5Puual3plvxmia3qrU7qf/x2YBW9jPx8e
- E4Ro1YGOcPULvhLcmXyBl4gcNvHtCy2DRLnz9ldIr55rfXqXszrmbG3jdA//wKjJi3+Vs
- ltFHkzRjhwr1VHT9i5uh57rgtGKOgSX1O77QWBROqCd+0dQRPrqYtEFK+VHXsxlAlyISi
- GPYGH8Fy5gUws7+T9ohMEKtQvpUP+/BKCO3U0uhoCkY+pjgZ7qnWDYHYiU+lNo3N7dXUB
- 4cdwyOj40UB+wuiG0/Fd9ykkU3nSXEi1c6xuqB4WtFHkoH//K1jTEWe+tSIuQcBbKog==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id toI36LjvQ0oK for <buildroot@buildroot.org>;
+ Fri, 30 Oct 2026 15:29:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org CA14F81776
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793374156;
+ b=LCPGcCf1us01TCyR8jEwZEremhsEO6z18sto8oBv6N8swI5z3GrVinqMkfMmL1TMhXxy
+ ns4mXDvZlFSdsuLuwjoQrug00odhOQN2JzbtbJHVb7iRV6vUf6LZY+BNU/0KoYsexb7Uv
+ t5leawYAcqBQMvuIRG5WsKl9cW1bHrJtRG5X7UTvVVFssmlpC4IwxeXJEeehBuY0nbwGv
+ wpZWecEXz4zKsFVbPpSsW+u2Z0pcK6Ik4vMHz4PCrprKw+7ziCSeAFZVaDVhWAFi+39L2
+ qnZrMw78mO9NCvYDIDFLnc0QzK8XysarXyO2Ysx2HSDAzAUnqChysgkLuiyFzDhuMfw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793374161;
+ c=relaxed/relaxed; t=1793374156;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=OYZWyeD7Pb4vA/x+x8Hmpt7HCRFyKjkaHVvlO1hJNCs=;
- b=WSqilPJ1hfLSRy4mJlVXG9vpbamLR2HVJIULOGKDUPpLkzlqqTnuWyZmCk6Jgx+rm5Kx
- VMb9QBlhE/lPU9yCjPGPYsJTZK8sjRbHNDyO+xQVDBQERSMH+gYVEgWxFn1d+ZKxfk533
- pff7vW2GbtU6LPevuJo0KAZvMfBgVNEKCflcpIOQOj3sdRKoxETB3pSAe0ZR2GCoS4j8e
- Gpiqk9ohhi3QNHRREmJ5MpgaD7h85PrYSwV0PPr/YL2aUlkeigFureTpQZ0nMnhkVsrD+
- wLofKn5QXuABElN1YFEa0xH21B22WbNX7VID2uTEsrhOBi7yPVkOGqlWFgnVuFzGZmg==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ bh=zvD5j+7E36YgTzzfVZxM3Loxvt0mNp14TrLwmJ27xfU=;
+ b=a1PqMrt8wVvUiJOBqGoz2+tw549iT8UbkkHWxxv0JldaA+Eadm9pJvVVsyhIH/H0hopU
+ kfcnXlmTTNUrYcV1neAR3EloPjhVIItH9Pa6MR0i9lO8iUqVLBUFz/WQiVdSrmExTkGXv
+ r3pR3FvKr80S5NNRt2BgVzh3Ra+jtXrBZrmdNYkhA1eQuqeco3JmMGAjWtUxx5kSLJX+A
+ vXDldjvct6HlYcsOHhXeYP6Kc7yZuK6i2JGSVFh1W1/2dtbNfZE7BiQPEmB5BCkx/y6jt
+ fmWuNy/FiloBdi7XxV8YOLIpdl3g80E7B3MX7iwf3ibzBMCxOzdpQs8qln75Qfq6x8w==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  dmarc=pass header.from=mind.be;
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b="It75hla/"; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::330"
+ header.s=google header.b=azwEX4RK; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::332"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8420760B23
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:21 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-4a35ac4475dso5925265e9.2
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 08:29:20 -0700 (PDT)
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CA14F81776
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:29:15 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-4a5177d78c7so8628185e9.2
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 08:29:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793374159; x=1793978959;
+ d=1e100.net; s=20260707; t=1793374153; x=1793978953;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=OYZWyeD7Pb4vA/x+x8Hmpt7HCRFyKjkaHVvlO1hJNCs=;
- b=xoxbhWqAatYGaEXKxEKqXf2SyHh7XVzAjAlRZemB/Urv/l0WATPMcYMdnAoELzr6XP
- VwhUw/3s8O6b9MCuj2oQoRazrTgqm5Lh3TntvcfZQLlVyQXLzRP8CAH1pAmP1JFBlZws
- uDOCvTsnKcrTQQWnrT38FPC5KqiCeXctbDpvCap5F7/SRmIZE+GfF56EPCQT5G+SE1uo
- vXOzx0kAPNuEzpDM0lsx6IIL5otuz5BoOZ7m7lve8qcLi3oMDI8zfiwpjkD05cS6qWMT
- cQSU5eBNOFlLnK5Tq6W3XJkdkS/pKWJFLfpC6vlEnk7xyfH5jUZpZ3yqoWt/rWsmKAUx
- hCHg==
-X-Gm-Message-State: AFq9FYKKVT7+ZByrYDCRNJjEp5Q7+Hxho4u/3+bR8WsnbbamB3ODEqoS
- QKGdPyVor4iSacujhaq7c5/zgrC7pWAPLGPylsHEWXs+wgxhoezeSqwlZJIxpbE1E+b5G8bjfiC
- G3CUEFDI=
-X-Gm-Gg: AYBFou3nCmnR6RmhpGsBXAB5YcwrF2OG8kNnemEGehfqQ7PYvaFkWr9S65W03jZASzh
- nkv1Wzle4PNQWFcU7s5O4urigs7BbWlInE4PphvC5XUPJBgxOEeBG/zOrRTtvgaDONYJgop/6ix
- lSF31lzRkxI0/qILDem/qya8gQ+Uw0e549kdioHIGHRLvS9NPj0jzeT5OwryGbU8I69tWkEdUkz
- +tem4zPdxeuO4M4PEDh1CIrhixBupgrc7/MM9c4X/ISQcCGUdDgQHglFNac3DSTY1sQfzjyZ3um
- fkLNJc4Jv0nPBAPTE/rrjbJPOCCkBlAT9muP/QaDPJr5t7onV5BLhAo833aTALiyD2sgT4lSNPQ
- YU/XjL4r/vZZROW9P6tVq96+kztJpFYMorC2FQ1lUFUL/0TLF2SU4fD2ShQdeevxypdM9VhWDrS
- zOx/Mt5CbJvzot4AZBfy7nuljRwm1tT0JTrBDbNaYBF4+7EZZy1cbhyyZHh6ij+juCIiqipcD3m
- MRenpgu6ZmDbcryWsYbYh5uaMaY++AB3z++zkE4u/8d3SWc5/samKXAwVzWyZWUeDQv0kh6Ji7M
- 9v3dAAwIvDVqb4mbq6DmFv//fsjFqYg4aNcpd3gLkwrSw/bQ7Mi5bp21Ye/V8is67pvxQSYt
-X-Received: by 2002:a05:600c:6285:b0:4a1:fa27:df7c with SMTP id
- 5b1f17b1804b1-4ac182dc8f6mr59878065e9.34.1793374159262; 
- Fri, 30 Oct 2026 08:29:19 -0700 (PDT)
+ bh=zvD5j+7E36YgTzzfVZxM3Loxvt0mNp14TrLwmJ27xfU=;
+ b=ri2TRP+F8YoqJGEg1PHCsdh370Y2U6XoPd3mqbHQtWXYT6X8k2H6fxsPREGhSwMG2I
+ gYtXFOLv7sW6BMLAP1igSqIZPAz8EGiphBLfAuiRhZQb6m/XeM/UvdnMf8LU4w0cBd7W
+ adHhnKDEH63mik7BXv3Nqwb/9QP+xF8uRblfZDPWoEPwCZ4HApI/QoYepfCr2OBH1LoR
+ V9dw8KXTjWUCG1LmcUrIrm4eB8RQY7rE4bOA0uyixBynQH9l3LNVJYBCIvbRW6zGpsPA
+ uA5xT1BlVNZ3jt2ElV5xhzPhsV/9rSCx/9uXodfiL50UYrGVs7FwTdEyG9CooYVpmHaF
+ Ua/A==
+X-Gm-Message-State: AFq9FYLO7bXisVNBZRdL9TV4Lc4P55rE83iBGDMNU3PdQSlAbqwutWBb
+ mNK2rbkgHHODSgOC/8cm1ltEO6rVmpkmd4JrOu5UjGa3P1WDBspI8sODZZzzIvgvBUH++dDNkL3
+ +mi+oqX4=
+X-Gm-Gg: AYBFou2Akis/Y+jgOW1Lyy29zubBaVMVuvzuFUjgDcLA7AWDdPXWxgTJba5MLN3ogvw
+ rYCmiKknVV4bCsrZmvQFKPYjMr/eChJ74baT4ZpdyhP3a2J4ecWojB6qnHWZGJLrW1B1VtpcWpo
+ 64+QtszzpOychtG1gzg5p5As+2DnOYnryRpgRFS8wNvvUFbDaAQNXjPK584zNDqCznexrMD/Nhp
+ 1NYIe3xHqg8wPYhWQuZN972wj60YwBxJdZIHe8CC+KCTrbQ2da0VGzl3Ci5NwjBc0SEeRQEOxu7
+ wYRgY/AdZdffSp9WuTkM53MCJiXRJjQrczQh6TcoUJVMh0929RInlztDTm8OZNrfcbcUI1eSOzj
+ vzemSS5uI7FbEbxjHy0se4CkmQNpmi13blSd7Ujo7Ciba4EKweRB0qpyw8kNfVJ+VyZodQkX8Xe
+ 4vCWi/9SEYpEd3eklh9rzKVGuIDeAsSV0QlU/o2e9RUQ8e040dW9VE06oitQFSXx2wDc+o0xj+U
+ qsm/L2fqN4nnY/WxGXpz1ayn1md5bOrusHklnApssybC1mhZ/rDevUSKtJcQpdEAjACXkTL/eMC
+ uabNxQI5L/rkQ2kYMy8X+FibLFohelFgz3Gs4csYe8M9051Cdx5m3m+7/yWnmWejw05b00rn2tY
+ vEwhzLEYyn6eLLDYi0A==
+X-Received: by 2002:a05:600c:4e44:b0:4a1:7bd4:d07d with SMTP id
+ 5b1f17b1804b1-4ac1932a2d5mr58907615e9.34.1793374153593; 
+ Fri, 30 Oct 2026 08:29:13 -0700 (PDT)
 Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
  [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4abf5b289f7sm67262725e9.5.2026.10.30.08.29.18
+ 5b1f17b1804b1-4aa813d295csm145424845e9.7.2026.10.30.08.29.13
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 30 Oct 2026 08:29:18 -0700 (PDT)
+ Fri, 30 Oct 2026 08:29:13 -0700 (PDT)
 To: buildroot@buildroot.org,
-	Yegor Yefremov <yegorslists@googlemail.com>
+	Bernd Kuhls <bernd@kuhls.net>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 30 Oct 2026 16:29:16 +0100
-Message-ID: <20261030152918.1907835-1-raphael.melotte@mind.be>
+Date: Fri, 30 Oct 2026 16:29:11 +0100
+Message-ID: <20261030152912.1907778-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261023225751.2614512-2-yegorslists@googlemail.com>
+In-Reply-To: <20261023211622.2096562-4-bernd@kuhls.net>
 References: 
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 2/2] package/avrdude: fix libserialport
- dependency
+Subject: Re: [Buildroot] [PATCH v3 4/5] package/mesa3d: i915 Gallium driver
+ needs llvm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -167,59 +168,58 @@ X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
 In reply of:
-> Since version 8.0, avrdude automatically detects and links against
-> libserialport when it finds it in the sysroot
-> (find_library(HAVE_LIBSERIALPORT ...) in CMakeLists.txt), and there is
-> no option to disable it.
+> Buildroot commit 3e296a151195f9d32dbfd62d6c75d08b822be6dd bumped the
+> package to 25.3.0 which includes upstream commit
+> https://gitlab.freedesktop.org/mesa/mesa/-/commit/b8b38d38b1c14b60de0324ac2f98ff7f1f4cc3c5
+> that enforces llvm for the i915 gallium driver causing configure errors
+> in buildroot:
 > 
-> Buildroot doesn't declare this dependency, so whether avrdude gets
-> libserialport support depends on the build order. With
-> BR2_PACKAGE_LIBSERIALPORT=y, building avrdude before libserialport
-> gives:
+> ../output-1/build/mesa3d-26.1.6/meson.build:241:3: ERROR: Feature llvm
+> cannot be disabled: i915 Gallium driver requires LLVM for vertex shaders
 > 
->   HAVE_LIBSERIALPORT:FILEPATH=HAVE_LIBSERIALPORT-NOTFOUND
+> Please note that
+> https://gitlab.freedesktop.org/mesa/mesa/-/commit/4235c39a9a8378f1e2dc0899dd4c3c941f27b887
+> later removed the llvm dependency for the r300 driver introduced by the
+> commit mentioned above so we only need to add the dependency to the i915
+> driver.
+> The configure option draw-use-llvm is disabled by default when llvm is
+> not available:
+> https://gitlab.freedesktop.org/mesa/mesa/-/commit/37c7d19e46a4863c120186a99ac0344c2dd31260
 > 
-> while building libserialport first links avrdude against it. This
-> makes the build non-reproducible.
+> Fixes:
+> https://autobuild.buildroot.org/results/acd9039901cf4168e6318c62252ddae6ea0ec93d/
 > 
-> Add libserialport to the dependencies when it is enabled, and
-> otherwise pass -DHAVE_LIBSERIALPORT=OFF, so that find_library() skips
-> the search and libserialport support is disabled.
-> 
-> This issue has been present since commit 0e16ff09e953
-> ("package/avrdude: bump to version 8.0"), as avrdude 8.0 added
-> libserialport detection. It therefore affects 2025.05 and later.
-> 
-> Fixes: 0e16ff09e9538d46c9726f8998080d55dfa5d41f ("package/avrdude: bump to version 8.0")
-> Assisted-by: Claude:claude-opus-5-5
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2026.08.x. Thanks
 
 > ---
-> Changes v1 -> v2:
->   - new patch
+> v3: no changes
+> v2: no changes
 > 
->  package/avrdude/avrdude.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  package/mesa3d/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> diff --git a/package/avrdude/avrdude.mk b/package/avrdude/avrdude.mk
-> index 476f031c99..fbad44a191 100644
-> --- a/package/avrdude/avrdude.mk
-> +++ b/package/avrdude/avrdude.mk
-> @@ -25,6 +25,12 @@ else ifeq ($(BR2_PACKAGE_LIBFTDI),y)
->  AVRDUDE_DEPENDENCIES += libftdi
->  endif
+> diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
+> index e18d25eb8e..f45a675445 100644
+> --- a/package/mesa3d/Config.in
+> +++ b/package/mesa3d/Config.in
+> @@ -147,11 +147,15 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_FREEDRENO
+>  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915
+>  	bool "Gallium i915 driver"
+>  	depends on BR2_i386 || BR2_x86_64
+> +	depends on BR2_PACKAGE_MESA3D_LLVM
+>  	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
+>  	select BR2_PACKAGE_LIBDRM_INTEL
+>  	help
+>  	  Support for i915-based Intel GPUs.
 >  
-> +ifeq ($(BR2_PACKAGE_LIBSERIALPORT),y)
-> +AVRDUDE_DEPENDENCIES += libserialport
-> +else
-> +AVRDUDE_CONF_OPTS += -DHAVE_LIBSERIALPORT=OFF
-> +endif
+> +comment "i915 driver needs llvm"
+> +	depends on !BR2_PACKAGE_MESA3D_LLVM
 > +
->  ifeq ($(BR2_PACKAGE_HIDAPI),y)
->  AVRDUDE_DEPENDENCIES += hidapi
->  endif
+>  config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
+>  	bool "Gallium iris driver"
+>  	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # host-llvm
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
