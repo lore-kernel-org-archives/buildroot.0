@@ -1,28 +1,28 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 820CF606A31A
-	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 15:29:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAA01606A31A
+	for <buildroot@archiver.kernel.org>; Fri, 30 Oct 2026 15:29:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=K8nHUDTr
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=gPwATklh
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5343840D09;
-	Fri, 30 Oct 2026 15:29:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 98A3881680;
+	Fri, 30 Oct 2026 15:29:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RDRQ-xmVI7CD; Fri, 30 Oct 2026 15:29:08 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org EE31440CF6
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793374148;
-	b=rRcyZTC0sDEt7lllcLZSklpvNmfiicPXBDt+y2Z2dqhLHIt6z6A5ZKK/90DAMQE2ccoP
-	 T8OsK2bV76w8Z72cvhyJIsifc/A04i2o26jzX4suXDfcsQhDioAzgxWrJU4R2kYhajx5F
-	 CkIFWDRwXVOvhl8r0BrXOB3AhbrL5zltx5YoBlRCK30fgK1IyY+j0lx65lMS95WF4oUnS
-	 O1LJfbQW7agi5dHZo4zH8MD1VJUiXNVuCi3+rRAskvW2hq3R5+gUI81/vQdYPD5yAZJtB
-	 ZkKhK2Bbk/cgSh21WBfbs1s19446ePX9C1Qbjgg4n7T62GXjim9QfgGCDdfNP2M/FZA==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OwICSRy5r84C; Fri, 30 Oct 2026 15:29:10 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 75668817A3
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793374150;
+	b=KJzAC3Rl2L6PszwAC/FRIvFq+QOBvpfntmTiAxq5ek1xYlLeNycceq+Fkad/VCyCIcjD
+	 45FDcfaSnvmrrW6Fo56GWlZMBybFFAxohZdRQUL2yBtsZ2kJrzoOoFy8xWthIwmj94R5C
+	 69yOsb9jHlAg+f0/kaJXRp3Bao5TF0unFwD9uF4HDbbSig2VTrNkUgDM7RI/eBMETbVuO
+	 uRS7iDlaSx46woUzx9Wb0g1sr4ZLBZxjYFuYsdBvbilR7IgGCNMtjT0pomW0Uo6UH4Ty+
+	 AX9poxRELQADjrxmKfFY6F7YVkr74m8Ie6HrUjBftt5tDMhRrIwvxIbc3UUh/hJgKlg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793374148;
+	c=relaxed/relaxed; t=1793374150;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,119 +31,120 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=ZHj4mguPLFcrY9Vwq8jc2OVgQ9bf6f+n6Xi/rwKq6A0=;
-	b=iQ/gMOrUPBEVrXQCZC3GvY/88ssySfPmFY5Aw3/aQWn1D7NVV5/QtL0CAPp9eUKzyhm5
-	 92srELWZnp97hK2KB5+FHmY4Gwv9Zo1efCjD5o47DbFaz/pcJ7hijVPOttHTeJ+iam70I
-	 lJIqL1lEoTz/qVCIPUXCeDgfboQ+fuyrUQSuBpTEZyCx914OGH5ECJUtfMuyBrZfKjWKi
-	 /1o/3h3D3LjgfIL6DF4CgKN6Akc60IjSk8tLfTI1zZbe+iYZWNN85B5YoaD/+MEvnXh1p
-	 145VgyjFUx5XB35oTJ78bm21R/VZ6dIDxXlUlgiocbvx3Y796EXcz436+eYDZ2s8oeg==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=lTV8SgO1cU5skUurrreWnL46p94Nq1X+QsJ4UADI3tE=;
+	b=itNwzZAK15IG1f5qZqWvIxfgXaBqbvHBu2rTfnJVot3SurZbe3ooB91MLpAqIAEu2kh8
+	 kZz+o6KSgt/U4NJXN44+pDYmLoLhX8Ns0qOVU8h91u6BgRN46O/91p2A6USZaBJtP5af6
+	 B3g6A0/v7AwRGbF8g2T7Xu9cu7c0/FohvWGZZokt8vy2elgGFBvhm8OeWixcX8oubyZcg
+	 5BQNr5zFAogQIJtLlbO5altEJieCyUR/8Sm3tpXWKP3AfQMtxJ13pJqv8YfnxURJHzgMK
+	 ThtwuE7Hc8vHcbplTCu0Ve722LNKGoBLVc0fouR4ej9/m1pc4hhOy48oX4x/5kRQSkA==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793374148;
-	bh=ZHj4mguPLFcrY9Vwq8jc2OVgQ9bf6f+n6Xi/rwKq6A0=;
+	s=default; t=1793374150;
+	bh=lTV8SgO1cU5skUurrreWnL46p94Nq1X+QsJ4UADI3tE=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=K8nHUDTrHoIz3SecVKuaGsp6k7+mpWdtI06nYFaUoIwoiv0S5JxAd0cjHa3xut0Ul
-	 gRPC1xaz0lIfVYczhz5v8VKZupOoZg72ZZejpMCu8qH6hzqLwMu//ymzgkfDSuDWdD
-	 bI1ZqwSIdf6f8oq3/PgZ6LzEzL+FHCyEHB9PtucawAD6x+sUQ3qbJrCp4BAlKmn2DO
-	 fvaSZ9fGnAUD394FVrpY1BIr59gCQEBj5610WxsWSW1n6ajXpkAa9fLAqc+1Dy40T7
-	 4quI1sjOCmene4PyRqT3VV1kXxjodQDDEYj9Xe12YtCyUHUGIEpgBHvB4uObbJMpAE
-	 fymfOhjwfwzYA==
+	b=gPwATklhZV21cEAfKZt1//YtliLdB/4HKt/dVmTW3o2PAf2T07RBJrEjA93Ym0F/C
+	 /+iWS4n5/s+idyv9E5S5nSR3QZxuKm7I9dZzLACEaHdV3gPWho3Uhbk7tgfCFyuiA3
+	 rEU7l9TxZvbIRMixKNHZ+/fbkqkcvRfv7/OQu2eYcUlVNhb55VrOsyqduaKvu5d14E
+	 vWYI6w12yFqRT7B5DiSKa6jjc8XHNxX94ikc5HJCG5TRzKy+RS25+R7umv+MOWZJyS
+	 fKM5DgO1Htja25o5e23X0w4wAIV7Q3tR/OCmjSthvc5ZgijIvSp91cRBANwPAY4g7t
+	 1m/nkix/gGDhg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EE31440CF6;
-	Fri, 30 Oct 2026 15:29:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id A346CD43
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:28:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 75668817A3;
+	Fri, 30 Oct 2026 15:29:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 57223D43
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:28:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 94FB840C9E
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:28:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4304C8177E
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:28:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pALsCZpFXpHb for <buildroot@buildroot.org>;
- Fri, 30 Oct 2026 15:28:06 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 3B81340CF6
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793374086;
- b=Y61Z5xNrxc2IdprIr0Azwu8Hfedxc5shSXDYLECVUIWY0lD1YVrQduvNWP8HjSEccms7
- KXvqdSuNKL94zFVtrjoknOl2JZbW0R8TgtI01RL8DqiW4Pp3jKHZs9W+a0OnucF3lJ8H+
- hl0oSx0gMZRTMPNuBuvUM5uZCb7EXuCIvtDGKdLW42c/8BlUL1J9/HK7/8VP2HAYOdtwZ
- aySbOmqQIyWBQSUuKggVziZ3XbF9kqyitc0DEyEDPbILEi4QqRQyzovOvX+QIj6uIkI12
- y8PG7ghYNRwCRSa2MnBMcid1XBQ0Mqj+etYJzeyTyHOfVQ4nnrFMbBD6GLFwnw9FCig==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 955dpwcgP-Dh for <buildroot@buildroot.org>;
+ Fri, 30 Oct 2026 15:28:09 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 5A4B281764
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793374089;
+ b=IIfb2byzNLgeJ/AfjFQGnkwcrS9X6kIoXSGMJ2sxUftTU89WiesXEbAuVsRh8Ubpz3q3
+ ToWnRlPgbgw94b4pEBL/lshAfxwJajDZEFVzLg3ZHhZOBxoU2IKRQ353KpyaUJT3X2BtC
+ Q7pxm5+T6p3KttMFa6XoCQ5SvDphSuMRLtyqVD6A8hRTvqI7+zwfW+xchS2aZhWcQP5cd
+ zY8oxFurrDg4H2xLVQtVRiwI3yjFi+xHgD9Gth6NgUvIG3GKBOujIYmIBoyVUKQkPajSa
+ TT767Nm4o/kvj3ozEr2K5W5vQiGp+momD/iGfrcAZcxG2Li+gKoHTHxb1WhhQr7YC1w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793374086;
+ c=relaxed/relaxed; t=1793374089;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=3K8G/IzlpoxBUDurCWzrel1kM7WmSJMO5FAVVpUpjzs=;
- b=T1LCkBrUkpronux0aygmqD6i6vue2E2FGiqy0OjxbnXs5lSBFH28+GjXRZ//3XAeqvpe
- VdjEKn6Vn6sGc5Ho0vAn4IolyUPYP74+Q2klxgcTAhUf1hVcEuvcaUXf7SvW+BtYA3kil
- sxsEPdbQWFCzuNpgESz8vw56EEaSoXag3o2SKB7YDEP1JptCnGRyj5NP1QKmDpogbhbyL
- Z7H0cdnqcOGsNHkhFGpHUK1KwAprYkDIyDJQ89SPwh+QywA+jpz9WrYBHYjKGW7jawghg
- Qfj7uXmS8MfAz21MCr2Ae3cnxlwEPSVIScdi42VVG51Y3tAR56Vf/CNipRFkrGBZpXA==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+ bh=prI5+5V/aSmRUUSMFMfjVZoaBHCOY3gEnIpTjzzBCPk=;
+ b=f+Z9NbGvf8csX671RHu0+XoNKgHHc9PPepv3YTmAyURoYP0wCuGwuJYuKnBhLMkInHt2
+ JaaAHG6cZPJ7NfkbopWLywol6hDa61xP0y4MPwa5UVa5tBjK3iG0l+ThfMVtIASdomH+X
+ NuyRdxMFOid+B4Ac9+hSZTXJ6czd2R/f6VBP5t/2tKIhx2Npl5oEubLtYSNDivOc7p+RB
+ YN/UjWzlmcqbmJJFyVQnU8nb7dNNBoqPoiphraGQziYI4kBTvm0BAkksAlaES468Aj44u
+ B3OuDH+X+t/9IhaPX6qMHEKmtSwlEU6ZbBB5TmCXtPIpwfn4XoR0pcz9p5SDafACoow==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  dmarc=pass header.from=mind.be;
  dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=eVbMDTlE; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::42e"
+ header.s=google header.b="Ea4C/RRq"; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::333"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3B81340CF6
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:28:05 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-48e0d1c095dso489279f8f.1
- for <buildroot@buildroot.org>; Fri, 30 Oct 2026 08:28:05 -0700 (PDT)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5A4B281764
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 15:28:08 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-4a20bdaf39cso9876425e9.1
+ for <buildroot@buildroot.org>; Fri, 30 Oct 2026 08:28:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793374084; x=1793978884;
+ d=1e100.net; s=20260707; t=1793374087; x=1793978887;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=3K8G/IzlpoxBUDurCWzrel1kM7WmSJMO5FAVVpUpjzs=;
- b=kqxI4lm2Kl1gEDOpFFJA1yXiC0pLaNYjGJQhhKvvyC10YM7kXG4zEp109GPCRR0ScY
- bH5+WLJ9GGwjNSekLNt+HMQ7HA2cjOyJljaCkr6mRu7xXik3KCLBOEIg1xi1LII6E7fy
- k76v8dgExQMjvLX1lWScSIn4zP1+MNDmsO1rCBwdo3lOtG6NkwIIg2uX12kbKY9JW/2P
- 3XC0t4+2kBZ3mA7q2Vqb5YXusWqq1oVbBUlxGEqRa/cyKYGrDcwPg0feIvjHBvl1AiNS
- hdGGA4X+Otnc9aUtHXklP2ZAGrbjIMUIEdb1yQdjq7/JW/gBE9NKr9RmcN4FarqI3w/k
- g2ug==
-X-Gm-Message-State: AFq9FYLYTDfsJNX1VBUXarHPndX8TqjFKauKrXOWSvCtDCbfYKH6klF9
- SjN4uWYEkGjTBQlVkduh4SoSS2bc6FMyjv6YWY/b2gj+8MItXN3Am2ouR1H2NTSeh7hrLRMwaLF
- wbxKuuEw=
-X-Gm-Gg: AYBFou1mIn8HOsjuAZfCzecZOUDGOT/94L/JSkox8PVWU+QDMa2tfDj84M0H1n10w/T
- 2cqttinIdRpiQdmkYRBmn8OdKk8gSW32ou87x05m3I8SCKe4+c5nNiQDi/b65MqF0tYPK63dgqK
- V5mhTJv7ki1ez7sb8tIxcL4FKOd0JiBSqrzN56sJ2HbGLffqhs77op7IpbtU4NaUCi6dLv43TMc
- nzv2Lrku1uJb78FgS5adzZqoFPtP5PfO4AplpsumRExCN6kl0Q/vAEn2Zf305XNdwvvab5EM9bL
- cy6zMig8cXTKiMkUhRIrUGnYMVuHYO8tWkLmOwlEoC/dUUoVRFJ6Dh/UKS3fr1WzTFYAemUQ0c0
- bw8GGcjn0rjpeD+BO6RopDqmyaCDCXvZL4qO6kuYoAP34LA6bYCbqykx5zF3MDGhrsVcBeU1Ah0
- vgnusaQH3KWSWmy9c7j3LGfQv3LhkjKG58cVpkvu4BmvmIEWO51QmASwfdTB6yLr2ZcmVi9BBNU
- G/4d36krE0E0w7XQnIYE1g38F4dGvFYdE7YXVilybS5CM0nUWiZgTxi9Nw6Y2nkCSedgYHe1fS0
- LMvhfTmS3Iy4cPypg5Nm+W2rAcwAAH0PMAafi0UdgHRz0hISIcWIDE13wzonqpm/Tth9IVI0
-X-Received: by 2002:adf:f007:0:b0:48b:174:eab1 with SMTP id
- ffacd0b85a97d-48e6e509b48mr5347202f8f.36.1793374083891; 
- Fri, 30 Oct 2026 08:28:03 -0700 (PDT)
+ bh=prI5+5V/aSmRUUSMFMfjVZoaBHCOY3gEnIpTjzzBCPk=;
+ b=jw4TbtpuTe600pk8SBvwnMVusM9o+xNl48c2FdS6WV7q5e/3MAx1xbyFhxJClew2X2
+ nM7J2PlDpccBXYlhdA4i0IhmiWeCIp9I3rb5dByeYI/dKiYhM91VKHPopm4jqNqNzNQt
+ BHZcfYk9f8Se81nrx39hLHGtRkDLjvExIruGGyvoI3N+m2cEsYPR2KPrnc5H9t41R5C6
+ ToDMSkhpcbOEJNEk2mb3gcSIG7QTw3pRlWdvOnA4gXJEzMA8h69tv+ZkJd5q8qT4Ix27
+ nJSB5pg4Ja+a0rzzWXs6GC6JQg30i2Rc2IfoLOkR+7cQWGQpYPuiNGyD1dm2g6l2x/4O
+ BbIg==
+X-Gm-Message-State: AFq9FYKf8uwFTwDfu9l/Hu5djgAJyp/maPXFG9oAvMcHBh6t1lilICmC
+ hVWenJaTykJ/G9Hl2B0niqmrIFX/zfvRqHoawq4atTTzopjRCNXQYrkVVSeglZCbnLpxgM2rFEL
+ id67uYFs=
+X-Gm-Gg: AYBFou2guZvZS7IrSJ+U3A/oVJpedjAhxrFCTqcf0t1nWU41wgnXMcuOJK1SUCBhnW+
+ DJqVJo2KLz4c4OjCme/8e33W6JfORuVD1Pz0+GB903/FibRhM0aHGiJkTWpFul7TKjBFlWJZps7
+ EfmYlBi+t74/c+B4BirhJ5cWmWEm7FojVELtyXbZ4ImtUFmCk1vmy8J7S23KI/gGIAn1yQU/fYz
+ 4BuH6EDFC8OiacFvnxUnpTGD+/xaWv6bS1k/QIIqH3HbuBuKAp66oy/Te1ukJ82otYlwIeue9s0
+ yH9dKRkAvkySuF91C1QACq/2Fwt5Cojk7B7B1VSEvcGVPsBL9LVwvFyJPsRYn1IDKTmZO5Pq8TS
+ YHe1m8TnhanImcAlsJMDU7VgZk7jRwiXlXSJKoDaM0ufVLlGKTvpAMctRr5AAk+pJ3r8Mp1P1fj
+ WOtPkjmM66WLquKQMovERw9qp+tGJxrpYMcpI8DjGYlARXWV0PJNUpJh6odMIzs/hPcdtG2v5Te
+ byMQsLT9GNCrKi7VtJ9TnQAq6N17Ub3/gkyc4xGkckeWW4oc4/S8loVYdd2YGXE8DZhHWQrFRFS
+ AIAhM7+iELxr3lsSZo6nqY8gjmdALGGkQp6RomK/WfP5NCmjqUGRvNTadUnQCQfxTSl67E+T03S
+ kDwzENj5f9NT/yHi/Nw==
+X-Received: by 2002:a05:600c:8183:b0:4a1:f9e6:f418 with SMTP id
+ 5b1f17b1804b1-4ac19802178mr49720105e9.34.1793374087018; 
+ Fri, 30 Oct 2026 08:28:07 -0700 (PDT)
 Received: from debian-hp-1 (ip-94-140-185-241.reverse.destiny.be.
  [94.140.185.241]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48e71a4d3e9sm4099287f8f.6.2026.10.30.08.28.03
+ ffacd0b85a97d-48e71ba24f6sm3682786f8f.51.2026.10.30.08.28.06
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 30 Oct 2026 08:28:03 -0700 (PDT)
+ Fri, 30 Oct 2026 08:28:06 -0700 (PDT)
 To: buildroot@buildroot.org,
-	Peter Korsgaard <peter@korsgaard.com>
+	Yegor Yefremov <yegorslists@googlemail.com>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 30 Oct 2026 16:28:01 +0100
-Message-ID: <20261030152802.1907105-1-raphael.melotte@mind.be>
+Date: Fri, 30 Oct 2026 16:28:04 +0100
+Message-ID: <20261030152805.1907134-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261022070004.2533972-1-peter@korsgaard.com>
+In-Reply-To: <20261022075734.2659243-1-yegorslists@googlemail.com>
 References: 
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/nginx: security bump to version
- 1.30.6
+Subject: Re: [Buildroot] [PATCH v2] package/valgrind: fix build with a
+ libgcc built without optimization
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -161,103 +162,156 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
 In reply of:
-> Fixes the following vulnerabilities:
+> The 64 bit division helpers of libgcc (__divdi3 and friends) are
+> compiled with -fexceptions -fnon-call-exceptions. Buildroot passes
+> TARGET_CFLAGS to gcc through CFLAGS_FOR_TARGET, so with BR2_OPTIMIZE_0
+> libgcc itself is built with -O0. GCC then keeps the (empty) exception
+> landing pads in those objects, which therefore reference
+> _Unwind_Resume() and __gcc_personality_v0(), normally provided by
+> libgcc_eh.a. Valgrind links its tools with -nodefaultlibs, so that
+> library is not available and the link fails on 32 bit targets:
 > 
-> Changes with nginx 1.30.6                                        14 Oct 2026
+>   ld: libgcc.a(_divdi3.o): in function `__divdi3':
+>   libgcc2.c:1226: undefined reference to `_Unwind_Resume'
+>   ld: libgcc.a(_divdi3.o):(.data.rel.local.DW.ref.__gcc_personality_v0[DW.ref.__gcc_personality_v0]+0x0):
+>       undefined reference to `__gcc_personality_v0'
+>   collect2: error: ld returned 1 exit status
+>   make[4]: *** [Makefile:1180: memcheck-x86-linux] Error 1
 > 
->     *) Security: a buffer overflow might occur in a worker process when
->        using the "alias" directive if the request URI was changed by the
->        "rewrite" directive and was then mapped to a file path
->        (CVE-2026-15176).
+> Backport the upstream commit providing dummy definitions of both
+> symbols in libgcc-sup-<platform>.a, which is linked after -lgcc, so
+> toolchains providing the real symbols are unaffected. They can never be
+> reached, as Valgrind's core is plain C and never raises an exception.
 > 
->     *) Security: a buffer overflow might occur in a worker process while
->        evaluating string expressions with variables, which affected the
->        document root calculation and request logging in the http and stream
->        modules (CVE-2026-93479).
->        Thanks to Matt Suiche of Tolmo Inc.
+> This issue has been present since commit 0fe633cdff66 ("gcc: explicitly
+> use C{XX}FLAGS_FOR_TARGET instead of --enable-target-optspace"), which
+> started building the gcc target libraries with TARGET_CFLAGS, and thus
+> with -O0 when BR2_OPTIMIZE_0 is enabled, instead of -Os. This is not a
+> gcc regression: both gcc 11 and gcc 15 emit these landing pads at -O0.
+> It therefore affects 2015.08 and later, including 2025.02.x and
+> 2026.02.x.
 > 
->     *) Security: when using HTTP/3 a part of an unknown frame might be
->        treated as the request body, which might result in bypassing the
->        "client_max_body_size" limit or injecting data in the proxied request
->        (CVE-2026-95101).
->        Thanks to Hansol Lee of GOTROOT.
+> Fixes:
+> https://autobuild.buildroot.org/results/4a58c34308095e4d8ae91e0a779c94123ee497f6
 > 
->     *) Security: when using TLS session ticket key rotation, one of the keys
->        was left uninitialized, which might allow to forge a session
->        (CVE-2026-97629).
->        Thanks to PhiNode Labs.
-> 
->     *) Security: when using asynchronous file I/O (AIO), use-after-free
->        might occur in certain configurations if the SSI page has "include
->        virtual" commands (CVE-2026-97205).
->        Thanks to cyberlancer.
-> 
-> Changes with nginx 1.30.5                                        15 Sep 2026
-> 
->     *) Security: a heap memory buffer overflow might occur in a worker
->        process under certain configurations when using HTTP/3 with OpenSSL
->        3.5.0 and earlier (CVE-2026-90439).
->        Thanks to Banny Liao.
-> 
-> Changes with nginx 1.30.4                                        15 Jul 2026
-> 
->     *) Security: heap buffer overflow might occur in a worker process when
->        using the map directive with regex matching if the map variable was
->        included in a string expression after a capture affected by this map;
->        a similar issue might happen when using a non-cacheable variable in a
->        string expression (CVE-2026-42533).
->        Thanks to Mufeed VH of Winfunc Research and Maxim Dounin.
-> 
->     *) Security: uninitialized memory access might occur when using unnamed
->        regex captures with the "slice" directive or background cache update,
->        which could result in worker process memory disclosure or worker
->        process termination (CVE-2026-60005).
-> 
->     *) Security: use-after-free might occur when processing a specially
->        crafted proxied backend response with the ngx_http_ssi_filter_module
->        (CVE-2026-56434).
->        Thanks to P4P3R-HAK.
-> 
-> https://nginx.org/en/CHANGES-1.30
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> Fixes: 0fe633cdff66febadc50bab3e0af4b3be53811c8 ("gcc: explicitly use C{XX}FLAGS_FOR_TARGET instead of --enable-target-optspace")
+> Assisted-by: Claude:claude-opus-5-5
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 Applied to 2025.02.x, 2026.08.x. Thanks
 
 > ---
->  package/nginx/nginx.hash | 2 +-
->  package/nginx/nginx.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+> Changes v1 -> v2:
+>   - replace the local patch with a backport of the upstream commit
+>     0ff27aab0831 (NEWS hunk dropped, it does not apply to 3.27.1)
+>   - describe since when the issue has been present and add a Fixes:
+>     tag for the culprit commit
+>   - fix the trailer order
 > 
-> diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
-> index 6c3afa889d..646b51997e 100644
-> --- a/package/nginx/nginx.hash
-> +++ b/package/nginx/nginx.hash
-> @@ -1,4 +1,4 @@
->  # Locally calculated after checking pgp signature
-> -sha256  e5823dc6f45610993def93ebf6cfce68264af4958c77e874b7d20f3709001b8f  nginx-1.30.3.tar.gz
-> +sha256  3cf46f5ed7504d460125866b7bea99fb357f31d887e2e63b35503310e9b8b6c8  nginx-1.30.6.tar.gz
->  # License files, locally calculated
->  sha256  08845fe39e06b51dad7685c28140ab49577a86e947523e16b536a46caf89ad5c  LICENSE
-> diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-> index ad61ef6140..c330e81ebf 100644
-> --- a/package/nginx/nginx.mk
-> +++ b/package/nginx/nginx.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -NGINX_VERSION = 1.30.3
-> +NGINX_VERSION = 1.30.6
->  NGINX_SITE = https://nginx.org/download
->  NGINX_LICENSE = BSD-2-Clause
->  NGINX_LICENSE_FILES = LICENSE
+>  ...winder-entry-points-needed-by-libgcc.patch | 88 +++++++++++++++++++
+>  1 file changed, 88 insertions(+)
+>  create mode 100644 package/valgrind/0003-Provide-dummy-unwinder-entry-points-needed-by-libgcc.patch
+> 
+> diff --git a/package/valgrind/0003-Provide-dummy-unwinder-entry-points-needed-by-libgcc.patch b/package/valgrind/0003-Provide-dummy-unwinder-entry-points-needed-by-libgcc.patch
+> new file mode 100644
+> index 0000000000..78ebf3e5f0
+> --- /dev/null
+> +++ b/package/valgrind/0003-Provide-dummy-unwinder-entry-points-needed-by-libgcc.patch
+> @@ -0,0 +1,88 @@
+> +From 0ff27aab0831786c7f419e73a2b5217cbbcc792d Mon Sep 17 00:00:00 2001
+> +From: Yegor Yefremov <yegorslists@googlemail.com>
+> +Date: Mon, 21 Sep 2026 23:45:52 +0200
+> +Subject: [PATCH] Provide dummy unwinder entry points needed by libgcc
+> +
+> +The 64 bit division helpers of libgcc (__divdi3 and friends) are
+> +compiled with -fexceptions -fnon-call-exceptions. When libgcc is built
+> +without optimisation, GCC keeps the exception landing pads in those
+> +objects, so _divdi3.o, _moddi3.o and _umoddi3.o end up referencing
+> +_Unwind_Resume() and __gcc_personality_v0(), which normally live in
+> +libgcc_eh.a. At -O1 and above the landing pads are optimised away and
+> +the references are gone.
+> +
+> +Tools are linked with -static -nodefaultlibs and pull the 64 bit
+> +division helpers out of -lgcc, but libgcc_eh.a is not available, so
+> +linking a tool against such a libgcc fails with:
+> +
+> +  ld: libgcc.a(_divdi3.o): in function `__divdi3':
+> +  libgcc2.c:1226: undefined reference to `_Unwind_Resume'
+> +  ld: libgcc.a(_divdi3.o):(.data.rel.local.DW.ref.__gcc_personality_v0[DW.ref.__gcc_personality_v0]+0x0):
+> +      undefined reference to `__gcc_personality_v0'
+> +  ld: libgcc.a(_moddi3.o): in function `__moddi3':
+> +  libgcc2.c:1249: undefined reference to `_Unwind_Resume'
+> +  ld: libgcc.a(_umoddi3.o): in function `__udivmoddi4':
+> +  libgcc2.c:1204: undefined reference to `_Unwind_Resume'
+> +  collect2: error: ld returned 1 exit status
+> +
+> +Provide dummy definitions. They can never be reached, since the core is
+> +plain C and never raises an exception. They live in
+> +libgcc-sup-<platform>.a, which is linked after -lgcc, so toolchains that
+> +do provide the real symbols keep using those.
+> +
+> +https://bugs.kde.org/show_bug.cgi?id=526075
+> +
+> +Upstream: https://sourceware.org/git/?p=valgrind.git;a=commit;h=0ff27aab0831786c7f419e73a2b5217cbbcc792d
+> +Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> +[Yegor: drop NEWS change]
+> +---
+> + coregrind/m_libgcc_sup.c | 33 +++++++++++++++++++++++++++++++++
+> + 1 file changed, 33 insertions(+)
+> +
+> +diff --git a/coregrind/m_libgcc_sup.c b/coregrind/m_libgcc_sup.c
+> +index df509be08d..10ad8ff86f 100644
+> +--- a/coregrind/m_libgcc_sup.c
+> ++++ b/coregrind/m_libgcc_sup.c
+> +@@ -60,6 +60,39 @@ unsigned long int __getauxval (unsigned long int type)
+> + }
+> + #endif
+> + 
+> ++/*====================================================================*/
+> ++/*=== Dummy unwinder entry points needed by libgcc                 ===*/
+> ++/*====================================================================*/
+> ++
+> ++/* The 64 bit division helpers of libgcc (__divdi3 and friends) are
+> ++   compiled with -fexceptions -fnon-call-exceptions.  When libgcc itself
+> ++   is built without optimisation, the resulting objects keep references
+> ++   to _Unwind_Resume() and __gcc_personality_v0(), which are normally
+> ++   provided by libgcc_eh.a.  As tools are linked with -nodefaultlibs,
+> ++   that library is not available and linking a tool fails with e.g.:
+> ++
+> ++     libgcc.a(_divdi3.o): in function `__divdi3':
+> ++     libgcc2.c:1226: undefined reference to `_Unwind_Resume'
+> ++
+> ++   So provide dummy definitions.  They can never be reached, since the
+> ++   core is plain C and never raises an exception.  They live in
+> ++   libgcc-sup-<platform>.a, which is linked after -lgcc, so toolchains
+> ++   that do provide the real symbols keep using those.  */
+> ++
+> ++#if defined(VGO_linux)
+> ++void _Unwind_Resume ( void* exc );
+> ++void _Unwind_Resume ( void* exc )
+> ++{
+> ++   __builtin_trap();
+> ++}
+> ++
+> ++void __gcc_personality_v0 ( void );
+> ++void __gcc_personality_v0 ( void )
+> ++{
+> ++   __builtin_trap();
+> ++}
+> ++#endif
+> ++
+> + #if defined(VGO_solaris)
+> + /* At least on Solaris 11.3 ar does not like
+> +    empty .ar files */
+> +-- 
+> +2.43.7
+> +
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
