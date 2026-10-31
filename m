@@ -1,118 +1,142 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1EBC606A31A
-	for <buildroot@archiver.kernel.org>; Sat, 31 Oct 2026 10:08:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCA3E606A32D
+	for <buildroot@archiver.kernel.org>; Sat, 31 Oct 2026 13:45:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Po26AKGY
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=KV0wk9LI
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7595B40B1D;
-	Sat, 31 Oct 2026 10:08:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A1E6180E00;
+	Sat, 31 Oct 2026 13:45:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KenpimL30xOe; Sat, 31 Oct 2026 10:08:03 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 2485640B2A
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793441283;
-	b=boQp7q86tdaKbFfcEKsIwNCCUfIkCdjG7h8UFe6O5TTRqYaqDltVZz/YBXp/B1BuPflU
-	 uYW5wsAu0Zus21IFKMJjoF2UjuQK6TxA1apyCxfYVdeT+2CjAAER972n35fGNy5+8UbK8
-	 rFS8jMlfY5f2TF7vrwVQIxQzv1O1CtD7HH53zf3B2qx+XuefI8AB5Yg69FwiVxFMDxYdI
-	 sO4d8guTDJhDOMgLjcY49BAf+V4CZJiGdbojkHho+JHhS6aDFYYpFY5DY6S6DwyMfr+RF
-	 koYxrprd5ODBcUBnRPzizucKNxulrprR+iWxxsUqLbADMatyNwktYRjjNyY+S39FGjQ==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id E5nQEUTAF_cz; Sat, 31 Oct 2026 13:45:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 3774080E03
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793454316;
+	b=PEON0Fta0ZxS26Dr5f5eMAsw4LK5vwN8+OHFsTCtHU0A6/YhmKyCxpKQUHsMYBgdRqu4
+	 tCZcbjxGAitdTNADuhCryCrPqKxYmG2Dsayw83lx+g5DMOKXm7nMal9siBuA0x1n8RMHr
+	 vBrysx/93lt0GK1onUFgZLUTOqqwDkFi/x2dtv5KA5ZguwoLKnyq4eXda3LqdBoxPKNk4
+	 IgFac2sHEWq+JEyFhMzgpuAFW0VpuWdV1tgQmqWtgBs0JQO5xUQSMItlpFe1QQvO2yCyv
+	 u2QkN4BdFNPsktScnRNKqqy6cxUrJTsr24vesIZCxbqEIvLdyNvK8AANDg17gf1Nebg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793441283;
+	c=relaxed/relaxed; t=1793454316;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
-	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
-	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
-	 Errors-To:Sender;
-	bh=gIxxLgt60rhjRM4suZ1Wv8ZlvLKY76+Cr1IZMJpd1I8=;
-	b=Yjrx/czXCMtTFkBh0+7flEZeMvwnA+nz5ubsnMS5vk9OW6Eng+MWuvVZ6iYicZXYeUIZ
-	 KSVD5HKfT+EIXcFAFfJbruLNmOWNh7r8ZK+ebksLNPNg+L/OoPLak8od93ULKouCWQF6V
-	 KkBfOEEOWwEKAvWfzABYlyHIV9MCHoAU7n9gW+MXR14sTjNqmZs+rGwDMfKZVLvMxeGln
-	 7sBqMchht7J6DAoG7SXYt/powheIbyBBUwPk69jQYnJlxZhWb3H+1IJPi+6RSw2sxTeW+
-	 QpF9F3KztRhCTqoNolEVXVNfPvsj7sktCTHHGjjhzqee6yz5/SQdn3/OStTz67Uh4xw==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 Received:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=mWs2SeuMZYS28r18TtaCSENuBz0Jpu4w549fTeYiMcY=;
+	b=WijjO3GzA+UtTT3snRW4N0JTV3Q5MtVHSX3bnSCxanRMB+Ismp4rvAefcQYOY33UpLNP
+	 gw74tQrYhC91SaFY0aXoRvzUGg9dMAWC5d5N/LwSY1aCu6o/Xao6gXK9YL96E/oVPiphz
+	 Ikhvdz8DyVUF1Z7OSq4z+aWXVz1rusi+Cc4NVCuzEo1iTvBy/Nw9DKwbGZdvt8Z0SLsZ0
+	 mKL2wzvbLpIerW6GaKEF2wJoQLg2oyC7sI9QxE9fSi6wee98yArAUIf7rjblaX7S2UGoe
+	 KtN2UT+GhOjAzCC6X+caWXwEDE77+SPsACrn0e/lcLi5RFps0uOHRMDQO9w6yA/HdXQ==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793441283;
-	bh=gIxxLgt60rhjRM4suZ1Wv8ZlvLKY76+Cr1IZMJpd1I8=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=Po26AKGYfdUbRGe/kYq06K4CLtyBUsuT6Vp1pRYeUO6N22mvZ3EpJM/K00tJVWXcs
-	 46x9k0txF6BCAClaT8/Ip9CvaZ/4ekzAVY6iBaT/Irf96MYoJEypUbubmKytghNuQN
-	 6HuRr3k1CTFBnTS88tEQogxZwSSs81RNFwmyXghjJmiq/C/tZiwPAgz6Zrp1mLHvFP
-	 2zDYTPz8lxVg+DAC9FZ1OC0YOis91Bab9nmN1gc1iKk6rpR9MeR8ZCk94WFY8fQUAf
-	 TskK0MlXGDS8cJfJ3OY7Pfd3kjwvUcpJsCTIHOYfWf08PMStjLS6jZnMP1ChDzOcF4
-	 oFa1KFIJyIZ4g==
+	s=default; t=1793454316;
+	bh=mWs2SeuMZYS28r18TtaCSENuBz0Jpu4w549fTeYiMcY=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=KV0wk9LIzuCjim/CURknbKmRZTvD7TMf9rjQ0kR+4gD0TueQV7X8ZpJBMNvlHzm15
+	 IkZvDZYH5GFaK0VHkdz+8o1iE/0mhoBo2/4dwbTeJ5h3YmqpNAdhZFHMLwc4FbE4CO
+	 veMHWzaebt2hxZgb69SUVzhTa0uAJR4UiTp/81vhDcMpryikvAesdjCX5GcZU04e9/
+	 isvrcCi9n23mSBW+hZTTAlM5TqC21R5i4tL3VpP70OmZZuQqkYmuVwfaW3g3LriTuV
+	 Fe7HYuDnDHw44DYrSpsfnUsvg7lfSVw1oJPLGTsVXWpLU0r9Z9o6JeC8CYOLl+KH1B
+	 ZguhOKJZeAnvQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2485640B2A;
-	Sat, 31 Oct 2026 10:08:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id CDCC332A
- for <buildroot@buildroot.org>; Sat, 31 Oct 2026 10:08:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3774080E03;
+	Sat, 31 Oct 2026 13:45:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 77D80473
+ for <buildroot@buildroot.org>; Sat, 31 Oct 2026 13:45:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BEF01607A0
- for <buildroot@buildroot.org>; Sat, 31 Oct 2026 10:08:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 751436061B
+ for <buildroot@buildroot.org>; Sat, 31 Oct 2026 13:45:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ifte3J0vYI77 for <buildroot@buildroot.org>;
- Sat, 31 Oct 2026 10:08:00 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 195A06079D
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793441280;
- b=m6lUtjjf9tTVvBexE/aDnctxvn6losbaQ/ENpHRcKwFK21R2Sh4T2ZA2+ozjr7DQl6xs
- lpq3OCI1auxLeFb2mUz5AITi0BGCCZS0Vc/Xl0o8DNuc2NNobQBlCWiPX07t6gn7yj4OQ
- wVz4tXSvb8VitWYsZhrUJWpa5L0oWu0D2QTkkwuhT9/fx++9SI8rPvmUe2pakK+XpzXlD
- H2Nbe/rtemySgaa7TYUj4kzJXCEpPFTUEXGKOm1SexH7AVrgn6X7/WTubvbp7Ux0cLQ+W
- Rew2mtD3a0eJkEpUlHgb0o3GF8GG35fMYPN5iER8WOEu5wKnP2lyrZaVx/M2M71AtzA==
+ id fDXFuCrnxYIu for <buildroot@buildroot.org>;
+ Sat, 31 Oct 2026 13:45:14 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org A583960625
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793454314;
+ b=BxVutqJSGiNgJQPQaYlxxxzmQAekRCg/JfcBYCQMbe/6gCaGDgggV+0m2WDW+AEdUczL
+ CiAdFhzBeWQeBkv7nyoy7/r2LXoTJPN13zGBTUN936JXHiO8Cvw0UYKHt+m4uQXZ9eqzT
+ hAAYX6FP4HRZLDFOLbn9czg17/BX1vqnYA7IapwrPjBuT9QEJilkj2d4/yzhUlk3iNFQK
+ n5fDluVh7INTGGk1TwWUFVl7jA6qlYBDwCOET7hJVmdxFGMD8/Y6nNRhja6twU9z/ondd
+ r5F9TIG57RdjR/fWu3dlYBuwPTKRJBxwfaczoCROWDUAykvVw4cU1kqojPb4xa4hhfA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793441280;
- h=Received-SPF:Received:DKIM-Signature:Received:MIME-Version:Date:From:
- To:Cc:Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
- Content-Type:Content-Transfer-Encoding;
- bh=Fua9abHIx/W/SKnwml1tpW2fcrjH6rhOAbO8V3kSDtA=;
- b=VA4ZAfnZ1T5as1eXsOCZZaOEIacxLprAJwkW1VdvJ+WceucDJjZdqSY6UMEZ93YL6wXu
- btlbidQ1WedvnRLpNbIfAUF58getT0Hhs4jCPeQVUhUWcGyoGhraUpSSzQ0hBgE8AQTlT
- lEnmr1+pKdwUX2Osr3AbbqE296k5Y+iADpW53zXSQFte/ao6WAcDXkdkvOzieh8CSpVJI
- Sw2Sqx+yVYAHQYh25HgAnBfYmv4ElM2AeJKi8uq0yxiLFmo/BfRAQp5wLWrkmCNNY73qJ
- YaqiiMz9aZCvlCq+wNQcTdcYcTPeizpmyb0eapgY1gppjgQu39k9Deb09lnGPDvsIXw==
+ c=relaxed/relaxed; t=1793454314;
+ h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
+ X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
+ Date:Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding;
+ bh=bRsoxdcmn8vqkU/4+qM98+iodE49ORJpA+0erpjYThk=;
+ b=S8m97aqw7TZeut/DHd/GyCaU6EEIqZBCoa3VYxY98yrTQIrSmBctfwQrmiWt1EQ4Nbgx
+ BRD72oxXxNmyYD7enLd/lO7rra0Iupwf+Yn+L3l0+SegFu1/QOoo3YncY81GVkX63uLbw
+ rcBMSEmZnYUm2SqSdGUSDiKUtwN15o/1AcSt4/v46JWMPh2732HbikKE7z/yLmSjEXJUk
+ iVvd80YZcawJSwaONKGpRKNzUfUavCxLQ+qXg7wQSlj/N7XQY2A43PUSi+7jXpSLvCZqe
+ wPtM517UaraAVzO42oN3kE5yfueBjYbKbNXyStJO5WIvA3sOTLy+NSJvexOhxijtaDg==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
- dmarc=pass header.from=free.fr;
- dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=lcRxe52f; 
- arc=none smtp.remote-ip=212.27.42.2
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 195A06079D
- for <buildroot@buildroot.org>; Sat, 31 Oct 2026 10:07:58 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id EE9922003DD;
- Sat, 31 Oct 2026 11:07:55 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 via
- 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr with HTTP (HTTP/1.0
- POST); Sat, 31 Oct 2026 11:07:55 +0100
+ dmarc=pass header.from=mind.be;
+ dkim=pass header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=fnYaDxrz; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::32f"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A583960625
+ for <buildroot@buildroot.org>; Sat, 31 Oct 2026 13:45:12 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-4a1fbd52ab6so12046825e9.0
+ for <buildroot@buildroot.org>; Sat, 31 Oct 2026 06:45:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1793454310; x=1794059110;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=bRsoxdcmn8vqkU/4+qM98+iodE49ORJpA+0erpjYThk=;
+ b=KsxCFFppDWdjlz8h8A7q0zSYt9WbRvvi4QmmicxLwQy13aNndgS96MdMM9RdmRQ18I
+ 5mB3Ehdz9O6QTmGF/7LH6iFO34M4GB9p4Sx3b8gWNYuMgd9IXeJGZ+FNDe7VnFAP9HLl
+ qmaD2d4JMBC5f409XeRperiYngE+NEPpwVpCH7yXKCqMSYy+pGjjL+LaiZOvsi2MP16u
+ NLxJZKrPrNdbWU+Qo/jEZgdUkLiRTOnkSTgOoajybDJWXVdjwdDGkIE6ydR4+DT6mtbb
+ 17YoLLq+tl8hC1AxjwsLUEbmX4ezPPVmv47kJe9eNqASiFRwblXwIgtl2fDyr3ZH5g5R
+ xIlA==
+X-Gm-Message-State: AFq9FYJrWBpOQajlW/vbT4ll1PooqdhlnNkqEgOY3x33JvAMsfAO3jTe
+ lGza6LYujHSaUXB1M4m12/5WqALkEV1DNAr23iSQREKAXi2oYPxf7ep4n84ebVJEl/G22R6ac3O
+ IJGoz
+X-Gm-Gg: AYBFou22z4ZZCN/nlbkMiiznvdFt+rIwz81+koWbym4dQfDuiDNftqjJJDo0aXz7T8J
+ B48LXHEJCeR7aKdUY8r+u17n35kJ/yElWAJBt7xggKVb2g91bjg2EbDgMAZNIauaHQNASi/5/fA
+ jOLPHBAlTOiR2SikKBqP9ABct5/wfXGEl9pHdo5nRll8HXhU6OyrDgH6VlpzoazRm/diB1iJPxg
+ 7XFzP3fYx6k/UzR1UrkAdJTuZvatwmzLHq5LWRq6Zvvy5dHRcrIcMh4BMHO4/oN16U6Nkh+5GMn
+ 9EdPfkPWmjkK2314vGREtSqr8zwkJZSwnh5mul+7vtbTFISuNcZf/pCJoqhY5lo8zGLlBDzIpU2
+ GmvvkYaQ6eh3fB1uuo53OFA7sQLEms6cBpY9zf88sYy5dj2aiEfdvhAUJyHLu7sXkVjesG7BAGR
+ GavvFyxM7El1d5BlNLf+Ai6VPfJnehk71HCbIdyi8clYySS4rUHcQhrYsw5ldd1GLYkbJTGDm+9
+ tM9+zAXuCtS8VO4I2moofHh36RJeM5cJckhUIhD0YZ88B3XOYmKZ32UAblXYTGFpd5NpEzTE/A5
+ BcLIOb9xjA8UFI9Zel+Ing==
+X-Received: by 2002:a05:600c:628d:b0:4a1:e01e:1927 with SMTP id
+ 5b1f17b1804b1-4ac17d16a1bmr117811265e9.5.1793454310450; 
+ Sat, 31 Oct 2026 06:45:10 -0700 (PDT)
+Received: from arch ([79.132.229.115]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-48e71b78a6bsm8783850f8f.27.2026.10.31.06.45.09
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 31 Oct 2026 06:45:10 -0700 (PDT)
+To: buildroot@buildroot.org
+Cc: Stefan Hager <stefan.hager@ginzinger.com>
+Date: Sat, 31 Oct 2026 14:45:09 +0100
+Message-ID: <20261031134509.1584908-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.56.0
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Date: Sat, 31 Oct 2026 11:07:55 +0100
-To: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20261030114225.2918102-1-angelo.compagnucci@gmail.com>
-References: <20261030114225.2918102-1-angelo.compagnucci@gmail.com>
-User-Agent: Webmail Free/1.6.20
-Message-ID: <ee837d5c08af9760a19d88f18da3e4aa@free.fr>
-X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH] package/python-pillow: security bump to
- version 13.0.0
+Subject: [Buildroot] [PATCH 1/1] package/cpuinfo: don't support ARMv4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,195 +146,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-15.1 required=3.0 tests=BAYES_00,BOMB_FREEM,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,SPF_PASS autolearn=ham
-	autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Hi Angelo,
+Building the package cpuinfo with an ARMv4 architecture would result in
+the following error message:
 
-Thanks for the patch.
+```
+/home/thomas/autobuild/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabi/13.4.0/../../../../arm-buildroot-linux-gnueabi/bin/ld: CMakeFiles/cpuinfo.dir/src/init.c.o: in function `cpuinfo_initialize':
+init.c:(.text+0x28): undefined reference to `cpuinfo_arm_linux_init'
+/home/thomas/autobuild/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabi/13.4.0/../../../../arm-buildroot-linux-gnueabi/bin/ld: libcpuinfo.so: hidden symbol `cpuinfo_arm_linux_init' isn't defined
+/home/thomas/autobuild/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabi/13.4.0/../../../../arm-buildroot-linux-gnueabi/bin/ld: final link failed: bad value
+```
 
-On 30/10/2026 12:42, Angelo Compagnucci wrote:
-> Fixes the following security issues:
-> 
-> - CVE-2026-96639, GHSA-v9pv-5gc8-w2m6: Stale native image storage 
-> reused
->   after mode transitions
-> - GHSA-5x8w-8jj5-q52h, GHSA-8g5g-8vmr-9782: JPEG decoder buffer 
-> overflow
->   from scanlines wider than tile extents
-> - CVE-2026-96644, GHSA-9v9v-9qvf-h2hj: WMF/EMF heap out-of-bounds read
->   from dimension truncation
-> - CVE-2026-96637, GHSA-g842-9rc4-69pw: SPIDER decompression bomb bypass
->   via seek()
-> - CVE-2026-96643, GHSA-g4qv-2jxx-769h: Unbounded Exif header 
-> replacement
->   loop
-> - CVE-2026-96778, GHSA-g7cr-3p24-7wf7: JPEG comment write after ICC
->   profile fills encoder buffer
-> - GHSA-462x-pgg6-55fp, GHSA-c6hw-5grf-ff96: TIFF tile and YCbCr 
-> decoding
->   out-of-bounds read from undersized libtiff buffers
-> - GHSA-p4wg-p73j-c528: PDF parsing stack exhaustion from long trailer
->   chains and deep or cyclic page trees
-> - CVE-2026-96640, GHSA-mrfp-p49p-3hf2: PDF append resource exhaustion
->   from repeated page tree references
-> - GHSA-pchr-8j38-3x4p: TIFF encoder accepted an incorrectly sized
->   Colormap for non-8-bit images
-> - GHSA-332p-7hrc-92wf: TIFF encoder heap buffer overflow when saving to
->   a file object
-> - GHSA-xcvg-w56q-r89m: TIFF encoder heap buffer overflow when tags
->   override the image size
-> - GHSA-xvh5-g6gv-559v: TIFF encoder memory disclosure and crash from
->   mismatched tag values
-> - GHSA-q45j-58j2-45rg: TIFF decoding returned uninitialized memory for
->   short JPEG strips
-> - GHSA-78g4-xqwv-q3g8: Bundled OpenJPEG heap buffer overflow when
->   reading tile-part data
-> - GHSA-4rr5-89j8-mwwm: TIFF encoder use-after-free write
-> - CVE-2026-96636, GHSA-p8hx-v2p6-rp84: MPO, DCX and MIC decompression
->   bomb bypass via seek()
-> - GHSA-f2g6-542v-9j58: PDF page tree stack exhaustion via cyclic /Kids
->   reference
-> - GHSA-5xm2-6676-qcp9: APNG decompression bomb bypass via delayed
->   disposal-frame sizing
-> - CVE-2026-96642, GHSA-3j72-p6qg-6xp7: TarIO negative size field causes
->   infinite CPU-spin loop
-> - CVE-2026-96638, GHSA-24rc-8hj2-v98c: BMP RLE decoder
->   memory-amplification denial of service
-> - GHSA-gg2r-wvfm-q9rx: MSP RLE decoder expands a tiny file into
->   unbounded memory
-> - GHSA-wqgw-9xfh-qf2g: TIFF and Exif IFD parsing memory and CPU
->   amplification from shared tag data
-> - GHSA-jg86-v3jv-hrpm: Quadratic time when writing many objects to a 
-> PDF
-> - GHSA-254f-3936-288h: PdfParser unbounded recursion via deeply nested
->   objects
-> - GHSA-rfgq-q3w2-pmv2: Image.quantize() crash from an empty target
->   palette
-> - GHSA-xgh8-jp6q-p5x8: XBM header parsing regular expression denial of
->   service
-> - GHSA-22hg-r758-rrw9, GHSA-74r2-7ff9-mjj2, GHSA-fc9g-5qg7-mf45: GIF
->   comment handling quadratic-time blowup from repeated concatenation
-> - GHSA-27h8-gf7j-v5hc: Out-of-bounds read in rank-based filters for
->   zero-dimension images
-> - CVE-2026-96641, GHSA-4rm8-3hmm-39fg: Integer underflow in PILfont 
-> text
->   width calculation
-> - GHSA-cp9v-662q-vvx9: Image.merge() buffer overflow when merging 
-> 32-bit
->   images as narrower bands
-> - GHSA-j4m9-6w36-pw47: Uninitialized glyph pointer freed on font
->   rendering error path
-> - GHSA-7mwm-ghpf-9vrm: Double free in Image.transform() after an
->   allocation failure
-> - GHSA-4558-3h8r-v8xp: P;2L and P;4L raw mode decoders read past the 
-> end
->   of their input
-> - GHSA-w889-685w-c8fh: EPS filename argument injection into Ghostscript
-> - GHSA-65qm-jvmh-6pqg: GIF decompression bomb check used a size
->   discarded on failure
-> - GHSA-vx6w-vv9f-6gvg: EPS decompression bomb bypass via Ghostscript
->   rendering
-> - GHSA-58r4-6rv3-gfh8: ImageMorph.MorphOp.apply() out-of-bounds write 
-> on
->   zero-width images
-> 
-> Fix the AVIF build option: Pillow names it avif, the -Clibavif setting
-> was silently ignored, so AVIF support was only auto-detected instead of
-> following BR2_PACKAGE_LIBAVIF.
-> 
-> Release notes:
-> https://pillow.readthedocs.io/en/stable/releasenotes/13.0.0.html
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
->  package/python-pillow/python-pillow.hash | 4 ++--
->  package/python-pillow/python-pillow.mk   | 8 ++++----
->  2 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/package/python-pillow/python-pillow.hash 
-> b/package/python-pillow/python-pillow.hash
-> index 6f9c5d2cb1..2bc0206258 100644
-> --- a/package/python-pillow/python-pillow.hash
-> +++ b/package/python-pillow/python-pillow.hash
-> @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/pillow/json
-> -md5  c714771477fa686ba789092cf84234c7  pillow-12.3.0.tar.gz
-> -sha256  
-> 3b8182a766685eaa002637e28b4ec8d6b18819a0c71f579bf0dbaa5830297cce  
-> pillow-12.3.0.tar.gz
-> +md5  c774e5aef5897704ccd528d0781a9b37  pillow-13.0.0.tar.gz
-> +sha256  
-> cdcd1ba258178f7356d74170c9a81ba4eab6a5d55748bc402a5a2a6fe6be3510  
-> pillow-13.0.0.tar.gz
->  # Locally computed sha256 checksums
->  sha256  
-> 15181e7363dca9aed78b79bebebc7fde7f1814b8bd311ea3b87ae8ccadfc185b  
-> LICENSE
-> diff --git a/package/python-pillow/python-pillow.mk 
-> b/package/python-pillow/python-pillow.mk
-> index 433cbae5e5..240353eda3 100644
-> --- a/package/python-pillow/python-pillow.mk
-> +++ b/package/python-pillow/python-pillow.mk
-> @@ -4,8 +4,8 @@
->  #
->  
-> ################################################################################
-> 
-> -PYTHON_PILLOW_VERSION = 12.3.0
-> -PYTHON_PILLOW_SITE = 
-> https://files.pythonhosted.org/packages/1c/3d/bb7fca845737cf9d7dbde16ed1843984665ff2e0a518f5db43e77ec540b9
-> +PYTHON_PILLOW_VERSION = 13.0.0
-> +PYTHON_PILLOW_SITE = 
-> https://files.pythonhosted.org/packages/ce/a4/9cc30690a394a8305e8be4c9036aa16d0dfddadd09079860b582f562496d
+This can be reproduced with the following defconfig:
 
-Trying to build this new version with commands:
+```
+BR2_arm=y
+BR2_fa526=y
+BR2_PACKAGE_CPUINFO=y
+```
 
-cat >.config <<EOF
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_PYTHON3=y
-BR2_PYTHON_PILLOW=y
-EOF
-make olddefconfig
-make python-pillow
+As stated in the README of the upstream project [1] only ARMv5 and later
+CPU are supported. This commit then exclude ARMv4 from the supported
+architecture.
 
-fails with the error:
+[1] https://github.com/pytorch/cpuinfo/blob/main/README.md#supported-environments
 
-aarch64-none-linux-gnu-gcc: ERROR: unsafe header/library path used in 
-cross-compilation: '-I/usr/include'
+Fixes: ea1cc1af55 package/cpuinfo: new package
+Fixes: https://autobuild.buildroot.org/results/f14/f14e4afacaa61021463c457def1cad3c81d35f29
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ package/cpuinfo/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Could you have a look, please?
+diff --git a/package/cpuinfo/Config.in b/package/cpuinfo/Config.in
+index 64477c2bd7..4aecf2e060 100644
+--- a/package/cpuinfo/Config.in
++++ b/package/cpuinfo/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_CPUINFO_ARCH_SUPPORTS
+ 	bool
+ 	default y if BR2_aarch64
+-	default y if BR2_arm
++	default y if BR2_arm && !BR2_ARM_CPU_ARMV4
+ 	default y if BR2_i386
+ 	default y if BR2_x86_64
+ 
+-- 
+2.56.0
 
->  PYTHON_PILLOW_SOURCE = pillow-$(PYTHON_PILLOW_VERSION).tar.gz
->  PYTHON_PILLOW_LICENSE = MIT-CMU
->  PYTHON_PILLOW_LICENSE_FILES = LICENSE
-> @@ -43,9 +43,9 @@ endif
-> 
->  ifeq ($(BR2_PACKAGE_LIBAVIF),y)
->  PYTHON_PILLOW_DEPENDENCIES += libavif
-> -PYTHON_PILLOW_BUILD_OPTS += -Clibavif=enable
-> +PYTHON_PILLOW_BUILD_OPTS += -Cavif=enable
->  else
-> -PYTHON_PILLOW_BUILD_OPTS += -Clibavif=disable
-> +PYTHON_PILLOW_BUILD_OPTS += -Cavif=disable
->  endif
-> 
->  ifeq ($(BR2_PACKAGE_LIBXCB),y)
-> --
-> 2.34.1
-
-Best regards,
-
-Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
