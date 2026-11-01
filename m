@@ -1,104 +1,118 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A99B606A325
-	for <buildroot@archiver.kernel.org>; Sun,  1 Nov 2026 15:26:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78BD8606A324
+	for <buildroot@archiver.kernel.org>; Sun,  1 Nov 2026 15:26:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Kc16mJf7
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=psHs3A1t
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 571A080DBD;
-	Sun,  1 Nov 2026 15:26:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1B14160623;
+	Sun,  1 Nov 2026 15:26:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TLhln3phEvAP; Sun,  1 Nov 2026 15:26:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 98BF880DEE
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793546801;
-	b=DwaXf3w57j1tBvn8fKpDk9aP/voWJqaP7AFVOWmNaKvr/wRvUpgmkMYMp3gb4o0DO/Gt
-	 JaESOt+T2tnnOEO1Hcuzxlduv08/zCsKBEFSKfUKK7kuV2le58UloikeO8ToGtMOJpNnW
-	 MyVL01EdX8iviiAsY9JOqgtdXgxlKR1C6yUfuolAyNBn19nD/LkHJlaG72fcEft7sQn2Y
-	 7+Gro8u3fG5Jfn3nV9z4h62UX4Ag0aNGo0nDENEq+zfkilRjO8K2I+5iZI5uqR8+aSQuF
-	 YXktmCrKzw1brpl7GAyCtAJ7DQqMldgX/5s6VzUo91ZfODkTB+ilBk0zfiFFvVc0KEw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WYcsBehGJGiv; Sun,  1 Nov 2026 15:26:56 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 363FB6061B
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793546816;
+	b=GzSCZU25TuEPsL/r5QS2bEkHDl9/PFUc9+JuBlEu3jTQm531wv6ZtrIMWI1+jjDJeVlg
+	 Mc46J/z1Hpbfls9/KdxRZJWDjRmRLB1uykKKYj4DsnSkm+1gSrBqqawDpogqBu1d7GJpr
+	 sZTTRTbUxEzqpxUFKnksbOenfZw7Ed0keHDzvqTfC7T3P7dzitIkKrdRLlQu8WbbUlsa5
+	 kriZ3dhapqLEL7IxxZQVATbq1f57YXk1sGgNme6ra9FWK8FUkh1qTpebtqAv2oJAfCElk
+	 qe7fePwQ9+/tDSKw8OKUkQdGI3QgD9z/d2izkR3z/+iiIr8V6Kz2T5pAf52+aDOWDgQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793546801;
+	c=relaxed/relaxed; t=1793546816;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=qqq8zS/gQzJfiZswe6MJz5yCCiZ7g/UnlV2gUfTi5kw=;
-	b=Ym0K/rU2+n5mb5vInoM4jJGaY1reYYrcqq7FD0cGKdwhxqn+yry2hIM4ERJmOPnfMYjr
-	 s4VEfXEhvE73bt5Moqa9BEJquTMcRnZOlg8k8AnwR2TfQ/GandT1sCZrJGo4Dc43UmOwr
-	 TiYWOQf9HWIa34agD01J3qkIgcga7niq/UNbfucGehbmEf7PGOXMkr7G/pxFlfJQV7Kp5
-	 6SgvxAVZQc8YvliGNtcRmUmboECxfaVk/Sw0s3vq9vny8BT6OhXPSdQvwrwrsIFNNHcJy
-	 v+dTRSYwesEb8gk7kyHIxZuvK6WqL9qvmGn22t0mKFfAwIXG7cAryQNG+1FdOVjaNlg==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
+	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
+	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
+	 Errors-To:Sender;
+	bh=ejTulNPu0q3+DQAEKxaXiykR0W5UQuJ7hNOfJvvXPQ4=;
+	b=NW0Q9/uTg0UMFPvhiL+OEKl1E82LZIPJ6B8uOKF+3a3fQhWutldjzQFB8FQcw3PQOZ95
+	 +5nSGSDTmEsWtDvxZTUCZ0q79dLiP78SDmSb7We5FKGRFcrTCoZPRgGDCdlvDuID4AA67
+	 7WDJnMIVM+PIEzxS6/QUFfqglSf5bQ+ycmmfwmRGDdrqqyupGJhbmcxpsChUXXqlqGmxX
+	 3AGafYi0PbTshn9ORB0txLH2IiV1ziHpu0Lxtnw+xwRI1RkX08NaV9Z1vhC1sqyydZt2M
+	 BCLCoTDBKC1Du2SNlZUOETaI74kbxoxS0lORT0IwVARsI0gb83pufpnU+qfmeFZ+z9A==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793546801;
-	bh=qqq8zS/gQzJfiZswe6MJz5yCCiZ7g/UnlV2gUfTi5kw=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Kc16mJf7pwa3a6o4t/Nv11rUyAL+OOovhOABQASm9CXWSJo0xgnXQ5yRLmQH3E5VF
-	 TaVNLuEY0lT+zIwI3viplsXu6oMpgxlE8PY4Pn4TrAn1mA+4iW+rd3/uYQ0CVpvxH5
-	 C+1b/vEq9tDBnipoeT/HjIR4ruW2oA7iuemmke0MDzB9VSdZjCfBY7tkMUrE8Od20m
-	 WvChdGN1v1JE4x1pELfn5sZL3vzwXbuuHUB9YFZVK1Mi2BZjmo4XQ7liD2124BCNUd
-	 GHxgTn9V5KgGXH/yNKdCdomCcAqXrXMjZrez+fhvJ1SECJLtZXBPK04M0v3SpQVHvE
-	 FMnqXwQSXbC0A==
+	s=default; t=1793546816;
+	bh=ejTulNPu0q3+DQAEKxaXiykR0W5UQuJ7hNOfJvvXPQ4=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=psHs3A1tCTQgXs0LuRL2tbFfLol326WtdJTx2+EiQoBg+Ll6DiIIg4v6BPyAanz1u
+	 h4sAbvTNRp6Zdy9QXvQ3nde0GDHIhsNW5G9S2UfdyvD7aVlTHnVOQxGb2bc1xFNLnx
+	 xCzGlQsxxe7jeqXvf46LkwCo3rwRWcyLvtz2IUYhcA2WQT95MTtZJ9kY5almYvZI88
+	 vBxd51CVQnmzKurCgPe2zZIkXK6YE1xyhP4fNbj5uqEiE87FZsgcbRpdzDAOo7KCFj
+	 yX7cnbyqrMHLCH6+lpAXGvnLIj1oaFjJkGFVFjTkUwZPhQabBx6T0GmTVFkAzYV/JN
+	 4o/GTQ6uPecqQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 98BF880DEE;
-	Sun,  1 Nov 2026 15:26:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id C0CF3380
- for <buildroot@buildroot.org>; Sun,  1 Nov 2026 15:26:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 363FB6061B;
+	Sun,  1 Nov 2026 15:26:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8F6EB2AC
+ for <buildroot@buildroot.org>; Sun,  1 Nov 2026 15:26:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B0447405F0
- for <buildroot@buildroot.org>; Sun,  1 Nov 2026 15:26:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 80AE080E16
+ for <buildroot@buildroot.org>; Sun,  1 Nov 2026 15:26:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gsy1OgV8qv6v for <buildroot@buildroot.org>;
- Sun,  1 Nov 2026 15:26:39 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 0F3AF4052E
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793546799;
- b=bo5DkDsWnh0gm4MMMCq4o5YkHZzDBy0LavrHLh6k+VdViSH6D1gaXK//NWY7PuBV2iPR
- pMMSdeyDc55igpfjE2rz4VG7aUsyDbom8RhyDPRLSY/bPpogqCzVY0pSUIvzpjGcWcbo1
- INyNkI3I3+OvbxCGKaV+qHZcjwJTMP4W1YdTkjQJWqkZtsdf9v09OZqy/a+/IWt59Vx8L
- 12xdE4nThaY+kZ2hItb3ftMriIsD7CC24qF+Oh3dfLR9uOz/pVS1f/3/zCXlTGuoy1fEY
- UepjgVqlT5fjb5qrYm45BeQUqcVYdnfMklzVODLa2Sslk7/wfKXWGu/bYelN3NQuTLg==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GsFCOmS8Eloq for <buildroot@buildroot.org>;
+ Sun,  1 Nov 2026 15:26:54 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org CDC5180DF3
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793546814;
+ b=AtOPS517ngoPJGhn20bTmZ0JTNHwFhgKOhWjv6/k378YnpZXxWXNbFHnuUEy8Dqf2Z/4
+ RdjioqiCGaT8WLRd5bvm6Ro1zQLR9F5G6CIesVdiGT7kVrK8Xr7MVPu+5tzLpK2anFao8
+ rjmLWdBW6m2LEzmQWnOOxr3Qek6kbkqFl4RbSymI4IjGx44hWSZeaPrLScMaLW9AWzJJB
+ ePmUaf5I8/RL3uxxUgGPmZSIN1P5pOcEHdwkAm/Uq1M5rMxOMnGCtIJmL98i2M9bpUyul
+ tj3Ulc7FRqQEcYLjj+uj+QKdM2MUh58eAaHeU34HfiIrPPqWnF/BaJTAIc884qU2w8A==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793546799;
- h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
- X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=3m57/cREZ96L9iQCm2UmOvH0p8buFLdgS2AzmjyCwMc=;
- b=I1uiAc4gwqKHMY4IiFnK5klSRAT4kAv5A+lEYcqKtDEd63p3Hg/tI9NWTjLIzXS/eTRD
- FG+ewKvx3TlvZkEiNzWPhjEIkHIxQQPRY2tFvNXV1JOnnPvVxFUgtxUQy+6IACCwHyhS/
- Sl4nZVqHsfAJKu7+UjtTlqaV1cqiE3674WhFn6KT9DVkgRbC3pJw5UJIkTVtIVyRSY2VS
- LGbW4oUEGaHhJToe1YD9x1YtD9MR2p11LteeBExdyDqcCfquTsw7cBi3P9e4MTtzmByDY
- B0MISJYfaWQayh1ILOCReGtZ5FWoBRARabBlOZoqq2i+q4x3eaKER097C8KqodthdJQ==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
- arc=none smtp.remote-ip=140.211.167.122
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0F3AF4052E
- for <buildroot@buildroot.org>; Sun,  1 Nov 2026 15:26:39 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C255E9D49C; Sun,  1 Nov 2026 15:25:09 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 1 Nov 2026 16:25:07 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9f30f21626e31bd558c3074ebba7a578082e900a
-X-Git-Newrev: 3ebe90bafdabf8c444d7a9a90bd592631614c58c
-X-Patchwork-Hint: ignore
-Message-Id: <20261101152509.C255E9D49C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mesa3d: fix dependency for i915
+ c=relaxed/relaxed; t=1793546814;
+ h=Received-SPF:Received:DKIM-Signature:Received:MIME-Version:Date:From:
+ To:Cc:Subject:In-Reply-To:References:User-Agent:Message-ID:X-Sender:
+ Content-Type:Content-Transfer-Encoding;
+ bh=FOxWGRarJhmB6egG8wJvCuvngTdC8PK6kelAD7bqMss=;
+ b=eZt6ry0ZZUtNi7b5agZ8tWzKt0YosspnLBJP9b4Yz443pFAWnXNFYS209bpnpay0yGLK
+ 7OGVQx1KHc0NhvgyKPWYGdCmVFjE6Hi3yLQxSnHoep930TS92/C8pRVbZjOIi+d9XRI0N
+ 8+6UTts4jMoWhKeHKTJY5MAryNVI8+OarIG4YTFOELukUDI1P13id/YqH5ksveEQWB46z
+ lylfMWaH2bUBw99ogy0VwkcSgRi7FoN1MhGr7ELuAR5reflUsfYw4e8i+l2iOkCfFxWpe
+ IhRsC84iFjTelb7l1TN4MtHij0m4qKFQUVzAnB1kiisOq+doCe83z6t/19GCNhTP8xQ==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ dmarc=pass header.from=free.fr;
+ dkim=pass header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=qQOXxUdt; 
+ arc=none smtp.remote-ip=212.27.42.2
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CDC5180DF3
+ for <buildroot@buildroot.org>; Sun,  1 Nov 2026 15:26:51 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.4])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPA id 439442003CC;
+ Sun,  1 Nov 2026 16:26:45 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 via
+ 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr with HTTP (HTTP/1.0
+ POST); Sun, 01 Nov 2026 16:26:45 +0100
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
+Date: Sun, 01 Nov 2026 16:26:45 +0100
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: buildroot@buildroot.org, Bernd Kuhls <bernd@kuhls.net>, Joseph Kogut
+ <joseph.kogut@gmail.com>, Romain Naour <romain.naour@gmail.com>
+In-Reply-To: <20261031210314.3994785-1-yann.morin.1998@free.fr>
+References: <20261031210314.3994785-1-yann.morin.1998@free.fr>
+User-Agent: Webmail Free/1.6.20
+Message-ID: <d7051ad377b1c64b46e7b86278cb469f@free.fr>
+X-Sender: ju.o@free.fr
+Subject: Re: [Buildroot] [PATCH] package/mesa3d: fix dependency for i915
  comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -111,49 +125,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
-	autolearn=ham autolearn_force=no version=4.0.1
+	MAILING_LIST_MULTI,SPF_HELO_PASS autolearn=ham autolearn_force=no
+	version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/3ebe90bafdabf8c444d7a9a90bd592631614c58c
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On 31/10/2026 22:03, Yann E. MORIN via buildroot wrote:
+> Commit 52ae9f49b215 (package/mesa3d: i915 Gallium driver needs llvm)
+> forgot to add the architecture part of the dependencies from the i915
+> symbol when it added a comment when LLVM support was not enabled.
+> 
+> Fixes: 52ae9f49b215
+> 
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Bernd Kuhls <bernd@kuhls.net>
+> Cc: Joseph Kogut <joseph.kogut@gmail.com>
+> Cc: Romain Naour <romain.naour@gmail.com>
+> Cc: Julien Olivain <ju.o@free.fr>
 
-Commit 52ae9f49b215 (package/mesa3d: i915 Gallium driver needs llvm)
-forgot to add the architecture part of the dependencies from the i915
-symbol when it added a comment when LLVM support was not enabled.
-
-Fixes: 52ae9f49b215
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Bernd Kuhls <bernd@kuhls.net>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>
-Cc: Romain Naour <romain.naour@gmail.com>
-Cc: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/mesa3d/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
-index a62956bff3..a1a5db232d 100644
---- a/package/mesa3d/Config.in
-+++ b/package/mesa3d/Config.in
-@@ -155,6 +155,7 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915
- 	  Support for i915-based Intel GPUs.
- 
- comment "i915 driver needs llvm"
-+	depends on BR2_i386 || BR2_x86_64
- 	depends on !BR2_PACKAGE_MESA3D_LLVM
- 
- config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
