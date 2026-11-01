@@ -2,27 +2,27 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D06FF606A325
-	for <buildroot@archiver.kernel.org>; Sun,  1 Nov 2026 14:50:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6C97606A325
+	for <buildroot@archiver.kernel.org>; Sun,  1 Nov 2026 14:50:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=gf06v8SR
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=kf2ojWo2
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AEFE0405E2;
-	Sun,  1 Nov 2026 14:50:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CA51F405FB;
+	Sun,  1 Nov 2026 14:50:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o-z0ZGR3gJnc; Sun,  1 Nov 2026 14:50:54 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org A5A8E40620
+ id onbwyenTIMHh; Sun,  1 Nov 2026 14:50:57 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org A7D704062E
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793544654;
-	b=iy7+zdrhJmFErqZ7xA5cDXsd5bLmfdGLGQp4MPLqpm48f9jgafujIpwPOhNOJFZjsEf9
-	 82pEYN9lnP3le1AxdaC3KIfqwrK87z4fGrN+6ECrPzeDTNhDMj2G1DFx6p/nCEFx79Cp3
-	 44RzxPOWI4VcINq0j8tTWJtWfMyBW9Mi/BUzcWSwQYnZiq6eFe3hZKUZL17aG9SZ+wcZm
-	 0M3og/tAdkerC1afuzJ80aFGDpDSYeg7OhAs6HoTJGFGHowSzQCBnL9nSeE45n5V3+DoB
-	 CzcSKuKlYIjooSvlOJ/Z0cUevGeEYNU131+vHyQRMbnaOyC2vuXvtZ6vMEiVTUSyfKw==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793544656;
+	b=X3S0V6f58ZPO4IiY24MsWpUw5CQ+4tU0I5vQSHDDDQvMdW7MEf2a6zRKIr0CZ4uZb5Ll
+	 cxWK4How83aim5nOWA1qcOPe5HNbASlRVEQNbmHdmw6OmxoVC7wKEP4yiplhPAWCxxGMj
+	 R6Pbnl4XKl59dy9H9LUqhwiNlo7047CkMArcws3b7B77qRPPTKmNtxmNWkALl9KDEheAq
+	 trLRDBsZAmn+nqUH65vfPDphCR661594a/LwQ6NPf+E7oyx9ihMgycfqhp8TmRI+oWT2N
+	 eCKK/Elmm7kP86YCrIMa97K/ZfascJDWqbNrbWTytDHIvDJ/h9NZXnk5AoQAslbVlbw==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793544654;
+	c=relaxed/relaxed; t=1793544656;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=2S3GpDlKfin+w8EQqEvquFDaAcBewtNMbOas+P4tZR4=;
-	b=BDYmTKoJ6s+aEtrA4WVNBjuxN9Bv1+qv4F4GHYZpuCeqVmiXJgOUn1f2MgT7q07oqSsr
-	 OMptbtWatKr79AdfGpCqwAK2jLN1vitSldCO6M4J5Sp0E1F4ycEd0HvdaiN7obnmbvZ10
-	 U3v/4ivfb5FM2iF6NwO1j4zsVXS7KZy1KKyJSoe/EpPe9cv3SCJ6iB/GlLmlkMR39ev5P
-	 wIMFHSCgZjPCkxV8Qg/c17d4RZmxrQhHGCMSD03OuZeAkKerC9TpoMYSBzO+r1vZhbDQv
-	 xK0DU0WhZpOz07SLeHJdAAK6MWBUU7gScaXQR3qG/eBg49ZLmaSbmNKcYmOYSpoIDCA==
+	bh=+MylTl7pSUKP5HMMCK6f6ZZYF3rRCAY3dwTtddE9kYQ=;
+	b=Rlu5ZLUW8J70JebfZsetXNt6aFp+QFpqBzfLVlzulRxHiiwuO53vI2k5NIS1XF/HiDdz
+	 k83OUtJ3+dlXdzivIhKWo/8Lgeha6pgZVeMfplVRBiii5/gfqOPhZ/dOeSmFfhgal49b5
+	 KyhZCmbS66iJaV5+OlkoiY/kgKGu9fWNRkqkNXineDO9uKPu0Wri3WKvU+Tuzgkfl1ch4
+	 9uWtsHTFfmuK5bYtY64BrJz+Yrr4OTE1jyhmxxGME5dzRiSUoed7/ehJfijB6qMHdZxYr
+	 /pOfosL8PBj595Y2CS/vs4agQkOQMcdOkxgwFO9uhki4xL68cGsPLhv5dzjry6CNxCw==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793544654;
-	bh=2S3GpDlKfin+w8EQqEvquFDaAcBewtNMbOas+P4tZR4=;
+	s=default; t=1793544656;
+	bh=+MylTl7pSUKP5HMMCK6f6ZZYF3rRCAY3dwTtddE9kYQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=gf06v8SRa6mNrbwkd61GdB6exX+dnAyIaUTSCIGjDEM+7gUBqC+HKogFl3Joxz/js
-	 wjRgL+MHeUrG+JZWQLHC3+cnBjsM7q8xfgFXi6Ycu2INitoY8zUlFJzsPYV5+L30PP
-	 JhmE45hcBmICaofRAeYc3Xwero4y07KVfbFHiS3pfgVBsHAnHKSqLR7dX+Fjsh8AKh
-	 Fz0Lw9I7COarRyjcky0oXoh8ib01QT9FE0GJcu+o8nm8M3aWm6Wj/Q16ZxX7S358e8
-	 P7bFs7Slu0rdNO94ej2SVWkosYHB9M4wvarKwrVFfgrKscAMTJopLDQ18tc+mu+mKY
-	 m+lDj6RfVIRXQ==
+	b=kf2ojWo2jbaCTQyGsSJt+xLRkNgsxqEKtPvQW3Ybprqo2AfULk3USLBJ3NRRrAEv/
+	 Umn8Yi6bAW4kbwqo7W+X3CRkPJNFi2wRJ+s+XD5FbL22yDEi4nTpQmfhC7XZJsqp1q
+	 WQqW4N33huCRs9d6DaF0K0sNa9Kkeqr9zG5W8j//Hn7PsrnbmZE7xVWS6AmePjA4C4
+	 ftdE48Psb/kvdteQ1CGf/SI8zcPANRmmmVFPlp05tUJZvzT/VX/kSDjKWs140Afd/W
+	 SvAuWyNhbbqqPVACj/ZReoPKxdRr6fqw+owNsj8cDVBSSWKVOJPb8gEi3TpfCPIvO5
+	 rV5m/82Pulpcg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A5A8E40620;
-	Sun,  1 Nov 2026 14:50:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 575B34B7
+	by smtp4.osuosl.org (Postfix) with ESMTP id A7D704062E;
+	Sun,  1 Nov 2026 14:50:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 70A644B7
  for <buildroot@buildroot.org>; Sun,  1 Nov 2026 14:50:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 49A5B80C6A
+ by smtp4.osuosl.org (Postfix) with ESMTP id 62666405E5
  for <buildroot@buildroot.org>; Sun,  1 Nov 2026 14:50:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jslmqg4Y_As1 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HlYRF1oLH0Cw for <buildroot@buildroot.org>;
  Sun,  1 Nov 2026 14:50:46 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 955AB80BF7
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 9FE2C405E2
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793544646;
- b=VcSnviYoB9+v4XyJQTPTUWhBiU8V26ZQlZafsCvMuCk5IjZiVZLF+I1djlZsu4zmIkut
- 6XU8D9Tmg4e1S8Uc9eFkFR8p734wuGfbBWGta+KVOSFxhDlFbXC1HduLVCA/+QjRq7pEl
- XkqHlRI6gKkDmtOc/XoKb3eED+GbNlqH2dlLiQPthw/HoWv+dolw3TpDLLMEMPd1QdBaw
- q+zHpjoGFz9rpAzBe7qBHfEZo3vtw8eIprvu+LAPIX4Vqw503KWu/1NZNfdsELyccMqnz
- 4QJXy+xs2Heyf5YU6Ekz5/Roq1Iy1gKkLPRtBAOOgu1gVULySPr+77HHbxphyE1RxRA==
+ b=LrPDtk6ZaYYe5qqCdr9JgQy2p2gkStlvXxFVCyuwDaS7+dwy9QYYrt/vUkPbw4IcRG2/
+ XALaCfkUkBRN6+kJeh6DPh+P3eEeEyF/IsUexVGcWK1/mNIJiKmEU3yUPmbt/JVJ4ieUG
+ o6opArX6tQxpxWfxLENnStQQAvr0Wyl5fmoxMf1G6YA1xueCaeOcng46pPPM5LIJ1thDY
+ eGllvCOGXKUPwAq2mALg/xDX7n+OHTkpIc6tM5wVKNlmUwMBtzUQLPKOneObw9ozGC3qA
+ NBmvYotrFLguOyE6Unzws5RSr/3VTYjZPs3Efhgl7rRZrFMJjKhfVk4j/d9cNLgnPag==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1793544646;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=s7lQcMiN88uE4COAtbyBrsELsaHKYPP+8IPavVBEMcE=;
- b=PRbO4WA65cfcsCQCuAT3PxfS2KJl0jQ05P76hUiZzgLNPfoWXm/h1xAbpGiBjCvvfp1O
- nbS90qVvY8y8xS6Vh711G267h8/e5uO7A0o/9F0jUGacMmKAM21Hd6VHT2+eV2SgS6MoZ
- vTY8v1SvoH0xFcicwytwWN+9kiexjYnvuwLOdTnHHk59DC/3JNFfijZivoHN6pWKncCQS
- HSVMM4QmR95XrpVDX4ydr0Lz4ZvEeyRBxBmoNi1l2GZtnviE1F02DmJNfKulvNkRlMmQN
- p9x6Da40xQ4wc6yaX9MFi+AWSAXphBqPP8/acmMj8HmRpjjrVAvGNSc5jM3B+PWiDMA==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ bh=ilhvQQhYMPpNFa7mb7L6zmwvOVMpnXmfV2xIK3kNySo=;
+ b=Rk23U71wvgOsBuFpRcG5db+El71oeG0UEciMqOhbEDi025bxUlfhvdjXp13yKLcRp1HR
+ Lcu2HeBoKjvXPERAidKdTdE0uYYHTtILTIILUj4nZ2hWWB7v7eNyD5t+PGKf8DlI65+Ba
+ rzLbzf+XrOTDOWTkEgcNO17p1MM99AkRtHSvNmAU83EDfBHzeiwYQoyoKz9MDYJdA4Yzc
+ frnhU9ZP/qae1aX/zVYSK2p8slxIX7iXheL3ewRMWQvua9qDYKM2C0Tdy9iADlS+QAMPf
+ 00yDurRNdYZ9+q3/MKNWumqXVI58ORIkdQTc6/Z9MGEgvcr5Y4wPOO9aMBAvolNPr5A==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 955AB80BF7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9FE2C405E2
  for <buildroot@buildroot.org>; Sun,  1 Nov 2026 14:50:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5ADDC9D490; Sun,  1 Nov 2026 14:49:17 +0000 (UTC)
+ id 6C7AD9D45F; Sun,  1 Nov 2026 14:49:17 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 1 Nov 2026 14:54:29 +0100
+Date: Sun, 1 Nov 2026 14:54:37 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0f50c782dfdc69ed116e388cb49d6394e7a3828c
-X-Git-Newrev: f8850254c60c8d3c9c696beb8fda8d599b8543c8
+X-Git-Oldrev: f8850254c60c8d3c9c696beb8fda8d599b8543c8
+X-Git-Newrev: 1bc28b9dcad33c23407a0eb5b5783e0c5aee6d4b
 X-Patchwork-Hint: ignore
-Message-Id: <20261101144917.5ADDC9D490@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pydantic: security bump to
- version 2.14.2
+Message-Id: <20261101144917.6C7AD9D45F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-dnspython: security bump to
+ version 2.9.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,49 +123,57 @@ X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f8850254c60c8d3c9c696beb8fda8d599b8543c8
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1bc28b9dcad33c23407a0eb5b5783e0c5aee6d4b
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Update the pinned pydantic-core dependency to 2.50.2, which fixes
-GHSA-qpmf-fgh3-ff25 and GHSA-3r8g-cqwr-jr29.
+Fix CVE-2026-114605: a crafted DNS message can cause excessive CPU use
+while decompressing DNS names.
 
-https://github.com/pydantic/pydantic/releases/tag/v2.14.2
+https://github.com/rthalley/dnspython/security/advisories/GHSA-45c3-73f7-pv4m
+
+Switch to the uv_build backend.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-pydantic/python-pydantic.hash | 4 ++--
- package/python-pydantic/python-pydantic.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-dnspython/python-dnspython.hash | 4 ++--
+ package/python-dnspython/python-dnspython.mk   | 8 +++++---
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pydantic/python-pydantic.hash b/package/python-pydantic/python-pydantic.hash
-index 68ffab3df5..57f49bbe03 100644
---- a/package/python-pydantic/python-pydantic.hash
-+++ b/package/python-pydantic/python-pydantic.hash
+diff --git a/package/python-dnspython/python-dnspython.hash b/package/python-dnspython/python-dnspython.hash
+index 01ef94b889..b5ed1a16a6 100644
+--- a/package/python-dnspython/python-dnspython.hash
++++ b/package/python-dnspython/python-dnspython.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pydantic/json
--md5  d1d82b6afbe5cbed83544dd99a104c02  pydantic-2.14.1.tar.gz
--sha256  94f478203dd03404682a1ada216965651dd74b1d2d5ffd62e00e0837caab5c26  pydantic-2.14.1.tar.gz
-+md5  f088af0a539873a8dce16be5d13c4e10  pydantic-2.14.2.tar.gz
-+sha256  fb7b2db6cefe8414dd612edeede49c4c433acb0432b0f92b95024e45f66c505d  pydantic-2.14.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/dnspython/json
+-md5  5f2ceb19b1c269f9e1ccef8bf2a1e8c5  dnspython-2.8.0.tar.gz
+-sha256  181d3c6996452cb1189c4046c61599b84a5a86e099562ffde77d26984ff26d0f  dnspython-2.8.0.tar.gz
++md5  264d7e3c65df17a3a23c52b64fae6c76  dnspython-2.9.1.tar.gz
++sha256  9a6d30e55f8dc63e6052597666112bff0586b95a2474a9deda03afbbf820d37a  dnspython-2.9.1.tar.gz
  # Locally computed sha256 checksums
- sha256  a9e186f3ca16b5eef84318e7a701721351a00cb7b8ae3a4394b67b49e3529ef3  LICENSE
-diff --git a/package/python-pydantic/python-pydantic.mk b/package/python-pydantic/python-pydantic.mk
-index 0a48204cca..5a560b2afe 100644
---- a/package/python-pydantic/python-pydantic.mk
-+++ b/package/python-pydantic/python-pydantic.mk
-@@ -4,9 +4,9 @@
+ sha256  c3ea3ff5654b329c19d3bc5f7481af623c3dded4a6145585499f843ad3d741cd  LICENSE
+diff --git a/package/python-dnspython/python-dnspython.mk b/package/python-dnspython/python-dnspython.mk
+index da3cf223fd..404676275a 100644
+--- a/package/python-dnspython/python-dnspython.mk
++++ b/package/python-dnspython/python-dnspython.mk
+@@ -4,12 +4,14 @@
  #
  ################################################################################
  
--PYTHON_PYDANTIC_VERSION = 2.14.1
-+PYTHON_PYDANTIC_VERSION = 2.14.2
- PYTHON_PYDANTIC_SOURCE = pydantic-$(PYTHON_PYDANTIC_VERSION).tar.gz
--PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/7c/0b/8e10b2e693af8ec54346a14caf36221334775975a747c9ceaa3f8371d96d
-+PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/9f/d5/b4867fa7c7f04c34997d7d8aad744f64d210bb99d67cf18bf3fb1eea1aed
- PYTHON_PYDANTIC_SETUP_TYPE = hatch
- PYTHON_PYDANTIC_LICENSE = MIT
- PYTHON_PYDANTIC_LICENSE_FILES = LICENSE
+-PYTHON_DNSPYTHON_VERSION = 2.8.0
++PYTHON_DNSPYTHON_VERSION = 2.9.1
+ PYTHON_DNSPYTHON_SOURCE = dnspython-$(PYTHON_DNSPYTHON_VERSION).tar.gz
+-PYTHON_DNSPYTHON_SITE = https://files.pythonhosted.org/packages/8c/8b/57666417c0f90f08bcafa776861060426765fdb422eb10212086fb811d26
++PYTHON_DNSPYTHON_SITE = https://files.pythonhosted.org/packages/91/21/7fcd6780f61e9756aafaea760560509bb4111375daa2e23c1be7a89f33f1
+ PYTHON_DNSPYTHON_LICENSE = ISC
+ PYTHON_DNSPYTHON_LICENSE_FILES = LICENSE
+-PYTHON_DNSPYTHON_SETUP_TYPE = hatch
++PYTHON_DNSPYTHON_SETUP_TYPE = pep517
++PYTHON_DNSPYTHON_DEPENDENCIES = host-python-uv-build
++HOST_PYTHON_DNSPYTHON_DEPENDENCIES = host-python-uv-build
+ 
+ $(eval $(python-package))
+ $(eval $(host-python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
