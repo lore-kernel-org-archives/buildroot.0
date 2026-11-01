@@ -1,121 +1,114 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03AB5606A324
-	for <buildroot@archiver.kernel.org>; Sun,  1 Nov 2026 17:57:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC091606A325
+	for <buildroot@archiver.kernel.org>; Sun,  1 Nov 2026 18:06:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=rSnmCvr5
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=cOcPQKbo
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3ABD6405B2;
-	Sun,  1 Nov 2026 17:57:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AA66E80DAC;
+	Sun,  1 Nov 2026 18:06:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BlH4SX-Pds3D; Sun,  1 Nov 2026 17:57:06 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 4438840523
-Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793555826;
-	b=exra+BWzjz+vKVJcr2VWoWJTVJrYVmkzUlyISnuYL2nbWdycj7YYwnmtCet0pwiulVWV
-	 0g65yIyGTNdLux7I6Q9IN6CIaOhh1ed6XV64a90avginvdHOEITlf8W/J8pwgPGx9408c
-	 32lERp/t2MfxYXgWibA/Sg5ZygRg5JrBmFlRlcdPqPdbeQ41u86fGsm/cP5q168TtoaQs
-	 75S+xjczR4+HRZ+TqeqJ8ZRosL9wPRr3VfbVklYhgC9Io1ESjxeZmzwbDVqaCueeX5JcZ
-	 PCb++6AYZR8mex9AbsVE/SRzn1NFuXMLo4cEK4QKlexdSajZtAH9XVFRHaE7TTrD7uw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vEivyjgqezea; Sun,  1 Nov 2026 18:06:15 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org D29E080D93
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793556375;
+	b=MGkI4hps9RW88QutYrU1C+Sk3rPA14wpOWoCsbf17C8R0/JLO78u/ug3as7iTvMOOtRX
+	 6qt5U6BVmfeWivkQpQyWMIcxhUUG1hsIRxsmmwe6FAjeI/VV1j3I/8xs1h1sVUruOfGH5
+	 Bs3GxRISJaGklmEH5P0cBd/v2V16PKPCwZG+eSlqveWwz7ZXq73twt62V2m9BSojTTq+n
+	 wAjnV3TPIAc4/dGr313SgZZB5iZO824odUHglUqA4AmV/2Tl38O4/iCVPSu0nycJkCMOT
+	 jbCfT9M3KiBn2h3BGZ6Lq+uCTeL6p8dmvOtUzwlOZrHBoHDJ4+DrZqvsFKtvrnz3+YA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793555826;
+	c=relaxed/relaxed; t=1793556375;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 X-Injected-Via-Gmane:To:From:Date:Message-ID:References:MIME-Version:
+	 User-Agent:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=BwE22jyJ+4Y5HbOXJAiocmhEBxJ/K8hg/wPkEysIJUg=;
-	b=tYIHcHE8MqhGl0YEcpctEhLSKk4LoI7Drvw3gPhj1xVnntJD1GkdaXZ5dkZ0qMIqEarY
-	 JusvtG3GjK/uPPAJCqhEHg51NYjj4FKzvMe817G/uVIHr76aViQ9NxfM4oOWlrEwDvgZD
-	 fg43kG95YTf92AWtEL/2GXY/onUo90QKUQv62GGy3foC2MwWYE3WsQmqHg+NTP/B4Zfow
-	 L75kauRAJ78MgONkwvQlLQxnQc+K9RYOqlj0vMIfwG0ymWfJL1tBTm0836lx8yqYIyD2f
-	 XQeVydWHuNQ/nB5qcbLFbB1A6PoQjZxbhm4eM/dd1ilw0KztV24vj4O9icITUkuRwgA==
-ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
+	bh=D/463JpBKxh1TUCLp6/i6sv5bTNnvHhRV6lmAbEMrO4=;
+	b=kKkg/AACubN1ffUeSlasCIT7lXubrGdthwMynnKraKvd+g+uSSdx0UlUyDomYQL8lfx2
+	 ufcfkKCJcwbY6c09QI7Rgv6CgwACj63R10KcqStkzwDbmr8oPdPipWaixVkHUOnQCjj4U
+	 k8cflDBhMc8cAGH0QhTtLClRHmLVa+V0+U5AklPe8YgfZOXeKlFmRUYchTslpvDQkueEj
+	 QY0EkwxfH3t19tW4QOFRyBzLMBQwDlkjS07R69gJUBFTxwGn73oO2Xm3iDwvmBgc63Ce9
+	 IejxoV8oiUF+mikbN3DmyRkcuf+bUWyLCSugVM8LxPyqnpNgOMqEs5p1gdAwCSzgbJQ==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793555826;
-	bh=BwE22jyJ+4Y5HbOXJAiocmhEBxJ/K8hg/wPkEysIJUg=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=rSnmCvr5UO4wjTA3oh7cTUXeQRp51e7XeRokxi8dTncywyYFsd4DRtIdx+2sclRaj
-	 jJLzr1BcqAV4xJElToMpDulg3vLUe+UKV8dkGwr6wFwGyTl3TY8eIt1sovIhc6Wz5h
-	 tIu6jDSwkE7AFDqLJK46Kqcbx8mymhtwCciLyFL4fwXkwQi9IShPkNsePjsRdQyzsY
-	 ocfUbWQrAX1sz0KhIzjvSTF6X/P3rTkezbsYJP/TBFfjqs3sgZCaJnasOscKLvBmtR
-	 1C9TLIThNqMX0pdccec9s38sMKOKa2HkignSH8utU1jWG6OdvHZLS2YCj/4UBWTLaZ
-	 hOHIdUBMUcqbg==
+	s=default; t=1793556374;
+	bh=D/463JpBKxh1TUCLp6/i6sv5bTNnvHhRV6lmAbEMrO4=;
+	h=To:From:Date:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From;
+	b=cOcPQKbozJXv+jFShkdp5P/PtUbRIHXoNMKrVHoi1l9poo0NbZZ3QP1Hgy7HFskhR
+	 gm3clsvJdltURANmQQjXT7S0u9tOpshqpPtJwHx54Obec1nzNFdTnz1omdFLzecjux
+	 jW+6zmfbt4r8hV0AG4gstEKu9cc6ohJ9sBVVoU/G/EGVOB/2jI5d7gizxsHQnamwTs
+	 PeOYzf6tkEd+lUT16OzxteAxt1k9GJcYWkNlUv66+rqWxHwCIj7WWWqOQ2fhBeTxiG
+	 7Cmw4vUmEJ65z5iVm1FvpwcrOKlW3XnYzg5YqpEIWdugoFZlY7aO+oEVmGMX8wd0tB
+	 vw60FGcvAeLbQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4438840523;
-	Sun,  1 Nov 2026 17:57:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6BD822AC
- for <buildroot@buildroot.org>; Sun,  1 Nov 2026 17:57:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D29E080D93;
+	Sun,  1 Nov 2026 18:06:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8505F2AC
+ for <buildroot@buildroot.org>; Sun,  1 Nov 2026 18:06:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5220060612
- for <buildroot@buildroot.org>; Sun,  1 Nov 2026 17:57:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8181940098
+ for <buildroot@buildroot.org>; Sun,  1 Nov 2026 18:06:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SFP6QH4gqs22 for <buildroot@buildroot.org>;
- Sun,  1 Nov 2026 17:57:04 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 1B94C60602
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793555824;
- b=qGF/MOWwaYb9YJied+5aj9mAfAFNT3FCc1ZjTR3YVPQ9Ap++Ifh0YgmJMTHZ73d4SOpd
- TLfbU8OLOkIrKdM0dRvLSwsYKpnE1XV77tiIQwfEmNZXMDWrWGXEz8Lbl1e06PO214H/F
- aH9YVcb850F35zB2D7VjaUrJqGcKxXTWXrQrufmtaCqyY7BcXI9yKFs6t1VcjG1+ihaPi
- IySOyFO0epWLFBfQEWbJdw3tINnvyUa7TYl1COpCmXVxNXCm3hbs3Yz3d2Z1Y4hK8KSTX
- WrNoEXtsf2SudtcU9z/tP0ckioLVJ0xRE7CMY4003MdTdqFFdQrGcCN8tPtVFjpCzWg==
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id omMNDe3o6HOg for <buildroot@buildroot.org>;
+ Sun,  1 Nov 2026 18:06:12 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 1D5034004D
+Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=49.12.148.96
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793556372;
+ b=QLfc13TLppjzTnfCbZO0XTD/zQMF4ahDzT641r88kkaNVCZcmsRq/Gij98RqR8Je/KTn
+ 9pu3J0oX6ReTK8kAmJLUCanh5KpVMbWos43ACYyp3pgQmsDeI3wXQfUi8n19g4D6LQAWO
+ 5+4evFcUw8nUcmZAFYnmbmGO8R8MzMwPMX/zbOBO7zllWWMqZtFu5LjpEjcoqV/6oSes1
+ Gd3/VTYXSkVyl9ijrF2WzaIRFi4V9IbbFNRUlzJqciMcZkivGbDM8YEYVsIOoDUQZ9bCy
+ npV89w8oqOT8HH3qfA+ASlw0s7wO68ATY9c7CfElDDr3NFPCZg2e81X71oWhO29JT+Q==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793555824;
- h=Received-SPF:Received:Received:Received:DKIM-Signature:Date:From:To:
- Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
- Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version;
- bh=HREQ2f+qGex4TBBXXJ+430M9DP3+NidT/y2a9ud0yhg=;
- b=Q8jrJqxv94bjQcbOBW2vNneQtqOKK9tsleTe4qzHf7OFkPthzZwSZ46376ZDJMIOpNbE
- laoj6gih7j/Upa5c1pFrJJdC39aK2H2vNvx7Zo3JYLnZe9WJrfRUl4Ax31mU0jpd9vtKr
- 3MXKoIl4z60sF0jLcqUdMtplE30UAP7dTVvXawhoUWpwHZCUX34hhR8XCDIcT376D+UMN
- g9vEVRWJnLxgMp93wzaejVv/MY5kPyNJ1H+orecEX1s+RzmQh4OD/ROCMi/Tw2m5lK1KK
- slb0azt0c1RKPJkWaBmRNLSmD7t7cOatYtKUrXKKWtuZKmhjRpwcHAYlvnqacZT7gUA==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
- dmarc=pass header.from=bootlin.com;
- dkim=pass header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=dkim header.b=Zx82y0F+; 
- arc=none smtp.remote-ip=185.246.85.4
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1B94C60602
- for <buildroot@buildroot.org>; Sun,  1 Nov 2026 17:57:03 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id 6CD674E41323;
- Sun,  1 Nov 2026 17:57:01 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 375EC60750;
- Sun,  1 Nov 2026 17:57:01 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id E05C51032855F; Sun,  1 Nov 2026 18:56:59 +0100 (CET)
-Date: Sun, 1 Nov 2026 18:56:59 +0100
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: marcus.folkesson@gmail.com, buildroot@buildroot.org
-Message-ID: <aud9F_e8B9t0EkGA@windsurf>
+ c=relaxed/relaxed; t=1793556372;
+ h=Received-SPF:Received:X-Injected-Via-Gmane:To:From:Subject:Date:
+ Message-ID:References:MIME-Version:Content-Type:
+ Content-Transfer-Encoding:User-Agent;
+ bh=jmKGsPoVXCwSb51/wyRTLNIpFVCzV1EiT2TODRg4xJ8=;
+ b=IEe7zTOZN4ys7q+AqkcBrSoByqHZga5gMYsRg6P658dKYlJBLLZ6Jm+fctmF487iXCr0
+ ZdeVgwdwFpD1y80X/UXAEbzdgABEr4Fp55PwizWi9xj0UAjjDlTIXslcI0oweD3VPJuYE
+ YxASu92KFIdmnmJDwhku76xKXseyWepJfnk04zxASE59cjledBxWFstZfqIYsSIYLcCHD
+ Fpb8bWlCGBP0vLLdW4nm26AJfC4dv3mO8uSjolbJ2KJ0Lob9Q+iRmWhy7BPiJC46sccg0
+ Mht6gXwMMaoWMX5TQhuZ2TxosjOqRZGZM+rMPJWXoyNeKJdmOVRm06DxzAac4VIUrMQ==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ dmarc=fail header.from=kuhls.net;
+ arc=none smtp.remote-ip=49.12.148.96
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=49.12.148.96;
+ helo=ciao; envelope-from=gclub-buildroot@m.gmane-mx.org; receiver=<UNKNOWN> 
+Authentication-Results: smtp2.osuosl.org;
+ dmarc=fail (p=none dis=none) header.from=kuhls.net
+Received: from ciao (ciao.gmane.io [49.12.148.96])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1D5034004D
+ for <buildroot@uclibc.org>; Sun,  1 Nov 2026 18:06:11 +0000 (UTC)
+Received: from list by ciao with local (Exim 4.98.2)
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>)
+ id 1xNZwU-00000001BI9-3qEE for buildroot@uclibc.org;
+ Sun, 01 Nov 2026 19:06:06 +0100
+X-Injected-Via-Gmane: http://gmane.org/
+To: buildroot@uclibc.org
+From: Bernd Kuhls <bernd@kuhls.net>
+Date: Sun, 01 Nov 2026 19:05:54 +0100
+Message-ID: <pan$fc49$3eb48425$dbc85d03$3c246fa@ID-313208.user.individual.net>
 References: <20261101104535.1696412-1-bernd@kuhls.net>
- <2f4dbf0e-3bea-487a-9be7-bd6dcab47971@kuhls.net>
+ <20261101104535.1696412-6-bernd@kuhls.net>
+ <audvr60n62pCGzCb__2095.99053939513$1793552489$gmane$org@windsurf>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <2f4dbf0e-3bea-487a-9be7-bd6dcab47971@kuhls.net>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH 4/6] package/libcamera-apps: bump version to
- 1.14.0
+User-Agent: Pan/0.162 (Pokrosvk)
+Subject: Re: [Buildroot] [PATCH 6/6] package/ffmpeg: bump version to 9.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,32 +118,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_PASS autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-5.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,FSL_HELO_NON_FQDN_1,
+	HEADER_FROM_DIFFERENT_DOMAINS,HELO_NO_DOMAIN,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_PASS autolearn=no autolearn_force=no
 	version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-On Sun, Nov 01, 2026 at 06:38:11PM +0100, Bernd Kuhls wrote:
+Hi Thomas,
 
-> the package should be restricted to rbpi:
-> https://github.com/raspberrypi/rpicam-apps/pull/827#issuecomment-3018166853
-> "To be honest, I doubt rpicam-apps would work on any other platform."
+Am Sun, 1 Nov 2026 18:00:30 +0100 schrieb Thomas Petazzoni via buildroot:
 
-Well, then our libcamera-apps package should select in libcamera the
-RPi support to make sure it is enabled?
+>> --- a/package/ffmpeg/0001-swscale-x86-yuv2rgb-Fix-build-without-
+SSSE3.patch
+> This was submitted in 2020.. but apparently not merged, what's the plan?
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Wait for upstream to commit the patch.
+
+It still is in state "New" along with ~30000 other patches
+https://patchwork.ffmpeg.org/project/ffmpeg/list/?state=1
+and I would feel bad being the guy asking for an ETA ;)
+
+>> +++ b/package/ffmpeg/0002-avcodec-vaapi_h264-skip-decode-if-pic-has-no-
+slices.patch
+> Same question: submitted in 2019, not merged.
+
+Same answer ;)
+
+>> +++ b/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
+> Same question :)
+
+Same answer ;)
+
+>> +++ b/package/ffmpeg/0004-configure-add-extralibs-to-
+extralibs_xxx.patch
+> So why do we have it?
+
+Added by buildroot commit f30bd1eb69c44793485e9f013249d020e3e19fc3 to "add 
+-latomic to pkg-config files". A patch addressing the same problem was 
+committed to ffmpeg 5.1 several months later: https://code.ffmpeg.org/
+FFmpeg/FFmpeg/commit/2f0a214a6202516b4dda2bb22b6b3ac20e465d6d
+
+I will check whether we still need patch 0004.
+
+>> +++ b/package/ffmpeg/0005-avutil-arm-fix-armv5-build.patch
+> If these are ARMv6 optimizations... why are you enabling them on ARMv5?
+
+Upstream asked me to do that:
+https://code.ffmpeg.org/FFmpeg/FFmpeg/pulls/25624#issuecomment-78683
+
+>> +FFMPEG_EXTRA_DOWNLOADS = \
+>> +	https://github.com/xbmc/xbmc/raw/refs/tags/22.0rc1-Piers/tools/
+depends/target/ffmpeg/001-ffmpeg-all-libpostproc-plugin.patch
+> This is a huge patch to re-add libpostproc. What's the plan
+> mid/long-term ?
+
+Use it forever... FFmpeg decided to remove libpostproc and created a 
+plugin mechanism so it can still be used:
+https://github.com/xbmc/xbmc/commit/
+587f3a6e936d487552d002bd63a0e4ff74bee433
+
+LibreELEC carries the patch as well:
+https://github.com/LibreELEC/LibreELEC.tv/tree/master/packages/multimedia/
+ffmpeg/patches/postproc
+
+Kodi needs it for vaapi-based hardware deinterlacing
+https://github.com/xbmc/xbmc/pull/5253#issuecomment-53122885
+applied to content like many 1080i DVB-S channels.
+
+Regards, Bernd
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
