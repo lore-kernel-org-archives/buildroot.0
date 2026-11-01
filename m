@@ -1,145 +1,104 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FBA2606A324
-	for <buildroot@archiver.kernel.org>; Sun,  1 Nov 2026 22:27:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19D34606A333
+	for <buildroot@archiver.kernel.org>; Sun,  1 Nov 2026 22:32:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=YRWIOyTX;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=fIWtqks0
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=kzzcwwy0
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 899B16065A;
-	Sun,  1 Nov 2026 22:27:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E34B180CE0;
+	Sun,  1 Nov 2026 22:32:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6r4tLVmjKOZs; Sun,  1 Nov 2026 22:27:55 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org A60EC60616
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793572075;
-	b=p+lB1yv3q5Ug+ufSGQrzegzaPiWqNCNd9zJ6tT9jw3g1GucUjpdqQLNukUwS6aUDJVGY
-	 SJjmicqkmT0TAmiZcIMdvRxFRN1DuW1THrD6acNeThheoARicO7Ef3IiQxzELjs1sNlRO
-	 Udhit6FJZoF/6/trHOvu2MtvPq+RpPc0CY4YBwdid8lvYQFnnMLu71IPh3X/7Uw13WdFD
-	 UsAZE39jGmvL0QgIBK/Nqf1O8J/6J+Ek7tEJ4F2NXXJ8P0U5/Ktqg8p8UQEtTQMJbmjtp
-	 koxeIpbmjJ+j/D0S2cQrTsPeOBl8lG8sH9dVvjR/tfv01O8v+wCoP2CkIswGnhN/f2g==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id A9j1LdLEpG6S; Sun,  1 Nov 2026 22:32:07 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org BC64980D6F
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793572326;
+	b=PymLaJsQG0D99GIK4YcjtfC/oKWYop6Fp+kqOkeSIGwghFg1SXlPW5Gzjhx2Rr+5P5hT
+	 eaTfVn/Q9HhwMn5DJBCtwlOuS/zXDx1Pw1CmHyHpHLb3d6dkAwrwY6uqLfMS7s9hKpqXt
+	 gJsfW4OrPwYzKHqRt74BewlcN4qO5NYSkLiRjYC5EWgU+A9RpIJ6Yg87WHIWlGKchZpnA
+	 QWAInTP/B20DR1Vk4FNKkDzpI/Vx316udp79Mf7CHRmNRGrvDKgj38eYQQOR3vdOSGkHM
+	 Xy943QSJXYyDT3SBZUm4hHOten4b7nYZcz00/yqUNy8oOYccH4O+2dYI6iUyKQE1P7A==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793572075;
+	c=relaxed/relaxed; t=1793572326;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Date:Message-ID:
-	 X-Mailer:MIME-Version:X-Spamd-Bar:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Content-Type:
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=X4CSpJLrykDKDLzBqLcuGoDZCa91s6QaQSaYPv461CM=;
-	b=GTwttFx/1vAlZl9kPO+jBS1/uEFXJ8e8DTImTfLUH0zXkzSlqcp2JpqiVSAbFRBPqgWm
-	 fB6T7Zzk0LeGZEG2o8RDGGkhFgpy3UyOiQDm+sUHCtIIc+OOxTBmNVoaWfvqs9oq0JRqW
-	 88NhgAnc+FHai7ML+F4az1qY0rUPsT0J3ognZPTSvgtJm7ukyubs8mKghuDn85Dy/2g0w
-	 sF5KRXuDdk+clCCoZGOYRL2Ic/FiOpZMzJ+UrfMJNbb9B90XefvZAU6+ztBgaKG2dp7v1
-	 wY0Px2hGCQPUlfPDA15DUk/edXEq5HwNYVwok7bMqGysiIoyZAgr/xDoYO+rqeKHAZQ==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	bh=9QmPiKjJYZWmb9N06IjabNhQyfmkYeYNqX7amaoq/qI=;
+	b=FlTXs4JZ9B+GibfTb4MyTczFpLUQ1tuM0TkR2Vy7RkMc5awEYa7UwZnaQqAN+FZTohRt
+	 SMlW20A+MvnK2JF7FNBYvtVBers5lmdUjYKmeOWNPi0OuZ4QWEHh4pSv/7R/F84FuIdVE
+	 VXyhgXndBYuTpTep+vicj60S1xMlm0rz7wqiInM2R7nHm8W0TE73HRWpI41w1uzsfcBYK
+	 uLkRCkCzyTf3uyMq2ELcAxd1+603VHS0f+30hDzYnh6OB1+QyojskOdoGkHR0i1WvqU4u
+	 KCki+1jn7H1FN+lPVBIUzspqaxk7HDhlHBW93N2bHenQlyBANV14n8GZX1fP98M3kCQ==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793572075;
-	bh=X4CSpJLrykDKDLzBqLcuGoDZCa91s6QaQSaYPv461CM=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=YRWIOyTXayBai6QLEuJ45xFKatCvwQPPXo0EBOt/8INZwIe7MTAe2bqvFDBRre+N5
-	 G7xboza8K4W2OgjdESNK++W+VbEMwMhY89/kPFWj6lx3wBDE1RF0oRQniBImgVMHIu
-	 J3r2rqkHLBCz5b9BqAGpw3IbnlmDdk79yn/SlD7iDGmNFhDkJOg1SrS6ACMORiq2X8
-	 7PBnB1IH7VKIHQ76O8S3z5oQHjG0pS2SoIfZNZjAi8X4RgZThI4S4gVAfiXjvOxBI6
-	 O1qZ42jCU4ZbxXrLe5VjBcPOJmP5LjvrV6389qf1Cw4/d8ybn3EW3YpnrbZ4meRs7k
-	 qR6Bp4zwhv5tQ==
+	s=default; t=1793572326;
+	bh=9QmPiKjJYZWmb9N06IjabNhQyfmkYeYNqX7amaoq/qI=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=kzzcwwy0npfSqFgDjgG3QaP3CCPW4LMizmLQM2b4eJIpUccIxPw1pPne/ZYWeQfyg
+	 TD/slKC2vZRGFgIRX/gLb9a548mQrCGYAu9j4Tuixx2VYIjZckTJ/SAwLdig/LNWnY
+	 uLAubxq3JY2XoYFquOMULxRQeYtzxfjl9mZAzN1q8H9mavYfAMwsPsRBgYUivQor4O
+	 qqG9uQeZX5NIoXU6hKPoE8OyyA+JHpreHfJ2IzLsYm4MmXKds+MSmzFONKktuhJ2eu
+	 tKB3k1IkLzT6rRoQAHoldWzzNHox2jQiTjgleLmwn37TvzUXpOkH+KibMg0LwQqnpf
+	 k6VgSNvsCxG9A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A60EC60616;
-	Sun,  1 Nov 2026 22:27:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 28211435
- for <buildroot@buildroot.org>; Sun,  1 Nov 2026 22:27:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC64980D6F;
+	Sun,  1 Nov 2026 22:32:06 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 98D94435
+ for <buildroot@buildroot.org>; Sun,  1 Nov 2026 22:32:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1A03740070
- for <buildroot@buildroot.org>; Sun,  1 Nov 2026 22:27:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7E45540086
+ for <buildroot@buildroot.org>; Sun,  1 Nov 2026 22:32:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id haQvlchuODdg for <buildroot@buildroot.org>;
- Sun,  1 Nov 2026 22:27:52 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 6B2ED4004D
-Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793572072;
- b=EUO8F427+F8HMJBgzTfeeOshw6WJfKAOgAXt5golP/rCQ3l6z30yKCDX1fWzD4QDioZY
- u5hSstlgaW7gvIoRv9TvlnndRihN3NvbNS+k0zHqVT1wWF0AyS9EesCgM901aYmlOsvnM
- pOD79dj8Lh1g9LQ+BtbCrDcijwxv2RbzDnPyYMg7jKfe/W0hGLEr+Imv8xghSAWAoeoHj
- DwVV11BZg0y+98DZyvSTVjv4KoQuQ3zbYlOKVcAtdNsLi+WUUzQ3Zylq84M3URaG9aoyD
- tbGiIF2PxiMi12Eotru7sWd8qf5keTF3U3gD9DYLrwdPZ5uYGNA5U61ZmBBtmV6qH9w==
+ id yH7v8Hu2YCoZ for <buildroot@buildroot.org>;
+ Sun,  1 Nov 2026 22:32:03 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org ABFD240042
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793572323;
+ b=aL45GC3Kc3iFwbIz74Ts4oZeCVIUPX6t1jmyDKALnJF8+vQOXYa6RPKVbhA5p86VTexG
+ lv309qmm86ipp8reA5d5NlX+dC2zlriksO47TsX7cmcivZ9+wriOYX8wr3NwMW+w1oHbN
+ 6118K1a1qw/4Ix6ekyVcIQvDOfDVKvd0uQxcsxZI8joy6JJGaTTs1VVvsNNEefaEjZYry
+ MEUyn4bm051kLwgwPkx63iqpLWjmi0fxG1N7IIegVR7QBPyeUvjI3jFF1/TARuTJzRKJV
+ 5CyO3eOr+K1tWK1dPW4sN1vn7xx7s75yA/lijntMLllSAZEqQJ/d7vymUwDr//B+8qQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793572072;
- h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:
- Subject:Date:Message-ID:X-Mailer:MIME-Version:
- Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=6OIH/SNwVxPv0+7e8/nlxRh1X/89sVM5riNZNse/yr4=;
- b=REFPE9ChvhzIeCBGldZMkkH2ke9KDXWkbGhxABeegKiBrCAj3a7oPGrxETr/msvbI857
- cZ4jCdVOOBzw5yq81YxmkxD+wSZE41EDwI76vFpMbpAqPaFrOzX4/QPVOqycyX413GgHz
- 321XrBUj0G1W3eh4oQ5JoEYn6rIk+rcipvPVutqbH1u9ex7zAX8kyJ1MaAY6O+7o+Qi9O
- 941CPNAt9QTgCL5jykUTMq5wHDsOwdoJojVp1xIViiKHVrfDa/V9NGhBMVU1Pu3JyiANT
- UW5pufEu5oZ9giTHBq7nYnYHRuqWt1PKQPVVPw1q3G5luwqIYtOxpy6J6ye2yPUNd8g==
+ c=relaxed/relaxed; t=1793572323;
+ h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
+ X-Git-Newrev:X-Patchwork-Hint:Message-Id;
+ bh=daSzX1OF4tecgXkiVrLVtu5mhHziBQu/+N3WNGiVqhU=;
+ b=NgbLq21ziiagGApPG43JzUvk2AOJ6Vb4D91+pOLnSBEH7VkXmGZbI9f7398J2ixFtSXQ
+ 1MohuoZEbv51ozYikdvvnoGDGRe86spLnJF9jnMwW6T1gVOcqzuIF0rK4AVou9JlcWbwS
+ 8Q745hynLa9Plr0Ip8qCvDkuECPnKxrTkny12bLSIRPQYHlIqA8tOkvK8Yykv//GMwI4j
+ F1X43f57vlI5pzNUWIdJYYnm6OMn4GYmLWo4kMEVYQWdg3plGsvj5AOsz4C5BiNlrddHV
+ uByM8WgIR5xoMQUc7oJEjvPxIgdFpq23NJovYmhnfVQBP73ikwv8JqOMFDVnOajjgTQ==
 ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
- dmarc=pass header.from=kuhls.net;
- dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=fIWtqks0; 
- arc=none smtp.remote-ip=85.13.140.57
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=fIWtqks0
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6B2ED4004D
- for <buildroot@buildroot.org>; Sun,  1 Nov 2026 22:27:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1793572067;
- bh=6OIH/SNwVxPv0+7e8/nlxRh1X/89sVM5riNZNse/yr4=;
- h=From:To:Subject:Date:From;
- b=fIWtqks0/5T6Q/1q+7EKstCgMgWlno/hBb8rIscvkim046jX3SDEjEHvwcRWzc3v+
- +6d76XRmkkaqz/1nxwsgYTJNbOqc3hNSDr0bPYRI6QlMT/2ebR1cxtKB+YZDN8hSO7
- ssG+1ck8bQkjnkuFFV6+4Y4YgK+Itw1QxPUWXOg6L+D3dhVF6fLU+SdMuN/kEFuEW5
- Y2iF5ct+MYAD43bASt2MWt64X83YPfcW6HUc3wVMap0BWRB4NTncT2nZrZ/S139x2/
- bza5YvCF2jBOuAWUEPWXfCbyWN4ZKoa8LXNnIL+6yjkOZ4gmfbKSRWjiJXzY2J9UXL
- 8wanGyQCAfeTQ==
-X-KAS-Sym: v3:f51bdf72230551df:oW+AJD25FcqBf9IkBW9t6eXwL+x4n+WOeFbvk63DGtba8
- ur2FccYXi1ppfsEtqU30MVK11t9D/8zUFB3+qYa/0fo9VUNUknxxRHxPZcPm5j5VFdpjvlYs8fp
- 4Wz0jxlX0QYhyrLlfMS0CiqXGZ5JAL9RxVL651N8hOtkm9q3UZaNthhyXRrchreClx2CpLluhRF
- 2HVI6fc7Cgbts2EbLsIdwNFvObt/kK4InFXqtYyvQbL508jn8w4dfLjTudk8kzRirpV7g+7LjPw
- hfQLV5H5YPS6BJvDExTSjjYqjJ9Y+tQvclMaY3iusD1Ly01zPHpEQv7drX7D9Z3K65rdvYuw==:
- kRs+bS0WXXHR/I7HMXSS/JH08orvkUYiesuRXZ38lTwoTqDa2Y6aNZy6ovp+RJgl0AEDhoGq95w
- xEJHbIoujqsVR6f32uuYnta6t5oXSdIwPONmsWomSe3RUwIEXPAZiE7LuxxWY5TOexFObb6KdT6
- 08FEuMVxWz/rNHJrZWq0+JF07GpXrBQxys3AfSoGH+H4jequVvGXOinKZSuS99wg2PGGfEnN4D2
- Fi5IYuXHWoOf5Y3/orsbYaKvKJ71VnsGj+uGNFwR2I/nkv6iEToLQOzJHmeJ24uc/75n/+2oWJ8
- /DLchheq/Xu5nP5eOuKlngcitW4Tg/DhMLaeq6VE9DRukkFcmiqo6sh6S1K3mIHrNduFMcIrlsn
- bQIOjj7idWauvqpovIQk/YaFEuUjyzeyVME/dIMBfbneqDyAhIlCyHpnV+Ha2v8BboXor+mSutI
- /ct25GBOCJCzXAl7enJ+XlvPOcHsJlzKw84KKWWVBiEPEi2UCAHsTe11hCXrq70Hb+njw/kL2SS
- 2FlsTE3QW4/YcShTaUoNfXoEE658/LJ4ZFuFOlF2WPqiwUXBp2Jp7aFVCMT/WrsqdSsucZZjRx/
- qTDTnymAdm8uNlWtfwTXENklT3931Mywd06c6hVCAjBP
-Received: from fli4l.lan.fli4l (p54a1b5d2.dip0.t-ipconnect.de [84.161.181.210])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 4FECFA4C304C
- for <buildroot@buildroot.org>; Sun,  1 Nov 2026 23:27:47 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:44592)
- by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xNe1i-000000001av-39yj
- for buildroot@buildroot.org; Sun, 01 Nov 2026 22:27:47 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ arc=none smtp.remote-ip=140.211.167.122
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id ABFD240042
+ for <buildroot@buildroot.org>; Sun,  1 Nov 2026 22:32:03 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4C9E79D5AD; Sun,  1 Nov 2026 22:30:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun,  1 Nov 2026 23:27:46 +0100
-Message-ID: <20261101222746.26548-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
-X-Spamd-Bar: --
-Subject: [Buildroot] [PATCH 1/1] package/rtai: remove package
+Date: Sun, 1 Nov 2026 23:27:25 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e3095fe471f6aebd218a669eebc8b717d71f7f13
+X-Git-Newrev: 84ab6812ac661e0f4aaf0a2ab00b54ea8f50ae40
+X-Patchwork-Hint: ignore
+Message-Id: <20261101223034.4C9E79D5AD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/open62541: bump to version 1.5.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -149,222 +108,174 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-16.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Building kernels > 4.19 is broken, for example:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/84ab6812ac661e0f4aaf0a2ab00b54ea8f50ae40
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-No RTAI patch for your kernel version
-make: *** [package/pkg-generic.mk:237:
- /home/autobuild/autobuild/instance-13/output-1/build/linux-6.6.161/.stamp_patched]
- Error 1
+Release notes:
+https://github.com/open62541/open62541/releases/tag/v1.4.0
+https://github.com/open62541/open62541/releases/tag/v1.5.0
+https://github.com/open62541/open62541/releases/tag/v1.5.10
 
-In 2023 the maintainer laid out some future plans:
-https://www.freelists.org/archive/rtai/05-2023
+The UA_ENABLE_PUBSUB_DELTAFRAMES, UA_ENABLE_PUBSUB_INFORMATIONMODEL_METHODS
+and UA_ENABLE_PUBSUB_ETH_UADP CMake options were removed in 1.4.0: the
+information model methods are now always built with the PubSub
+information model, and Ethernet support is part of the POSIX event loop
+on Linux. Drop the corresponding Buildroot options, no legacy options
+are added since those features are now always compiled in.
 
-The last mailing list entries date back to 2024:
-https://www.freelists.org/archive/rtai/11-2024
+Since 1.5.0, event monitoring (UA_ENABLE_SUBSCRIPTIONS_EVENTS, enabled
+by default) requires JSON encoding, otherwise configuration fails with:
 
-As the future of the project is unclear and the package is broken with
-newer kernels we remove the package from buildroot.
+  CMake Error at CMakeLists.txt:955 (message):
+    Event Filter Parsing require JSON to be enabled
 
-Fixes:
-https://autobuild.buildroot.net/results/800/800854f679cacdb2f5311dae62f7cd4db4efefa2/
+Enable JSON encoding by default, as upstream does, so events stay
+available as with 1.3.x, and disable event monitoring when JSON
+encoding is turned off.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy                              | 12 +++++++
- ...ding-packages-linux-kernel-spec-infra.adoc |  4 +--
- linux/Config.ext.in                           | 11 -------
- linux/linux-ext-rtai.mk                       | 30 -----------------
- package/Config.in                             |  1 -
- package/rtai/Config.in                        |  8 -----
- package/rtai/rtai.hash                        |  2 --
- package/rtai/rtai.mk                          | 32 -------------------
- 8 files changed, 14 insertions(+), 86 deletions(-)
- delete mode 100644 linux/linux-ext-rtai.mk
- delete mode 100644 package/rtai/Config.in
- delete mode 100644 package/rtai/rtai.hash
- delete mode 100644 package/rtai/rtai.mk
+ package/open62541/Config.in      | 29 ++++-------------------------
+ package/open62541/open62541.hash |  2 +-
+ package/open62541/open62541.mk   | 25 +++++--------------------
+ 3 files changed, 10 insertions(+), 46 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 29c9b7f9e7..3765db9778 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,18 @@ endif
+diff --git a/package/open62541/Config.in b/package/open62541/Config.in
+index a5c07d5043..024067f6bb 100644
+--- a/package/open62541/Config.in
++++ b/package/open62541/Config.in
+@@ -71,25 +71,18 @@ config BR2_PACKAGE_OPEN62541_DISCOVERY
  
- comment "Legacy options removed in 2026.11"
+ config BR2_PACKAGE_OPEN62541_JSON_ENCODING
+ 	bool "json encoding"
++	default y
+ 	help
+-	  Enable JSON encoding
++	  Enable JSON encoding. This is also needed for event
++	  monitoring support.
  
-+config BR2_PACKAGE_RTAI
-+	bool "RTAI userspace has been removed"
-+	select BR2_LEGACY
-+	help
-+	  RTAI is unmaintained and has been removed
-+
-+config BR2_LINUX_KERNEL_EXT_RTAI
-+	bool "RTAI Real-time kernel patch has been removed"
-+	select BR2_LEGACY
-+	help
-+	  RTAI is unmaintained and has been removed
-+
- config BR2_PACKAGE_MESA3D_OPENCL
- 	bool "Mesa3D OpenCL support is now provided by RustiCL"
- 	select BR2_LEGACY
-diff --git a/docs/manual/adding-packages-linux-kernel-spec-infra.adoc b/docs/manual/adding-packages-linux-kernel-spec-infra.adoc
-index 22ffc5496f..c7fbb6184d 100644
---- a/docs/manual/adding-packages-linux-kernel-spec-infra.adoc
-+++ b/docs/manual/adding-packages-linux-kernel-spec-infra.adoc
-@@ -98,8 +98,8 @@ the kernel tree, or in the form of new files to be added to the
- tree. The Buildroot's Linux kernel extensions infrastructure provides
- a simple solution to automatically do this, just after the kernel
- sources are extracted and before the kernel patches are
--applied. Examples of extensions packaged using this mechanism are the
--real-time extensions Xenomai and RTAI.
-+applied. An example of an extension packaged using this mechanism is the
-+real-time extension Xenomai.
+ config BR2_PACKAGE_OPEN62541_PUBSUB
+ 	bool "publish/subscribe"
+ 	help
+-	  Enable the experimental OPC UA PubSub support. The option
+-	  will include the PubSub UDP multicast plugin.
++	  Enable the OPC UA PubSub support.
  
- Let's look at an example on how to add a new Linux extension +foo+.
+ if BR2_PACKAGE_OPEN62541_PUBSUB
  
-diff --git a/linux/Config.ext.in b/linux/Config.ext.in
-index 3b72d3cf60..86af4c338b 100644
---- a/linux/Config.ext.in
-+++ b/linux/Config.ext.in
-@@ -44,17 +44,6 @@ comment "xenomai needs a uClibc or glibc toolchain w/ threads"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
- 
--#-------------------------------------------------------------------------------
--# RTAI
--config BR2_LINUX_KERNEL_EXT_RTAI
--	bool "RTAI Real-time patch"
--	depends on !BR2_LINUX_KERNEL_LATEST_VERSION
--	depends on !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	depends on !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
--	select BR2_PACKAGE_RTAI
+-config BR2_PACKAGE_OPEN62541_PUBSUB_DELTAFRAMES
+-	bool "publish/subscribe deltaframes"
 -	help
--	  RTAI Kernel part.
+-	  The PubSub messages differentiate between keyframe (all
+-	  published values contained) and deltaframe (only changed
+-	  values contained) messages. Deltaframe messages creation
+-	  consumes some additional resources.
 -
- # kernel extensions from br2-external trees, if any
- source "$BR2_BASE_DIR/.br2-external.in.linux"
+ config BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL
+ 	bool "publish/subscribe information model"
+ 	depends on BR2_PACKAGE_OPEN62541_UA_NAMESPACE_ZERO_REDUCED || \
+@@ -98,20 +91,6 @@ config BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL
+ 	  Enable the information model representation of the PubSub
+ 	  configuration.
  
-diff --git a/linux/linux-ext-rtai.mk b/linux/linux-ext-rtai.mk
-deleted file mode 100644
-index 50f79f8d50..0000000000
---- a/linux/linux-ext-rtai.mk
-+++ /dev/null
-@@ -1,30 +0,0 @@
--################################################################################
--#
--# Patch the linux kernel with RTAI extension
--#
--################################################################################
+-if BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL
 -
--LINUX_EXTENSIONS += rtai
+-config BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL_METHODS
+-	bool "publish/subscribe information model methods"
+-	help
+-	  Enable PubSub informationmodel methods
 -
--ifeq ($(KERNEL_ARCH),i386)
--RTAI_ARCH = x86
--else ifeq ($(KERNEL_ARCH),x86_64)
--RTAI_ARCH = x86
--else ifeq ($(KERNEL_ARCH),powerpc)
--RTAI_ARCH = ppc
--else
--RTAI_ARCH = $(KERNEL_ARCH)
 -endif
 -
--# Prepare kernel patch
--define RTAI_PREPARE_KERNEL
--	kver=`$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelversion` ; \
--	if test -f $(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/hal-linux-$${kver}-*patch ; then \
--		$(APPLY_PATCHES) $(LINUX_DIR) \
--			$(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/ \
--			hal-linux-$${kver}-*patch ; \
--	else \
--		echo "No RTAI patch for your kernel version" ; \
--		exit 1 ; \
--	fi
--endef
-diff --git a/package/Config.in b/package/Config.in
-index d3bef2d5f0..06ea65c6f4 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2733,7 +2733,6 @@ comment "-------------------------------------------------------"
- endmenu
- 
- menu "Real-Time"
--	source "package/rtai/Config.in"
- 	source "package/xenomai/Config.in"
- endmenu
- 
-diff --git a/package/rtai/Config.in b/package/rtai/Config.in
-deleted file mode 100644
-index 14b1854837..0000000000
---- a/package/rtai/Config.in
-+++ /dev/null
-@@ -1,8 +0,0 @@
--config BR2_PACKAGE_RTAI
--	bool "rtai"
--	depends on BR2_LINUX_KERNEL_EXT_RTAI
--	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
+-config BR2_PACKAGE_OPEN62541_PUBSUB_ETH_UADP
+-	bool "publish/subscribe UADP"
 -	help
--	  RTAI - the RealTime Application Interface for Linux.
+-	  Enable publish/subscribe UADP over Ethernet
 -
--	  http://www.rtai.org
-diff --git a/package/rtai/rtai.hash b/package/rtai/rtai.hash
-deleted file mode 100644
-index f2eb7f33ad..0000000000
---- a/package/rtai/rtai.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally computed
--sha256  57acd3ad46cc8f1e01dc21089a24587c59e7328cbac06abb62bb0152de0b9df7  rtai-5.3.tar.bz2
-diff --git a/package/rtai/rtai.mk b/package/rtai/rtai.mk
-deleted file mode 100644
-index 6e189bf27b..0000000000
---- a/package/rtai/rtai.mk
-+++ /dev/null
-@@ -1,32 +0,0 @@
--################################################################################
--#
--# rtai
--#
--################################################################################
+ endif # BR2_PACKAGE_OPEN62541_PUBSUB
+ 
+ endif
+diff --git a/package/open62541/open62541.hash b/package/open62541/open62541.hash
+index 3beead1a20..fcf8f26412 100644
+--- a/package/open62541/open62541.hash
++++ b/package/open62541/open62541.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  a8719f299505b144bd68bf557ad0b023fa28faf8862ff2d0b171381c8bd278c3  open62541-v1.3.15-git4.tar.gz
++sha256  6c218091f334fc458126635d0c7c3106b47b8f6fedd6c648defe06950654380f  open62541-v1.5.10-git4.tar.gz
+ sha256  fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85  LICENSE
+diff --git a/package/open62541/open62541.mk b/package/open62541/open62541.mk
+index 8d9c5e44bf..ac0a33bf87 100644
+--- a/package/open62541/open62541.mk
++++ b/package/open62541/open62541.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPEN62541_VERSION_UPSTREAM = 1.3.15
++OPEN62541_VERSION_UPSTREAM = 1.5.10
+ OPEN62541_VERSION = v$(OPEN62541_VERSION_UPSTREAM)
+ OPEN62541_SITE_METHOD = git
+ OPEN62541_SITE = https://github.com/open62541/open62541.git
+@@ -58,7 +58,10 @@ endif
+ ifeq ($(BR2_PACKAGE_OPEN62541_JSON_ENCODING),y)
+ OPEN62541_CONF_OPTS += -DUA_ENABLE_JSON_ENCODING=ON
+ else
+-OPEN62541_CONF_OPTS += -DUA_ENABLE_JSON_ENCODING=OFF
++# Event filter parsing requires JSON encoding
++OPEN62541_CONF_OPTS += \
++	-DUA_ENABLE_JSON_ENCODING=OFF \
++	-DUA_ENABLE_SUBSCRIPTIONS_EVENTS=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_OPEN62541_PUBSUB),y)
+@@ -67,30 +70,12 @@ else
+ OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_OPEN62541_PUBSUB_DELTAFRAMES),y)
+-OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_DELTAFRAMES=ON
+-else
+-OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_DELTAFRAMES=OFF
+-endif
 -
--RTAI_VERSION = 5.3
--RTAI_SOURCE = rtai-$(RTAI_VERSION).tar.bz2
--RTAI_SITE = https://raw.githubusercontent.com/mmorandi/RTAI/cb3c52f056559c9aaa54d0e1c8c0b47467ae5f3e/userfiles/downloads/RTAI
--RTAI_INSTALL_STAGING = YES
+ ifeq ($(BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL),y)
+ OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL=ON
+ else
+ OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_OPEN62541_PUBSUB_INFORMATIONMODEL_METHODS),y)
+-OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL_METHODS=ON
+-else
+-OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_INFORMATIONMODEL_METHODS=OFF
+-endif
 -
--# The <pkg>_CONFIG_SCRIPTS cannot apply here to the specificities of rtai-config
--define RTAI_POST_PATCH_FIXUP
--	$(SED) 's%^staging=.*%staging=$(STAGING_DIR)%' $(STAGING_DIR)/usr/bin/rtai-config
--endef
+-ifeq ($(BR2_PACKAGE_OPEN62541_PUBSUB_ETH_UADP),y)
+-OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_ETH_UADP=ON
+-else
+-OPEN62541_CONF_OPTS += -DUA_ENABLE_PUBSUB_ETH_UADP=OFF
+-endif
 -
--RTAI_POST_INSTALL_STAGING_HOOKS += RTAI_POST_PATCH_FIXUP
--
--RTAI_DEPENDENCIES = linux
--
--RTAI_CONF_OPTS = \
--	--includedir=/usr/include/rtai \
--	--with-linux-dir=$(LINUX_DIR) \
--	--disable-leds \
--	--enable-usi \
--	--enable-align-priority \
--	--disable-rtailab \
--	--with-module-dir=/lib/modules/$(LINUX_VERSION_PROBED)/rtai
--
--RTAI_MAKE = $(MAKE1)
--
--$(eval $(autotools-package))
--- 
-2.47.3
-
+ # Remove unneeded files
+ define OPEN62541_REMOVE_UNNEEDED_FILES
+ 	$(RM) -r $(TARGET_DIR)/usr/share/open62541
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
