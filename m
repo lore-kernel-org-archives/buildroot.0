@@ -2,148 +2,150 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2536A606A324
-	for <buildroot@archiver.kernel.org>; Sun,  1 Nov 2026 10:45:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CDD1606A329
+	for <buildroot@archiver.kernel.org>; Sun,  1 Nov 2026 10:46:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=qOBi2CAQ;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=ZfferyWj
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Z92Qo9zR;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=k8GoOWXD
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F0A6980F6A;
-	Sun,  1 Nov 2026 10:45:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 56F2580F40;
+	Sun,  1 Nov 2026 10:46:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 08cJ-n9zpRMB; Sun,  1 Nov 2026 10:45:57 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 0319980F39
+ id qsGJWLlEsCSv; Sun,  1 Nov 2026 10:46:10 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 6ECB080F39
 Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793529957;
-	b=S2AqvQpE7E+VMPAcd0O8EcZduBo9GMRwVT/zhQt48irH9Cic0B7Xx6w64WvyMwz4veVm
-	 R63Q/FRbqf48M73fysFSsqH2rQzayirSbbWam/SD+mvNpSkPbVgf0OmUn0HB2VNSiaPAC
-	 htRN/pafIIRWnc8tlGHYpVOIIfLMKQoMRBWJ3eDagjH95/F6e6W4n7PoyiHWUROEvtOoZ
-	 S310R/XGgtr3GGvU2glhKmi9JPwgmMIbOtB0w1JyM/fYYnqMv4MiVDyTXGuUFifT4sfNE
-	 XWz8CkO4E+9WuboIzDt2wasIV9Pf19eR/N0peTN/6mzApgHllD1k0+prxLmTWGW1skQ==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793529970;
+	b=iiqdcup6hG8vpH+/y1gZCtQnz2tn41I4lyqTBCeY4e0qmJs7k1WauFZDewb3VKscayqR
+	 cUlLndiHoB+fYLhIynwhPKYVx3IksYmrALy9Qz3FwIRtWHF49yp2UECsHlGMiQdB5MTI1
+	 YHnIwB6ftC6qoTnLq3sUsG3kaLSC99xQC8r1JszbTX3aBVHE9A350i0siEvf3QoncEA9C
+	 dNxsbppNePp3t/X4oA/JI4LYmML+X5q3uN380kkAHtfU9V1BvPInn6n+lffnh1XRU4jVR
+	 I3bWqJ7CUM6YAS3xH+Zem54Jh7utjHT3KVsk/54jlE1OiTtPDQgkgEXTuBMuiEHnK6w==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793529957;
+	c=relaxed/relaxed; t=1793529970;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Date:Message-ID:
+	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:X-Spamd-Bar:Subject:
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=HpLu6qIQTTz8oQYmPKOL19IQmODiap5FbvBCEVAnYJ0=;
-	b=b08wigh1r5B4T4hg+QEJNIZ5ViTONqD5qKWNXjROULM8lyCSs2ldOggn1WjD2OiD81gD
-	 A6kolUzxHsqWMd8njV0SsJvNS3tWTsfwawk79PFTqsNA+zorb4tiKkS/6h9m8baL/gyca
-	 3+6lrv12kZstn0RFAh8wienTC6xGv6xyUHzSEYG2MmpVEugXiWbuSsI05F6wNeODyGmvX
-	 AIUHTdbG/+ff/b1c1cX69PjOh2COWcCNW2a2aQfzd7Av21kRPSrndG2mFUwSq2kvmKw2W
-	 KlW4Rv27DgUl0neudx/HHQYk5UtOHUGNRQa0bNX+gFsBv+ddLTx6KhEg3zNVgkPmM5w==
+	bh=gp1XMxGudHHIMyOLb2YRgmeofcJo0y44L0D40oQdf+Y=;
+	b=WL0owbm5zOG9SZSKViJEf+sy9k59ADB384pDTacVAsKFSFKVGE475j17ThISoh8xcZwc
+	 eA4p7LoKZ69AkiD3cI2AfNuF6x9Lr5ZZr9g2BjztcwUVXyC6bcJK+KGfkJjuKa0t4qGaK
+	 H08cwZSljlGfNmZNCFnXChMmGvXbBoFS213KdDVFMJLSSqeTGqFlS0h/nNGEGgN5wdVmH
+	 T+kPk4GvBIY3rkDKUCjAC2o/6LHggs7/uaoxlNufzV1fKXX8VEMdeqCNFp4dbDDf057RI
+	 oENIPHXyko+IBtRW8yxNpfdafRV7mgp9AJk5RbJUVlOHRKLRRls4aaQSZcn23BSGLiw==
 ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793529957;
-	bh=HpLu6qIQTTz8oQYmPKOL19IQmODiap5FbvBCEVAnYJ0=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1793529970;
+	bh=gp1XMxGudHHIMyOLb2YRgmeofcJo0y44L0D40oQdf+Y=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=qOBi2CAQ06oyB7CD4B9iBk1Zw8GGSdKrx/VT1FqpJm6yWIY307r7hRqf7X+Hm+cR6
-	 wssUxmEjbgH2wbEGHkxbizyh3m975SpokXcgIJYqRx41CxLrCJTCVJVYCnzY6IqeOx
-	 YtuRFNBpKYnt4Fc3/wNp/837rFF+VYbKTsbB/diZiDnerSdM7Y7TmnQAge69mTu89D
-	 iblK+IvPLL+FTwZyov2rmv2TV5jBVQO6/KqZpW8UxmN5XKFdwt0OWef+oEKFF2hEiO
-	 08tAll13nLReyMhR49UGCKAliyp2dcWdEG99GjwXjpXe0yDmd3hEdIl2yv0NQGu0Mv
-	 Bm3QitHj6OuvA==
+	b=Z92Qo9zRLsHvWtLN9rc80o7uVy5oIvGDfRgoPyeRyOtGajhIZgcGUmpy8byIGR2k4
+	 xF7sfRDczqq9lpIkmLZMkesg0fSEBWH9w7KZ6DozIgKFER+HvYlP2RkSsDG3mRlW26
+	 JL/ySuokCfajEvDTvJWp51Yg8NNB16vfQJ5QOxA4A+tbcx6azOmhgSoN+IF4EOrMH+
+	 vK4aIBQQfcTBlPdiHfEOv+M1uXAwgK+s3KUaKaouW8yuBBZpei9PlLEAni2hByT6Pl
+	 PM5I537XwCiEeGOfe6Zbq9us/RBaDTyf+esXWX3D2Rc98CbdTQyTjV2w9oamX2C4h7
+	 s5leSWBFpeJaQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0319980F39;
-	Sun,  1 Nov 2026 10:45:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 5DAF72AC
- for <buildroot@buildroot.org>; Sun,  1 Nov 2026 10:45:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6ECB080F39;
+	Sun,  1 Nov 2026 10:46:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BFC23323
+ for <buildroot@buildroot.org>; Sun,  1 Nov 2026 10:46:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4FAE86061B
- for <buildroot@buildroot.org>; Sun,  1 Nov 2026 10:45:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B1A0940602
+ for <buildroot@buildroot.org>; Sun,  1 Nov 2026 10:46:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zWPz0tIcAb1v for <buildroot@buildroot.org>;
- Sun,  1 Nov 2026 10:45:54 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 0AD91605FA
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793529954;
- b=Pk5SOCt4e1GA/FwaUkMI9JecmkeGwzFlxJEO8P8YFEx9mWwZe7WOnQn3aQNLE7fKj3fG
- KU5wAtzFLzV/PqdzARmcawqs787XvsYfXW9X7Fjjl+b6ST9VWrJ1mrapohFuPTZ+D1Qs4
- ctuLPnoNb9OsTe3LXoELPECKCjSsW3vjXjDZbHJeLOxquWX3J/It439WQXR5IbIIE2dx9
- bjXhvHuzyaQJaScGUdZSEZQNAFSa57BEiEC5xpRI/3EASUhaz6PoYrCS+VRzZ9Elvluww
- 98kXNIdLOQl340Jbz3olOJqKtA9p2N6d+mwnCjTJmyodsl3Adr9WdUOP3nyX2466yLQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GKqTCzNvR9Xw for <buildroot@buildroot.org>;
+ Sun,  1 Nov 2026 10:46:07 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org EB7444048A
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793529967;
+ b=NQEtQGWPWkB099RcI+LfsThQdXqZJxh5z+3+YSfunL448MDQN7HIkwVitu1pp0XmubXG
+ W+XLNKwVMrElzrUWtxKA0kbN9mO1Mw33RZRupU/MXO1YlSAOqoLbtH+bNVqoWvqarn7Vd
+ 22edNADtd0el7zaXTME7SkF1GAuXMS29aWcnGUX913OmSjOKaen8HDBOe+399apwHcQhm
+ Yi755C6mY1O0jfWlJUp+TwK3soRtJk5vknN/cy2ozijv100BjV7m86YuYPR1b0JFj9CIs
+ NYvksiY5HqQgx08cg5MBwG+OWyMBtkLod6JuFMAEssumKgmzl5KnRr1RVSJj4k+ENqw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793529954;
- h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:
+ c=relaxed/relaxed; t=1793529967;
+ h=Received-SPF:DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:
  Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding:X-Spam-Score:X-Spamd-Bar;
- bh=Oq9SJMDbHuGn8rf5kcHVz/511Rf1KJHQnSAfFaeIeAo=;
- b=LO+tqaF9YGPXUsTDD4psoOjMf4iyBkaS7mHjoOxOUvc/alvNTNHAwDhUNi82fkcFqJSg
- 0aUUygZZkX+N3qTKZlMNKK9Wrj2tdg/gTobpAZ3RNE/oLi1BAEXpwH5FB21LMKzE37x9r
- w6Tw7alWIkvuV96Ed1nvzLzA5W1Z5HIO8BqR8AX3Mkj8chqNNGGuY0EAzNGwcwwz68NuU
- oFpX3mJPqfGP4OnBBAsOtQLk0iEpkf6au6OljQG3iHiZDNT/Ewb+NLVJ0nwmLYYwlkyOR
- djmPr9HrOtREN7gxXrC+FOj95LFhOQSuCZh0KdT3KEtOzTL12/lhjguIZoHdGbpqIsg==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ bh=tyxlVGooKeRLwf+rzPxjiGmCcTN72VtMSRb3CpWXFyg=;
+ b=YzgvRlgXR3wYdMu1oNPOmlaKDxLYul8eDWmCNl/BGR47lRbGwM3f2800EdaiFw7kaUMn
+ S/msoKFHRXDFjYJYfjyhmVGuqyWobDoij3vbj120QcJKS9AxwmhDGFpnwHVYKBhgHGnf7
+ oHDQQ/5DvnsMeamcB1i+SSrkDWbWUYpHnXAnPYfEkA6VdHyYwt/yKABcRTIrzVvT3luM/
+ DnC6v1JqJB8rMc/5d++6VbdcNNTE2YxrBG1GjU8dr0TLDF306jkyf7kycubeNlCkM1HJp
+ dZIW0t0FMgkkhQiVkMI0s9VpM7Mocjjz9Ru9ZyI4hlc+Z3N52rhS6LYaxZPkyMcniww==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
  dmarc=pass header.from=kuhls.net;
  dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=ZfferyWj; 
+ header.s=kas202605290044 header.b=k8GoOWXD; 
  arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
+Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=ZfferyWj
+Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=k8GoOWXD
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0AD91605FA
- for <buildroot@buildroot.org>; Sun,  1 Nov 2026 10:45:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EB7444048A
+ for <buildroot@buildroot.org>; Sun,  1 Nov 2026 10:46:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1793529936;
- bh=Oq9SJMDbHuGn8rf5kcHVz/511Rf1KJHQnSAfFaeIeAo=;
- h=From:To:Subject:Date:In-Reply-To:From;
- b=ZfferyWj13vgAPYdtgi6TVlDj6OEvG701HOFNeSQsgBA55d9slYJ1BEQKthf6g0AS
- ObBb7uDPDbzJy6I2JHAlhqwjeohCK6HZqAznSwkS3JNupMdYxRGZ8GK3Ld5rKiznXq
- hGE18jddjKzY8VQf4QLu/VaAF8rVqETh6H+dc9iXUAze2hoPT7Q6blSULOzhvs49Sx
- awda1T9mg2uyt51uMHlFLzYvtNYBWcf26prOMbyZ4tTC3C+ufhDB1IRqDrYal0Sl/C
- 8wcF/gB4J/yH3QzSctEdmk5wM+//Or1nBfQHT0g4SETgBV0/PqBFRNEHwFxHb20Nzl
- 8wrjSVTiP5gfw==
+ s=kas202605290044; t=1793529937;
+ bh=tyxlVGooKeRLwf+rzPxjiGmCcTN72VtMSRb3CpWXFyg=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:From;
+ b=k8GoOWXDcQqnh4ar1qAQjCzldGKX72uTaJIE6SlVs6tmNGrDfw+3Xx4BBQzUxTYV5
+ bfYJXKqMssJUJ2PXqo1l9C+d0vmb3+T9QunyaioOKG3LUDKFfc/XTnLzI0tRLE6z59
+ QlIzcn7M3+gjYewgENtKQH/qwW4ZQ2V1Uvuq8IugJ5neC+lajyfUkkDFrB4mp6kgST
+ oLz9rbk0MxcQY5pHoIN5erk3DhhE3w+DmJlgesGTNgvmLj0zVpxZprc71WQbT7WZ2h
+ /eot0FdqbkPqKMAOmgUzIPVobhVvbewkDBjRolwaCLqkmC4p/sbB/oNYEqnBlICsxn
+ IoI8dUWTPu5zg==
 X-KAS-Sym: v3:f51bdf72230551df:ucr7yDXRooWdslSDRqcvcYDSgJhetnl3KDrZuVM6Kywq4
  vP2bL/whU08maPRhLd+FSCef9vnSZC35lHpFL2dy21u4T2gVVboWp98rCs80jHag6st+EioXS7x
  fp1tdFDXbDtnJ8UXvra5BJnUbhuXqz+tTX11gLYv3vjqRDHfVO4gddIYzgUm5doC+RyhT4S553c
  gX7leJ6pvw5lR1uI23sElMEqtBgPRpmIqDE3uej1DHjNW/WV+lJfjXj1EqVcMS5k4/qyOz8UK3z
  idTcP8d8stTEAOnneIvM6kNfsA3Jvuz1xX9hDulWnvZzK+fxs2O8TfNboe1TVIItYWk7tWDA==:
- Z5mKqcoOiiPNp53A2QT3f+WqEuWqXsUw/j9EySCwfyLN76L+THBi2k+aspQXKFwBkctzI6sCGw2
- /7OL9wlVU8vTsKks3Ezw6RjuF6nNa0SydTLUoIIOxlq5hIKlAw8pcl7FfcmPJ+H7k6Whb9NJQus
- JbuIpe+yzRJN9umstQ1uAOD8br4G9OZZGvIowsq3GJag5u1dXdlB4Sp9AKbZBxqnrLkgSwbBEWc
- WoNloI6IKBNzZd2bNSvX0vLVORioQdyePq1CkT3mAHwLy/w7P/IMaRxwypX6YGROE7+2jDyBo5d
- zNT12CKLXB5iPNXhBRxzFlxDwBBy988P3PQIua3mFHQa+svkxDC69PejCOq7UM20vBa3H6MjvvS
- QEviftQTqGEEvvHdJ78PXbBkV0ujGGlVTABDpeuOq6M2aPK8Nteb+saXQB9rMa4HuGEZXekkVvr
- JOi8kx0z9SEXYblRlFmzT8pfitceBdm94jqR0tRiTW2y+JgkS4gI/cjwFf8I3aihL9d3o/7UpTj
- iXouQwIfiYjCLwIKhOmwhmamqTUBBG+iXeBIUrIBw7yoykAbp7hWzZTElg9Av2z1KJN9UXQETPC
- CFXqog==
+ 0MxNeN8XO+UcRAQlPebdvkLKxTD823nBnCVxmAAF3mK+32Nmw4a9YP8Zd4NGJYKzcqEUni0TQHx
+ Wc8axuaXfJ4jDs4oPDigXm/DCHIbfCFz/YcPftwWRUCgr0R6MF5BS2cNVmSq6BfNoGCWy3d0nbJ
+ KvAL2nX5Bk7yXrrzkbdYV1HPrOe0C4nsGNAz3U1LtunMZqIh/taudHCtRauPVQE1Q0hrCb6hwNN
+ 1Wn8s/gjVxbcPpHtZK3gt07O4NF3ybcyfB131LtJ6r8P271C3kA4PyMQbammxsNI33Y5hyxwR9q
+ 0xeqlLZ1oLZWQfYRwsIiM0rnuGf7dYDp691lBY09GYQ5YwHQUjNmqJNUDa+/uXumTn9RCiLmXGu
+ mGivAmEUYrbTma/P69szPtnNLxwx9ibRiJWMVXLLjU4qrsJhE8d8rsvoj23buJ5G1oKM2BafMci
+ rI7t2TRVKGkR4FTSA5BLuWzWUDO342PpXM9ng+o0JrCyrVWn5/w2I0hCsX5cDahB9HecwAqdDxS
+ YUYcQ+awDEVJYId8NLgqs+dzYzEmEPJ3QOmAYpajfJi56WH8A36HFV0THIPTqEdwGUdXFh0gbny
+ NkpUF3cabaKHhf+Wy8xPEtvOvueF4gbSWW55I8K1CoOS590HwETRJS6rzfs89hs=
 Received: from fli4l.lan.fli4l (p54a1b880.dip0.t-ipconnect.de [84.161.184.128])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id E6193A4C00C6
- for <buildroot@buildroot.org>; Sun,  1 Nov 2026 11:45:35 +0100 (CET)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 80F32A4C00EC;
+ Sun,  1 Nov 2026 11:45:37 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:47698)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xNT4B-000000004Gs-3K5H
- for buildroot@buildroot.org; Sun, 01 Nov 2026 10:45:35 +0000
+ (envelope-from <bernd@kuhls.net>) id 1xNT4D-000000004Gs-1mCS;
+ Sun, 01 Nov 2026 10:45:37 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun,  1 Nov 2026 11:45:30 +0100
-Message-ID: <20261101104535.1696412-2-bernd@kuhls.net>
+Cc: Kieran Bingham <kieran.bingham@ideasonboard.com>,
+ Marcus Folkesson <marcus.folkesson@gmail.com>
+Date: Sun,  1 Nov 2026 11:45:31 +0100
+Message-ID: <20261101104535.1696412-3-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261101104535.1696412-1-bernd@kuhls.net>
 References: <20261101104535.1696412-1-bernd@kuhls.net>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-X-Spamd-Bar: --
-Subject: [Buildroot] [PATCH 2/6] package/gstreamer1/gst1-libav: fix build
- with ffmpeg 9.x
+X-Spamd-Bar: -
+Subject: [Buildroot] [PATCH 3/6] package/libcamera: bump version to
+ v0.7.2-167-g8fe1f4514
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -158,95 +160,47 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-16.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
- ...av-Fix-build-failure-with-FFmpeg-9.0.patch | 72 +++++++++++++++++++
- 1 file changed, 72 insertions(+)
- create mode 100644 package/gstreamer1/gst1-libav/0001-gst-libav-Fix-build-failure-with-FFmpeg-9.0.patch
+The releases of libcamera-apps and this package are not synced feature-
+wise. To use the newest release of libcamera-apps, version 1.14.0, we
+need to use a git tree newer than the current release 0.7.2 of libcamera.
 
-diff --git a/package/gstreamer1/gst1-libav/0001-gst-libav-Fix-build-failure-with-FFmpeg-9.0.patch b/package/gstreamer1/gst1-libav/0001-gst-libav-Fix-build-failure-with-FFmpeg-9.0.patch
-new file mode 100644
-index 0000000000..31899e0a48
---- /dev/null
-+++ b/package/gstreamer1/gst1-libav/0001-gst-libav-Fix-build-failure-with-FFmpeg-9.0.patch
-@@ -0,0 +1,72 @@
-+From be9bdb67f4fc868977f1f74e95b6ebe19ef792ec Mon Sep 17 00:00:00 2001
-+From: Reilly Brogan <reilly@reillybrogan.com>
-+Date: Tue, 4 Aug 2026 12:09:11 -0500
-+Subject: [PATCH] gst-libav: Fix build failure with FFmpeg 9.0
-+
-+Closes https://gitlab.freedesktop.org/gstreamer/gstreamer/-/work_items/5251
-+
-+Part-of: <https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/12217>
-+
-+Upstream: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/be9bdb67f4fc868977f1f74e95b6ebe19ef792ec
-+
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+---
-+ ext/libav/gstavviddec.c | 15 +++++++++------
-+ ext/libav/gstavvidenc.c | 15 +++++++++------
-+ 2 files changed, 18 insertions(+), 12 deletions(-)
-+
-+diff --git a/ext/libav/gstavviddec.c b/ext/libav/gstavviddec.c
-+index e21f3e1558..39335d98b1 100644
-+--- a/ext/libav/gstavviddec.c
-++++ b/ext/libav/gstavviddec.c
-+@@ -2677,12 +2677,15 @@ gst_ffmpegviddec_register (GstPlugin * plugin)
-+       continue;
-+ 
-+     /* no quasi codecs, please */
-+-    if (in_plugin->id == AV_CODEC_ID_RAWVIDEO ||
-+-        in_plugin->id == AV_CODEC_ID_V210 ||
-+-        in_plugin->id == AV_CODEC_ID_V210X ||
-+-        in_plugin->id == AV_CODEC_ID_V308 ||
-+-        in_plugin->id == AV_CODEC_ID_V408 ||
-+-        in_plugin->id == AV_CODEC_ID_V410 || in_plugin->id == AV_CODEC_ID_R210
-++    if (in_plugin->id == AV_CODEC_ID_RAWVIDEO
-++        || in_plugin->id == AV_CODEC_ID_V210
-++        || in_plugin->id == AV_CODEC_ID_V210X
-++        || in_plugin->id == AV_CODEC_ID_R210
-++#if LIBAVCODEC_VERSION_MAJOR < 63
-++        || in_plugin->id == AV_CODEC_ID_V308
-++        || in_plugin->id == AV_CODEC_ID_V408
-++        || in_plugin->id == AV_CODEC_ID_V410
-++#endif
-+ #if LIBAVCODEC_VERSION_MAJOR < 61
-+         || in_plugin->id == AV_CODEC_ID_AYUV
-+ #endif
-+diff --git a/ext/libav/gstavvidenc.c b/ext/libav/gstavvidenc.c
-+index 2ae6a1b451..b8e010e70c 100644
-+--- a/ext/libav/gstavvidenc.c
-++++ b/ext/libav/gstavvidenc.c
-+@@ -1025,12 +1025,15 @@ gst_ffmpegvidenc_register (GstPlugin * plugin)
-+       continue;
-+ 
-+     /* no quasi codecs, please */
-+-    if (in_plugin->id == AV_CODEC_ID_RAWVIDEO ||
-+-        in_plugin->id == AV_CODEC_ID_V210 ||
-+-        in_plugin->id == AV_CODEC_ID_V210X ||
-+-        in_plugin->id == AV_CODEC_ID_V308 ||
-+-        in_plugin->id == AV_CODEC_ID_V408 ||
-+-        in_plugin->id == AV_CODEC_ID_V410 || in_plugin->id == AV_CODEC_ID_R210
-++    if (in_plugin->id == AV_CODEC_ID_RAWVIDEO
-++        || in_plugin->id == AV_CODEC_ID_V210
-++        || in_plugin->id == AV_CODEC_ID_V210X
-++        || in_plugin->id == AV_CODEC_ID_R210
-++#if LIBAVCODEC_VERSION_MAJOR < 63
-++        || in_plugin->id == AV_CODEC_ID_V308
-++        || in_plugin->id == AV_CODEC_ID_V408
-++        || in_plugin->id == AV_CODEC_ID_V410
-++#endif
-+ #if LIBAVCODEC_VERSION_MAJOR < 61
-+         || in_plugin->id == AV_CODEC_ID_AYUV
-+ #endif
-+-- 
-+2.47.3
-+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Cc: Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>
+---
+ package/libcamera/libcamera.hash | 2 +-
+ package/libcamera/libcamera.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
+index d1d7576533..1caad4f40c 100644
+--- a/package/libcamera/libcamera.hash
++++ b/package/libcamera/libcamera.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+-sha256  7c5728f6a51d717542cfdd2ff368ac78fa2e50e8a7360a38bb37952e9293e008  libcamera-v0.7.1-git4.tar.gz
++sha256  58864d3ef4f14661187ce9871e2a2d38d6f0e89c76b6beff2f663021130359af  libcamera-v0.7.2-167-g8fe1f45140bace32677b1f7b9a17ae3b4fa85a59-git4.tar.gz
+ 
+ # license files
+ sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
+diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
+index 256909ebc8..03c31eabb8 100644
+--- a/package/libcamera/libcamera.mk
++++ b/package/libcamera/libcamera.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBCAMERA_SITE = https://gitlab.freedesktop.org/camera/libcamera.git
+-LIBCAMERA_VERSION = v0.7.1
++LIBCAMERA_VERSION = v0.7.2-167-g8fe1f45140bace32677b1f7b9a17ae3b4fa85a59
+ LIBCAMERA_SITE_METHOD = git
+ LIBCAMERA_DEPENDENCIES = \
+ 	host-openssl \
 -- 
 2.47.3
 
