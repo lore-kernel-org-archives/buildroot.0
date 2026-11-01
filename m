@@ -1,28 +1,28 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA744606A325
-	for <buildroot@archiver.kernel.org>; Sun,  1 Nov 2026 17:08:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B290606A324
+	for <buildroot@archiver.kernel.org>; Sun,  1 Nov 2026 17:08:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=pUoIqXkC
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=R5ihTFI2
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A80D980E28;
-	Sun,  1 Nov 2026 17:08:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2363B60749;
+	Sun,  1 Nov 2026 17:08:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bcKzpFks8tgQ; Sun,  1 Nov 2026 17:08:01 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org ACBA480E07
-Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793552881;
-	b=XxeAWhN5S4+brSJ9Q6fz7Z2VkM59sAgfu84rLbJS1AkrxVF86Rf6kpvFQIhrq5n0QiT3
-	 EkvAW9AvA+7dT5bj0OhFDFjTPR5VPiLcawX2KyMxBwvafd4p448fawKvxA9gA2PT1p0qy
-	 xfxewlTluTnDPDTg0YvAe7pmSqtzTpxRqBpKqlS11DeIOVSY5j2TbWzW1jtnCPor2IuvS
-	 6vZWbEeH95gh6LkxTu3YEd8RkV4oxC/BI4cv5wrz03p15QCuWfAU3IACRaqj9uFSYyBep
-	 TGFCAgiVrOMBtDh7ZtMN0R+ve5Ttrl71wn11FUmou47ByRmDLK+FX7bKYFWO0n9KjSw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6wCiUCIbxNb3; Sun,  1 Nov 2026 17:08:03 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 0F98360705
+Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793552883;
+	b=NeKiFAMdLip7FM3Pj/Qs1uVQlnRGXPDfIGCDTGS8fyw6qTsu1JDfeBBqhcTHx0M70cb8
+	 OdHDgyiBjofl2OR4NAwEUlgeqWBp9Mi/byvEhk7GtzegAtw5dYHwWtmL3Qr01WMsrVznN
+	 hFVb5FY+0Yp3GdRbDobud5vWX5v0/amLJ5WvSjSx6U+JYU99Dy4NIEZMzMBXFUB7gZKWi
+	 o39iXvbWPdbikHGDsHbnWHLbRI1uHsKDfx5yOKLxbO93J6AbeaBgEE5ScivdPpmNptX9I
+	 /NpAbMOxQKHAePv5sVbpzF2AA9r6uwsdNH965neln6BMOdFGO7wYagnJCh1NYqS6Hqg==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793552881;
+	c=relaxed/relaxed; t=1793552883;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,76 +30,76 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=yKENa4cIp59UWY3ZJGzu7Ermrn9Yom955WsXjs3+JHM=;
-	b=ehKcoYC0tYRa0DFne7/gg0yaQf2uH0NNzJyfaP526yvWyhKLRwoqJSFUXALAQXcRmmH/
-	 hcqpzNQN0TPr2UNwBFqhPZxxempSdDblw/hRB9P3lHOGIbjW7b/OcmrUeT/lnMKPq3Y5F
-	 PIpDeGiZeFlFvGu0fHbKt9XjZe+rrVR5c4YdQE+PX9Jk+qBDb5E2Rkc5npP0EOAqz8v5S
-	 70fd1gxhXPHMG4lf6v6edM0XQbbJ3Vd+UywQ1AtgtkGgjpN5pFa1eKleR36TdFS3NCClF
-	 3ctICjO20Q4iNyVRXtyVvClZsjUO3eRIg4z6adLlSN2NV47ng/Wn52Nhp1LQo6Lll9A==
-ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	bh=qbQJmdN9P7n1ySo4tRZ5nZA50A45ihXCcLlkj9S1aPk=;
+	b=nYF1w4Du1uLN+L8VewBZKGsCIDSt26o/zTR38BCOkZQtUGRx24uuzgFIGe9n2veTisE5
+	 69uR47r39p2SdBzPyEdhLFAHQI+XRUPqnKQt9JJ618NIEF42/WVzs4AtA36yEVZC2ZI+Y
+	 RZjvy8RE1ovCVHPI4rqvidLI+Sgzex4Qf69CKPYS8fgDBWJYE8Ulye0wQF0lk2xnxqjj/
+	 VpCfMjDWiJp8VOl4eDS5n6YTWpj6yzsd53MKDa7mfeVPT0xAKAIv2HU2DenXoktSrR/HJ
+	 ew9vceBl+N/l6fWKEeoNyz/cisAbHaGrstEEm9VFlQixRCagSbS5jqoVfUJq/AzOOFg==
+ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793552881;
-	bh=yKENa4cIp59UWY3ZJGzu7Ermrn9Yom955WsXjs3+JHM=;
+	s=default; t=1793552883;
+	bh=qbQJmdN9P7n1ySo4tRZ5nZA50A45ihXCcLlkj9S1aPk=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=pUoIqXkCuG9ylO01mwsRwLKBqz2+YWmy80g5KOCExP7tm6/SSDnN63nBBWBpfUIVv
-	 Rvabq+pyHSQqWVEd5FA8xvRu1J587jsaYh0DLotkDNRStShC0p5gmtucWO4noqxaSB
-	 JjShov6YeAJ85RfqplZyuBPRJak2+zuN5TRhVRzED8uQwvGYZgg+rstK0KLIrME1ue
-	 F69+I8xuubpqzWcmiyfd/kP2LxBdPqdzP6KRzvY7Da9Q76blt5JJl4KG5pmN+HzIY2
-	 TlNwIT/2il4Hj5bExpis3x1sQFDgWlDRIeyztg+TewoyzupWxiUQ2McnaC75KT0e+P
-	 qzJ/xKgjn6EFA==
+	b=R5ihTFI2WuCEWcjmBS1f4Y5KUiO0fWtnLOz9k/OWU2/8n66Y3rrdt+J1Qx4vNxr/F
+	 yGBk5qHvxLgodPWYmxJPTdUVs3BUZvX83wAjnXifGLqm+1t5P9k49vh1SJWan8FVxE
+	 iAHKSsolSbf8oc+9qYCGqLP9gO4tM0EMnY7M5XEhkNLJfa2KBMi5DM/Uo2B8CpK0ba
+	 tZd85NvtRWRK6d0JaZoKe2LcgeUNToy1iZyjv+J8ViXFrpn6accNjkbZcqQ9hZtTUt
+	 QzABth1qtrpmXme7QnWvyBvMeQk39wicY5i1ouVDuGOSQxBW0wSmGkE6fA8G4JC6iB
+	 Uc9Hn2j/tAQ1Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id ACBA480E07;
-	Sun,  1 Nov 2026 17:08:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0F98360705;
+	Sun,  1 Nov 2026 17:08:03 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 68494EF6
+ by lists1.osuosl.org (Postfix) with ESMTP id 8A2AA2AC
  for <buildroot@buildroot.org>; Sun,  1 Nov 2026 17:07:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4A53C80D3E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6FA4780D1E
  for <buildroot@buildroot.org>; Sun,  1 Nov 2026 17:07:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 03XcdQpcHGFV for <buildroot@buildroot.org>;
+ id iJypoShcurIp for <buildroot@buildroot.org>;
  Sun,  1 Nov 2026 17:07:19 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 7549580D6F
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 7F52280DB8
 ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793552839;
- b=oFgntUFhcdSi2ouPcpdaRSt6w3W99U+IKdkb2qfhyPhcS56cjokdywVmvwqxFx8QxUQE
- 1wRhUb3HjcmY6GrxoPBfqc6uDye3+/wzXP4KLcgCfrwWs0AEojQ4UAJKoiG7LMgl0Prdb
- e4IYCmkxXnHFx0et9ENDJgv50+Kzql/sHRKrjXGhJ4SbbkYNvH5x39+E+NHZgCLiEQTJV
- PQ8847IobWl+rIrGh/zKZxeRhKBdSZrFKTRMNQK/N12g43KCmNLw7ByV/otMhpUcpfM1x
- H6bOXflbs80KauxkzS8pN+r/PWvA/1xx4SDxh9CBuG0C+4iQPqjI+6dm6r0UzdeWcTg==
+ b=UXDN9r4C1M6rGQSJkNIM0fTfz86qUxMR8xB8+CWBEQeFtLKQ7pHbO5aHooEc2u3SxJH6
+ gQNLG6Q22qEQ+W53+5506wCnEdWn4GlF7QgYaPrX63FPPQkoVg02JIBb8tpFVfCo+M9W/
+ hh/8WfqHDy+u+aGHxhGXH/TkiUflfpPJxSMWnhidz9lXewjPph9MiQCM5NE/KimIkI++O
+ ugO/71L9XHIlz4/Q4IwcRsA3oYbpAT5NMfTVQbTVAt1cI2PiaUF2iLo66pfqvoLOrFr6j
+ dPRYZMLFAT0Ne5E50d4zz3VsYsSmCAK9V7SNoVxcWPqEkwHUPj98topiLl6QmKcZaaw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
  c=relaxed/relaxed; t=1793552839;
  h=X-Comment:Received:From:To:Date:Subject:X-Git-Refname:X-Git-Oldrev:
  X-Git-Newrev:X-Patchwork-Hint:Message-Id;
- bh=4MQx3Wl/wP6uaYsnzHNB+78WDSFCyQxtbhfVNLT7KQc=;
- b=oW7nbRF6Lh/MJ9bAUS54dRfROYISP3wljvPpe0t/zOOhFRY3Oeurd5tkM5Dg174o11ZJ
- vWEzQvRYkTjKOvjKwps1TXQIbh7Kvd0nmuPKaIbu7zMNo2iJDzgIjaCOgbkVhem4l/Lgy
- 2O/7MgKzr4i85o+NFCTjtmqso/ry24liVMBkqWFIkaAUVNpb51TtFFZCnuYGMy+wyY73s
- m28NsSx0eNYJtcvgOiONKOONLMM0jmlOhaifJTDJiP5vklxzK8rr+DTnnLMYNOni10iiB
- 7ZInuO9O2uwy3qwVnkx21yLP8j2pMN2uL7wRf0fnERVd8NXfQtmYItUA+CwKjqUS0SA==
+ bh=Ug3ZHHK3OKQprZJ3W50IPv31oS+i4SrIz4eer4g+PQc=;
+ b=fD+dRZexti85PamRsn347f7DqTxNzGkT+Gw+q8rEONjcBOxL1Q94i5+gv5+BOmi6kXlD
+ eZCzgr+pyTZt8cMC3wreMbMU8Yt/9TljL9uCQXr68IVsdcCLDwnMzQeu8ZLqoqdsEsmck
+ 7M4eWTwbNVBd2dAy5oRz+CEnz3ecf+hbiN7xqygog94Tddu7a0i0/U9hDefsd2nUDuwbQ
+ +RfI+3ZPupkGOM+B/sXzAvZxaM/+gu8l8DsmPd9QYk4DnIzB0qcnagdJEGd4TbHzhDcTy
+ dYc8EfB/ET2KGibz3CTJa2rDlEvtXAqlNaWvKhUPw8O6ZZuhtqM3RqUrirTmsewxIJQ==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
  arc=none smtp.remote-ip=140.211.167.122
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7549580D6F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7F52280DB8
  for <buildroot@buildroot.org>; Sun,  1 Nov 2026 17:07:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3FBCE9D4FC; Sun,  1 Nov 2026 17:05:50 +0000 (UTC)
+ id 4D22B9D3FD; Sun,  1 Nov 2026 17:05:50 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Sun, 1 Nov 2026 18:02:11 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c8c29172a96924d8aa6a1a76b1b788620b9d763e
-X-Git-Newrev: 27d507121ee4b1e6a9ba490b2c907e30742ddbc4
+X-Git-Oldrev: 27d507121ee4b1e6a9ba490b2c907e30742ddbc4
+X-Git-Newrev: 20e04161a3d5255a349d964b2eef98df3454c7e9
 X-Patchwork-Hint: ignore
-Message-Id: <20261101170550.3FBCE9D4FC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-grpcio: bump to version
- 1.85.1
+Message-Id: <20261101170550.4D22B9D3FD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-grpcio-reflection: bump to
+ version 1.85.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,49 +118,49 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
-	autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	TVD_SPACE_RATIO autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/27d507121ee4b1e6a9ba490b2c907e30742ddbc4
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/20e04161a3d5255a349d964b2eef98df3454c7e9
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-grpcio/python-grpcio.hash | 4 ++--
- package/python-grpcio/python-grpcio.mk   | 4 ++--
+ package/python-grpcio-reflection/python-grpcio-reflection.hash | 4 ++--
+ package/python-grpcio-reflection/python-grpcio-reflection.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-grpcio/python-grpcio.hash b/package/python-grpcio/python-grpcio.hash
-index c230f68918..dc3c9edf65 100644
---- a/package/python-grpcio/python-grpcio.hash
-+++ b/package/python-grpcio/python-grpcio.hash
+diff --git a/package/python-grpcio-reflection/python-grpcio-reflection.hash b/package/python-grpcio-reflection/python-grpcio-reflection.hash
+index 42540564d2..1f5b56f58b 100644
+--- a/package/python-grpcio-reflection/python-grpcio-reflection.hash
++++ b/package/python-grpcio-reflection/python-grpcio-reflection.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/grpcio/json
--md5  1c5d46ea8d18b15a69b59a4f9dcd70e9  grpcio-1.84.1.tar.gz
--sha256  446e7876b9b991fa124c1d414899fa7cf95f89a3e71237ea0161863dc0b2c09f  grpcio-1.84.1.tar.gz
-+md5  377e93eb40a0f013f7a892f18a319710  grpcio-1.85.1.tar.gz
-+sha256  5f530287d5de5f7f66089ead81de44f6787162944dab3922efa65dfdff108a1d  grpcio-1.85.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/grpcio-reflection/json
+-md5  fcc7b785c8283697cba440e9c32e6260  grpcio_reflection-1.84.1.tar.gz
+-sha256  09d72642fbabaf45f8fb9c86b0d3cf45945fb7c7c1c4a2dd3321dfdb05cbe2f8  grpcio_reflection-1.84.1.tar.gz
++md5  732c4dde3cbd777dc44d0fcdfa20acc7  grpcio_reflection-1.85.1.tar.gz
++sha256  a3257f35cc817e372cfe330ba3411fc0c61f23b09a94dd2d8f91185955c5533c  grpcio_reflection-1.85.1.tar.gz
  # Locally computed sha256 checksums
  sha256  58c86a3f2b5cca0ebdf9ed3e7f4e6dc38e3b38796d8c3dc92064c62a4e39d0dd  LICENSE
-diff --git a/package/python-grpcio/python-grpcio.mk b/package/python-grpcio/python-grpcio.mk
-index fcd6503199..9a2e1a2103 100644
---- a/package/python-grpcio/python-grpcio.mk
-+++ b/package/python-grpcio/python-grpcio.mk
+diff --git a/package/python-grpcio-reflection/python-grpcio-reflection.mk b/package/python-grpcio-reflection/python-grpcio-reflection.mk
+index 1b5f909727..f21b8d5e91 100644
+--- a/package/python-grpcio-reflection/python-grpcio-reflection.mk
++++ b/package/python-grpcio-reflection/python-grpcio-reflection.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_GRPCIO_VERSION = 1.84.1
-+PYTHON_GRPCIO_VERSION = 1.85.1
- PYTHON_GRPCIO_SOURCE = grpcio-$(PYTHON_GRPCIO_VERSION).tar.gz
--PYTHON_GRPCIO_SITE = https://files.pythonhosted.org/packages/c0/3a/5c8e0eea2af3d30cb20d33ac325a98d9b799c069d63101ca4da20bcc776a
-+PYTHON_GRPCIO_SITE = https://files.pythonhosted.org/packages/f0/03/f9e805772d4d01da2a1754a5f63c58601eacaf8f1e878729217188de7d16
- PYTHON_GRPCIO_SETUP_TYPE = setuptools
- PYTHON_GRPCIO_LICENSE = Apache-2.0
- PYTHON_GRPCIO_LICENSE_FILES = LICENSE
+-PYTHON_GRPCIO_REFLECTION_VERSION = 1.84.1
++PYTHON_GRPCIO_REFLECTION_VERSION = 1.85.1
+ PYTHON_GRPCIO_REFLECTION_SOURCE = grpcio_reflection-$(PYTHON_GRPCIO_REFLECTION_VERSION).tar.gz
+-PYTHON_GRPCIO_REFLECTION_SITE = https://files.pythonhosted.org/packages/d8/16/dc6673110945d3d2a17d862516b67e0237dabdbaaa6ea1c8ccd76fb704b1
++PYTHON_GRPCIO_REFLECTION_SITE = https://files.pythonhosted.org/packages/3d/57/6dd3f295af8c5b0516ae58b252fad8f07eb18c13b6e81db04b3537740574
+ PYTHON_GRPCIO_REFLECTION_SETUP_TYPE = setuptools
+ PYTHON_GRPCIO_REFLECTION_LICENSE = Apache-2.0
+ PYTHON_GRPCIO_REFLECTION_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
