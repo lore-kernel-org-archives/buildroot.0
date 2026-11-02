@@ -2,28 +2,28 @@ Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1215A606A326
-	for <buildroot@archiver.kernel.org>; Mon,  2 Nov 2026 13:16:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13B42606A327
+	for <buildroot@archiver.kernel.org>; Mon,  2 Nov 2026 13:16:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=cnFzhRsb;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=B4DuORa5
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Y/JdQ1pS;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=st8bVr9q
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7274E60661;
-	Mon,  2 Nov 2026 13:16:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 28639607DD;
+	Mon,  2 Nov 2026 13:16:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9-DTEAUjAiwn; Mon,  2 Nov 2026 13:16:25 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 4630460788
+ id EyZa4iv3LoWK; Mon,  2 Nov 2026 13:16:28 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 984E9607EB
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793625385;
-	b=RBunqPjtDGJX79QrIqiDzeD9wTcGj00QoEHhNCyorrBp4t2NNbjdzT2GpPZdFHsWsGGe
-	 Tc3LzM1r326V1ZW56Th/RCn5lkFF2ddi+g5C1fqpU3+zlWGs2zSXCYPIhzIEILgQM5Jkz
-	 jS9zkLXd5Nv7ndWZ34p7l5iPVZQMBSii7XJag3YwWhhbeXzKn0T2ao7uUbiW00v9Wv5K9
-	 nw0x/S7l37xeU0dVq5PWcd4t/aUnXceclViWruk7XYJXgOWIlG3J9hzA5cqMpXD4dk2/t
-	 aosyJ4bNFiT7sh+fqjZv1E3hBsk7UWVSZIDknJfVKI7QRZ0N5XwAFHSjuHxNQh8gknA==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793625388;
+	b=TAp8bAA9c1x58GT1VmcErcmXb01EFIJGdxrxN3FJo0xb8KmgeqH3d0uon7A/xgzu1SLb
+	 WSaH7yddWbk6fdWXjpfJlkcLDb6noVNUffwhN4Y+d4X5U3YJ0aHP8dPB5Vt7q5z1KN4qP
+	 Ds3VXnhbIkJSVzdFzZpbDKMSOfB50WtUCJyNTyiySVU9QmNZi5WcyUUXzqkrPgo/m8vvB
+	 x/rH2VqFVRs3iBE5bIcnps+DAWAZAf9OT0jq+DPj2kbo0QcG4QQ/mLGR2mnzeDmPjPkdt
+	 UguPsZKkQ2F8TujzHcTmLXu/QFafk5LPPa6PsEIAmMXL1sgZXPbU0gtE5T0qz2jrF1w==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793625385;
+	c=relaxed/relaxed; t=1793625388;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -33,140 +33,140 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
 	 Sender;
-	bh=qn6TE3VxBoyqj8FmazjM2QLEuQrRPthNHPQBUpbOF/8=;
-	b=Qt3yBjaerzquYzw/F33OR5Wv3VEuT3XidKAD0hKATqfPnkljnqeTk7arHeXW57r6GelP
-	 5XdcPQ64XHL5FYvZZ46rLbrsgw+iqEAPLCkb5UBX1wBQS1gZTG5deUdOs+lnZDcM1CCow
-	 sYU1zwzbg15pCnCaWhJ+qcuzAiE5yH06hpsE0iFZNmSONv3mDLl0+6m23fNdH3Nv+JGJZ
-	 nUFwZJkMJiQVV54zfOH+QD84bnajfzvyJhvwHWuJSnZaEyqOeB/twM1O1Q8m93YYnT2gR
-	 BF+KFfjekY056dfNKkYD9v3S+uAOMM5enzymh2Zjcn3kwmmSVvCCcflQYMKypEFeg3w==
+	bh=wvpuTE3taBv2jvmU41tE60liOu131Ipa5vbP8Lkz6Kg=;
+	b=YpaPtBD/raZpQX/oJKZhrLBZ2IzLX5x9IK7g5Jzri629HZTSkh3xbl3bGeqglmrE+Qg7
+	 P46dghChVMLoUozGvVjXgjKV91o59R7Pi4yAvi3+BHhPo/eX9jiM7waBw6RK9xzPsqO2I
+	 JvPj0qjoOsMtvSZ/5IEZsZIq8TwtxQpJgDCUfnj0uZtwqN8OfVNeBJsRijOWEI31bV5O8
+	 HwmjV0xhpOMrr9CrTvChb+YJyO92Aynrwa1CcHDIWaC+VGMi4rp+lchIE764dqiSU8npc
+	 dvVN2f4kJm9CxDW84hlyCtVsjTup4i4OJVKElO/nrEzblkC9W7GZMDWQZDAtO2YIuMA==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	dmarc=pass header.from=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=B4DuORa5;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=st8bVr9q;
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793625385;
-	bh=qn6TE3VxBoyqj8FmazjM2QLEuQrRPthNHPQBUpbOF/8=;
+	s=default; t=1793625388;
+	bh=wvpuTE3taBv2jvmU41tE60liOu131Ipa5vbP8Lkz6Kg=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=cnFzhRsbAqQQmw7ukigcrhl81Koz/CTgf3rPufuCTlxRY8o7BFB7VqtSi7S6f7EH8
-	 NZbwKyr6AhqRrfjY2pz4t3Iw90tKhxjKwx/wsRb8WhIEFCU7l2FvBCCGZd3uwEBRpy
-	 Wm+9Did1+Xzu386mYSmDFIGg2u+c8jIVIVAEBZjj8HxmuufQDYUVhLQXnhemv4Df8N
-	 994plAdEH9Aq4chgigUX5vRPRlpoDhqDDEQjKsuXhliCyhn73KtZ+8+vauOGExDEOa
-	 T9DrqMaGxK4TRR6e3LN1YH2KfWXzSxlzYFbIEk5UZ7uE6siGEknX+ogKCweQD9lwoX
-	 1QlbOEYoqPgDw==
+	b=Y/JdQ1pSuJzzzz/7GwHo8XsvnLvGHccJrgUxfZHz3WTKPZHLpTr7bV+4h5ViUUZZn
+	 ySDNqQ8h3/Kxf6X51IRFfTsPlAiQLcp+1VRT3r3sCbTLTKo7A4RhmYGFLQsMebDsDp
+	 85B9APM4lC3JZDcZxp2ZlZcvzOCEkXSDIOHKeUykjn2SItu42RNLd9vU3wiwMyLPP4
+	 uL1Nh7vdrWppu55buYkXmaRmIGLkKVUn/tqwAr601fBBFLguDMgRNqLhCehSfpG1jM
+	 2gvGppnayC634E/lJbft54ZqrQgw+Kja4ym5gTTdHipaywwT1E20oWYjx5FkXDOd6z
+	 SvdU90gsx7nSQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4630460788;
-	Mon,  2 Nov 2026 13:16:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 984E9607EB;
+	Mon,  2 Nov 2026 13:16:27 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 225344BC
- for <buildroot@buildroot.org>; Mon,  2 Nov 2026 13:16:20 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 0BDF1411
+ for <buildroot@buildroot.org>; Mon,  2 Nov 2026 13:16:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0755F606D0
+ by smtp3.osuosl.org (Postfix) with ESMTP id E5C91606FF
  for <buildroot@buildroot.org>; Mon,  2 Nov 2026 13:16:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4oGblVrcvSKH for <buildroot@buildroot.org>;
- Mon,  2 Nov 2026 13:16:19 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org D8F5A6065F
+ id pjfvqIPd2AXB for <buildroot@buildroot.org>;
+ Mon,  2 Nov 2026 13:16:20 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org B9E1960661
 Authentication-Results: smtp3.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::42d"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793625379;
- b=bh4rHsPnfbLzlgOryfLeg+5WIKhvUFuos9w//Y3GDPXfLNRgX4L4qf8ZGkJQw0A+JSyE
- WaAJ8Ky/+JM7XFGTApTdUDvC9isOg9CRKyAR0+tJyYCIeAVT3dCK+u0K+AaLazbND7GWT
- 1QUva99bnxo1lyloh0LQC6tHKdSVu7T1OvBZlxNDVIQm4PqqfIHKVC1iQoqq/n8A4Jj0Z
- 4bS0OEPUThypK84Whm1jgS08wxzCMW6nOBUNYrpSpSffdrnXXPfnITrx3wscPQRBCMSiy
- s+bppDJPjbqpng518bdkigwS7yEYoAQrAJRMUdmcgWjl+wdQSOZFCxXiRXL4mWEnsjA==
+ arc=none smtp.remote-ip="2a00:1450:4864:20::32b"
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793625380;
+ b=SWjZaoZmqwppCbYHiFvV4W2zaVYM71vAwr4LdLWGx40kZBm0xNbmkvm3DE4YaexsrKS9
+ i/KCyETywfE3+sH69c1DEM65yFB0kmduda99hVTWH2fbOq6vI2gDRlTdV/S+EqNxx05ni
+ gHt0TnEeXCwF8VK6AusqkIa1JroTXDKeZ9vlQErrVQ4ykDd8nJBD6ud53+XnnQNfm9G4P
+ sL1icFrcMm+aAHCy8E2PJH0msRCgpIZ0lVTo4/vQgRxcj8T2LsoDpYErA4DTH4qUVyUTd
+ OTM02pl12WtpuTOZdr3T/jJ+G4PbrjjMNUHO5xRgTwSLQF//AyFvcK4esXVLZXZZcWQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793625379;
+ c=relaxed/relaxed; t=1793625380;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=83igqs36FxyXmY6tHfkaeXupBJQluISkie4OZo4/rXc=;
- b=I+YVIIr2kwX8p5eX6MZDPg3iItvW/kSw+7pXwwMSP9gKekwn1Op9HvnXXtLyNsNnnB2Q
- BO8vZP/tcfdF1MKEUYSFxDewVvYHaLdqO04Gr7tQDijHY9NDQFTTRIN6Z+WsrG+FtiO17
- a6ucg9zlnNKUm16995qOjVM3TT1M/l1sx2grO7BM5MbtaPWfA3agfsjZwdYMCDhgbWHvY
- ifnAeSY9gKTRXoR992YLrfkPY7yKKjcBjnU3LKkWP+WgWDGqEsTQc6uFZoVNg7Ib7NOTX
- Lz2rG2sH2x9v9y3u6aZ7htW2MwcErBFw/iigQsltA1XcwDuSpHicACNv4aXvF8iF+0g==
+ bh=iArOnBtJAilncqk9WeIU1twpu9dtve+CyHvIng0XQoQ=;
+ b=oks+nm5C4l1SasXs62dlqF6QVNEimr5K46TPLW4tlWE8KqkaRy2Eo/ZHSjTvMEtijnMS
+ agiqJU/EUkqplRKi9FsvrYQEOmUwUs0EUk9T3NmbtW9sgnnwHOIamDo1UK7IoqQifpm/D
+ BgNEKGG5hfd2/Pw8LHa4Ta7ua4LleAfX5nOduLQIHdIkuxGM4NIqeKM2PDPJ27JXrrgh6
+ lqcF66uPfFKQ3ScgxxeO+yWVVOrlx9aEywuAPFpn0jgwCqHvZ2bxD3jMi2cwo6zYcqaW8
+ Hu+XNiTPXu5woSME/fmPH/BETMN2U+U2b3uF7tW61obj4/7kbfKbKak6rWuLouFIRzA==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
  dmarc=pass header.from=gmail.com;
  dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20260707 header.b=B4DuORa5; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::42d"
+ header.s=20260707 header.b=st8bVr9q; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::32b"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42d; helo=mail-wr1-x42d.google.com;
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
  envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
 Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20260707 header.b=B4DuORa5
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com
- [IPv6:2a00:1450:4864:20::42d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D8F5A6065F
- for <buildroot@buildroot.org>; Mon,  2 Nov 2026 13:16:18 +0000 (UTC)
-Received: by mail-wr1-x42d.google.com with SMTP id
- ffacd0b85a97d-48e04773687so841078f8f.2
- for <buildroot@buildroot.org>; Mon, 02 Nov 2026 05:16:18 -0800 (PST)
+ header.a=rsa-sha256 header.s=20260707 header.b=st8bVr9q
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B9E1960661
+ for <buildroot@buildroot.org>; Mon,  2 Nov 2026 13:16:19 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-49d05d51553so18930315e9.2
+ for <buildroot@buildroot.org>; Mon, 02 Nov 2026 05:16:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20260707; t=1793625376; x=1794230176; darn=buildroot.org;
+ d=gmail.com; s=20260707; t=1793625377; x=1794230177; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=83igqs36FxyXmY6tHfkaeXupBJQluISkie4OZo4/rXc=;
- b=B4DuORa534TEv9R5yZ2aZ3LS09Fqd/YKoG6RyzrLq5r5kfNaVzzwKGsGqk6AHL0Xfk
- 1Ityrwnmkdojl3YcakOCUvFJnZP3yj+O/I83I5CaXQ6pcTxz1ZB/6rqWPBree+XbRV2G
- qsv4VEwDvvQG0k+gwHJnOwm5I27kSkl5EiXmM73PiZAUiYFfCz5w7jdC0jvnn0vHvmp1
- yz01dgYQrlFhPZyvUFYflZQzjYxu1CWiPWVnXksJT3R2L2gyM3QEfUgmfjwkFdgKOKkz
- pWkVYceBNEZ1CmdmXm5AID6RxvrS95V2NzwTRluu9DSDXyw4TbJlIbzO6N2ymfxhtToH
- dAvg==
+ bh=iArOnBtJAilncqk9WeIU1twpu9dtve+CyHvIng0XQoQ=;
+ b=st8bVr9q4U9wt1Bxp6Z7yx+ympIJSecHBgCsacmvXIUhfNbFYd4NpcyhTdo6dg9kjI
+ /1A25YGiQmUB7uklNsF6CMvZpgFiNLalbvS6vgMgwsnpCvxMPyKTyS7C4S0io8LtogD5
+ ydCDMnrkSDn8tyEZEm5HJrRBJzcFNWSVwo3OOVqudCk2nV/UrQHuHz46TezXHDET8oWT
+ QAiWM37ryoRI8cy3SGxzVZTU9x6sXnsMuN6fWcq5XDoLBY8w4WsY05YAxF9IiQpqa/vz
+ 2UdLzavzAzqA5PqF9QgZg3JlX+HPC1McMgWqW4DjKYHLwK5rw32vEOF+SXCovGLM02Z8
+ PSvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793625376; x=1794230176;
+ d=1e100.net; s=20260707; t=1793625377; x=1794230177;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=83igqs36FxyXmY6tHfkaeXupBJQluISkie4OZo4/rXc=;
- b=oZRFtP5ue73mxvO+aWfadShTidlD0on18OLt8CtU7dcZfix0XRFMUbhc8ZJsR0hdOZ
- 8mXK9NxUJ3qDC2CNHqe9RnAtLOnD5EBZPVZhXVbL/RKhjgj9CsyLOlIOTHAKcKpEMaNE
- eOQhvMmZTqm3OGhGgp8wnt7PuRcH5HMXuqvPe6G9EaTKqLQuAZeruZe5OHMSstjTeFQz
- 4KVOaj9bD3HGz72e7xu+naFRdJ5Z+W7RP+FTX20+JGxwE8g9opMdvIdVCNhlkTMpvP9U
- g5dyytHria9hUDcExtTy3APsI0zMXlcVrYTEz3hedNdelS2Kp4vdoSXN8C0eCIbzHCYn
- K+uQ==
-X-Gm-Message-State: AFq9FYJ5dDN4CWzu4GUh8mWH7joxEWeA8nmXUV/kMxHmJ8n9j+dhUzBi
- ntlaf5xzwQYVAydLO51eBczPzozLc4FhIFrBeLk6PRzNL0Gx+UiVeQpyUdZmig==
-X-Gm-Gg: AYBFou2VVwUt5OXa7t9Srh4kycomBiVJesAc5/8BwpxVIIL73W8TQ7LqPColz74Pm1r
- gFPiI6fFDiRfnQ2wK2F+54LHlkQ20zYD6z5rp792cj7blYKmUxetnxdvsb5NMv8dLVykHmRqFJY
- FqvW8zUhMjfWThSArCBTV9G1oT+GXvQJMppS6GIJKkpy0fLf7ZIJRnT5Jt4I4iztsJnbICEaHbX
- CHBW+orHioD3NSO2XBOpunNyRHVWIXFud/HQ9E9r8oYD1o3G/vYuskpj8hMCljC0ISCxDUpfIWr
- abhKFOdTdt0gBePGa8I7PF77UxzOSpVbWzn/5kNhcoq+a9V5fkd6CZHaqxn93NQvjxTOQGtxBVQ
- r4CjIzCbblPrCgTUUQ+VTX86twcRpbB6f7+vlmeiN7jk5lM4HE8Ka7Cn7uGMxeikjlVea2BXCVb
- BjInZMt7/qWlv8F8vJ2ZBBHmINeBym8lxHq/8o4c+Pgap4eRKjRD3fdXsUp9szMryEcI2h05GNK
- m50m7NyaOLsJz8j5qOIH2lEmSh3Wyu3+S3aO6stpWxJmMoqMFhiDzQn5lf21RW+7V6SUj9G7+Pu
- S2ph4rY2ZKPkPqF1OZ2RgMJw7MWG6m5Rq3i12nnDV3awZP5Kw061fA==
-X-Received: by 2002:a05:600c:1387:b0:4aa:2339:a375 with SMTP id
- 5b1f17b1804b1-4ac1793fa6bmr239249065e9.13.1793625376160; 
- Mon, 02 Nov 2026 05:16:16 -0800 (PST)
+ bh=iArOnBtJAilncqk9WeIU1twpu9dtve+CyHvIng0XQoQ=;
+ b=lHLP1GjhjuTcJMzZdU/I5l1edcMQm4bGSY2MKEgbpFFsGEZ9iabG2CyOzdpr0F6Fwj
+ gG+8QV8vJf6ViDUfJV/mjQPL53vtFLiUgKMk6HPza4gChpEYNd5Va3NrY7LGqKzjDCPa
+ 0+sCZVZj2jPw2b4s76Qi+iMYtAVhc7y2D5mHlctS0/8Zx9rvfU6mUKjeiJLxvlMCikb4
+ NK9Xks/5b9TRVuCYS1Fj2aiiysJeODvgP2SQWeVYpXERO5gNtYRsPK9Bj6XY/kyEdILP
+ 1hRrJLIvck0ott5BIyjnC8vV2cPMfuxaY7c89PBsuNWu+f6q/IcEVgSmOky9hyGQjrYx
+ aZSQ==
+X-Gm-Message-State: AFq9FYJBUhjMQkhdNxGUMYajpSszKy6qb3XIr0EdGbnG1iUfbDMNZtYs
+ +jbfdya1LgoU2WlfWkU9j69GY2Iv+xEeHOh2ozp4zTOMQ8qE/KWYwlc0GFKGeA==
+X-Gm-Gg: AYBFou1dxefgwg64C3F0FUaY7rWPiZ8OYjfk9AV6UECzagDtjs0weIMS6mXN/eth/QO
+ eHtEr/2cnlXScqoo+L+Vr9Mv+We7XmppWHdSAzSLuiHFocYsN35fX7jH+y21HIxqp2xogiCwEbD
+ eM6rg5m7K9Ph9DV9WyqITOPY+Euy2Y5jOnwUnyDBA6KDBLGHTsZ6BuRHHTVXZLfggFfUINBusWj
+ mFpSZIsjsJgDP32WV+iZUIkAbnX425hjQjsA+irqTXqVHrK6uIJgGY+HL7oxX0X/CghZd51xc1E
+ r4eyIwXt0B3//IVWfUtaVF5G+hP0me8SlRo34Jxlbnhg1vYitpLVLcY5GLEAOd21hP4+252yHxw
+ nGkYsp/DrXqoqm56uNT5FgOgAWGIEWloyfT+2PnaNVYMHoT3+0ah8c3USoXsHMaKOjLVcZHbVJB
+ 47JfsunqjxmepoQ2hNs0Ek3OpZ+DqyRZQwtHrZHR95y6fDCeSxA8ESolAreORrcW+Uwvi5Hx+e+
+ s3CCZSZBLnit/WwFuj4dF8GgbofbTzB0jjizk2peLC5EzhHcqRQf1uw45922f/+z6Gq/7YdvFco
+ 9g8HOxSnZe10j7i0k//s9Ce91ymEv5fRdONfmXCZMI0oVEx0gJA18A==
+X-Received: by 2002:a05:600c:1f93:b0:4a3:2f35:38b6 with SMTP id
+ 5b1f17b1804b1-4ac180f1e69mr222399875e9.24.1793625377144; 
+ Mon, 02 Nov 2026 05:16:17 -0800 (PST)
 Received: from angelo-Precision-7550.. ([94.154.175.53])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4aa81a896ecsm361313165e9.9.2026.11.02.05.16.15
+ 5b1f17b1804b1-4aa81a896ecsm361313165e9.9.2026.11.02.05.16.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 02 Nov 2026 05:16:15 -0800 (PST)
+ Mon, 02 Nov 2026 05:16:16 -0800 (PST)
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 To: buildroot@buildroot.org
 Cc: Damien Le Moal <dlemoal@kernel.org>,
  Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Mon,  2 Nov 2026 14:16:09 +0100
-Message-Id: <20261102131610.141568-4-angelo.compagnucci@gmail.com>
+Date: Mon,  2 Nov 2026 14:16:10 +0100
+Message-Id: <20261102131610.141568-5-angelo.compagnucci@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20261102131610.141568-1-angelo.compagnucci@gmail.com>
 References: <20261102131610.141568-1-angelo.compagnucci@gmail.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 4/5] configs/sipeed_lichee_rv*: use mainline
- Linux 6.18.60
+Subject: [Buildroot] [PATCH 5/5] configs/sipeed_lichee_rv*: add hashes for
+ Linux/opensbi/u-boot
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -183,273 +183,98 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
 	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,
-	UPPERCASE_50_75,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=4.0.1
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-The D1 support is now in mainline, so use that instead, as done in the
-nezha defconfig.
+And enable BR2_DOWNLOAD_FORCE_CHECK_HASHES.
 
-The linux configuration, shared by both boards, is based on the riscv
-defconfig, reduced to the smallest one supporting the boards.
+The hashes are shared by both defconfigs, as the overlay.
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- board/sipeed/lichee_rv/linux.config     | 197 ++++++++++++++++++++++++
- configs/sipeed_lichee_rv_defconfig      |   9 +-
- configs/sipeed_lichee_rv_dock_defconfig |   9 +-
- 3 files changed, 207 insertions(+), 8 deletions(-)
- create mode 100644 board/sipeed/lichee_rv/linux.config
+ .checkpackageignore                                             | 2 --
+ board/sipeed/lichee_rv/patches/linux-headers/linux-headers.hash | 1 +
+ board/sipeed/lichee_rv/patches/linux/linux.hash                 | 2 ++
+ board/sipeed/lichee_rv/patches/opensbi/opensbi.hash             | 2 ++
+ board/sipeed/lichee_rv/patches/uboot/uboot.hash                 | 2 ++
+ configs/sipeed_lichee_rv_defconfig                              | 2 ++
+ configs/sipeed_lichee_rv_dock_defconfig                         | 2 ++
+ 7 files changed, 11 insertions(+), 2 deletions(-)
+ create mode 120000 board/sipeed/lichee_rv/patches/linux-headers/linux-headers.hash
+ create mode 100644 board/sipeed/lichee_rv/patches/linux/linux.hash
+ create mode 100644 board/sipeed/lichee_rv/patches/opensbi/opensbi.hash
+ create mode 100644 board/sipeed/lichee_rv/patches/uboot/uboot.hash
 
-diff --git a/board/sipeed/lichee_rv/linux.config b/board/sipeed/lichee_rv/linux.config
-new file mode 100644
-index 0000000000..e454cdd46a
+diff --git a/.checkpackageignore b/.checkpackageignore
+index a8c1baacbd..40716caa1d 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -128,8 +128,6 @@ configs/olpc_xo175_defconfig lib_defconfig.ForceCheckHash
+ configs/olpc_xo1_defconfig lib_defconfig.ForceCheckHash
+ configs/orangepi_pc2_defconfig lib_defconfig.ForceCheckHash
+ configs/orangepi_zero_plus_defconfig lib_defconfig.ForceCheckHash
+-configs/sipeed_lichee_rv_defconfig lib_defconfig.ForceCheckHash
+-configs/sipeed_lichee_rv_dock_defconfig lib_defconfig.ForceCheckHash
+ configs/sipeed_licheepi_nano_defconfig lib_defconfig.ForceCheckHash
+ configs/sipeed_maix_bit_defconfig lib_defconfig.ForceCheckHash
+ configs/sipeed_maix_bit_sdcard_defconfig lib_defconfig.ForceCheckHash
+diff --git a/board/sipeed/lichee_rv/patches/linux-headers/linux-headers.hash b/board/sipeed/lichee_rv/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
 --- /dev/null
-+++ b/board/sipeed/lichee_rv/linux.config
-@@ -0,0 +1,197 @@
-+CONFIG_SYSVIPC=y
-+CONFIG_POSIX_MQUEUE=y
-+CONFIG_NO_HZ_IDLE=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_BPF_SYSCALL=y
-+CONFIG_IKCONFIG=y
-+CONFIG_IKCONFIG_PROC=y
-+CONFIG_CGROUPS=y
-+CONFIG_MEMCG=y
-+CONFIG_BLK_CGROUP=y
-+CONFIG_CGROUP_SCHED=y
-+CONFIG_CFS_BANDWIDTH=y
-+CONFIG_CGROUP_PIDS=y
-+CONFIG_CGROUP_FREEZER=y
-+CONFIG_CGROUP_HUGETLB=y
-+CONFIG_CPUSETS=y
-+CONFIG_CGROUP_DEVICE=y
-+CONFIG_CGROUP_CPUACCT=y
-+CONFIG_CGROUP_PERF=y
-+CONFIG_CGROUP_BPF=y
-+CONFIG_USER_NS=y
-+CONFIG_CHECKPOINT_RESTORE=y
-+CONFIG_BLK_DEV_INITRD=y
-+CONFIG_PROFILING=y
-+CONFIG_ARCH_SUNXI=y
-+CONFIG_ERRATA_ANDES=y
-+CONFIG_ERRATA_SIFIVE=y
-+CONFIG_SMP=y
-+CONFIG_RISCV_SBI_CPUIDLE=y
-+CONFIG_CPU_FREQ=y
-+CONFIG_CPU_FREQ_STAT=y
-+CONFIG_CPU_FREQ_GOV_USERSPACE=y
-+CONFIG_CPU_FREQ_GOV_ONDEMAND=y
-+CONFIG_CPUFREQ_DT=y
-+CONFIG_VIRTUALIZATION=y
-+CONFIG_ACPI=y
-+CONFIG_JUMP_LABEL=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_BLK_DEV_THROTTLING=y
-+CONFIG_SPARSEMEM_MANUAL=y
-+CONFIG_PAGE_REPORTING=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_IP_MULTICAST=y
-+CONFIG_IP_ADVANCED_ROUTER=y
-+CONFIG_IP_PNP=y
-+CONFIG_IP_PNP_DHCP=y
-+CONFIG_IP_PNP_BOOTP=y
-+CONFIG_IP_PNP_RARP=y
-+CONFIG_NETFILTER=y
-+CONFIG_NET_SCHED=y
-+CONFIG_NETLINK_DIAG=y
-+CONFIG_NET_L3_MASTER_DEV=y
-+CONFIG_CGROUP_NET_PRIO=y
-+CONFIG_CGROUP_NET_CLASSID=y
-+CONFIG_RFKILL=y
-+CONFIG_NET_9P=y
-+CONFIG_NET_9P_VIRTIO=y
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_MTD=y
-+CONFIG_MTD_BLOCK=y
-+CONFIG_MTD_CFI=y
-+CONFIG_MTD_CFI_ADV_OPTIONS=y
-+CONFIG_MTD_SPI_NOR=y
-+CONFIG_BLK_DEV_LOOP=y
-+CONFIG_VIRTIO_BLK=y
-+CONFIG_EEPROM_93CX6=y
-+CONFIG_BLK_DEV_SD=y
-+CONFIG_BLK_DEV_SR=y
-+CONFIG_SCSI_VIRTIO=y
-+CONFIG_ATA=y
-+CONFIG_SATA_AHCI_PLATFORM=y
-+CONFIG_MD=y
-+CONFIG_NETDEVICES=y
-+CONFIG_VIRTIO_NET=y
-+CONFIG_MACB=y
-+CONFIG_MICREL_PHY=y
-+CONFIG_MICROSEMI_PHY=y
-+CONFIG_MOTORCOMM_PHY=y
-+CONFIG_REALTEK_PHY=y
-+CONFIG_INPUT_MOUSEDEV=y
-+CONFIG_INPUT_EVDEV=y
-+CONFIG_KEYBOARD_GPIO=y
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_SERIAL_8250_DW=y
-+CONFIG_SERIAL_OF_PLATFORM=y
-+CONFIG_SERIAL_EARLYCON_RISCV_SBI=y
-+CONFIG_SERIAL_SIFIVE=y
-+CONFIG_SERIAL_SIFIVE_CONSOLE=y
-+CONFIG_VIRTIO_CONSOLE=y
-+CONFIG_HW_RANDOM=y
-+CONFIG_HW_RANDOM_VIRTIO=y
-+CONFIG_I2C=y
-+CONFIG_I2C_DESIGNWARE_CORE=y
-+CONFIG_I2C_MV64XXX=y
-+CONFIG_SPI=y
-+CONFIG_SPI_SIFIVE=y
-+CONFIG_SPI_SUN6I=y
-+# CONFIG_PTP_1588_CLOCK is not set
-+CONFIG_PINCTRL=y
-+CONFIG_GPIO_DWAPB=y
-+CONFIG_GPIO_SIFIVE=y
-+CONFIG_POWER_RESET=y
-+CONFIG_POWER_RESET_GPIO_RESTART=y
-+CONFIG_POWER_RESET_SYSCON=y
-+CONFIG_POWER_RESET_SYSCON_POWEROFF=y
-+CONFIG_CPU_THERMAL=y
-+CONFIG_DEVFREQ_THERMAL=y
-+CONFIG_WATCHDOG=y
-+CONFIG_SUNXI_WATCHDOG=y
-+CONFIG_MFD_AXP20X_I2C=y
-+CONFIG_REGULATOR=y
-+CONFIG_REGULATOR_FIXED_VOLTAGE=y
-+CONFIG_REGULATOR_AXP20X=y
-+CONFIG_REGULATOR_GPIO=y
-+CONFIG_FB=y
-+CONFIG_FRAMEBUFFER_CONSOLE=y
-+CONFIG_FRAMEBUFFER_CONSOLE_DETECT_PRIMARY=y
-+CONFIG_SOUND=y
-+CONFIG_SND=y
-+CONFIG_SND_SOC=y
-+CONFIG_USB=y
-+CONFIG_USB_OTG=y
-+CONFIG_USB_XHCI_HCD=y
-+CONFIG_USB_XHCI_PLATFORM=y
-+CONFIG_USB_EHCI_HCD=y
-+CONFIG_USB_EHCI_HCD_PLATFORM=y
-+CONFIG_USB_OHCI_HCD=y
-+CONFIG_USB_OHCI_HCD_PLATFORM=y
-+CONFIG_USB_STORAGE=y
-+CONFIG_USB_UAS=y
-+CONFIG_USB_MUSB_HDRC=y
-+CONFIG_USB_MUSB_SUNXI=y
-+CONFIG_NOP_USB_XCEIV=y
-+CONFIG_USB_GADGET=y
-+CONFIG_MMC=y
-+CONFIG_MMC_SDHCI=y
-+CONFIG_MMC_SDHCI_PLTFM=y
-+CONFIG_MMC_SDHCI_OF_DWCMSHC=y
-+CONFIG_MMC_SDHCI_CADENCE=y
-+CONFIG_MMC_SPI=y
-+CONFIG_MMC_DW=y
-+CONFIG_MMC_SUNXI=y
-+CONFIG_RTC_CLASS=y
-+CONFIG_RTC_DRV_SUN6I=y
-+CONFIG_RTC_DRV_GOLDFISH=y
-+CONFIG_DMADEVICES=y
-+CONFIG_DMA_SUN6I=y
-+CONFIG_DW_AXI_DMAC=y
-+CONFIG_SYNC_FILE=y
-+# CONFIG_VIRTIO_MENU is not set
-+CONFIG_GOLDFISH=y
-+# CONFIG_SUN8I_DE2_CCU is not set
-+CONFIG_MAILBOX=y
-+CONFIG_PCC=y
-+CONFIG_SUN50I_IOMMU=y
-+CONFIG_RPMSG_CHAR=y
-+CONFIG_RPMSG_CTRL=y
-+CONFIG_RPMSG_VIRTIO=y
-+CONFIG_PM_DEVFREQ=y
-+CONFIG_IIO=y
-+CONFIG_PWM=y
-+CONFIG_PHY_SUN4I_USB=y
-+CONFIG_LIBNVDIMM=y
-+CONFIG_NVMEM_SUNXI_SID=y
-+CONFIG_EXT4_FS=y
-+CONFIG_EXT4_FS_POSIX_ACL=y
-+CONFIG_EXT4_FS_SECURITY=y
-+CONFIG_AUTOFS_FS=y
-+CONFIG_ISO9660_FS=y
-+CONFIG_JOLIET=y
-+CONFIG_ZISOFS=y
-+CONFIG_MSDOS_FS=y
-+CONFIG_VFAT_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-+CONFIG_HUGETLBFS=y
-+# CONFIG_EFIVAR_FS is not set
-+CONFIG_NFS_FS=y
-+CONFIG_NFS_V4=y
-+CONFIG_NFS_V4_1=y
-+CONFIG_NFS_V4_2=y
-+CONFIG_ROOT_NFS=y
-+CONFIG_9P_FS=y
-+CONFIG_NLS_CODEPAGE_437=y
-+CONFIG_SECURITY=y
-+CONFIG_SECURITY_SELINUX=y
-+CONFIG_SECURITY_APPARMOR=y
-+CONFIG_DEFAULT_SECURITY_DAC=y
-+CONFIG_PRINTK_TIME=y
-+CONFIG_DEBUG_KERNEL=y
-+CONFIG_DEBUG_FS=y
-+# CONFIG_RUNTIME_TESTING_MENU is not set
-+CONFIG_MEMTEST=y
++++ b/board/sipeed/lichee_rv/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/sipeed/lichee_rv/patches/linux/linux.hash b/board/sipeed/lichee_rv/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..a5e2b5fc40
+--- /dev/null
++++ b/board/sipeed/lichee_rv/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
++sha256  3c2f44ef6acc021a7ad444d9a2e6ec1ef488ff09368793d0004a6080f69d621e  linux-6.18.60.tar.xz
+diff --git a/board/sipeed/lichee_rv/patches/opensbi/opensbi.hash b/board/sipeed/lichee_rv/patches/opensbi/opensbi.hash
+new file mode 100644
+index 0000000000..5e2e695bc1
+--- /dev/null
++++ b/board/sipeed/lichee_rv/patches/opensbi/opensbi.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  fb1ae61a85e966322101acb1c982f84d9eaafc4de7dd474a7d7546d9bb321c6f  opensbi-1.8.1.tar.gz
+diff --git a/board/sipeed/lichee_rv/patches/uboot/uboot.hash b/board/sipeed/lichee_rv/patches/uboot/uboot.hash
+new file mode 100644
+index 0000000000..7d05185938
+--- /dev/null
++++ b/board/sipeed/lichee_rv/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  36db7c20b179f03aa29009565c6b34380d5629fd5c57ed110244594d9930dfed  uboot-2e89b706f5c956a70c989cd31665f1429e9a0b48.tar.gz
 diff --git a/configs/sipeed_lichee_rv_defconfig b/configs/sipeed_lichee_rv_defconfig
-index e2590983a9..2591609bce 100644
+index 2591609bce..41e7307478 100644
 --- a/configs/sipeed_lichee_rv_defconfig
 +++ b/configs/sipeed_lichee_rv_defconfig
-@@ -1,12 +1,13 @@
+@@ -1,5 +1,7 @@
  BR2_riscv=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
++BR2_GLOBAL_PATCH_DIR="board/sipeed/lichee_rv/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
  BR2_ROOTFS_OVERLAY="board/sipeed/lichee_rv/overlay"
  BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
  BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/sipeed/lichee_rv/genimage.cfg"
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,linux,ca67838d84af4c9f85d06311c9e98e1adf46308f)/linux-ca67838d84af4c9f85d06311c9e98e1adf46308f.tar.gz"
--BR2_LINUX_KERNEL_DEFCONFIG="nezha"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.60"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/sipeed/lichee_rv/linux.config"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun20i-d1-lichee-rv"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
 diff --git a/configs/sipeed_lichee_rv_dock_defconfig b/configs/sipeed_lichee_rv_dock_defconfig
-index 91383d7980..4467fcb916 100644
+index 4467fcb916..cd529b7e11 100644
 --- a/configs/sipeed_lichee_rv_dock_defconfig
 +++ b/configs/sipeed_lichee_rv_dock_defconfig
-@@ -1,13 +1,14 @@
+@@ -1,5 +1,7 @@
  BR2_riscv=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_18=y
++BR2_GLOBAL_PATCH_DIR="board/sipeed/lichee_rv/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
  BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
  BR2_ROOTFS_OVERLAY="board/sipeed/lichee_rv/overlay board/sipeed/lichee_rv_dock/overlay"
  BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/sipeed/lichee_rv_dock/genimage.cfg"
- BR2_LINUX_KERNEL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,smaeul,linux,ca67838d84af4c9f85d06311c9e98e1adf46308f)/linux-ca67838d84af4c9f85d06311c9e98e1adf46308f.tar.gz"
--BR2_LINUX_KERNEL_DEFCONFIG="nezha"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.60"
-+BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-+BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/sipeed/lichee_rv/linux.config"
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/sipeed/lichee_rv_dock/linux.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun20i-d1-lichee-rv-dock"
 -- 
 2.34.1
 
