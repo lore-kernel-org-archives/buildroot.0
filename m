@@ -2,216 +2,130 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE59B60A381D
-	for <buildroot@archiver.kernel.org>; Mon,  2 Nov 2026 14:25:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0BC0607A899
+	for <buildroot@archiver.kernel.org>; Mon,  2 Nov 2026 14:38:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=SvS3SqqC
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=ObR8/gyR;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b=VJukwHXR
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9B07140791;
-	Mon,  2 Nov 2026 14:25:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 98DB2406A5;
+	Mon,  2 Nov 2026 14:38:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ryiI4p0fwD5K; Mon,  2 Nov 2026 14:25:01 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 3389840794
+ id 46JPi4iztDCs; Mon,  2 Nov 2026 14:38:04 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 77E11405D7
 Authentication-Results: smtp4.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793629501;
-	b=osuelcusjSQlMVl+bkRgk59XglbrX48bKDtSX/23sMREaZl9mjSrLNu/stYfeRm+V/xc
-	 ifiJBr4SAKSZRXG31kkZq1jShSsRXykpKngDj2QXvmAcrAYHIncTJVFqAIltL/VJWOB3z
-	 smJWDaN7sqr5TAkl/5l3qLmj+98AHqwTIjwPLW3rlUEcyLOHqm/7RMh/pLBfYMZWbbmET
-	 GhkpUhSAnAP97E4BKYKbeAWvUpxygNvtY5wbEQw9VKFZoA9sjlC1Zz2b6sNcN7J3jD/JD
-	 R28d8MInRQZ6kyQBK19mOFbwcjMX7cgB6abp0dzbax0VvNFRE3UJdgSLC2SYjHY0o+A==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793630284;
+	b=ASd0TpYG2gf4UxN1aSIfPA5tg40FsB6pA3Zs6BWxcnlFS3GYZg2nxm+c2oGGISiDtjXB
+	 kX36eTovvGsm0PQB4VMazx9yJaFnFD6sPAvdYzG0h+ZeDj3/9u9/IWRfkbYv1q9j4Isqm
+	 U27ojEB0jbTAK+uo/exH7qyf4zHobeF0dU5zZrU3lml72Nwx1a68N1RGvSKYIgD7Ti/4k
+	 UZe5QG5sLApJ0Kz8ncTsfCsSc2kluyY+W3GKcjCHnQeawzOmC+tuGV/AWwnTwWXFVxUvV
+	 A6F3qppR2XfuHZBXASSkw5XcK6CvhM+Xy4rCXd7XNNLWY9jQ4BgIOdWkZ952LCfNGuQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793629501;
+	c=relaxed/relaxed; t=1793630284;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 X-UI-Sender-Class:Received:To:Cc:Date:Message-ID:X-Mailer:In-Reply-To:
-	 References:MIME-Version:X-Provags-ID:UI-OutboundReport:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=CPbUH++tsIxe5hTe6Xpf0lBBlZ9TfuO02Xi8vLzt3jc=;
-	b=hYev07VZvcaSzAfiNP2SET9wiKr71IJLpw5sy0rAf0xu2k/H7aQM7wWaB1WfGu3+oR3p
-	 VWL5Tig+GMkfIrUYjuN9LzXodN8Jd7Dlb2X7aMXm3v0SNSPvWeq6pIXNAj4i+UOdJEImm
-	 Xa/Ias9I/Jm/a8tlnsRc5SVh5+bkWoHS/jf1Tz2YVF405n//qkAMtvKomfZat/NH6ZclI
-	 pumw+tkkcy/QIfuWcC2n/z6NF6A5eRLdM10T8XrCl4aCT2rXXt56/PO1k7yOi2rQEoqfy
-	 40wFZ3uf8wqOGIZKxLzVSawGwZs3490MPsOr2VEMMwkR0pj3N5LDPJDlAveFQQXSgmw==
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 DKIM-Signature:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
+	 X-CMAE-Envelope:Subject:X-BeenThere:X-Mailman-Version:Precedence:
+	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
+	 Sender;
+	bh=AFK5hNX90IiO9DG4Bqek4vOk4zppeJWCozCvmNRGrmc=;
+	b=S2ZEf6vlhI6WvmiibBthoZgH+F3hHJYf3/zxVkFKIm3+GhRRVE9fcnBcwRzubxqh5k+N
+	 MoMIsjw2M+EYNIo/1knYVLp0wJX+Cim3kptDUClpFa54P9fCfTAvriTy38/O5tgGN2T5x
+	 r7x4QedZ9ZzE5/bJB0scKoua4NcrL9SvR38d7IOwQLgcH+Sd8YydhNpGPhuhmljSq7TZJ
+	 uWh1B0/pl432ptt4uY1Q8we1PwxkQigvgik+C7aH2KhpQXRGMXydyhK3NFYPWXYKGPvkr
+	 wFUTDGfVASdsjZUWQS5QiBhXgVy02w1j4Zi4NFWZefyFOsy5Bif9bEAWkDiKkLP8p0g==
 ARC-Authentication-Results: i=2; smtp4.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793629501;
-	bh=CPbUH++tsIxe5hTe6Xpf0lBBlZ9TfuO02Xi8vLzt3jc=;
-	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=SvS3SqqCfE3PRW9VKad2+AG0IGIiekCux9A4Ozb7jhL8BIE1O8FsUwMaYcD2jRgHU
-	 BeXh53ZacZLmDX5uql2ojwJJ/on8Myhroh2tEeG+RUb+H5fu8uk6BooP6ytu2mKQj1
-	 CmsHMv8Xb61IiyN1pBt6YJCesccy1uUeaaxJmQNIP4vQRx4BfvVhIDADkcWGPaa8+3
-	 pe9cDzLMuzVLRqeOuvEf0zjQVCFIxNb93OFlBIJrEwrFTjDziHMbCnXmNaS0qRgpmM
-	 rEoX23ChbFhwt11FRHswOIOXMtSiWUawuXdNDuUYO8wTV6EU+i31YAwuRi0jc01Og7
-	 k6pu3Y884/IkQ==
+	s=default; t=1793630284;
+	bh=AFK5hNX90IiO9DG4Bqek4vOk4zppeJWCozCvmNRGrmc=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=ObR8/gyRT4f/joiFgBo3eXsQBP5gHoOYYCAc343bHYMwNLYOoEhxKJHgmSUMZo6CH
+	 Sigxp3RBQYrQurAg6frol0aO8ITdBF1XShHcJSxTDOwxgbrDK45tdKqjI7KXjFvSEp
+	 uq/GklNOxjqiTKvhCijKBZolzom5UmUkb9e21o119oIDwTeVhT25V7RV2VMDhfhaYv
+	 l6+ODMGc8la+/CymkNVD4fl0/E78A5RXHdoxTlMgCcxO1rgX9a3VeM3VuJtbWH6Cyt
+	 LYEIfMVG8THzROqEbSR1oBxAvI+gJQnQy/uAwfehUownpG6GfoFfM52KJyk/J3qsAt
+	 5TNpyNok4NH0g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3389840794;
-	Mon,  2 Nov 2026 14:25:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 77E11405D7;
+	Mon,  2 Nov 2026 14:38:04 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id ECAEDD3A
- for <buildroot@buildroot.org>; Mon,  2 Nov 2026 14:24:58 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4BEC54BC
+ for <buildroot@buildroot.org>; Mon,  2 Nov 2026 14:38:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D23AC400D7
- for <buildroot@buildroot.org>; Mon,  2 Nov 2026 14:24:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4939B400D7
+ for <buildroot@buildroot.org>; Mon,  2 Nov 2026 14:38:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GrX_dh022F9O for <buildroot@buildroot.org>;
- Mon,  2 Nov 2026 14:24:58 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 5398C400D6
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793629497;
- b=iKrKi9DRB8raW+fubWWLAn0x2RK7+AdnFSBU1RW0ECxcF7R3ABc2BvO6/MCQDfpeTG6g
- GW0qMPj3P0DZNQTB9pbFE3R8YF7wUMNDRMKIMOLkB+MjfTNq7otD3N25RbTWTJ1j/FDcs
- U3UcF8S0SAqRGw678cqTOkZgp4GM14q7RUmzaVyMVqf2aTuBe0RgxkFxOgNSNlPdDE38Q
- DaOcvR+JJbWdcWSDwMPh61lGMl3C2p8LlIXI6ieBMIwyaaWqqfoQUWIpf6QG6gM6kfsVU
- 6uAHnT2ZdF7aE/ha+DLjnJu/pAiV/TcNdDCWe75Kvla+EO8tU66VHdkqaB0Y3oCN4pw==
+ id p61d9-YJMQKQ for <buildroot@buildroot.org>;
+ Mon,  2 Nov 2026 14:38:00 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 4297A400D6
+Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=62.149.156.56
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793630280;
+ b=mcURkIgIBGsk4bi9mFPSSRdtGl99o77uTONpeelzR5KxnMktS9dalurItPXGbHFFde03
+ 3l33aP9y56jVhL5nZPz5hHm6V18cr9L9utrz3+r7iSlBXOHAmfZaB9QKfmf96GdF1sKOt
+ tY04+YF6soTE8oFw1fCxSG79pzjTqkAJrtGaSozYLdLCvMkp8vakv2W2QoRU1aA9hXSJT
+ I3rmSHu6SqGarAqafNQ1ZF6BKNZM5EZG55UhAKNygNdweue947iPEi9/zMrmd0KnFD2+Y
+ GeHFpEwBTgM6Dz0c8nY9v7qxP39Q7s60n96LmWUNn+jvYdnGgxVA8Widhs7dndo1x1w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793629497;
- h=Received-SPF:DKIM-Signature:X-UI-Sender-Class:Received:From:To:Cc:
- Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
- Content-Transfer-Encoding:X-Provags-ID:X-Spam-Flag:UI-OutboundReport;
- bh=YjQx8GnG2KWRrFd8ArDcmDrHhbvZn/tjt3Cz6VZ5eh0=;
- b=ed/YchNYaJtJdsf9sOZSm4Rc8Yo4lTMh4mM5Q1G8uON7C/QId5ii9I5vuFXaHrnxhhGP
- DlVsZjqpDhEnb6AKePUO00VhQtoy7v8dTQJNd+k6cdyYl0C0zMgxHUsCCSkfBtbhVQA4S
- dHZrqZFGMxSe0XeT3TlinKRiGfzfZc5dVbwrmvWzWiV2BEMubVb6FtL8HNd9lhzhFv1H1
- zaLR04yXbhnrcPWz/BK+005qqIKzCQNwWaJh5oP12LFTtYvKg4g17av3UuMYi0gxXMf5z
- IaN33ZhXnksxlpN6018f6NH0Yfn/ZaPdlim9fk6FLPSKSjCnzB4xqf1odwzpVMyggHA==
+ c=relaxed/relaxed; t=1793630280;
+ h=Received-SPF:Received:DKIM-Signature:From:To:Cc:Subject:Date:
+ Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+ X-CMAE-Envelope;
+ bh=p1oDjpQWiKogJeVohBREMTxanRXcRqEF8nLSTjiX1rM=;
+ b=Wny1gBgFXmqSeKSgj4ejvCMEuEIfiLKhQxCK5GlogshS0ULoYyICywtEOz8LRxrhsH1y
+ modbNpanTnv/yUxbC+5dD4k9if7XgZkOxfiHeso9SqHskLvgX7konxxSCPkADA20YqSJg
+ mnRs1g6p+qDH8W38cYZ+6GVHQh24ZJ8RK8PlWv1GaBvY8uesARpwMqJwq+eO6D1WFbvNz
+ ZLX0xw37MmVo7JuBkNbBm1QCy53nUDW8FLhjqoEFWM2fcpOOfpwyM3UBMRdXhEw+Odo1x
+ t6vU5F46xXZvZvtHbFFSchdN5hzQFZIKVN6aSiAs2TwnwIys6u4Bii+QgOuw0mRcCQw==
 ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
- dmarc=pass header.from=gmx.de;
- dkim=pass header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=a5VwidmS; 
- arc=none smtp.remote-ip=212.227.17.20
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5398C400D6
- for <buildroot@buildroot.org>; Mon,  2 Nov 2026 14:24:56 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MNsw4-1x8Wu90Vei-00JZQv; Mon, 02
- Nov 2026 15:24:49 +0100
+ dmarc=pass header.from=benettiengineering.com;
+ dkim=pass header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1
+ header.b=VJukwHXR; 
+ arc=none smtp.remote-ip=62.149.156.56
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.56;
+ helo=smtpcmd0756.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
+ receiver=<UNKNOWN> 
+Authentication-Results: smtp2.osuosl.org; dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=VJukwHXR
+Received: from smtpcmd0756.aruba.it (smtpcmd0756.aruba.it [62.149.156.56])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4297A400D6
+ for <buildroot@buildroot.org>; Mon,  2 Nov 2026 14:37:57 +0000 (UTC)
+Received: from localhost.localdomain ([151.95.84.63])
+ by Aruba SMTP with ESMTPSA
+ id NtAZxYzWhuuRMNtAZx5q5f; Mon, 02 Nov 2026 15:37:55 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+ t=1793630275; bh=1f1LarMJ36szO9xlrpdieiT3fYOmC6+JTkF4wTcWAuI=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=VJukwHXRI2CIAE//zgjqEKeBOY/OAa/A/VtdLfLTlwWi8TJvpFQgOPc/ckRwryzVm
+ UjBdEEm76dYF7zTIzKNqbQQZ6/Hr8bWx+QyfWGZQaS46r0LXtoINcWNE4ssEX+STam
+ vGGcIRfm/4JgDMSeNKUxy6fuFcKowMuh05a1VgQT1Yh4ZnE8iT5VFNSpj//rcRrLSE
+ bdAIQ599Z3iyajBwYk+z9RqUv0K3bI9ZA0ssRErwHvrZyUTaQ68DODqniqLWtQYK0n
+ qv9+K8RxaLbxX8ddIclferTEDMm3C5agkIuErlwK0PXvgXMYsnZMXznXWoMXrKdrAR
+ XDbFtCsd34qpQ==
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Cc: Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@hastings.org>,
- Julien Olivain <ju.o@free.fr>,
- "Fiona Klute (othermo GmbH)" <fiona.klute@gmx.de>
-Date: Mon,  2 Nov 2026 15:24:17 +0100
-Message-ID: <20261102142418.2544020-5-fiona.klute@gmx.de>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261102142418.2544020-1-fiona.klute@gmx.de>
-References: <20261102142418.2544020-1-fiona.klute@gmx.de>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Date: Mon,  2 Nov 2026 15:37:54 +0100
+Message-ID: <20261102143754.18923-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.47.3
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:obG8xwzrr1AwnpK0pt3xSkk2/GNJefO/kU6KVgXFkFYP1fYQZY/
- 2q6gjDHTlKIGeE8M8AvLt2P7ec0YJY+nJ1Mb0F/M/jUkV8KAW3W2yoTD5oJX5DJwhrJWgP+
- tP7b8Mf7u3+QoL+CYlN724l3KmKAqSFBZPa+jInc7y9VlTeF4WrA7ik3BZu7Tj/4d46sCT4
- v+O9bN28HH2dQNJ+u+ShQ==
-UI-OutboundReport: notjunk:1;M01:P0:fEHB/iIlwQo=;OwZpz459oRnOHHEDVpT1tlitZsx
- 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
- G82T6abxTc67HBsyf5A81L9+smg==
-Subject: [Buildroot] [PATCH v2 4/5] package/systemd: bump version to 261.4
+X-CMAE-Envelope: MS4xfJA2IloZjPwbthgqKzk1lGved/RDkjeVM3logLuEDEZSL+FKxx+E2KfS5503aCa6s66gHiXsxewh1EZrY3OJQ0oEjttI3N2g7RxLDozk9EFIG2COCfzd
+ Wba1jwcDxp7I5SlQmuya/C/VbtwVpa342olBDWdA/VeSvkVoRyWD9xuSOF+mFc4zJPPVcIS1kiI7H8ZafBRoVjAbkzJlbpTWivliZKskwrOgtrc/NZDUIMkm
+ mIuUVMICQ9NqcltdhO6oUMUYO+amSL3WwyqpFnCexpU=
+Subject: [Buildroot] [PATCH] package/esp-hosted: fix build failure with
+ Linux >= 7.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -221,200 +135,313 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-From: "Fiona Klute (othermo GmbH)" <fiona.klute@gmx.de>
+Espressif moved esp-hosted NG driver to a separate repository so let's
+point ESP_HOSTED_SITE accordingly(esp-hosted-linux) taking into account
+the slight difference of folder structure.
+Let's also bump to latest version 2026-11-01 and drop local patch that has
+been applied to master branch.
+So let's add local patch pending upstream to fix build failure with Linux
+7.3.0.
 
-This version adds an IMDS (Cloud "Instance Metadata Service")
-subsystem, to recognize running in VMs provided by certain cloud
-providers and provide information on the instance. This is left
-disabled. The user "systemd-imds" defined in the new
-sysusers.d/systemd-imds.conf.in source file is only needed if IMDS is
-enabled.
-
-Excerpts from NEWS possibly relevant for other package builds and post
-scripts:
-* "libsystemd is no longer guaranteed to be linked against libm. [...]
-  Consumers that rely on libsystemd transitively pulling in libm
-  should link against it themselves." [1]
-* "Individual binaries now also embed the dlopen ELF metadata note
-  (https://uapi-group.org/specifications/specs/elf_dlopen_metadata/)
-  for their dlopen() dependencies, which allows packaging tools to
-  reliably discover the set of optional dependencies of a binary,
-  [...]" [2]
-
-New options:
-* "sysinstall" enables a textual installer/setup tool, disabled
-* "imds" enables/disables the new IMDS subsystem, disabled
-* "imds-network" has no effect with imds disabled, leave unset
-* "systemd-imds-uid" is left unset like other fixed uid options
-
-Building with kernel headers <5.12 fails because the epoll_pwait2 and
-mount_setattr syscalls are undefined (either may appear in the error
-message depending on build order). Upstream has rejected an issue
-about the latter [3] without changing the "minimum baseline", so we
-have to conclude only the "recommended baseline" is supported for
-building. Update our header requirements accordingly, drop the config
-comment about the recommended version because it is now required, and
-note it in the update instructions in package/systemd/systemd.mk.
-
-Please see the upstream NEWS file for other changes [4].
-
-Hash of LICENSES/README.md changed due to licence changes (to MIT-0)
-[5,6] and renaming [7] of listed files.
-
-[1] https://github.com/systemd/systemd/blob/v261.4/NEWS#L100-L110
-[2] https://github.com/systemd/systemd/blob/v261.4/NEWS#L604-L608
-[3] https://github.com/systemd/systemd/issues/43575
-[4] https://github.com/systemd/systemd/blob/v261.4/NEWS
-[5] https://github.com/systemd/systemd/commit/919b8c7c92b120ba986a28882c151777661e97d6
-[6] https://github.com/systemd/systemd/commit/b5ee53b6c8235289a9fe2a9223aa6cb99734ce20
-[7] https://github.com/systemd/systemd/commit/74d392ed1bab578e901699ee272faa0c8b922128
-
-Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
-v1 -> v2:
-* fix hash of LICENSES/README.md
-* require kernel headers according to "recommended baseline", upstream
-  does not fix build errors with "minimum baseline" versions
+ ...p_hosted_ng-Fix-build-for-kernel-7.1.patch | 147 ------------------
+ ...p_hosted_ng-Fix-build-for-kernel-7.3.patch |  86 ++++++++++
+ package/esp-hosted/esp-hosted.hash            |   2 +-
+ package/esp-hosted/esp-hosted.mk              |   8 +-
+ 4 files changed, 91 insertions(+), 152 deletions(-)
+ delete mode 100644 package/esp-hosted/0001-fix-esp_hosted_ng-Fix-build-for-kernel-7.1.patch
+ create mode 100644 package/esp-hosted/0001-fix-esp_hosted_ng-Fix-build-for-kernel-7.3.patch
 
- package/systemd/Config.in    |  2 +-
- package/systemd/systemd.hash |  4 ++--
- package/systemd/systemd.mk   | 10 ++++++++--
- system/Config.in             | 10 +++-------
- 4 files changed, 14 insertions(+), 12 deletions(-)
-
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index 7f3958aed8..7fd05be41b 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -21,7 +21,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	depends on !BR2_STATIC_LIBS # kmod
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_TOOLCHAIN_HAS_SSP
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_14
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	depends on BR2_HOST_GCC_AT_LEAST_8 # host-systemd
- 	select BR2_ROOTFS_MERGED_USR
-diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
-index 91ad68017b..16dab511d2 100644
---- a/package/systemd/systemd.hash
-+++ b/package/systemd/systemd.hash
-@@ -1,5 +1,5 @@
- # sha256 locally computed
--sha256  46f00bb99c02e295cfda58b2fe9c7eac67a06d2ea5895aa80580c718ca3da71d  systemd-260.6.tar.gz
-+sha256  2f78c37c6592dd34b95cca86793f1b8c5b073db35681ef80ea16a73c0c297a9e  systemd-261.4.tar.gz
- sha256  ac4985facb553559981f507982444d779115e3e3a4c8b7847ae956198490c1b3  LICENSE.GPL2
- sha256  6d9bb3b7fc818a8facc4cc296060a0883fef8710d6498f86165335846e82ee9d  LICENSE.LGPL2.1
- sha256  c9e7bf5b7c243c719b8b43c36158effb9b54c5e80abc9d82e4b2d4b2a4aa64ad  LICENSES/alg-sha1-public-domain.txt
-@@ -13,4 +13,4 @@ sha256  8a6fc0879cecc0b96bf4c08159b9d733bf0f15fcf32879aec98c4ffd05424554  LICENS
- sha256  b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0  LICENSES/MIT.txt
- sha256  2a98749f6bec00dfaed86fa9c1edea871aaae4f11ee4d100b671aaf4ce353a73  LICENSES/murmurhash2-public-domain.txt
- sha256  1a7adaa2c86cedfd6c7f5c0c7c72fd6d3e02cd0c9593f21fdb53c89bb2b130ec  LICENSES/OFL-1.1.txt
--sha256  769cad6e4cf7548fe86ccd11f16a922aaacaeaaf885af15d13bf0d6946f58cf9  LICENSES/README.md
-+sha256  a3be270384280249880bd69cab48de68f3e9906b975fb172bc2b83657c43d9a0  LICENSES/README.md
-diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 7e95e098ff..e9e3abf26b 100644
---- a/package/systemd/systemd.mk
-+++ b/package/systemd/systemd.mk
-@@ -6,7 +6,9 @@
- 
- # When updating systemd, take care of the following:
- # - Check if the requirements have changed (see README), in particular
--#   arch and headers
-+#   arch and headers. Use the "recommended baseline" to choose
-+#   BR2_TOOLCHAIN_HEADERS_AT_LEAST_..., upstream rejects issues about
-+#   build failures with older versions.
- # - If yes, propagate the dependencies to BR2_INIT_SYSTEMD
- # - If the required kernel options have changed, update the Config.in
- #   help text and the list of KCONFIG_ENABLE_OPT.
-@@ -19,7 +21,7 @@
- # - Diff sysusers.d with the previous version
- # - Diff factory/etc/nsswitch.conf with the previous version
- #   (details are often sprinkled around in README and manpages)
--SYSTEMD_VERSION = 260.6
-+SYSTEMD_VERSION = 261.4
- SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
- SYSTEMD_LICENSE = \
- 	LGPL-2.1+, \
-@@ -77,6 +79,7 @@ SYSTEMD_CONF_OPTS = \
- 	-Dfuzz-tests=false \
- 	-Didn=true \
- 	-Dima=false \
-+	-Dimds=disabled \
- 	-Dinstall-tests=false \
- 	-Dipe=false \
- 	-Djournal-storage-default=persistent \
-@@ -103,6 +106,7 @@ SYSTEMD_CONF_OPTS = \
- 	-Dsulogin-path=/usr/sbin/sulogin \
- 	-Dswapoff-path=/usr/sbin/swapoff \
- 	-Dswapon-path=/usr/sbin/swapon \
-+	-Dsysinstall=false \
- 	-Dsystem-gid-max=999 \
- 	-Dsystem-uid-max=999 \
- 	-Dsysupdated=disabled \
-@@ -926,6 +930,7 @@ HOST_SYSTEMD_CONF_OPTS = \
- 	-Dhwdb=true \
- 	-Didn=false \
- 	-Dima=false \
-+	-Dimds=disabled \
- 	-Dimportd=disabled \
- 	-Dinitrd=false \
- 	-Dinstall-tests=false \
-@@ -979,6 +984,7 @@ HOST_SYSTEMD_CONF_OPTS = \
- 	-Dsplit-bin=true \
- 	-Dstoragetm=false \
- 	-Dsysext=false \
-+	-Dsysinstall=false \
- 	-Dsysupdate=disabled \
- 	-Dsysupdated=disabled \
- 	-Dsysusers=false \
-diff --git a/system/Config.in b/system/Config.in
-index 8d80d04d97..baac35be14 100644
---- a/system/Config.in
-+++ b/system/Config.in
-@@ -123,25 +123,21 @@ config BR2_INIT_SYSTEMD
- 	depends on BR2_TOOLCHAIN_USES_GLIBC
- 	depends on BR2_TOOLCHAIN_HAS_SSP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_14
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	depends on BR2_HOST_GCC_AT_LEAST_8
- 	select BR2_PACKAGE_SYSTEMD
- 	select BR2_PACKAGE_SKELETON_INIT_SYSTEMD if BR2_ROOTFS_SKELETON_DEFAULT
- 
--comment "systemd needs a glibc toolchain w/ SSP, headers >= 5.10, host and target gcc >= 8"
-+comment "systemd needs a glibc toolchain w/ SSP, headers >= 5.14, host and target gcc >= 8"
- 	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_USES_GLIBC || \
- 		!BR2_TOOLCHAIN_HAS_SSP || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10 || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_14 || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || \
- 		!BR2_HOST_GCC_AT_LEAST_8
- 
--comment "systemd highly recommends Linux >= 5.14"
--	depends on BR2_INIT_SYSTEMD
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_14
+diff --git a/package/esp-hosted/0001-fix-esp_hosted_ng-Fix-build-for-kernel-7.1.patch b/package/esp-hosted/0001-fix-esp_hosted_ng-Fix-build-for-kernel-7.1.patch
+deleted file mode 100644
+index 90076b4956..0000000000
+--- a/package/esp-hosted/0001-fix-esp_hosted_ng-Fix-build-for-kernel-7.1.patch
++++ /dev/null
+@@ -1,147 +0,0 @@
+-From fa27d70495e3b4f92c9de43b33aa09813a318495 Mon Sep 17 00:00:00 2001
+-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+-Date: Mon, 18 May 2026 16:44:57 +0200
+-Subject: [PATCH] fix(esp_hosted_ng): Fix build for kernel 7.1
 -
- comment "Special purpose (read help)"
+-With commit:
+-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=033fe322f5852d5144a85978e880e01b1787fd0d
+-many functions esp_cfg80211_*() have argument struct netdevice * subsituted
+-with struct wireless_dev *. So let's add separate function headers and
+-retrieve struct netdev * from struct wireless_dev * if Linux version >= 7.1.
+-
+-Upstream: https://github.com/espressif/esp-hosted/pull/736
+-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+----
+- esp_hosted_ng/host/esp_cfg80211.c | 50 +++++++++++++++++++++++++++++++
+- 1 file changed, 50 insertions(+)
+-
+-diff --git a/esp_hosted_ng/host/esp_cfg80211.c b/esp_hosted_ng/host/esp_cfg80211.c
+-index c68f7983e6..1009df1fd5 100644
+---- a/esp_hosted_ng/host/esp_cfg80211.c
+-+++ b/esp_hosted_ng/host/esp_cfg80211.c
+-@@ -533,22 +533,38 @@ static int esp_cfg80211_set_default_key(struct wiphy *wiphy,
+- }
+- 
+- static int esp_cfg80211_set_default_mgmt_key(struct wiphy *wiphy,
+-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
+-+					     struct wireless_dev *wdev, INT_LINK_ID u8 key_index)
+-+#else
+- 					     struct net_device *ndev, INT_LINK_ID u8 key_index)
+-+#endif
+- {
+- 	return 0;
+- }
+- 
+-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
+-+static int esp_cfg80211_del_key(struct wiphy *wiphy, struct wireless_dev *wdev,
+-+#else
+- static int esp_cfg80211_del_key(struct wiphy *wiphy, struct net_device *dev,
+-+#endif
+- 				INT_LINK_ID u8 key_index, bool pairwise,
+- 				const u8 *mac_addr)
+- {
+- 	return 0;
+- }
+- 
+-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
+-+static int esp_cfg80211_add_key(struct wiphy *wiphy, struct wireless_dev *wdev,
+-+				INT_LINK_ID u8 key_index, bool pairwise,
+-+				const u8 *mac_addr, struct key_params *params)
+-+{
+-+	struct net_device *dev = wdev->netdev;
+-+#else
+- static int esp_cfg80211_add_key(struct wiphy *wiphy, struct net_device *dev,
+- 				INT_LINK_ID u8 key_index, bool pairwise,
+- 				const u8 *mac_addr, struct key_params *params)
+- {
+-+#endif
+- 	struct esp_wifi_device *priv = NULL;
+- 
+- 	if (!wiphy || !dev || !params) {
+-@@ -564,7 +580,11 @@ static int esp_cfg80211_add_key(struct wiphy *wiphy, struct net_device *dev,
+- 	esp_dbg("\n");
+- 
+- 	if (params->key_len == 0) {
+-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
+-+		return esp_cfg80211_del_key(wiphy, wdev, ZERO_LINK_ID key_index, pairwise, mac_addr);
+-+#else
+- 		return esp_cfg80211_del_key(wiphy, dev, ZERO_LINK_ID key_index, pairwise, mac_addr);
+-+#endif
+- 	}
+- 	return cmd_add_key(priv, key_index, pairwise, mac_addr, params);
+- }
+-@@ -783,9 +803,16 @@ static int esp_cfg80211_set_tx_power(struct wiphy *wiphy,
+- 	return cmd_set_tx_power(priv, priv->tx_pwr);
+- }
+- 
+-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
+-+static int esp_cfg80211_get_station(struct wiphy *wiphy, struct wireless_dev *wdev,
+-+				    const u8 *mac, struct station_info *sinfo)
+-+{
+-+	struct net_device *ndev = wdev->netdev;
+-+#else
+- static int esp_cfg80211_get_station(struct wiphy *wiphy, struct net_device *ndev,
+- 				    const u8 *mac, struct station_info *sinfo)
+- {
+-+#endif
+- 	struct esp_wifi_device *priv = NULL;
+- 
+- 	priv = netdev_priv(ndev);
+-@@ -1034,9 +1061,16 @@ static int esp_cfg80211_probe_client(struct wiphy *wiphy, struct net_device *dev
+- 	return 0;
+- }
+- 
+-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
+-+static int esp_cfg80211_del_station(struct wiphy *wiphy, struct wireless_dev *wdev,
+-+					struct station_del_parameters *params)
+-+{
+-+	struct net_device *dev = wdev->netdev;
+-+#else
+- static int esp_cfg80211_del_station(struct wiphy *wiphy, struct net_device *dev,
+- 					struct station_del_parameters *params)
+- {
+-+#endif
+- 	struct esp_wifi_device *priv = NULL;
+- 
+- 	if (!wiphy || !dev) {
+-@@ -1055,10 +1089,18 @@ static int esp_cfg80211_del_station(struct wiphy *wiphy, struct net_device *dev,
+- 	return 0;
+- }
+- 
+-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
+-+static int esp_cfg80211_add_station(struct wiphy *wiphy, struct wireless_dev *wdev,
+-+				    const u8 *mac,
+-+				    struct station_parameters *params)
+-+{
+-+	struct net_device *dev = wdev->netdev;
+-+#else
+- static int esp_cfg80211_add_station(struct wiphy *wiphy, struct net_device *dev,
+- 				    const u8 *mac,
+- 				    struct station_parameters *params)
+- {
+-+#endif
+- 	struct esp_wifi_device *priv = NULL;
+- 
+- 	if (!wiphy || !dev) {
+-@@ -1078,10 +1120,18 @@ static int esp_cfg80211_add_station(struct wiphy *wiphy, struct net_device *dev,
+- 	return 0;
+- }
+- 
+-+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
+-+static int esp_cfg80211_change_station(struct wiphy *wiphy,
+-+				       struct wireless_dev *wdev, const u8 *mac,
+-+				       struct station_parameters *params)
+-+{
+-+	struct net_device *dev = wdev->netdev;
+-+#else
+- static int esp_cfg80211_change_station(struct wiphy *wiphy,
+- 				       struct net_device *dev, const u8 *mac,
+- 				       struct station_parameters *params)
+- {
+-+#endif
+- 	struct esp_wifi_device *priv = NULL;
+- 
+- 	if (!wiphy || !dev) {
+--- 
+-2.47.3
+-
+diff --git a/package/esp-hosted/0001-fix-esp_hosted_ng-Fix-build-for-kernel-7.3.patch b/package/esp-hosted/0001-fix-esp_hosted_ng-Fix-build-for-kernel-7.3.patch
+new file mode 100644
+index 0000000000..3614f65b16
+--- /dev/null
++++ b/package/esp-hosted/0001-fix-esp_hosted_ng-Fix-build-for-kernel-7.3.patch
+@@ -0,0 +1,86 @@
++From f91cb6274e5b13342091a934fadeeb39ea9613d0 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Thu, 29 Oct 2026 12:46:52 +0100
++Subject: [PATCH] fix(esp_hosted_ng): Fix build for kernel 7.3
++
++With commit:
++https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=914781c72813989b512609a51f8abb68417f722d
++argument u64 *cookie changed into u64 cookie for mgmt_tx callback.
++So let's deal with it when Linux version >= 7.3.0.
++
++With commit:
++https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4ab9b637b94a
++probe_client callback has been renamed to probe_peer.
++So let's disable probe_client when Linux version >= 7.3.0.
++
++Upstream: https://github.com/espressif/esp-hosted-linux/pull/6
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++---
++ host/esp_cfg80211.c | 22 ++++++++++++++++++++--
++ 1 file changed, 20 insertions(+), 2 deletions(-)
++
++diff --git a/host/esp_cfg80211.c b/host/esp_cfg80211.c
++index 2edd523..ff61de5 100644
++--- a/host/esp_cfg80211.c
+++++ b/host/esp_cfg80211.c
++@@ -1190,7 +1190,12 @@ static int esp_cfg80211_mgmt_tx(struct wiphy *wiphy, struct wireless_dev *wdev,
++ #else
++ 				struct cfg80211_mgmt_tx_params *params,
++ #endif
++-		u64 *cookie)
+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(7, 3, 0)
+++				u64 cookie
+++#else
+++				u64 *cookie
+++#endif
+++)
++ {
++ 	struct esp_wifi_device *priv = NULL;
++ 
++@@ -1207,8 +1212,11 @@ static int esp_cfg80211_mgmt_tx(struct wiphy *wiphy, struct wireless_dev *wdev,
++ 		esp_err("empty priv\n");
++ 		return -EINVAL;
++ 	}
++-
+++#if LINUX_VERSION_CODE >= KERNEL_VERSION(7, 3, 0)
+++	return cmd_mgmt_request(priv, params, &cookie);
+++#else
++ 	return cmd_mgmt_request(priv, params, cookie);
+++#endif
++ }
++ 
++ static int esp_cfg80211_set_ap_chanwidth(struct wiphy *wiphy,
++@@ -2444,12 +2452,18 @@ static void esp_cfg80211_mgmt_frame_registrations(struct wiphy *wiphy,
++ }
++ #endif
++ 
+++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 3, 0))
+++static int esp_cfg80211_probe_peer(struct wiphy *wiphy, struct net_device *dev,
+++                                  const u8 *peer, u64 cookie)
+++#else
++ static int esp_cfg80211_probe_client(struct wiphy *wiphy, struct net_device *dev,
++                                   const u8 *peer, u64 *cookie)
+++#endif
++ {
++ 	return -EOPNOTSUPP;
++ }
++ 
+++
++ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 1, 0))
++ static int esp_cfg80211_del_station(struct wiphy *wiphy, struct wireless_dev *wdev,
++ 					struct station_del_parameters *params)
++@@ -2675,7 +2689,11 @@ static struct cfg80211_ops esp_cfg80211_ops = {
++ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0))
++ 	.update_mgmt_frame_registrations = esp_cfg80211_mgmt_frame_registrations,
++ #endif
+++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(7, 3, 0))
+++	.probe_peer = esp_cfg80211_probe_peer,
+++#else
++ 	.probe_client = esp_cfg80211_probe_client,
+++#endif
++ 	.del_station = esp_cfg80211_del_station,
++ 	.add_station = esp_cfg80211_add_station,
++ 	.change_station = esp_cfg80211_change_station,
++-- 
++2.47.3
++
+diff --git a/package/esp-hosted/esp-hosted.hash b/package/esp-hosted/esp-hosted.hash
+index b478d412f4..8b8347ebf4 100644
+--- a/package/esp-hosted/esp-hosted.hash
++++ b/package/esp-hosted/esp-hosted.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  b8baa6d1c8576f5453e382333bc4aafef1293b4705f073dff5b08d900d10d68c  ng-v1.0.6.tar.gz
++sha256  02abcfea2bf8e040d7fb6af19de155d19cf0a7f698dc069639ec0ab5f2dedf4b  ng-v54d53676e36850e53d82ee779b6d65dff8e65967.tar.gz
+ sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  esp_hosted_ng/host/LICENSE
+diff --git a/package/esp-hosted/esp-hosted.mk b/package/esp-hosted/esp-hosted.mk
+index 5cf6571481..8a9140d07a 100644
+--- a/package/esp-hosted/esp-hosted.mk
++++ b/package/esp-hosted/esp-hosted.mk
+@@ -4,13 +4,13 @@
+ #
+ ################################################################################
  
- config BR2_INIT_CATATONIT
+-ESP_HOSTED_VERSION = 1.0.6
+-ESP_HOSTED_SITE = $(call github,espressif,esp-hosted,release/ng-$(ESP_HOSTED_VERSION))
++ESP_HOSTED_VERSION = 54d53676e36850e53d82ee779b6d65dff8e65967
++ESP_HOSTED_SITE = $(call github,espressif,esp-hosted-linux,$(ESP_HOSTED_VERSION))
+ ESP_HOSTED_SOURCE = ng-v$(ESP_HOSTED_VERSION).tar.gz
+ ESP_HOSTED_DEPENDENCIES = linux
+ ESP_HOSTED_LICENSE = GPL-2.0
+-ESP_HOSTED_LICENSE_FILES = esp_hosted_ng/host/LICENSE
+-ESP_HOSTED_MODULE_SUBDIRS = esp_hosted_ng/host
++ESP_HOSTED_LICENSE_FILES = host/LICENSE
++ESP_HOSTED_MODULE_SUBDIRS = host
+ 
+ define ESP_HOSTED_LINUX_CONFIG_FIXUPS
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
 -- 
-2.55.0
+2.47.3
 
 _______________________________________________
 buildroot mailing list
