@@ -1,150 +1,124 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 424FB606A32C
-	for <buildroot@archiver.kernel.org>; Mon,  2 Nov 2026 22:49:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84120606A324
+	for <buildroot@archiver.kernel.org>; Tue,  3 Nov 2026 04:10:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=oYMcLc6s
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=bhzOgelD;
+	dkim=fail reason="signature verification failed" (1024-bit key, unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256 header.s=mail header.b=ixXGIflI
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0C7576060A;
-	Mon,  2 Nov 2026 22:49:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 44C3E80DC5;
+	Tue,  3 Nov 2026 04:10:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M_dVcwlBdGUd; Mon,  2 Nov 2026 22:49:37 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 037DF605FF
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793659777;
-	b=KsTdl1asgVxdIh0GqAbudJDKt+RxwgESJUXhlvQxPC2Cxb0fpWpj6LSD7nvHYeTaHmgw
-	 1TNlWV3f5tyX7uHPcfU51L4J4CPfVPCmpDzzPeH0o+uF/NE9Sw13aSwO5WrYTMpOPjMK7
-	 LuNDlAFNXAFT8Q0bNzSpuK2oG3LLwtUOP09Dl28epfqTq1iqHFZg8X3iWyal13hlbzcNq
-	 Rk/TdrIB4g3luA70wPEbESuWK6CzCXeX5gxLlsklgt6AYaWRfVBd40vCGN31LMOnShAkh
-	 wGcvcZSG7TDWg8O5BIWMYVhO/9dg9k2FCB4itl+aO1itDIWs5Q8t1SWgCdgJeUnrRJQ==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id d202keEKwkB6; Tue,  3 Nov 2026 04:10:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org AEF9280DA2
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793679016;
+	b=J/hzGn3LnVdGgfhotTtM5a/H1ckV/pRMkAIsc+xN6ZSEeyZiDJTuRc6gIVe4OwQQbI3k
+	 ZpPsb3jFIhSEq3O/4W1hncRLeZxih0cW3s36YGrfuikRONWZwzZhsmZ1J8jBRxMa4cHjj
+	 G1J2/hZxSSfR2Je+kUn5mcdb5giZTCVfOsX39iDAnZhewuBNPypiN0If3CSU3N90Alqug
+	 1t7lkpvNxdGnxulagapKHQLerj+hmn6xHyGOdKDWMJQIGdbVWI+9vry+JAoc/+Ol2oQNH
+	 bAzZEXZdmbhhDrKNjDCnh+5tDm9Z213dvUhCsWvkKc2yocO8QyFOqQqT7GoASzHf7IQ==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793659777;
+	c=relaxed/relaxed; t=1793679016;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 Received:From:To:Cc:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=//teD7mg3ye3ET6crOEcdSP2biAgzUFaBQK1YefwBXs=;
-	b=DjUyU5F3ywC7Fh6KEr1SLfR+3LnBvD/Y3S3kR+mRRM5o5NKDS/f8pA6iDTvQ3VHlXPqH
-	 IfQ8rqFZfaUmLErrkU0E3jl6QIcjDWwhtIHOPqCqVEP7svM2iX4uyKlvhMJ2Tgad5JC8N
-	 Ot9GfCHvm3YuYepKYN4TgbGRh4bEepKGLo8VsIIfP+E5vzB4s3Vk5CV3t/cL5pTf8vpj9
-	 hJrHpEk5Tq9pXpEfasZqkdf33QUQ66y6z1+IPMRqki5erjGFqmxihTg63AMTPuAcSiS2F
-	 /DsxUrl+JmbdnO64lFY/67plgvSiTdCf0Y1THoOL+O08xX1Nk9iDOpCVCex/OZVt7Tg==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 DKIM-Signature:Received:From:To:Cc:Date:Message-ID:X-Mailer:
+	 MIME-Version:X-Virus-Scanned:X-Virus-Status:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=jD8ZNwpOtvccHaa4a4iAEsonhs1CdR/H2I+kjMoPFKY=;
+	b=QfvOTA1upWL0cx8Tl5TESuNf4ExBV1yWbnvZnjiisCb1nc0drqY8xOUHfyNjjBZEHFXt
+	 CLLlm3ct1TIMLjD7FlPp/QXqZIh5W47yr+JOutDtHnqocuZsRj2NDAQYvJV4ceZ+/t6NV
+	 JkiNIR5pAs+5vXekOtfGWsrmdr3GiYv5Uj1iBnuPIKnm1RdzN2tvHkT48S1fqcPNoERpE
+	 4PXAaSNnpbV1QZIrkKx8KU5RpQqpK7NwCvDSOrzFDVih7xxD/mEqWwBJP1EKQW9CLWRD5
+	 kxwb2TAWTv4Qkgrt5JmK9yUIBYVc8sVEc+pl5zULzgJV3waqWDr0sFP8T9LWQTROuSw==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793659777;
-	bh=//teD7mg3ye3ET6crOEcdSP2biAgzUFaBQK1YefwBXs=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=oYMcLc6s5gZH6uar6QK3/iI4jC3X0ANXGpWJ821xExrfHLtRXHVdrgzYHSTG5huD3
-	 F5NLiEuHOY4BZbxy/LaO70Iji7S2EC+BhW0fbFcQFFGz06tGNhc2htkhKNchgd+El3
-	 OiC1VFDeYVDASDfaNlkdkyqzsU7IV/MrElog3xN+HbeGeVlgF7xlkS2IYjwP9+bvO2
-	 tJ0qfTJHk8tYSR5hOYOQgdm6EzpJYrgz1iHvus4VjmJT+/9rQTyxd0pdlDhw9yphD9
-	 Nm0qKPMN/mumfXHamCIbZpRoP5q+P8HPvxxZ0AWUASs5WdFX8jTfCFZTVZI6fpI7go
-	 ntkATZ3L/tegA==
+	s=default; t=1793679016;
+	bh=jD8ZNwpOtvccHaa4a4iAEsonhs1CdR/H2I+kjMoPFKY=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=bhzOgelDiAkNCiMLEu6e2jvp5zbJO/gqsO89kxb8n+7wxOTHq5oZ/81DMPwXKakae
+	 gZuNogzAsFLUVllfvJ/FSyU4vN+FriAklCrzkZVIokhFOycQtLM0MgshLa5tJRb436
+	 daB5Y+K8z3C4AOWPcgJxLD2adTsvSgdCzyTTLU3/bUzCzZYl08Bq66JfZRXFMT/NQt
+	 fjakxB1P48o8u3I4ZTBpRFUXskH8Ql5UvFvO1Wr60E0FwztmKQ7W1Ji/YGS6xcq0Ec
+	 GhGf7px0mOLoFD6+QBHLt2vZ9fT8Je0hFTXLvvjdqTCZ10wYQNJGtJa9AaS+jbTO7z
+	 HclY26sf+gu4w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 037DF605FF;
-	Mon,  2 Nov 2026 22:49:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1544C2A8
- for <buildroot@buildroot.org>; Mon,  2 Nov 2026 22:49:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AEF9280DA2;
+	Tue,  3 Nov 2026 04:10:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id F4083B00
+ for <buildroot@buildroot.org>; Tue,  3 Nov 2026 04:10:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0698D40519
- for <buildroot@buildroot.org>; Mon,  2 Nov 2026 22:49:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E5890606B6
+ for <buildroot@buildroot.org>; Tue,  3 Nov 2026 04:10:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RYP6BvN2qfiZ for <buildroot@buildroot.org>;
- Mon,  2 Nov 2026 22:49:33 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 2DF6E40512
-Authentication-Results: smtp4.osuosl.org;
- arc=none smtp.remote-ip=209.85.128.176
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793659773;
- b=cMiu5qQaXri8AXo32TQszseYW12dnzsGE5nKlPdvFQN4t/51tri0lQjk0rgM321ynlsA
- Ph2Te/kzewCn6SjSgG3204y5qdvgtbv7nlVrA4/EA40y3VeBw1tflAxv0a7/pJ5EZMv9O
- Ic28z6QixNoWF25mIRm9HkJREihyE9LhDQUr+nd4mY8hqYqnnyhGzkEzWtdvOAHS5bxk/
- NsM99pCarz81ajxU7JgazwCPQ7vagx0APPYJJrmCneWDXQq2i5IWABPP4LK/sUVbo3x0r
- m7UtmQUI8r7ERxv1gWCCHR3Q7T+reyJbPs4eTq7aMeHNLmafpCxtc6GF2R07RQjyi1w==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3fWHBNq0gcC9 for <buildroot@buildroot.org>;
+ Tue,  3 Nov 2026 04:10:14 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org D9767606A8
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=176.9.89.163
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793679014;
+ b=PLCROCMxLjb+fcKp7roDRoejz6le1lS9aEWgMA0CwLK4xJuXsKqY1IRAN0Bonp+fb2eB
+ lqt2xbAHR/FxKMogaYa2DWtwfSSaKUk4p5Js6d+hXxzoRTqEAzk9tzxoXSD9T8/9tk3On
+ kCOoIBhew/glAD55QfZdXNr+7jKEEY+egVWazlAIBaJcmpnkMHBloAAt93D4EypzdZs5w
+ Ryba32EuDoLSAO5eV+q2urkVGGTV+VCnAEpoNwrOkefZ2Usl+I0AP/Ok7+vZW6f9PK140
+ 9+lFF8LHVlfTt9gNIlROpH4MoszcoE/Tf3ojvhBn8yoW/2b1O82bWWWCVF1xktkRyJA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793659773;
- h=Received-SPF:Received:X-Google-DKIM-Signature:X-Gm-Message-State:
- X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:Date:Message-ID:
- X-Mailer:In-Reply-To:References:MIME-Version:
- Content-Transfer-Encoding;
- bh=+r3KXl8EvubFIpHGMUnPYvvvb5PsAsK2TP+pmwav5Y8=;
- b=O2ViY98YHdtyYPjcgTO+rLv/sVZ+n2Ox76LNotOTSfbpND788hY+s68hI84A4R6tdu68
- 36KHRN/oMHCgnX4Dd5X3OF9GJivqPlCE3cCxjJiFeBb2jWLlmLC4D83JHEx+XB0cOVpvb
- NCPtij0GFqhoC4yxtWhjeYUr6CdZ/a903jPMTdCHQNG/hZOFox3zn2T/FKc2KpuL0SiJt
- R5ztnsjbD5lvSSojR4oRJLm01CKsZ1G/K0YinjT9qm9vMbW/qBI2jlrw6gfri171bbPQX
- AUlKt23RnA1fCr1bBpTLCCdQlcKA14mu4USxBGlcpKov9ixKun9HkxrPwm4ef8SPW1Q==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
- dmarc=none header.from=telaak.dev;
- arc=none smtp.remote-ip=209.85.128.176
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.176;
- helo=mail-yw1-f176.google.com; envelope-from=jttelaak04@gmail.com;
- receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none) header.from=telaak.dev
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com
- [209.85.128.176])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2DF6E40512
- for <buildroot@buildroot.org>; Mon,  2 Nov 2026 22:49:32 +0000 (UTC)
-Received: by mail-yw1-f176.google.com with SMTP id
- 00721157ae682-8ab43af5e97so1682547b3.1
- for <buildroot@buildroot.org>; Mon, 02 Nov 2026 14:49:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793659772; x=1794264572;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=+r3KXl8EvubFIpHGMUnPYvvvb5PsAsK2TP+pmwav5Y8=;
- b=iU1npaJAW0NvB9mxLauQOufmAU9tRTxwC6y0p+FwReFEWjXI09VQ8f89c0nl8BH09K
- HOWi7Q+12VbggRuEoXP9t1fVeVrgWizQGbo6fJo/EOjmxp6vjLfS39gEKUmMNZZy1Vky
- ByQyNHRBtAk45tyMQpQpy/ihS6agTVSXDd1KYNBF9LaAdEziX4VDVBvAQX9rJyjTtrgN
- /LWJ3KbvpaBZyMpRUUIiMa/9mRTnjY0Upr4eYPhXKRdlzHs3F9hF7EQj7RGaeian5kCn
- R+eG0l0dzBO7jZXJCL64dC+RZPcD55CtUtevkSW6m34shY63QbEP5jICcXuuC0zJgXRi
- NgoA==
-X-Gm-Message-State: APuU4Z+i86TyZJkXA5cJ8mhdsbNte9BcU2MQ23/8Wvqwn32KV/s3erHi
- gh/HA+pLmn3KOB66gbhGOApmWaT1I4l6VJbkhPKWYt/h1VytbxG5UQBpw7iozxJdgzo=
-X-Gm-Gg: AYBFou1fJhDFc03YCd6/dUjwwkdbsBMVmrdLOsBMRR652LTDHyRTfcTTdCKpV3cTa1N
- /zVJOMZp2R7oIWe8lvSg63t+FZogjKfYxb5xrusA75TbgOIYE00q9x9re62p91X/Ba+ZGQZu2pl
- Mu4KY2LC4tmgWG6utiF8/huKITkAY09puHi48dpNJ9t4qggLbKicvfuVE9a2giffmwsZebYpbFw
- +TqCNMMl1Nfxw821krXEhJ/2u11zGekcwIUI4mUb1StB43ypvegmuaMgyHnKAQ+O9D2P9mMS9ht
- erOCvXuu/yrmysPpFhrPjUOUT7sGu2W7zLI7W7wwZ/NmtcVilGcg70F8lp4vu9rH5LqU/kAcWJ/
- cwWHGzP00HfcS6DXFOu2AyeIESQMwcFlblNYf0Wd5+5rxKCSGrhlRcZsFl3nZIweIF8kP0XXCTS
- mFdXgeNA2H39cNcdUiczcrP002olgfxWzRcdPZl4I5DYI0kUeW9mNdWnGLc2/Zrsc/jlrH5pBhJ
- YOS50ribN1ZF3ZoyCJj5efZJ63R+RJUiv8+xzhLQ0wGOge6wm4w1NXhK1A8eub6LFO7zc47Oxvu
- oqSNw7wytsFJ8ffHqOQnvlVAtwe4bUGHBp6qvu/QZZmYEbgvFvcBEn9H3cHLQ8JkGDbwzDK9NlS
- 3aRvATx34MTA0PJX0pZKeWH5AMVilh9TxUWX6jS4ei14jhPQtNsnh
-X-Received: by 2002:a05:690c:4192:b0:8b0:a01e:2ce2 with SMTP id
- 00721157ae682-8b1c66e9e30mr80629697b3.15.1793659771755; 
- Mon, 02 Nov 2026 14:49:31 -0800 (PST)
-Received: from localhost.localdomain ([71.68.170.161])
- by smtp.gmail.com with ESMTPSA id
- 00721157ae682-8b2b71641aasm61638357b3.25.2026.11.02.14.49.31
- (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
- Mon, 02 Nov 2026 14:49:31 -0800 (PST)
-From: Joseph Telaak <joseph@telaak.dev>
+ c=relaxed/relaxed; t=1793679014;
+ h=Received-SPF:DKIM-Signature:Received:From:To:Cc:Subject:Date:
+ Message-ID:X-Mailer:MIME-Version:Content-Transfer-Encoding:
+ X-Virus-Scanned:X-Virus-Status;
+ bh=W9Ll3ecjubfj8Cb/l6/67o7TTqCserQjgM/2YvVuOAE=;
+ b=dtpEAD8cNyV6W045krXpo27P7IV3rW9U0nJWVBppwIWBK6LPdBFhik6PzmgxVa+oXQAe
+ m1x1t72XqLRWznY1mjMCQPqHN7Y7kbojgftllvLoDc1XabhZ66mDpXf20IBGtuiWU/RJH
+ MrB84PlYdjGnkiEJPFNepyk3OVVmD0d+KawSUBGLne8ubfgoeZAQ9v/uIy6kFvEkrELQ7
+ jn5YfvNSXxn0PqTKUq5e2c+oDca+ochgiIV7TIoZixPi1dgeGAD7OCkl8EXOCYqqG2WrT
+ 8/m/8ny8IVFeZu8gEC6vQMcGVIel5dzbKsMB5hjdeiTyPFBGymvV+d7T01/zIwbPYEg==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+ dmarc=none header.from=umbiko.net;
+ dkim=pass header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
+ header.s=mail header.b=ixXGIflI; 
+ arc=none smtp.remote-ip=176.9.89.163
+Received-SPF: None (mailfrom) identity=mailfrom; client-ip=176.9.89.163;
+ helo=serv15.avernis.de; envelope-from=br025@umbiko.net; receiver=<UNKNOWN> 
+Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=umbiko.net
+Authentication-Results: smtp3.osuosl.org; dkim=pass (1024-bit key,
+ unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
+ header.s=mail header.b=ixXGIflI
+Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D9767606A8
+ for <buildroot@buildroot.org>; Tue,  3 Nov 2026 04:10:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=umbiko.net; s=mail;
+ t=1793679007; bh=FGX/My5iQsH2T1H7rWsjqK1FnIdlXm9hkryMkRvaVf0=;
+ h=From:To:Cc:Subject:Date;
+ b=ixXGIflItp300jSdfse0zI0DbBB1FMvkCRi9+fHNczoZPgQ1p6riUaYeg5PjJ3TXs
+ iBKvm8zn6NKYbXNkaNokrOX1c7E91AB+BL/eQ2VvgNR1vVgmjX7z/ODi0FmPWEPYeM
+ sHtXM/Z1wklQJoxI/Cms7kglrUnv7nV0jD3ys3v8=
+Received: by serv15.avernis.de (Postfix) with ESMTPSA id 7FFBBBDE3543;
+ Tue, 03 Nov 2026 05:10:06 +0100 (CET)
+From: Andreas Ziegler <br025@umbiko.net>
 To: buildroot@buildroot.org
-Cc: Adrian Perez de Castro <aperez@igalia.com>
-Date: Mon,  2 Nov 2026 17:49:15 -0500
-Message-ID: <20261102224915.69302-3-joseph@telaak.dev>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20261102224915.69302-1-joseph@telaak.dev>
-References: <20261102224915.69302-1-joseph@telaak.dev>
+Cc: Andreas Ziegler <br025@umbiko.net>
+Date: Tue,  3 Nov 2026 05:09:46 +0100
+Message-ID: <20261103040947.211239-1-br025@umbiko.net>
+X-Mailer: git-send-email 2.53.0
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/2] package/wpewebkit: add WPE Platform options
+X-Virus-Scanned: clamav-milter 1.4.3 at serv15.avernis.de
+X-Virus-Status: Clean
+Subject: [Buildroot] [PATCH 1/1] package/mpd: update version to 0.24.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -159,132 +133,71 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-16.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-WPE Platform is the newer embedding API of WPE WebKit: the application
-creates a WPEDisplay and WebKit renders through it, without libwpe or
-a WPE backend. In 2.50 it is only enabled by default in developer
-mode, so add an option for it, with sub-options for the DRM and
-Wayland platforms. The headless platform has no dependencies and is
-always built.
+Bug fixes plus libupnp version adaption - Buildroot uses 1.14.25,
+which is usable.
 
-WPE Platform uses libmanette for gamepads when it finds it, so build
-libmanette first when it is enabled.
+Version 0.24.18 change log: 
 
-The DRM platform needs libinput and libudev. It also needs GBM and
-libdrm, which the existing USE_GBM and USE_LIBDRM blocks handle. It
-imports buffers for scanout with GBM format modifiers, which not every
-GBM provider supports, so, like cog, it depends on
-BR2_PACKAGE_LIBGBM_HAS_FEATURE_FORMAT_MODIFIER_PLANE_COUNT, the
-closest feature symbol. It does not use gbm_bo_get_fd, so unlike cog
-it does not need the DMA_BUF feature.
+* protocol
+  - "albumart": don't climb above the music directory for CUE tracks
+* database
+  - proxy: fix playback of CUE tracks
+  - simple: reject playlist entries which climb above the music directory
+  - simple: improve symlink checks
+  - upnp: support libupnp 1.18 (and 1.14.26 to 1.14.29)
+* storage
+  - nfs: fix use-after-free crash bug after disconnect
+  - nfs: fix crash after directory listing cancellation
+* archive
+  - iso9660: limit nesting depth and detect directory loops
+* decoder
+  - mpg123: fix "cannot seek!" error
+* output
+  - osx: follow the default device after it has changed
+  - wasapi: fix race crash bug
+* mixer
+  - alsa: fix data race which could set the wrong volume
+  - sndio: fix data race
+  - software: fix use-after-free crash bug
+  - wasapi: fix crash bug
+* Android
+  - fix crash bug
 
-The Wayland platform selects wayland and wayland-protocols even though
-wpewebkit itself selects them today: that is only for wpebackend-fdo,
-and the Wayland platform needs them on its own.
-
-Every WPE Platform display compiles an XKB keymap with libxkbcommon.
-Without the xkeyboard-config data this fails and the application
-crashes, so select xkeyboard-config.
-
-Pass ENABLE_WPE_PLATFORM explicitly in both cases, as upstream
-enables it by default starting with 2.54.
-
-Signed-off-by: Joseph Telaak <joseph@telaak.dev>
+Signed-off-by: Andreas Ziegler <br025@umbiko.net>
 ---
- package/wpewebkit/Config.in    | 38 ++++++++++++++++++++++++++++++++++
- package/wpewebkit/wpewebkit.mk | 24 +++++++++++++++++++++
- 2 files changed, 62 insertions(+)
+ package/mpd/mpd.hash | 2 +-
+ package/mpd/mpd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
-index c624c697..3b7ea4fc 100644
---- a/package/wpewebkit/Config.in
-+++ b/package/wpewebkit/Config.in
-@@ -86,6 +86,44 @@ comment "sandboxing supports needs a toolchain w/ headers >= 3.17"
- 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
+diff --git a/package/mpd/mpd.hash b/package/mpd/mpd.hash
+index a1ecb908bd..b4b4b6e2b9 100644
+--- a/package/mpd/mpd.hash
++++ b/package/mpd/mpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  06d606da69112cbc999f23c72e8eadcb6bac0107abea6e658e3d01f66ad8a086  mpd-0.24.17.tar.xz
++sha256  afe8fddbdbefc7b3e7ee721fd0dd4e2276f29e40fe7e3c573daf5123b444578f  mpd-0.24.18.tar.xz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/mpd/mpd.mk b/package/mpd/mpd.mk
+index 6023578236..a017fe236a 100644
+--- a/package/mpd/mpd.mk
++++ b/package/mpd/mpd.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+config BR2_PACKAGE_WPEWEBKIT_WPE_PLATFORM
-+	bool "WPE Platform API"
-+	select BR2_PACKAGE_XKEYBOARD_CONFIG # runtime
-+	help
-+	  Build the WPE Platform API, an alternative to libwpe and WPE
-+	  backends: the application creates a WPEDisplay (DRM, headless
-+	  or Wayland) and WebKit renders through it. The headless
-+	  platform is always included.
-+
-+	  The libwpe API remains available.
-+
-+if BR2_PACKAGE_WPEWEBKIT_WPE_PLATFORM
-+
-+config BR2_PACKAGE_WPEWEBKIT_WPE_PLATFORM_DRM
-+	bool "DRM platform"
-+	depends on BR2_PACKAGE_HAS_LIBGBM
-+	depends on BR2_PACKAGE_LIBGBM_HAS_FEATURE_FORMAT_MODIFIER_PLANE_COUNT
-+	depends on BR2_PACKAGE_HAS_LIBUDEV # libinput
-+	select BR2_PACKAGE_LIBDRM
-+	select BR2_PACKAGE_LIBINPUT
-+	help
-+	  Display directly through kernel mode-setting (KMS), without
-+	  a compositor, with input from libinput.
-+
-+comment "DRM platform needs GBM w/ format modifiers and libudev"
-+	depends on !BR2_PACKAGE_HAS_LIBGBM || \
-+		!BR2_PACKAGE_LIBGBM_HAS_FEATURE_FORMAT_MODIFIER_PLANE_COUNT || \
-+		!BR2_PACKAGE_HAS_LIBUDEV
-+
-+config BR2_PACKAGE_WPEWEBKIT_WPE_PLATFORM_WAYLAND
-+	bool "Wayland platform"
-+	select BR2_PACKAGE_WAYLAND
-+	select BR2_PACKAGE_WAYLAND_PROTOCOLS
-+	help
-+	  Display as a client of a Wayland compositor.
-+
-+endif
-+
- config BR2_PACKAGE_WPEWEBKIT_MULTIMEDIA
- 	bool "multimedia support"
- 	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS # gst1-libav
-diff --git a/package/wpewebkit/wpewebkit.mk b/package/wpewebkit/wpewebkit.mk
-index ce4d1ad9..f9266d1a 100644
---- a/package/wpewebkit/wpewebkit.mk
-+++ b/package/wpewebkit/wpewebkit.mk
-@@ -94,6 +94,30 @@ else
- WPEWEBKIT_CONF_OPTS += -DENABLE_WEBDRIVER=OFF
- endif
- 
-+ifeq ($(BR2_PACKAGE_WPEWEBKIT_WPE_PLATFORM),y)
-+WPEWEBKIT_CONF_OPTS += \
-+	-DENABLE_WPE_PLATFORM=ON \
-+	-DENABLE_WPE_PLATFORM_HEADLESS=ON
-+# Gamepad support uses libmanette when it is found
-+ifeq ($(BR2_PACKAGE_LIBMANETTE),y)
-+WPEWEBKIT_DEPENDENCIES += libmanette
-+endif
-+ifeq ($(BR2_PACKAGE_WPEWEBKIT_WPE_PLATFORM_DRM),y)
-+WPEWEBKIT_CONF_OPTS += -DENABLE_WPE_PLATFORM_DRM=ON
-+WPEWEBKIT_DEPENDENCIES += libinput libudev
-+else
-+WPEWEBKIT_CONF_OPTS += -DENABLE_WPE_PLATFORM_DRM=OFF
-+endif
-+ifeq ($(BR2_PACKAGE_WPEWEBKIT_WPE_PLATFORM_WAYLAND),y)
-+WPEWEBKIT_CONF_OPTS += -DENABLE_WPE_PLATFORM_WAYLAND=ON
-+WPEWEBKIT_DEPENDENCIES += wayland wayland-protocols
-+else
-+WPEWEBKIT_CONF_OPTS += -DENABLE_WPE_PLATFORM_WAYLAND=OFF
-+endif
-+else
-+WPEWEBKIT_CONF_OPTS += -DENABLE_WPE_PLATFORM=OFF
-+endif
-+
- ifeq ($(BR2_PACKAGE_FLITE),y)
- WPEWEBKIT_CONF_OPTS += -DENABLE_SPEECH_SYNTHESIS=ON
- WPEWEBKIT_DEPENDENCIES += flite
+ MPD_VERSION_MAJOR = 0.24
+-MPD_VERSION = $(MPD_VERSION_MAJOR).17
++MPD_VERSION = $(MPD_VERSION_MAJOR).18
+ MPD_SOURCE = mpd-$(MPD_VERSION).tar.xz
+ MPD_SITE = https://www.musicpd.org/download/mpd/$(MPD_VERSION_MAJOR)
+ MPD_DEPENDENCIES = host-pkgconf fmt
 -- 
-2.50.1 (Apple Git-155)
+2.53.0
 
 _______________________________________________
 buildroot mailing list
