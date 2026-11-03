@@ -1,143 +1,214 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C82B606B6E8
-	for <buildroot@archiver.kernel.org>; Tue,  3 Nov 2026 08:45:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E1A9606A329
+	for <buildroot@archiver.kernel.org>; Tue,  3 Nov 2026 08:52:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=a76TDyRs
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=lrcqBU6U
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D5C276074A;
-	Tue,  3 Nov 2026 08:45:13 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iWeBL40PqDNs; Tue,  3 Nov 2026 08:45:11 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org AA4CA6060A
-Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793695511;
-	b=qx78uUwGb4Vyf0Rnr6fHnI2SSQUr9s7raOTTc+sYmzebaEsYYnZgGhjeEBWGUK79qH84
-	 V2p4WfU6wv4YOa+vdXFy5P3vKKE/FtCHJ/oUvpL7jM+ZPiFiZidbglAU5ZlULWu8snGkX
-	 ZmT4GXMBoGUDEEwMyt5UwiEGOUBIxBeh6ACjww38/PydMX8r+ndE/Y/oztrHgymPTisKP
-	 Hyc2VlI5AKrTOMWLjlk+Ym81MKly40PJBggsviIaRTKJ0T//un6GzAv+KuuPnOfAH/wbj
-	 ARSSJDPT/V/l4pEU0db5F6/yiBx86m6uS8r2aMyrLfAJXKaMPl8IvxuIx+c3mBHX6Yg==
-ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793695511;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 Received:To:Date:Message-Id:X-Mailer:MIME-Version:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=VrZ7AC6qK8wY8CNlddNXmdY29ZTwxrbD33qbAjw6aQg=;
-	b=lEmz81lV39GPSXCNbRIDgJvexN1hUrUAi+JXKeAAFKRcUOox8MrFvhqPGDYGOzH3SicY
-	 NE+Dm7b6siaBfqU+fPJcry/O/R6fd/FQG4VgKTZIzCrcTiMx2zF32Rtp//7Bg8bcFDHwu
-	 u4+l7MxTDtVztQj6ytbpHMCMWgs8GyenlACI8lr760QiomffQqRC39Lfhr0XH8VlIxEK8
-	 YfdxDab0qzj3qRtceTi5CcPiEN4/ThD0oLp1Tjv/h1iZkKRymAsG1iYsM2ljc9VehtGZO
-	 0NBsPLPa5/wKOpgILCotrEofBMK84PtT1eghjMMrtUis69HO/++uGrau10BKqiNVdHg==
-ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
-	arc=fail smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793695511;
-	bh=VrZ7AC6qK8wY8CNlddNXmdY29ZTwxrbD33qbAjw6aQg=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=a76TDyRsKZuWyC9TGTjWTT9u3bwrwWf1ZU6lnbOM2J1iD1Sk9BjlAlLztuGo4mJDl
-	 J6z22Ksa3Cr4f1STrxw3LMYex8ZOkd+qaYiYAXWQaQdaT8lSduScZjGEVsJ3r+9PY/
-	 4KvU/MoKjKMbvu1aKsQpv6hg3TCderMtL0c9bnme520Ig8rAPvCMd036F2ui/Z5ti3
-	 uAaJ8MPMhRXkTb6ouuzSqkrLhuwDsPnVgY4G3VcP+fnloAnltCMAoXZPB4+PqfkuXT
-	 WbpHOPz1JOU9PLXpCSw/t+7sQPLMm688JNL5fx0qNi1OHVCxLir3WvUkr57gKX+8jq
-	 r+NUhO3HRTQvw==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AA4CA6060A;
-	Tue,  3 Nov 2026 08:45:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 07EFE411
- for <buildroot@buildroot.org>; Tue,  3 Nov 2026 08:45:10 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E20AB80DE2
- for <buildroot@buildroot.org>; Tue,  3 Nov 2026 08:45:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7DAB180E42;
+	Tue,  3 Nov 2026 08:52:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U7YjRdwEbass for <buildroot@buildroot.org>;
- Tue,  3 Nov 2026 08:45:09 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 987F880DEE
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793695509;
- b=X0Twur/Zu4j6sZiYLduD0Wq/oi0BRS9iEwzYaGiS8uqH2A0M5Wf4HOWBRF6jq+PZ+AjD
- xPi8J0Kviim7y0NzcoBqET8aW4WjKsjGJz8xXTflAamrEbaaB7SyKEh3b1C1EHvjHafSs
- pxbQ0viCIYMcWkA84lbou2LobB5a5ESMIoFcNneRdRTAqnbH9Rox0HliSUAp2T1LDftFV
- g6qGDf2apk9TMRgOuctkAEbzZJrGaITOnYJnpCg9B+1ek7FnNYXVxyGVobXDvcD+TVisk
- 89M7pUS2ogre9uCMvT+ClEnUJGIfMoePoBp51FgAlkc6l0Jm8urWRcA5KrlysKq5Tfw==
+ id kWjwRluZ7puU; Tue,  3 Nov 2026 08:52:53 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org AC46580E45
+Authentication-Results: smtp1.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793695973;
+	b=sP/hI9xr7Dy+o8cswH2DWwaMoCa0D6nXx2z86Zq3Fxs0I3MgT9m+iPbHulXwSWYzOOod
+	 rV9FG2UbPtmRZavPc8zq9HSW9KZSFAju+i0vCvhjYlXAtePdrdkOPnh4xHpiV0TJl5HUA
+	 BVa7uKt6y6inlCoSlOy2tdEa4d9ZwBfzD5lpe0K5DjwdfP2DHd7fCTZYIQ941e1/KUFiD
+	 1AmdcoeMzoGLmPo+UBee7N8NmD8XZw5m9k4bP9qbvj6wvhd2TID0aqM2/NssFh+biZgCf
+	 BFZbSZrPk6WjskZzEoR+Cc5kjkmENuwkP/L08/qPk0Q0oCM8kSSAxET6ZKv5TXJz8ow==
+ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1793695973;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 X-UI-Sender-Class:Received:To:Cc:Date:Message-ID:X-Mailer:
+	 MIME-Version:X-Provags-ID:UI-OutboundReport:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=jnYr+BIUmBIVOrShRqqUawEp/lmVJHaEgyNqttfNE7M=;
+	b=HQqEm5Y5mURHTtmwSEA9bJ3VUwgzvTPXvOxAyDZopBVPmvMA0CRXTnlQFiDUvzdPrHHr
+	 IPjG4fZrH/y2fiKoSW3DR3393cNbDi/gbXlBGBQ4XStD+6OOaVmrTFtcTK3YrqFn9qxct
+	 rbeO9Hd30fuWlOGa2ftLaCYTO/D2pVhV5VigTKHv0qIo6BKmIVi2SJKiSCeuomSnbESBG
+	 jMXjqORmQ9BZyPmwOWGfHT3frCBI/6X59mPTZtPflRuUnoWfSICzpZL/xgA+NBb9PLPTx
+	 g2CULlegj+GZtgmV0ieh5pzYPY6Cl2Qf7zce+Mrn6L7rj54pTg9ysf73z/jaoJxfHWQ==
+ARC-Authentication-Results: i=2; smtp1.osuosl.org; 
+	arc=fail smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1793695973;
+	bh=jnYr+BIUmBIVOrShRqqUawEp/lmVJHaEgyNqttfNE7M=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=lrcqBU6UfuZ9NrqoGJAOI65BT2H2LeabyUtSN3miLMunNuUSdU6iqxJPFeQkJKgCA
+	 kIiksQYFYr9HcCtd0IWtFIdQEN+LE4FHef9G91y8XakSkt7TppaW5RZKYz6ydeg1SB
+	 0MVaE8eF69GLdq6T0SKtx911Z0m5SaCig1PN/5YTubtLh1ZB0/FA6sWCilW9zbCXwr
+	 mgBskYdBMQTx/tt6gPzumLKaMwxiFZp67/mmCVEKMUWt01N0segM1S0K943NBUAF0o
+	 w1bB9LjqibztkPuaBTl7zSUFHHqk4pCf+wVjxCfW5oBxhv8DYt/mhM6zwtIKugtLc0
+	 dXwnr7zYjR8zg==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC46580E45;
+	Tue,  3 Nov 2026 08:52:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7B976411
+ for <buildroot@buildroot.org>; Tue,  3 Nov 2026 08:52:52 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6C77C401DB
+ for <buildroot@buildroot.org>; Tue,  3 Nov 2026 08:52:52 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bgvwNM_QcakI for <buildroot@buildroot.org>;
+ Tue,  3 Nov 2026 08:52:51 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 1130C40080
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793695971;
+ b=JLG49S94R5mSpBJvHS587u8D55I2hVvCJtff46exXlGcNR7ok6xxNwIcEy4WDE77tNkb
+ MKPmGsMFIH/DvqVEqWv4TOjDT3iFIRdTvXVARxkzLJEz7kEETzMlfcvFBv1srzXAqPnQg
+ /HwFv4yolBTRKi5byUuTy6cmW2Dx+odNRvwOGSnUOuiFkcJfLjZUcsKJSCr7Y1ITwY3Wr
+ BSe53vnXKlbRjGA2FUf5IKFfDwzvzZM9Y7YVLMlFtIHxBUSHXuuHMhYdGio1o0Mjtcpve
+ M/Uhq0yq0AXetzCxxrvT6J+/KRmUphMFLQ4Zm1+J8sGJOe2A8c3ID5v0S++ZCSNhNkA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793695509;
- h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
- X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Subject:Date:
- Message-Id:X-Mailer:MIME-Version:Content-Transfer-Encoding;
- bh=OZB9NTtiFs9lEomhgwsg+5d/T4ySwBVZrrVFQTAeaqg=;
- b=kuIQTx00MsL4M6EWIkh124gsnvfcuEeReN1WZCwl8OZ7yVIrLA6HM0tu+v3bVVGhF8fx
- 1Su6JFZuGsTBZgkEJ4VTsBB9bNG3BVo8QWwGieATQPm8UwMOOgkN3huBIfY5lEWii6VLz
- bIL0ZxVEx8ekEwHOq3+nAwu5iUrvLJEAnl98FlwBfLzVwznxNCCv7Og3hiKTPtus6KGWL
- K31yHu6T9DLhCj9axdJkBXKX2dPAWXawgnzS9w3DfX/1zGpjLWWbSdeXJHX+TBmM2OS+C
- XVFzoWUWewlFDmSIB09ASYtoLG7itK3HfzHyWE3hKYtnH8fqLCyryCArpCZ1DMCVQkg==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
- dmarc=pass header.from=googlemail.com;
- dkim=pass header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256
- header.s=20260707 header.b=Ypfek5VM; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::634"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::634; helo=mail-ej1-x634.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
- [IPv6:2a00:1450:4864:20::634])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 987F880DEE
- for <buildroot@buildroot.org>; Tue,  3 Nov 2026 08:45:07 +0000 (UTC)
-Received: by mail-ej1-x634.google.com with SMTP id
- a640c23a62f3a-c4322d310e7so627081766b.0
- for <buildroot@buildroot.org>; Tue, 03 Nov 2026 00:45:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793695506; x=1794300306;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to:content-type;
- bh=OZB9NTtiFs9lEomhgwsg+5d/T4ySwBVZrrVFQTAeaqg=;
- b=G9G5+0yyZUvqJT5zyZ+mYgJm/5OuFwWkxJRYOviNfziYCYs5QNMhWguGHgb82lm4yU
- i0uw6a6U2WnWr8hYOKCqSgEPzS7OFzU8vut8/H+vzIY4ma3+YB3eFHb/5jrhTEgL/uQe
- HvFUNCoJ4nNHNDyf6xJ3fn/wHFCrtCM77EY+9XQmXiA+NVl04G1bVpbnWgfvigcw2gh+
- S5CpXAlT1i/g3w2TYWK6i9PRJpsepSzxmNwQ8lIf/1KL5eWl+zCzUZF5BwX1fpAPJv4l
- rkKh73vp/soi5FfmpnrfzGU+iLvCCqAdH8PoYE47uOTvVAviI3Rq5m1w7Ad8VbFTMBHX
- +TmQ==
-X-Gm-Message-State: APuU4Z/HqdYzkK8Ha7LeRXvSaDO8lbjEwvGcWiss3L8c8904L8G4UeqC
- /jy/BF5ye9guYTiwwGJUkQhbQvpi8n+KZodQeksrr1JCgGkMJs1hiAt8w0oyJA==
-X-Gm-Gg: AYBFou3wRQDlNMAf+7IsU/TVRIa7zIohFxk2ioUX9IAaLq2eLVKZfFm6jkzg+fyvOhP
- LRrV9JqsRL8XmNG8sbmhGQbwIn4JiopsRukg0cO4OL3LD6L5euFPWc7l2rwnsxCZwouM3SUcxK8
- j7lhXPTbknYA0Fdxn5cMUd0nrIeQF+CEoV+HycCnyWh4kD7/g+trifGlPQSKwyD5/ugTBOa4oMR
- poprwK6ms5tjp5CTwRwt3JcwzCEJr76q+Qs9bjt9mLlOW5XXCHHS7qWhFgjXaqQOvpEfPMtD4BS
- It3v6d2PjJfj7eZVyfiVZWpuJ/pW5wVWn/y5nCLOfS7YIUykBiwqgug1bTCNw139ivPDfAHLgkV
- 2E55v4cuGaeys+WMXwxcUUS3UEqDwWRvW42EEjbNLzSG+6kubQOAB15DIYpqV4Ivw219koLO8zu
- rg/77A6gMFQXuKhIv7SHfO3QxTuxjhOgiWGM/PE7gPTDJd7l8e+96BKgirG8ZNIDDMe38TQ/8md
- Gk+4uXcL6l7LOoz/qwAqTblkWodTr+gSlMjSyZZdmqubrrAP6gyM2PlX6mgqmYw0AwY0sZxMBEE
- StQtinmqFFc/KzPYatiwELScfZasOjBgiVXlB5sIgVJlnJ4FPh78QjW3+zQsWE2lDJgN+KHAiwk
- j1GTAxE+6
-X-Received: by 2002:a17:907:9612:b0:c3f:8c92:3b51 with SMTP id
- a640c23a62f3a-c4ca793c5f9mr1054011866b.4.1793695505865; 
- Tue, 03 Nov 2026 00:45:05 -0800 (PST)
-Received: from development2.visionsystems.local (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c4cebec61c6sm64935966b.17.2026.11.03.00.45.05
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 03 Nov 2026 00:45:05 -0800 (PST)
+ c=relaxed/relaxed; t=1793695971;
+ h=Received-SPF:DKIM-Signature:X-UI-Sender-Class:Received:From:To:Cc:
+ Subject:Date:Message-ID:X-Mailer:MIME-Version:
+ Content-Transfer-Encoding:X-Provags-ID:X-Spam-Flag:UI-OutboundReport;
+ bh=4XwEhOtbHjgFNjSmvtutscp7xN3cVhs4RxQAnR8wkZg=;
+ b=QeS/0knKrEwJLXfv9k8ulfzxzbdKzC5uCqbKXK+ufJtT4j7JhsfbrbMUXH/TqKj7Ty/y
+ KVhc/a4LpdLRnRLtoLFYIdb12KHzjx067NgiJbEmMBdl9elzC16fiGC/tr2jdOJItN4kS
+ OJs3IDue+uL+4sehzhy+N1oiWVQ8AhEmG6Aookk5wsdUiI28kI89GY2DI7CSm+JZLT61b
+ 9aDM8bDTfN4yd4ydGc0yrulQn7gqgEnDLgf5s3/qZISezc45oXLufxZh/R3gsSV9Misb6
+ xgour1oNYlJ0P2O9MPvpXtYR5O27t6I8IbHdJPGMyakZZHYizhIii+171zjCKbVN2KA==
+ARC-Authentication-Results: i=1; smtp2.osuosl.org; 
+ dmarc=pass header.from=gmx.net;
+ dkim=pass header.d=gmx.net header.i=ps.report@gmx.net header.a=rsa-sha256
+ header.s=s31663417 header.b=Ujd2VTNJ; 
+ arc=none smtp.remote-ip=212.227.15.19
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
+ helo=mout.gmx.net; envelope-from=ps.report@gmx.net; receiver=<UNKNOWN> 
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1130C40080
+ for <buildroot@buildroot.org>; Tue,  3 Nov 2026 08:52:49 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M8ygO-1xUEnJ0bQs-00BG1K; Tue, 03
+ Nov 2026 09:52:47 +0100
 To: buildroot@buildroot.org
-Date: Tue,  3 Nov 2026 09:45:04 +0100
-Message-Id: <20261103084504.3957155-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.34.1
+Cc: Peter Seiderer <ps.report@gmx.net>
+Date: Tue,  3 Nov 2026 09:52:45 +0100
+Message-ID: <20261103085245.57062-1-ps.report@gmx.net>
+X-Mailer: git-send-email 2.56.0
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/python-netifaces: remove package
+X-Provags-ID: V03:K1:em/2Wb/PVQElQ3fd3uPEjOCxSrhuuoK0Go0Y1HvP38tyvEYTDS7
+ /jWA5O3N7u/vNs2EO4w8qMsFZia/e00DnBbqxmnYwP0fni2K360aC8Wl4wVyB97b4tndiJB
+ AEw4k9Chv/YTHpaD0GqbdYu65GgwNYtWXi/gi4RFeO0uMpgFujSQw2W8163ypdwwlA2sib7
+ A5wvN1FrTDqvwdt3Ykyyg==
+UI-OutboundReport: notjunk:1;M01:P0:wmn5xNQyZkA=;TRX04GIubVYCaTwCG+opqqhm8ql
+ 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
+Subject: [Buildroot] [PATCH v4] package/libressl: bump version to 4.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -147,127 +218,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
-Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
+From: Peter Seiderer via buildroot <buildroot@buildroot.org>
+Reply-To: Peter Seiderer <ps.report@gmx.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-python-netifaces is no longer maintained: its last release, 0.11.0, is
-from 2021, and the upstream repository was archived on GitHub the
-same year.
+- bump version to 4.4.0 (for details see [1])
 
-It now fails to build with musl and GCC 14, as it initializes struct
-msghdr positionally, which does not match musl's layout with padding
-fields, and int-conversion warnings are errors since GCC 14:
+- enable 'ENABLE_ASM=OFF' for aarch64, fixes (for some combinations of
+  gcc/binutils/target-cpu):
+  bootlin-aarch64-glibc-old/build/libressl-4.4.0/crypto/sha/sha1_aarch64_ce.S:105: Error: unknown architectural extension `sha2'
+  bootlin-aarch64-glibc-old/build/libressl-4.4.0/crypto/sha/sha1_aarch64_ce.S:156: Error: selected processor does not support `sha1c q18,s19,v28.4s'
 
-  netifaces.c:1808:9: error: initialization of 'int' from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-   1808 |         NULL,
-  netifaces.c:1808:9: note: (near initialization for 'msghdr.__pad1')
+- add stack protector 'ENABLE_HARDENING=OFF' flag, fixes
+  "undefined reference to `__stack_chk_fail_local'"
 
-No other package depends on it, so rather than carrying patches for a
-dead package, remove it. python-ifaddr and python-psutil provide
-similar functionality.
+[1] https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-4.4.0-relnotes.txt
 
-Fixes:
-https://autobuild.buildroot.org/results/dc4a82870828e575eb3bce1b6ea1b281e6e68e8e
-
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
 ---
- Config.in.legacy                               |  9 +++++++++
- package/Config.in                              |  1 -
- package/python-netifaces/Config.in             |  6 ------
- package/python-netifaces/python-netifaces.hash |  5 -----
- package/python-netifaces/python-netifaces.mk   | 14 --------------
- 5 files changed, 9 insertions(+), 26 deletions(-)
- delete mode 100644 package/python-netifaces/Config.in
- delete mode 100644 package/python-netifaces/python-netifaces.hash
- delete mode 100644 package/python-netifaces/python-netifaces.mk
+Changes v3 -> v4:
+ - add 'ENABLE_HARDENING=OFF' flag unconditionaly
+  (suggested by Thomas Petazzoni)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 29c9b7f9e7..8e48488d76 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,15 @@ endif
+Changes v2 -> v3:
+ - fix 'ENABLE_ASM=OFF' comment formating
+
+Changes v1 -> v2:
+ - enable 'ENABLE_ASM=OFF' for aarch64
+ - handle stack protector/ENABLE_HARDENING flag
+---
+ package/libressl/libressl.hash |  2 +-
+ package/libressl/libressl.mk   | 10 +++++++---
+ 2 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/package/libressl/libressl.hash b/package/libressl/libressl.hash
+index b64df284fc..e3978baa63 100644
+--- a/package/libressl/libressl.hash
++++ b/package/libressl/libressl.hash
+@@ -1,4 +1,4 @@
+ # From https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
+-sha256  57c8b2f8c6f9505587abaeddab003ea243d615edb7ed71957968121fc6316bd6  libressl-4.3.4.tar.gz
++sha256  7d02522ad5070b9adb32eb253ecabce181184a3750cf65abac0675ee908687c1  libressl-4.4.0.tar.gz
+ # Locally computed
+ sha256  9853507b8821c3f277aa60bf554eade41441ef06b2df538d247183ad28789b7f  COPYING
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index 6d6de78213..44a28de674 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "Legacy options removed in 2026.11"
+-LIBRESSL_VERSION = 4.3.4
++LIBRESSL_VERSION = 4.4.0
+ LIBRESSL_SITE = https://ftp.openbsd.org/pub/OpenBSD/LibreSSL
+ LIBRESSL_LICENSE = ISC (new additions), OpenSSL or SSLeay (original OpenSSL code)
+ LIBRESSL_LICENSE_FILES = COPYING
+@@ -13,11 +13,15 @@ LIBRESSL_INSTALL_STAGING = YES
+ LIBRESSL_CONF_OPTS = -DLIBRESSL_TESTS=OFF -DOPENSSLDIR="/etc/ssl"
  
-+config BR2_PACKAGE_PYTHON_NETIFACES
-+	bool "python-netifaces has been removed"
-+	select BR2_LEGACY
-+	help
-+	  python-netifaces has been removed, as it is no longer
-+	  maintained upstream (repository archived in 2021) and fails
-+	  to build with recent compilers. Consider using python-ifaddr
-+	  or python-psutil instead.
+ # Otherwise fails to build with undefined reference to
+-# `bn_mul_add_words'
+-ifeq ($(BR2_powerpc)$(BR2_mips64)$(BR2_mips64el),y)
++# `bn_mul_add_words' or for some aarch64 combinations (gcc/binutils/target-cpu)
++# with "Error: unknown architectural extension `sha2'
++ifeq ($(BR2_aarch64)$(BR2_powerpc)$(BR2_mips64)$(BR2_mips64el),y)
+ LIBRESSL_CONF_OPTS += -DENABLE_ASM=OFF
+ endif
+ 
++# Avoid linking problem: "undefined reference to `__stack_chk_fail_local'"
++LIBRESSL_CONF_OPTS += -DENABLE_HARDENING=OFF
 +
- config BR2_PACKAGE_MESA3D_OPENCL
- 	bool "Mesa3D OpenCL support is now provided by RustiCL"
- 	select BR2_LEGACY
-diff --git a/package/Config.in b/package/Config.in
-index 32fc1496c9..66d38630ab 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1278,7 +1278,6 @@ menu "External python modules"
- 	source "package/python-nats-py/Config.in"
- 	source "package/python-nested-dict/Config.in"
- 	source "package/python-netaddr/Config.in"
--	source "package/python-netifaces/Config.in"
- 	source "package/python-networkmanager/Config.in"
- 	source "package/python-networkx/Config.in"
- 	source "package/python-numpy/Config.in"
-diff --git a/package/python-netifaces/Config.in b/package/python-netifaces/Config.in
-deleted file mode 100644
-index 1f54f4bd18..0000000000
---- a/package/python-netifaces/Config.in
-+++ /dev/null
-@@ -1,6 +0,0 @@
--config BR2_PACKAGE_PYTHON_NETIFACES
--	bool "python-netifaces"
--	help
--	  Portable access to network interfaces from Python.
--
--	  http://alastairs-place.net/projects/netifaces
-diff --git a/package/python-netifaces/python-netifaces.hash b/package/python-netifaces/python-netifaces.hash
-deleted file mode 100644
-index ec8ccf623e..0000000000
---- a/package/python-netifaces/python-netifaces.hash
-+++ /dev/null
-@@ -1,5 +0,0 @@
--# md5, sha256 from https://pypi.org/pypi/netifaces/json
--md5  3146dcb3297dd018ae5eb9a52b440419  netifaces-0.11.0.tar.gz
--sha256  043a79146eb2907edf439899f262b3dfe41717d34124298ed281139a8b93ca32  netifaces-0.11.0.tar.gz
--# Locally computed sha256 checksums
--sha256  b20b895164b72b9cc0170e6c0d60b14f9aaacc6862c0556eed41eaa348883705  LICENSE
-diff --git a/package/python-netifaces/python-netifaces.mk b/package/python-netifaces/python-netifaces.mk
-deleted file mode 100644
-index 1b1aa99568..0000000000
---- a/package/python-netifaces/python-netifaces.mk
-+++ /dev/null
-@@ -1,14 +0,0 @@
--################################################################################
--#
--# python-netifaces
--#
--################################################################################
--
--PYTHON_NETIFACES_VERSION = 0.11.0
--PYTHON_NETIFACES_SOURCE = netifaces-$(PYTHON_NETIFACES_VERSION).tar.gz
--PYTHON_NETIFACES_SITE = https://files.pythonhosted.org/packages/a6/91/86a6eac449ddfae239e93ffc1918cf33fd9bab35c04d1e963b311e347a73
--PYTHON_NETIFACES_LICENSE = MIT
--PYTHON_NETIFACES_LICENSE_FILES = LICENSE
--PYTHON_NETIFACES_SETUP_TYPE = setuptools
--
--$(eval $(python-package))
+ ifeq ($(BR2_PACKAGE_LIBRESSL_BIN),)
+ define LIBRESSL_REMOVE_BIN
+ 	$(RM) -f $(TARGET_DIR)/usr/bin/openssl
 -- 
-2.34.1
+2.56.0
 
 _______________________________________________
 buildroot mailing list
