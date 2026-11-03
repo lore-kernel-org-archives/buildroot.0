@@ -2,28 +2,28 @@ Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6562D606A820
-	for <buildroot@archiver.kernel.org>; Tue,  3 Nov 2026 10:52:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A972A606BF80
+	for <buildroot@archiver.kernel.org>; Tue,  3 Nov 2026 10:52:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=JRq3T8du;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FLBG+dT1
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=moZM+4Ib;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=JC2CjiLf
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7346B606A2;
-	Tue,  3 Nov 2026 10:52:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 74B73607B1;
+	Tue,  3 Nov 2026 10:52:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y-0laZalIuby; Tue,  3 Nov 2026 10:52:36 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 9913E606E6
+ id bBMKjyeKncBE; Tue,  3 Nov 2026 10:52:40 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 6206A6078A
 Authentication-Results: smtp3.osuosl.org; arc=fail smtp.remote-ip=140.211.166.142
-ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793703156;
-	b=o5EJ8l4sIJGxnsrTcQlON+/sQgGcbhJNveRQzHsDYM0/EPQSoKMmS40tM/J7XZGr6trT
-	 tPlJuxTEBMASDTITPjqfxkrSvPByqwUIaD3BOzWjNr6vmdQoJxALx4G/xR3wBAIPIkaC8
-	 JlEImTfvqLKsV/t9VMao87oi+eyJuncf3Kshg1jKDRz6VdanK9jOZ3PzAJ9HkMk5UUjpB
-	 hi4uq/Ggqd74XMAbrvTST8PI/rNxVFCo/J8A1GzG57x69lNtwAYeGBruZYTpgugmZ14a0
-	 dqVMH0w3eWGYN5qEnWhmgfWtswlDgvUgCgFkeD+ngOrzXEsJQQ/P9TEZPlcTJOWjknA==
+ARC-Seal: i=2; d=osuosl.org; s=arc; a=rsa-sha256; cv=fail; t=1793703160;
+	b=g21u+w5cwGgsdCSgXaaDIlswWtDtXL+Z5qZ7Ub7c+v2U08yvjxTnaXJSS6/J45PbsS7B
+	 ele1640ICF6ck6aca0pDZc4p5roioAjnqURYJ4BgNqYDcbDnaKO1P3325TueeZBKxTBgK
+	 IesXVdHZEfd1ZYhdysVGorZTVqz4/US+FMW06HmN4EPN42gU+zujq1W7HcJS1VFD9pcnQ
+	 5kMsXb1zr/msdhpZ+4gOqr30hZqnlsaJN5UzEQIckorbPQgNzHST31I6/qWkBHtejM54/
+	 krqZTbGtUtA7YZaewYYFTdWWKwDMunM1L+FDuJ5pxKO7MO5PYZ+F/z/Ck05f6IXM4dA==
 ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793703156;
+	c=relaxed/relaxed; t=1793703160;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -33,136 +33,137 @@ ARC-Message-Signature: i=2; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
 	 Sender;
-	bh=s05glC14jrVotlTciZA8rSyPv6v7cQDExaJ6YgG4f7A=;
-	b=J1/numzvXlHQoxPk3nx6pypk8gDoInbhX0C3i0HB93+Hmw4yAgdSGof/DkX1gmLey9tq
-	 zHsSHNl2dhLj0Veqf3EbaN/q+bALzX1lQHqLDYCidENWEFiK0hDKacD37gf+kJ/4K8nYl
-	 ZjZ+H28ijrrKtr2+65KIClRFef+1j/UPsygzEOoEWA+FTXSL5u8RMIPDP0Gfo/y2hZ7Gp
-	 waDYrUtcIrudYPP9miFrs1xww6VX0Q9VkLBhBHHDjzxVKGcuPIOpWR4rR305nUPG9ZbO7
-	 aFzbA2TREhiQ4DkgFPfi6Hc+wW3oULME7hcKvxuCQnZmJsQxJ1UFu7kzUHTcegHkDNQ==
+	bh=fnibRiQgYzHKQG8pINuYR0M1YnC5AjvdxrTtwKOFVNw=;
+	b=jLQyGGZShU82G/P+BWkw+TR9mEbhR+uZVaE/pVV/to0aJqFRfu2EwyOgoyWN2MfrjymN
+	 AOJwLEm0YnaAd0LkQsTJ3YNE9KwWmjR/+wZPmedKMKxLlFEseX/11/pcTf96UpYQ68syz
+	 CQ791mPnI5Qs66P+xQwRI/RakNYfQ9ezZGB9zcZFh2wmTgFiIzYaBwUL1oaXN++vRS79/
+	 /5sN0C/+jbcLHWKtKIWWDY8uJcf0JC4GKsJWL6++kf8wsr8+AJE+S+28REwFg56FliXAf
+	 +tykDYeLGNNfHjeXZ3sEkehGAQgloH9y+9irjyKzFAKsJnyoLwZecyVXcbFMOJBHwsg==
 ARC-Authentication-Results: i=2; smtp3.osuosl.org; 
 	arc=fail smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793703156;
-	bh=s05glC14jrVotlTciZA8rSyPv6v7cQDExaJ6YgG4f7A=;
+	s=default; t=1793703160;
+	bh=fnibRiQgYzHKQG8pINuYR0M1YnC5AjvdxrTtwKOFVNw=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=JRq3T8duXVkIbwscdD1XuhWraAQWoCGeglO4z3Oy4eN4vhUXM+cR9cgGHLcNFzDJJ
-	 0Hxpax4F2P5U6J2ba7TO0C1iRqmc/CiFNFMdTNHYMqQLiiRgOSWcorvmMqM4uYbcGX
-	 k3QQBdzoCHxg1JL55b2cjIoMN5SUceaSQlp4HO7QciMOHaTWZqCKvxidDYacyC/QRQ
-	 A/agurMktxTnngFA8fl9/Lwz/y10dyx0egUPus22bZyfXZVPPSkmkxjc9oTzBFhP6E
-	 rOY1npNVdNM+ReE5Mj4TJoHUYTi2aIP85ZeDhsHnRbMurDkP/7/hKwQ02hqwTlj7f3
-	 5RrS+e9ADre0A==
+	b=moZM+4IbTB98F5IqL2AWGzuuVatmHubbyKHp3Ekftd6x4V6ReiT68RXJa9lk4WA0y
+	 b6BfMFC+fOLxA5/noaJyAQktfoB0fPY537IhkRTpHlIrcG3blspJK4ctiuOCOOwVg/
+	 97gil4dFtbnAKDdqVThGu+QDSwAkNxgQZCGIw8Duip8Meghb3Bu7NDk6tRbiTn4I9p
+	 hXIT/lMrtRfLV/XYOT04Z2nCMa2UR6R/hGXOc1J3OlIcvGXYLwFGO+m1Xo0yAsKIl8
+	 M6s9PHx9UklTriJ1VfnKRao/JcOd3ValDRmfiFRHFEQKEintVcH2LlXXas16J+ojX0
+	 /WJRx3i3n0Dlg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9913E606E6;
-	Tue,  3 Nov 2026 10:52:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 21935235
- for <buildroot@buildroot.org>; Tue,  3 Nov 2026 10:52:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6206A6078A;
+	Tue,  3 Nov 2026 10:52:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id A1A72356
+ for <buildroot@buildroot.org>; Tue,  3 Nov 2026 10:52:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 07AC580DEE
- for <buildroot@buildroot.org>; Tue,  3 Nov 2026 10:52:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 93B61405B7
+ for <buildroot@buildroot.org>; Tue,  3 Nov 2026 10:52:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jB6pyAtzzui8 for <buildroot@buildroot.org>;
- Tue,  3 Nov 2026 10:52:32 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 1E9EF80D8B
-Authentication-Results: smtp1.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::42a"
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793703152;
- b=D2b/zGk8M8SOY4C5mgZ2oC5LJERFrMrY2+zXEslTWOPbQEQ+dGC0hz28T/K/mYf6QHgn
- ld1Tlk2dVaNgulxqZvkSqZe3btwFYAXJ8/lrg6KLNa/IB5sVUhCycRD7XQpVNpPaUt5pj
- Ry8Cu3wuYVQZAWm7zAq0/WAIAWTWbcWacX3QxAH5E8JGR7n/slswmq6LPVuQRB8MPkJeL
- xNUg+BES5U1FHTm4J707xAb9Sxt9lu2nh2WyaLmYZREeoE8Y6EA14/mqkL4liGqZEmZ2f
- UlewXnFn2b9XDHmmsovXQf7tP9nVxpp+o2FP1w7EfbM32uJoqBQ3y3YUB23B7ixnUeQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y0yjZPEk0XlZ for <buildroot@buildroot.org>;
+ Tue,  3 Nov 2026 10:52:34 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 771FB40575
+Authentication-Results: smtp4.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::432"
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793703153;
+ b=cLHoMkN7e+98KCz+uPp0RdtSe5XHDBlG2nmIukbPt0kJctWItA8o29y2+qXBC8hWLf4M
+ y2wsbAQUrcQBLwwG5vGoRlhb4ud4T+1WH8COzEJlwD1Dnxr8FDiUEn9al2VWALjq47Ljr
+ 1tb0cInaLlHlvGrFzhrE3A1kUEaBtsKKZpwbwnKLXCQ/aiwwtZ6+jhHdVZIJHhj5bEAgy
+ 3xse/jV20LUVrSIs4Lko0O0J7KZxa+z8wPdUN9GCCYwmqg+UvTRfRjw/N8YWDuxAv5rZo
+ KzTqahGunyUQ6+zIXKrAmsa4UTNA0g3jTHC1TTsiXkoppgFvaxj84ObKlPvONW8j0KQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
- c=relaxed/relaxed; t=1793703152;
+ c=relaxed/relaxed; t=1793703153;
  h=Received-SPF:Received:DKIM-Signature:X-Google-DKIM-Signature:
  X-Gm-Message-State:X-Gm-Gg:X-Received:Received:From:To:Cc:Subject:
  Date:Message-Id:X-Mailer:In-Reply-To:References:MIME-Version:
  Content-Transfer-Encoding;
- bh=SeGEdUnAt//Q0HJw9Ioc8AlJJgy+VHhA6bmBDC42pqY=;
- b=OxVyCgQcGipfKNgUi5Inity/ft58hi9YypbrdKlr07NFd7cMXL4X32Gv5i9HmQ0/JlV8
- RBci6PKHFWJDP/KjjyK56HM+/8FeRJumtEU0jJnimRcAgK3o3UOecrlnvQ6OhShUy5ptI
- ElA4THX05YtppGa2ycjFlwfzK8ZqZXLerzBgR8HG+odkxAofWlw5oI54SjRoe5RR0DHpx
- asR0LahbdPDwafAjxaIH4EuhGRNJ01k8w4Rp/vH3V8A8m0N1Lj1zy+qzNRvlpUfMdJXAC
- ubaQCmNI6iLohPCflIQug/Dr+7nBCFuIm4jRfvvqyD6RNicL5Da4XdXj4qN4BFEN4BQ==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+ bh=rxY5gBJA/fowx+ldV08xkiGgJo1lWr40OY8TDS5H7Ik=;
+ b=E8AunXc/kRy09FrxYotYbrISjLvGpNwmoPwf7IKi9saraYyC6KCmL2gkA6chS3FytvE5
+ afi6U5OjM6c/0PYdAoFj5agrsLMxPL9WfGnC7Dy9Ojr1XkZigA3ZWjRDDTR0fwnzJZpfl
+ sVCdj6iAqkNAORgtcC/SoYnKAOmWG3QPhpE3NDHUJv0ns5lY3LJIm+hIEGhOcR/Udjzgw
+ AqC+go3tbjNRBotjU895mqXkDjDorBamBn4aH4jweabPEedwW8MJK6b1DzLqNzPGZ0unw
+ tjSVGuXZFnAMMpn6BJOYHtaxk0uK3jkGIjnYLNp0eASREgYcGfmuLSInxa/ntob5nRg==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
  dmarc=pass header.from=gmail.com;
  dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20260707 header.b=FLBG+dT1; 
- arc=none smtp.remote-ip="2a00:1450:4864:20::42a"
+ header.s=20260707 header.b=JC2CjiLf; 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::432"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
  envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20260707 header.b=FLBG+dT1
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1E9EF80D8B
- for <buildroot@buildroot.org>; Tue,  3 Nov 2026 10:52:31 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-48dfaa3fa12so325548f8f.0
- for <buildroot@buildroot.org>; Tue, 03 Nov 2026 02:52:31 -0800 (PST)
+ header.a=rsa-sha256 header.s=20260707 header.b=JC2CjiLf
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
+ [IPv6:2a00:1450:4864:20::432])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 771FB40575
+ for <buildroot@buildroot.org>; Tue,  3 Nov 2026 10:52:32 +0000 (UTC)
+Received: by mail-wr1-x432.google.com with SMTP id
+ ffacd0b85a97d-48e47347279so2498988f8f.1
+ for <buildroot@buildroot.org>; Tue, 03 Nov 2026 02:52:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20260707; t=1793703149; x=1794307949; darn=buildroot.org;
+ d=gmail.com; s=20260707; t=1793703151; x=1794307951; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=SeGEdUnAt//Q0HJw9Ioc8AlJJgy+VHhA6bmBDC42pqY=;
- b=FLBG+dT1F1FeBtwGupLc1+bS+I3tlQJ+9oeA/UKN2As/cG3+70jh/nkuW5E5BdyquY
- bH8RJXJh9ygVkIwVzTETNnKbiIJ/Vj1pyQSkhEORk549V2aX9cSxSYZG0CoR7ZkGOr2C
- IvUkQXGZw9FYlTYQtR/h0/5V62QTpQe2HdXxLuBn8dLVyRQzZkGzILT+PnLMx+z4hwKx
- JzsYVIVOIupoOuHXNUoOv0tkoKbL0DxVeqzXKZkUSBHOSGG8Zo6eLbCU0pJsJgZFQ7Aw
- 9eC1GRLIyH9drkVZLTut2Kyzsf57gAsAwtYyB0++fx3dW+EWQMp2rPZLrQ+ZljXGbw/E
- CbYQ==
+ bh=rxY5gBJA/fowx+ldV08xkiGgJo1lWr40OY8TDS5H7Ik=;
+ b=JC2CjiLfRSAQnt68r8s6zCVEqLuVhrdWPiPYmE2dWr87uMY2Tg64e5OhaEx5DaTpE9
+ wQc0tYuK9K97LjzRHVqY+IKqXrV8Ku1H2V0HRFUhAQZbsTCU1SIsdtLi7NnhfGZ5OWGn
+ uTuiDTce9ZHTKjBbBFoOsWknEwwKH14IdB6sBEaxvt6zQSjsEuUCyq4f9kp7rtVngO0i
+ n9i9m6Zp8KBSKRg3i1WzJPClUrDXnRD2pObKALtgMpJiFQEnqaqLc0omLjJgqymynE/b
+ MPxF9Ai+7GuJjMDnf6aPu9rAgBwKluj1BwXnjGPsS0ELZMGVEDM+4+Vrht6DbNox6JgQ
+ ChOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793703149; x=1794307949;
+ d=1e100.net; s=20260707; t=1793703151; x=1794307951;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=SeGEdUnAt//Q0HJw9Ioc8AlJJgy+VHhA6bmBDC42pqY=;
- b=ba+5JDcRJXxhpbbMEVpDR/SrxDd3Ot/qd2h39P0CJPS/MPQsWnDKh5c7oJnItZz8dQ
- 4NPFbFf0UywDS4IQZ2BP/I98O6SFUiwn+kuzIgC/8RDW787MuZT+eEh+tJ6OMggmxeGA
- yJPQPuML2EDvAhEZD06jiOqP5rSH4vkWvA0aKyc89Vue3+Fgisa1QxmkBTniblDPOiCW
- xMN2k2SHU9aP5d36f5JDNhcxIsNnnTeCgxvHg5zVMv5mdijO258NEr/D1rGs9QIVB6Rc
- gct/1ytI2X8WRr+SdTK8ba3dmNvhhmkYNDNIKKqyLp6btuPNEoR0poXD9KLEs7+Kivqq
- k/lw==
-X-Gm-Message-State: APuU4Z812eQnqjbbLRfC1N4K1WAinLsk86oMUJfajD9eix2YBwtN+N7N
- lKy12dQkg9jGm4CxqWjZgKBcU5rCLQ3+hnPASRQX30qC2109FYsHhEFX1iuN3g==
-X-Gm-Gg: AYBFou0ttsBm6avtb2PKeZCovPrakU/tE6gStESE6Xb44HtfzGLY7yV5FDqwaDJXDTk
- Ks8M8daJoHUU4mRFkYnXT99B5y6ff/gcb8pt14qmFXBnstp9bzE3Vxy2r+vYPIYqYGyWMVU5pST
- X9ysaR5o3yQ7GZ/hOaBW02kZ9yIwImtMYiJkopSRFh1PMivlt237krXfzdbLKEr+uuCWUOhPsr7
- RXz3xfRNObeQD2Ib/AXdH699MDwZASBlZNT8K0cnRWrLRFMOC28B8lDbHX+enbVGJNA1qT4YIKI
- 9oZXrmr1sh0eyxq/J5gCT2s9CbneQe4ccRrZqEzVf2aNOALdC8b4+nCpI2aB1sUalG44p4w1wN2
- bswCT12QWSeTW3F4DyFJJbVofiEmkEDCVwQ4bn3EJjaBf/FogRhk99/QwpbZyVe/KpKKt6KzA4J
- 0FB6ArwE22el4KEK2q1/fezlCJPVHlkenVr3x2wHNzJKoM+h0H8wM56LY7CjfXkgvHqEZ94uVoU
- cZloLINJY3Q+tmdy9EaeOsZG6Yu/lYsU67gHD+2BLQmm4p4cCYqYnMTvf07vkluyBPu5zAsCn+I
- Hkqu6c3zzqyt6arKjZQ7woMJoOTMzn1wJVd/7uCGo2zT2Mu1EfwQ8A==
-X-Received: by 2002:a05:6000:144e:b0:48e:850:c0b7 with SMTP id
- ffacd0b85a97d-48e6e27ec17mr27260342f8f.1.1793703149493; 
- Tue, 03 Nov 2026 02:52:29 -0800 (PST)
+ bh=rxY5gBJA/fowx+ldV08xkiGgJo1lWr40OY8TDS5H7Ik=;
+ b=m1o7pqylseMdWvYCqq5GLVY4wVS2Sq2qoBUWzp9sdpeFJMG25KJK7MRvZ4K30ID9tS
+ 4NhVUwlgbQUKzT2npTDQotRopxtGS/HP5QpZZEiZagTP6bl4XTcpGn8f0Qn96m1WEBUA
+ 2F+NRN48QUCHEKjgDJs64U3g4lq2ePJjfcJVjmaY1VcCUqW9gSecIrigC2CcAJSFbg/3
+ nIv0tACqS4gaL6ULCDDyoNXVUbC7ZHfsoCD6gAawjgkJkGIWleX+/R/WSgQE7BKUlZLv
+ 3nRRQ9X3bPRP7S24rTB3DlIHNUFt/23P5JO67fdmqz6TLUMD40zpffI9Qm55ec+IhUWN
+ QMzA==
+X-Gm-Message-State: APuU4Z8dR8a+2zcimGxoL0QBVf0oqDfJHtDgsxib9V/AGLnjyFLIGLsz
+ 9LiS0RX5iZxMib8K6wByZTxVBPFnQEnkoa5y4rTekkaYlandsav1xOkJtPumsA==
+X-Gm-Gg: AYBFou1FwkUqPoDODsjLMuaxi86wmeYnVqOR+ZYZpXy5LNnNewnCyBaO1iVI8kYBSR6
+ H/A2SzLGWU7pZDd3yclPSvODKMs/QRaVIAN9h3KJEbPgnKBw+n2gfH2B130ZPUAVaTWnhorPSfP
+ NnNk8sKdF6qnbWc8n3EEsMDAv8hO2/3rGzLkflZ/Ncum9LaK1j8NhGBRV89vIB4UU5gz0SuYwfO
+ Xjq7v8OYgGLpoSNCK2eMPxhPnsJKiFUg7fO94Fp7tnEy8O+liQtoN74ZmV1j9reSOnwIbNyFn4c
+ qrmAtrzHNBHDx59JlSh+UHyfK4KDYi3G27C8uI1vXiiTAV+pytRlfLZwNJxVJIQl4SazQ2SnHxR
+ D2y0Dw+JmptSbnG5Kli/XxSt9baPPdzcWzukXsqNoV60inX6WteZxmBsrXYt2kIEagt5NDFCPPt
+ DuZFJr7LcPYBdQRRIzuR5dF2l9Dpzn2/f9kMxbtzynEhHDda1AQ8p1fMOp7+E4NDVzl8UyfqcbG
+ nVZfBQAjuLr33irDtVscwaDFePK/+H7X3rZzlqJ1wpRdRTIdja7VGmGPGKVJhNkMSlbDLGdVl1v
+ 1zD5iDrks9wHIvwWhypGp+D5PbUyDpDEurB3Q62pcyz3aHB4lxQNpA==
+X-Received: by 2002:a05:6000:186c:b0:48e:7a19:7aad with SMTP id
+ ffacd0b85a97d-48e7a197e64mr22043122f8f.6.1793703150579; 
+ Tue, 03 Nov 2026 02:52:30 -0800 (PST)
 Received: from angelo-Precision-7550.. ([94.154.175.53])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-48e7a1d9d71sm18911099f8f.48.2026.11.03.02.52.28
+ ffacd0b85a97d-48e7a1d9d71sm18911099f8f.48.2026.11.03.02.52.29
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 03 Nov 2026 02:52:28 -0800 (PST)
+ Tue, 03 Nov 2026 02:52:30 -0800 (PST)
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 To: buildroot@buildroot.org
 Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Tue,  3 Nov 2026 11:52:23 +0100
-Message-Id: <20261103105224.1995953-3-angelo.compagnucci@gmail.com>
+Date: Tue,  3 Nov 2026 11:52:24 +0100
+Message-Id: <20261103105224.1995953-4-angelo.compagnucci@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20261103105224.1995953-1-angelo.compagnucci@gmail.com>
 References: <20261103105224.1995953-1-angelo.compagnucci@gmail.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2/3] docs/manual: document the /etc overlayfs
+Subject: [Buildroot] [PATCH 3/3] support/testing: add runtime tests for the
+ /etc overlayfs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -178,59 +179,185 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
 	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Explain how the /etc overlayfs works, the options to configure it, the
-requirements on the persistent device, and that only /etc is handled.
+Test the /etc overlayfs with the busybox, sysvinit and systemd init
+systems, with a read-only ext4 root filesystem and a second ext4 disk
+as the persistent device: the original init runs as PID 1, /etc is an
+overlay whose changes are stored on the persistent device and survive
+a reboot, and the original /etc is exposed read-only. Also check that
+the system still boots, with a read-only /etc, without the persistent
+device.
+
+The kernel configuration disables overlayfs, to check that the option
+enables it.
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- docs/manual/configure.adoc | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ DEVELOPERS                                    |   1 +
+ .../testing/tests/init/test_overlayfs_etc.py  | 128 ++++++++++++++++++
+ .../linux-no-overlayfs.fragment               |   2 +
+ 3 files changed, 131 insertions(+)
+ create mode 100644 support/testing/tests/init/test_overlayfs_etc.py
+ create mode 100644 support/testing/tests/init/test_overlayfs_etc/linux-no-overlayfs.fragment
 
-diff --git a/docs/manual/configure.adoc b/docs/manual/configure.adoc
-index e0358aa0f9..6aacc8fefb 100644
---- a/docs/manual/configure.adoc
-+++ b/docs/manual/configure.adoc
-@@ -429,3 +429,35 @@ can be chosen from +System configuration+, +Init system+:
- The solution recommended by Buildroot developers is to use the
- *BusyBox init* as it is sufficient for most embedded
- systems. *systemd* can be used for more complex situations.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1b9dd41f01..0c6e777133 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -262,6 +262,7 @@ F:	package/sshguard/
+ F:	package/sunwait/
+ F:	package/sysdig/
+ F:	package/uthash/
++F:	support/testing/tests/init/test_overlayfs_etc.py
+ 
+ N:	Andy Shevchenko <andy.shevchenko@gmail.com>
+ F:	package/fb-test-app/
+diff --git a/support/testing/tests/init/test_overlayfs_etc.py b/support/testing/tests/init/test_overlayfs_etc.py
+new file mode 100644
+index 0000000000..7b258c8793
+--- /dev/null
++++ b/support/testing/tests/init/test_overlayfs_etc.py
+@@ -0,0 +1,128 @@
++import os
++import subprocess
 +
-+==== Writable /etc on a read-only root filesystem
++import infra.basetest
 +
-+When the root filesystem stays read-only (+BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW+
-+disabled), +/etc+ can still be made writable with an overlayfs whose
-+upper layer is on a persistent device, by enabling
-++BR2_ROOTFS_OVERLAYFS_ETC+. This works with the BusyBox, systemV and
-+systemd init systems.
 +
-+The init system reads +/etc+ as soon as it starts, so the overlay
-+can't be mounted from +/etc/fstab+ or from a systemd unit. Instead,
-+Buildroot moves the init program to +/usr/libexec/overlayfs-etc/init+
-+and installs a small script as +/sbin/init+, which:
++class InitSystemOverlayfsEtcBase(infra.basetest.BRTest):
++    # The kernel fragment disables overlayfs, to check that
++    # BR2_ROOTFS_OVERLAYFS_ETC enables it.
++    kern_frag = infra.filepath(
++        "tests/init/test_overlayfs_etc/linux-no-overlayfs.fragment")
++    config = \
++        f"""
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW is not set
++        BR2_ROOTFS_OVERLAYFS_ETC=y
++        BR2_ROOTFS_OVERLAYFS_ETC_DEVICE="/dev/vdb"
++        BR2_ROOTFS_OVERLAYFS_ETC_EXPOSE_LOWER=y
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.60"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kern_frag}"
++        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++        BR2_TARGET_ROOTFS_EXT2=y
++        BR2_TARGET_ROOTFS_EXT2_4=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
 +
-+ * mounts the persistent device (+BR2_ROOTFS_OVERLAYFS_ETC_DEVICE+,
-+   +BR2_ROOTFS_OVERLAYFS_ETC_FSTYPE+, +BR2_ROOTFS_OVERLAYFS_ETC_MOUNT_OPTIONS+)
-+   on +BR2_ROOTFS_OVERLAYFS_ETC_MOUNT_POINT+ (+/data+ by default);
-+ * mounts an overlayfs on +/etc+, with the original +/etc+ as the lower
-+   layer and +<mount point>/overlay-etc/upper+ as the upper layer;
-+ * optionally (+BR2_ROOTFS_OVERLAYFS_ETC_EXPOSE_LOWER+), bind-mounts the
-+   original +/etc+ read-only on +<mount point>/overlay-etc/lower+;
-+ * starts the original init program.
++    def create_data_disk(self):
++        disk = os.path.join(self.builddir, "images", "data.ext4")
++        subprocess.check_call(
++            ["dd", "if=/dev/zero", f"of={disk}", "bs=1M", "count=32"],
++            stdout=self.emulator.logfile, stderr=self.emulator.logfile)
++        mkfs = os.path.join(self.builddir, "host", "sbin", "mkfs.ext4")
++        subprocess.check_call(
++            [mkfs, "-F", "-q", disk],
++            stdout=self.emulator.logfile, stderr=self.emulator.logfile)
++        return disk
 +
-+The persistent device must already exist and be formatted, which is
-+left to the integration, and it must not be listed in +/etc/fstab+.
-+If it cannot be mounted, the system still boots, with a read-only
-++/etc+.
++    def boot(self, data_disk):
++        rootfs = os.path.join(self.builddir, "images", "rootfs.ext2")
++        kernel = os.path.join(self.builddir, "images", "Image")
++        options = ["-M", "virt", "-cpu", "cortex-a57", "-m", "256M",
++                   "-drive", f"file={rootfs},if=virtio,format=raw"]
++        if data_disk:
++            options += ["-drive", f"file={data_disk},if=virtio,format=raw"]
++        self.emulator.boot(arch="aarch64",
++                           kernel=kernel,
++                           kernel_cmdline=["root=/dev/vda", "ro", "rootwait",
++                                           "console=ttyAMA0"],
++                           options=options)
++        self.emulator.login()
 +
-+Only +/etc+ is handled. With systemd, +/var+ is managed by the
-++/var management+ option. With BusyBox or systemV init, +/var+ only
-+provides volatile directories (symbolic links to +/tmp+ and +/run+),
-+and +/var/lib+ stays read-only.
++    def check_common(self):
++        # The original init runs as PID 1, after the pre-init
++        self.assertRunOk("cmp /proc/1/exe /usr/libexec/overlayfs-etc/init")
++        # The root filesystem stays read-only
++        self.assertRunOk("grep -q '^/dev/root / ext4 ro' /proc/mounts")
++        self.assertRunNotOk("touch /usr/foo")
++
++    def check_overlay(self):
++        disk = self.create_data_disk()
++
++        self.boot(disk)
++        self.check_common()
++
++        # /etc is an overlay with its upper on the persistent device
++        self.assertRunOk("grep -q '^overlay-etc /etc overlay ' /proc/mounts")
++        self.assertRunOk("grep -q '^/dev/vdb /data ext4 ' /proc/mounts")
++
++        self.assertRunOk("echo foobar >/etc/br-test")
++        self.assertRunOk("test -e /data/overlay-etc/upper/br-test")
++
++        # The original /etc is exposed read-only
++        self.assertRunOk("cmp /data/overlay-etc/lower/passwd /etc/passwd")
++        self.assertRunNotOk("test -e /data/overlay-etc/lower/br-test")
++        self.assertRunNotOk("touch /data/overlay-etc/lower/foo")
++
++        # The changes persist across boots
++        self.assertRunOk("sync")
++        self.emulator.stop()
++        self.boot(disk)
++        out, exit_code = self.emulator.run("cat /etc/br-test")
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(out[0], "foobar")
++
++
++class TestInitSystemOverlayfsEtcBusybox(InitSystemOverlayfsEtcBase):
++    config = InitSystemOverlayfsEtcBase.config
++
++    def test_run(self):
++        self.check_overlay()
++
++
++class TestInitSystemOverlayfsEtcSysv(InitSystemOverlayfsEtcBase):
++    config = InitSystemOverlayfsEtcBase.config + \
++        """
++        BR2_INIT_SYSV=y
++        """
++
++    def test_run(self):
++        self.check_overlay()
++
++
++class TestInitSystemOverlayfsEtcSystemd(InitSystemOverlayfsEtcBase):
++    config = InitSystemOverlayfsEtcBase.config + \
++        """
++        BR2_INIT_SYSTEMD=y
++        """
++
++    def test_run(self):
++        self.check_overlay()
++
++
++class TestInitSystemOverlayfsEtcNoDevice(InitSystemOverlayfsEtcBase):
++    config = InitSystemOverlayfsEtcBase.config
++
++    def test_run(self):
++        # Without the persistent device, the system still boots, with
++        # the read-only /etc
++        self.boot(None)
++        self.check_common()
++        self.assertRunNotOk("grep -q ' /etc overlay ' /proc/mounts")
++        self.assertRunNotOk("touch /etc/foo")
+diff --git a/support/testing/tests/init/test_overlayfs_etc/linux-no-overlayfs.fragment b/support/testing/tests/init/test_overlayfs_etc/linux-no-overlayfs.fragment
+new file mode 100644
+index 0000000000..f59e353141
+--- /dev/null
++++ b/support/testing/tests/init/test_overlayfs_etc/linux-no-overlayfs.fragment
+@@ -0,0 +1,2 @@
++# Disabled here, to check that BR2_ROOTFS_OVERLAYFS_ETC enables it
++# CONFIG_OVERLAY_FS is not set
 -- 
 2.34.1
 
