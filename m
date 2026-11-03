@@ -1,87 +1,87 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD949606A326
-	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 15:58:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12A17606A326
+	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 15:58:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Yyb/Czig
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=ntU7ykzi
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AC774608AB;
-	Fri,  6 Nov 2026 15:58:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CA0EB811D2;
+	Fri,  6 Nov 2026 15:58:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KvcXmxhFRk8i; Fri,  6 Nov 2026 15:58:43 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org B80F6605A7
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793980723;
-	b=O1zZxAKAJYe18t+FDdSgLBaSdOhvc3OjXoboODjxbeZXX7ANUfQkSGiXD5moHartU1/I
-	 pj2G21Q5d21IGY3eeJ6uGow72yXDZYgnLWEEHP5t0rOjw2tnc2vyLP38cUwe4DvP7Hj8B
-	 ZGEOwiL0zqE8J8qoXj/BkrRrvX37r0+8kKkg5rKQlMfHHO8gEJMXyQ8t/bSLOBq+FfidH
-	 bTMTEi+UFl8G4EzxVpV3ehOIeIPmIhPtlhXMFnDdURnNLMyEgI5t9i1plddurok1eirmg
-	 PBvB4xLdvs5pQzkkPfvMBGD46yyYPFlDAAGRI8EFP3B8242zNSbd1PUiwZThN/UKOEA==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m8X8fxqnBeI8; Fri,  6 Nov 2026 15:58:43 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 5C44781203
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793980722;
+	b=bO5SzuobkB6OtVbHiXsINZBWIqS3aVt4nf7Ulfj5PQ1sF8P/e9yCeniygcHtiskOSDid
+	 MeUNPIqp2jzIy6viAh5Id7E46u6eF32RcIk7Ves7+mEivmk1Dd7Z94VNgz6VRDu3yEcsl
+	 /3dleHVK27rX7FWABUamQ2cPcFhMddiIErSr/A2pSKliuW3vhXzWXVcsaAkyAoepL+4Q6
+	 PC9zJKqnwwf9e/PJ5hP3FnkPYLRqrpiO2NBnNMu/2xqMOeuG5Lrl+skfkAUKyyUV0Th5p
+	 ZOJWly9esKtOTHbfavC5/YMzrXUEIFZHInioAIFlPEWg46+EAS74h+vleLIXNo9pcaA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793980723;
+	c=relaxed/relaxed; t=1793980722;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
 	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=Gwnnyk/qVbENrQYVr9t0PYu56UbaS3u/xh1Vc6hRx2g=;
-	b=WzTIWvjZr34y0stoLTLGrG1lUzzMboPai4tKz7s0V5J64MRd5AyYQtLg/uXRRCIWOLm5
-	 LLVUnTUOy3MXLBF6ECZKcf7FgWwNRSGuOQqJvLPPf4t5nwDMA+zi8MdlMYQoI/gOSesT7
-	 APwXLDvGq2UVKbnT7pmqtht85gDmhs7DFLoEB0hIjv3KkS3GmdGIZmGkIsgeAFHCh43Tf
-	 1WGQ34jQrT+/PL82yP+NYYI0zvRc1iC0rCfLRXLqfTw0KEQZ4J9DkCBK8Ik+/s0ojLivt
-	 VuzzjeTarKfg0e+CNBoxotaHiorr9XH2JCKc3JCfTy4sCNStN5ndukPpCISvjeAsKdg==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
+	 Sender;
+	bh=wjjzr0tSnwi3HS4vDQ9KyRt1gN5mGHdV9iGd8rvMJo0=;
+	b=fMhvuOv0bUFr7Se4wS/3fgEmp4blmij4tGXqMD7FiNHh9mwMEXXivjPGWY4flDsa0mkH
+	 ktpS5zD//7zxm/n1ZWc2dG9+EKOCZEIjyrvN562DZdkq7OuMoDXQ+VhncTd9/fbxQNZuy
+	 xNz+WblZGvxH6TyEeu6xAqIhWoE1occMjHuI4rOPSS2ZaNLasaHXF5Y10Gs2pTHK1eLJL
+	 XncZ1LWNjuKvZh1JtJtCDrWDdyM9azm3LB2cvmyBk+d5kZ2Evbi36ezGd+x4IrCFKe69t
+	 4pXdEyfXBhPjpjsygzbw6Rg2DMr+Srx+PRXp7P412oCLWLj6R8nOlf2igmlXSoIMJgg==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793980723;
-	bh=Gwnnyk/qVbENrQYVr9t0PYu56UbaS3u/xh1Vc6hRx2g=;
+	s=default; t=1793980722;
+	bh=wjjzr0tSnwi3HS4vDQ9KyRt1gN5mGHdV9iGd8rvMJo0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Yyb/CzigcsST0hKhWkGEd9l67+03C8zAnQZI0gBIQl8qGzISkeI1nj731CYa+8B/b
-	 tMUbD6ELZC3Q10bTZiPH4byg/YA8Aty9XBKzGxoJFnjfoKXvm22RLv3njdFFC+x3ec
-	 yl272LfUMXWvxf3ni2cUbBQCyrRblHD6eKNL0GNOqZlO/XEadrU09/p1iOVGSyenrW
-	 44SACv3rVy4P2zHeTeYSbo0Msq7E564WM5JPk6KVFfFt+EK7wJZkkNr6qqMrk0gdqI
-	 45Ccqb9SG0Ay89FDZh8i0oiwjUTSOtUH1dgvfexHxWKoRTOxSvXRII8IPVcp9MX885
-	 a3b/3ef30v8QQ==
+	b=ntU7ykziey6Uk/gG/KzkmJlE3MNcZKOKyiY1CluAc5YKtA6TE2MR38kDAf1cneg8P
+	 Efw9sz927rc9GhDLIIt8AUg+JFoKQMaduT3cpWGw1yIpwO08xn3EMe1OK8ZTjs5orb
+	 LcAI1ZOGHzto8LGM/ybgM0g4XRZJurBoirbg7oc6VCtl2vsm0sBOCZwUGmUgpWO/Ye
+	 eUxXsS/GDZZGlhjmlL2Xs4Dasz6d+sqC47wp1h74nwXd6metcWH6iIzdvc8vbmTMo5
+	 ux82LyCH+Sk5d93mMJJAos8y4D4W0TBA2WRCKGCRRXz2Xtn4qoalEKdA0PpusXP320
+	 lUm5wxotdj7AQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B80F6605A7;
-	Fri,  6 Nov 2026 15:58:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id AEB41D36
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5C44781203;
+	Fri,  6 Nov 2026 15:58:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id AD97A34D
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 15:58:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8ABB540949
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9CC5980FAF
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 15:58:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W4A21_LRs_G3 for <buildroot@buildroot.org>;
- Fri,  6 Nov 2026 15:58:27 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 4721F40911
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VtLgX5CJfylH for <buildroot@buildroot.org>;
+ Fri,  6 Nov 2026 15:58:26 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org B60FB80F5D
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4721F40911
- for <buildroot@buildroot.org>; Fri,  6 Nov 2026 15:58:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B60FB80F5D
+ for <buildroot@buildroot.org>; Fri,  6 Nov 2026 15:58:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7F3DE9E0A8; Fri,  6 Nov 2026 15:56:55 +0000 (UTC)
+ id DBF9C9E09B; Fri,  6 Nov 2026 15:56:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 5 Nov 2026 10:31:50 +0100
+Date: Tue, 3 Nov 2026 11:15:38 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: ceb557bb180db934a51132d860aa28bd19064bd4
-X-Git-Newrev: d07e0a9bfc73981dfe2975cfaeec72e5be8d8bef
+X-Git-Oldrev: 4081f0aac9f1c8e21c33703f06c9f46b60b01660
+X-Git-Newrev: 1c562e762752f274d97cc868bd1a5404f1b0ebaa
 X-Patchwork-Hint: ignore
-Message-Id: <20261106155655.7F3DE9E0A8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/suricata:
- security bump version to 8.0.7
+Message-Id: <20261106155654.DBF9C9E09B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/iperf3: bump to
+ version 3.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,70 +95,287 @@ From: Thomas Perale via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Perale <thomas.perale@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============3623205905652662019=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_24_48,
+X-Spam-Status: No, score=-19.9 required=3.0 tests=BAYES_00,DATE_IN_PAST_48_96,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
-	autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_NONE autolearn=ham autolearn_force=no
+	version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d07e0a9bfc73981dfe2975cfaeec72e5be8d8bef
+--===============3623205905652662019==
+Content-Type: text/plain
+
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1c562e762752f274d97cc868bd1a5404f1b0ebaa
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-https://forum.suricata.io/t/suricata-8-0-5-and-7-0-16-released/6315
+Release notes:
+https://github.com/esnet/iperf/releases/tag/3.19
 
-Fixes CVE-2026-45764, CVE-2026-45766, CVE-2026-45769, CVE-2026-45768,
-CVE-2026-46387, CVE-2026-45759, CVE-2026-45762, CVE-2026-45765,
-CVE-2026-45747, CVE-2026-45770, CVE-2026-46352, CVE-2026-45767,
-CVE-2026-45763, CVE-2026-45751, CVE-2026-45752 & CVE-2026-45761
+Updated license hash due to copyright year bump:
+https://github.com/esnet/iperf/commit/9f6dc2164dea62221298818c54992c3f24a7e214
 
-https://forum.suricata.io/t/suricata-8-0-6-and-7-0-17-released/6391
+Added a patch to fix the build error with uClibc.
 
-Fixes CVE-2026-63452, CVE-2026-63450, CVE-2026-63449, CVE-2026-57227,
-CVE-2026-57229, CVE-2026-63446, CVE-2026-63448, CVE-2026-57224,
-CVE-2026-63447, CVE-2026-63451, CVE-2026-57222 & CVE-2026-57228
-
-https://forum.suricata.io/t/suricata-8-0-7-released/6467
-
-Fixes 67 security bugs, all CVEs are pending.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 510003c0411a915d71709417e53d2bd62be9f999)
+Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit 0575a3ab10932a030c0726a8d8bedc2d06b6499c)
+[thomas: remove the previously applied backport]
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/suricata/suricata.hash | 2 +-
- package/suricata/suricata.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...lation-issue-with-uClibc-due-to-a-missing.patch | 51 ++++++++++++
+ ...0001-Fix-off-by-one-head-overflow-in-auth.patch | 93 ----------------------
+ ...lures-on-malformed-authentication-attempt.patch | 35 --------
+ package/iperf3/iperf3.hash                         |  6 +-
+ package/iperf3/iperf3.mk                           |  8 +-
+ 5 files changed, 55 insertions(+), 138 deletions(-)
 
-diff --git a/package/suricata/suricata.hash b/package/suricata/suricata.hash
-index 15f7e666b3..a5b7807d60 100644
---- a/package/suricata/suricata.hash
-+++ b/package/suricata/suricata.hash
-@@ -1,5 +1,5 @@
- # Locally computed:
--sha256  81cee7bae69848a9751b2ce0867620eefa52b192e79c20b5eac897600b28b191  suricata-8.0.4.tar.gz
-+sha256  a9d46a9c8f40e81f8a6df3ecc2c5a9a8e8da985876299108d92da547c013ba8c  suricata-8.0.7.tar.gz
- 
- # Hash for license files:
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
-index 56bbc0c89b..d77652162c 100644
---- a/package/suricata/suricata.mk
-+++ b/package/suricata/suricata.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/iperf3/0001-Fix-a-compilation-issue-with-uClibc-due-to-a-missing.patch b/package/iperf3/0001-Fix-a-compilation-issue-with-uClibc-due-to-a-missing.patch
+new file mode 100644
+index 0000000000..cc2f4bd595
+--- /dev/null
++++ b/package/iperf3/0001-Fix-a-compilation-issue-with-uClibc-due-to-a-missing.patch
+@@ -0,0 +1,51 @@
++From e5c4263c6b2c5b84a6edeb1cf3c95bddd73d4d7c Mon Sep 17 00:00:00 2001
++From: Kadambini Nema <kadambini.nema@gmail.com>
++Date: Sat, 17 May 2025 16:20:07 -0700
++Subject: [PATCH] Fix a compilation issue with uClibc due to a missing include
++ file.
++MIME-Version: 1.0
++Content-Type: text/plain; charset=UTF-8
++Content-Transfer-Encoding: 8bit
++
++------
++In file included from t_auth.c:35:
++iperf_api.h:395:77: error: unknown type name ‘va_list’
++  395 | void iperf_exit(struct iperf_test *test, int exit_code, const char *format, va_list argp) __attribute__ ((noreturn));
++	  |                                                                             ^~~~~~~
++iperf_api.h:33:1: note: ‘va_list’ is defined in header ‘<stdarg.h>’; did you forget to ‘#include <stdarg.h>’?
++   32 | #include <setjmp.h>
++  +++ |+#include <stdarg.h>
++   33 | #include <stdio.h>
++-----
++
++Signed-off-by: Kadambini Nema <kadambini.nema@gmail.com>
++Upstream: https://github.com/esnet/iperf/pull/1888
++---
++ src/iperf_api.c | 1 -
++ src/iperf_api.h | 1 +
++ 2 files changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/iperf_api.c b/src/iperf_api.c
++index aeec91dd3..d4a06bec9 100644
++--- a/src/iperf_api.c
+++++ b/src/iperf_api.c
++@@ -53,7 +53,6 @@
++ #include <sys/stat.h>
++ #include <sched.h>
++ #include <setjmp.h>
++-#include <stdarg.h>
++ #include <math.h>
++ 
++ #if defined(HAVE_CPUSET_SETAFFINITY)
++diff --git a/src/iperf_api.h b/src/iperf_api.h
++index 03d273e8c..cd82e6f9b 100644
++--- a/src/iperf_api.h
+++++ b/src/iperf_api.h
++@@ -30,6 +30,7 @@
++ #include <sys/socket.h>
++ #include <sys/time.h>
++ #include <setjmp.h>
+++#include <stdarg.h>
++ #include <stdio.h>
++ #include <stdint.h>
++ #ifdef __cplusplus
+diff --git a/package/iperf3/0001-Fix-off-by-one-head-overflow-in-auth.patch b/package/iperf3/0001-Fix-off-by-one-head-overflow-in-auth.patch
+deleted file mode 100644
+index 38fe1327ce..0000000000
+--- a/package/iperf3/0001-Fix-off-by-one-head-overflow-in-auth.patch
++++ /dev/null
+@@ -1,93 +0,0 @@
+-From 4e5313bab0b9b3fe03513ab54f722c8a3e4b7bdf Mon Sep 17 00:00:00 2001
+-From: Sarah Larsen <swlarsen@es.net>
+-Date: Wed, 25 Jun 2025 15:11:03 +0000
+-Subject: [PATCH] Fix off-by-one heap overflow in auth.
+-
+-Reported by Han Lee (Apple Information Security)
+-
+-CVE: CVE-2025-54349
+-Upstream: https://github.com/esnet/iperf/commit/4e5313bab0b9b3fe03513ab54f722c8a3e4b7bdf
+-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+----
+- src/iperf_auth.c | 18 +++++++++++++-----
+- 1 file changed, 13 insertions(+), 5 deletions(-)
+-
+-diff --git a/src/iperf_auth.c b/src/iperf_auth.c
+-index b9f2bc0f2..632f03d24 100644
+---- a/src/iperf_auth.c
+-+++ b/src/iperf_auth.c
+-@@ -288,6 +288,7 @@ int encrypt_rsa_message(const char *plaintext, EVP_PKEY *public_key, unsigned ch
+- }
+- 
+- int decrypt_rsa_message(const unsigned char *encryptedtext, const int encryptedtext_len, EVP_PKEY *private_key, unsigned char **plaintext, int use_pkcs1_padding) {
+-+    int ret =0;
+- #if OPENSSL_VERSION_MAJOR >= 3
+-     EVP_PKEY_CTX *ctx;
+- #else
+-@@ -310,7 +311,8 @@ int decrypt_rsa_message(const unsigned char *encryptedtext, const int encryptedt
+-     keysize = RSA_size(rsa);
+- #endif
+-     rsa_buffer  = OPENSSL_malloc(keysize * 2);
+--    *plaintext = (unsigned char*)OPENSSL_malloc(keysize);
+-+    // Note: +1 for NULL
+-+    *plaintext = (unsigned char*)OPENSSL_malloc(keysize + 1);
+- 
+-     BIO *bioBuff   = BIO_new_mem_buf((void*)encryptedtext, encryptedtext_len);
+-     rsa_buffer_len = BIO_read(bioBuff, rsa_buffer, keysize * 2);
+-@@ -320,13 +322,15 @@ int decrypt_rsa_message(const unsigned char *encryptedtext, const int encryptedt
+-         padding = RSA_PKCS1_PADDING;
+-     }
+- #if OPENSSL_VERSION_MAJOR >= 3
+-+
+-     plaintext_len = keysize;
+-     EVP_PKEY_decrypt_init(ctx);
+--    int ret = EVP_PKEY_CTX_set_rsa_padding(ctx, padding);
+-+
+-+    ret = EVP_PKEY_CTX_set_rsa_padding(ctx, padding);
+-     if (ret < 0){
+-         goto errreturn;
+-     }
+--    EVP_PKEY_decrypt(ctx, *plaintext, &plaintext_len, rsa_buffer, rsa_buffer_len);
+-+    ret = EVP_PKEY_decrypt(ctx, *plaintext, &plaintext_len, rsa_buffer, rsa_buffer_len);
+-     EVP_PKEY_CTX_free(ctx);
+- #else
+-     plaintext_len = RSA_private_decrypt(rsa_buffer_len, rsa_buffer, *plaintext, rsa, padding);
+-@@ -337,7 +341,7 @@ int decrypt_rsa_message(const unsigned char *encryptedtext, const int encryptedt
+-     BIO_free(bioBuff);
+- 
+-     /* Treat a decryption error as an empty string. */
+--    if (plaintext_len < 0) {
+-+    if (plaintext_len <= 0) {
+-         plaintext_len = 0;
+-     }
+- 
+-@@ -386,24 +390,28 @@ int decode_auth_setting(int enable_debug, const char *authtoken, EVP_PKEY *priva
+-     int plaintext_len;
+-     plaintext_len = decrypt_rsa_message(encrypted_b64, encrypted_len_b64, private_key, &plaintext, use_pkcs1_padding);
+-     free(encrypted_b64);
+--    if (plaintext_len < 0) {
+-+    if (plaintext_len <= 0) {
+-         return -1;
+-     }
+-+
+-     plaintext[plaintext_len] = '\0';
+- 
+-     char *s_username, *s_password;
+-     s_username = (char *) calloc(plaintext_len, sizeof(char));
+-     if (s_username == NULL) {
+-+        OPENSSL_free(plaintext);
+- 	return -1;
+-     }
+-     s_password = (char *) calloc(plaintext_len, sizeof(char));
+-     if (s_password == NULL) {
+-+        OPENSSL_free(plaintext);
+- 	free(s_username);
+- 	return -1;
+-     }
+- 
+-     int rc = sscanf((char *) plaintext, auth_text_format, s_username, s_password, &utc_seconds);
+-     if (rc != 3) {
+-+        OPENSSL_free(plaintext);
+- 	free(s_password);
+- 	free(s_username);
+- 	return -1;
+diff --git a/package/iperf3/0002-Prevent-crash-due-to-assertion-failures-on-malformed-authentication-attempt.patch b/package/iperf3/0002-Prevent-crash-due-to-assertion-failures-on-malformed-authentication-attempt.patch
+deleted file mode 100644
+index bcba77be21..0000000000
+--- a/package/iperf3/0002-Prevent-crash-due-to-assertion-failures-on-malformed-authentication-attempt.patch
++++ /dev/null
+@@ -1,35 +0,0 @@
+-From de932ea16bc959f839d28d370f0602de52c5def1 Mon Sep 17 00:00:00 2001
+-From: "Bruce A. Mah" <bmah@es.net>
+-Date: Tue, 24 Jun 2025 15:58:21 -0700
+-Subject: [PATCH] Prevent crash due to assertion failures on malformed
+- authentication attempt.
+-
+-Reported by Han Lee (Apple Information Security)
+-
+-CVE: CVE-2025-54350
+-Upstream: https://github.com/esnet/iperf/commit/de932ea16bc959f839d28d370f0602de52c5def1
+-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+----
+- src/iperf_auth.c | 2 --
+- 1 file changed, 2 deletions(-)
+-
+-diff --git a/src/iperf_auth.c b/src/iperf_auth.c
+-index 72e85fc9a..b9f2bc0f2 100644
+---- a/src/iperf_auth.c
+-+++ b/src/iperf_auth.c
+-@@ -28,7 +28,6 @@
+- #include "iperf_config.h"
+- 
+- #include <string.h>
+--#include <assert.h>
+- #include <time.h>
+- #include <sys/types.h>
+- /* FreeBSD needs _WITH_GETLINE to enable the getline() declaration */
+-@@ -152,7 +151,6 @@ int Base64Decode(const char* b64message, unsigned char** buffer, size_t* length)
+- 
+-     BIO_set_flags(bio, BIO_FLAGS_BASE64_NO_NL); //Do not use newlines to flush buffer
+-     *length = BIO_read(bio, *buffer, strlen(b64message));
+--    assert(*length == decodeLen); //length should equal decodeLen, else something went horribly wrong
+-     BIO_free_all(bio);
+- 
+-     return (0); //success
+diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
+index 2aef76578a..1ffb2c6c02 100644
+--- a/package/iperf3/iperf3.hash
++++ b/package/iperf3/iperf3.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.es.net/pub/iperf/iperf-3.18.tar.gz.sha256
+-sha256  c0618175514331e766522500e20c94bfb293b4424eb27d7207fb427b88d20bab  iperf-3.18.tar.gz
++# From https://downloads.es.net/pub/iperf/iperf-3.19.tar.gz.sha256
++sha256  040161da1555ec7411a9d81191049830ef37717d429a94ee6cf0842618e0e29c  iperf-3.19.tar.gz
+ # Locally computed
+-sha256  3dc3e2076dd9cdea2b66d8fe213997ff25fb6171594f055b59fe25321b438f6f  LICENSE
++sha256  7c9ba0385fcf35c4c9e08ad0c0cba72d4315f36f0f742fef4de826a28cc33a97  LICENSE
+diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
+index 43f791b082..69c4792f98 100644
+--- a/package/iperf3/iperf3.mk
++++ b/package/iperf3/iperf3.mk
+@@ -4,19 +4,13 @@
  #
  ################################################################################
  
--SURICATA_VERSION = 8.0.4
-+SURICATA_VERSION = 8.0.7
- SURICATA_SITE = https://www.openinfosecfoundation.org/download
- SURICATA_LICENSE = GPL-2.0
- SURICATA_LICENSE_FILES = COPYING LICENSE
+-IPERF3_VERSION = 3.18
++IPERF3_VERSION = 3.19
+ IPERF3_SITE = https://downloads.es.net/pub/iperf
+ IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
+ IPERF3_LICENSE = BSD-3-Clause, BSD-2-Clause, MIT
+ IPERF3_LICENSE_FILES = LICENSE
+ IPERF3_CPE_ID_VENDOR = es
+ 
+-# 0001-Fix-off-by-one-head-overflow-in-auth.patch
+-IPERF3_IGNORE_CVES += CVE-2025-54349
+-
+-# 0002-Prevent-crash-due-to-assertion-failures-on-malformed-authentication-attempt.patch
+-IPERF3_IGNORE_CVES += CVE-2025-54350
+-
+ IPERF3_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+ 
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+
+--===============3623205905652662019==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3623205905652662019==--
