@@ -1,28 +1,28 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D460606A326
-	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 15:58:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EDFB606A326
+	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 15:58:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=nPhFr2yP
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=sKnMn3s3
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 39FA280F8D;
-	Fri,  6 Nov 2026 15:58:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2DC4B608AD;
+	Fri,  6 Nov 2026 15:58:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JSXkQY_m5Hl3; Fri,  6 Nov 2026 15:58:48 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org E5DE5811D0
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793980727;
-	b=VHFd00bJDb7oFL5Al73tSeGOEcwW0gUFo/TgvzMll2PypDzZ8YlIgtQ8ApIia1LRvzjp
-	 SWTS3WbpFByitRq8WFZDlD7hpmGU1tK5Czm9zgW1BdWMHM4IBHxr9YwFj4KMileHukChJ
-	 n6Xb7gM12tXcN6Glg5NdWvTpQJfTGrNnrnmDTVYlYWhedKj9Q38jD7gZJqct/Pd6zVUCo
-	 LJtoqv0Bf+ZZRY6fLoXpKEuhs+46QWgC3qSTHMl717t0ZUZP2qfPqz1Jgwo0GtM7zY2ET
-	 BaOLEvTQpf0Bx6cGsCC8GRe//B/cpxojoYR20qTa6uub07AjMWgsiHdNjJM8eurzZSw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OMYt8U2NKheZ; Fri,  6 Nov 2026 15:58:50 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 39668608BB
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793980730;
+	b=F7jGe8VaSrPEoGXx6sZl7f/LJOpDlkSctLvAfdncXRld+9kZKEl1dnLpBrHIV8gvF4tB
+	 OsXxzJ/Wt3y29S4ZLKUbX0h9UlY++GCnkYlasa9krO7juUtrDuYT/Cr4qYKWF3fXMfAKJ
+	 ypc+m3ry3u+2xe5fNb9sIG1+mVMcNSMXqBAtdFPP72FfoZmnbGFui/TV2WW0hxE5MAU+w
+	 09pExG2zAPYLpkP/F3IZdvtBroEE1tSjJHLXC+VN1nCLm6NMJ/aVG/8HgxbdHKYNcOnCH
+	 8Pjq45RlZIXCF0GsVdeCx87bVYVhQGHY9x/ZBPZUJ7eEKhQaEfjI7L8W1eXQhs/O3lw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793980727;
+	c=relaxed/relaxed; t=1793980730;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,58 +30,58 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=7MRhLw8dw7nWFQGktH61GArjBidi5MCK/laPbQtTKGc=;
-	b=ifOO+RiQsPAs1CQhprs73e2C6zw7epqVCg9v8+mfapJflyea8kVIwwe/5fNcQtRgOUMM
-	 dlDq3HsI7iUd8eNAUBKcqiBcestc62zYkmFVpFEbD4LH+cv1b3odVEEGN5V22hMJBmVND
-	 SdSIC0ZODR82REJwxjSn7+YmQiFWX6di99NFnmdJwTPJuPqiB80NZSAzgcA0P3OKJQ+U3
-	 t9n+hzEHyvvKPHiQuECRLS7Lt2K8T6OjIXgm++h81P846xCMfGuBQ6eFs75YQD4kigyVE
-	 GSD7t1+K7CoaAO7RDlFPoGvf/YXDQXVpzV47bF2rsC79TP24wGvpQ4bD6XJbhlk3H/g==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+	bh=frTlIL0kKyMHgyLbehaGzFJoYG3saWRsMBgXMScVhe4=;
+	b=GR03NT4JZuW3zlVElIfFBSZpdLG1aBUDfNFsZrjKdK5hPcdNFisn2dRq8Uvul0KmMgJR
+	 Q533n3Dr1SjsHC3JQIFA8b+VmZwh1qio7P50lVoVLXjdDAKiFs03Lec/5byjJC9NPCznh
+	 q22A4D29nwWaMmt//8gfPcW8NLvXRiUsfQ5+SUb3E8Al8uDqnryVSAuWq0qQRgtd+zFbA
+	 NEppDXX+XynQrDzzm6a5JcloN1xXNSplX90w/iRDYqEjEUQPNcD487Tisrz9uA/bx0Maf
+	 0BEWPkXyk6Yj6+fYl7ybPnXihz5dHx5EirzJI+kT7768Ro9RFEyv9Gg1XgF3HHeMraA==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793980727;
-	bh=7MRhLw8dw7nWFQGktH61GArjBidi5MCK/laPbQtTKGc=;
+	s=default; t=1793980730;
+	bh=frTlIL0kKyMHgyLbehaGzFJoYG3saWRsMBgXMScVhe4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=nPhFr2yPpAf43IbqvILgjnu+JsKZ+xLrwvTGSq48MJVtUhBZ5vsyDB14t4hmm8vdo
-	 WJlrPAN5lQAf68Ocr2Xt7zp2SIc3p1ssM1XHSeCpbkL5jaCvvi5B4ZbCnaqmXG4Ebj
-	 3Nhou+CYAJryRJxN+UoLfXXcdxhL7QoQcycUFERj6OIQ549F5SHNvo78/AXQGAK3JC
-	 wr+NjalYF+KtSLrTwencaBaITWFLuK3ulL+0Olth4sbvlUsS81DTYPIeU5faYnrth4
-	 s5RGmUou5V3emjdNW96Io+KRBa912nL5VfZz4jEiU5Z73fcY5859L0jj++h8z+Q5n0
-	 +g8ETzqpInaeA==
+	b=sKnMn3s3qGAP1CYqIp3IOhHWmljRRC/DlS+uMdfWQNC+pPp0gXTxxClWAlk2Dq65g
+	 OsJ5dtv00txH5ouJykgBz6MgyjmMZb1WX68CSgoQjHl44eWUtw/lXTKqJM0o1DKaHV
+	 zWjWmoT33ghfUS/WYIqcrnFluvQbUr5K7caFWI6za317DWaY6tereAtmM5LIQ4iusZ
+	 ZtgVA/mbu8xdv1IdtDuQql1e/YSCGZFFmkySlMOJ5Sab6LEQ40AgzzoCJa8mVPsyLq
+	 E8HjAhyv9t1zdvHS36QGVSZqk/Yq3RkuiQLR/qn3PWGtG8ofoFOpc380Di4HyKb7uK
+	 oyUDTFgAG0SRA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E5DE5811D0;
-	Fri,  6 Nov 2026 15:58:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id BCFAAFC6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 39668608BB;
+	Fri,  6 Nov 2026 15:58:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BBAFDD3A
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 15:58:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A2825403DF
+ by smtp4.osuosl.org (Postfix) with ESMTP id A017E40906
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 15:58:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a56QE5raIOJ8 for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VHdE05q2SYGv for <buildroot@buildroot.org>;
  Fri,  6 Nov 2026 15:58:27 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 38102403D5
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 030AA408FB
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 38102403D5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 030AA408FB
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 15:58:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6FD119E09B; Fri,  6 Nov 2026 15:56:55 +0000 (UTC)
+ id 2DEA59E0A8; Fri,  6 Nov 2026 15:56:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 5 Nov 2026 10:31:34 +0100
+Date: Tue, 3 Nov 2026 11:18:25 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: c97b40377f135288efb1068792dcd6f17ed2609f
-X-Git-Newrev: ceb557bb180db934a51132d860aa28bd19064bd4
+X-Git-Oldrev: cc590a05af7976d9f3aa42d21f127557ee3cfd56
+X-Git-Newrev: 88a52501e0c9fd82a148ef1faa11b7d09291c1b7
 X-Patchwork-Hint: ignore
-Message-Id: <20261106155655.6FD119E09B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/suricata: fix
- build
+Message-Id: <20261106155655.2DEA59E0A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/iperf3: security
+ bump version to 3.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -98,53 +98,56 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-19.8 required=3.0 tests=BAYES_00,DATE_IN_PAST_24_48,
+X-Spam-Status: No, score=-20.1 required=3.0 tests=BAYES_00,DATE_IN_PAST_48_96,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
 	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ceb557bb180db934a51132d860aa28bd19064bd4
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/88a52501e0c9fd82a148ef1faa11b7d09291c1b7
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Buildroot commit a3374e49baa45679997c37a25accaf1574132c4a in 2026.05-rc1
-bumped the package from 6.0.20 to 8.0.4.
+https://github.com/esnet/iperf/blob/3.22/RELNOTES.md
 
-Upstream included in version 8.0.1 a commit adding rustdoc as build
-dependency "required for the tests":
-https://github.com/OISF/suricata/commit/6d74656befe20cd939de8a97bfe272efa112c90b
+Fixes CVE-2026-101283, CVE-2026-101276, CVE-2026-102253, CVE-2026-71217.
 
-This causes an error during configure in buildroot:
-
-  checking for rustdoc... no
-  configure: error: rustdoc required
-
-To fix we problem we add RUSTDOC=true to _CONV_ENV.
-
-Fixes:
-https://autobuild.buildroot.net/results/489/48984ab369d01fae9b53b7b1f51e874bada0619f/
+"The iperf-3.18 release notes were updated to reflect that a code change
+ in that version addresses CVE-2026-71218."
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Arnout Vandecappelle <arnout@rnout.be>
-(cherry picked from commit a0b3c2f84e1e048cfe11243645b4df7dc73bc41d)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit cb129a641b403cfc4c1b2ea9280b966e19837b62)
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- package/suricata/suricata.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/iperf3/iperf3.hash | 4 ++--
+ package/iperf3/iperf3.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/suricata/suricata.mk b/package/suricata/suricata.mk
-index 0ee3752a21..56bbc0c89b 100644
---- a/package/suricata/suricata.mk
-+++ b/package/suricata/suricata.mk
-@@ -30,6 +30,7 @@ SURICATA_DEPENDENCIES = \
- SURICATA_CONF_ENV = \
- 	ac_cv_path_HAVE_SPHINXBUILD=no \
- 	CARGO_HOME=$(BR_CARGO_HOME) \
-+	RUSTDOC=true \
- 	RUST_TARGET=$(RUSTC_TARGET_NAME)
+diff --git a/package/iperf3/iperf3.hash b/package/iperf3/iperf3.hash
+index cce50581e6..92246b6915 100644
+--- a/package/iperf3/iperf3.hash
++++ b/package/iperf3/iperf3.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.es.net/pub/iperf/iperf-3.21.tar.gz.sha256
+-sha256  656e4405ebd620121de7ceca3eaf43a88f79ea1b857d041a6a0b1314801acdd8  iperf-3.21.tar.gz
++# From https://downloads.es.net/pub/iperf/iperf-3.22.tar.gz.sha256
++sha256  1c0d0fb02c52626111d6e132db80edfbf27bbaff8bd9245df2a371dcb0b35a92  iperf-3.22.tar.gz
+ # Locally computed
+ sha256  6c6e9abd761ff429c11189cd93bdee5bff7e3591253bd614b253a5f4fd30cbe5  LICENSE
+diff --git a/package/iperf3/iperf3.mk b/package/iperf3/iperf3.mk
+index bff9a40865..2e9305692d 100644
+--- a/package/iperf3/iperf3.mk
++++ b/package/iperf3/iperf3.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- SURICATA_MAKE_ENV = \
+-IPERF3_VERSION = 3.21
++IPERF3_VERSION = 3.22
+ IPERF3_SITE = https://downloads.es.net/pub/iperf
+ IPERF3_SOURCE = iperf-$(IPERF3_VERSION).tar.gz
+ IPERF3_LICENSE = BSD-3-Clause, BSD-2-Clause, MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
