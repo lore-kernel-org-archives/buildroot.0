@@ -1,28 +1,28 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C23F606BA26
-	for <buildroot@archiver.kernel.org>; Wed,  4 Nov 2026 20:52:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74F2A606C5AD
+	for <buildroot@archiver.kernel.org>; Wed,  4 Nov 2026 20:52:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=bhPj6AKD
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=R21iWs4s
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 31BF8408A8;
-	Wed,  4 Nov 2026 20:52:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4BCA36085C;
+	Wed,  4 Nov 2026 20:52:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OIrKzEAjRlm4; Wed,  4 Nov 2026 20:52:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 0E595408A9
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793825561;
-	b=ffc9JV2ohsr3cZsk0mHCljz35FLQYgORycKK66oBr+BmkPl+0gHJ78TjEAYhGLEaYFVR
-	 hHqmbmS/5QBaX3c1MqaVtHqwbu9LdMLlIZUjDeJGFKR+5LM5n13Y8Pqj6isfCWPGqU7SI
-	 m7GLYoLooAbnj9dsNOTqXrWsqFCa0+P3ailoyS9J+He8Uxe1tLj8c5PcMliMhWugm2l3L
-	 KYIw5uaF8/E7H3og+gsRYduD80b41m2O3zNVgeOycqO+I5j+LknoGOJqw2QD9tSnFjio3
-	 74IiZrdpT287bdHjbY6vFvOKzkBJ0/FOLVcMiQ4PgBQRRKP0WWZYHEqj6+tlNR7D66Q==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6qhSTWBA6Fs6; Wed,  4 Nov 2026 20:52:40 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 9083760828
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793825559;
+	b=AElWOkKupuVUP4T4lp4qv3GExvM3nfv9iFbg2GImmR7+GlC6WLV/UAWl5WueKTyLbdV3
+	 wgsQyTBWTrR1i0zNRltFPioiPDztTTstVW4xIFuiouiOr/QAw1un7AYFCkIe+1aVQKKw7
+	 6/BbOX5DPE8PPHg+qcYNiGeLSHjXAgBJs1ZkKalt8BeuG7JZ8ZiKsJY4pG6kA6QugZ4Pc
+	 ogp29OOV9FwON3fQNzcxznFFrnBRCWDoslGZjACKfc1BMxzvWuLzFvkLKFWjplqqqDN6i
+	 s4cb82QkaJYh1WcvUNgBSrzATFY+IfTsKX569+EmV17HA+eZcvZN+O9xbhFvmWopLgQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793825561;
+	c=relaxed/relaxed; t=1793825559;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,57 +30,57 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=esLG+Q6YUiZLgo9I/RoiA+ht6Z/F8mXskXRC+5GkF5Q=;
-	b=CybDR0b6Ml0Cmt2FqYDll+P7qV7dq00riI5hnh7NOxBpWUl4vgHjAu1MIDoeETxymn6q
-	 MfNzOqmOgiTfjRo1H6a3Uu0OOXn2Io2A3R0/2OOaGQ5uMGoXGndqh+C2kcP17zPKItHf3
-	 nZJD2W2+rxzxDlDCGiLs0hoGogBJ8p/AVz9iQHz2QXJSliB/X8TLTbZdGFnh1Pj4CxZ2F
-	 CWBX8ujIM2aIKTZ7Jo8fOiHrlc1AxsxVwOiDk5/YN2Vrr7JALlgXMB4Od9qelPkoj/U/s
-	 0esHjS8VA7+WwYPOr791KmM8YRBTrXNc6oMT2BWy9hj8B1JAu5kNe7JsxsWfUDhOd4A==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+	bh=qAoYVzvfn8eTs0I4EaogstD93s/p31c3hgTSuX8810M=;
+	b=tAo18FGzTmpsKcV/PpFTVpgf3rzhSkFUiFaKiFGlKMs7Fld1zrfkyY+IHBuOe7Y90bVV
+	 aFT0YaWRhB6Rg/brpyncek8ir9tWBJ8cycCitQMUXpzOpeTQbID1+Pfkt6Vaq4jL1dXMu
+	 EtipgLo3CLbvzHYBYZ5NJeLFMmnZFBpvXbAHC5QvC1Sbs3+PAztWl77nZctyzZxWD10SL
+	 ytl+nbvevPfFU3tHV/m6vk3u69FAIo7gpG63b3r/CLaLHo/1BvPBTO1m6kz0p4EMZ7wi6
+	 6xsnX8bRpFWHfYnPvgDsFw/OWWU4Lsggv6NKWqCQExkKjAjRM+3Mwgf15jgIFjMJtew==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793825561;
-	bh=esLG+Q6YUiZLgo9I/RoiA+ht6Z/F8mXskXRC+5GkF5Q=;
+	s=default; t=1793825559;
+	bh=qAoYVzvfn8eTs0I4EaogstD93s/p31c3hgTSuX8810M=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=bhPj6AKDOcok9OQxmgLv+JWW/rSl0VOqPZvWGhTWE79+sxg58fb9W9KLKNQiKCVxV
-	 b2HECbMvmaR42BjvDV5sf5ppNfQPrFZUbpeotoG1Z6ufB426pLQZa+rBwHXFO5TnHh
-	 3U0GHNcKox9xPdHiZFoWxwETJGRZ6HK/FwgclFdty1chiITBmJaKa8YUait8HqZWXC
-	 439kgzC98QTd8Cw6BtHtjOEhg9HymFaq4GhIopg6a/OQibP/AzhKT5CcRXaqVQAF7q
-	 3GER7HTAKtKyCccil54pCA+xNd5k96u3wYq0j+BAoML9eBeLtkmeh1NIIFSQyIgtux
-	 Zezq071GrisAg==
+	b=R21iWs4s/nT0VTqodQ0Jg89pUhb/3I219DMiNpr9NNBoDZ4Y8NQt8dEx42ajI1oRi
+	 bny6RIGxLuVNw8Tgj+oi1RlgswvEU35waqEB5RUqBW0M5+Zdk9gKsOoc867ZYwtohn
+	 tkqV3lYPtkilbYvu9SqMPxFTnWQ5t4AkSxvg5ZFahfoaAvYfR0mBOBKPaL+bvI+6ze
+	 Sf4r0S4Sg3nRHRXOiBYFiHVm8Tal+LlGO34hN5Nqshl3hACTgC+wmDxKQG1cSggtUP
+	 nkXnjG7xEVCMznw/NCqNb+6vN8g7py2+ndmxACywWUQL0OmH8ILlvbAxRPrK6w1R/g
+	 T0gPIc6flehRg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0E595408A9;
-	Wed,  4 Nov 2026 20:52:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9083760828;
+	Wed,  4 Nov 2026 20:52:39 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id AA9601789
+ by lists1.osuosl.org (Postfix) with ESMTP id A23A231F
  for <buildroot@buildroot.org>; Wed,  4 Nov 2026 20:52:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8F11360728
+ by smtp3.osuosl.org (Postfix) with ESMTP id 87E156080B
  for <buildroot@buildroot.org>; Wed,  4 Nov 2026 20:52:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cg3oaEJyLrIi for <buildroot@buildroot.org>;
+ id CrMH7qxES1gq for <buildroot@buildroot.org>;
  Wed,  4 Nov 2026 20:52:34 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 9746C607FA
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 8080E60728
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9746C607FA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8080E60728
  for <buildroot@buildroot.org>; Wed,  4 Nov 2026 20:52:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BDE3F9DC0C; Wed,  4 Nov 2026 20:51:03 +0000 (UTC)
+ id A4EBD9DE0A; Wed,  4 Nov 2026 20:51:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 4 Nov 2026 21:52:20 +0100
+Date: Wed, 4 Nov 2026 21:52:19 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 44b6ba3af318f26b29ab80b8414cb9a553d5d619
-X-Git-Newrev: 56052e5877d5cc1316bbc5def6fcc4263f8fa7a7
+X-Git-Oldrev: 689e3813dfa4b6b84843b496f93165e3de63d212
+X-Git-Newrev: 44b6ba3af318f26b29ab80b8414cb9a553d5d619
 X-Patchwork-Hint: ignore
-Message-Id: <20261104205103.BDE3F9DC0C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/htpdate: remove package
+Message-Id: <20261104205103.A4EBD9DE0A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/httpdate: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -104,221 +104,203 @@ X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/56052e5877d5cc1316bbc5def6fcc4263f8fa7a7
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/44b6ba3af318f26b29ab80b8414cb9a553d5d619
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-htpdate is in maintenance mode upstream: 2.1.x is its final release
-line, which only gets critical bug fixes, and its users and package
-maintainers are advised to migrate to its successor, httpdate, that
-delegates the network transport to libcurl.
+httpdate synchronizes the system time using the Date header of HTTP and
+HTTPS servers, which is useful on networks where NTP is blocked but web
+access is permitted. It is the successor of htpdate, from the same
+author: it delegates the network transport (HTTP, HTTPS, HTTP/2,
+proxies) to libcurl, and estimates the time from several servers.
 
-Remove htpdate in favor of httpdate: its legacy option selects httpdate
-instead.
+Like the htpdate package, add a SysV init script and a systemd unit,
+running httpdate with the arguments of HTTPDATE_ARGS, that can be
+overridden in /etc/default/httpdate. As httpdate does not write a
+pidfile, it runs in the foreground (-F), and start-stop-daemon
+backgrounds it and writes the pidfile.
 
-https://github.com/twekkel/htpdate
+https://github.com/twekkel/httpdate
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- Config.in.legacy                |  9 +++++++
- DEVELOPERS                      |  1 -
- package/Config.in               |  1 -
- package/htpdate/Config.in       |  8 -------
- package/htpdate/S43htpdate      | 53 -----------------------------------------
- package/htpdate/htpdate.hash    |  3 ---
- package/htpdate/htpdate.mk      | 38 -----------------------------
- package/htpdate/htpdate.service | 13 ----------
- 8 files changed, 9 insertions(+), 117 deletions(-)
+ DEVELOPERS                        |  1 +
+ package/Config.in                 |  1 +
+ package/httpdate/Config.in        | 11 ++++++++
+ package/httpdate/S43httpdate      | 55 +++++++++++++++++++++++++++++++++++++++
+ package/httpdate/httpdate.hash    |  3 +++
+ package/httpdate/httpdate.mk      | 33 +++++++++++++++++++++++
+ package/httpdate/httpdate.service | 12 +++++++++
+ 7 files changed, 116 insertions(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 29c9b7f9e7..a238369785 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,15 @@ endif
- 
- comment "Legacy options removed in 2026.11"
- 
-+config BR2_PACKAGE_HTPDATE
-+	bool "htpdate has been removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_HTTPDATE
-+	help
-+	  htpdate is in maintenance mode upstream, and its users are
-+	  advised to migrate to its successor, httpdate, which is
-+	  selected instead.
-+
- config BR2_PACKAGE_MESA3D_OPENCL
- 	bool "Mesa3D OpenCL support is now provided by RustiCL"
- 	select BR2_LEGACY
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 00035d933f..8f7552407e 100644
+index d6ed6b2b1a..00035d933f 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -233,7 +233,6 @@ F:	package/cutekeyboard/
- F:	package/fail2ban/
+@@ -234,6 +234,7 @@ F:	package/fail2ban/
  F:	package/grep/
  F:	package/gtkiostream/
--F:	package/htpdate/
- F:	package/httpdate/
+ F:	package/htpdate/
++F:	package/httpdate/
  F:	package/i2c-tools/
  F:	package/jq/
+ F:	package/libapparmor/
 diff --git a/package/Config.in b/package/Config.in
-index 089860e7ec..b79f4dcca1 100644
+index 32fc1496c9..089860e7ec 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2508,7 +2508,6 @@ endif
- 	source "package/haproxy/Config.in"
+@@ -2509,6 +2509,7 @@ endif
  	source "package/hostapd/Config.in"
  	source "package/hplip/Config.in"
--	source "package/htpdate/Config.in"
- 	source "package/httpdate/Config.in"
+ 	source "package/htpdate/Config.in"
++	source "package/httpdate/Config.in"
  	source "package/httping/Config.in"
  	source "package/i2pd/Config.in"
-diff --git a/package/htpdate/Config.in b/package/htpdate/Config.in
-deleted file mode 100644
-index d2a71fb696..0000000000
---- a/package/htpdate/Config.in
-+++ /dev/null
-@@ -1,8 +0,0 @@
--config BR2_PACKAGE_HTPDATE
--	bool "htpdate"
--	depends on BR2_USE_MMU # fork()
--	help
--	  The HTTP Time Protocol (HTP) is used to synchronize a
--	  computer's time with web servers as reference time source.
--
--	  https://github.com/twekkel/htpdate
-diff --git a/package/htpdate/S43htpdate b/package/htpdate/S43htpdate
-deleted file mode 100644
-index 22e5e6c803..0000000000
---- a/package/htpdate/S43htpdate
-+++ /dev/null
-@@ -1,53 +0,0 @@
--#!/bin/sh
--
--DAEMON="htpdate"
--PIDFILE="/var/run/$DAEMON.pid"
--
--HTPDATE_ARGS="-a -s -t https://google.com"
--
--# shellcheck source=/dev/null
--test -r "/etc/default/$DAEMON" && . "/etc/default/$DAEMON"
--
--start() {
--	printf 'Starting %s: ' "$DAEMON"
--	# shellcheck disable=SC2086 # we need the word splitting
--	start-stop-daemon -S -q -x "/usr/sbin/$DAEMON" \
--		-- -D -i "$PIDFILE" $HTPDATE_ARGS
--	status=$?
--	if [ "$status" -eq 0 ]; then
--		echo "OK"
--	else
--		echo "FAIL"
--	fi
--	return "$status"
--}
--
--stop() {
--	printf 'Stopping %s: ' "$DAEMON"
--	start-stop-daemon -K -q -p "$PIDFILE"
--	status=$?
--	if [ "$status" -eq 0 ]; then
--		rm -f "$PIDFILE"
--		echo "OK"
--	else
--		echo "FAIL"
--	fi
--	return "$status"
--}
--
--restart() {
--	stop
--	sleep 1
--	start
--}
--
--case "$1" in
--	start|stop|restart)
--		"$1";;
--	reload)
--		# Restart, since there is no true "reload" feature.
--		restart;;
--	*)
--		echo "Usage: $0 {start|stop|restart|reload}"
--		exit 1
--esac
-diff --git a/package/htpdate/htpdate.hash b/package/htpdate/htpdate.hash
-deleted file mode 100644
-index 44d73fbe2f..0000000000
---- a/package/htpdate/htpdate.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated:
--sha256  4c771fe3fc5c4ab5f9393dd501bdc51e4c067297cf304ad1e74e1965ac1c066f  htpdate-2.0.1.tar.gz
--sha256  74096c67e102bb6545b84487b5e7f18edd038fd5fc0199c8a0b25efb3c522f06  LICENSE
-diff --git a/package/htpdate/htpdate.mk b/package/htpdate/htpdate.mk
-deleted file mode 100644
-index 8d4b1e073c..0000000000
---- a/package/htpdate/htpdate.mk
-+++ /dev/null
-@@ -1,38 +0,0 @@
--################################################################################
--#
--# htpdate
--#
--################################################################################
--
--HTPDATE_VERSION = 2.0.1
--HTPDATE_SITE = $(call github,twekkel,htpdate,v$(HTPDATE_VERSION))
--HTPDATE_LICENSE = GPL-2.0+
--HTPDATE_LICENSE_FILES = LICENSE
--
--ifeq ($(BR2_PACKAGE_OPENSSL),y)
--HTPDATE_BUILD_OPTS = \
--	https \
--	SSL_LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs openssl`"
--HTPDATE_DEPENDENCIES += openssl host-pkgconf
--endif
--
--define HTPDATE_BUILD_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) $(HTPDATE_BUILD_OPTS)
--endef
--
--define HTPDATE_INSTALL_TARGET_CMDS
--	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
--		DESTDIR=$(TARGET_DIR) install
--endef
--
--define HTPDATE_INSTALL_INIT_SYSV
--	$(INSTALL) -D -m 0755 package/htpdate/S43htpdate \
--		$(TARGET_DIR)/etc/init.d/S43htpdate
--endef
--
--define HTPDATE_INSTALL_INIT_SYSTEMD
--	$(INSTALL) -D -m 0644 package/htpdate/htpdate.service \
--		$(TARGET_DIR)/usr/lib/systemd/system/htpdate.service
--endef
--
--$(eval $(generic-package))
-diff --git a/package/htpdate/htpdate.service b/package/htpdate/htpdate.service
-deleted file mode 100644
-index 95220581d4..0000000000
---- a/package/htpdate/htpdate.service
-+++ /dev/null
-@@ -1,13 +0,0 @@
--[Unit]
--Description=htpdate daemon
--After=network.target
--
--[Service]
--Type=forking
--PIDFile=/run/htpdate.pid
--Environment=HTPDATE_ARGS="-a -s -t https://www.google.com"
--EnvironmentFile=-/etc/default/htpdate
--ExecStart=/usr/sbin/htpdate -D -i /run/htpdate.pid $HTPDATE_ARGS
--
--[Install]
--WantedBy=multi-user.target
+ 	source "package/iana-assignments/Config.in"
+diff --git a/package/httpdate/Config.in b/package/httpdate/Config.in
+new file mode 100644
+index 0000000000..8d3f2c7bef
+--- /dev/null
++++ b/package/httpdate/Config.in
+@@ -0,0 +1,11 @@
++config BR2_PACKAGE_HTTPDATE
++	bool "httpdate"
++	depends on BR2_USE_MMU # daemon()
++	select BR2_PACKAGE_LIBCURL
++	help
++	  httpdate synchronizes the system time using the Date header
++	  of HTTP and HTTPS servers, which is useful on networks where
++	  NTP is blocked but web access is permitted. It is the
++	  successor of htpdate.
++
++	  https://github.com/twekkel/httpdate
+diff --git a/package/httpdate/S43httpdate b/package/httpdate/S43httpdate
+new file mode 100644
+index 0000000000..aff7a00eb9
+--- /dev/null
++++ b/package/httpdate/S43httpdate
+@@ -0,0 +1,55 @@
++#!/bin/sh
++
++DAEMON="httpdate"
++PIDFILE="/var/run/$DAEMON.pid"
++
++HTTPDATE_ARGS="-s https://www.google.com"
++
++# shellcheck source=/dev/null
++test -r "/etc/default/$DAEMON" && . "/etc/default/$DAEMON"
++
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++	# httpdate does not write a pidfile, so run it in the foreground
++	# and let start-stop-daemon background it and write it.
++	# shellcheck disable=SC2086 # we need the word splitting
++	start-stop-daemon -S -q -b -m -p "$PIDFILE" -x "/usr/bin/$DAEMON" \
++		-- -F $HTTPDATE_ARGS
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon -K -q -p "$PIDFILE"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		rm -f "$PIDFILE"
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	sleep 1
++	start
++}
++
++case "$1" in
++	start|stop|restart)
++		"$1";;
++	reload)
++		# Restart, since there is no true "reload" feature.
++		restart;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
+diff --git a/package/httpdate/httpdate.hash b/package/httpdate/httpdate.hash
+new file mode 100644
+index 0000000000..31c6d80868
+--- /dev/null
++++ b/package/httpdate/httpdate.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  c7a13e693de32e48fc374f36598390eece04e4c26f21b1e7d67cdc680d60236b  httpdate-1.0.1.tar.gz
++sha256  cb7177d68741cb08ed1fade01b9f9cc7d1c56c0e96f3f6ab86f5b455cf99e44f  LICENSE
+diff --git a/package/httpdate/httpdate.mk b/package/httpdate/httpdate.mk
+new file mode 100644
+index 0000000000..6a21f0fccc
+--- /dev/null
++++ b/package/httpdate/httpdate.mk
+@@ -0,0 +1,33 @@
++################################################################################
++#
++# httpdate
++#
++################################################################################
++
++HTTPDATE_VERSION = 1.0.1
++HTTPDATE_SITE = $(call github,twekkel,httpdate,v$(HTTPDATE_VERSION))
++HTTPDATE_LICENSE = GPL-2.0+
++HTTPDATE_LICENSE_FILES = LICENSE
++HTTPDATE_DEPENDENCIES = host-pkgconf libcurl
++
++define HTTPDATE_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		LIBS="`$(PKG_CONFIG_HOST_BINARY) --libs libcurl` -lm"
++endef
++
++define HTTPDATE_INSTALL_TARGET_CMDS
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) \
++		DESTDIR=$(TARGET_DIR) PREFIX=/usr install
++endef
++
++define HTTPDATE_INSTALL_INIT_SYSV
++	$(INSTALL) -D -m 0755 package/httpdate/S43httpdate \
++		$(TARGET_DIR)/etc/init.d/S43httpdate
++endef
++
++define HTTPDATE_INSTALL_INIT_SYSTEMD
++	$(INSTALL) -D -m 0644 package/httpdate/httpdate.service \
++		$(TARGET_DIR)/usr/lib/systemd/system/httpdate.service
++endef
++
++$(eval $(generic-package))
+diff --git a/package/httpdate/httpdate.service b/package/httpdate/httpdate.service
+new file mode 100644
+index 0000000000..adce46d929
+--- /dev/null
++++ b/package/httpdate/httpdate.service
+@@ -0,0 +1,12 @@
++[Unit]
++Description=httpdate daemon
++After=network.target
++
++[Service]
++Type=simple
++Environment=HTTPDATE_ARGS="-s https://www.google.com"
++EnvironmentFile=-/etc/default/httpdate
++ExecStart=/usr/bin/httpdate -F $HTTPDATE_ARGS
++
++[Install]
++WantedBy=multi-user.target
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
