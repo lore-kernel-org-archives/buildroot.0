@@ -1,87 +1,148 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70DB2607030E
-	for <buildroot@archiver.kernel.org>; Wed,  4 Nov 2026 21:53:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B64B360A260D
+	for <buildroot@archiver.kernel.org>; Wed,  4 Nov 2026 21:53:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=UDaFgAu2
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Nc3N8gVe
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4D96D806F6;
-	Wed,  4 Nov 2026 21:53:21 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PmyDKDuGZ1ht; Wed,  4 Nov 2026 21:53:20 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 3E16A811A8
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793829200;
-	b=n3SW2/CyYWfkXvQuFGGelLFdP8Po/EAbJYK5BXWpLz+OTPi8uaK5mcLgeuOqr+tiQmBX
-	 GUYRm5pT6CVkSIOFvgWJ5btMp4x7MbfXy6cXj/koMe7RI/0AapZ39xVwL27Lxyw6ZuU2W
-	 iX2MEyyP4d3r4VTc+THl0Gsu2jzPgmAqrnu98IlJn5EuyywB4GY/Gf7WbHWW4MnZOX2F9
-	 cG00sh5lf52hd5n5MQd2SC094W19MHmlGVpTPng4v0hmcxlTmS/JW5m5xnbOaWiuQY/OL
-	 yP/+vMHJOSaxjg52X1t1LpxeoBZ11O63MBxbYIxHac5HXBBWkymIYP0oTTfQEWCDNEQ==
-ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793829200;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=0kZMY4PGtaUEAXAxVThScT8zKG5ki+cCG0jh6tgqPfE=;
-	b=SEvu7S/TviECOo/v6klROTmelJA/TwkOjForXhADFga1TrhEUVIDp/aY6Lr5kyZdStKP
-	 nyOuGIL3YNDvZMg8T37PzRaHRzlEKvjW3DA7gQmUv7KHRCa36Z7qrQ0J20mNiO/tVupND
-	 hn6nKntrQfWyIXOe6vdJ5hxcseM9ov++nZL4RJT3xU/oVn6xkZ33lCNFSkGUWF8+iGkrU
-	 +hfQWXP+fQIM4zbueV0SwK++WuxGeG5RkgY7LCA/PDrIO7aO8LdNp+wOBc7x98U3EUuFB
-	 3hWKXdFTQUiTbZR1E+jbaVEv7AZUbpRea7Wi1cO138dHbNCR+8/V2E2Cf+s+usAE3hw==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
-	arc=none smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793829200;
-	bh=0kZMY4PGtaUEAXAxVThScT8zKG5ki+cCG0jh6tgqPfE=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=UDaFgAu2BN1XVMU6tFUNUkQyvb/X0j6G5ryLriJ7e/f5lKHjGl2EHkskrSj5AOm5/
-	 emqFLqsl/S/MZDtO5yXbhJUkhB2SdycUIX5/Y8Gpbivj72Gnv2uU2vUOXr0O3ZZilF
-	 At26wfYqYpborOJm5yR4sLeaDo8qmrYNY9LHTTNdKdnxdUhIobVf138AlBJDv12ZUQ
-	 OgAP48zaDOTeg0LJNMFmSt4VWBLInWUFF+ZP3H+ooM/6BAM6ihB+sgkYaw40SM9rHl
-	 eFmMvKPPd+gOPwHap1+XnacegPNd+EDc1hW8qbZ/qHAYhSBnsWPbPBIjjTlONVPfBU
-	 nIzpIc2pizt4w==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3E16A811A8;
-	Wed,  4 Nov 2026 21:53:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 174CAB6C
- for <buildroot@buildroot.org>; Wed,  4 Nov 2026 21:53:19 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 086CD407D0
- for <buildroot@buildroot.org>; Wed,  4 Nov 2026 21:53:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 931D340797;
+	Wed,  4 Nov 2026 21:53:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JDEjvKP-D8yl for <buildroot@buildroot.org>;
- Wed,  4 Nov 2026 21:53:18 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 26CC7407BC
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id dsPlNd7Y_g0F; Wed,  4 Nov 2026 21:53:21 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 8152B407BC
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793829201;
+	b=LCacxqdKSGWy+XVxDb12ITs7HntYCa//cJCCcrD1ig1FFYuJV5sqMFs/y4ISUYlQo1aQ
+	 kNh17subzCItm+B7BQswj84BE5umR9/po/SyUbF8zJh/ZDXvNJ3DL/feg7jeCszNaCDyI
+	 UkCLGXLJzAMB61IzCYI/WKjbZJ2ObOSNP5U77YnmdqOUQ0OxmQdQUDb70VnUsRc60hNMw
+	 YI+HZMbA+Or293IuQoYwojARuQb2B+nA3xija8OeToWhh250iQ6Feu5Zt/30F2lK//gh4
+	 Rdn/9xI8qcr3WveKzgrCEDOyelmGVQiGNoYUnX+Hp8E2cU0vgatcaoSzdM8bVvsITLQ==
+ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1793829201;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 X-Google-DKIM-Signature:X-Forwarded-Encrypted:X-Gm-Message-State:
+	 X-Gm-Gg:X-Received:Received:Received:X-Forwarded-Encrypted:X-Received:
+	 MIME-Version:References:In-Reply-To:From:Date:
+	 X-Gmail-Original-Message-ID:X-Gm-Features:Message-ID:To:Cc:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:Content-Type:
+	 Errors-To:Sender;
+	bh=dySKHTRgO7n1+8ons00BQXylKxQ1SX7eOLiF6So12TY=;
+	b=nIMb6lw9MnhEIu2Oku8Bwk+CafIz5P/zckoys/DnzI9DC/zx7yt3CjbHgX3sqDnujYSw
+	 KGcRe8kNshHxWLQZPL6j506ZP8P8OWqHZPaTTsQqvPLAOwHrMy34q9saBRbgNBHk8SEIa
+	 dtkf25yi7My5+plcGE88mTvUxunTBMFNMqy9CMrc9/J6UlQdt9JCHqWjYLEqXBJq+XtZ4
+	 /CmMXQ6odzZkA/3rqj6oNIXPwq4eSPEB+u16Mv+tqs+YD7P3QdxDq+xAdoof9uXdbXvL+
+	 ziwMXaKIUNkibDvXjzBBuvTt/iziC8NxBasRzeWvqdaZEV/4orr9HyhGKyFlSculnVA==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+	arc=none smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1793829201;
+	bh=dySKHTRgO7n1+8ons00BQXylKxQ1SX7eOLiF6So12TY=;
+	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=Nc3N8gVefPdbFXMgUOZXWcRSfzlSif8pnCwEdf3J4mM2LawwiYuArC/ofdDOcdsrz
+	 i9CPzmnysDOYA3aEStCB/UmlOgJeJsz6XSWZ6pEURo41iMMGsjKxAZWGZqGF2sITge
+	 fQOsIktVzilPijbGdl8s+YqkDXKp7zbJkGdjwm+JX8RPtvhqLEdlHV+1CqPL1Az+cd
+	 vHwYKszKbLl7HdZoZoh1bNrxe47AH3Vhi0rF06kgDduVfu+2gfbv/hpMMf2JqcuxWb
+	 6ahZa2k31jQmx0NPeRVjH2QpqmRcugos/B0cnsA+7XBH27JDSNzDoC2BIMf/KY36mY
+	 MuwdCZs7a9nGA==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8152B407BC;
+	Wed,  4 Nov 2026 21:53:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E9A1DD3A
+ for <buildroot@buildroot.org>; Wed,  4 Nov 2026 21:53:19 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id DA715811A8
+ for <buildroot@buildroot.org>; Wed,  4 Nov 2026 21:53:19 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xlUM0xQpzA8z for <buildroot@buildroot.org>;
+ Wed,  4 Nov 2026 21:53:19 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org C176A81199
+Authentication-Results: smtp1.osuosl.org;
+ arc=none smtp.remote-ip=209.85.160.180
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.160.180;
+ helo=mail-qt1-f180.google.com; envelope-from=thomas.devoogdt@gmail.com;
  receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 26CC7407BC
+Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=devoogdt.com
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com
+ [209.85.160.180])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C176A81199
  for <buildroot@buildroot.org>; Wed,  4 Nov 2026 21:53:18 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2BD039DE37; Wed,  4 Nov 2026 21:51:47 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 4 Nov 2026 22:51:38 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 12e4700524e8f47faf087242a26d4c2473037038
-X-Git-Newrev: 0b820f8e22a936ca80a3c7c8eb862c7476f53a71
-X-Patchwork-Hint: ignore
-Message-Id: <20261104215147.2BD039DE37@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libwebsockets: bump to version
- 5.1.0
+Received: by mail-qt1-f180.google.com with SMTP id
+ d75a77b69052e-53665358476so12580241cf.2
+ for <buildroot@buildroot.org>; Wed, 04 Nov 2026 13:53:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1793829197; x=1794433997;
+ h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+ :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to:content-type;
+ bh=tP3epqcAa9LFW1nb7k5pSh1iYOrjHEElPW7ChNoK4Is=;
+ b=jAqXkJoNwKABTHmEIdbdyweChO0Pm68TQIh5POa/tcnLV5H9HF1OqZWVDunESS3HE8
+ qKIpaKbWKysKw+0IWo3tQRpyzouKqHz1hUtIutO3ZR3+OcWYzTOYCEavng2KqtuPYfJR
+ 7rSHePDjvZktpLPxxAHtc8w+1u47Vfr1lMzXamEtfUudYbOyFAUy4FiKIDg6Wv0x7y+V
+ x71qH/f7T68j22TdLH5/rPNu71lq6F7Zl5wGuvuU1NTViqbbtyR3crBE6H6rlkAZAhu5
+ otGCwRWH4kD8qnf5stgvZsFK4DnR1xJHUf+hL0XGEqQeRPSg21R0ua9xoHe3JJ8cA3DP
+ jtUA==
+X-Forwarded-Encrypted: i=1;
+ AKwUvBwax8Ag32S8QHKVq4uiP2pEQ3XHW2dItjRXw17dAy9rsva68E7y9bUjdyG4jL1T5TsbJYCvUw2H0s0=@buildroot.org
+X-Gm-Message-State: APuU4Z8m1DLwa2HCDJKDuu1oKlwSKO2KjRJE55wytbfo4kEA2KI2uS6x
+ XTdkogVzomXcliiP4C8LNLMyTxEEnaMH5eTB7UGV9uyQNiHH9yskoHs9vM1Zpx99
+X-Gm-Gg: AYBFou0NPOwwvnVKB7PzgQUWVAign7/jM1U11m/u/V88GsPIXNIr86SPVsjfq7OwI+G
+ l62M+jJJUDB50+WIq8Mt20z8806suFPgepC2qcy2soUokvZktpBTumBjtM9dSk+qIetSO5kW2jA
+ x6lzkPeCustOfMSa1bZBSVVPHIxite7m39gjfh8fGfU9l9lF5uv1XlUw4o6W7EUHe+7j7GFnVAk
+ DWcK3HkZ9zrUnoQQJNqZpCUKhGWHmQw972uumANUfmfF/RW25qNuivL+1o2OTeHQF8sxFjUvpLB
+ yCWquR7CnJyDVFj4VWhrsoxJO3wVeIVCnniTn5Fnk3vQSPGGun532/y1uoj2C68QLk3fWT3OKtt
+ EbH1AF/Z80SeHby3MZMQAlQyOtalyCYql57XcjJylFih7S3YJVbYizqHDknt/N+AID2hbvmKR+P
+ riuSt6ucvwPc+/nfbDqyKyNudwZoI9NITWcMqO8XZXY2tXRClpMm2hxgKhUxLiM5xJRfTacafCd
+ 9XCcQv5GD8/PK1GBsJSE1NiB2m2heQEE36ptldsuEI/xcfeNkKusMa7mnoFFki+JofJXhnW33Td
+ GP2SrcitVv1hIHUPWONmb+GRlll3NYeuDPkQxjxIOcPIOWNUuBi3BHr0OuHywqPvbESBPBjZ1jq
+ ygmTlgnmB5VF8Pv0jCUMIirOT3G9pPeH+4UMVe+TLZOhq61cpW0FUzWrxTaC733d8JCRr/at/Ju
+ U4GdnV5w==
+X-Received: by 2002:a05:622a:5c8:b0:535:87c3:79e5 with SMTP id
+ d75a77b69052e-542b7141181mr283241081cf.39.1793829197008; 
+ Wed, 04 Nov 2026 13:53:17 -0800 (PST)
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com.
+ [209.85.219.43]) by smtp.gmail.com with ESMTPSA id
+ d75a77b69052e-54b10c48836sm34923611cf.21.2026.11.04.13.53.15
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 04 Nov 2026 13:53:16 -0800 (PST)
+Received: by mail-qv1-f43.google.com with SMTP id
+ 6a1803df08f44-91c76540d0bso12983336d6.0
+ for <buildroot@buildroot.org>; Wed, 04 Nov 2026 13:53:15 -0800 (PST)
+X-Forwarded-Encrypted: i=1;
+ AKwUvBzM6bil7gYdbKwcmB1OeSTIp129oIDb6tK5v1STtZMIdTo8X8n66h/MgzXIR/NQ9huKfKL8e8WEFJk=@buildroot.org
+X-Received: by 2002:a05:6214:246a:b0:91e:8d1a:a198 with SMTP id
+ 6a1803df08f44-91e8d1aa330mr34097786d6.49.1793829195456; Wed, 04 Nov 2026
+ 13:53:15 -0800 (PST)
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
+References: <audrTUDPjZfZpyNG@windsurf>
+ <20261102160505.1754919-1-thomas.devoogdt@barco.com>
+ <auuV_PCwJYLlCadf@windsurf>
+In-Reply-To: <auuV_PCwJYLlCadf@windsurf>
+From: Thomas Devoogdt <thomas@devoogdt.com>
+Date: Wed, 4 Nov 2026 22:53:04 +0100
+X-Gmail-Original-Message-ID: <CACXRmJhjkduyOe2sJUJK59H9Fc-4GehP77t9PSHOnEzqYHcWtQ@mail.gmail.com>
+X-Gm-Features: AclHuK8XlTtIzI9nab5yqPGrOEcKewUSZz-wMISQVVQeJrNRf_7Fg6etdR7QvPE
+Message-ID: <CACXRmJhjkduyOe2sJUJK59H9Fc-4GehP77t9PSHOnEzqYHcWtQ@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Devoogdt <thomas@devoogdt.com>, buildroot@buildroot.org, 
+ fontaine.fabrice@gmail.com
+Subject: Re: [Buildroot] [PATCH v2] package/libgtk4: add missing direct
+ dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,161 +152,174 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5905740205750482334=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
-	autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-5.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
+	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_PASS autolearn=no
+	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/0b820f8e22a936ca80a3c7c8eb862c7476f53a71
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+--===============5905740205750482334==
+Content-Type: multipart/alternative; boundary="000000000000fba77b065f7a6794"
 
-There are no release notes for the 5.x series; the git history is at
-https://github.com/warmcat/libwebsockets/compare/v4.5.8...v5.1.0
+--000000000000fba77b065f7a6794
+Content-Type: text/plain; charset="UTF-8"
 
-Version 5.0.0 added mbedtls 4 support, and 5.1.0 brings the mbedtls 4
-fixes on top of it, so libwebsockets now builds and works with
-mbedtls 4.1.
+Hi Thomas,
 
-Drop patch 0001, which was applied upstream in a reworked form as
-commit 8a0dbfba1 ("cmake: only use libatomic if it provides the 64-bit
-atomics").
+Op wo 4 nov 2026 om 21:31 schreef Thomas Petazzoni <
+thomas.petazzoni@bootlin.com>:
 
-HTTP/3 (QUIC) is now enabled by default. With OpenSSL, it forces the
-new GnuTLS backend on, and with mbedtls it requires an mbedtls carrying
-the libwebsockets QUIC patches, so the configure step fails either way:
+> On Mon, Nov 02, 2026 at 05:05:03PM +0100, Thomas Devoogdt wrote:
+> > From: Thomas Devoogdt <thomas@devoogdt.com>
+> >
+> > GTK links directly against libdrm (mandatory on Linux), cairo,
+> > harfbuzz, libfribidi, libpng, jpeg and tiff, and the X11 backend
+> > additionally against fontconfig, x11, xext, xrender, xi, xcursor,
+> > xdamage, xfixes, xrandr and xinerama.
+> >
+> > Add them to LIBGTK4_DEPENDENCIES so that they are always built before
+> > libgtk4, and select the corresponding Config.in symbols instead of
+> > relying on them being selected by other packages (pango, cairo, ...).
+> >
+> > Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+>
+> I assume you verified that all those dependencies are not just direct
+> dependencies, but are also _mandatory_ dependencies, correct?
+>
 
-  LWS_ROLE_QUIC (HTTP/3) requires mbedtls to be patched with QUIC
-  support.
+Yes, all packages are direct and mandatory dependencies.
 
-Disable HTTP/3 and QUIC, which version 4.5.8 did not have either.
+cairo:
+https://gitlab.gnome.org/GNOME/gtk/-/blob/4.21.0/meson.build?ref_type=tags#L471-473
+harfbuzz:
+https://gitlab.gnome.org/GNOME/gtk/-/blob/4.21.0/meson.build?ref_type=tags#L476-478
+jpeg:
+https://gitlab.gnome.org/GNOME/gtk/-/blob/4.21.0/meson.build?ref_type=tags#L494
+libdrm:
+https://gitlab.gnome.org/GNOME/gtk/-/blob/4.21.0/meson.build?ref_type=tags#L731
+libfribidi:
+https://gitlab.gnome.org/GNOME/gtk/-/blob/4.21.0/meson.build?ref_type=tags#L474-475
+libpng:
+https://gitlab.gnome.org/GNOME/gtk/-/blob/4.21.0/meson.build?ref_type=tags#L492
+tiff:
+https://gitlab.gnome.org/GNOME/gtk/-/blob/4.21.0/meson.build?ref_type=tags#L493
+x11:
+https://gitlab.gnome.org/GNOME/gtk/-/blob/4.21.0/meson.build?ref_type=tags#L606-664
 
-LWS_PRE, the headroom required before buffers passed to lws_write(),
-grew on 64-bit builds, and the soname changed from
-libwebsockets.so.21 to libwebsockets.so.23.
+Because for the patch on libgtk3, I think you got this wrong (I'll
+> reply to it separately).
+>
 
-The LICENSE file lists two more files that are already MIT licensed
-(lib/misc/dht and lib/misc/qrcodegen.c), hence the hash change.
+I will have a look, and also reply separately.
 
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...sl-only-link-libatomic-if-it-is-available.patch | 61 ----------------------
- package/libwebsockets/libwebsockets.hash           |  4 +-
- package/libwebsockets/libwebsockets.mk             |  6 ++-
- 3 files changed, 7 insertions(+), 64 deletions(-)
 
-diff --git a/package/libwebsockets/0001-cmake-openssl-only-link-libatomic-if-it-is-available.patch b/package/libwebsockets/0001-cmake-openssl-only-link-libatomic-if-it-is-available.patch
-deleted file mode 100644
-index 84724f9c50..0000000000
---- a/package/libwebsockets/0001-cmake-openssl-only-link-libatomic-if-it-is-available.patch
-+++ /dev/null
-@@ -1,61 +0,0 @@
--From e0480a47e95a0d74c826926ae6bfef14fc8d988f Mon Sep 17 00:00:00 2001
--From: Yegor Yefremov <yegorslists@googlemail.com>
--Date: Tue, 27 Oct 2026 08:47:29 +0100
--Subject: [PATCH] cmake: openssl: only link libatomic if it is available
--
--Commit 09aade8c9 ("cmake: openssl: Added check for atomic library")
--adds -latomic to CMAKE_REQUIRED_LIBRARIES whenever 64-bit atomics
--don't work out of the box, without checking that libatomic exists.
--
--Some toolchains don't provide libatomic at all, e.g. GCC toolchains
--built without thread support, as libatomic relies on pthreads. On such
--a toolchain for a CPU without native 64-bit atomics (e.g. ARMv5), every
--OpenSSL API probe then fails to link:
--
--  ld: cannot find -latomic: No such file or directory
--
--so lws believes it deals with a pre-1.1 OpenSSL and the build fails:
--
--  include/libwebsockets/lws-genhash.h:93:18: error: field 'ctx' has incomplete type
--     93 |         HMAC_CTX ctx;
--        |                  ^~~
--
--Only use libatomic if linking against it makes the 64-bit atomics
--test pass.
--
--Assisted-by: Claude:claude-opus-5-5
--Upstream: sent to Andy Green <andy@warmcat.com> on 2026-10-27
--Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-----
-- lib/tls/CMakeLists.txt | 15 +++++++++++----
-- 1 file changed, 11 insertions(+), 4 deletions(-)
--
--diff --git a/lib/tls/CMakeLists.txt b/lib/tls/CMakeLists.txt
--index d91c3dab6..9060d32fe 100644
----- a/lib/tls/CMakeLists.txt
--+++ b/lib/tls/CMakeLists.txt
--@@ -564,10 +564,17 @@ if (DEFINED LIB_LIST)
-- endif()
-- if(UNIX AND (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID MATCHES "Clang"))
--   check_c_source_compiles("int main() { long long x = 0; __atomic_fetch_add(&x, 1, __ATOMIC_SEQ_CST); return 0; }" HAVE_WORKING_ATOMIC_64)
---  if(HAVE_WORKING_ATOMIC_64)
---    set(LWS_ATOMIC_LIB "")
---  else()
---    set(LWS_ATOMIC_LIB atomic)
--+  set(LWS_ATOMIC_LIB "")
--+  if(NOT HAVE_WORKING_ATOMIC_64)
--+    # libatomic is not always available (eg, toolchains without threads),
--+    # only use it if it actually provides the 64-bit atomics
--+    set(CMAKE_REQUIRED_LIBRARIES_SAVE ${CMAKE_REQUIRED_LIBRARIES})
--+    set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} atomic)
--+    check_c_source_compiles("int main() { long long x = 0; __atomic_fetch_add(&x, 1, __ATOMIC_SEQ_CST); return 0; }" HAVE_WORKING_ATOMIC_64_WITH_LIBATOMIC)
--+    set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES_SAVE})
--+    if(HAVE_WORKING_ATOMIC_64_WITH_LIBATOMIC)
--+      set(LWS_ATOMIC_LIB atomic)
--+    endif()
--   endif()
-- endif()
-- if (UNIX AND NOT (${CMAKE_SYSTEM_NAME} MATCHES "QNX"))
---- 
--2.34.1
--
-diff --git a/package/libwebsockets/libwebsockets.hash b/package/libwebsockets/libwebsockets.hash
-index 654d3007e6..fe5c7b06ce 100644
---- a/package/libwebsockets/libwebsockets.hash
-+++ b/package/libwebsockets/libwebsockets.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  b6ade658f4af3a823d0dc806ae5ef0623f0f4f5e2aeb895a0f77c4783840c30e  libwebsockets-4.5.8.tar.gz
--sha256  6ff2868dd9d9e251de27574342663f4773a8c2f954128899eb6f3c2ba9d9a245  LICENSE
-+sha256  9acbba00aaa9e6178ae09c6f920d95449b527c1417e81d2cdd4103bc6d64d13f  libwebsockets-5.1.0.tar.gz
-+sha256  e98c88a3de53b32c75d8130e29f5f3c4cdd89fb0c002091748e7d2d626dcb914  LICENSE
-diff --git a/package/libwebsockets/libwebsockets.mk b/package/libwebsockets/libwebsockets.mk
-index 51f3df80f1..513b09ded2 100644
---- a/package/libwebsockets/libwebsockets.mk
-+++ b/package/libwebsockets/libwebsockets.mk
-@@ -4,14 +4,18 @@
- #
- ################################################################################
- 
--LIBWEBSOCKETS_VERSION = 4.5.8
-+LIBWEBSOCKETS_VERSION = 5.1.0
- LIBWEBSOCKETS_SITE = $(call github,warmcat,libwebsockets,v$(LIBWEBSOCKETS_VERSION))
- LIBWEBSOCKETS_LICENSE = MIT with exceptions
- LIBWEBSOCKETS_LICENSE_FILES = LICENSE
- LIBWEBSOCKETS_DEPENDENCIES = zlib
- LIBWEBSOCKETS_INSTALL_STAGING = YES
-+# HTTP/3 (QUIC) is enabled by default, but needs GnuTLS when OpenSSL
-+# is used, and an mbedtls with the libwebsockets QUIC patches.
- LIBWEBSOCKETS_CONF_OPTS = \
- 	-DDISABLE_WERROR=ON \
-+	-DLWS_WITH_HTTP3=OFF \
-+	-DLWS_ROLE_QUIC=OFF \
- 	-DLWS_WITHOUT_TESTAPPS=ON \
- 	-DLWS_IPV6=ON \
- 	-DLWS_UNIX_SOCK=ON \
+> For the time being, I've applied this patch to master, because a quick
+> look at meson.build indeed seems to indicate that they are all
+> mandatory dependencies.
+>
+> Thanks!
+>
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
+>
+>
+Kr,
+
+Thomas Devoogdt
+
+--000000000000fba77b065f7a6794
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Hi Thomas,</div><br><div class=3D"gmail_quote gmail_q=
+uote_container"><div dir=3D"ltr" class=3D"gmail_attr">Op wo 4 nov 2026 om 2=
+1:31 schreef Thomas Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni@bootli=
+n.com">thomas.petazzoni@bootlin.com</a>&gt;:<br></div><blockquote class=3D"=
+gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(20=
+4,204,204);padding-left:1ex">On Mon, Nov 02, 2026 at 05:05:03PM +0100, Thom=
+as Devoogdt wrote:<br>
+&gt; From: Thomas Devoogdt &lt;<a href=3D"mailto:thomas@devoogdt.com" targe=
+t=3D"_blank">thomas@devoogdt.com</a>&gt;<br>
+&gt; <br>
+&gt; GTK links directly against libdrm (mandatory on Linux), cairo,<br>
+&gt; harfbuzz, libfribidi, libpng, jpeg and tiff, and the X11 backend<br>
+&gt; additionally against fontconfig, x11, xext, xrender, xi, xcursor,<br>
+&gt; xdamage, xfixes, xrandr and xinerama.<br>
+&gt; <br>
+&gt; Add them to LIBGTK4_DEPENDENCIES so that they are always built before<=
+br>
+&gt; libgtk4, and select the corresponding Config.in symbols instead of<br>
+&gt; relying on them being selected by other packages (pango, cairo, ...).<=
+br>
+&gt; <br>
+&gt; Signed-off-by: Thomas Devoogdt &lt;<a href=3D"mailto:thomas@devoogdt.c=
+om" target=3D"_blank">thomas@devoogdt.com</a>&gt;<br>
+<br>
+I assume you verified that all those dependencies are not just direct<br>
+dependencies, but are also _mandatory_ dependencies, correct?<br></blockquo=
+te><div><br></div><div>Yes, all packages are direct and=C2=A0mandatory=C2=
+=A0dependencies.</div><div><br></div><div>cairo: <a href=3D"https://gitlab.=
+gnome.org/GNOME/gtk/-/blob/4.21.0/meson.build?ref_type=3Dtags#L471-473">htt=
+ps://gitlab.gnome.org/GNOME/gtk/-/blob/4.21.0/meson.build?ref_type=3Dtags#L=
+471-473</a><br>harfbuzz: <a href=3D"https://gitlab.gnome.org/GNOME/gtk/-/bl=
+ob/4.21.0/meson.build?ref_type=3Dtags#L476-478">https://gitlab.gnome.org/GN=
+OME/gtk/-/blob/4.21.0/meson.build?ref_type=3Dtags#L476-478</a><br>jpeg: <a =
+href=3D"https://gitlab.gnome.org/GNOME/gtk/-/blob/4.21.0/meson.build?ref_ty=
+pe=3Dtags#L494">https://gitlab.gnome.org/GNOME/gtk/-/blob/4.21.0/meson.buil=
+d?ref_type=3Dtags#L494</a><br>libdrm: <a href=3D"https://gitlab.gnome.org/G=
+NOME/gtk/-/blob/4.21.0/meson.build?ref_type=3Dtags#L731">https://gitlab.gno=
+me.org/GNOME/gtk/-/blob/4.21.0/meson.build?ref_type=3Dtags#L731</a><br>libf=
+ribidi: <a href=3D"https://gitlab.gnome.org/GNOME/gtk/-/blob/4.21.0/meson.b=
+uild?ref_type=3Dtags#L474-475">https://gitlab.gnome.org/GNOME/gtk/-/blob/4.=
+21.0/meson.build?ref_type=3Dtags#L474-475</a><br>libpng: <a href=3D"https:/=
+/gitlab.gnome.org/GNOME/gtk/-/blob/4.21.0/meson.build?ref_type=3Dtags#L492"=
+>https://gitlab.gnome.org/GNOME/gtk/-/blob/4.21.0/meson.build?ref_type=3Dta=
+gs#L492</a><br>tiff: <a href=3D"https://gitlab.gnome.org/GNOME/gtk/-/blob/4=
+.21.0/meson.build?ref_type=3Dtags#L493">https://gitlab.gnome.org/GNOME/gtk/=
+-/blob/4.21.0/meson.build?ref_type=3Dtags#L493</a><br>x11: <a href=3D"https=
+://gitlab.gnome.org/GNOME/gtk/-/blob/4.21.0/meson.build?ref_type=3Dtags#L60=
+6-664">https://gitlab.gnome.org/GNOME/gtk/-/blob/4.21.0/meson.build?ref_typ=
+e=3Dtags#L606-664</a></div><div><br></div><blockquote class=3D"gmail_quote"=
+ style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);p=
+adding-left:1ex">
+Because for the patch on libgtk3, I think you got this wrong (I&#39;ll<br>
+reply to it separately).<br></blockquote><div><br></div><div>I will have a =
+look, and also reply=C2=A0separately.</div><div>=C2=A0</div><blockquote cla=
+ss=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid =
+rgb(204,204,204);padding-left:1ex">
+For the time being, I&#39;ve applied this patch to master, because a quick<=
+br>
+look at meson.build indeed seems to indicate that they are all<br>
+mandatory dependencies.<br>
+<br>
+Thanks!<br>
+<br>
+Thomas<br>
+-- <br>
+Thomas Petazzoni, co-owner and CEO, Bootlin<br>
+Embedded Linux and Kernel engineering and training<br>
+<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
+//bootlin.com</a><br>
+<br></blockquote><div><br></div><div>Kr,</div><div><br></div><div>Thomas De=
+voogdt=C2=A0</div></div></div>
+
+--000000000000fba77b065f7a6794--
+
+--===============5905740205750482334==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5905740205750482334==--
