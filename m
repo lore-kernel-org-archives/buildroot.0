@@ -1,99 +1,86 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E87B606A329
-	for <buildroot@archiver.kernel.org>; Wed,  4 Nov 2026 22:44:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DCFD606A31B
+	for <buildroot@archiver.kernel.org>; Wed,  4 Nov 2026 22:44:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=BBbRzN4T
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=K2GSPZ58
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 491BC8127B;
-	Wed,  4 Nov 2026 22:44:34 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SHrDRMDaeHUp; Wed,  4 Nov 2026 22:44:33 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 77F7F81257
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793832273;
-	b=Ea1b47i1iQI0/4nZBKMWS573SSES3Ovrjvg14cgCl9RiDbVT/LEolcMOdl3X/UbRfGyr
-	 EImTKrah7ZVhMwLCSu84imlS0DyCwDuMcpg4MDAXPlU/2IEk3Q8HTL4QsnZMDzgFMCTx4
-	 7ooFIOz5AUowUo/JqiV/WuPrIJSn62fgzKy601dpbLo+3bB9PjV8nQOW3BtRvB4jWpEvh
-	 SutcL3KRc4NSObTDhaEiiN9PSaNzKV1nsdkGimcoW5gmZBkxxoxeZtkV/vGUNBoDr8aeB
-	 eVijczfNt8nfKK0HhplUCRT+Fi5fG40d3L06KPBQ4yNp/njrCMHmWNm/2FsAdTwEpag==
-ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793832273;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
-	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=5bIdBbXjD5tUPzBym69je49inkMDqqRzOPmEM844wfI=;
-	b=n99AjicO4O2AOM6zfjBadXgLdUvxbWpLFXKF71nAKxMvElvBdkB5hQuSh4sxJceVSqD7
-	 DzcLnb5Hs6OeBJ/e+JZ+hcyEzZqdfxQ+r+vckMnhSMLV3AnSYZxiLpmdZxMIkOoofHXIe
-	 E0jIy5AFxfdfW5319xePU9BKN4ZTT7FhYD7mJqVwgBjyOdgoxwFJ25ZmUpSXX/Ix4u7Sf
-	 dKl4F2STM6r0+Mvj0DwI6ldqzZrVj8qJX9AioCoTreSG61MIN4+lyIbn7rPUyzVFy78Ne
-	 zMcye5pjO3DY/EmVsXqkBa6+Ne19QaP18pLnLgnad/MQb9cQ/p3hb6JbBnTwEsEAZaQ==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
-	arc=none smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793832273;
-	bh=5bIdBbXjD5tUPzBym69je49inkMDqqRzOPmEM844wfI=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=BBbRzN4TetF+NjjZbhAiV3lTgeDtqvMs41R9stSqz7f6EBWRs/qVnLQ+ezrMUYtg5
-	 UzMkhDlnhD217QIxRq00J7ZrPL0YyhBQRYQSDufr+gytPGckNJURJT5osHoPdDZmaL
-	 49dKO9Zp/gKZGlHT7NNd3+ArsdPK0fpZg7IePla53I8LySvuRv4MImTA90vZ0Gekgf
-	 oUAXWthq/xJS2adGqqOY8q1clIbQVtaDA9mzOtMJARUKHT0707HwRIV8nbpeT87hen
-	 x7b0pygDUJHR/TEUBm2BOUiHlPkK3emY6woNBmv4g3DZuww5gaD5dYH3XSNxBRI9us
-	 g566mTAjiVgPA==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 77F7F81257;
-	Wed,  4 Nov 2026 22:44:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id E1422362
- for <buildroot@buildroot.org>; Wed,  4 Nov 2026 22:44:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DDA54607F7
- for <buildroot@buildroot.org>; Wed,  4 Nov 2026 22:44:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F349C607D5;
+	Wed,  4 Nov 2026 22:44:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AsaInNOKIFwg for <buildroot@buildroot.org>;
- Wed,  4 Nov 2026 22:44:31 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 0DABD607D5
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.85.4;
- helo=smtpout-03.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id Q_QKHfNKzW6r; Wed,  4 Nov 2026 22:44:47 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 0BC7B607F7
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793832287;
+	b=krnwc7tXm1ITE9WiDT2qa/W7h38vkiq3g/qETfQ2aEEddtXNe8fQDr6AEsyBAhf8LmYk
+	 UEcdK6GAfZC4yOh7cP6wxKk5huS4kxOrXOXhXBzFgTwnJA1oMuAPrBpGoBLcunvumoUn+
+	 m5XpUbUNyUtPd8u3/jwiF3bH2j08+u8u85MKmx9FJm9a4A3A2/1apQ0DwNehAvOjnSgfO
+	 XlWLkdPdh8I5JpcmvFBw/Ph22gdE4yeq7/uPJasE843+e3czVlP/gKdi+IRLRIgCrG1Ac
+	 1vp//tngfjOmomV7krtUzpfQZdfLWp3Z0uuqdJi6JuJFd1ScQZVDWRXDIUWj18aNrpQ==
+ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1793832287;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=g5e5AZQKMd1+f5VMfzbFfUie9ZdTkqZtDr4Q3yGHmS8=;
+	b=lB102A52FNM0hwZm1m6rI7RAZksHPGnNGJPQ8KQVpHAV9mXWK/GC6mU65zYDFLRTTN0u
+	 FksfK3n0PnyrCnvyrUlOYVm84xvBgRqloigbcNYACmEw/t1EExZVJ5W5IfUiQnQakBE5k
+	 oGqiA++59XuVIKIUK9gVL0ursLKQbmVvDfX0rxFvzMcar6DvdMPZQ7UjQOCECy2MBwRYZ
+	 JQtrX2IKPoepXhAsfzpmySKDkZkk3ij4/LGFody1kMOKJ9g+ZrDrPaYJjJzGPTdk+rYtb
+	 aEcmVr62vOfL5+7NHxoAlBjy7Y5opLdAca+m2KworGDdaGA4ywihreZ3T1fiXpWIN/w==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+	arc=none smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1793832287;
+	bh=g5e5AZQKMd1+f5VMfzbFfUie9ZdTkqZtDr4Q3yGHmS8=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=K2GSPZ58RFfPO4AWQ+j0ZpGuZCkE7aAKHCkWA3LI6M3D1+MIOSvvqwp43DK07urpy
+	 ZcujbOw53LUTIeOrwB1qV/KP7dmxl2G7/9WeS3HtD0jkOiJ8thIjgJsDW7LrF+XXRX
+	 HeUaeUeeoHWUuo76nfXr5kC7SkSrg7suu6p+NrUYbJTJQNiGCvnVMQ7bgRjXsTor31
+	 y++7wjBzT5OEdN18WDxCqbWCbiZ+ovxfBD+Bnb3NX2NpfVse+cQaL65ZifgMs3P3gV
+	 JDOcBPrNos+NFOYaAj9zcUPC0VNoADam27qWGmcUURKLJeDGzxV/iz0/aypVDxna7/
+	 X8vBoxK7yinEw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0BC7B607F7;
+	Wed,  4 Nov 2026 22:44:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5994537B
+ for <buildroot@buildroot.org>; Wed,  4 Nov 2026 22:44:45 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3F0CE40858
+ for <buildroot@buildroot.org>; Wed,  4 Nov 2026 22:44:45 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JWe8gTEhUZqg for <buildroot@buildroot.org>;
+ Wed,  4 Nov 2026 22:44:44 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 53BE140856
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0DABD607D5
- for <buildroot@buildroot.org>; Wed,  4 Nov 2026 22:44:30 +0000 (UTC)
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
- by smtpout-03.galae.net (Postfix) with ESMTPS id AAEEA4E404ED
- for <buildroot@buildroot.org>; Wed,  4 Nov 2026 22:44:28 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
- by smtpout-01.galae.net (Postfix) with ESMTPS id 7AFA55FD65;
- Wed,  4 Nov 2026 22:44:28 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 9C5411032926F; Wed,  4 Nov 2026 23:44:23 +0100 (CET)
-Date: Wed, 4 Nov 2026 23:44:22 +0100
-To: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: buildroot@buildroot.org
-Message-ID: <auu1HsM7xp331Hbk@windsurf>
-References: <20261103064034.3913314-1-yegorslists@googlemail.com>
- <auuiaUH0JJ20VZWV@windsurf>
- <CAGm1_kt3BhEuM3H2rRUQYiFmU2+HrsCQdajzCe6whEXwrBkmAw@mail.gmail.com>
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <CAGm1_kt3BhEuM3H2rRUQYiFmU2+HrsCQdajzCe6whEXwrBkmAw@mail.gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
-Subject: Re: [Buildroot] [PATCH] package/file: bump to version 5.48
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 53BE140856
+ for <buildroot@buildroot.org>; Wed,  4 Nov 2026 22:44:44 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 636859DE52; Wed,  4 Nov 2026 22:43:13 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 4 Nov 2026 23:40:51 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6df483656000c1fdc262038d3011e5dfc2c25f6b
+X-Git-Newrev: 683f63f3bd3d4cc88d8262a3fd8f135e290deb83
+X-Patchwork-Hint: ignore
+Message-Id: <20261104224313.636859DE52@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pico{tool,-sdk}: bump to 2.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,37 +92,78 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_PASS autolearn=ham autolearn_force=no
-	version=4.0.1
+X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-On Wed, Nov 04, 2026 at 11:19:49PM +0100, Yegor Yefremov wrote:
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/683f63f3bd3d4cc88d8262a3fd8f135e290deb83
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-> > I continue to be amazed that key open-software like file has a website
-> > like this: https://astron.com/, no Git repository, no mailing list, no
-> > nothing...
-> 
-> You're right. That's very odd. They seem to use CVS:
-> https://github.com/file/file
+See the release notes here:
+pico-sdk: https://github.com/raspberrypi/pico-sdk/releases/tag/2.3.1
+picotool: https://github.com/raspberrypi/picotool/releases/tag/2.3.1
 
-CVS, interesting :-)
+Signed-off-by: Manuel Diener <manuel.diener@oss.othermo.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/pico-sdk/pico-sdk.hash | 2 +-
+ package/pico-sdk/pico-sdk.mk   | 2 +-
+ package/picotool/picotool.hash | 2 +-
+ package/picotool/picotool.mk   | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-Note that https://github.com/file/file says "NOTE: do not make pull
-requests here, nor comment any commits, submit them usual way to bug
-tracker or to the mailing list.". So is there a mailing list
-somewhere?
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/pico-sdk/pico-sdk.hash b/package/pico-sdk/pico-sdk.hash
+index 2cad5b4b6e..17bdfbea0d 100644
+--- a/package/pico-sdk/pico-sdk.hash
++++ b/package/pico-sdk/pico-sdk.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  bbb60e768c1feeb1a4b7155da7361a135cba3ce197cef7cb93a300c559302897  pico-sdk-2.3.0-git4.tar.gz
++sha256  85165f85152e00b4003d19a3e9052a7505bbcb3ce971e267e5db95364d86cc42  pico-sdk-2.3.1-git4.tar.gz
+ sha256  483f865953435b66c443dee7558debe3cc3cf8fcbb6a112fd9fc6a795d53f1f6  LICENSE.TXT
+diff --git a/package/pico-sdk/pico-sdk.mk b/package/pico-sdk/pico-sdk.mk
+index 08760325f3..bfa8a5cae3 100644
+--- a/package/pico-sdk/pico-sdk.mk
++++ b/package/pico-sdk/pico-sdk.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PICO_SDK_VERSION = 2.3.0
++PICO_SDK_VERSION = 2.3.1
+ PICO_SDK_SITE = https://github.com/raspberrypi/pico-sdk.git
+ PICO_SDK_SITE_METHOD = git
+ PICO_SDK_GIT_SUBMODULES = YES
+diff --git a/package/picotool/picotool.hash b/package/picotool/picotool.hash
+index f8589e3592..89c75397bd 100644
+--- a/package/picotool/picotool.hash
++++ b/package/picotool/picotool.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  97aaf36800d2317683528cba5762e3d4e7a5de0cba729d28011a6ee94b3b7538  picotool-2.3.0.tar.gz
++sha256  07946d294ab5c474b610660c53c5d94216e4ab13555de075ed521f98afc4f44c  picotool-2.3.1.tar.gz
+ sha256  483f865953435b66c443dee7558debe3cc3cf8fcbb6a112fd9fc6a795d53f1f6  LICENSE.TXT
+diff --git a/package/picotool/picotool.mk b/package/picotool/picotool.mk
+index cf70cfc7f0..caf1186e77 100644
+--- a/package/picotool/picotool.mk
++++ b/package/picotool/picotool.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PICOTOOL_VERSION = 2.3.0
++PICOTOOL_VERSION = 2.3.1
+ PICOTOOL_SITE = $(call github,raspberrypi,picotool,$(PICOTOOL_VERSION))
+ PICOTOOL_LICENSE = BSD-3-Clause
+ PICOTOOL_LICENSE_FILES = LICENSE.TXT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
