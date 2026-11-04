@@ -2,27 +2,27 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 495EA606A33A
-	for <buildroot@archiver.kernel.org>; Wed,  4 Nov 2026 17:33:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41108606A328
+	for <buildroot@archiver.kernel.org>; Wed,  4 Nov 2026 18:03:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=VnsO7Axy
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=LfGoS+Ng
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 19F41404F9;
-	Wed,  4 Nov 2026 17:33:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0B72B40940;
+	Wed,  4 Nov 2026 18:03:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4OnLtIU-TXDy; Wed,  4 Nov 2026 17:33:06 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org C7481404FF
+ id StgIj-EbKF6P; Wed,  4 Nov 2026 18:03:30 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 34F574095D
 Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793813585;
-	b=myNc/iqVuTUIcAocBb2Mn2IX2Eg9b6W/Y2vONtcEHrLuJb3NptEKEUmaLzxm6HUDG5mx
-	 HdNC7uJZ+ePHcy8hIIVY5JF2O78fE8QtYO7G8S6fR+j9u07IcrSX/u0rvLOxwvYkxffqQ
-	 N27N0wWrLrCF7XXs3LHbghURL1rv201ReFkOdVRi4VIrkdkopFxK57sBHLSoHWctk6Gu7
-	 Zi3Qa+Ub2WLk5OfzC4XJQq/HnUomHAFI7PSQkcvivVuJuuoOqM6cUlTb1U20r9x9R482W
-	 tHOAmNQeJ9Nen3TW08Cx/Q+YTuDbnj3AYYcVu3h+Iv/gMbxrvkJMgTyjhX2Cc+8VNow==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793815407;
+	b=adR6xCHCeVNLCgG2EPnxmxUuc8xS1YH2ic+o+wF0qque3DgKSu2sjyaS74A1CRQFdwPI
+	 1EoMnr02usWpBaR3m+uZkKA4DCIfSH7RTiGm+J0/dcotuRiCXeAXLN3xacG3oEGwY9XX6
+	 VT4g/yojLPHzao+alIANOUD37ODhAf+EGUIB6j3HRr/G71lVt4A5bVWpQ0aofeFvf5Kc0
+	 /vuDnbWklhX1xn8/99UfrCWR5AFV2c9/Y9D8rIkI5BgpQrwYS/lsYpLMFd1tmT8+shu/7
+	 EFMzugIceafxv5O9zLPQYrUbOniMNUydcpev0BdZoKmjI4YEE71qNEELVUPcGlFpFMA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793813585;
+	c=relaxed/relaxed; t=1793815407;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,58 +30,57 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=cP2YUy9ewTo4O8fR85pEMY/MlOf8R5DRjYotRQPV208=;
-	b=YBNozTyBWFfZqqD4m5XHum3dUlc5LOTHZFNCfEc/5NZ9BBVI/g9TbsCiwqTEjv5F2eK/
-	 bLYxFFEqNRUDHZC+VmyN+cckt4ntFeyzICbstp+hGLkl4h6M1FhOwfx2PRF92AauknMgB
-	 Ydo98m+rm/T3WiIjGQv5DlmVZ/i3reP6bLLCAIEtcZ4eJGy8ZSnP4SOz8uJKw2gM+gJbw
-	 3R+lormhSmrQwPg+AHpeMhbyMwQmY/TaWVUH/EJgqs+BEzW2x8vD61BA/n+wQwATQ9Wu5
-	 OUfjhXGo1f1QJtc1Tg7ZSVJd5f0n0XHX+zKAuAaIygQLnrSBA8vXcQbz2Rka0GuEOQw==
+	bh=JqSxFOjYRRePncF0OfNi4zZsC7fQNlUgAGmxErL9cfw=;
+	b=evreqb3Cxfoo1ymwCRAsH7p0IxBbtoYLIQqhFtwYuLS5IKiCzroT+1e+UTEs38lWFMj6
+	 FRTDkEBsjrpmP2HwD0YRNhGyk+6WdIlwKG0+bdckyYZCECvUlChT/VFG9zKO/A1UwDwjF
+	 cT9Ai+0L78xMUUNhvnbee32lPcAaiakBdtYqtDHu/ttEl7tCtkfX86sg9xhiHK5ac2eVm
+	 ylNM/3l5SgyPj94rBTn1GFyVpoIEJKYEeZxVGZoWW67a1V86JLC1qAv2L0iJAynuEUyyZ
+	 uuM/g7R3JEYwG+r9IjZEEF48F8DRZGrjq1iBeWMb7nZMulfJ12nJwFfEf1bszakDGBw==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793813585;
-	bh=cP2YUy9ewTo4O8fR85pEMY/MlOf8R5DRjYotRQPV208=;
+	s=default; t=1793815407;
+	bh=JqSxFOjYRRePncF0OfNi4zZsC7fQNlUgAGmxErL9cfw=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=VnsO7AxyOcPwDdLqWZM8oNd3JWxUjjps2DEnSeAdKr+n7x2CCynUanZBeGcgcZWvC
-	 G3FCU74AKgcnDof0DZ/3skeD6rGCHwoo0S0DDWw7qZavkVz8jH4Il3n/BucIW25SCZ
-	 FipGJSE/TvuqPYqkYDJkXwjmfanrWWJXOF1RC3tYqgxeUGzrobj/paQEw/6a09rNyf
-	 AceQ+oN34pCzTGDvGsXwGX0cvC7xyE6TmnhU7HjhYKVMfYnJ6EN9tF4x5GQJjogt2w
-	 aFJKXrOS5Hv+BHjRG9sUzOkJ/JFP8UZJmr3m8fQifvMyXu81mDK1jqsHwvMMO07aKB
-	 IY217lxRXlo3Q==
+	b=LfGoS+NgHcDqF9t52VHx3wqSIkQL0kxokPCb/Lqed98fFftT3RI97rVRuZh1z/zGM
+	 REjuCaY11G6ZkGsC35ruc18rMDMxdzR8u0DzccPyhkznr6/mX6uXvCgAegCX0QMgt/
+	 5OXqLt5nIX0uHdDaN9l2LbCKGU/b9oiwQQjn3y3E3i31veQ4zG7oILANC6xA5Q+Gsx
+	 r5Wbwt8nZUW0tEilDP8F5mbehXTlbeLFlaqWIqa60ucR73hDtSzNzAODP0UG0UlKP4
+	 6ZzzWp37MG+4ZPrdgZzhanH0Ot4cFHl+qy4PS4OLHuSaZVOf++IN2cHONMrGmei2VW
+	 lYYEiB+kHaqJg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C7481404FF;
-	Wed,  4 Nov 2026 17:33:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id BF831EF8
- for <buildroot@buildroot.org>; Wed,  4 Nov 2026 17:33:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 34F574095D;
+	Wed,  4 Nov 2026 18:03:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B2472177B
+ for <buildroot@buildroot.org>; Wed,  4 Nov 2026 18:03:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B15D840211
- for <buildroot@buildroot.org>; Wed,  4 Nov 2026 17:33:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A412F408DE
+ for <buildroot@buildroot.org>; Wed,  4 Nov 2026 18:03:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oOjX6bW4PJMH for <buildroot@buildroot.org>;
- Wed,  4 Nov 2026 17:33:02 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 3B5A440062
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0xzlPGZzo-xM for <buildroot@buildroot.org>;
+ Wed,  4 Nov 2026 18:03:22 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org B76A440CE8
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3B5A440062
- for <buildroot@buildroot.org>; Wed,  4 Nov 2026 17:33:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B76A440CE8
+ for <buildroot@buildroot.org>; Wed,  4 Nov 2026 18:03:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 592BD9DCF5; Wed,  4 Nov 2026 17:31:31 +0000 (UTC)
+ id E11E39DC83; Wed,  4 Nov 2026 18:01:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 4 Nov 2026 18:32:38 +0100
+Date: Wed, 4 Nov 2026 19:01:17 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: db1d0382f35893ac624b614b765ddecfbdd1bef5
-X-Git-Newrev: 78f0de27ff99d1fe65aada26e3b3de18641f11c2
+X-Git-Oldrev: cc733c00a33d144439accdab0d52b8a4dcf41ff0
+X-Git-Newrev: 24cff684345ac6fceee1bfbdc8ef21e981887fae
 X-Patchwork-Hint: ignore
-Message-Id: <20261104173131.592BD9DCF5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pppd: security bump version to
- 2.5.5
+Message-Id: <20261104180139.E11E39DC83@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/systemd: bump version to 261.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -91,8 +90,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
@@ -105,263 +104,183 @@ X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/78f0de27ff99d1fe65aada26e3b3de18641f11c2
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/24cff684345ac6fceee1bfbdc8ef21e981887fae
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-https://github.com/ppp-project/ppp/releases/tag/v2.5.5
-https://github.com/ppp-project/ppp/releases/tag/v2.5.4
+This version adds an IMDS (Cloud "Instance Metadata Service")
+subsystem, to recognize running in VMs provided by certain cloud
+providers and provide information on the instance. This is left
+disabled. The user "systemd-imds" defined in the new
+sysusers.d/systemd-imds.conf.in source file is only needed if IMDS is
+enabled.
 
-Version 2.5.4 fixes CVE-2026-75883 and CVE-2026-85495.
+Excerpts from NEWS possibly relevant for other package builds and post
+scripts:
+* "libsystemd is no longer guaranteed to be linked against libm. [...]
+  Consumers that rely on libsystemd transitively pulling in libm
+  should link against it themselves." [1]
+* "Individual binaries now also embed the dlopen ELF metadata note
+  (https://uapi-group.org/specifications/specs/elf_dlopen_metadata/)
+  for their dlopen() dependencies, which allows packaging tools to
+  reliably discover the set of optional dependencies of a binary,
+  [...]" [2]
 
-Removed patch which is included in this release.
+New options:
+* "sysinstall" enables a textual installer/setup tool, disabled
+* "imds" enables/disables the new IMDS subsystem, disabled
+* "imds-network" has no effect with imds disabled, leave unset
+* "systemd-imds-uid" is left unset like other fixed uid options
 
-Updated configure options for OpenSSL engines support due to commit
-https://github.com/ppp-project/ppp/commit/23d1bb7eddd8598d5106c8957b312392f01dcce1
+Building with kernel headers <5.12 fails because the epoll_pwait2 and
+mount_setattr syscalls are undefined (either may appear in the error
+message depending on build order). Upstream has rejected an issue
+about the latter [3] without changing the "minimum baseline", so we
+have to conclude only the "recommended baseline" is supported for
+building. Update our header requirements accordingly, drop the config
+comment about the recommended version because it is now required, and
+note it in the update instructions in package/systemd/systemd.mk.
 
-Please note that the bump to 2.5.4 was skipped in buildroot due to
-runtime errors fixed with this release:
-"This is a bug-fix and security release, with no new features.
- Changes include:
- Fix bugs where hook scripts such as /etc/ppp/ip-up were not being run.
- [...]"
+Please see the upstream NEWS file for other changes [4].
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Tested-by: Fiona Klute <fiona.klute@gmx.de>
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+Hash of LICENSES/README.md changed due to licence changes (to MIT-0)
+[5,6] and renaming [7] of listed files.
+
+[1] https://github.com/systemd/systemd/blob/v261.4/NEWS#L100-L110
+[2] https://github.com/systemd/systemd/blob/v261.4/NEWS#L604-L608
+[3] https://github.com/systemd/systemd/issues/43575
+[4] https://github.com/systemd/systemd/blob/v261.4/NEWS
+[5] https://github.com/systemd/systemd/commit/919b8c7c92b120ba986a28882c151777661e97d6
+[6] https://github.com/systemd/systemd/commit/b5ee53b6c8235289a9fe2a9223aa6cb99734ce20
+[7] https://github.com/systemd/systemd/commit/74d392ed1bab578e901699ee272faa0c8b922128
+
+Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .../0001-dhcpv6relay-fix-build-with-gcc-9.x.patch  | 184 ---------------------
- package/pppd/pppd.hash                             |   2 +-
- package/pppd/pppd.mk                               |   8 +-
- 3 files changed, 7 insertions(+), 187 deletions(-)
+ package/systemd/Config.in    |  2 +-
+ package/systemd/systemd.hash |  4 ++--
+ package/systemd/systemd.mk   | 10 ++++++++--
+ system/Config.in             | 10 +++-------
+ 4 files changed, 14 insertions(+), 12 deletions(-)
 
-diff --git a/package/pppd/0001-dhcpv6relay-fix-build-with-gcc-9.x.patch b/package/pppd/0001-dhcpv6relay-fix-build-with-gcc-9.x.patch
-deleted file mode 100644
-index b7dfd87e8a..0000000000
---- a/package/pppd/0001-dhcpv6relay-fix-build-with-gcc-9.x.patch
-+++ /dev/null
-@@ -1,184 +0,0 @@
--From 56f6f09035b034b96c84637160729aabf07f3460 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd@kuhls.net>
--Date: Wed, 17 Jun 2026 20:45:19 +0200
--Subject: [PATCH] dhcpv6relay: fix build with gcc 9.x
--
--Fixes various build errors seen with gcc 9.x:
--
--Making all in dhcpv6relay
--  CC       dhcpv6relay_la-dhcpv6relay.lo
--dhcpv6relay.c: In function 'dhcpv6relay_down':
--dhcpv6relay.c:193:1: error: parameter name omitted
-- void dhcpv6relay_down(void*, int)
-- ^~~~
--dhcpv6relay.c:193:1: error: parameter name omitted
--dhcpv6relay.c: In function 'dhcpv6relay_release_route':
--dhcpv6relay.c:265:45: error: parameter name omitted
-- void dhcpv6relay_release_route(const struct in6_addr* addr, uint8_t prefixlen, uint32_t /* lifetime */)
--                                             ^~~~~~~~
--dhcpv6relay.c: In function 'dhcpv6relay_process_ia_pd':
--dhcpv6relay.c:343:2: error: label at end of compound statement
--  default:
--  ^~~~~~~
--dhcpv6relay.c: In function 'dhcpv6relay_process_ia_na':
--dhcpv6relay.c:380:2: error: label at end of compound statement
--  default:
--  ^~~~~~~
--dhcpv6relay.c: In function 'dhcpv6relay_process_packet_for_routes':
--dhcpv6relay.c:422:2: error: a label can only be part of a statement and a declaration is not a statement
--  dhcpv6relay_route_func func;
--  ^~~~~~~~~~~~~~~~~~~~~~
--dhcpv6relay.c:449:6: error: label at end of compound statement
--      default:
--      ^~~~~~~
--dhcpv6relay.c: In function 'dhcpv6relay_server_event':
--dhcpv6relay.c:463:1: error: parameter name omitted
-- void dhcpv6relay_server_event(int fd, void*)
-- ^~~~
--dhcpv6relay.c:558:2: error: label at end of compound statement
--  default:
--  ^~~~~~~
--dhcpv6relay.c: In function 'dhcpv6relay_client_event':
--dhcpv6relay.c:619:1: error: parameter name omitted
-- void dhcpv6relay_client_event(int fd, void*)
-- ^~~~
--dhcpv6relay.c: In function 'dhcpv6relay_send_router_advertisement_timed':
--dhcpv6relay.c:795:1: error: parameter name omitted
-- void dhcpv6relay_send_router_advertisement_timed(void*)
-- ^~~~
--dhcpv6relay.c: In function 'dhcpv6relay_router_solicitation':
--dhcpv6relay.c:802:1: error: parameter name omitted
-- void dhcpv6relay_router_solicitation(int fd, void*)
-- ^~~~
--dhcpv6relay.c: In function 'dhcpv6relay_up':
--dhcpv6relay.c:855:1: error: parameter name omitted
-- void dhcpv6relay_up(void*, int)
-- ^~~~
--dhcpv6relay.c:855:1: error: parameter name omitted
--
--Upstream: https://github.com/ppp-project/ppp/pull/598
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- pppd/plugins/dhcpv6relay/dhcpv6relay.c | 22 ++++++++++++----------
-- 1 file changed, 12 insertions(+), 10 deletions(-)
--
--diff --git a/pppd/plugins/dhcpv6relay/dhcpv6relay.c b/pppd/plugins/dhcpv6relay/dhcpv6relay.c
--index e9ebba1..e416720 100644
----- a/pppd/plugins/dhcpv6relay/dhcpv6relay.c
--+++ b/pppd/plugins/dhcpv6relay/dhcpv6relay.c
--@@ -190,7 +190,7 @@ void routes_remove_all()
-- }
-- 
-- static
---void dhcpv6relay_down(void*, int)
--+void dhcpv6relay_down(__attribute__((unused)) void* unused, __attribute__((unused)) int unusedint)
-- {
--     routes_remove_all();
--     if (dhcpv6relay_sock_ll >= 0) {
--@@ -262,7 +262,7 @@ void dhcpv6relay_route_timeout(void* _r)
-- }
-- 
-- static
---void dhcpv6relay_release_route(const struct in6_addr* addr, uint8_t prefixlen, uint32_t /* lifetime */)
--+void dhcpv6relay_release_route(const struct in6_addr* addr, uint8_t prefixlen, __attribute__((unused)) uint32_t lifetime)
-- {
--     char in6addr[INET6_ADDRSTRLEN];
-- 
--@@ -341,7 +341,7 @@ void dhcpv6relay_process_ia_pd(const unsigned char *bfr, uint16_t len, dhcpv6rel
-- 	    routefunc((const struct in6_addr*)(bfr + 9), bfr[8], ntohl(*(const uint32_t*)(bfr+4)));
-- 	    break;
-- 	default:
---	    /* nothing */
--+	    break;
-- 	}
-- 
-- 	bfr += optlen;
--@@ -378,7 +378,7 @@ void dhcpv6relay_process_ia_na(const unsigned char *bfr, uint16_t len, dhcpv6rel
-- 	    routefunc((const struct in6_addr*)bfr, 128, ntohl(*(const uint32_t*)(bfr+20)));
-- 	    break;
-- 	default:
---	    /* nothing */
--+	    break;
-- 	}
-- 
-- 	bfr += optlen;
--@@ -392,6 +392,7 @@ void dhcpv6relay_process_packet_for_routes(const unsigned char *bfr, uint16_t le
--     if (len < 1)
-- 	return;
--     uint8_t pkttype = *bfr;
--+    dhcpv6relay_route_func func;
-- 
--     switch (pkttype) {
--     case DHCPv6_MSGTYPE_RELAY_FORW:
--@@ -419,7 +420,6 @@ void dhcpv6relay_process_packet_for_routes(const unsigned char *bfr, uint16_t le
-- 	break;
--     case DHCPv6_MSGTYPE_REPLY:
--     case DHCPv6_MSGTYPE_RELEASE:
---	dhcpv6relay_route_func func;
-- 	if (pkttype == DHCPv6_MSGTYPE_RELEASE)
-- 	    func = dhcpv6relay_release_route;
-- 	else
--@@ -447,6 +447,7 @@ void dhcpv6relay_process_packet_for_routes(const unsigned char *bfr, uint16_t le
-- 		dhcpv6relay_process_ia_na(bfr, optlen, func);
-- 		break;
-- 	    default:
--+		break;
-- 	    }
-- 	    bfr += optlen;
-- 
--@@ -460,7 +461,7 @@ void dhcpv6relay_process_packet_for_routes(const unsigned char *bfr, uint16_t le
-- }
-- 
-- static
---void dhcpv6relay_server_event(int fd, void*)
--+void dhcpv6relay_server_event(int fd, __attribute__((unused)) void* unused)
-- {
--     unsigned char buffer[1024];
--     unsigned char *options = buffer + 34; /* skip fixed header */
--@@ -558,6 +559,7 @@ void dhcpv6relay_server_event(int fd, void*)
-- 	default:
-- 	    /* notice("DHCPv6 relay: Skipping processing of option %u of length %u.",
-- 		    type, len); */
--+	    break;
-- 	}
-- 	options += len;
-- 	r -= len;
--@@ -616,7 +618,7 @@ int dhcpv6relay_init_upstream()
-- }
-- 
-- static
---void dhcpv6relay_client_event(int fd, void*)
--+void dhcpv6relay_client_event(int fd, __attribute__((unused)) void* unused)
-- {
--     unsigned char buffer[1024];
--     unsigned char fwd_head[256];
--@@ -792,14 +794,14 @@ void dhcpv6relay_send_router_advertisement(const struct sockaddr* da)
-- }
-- 
-- static
---void dhcpv6relay_send_router_advertisement_timed(void*)
--+void dhcpv6relay_send_router_advertisement_timed(__attribute__((unused)) void* unused)
-- {
--     dhcpv6relay_send_router_advertisement(NULL);
--     ppp_timeout(dhcpv6relay_send_router_advertisement_timed, NULL, dhcpv6relay_ra_interval, 0);
-- }
-- 
-- static
---void dhcpv6relay_router_solicitation(int fd, void*)
--+void dhcpv6relay_router_solicitation(int fd, __attribute__((unused)) void* unused)
-- {
--     unsigned char bfr[1]; /* kernel will truncate packets in case of overflow,
-- 			     and we don't care about the content.  Will
--@@ -852,7 +854,7 @@ int dhcpv6relay_populate_ll(struct sockaddr_in6* res)
-- }
-- 
-- static
---void dhcpv6relay_up(void*, int)
--+void dhcpv6relay_up(__attribute__((unused)) void* unused, __attribute__((unused)) int unusedint)
-- {
--     struct sockaddr_in6 sa;
--     struct ipv6_mreq mreq;
---- 
--2.47.3
--
-diff --git a/package/pppd/pppd.hash b/package/pppd/pppd.hash
-index a79f73fe93..7ec081fe20 100644
---- a/package/pppd/pppd.hash
-+++ b/package/pppd/pppd.hash
-@@ -1,4 +1,4 @@
- # Locally calculated
--sha256  ddda28dec8aca99a403ab6070d94ffd2b17d63e9a4c5509158e99e148f572d4f  ppp-2.5.3.tar.gz
-+sha256  0ebbcfef906d16cfbb9cbdd19c0d92aa3df2fd8fdd29731f614c58d16a279aa5  ppp-2.5.5.tar.gz
- sha256  5d588eb3b157d52112afea935c88a7ff9efddc1e2d95a42c25d3b96ad9055008  LICENSE.BSD
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL-2
-diff --git a/package/pppd/pppd.mk b/package/pppd/pppd.mk
-index f8b68f39b7..d854f6a036 100644
---- a/package/pppd/pppd.mk
-+++ b/package/pppd/pppd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 7f3958aed8..7fd05be41b 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -21,7 +21,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ 	depends on !BR2_STATIC_LIBS # kmod
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_TOOLCHAIN_HAS_SSP
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_14
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 	depends on BR2_HOST_GCC_AT_LEAST_8 # host-systemd
+ 	select BR2_ROOTFS_MERGED_USR
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index 91ad68017b..16dab511d2 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,5 +1,5 @@
+ # sha256 locally computed
+-sha256  46f00bb99c02e295cfda58b2fe9c7eac67a06d2ea5895aa80580c718ca3da71d  systemd-260.6.tar.gz
++sha256  2f78c37c6592dd34b95cca86793f1b8c5b073db35681ef80ea16a73c0c297a9e  systemd-261.4.tar.gz
+ sha256  ac4985facb553559981f507982444d779115e3e3a4c8b7847ae956198490c1b3  LICENSE.GPL2
+ sha256  6d9bb3b7fc818a8facc4cc296060a0883fef8710d6498f86165335846e82ee9d  LICENSE.LGPL2.1
+ sha256  c9e7bf5b7c243c719b8b43c36158effb9b54c5e80abc9d82e4b2d4b2a4aa64ad  LICENSES/alg-sha1-public-domain.txt
+@@ -13,4 +13,4 @@ sha256  8a6fc0879cecc0b96bf4c08159b9d733bf0f15fcf32879aec98c4ffd05424554  LICENS
+ sha256  b85dcd3e453d05982552c52b5fc9e0bdd6d23c6f8e844b984a88af32570b0cc0  LICENSES/MIT.txt
+ sha256  2a98749f6bec00dfaed86fa9c1edea871aaae4f11ee4d100b671aaf4ce353a73  LICENSES/murmurhash2-public-domain.txt
+ sha256  1a7adaa2c86cedfd6c7f5c0c7c72fd6d3e02cd0c9593f21fdb53c89bb2b130ec  LICENSES/OFL-1.1.txt
+-sha256  769cad6e4cf7548fe86ccd11f16a922aaacaeaaf885af15d13bf0d6946f58cf9  LICENSES/README.md
++sha256  a3be270384280249880bd69cab48de68f3e9906b975fb172bc2b83657c43d9a0  LICENSES/README.md
+diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+index 7e95e098ff..e9e3abf26b 100644
+--- a/package/systemd/systemd.mk
++++ b/package/systemd/systemd.mk
+@@ -6,7 +6,9 @@
  
--PPPD_VERSION = 2.5.3
-+PPPD_VERSION = 2.5.5
- PPPD_SITE = https://download.samba.org/pub/ppp
- PPPD_SOURCE = ppp-$(PPPD_VERSION).tar.gz
- PPPD_LICENSE = LGPL-2.0+, LGPL, BSD-4-Clause, BSD-3-Clause, GPL-2.0+
-@@ -25,9 +25,13 @@ endif
- ifeq ($(BR2_PACKAGE_OPENSSL),y)
- PPPD_CONF_OPTS += \
- 	--enable-eaptls \
--	--enable-openssl-engine \
- 	--enable-peap \
- 	--with-openssl=$(STAGING_DIR)/usr
-+ifeq ($(BR2_PACKAGE_LIBOPENSSL_ENGINES),y)
-+PPPD_CONF_OPTS += --enable-openssl-engine
-+else
-+PPPD_CONF_OPTS += --disable-openssl-engine
-+endif
- PPPD_DEPENDENCIES += openssl
- else
- PPPD_CONF_OPTS += \
+ # When updating systemd, take care of the following:
+ # - Check if the requirements have changed (see README), in particular
+-#   arch and headers
++#   arch and headers. Use the "recommended baseline" to choose
++#   BR2_TOOLCHAIN_HEADERS_AT_LEAST_..., upstream rejects issues about
++#   build failures with older versions.
+ # - If yes, propagate the dependencies to BR2_INIT_SYSTEMD
+ # - If the required kernel options have changed, update the Config.in
+ #   help text and the list of KCONFIG_ENABLE_OPT.
+@@ -19,7 +21,7 @@
+ # - Diff sysusers.d with the previous version
+ # - Diff factory/etc/nsswitch.conf with the previous version
+ #   (details are often sprinkled around in README and manpages)
+-SYSTEMD_VERSION = 260.6
++SYSTEMD_VERSION = 261.4
+ SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = \
+ 	LGPL-2.1+, \
+@@ -77,6 +79,7 @@ SYSTEMD_CONF_OPTS = \
+ 	-Dfuzz-tests=false \
+ 	-Didn=true \
+ 	-Dima=false \
++	-Dimds=disabled \
+ 	-Dinstall-tests=false \
+ 	-Dipe=false \
+ 	-Djournal-storage-default=persistent \
+@@ -103,6 +106,7 @@ SYSTEMD_CONF_OPTS = \
+ 	-Dsulogin-path=/usr/sbin/sulogin \
+ 	-Dswapoff-path=/usr/sbin/swapoff \
+ 	-Dswapon-path=/usr/sbin/swapon \
++	-Dsysinstall=false \
+ 	-Dsystem-gid-max=999 \
+ 	-Dsystem-uid-max=999 \
+ 	-Dsysupdated=disabled \
+@@ -926,6 +930,7 @@ HOST_SYSTEMD_CONF_OPTS = \
+ 	-Dhwdb=true \
+ 	-Didn=false \
+ 	-Dima=false \
++	-Dimds=disabled \
+ 	-Dimportd=disabled \
+ 	-Dinitrd=false \
+ 	-Dinstall-tests=false \
+@@ -979,6 +984,7 @@ HOST_SYSTEMD_CONF_OPTS = \
+ 	-Dsplit-bin=true \
+ 	-Dstoragetm=false \
+ 	-Dsysext=false \
++	-Dsysinstall=false \
+ 	-Dsysupdate=disabled \
+ 	-Dsysupdated=disabled \
+ 	-Dsysusers=false \
+diff --git a/system/Config.in b/system/Config.in
+index 8d80d04d97..baac35be14 100644
+--- a/system/Config.in
++++ b/system/Config.in
+@@ -123,25 +123,21 @@ config BR2_INIT_SYSTEMD
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC
+ 	depends on BR2_TOOLCHAIN_HAS_SSP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
++	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_14
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 	depends on BR2_HOST_GCC_AT_LEAST_8
+ 	select BR2_PACKAGE_SYSTEMD
+ 	select BR2_PACKAGE_SKELETON_INIT_SYSTEMD if BR2_ROOTFS_SKELETON_DEFAULT
+ 
+-comment "systemd needs a glibc toolchain w/ SSP, headers >= 5.10, host and target gcc >= 8"
++comment "systemd needs a glibc toolchain w/ SSP, headers >= 5.14, host and target gcc >= 8"
+ 	depends on BR2_PACKAGE_SYSTEMD_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC || \
+ 		!BR2_TOOLCHAIN_HAS_SSP || \
+-		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10 || \
++		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_14 || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || \
+ 		!BR2_HOST_GCC_AT_LEAST_8
+ 
+-comment "systemd highly recommends Linux >= 5.14"
+-	depends on BR2_INIT_SYSTEMD
+-	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_14
+-
+ comment "Special purpose (read help)"
+ 
+ config BR2_INIT_CATATONIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
