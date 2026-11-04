@@ -1,95 +1,116 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33AED606A864
-	for <buildroot@archiver.kernel.org>; Wed,  4 Nov 2026 20:38:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 699F5606B2ED
+	for <buildroot@archiver.kernel.org>; Wed,  4 Nov 2026 20:42:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=d2spH2et
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=e7NW4ZbX;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=m.gmane-mx.org header.i=@m.gmane-mx.org header.a=rsa-sha256 header.s=ciao2026 header.b=HRaKYf+V
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 08F0A607FA;
-	Wed,  4 Nov 2026 20:38:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F24040854;
+	Wed,  4 Nov 2026 20:42:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 984NHMEg8dFp; Wed,  4 Nov 2026 20:38:58 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org D91D46080B
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793824738;
-	b=hot9BUupO3QcmrD+zhyBmqJLGG1Kerp14sg1SPPROnJYRoXg88He2vsUWGhcKewUgMgq
-	 PPplzkjV11i/N2uBlC5UyZeEXDghP3D2dvNz23Zz8iNOyuGziOhlAu0H2vaIz8KVAi2OA
-	 VbWHpjMVpMc1oozz6zcFkhTLjjyIjCJ6PtA7Ua+KLh2iUMdnnzsqHlMP0u/JE4Jc0A/bI
-	 L3mrPKe8rzVoB0hFZj+DCEbaDCTO6fVHOfnpS1mx1MG0JVNyXKCjaNe+ElPH3sKqe0ujt
-	 hJvX/CGhAvybfIk0Pd+SdJ5MHaOLmxwvhSpTYlZRswCrDAA1lkRVoBG4ktrB020+Klg==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BjiyzxS4Jogd; Wed,  4 Nov 2026 20:42:35 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 6FD844084A
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793824955;
+	b=Cy5fWreQSVxI2jX2z7KGypR4Xc5L2z6Ck3PE0JHM/Fp4VSCqd5HUX2DeExhUgiZ4oypx
+	 1ajpNdA+CwLeLUl5Z8uqShBWLltt1m6EyHfF5p3qt/BkWQWMsQHoUYcQJ0L0Z4TitSjkE
+	 Q6rb+MczvB3DWNQDLJf7e69JEjh5hDc49Mi8z/EXU/dCxwMCEMA8tHGMuOoETUfukcuhT
+	 SKyXYJOV7tCq0F/rQWvn2XWZDwNn/137FusCTXqs+Df8X5PeDfVdKuRfGdtIbWgEZrfYg
+	 lPBopKeI7obzCHbKjp0Vgky3nF9/kALU8nDsqf4tunXEEfne5UODZZIZh5Z0SFDwE4w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793824738;
+	c=relaxed/relaxed; t=1793824955;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
-	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
-	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
-	 Errors-To:Sender;
-	bh=lqgJnhjo0lqI9K+cVWt2qkBH9Df3ifMUmI8WmAS+GnE=;
-	b=b+R/0GuERDi7JQc1uFJ5aGrM2GPjmy3jKcWS1SDxWFk5ykwfxUvjgQBaxrCVyLVw5LMW
-	 w1BSchz8JjiCAWAIDh8qZuodqGyQm6a4k+Mdo5XWC73ZA8s//Fu0EihWy8JGpQWKtCT3B
-	 Yd3jDPYt/a28RY/ktvS2bMduQ0UjNe1pU+BdSFG/RbW8E03Dcub8MmzCQ5DlAE39XAPXP
-	 OrrEcgJV0Jj+5T0ZI1pvZxRPCxy/XBe7Him+TVhr92J3TRb9DVVHcePdz5GZvqc6hHxjB
-	 SIIb/hrdMfcj9np+Sj/JYl7oqmo5dvtl/t1H1bt2sNQBfFeKjYMwxPKqjTlYq021HTw==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+	 X-Spam-Status:Received:ARC-Filter:X-Greylist:Received-SPF:Received:
+	 DKIM-Signature:Received:X-Injected-Via-Gmane:To:From:Date:Message-ID:
+	 References:MIME-Version:User-Agent:Cc:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=heZSnumfgTLBDcjqmTzdWJClHYylnRX527unJvHaaZY=;
+	b=PRm5oloyrU/VgdWl6P2VrH/1VXMbEEIXIRJ0ZInqwib6FGitakCx7G9Tvsvd7qaC85Vk
+	 NvMHkFGmbjAbJS1UtQhnw5UzsaszlmqJ4VJ2KSNBfVbY8jSyyEkItzlsX2PVE22/MuY03
+	 wMPZWqMUTBsBf0GHeECPET647F2fHMh3iBJ+xrjL75I2onek947iksvgjq0daCPEU+Bzf
+	 ykBOPQR+XsnGI5hnia3bKxEOhJnO8FMgVYZ43yQPi0ZT6/Hx2wJLX2zQdZhR3P4xMLGvN
+	 W6DDpSMz3mTGR/G8lCfOPFQpy5Q/H5pRnflzOqIsJ2Et7yAr7m6Yzzw7dJKRPH6WDvA==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793824737;
-	bh=lqgJnhjo0lqI9K+cVWt2qkBH9Df3ifMUmI8WmAS+GnE=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=d2spH2etXv94BLFYWb3ZMlgUQ0GsXAXgH59S2BVqb+E1oJUe87tU18D0McP50oPuB
-	 wyg7AT22ANjp9keVWKTXcmdSVzc6Rxa807XRosphI2bWBDAjZTKDGNDsPlHu7IHqri
-	 XLl7zHgxYmDZuUWGAAZhfX/S/YkaJJouwNYU0SzQsjJK0WOlWVulW+AAlRlyROYgr8
-	 7KkpKff0kSuygjQH9PMkkE5YMuS3oG0xPwW+7LgCNdiSqJsJ4ZzNt2KKseabr8FwiV
-	 kv6+nI24vZeyar2Wl79c6hT2fuuwjysCYrIkZlIjgroKjQwPNS1aOQINH6vWjpJhLU
-	 ArnH9cQ2EoXZQ==
+	s=default; t=1793824955;
+	bh=heZSnumfgTLBDcjqmTzdWJClHYylnRX527unJvHaaZY=;
+	h=To:From:Date:References:Cc:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From;
+	b=e7NW4ZbXpvdVPoHG1NUXTMwo/bkfr40utt2XlyJXyicIML3gmn3+7HK6esWesUIbC
+	 c7Bmy24poZglD+YDf0p637tclltV81dkzlDhLhdRzcAFyeHUsrn2ynUlbj7SlMXqtu
+	 7h0kwq9O3tWsI9NXRCK1IKa1J6m4NND3P1tf7YiPrKmLOW0KqHhp6NZhf8csZNDYLy
+	 QmQ8uTBcwHo2lOS+8PnjMmaV09DovJP80nQdhK+M41Yd/F+SiyH7KDo5YvhzSAGhN4
+	 RT1RaH6OsWru3EqxYNMamr+EmFJdBQm5uvRDPHmNUufKXpmc8mFaWGKwPdlrSgTa/Z
+	 v6OksmSfiUprg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D91D46080B;
-	Wed,  4 Nov 2026 20:38:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 9D120B6C
- for <buildroot@buildroot.org>; Wed,  4 Nov 2026 20:38:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6FD844084A;
+	Wed,  4 Nov 2026 20:42:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 1E647B6C
+ for <buildroot@buildroot.org>; Wed,  4 Nov 2026 20:42:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 83172813D8
- for <buildroot@buildroot.org>; Wed,  4 Nov 2026 20:38:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 03EF0811E8
+ for <buildroot@buildroot.org>; Wed,  4 Nov 2026 20:42:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jx-wUss_y1Wx for <buildroot@buildroot.org>;
- Wed,  4 Nov 2026 20:38:56 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 95740813BD
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 95740813BD
- for <buildroot@buildroot.org>; Wed,  4 Nov 2026 20:38:55 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 1CB9A2003C3;
- Wed,  4 Nov 2026 21:38:50 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 via
- 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr with HTTP (HTTP/1.0
- POST); Wed, 04 Nov 2026 21:38:50 +0100
+ id Cs3rmw-BOgwe for <buildroot@buildroot.org>;
+ Wed,  4 Nov 2026 20:42:33 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org E1833810EE
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=49.12.148.96
+X-Greylist: delayed 315 seconds by postgrey-1.37 at util1.osuosl.org;
+ Wed, 04 Nov 2026 20:42:32 UTC
+Authentication-Results: smtp1.osuosl.org;
+ dmarc=fail (p=none dis=none) header.from=kuhls.net
+Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=m.gmane-mx.org header.i=@m.gmane-mx.org
+ header.a=rsa-sha256 header.s=ciao2026 header.b=HRaKYf+V
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=49.12.148.96;
+ helo=ciao.gmane.io; envelope-from=glbb-buildroot@m.gmane-mx.org;
+ receiver=<UNKNOWN> 
+Received: from ciao.gmane.io (ciao.gmane.io [49.12.148.96])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E1833810EE
+ for <buildroot@busybox.net>; Wed,  4 Nov 2026 20:42:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ d=m.gmane-mx.org; s=ciao2026; h=Cc:Content-Transfer-Encoding:Content-Type:
+ MIME-Version:References:Message-ID:Date:Subject:From:To:Sender:Reply-To:
+ Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+ Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:List-Id:List-Help:
+ List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+ bh=ei8ZFTt0U1o6r3au/7SH8HUOevkZ7yrAl0QNlvESEX4=; b=HRaKYf+VaY4D3i+nTmYT0sAdRG
+ Za4OO7YR81bvarIoh3stgUp0wD2oKT+qBndxkA0/4owtFccMpLbDaAfRA2Qw0Actn1LJQubiWJdkN
+ DQGM9Ofn08Qp79fzD1YrJdPK35P7qPAIeloDmWZUoAGEK+Gh6DSK26mV5lqOS1EJ7uhWJX5u1SpIe
+ sC5DYFvSbFFARdCWSZcnxxGw75ZGJVC4iKN72da78EQIucfY36rCJxzJdwFv7a+Cdf8ubpsR8p3f4
+ PlATnLQtOCRA2q1Qoh/tvjTL/JCBXF89RRjPlf0K9wRR81AKoHhbyGATQPNBA2XyLrlHDguOcR/Yw
+ TvhQ9IKQ==;
+Received: from list by ciao.gmane.io with local (Exim 4.98.2)
+ (envelope-from <glbb-buildroot@m.gmane-mx.org>)
+ id 1xOhjL-00000007FNM-14Xq for buildroot@busybox.net;
+ Wed, 04 Nov 2026 21:37:11 +0100
+X-Injected-Via-Gmane: http://gmane.org/
+To: buildroot@busybox.net
+From: Bernd Kuhls <bernd@kuhls.net>
+Date: Wed, 04 Nov 2026 21:36:35 +0100
+Message-ID: <pan$e3688$bbe879c3$9318f006$3db2d852@ID-313208.user.individual.net>
+References: <20261029204953.1447140-1-bernd@kuhls.net>
+ <20261029204953.1447140-2-bernd@kuhls.net> <auO2ugenOrGrEKGM@windsurf>
+ <BN0P110MB16090AD1C42FD6EAAAFABCD69F6DA__1775.67241932906$1793370569$gmane$org@BN0P110MB1609.NAMP110.PROD.OUTLOOK.COM>
+ <pan$1b902$b669761d$4f2dfd93$7e06a599@ID-313208.user.individual.net>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Date: Wed, 04 Nov 2026 21:38:50 +0100
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20261103-bump_libxmlsec-v1-1-7ddff8f300c1@bootlin.com>
-References: <20261103-bump_libxmlsec-v1-1-7ddff8f300c1@bootlin.com>
-User-Agent: Webmail Free/1.6.20
-Message-ID: <f9c4deff6a706d1010d859696b513bfe@free.fr>
-X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH] package/libxmlsec1: bump to version 1.3.13
+User-Agent: Pan/0.162 (Pokrosvk)
+Cc: buildroot@uclibc.org
+Subject: Re: [Buildroot] [PATCH 2/2] package/python3: bump version to 3.15.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,47 +120,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS autolearn=ham
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no
 	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-T24gMDMvMTEvMjAyNiAyMDo0MCwgQWxleGlzIExvdGhvcsOpIHZpYSBidWlsZHJvb3Qgd3JvdGU6
-Cj4gQ2hhbmdlbG9nIGF2YWlsYWJsZSBhdDoKPiBodHRwczovL2dpdGh1Yi5jb20vbHNoMTIzL3ht
-bHNlYy9yZWxlYXNlcy90YWcvMS4zLjEzCj4gCj4gV2hpbGUgYXQgaXQsIHVwZGF0ZSB0aGUgaGFz
-aCBmaWxlIHRvIG1lbnRpb24gdGhlIGhhc2ggZm91bmQgaW4gdGhlCj4gcmVsZWFzZSBwYWdlIHJh
-dGhlciB0aGFuIG1lbnRpb25pbmcgYSBjb21wdXRlZCBoYXNoLiBUaGUgaGFzaCBmb3IgdGhlCj4g
-Q29weXJpZ2h0IGZpbGUgaGFzIGNoYW5nZWQ6IHRoZSBkaWZmIGlzIG9ubHkgYWJvdXQgc29tZSB0
-eXBvcyB0aG91Z2gsCj4gc2VlIAo+IGh0dHBzOi8vZ2l0aHViLmNvbS9sc2gxMjMveG1sc2VjL2Nv
-bW1pdC9iNmQ2OWMwOWY0YmM1MTg0NWRiZTkwZjBkYTgyYzllYjA0YmQ2NzFlCj4gCj4gVGhlIHYx
-LjMuMTMgZG9lcyBub3QgYnVpbGQgaW1tZWRpYXRlbHkgd2l0aG91dCBzb21lIGhlbHA6Cj4gCj4g
-LSB0aGUgY29uZmlndXJlIHN0ZXAgZmFpbHMsIGJlY2F1c2UgaXQgZmFpbHMgdG8gYnVpbGQgc29t
-ZSB0ZXN0IAo+IHByb2dyYW0uCj4gICBUaGlzIHRlc3QgcHJvZ3JhbSBmYWlscyB0byBidWlsZCBi
-ZWNhdXNlIF9GT1JUSUZZX1NPVVJDRSBpcyBkZWZpbmVkCj4gICB0d2ljZSwgaXQgaXMgcGFzc2Vk
-IGFzIF9GT1JUSUZZX1NPVVJDRT0xIGJ5IGRlZmF1bHQgYnkgYnVpbGRyb290LCBhbmQKPiAgIHRo
-aXMgbmV3IGxpYnhtbHNlYzEgdmVyc2lvbiBoYXMgaGFyZGVuaW5nIGVuYWJsZWQgYnkgZGVmYXVs
-dCwgd2hpY2gKPiAgIHNldHMgX0ZPUlRJRllfU09VUkNFPTIuIFRoaXMgaXNzdWUgaXMgZml4ZWQg
-YnkgcHJlc2VydmluZyB0aGUgZm9ybWVyCj4gICBiZWhhdmlvciwgaWUgcGFzc2luZyAtLWRpc2Fi
-bGUtaGFyZGVuaW5nIGF0IGNvbmZpZ3VyZSB0aW1lLgo+IC0gdGhlIHRvb2xjaGFpbiB3cmFwcGVy
-IHJhaXNlcyBhbiBlcnJvciBhYm91dCBzb21lIHN5c3RlbSBoZWFkZXJzIGJlaW5nCj4gICBpbmNs
-dWRlZDoKPiAgICAgYWFyY2g2NC1saW51eC1nY2M6IEVSUk9SOiB1bnNhZmUgaGVhZGVyL2xpYnJh
-cnkgcGF0aCB1c2VkIGluIFwKPiAgICAgY3Jvc3MtY29tcGlsYXRpb246ICctSS91c3IvaW5jbHVk
-ZS94bWxzZWMxJwo+ICAgVGhpcyBlcnJvciBpcyBkdWUgdG8gc29tZSBmdXp6ZXIgcHJvZ3JhbSBu
-b3cgYmVpbmcgcGFydCBvZiB0aGUKPiAgIHN0YW5kYXJkIGJ1aWxkLCBhbmQgbWlzc2luZyBzb21l
-IGNmbGFncy4gVGhlIGNvcnJlc3BvbmRpbmcgcGF0Y2ggaGFzCj4gICBiZWVuIHNlbnQgYW5kIGlu
-dGVncmF0ZWQgdXBzdHJlYW0sIGFuZCBiYWNrcG9ydGVkIGluIHRoaXMgY29tbWl0Cj4gLSBUaGUg
-c2FtZSBmdXp6ZXIga2VlcCBvbiB1c2luZyBzb21lIERFUyByZWxhdGVkIEFQSXMgZXZlbiB3aGVu
-Cj4gICAtLWRpc2FibGUtZGVzIGlzIHBhc3NlZC4gVGhlIGlzc3VlIGlzIGFscmVhZHkgZml4ZWQg
-dXBzdHJlYW0sIHRoaXMKPiAgIGNvbW1pdCBiYWNrcG9ydHMgdGhpcyBwYXRjaCBhcyB3ZWxsLgo+
-IAo+IFNpZ25lZC1vZmYtYnk6IEFsZXhpcyBMb3Rob3LDqSA8YWxleGlzLmxvdGhvcmVAYm9vdGxp
-bi5jb20+CgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdAo=
+Am Wed, 04 Nov 2026 21:22:20 +0100 schrieb Bernd Kuhls:
+
+>> - I noticed that we're building the interpreter in shared lib mode.
+> CPython's `--enable-shared` is interpreted differently than general
+> autoconf recipes. There is a new flag I recommend we use in 3.15 [0] so
+> there is less of a performance penalty on the interpreter.
+> 
+> I tried that option but got build errors:
+> /home/bernd/buildroot/buildroot/output/per-package/python3/host/bin/
+> python3: error while loading shared libraries: /home/bernd/buildroot/
+> buildroot/output/build/python3-3.15.2/libpython3.15.so.1.0: file too
+> short
+
+Hi Vincent,
+
+short follow-up: A second try to build python3 works now with --enable-
+static-libpython-for-interpreter, maybe I messed up my build dir...
+
+Sorry for the noise. The new option makes sense to me and I will add it to 
+the version bump patch.
+
+Regards, Bernd
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
