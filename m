@@ -2,85 +2,96 @@ Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3700606A329
-	for <buildroot@archiver.kernel.org>; Wed,  4 Nov 2026 22:39:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74A07606A31B
+	for <buildroot@archiver.kernel.org>; Wed,  4 Nov 2026 22:40:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=jYd6Z0wu
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=c+BQRmq9
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A7D2C607D5;
-	Wed,  4 Nov 2026 22:39:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4B5F26082D;
+	Wed,  4 Nov 2026 22:40:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rz0vN0a8tkHx; Wed,  4 Nov 2026 22:39:20 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 8ABCD6082D
+ id 8ZiY6tvjcawa; Wed,  4 Nov 2026 22:40:36 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 27BB460844
 Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793831960;
-	b=Nf7kXMxofCPqnHb/ogsBV6k38KtV8wKGHUg2f618xWk3eQ6ZPhGutJSGOya84KB9I5jA
-	 T4cPhex5xqzuTfQ9K3buoRTP+/JmUWfqMrpzlXrsmdtXSitkf1M0M0kFTraQTfmF2GRVf
-	 crPRRehWLuIZUZWch4vgGe9U00qsD4gUgZ3FR2H9UkQIU5sV35vmYrtVmyL8REcPoNNah
-	 JrYhhfuMcgamPAVpzmnJmQjKQr7hi5ZpZ2odof0KmsdAOCDgLUvKzkTwwjvCIoy6xkXto
-	 zV1wZ6sFORqG+OuqpS+cm4FcKCFInMy+iu8Mt153MwiWKLKwp5YOjL5+Q+nJA8jkKaw==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793832036;
+	b=Ymutd5B8OGED0fK2p2a5YpZz9ECZVnC8lw36xK4m5u+ZfVuTd1L6/naIzpoynZvIC7pG
+	 clKx4LtrCZ17zJuMdC8po+m47XgSWQHA9EHT9t02f2FERyvs4hX/0CsBoo0t/Z69LrR41
+	 WwN6rBoOxDNxjd/Mj9Aiy+g/Zim7n08cCHc+GRjgMthCiApKfFnr6e+6Z0SSdVRTBqmuU
+	 A+vZQd9/GVTgrBiLD0+bGGHFmT1Hk4+byFRbR0qV2SIi28cTgJ2QYZZryb/wrGLu3kdd0
+	 piX7AgQf5Wlgfhew1e/Sw2Q/iPX0SO3yGs9eaSjTbWWdtYQorusFo3VqIOHADwpsQVw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793831960;
+	c=relaxed/relaxed; t=1793832036;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=/QG3iB1cs7gTKLzc3cZjfSM87mNXQ6gjs0hoZ85zt1c=;
-	b=sIcarn8Eh3b6i8gDbaO1/EPp3qaqf9/8h8+FrKNeGE40WgryoPoJxZ6RM3TLDr9N4Y72
-	 pRd6umIx4dvm1RkliCFkSUS8BC4wID3eJN1qpWvBdSkyZudPD7nq+szBkjxIDIzR0RuvO
-	 8at4Ur6zRKGUQIeeEH1k9LOFoR7BrUgyy5SsTzgwfbxRrByFrcwrZlO/ZI65KVDff18sy
-	 +TvDiYTWK7xU93F0/5EqlmXLHRArJiID1+I/6SrnZk4y85upJoz0PaV5K2BpfpMruOmEd
-	 iAnz/lOHOTjtWZXz9i0LLY5RknLsZ/SUUGN/bW5d/X7Gh1hmFP2ULBIIsq1XTa7kGBA==
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
+	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=ARTID13YQtqtMCtoQYbO3mIj8OfiFmacDQJkia0Mfjs=;
+	b=S6OHhV+0gLL3iiw1v1pkDFgjrtDyae4OLgNPEr17ZvP7qY/QeasCCoihvhbl2I2jO9rx
+	 tD+OzkrDkC7b00mCz+ziG/WbUZyGGkosugqJ9B4assLcYjesv7CcV65pzHw7Ctojc6Yu4
+	 HF2nDte7z1uqCbvrULwlV3+Q+qhDhBVefDj8xYGbu/Ld8A4dBLFIuQ0Ob4XT9zEUUA4NQ
+	 QISrwxxLxeHzGOfex86YvpXSMSTYqh41/qCi6egGe1Yl2J5DY4uoqXP6SzZviIOI2/+ap
+	 5MNe6sB3w9fpkqdK0f/PsKzmtS2/cJIf79mwsLPnrW4y3d9pDi8INge1cqLTfutSkUg==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793831960;
-	bh=/QG3iB1cs7gTKLzc3cZjfSM87mNXQ6gjs0hoZ85zt1c=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=jYd6Z0wuIkhiyNXQLNho6H3HGBTE8B1BEH7aGsV1UkKaaI+0rz/foIRvN7iOgj9Aj
-	 3zmcd6RAg1UIgKCJtvVFQvMzu1XtAveF+OGbnMgB/YvjWvvUmZsjr/8zGJ06BN1272
-	 +zj6+nCuqshkvQ4vjZCT9kfYpOis5QCHbDHwKVuuC8/dpySPOSEO82POvYbHUgJUDF
-	 8+ppJ76oiZg9FUaOB8iAyNuFWD01YZcmPlyma7+umxz+qRyQ2cfZSxs8J/4mSjhQK1
-	 1Fan1dpqzbdbKgdiJeqUnTJo0wfwDrEAEe2xWuvxC7TF1LuGtfigvKtjpnTGD4nxtA
-	 7zEByLNCXzLmg==
+	s=default; t=1793832036;
+	bh=ARTID13YQtqtMCtoQYbO3mIj8OfiFmacDQJkia0Mfjs=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=c+BQRmq9y7LhWWk1tFmXEhpHu53vR0gIet5c1RnA/1LKGpjSGSVJ1a4Ii0FmYw46q
+	 LKQxE2Obhdk0tBJ0EVeUPkFZLtjfcyWcxo5qLfZAaxaY8HcdJsPAWtSI9hdMXDXe7X
+	 Q05EkdnnI445IB47WbGt4dErQmJTHZfiEMT4ZYT2mQKYApV7tkW9DxHV/TijuyKxZp
+	 Zp7hkWdqqhQU3XKGUdn7WmrxpA0TBRF5DjK8Yt9IU7KbsWqatrYD8Otg3ubVQQ5Esf
+	 9TCWGRxvhxbg2DKrGEM+VI2P40U00HHNIuE87lriGHu1QAL28IRQQfMhP0kcpgtEo6
+	 thDtUeb9wFk5w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8ABCD6082D;
-	Wed,  4 Nov 2026 22:39:20 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9022D362
- for <buildroot@buildroot.org>; Wed,  4 Nov 2026 22:39:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 27BB460844;
+	Wed,  4 Nov 2026 22:40:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id E9CD831F
+ for <buildroot@buildroot.org>; Wed,  4 Nov 2026 22:40:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 75C706082D
- for <buildroot@buildroot.org>; Wed,  4 Nov 2026 22:39:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D081540867
+ for <buildroot@buildroot.org>; Wed,  4 Nov 2026 22:40:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jz3K-4i89IDk for <buildroot@buildroot.org>;
- Wed,  4 Nov 2026 22:39:18 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 72E86607D5
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WUywch9ZGqUC for <buildroot@buildroot.org>;
+ Wed,  4 Nov 2026 22:40:33 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 8394C40866
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 72E86607D5
- for <buildroot@buildroot.org>; Wed,  4 Nov 2026 22:39:18 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 83AB49DCF0; Wed,  4 Nov 2026 22:37:47 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 4 Nov 2026 23:38:35 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 47d9c8aa1b873dc7c0fa751dc856d8138dccf60c
-X-Git-Newrev: 6df483656000c1fdc262038d3011e5dfc2c25f6b
-X-Patchwork-Hint: ignore
-Message-Id: <20261104223747.83AB49DCF0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rtai: remove package
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8394C40866
+ for <buildroot@buildroot.org>; Wed,  4 Nov 2026 22:40:32 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id 7EA2E1A0440;
+ Wed,  4 Nov 2026 22:40:30 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id 5821C5FD65;
+ Wed,  4 Nov 2026 22:40:30 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 9A3D41032925B; Wed,  4 Nov 2026 23:40:25 +0100 (CET)
+Date: Wed, 4 Nov 2026 23:40:24 +0100
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org
+Message-ID: <auu0FjKN4kkG9Pck@windsurf>
+References: <20261101222746.26548-1-bernd@kuhls.net>
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20261101222746.26548-1-bernd@kuhls.net>
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH 1/1] package/rtai: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,220 +103,40 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
-	autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-6.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MAILING_LIST_MULTI,
+	SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6df483656000c1fdc262038d3011e5dfc2c25f6b
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On Sun, Nov 01, 2026 at 11:27:46PM +0100, Bernd Kuhls wrote:
+> Building kernels > 4.19 is broken, for example:
+> 
+> No RTAI patch for your kernel version
+> make: *** [package/pkg-generic.mk:237:
+>  /home/autobuild/autobuild/instance-13/output-1/build/linux-6.6.161/.stamp_patched]
+>  Error 1
+> 
+> In 2023 the maintainer laid out some future plans:
+> https://www.freelists.org/archive/rtai/05-2023
 
-Building kernels > 4.19 is broken, for example:
+In this e-mail from 2023, the maintainer said he was 79 years old!
+We're 3 years later, so it means that he is at least 82 years old by
+now. Not surprising that he has other things to worry about than
+maintaining RTAI.
 
-No RTAI patch for your kernel version
-make: *** [package/pkg-generic.mk:237:
- /home/autobuild/autobuild/instance-13/output-1/build/linux-6.6.161/.stamp_patched]
- Error 1
+Therefore: applied to master, thanks!
 
-In 2023 the maintainer laid out some future plans:
-https://www.freelists.org/archive/rtai/05-2023
+Best regards,
 
-The last mailing list entries date back to 2024:
-https://www.freelists.org/archive/rtai/11-2024
-
-As the future of the project is unclear and the package is broken with
-newer kernels we remove the package from buildroot.
-
-Fixes:
-https://autobuild.buildroot.net/results/800/800854f679cacdb2f5311dae62f7cd4db4efefa2/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- Config.in.legacy                                   | 12 ++++++++
- .../adding-packages-linux-kernel-spec-infra.adoc   |  4 +--
- linux/Config.ext.in                                | 10 -------
- linux/linux-ext-rtai.mk                            | 30 --------------------
- package/Config.in                                  |  1 -
- package/rtai/Config.in                             |  8 ------
- package/rtai/rtai.hash                             |  2 --
- package/rtai/rtai.mk                               | 32 ----------------------
- 8 files changed, 14 insertions(+), 85 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 970b587a94..a28c8eeef8 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,18 @@ endif
- 
- comment "Legacy options removed in 2026.11"
- 
-+config BR2_PACKAGE_RTAI
-+	bool "RTAI userspace has been removed"
-+	select BR2_LEGACY
-+	help
-+	  RTAI is unmaintained and has been removed
-+
-+config BR2_LINUX_KERNEL_EXT_RTAI
-+	bool "RTAI Real-time kernel patch has been removed"
-+	select BR2_LEGACY
-+	help
-+	  RTAI is unmaintained and has been removed
-+
- config BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	bool "Latest CIP RT SLTS version has been removed"
- 	select BR2_LEGACY
-diff --git a/docs/manual/adding-packages-linux-kernel-spec-infra.adoc b/docs/manual/adding-packages-linux-kernel-spec-infra.adoc
-index 22ffc5496f..c7fbb6184d 100644
---- a/docs/manual/adding-packages-linux-kernel-spec-infra.adoc
-+++ b/docs/manual/adding-packages-linux-kernel-spec-infra.adoc
-@@ -98,8 +98,8 @@ the kernel tree, or in the form of new files to be added to the
- tree. The Buildroot's Linux kernel extensions infrastructure provides
- a simple solution to automatically do this, just after the kernel
- sources are extracted and before the kernel patches are
--applied. Examples of extensions packaged using this mechanism are the
--real-time extensions Xenomai and RTAI.
-+applied. An example of an extension packaged using this mechanism is the
-+real-time extension Xenomai.
- 
- Let's look at an example on how to add a new Linux extension +foo+.
- 
-diff --git a/linux/Config.ext.in b/linux/Config.ext.in
-index f598326121..86af4c338b 100644
---- a/linux/Config.ext.in
-+++ b/linux/Config.ext.in
-@@ -44,16 +44,6 @@ comment "xenomai needs a uClibc or glibc toolchain w/ threads"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_TOOLCHAIN_USES_MUSL
- 
--#-------------------------------------------------------------------------------
--# RTAI
--config BR2_LINUX_KERNEL_EXT_RTAI
--	bool "RTAI Real-time patch"
--	depends on !BR2_LINUX_KERNEL_LATEST_VERSION
--	depends on !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
--	select BR2_PACKAGE_RTAI
--	help
--	  RTAI Kernel part.
--
- # kernel extensions from br2-external trees, if any
- source "$BR2_BASE_DIR/.br2-external.in.linux"
- 
-diff --git a/linux/linux-ext-rtai.mk b/linux/linux-ext-rtai.mk
-deleted file mode 100644
-index 50f79f8d50..0000000000
---- a/linux/linux-ext-rtai.mk
-+++ /dev/null
-@@ -1,30 +0,0 @@
--################################################################################
--#
--# Patch the linux kernel with RTAI extension
--#
--################################################################################
--
--LINUX_EXTENSIONS += rtai
--
--ifeq ($(KERNEL_ARCH),i386)
--RTAI_ARCH = x86
--else ifeq ($(KERNEL_ARCH),x86_64)
--RTAI_ARCH = x86
--else ifeq ($(KERNEL_ARCH),powerpc)
--RTAI_ARCH = ppc
--else
--RTAI_ARCH = $(KERNEL_ARCH)
--endif
--
--# Prepare kernel patch
--define RTAI_PREPARE_KERNEL
--	kver=`$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) --no-print-directory -s kernelversion` ; \
--	if test -f $(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/hal-linux-$${kver}-*patch ; then \
--		$(APPLY_PATCHES) $(LINUX_DIR) \
--			$(RTAI_DIR)/base/arch/$(RTAI_ARCH)/patches/ \
--			hal-linux-$${kver}-*patch ; \
--	else \
--		echo "No RTAI patch for your kernel version" ; \
--		exit 1 ; \
--	fi
--endef
-diff --git a/package/Config.in b/package/Config.in
-index b79f4dcca1..a24c73c2ca 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2736,7 +2736,6 @@ comment "-------------------------------------------------------"
- endmenu
- 
- menu "Real-Time"
--	source "package/rtai/Config.in"
- 	source "package/xenomai/Config.in"
- endmenu
- 
-diff --git a/package/rtai/Config.in b/package/rtai/Config.in
-deleted file mode 100644
-index 14b1854837..0000000000
---- a/package/rtai/Config.in
-+++ /dev/null
-@@ -1,8 +0,0 @@
--config BR2_PACKAGE_RTAI
--	bool "rtai"
--	depends on BR2_LINUX_KERNEL_EXT_RTAI
--	select BR2_LINUX_NEEDS_MODULES # not using kernel-module infra
--	help
--	  RTAI - the RealTime Application Interface for Linux.
--
--	  http://www.rtai.org
-diff --git a/package/rtai/rtai.hash b/package/rtai/rtai.hash
-deleted file mode 100644
-index f2eb7f33ad..0000000000
---- a/package/rtai/rtai.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally computed
--sha256  57acd3ad46cc8f1e01dc21089a24587c59e7328cbac06abb62bb0152de0b9df7  rtai-5.3.tar.bz2
-diff --git a/package/rtai/rtai.mk b/package/rtai/rtai.mk
-deleted file mode 100644
-index 6e189bf27b..0000000000
---- a/package/rtai/rtai.mk
-+++ /dev/null
-@@ -1,32 +0,0 @@
--################################################################################
--#
--# rtai
--#
--################################################################################
--
--RTAI_VERSION = 5.3
--RTAI_SOURCE = rtai-$(RTAI_VERSION).tar.bz2
--RTAI_SITE = https://raw.githubusercontent.com/mmorandi/RTAI/cb3c52f056559c9aaa54d0e1c8c0b47467ae5f3e/userfiles/downloads/RTAI
--RTAI_INSTALL_STAGING = YES
--
--# The <pkg>_CONFIG_SCRIPTS cannot apply here to the specificities of rtai-config
--define RTAI_POST_PATCH_FIXUP
--	$(SED) 's%^staging=.*%staging=$(STAGING_DIR)%' $(STAGING_DIR)/usr/bin/rtai-config
--endef
--
--RTAI_POST_INSTALL_STAGING_HOOKS += RTAI_POST_PATCH_FIXUP
--
--RTAI_DEPENDENCIES = linux
--
--RTAI_CONF_OPTS = \
--	--includedir=/usr/include/rtai \
--	--with-linux-dir=$(LINUX_DIR) \
--	--disable-leds \
--	--enable-usi \
--	--enable-align-priority \
--	--disable-rtailab \
--	--with-module-dir=/lib/modules/$(LINUX_VERSION_PROBED)/rtai
--
--RTAI_MAKE = $(MAKE1)
--
--$(eval $(autotools-package))
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
