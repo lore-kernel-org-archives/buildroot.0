@@ -1,28 +1,28 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D8760958E3
-	for <buildroot@archiver.kernel.org>; Wed,  4 Nov 2026 19:52:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7C1D606C466
+	for <buildroot@archiver.kernel.org>; Wed,  4 Nov 2026 19:52:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=M16twSfb
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=XHsQE3EM
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B4A8460820;
-	Wed,  4 Nov 2026 19:52:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8DF3D81423;
+	Wed,  4 Nov 2026 19:52:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 14PAjoJFhYKi; Wed,  4 Nov 2026 19:52:20 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 9FD1A60760
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793821940;
-	b=FbJfJWpjrtbK981r8NHsIoX8R2KEwzseii074DlgGcpZvi+q26xcWpYJH4DaXawubWfU
-	 QdJ/MkHV9e7zuSJYek3cOwE3ORWmzX4nDHfRCCiDlc0DKOXGXIr3ERRRonp7mFhunlGAF
-	 ggFRdl7/1DTp3G1YpktPse66oLHWmSnPhMZCbndmLO7eADrpN8X0RkovZ0UBGx0M3Kz5M
-	 KY46Y0tJAjcaRvRKYYb3heIotEF2/oABZMFD6Nwp3SzdCZnNiDDZFgvFDs48yjFpQQmVw
-	 c+BjEdlp/b8Uy52xn5/Mxt5Ip0QaR6tSTKQdQ1rpnVxqVAHqbIq9sJnCTiSW93ORJ6Q==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lFewYP5cuhDl; Wed,  4 Nov 2026 19:52:23 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org BAEBA813ED
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793821943;
+	b=oi/PvXQPC3mOU87kDHRA1O7t4j9NWxXzMDp8nOOtApvtoEg81bT7zrE/vy2SaBAeCRW1
+	 cX4tZm+tk0DCNfE6/HEiFiQa/X+aWooJSaYkpiop1pY9EXESywExQfE2+padyDPTn5P5N
+	 uUcjEzNNrgHXtQxkoe3XVPg6QX6YrgZ4W9/cYnI/J3p47YOlFo66k6DYBu9WcBYD8Fni4
+	 MFAXbQxBtR1cHg1q6/jiIN4gX1M3QEEogGIndd3Urs0C4+EOHwQ4oXr6NDkqvyiO+TdYe
+	 zfGIEaasw0X34vXIuHyaeAFhKUdFNEeXs89/Tv24mk5G+IIdYtn8x+m5dtGoLaYNp1A==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793821940;
+	c=relaxed/relaxed; t=1793821943;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,58 +30,58 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=jKUVfKaI+6eYtX5vGeKkHxxZeUf6jOtxYK9kGGf2WMs=;
-	b=iChlM891cEumQeO3qXojanx1CktiIwzv9iyaxt0Y4M4USZ92RqCBehn+msH135ey71mw
-	 GrGJoZaDxudeIf0yyUTca0QFn9VYSAI2694fJn6kfIwHosAWGocLg1PzNpre6CynidPbZ
-	 MH2cececBIcELVXFAsFcuHRKIRMTg3PzgMKUaq/Z14bhVmwlhkaZB69kHsO1etEn14g09
-	 0JtDpnw0Ede7tf/BWtuPyCeaG2yl2tPjxXV1XGSCqsSPUVq/oO7QMDl06H/rWu2gW56Vy
-	 ttoBORm/surEuz89TPR+kZb1HbxJsl5qqCzsl9EMEBb+GKQ1Ht4p11clW5el0GBCJqg==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+	bh=BKJ4nUSstL4DQmzYPV6EGIzbmKdG/vNcmug9sgjPxWg=;
+	b=jh/7ev+oVoXL9DXu5z53ahxyB+ExZtmltIE/49T57UKfdoXHyFWTZc3pB2AA+CG5XMEy
+	 jDwmG5laHM7HHoDDeMfOQPL2uJhXJQOd+5pHKNpUd0XCEwU9vnJwkp4xYgMG+QG62DDuJ
+	 eKrABirQQlgQO4XTLYVBD8uC6IlYsBRlk1ifDEgH82F6sd+ovH1GMLRl5O6r5gEnnONGd
+	 9Ynk7p7hoUNi+7q9oH6SpCECCvro6sI7KoxSZc4Igs5Z3okjbBu3+iWQoQ9rBoMPg3SWS
+	 XpFLKJE5CfG8S/cLKP0yAXiwIFeo8jl7bHfXakjkcB2BCw0pt1eSDiZME/IgEFAjqiw==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793821940;
-	bh=jKUVfKaI+6eYtX5vGeKkHxxZeUf6jOtxYK9kGGf2WMs=;
+	s=default; t=1793821943;
+	bh=BKJ4nUSstL4DQmzYPV6EGIzbmKdG/vNcmug9sgjPxWg=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=M16twSfbHAz+QqSuvnB+N+0UoAnuN7bGUTUDKKfKNDbukID7edfwaP063ZvNWTmcP
-	 jrjsQplo+887KgtJLQJFyfPGeOGeQ1FazMAAoNjqw1lUOi93XRJ2BH1e6hXVs1BQg3
-	 kPKoG8rheO8kd6fFe4x1rWCcykeIOB/tJSHpk35GlSBFDyAm7r8aJ39BwWLF+cJwdH
-	 SNB4TjR1bsTOjwgwERwuGLAYd/RCirU3Ofor87nI6aZnEpGkUADuMENewCyRVD1Tbd
-	 Rkt07OovLd1CZ/6o2Jmywg5qOknLCqA5ZzWoLc4ucbiXfEMAAqxLj6na5fcqNAQnm9
-	 GvyQjRRAY/8kg==
+	b=XHsQE3EM3VyAtw1QzhXvdm2z64xGIA1JhQYh8cmo7JxqGmMjSc6GE+wZoGrHxF8h+
+	 256O0lF910eEE3j618toW7/5v2/8P9ZCYSpPMi0OkwA+NXAyMcuKdd2vhv8Zc9iiwv
+	 930FzRE8KiuZ3ktQXDJlKXBb64SdAuI72geby4aCblsIU0p7heovDDlye5JOpVJEOs
+	 Rk3z0+zi/Kz1sAvzeP1der9EZ9YwCQo0uknhP6sV+AjTA1+BtMFVtkdnVpDsRS1HJg
+	 QyFk6pSrXFx4o5OxQ34dinET3j+oWEbXX36dDoci/nBpFaw1oOOLVEWo02XSYnEeE3
+	 4rbNhDzR+Zx0g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9FD1A60760;
-	Wed,  4 Nov 2026 19:52:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 5E6F6178A
+	by smtp1.osuosl.org (Postfix) with ESMTP id BAEBA813ED;
+	Wed,  4 Nov 2026 19:52:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6D147177B
  for <buildroot@buildroot.org>; Wed,  4 Nov 2026 19:52:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 44E5940935
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5D6B4813EC
  for <buildroot@buildroot.org>; Wed,  4 Nov 2026 19:52:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DjU3Jh7lZsu6 for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TZAKlJtKpWYF for <buildroot@buildroot.org>;
  Wed,  4 Nov 2026 19:52:15 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 87D8140933
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org B7706813C9
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 87D8140933
+ by smtp1.osuosl.org (Postfix) with ESMTP id B7706813C9
  for <buildroot@buildroot.org>; Wed,  4 Nov 2026 19:52:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A93929DD49; Wed,  4 Nov 2026 19:50:44 +0000 (UTC)
+ id E513E9DD98; Wed,  4 Nov 2026 19:50:44 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 4 Nov 2026 20:44:40 +0100
+Date: Wed, 4 Nov 2026 20:46:59 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 06ad1e5012a857b059c8997bbee13b0834209557
-X-Git-Newrev: c7b9193b480483cb8a0bd42bc0c011461ab5f540
+X-Git-Oldrev: 1f6587da68c2bb5fe424b44729743eb243ce3cf1
+X-Git-Newrev: 442a4f86e80ea0b428e8c0bd3584833c8ca2c612
 X-Patchwork-Hint: ignore
-Message-Id: <20261104195044.A93929DD49@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] website: switch to Bootstrap 5 and the
- Bootswatch Materia theme
+Message-Id: <20261104195044.E513E9DD98@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] website/docs: make the PDF and ASCII
+ manual icons clickable
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,53 +105,49 @@ X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c7b9193b480483cb8a0bd42bc0c011461ab5f540
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/442a4f86e80ea0b428e8c0bd3584833c8ca2c612
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-The website uses Bootstrap 3.3.7 with the Bootswatch Paper theme, which
-are unmaintained and affected by known vulnerabilities. Paper is not
-available for newer Bootstrap versions, so switch to Bootstrap 5.3.8
-with the Bootswatch Materia theme, which provides the same material
-design look.
-
-Glyphicons are not shipped anymore with Bootstrap 5, so use Bootstrap
-Icons 1.13.1 instead.
-
-Migrate the markup accordingly:
-- rewrite the navigation bar as a sticky bar, collapsing it below
-  1200px
-- replace panels with Materia cards, the news timeline entries and LTS
-  charts included
-- use the new grid offset, image, float and button classes
-- rewrite the carousel and the git URL input group
-- adapt the tooltip and active menu entry selectors in buildroot.js
-
-Also drop most of the custom styles in favor of the Bootstrap utility
-classes and the Materia defaults: typography, page headers, spacing
-helpers, the LTS numbered lists and the sponsors grid.
+Only the HTML manual icon links to the manual, while the PDF and ASCII
+ones are plain images. Make them link to the stable version of the
+manual too, as the HTML one does.
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/website/association.html |   28 +-
- docs/website/contribute.html  |   20 +-
- docs/website/css/lts.css      |  277 +---
- docs/website/css/main.css     |  212 +--
- docs/website/css/sponsors.css |   40 -
- docs/website/css/timeline.css |    7 -
- docs/website/docs.html        |   52 +-
- docs/website/download.html    |   34 +-
- docs/website/footer.html      |    2 +-
- docs/website/header.html      |   69 +-
- docs/website/index.html       |  138 +-
- docs/website/js/buildroot.js  |    4 +-
- docs/website/lts.html         |  425 +++---
- docs/website/news.html        | 3020 ++++++++++++++++++++---------------------
- docs/website/sponsors.html    |  466 +++----
- docs/website/support.html     |   46 +-
- 16 files changed, 2219 insertions(+), 2621 deletions(-)
+ docs/website/docs.html | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Patch is too large, so refusing to show it
+diff --git a/docs/website/docs.html b/docs/website/docs.html
+index 036fe10b74..38f1996c4a 100644
+--- a/docs/website/docs.html
++++ b/docs/website/docs.html
+@@ -35,10 +35,10 @@
+ 	  <div class="flip-container mx-auto" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<img src="images/pdf-icon.png" width="180" alt="">
++		<a href="/downloads/manual/manual.pdf"><img src="images/pdf-icon.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<img src="images/pdf-icon.png" width="180" alt="">
++		<a href="/downloads/manual/manual.pdf"><img src="images/pdf-icon.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
+@@ -54,10 +54,10 @@
+ 	  <div class="flip-container mx-auto" ontouchstart="this.classList.toggle('hover');">
+ 	    <div class="flipper">
+ 	      <div class="front">
+-		<img src="images/text.png" width="180" alt="">
++		<a href="/downloads/manual/manual.text"><img src="images/text.png" width="180" alt=""></a>
+ 	      </div>
+ 	      <div class="back">
+-		<img src="images/text.png" width="180" alt="">
++		<a href="/downloads/manual/manual.text"><img src="images/text.png" width="180" alt=""></a>
+ 	      </div>
+ 	    </div>
+ 	  </div>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
