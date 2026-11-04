@@ -2,27 +2,27 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96725606A328
-	for <buildroot@archiver.kernel.org>; Wed,  4 Nov 2026 18:04:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F48C606A328
+	for <buildroot@archiver.kernel.org>; Wed,  4 Nov 2026 18:04:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Zd5nhJCd
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=bYitrFMF
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 51F67811A6;
-	Wed,  4 Nov 2026 18:04:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 547D580893;
+	Wed,  4 Nov 2026 18:04:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gYEPsE-JJWEu; Wed,  4 Nov 2026 18:03:59 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 93B7381EEF
+ id YiHv4A2GdUR0; Wed,  4 Nov 2026 18:04:02 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 6A76C820B2
 Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793815417;
-	b=c2kufy/rSh8hk63V8Wsuc2PVE3iIBCdbhpl3ETckdoABedlFSyJxiswM9RAhjVijTiGH
-	 IYZfIOWEjamOagy8fTSuq92h3DrJybJdFVR6/4I6hMWUIHRg3Cznnv1bTpGjfonHyclUw
-	 vpSuia7JtuJfkOCSG/7eETfDiNDUniTkGuQ8WKjUPMPe1ObFpsVckWKv+z29kohjtArVH
-	 0OElVz15oPJDFVmij5WZ2uuTe2j++k+hNOgFe+IGZfe/gT49sW5pfUyvcCxZlQn/v+n2a
-	 o1WT7QzkfH2+2N66TkT6vDonojcRior+ImTVyu7d8nbbPprGSQfErT0rCDQsgdP6LxA==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793815419;
+	b=IUhXD/XBiyxFYHok26yZoFY4lgJ83e9xmLJv+y9d7EtD/Ehe6DJTukxhl0QlGhheoRcP
+	 gfun/qvo6jfpaU/PRetKLnOn7XwD6Im3vzQljIqRFcF0x/7HZVSOnM++A2RXY2Q6EyNxo
+	 TW9BGIn+WN7oX02/6iBUsU3azpNYEljQCDpURr8sdRKLEHYGQWrA9XCfVRyS1jMJwis3s
+	 jg7jpYv/dDBBexQotF1rN1F2RHmriYdWwllqFEWNXRK84EZqmy1W1dIaAXUAhBrxoOBZ+
+	 Funo9225my1XxTYxdzs06zXDt/bwuO8F3/CVbZr/JFaBCS3sLMg6ihVJanC9kco/i/Q==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793815417;
+	c=relaxed/relaxed; t=1793815419;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,58 +30,57 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=nURvfBBDx0VKqgFngkUT1e68+1KQ3sEoqz+O9T5B7hg=;
-	b=m4ZNlVYFyYA6fEewuKmiWAi7njiVDZSXqF9oWkHg3ZBvi/MjRfOjA+ZukUhuKLux/oj9
-	 MHUUvskwV4FxdZv3trVHp/FCC5EX6tgkCi+ZkpxOS+mN3bbi+vmz0TuoVwXnr1FRo0497
-	 jESAudNs/uaiXHqxjWtQXbbLqJNCdN/rqpE0BB75NqeMq32rXg2fyzW3DIrHx4JavraHs
-	 gC3tN3pG9W4BsGVVFbqvO7fDtEYHZ/0LMfbYutFMOrKSws0j4cttivMUho69YjY2Ajzwv
-	 oK/TxZvDmll49lTlr5mV2nNc9jeac8RlcSyoSKFvMTzgzO1gkHz7RfP6BW3q16+lDZg==
+	bh=AXbB+o2C4ERo3PLtc4YxXVro2WE+AbujrGMsyMw9byA=;
+	b=ESY8mcX1IkJK8nIGFKrmf/StwCBo/wOf1QBWHa41MGnN3sxaYSsTxj2TbCwOpkZ9Ahdm
+	 Z58BxtSexWZtQqHDvse4O/jrNZ05ChuAxfwd+A+v2KD2daFCCPKqBzeUlcnpkLbeoNW4j
+	 ZjqMr+Fp+iOlgPuT00JIFPAlLGQK0Cvhb3Yf+t1+2cTBNTkxZSReAzL/dWPUziMNSFj/L
+	 Hk+sGyXWzy9VoxhEmOEGB2ucuwho6v/cTf7v41shQFBY3Iw8k6OJzvRo3pfSNpwbabtBP
+	 Ws8L4M9k3KiW8mHkF3PXqhbJtDjz/lZH1GEjUmTs+/pTf2+/s9tnavUovuhLKAUdPrA==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793815417;
-	bh=nURvfBBDx0VKqgFngkUT1e68+1KQ3sEoqz+O9T5B7hg=;
+	s=default; t=1793815419;
+	bh=AXbB+o2C4ERo3PLtc4YxXVro2WE+AbujrGMsyMw9byA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Zd5nhJCdWSbhIDztbVUaD9RnHOdnpa9vVHG/Edje0v99LR09ZXmj1j/q/9Eirn2KR
-	 zP4rxTkJu6BDlVu0j6I01k/SLMBiWes76H1LsgQ32n43tT+5hFmWRJ1B75gtUQKomT
-	 w4kYxQiLpJ6axzsgUTkgA8aFbEFd3N7b66cQI05JuKhk0lYwJsdDqLnczAd+NfvRyM
-	 EvFPQmX/VTyZm/im7WLHQY2IwYiv6Jyz8imPSrUqZ3UTm/jh8PrlNtEeat/zBQMg1q
-	 aFOBatN5thJXOiXrOGhfx6+v7s+8NsDdj4Hl5SEoc0qggpAXNtPksBZIjoTCekCfbb
-	 efR8FN2aYH7/g==
+	b=bYitrFMF11zjlfnjEVRk2RXxaD1Ibw+P9CghPqlQGJwez8SV5fGuWvLYA6HhdKTlE
+	 lraQx1kwlgODsvaM3Szr4DFyERjJSvuesCq+p3Qm++LguEpURAtfpjBqL9O9femU6T
+	 iKQC/7cNu3O6V7eY0Lvewrz6phuk+VoFXr2ogs5ZDQVJnyqEn1IMb9UCRNvtTrpWFe
+	 a8NHJNAIXProDjnjSNCfRAD/Del5isC5BCBl9/EWdHsQT0N5gdGY6onmVLK0L4gYYZ
+	 PXs69dC20HMqEevKSHS3t2iTphI588PAQljXEVYDi7Yw4ay73l9gmm6uCsJO5NpiuV
+	 a5C+p2d6OLcAw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 93B7381EEF;
-	Wed,  4 Nov 2026 18:03:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B8F75177B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A76C820B2;
+	Wed,  4 Nov 2026 18:03:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id CA243177D
  for <buildroot@buildroot.org>; Wed,  4 Nov 2026 18:03:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 993BC416FB
+ by smtp2.osuosl.org (Postfix) with ESMTP id BB808416FC
  for <buildroot@buildroot.org>; Wed,  4 Nov 2026 18:03:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tMthsWEHbWqT for <buildroot@buildroot.org>;
+ id WTbAh-7PrhQT for <buildroot@buildroot.org>;
  Wed,  4 Nov 2026 18:03:34 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 8D64040E28
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 8E68040FAA
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8D64040E28
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8E68040FAA
  for <buildroot@buildroot.org>; Wed,  4 Nov 2026 18:03:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 662049DCEE; Wed,  4 Nov 2026 18:01:39 +0000 (UTC)
+ id BEFB59DC83; Wed,  4 Nov 2026 18:01:39 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Wed, 4 Nov 2026 19:01:17 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 78f0de27ff99d1fe65aada26e3b3de18641f11c2
-X-Git-Newrev: 62fd1257ea99a36c43426b7a441db84164e8650c
+X-Git-Oldrev: 62fd1257ea99a36c43426b7a441db84164e8650c
+X-Git-Newrev: 7c0c0c5d131d5e5b8b7a1c7fd1e966d68d664653
 X-Patchwork-Hint: ignore
-Message-Id: <20261104180139.662049DCEE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/systemd: sort {,
- HOST_}SYSTEMD_CONF_OPTS
+Message-Id: <20261104180139.BEFB59DC83@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/systemd: bump version to 259.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,300 +99,181 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
 	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/62fd1257ea99a36c43426b7a441db84164e8650c
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7c0c0c5d131d5e5b8b7a1c7fd1e966d68d664653
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-The same was done before in 15b4d396b9431634d339dde61cb1d52dcf9e0746
-("systemd: sort SYSTEMD_CONF_OPTS"), but ordering was partially lost
-since.
+Changes relevant for packaging:
+* iptables/libiptc is no longer supported, only nftables. The libiptc
+  feature flag is deprecated and has no effect, remove it and the
+  optional dependency. Note that nftables support needs no dependency,
+  only kernel support [1].
+* systemd no longer links against libcap, remove the dependency.
+* `run0 --empower` uses a new "empower" system group, which allows
+  privileged access to polkit actions without running as root. Create
+  the group if polkit support is enabled.
 
-Also assign ("=") instead of append ("+=") for unconditional options.
+New meson options:
+* swapon-path
+* swapoff-path
+* agetty-path
+* journal-storage-default, note that "persistent" is the new
+  default, changed from the previous (non-configurable) "auto"
+* libc, set to "glibc" for now (see below)
+* empower-gid, not set like other gid soft-fix options
+* tpm2-nvpcr-base, not set. The default is based on a range assignment
+  to the systemd project, also setting the default 0x01d10200 would be
+  confusing because Meson does not accept integer options as hex.
 
-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+Systemd 259 also added "incomplete" musl support, that is not enabled
+as part of this version bump. Also note that while the release notes
+contain a list with several increased minimum dependency versions,
+these are warnings for version 260, not actually relevant to this
+update.
+
+Please see the upstream NEWS file for other changes [2].
+
+[1] https://github.com/systemd/systemd/commit/715a70e7218710d6a6c033e9157bf97fdf5d8ede
+[2] https://github.com/systemd/systemd/blob/v259.10/NEWS
+
+Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/systemd/systemd.mk | 198 ++++++++++++++++++++++-----------------------
- 1 file changed, 99 insertions(+), 99 deletions(-)
+ package/systemd/Config.in    |  1 -
+ package/systemd/systemd.hash |  2 +-
+ package/systemd/systemd.mk   | 20 +++++++++-----------
+ 3 files changed, 10 insertions(+), 13 deletions(-)
 
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 4c19a884b4..6b1298069a 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -29,7 +29,6 @@ menuconfig BR2_PACKAGE_SYSTEMD
+ 	select BR2_PACKAGE_HAS_LIBUDEV
+ 	select BR2_PACKAGE_HAS_UDEV
+ 	select BR2_PACKAGE_DBUS if !BR2_PACKAGE_DBUS_BROKER # runtime
+-	select BR2_PACKAGE_LIBCAP
+ 	select BR2_PACKAGE_LIBXCRYPT
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBS
+diff --git a/package/systemd/systemd.hash b/package/systemd/systemd.hash
+index cb652998cd..7164af23e5 100644
+--- a/package/systemd/systemd.hash
++++ b/package/systemd/systemd.hash
+@@ -1,5 +1,5 @@
+ # sha256 locally computed
+-sha256  5062da9c9b0b6fd3ed0efaa2c6ec37be2e634c6e516abd6275ee42f85282c891  systemd-258.12.tar.gz
++sha256  f9a3f1e21e4dd78717bad0888638954467a55d73cab44a2c7a75c5bed47ef814  systemd-259.10.tar.gz
+ sha256  ac4985facb553559981f507982444d779115e3e3a4c8b7847ae956198490c1b3  LICENSE.GPL2
+ sha256  6d9bb3b7fc818a8facc4cc296060a0883fef8710d6498f86165335846e82ee9d  LICENSE.LGPL2.1
+ sha256  c9e7bf5b7c243c719b8b43c36158effb9b54c5e80abc9d82e4b2d4b2a4aa64ad  LICENSES/alg-sha1-public-domain.txt
 diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-index 7a73a06bb4..4476b92886 100644
+index 4476b92886..5787decec8 100644
 --- a/package/systemd/systemd.mk
 +++ b/package/systemd/systemd.mk
-@@ -64,30 +64,34 @@ SYSTEMD_SELINUX_MODULES = systemd udev xdg
- 
+@@ -19,7 +19,7 @@
+ # - Diff sysusers.d with the previous version
+ # - Diff factory/etc/nsswitch.conf with the previous version
+ #   (details are often sprinkled around in README and manpages)
+-SYSTEMD_VERSION = 258.12
++SYSTEMD_VERSION = 259.10
+ SYSTEMD_SITE = $(call github,systemd,systemd,v$(SYSTEMD_VERSION))
+ SYSTEMD_LICENSE = \
+ 	LGPL-2.1+, \
+@@ -55,7 +55,6 @@ SYSTEMD_DEPENDENCIES = \
+ 	host-gperf \
+ 	host-python-jinja2 \
+ 	kmod \
+-	libcap \
+ 	libxcrypt \
+ 	util-linux-libs \
+ 	$(TARGET_NLS_DEPENDENCIES)
+@@ -65,6 +64,7 @@ SYSTEMD_SELINUX_MODULES = systemd udev xdg
  SYSTEMD_PROVIDES = libudev udev
  
--SYSTEMD_CONF_OPTS += \
-+SYSTEMD_CONF_OPTS = \
-+	-Dbpf-framework=disabled \
+ SYSTEMD_CONF_OPTS = \
++	-Dagetty-path=/usr/bin/agetty \
+ 	-Dbpf-framework=disabled \
  	-Dcreate-log-dirs=false \
--	-Ddbus=disabled \
  	-Ddbus-interfaces-dir=no \
-+	-Ddbus=disabled \
- 	-Ddefault-compression='auto' \
- 	-Ddefault-locale='C.UTF-8' \
- 	-Ddefault-user-shell=/bin/sh \
- 	-Dfirst-boot-full-preset=false \
-+	-Dfuzz-tests=false \
- 	-Didn=true \
+@@ -78,9 +78,11 @@ SYSTEMD_CONF_OPTS = \
  	-Dima=false \
-+	-Dinstall-tests=false \
+ 	-Dinstall-tests=false \
  	-Dipe=false \
++	-Djournal-storage-default=persistent \
  	-Dkexec-path=/usr/sbin/kexec \
  	-Dkmod-path=/usr/bin/kmod \
  	-Dldconfig=false \
-+	-Dlibfido2=disabled \
-+	-Dlibmount=enabled \
++	-Dlibc=glibc \
+ 	-Dlibfido2=disabled \
+ 	-Dlibmount=enabled \
  	-Dlink-boot-shared=true \
- 	-Dloadkeys-path=/usr/bin/loadkeys \
-+	-Dlog-message-verification=disabled \
- 	-Dman=disabled \
--	-Dmount-path=/usr/bin/mount \
--	-Dvcs-tag=false \
- 	-Dmode=release \
-+	-Dmount-path=/usr/bin/mount \
- 	-Dnspawn-locale='C.UTF-8' \
- 	-Dnss-systemd=true \
- 	-Dpasswdqc=disabled \
--	-Dlibfido2=disabled \
- 	-Dquotacheck-path=/usr/sbin/quotacheck \
- 	-Dquotaon-path=/usr/sbin/quotaon \
+@@ -97,6 +99,8 @@ SYSTEMD_CONF_OPTS = \
  	-Dsetfont-path=/usr/bin/setfont \
-@@ -95,20 +99,16 @@ SYSTEMD_CONF_OPTS += \
+ 	-Dsplit-bin=true \
  	-Dsulogin-path=/usr/sbin/sulogin \
++	-Dswapoff-path=/usr/sbin/swapoff \
++	-Dswapon-path=/usr/sbin/swapon \
  	-Dsystem-gid-max=999 \
  	-Dsystem-uid-max=999 \
-+	-Dsysupdated=disabled \
- 	-Dsysvinit-path= \
- 	-Dsysvrcnd-path= \
- 	-Dtests=false \
--	-Dfuzz-tests=false \
--	-Dinstall-tests=false \
--	-Dlog-message-verification=disabled \
--	-Dsysupdated=disabled \
- 	-Dtmpfiles=true \
- 	-Dukify=disabled \
--	-Dbpf-framework=disabled \
--	-Dvmlinux-h=disabled \
- 	-Dumount-path=/usr/bin/umount \
--	-Dxenctrl=disabled \
--	-Dlibmount=enabled
-+	-Dvcs-tag=false \
-+	-Dvmlinux-h=disabled \
-+	-Dxenctrl=disabled
+ 	-Dsysupdated=disabled \
+@@ -174,13 +178,6 @@ else
+ SYSTEMD_CONF_OPTS += -Delfutils=disabled
+ endif
  
- SYSTEMD_CFLAGS = $(TARGET_CFLAGS)
- ifeq ($(BR2_OPTIMIZE_FAST),y)
-@@ -892,118 +892,118 @@ endef
+-ifeq ($(BR2_PACKAGE_IPTABLES),y)
+-SYSTEMD_DEPENDENCIES += iptables
+-SYSTEMD_CONF_OPTS += -Dlibiptc=enabled
+-else
+-SYSTEMD_CONF_OPTS += -Dlibiptc=disabled
+-endif
+-
+ # Both options can't be selected at the same time so prefer libidn2
+ ifeq ($(BR2_PACKAGE_LIBIDN2),y)
+ SYSTEMD_DEPENDENCIES += libidn2
+@@ -539,6 +536,7 @@ endif
+ ifeq ($(BR2_PACKAGE_SYSTEMD_POLKIT),y)
+ SYSTEMD_CONF_OPTS += -Dpolkit=enabled
+ SYSTEMD_DEPENDENCIES += polkit
++SYSTEMD_POLKIT_USER = - - empower -1 * - - - Privileged access to polkit actions
+ else
+ SYSTEMD_CONF_OPTS += -Dpolkit=disabled
+ endif
+@@ -709,6 +707,7 @@ define SYSTEMD_USERS
+ 	$(SYSTEMD_NETWORKD_USER)
+ 	$(SYSTEMD_RESOLVED_USER)
+ 	$(SYSTEMD_TIMESYNCD_USER)
++	$(SYSTEMD_POLKIT_USER)
+ endef
  
- # We need a very minimal host variant, so we disable as much as possible.
- HOST_SYSTEMD_CONF_OPTS = \
--	-Dsplit-bin=true \
- 	--prefix=/usr \
- 	--libdir=lib \
- 	--sysconfdir=/etc \
- 	--localstatedir=/var \
--	-Dcreate-log-dirs=false \
--	-Dvcs-tag=false \
--	-Dmode=release \
--	-Dutmp=false \
--	-Dhibernate=false \
--	-Dldconfig=false \
--	-Dresolve=false \
--	-Dbootloader=disabled \
--	-Defi=false \
--	-Dtpm=false \
--	-Denvironment-d=false \
-+	-Dacl=disabled \
-+	-Dadm-group=false \
-+	-Danalyze=false \
-+	-Dapparmor=disabled \
-+	-Daudit=disabled \
-+	-Dbacklight=false \
- 	-Dbinfmt=false \
--	-Drepart=disabled \
-+	-Dbootloader=disabled \
-+	-Dbpf-framework=disabled \
-+	-Dbzip2=disabled \
- 	-Dcoredump=false \
--	-Ddbus=disabled \
-+	-Dcreate-log-dirs=false \
-+	-Dcreate-log-dirs=false \
- 	-Ddbus-interfaces-dir=no \
--	-Dpstore=false \
--	-Doomd=false \
--	-Dlogind=false \
-+	-Ddbus=disabled \
-+	-Defi=false \
-+	-Delfutils=disabled \
-+	-Denvironment-d=false \
-+	-Dfdisk=disabled \
-+	-Dfirstboot=false \
-+	-Dfuzz-tests=false \
-+	-Dgcrypt=disabled \
-+	-Dglib=disabled \
-+	-Dgnutls=disabled \
-+	-Dgshadow=false \
-+	-Dhibernate=false \
-+	-Dhomed=disabled \
- 	-Dhostnamed=false \
-+	-Dhtml=disabled \
-+	-Dhwdb=true \
-+	-Didn=false \
-+	-Dima=false \
-+	-Dimportd=disabled \
-+	-Dinitrd=false \
-+	-Dinstall-tests=false \
-+	-Dkernel-install=false \
-+	-Dkmod=disabled \
-+	-Dldconfig=false \
-+	-Dlibarchive=disabled \
-+	-Dlibcryptsetup-plugins=disabled \
-+	-Dlibcryptsetup=disabled \
-+	-Dlibcurl=disabled \
-+	-Dlibfido2=disabled \
-+	-Dlibidn2=disabled \
-+	-Dlibidn=disabled \
-+	-Dlibiptc=disabled \
-+	-Dlibmount=enabled \
- 	-Dlocaled=false \
-+	-Dlog-message-verification=disabled \
-+	-Dlogind=false \
-+	-Dlz4=disabled \
- 	-Dmachined=false \
--	-Dpasswdqc=disabled \
--	-Dportabled=false \
--	-Dsysext=false \
--	-Dsysupdate=disabled \
-+	-Dman=disabled \
-+	-Dmicrohttpd=disabled \
-+	-Dmode=release \
- 	-Dmountfsd=false \
--	-Duserdb=false \
--	-Dhomed=disabled \
- 	-Dnetworkd=false \
--	-Dtimedated=false \
--	-Dtimesyncd=false \
--	-Dremote=disabled \
--	-Dcreate-log-dirs=false \
-+	-Dnspawn=disabled \
- 	-Dnsresourced=false \
- 	-Dnss-myhostname=false \
- 	-Dnss-mymachines=disabled \
- 	-Dnss-resolve=disabled \
- 	-Dnss-systemd=false \
--	-Dfirstboot=false \
--	-Drandomseed=false \
--	-Dbacklight=false \
--	-Dvconsole=false \
--	-Dvmspawn=disabled \
-+	-Doomd=false \
-+	-Dp11kit=disabled \
-+	-Dpam=disabled \
-+	-Dpasswdqc=disabled \
-+	-Dpcre2=disabled \
-+	-Dpolkit=disabled \
-+	-Dportabled=false \
-+	-Dpstore=false \
-+	-Dpwquality=disabled \
-+	-Dqrencode=disabled \
- 	-Dquotacheck=false \
--	-Dsysusers=false \
--	-Dstoragetm=false \
--	-Dtmpfiles=true \
--	-Dimportd=disabled \
--	-Dhwdb=true \
-+	-Drandomseed=false \
-+	-Dremote=disabled \
-+	-Drepart=disabled \
-+	-Dresolve=false \
- 	-Drfkill=false \
--	-Dman=disabled \
--	-Dhtml=disabled \
-+	-Dseccomp=disabled \
-+	-Dselinux=disabled \
- 	-Dsmack=false \
--	-Dpolkit=disabled \
--	-Didn=false \
--	-Dadm-group=false \
--	-Dwheel-group=false \
--	-Dzlib=disabled \
--	-Dgshadow=false \
--	-Dima=false \
--	-Dtests=false \
--	-Dfuzz-tests=false \
--	-Dinstall-tests=false \
--	-Dlog-message-verification=disabled \
--	-Dglib=disabled \
--	-Dlibarchive=disabled \
--	-Dacl=disabled \
-+	-Dsplit-bin=true \
-+	-Dstoragetm=false \
-+	-Dsysext=false \
-+	-Dsysupdate=disabled \
-+	-Dsysupdated=disabled \
-+	-Dsysusers=false \
- 	-Dsysvinit-path='' \
--	-Dinitrd=false \
--	-Dxdg-autostart=false \
--	-Dkernel-install=false \
-+	-Dtests=false \
-+	-Dtimedated=false \
-+	-Dtimesyncd=false \
-+	-Dtmpfiles=true \
-+	-Dtpm=false \
- 	-Dukify=enabled \
--	-Danalyze=false \
--	-Dbpf-framework=disabled \
-+	-Duserdb=false \
-+	-Dutmp=false \
-+	-Dvconsole=false \
-+	-Dvcs-tag=false \
- 	-Dvmlinux-h=disabled \
--	-Dpwquality=disabled \
--	-Dmicrohttpd=disabled \
--	-Dqrencode=disabled \
--	-Dselinux=disabled \
--	-Dlibcryptsetup=disabled \
--	-Dlibcryptsetup-plugins=disabled \
--	-Delfutils=disabled \
+ define SYSTEMD_INSTALL_NSSCONFIG_HOOK
+@@ -935,13 +934,13 @@ HOST_SYSTEMD_CONF_OPTS = \
+ 	-Dkmod=disabled \
+ 	-Dldconfig=false \
+ 	-Dlibarchive=disabled \
++	-Dlibc=glibc \
+ 	-Dlibcryptsetup-plugins=disabled \
+ 	-Dlibcryptsetup=disabled \
+ 	-Dlibcurl=disabled \
+ 	-Dlibfido2=disabled \
+ 	-Dlibidn2=disabled \
+ 	-Dlibidn=disabled \
 -	-Dlibiptc=disabled \
--	-Dapparmor=disabled \
--	-Daudit=disabled \
-+	-Dvmspawn=disabled \
-+	-Dwheel-group=false \
-+	-Dxdg-autostart=false \
- 	-Dxenctrl=disabled \
--	-Dlibidn2=disabled \
--	-Dlibidn=disabled \
--	-Dseccomp=disabled \
- 	-Dxkbcommon=disabled \
--	-Dbzip2=disabled \
--	-Dzstd=disabled \
--	-Dlz4=disabled \
--	-Dpam=disabled \
--	-Dfdisk=disabled \
--	-Dkmod=disabled \
- 	-Dxz=disabled \
--	-Dlibcurl=disabled \
--	-Dgcrypt=disabled \
--	-Dgnutls=disabled \
--	-Dp11kit=disabled \
--	-Dlibfido2=disabled \
--	-Dpcre2=disabled \
--	-Dsysupdated=disabled \
--	-Dnspawn=disabled \
--	-Dlibmount=enabled
-+	-Dzlib=disabled \
-+	-Dzstd=disabled
- 
- HOST_SYSTEMD_DEPENDENCIES = \
+ 	-Dlibmount=enabled \
+ 	-Dlocaled=false \
+ 	-Dlog-message-verification=disabled \
+@@ -1009,7 +1008,6 @@ HOST_SYSTEMD_DEPENDENCIES = \
  	$(BR2_COREUTILS_HOST_DEPENDENCY) \
+ 	host-util-linux \
+ 	host-patchelf \
+-	host-libcap \
+ 	host-libxcrypt \
+ 	host-gperf \
+ 	host-python-jinja2 \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
