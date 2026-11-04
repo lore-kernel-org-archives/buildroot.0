@@ -2,27 +2,27 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6CBF606D809
-	for <buildroot@archiver.kernel.org>; Wed,  4 Nov 2026 21:06:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23FEB606D809
+	for <buildroot@archiver.kernel.org>; Wed,  4 Nov 2026 21:06:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=QThswCSY
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Q8IH1Ux7
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B6884092C;
-	Wed,  4 Nov 2026 21:06:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F3E6D408F0;
+	Wed,  4 Nov 2026 21:06:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 64iDGxmurEAu; Wed,  4 Nov 2026 21:06:48 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 7A5AF40910
+ id 1wIjZKgL8pUF; Wed,  4 Nov 2026 21:06:50 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 267E940930
 Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793826408;
-	b=FpAuZTtFUm55oay1ixrkBx2VC6UMFvVLxYCW2HGgEh2hBtEpg49506DAJpdFzgIQr6kK
-	 N1HfcjsczCDpyha+q50v4osoS+AVWLH2UcKVSqz+gb31xrmvBtbu+1EEy3kcpCqZRGpBC
-	 6sPb0NvLBTSJOT/gzeNuReBavDktsiyFGbWgSkQNV6Z6sM4ifLMnIYS9Gn/up92rppfJa
-	 kFr+7d+yUqOeN9wpjcXDPxSDybb17OBt/koQccTm3kOSicvttiKZQT3HqIluAWq7+TS9d
-	 vV8pYDI9p6cUHMT6SRVZseGwDugKlNn2U9pIMUU1pixqBmFrmNNKtcJe8kC4YKcu6dg==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793826410;
+	b=QowHxcOiRLT+RIZKG1CmTgS1iVQ0UHxoYu/6lHqjblGsT241H7Acsc/pXkgAVKNVny4h
+	 1uqDoaT0iG8fPcEksKzy0n54UxlqIzV97oU160YlAShKTmX/c2repK4huF/vRQpg1L8Ul
+	 XH3rzH4uqlzPXevV8X8vdeuuC+/VfukP5lpaVm8B7eBn2PlUu0dCXZPJDE7ouCS1O0kSB
+	 5NevM7ZbQhvC1aPQjRaaWDnyX5Mzq1agjtgPoo+Ld/qSw3ymdjr+7K3PpTq3yWM7z4rJd
+	 CYvjAHQsyu2JPxP4gPf+0oLvWFIjTEnj4eH/4ivIY0Qg/ltiKxJpZbLdUN7Ly1mBlWg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793826408;
+	c=relaxed/relaxed; t=1793826410;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,57 +30,58 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=0z7FG+cZEg4Q/ExftmH2LbuLRyYOqb4j8j2iMb8IOF4=;
-	b=EdiD66l+IKKPRI14Xt+ySMfLljtioRwEGR7Bzyk3Nc1qxJJUMsXgRfayuNHqc0HaF/Sq
-	 ahiApDdCzfI9WyRIqDW+o2OcNghd5FxqApbEhByMfZZXis63cLIsL3NNmWubdNwTpudBx
-	 STSZsHiPo6YAVfrWSBdnQllz7DlF3t67XvjONau5VEg+4nCN11JNkwmNeG9zs2uXmR5AF
-	 oZD60CuYjRl9c5qBtfROF9AQFuNeCpSSw5UzrU3v3LL1zvVCTk5zxjEczJtSx/aGp0gMB
-	 7hEqjUSMP0Oa5I37JsDzQlGV3cuod/oj600sN7OXBFCLq35AYecEPXtiCiMySwIQmLQ==
+	bh=5BkMVzCE1Zn9juXmuiJizNUWJkAG4qPqyrLx7Q7HEC8=;
+	b=fFOXSnmVn5iUrnuvDR6HvxgNM77lXskl+QEmO6tCTipTekiWRLq8rKANDTiQ3Kgo5Rs+
+	 I2oeLf2Pl/lbkcyGadJe1RYJi+cE/blvEQVPrr8xpcNdNULAzmTy+ftUtfZEOAuz2eSAA
+	 OCT6CBdK+jw8IMBu+LDwbEnQhRNxLaifcdFJwCZPK5T5MBTCflj1ecrvN2aD/wjzgzEAJ
+	 jf6K4rOnjt7Pw7mA7O0Ocqw3+rKvklO9iguz+jyL2WUVicUUYaTGG4EX+YMF/Er4cOz/c
+	 OHJa/oo7h8BP+xDRXUmdeyNathZOOvcqW6RdO9x38omhn1ZaqoFtenzvuBFjfEhvwlw==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793826408;
-	bh=0z7FG+cZEg4Q/ExftmH2LbuLRyYOqb4j8j2iMb8IOF4=;
+	s=default; t=1793826410;
+	bh=5BkMVzCE1Zn9juXmuiJizNUWJkAG4qPqyrLx7Q7HEC8=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=QThswCSYbvLbNKmaGV2/XoFQnI5STw/lKsic6t+K7yZBhVLssnyGkQyB7nszX2oPT
-	 InCwkJ9SR3djDI4bSRuPdA+wgPmMQgGA5Ncu1hraJsNlA+XcC175m2lIBbbW1em3MS
-	 ymCYv/Qg7Klb11QDgSdsVrMJkXWtXvTF3/xCxO+O8mZi2WJ5eZG2SvVeB8E6vdRLrQ
-	 ELRbgCJ6SVI6FV6eWsD0l2rNzKE4o8jR+5Hkx65j4mmlfmDC1PDaGc06Pv/yis3ifD
-	 +G1C27QfyOT1HyHtsRsPMvMj0oND+E/nlAXfRe33Z1AqJWnxOclItMMaJx/IZ/RoJK
-	 N+2z/ngLnyQ+A==
+	b=Q8IH1Ux7CNA4V0fD3uIg1r+NYu3igaDoVPCra/T1IHDOdq76VFH6gn919tqKtXxFV
+	 aRwtpW6AKlfdPSiOcbBBxqeMCYraa7uFTeIZNnHjIFELa3A0eAr/YQB8m+6p2hPWVr
+	 zWeBHvFNR4sn/CzAONju3gL7j0vCUeZx7M3h2Frzi5aFGF6nX5ENvw73WQnzIXNPlP
+	 xahpPIhZS7WQvETdKHTZvgqYVRzD5VhYJtiEWnvvfN1rHpbz69IfldFUJnFyfUFXop
+	 kQzEKj+Kl0c4D0wiouEiNTep1ToQ5oTVIyBxvswLkALooj+/7luwwk+o9+aKQdTyJD
+	 Mh0qlloXmyxMQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7A5AF40910;
-	Wed,  4 Nov 2026 21:06:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id D36A71790
+	by smtp4.osuosl.org (Postfix) with ESMTP id 267E940930;
+	Wed,  4 Nov 2026 21:06:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id AFA9DB00
  for <buildroot@buildroot.org>; Wed,  4 Nov 2026 21:06:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B8E4F6078E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 910B8408AC
  for <buildroot@buildroot.org>; Wed,  4 Nov 2026 21:06:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NzZIFUGJymOs for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wXDI2q9SMUA0 for <buildroot@buildroot.org>;
  Wed,  4 Nov 2026 21:06:35 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org E0AE1607F7
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org EF31D408AB
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E0AE1607F7
+ by smtp4.osuosl.org (Postfix) with ESMTP id EF31D408AB
  for <buildroot@buildroot.org>; Wed,  4 Nov 2026 21:06:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 144E29DE69; Wed,  4 Nov 2026 21:05:04 +0000 (UTC)
+ id 233C79DE7B; Wed,  4 Nov 2026 21:05:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 4 Nov 2026 22:06:14 +0100
+Date: Wed, 4 Nov 2026 22:06:21 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 48a835ba2b00334518e60e7c02f4eb3c17e1fa06
-X-Git-Newrev: 48053a2861fbd03da67022769d7decd03072d380
+X-Git-Oldrev: 48053a2861fbd03da67022769d7decd03072d380
+X-Git-Newrev: 9fead9bc6853081f90554b8c4fe6516606d442a2
 X-Patchwork-Hint: ignore
-Message-Id: <20261104210504.144E29DE69@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] website: escape the bare ampersands
+Message-Id: <20261104210504.233C79DE7B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] DEVELOPERS: add Angelo Compagnucci for the
+ website
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,77 +100,35 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
 	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/48053a2861fbd03da67022769d7decd03072d380
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9fead9bc6853081f90554b8c4fe6516606d442a2
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-The news and LTS pages use bare ampersands, in text and in the mailto
-links of the LTS sponsorship buttons, which is not valid HTML.
-
-Escape them as &amp;. The links are unchanged, as the browser decodes
-the attribute values.
+I reworked the website with Bootstrap 5 and I'm going to follow its
+maintenance as well.
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/website/lts.html  | 8 ++++----
- docs/website/news.html | 2 +-
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/docs/website/lts.html b/docs/website/lts.html
-index 4308a37a4d..3b58cbff0f 100644
---- a/docs/website/lts.html
-+++ b/docs/website/lts.html
-@@ -38,7 +38,7 @@
-         <span class="badge rounded-pill text-bg-primary fs-5 align-self-start">2</span>
-         <div>
-             <h3 class="h4 text-body-secondary">
--                Vulnerability tracking & reporting
-+                Vulnerability tracking &amp; reporting
-             </h3>
-             <p class="mb-0">
-             Tracking of the vulnerabilities affecting Buildroot
-@@ -264,7 +264,7 @@
-               </td>
-             </tr>
-             <tr>
--              <th scope="row">Analysis & commit annotation</th>
-+              <th scope="row">Analysis &amp; commit annotation</th>
-               <td>
-                 <div class="row g-0">
-                   <div class="col-6 px-1"><span class="badge text-bg-primary d-block text-truncate">&nbsp;</span></div>
-@@ -401,12 +401,12 @@
-     <div class="card-body">
-     <p>
-     Interested ? Contact us at
--    <a href="mailto:buildroot-lts@buildroot.org?subject=[buildroot-lts] Sponsorship information&body=Thanks for showing interest in the Buildroot LTS Sponsorship. We would appreciate if you could introduce yourself and your company by answering the following questions: in which products do you use Buildroot ? How are you using Buildroot ? How many different configurations do you have ? How long do you support your products ?">buildroot-lts@buildroot.org</a>
-+    <a href="mailto:buildroot-lts@buildroot.org?subject=[buildroot-lts] Sponsorship information&amp;body=Thanks for showing interest in the Buildroot LTS Sponsorship. We would appreciate if you could introduce yourself and your company by answering the following questions: in which products do you use Buildroot ? How are you using Buildroot ? How many different configurations do you have ? How long do you support your products ?">buildroot-lts@buildroot.org</a>
-     to learn more about the different sponsorship tiers and get all the
-     details about the sponsorship.
-     </p>
-     <div class="text-center">
--      <a class="btn btn-success btn-lg" href="mailto:buildroot-lts@buildroot.org?subject=[buildroot-lts] Sponsorship information&body=Thanks for showing interest in the Buildroot LTS Sponsorship. We would appreciate if you could introduce yourself and your company by answering the following questions: in which products do you use Buildroot ? How are you using Buildroot ? How many different configurations do you have ? How long do you support your products ?">
-+      <a class="btn btn-success btn-lg" href="mailto:buildroot-lts@buildroot.org?subject=[buildroot-lts] Sponsorship information&amp;body=Thanks for showing interest in the Buildroot LTS Sponsorship. We would appreciate if you could introduce yourself and your company by answering the following questions: in which products do you use Buildroot ? How are you using Buildroot ? How many different configurations do you have ? How long do you support your products ?">
-         <span class="bi bi-envelope-fill"></span>&nbsp; Contact us</a>
-     </div>
-     </div>
-diff --git a/docs/website/news.html b/docs/website/news.html
-index d7e680e41a..be4d550505 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -9787,7 +9787,7 @@
-       <div class="timeline-body">
- 	<p>The slides from
- 	  the <a href="http://fosdem.org/2010/schedule/events/emb_cross_build">Cross
--	    Build Systems: Present & Future</a> session
-+	    Build Systems: Present &amp; Future</a> session
- 	  at <a href="http://fosdem.org/2010">FOSDEM</a> are
- 	  now <a href="http://send-patches.org/news/20100211-1-FOSDEM-Crossdev-Workshop.pdf">online</a>.
-       </div>
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8f7552407e..7ce992a683 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -225,6 +225,7 @@ N:	Angelo Compagnucci <angelo.compagnucci@gmail.com>
+ F:	board/sipeed/lichee_rv/
+ F:	board/sipeed/lichee_rv_dock/
+ F:	configs/sipeed_lichee_rv*
++F:	docs/website/
+ F:	package/apparmor/
+ F:	package/corkscrew/
+ F:	package/cups/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
