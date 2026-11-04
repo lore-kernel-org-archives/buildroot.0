@@ -2,85 +2,97 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E81D96083621
-	for <buildroot@archiver.kernel.org>; Wed,  4 Nov 2026 21:26:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F6C1606C5A3
+	for <buildroot@archiver.kernel.org>; Wed,  4 Nov 2026 21:26:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=d0/fqTI7
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=D4XQDEBW
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C5AB040467;
-	Wed,  4 Nov 2026 21:26:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 487814084B;
+	Wed,  4 Nov 2026 21:26:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m1krHlbTll6i; Wed,  4 Nov 2026 21:26:12 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org E5821403B3
+ id DYqV8mGJ6CTV; Wed,  4 Nov 2026 21:26:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 479C540801
 Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793827572;
-	b=efU5Nyo2wScbz5D2Y2DTHEzEphB9gHUqkRLE697bmSh0t1ZE8FDmoJEfQdjxyPK2nuiR
-	 3IgLDUMd0Tu+F803PisCHqYV0vTAc7KamKYkWm32cS6N597AC8ICiK6w6DKaZoSs1rvqv
-	 mwu3klUd16BSK4jV0fl4zZjm2fxDpq3Mp6XnBc4JjjaSqTMcVC8kmttKj9xQHRAE8Bzg8
-	 B7RIOuMEscN23GkxEiC/ZW5U2BHgzq4U5725lqKz6HIFAS8KkIl1DjLtRSnw5NP1fWmKI
-	 L7aekaHqtyiPFc7e4PHEekdAddSbk4zGeGdcB0iblBxWHyi8JzBWfAKYTU+f6gvTECg==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793827576;
+	b=F+YsiuH0SWMIyU7BI+cQVRaxhy70H9u+Uea1w7tI8/sn/hxXStnMFwddblio9GtxgZa0
+	 WM6wGG72lLIzEzQPR6TtYLOgTIMlQyjk5y7BexDdKeYVpWEG+w4UG8kxAxmx5Ubk02uGE
+	 QSa7ErNn7RS+cYU6T/aFjEBYNvbImI3MRO2MG2/RBu3BmoHhVJaW7ssg6Pme+SWk4EOyG
+	 qgWAHDsMMtIwG+3dBsa3kN1RXD7ecO+ah4xnTe8IbC+wCCmz0Akhz6Qb0DJtvGGYBfY/5
+	 U1yUlBe/Yhw4BwPwfos6bYaBptIFU78OihG8f1P1hZGlKigIGW2Nfiu1E6ZBQU0xOVA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793827572;
+	c=relaxed/relaxed; t=1793827576;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
-	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
-	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=ZOtsNIm6L3UsMPGJuQPDNw8AMOtKEmrEbFo/wos4gn0=;
-	b=JRt9UpBcGIetoXYz/SvEzUXdsULPgKgBrZypNCh85/iafbx3BiXfR3yDWgumGD1F4Iw2
-	 OYcUeJIl2MXtrE+qbViozkmbxocrptvnshSkpbNlXYlP8FBqgYLVKXm2FD2r1stfm0bB5
-	 L/Em9uXeDL/nf9pZPTBnKcNcJppP6yWPwcFpOUfLkKJH6wOjU+yFhNLsO5AzbaeROXIjV
-	 VFRzaebmm//JV+OE6/IJqWUeFCOVlMcJBF0jHzv/fbBXaL0mYqJV6Jd+xLTjRQ2boCLHr
-	 vEcqTLvqsLbRRLKG5jq6q2tl0N3zX3bO2q3ewtexQsrrraKDoy1xLU+8HN2Rk9dA67Q==
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:Received:Date:To:Cc:Message-ID:References:MIME-Version:
+	 Content-Disposition:In-Reply-To:X-Last-TLS-Session-Version:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=IdstPyQIDg8JFMdavATqwd8zG5w5/j1/L24maEx0jgI=;
+	b=dkMkwg6rwFu5JRngYnz1RtxPQydoHwT/UFqibHNyv/Ny/T8HQh4bRWidlin69e7nRDem
+	 lRf8q/6gY0stmVjzSPsU44dubQ2wMoYGVsaJZMkozguuLPzpxyAdRgjOUEe4WsygCbfAp
+	 72ja0bqx0fxde6zkSLLu6oksXAX9vMF58GshV2H4ziBo/9cCKg1noUvY57tSNSDlbbxDV
+	 NKpPSvn6p6FSrcgC3Mcrum4FNDT7KkDWWY8CGMwKYNXnA1h+7hGsiu84PFM3yMWXVlFTM
+	 O5jjqv+AtdTJy2wp1NPKPgLDV77wn9Mb1G/OlF3MRssZ0X3At/HqBkIK3I+6K4R3rIA==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793827572;
-	bh=ZOtsNIm6L3UsMPGJuQPDNw8AMOtKEmrEbFo/wos4gn0=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=d0/fqTI7Qs8PsQlUb+q3eCvW1CN5Fd94Na2CxDym3pLnKavXTeshUnGo44pwr45Wx
-	 g9xWmygWLhqqB5ahY6QP7zUQiqsCnYMn1jUbKc44XIZW+fv1bl1rhOa2pj2tOSocfj
-	 QYP5eGlcD6bpcn2udW0Qk8TdGO9SaObKVpTb71kh7fCgBOrPIJbb9akcRrV2a8P9LG
-	 HQHzu46bf5zjMwb4yxekD0ZYBY89Ga5epoYfu/MvFxDAVhnvN9d5qkftGINsYqNlxt
-	 qZuHEgS7J8tBmVfljwPqXAAMEKAnMwQOpn2d0H4g0fEcU/gmG9N3mLDfbvphDJpJLy
-	 j1fUs3c/yrs6Q==
+	s=default; t=1793827576;
+	bh=IdstPyQIDg8JFMdavATqwd8zG5w5/j1/L24maEx0jgI=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=D4XQDEBW1ZZ611VetwFsBBJRazzQR+HOwQmB9ePt60rhgs3+onlBSrtqtZsiJfqLW
+	 +whvarFrpgzeLmyI2kzvrycJS3Iuj3rzv2a2hT5ldjm/SM1HqLpgRchoaV9bnvDcy1
+	 m+JHBmbU75wGzUmXOuw5UM2pdQYWO8VfGAZjU5enFkuYbl0sgY+C0W+1l59+LKWvfA
+	 RLXkd/wmzOC33XadxN5pM1GulrNprpfpTmeFpnryeZ59Hgxo/r0m7+N13QGxOMJnIf
+	 dAZTJWVKvfeKXdjmhF8tDfpgaspXjOmK3fYukc21ZjV/5FYnmZavjMhkKRyAmDUJau
+	 LhsScyMSeztcw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E5821403B3;
-	Wed,  4 Nov 2026 21:26:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3DB94177B
- for <buildroot@buildroot.org>; Wed,  4 Nov 2026 21:26:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 479C540801;
+	Wed,  4 Nov 2026 21:26:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 83F95177B
+ for <buildroot@buildroot.org>; Wed,  4 Nov 2026 21:26:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 23A08812D9
- for <buildroot@buildroot.org>; Wed,  4 Nov 2026 21:26:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 69B8E406DA
+ for <buildroot@buildroot.org>; Wed,  4 Nov 2026 21:26:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8sMOtmCHO_ip for <buildroot@buildroot.org>;
- Wed,  4 Nov 2026 21:26:10 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 8039781271
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h1V3_HZ6eiH4 for <buildroot@buildroot.org>;
+ Wed,  4 Nov 2026 21:26:13 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 2A60F40294
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=185.246.84.56;
+ helo=smtpout-02.galae.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8039781271
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2A60F40294
+ for <buildroot@buildroot.org>; Wed,  4 Nov 2026 21:26:12 +0000 (UTC)
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+ by smtpout-02.galae.net (Postfix) with ESMTPS id B853F1A0666
  for <buildroot@buildroot.org>; Wed,  4 Nov 2026 21:26:10 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 922B09DEA7; Wed,  4 Nov 2026 21:24:39 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 4 Nov 2026 22:25:42 +0100
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 746840c419ed7ec473a1581132425edb4a8b8d3d
-X-Git-Newrev: ffe8a5ff4dc7c0e77bc4c25cfe167755b993f9ea
-X-Patchwork-Hint: ignore
-Message-Id: <20261104212439.922B09DEA7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/imlib2: bump to version 1.12.7
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+ by smtpout-01.galae.net (Postfix) with ESMTPS id BA8095FDD4;
+ Wed,  4 Nov 2026 21:07:49 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id B8EA410329248; Wed,  4 Nov 2026 22:07:44 +0100 (CET)
+Date: Wed, 4 Nov 2026 22:07:44 +0100
+To: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: buildroot@buildroot.org, Pascal de Bruijn <p.debruijn@unilogic.nl>
+Message-ID: <auuenDMCrUePDXj7@windsurf>
+References: <20261104082735.4134892-1-yegorslists@googlemail.com>
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20261104082735.4134892-1-yegorslists@googlemail.com>
+X-Last-TLS-Session-Version: TLSv1.3
+Subject: Re: [Buildroot] [PATCH] package/linux-tools: hv: fix build on
+ non-x86 build hosts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -92,69 +104,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
-	autolearn=ham autolearn_force=no version=4.0.1
+	MAILING_LIST_MULTI,SPF_HELO_PASS,SPF_PASS autolearn=ham
+	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ffe8a5ff4dc7c0e77bc4c25cfe167755b993f9ea
-branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
+On Wed, Nov 04, 2026 at 09:27:35AM +0100, Yegor Yefremov wrote:
+> Since Linux 5.4, commit 9b5434196529 ("Tools: hv: move to tools
+> buildsystem"), the Hyper-V daemons are built with tools/build, which
+> first links the objects with "$(LD) -r". We only pass CC to the hv
+> build, so LD defaults to $(CROSS_COMPILE)ld, i.e. the build host's
+> plain ld. That only works by chance on x86 build hosts, whose ld
+> handles i386/x86_64 objects; on an aarch64 build host it fails:
+> 
+>   LD      hv_kvp_daemon-in.o
+> /usr/bin/ld.bfd: relocatable linking with relocations from format elf32-i386 (hv_kvp_daemon.o) to format elf64-littleaarch64 (hv_kvp_daemon-in.o) is not supported
+> 
+> Pass LD="$(TARGET_LD)", as already done for rtla.
+> 
+> This issue has been present since commit 2703383c7201 ("package/linux-tools:
+> add hyperv integration services"), which added the hv tools while the
+> supported kernels already used tools/build for them, without passing
+> LD. It therefore affects 2020.02 and later, including 2025.02.x.
+> 
+> Fixes:
+> https://autobuild.buildroot.org/results/86c33797a5f09dbb1162a554cb6019f7c0702fbd
+> 
+> Fixes: 2703383c72011d38a1e3559cb7a5a2b0071b35c6 ("package/linux-tools: add hyperv integration services")
+> Assisted-by: Claude:claude-opus-5-5
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Changes since 1.12.5 include input validation fixes in several loaders
-(APNG, ICO, ID3, j2k, y4m), a limit on decompressed temporary output,
-16-bit PNM support and bicubic scaling via the bundled uscaler, which
-is enabled by default and needs no extra dependency:
+Applied to master, thanks!
 
-https://sourceforge.net/projects/enlightenment/files/imlib2-src/1.12.6/
-https://sourceforge.net/projects/enlightenment/files/imlib2-src/1.12.7/
+Best regards,
 
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/imlib2/imlib2.hash | 10 +++++-----
- package/imlib2/imlib2.mk   |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/package/imlib2/imlib2.hash b/package/imlib2/imlib2.hash
-index 6c316b5d0b..6623098e64 100644
---- a/package/imlib2/imlib2.hash
-+++ b/package/imlib2/imlib2.hash
-@@ -1,9 +1,9 @@
--# From https://sourceforge.net/projects/enlightenment/files/imlib2-src/1.12.5/
--md5  c81c9f91d92ecbd87cf652f867ec5d74  imlib2-1.12.5.tar.xz
--sha1  055778fca4639962290426c37d909c1a6a4c8e1c  imlib2-1.12.5.tar.xz
-+# From https://sourceforge.net/projects/enlightenment/files/imlib2-src/1.12.7/
-+md5  b19079314bdb3948b464203f81383060  imlib2-1.12.7.tar.xz
-+sha1  dbe0d336c02644875e0c64bc67bf87fa85ec1d55  imlib2-1.12.7.tar.xz
- 
--# From https://sourceforge.net/projects/enlightenment/files/imlib2-src/1.12.5/imlib2-1.12.5.sha256
--sha256  fa2315f28379b430a6e6605b4284b07be06a3ef422d4f5e1c9bb24714c4cf6dd  imlib2-1.12.5.tar.xz
-+# From https://sourceforge.net/projects/enlightenment/files/imlib2-src/1.12.7/imlib2-1.12.7.sha256
-+sha256  d71ee5351cc1914fb01968123d0dcf276740e5af5662943ac47ae60cafa4d13b  imlib2-1.12.7.tar.xz
- 
- # Locally computed
- sha256  fb70339dd33a77b6213c7ae067fccf93d04af44ff3f937c61f8863f7970e73f6  COPYING
-diff --git a/package/imlib2/imlib2.mk b/package/imlib2/imlib2.mk
-index c650981501..5ca4322d71 100644
---- a/package/imlib2/imlib2.mk
-+++ b/package/imlib2/imlib2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IMLIB2_VERSION = 1.12.5
-+IMLIB2_VERSION = 1.12.7
- IMLIB2_SOURCE = imlib2-$(IMLIB2_VERSION).tar.xz
- IMLIB2_SITE = http://downloads.sourceforge.net/project/enlightenment/imlib2-src/$(IMLIB2_VERSION)
- IMLIB2_LICENSE = Imlib2
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
