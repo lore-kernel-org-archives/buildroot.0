@@ -1,28 +1,28 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15284606C466
-	for <buildroot@archiver.kernel.org>; Wed,  4 Nov 2026 19:52:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 955BA60D8782
+	for <buildroot@archiver.kernel.org>; Wed,  4 Nov 2026 19:52:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=dfM4pbLk
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=jYRQfTCf
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D6E4F4094A;
-	Wed,  4 Nov 2026 19:52:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 732A681539;
+	Wed,  4 Nov 2026 19:52:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iTnut86M31PY; Wed,  4 Nov 2026 19:52:27 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 03AAD4093B
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793821947;
-	b=Klw8RnbPR2rZ3SGDx8qBI2h+k5SGfe8SHxzqAv9DmTgpy2ZnUaCqc+GVMrA2/G9dQtRm
-	 4ItQlfGiFqGaZAt7o0pt4laohUI9hu4C32ydPEdjCzW9SQyktgKSSXieIuMcCBvjra0PE
-	 2RgvcAxDOQrCuJVgobFy4yz42bRs6SFTM/oSM7Lwst/N8AjAxPAh3MLw7PQ69wcNj0e0p
-	 p9rh2/tV/T+GwNzzFwI14n2aDVaOv/5Rz397Q2nHctOWeRTWbb0sZimWoiP9fMxXNFvGa
-	 o1DwChLMGIJm6NZujJHvRIo+9ULs6JeaiAjdDg/wJltlGTlvWQcQ5GjyxpDPeBdrHog==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bFN_v_a8hAUp; Wed,  4 Nov 2026 19:52:28 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 743818149C
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793821948;
+	b=snSEg7juDLnfIspK4MnFbIAowIlEFRMen47srWmYEs54vUqMUjvMP2yLfirhGkbp6B6Y
+	 2F2XzMOZwiPLydXR53s6MFShUvoXXn4xxeEkMOt27HpgjRMbo69pgtXru+D4od6rmFUnR
+	 mSBpBKNwnn2fLpTcCSB+iEBQqyLBjGDJ3Ki0RVuPk1oL24Ifnf31rC4M6acTHDGkTLEfk
+	 V7JFqEQK+8uFByfbgPhxtxqOahyrUWzu0qGqDK1MblohCS59P+WAWCIXfBumUxnipGoTu
+	 REqcfcc7cmbRn7lmqQNudUaltttTRGCEajzbmzDsOcsD7MRYQjMUzR+5NbwjCl/6ihA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793821947;
+	c=relaxed/relaxed; t=1793821948;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,58 +30,58 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=UORZsFwxm0M1hlVHzdKVxgIIsctRcPVvh7GPXc3LYsw=;
-	b=U18jtnOHC4TTiY4BfCABGsg/sDdlgqSnYvmuNtef4teOvef9LW+HAP+gcL6RhSwHfV8+
-	 dNzFyBp32hpYasBNU44ZhRwhwYyxLR2YEio+9kBl8CKC7ykLAlcyu4umvxv88b/NvB8b3
-	 jjkmXePjweWMObEV0XsNILSc4DqPm7t0M7CuPsMMONNSE0kPIvalZbelUCCUy8KppkFr8
-	 vjHUJj3eWn0mAkdbkBqKBLmaC5WJ18Zka/UgyHabOV7p0fRko+nExXtSMe0aYWXQ+iIuz
-	 1etAPxjEsQkNsWOasBQTUw2WFzkWL8hSat/nooGDcB2UDHFx9NPYYEoOhBNQftrTPog==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+	bh=B5hrKNBvL+I5TdQCXyRtMdCNTmtWjnOeN/cbhDqVHjA=;
+	b=a9MG1wu/84jsTqG9ChhNDGkRnTvknAesQhWW03RVJPAvrTeB0ASfG72HG+KqvR7Z9smC
+	 kU4ApJ8d6nx0yNaJpO5s8eV8iSrEwGPIN82Qm6SFZtp6jijucnSDOKkNtoSSdA1FEmXWz
+	 cGSvd2+Y7NGkZ1myQI55qhOTr6PCFG2SdEpIQxfiZ9KldTyTVr5a1uk9ormix8jnQXPxu
+	 MJP4GmyGI1ERcKVXlKQ0VFJfsb3DiXKCB/oDLKCsa9WCNx27dYLZH1+c/vbG2ka2TZxxt
+	 DG4oOGVFAY5FJ/CoV+4vUn4fWLJ67rAWJtZ0vggiHBdZZPAozc1r+3nri2dKoiXfz+Q==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793821947;
-	bh=UORZsFwxm0M1hlVHzdKVxgIIsctRcPVvh7GPXc3LYsw=;
+	s=default; t=1793821948;
+	bh=B5hrKNBvL+I5TdQCXyRtMdCNTmtWjnOeN/cbhDqVHjA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=dfM4pbLkMLldo20GpJOl0om7IPmO2M38sKxauhkdMirhQhHn6sxjSN4r4sesUkGIA
-	 J2HINYjt9czYARz4/8vQFVkimAfwtLMHGT/11N5JPLmAWs7ErcYi81KOm2OBUCYlN5
-	 ucd/iitEWhwPEsXmEeDp8iDg7CqAgLXqlpobeEED5wpZcGVa4pSId0mK4l1azKkb1V
-	 xNrZQa1K1O43Hm3lQGlo137Kc9zqZ1JaKsseSNsnM/ShvgVh2bYYfNaNB6HOdbWaqI
-	 //I9UUX4UYRBF+jNGn3gH0K6GuuaFd3T3h2Qi3zfy6KC/1IlE1XeQcO1Z2dv68cPey
-	 JKsQmlRWnHOpQ==
+	b=jYRQfTCfjgiwbjcltOoHvD4ECM/wCq/W3t/F94fJWGpSdnJZlXPXQ/9/C/pFgYmWC
+	 r5b/vF1xJppIUMlrh4zE3FPdGDlkNYZTWQ3Z/di0olULLatJXFQBnRtzwl48YDFHk+
+	 M/Uwn1RTX6W42g8npUtGdTbm0NqyL4ltjJ0A7/ZxhHbI9GrU4OWGVB/QipQvD+LK6+
+	 bwvMRii6+y7lKkCSKy452d2pHbeZnDDm4x0gaUiv0wQ/gbgsGBKkbhKSRldl9evB9J
+	 4bLx1xffLAP2plokReHl9N+XD9O7y5q9Q2gYKgQ+PT9rPeXvjCDB9rYF6SzJSwte2y
+	 ChcD+aUGZegKA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 03AAD4093B;
-	Wed,  4 Nov 2026 19:52:27 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9D84E9C4
+	by smtp1.osuosl.org (Postfix) with ESMTP id 743818149C;
+	Wed,  4 Nov 2026 19:52:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9FD3A177B
  for <buildroot@buildroot.org>; Wed,  4 Nov 2026 19:52:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 83EE940083
+ by smtp4.osuosl.org (Postfix) with ESMTP id 84E0E40933
  for <buildroot@buildroot.org>; Wed,  4 Nov 2026 19:52:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fBVV1NW7NbSy for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vRJVKFa6YxRM for <buildroot@buildroot.org>;
  Wed,  4 Nov 2026 19:52:15 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org C527640217
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org B6D3C40934
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C527640217
+ by smtp4.osuosl.org (Postfix) with ESMTP id B6D3C40934
  for <buildroot@buildroot.org>; Wed,  4 Nov 2026 19:52:15 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F03939DD9C; Wed,  4 Nov 2026 19:50:44 +0000 (UTC)
+ id D8C2B9DD96; Wed,  4 Nov 2026 19:50:44 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 4 Nov 2026 20:48:01 +0100
+Date: Wed, 4 Nov 2026 20:46:42 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 442a4f86e80ea0b428e8c0bd3584833c8ca2c612
-X-Git-Newrev: 40f85148f29ff1de220a235249f0251cbf15258e
+X-Git-Oldrev: 0ba6700c471cc486718f67a4e258ac321b0d0a4f
+X-Git-Newrev: 1f6587da68c2bb5fe424b44729743eb243ce3cf1
 X-Patchwork-Hint: ignore
-Message-Id: <20261104195044.F03939DD9C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/website/docs.html: update details
- about training
+Message-Id: <20261104195044.D8C2B9DD96@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] website/support: lay out the commercial
+ support logos in a grid
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,49 +100,96 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
 	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/40f85148f29ff1de220a235249f0251cbf15258e
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/1f6587da68c2bb5fe424b44729743eb243ce3cf1
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-- No longer useful to mention "Free Electrons"
-- 3-day instead of 3-days
-- Fix broken links
+The commercial support logos were laid out with a <center> tag and
+inline styles, giving unaligned logos of different sizes.
 
+Use a Bootstrap grid instead, showing bigger logos on two centered
+rows.
+
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- docs/website/docs.html | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ docs/website/css/main.css |  1 -
+ docs/website/support.html | 44 ++++++++++++++++++++++++++++++--------------
+ 2 files changed, 30 insertions(+), 15 deletions(-)
 
-diff --git a/docs/website/docs.html b/docs/website/docs.html
-index 38f1996c4a..f137b6376e 100644
---- a/docs/website/docs.html
-+++ b/docs/website/docs.html
-@@ -78,8 +78,8 @@
-   <div class="card mb-4">
-     <div class="card-header text-bg-primary rounded-top">Training</div>
-     <div class="card-body">
--      <p><a href="http://www.bootlin.com">Bootlin</a> (formerly Free Electrons)
--	offers a complete <a href="http://bootlin.com/training/buildroot/">3-days
-+      <p><a href="http://www.bootlin.com">Bootlin</a>
-+	offers a complete <a href="http://bootlin.com/training/buildroot/">3-day
- 	  training course on Buildroot</a>. They also make the training
- 	materials freely available:</p>
+diff --git a/docs/website/css/main.css b/docs/website/css/main.css
+index ca11d11d45..3077c0de53 100644
+--- a/docs/website/css/main.css
++++ b/docs/website/css/main.css
+@@ -81,4 +81,3 @@ a {
+ 	filter: FlipH;
+ 	-ms-filter: "FlipH";
+ }
+-
+diff --git a/docs/website/support.html b/docs/website/support.html
+index 8d5f096bac..46af35dc1e 100644
+--- a/docs/website/support.html
++++ b/docs/website/support.html
+@@ -101,25 +101,41 @@
+ 	 support. Only companies heavily involved in Buildroot maintenance and
+ 	 community are listed here.</p>
  
-@@ -101,8 +101,8 @@
- 	    <div class="card-body">
- 	      <ul class="mb-0">
- 		<li><a href="http://bootlin.com/doc/training/buildroot/buildroot-slides.pdf">slides (PDF)</a></li>
--		<li><a href="http://bootlin.com/doc/training/buildroot/buildroot-labs.pdf">practical labs (PDF)</a></li>
--		<li><a href="http://bootlin.com/doc/training/buildroot/buildroot-labs.tar.xz">practical labs data (.tar.xz)</a></li>
-+		<li><a href="http://bootlin.com/doc/training/buildroot/buildroot-stm32mp1-labs.pdf">practical labs (PDF)</a></li>
-+		<li><a href="http://bootlin.com/doc/training/buildroot/buildroot-stm32mp1-labs.tar.xz">practical labs data (.tar.xz)</a></li>
- 	      </ul>
- 	    </div>
- 	  </div>
+-      <div class="row">
+-	<div class="col-sm-12">
+-	  <center>
+-	    <a href="https://bootlin.com/engineering/">
+-	      <img src="images/bootlin-logo.png" style="max-width:200px; margin-right:40px;"/>
++      <div class="row justify-content-center g-4 py-3">
++	<div class="col-6 col-md-4">
++	  <div class="ratio ratio-21x9">
++	    <a class="d-flex align-items-center justify-content-center p-3" href="https://bootlin.com/engineering/">
++	      <img class="mw-100 mh-100" src="images/bootlin-logo.png" alt="Bootlin"/>
+ 	    </a>
+-	    <a href="https://mind.be/about-us/#anchor-open-source">
+-	      <img src="images/mind-logo.png" style="max-width:200px; margin-right:40px;"/>
++	  </div>
++	</div>
++	<div class="col-6 col-md-4">
++	  <div class="ratio ratio-21x9">
++	    <a class="d-flex align-items-center justify-content-center p-3" href="https://mind.be/about-us/#anchor-open-source">
++	      <img class="mw-100 mh-100" src="images/mind-logo.png" alt="Mind"/>
+ 	    </a>
+-	    <a href="https://www.smile.eu/en/offers/embedded-iot">
+-	      <img src="images/smile-logo.png" style="max-width:200px; margin-right:40px;"/>
++	  </div>
++	</div>
++	<div class="col-6 col-md-4">
++	  <div class="ratio ratio-21x9">
++	    <a class="d-flex align-items-center justify-content-center p-3" href="https://www.smile.eu/en/offers/embedded-iot">
++	      <img class="mw-100 mh-100" src="images/smile-logo.png" alt="Smile"/>
+ 	    </a>
+-	    <a href="https://www.amarulasolutions.com/services/integrated-system/">
+-	      <img src="images/amarula-solutions-logo.png" style="max-width:200px; margin-right:40px;"/>
++	  </div>
++	</div>
++	<div class="col-6 col-md-4">
++	  <div class="ratio ratio-21x9">
++	    <a class="d-flex align-items-center justify-content-center p-3" href="https://www.amarulasolutions.com/services/integrated-system/">
++	      <img class="mw-100 mh-100" src="images/amarula-solutions-logo.png" alt="Amarula Solutions"/>
+ 	    </a>
+-	    <a href="https://www.linkedin.com/company/benetti-engineering">
+-	      <img src="images/benetti-engineering-logo.png" style="max-width:260px; margin-right:40px;"/>
++	  </div>
++	</div>
++	<div class="col-6 col-md-4">
++	  <div class="ratio ratio-21x9">
++	    <a class="d-flex align-items-center justify-content-center p-3" href="https://www.linkedin.com/company/benetti-engineering">
++	      <img class="mw-100 mh-100" src="images/benetti-engineering-logo.png" alt="Benetti Engineering"/>
+ 	    </a>
+-	  </center>
++	  </div>
+ 	</div>
+       </div>
+     </div>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
