@@ -2,96 +2,85 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12602606D804
-	for <buildroot@archiver.kernel.org>; Thu,  5 Nov 2026 19:09:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB194606A326
+	for <buildroot@archiver.kernel.org>; Thu,  5 Nov 2026 19:14:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=D4RF3UH8
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=szW1ONeo
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 57AD14087D;
-	Thu,  5 Nov 2026 19:09:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7EB654084E;
+	Thu,  5 Nov 2026 19:14:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nwRQmbKS-TAl; Thu,  5 Nov 2026 19:09:11 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 022824080B
+ id vV7IEjDGIZDC; Thu,  5 Nov 2026 19:13:59 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org A424B40856
 Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793905751;
-	b=sApIRBTgEs2RxDrBESBJp6XNX1MRbQVt7NPxC/qJcGlE/VxIZ3hkWGwdtyDYBlYoUuHP
-	 Dag4CsZ2nzSkPY1jIK1v0z8oD4Q8UdqRyaymf2gCjnyRCPTFuYzQND00mXtfItdKRN8Vj
-	 dRhI8TqMrksCXZLHHJiYAJYSUGBGfyuAljsKEKT8acl5hyHt413aWXlhiTPTaP35GYcGH
-	 1ZSe//VIGyhEYL75/BI+di5dSUsqCYRPUpZlhuRgzclieQ17aDhq3GubSfVKKPQzNoJg+
-	 ouGFTVv/femHaxEXW7CjiTnCPn9Ht6rJva5MRcvsJLAJOb3/ofGyaTjsSKQ0GDNn2YQ==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793906039;
+	b=sVks7oWqU0O4Fh8fg1Ta1J+W5lYF+ge+/qKOviVQTfVIEKFZVT4ut1wQxd+RDEPEQ3tS
+	 kuERtClIcMNtCvoPH6ty2de5XCP71584Dpv0uL01eJD8uw1dMYGJnsdBFPf3sGDkJ2XUB
+	 5ryN/gd8N609zaD3ceymhUB4Bq+7DK/Sdyo80d06OWAgLkgpvUS1XVdRrPPCi4khppOIN
+	 xCxYWBtCRaCi2X4UI6Xb4YkyhkC9CMtriUVxIbFvxLqPwc+WT7D9+TgQsiWQfJk2HLE+Q
+	 zpYs3mDqX5oHLpbE4czPN+TL0mCMhJrQlcKdph6rM8HVHQ2PTipylda6AH+T3S86pGA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793905751;
+	c=relaxed/relaxed; t=1793906039;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
-	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
-	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
-	 Errors-To:Sender;
-	bh=LKhc0+DauJe76iFsf1eR3RUxRdiUTA55JAaatqu9DMM=;
-	b=bEnmnqLwh0AHAxAH+aSIH7+IVkdqfVO3UzhNnT9jEFO/wAz/HxfvUSlklPDVZFeIuk7y
-	 9KCTXjAIzvNlR950wv3ztd2rcoXRsXJAgXO4FeHC03/aGKlZAyO9DOkBgXgmbz79uuXyO
-	 Y06jq5z4fd01Zr6zMqcyuF5lJc++cBNSBNHKbIJvD60pcV5UPPRZiBHZc5nxwd+WxzKfX
-	 ggK0HC+EquIfeTCJ05QgNYtFn8/LkCMjcSl8j9CZioi97AuFuVTR5hEEJU+GR+2CENjVp
-	 ZBTNMI2SOdWg1EmWHKtdaOhpN00bIoWBbUC5vfXau8B/0UpvcGiwsz/NCQWsrW6GlKA==
+	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
+	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
+	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=e3gd+S2Zu4d3leEA4fe+CeCsHLNRDSL+zu365RhFMN0=;
+	b=AZQFd6GYeJ8cT4UEi5SnZjoCrVV+BghkHTUwm0hT5Lv+FdMwvNNJQgk6NiEA7RCqnFJa
+	 7HeXba+bTvVQLpseOBEpn/xbQUMSdaltG7/0wszJFEuxHg/8TUIqgwLMg1qW3oJukE77R
+	 BxhPoSXIYvWRqcK1hDNHh0H401AJmJwcUiEwIWFMbKV0S1FKq2kH7wioTNVAGaAP4uTf5
+	 7H+B9M1UDHa4SLSHE89xczC6A2Lq8m3FMEZ2OcCotOqVIwSTMgTwW61SNrug7xiZ/PE+O
+	 /w6+ji2FMtGRK0UKjyuwORzP/jcY0peuCaxvSLVtWaWy6VuwQaHgg258X4yn/0HMFQQ==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793905751;
-	bh=LKhc0+DauJe76iFsf1eR3RUxRdiUTA55JAaatqu9DMM=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=D4RF3UH8rot4LEOpSyNiOJd+chojSv7KsCFgZyML8M3Q8YSNmSeZ9zQ+eXxTKubYx
-	 HvYgwCfXUTlwCGiCHAteGNM+w13psGciMTvsZXAtRFzvaOJaj4mPPFTgXY8hooCO8L
-	 c2cqDqQVPWy97j8TO1m+y7IxckqazqWeX4JK1CfvxeZn8qBUgGcCXlTfg402/qDYhu
-	 Linm4vb79/RULc/V6cJmpr32A3871fIs7mEqJbi+YbqnEAQ9bGJpfPHClhnEt8V8Qy
-	 4ozVKEnu2qP2klWpxBWZJdCMQBD8bJvVh7Cg+jwG40c9rTPob7gemd7DiPa1n8F6Ew
-	 Tlc+HGrnS2UOA==
+	s=default; t=1793906039;
+	bh=e3gd+S2Zu4d3leEA4fe+CeCsHLNRDSL+zu365RhFMN0=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=szW1ONeoUCmAeAqz2r73/u4s+gRSqkEfZTD4lxxPwRm8rO7ajknueUE/1lpngsJyf
+	 XmDnjs3AqHXm5U8aOn59ZZriCBc6gBQ8M4AiUkrUMXrsUO8wf5la+aDRhp1NTtqvQx
+	 +DmJxW1qFTOzc7lWR+r0vnVU4qX2b4sPDW1MhNPRRYOxfpHY8h7jdWFjNRYQVGmsQi
+	 joDMC4zE9Ozv3gCwivbDasMDAi8jgKMqQ+vA8NohiSU42/GhVUH3BBk7MILHvOiVEx
+	 adeTU5IS4tm/VND+0DQV728JYgGTmY2SDsF7ka8lWphxuyeUgq269xUazePuqpNFfd
+	 D1o3BKzt0J4KA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 022824080B;
-	Thu,  5 Nov 2026 19:09:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id B8CE1B00
- for <buildroot@buildroot.org>; Thu,  5 Nov 2026 19:09:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A424B40856;
+	Thu,  5 Nov 2026 19:13:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3964AB00
+ for <buildroot@buildroot.org>; Thu,  5 Nov 2026 19:13:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AAB3460884
- for <buildroot@buildroot.org>; Thu,  5 Nov 2026 19:09:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2B52D40363
+ for <buildroot@buildroot.org>; Thu,  5 Nov 2026 19:13:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 27yut72CppQp for <buildroot@buildroot.org>;
- Thu,  5 Nov 2026 19:09:08 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 053DC60808
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 053DC60808
- for <buildroot@buildroot.org>; Thu,  5 Nov 2026 19:09:07 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.1])
- (Authenticated sender: ju.o@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPA id 9B9BB60129;
- Thu,  5 Nov 2026 20:09:01 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 via
- 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr with HTTP (HTTP/1.0
- POST); Thu, 05 Nov 2026 20:09:01 +0100
-X-Archived-By: <archiver.kernel.org>
-MIME-Version: 1.0
-Date: Thu, 05 Nov 2026 20:09:01 +0100
-To: Bryan Brattlof <bb@ti.com>
-Cc: buildroot@buildroot.org, Anand Gadiyar <gadiyar@ti.com>, Xuanhao Shi
- <X15000177@gmail.com>
-In-Reply-To: <20261105-ti-k3-r5-loader-bump-v1-1-ff5486ac1748@ti.com>
-References: <20261105-ti-k3-r5-loader-bump-v1-1-ff5486ac1748@ti.com>
-User-Agent: Webmail Free/1.6.20
-Message-ID: <e7c172bd239ec3be3dd9af94ffd7bdf3@free.fr>
-X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH] boot/ti-k3-r5-loader: bump to version
- 2026.10
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DmLuYq4KA9TC for <buildroot@buildroot.org>;
+ Thu,  5 Nov 2026 19:13:57 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org F0C7D40012
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id F0C7D40012
+ for <buildroot@buildroot.org>; Thu,  5 Nov 2026 19:13:56 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 89CFA9E042; Thu,  5 Nov 2026 19:12:25 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 5 Nov 2026 20:10:41 +0100
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: cbfd535f16b3dc2b090f6f46426baacad3bab730
+X-Git-Newrev: 6d80b5651d8126b15c3689c87d7baa12330df8d9
+X-Patchwork-Hint: ignore
+Message-Id: <20261105191225.89CFA9E042@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tor: bump version to 0.4.9.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -103,31 +92,54 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
+X-Archived-By: <archiver.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,SPF_PASS
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
 	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-On 05/11/2026 15:19, Bryan Brattlof via buildroot wrote:
-> Release announcement:
->    
-> https://lists.u-boot-project.org/pipermail/u-boot/2026-October/634075.html
-> 
-> Exactly like with commit 747aa911f6a4 ("boot/uboot: bump to version
-> 2026.10") all release artifacts for U-Boot have been migrated to the 
-> new
-> gitlab instance at git.u-boot-project.org, so we also need to update 
-> the
-> TI_K3_R5_LOADER_SITE to point to the new location.
-> 
-> Signed-off-by: Bryan Brattlof <bb@ti.com>
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/6d80b5651d8126b15c3689c87d7baa12330df8d9
+branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-Applied to master, thanks.
+https://gitlab.torproject.org/tpo/core/tor/-/blob/tor-0.4.9.16/ReleaseNotes?ref_type=tags
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ package/tor/tor.hash | 4 ++--
+ package/tor/tor.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/tor/tor.hash b/package/tor/tor.hash
+index dc7d35fa67..648c28ae80 100644
+--- a/package/tor/tor.hash
++++ b/package/tor/tor.hash
+@@ -1,4 +1,4 @@
+-# From https://dist.torproject.org/tor-0.4.9.15.tar.gz.sha256sum
+-sha256  1911f5b216a6814ed143a08bbcff1c6dc96d2ca3b505df9a21876080a92963f3  tor-0.4.9.15.tar.gz
++# From https://dist.torproject.org/tor-0.4.9.16.tar.gz.sha256sum
++sha256  6180e193152f4525bdca5475168419b2a2035b963c3c60162a187f86e6160e48  tor-0.4.9.16.tar.gz
+ # Locally computed
+ sha256  5dc29ea302cc75db6db4a7c88d7b5d4638b4e0f5f1d2e6d21ce71f707470b766  LICENSE
+diff --git a/package/tor/tor.mk b/package/tor/tor.mk
+index 3f07cc356c..17a80d5bce 100644
+--- a/package/tor/tor.mk
++++ b/package/tor/tor.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TOR_VERSION = 0.4.9.15
++TOR_VERSION = 0.4.9.16
+ TOR_SITE = https://dist.torproject.org
+ TOR_LICENSE = BSD-3-Clause
+ TOR_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
