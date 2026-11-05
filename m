@@ -1,28 +1,28 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 363F8606A336
-	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 15:59:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C02F1606A329
+	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 15:59:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=dYuA5y6n
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=lQeQJSFf
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 131BD608D0;
-	Fri,  6 Nov 2026 15:59:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9BC71812CB;
+	Fri,  6 Nov 2026 15:59:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9gU-_YghjEFt; Fri,  6 Nov 2026 15:59:11 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 375EA608AB
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793980751;
-	b=RTd4Vk1xaBnDpb6WMinWJ2ekpDgiBOYTyAkehsica46IaLvcprlJhbfAHCvMxog4gNru
-	 IHU+nQgZl9OMAyNGsqHcI+DrDUdbDk9R21nFClkNPtxVvI39gI6tL33onzxLbpHu86ZFN
-	 d926S1zmQ5e/0LqtAIRPrAX8ldttxLXO09Xbe3+vJaXKuH8UG9+Wt358E0fTD2IaoXMdL
-	 4a+SGzyEPdY+pZ05RSuujP2a1PDBeI62ZtbDDKzTXniE0IgVjvk9GsTWiFuXRRA1oGBcJ
-	 P12mfgvXuc02W52PUwkdM8+tJObPn1gSo7qhLJoTetrTGCB0drXQV31ltQCAJja28XA==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id q475TwiDuzox; Fri,  6 Nov 2026 15:59:12 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org B16E7812C8
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793980752;
+	b=p9p5uc5xfvi+27wBk9/2gsLCX9NPCc8uhfPiZ762A212feAMD8fkrVYgoZLmiYqgVPB2
+	 phTPYr+H0IedROh3N58+4q9X4bwdRQcxBZpmcPpRXGL9ULFIhxVcuiv5O53efisMJvDf+
+	 WhCLW4VLXAA1Mvk7W4UPjO2iYAOOrXYzI4eGkKfkPVGRj4gom0kWpYnf9eKgiJtF57vG+
+	 SPFcr//dpVHlbDeHCg1yQsUMXcYiPcr9WaM4xekMLYO0s8suFXM3sq4v4I5yEIooH9l/Z
+	 Oh1p+Ix/lFoKn4rCrSAp42TVUt1GyKDVWQ3Bhx4PyvNjAq90REagjCDBtbRbokM7VgQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793980751;
+	c=relaxed/relaxed; t=1793980752;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,58 +30,58 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=VGOuPwxOA97lP1Rvaht4d9H0AQYyOKZafFvwmNDa35s=;
-	b=R0AkR0PFQYRjUQciUcoQyAsJ4ROwZBr0UasmyU4iDPsh1/LwOe0mwF73gwHlrOpwYKwC
-	 HLV5Ik+6/haBGVMJYvzTX7RgXKx3U+K7LdRFGkF7sRfcCnxvtg+7GZ7IxQKhOUVhsnrbu
-	 yrUz4q7DN87KVRDBLXvAqOl/zMv9xDdW+BEsGGsrc88W3D3luz4TT2s9WUZOnvGFCe6kD
-	 0kDjsueOebbczKh5chLpsKC29Dd3cxhh4xRJnkGqzuxzEK2likmorCGXkjqx/D2tOKbGR
-	 ex/ewn0xgohNsWRHWi42laroe3+N2XTnMqdo73snSHljtI1oVq6/gW8IheUjqy7tHDQ==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+	bh=o0BP8pN/vy/4fclfoidYJYBl53H7n6HXQpAJUf3OWYo=;
+	b=bYa3+gDv3nHJeb73HzEdJRZlzxd82Rn66nAnqUfFHfx5inmfK6FkQnyvwOZnts+ZBrzG
+	 LOtMtQqPrcgbP1kgDK8IeIODOWRCV8t/Y2qUdPEYB5eBzdZspA0B5phb3nY9azzGVUhBg
+	 /+HVp9t+RuzibqLoixqNhKGbrFus+Y+wOPd07Cz3ZWzLyAdtTYBcH3oZMJqlbyrfNcArA
+	 V2LiBeHiRciO1OB409e91ZcJVkok4aD3AsxYNnVZ0WgyFM3+w4fJDuLfMJCby1MHxMw4Z
+	 E8Lkfl9bka374HSqdQJENF18fWePXagx290C+BotzAmEYxRh7fsH9st7kDPTNxcdlkA==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793980751;
-	bh=VGOuPwxOA97lP1Rvaht4d9H0AQYyOKZafFvwmNDa35s=;
+	s=default; t=1793980752;
+	bh=o0BP8pN/vy/4fclfoidYJYBl53H7n6HXQpAJUf3OWYo=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=dYuA5y6nV9wIeoDGM376JTQZm4P0GWbmqh9/oELZtDZDBonqDw9W4nivZOCwKJlJg
-	 BJLYSsRogyc3m9lopCT4VzLtzQApy/MldpHWqHWU/mwQ+0J9A0MVgwbwbAWhs+LPsM
-	 dWXwF/cujrvBNgLQaLhqKlOp9lJL0TuWZFv6jTntFiRxMN3U9+KvFee8jd8/53Cxcv
-	 h2XL+91Zt853BPeswR5T+bPx0vXhadQBzvyCUSi9IY86K2nFQkcs/yLWbH8ehGfaVo
-	 IsPd2UeFgM19kbbItf5sTtNFPPImcpmfJ/qxc60lOEQWlPhyFT9z63uRBa7Zy4ep2X
-	 npIetaLpOaXrA==
+	b=lQeQJSFf7Q4ttBrTGIhdcBYdG5TL5uXHJhHa359ft2qHx3ZafIDPpLv/v4Zq5DCok
+	 eeu6igU0TzDXti1A1Z2fvJzDF6GoGaSBf/1fXh137FWQn+NEbCPqs/+/Q2stP49I48
+	 U7zmD9sGNpqafZOmNltW36R7DfC2f2Who8d1Z44xPymFQtPE3WmcOAy0znXWe+VoJo
+	 n+8DSHZlVvW4SFeQq8LIhv0BDFN0BhHm4+eja1I7NnYFJoeIJVwYu95TqeMnhUjCda
+	 XhoGONRuORS/yVin0bRFOgGrrt5g6VJ49jGCybg2Ln5AVG0x59ckenN+kZPmEq/eF1
+	 MMYtgDDDgX95A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 375EA608AB;
-	Fri,  6 Nov 2026 15:59:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B16E7812C8;
+	Fri,  6 Nov 2026 15:59:12 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6AF66A14
+ by lists1.osuosl.org (Postfix) with ESMTP id 8DEE934D
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 15:58:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5D1984091B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 73E374091B
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 15:58:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tp27wIroH3ol for <buildroot@buildroot.org>;
+ id qv3GwQ1pCu_G for <buildroot@buildroot.org>;
  Fri,  6 Nov 2026 15:58:28 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org BD7CD4091C
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 76DFA40913
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BD7CD4091C
- for <buildroot@buildroot.org>; Fri,  6 Nov 2026 15:58:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 76DFA40913
+ for <buildroot@buildroot.org>; Fri,  6 Nov 2026 15:58:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 012159E0AC; Fri,  6 Nov 2026 15:56:56 +0000 (UTC)
+ id AE9649E0A8; Fri,  6 Nov 2026 15:56:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 5 Nov 2026 12:04:26 +0100
+Date: Thu, 5 Nov 2026 13:27:52 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: 821a4db80e9b9f3eb261a4814ea764c1b06ef9dd
-X-Git-Newrev: ddb270f94bf2cf9eb612c4ef5e041084c80cb28a
+X-Git-Oldrev: f0f660e43b766676f09e815e311eb5d8e26825cb
+X-Git-Newrev: 8c1e897d568391f8082354f47ddc78c430615a7e
 X-Patchwork-Hint: ignore
-Message-Id: <20261106155656.012159E0AC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/rtl8188eu: fix
- build failure using gcc >= 14
+Message-Id: <20261106155656.AE9649E0A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/python-django:
+ security bump to v5.2.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,7 +96,7 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0931226226331210759=="
+Content-Type: multipart/mixed; boundary="===============9151130530594803542=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DATE_IN_PAST_24_48,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
@@ -106,47 +106,76 @@ X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DATE_IN_PAST_24_48,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============0931226226331210759==
+--===============9151130530594803542==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/ddb270f94bf2cf9eb612c4ef5e041084c80cb28a
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8c1e897d568391f8082354f47ddc78c430615a7e
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Starting with gcc 14, several C diagnostics which were previously warnings are
-errors by default. In particular, -Wincompatible-pointer-types was
-changed to a permanent error by GCC commit:
-r14-6037-g9715c545d33b3a32ddc1ae817ba9356ade1fb9df
-("c: Turn -Wincompatible-pointer-types into a permerror").
-So let's workaround this by passing -Wno-error to USER_EXTRA_CFLAGS.
+See the release notes:
+- https://docs.djangoproject.com/en/5.2/releases/5.2.16/
+- https://docs.djangoproject.com/en/5.2/releases/5.2.17/
+- https://docs.djangoproject.com/en/5.2/releases/5.2.18/
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 40a535a386aa3caef0e4f7da4c1f11619b912b5b)
+This fixes the following vulnerabilities:
+- CVE-2026-48588: Potential exposure of private data via cached Set-Cookie
+                  response
+- CVE-2026-53877: Heap buffer over-read in GDALRaster
+- CVE-2026-53878: Header injection possibility since DomainNameValidator
+                  accepted newlines in input
+- CVE-2026-15307: Server-side file-write and request forgery via spatial
+                  lookups
+- CVE-2026-15337: Potential denial-of-service vulnerability in
+                  check_for_language()
+- CVE-2026-15830: Potential denial-of-service vulnerability via nested
+                  geometry collections
+- CVE-2026-15920: Potential cross-site scripting via URLField values in
+                  the admin
+- CVE-2026-77050: Potential denial-of-service vulnerability in
+                  get_supported_language_variant()
+- CVE-2026-84429: Potential denial-of-service vulnerability in HTTP header
+                  parsing
+- CVE-2026-87890: Potential request forgery via spatial lookup byte values
+- CVE-2026-87975: Privilege abuse in model formsets with editable primary
+                  keys
+
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
+(alternative to commit 3e1a371a47c5abbbdae8e633aac8130a37aa2688)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/rtl8188eu/rtl8188eu.mk | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ package/python-django/python-django.hash | 4 ++--
+ package/python-django/python-django.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/rtl8188eu/rtl8188eu.mk b/package/rtl8188eu/rtl8188eu.mk
-index 9c60929d62..d6824ffc1f 100644
---- a/package/rtl8188eu/rtl8188eu.mk
-+++ b/package/rtl8188eu/rtl8188eu.mk
-@@ -8,7 +8,12 @@ RTL8188EU_VERSION = f42fc9c45d2086c415dce70d3018031b54a7beef
- RTL8188EU_SITE = $(call github,benetti-engineering,rtl8188eu,$(RTL8188EU_VERSION))
- RTL8188EU_LICENSE = GPL-2.0, proprietary (rtl8188eufw.bin firmware blob)
- RTL8188EU_LICENSE_FILES = COPYING
--RTL8188EU_MODULE_MAKE_OPTS = CONFIG_RTL8188EU=m
-+
-+RTL8188EU_EXTRA_CFLAGS = -Wno-error
-+
-+RTL8188EU_MODULE_MAKE_OPTS = \
-+	CONFIG_RTL8188EU=m \
-+	USER_EXTRA_CFLAGS="$(RTL8188EU_EXTRA_CFLAGS)"
+diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
+index 8121d67796..9bb445877f 100644
+--- a/package/python-django/python-django.hash
++++ b/package/python-django/python-django.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/django/json
+-md5  9db6f4aaaf130e3f53a4c5255c1b1bcd  django-5.2.15.tar.gz
+-sha256  5154a9bf84ac01dde011e367f355c07dbb329532e06810dcf3ef2af269e236e7  django-5.2.15.tar.gz
++md5  37d9504be21272595b91c2aa3ef4904c  django-5.2.18.tar.gz
++sha256  461c5dd06d2ea16bd5ca37d3f46e4def1d6b0fe7588c6f4e2119517bb0af8b2d  django-5.2.18.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
+ sha256  a6fa72074c31928128aaa18162204507938b7a9a8b819bd833fa82467441800d  django/contrib/gis/measure.py
+diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
+index cae4542099..a94853c518 100644
+--- a/package/python-django/python-django.mk
++++ b/package/python-django/python-django.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- define RTL8188EU_LINUX_CONFIG_FIXUPS
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_NET)
+-PYTHON_DJANGO_VERSION = 5.2.15
++PYTHON_DJANGO_VERSION = 5.2.18
+ PYTHON_DJANGO_SOURCE = django-$(PYTHON_DJANGO_VERSION).tar.gz
+ # The official Django site has an unpractical URL
+ PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/source/d/django
 
---===============0931226226331210759==
+--===============9151130530594803542==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -157,4 +186,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0931226226331210759==--
+--===============9151130530594803542==--
