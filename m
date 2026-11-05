@@ -1,28 +1,28 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C138A606A329
-	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 16:08:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B365606A329
+	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 16:08:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Xkzo5NT0
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=or37iOsQ
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E13E608EB;
-	Fri,  6 Nov 2026 16:08:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3320181423;
+	Fri,  6 Nov 2026 16:08:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Nq0WqPfYhNkl; Fri,  6 Nov 2026 16:08:32 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 9557D608DA
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793981312;
-	b=knltOZgRKgCc2e0+trw0haaDcxbY1uQOZnHpPCimuH/Okx3in5CaCbUJs5G62TN7s0OP
-	 y6XXScF4hcbZd3e2MZZzPUyKryCq+AUvMSozrUxV4qcLeGkmyflmusq2cKv8Mvzg8SiUf
-	 Grsjg0kggXJyBp3cngZQ2r5YDLiQ7pcA6nfcnN4gqh4XKuWFWFMDaDlHfQ/dsBDIq1EkL
-	 tyxPTZJz4YZnbWhAfYPwtHtl0PZPgdi5W4AivtKkqtXZIJn/8LZgKzsLILeKXbjAYa5Zz
-	 C6EHPMGRdz6JYe6Pr8LeeUfJH3vEG2fg9oswPsIlGu9tBJCJoqp9O7A6MBywFaXVIdw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MX_sD4aBZMGQ; Fri,  6 Nov 2026 16:08:34 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 378C581421
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793981314;
+	b=N6pqtbkZZ6npsKbCbm7jkopxJ2nyRiHVUV0chMTLjjFjOINzMud48dM9tDGrxnmIIs2H
+	 Sw5SFnmm1UkRRpUYsQzuMtVqjpo+GszCZHKkDXMslN4v59iEmH6wLsF1y5i34TJNVHHsR
+	 jTS1O0Ac8d6fUEguLS7w0NmoN3VONBQBl8ky6OMgvzniqm1cvloVcT7pb4xXlFaf4mvH3
+	 VMZa4WqbcYVtd2BcHI76cMpO5hp/MlBwBYk7eBJIRBrahbFMTO2R8b8nwgXq0Hucn0VwI
+	 gvYZolToWgTFERYCko2nU1MuJ36UGg0MSlJ2FTINY3Uz58owKtt6ZwEMeZ5lZ/n7OPw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793981312;
+	c=relaxed/relaxed; t=1793981314;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,58 +30,58 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=Cj2pki77YDkiPz/14kBItE4qOa5RgipdHbvg7w4t/FU=;
-	b=UMPdeJa/JCxfMBhSakVSgy7yzCgUcjl6VwpypwQiLkvY53IH7hk3EIbtAPWGlP7Mnv+s
-	 U0ZM4FXK3FeknEX2xmMDzvRHZGrUrm9JMpBIIoHw1SklU0ptEfXXWEXnpDwc6I0PTWeKL
-	 vVlBrDnhn6bB9eKTC76stvhhwu17E6XHjHfxQ1DnrHbYo/WZC1q0//LZ3MYJUkntYywri
-	 jGUa+Vhq+zMBQBw6tcPH6BmCDiSsuI7XCD/YoQUj/t1IjqYmYK8Q5sUnaChLB/bhTvQ6r
-	 H9RqbU4Vr3DdccPU81XjIygfWlRkIXkgg/ybxFM3LZlBxaA6v3sbTGX9XORUMHrVY1g==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+	bh=uLZZgjYs136hD5UZiBh5ZopGWf0ZWYTG++qXqLpRmW0=;
+	b=RVlZLAVu7dtTtc/LWUcoKzbLwO9xN4jQ4Nvi5OfEWmDgMYYlvCH7FtGSVZURc1uPd3Te
+	 JiFNqxSXA+PnPZ2Rbvoxke4N8z2PVAcq0nElvZgCH7x8a9dPshOmAuEz3vN7B5rBplLm8
+	 oohuX/6AKWsZAYF+wWJJGjTuqkTLokq9ClH48tkS2DlAZ9chctrl9lOd6GtECYFIgl8bR
+	 F0FyJsQNnNDfyWJCY2lzgaMWdkPk/h/CWhqB0TneQy48TpB0YL7TJn4wMFbaGQhOkliEb
+	 a/hIlCzriGS6xwITamuz0FZGgSPg9WpvXuCwnM4waRETzdmbhQdO8wdBqOv4Q481WPg==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793981312;
-	bh=Cj2pki77YDkiPz/14kBItE4qOa5RgipdHbvg7w4t/FU=;
+	s=default; t=1793981314;
+	bh=uLZZgjYs136hD5UZiBh5ZopGWf0ZWYTG++qXqLpRmW0=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Xkzo5NT0+Qr16yQ+DXbGNtkdURoRCE5PEwVWkDVm9quIv01iBdlxwu8BjhVw7Z8wj
-	 Sgf2I585zYR1A+XDsmyCJF386A67xGEgh5HcMzVlwBMzFX8WVOabj+SdDWwKcQZMb8
-	 oVROzMl2JCFYZQanvaVv7X8yf5oZ3OUokzNgelbzmHlierZnIuauJwh7xkhymBN/J1
-	 ZB42guMtqwY/MCY8E5I45kpkv+dE/cxz864jwDIK5IMSNOt1TnwIVxDYS/hXT7FC6b
-	 uTbsygMEKlqg1IsMYS56wD5rRWkeYwS2zoF16rW13zSkvr9tXpp4Rp6a3A58woxjN2
-	 Ydu8e9sSYhZ2A==
+	b=or37iOsQQNbGUR4i3sMvWRd5qXWbDjKEOeH9jOnATOQNdvBLWeAHTjuk5hdAJXpYP
+	 i8XRzM7xc4vlP8sghj35uXUUIIwlua1wnwwlOV0aAABoobXVWBca+hCqQBAxu4z1Pj
+	 IXy/udeJ6FtA4GJhtaTh+mp6TFDnmjliG1biMVysTovgXMnJRk8RF1hxfnY+V74odn
+	 QMhxOMVu0AOpctR+kNa8rWAyFiDKOnKC+9wrmzPhtjQHO8iklmKUf5CjCNvsDLOrpL
+	 j8YKiCUOxyVXMotttoHsV5IE2Ccu8T6Swlmvualia9Fy6PeDyL+MLNs0cd5rSvHOU3
+	 bUY2aobdN86Gw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9557D608DA;
-	Fri,  6 Nov 2026 16:08:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 378C581421;
+	Fri,  6 Nov 2026 16:08:34 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id DE5854B8
+ by lists1.osuosl.org (Postfix) with ESMTP id EEF2E7AA
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:08:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C418E6061F
+ by smtp3.osuosl.org (Postfix) with ESMTP id E013F6061F
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:08:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id giTi83UXAAuo for <buildroot@buildroot.org>;
+ id FSZExu6viXVz for <buildroot@buildroot.org>;
  Fri,  6 Nov 2026 16:08:17 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org E4F22605A7
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 3A41560890
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id E4F22605A7
- for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:08:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3A41560890
+ for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:08:17 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 27CD79E0B1; Fri,  6 Nov 2026 16:06:45 +0000 (UTC)
+ id 657869E09B; Fri,  6 Nov 2026 16:06:45 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 5 Nov 2026 15:30:57 +0100
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: 93f36d8d94136a24faebc0cb98c1d0d030817a12
-X-Git-Newrev: 46bb9d19dcf1112b89a32f967d52b40d38550576
+X-Git-Oldrev: 46bb9d19dcf1112b89a32f967d52b40d38550576
+X-Git-Newrev: 450c3ee6f7bd30af5cc857d8232c8ed47ba6b5da
 X-Patchwork-Hint: ignore
-Message-Id: <20261106160645.27CD79E0B1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/libwebsockets:
- fix OpenSSL detection without libatomic
+Message-Id: <20261106160645.657869E09B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/drogon: needs a
+ toolchain with wchar support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,7 +96,7 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2839873496658737865=="
+Content-Type: multipart/mixed; boundary="===============0676124597110647887=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DATE_IN_PAST_24_48,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
@@ -106,120 +106,64 @@ X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DATE_IN_PAST_24_48,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============2839873496658737865==
+--===============0676124597110647887==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/46bb9d19dcf1112b89a32f967d52b40d38550576
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/450c3ee6f7bd30af5cc857d8232c8ed47ba6b5da
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-Since version 4.5.3, libwebsockets adds -latomic to the libraries used
-by its OpenSSL API probes whenever 64-bit atomics don't work out of the
-box, without checking that libatomic is available. Buildroot toolchains
-without thread support don't provide libatomic, so on a CPU without
-native 64-bit atomics (e.g. ARMv5) all probes fail to link:
+The trantor library bundled in drogon uses std::codecvt_utf8<wchar_t>
+to convert strings between UTF-8 and std::wstring. Toolchains without
+wide character support, such as uClibc without WCHAR, have a libstdc++
+that lacks it, so any executable linked against trantor fails to link,
+starting with the drogon examples.
 
-  ld: cannot find -latomic: No such file or directory
+ld: ../trantor/libtrantor.so.1.5.29: undefined reference to `std::codecvt_utf8<wchar_t, 1114111ul, (std::codecvt_mode)0>::codecvt_utf8(unsigned int)'
 
-libwebsockets then assumes a pre-1.1 OpenSSL and fails to build:
+These conversions are part of the public API of trantor and drogon, so
+they cannot be disabled. Add a dependency on BR2_USE_WCHAR, together
+with the matching comment.
 
--- Performing Test HAVE_WORKING_ATOMIC_64 - Failed
-[...]
--- Looking for HMAC_CTX_new - not found
-[...]
-include/libwebsockets/lws-genhash.h:93:18: error: field 'ctx' has incomplete type
-   93 |         HMAC_CTX ctx;
-      |                  ^~~
-
-Add a patch, sent upstream, to only use libatomic if linking against it
-makes the 64-bit atomics test pass.
-
-This issue has been present since commit 20c3eb6eb684
-("package/libwebsockets: bump version to 4.5.7"), which bumped
-libwebsockets from 4.4.1 to 4.5.7, the atomic check having been added
-in 4.5.3. It therefore affects 2026.05 and later.
+This issue has been present since the package was added, so it also
+affects the 2026.08.x branch.
 
 Fixes:
-https://autobuild.buildroot.org/results/863c30265623973e15a25c2d38c0e1631a39b7e8
+https://autobuild.buildroot.org/results/6b893fea68e25fd928daabff5cf034de76062ac1
 
-Fixes: 20c3eb6eb68432c37d5db69963be266b7f2d23f7 ("package/libwebsockets: bump version to 4.5.7")
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Fixes: d38b4915e9437c5492836914c0a0fff12b4f1031 ("package/drogon: new package")
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f39c490c44cae0496c3ea4732d26af66f384fdc2)
+(cherry picked from commit 8aad652355035386e9de15f102549bed5395f022)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- ...sl-only-link-libatomic-if-it-is-available.patch | 61 ++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
+ package/drogon/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/libwebsockets/0001-cmake-openssl-only-link-libatomic-if-it-is-available.patch b/package/libwebsockets/0001-cmake-openssl-only-link-libatomic-if-it-is-available.patch
-new file mode 100644
-index 0000000000..84724f9c50
---- /dev/null
-+++ b/package/libwebsockets/0001-cmake-openssl-only-link-libatomic-if-it-is-available.patch
-@@ -0,0 +1,61 @@
-+From e0480a47e95a0d74c826926ae6bfef14fc8d988f Mon Sep 17 00:00:00 2001
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Tue, 27 Oct 2026 08:47:29 +0100
-+Subject: [PATCH] cmake: openssl: only link libatomic if it is available
-+
-+Commit 09aade8c9 ("cmake: openssl: Added check for atomic library")
-+adds -latomic to CMAKE_REQUIRED_LIBRARIES whenever 64-bit atomics
-+don't work out of the box, without checking that libatomic exists.
-+
-+Some toolchains don't provide libatomic at all, e.g. GCC toolchains
-+built without thread support, as libatomic relies on pthreads. On such
-+a toolchain for a CPU without native 64-bit atomics (e.g. ARMv5), every
-+OpenSSL API probe then fails to link:
-+
-+  ld: cannot find -latomic: No such file or directory
-+
-+so lws believes it deals with a pre-1.1 OpenSSL and the build fails:
-+
-+  include/libwebsockets/lws-genhash.h:93:18: error: field 'ctx' has incomplete type
-+     93 |         HMAC_CTX ctx;
-+        |                  ^~~
-+
-+Only use libatomic if linking against it makes the 64-bit atomics
-+test pass.
-+
-+Assisted-by: Claude:claude-opus-5-5
-+Upstream: sent to Andy Green <andy@warmcat.com> on 2026-10-27
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ lib/tls/CMakeLists.txt | 15 +++++++++++----
-+ 1 file changed, 11 insertions(+), 4 deletions(-)
-+
-+diff --git a/lib/tls/CMakeLists.txt b/lib/tls/CMakeLists.txt
-+index d91c3dab6..9060d32fe 100644
-+--- a/lib/tls/CMakeLists.txt
-++++ b/lib/tls/CMakeLists.txt
-+@@ -564,10 +564,17 @@ if (DEFINED LIB_LIST)
-+ endif()
-+ if(UNIX AND (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID MATCHES "Clang"))
-+   check_c_source_compiles("int main() { long long x = 0; __atomic_fetch_add(&x, 1, __ATOMIC_SEQ_CST); return 0; }" HAVE_WORKING_ATOMIC_64)
-+-  if(HAVE_WORKING_ATOMIC_64)
-+-    set(LWS_ATOMIC_LIB "")
-+-  else()
-+-    set(LWS_ATOMIC_LIB atomic)
-++  set(LWS_ATOMIC_LIB "")
-++  if(NOT HAVE_WORKING_ATOMIC_64)
-++    # libatomic is not always available (eg, toolchains without threads),
-++    # only use it if it actually provides the 64-bit atomics
-++    set(CMAKE_REQUIRED_LIBRARIES_SAVE ${CMAKE_REQUIRED_LIBRARIES})
-++    set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} atomic)
-++    check_c_source_compiles("int main() { long long x = 0; __atomic_fetch_add(&x, 1, __ATOMIC_SEQ_CST); return 0; }" HAVE_WORKING_ATOMIC_64_WITH_LIBATOMIC)
-++    set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES_SAVE})
-++    if(HAVE_WORKING_ATOMIC_64_WITH_LIBATOMIC)
-++      set(LWS_ATOMIC_LIB atomic)
-++    endif()
-+   endif()
-+ endif()
-+ if (UNIX AND NOT (${CMAKE_SYSTEM_NAME} MATCHES "QNX"))
-+-- 
-+2.34.1
-+
+diff --git a/package/drogon/Config.in b/package/drogon/Config.in
+index ce8a8313bd..c5e20c2017 100644
+--- a/package/drogon/Config.in
++++ b/package/drogon/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_DROGON
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_11 # C++17/20
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
++	depends on BR2_USE_WCHAR # std::codecvt_utf8<wchar_t>
+ 	select BR2_PACKAGE_JSONCPP
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+@@ -45,8 +46,8 @@ config BR2_PACKAGE_DROGON_YAML_CONFIG
+ 
+ endif
+ 
+-comment "drogon needs a toolchain w/ C++, threads, gcc >= 11"
++comment "drogon needs a toolchain w/ C++, threads, wchar, gcc >= 11"
+ 	depends on BR2_USE_MMU
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_11 || \
+-		!BR2_TOOLCHAIN_HAS_THREADS
++		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
 
---===============2839873496658737865==
+--===============0676124597110647887==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -230,4 +174,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============2839873496658737865==--
+--===============0676124597110647887==--
