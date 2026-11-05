@@ -1,28 +1,28 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CF59606B07A
-	for <buildroot@archiver.kernel.org>; Thu,  5 Nov 2026 19:30:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7FB560A5BC4
+	for <buildroot@archiver.kernel.org>; Thu,  5 Nov 2026 19:34:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=W57XFDv+
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=dTAzIl58
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 51D2660888;
-	Thu,  5 Nov 2026 19:30:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B5A66403F8;
+	Thu,  5 Nov 2026 19:34:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nLFs8Qq2YSm3; Thu,  5 Nov 2026 19:30:49 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 6ED4A60833
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793907049;
-	b=rpLrNMwt6/iYvTx1pfPp5mLAXwDhSzcw1da2kkvw5YbCSK2Xty6jQMcKP3B23rZq3iIg
-	 tZvL5R0X4pL/v6jcpUbpDJqGRS6r3i8rlb+q0z4k6JhGs6uvYaQ34FbeU7PMHYhb0urHU
-	 u4P4s0iIt00IX30k/wDjvl3i5c8FqjaJxH+uIhtuLJSIxCmg306RNLn+DOqJB8r3tKrUK
-	 DRab3ZQm7/et7f+wlL2GIGd3pmHiHfQIumLKnyV6RBRhMVBuu20uLkd8ToTqIOtxcLD3L
-	 mYxu1d7O/AjPS9fwJT5oxCxpJqxLfSgPpPT6gdBOwxf2dVVKmSt5pnBVlBg7mYEiNCQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2OTwSEFvhDOo; Thu,  5 Nov 2026 19:34:24 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org E3822404E7
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793907264;
+	b=DGNKn4lhrmf0FoDSFtmuCBIjvY7l69lb/lYKdd8GkWMQaUsAE6/uD5r2+OtrMLitrDLm
+	 KoLw1uxKroiM9xIIcMrxAWdmAjBGO+2KF3gNMKHhvthQtNsBNiznGNFB1mGpu0S/WHIcP
+	 Y1meN3P+tevPLjLuBbxs6IfS5F5fa1pzw1vPjh6Tf17FSbKXtIhh7IJ/A4h15yfSWwGsQ
+	 Y42sIB2Q/Jo5rNIvlrlxo6kq20pMPqw/SXXTc03Zuig/kALvaNKdNmOdeGdSfgfYuUbuX
+	 TNNPWmuQTBOdnQyYBx+Ny8oblJQokZ60oreDPPpoDtq+CZvk/QNpUIAmliVizk4C9XA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793907049;
+	c=relaxed/relaxed; t=1793907264;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,57 +30,57 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=SDQZr4ov+M0eqadLbU8lNvydSKEc4BaILIi6SFA3gfY=;
-	b=OEoSVfJwrwgWG7sXbDvuqwuDVvGSDE/mWvMfoMGJmHJrj48ze1bzj+q2UqZjY7Oa8BHZ
-	 9vE+NEhc32bDnyEB83d/zQMjHtXkLl84ybVJ3WHd7srgyPzhVt7vb0piZA7DqFDoYiRjO
-	 Nrd1QXmEkUaRA7eGbiIVcWwQp6oAD/cq4M2OELcTACnGl6v02Oi1UEXL9lnkCBDubju50
-	 S88fPOvUsDxD2Ncu/JPIiitRdV7WWlzaZd0fOZjiAQlNOKXBBLXagfs7AzE2TTvU+A2Q3
-	 zyYpul6W4qPamlGTscqWQO/53P3Hm8Q9KOUMlr0iAAo05zVyAC7g4yv4WBYMIZP9qgQ==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+	bh=2C8M8zsvqsNhGT4s1DAyJAiEYyWU0i+kmP3sm2Wcu/I=;
+	b=UwJUsdXiPc13b6N3fu0k3z0TM0MFLRSVLI2Y42/wdGwPUBtw0pMOTuENRAcS1eluXvdE
+	 qhTqIZRs7aKyeBSjfp2C82phO7rJDs8RV8bZYtdfnqslhvn7guUgnU9qPYUPmBTayn+MM
+	 Ai6BvcRYx2dDSitsoP/VzXMkFbC7eh0MfeH7q9Gr/bygbJwZCxCngOyZj5D7fPJG6fZVx
+	 Qxu4ZhOTmeUHTyKGFhq19av5YxoT6ldc5gvKMIlcgDx8hB5SWXDWfjtCIKSyDmJtxnRsx
+	 RZKsSj65mdwy2CfrN3BwXWq4860DbiTbGn0P/XomHIam/kAJPZ/Ci9tYDW+VGKqomCQ==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793907049;
-	bh=SDQZr4ov+M0eqadLbU8lNvydSKEc4BaILIi6SFA3gfY=;
+	s=default; t=1793907264;
+	bh=2C8M8zsvqsNhGT4s1DAyJAiEYyWU0i+kmP3sm2Wcu/I=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=W57XFDv+GZ5AycLJ2HoV+I/+iAsIwHH14EJvh0IIsbQ7Klxu+zD+1NHH9Pzr6L4cn
-	 4Uj4JiKT8EPMNLtbCpcXk5fIFX96fsX+MhUbNz7/m/D8EEmX+FLhxNSMcIw0cwU7G3
-	 MwxwFgIx3BfFEnRZZ4f5n/DqcwfoP9smczPVGys1WaFyLVRKVvY9VZEt0DWV88+JQM
-	 LCa0LfNrJCyp1QXYzAVEs1uNdn/HPK9ixswrobJStIb/Qbj1Sshzdnk5aGZ1uiiULK
-	 Vr9utjtHgwRRpdfj9vtJ7eEPIIEbLY3Opsp0ee9R99vjDnSfHXB0BPIbAUX3uUT/nY
-	 BBssQzQjvbmEQ==
+	b=dTAzIl58SnPQLpk8aVWvwPqUz83mvYel+jiSMPhBhjs8MS0jE1nSmlBXm0Gw9O8Nn
+	 agg33qFg0AepzOjrybEX735Pp4QtgJWMcJWbQrVT43SRDVjoxJB/VIYrsa6fV5Xk6h
+	 Ag19hBkhfCVeAIr9mmQOxdaOnr+UPV3kBSZ3bPLJQazrSAMibFFWtnvcREdJnmIvqO
+	 GgpNbw9UEduWYkm6XJuxAdk16AWf+XlXjFKhXRhnxOkodD7Q0vjpsBCOzNiNjvt5lx
+	 3T8sS/vjkQbbEADBwVOJJUXJQsujGYDglsci26zML6uVq48CTTdE+cMi7n3b2XAamF
+	 Nt6Wc0Pk5pZJg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6ED4A60833;
-	Thu,  5 Nov 2026 19:30:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7A7FB235
- for <buildroot@buildroot.org>; Thu,  5 Nov 2026 19:30:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E3822404E7;
+	Thu,  5 Nov 2026 19:34:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 620EE235
+ for <buildroot@buildroot.org>; Thu,  5 Nov 2026 19:34:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6B0548119C
- for <buildroot@buildroot.org>; Thu,  5 Nov 2026 19:30:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 485FF404E7
+ for <buildroot@buildroot.org>; Thu,  5 Nov 2026 19:34:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s9ZDXMLTaU1N for <buildroot@buildroot.org>;
- Thu,  5 Nov 2026 19:30:45 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org C709781139
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FGjkgSpZHf8L for <buildroot@buildroot.org>;
+ Thu,  5 Nov 2026 19:34:21 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 63B72403F8
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C709781139
- for <buildroot@buildroot.org>; Thu,  5 Nov 2026 19:30:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 63B72403F8
+ for <buildroot@buildroot.org>; Thu,  5 Nov 2026 19:34:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 689759E047; Thu,  5 Nov 2026 19:29:14 +0000 (UTC)
+ id 10DFD9CFCC; Thu,  5 Nov 2026 19:32:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 5 Nov 2026 20:24:58 +0100
+Date: Thu, 5 Nov 2026 20:31:40 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b34752398f28ee6b15ab852daa8479864330eed1
-X-Git-Newrev: 9c4e371d76cfbdfacd8bcc5a6322809b093d470f
+X-Git-Oldrev: 9c4e371d76cfbdfacd8bcc5a6322809b093d470f
+X-Git-Newrev: b4b0e7b369761a4cea9809f73c836afc8adc3432
 X-Patchwork-Hint: ignore
-Message-Id: <20261105192914.689759E047@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/iproute2: bump to version 7.3.0
+Message-Id: <20261105193250.10DFD9CFCC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/json-c: bump to version 0.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,52 +99,52 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
 	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9c4e371d76cfbdfacd8bcc5a6322809b093d470f
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b4b0e7b369761a4cea9809f73c836afc8adc3432
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-For release annouces, see:
-7.2.0: https://lore.kernel.org/netdev/20260817193804.46fb3c18@phoenix.local/
-7.3.0: https://lore.kernel.org/netdev/20261020194820.5c9fbfb8@phoenix.local/
-
 For the changes, see:
-https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/log/?qt=range&q=v7.1.0..v7.3.0
+https://github.com/json-c/json-c/blob/json-c-0.19-20260627/ChangeLog
+
+This release also addresses CVE-2026-9146 (documentation update only)
+and CVE-2026-11322 (in apps/json_parse, which Buildroot does not build
+as it passes -DBUILD_APPS=OFF).
 
 Assisted-by: Claude:claude-opus-5-5
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-[Julien: add links to release announces in commit log]
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/iproute2/iproute2.hash | 2 +-
- package/iproute2/iproute2.mk   | 2 +-
+ package/json-c/json-c.hash | 2 +-
+ package/json-c/json-c.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
-index 691e87bb43..645b1b5d79 100644
---- a/package/iproute2/iproute2.hash
-+++ b/package/iproute2/iproute2.hash
-@@ -1,3 +1,3 @@
- # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
--sha256  fd9fa1b95809417157ca83dd72957e3261bdbce896353cb936f80af0b33a4b5c  iproute2-7.1.0.tar.xz
-+sha256  5c1789d290bba048a6135ed1ab81b0402dd0fb528d1f1421765c42b1fc3d6289  iproute2-7.3.0.tar.xz
- sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 344a6fa8e4..aa0a094db1 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
+diff --git a/package/json-c/json-c.hash b/package/json-c/json-c.hash
+index 88bb49cb9d..c63a399e2b 100644
+--- a/package/json-c/json-c.hash
++++ b/package/json-c/json-c.hash
+@@ -1,4 +1,4 @@
+ # From https://github.com/json-c/json-c/wiki
+-sha256  876ab046479166b869afc6896d288183bbc0e5843f141200c677b3e8dfb11724  json-c-0.18.tar.gz
++sha256  37ad0249902e301bd9052bf712e511fcc6acff4ecaad4b5900aad9ce564e26de  json-c-0.19.tar.gz
+ # Locally calculated
+ sha256  74c1e6ca5eba76b54d0ad00d4815c8315c1b3bc45ff99de61d103dc92486284c  COPYING
+diff --git a/package/json-c/json-c.mk b/package/json-c/json-c.mk
+index 20fa767c23..385a11105a 100644
+--- a/package/json-c/json-c.mk
++++ b/package/json-c/json-c.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPROUTE2_VERSION = 7.1.0
-+IPROUTE2_VERSION = 7.3.0
- IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
+-JSON_C_VERSION = 0.18
++JSON_C_VERSION = 0.19
+ JSON_C_SITE = https://s3.amazonaws.com/json-c_releases/releases
+ JSON_C_INSTALL_STAGING = YES
+ JSON_C_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
