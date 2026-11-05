@@ -1,28 +1,28 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1121B606A32D
-	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 15:59:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2758C606A326
+	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 15:59:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=mC5V7xML
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=I5Vh89Eg
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DDF8E8103B;
-	Fri,  6 Nov 2026 15:59:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 03E66608B9;
+	Fri,  6 Nov 2026 15:59:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PMbM9RadAc28; Fri,  6 Nov 2026 15:59:04 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org BCEDA81290
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793980743;
-	b=arc0dveM36ytBf+1uUuLOH9HID4WYOp7eEhN0VPBP/LTFmN34SXVvBlkVm4zOJ8hiAJ+
-	 qSceedipUtQYU1VvTdG53dzxGieAYjCFwiW++sLyMx16heez6H9gXeEmPvbiqRDiwFhsN
-	 eRSsxIJECIsPXjBx8tOg3nrSchSbbxMx7X5aHh1sEuTdZ6P6jFVp7UaIk/ILzvf55IFwf
-	 iuF7VsVJQ4NTpZCjiPk0+UTGkuPWecWW14q3MGRKEynbZmICNzZFdt3MBev+F6YAMmHrH
-	 gjIFJshWsjg+5XlTRvO90Y+Ovh9fSiKHC27RAD4E5mIod9KlOtl9PlRxXajKcKOxTCQ==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id A7sOnwZg29LS; Fri,  6 Nov 2026 15:59:06 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 2117C608BE
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793980746;
+	b=EvtqCof7cu0reQcT5IVPydGvEB5g+95Df4Fi3kEcSJCDaOkHxomgoz4wPCKp56VqDZ2p
+	 82MIJNBDSxwzKKshHFtkysaD6hjfRUA+y7aJYRcKAfGAYz/V/0h9ugkfS4ZuCimNYDTiv
+	 29CQu1muePMNOZ6YOpz3F7vthPwOhIsaDRMeOA1MSMNhC1FQGXw784JIVshB67jOI3ow3
+	 F2lNvI+JnYG/TwnvFzL65K+ke4wprFC4MBPd1soqbimg0caknXQjHFt+imbclGArOa5fp
+	 UVQwRR9ee0SzpnDN5f3DkEs1e1evn/B4anZLkk5YEtTYNkjxLK4U4jwwV+/sBTsNmkA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793980743;
+	c=relaxed/relaxed; t=1793980746;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,58 +30,58 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=mEEDGFQelfvDf6Q9p59m9kRyMXyE8HAbaAuB8IuuOpI=;
-	b=TW56bWh7VgNQo7Ki0TIkU7ElGfiLkX5hmggt3s05Rg1+5WfOlp0VL3cqwxH9SaXGAln7
-	 UgUpoxI0PM+4qn61sUXMyBUJg5LYQQ9mLWmKah3ax6snD0T3eiPJgKI+SfoMOFtYxEP74
-	 hD9OpKr2BIvAd4TkoVz7gyZw4Ga18YcQITWsEGPFutgLJdT/0ZDN0Lmo7/YvHXjjZWGgp
-	 1V0k1X2pjZMSKiG/Ic23c71GVDwxdLRSyiLUp62r19jylDF9+SyuldEEB/3FNjJ0OoSHr
-	 abFlt3nlcGs6CzHv+4XdEAWnd88qD8Yghd7fRfh7QUaNG7fA6U83/5cSBFX9JS1czsg==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+	bh=qM+lbiVOXKQUhBZiNLnE9igM5P/A8WZrjjVMRl9iPfQ=;
+	b=eQut5JL0qvCWNUgMvgN+PPgLV6iPDZmM9UMNaRbsJSAp50Y2tClC3KyVo2V6C0nMZtN6
+	 oshzZWacZgLHVWpqyLha07slY1xuYGnWfMlTqN3ag/q+jtGT+J2r/yckYTBuChVoTmeEL
+	 U9nJSL9IU5gD30SCLYwq4RbylyxkBY1IqxNLIPzHAILkLI4bNX+ewG5ZL5WMTOin7SLTX
+	 ikbLaZdZ0zN+xS51SHdzJOKUM0EZHdpaspw4z3v7pkTBt6gGAiYiRG5jaxlSLbJiA9qKn
+	 0WtAmCw91MgCAD8+m9p8XhbfNDmIADC0JoNUEUO/rKI4AKcmH9lbLA10ZOTNgu4nXMQ==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793980743;
-	bh=mEEDGFQelfvDf6Q9p59m9kRyMXyE8HAbaAuB8IuuOpI=;
+	s=default; t=1793980746;
+	bh=qM+lbiVOXKQUhBZiNLnE9igM5P/A8WZrjjVMRl9iPfQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=mC5V7xMLXgwIp4mVBFMeoi3k/n2PuaXi98l2upoTn52IU1C3TYfodKj/vQ5C81U2b
-	 LSdOhUYiYtXIQKZ2GMov+Q4cQGIlRL3+6ruiKdzfn+3f0gOQL38rCJZxSHI7YGPK4M
-	 aQ9XUPLRx/4HiazawOAxayQTVyHcaj30/6ENPssEw6jdmk66k+vy4ma1/6zZ2atLdD
-	 Xj4r+nIwiGdqUpgQOWYcm56+ECG8wdxH1nEMqy4uR4WCQaojyd0Ga7zS2tYEzwiXgg
-	 aFN2SooYFDQoy05ofKXF5Wn4D9TqZ+8fVmtwoM/mXyS2EXcRSnzXV/PXSm/0bdZDjT
-	 86Nl5NGMd/H6Q==
+	b=I5Vh89Eg+MFt1ZITLHgvo9j9F6scrUYxB0I6Wc+ehK0JIUBoomJMSdtAVZCyMa1BI
+	 8LsLL31L6KsEHDYUmVStDpA+GVd6Bpn6/00imww6koLG9sqJS5XjoZ8qqZhmVxC4Qu
+	 ZlSdUo/RNcRH5YWM7mFmYgr4GBtLaJVX84Oz3Nj+nRgdE+hNTFUMxCkilXqV6FG4rv
+	 GVMs+bzg5Vw3hydDI8hzsRbtDqjZVxTrAz260V/psCGP9pn30WbKgBkySomPyERs2E
+	 d2o4dqrYULxW3oRrcR+lMljQQv+FekofPnwxAFvAcwxXvNC+CVIPus9rY789rAUmu0
+	 tP1sVhdb2e16Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BCEDA81290;
-	Fri,  6 Nov 2026 15:59:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 60260D3A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2117C608BE;
+	Fri,  6 Nov 2026 15:59:06 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 553E132A
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 15:58:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 43404403DC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 42A38403D9
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 15:58:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1BjPP53EZiia for <buildroot@buildroot.org>;
+ id 94xtQ2aEpeSO for <buildroot@buildroot.org>;
  Fri,  6 Nov 2026 15:58:28 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org D3D0F403DD
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 67F07403DE
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D3D0F403DD
- for <buildroot@buildroot.org>; Fri,  6 Nov 2026 15:58:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 67F07403DE
+ for <buildroot@buildroot.org>; Fri,  6 Nov 2026 15:58:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 17FE69E09B; Fri,  6 Nov 2026 15:56:56 +0000 (UTC)
+ id 9F9929E09B; Fri,  6 Nov 2026 15:56:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 5 Nov 2026 12:04:26 +0100
+Date: Thu, 5 Nov 2026 13:21:58 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: ddb270f94bf2cf9eb612c4ef5e041084c80cb28a
-X-Git-Newrev: f98118f0f7979178e9765c4f85b2bba38a8ca438
+X-Git-Oldrev: d19bcb52080b16ede6b08bc8d37e0eab8bee7541
+X-Git-Newrev: f0f660e43b766676f09e815e311eb5d8e26825cb
 X-Patchwork-Hint: ignore
-Message-Id: <20261106155656.17FE69E09B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x]
- package/rtl8812au-aircrack-ng: fix build failure using gcc >= 14
+Message-Id: <20261106155656.9F9929E09B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/docker-cli: Fix
+ go module version information
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,54 +96,72 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2782699041591240828=="
+Content-Type: multipart/mixed; boundary="===============2363223126189563805=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DATE_IN_PAST_24_48,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_NONE autolearn=ham autolearn_force=no
+	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_PASS autolearn=ham autolearn_force=no
 	version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============2782699041591240828==
+--===============2363223126189563805==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f98118f0f7979178e9765c4f85b2bba38a8ca438
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f0f660e43b766676f09e815e311eb5d8e26825cb
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-Starting with gcc 14, several C diagnostics which were previously warnings are
-errors by default. In particular, -Wincompatible-pointer-types was
-changed to a permanent error by GCC commit:
-r14-6037-g9715c545d33b3a32ddc1ae817ba9356ade1fb9df
-("c: Turn -Wincompatible-pointer-types into a permerror").
-So let's workaround this by passing -Wno-error to USER_EXTRA_CFLAGS.
+Apply the same change from docker-engine to the docker-cli.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 750d353e3bb295b051ad50dfbd62a7cdff4a6857)
+Docker's own build system (hack/make/.binary) uses "-mod=vendor
+-modfile=vendor.mod" flags, which are crucial for preserving module
+dependency information. Adding these flags makes the previous vendoring
+workaround obsolete for modern Docker versions.
+
+Patch downloaded from
+https://github.com/home-assistant/buildroot/commit/dba1173fb4cfb39624621f328fd2811f50a34513
+
+Signed-off-by: Stefan Agner <stefan@agner.ch>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+(cherry picked from commit bdfb817b1c97da7835e7ec60e5bed962e1c4c3b5)
+[Raphaël: fix conflicts in package/docker-cli/docker-cli.mk]
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ package/docker-cli/docker-cli.mk | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
 
-diff --git a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
-index 6ffcf37c20..9c6cf3936f 100644
---- a/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
-+++ b/package/rtl8812au-aircrack-ng/rtl8812au-aircrack-ng.mk
-@@ -13,9 +13,7 @@ RTL8812AU_AIRCRACK_NG_EXTRA_CFLAGS = \
- 	-DCONFIG_$(call qstrip,$(BR2_ENDIAN))_ENDIAN \
- 	-DCONFIG_IOCTL_CFG80211 \
- 	-DRTW_USE_CFG80211_STA_EVENT \
--	-Wno-error=address \
--	-Wno-error=array-bounds \
--	-Wno-error=cast-function-type
-+	-Wno-error
+diff --git a/package/docker-cli/docker-cli.mk b/package/docker-cli/docker-cli.mk
+index e118481838..1c5062e3d5 100644
+--- a/package/docker-cli/docker-cli.mk
++++ b/package/docker-cli/docker-cli.mk
+@@ -17,6 +17,7 @@ DOCKER_CLI_CPE_ID_PRODUCT = docker
  
- RTL8812AU_AIRCRACK_NG_MODULE_MAKE_OPTS = \
- 	CONFIG_PLATFORM_I386_PC=n \
+ DOCKER_CLI_TAGS = autogen
+ DOCKER_CLI_BUILD_TARGETS = cmd/docker
++DOCKER_CLI_BUILD_OPTS += -mod=vendor -modfile=vendor.mod
+ DOCKER_CLI_GOMOD = github.com/docker/cli
+ 
+ DOCKER_CLI_LDFLAGS = \
+@@ -29,15 +30,6 @@ DOCKER_CLI_TAGS += osusergo netgo
+ DOCKER_CLI_GO_ENV = CGO_ENABLED=no
+ endif
+ 
+-# create the go.mod file with language version go1.19
+-# remove the conflicting vendor/modules.txt
+-# https://github.com/moby/moby/issues/44618#issuecomment-1343565705
+-define DOCKER_CLI_FIX_VENDORING
+-	printf "module $(DOCKER_CLI_GOMOD)\n\ngo 1.19\n" > $(@D)/go.mod
+-	rm -f $(@D)/vendor/modules.txt
+-endef
+-DOCKER_CLI_POST_EXTRACT_HOOKS += DOCKER_CLI_FIX_VENDORING
+-
+ DOCKER_CLI_INSTALL_BINS = $(notdir $(DOCKER_CLI_BUILD_TARGETS))
+ 
+ $(eval $(golang-package))
 
---===============2782699041591240828==
+--===============2363223126189563805==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -154,4 +172,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============2782699041591240828==--
+--===============2363223126189563805==--
