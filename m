@@ -2,27 +2,27 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1C21606BFB1
-	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 16:09:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4559606A329
+	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 16:09:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=g4gPqkcx
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=sqaIrfPq
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AA7838167A;
-	Fri,  6 Nov 2026 16:09:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 870D581754;
+	Fri,  6 Nov 2026 16:09:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ld4CM9ug_Rx1; Fri,  6 Nov 2026 16:09:20 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 6D4F681758
+ id GULicp76QKYx; Fri,  6 Nov 2026 16:09:21 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 8C9408175C
 Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793981359;
-	b=oXlBS8uziQ1vcIN57UAjqVRhwDBfwInHwTmIb9+3XN7AxQ7CxAoU/YhWGtfCfNV0SBV1
-	 m37Mkp8Cy/Ay1TH7lvFZmDKX8Bz//wwmL+j3kpfddx9mCrK28RQxZiWSFB7d1aOuaTJDq
-	 sdG/bygYeAGFJb2ap2EN2WwlIzOlfYImAF5Rz5MBIEcrVugAuNVFKslTztoWZIYEQHVzR
-	 SDktF0sJVvWPSJLRvMfcAovm7MKGOCpTo5kLi6WhHDnalFrNJ7VHeEEFpm0Co81JNYTx8
-	 b+9NMe8YwVr5UYM2KmLdoyA+Zx0s6sRAUR8vmSM+dzVdSM8V0yQknHcReUX4qUKQ3Sg==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793981361;
+	b=PdYMtenEIBmVEgagYUCS12rTwGKLRgHhB2I8KQyal+xvhXypFf4IcgMJKf51Yi2g1xv1
+	 mk6B0kPGvdpKw3DmEckCC0xB8buf1VVMZswjiyZMm8KghFd6m1gx1TpBrXFI+yf2DfbKg
+	 SvBRkF8+y3LeBtKqglxJyvLVm91ESDG9eCopf+yirLcMpYeKkXth0XJJYleciDCyViD1c
+	 H488TqYF+x5kyuLTUuYgFu0WEj17nV7iypsAkgZn88jGlg8yV/HkGxKah94sePjp1PCSB
+	 TCyTUJKt40ADbsKhXPNXlMvDqY++4fabhLGVZPI36GHVQVFnfDOI6wRBCNEGOBoBwLg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793981359;
+	c=relaxed/relaxed; t=1793981361;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,58 +30,58 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=f4OdGlYZETIpGDaydRVHrEV11pqmPuPG2btvZL/mtTk=;
-	b=bTG1enClsqrvmjSZVROBU7BPzG0sew2IbzCcFgUDoYoe7FTK/nfuw/HPGhgEb3CrFd4P
-	 0NqkdmrA0VS4qc9yN+POpqSDFnG0fawpB4NnVLvrvgpqr/f5SjnpTBcYnAjAJGj+GceRD
-	 ooEIR5tJV6aUUvtEuq4ZW39wF7CzBZLcEbarLz2KOBn6sshttE106/9yjelDNVYuMeEHQ
-	 uGAI8jUAEQOuzZc84SQ2Uv9hzKLQTKKeBQilWvQ8zpNJdtHgprXzpgVczEnz1cfK0REun
-	 eOzPjaBMEy+8AhS27vRVYBFg38ysOtC835cDVIwX2SAVHs3pP8tjZ95thQaQ/Qelsqg==
+	bh=RFvQD/UnKTncvpuDBGSjLZBuv/5uR8BdUd3NmBmDGqA=;
+	b=a4khaKYiFR0fMxdwJ42+v8f6Eesef1RnX0qB3VM8FtA41so5TXuRAlUSNC+sgUkbWY6R
+	 mTZSCqsbxYBRqzO0amzvc+RBqbOjqnikb9uaR7hIDEdjOO+QBUjAP+lZmYgGEJnBthg2h
+	 vnIiPkeQLgm/11SwxyAj+My+Pp7y3JsIv+KWzFMR+0Q+sTmzsedfsjk2UwzYGBGQpnwAN
+	 ZlFv2vcPdIQO8bIFH/jEuClHShd62olrvTHcFJ8d1//7rnx6IagK5UfoGrXi+1ZgLQfk3
+	 3kAWgLHvCtG5MLI1rDngizKxonRI9EJD2ssgvqG3rnFOGFCJrt7zWBw7dR6hB3yOqIg==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793981359;
-	bh=f4OdGlYZETIpGDaydRVHrEV11pqmPuPG2btvZL/mtTk=;
+	s=default; t=1793981361;
+	bh=RFvQD/UnKTncvpuDBGSjLZBuv/5uR8BdUd3NmBmDGqA=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=g4gPqkcxzATb5VeJ4/mHw59NNrnlZUk1X86bafeWqAjqPUHPjt1h+PdrVxguLauGo
-	 wTNKBD8IMXssT2GTg3O3l6BxgSDCNcQULvlFHhgXuRy7EM8RlfVJpAWGeHApwMAYpP
-	 X7jOlpNLFIZMNZLoQvL9WszB5u0kBxPAk98Xvs6WkaCvJ9H4mLSL5CwS4O5A13FR5T
-	 W5w6v2FprZ6scqWHQgwB2ZUlq/8tyLk7GNADZbm8Ha2oTM5q9asWUwcd/9h2+wZ+37
-	 f3Ac+xk18izR4bS2AOGEWlp8DpaDDm1puXibJKJLVtYHgRIHIOoh3GGBVlKbn9RVLN
-	 lkX1MCYcJxeoA==
+	b=sqaIrfPqqW1Jwvl5DvUON3mB/Prt/wSyVCcCrNddh42My3HiYn7SP6KhCB3vqHN3d
+	 k2j1KFVt/s02T7a5O3toWep4lgRt9WVzdrAg/pNT7LAhD9oemXFvsDYa/3GZD5vr1w
+	 z3lvfkzbQ/X1IMvU5ARymSvYcVIlmXsVvuPI4Gj2xwLymVvHBx8HYWEFZC4Ld9F2C5
+	 AUkYZzBsesG800CmbmeVmR+G9GWdFzKwv6bKBELKxFN1j3TeU85IgCtroOp5DLMs+r
+	 AKUEyCbtosPOh9+wgqIPmtJlSiG9TJMVW+HCA5VgdlCbpseWh1T4pt5Kv3CdB7ymPM
+	 gpoP4pr7kF/ag==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6D4F681758;
-	Fri,  6 Nov 2026 16:09:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 7CD89AFC
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8C9408175C;
+	Fri,  6 Nov 2026 16:09:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D3D394B8
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:08:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6ADE640917
+ by smtp2.osuosl.org (Postfix) with ESMTP id B9EC8403D5
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:08:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MDPfm2u6lWTU for <buildroot@buildroot.org>;
- Fri,  6 Nov 2026 16:08:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org C3BD140911
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Zf-a7whvF-tv for <buildroot@buildroot.org>;
+ Fri,  6 Nov 2026 16:08:42 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org F1668403CB
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C3BD140911
+ by smtp2.osuosl.org (Postfix) with ESMTP id F1668403CB
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:08:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EEEE79E0B0; Fri,  6 Nov 2026 16:07:09 +0000 (UTC)
+ id 25E489E09B; Fri,  6 Nov 2026 16:07:10 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 5 Nov 2026 15:30:58 +0100
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: f3723d838f87bcb46124e0e5615350343c66b05d
-X-Git-Newrev: 7bffbc901b93c0e69de2cc6fb83b6793ea2fc78f
+X-Git-Oldrev: 7bffbc901b93c0e69de2cc6fb83b6793ea2fc78f
+X-Git-Newrev: c5d4f01f6361bd2fd8f88b4d1347254e6c66a2ec
 X-Patchwork-Hint: ignore
-Message-Id: <20261106160709.EEEE79E0B0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/cpuinfo: don't
- support ARMv4
+Message-Id: <20261106160710.25E489E09B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] package/python-httplib2:
+ add patch to revoke compromised eMudhra CA
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,71 +96,101 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6230163297309955222=="
+Content-Type: multipart/mixed; boundary="===============2416070298298949195=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DATE_IN_PAST_24_48,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
 	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_NONE autolearn=ham autolearn_force=no
+	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_PASS autolearn=ham autolearn_force=no
 	version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============6230163297309955222==
+--===============2416070298298949195==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7bffbc901b93c0e69de2cc6fb83b6793ea2fc78f
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/c5d4f01f6361bd2fd8f88b4d1347254e6c66a2ec
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-Building the package cpuinfo with an ARMv4 architecture would result in
-the following error message:
-
-```
-/home/thomas/autobuild/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabi/13.4.0/../../../../arm-buildroot-linux-gnueabi/bin/ld: CMakeFiles/cpuinfo.dir/src/init.c.o: in function `cpuinfo_initialize':
-init.c:(.text+0x28): undefined reference to `cpuinfo_arm_linux_init'
-/home/thomas/autobuild/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabi/13.4.0/../../../../arm-buildroot-linux-gnueabi/bin/ld: libcpuinfo.so: hidden symbol `cpuinfo_arm_linux_init' isn't defined
-/home/thomas/autobuild/instance-0/output-1/host/lib/gcc/arm-buildroot-linux-gnueabi/13.4.0/../../../../arm-buildroot-linux-gnueabi/bin/ld: final link failed: bad value
-```
-
-This can be reproduced with the following defconfig:
-
-```
-BR2_arm=y
-BR2_fa526=y
-BR2_PACKAGE_CPUINFO=y
-```
-
-As stated in the README of the upstream project [1] only ARMv5 and later
-CPU are supported. This commit then exclude ARMv4 from the supported
-architecture.
-
-[1] https://github.com/pytorch/cpuinfo/blob/main/README.md#supported-environments
-
-Fixes: ea1cc1af55 ("package/cpuinfo: new package")
-Fixes: https://autobuild.buildroot.org/results/f14/f14e4afacaa61021463c457def1cad3c81d35f29
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ccdd1ca4aac11d913f10eb071d7c15d5fbede9a4)
+(alternative to commit 006269e93297e1a4009553526b158c6287aad805)
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/cpuinfo/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...d-comodo-aaa-certificate-services-root-ca.patch | 64 ++++++++++++++++++++++
+ 1 file changed, 64 insertions(+)
 
-diff --git a/package/cpuinfo/Config.in b/package/cpuinfo/Config.in
-index 64477c2bd7..4aecf2e060 100644
---- a/package/cpuinfo/Config.in
-+++ b/package/cpuinfo/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_CPUINFO_ARCH_SUPPORTS
- 	bool
- 	default y if BR2_aarch64
--	default y if BR2_arm
-+	default y if BR2_arm && !BR2_ARM_CPU_ARMV4
- 	default y if BR2_i386
- 	default y if BR2_x86_64
- 
+diff --git a/package/python-httplib2/0001-cacerts-remove-distrusted-comodo-aaa-certificate-services-root-ca.patch b/package/python-httplib2/0001-cacerts-remove-distrusted-comodo-aaa-certificate-services-root-ca.patch
+new file mode 100644
+index 0000000000..c7d93df543
+--- /dev/null
++++ b/package/python-httplib2/0001-cacerts-remove-distrusted-comodo-aaa-certificate-services-root-ca.patch
+@@ -0,0 +1,64 @@
++From: Kirill Logachev <kirl@google.com>
++Date: Wed, 21 Oct 2026 05:15:52 +0000
++Subject: cacerts: remove distrusted Comodo AAA Certificate Services root CA
++
++Remove the Comodo "AAA Certificate Services" root certificate (SHA-256: d7:a7:a0:fb:5d:7e:27:31:d7:71:e9:48:4e:bc:de:f7:1d:5f:0c:3e:0a:29:48:78:2b:c8:3e:e0:ea:69:9e:f4) from httplib2/cacerts.txt.
++
++Six eMudhra (emSign) intermediate TLS CA private keys were compromised and are trivially reconstructable by third parties. Because the legacy Comodo "AAA Certificate Services" root CA cross-signs the affected emSign Root TLS CA - G3 hierarchy, TLS clients that do not enforce browser CRLSet/OneCRL revocations remain vulnerable to MITM attacks if they continue to trust this root certificate. Major root programs and CA bundles (including Mozilla NSS and certifi 2026.10.19) have removed trust in this root certificate.
++
++References:
++- https://bugzilla.mozilla.org/show_bug.cgi?id=2083449
++- https://emudhra.we-have-a-problem.com/
++- https://github.com/certifi/python-certifi/pull/440
++
++---
++Upstream: https://github.com/httplib2/httplib2/commit/5fee2b095f49a6ad5e1f0a185d909c89199e4dc9
++Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
++---
++ httplib2/cacerts.txt | 33 ---------------------------------
++ 1 file changed, 33 deletions(-)
++
++diff --git a/httplib2/cacerts.txt b/httplib2/cacerts.txt
++index 78a444c..e80059b 100644
++--- a/httplib2/cacerts.txt
+++++ b/httplib2/cacerts.txt
++@@ -875,39 +875,6 @@ Zvqz2cK6Kb6aSDiCmfS/O0oxGfm/jiEzFMpPVF/7zvuPcX/9XhmgD0uRuMRUvAaw
++ RY8mkaKO/qk=
++ -----END CERTIFICATE-----
++
++-# Issuer: CN=AAA Certificate Services O=Comodo CA Limited
++-# Subject: CN=AAA Certificate Services O=Comodo CA Limited
++-# Label: "Comodo AAA Services root"
++-# Serial: 1
++-# MD5 Fingerprint: 49:79:04:b0:eb:87:19:ac:47:b0:bc:11:51:9b:74:d0
++-# SHA1 Fingerprint: d1:eb:23:a4:6d:17:d6:8f:d9:25:64:c2:f1:f1:60:17:64:d8:e3:49
++-# SHA256 Fingerprint: d7:a7:a0:fb:5d:7e:27:31:d7:71:e9:48:4e:bc:de:f7:1d:5f:0c:3e:0a:29:48:78:2b:c8:3e:e0:ea:69:9e:f4
++------BEGIN CERTIFICATE-----
++-MIIEMjCCAxqgAwIBAgIBATANBgkqhkiG9w0BAQUFADB7MQswCQYDVQQGEwJHQjEb
++-MBkGA1UECAwSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHDAdTYWxmb3JkMRow
++-GAYDVQQKDBFDb21vZG8gQ0EgTGltaXRlZDEhMB8GA1UEAwwYQUFBIENlcnRpZmlj
++-YXRlIFNlcnZpY2VzMB4XDTA0MDEwMTAwMDAwMFoXDTI4MTIzMTIzNTk1OVowezEL
++-MAkGA1UEBhMCR0IxGzAZBgNVBAgMEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UE
++-BwwHU2FsZm9yZDEaMBgGA1UECgwRQ29tb2RvIENBIExpbWl0ZWQxITAfBgNVBAMM
++-GEFBQSBDZXJ0aWZpY2F0ZSBTZXJ2aWNlczCCASIwDQYJKoZIhvcNAQEBBQADggEP
++-ADCCAQoCggEBAL5AnfRu4ep2hxxNRUSOvkbIgwadwSr+GB+O5AL686tdUIoWMQua
++-BtDFcCLNSS1UY8y2bmhGC1Pqy0wkwLxyTurxFa70VJoSCsN6sjNg4tqJVfMiWPPe
++-3M/vg4aijJRPn2jymJBGhCfHdr/jzDUsi14HZGWCwEiwqJH5YZ92IFCokcdmtet4
++-YgNW8IoaE+oxox6gmf049vYnMlhvB/VruPsUK6+3qszWY19zjNoFmag4qMsXeDZR
++-rOme9Hg6jc8P2ULimAyrL58OAd7vn5lJ8S3frHRNG5i1R8XlKdH5kBjHYpy+g8cm
++-ez6KJcfA3Z3mNWgQIJ2P2N7Sw4ScDV7oL8kCAwEAAaOBwDCBvTAdBgNVHQ4EFgQU
++-oBEKIz6W8Qfs4q8p74Klf9AwpLQwDgYDVR0PAQH/BAQDAgEGMA8GA1UdEwEB/wQF
++-MAMBAf8wewYDVR0fBHQwcjA4oDagNIYyaHR0cDovL2NybC5jb21vZG9jYS5jb20v
++-QUFBQ2VydGlmaWNhdGVTZXJ2aWNlcy5jcmwwNqA0oDKGMGh0dHA6Ly9jcmwuY29t
++-b2RvLm5ldC9BQUFDZXJ0aWZpY2F0ZVNlcnZpY2VzLmNybDANBgkqhkiG9w0BAQUF
++-AAOCAQEACFb8AvCb6P+k+tZ7xkSAzk/ExfYAWMymtrwUSWgEdujm7l3sAg9g1o1Q
++-GE8mTgHj5rCl7r+8dFRBv/38ErjHT1r0iWAFf2C3BUrz9vHCv8S5dIa2LX1rzNLz
++-Rt0vxuBqw8M0Ayx9lt1awg6nCpnBBYurDC/zXDrPbDdVCYfeU0BsWO/8tqtlbgT2
++-G9w84FoVxp7Z8VlIMCFlA2zs6SFz7JsDoeA3raAVGI/6ugLOpyypEBMs1OUIJqsi
++-l2D4kF501KKaU73yqWjgom7C12yxow+ev+to51byrvLjKzg6CYG1a4XXvi3tPxq3
++-smPi9WIsgtRqAEFQ8TmDn5XpNpaYbg==
++------END CERTIFICATE-----
++-
++ # Issuer: CN=Secure Certificate Services O=Comodo CA Limited
++ # Subject: CN=Secure Certificate Services O=Comodo CA Limited
++ # Label: "Comodo Secure Services root"
 
---===============6230163297309955222==
+--===============2416070298298949195==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -171,4 +201,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============6230163297309955222==--
+--===============2416070298298949195==--
