@@ -1,122 +1,150 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AEF7606EEAF
-	for <buildroot@archiver.kernel.org>; Thu,  5 Nov 2026 20:38:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03EAD606A31B
+	for <buildroot@archiver.kernel.org>; Thu,  5 Nov 2026 21:00:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=gQP1w03m;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wIpmDsic
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 479DB81144;
-	Thu,  5 Nov 2026 20:38:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B1BE3408E0;
+	Thu,  5 Nov 2026 21:00:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xV3NyGCV2QZ5; Thu,  5 Nov 2026 20:38:21 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org AEAF58116A
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793911101;
-	b=I9NrcdY0C+ke0IVt+SQAvz38THnWBEeJYzlIJ/aTvp/dwDE/xZfKX/mzhSTlMkXJT46D
-	 ujC+MTa8Pwy44ARRYPGyBcj9FXEry9ExNdaRUKqZDMD12abbs0RbzOKhw6V/q1ognYP/R
-	 G9/rCiKZw8gL//AjMJdzOfzBTJ8JXELW9xULF5FxGHedX4aznQcwIB4R7PMkdFsnhGzt8
-	 D+fsEPmRLSpa3XdDxcBpgL4/aXvmrBYDbviaIsUVed7JU6oJA0NqkW3R9nBtSwtGz0iuV
-	 z69tRoWeNht75P1GfNCqxl7bIBRxJ6giLtwIxc9nvWWSbnJjOittuTR0fI4KqZal5EQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id r4chCzNC0_Pc; Thu,  5 Nov 2026 21:00:28 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org E2574408D4
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793912428;
+	b=teJIajHETQIC+s4HC6SU/Ht/3ED5cS+SYc5aDPsvWnlryzYJbReTV6uxXapBpgTTELzL
+	 7cAHRMNbcbyNEzSyvaSgG+IQLYkpFGPfBtWc36fqSMZ/8iIo+De7tyFYuDoKlfCEWWUVR
+	 kfG/TFoQOQngXsXjkmu82AkR+aPjm0jevdhDUZBh7EZr2VtPTA3JmegRBoI6DewJ8LvJ6
+	 Qa1+j736qWyd5b+UUONbJVOQM75y2G8Dy/JCnGLVDiGmwM6fRcVr/EzhjAHkailgDQXvg
+	 acD/V7p9C0VCBSygBETcdVA4DEYMFW8vZFM+G/uJHd5Iao0woZYsILeqGeNIH87UR6Q==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793911101;
+	c=relaxed/relaxed; t=1793912428;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:Date:Message-ID:
-	 X-Mailer:MIME-Version:X-Spamd-Bar:Subject:X-BeenThere:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:Received:Date:From:To:Cc:Message-ID:References:
+	 MIME-Version:Content-Disposition:In-Reply-To:Subject:X-BeenThere:
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=a+Qtzd88cyBvPltobo2YZPN7StBVyV0qvB2GbTZLVPc=;
-	b=C/gKpctz6iVTCnK02LIVmtQuB3HXbfOePrk65gldkr5LjkUiUE2JrB1qhL1IdRPmG4Ls
-	 0NEZ+jUDAwMkXGK6mGWmr1/65FKoJ/TahvXDvgSVh1r5202YIC0aWt35wDfLSnzMDcbo1
-	 RdGD0vxFKw1YwhO6cjwAjsznL8dAN15Rs3wc3uSe7oDwExcl3YPlc6HGphJh8o0XbxdCD
-	 YvJ9gUf1WkCgRsNc9Xf+Jms5d4v091lYB9hGNaxGqjG6V8cbdHIZpl6k7bJSLXamkh7W6
-	 4ehY8nuKy10bn09Oltz5YIyPJc7JKgf75DDy7gRGIXrwl05rerBkqND0KV09kaMB/nA==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+	bh=9fIw8bk9TuFVQyOG74TBWvgHpIXwzrKxOCOca7mqX4E=;
+	b=RgDlptDCtoFhG++VghMuiDYWklb8NDjMRe5HxCOqjK40CE7FFjVpCUDMm95ir/PU2vyW
+	 rzA/XFZVglyCjuDORYyIfkMGJaT+sWG91MVmZIGHlhc4tUK+R2rBZ4w91chix4DQy04jr
+	 HcECytr5Xoh/V62w7IU2UjYR0SjXhNmc6xj/XaB0B7XUCs39hMrG4rQmQF7nMuD+YQ7Ms
+	 iBma1RJo38bmMxokz8Uhn6tKTvQIOEClM56i9EJTmF7QkQYvd72wvSdDvLIxZj6gBpvoW
+	 /72fr3OkoDxKOcL3XYn/e7A0te4YzuBoB9r8vZd+pBjBGQPhG7x5NJ8T5GSEv9iOFyw==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+	dmarc=pass header.from=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wIpmDsic;
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793911101;
-	bh=a+Qtzd88cyBvPltobo2YZPN7StBVyV0qvB2GbTZLVPc=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=UFmwvTPkEcmTdvss25hpCtexAOIcBQ3AnfnSKFYxVHw55bZYLa70ZgH8IwXLFUuqg
-	 Mwml88oEJ5vhBoQqlFLDmIAjWr295hAsZf8fBelS7GR42j0aq3+TTBw0isr/yRwsD+
-	 ULUpxf7qdYqcyciAdAAOjQ8NVw6L9gz9KoBZ0jlnJ5tBfjnhn7jirzWAFGULWbAfDU
-	 M2L0lAcGvja7/K39ASQJFwxHQKW+2SaRmA6HFL5sgP0C3OjhfKJGNa2P0lMCpntXE9
-	 DDf+LSFiCqCfWOfrba4sK/FMSMFOYDzp6lkb/jDSCd5/LZfysF9gLNvQJQjKh/Wy/D
-	 tZYP9TkUnsMrw==
+	s=default; t=1793912428;
+	bh=9fIw8bk9TuFVQyOG74TBWvgHpIXwzrKxOCOca7mqX4E=;
+	h=Date:From:To:Cc:References:In-Reply-To:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=gQP1w03mzwCAqpXqPX4bGxdJlWpruPx9gipy9OvZRL7+yZuykVOlDIkwyvNqWM+zD
+	 Y6mTzLioyf+oTM3bHmqq/zjJfM1NuJHdsbHyn9D074yFuWzp+vxpcEvV3+bpUt7Hqi
+	 qNmg0Ke/iYmdoLnMJRjWJhx9VHckXPYdSpRIsrB7t8QhdBWym+n9iGEOJ6/vlglJfM
+	 NmSq+mi0JXGQxJ64hYR+KfLSDWuiSoXkldfSkSqI/9wFbdG1pvYMIYJC8X5LKBJIeR
+	 vSFKMC8u38mEptTyThtg0j7/1B8+00hGzhrepLGd+IHZdbZpFcJ7uqKzOJSGi0smwE
+	 GrFKxB7H9Zs0g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AEAF58116A;
-	Thu,  5 Nov 2026 20:38:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id B279DF07
- for <buildroot@buildroot.org>; Thu,  5 Nov 2026 20:38:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E2574408D4;
+	Thu,  5 Nov 2026 21:00:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 29A39F07
+ for <buildroot@buildroot.org>; Thu,  5 Nov 2026 21:00:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A73354010C
- for <buildroot@buildroot.org>; Thu,  5 Nov 2026 20:38:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0F015408D4
+ for <buildroot@buildroot.org>; Thu,  5 Nov 2026 21:00:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K0jwWxstLNNJ for <buildroot@buildroot.org>;
- Thu,  5 Nov 2026 20:38:18 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 29D2A40012
-Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202605290044 header.b=Y6nCWhqu
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 29D2A40012
- for <buildroot@buildroot.org>; Thu,  5 Nov 2026 20:38:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1793911093;
- bh=uweuwUxK0zeRfbg4uvLo/QMcpvuCeEh1NC0V04CZDAc=;
- h=From:To:Cc:Subject:Date:From;
- b=Y6nCWhqutC63Y56UO1jfuMXmMohB5JBs+V0lJO4Ngy9XKYyvTvrRdD7uSQNnAi3z5
- Ul+/C0roCqKX8KE+ow5EVfWqfAUMbEAXDT491tC9gBoVvZsW98vv2pNnSfrMciiuh8
- 3SWAzc7FhVQ37766dQ5CaSpvVPpHpL6Qj2dV10GfmFy7M4oOzkuW26EQo92Gd6XbVn
- SAgKOBa14cq4fBExK09egnDQ8QO+2Pk0iPytgUVJOuAIlZFz/9k6U4AU3hRvtL6MMm
- T+fq40PYbitj13h43rnk5+EFXJ+/aQW1aMrCjabX0JLnFGDR4smwNCYxk40beS5prU
- Cf9OqSx5KYUKA==
-X-KAS-Sym: v3:f51bdf72230551df:WRmMFzXk8NFQ0hd4QIwhSMW66PXB6IwY/k/j7kJXa8DeN
- YzGILkCVxdzRf2XESliKR3Y8+HCnk/bSUPmmWQj6oVJI0YL6YNE50XdhsZ9kGqVZ+lQ4fVNSGam
- AkxVOo3yZ09ZlUWENUKi1K+DmMD3jVKzOQiKd3jh3tEYYQL8ApXarPOE8Mf61oDmSPaLtObdxlC
- sSuM+y1+Yf6pVisdraaBxkVrZOGJG3ajbF56wJDdVRRUznFrzRwbG0BLK/nnoEV5sqojroA8Qvd
- /PbXvBG6BBjFUdOvmAKpWCl5dhW8J2YYV2bJxBBfgs2CjFRY5zCigIlzWMCWp8isvsAb9bVA==:
- uvCWvZcvX7RgiWgAF2Xj9mtSNaEi9jxaN1Wmvwbwy/dk3RDqgt/lVbvo/ffXDzNA6Hmag1fF/OG
- NDPyO+m2mPfDD31w0F9k08yZAVftI/5FNRVFKg/H9RpDH6hDd7cY8tZe6GqLKpssGzte2g8dT8k
- rMfWR6JoRDvFhphvXNXpSfl12jeP89IyoK1nDtVbIaYjahygWxds5dei/6trYE0Lr4WbZr/1FvG
- vVBdy0K/d183T75UoXjDj5wqkT27gBnzn9iijHIG24TbONi3oCSL9xt4hE7U185fAfoC0bJJaZQ
- YC3aYEkRZ4GXTqvPL3kFCKUcoo+ocX/FWVjuWfI0TjxOV/G40gAznUzKfNSMDmwlAReJtXHx441
- uLxrVTvDxRpld9zl/XJ1xIgfibjFggdwg7i9jME6T2JAXTAVNv9N0/UaRPeNL28xDgN3Pk8RY5o
- pdU33oakEXo7yft7MF60wEXoTIy9O7X9KSNY8YTOGJGCKtdJ6BOkIQA5PYpcsPEijbjL2+5kU8h
- zYlpnA2MngUttp4cpzd1T5cbkDwp4qHNgcZf7rSmiy7LIHkKnmR8WxIngSdJuNqDkyJ/GcUfaas
- qHBaTSnxPgeSAsCDpApTBeBH/Du75fNwJ4n0t6Y2w/YLNI8RWjB662r2W/rk
-Received: from fli4l.lan.fli4l (p54a1b33d.dip0.t-ipconnect.de [84.161.179.61])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 79977A4C3806;
- Thu,  5 Nov 2026 21:38:13 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:51680)
- by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xP4Dt-000000007S2-15Qr;
- Thu, 05 Nov 2026 20:38:13 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Thu,  5 Nov 2026 21:38:13 +0100
-Message-ID: <20261105203813.1522364-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id f5ibC-_FvMla for <buildroot@buildroot.org>;
+ Thu,  5 Nov 2026 21:00:26 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 1416640718
+Authentication-Results: smtp4.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::336"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ envelope-from=olteanv@gmail.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20260707 header.b=wIpmDsic
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1416640718
+ for <buildroot@buildroot.org>; Thu,  5 Nov 2026 21:00:25 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-4ae34ad9bb6so2666425e9.2
+ for <buildroot@buildroot.org>; Thu, 05 Nov 2026 13:00:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20260707; t=1793912423; x=1794517223; darn=buildroot.org;
+ h=in-reply-to:content-disposition:content-type:mime-version
+ :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+ :date:message-id:reply-to:content-type;
+ bh=M3NE8rCv7z9yE8srEGpwx6N3Gt4v/fOLHM8x12b5exg=;
+ b=wIpmDsicrct0XCk2l7la2Lb9+MOV1cHBmE2OnYGtLVmrQRcEfCz6fjNVLdKwZJhFxr
+ 2AWoPiMTuMGzShbDhxSGvvcG4z3D27c8Vs9P5zuOGYBhyL3OaN/2Ga5HnrBmLo/NDqle
+ Xr5VOSztXij3kNPU+QfDSE1OC5oJl5nL6UExVqHNqyG/mrO45nJafNM4Y6k2ScfnSb2+
+ qZ9rCPrNw392sqsAKF5EqlPBrXrHGcUvmHon/6V6U8CvGwkEHQJ6630b/n8+AU1/j5fq
+ z7r0HbygHVxI0nxre9umJCZ5TT3jB+v6x5EbKMIaReMiMdP8vhlkBKsjdaxBcFOk2m8+
+ q6yQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1793912423; x=1794517223;
+ h=in-reply-to:content-disposition:content-type:mime-version
+ :references:message-id:subject:cc:to:from:date:x-gm-gg
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+ :content-type;
+ bh=M3NE8rCv7z9yE8srEGpwx6N3Gt4v/fOLHM8x12b5exg=;
+ b=h5dii5P5HZBU8GTpO0b0bkd8LLN/xdVARRBDnNd6swZmNx7ejOmsXHz4OpzAuom0Qi
+ ez7QzusPL7afpmjt6PMV/mn/Lu0VhNw5YtmtN6R2SR9gsEPr+DcPUhAZP8CbPZHRPFi4
+ wuUBln/XIOB2PKwIv4tjWkTb1F4gA3jFfBl+2DD2MAlgZO5DHoKTrhAZe2DX97vheEKQ
+ Lqx2f1hSAQ8W5EC2CM8H5M4zGrkZThwo3hiiMAzLvxXt5ZM4XpLf9Nqy0buyaDs0r7LJ
+ 0o4bDkgZMRVwTM+TPGVI/nKZHwkIGp8/pF4GTSfPcTZpQ5No0WWkVL0uxEK0Vfyv/+dA
+ w5/A==
+X-Gm-Message-State: APuU4Z9j+Ax1VzwHuTjkY5EZKF5Vf234qaVIiHQRB7MkNjKlNj9ksnG8
+ y1pFLHIrxaH2l6a/6KRXxL/me4YCpoq46LipS6VKm7NDIKWfm+T1H6J0
+X-Gm-Gg: AYBFou0Gs249ryUV87PC60kCfO0J09kuZNsbielwnDbJj0fFKEj8BggJiW/f1dKI/wg
+ rSwGsTqqbGSy/79uQG+JUWYxV5ZnePKdMwn0eb4ENlQaCZrzoDsS6I2TUHNaBUixdCG7OP4DYpD
+ 7tx7Y2gnGfKreONRovYMrSYNe2uyBwBACuxOpzJbwpftJkJIZ532/CeQ4xMQwJNeDMXZKLGgL7z
+ dRr7/H1ZF6/rHNBqnj3IPFZTDe8kdBzC7CdMubzZGC92GTDbe+7fFK6GVLTTH9ShtIxonWTSrvE
+ EmFHI1qY4roncWWcm/gZ7oUkkgk0cLH/+zKVDUWIQCX3M2R2R/3j9EaL49GX/B96VMX+vuP/u37
+ kWxVxdQVn6PCmNaRHkGAxwdwaoQdEf/8jk0kG9NYeOxyPVAVag6gnGYAvhMM6Ylk1PPXBpGp2RU
+ Y+1OKEFv7ZClLHjv1VXnflykVgYsc6ed/50xPKJpJo/6d7HbPvXFHaL83dE0oyWnZRRcdvRDkOy
+ HqCVcVMzwZc36HM89uoHO/SJrGlErzVeNnNS6wvY26hv/F7Qe0xaCkkSRwJg9jy2hS6bE9Abu+K
+ 4uKFcdWvNAXrp9A1tGM1
+X-Received: by 2002:a05:6000:41c3:b0:490:3f9a:5173 with SMTP id
+ ffacd0b85a97d-4927845529dmr1414553f8f.4.1793912423042; 
+ Thu, 05 Nov 2026 13:00:23 -0800 (PST)
+Received: from skbuf ([2a02:2f04:d401:2601:bb65:56f7:9f07:19bc])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-48fece998absm12746852f8f.22.2026.11.05.13.00.20
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 05 Nov 2026 13:00:21 -0800 (PST)
+Date: Thu, 5 Nov 2026 23:00:18 +0200
+From: Vladimir Oltean <olteanv@gmail.com>
+To: Vladimir Oltean <leo.denieul.yoshino@gmail.com>
+Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Maxime Leroy <maxime@leroys.fr>, Vincent Jardin <vjardin@free.fr>
+Message-ID: <auzuNoPUXTFUidwJ@skbuf>
+References: <auIW8EW-9Qo0NFXv@skbuf>
+ <auyijJkgbV87YT38@leo-ThinkPad-P16s-Gen-4-AMD>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-X-Spamd-Bar: --
-Subject: [Buildroot] [PATCH 1/1] package/{lib,
- minizip-}zlib: security bump version to 1.4
+Content-Disposition: inline
+In-Reply-To: <auyijJkgbV87YT38@leo-ThinkPad-P16s-Gen-4-AMD>
+Subject: Re: [Buildroot] [PATCH v8 1/2] board/lx2160ardb: new platform
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -129,153 +157,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-5.8 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-https://github.com/madler/zlib/releases/tag/v1.4
-https://github.com/madler/zlib/blob/v1.4/ChangeLog
-https://madler.net/pipermail/zlib-announce_madler.net/2026/000017.html
-"This version remedies several security vulnerabilities, fixes other
- bugs, and has many other enhancements and portability improvements."
+On Thu, Nov 05, 2026 at 04:36:44PM +0100, Vladimir Oltean wrote:
+> Add Buildroot support for the NXP LX2160A-RDB (reference design board).
+> This is configured here to boot from the SD card. To my surprise, NXP
+> RCWs for LX2160A rev2 silicon don't have a pre-existing example for SD
+> boot, so until one is available, include the RCW through board files.
+> 
+> The boot uses U-Boot's bootstd framework with extlinux.conf. The DPAA2
+> Management Complex firmware is loaded from the filesystem during U-Boot
+> board init. EFI boot support is disabled since we use extlinux.
+> 
+> Signed-off-by: Vladimir Oltean <olteanv@gmail.com>
+> Reviewed-by: Vincent Jardin <vjardin@free.fr>
+> Tested-by: Maxime Leroy <maxime@leroys.fr>
+> Signed-off-by: Maxime Leroy <maxime@leroys.fr>
+> Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+> Tested-by: Vladimir Oltean <olteanv@gmail.com>
+> Signed-off-by: Leo DENIEUL <leo.denieul.yoshino@gmail.com>
+> ---
 
-Removed patches which are included in this release.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
-Gitlab pipelines passed:
-https://gitlab.com/bkuhls/buildroot/-/commits/abfccd119bdc40abb2bf9125c83410f519ab594a
-
- ...overflow-bug-in-non-blocking-gzwrite.patch | 31 -------------------
- package/libzlib/libzlib.hash                  |  2 +-
- package/libzlib/libzlib.mk                    |  4 +--
- ...ncy-to-ints.h-in-minizip-Makefile.am.patch | 26 ----------------
- package/minizip-zlib/minizip-zlib.mk          |  2 +-
- 5 files changed, 3 insertions(+), 62 deletions(-)
- delete mode 100644 package/libzlib/0001-fix-buffer-overflow-bug-in-non-blocking-gzwrite.patch
- delete mode 100644 package/minizip-zlib/0001-Add-dependency-to-ints.h-in-minizip-Makefile.am.patch
-
-diff --git a/package/libzlib/0001-fix-buffer-overflow-bug-in-non-blocking-gzwrite.patch b/package/libzlib/0001-fix-buffer-overflow-bug-in-non-blocking-gzwrite.patch
-deleted file mode 100644
-index 32aaabcc76..0000000000
---- a/package/libzlib/0001-fix-buffer-overflow-bug-in-non-blocking-gzwrite.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From df84af25dc1942490e1d1c899a07619152a46148 Mon Sep 17 00:00:00 2001
--From: Mark Adler <git@madler.net>
--Date: Wed, 16 Sep 2026 16:26:14 -0700
--Subject: [PATCH] Fix buffer overflow bug in non-blocking gzwrite.
--
--This addresses CVE-2026-85091.
--
--Upstream: https://github.com/madler/zlib/commit/df84af25dc1942490e1d1c899a07619152a46148.patch
--CVE: CVE-2026-85091
--Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-----
-- gzwrite.c | 5 ++++-
-- 1 file changed, 4 insertions(+), 1 deletion(-)
--
--diff --git a/gzwrite.c b/gzwrite.c
--index b217b85ce..512329244 100644
----- a/gzwrite.c
--+++ b/gzwrite.c
--@@ -242,8 +242,11 @@ local z_size_t gz_write(gz_statep state, voidpc buf, z_size_t len) {
--             n -= state->strm.avail_in;
--             state->x.pos += n;
--             len -= n;
---            if (ret == -1)
--+            if (ret == -1) {
--+                state->strm.avail_in = 0;
--+                state->strm.next_in = state->in;
--                 return state->again ? put - len : 0;
--+            }
--         } while (len);
--     }
-- 
-diff --git a/package/libzlib/libzlib.hash b/package/libzlib/libzlib.hash
-index bc8b046426..11907ede28 100644
---- a/package/libzlib/libzlib.hash
-+++ b/package/libzlib/libzlib.hash
-@@ -1,4 +1,4 @@
- # From http://www.zlib.net/
--sha256  d7a0654783a4da529d1bb793b7ad9c3318020af77667bcae35f95d0e42a792f3  zlib-1.3.2.tar.xz
-+sha256  4f11c512053d7bab8d9e9b89bde3575add3e4c50a383b42ef6cb837035fc5a7c  zlib-1.4.tar.xz
- # License files, locally calculated
- sha256  e32ff4e00d9d94930537635291da39e7e612703334bf6fde8c7f1686fe8a45a2  LICENSE
-diff --git a/package/libzlib/libzlib.mk b/package/libzlib/libzlib.mk
-index 9ce08d7093..ac411d3d11 100644
---- a/package/libzlib/libzlib.mk
-+++ b/package/libzlib/libzlib.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version here, please also update the minizip-zlib package
--LIBZLIB_VERSION = 1.3.2
-+LIBZLIB_VERSION = 1.4
- LIBZLIB_SOURCE = zlib-$(LIBZLIB_VERSION).tar.xz
- LIBZLIB_SITE = https://www.zlib.net
- LIBZLIB_LICENSE = Zlib
-@@ -15,8 +15,6 @@ LIBZLIB_PROVIDES = zlib
- LIBZLIB_CPE_ID_VENDOR = zlib
- LIBZLIB_CPE_ID_PRODUCT = zlib
- 
--LIBZLIB_IGNORE_CVES += CVE-2026-85091
--
- # It is not possible to build only a shared version of zlib, so we build both
- # shared and static, unless we only want the static libs, and we eventually
- # selectively remove what we do not want
-diff --git a/package/minizip-zlib/0001-Add-dependency-to-ints.h-in-minizip-Makefile.am.patch b/package/minizip-zlib/0001-Add-dependency-to-ints.h-in-minizip-Makefile.am.patch
-deleted file mode 100644
-index 98e16251d8..0000000000
---- a/package/minizip-zlib/0001-Add-dependency-to-ints.h-in-minizip-Makefile.am.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--From cb14dc9ade3759352417a300e6c2ed73268f1d97 Mon Sep 17 00:00:00 2001
--From: Rui Chen <rui@chenrui.dev>
--Date: Tue, 17 Feb 2026 10:48:39 -0500
--Subject: [PATCH] Add dependency to ints.h in minizip Makefile.am.
--
--So that ints.h is part of the installation.
--
--Upstream: https://github.com/madler/zlib/commit/cb14dc9ade3759352417a300e6c2ed73268f1d97
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- contrib/minizip/Makefile.am | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/contrib/minizip/Makefile.am b/contrib/minizip/Makefile.am
--index d343011eb..b7dea4f7e 100644
----- a/contrib/minizip/Makefile.am
--+++ b/contrib/minizip/Makefile.am
--@@ -27,6 +27,7 @@ libminizip_la_LDFLAGS = $(AM_LDFLAGS) -version-info 1:0:0 -lz
-- minizip_includedir = $(includedir)/minizip
-- minizip_include_HEADERS = \
-- 	crypt.h \
--+	ints.h \
-- 	ioapi.h \
-- 	mztools.h \
-- 	unzip.h \
-diff --git a/package/minizip-zlib/minizip-zlib.mk b/package/minizip-zlib/minizip-zlib.mk
-index d5c07fcca5..acbff105d4 100644
---- a/package/minizip-zlib/minizip-zlib.mk
-+++ b/package/minizip-zlib/minizip-zlib.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- # When updating the version here, please also update the libzlib package
--MINIZIP_ZLIB_VERSION = 1.3.2
-+MINIZIP_ZLIB_VERSION = 1.4
- MINIZIP_ZLIB_SOURCE = zlib-$(MINIZIP_ZLIB_VERSION).tar.xz
- MINIZIP_ZLIB_SITE = https://www.zlib.net
- MINIZIP_ZLIB_DL_SUBDIR = libzlib
--- 
-2.47.3
-
+Please fix your email client, it is still sending emails as "From:
+Vladimir Oltean <leo.denieul.yoshino@gmail.com>".
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
