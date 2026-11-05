@@ -1,28 +1,28 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F7C0606A329
-	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 15:59:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97C47606A326
+	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 15:59:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Z/5g8IR7
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=LK3DvjAN
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2CC77608B9;
-	Fri,  6 Nov 2026 15:59:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 71282812A3;
+	Fri,  6 Nov 2026 15:59:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E0pwqQfGhIIJ; Fri,  6 Nov 2026 15:59:16 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 1FC16608CE
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793980756;
-	b=iWdqjJBfUcA2pEEyi6zMrJkLEgnQT2xCFTaW6SsKPDXJFEPeY/nzp/f/c0eGoLC1/r39
-	 FHZrANUtVGaCeQW5+Vc+zanzdeocq18xqEwaHfKHJMz5WpeyHMnJ8YWtGEn1TVfCFcWDR
-	 r9WUT97EZSGnEOAeN6SbU+Qkkz4ODMtEeP3QRBO1Kkml1ZEIE/4uoKjxJR4aYYE1VkQAs
-	 5+VMLWF6XQFrVoWoLhADp0TAivfSprlfDmxZ6iAFW2TFGpsPNqtEgoMkupvtG4DlFg2vY
-	 2QyKcC9rLTixHNrQ0LNLKOQhfsiaOaGP+jGlBZS2dDprilHD03ixpyNnY/7jZVBKGNg==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Gb4EEeDBj-D7; Fri,  6 Nov 2026 15:59:17 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 79D29812F6
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793980757;
+	b=oNJ/bbJH9lvU6axDsh8Q7ZrKY3tf/djs7uQwVQ7tYzG+kbU81wxj02c1BiFNru8DRYNi
+	 qjStJ7XqBwBNu5zcCI3gMR9nj7+tX/VM3ju7yh9QcCd3YhjKSwvC20pBx+XGI3oLpNxDU
+	 VKCUr+6SWt1TgVvLOeOFF7koooTWknfHZ0EwVrkZj5xNWXjfyXtj729B48W/y4Vy16XM0
+	 cRyHMG6tnAh1xFGKXOf93LF8tf5N2ABSM3W746zogHU7jSlZFlTkmjoy1wUNMIolEwdM/
+	 B9PG2sEjXAsTpIQfnOeaMoBzjy2rWsA7i0qD4RzD7l+PjNHT1Uo9iT++fc5atNTSXFQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793980756;
+	c=relaxed/relaxed; t=1793980757;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,58 +30,58 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=46ocKbLlrbzjEFBxc5mg691KJL1nAlNHqUCmll1Y9rU=;
-	b=AGu7B8hzUAcm9RKu2dprToKLAPEVQHGer90dX03HoyIHFNsczk+eMd2ArAYSG/a9JU7N
-	 y1tWY4h9WbFmitBLjQZ5ka+64A6jrCCREnMD4rGlQ15XnPYdGKRC+bPiCH1cHiIEjDFC2
-	 YLhaX2fv4u/sZzqKhnq5BLTIoDwhotSLLbSAWlqOSBgDjvASSSK7rmHgJ7HMkv/RK9R6H
-	 dxf+qMYHjT2d6Gc0mYvon3AwQrpJrLGzxxGHHc0hdVvkq9pg+HwsS2U7stxrgS+L/prrc
-	 RdjCukWg3YaS1Ey0pO5EX87Emq1osZ7vGOW5WKvoAnPcdd8NL/kYBwX3lepc/GkybKQ==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+	bh=1ifD0E4M7uC2QjSRgoYu7XKnNyq/lLqpKBxGIVUharE=;
+	b=CdgdLnwJvzb3Hy1wlyRXwOtrFbjMUa6HDMFnreIqoCt0ww/7MZRcm0pt4pKT3sV2UPbq
+	 4M5efqVdsjCV1n6TgcCH3O9AAiYxzz1EgXmYEKq5KRBfvRSTf3YLnMt/IEvtleRrnPrzP
+	 N+rmXVHjxsWB+R5dtjz05YaBbfmxuGtcpUbBKh6XQ60f3xurzXRDj0XDSwuHb7TfOCqwn
+	 tkyQ/z+mtvnek0PCO2/l5j5EW4GllVjRb8PuAmsJH6WCnSlh+yKV1wIiz683Pfk510uVH
+	 aIGzT0v4/ZUzpcR+apqxL5Qb6bJyT/Z0oSGG6euEXrUqLsRl1JBwYD7R+6Dj+0xBkqg==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793980756;
-	bh=46ocKbLlrbzjEFBxc5mg691KJL1nAlNHqUCmll1Y9rU=;
+	s=default; t=1793980757;
+	bh=1ifD0E4M7uC2QjSRgoYu7XKnNyq/lLqpKBxGIVUharE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=Z/5g8IR7Tav9n5Hk++huW+9Dt4JKtjjTvVciwLGmFWliA7gce5ASGwbPOdTp9fc7b
-	 7AHVfIHGbl6LTwV0x2qqAG19LhVCo4BvqZyjD7HN32Z/7W6cheCJadYR7DhVAemBvK
-	 7Pq+rvD5w8Xea7B+QX2H88CUW0Z7DL5j5Gs00HwPzY3fcH4opdQJcrO+1QPRoclJsg
-	 gU8yYQN04CEUjwueWAPVVblUXTZgiURd7RAe58PSHvzFWPr3EZhITxhUMxCAf2Op4h
-	 Aw0eAbCknc4LIbcnwgD+pl9uiM7MbNWEKwVql4o4OnbZ316WNa6JjhxtTnrBQBeNTi
-	 p4LArcx/b2UrA==
+	b=LK3DvjANDqbYAN4kYxTnvhaUWpG7+I2s++0H2cEBvnsVwbQui8kJvk+5cRiW4oIYq
+	 nMI+OPzLbPHLuYmdmvG8yD8xlW0FaUgAUKRNoK8dz7LP7oV/WB/WYFIMwftt1BWKI/
+	 RhyHpJmb9pT2vNmDjMh6S1jZ9o7t/iV1uLc8yui01oWE/2v9j2cvUt2NCOZX5WVVBp
+	 VXiU293QX0T/jKN9JPamVEn2f9rClHWilPra3PC+9cNNsVHmJSVKAfrhq1Jdhq0sGD
+	 WOb40eJ8T5zHrOY+Ty/OgtPr/FHEtaLcqxSHNt7Ditq37WwnxMCGjgLFbgCfdJLRr1
+	 3GRVf/CI1XU1Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1FC16608CE;
-	Fri,  6 Nov 2026 15:59:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 79D29812F6;
+	Fri,  6 Nov 2026 15:59:17 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id AA60BAFC
+ by lists1.osuosl.org (Postfix) with ESMTP id C18FE4B8
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 15:58:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A6E65408FB
+ by smtp4.osuosl.org (Postfix) with ESMTP id B0687406CA
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 15:58:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PNFswTJcYzEd for <buildroot@buildroot.org>;
- Fri,  6 Nov 2026 15:58:28 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 96E04406CA
+ id 2CgMgjxUujrv for <buildroot@buildroot.org>;
+ Fri,  6 Nov 2026 15:58:29 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org D6CB140906
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 96E04406CA
+ by smtp4.osuosl.org (Postfix) with ESMTP id D6CB140906
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 15:58:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CBF829E0A8; Fri,  6 Nov 2026 15:56:56 +0000 (UTC)
+ id 1A2DE9E0A8; Fri,  6 Nov 2026 15:56:57 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 5 Nov 2026 15:27:56 +0100
+Date: Thu, 5 Nov 2026 15:27:59 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: de0ca461f408cc12a9b153caa25ff7fefc2a24bd
-X-Git-Newrev: 5b3aacf81125a8b2bf7ce9de122b16162f1ac074
+X-Git-Oldrev: 3133b61f8547bc41b556761edb27eb16e22755d5
+X-Git-Newrev: cff54b0884819ba0a81977e6d94e6ab43f56e7f7
 X-Patchwork-Hint: ignore
-Message-Id: <20261106155656.CBF829E0A8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/python-dnspython:
- add security fix for CVE-2026-114605
+Message-Id: <20261106155657.1A2DE9E0A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/18xx-ti-utils:
+ fetch from the BeagleBoard GitHub mirror
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,7 +96,7 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2916536703677565148=="
+Content-Type: multipart/mixed; boundary="===============6289282628845548511=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DATE_IN_PAST_24_48,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
@@ -106,146 +106,66 @@ X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DATE_IN_PAST_24_48,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============2916536703677565148==
+--===============6289282628845548511==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/5b3aacf81125a8b2bf7ce9de122b16162f1ac074
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/cff54b0884819ba0a81977e6d94e6ab43f56e7f7
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-(alternative to commit 1bc28b9dcad33c23407a0eb5b5783e0c5aee6d4b)
+git.ti.com no longer serves git clones through its cgit web path, so
+the download fails:
+
+  fatal: unable to access 'https://git.ti.com/cgit/wilink8-wlan/18xx-ti-utils/': The requested URL returned error: 403
+
+The https://git.ti.com/git/wilink8-wlan/18xx-ti-utils.git URL accepts
+requests, but fetching all references, as the Buildroot git download
+helper does, fails for this repository with its ~1000 refs:
+
+  error: RPC failed; HTTP 501 curl 22 The requested URL returned error: 501
+  fatal: error reading section header 'shallow-info'
+
+The cgit snapshot tarballs, used before switching to git, now return
+HTTP 400.
+
+Fetch the sources from the BeagleBoard.org GitHub mirror instead. Its
+R8.8 tag is identical to the one on git.ti.com (tag object
+6e8dcab3a39a, commit b23772347318), and the generated tarball matches
+the existing hash.
+
+This issue has been present since commit d8b15b078aeb
+("package/18xx-ti-utils: switch to git repo"), which introduced the
+cgit URL; it worked at the time, until git.ti.com stopped serving git
+over it. It therefore affects 2025.11 and later, and 2025.02.x since
+2025.02.9.
+
+Fixes:
+https://autobuild.buildroot.org/results/500ab1e5fc96b226bc6dd9bd7c738e7bc9b9cd9f
+
+Fixes: d8b15b078aeb9b9f3b42b9bdea91f2adff02fd09 ("package/18xx-ti-utils: switch to git repo")
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit a34e1e89f6b9d23270276fe73b9253981247cd8a)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- ...pression-to-a-chain-length-of-at-most-16-.patch | 106 +++++++++++++++++++++
- package/python-dnspython/python-dnspython.mk       |   3 +
- 2 files changed, 109 insertions(+)
+ package/18xx-ti-utils/18xx-ti-utils.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/python-dnspython/0001-Limit-decompression-to-a-chain-length-of-at-most-16-.patch b/package/python-dnspython/0001-Limit-decompression-to-a-chain-length-of-at-most-16-.patch
-new file mode 100644
-index 0000000000..6fba6b0f75
---- /dev/null
-+++ b/package/python-dnspython/0001-Limit-decompression-to-a-chain-length-of-at-most-16-.patch
-@@ -0,0 +1,106 @@
-+From 95a1f238ce3a75eca4555a97f643e6980facc1ea Mon Sep 17 00:00:00 2001
-+From: Bob Halley <halley@dnspython.org>
-+Date: Sat, 26 Sep 2026 13:38:07 -0700
-+Subject: [PATCH] Limit decompression to a chain length of at most 16 pointers.
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+A maliciously crafted DNS message may cause dns.name.from_wire_parser() to use excessive CPU for DNS name decompression. Applications which process untrusted DNS wire form messages with dnspython may be degraded or DoS'd by the extra CPU use required.
-+
-+Credit:
-+
-+Evgenios Gkritsis, Department of Informatics, University of Piraeus & Athena Research Center, Greece
-+Constantinos Patsakis, Department of Informatics, University of Piraeus & Athena Research Center, Greece
-+George Stergiopoulos, Department of Informatics, Athens University of Economics and Business, Greece
-+
-+(cherry picked from commit b485e460c266540a1a09ca6d8d1d7b685b1d3023)
-+Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
-+CVE: CVE-2026-114605
-+Upstream: https://github.com/rthalley/dnspython/commit/b485e460c266540a1a09ca6d8d1d7b685b1d3023
-+---
-+ dns/name.py        | 11 ++++++++++-
-+ tests/test_name.py | 22 ++++++++++++++++++++++
-+ 2 files changed, 32 insertions(+), 1 deletion(-)
-+
-+diff --git a/dns/name.py b/dns/name.py
-+index f79f0d0f..0b2bf35e 100644
-+--- a/dns/name.py
-++++ b/dns/name.py
-+@@ -86,6 +86,10 @@ class BadPointer(dns.exception.FormError):
-+     """A DNS compression pointer points forward instead of backward."""
-+ 
-+ 
-++class PointerChainTooLong(dns.exception.FormError):
-++    """A DNS compression pointer chain was too long."""
-++
-++
-+ class BadLabelType(dns.exception.FormError):
-+     """The label type in DNS name wire format is unknown."""
-+ 
-+@@ -1064,9 +1068,10 @@ def from_text(
-+     return Name(labels)
-+ 
-+ 
-+-# we need 'dns.wire.Parser' quoted as dns.name and dns.wire depend on each other.
-++MAX_COMPRESSION_POINTER_CHAIN = 16
-+ 
-+ 
-++# we need 'dns.wire.Parser' quoted as dns.name and dns.wire depend on each other.
-+ def from_wire_parser(parser: "dns.wire.Parser") -> Name:
-+     """Convert possibly compressed wire format into a Name.
-+ 
-+@@ -1082,6 +1087,7 @@ def from_wire_parser(parser: "dns.wire.Parser") -> Name:
-+ 
-+     labels = []
-+     biggest_pointer = parser.current
-++    hops = 0
-+     with parser.restore_furthest():
-+         count = parser.get_uint8()
-+         while count != 0:
-+@@ -1092,6 +1098,9 @@ def from_wire_parser(parser: "dns.wire.Parser") -> Name:
-+                 if current >= biggest_pointer:
-+                     raise BadPointer
-+                 biggest_pointer = current
-++                hops += 1
-++                if hops > MAX_COMPRESSION_POINTER_CHAIN:
-++                    raise PointerChainTooLong
-+                 parser.seek(current)
-+             else:
-+                 raise BadLabelType
-+diff --git a/tests/test_name.py b/tests/test_name.py
-+index 96c03459..f4bb860f 100644
-+--- a/tests/test_name.py
-++++ b/tests/test_name.py
-+@@ -739,6 +739,28 @@ class NameTestCase(unittest.TestCase):
-+ 
-+         self.assertRaises(dns.name.BadLabelType, bad)
-+ 
-++    def testCompressionChainLength(self):
-++        # We're going to decode some wire starting two bytes from the end.  At this
-++        # position is a pointer which points to four bytes from the end, and it points
-++        # to one 6 bytes from the end, etc., until finally the 16th pointer points at
-++        # offset zero, which is the root label followed by a byte of padding.  After
-++        # all of this useless pointer hopping, we should get the root name.
-++        w = b"\x00\x00\xc0\x00\xc0\x02\xc0\x04\xc0\x06\xc0\x08\xc0\x0a\xc0\x0c\xc0\x0e\xc0\x10\xc0\x12\xc0\x14\xc0\x16\xc0\x18\xc0\x1a\xc0\x1c\xc0\x1e"
-++        self.assertEqual(len(w), 34)
-++        starts = [c for c in w if c == 0xC0]
-++        self.assertEqual(len(starts), dns.name.MAX_COMPRESSION_POINTER_CHAIN)
-++
-++        def bad():
-++            # Now we make the wire one pointer longer, which is too long!
-++            w1 = w + b"\xc0\x20"
-++            self.assertEqual(len(w1), 36)
-++            starts = [c for c in w1 if c == 0xC0]
-++            self.assertEqual(len(starts), dns.name.MAX_COMPRESSION_POINTER_CHAIN + 1)
-++            dns.name.from_wire(w1, 34)
-++
-++        self.assertEqual(dns.name.from_wire(w, 32)[0], dns.name.from_text("."))
-++        self.assertRaises(dns.name.PointerChainTooLong, bad)
-++
-+     def testParent1(self):
-+         n = dns.name.from_text("foo.bar.")
-+         self.assertEqual(n.parent(), dns.name.from_text("bar."))
-+-- 
-+2.54.0
-+
-diff --git a/package/python-dnspython/python-dnspython.mk b/package/python-dnspython/python-dnspython.mk
-index 2d3622110c..aecd8409bc 100644
---- a/package/python-dnspython/python-dnspython.mk
-+++ b/package/python-dnspython/python-dnspython.mk
-@@ -11,5 +11,8 @@ PYTHON_DNSPYTHON_LICENSE = ISC
- PYTHON_DNSPYTHON_LICENSE_FILES = LICENSE
- PYTHON_DNSPYTHON_SETUP_TYPE = hatch
+diff --git a/package/18xx-ti-utils/18xx-ti-utils.mk b/package/18xx-ti-utils/18xx-ti-utils.mk
+index 3e6f715730..6c04b60723 100644
+--- a/package/18xx-ti-utils/18xx-ti-utils.mk
++++ b/package/18xx-ti-utils/18xx-ti-utils.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
-+# 0001-Limit-decompression-to-a-chain-length-of-at-most-16-.patch
-+PYTHON_DNSPYTHON_IGNORE_CVES += CVE-2026-114605
-+
- $(eval $(python-package))
- $(eval $(host-python-package))
+ 18XX_TI_UTILS_VERSION = R8.8
+-18XX_TI_UTILS_SITE = https://git.ti.com/cgit/wilink8-wlan/18xx-ti-utils
++18XX_TI_UTILS_SITE = https://github.com/beagleboard/18xx-ti-utils.git
+ 18XX_TI_UTILS_SITE_METHOD = git
+ 18XX_TI_UTILS_DEPENDENCIES = libnl
+ 18XX_TI_UTILS_LICENSE = BSD-3-Clause
 
---===============2916536703677565148==
+--===============6289282628845548511==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -256,4 +176,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============2916536703677565148==--
+--===============6289282628845548511==--
