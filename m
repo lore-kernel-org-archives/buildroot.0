@@ -2,27 +2,27 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04AA5606A326
-	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 16:08:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19048606A326
+	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 16:08:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=JVBUZHOS
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=BLmYWCMM
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CCFE181303;
-	Fri,  6 Nov 2026 16:08:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CBD9881292;
+	Fri,  6 Nov 2026 16:08:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YS0ESFL6Fz0K; Fri,  6 Nov 2026 16:08:24 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org C85DE812F1
+ id 38KvmVieUkoT; Fri,  6 Nov 2026 16:08:25 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 5753E81298
 Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793981304;
-	b=s9GmV41b+ol+KlWTeUii5zlJ5RKfgL5LQrfhT+yD6iH8UvZbo+dWgoXIAwYM8KUH89w0
-	 5gix0Mk7ACxzvXX3Sue7kNoMx8pOjvHezXE1proIH+v3WsINQehzAd6j5lFoQDxN42ZUf
-	 KDvKSIMCBGa93VcK6WHbf2vKIvTG21ZAOt/8sKb2U9Gdl5PhHh9tsl4B5qSMc/NosQo+F
-	 UEZYnK+umUU1ljlYor7rXt5M4RQ5IGuTjhnmxTch7LgZNLnT68lB63X5fYc6BhSKBepIv
-	 hx8dQN3ZS6ZIBwOHNHL7I511KYsn78N1Y/ULZoYwqT5gyPFoGYVCAzbawBzK6Z5ov+A==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793981305;
+	b=UEmCIfIJK/lJSFGysodteeGTM/JL9QCWspk2QbrU/d14bFxCPxXWHS0EhCNbpnwLOSKY
+	 3D0nrr63Z575TbJ0gH5A0QrrWnqoDl34t14H/mxh5W4I0/7tuyoqzw4yJqjkbfSSWaE2n
+	 +0G/ASXr4ZD/AwXvKcsOJwkPcK+Z4yDJVSiOIseFAPrYIRvWcHokcOPS5EJ4NOGoyySkq
+	 0iNddIbu1tI1Q8RTzVJxxVpUCcSFpCNclCc1eNUO/n5pr/NBtPw6s506ly3eXuPwGfJ64
+	 uByF6+IQbBkE2aC4GKkU5iiqzyMt9FfvaB+WZ7MEcuZZYnRsTRs6Z9tNPCNA7ESaXkw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793981304;
+	c=relaxed/relaxed; t=1793981305;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,58 +30,58 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=+t2H7QjxuPdIwLTTCweySTuMI8+NYh+S5kSE1Mmdcq0=;
-	b=iPXtafoAswPmwPdICsAwlHSOluOdTkVa1O606KIc6NK9H689wGvgZnO3FDUaSeIghpfT
-	 pzPKOj+8u5xHFBNJATBV8SZ1NLraZSXMaOD+vr3j1pdyoiuTUcR37qAPISIfmafj34UQV
-	 FDeahmhyRVq/ZLEz2kUrgXJWRTfhrHhuGvqdwKer0cSll0udx9j/+Gz7g2QAFBZYG4oHh
-	 8MfN4hKgl3+7DYDON3yjQY4tXqVp7tIIfq0+aklg6cfwvSPegUxwQbsqoxey5VamIxt+6
-	 9W84S/08jOp6NfKsD0JxkPMqQyk+dhqoP4ayYnPt5bCBXiG2LixqAhLXq3B+rYm86AA==
+	bh=nwobhUd/h2nqg1QFFYoH+dtghEatBQF5tFNENwKm6KQ=;
+	b=ldgoABjWxzVDr6MAeu5r49GGr1k6gYPsrVT9BXvpJfghAz/LV6EredGyMa784u+d2JNL
+	 IH7TL8umxfNRQa4AR3OnIYpHkuFJH2xS4uKPcQrr2hGIFURWacLj6o3gIESvad1drL/Tu
+	 c4CB2YEqKVBFY4tAdq8tA3IJamTg+PMpbAIqE8yRJ+77fe20ccdD7zkdjaYCwZtNsdZvx
+	 P7trDapR5xuhn94k++5tG9bT4zEhkjTPh9MGZcdLLNa3r7vxCVST5euFE0GiHHXhUMuwD
+	 rH8J+sEwEZzrYqqeOMAOdLakX4zy2E/DUx/pQrB7dKSLXMngspQbvEhXwuT2fWGDfJg==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793981303;
-	bh=+t2H7QjxuPdIwLTTCweySTuMI8+NYh+S5kSE1Mmdcq0=;
+	s=default; t=1793981305;
+	bh=nwobhUd/h2nqg1QFFYoH+dtghEatBQF5tFNENwKm6KQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=JVBUZHOS9xnCl3vRndygqIStWBrWr5RCeZdkJXlpCP/n1837hxv/HGfqZyZiYkf6l
-	 7CWxFDViugaTBZYciS+yZ0Rn7j99UfKyhguPfouxLmJAfNtpxwGexhYVnpv0jN0CrS
-	 p0U88uM0+bJ7GLOPYVXnFCEZx6pooiOHb+20NmZfKHp8S0Oc3JA44FO9d2O7cagikn
-	 p+tzWGdKu6TH5IlDVG3xXv62sy2pIxxLCxjNW7KFOFyCV1OGfehSNKzkqunOXMx2Ke
-	 PrkBW/k2+0fduF2U3S1XPBUebAnY0SQ76VdlEd5h2Kh/D2Td0/5GxfXw/QYoxTxaxN
-	 0C/FEkdiBhqRA==
+	b=BLmYWCMMWY482emVJi83QujfF1cPp0ZEm9irMeRM4DhR0tMXfAt3/M7F6LIGRxGHU
+	 gLqX4m5U4LLmiZTCxSlH1vkHkvk0IW6w22J3gkGfZCEeI9ULIBGXUc8vg8+Jusit4f
+	 7ubLGTS8CUyMLuDRf9D94zutVpn29bJNbM3iB+csMen7xvRF5ncSiDz1i6fv9R1JPP
+	 H87r/Ok7XZnNbm7N6zvXTJJ5OtNmMzYvMZ4rzGKy0h0s9S4a1gNF3Rm8cIp2LsZ6WM
+	 yyzubXBb6yDjZTfyjVi3tKqb22rk1jQatvQsx5MrV3g1+C26p+IlIfbmZ7xlk6Noe2
+	 HkXwfcD8U5f7w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C85DE812F1;
-	Fri,  6 Nov 2026 16:08:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4A1E02E5
- for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:08:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5753E81298;
+	Fri,  6 Nov 2026 16:08:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 519F42E5
+ for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:08:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 37EEB81289
- for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:08:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 436D9403D5
+ for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:08:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S6QsBod-yb-J for <buildroot@buildroot.org>;
- Fri,  6 Nov 2026 16:08:15 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 4C6748129B
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rqvnfiR4N1KA for <buildroot@buildroot.org>;
+ Fri,  6 Nov 2026 16:08:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 9DFFE400AF
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4C6748129B
- for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:08:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9DFFE400AF
+ for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:08:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 51A669E09B; Fri,  6 Nov 2026 16:06:43 +0000 (UTC)
+ id C82C29E09B; Fri,  6 Nov 2026 16:06:44 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 5 Nov 2026 15:30:56 +0100
 X-Git-Refname: refs/heads/2026.08.x
-X-Git-Oldrev: 7fa7d79f377ecb2feb22121e025b9cd570d83946
-X-Git-Newrev: 2a8fd8bd8bf1efa634b6c285d20d627a40b8b977
+X-Git-Oldrev: 2a8fd8bd8bf1efa634b6c285d20d627a40b8b977
+X-Git-Newrev: bbd7906616216d84c69c71aecec6f745c4afa6d3
 X-Patchwork-Hint: ignore
-Message-Id: <20261106160643.51A669E09B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2026.08.x] package/dante: fix build
- on musl
+Message-Id: <20261106160644.C82C29E09B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2026.08.x] utils/generate-cyclonedx:
+ Use typing annotations needed for Python 3.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,7 +96,7 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6935889085699953283=="
+Content-Type: multipart/mixed; boundary="===============6811421310808005027=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DATE_IN_PAST_24_48,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
@@ -106,88 +106,88 @@ X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DATE_IN_PAST_24_48,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============6935889085699953283==
+--===============6811421310808005027==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2a8fd8bd8bf1efa634b6c285d20d627a40b8b977
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/bbd7906616216d84c69c71aecec6f745c4afa6d3
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2026.08.x
 
-Since version 1.4.4, dante's sched_setaffinity configure check defines
-_GNU_SOURCE before including <sched.h>, but the actual build only uses
--D_XOPEN_SOURCE=600 -D_BSD_SOURCE -D_DEFAULT_SOURCE. On musl, cpu_set_t
-is only declared with _GNU_SOURCE, so the check succeeds,
-HAVE_SCHED_SETAFFINITY is set, and the build fails:
+Python 3.8 and older evaluate list[str] at function-definition time,
+but built-in generic annotations such as list[str], dict[str, int], and
+tuple[str, ...] are only supported at runtime from Python 3.9
 
-  ../include/sockd.h:1604:4: error: unknown type name 'cpu_set_t'
+The generate-cyclonedx script uses these built-in generic annotations
+that cause the following error when executed in a host with Python 3.8:
 
-glibc declares cpu_set_t unconditionally, so it is not affected.
+Traceback (most recent call last):
+  File "../utils/generate-cyclonedx", line 222, in <module>
+    def cyclonedx_patches(comp_ref: str, patch_list: list[str]):
+TypeError: 'type' object is not subscriptable
+make: *** [Makefile:23: _all] Error 141
 
-Add a patch that defines _GNU_SOURCE on Linux in compiler.m4, so the
-build uses the same feature set as the configure check. This also
-keeps CPU affinity support enabled on musl.
+This commit fixes this issue by replacing built-in generic annotations
+with "typing" equivalents that work properly also with Python >=3.9
 
-This issue has been present since commit 7d95c34d6450 ("package/dante:
-security bump version to 1.4.4"), which brought in the modified
-configure check. It therefore affects 2025.11 and later, and 2025.02.x
-since 2025.02.8.
-
-Fixes:
-https://autobuild.buildroot.org/results/0706b54c06cea6269d584bde2abeb8ee030e476e
-
-Fixes: 7d95c34d64505214d56e452abc1f3502323266af ("package/dante: security bump version to 1.4.4")
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d69c401301a717418d5db0a1d5ce8a137e6cb0dc)
+Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+Acked-By: Thomas Perale <thomas.perale@mind.be>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit 0c58b443d8328316906cbc177beae0d1c4c50ab5)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- ...3-compiler.m4-define-_GNU_SOURCE-on-Linux.patch | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+ utils/generate-cyclonedx | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/dante/0003-compiler.m4-define-_GNU_SOURCE-on-Linux.patch b/package/dante/0003-compiler.m4-define-_GNU_SOURCE-on-Linux.patch
-new file mode 100644
-index 0000000000..c2ce03422d
---- /dev/null
-+++ b/package/dante/0003-compiler.m4-define-_GNU_SOURCE-on-Linux.patch
-@@ -0,0 +1,36 @@
-+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Mon, 26 Oct 2026 14:58:11 +0100
-+Subject: [PATCH] compiler.m4: define _GNU_SOURCE on Linux
-+
-+Since 1.4.4, the sched_setaffinity check defines _GNU_SOURCE before
-+including <sched.h>, but the actual build does not. On musl,
-+cpu_set_t is only declared with _GNU_SOURCE, so the check succeeds,
-+HAVE_SCHED_SETAFFINITY is set, and the build fails:
-+
-+  ../include/sockd.h:1604:4: error: unknown type name 'cpu_set_t'
-+
-+Define _GNU_SOURCE on Linux, so the build uses the same feature set
-+as the check.
-+
-+Assisted-by: Claude:claude-opus-5-5
-+Upstream: sent to dante-bugs@inet.no on 2026-10-26 (no public archive),
-+  Message-Id: <20261026141309.1892005-1-yegorslists@googlemail.com>
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ compiler.m4 | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/compiler.m4 b/compiler.m4
-+index afd1939..3546f87 100644
-+--- a/compiler.m4
-++++ b/compiler.m4
-+@@ -28,6 +28,8 @@ case $host in
-+     *-*-linux-*)
-+ 	CPPFLAGS="${CPPFLAGS}${CPPFLAGS:+ }-D_XOPEN_SOURCE=600 -D_XOPEN_SOURCE_EXTENDED"
-+ 	CPPFLAGS="${CPPFLAGS}${CPPFLAGS:+ }-D_BSD_SOURCE -D_DEFAULT_SOURCE"
-++	#for cpu_set_t on musl, matching the sched_setaffinity check
-++	CPPFLAGS="${CPPFLAGS}${CPPFLAGS:+ }-D_GNU_SOURCE"
-+ 	;;
-+ 
-+     *-*-aix*)
+diff --git a/utils/generate-cyclonedx b/utils/generate-cyclonedx
+index 1fbf020a3d..a79ca41fe1 100755
+--- a/utils/generate-cyclonedx
++++ b/utils/generate-cyclonedx
+@@ -14,7 +14,7 @@ import json
+ import os
+ from collections import defaultdict
+ from pathlib import Path
+-from typing import Iterator
++from typing import Iterator, List, Tuple
+ import urllib.error
+ import urllib.parse
+ import urllib.request
+@@ -148,7 +148,7 @@ def cyclonedx_licenses(lic_list):
+     }
+ 
+ 
+-def extract_cves_from_header(header: str) -> list[str]:
++def extract_cves_from_header(header: str) -> List[str]:
+     """Extract CVE identifiers from the patch header.
+ 
+     Args:
+@@ -219,7 +219,7 @@ def read_patch_file(patch_path: Path) -> str:
+         return f.read()
+ 
+ 
+-def cyclonedx_patches(comp_ref: str, patch_list: list[str]):
++def cyclonedx_patches(comp_ref: str, patch_list: List[str]):
+     """Translate a list of patches from the show-info JSON to a list of
+     patches in CycloneDX format.
+ 
+@@ -285,7 +285,7 @@ def cyclonedx_patches(comp_ref: str, patch_list: list[str]):
+     }
+ 
+ 
+-def parse_uris(uris: list[str]) -> Iterator[tuple[list[str], str]]:
++def parse_uris(uris: List[str]) -> Iterator[Tuple[List[str], str]]:
+     """Parse download URIs into (schemes, url) tuples.
+ 
+     Splits the Buildroot URI format "scheme[|scheme]+url" and yields all
+@@ -295,7 +295,7 @@ def parse_uris(uris: list[str]) -> Iterator[tuple[list[str], str]]:
+     Args:
+         uris (list): Array of URI strings from the show-info output.
+     Yields:
+-        tuple[list[str], str]: (schemes, url) for each usable URI.
++        Tuple[List[str], str]: (schemes, url) for each usable URI.
+     """
+     for uri in uris:
+         scheme, _, stripped_uri = uri.partition("+")
 
---===============6935889085699953283==
+--===============6811421310808005027==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -198,4 +198,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============6935889085699953283==--
+--===============6811421310808005027==--
