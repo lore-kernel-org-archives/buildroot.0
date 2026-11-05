@@ -2,27 +2,27 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B7BC606A326
-	for <buildroot@archiver.kernel.org>; Thu,  5 Nov 2026 00:22:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17927606A326
+	for <buildroot@archiver.kernel.org>; Thu,  5 Nov 2026 00:23:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=M3T1dOTV
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Nia87X8o
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C888280B80;
-	Thu,  5 Nov 2026 00:22:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E1F7280BD1;
+	Thu,  5 Nov 2026 00:23:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9s8bmuaPcoW6; Thu,  5 Nov 2026 00:22:02 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 115F580AD0
+ id VvT63hM5z2-b; Thu,  5 Nov 2026 00:23:35 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org EC3A880BBE
 Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793838122;
-	b=I37Juav1Ha2BFhymq/jRtUz1uQblv0AOEEhFvs4bTTTjgBS2Zg8SNXMvVHhkbolgIMbM
-	 y7tTh0ibfWOoUo7d51NY4oD2mklp2wXbWjrhH5zoXtH5ajckEG4+YpEXNRRumBhsFtwAF
-	 NTiiZOT1ZOQA246z/soHEEEpZd6binQK1hZnjIayPRhotG4P1fiNoXi2B+Ya8jRKSAZCU
-	 vXRfhHE197XVVu1/kNlnxt/RzkvC2eQ5RQ9HK7j8lDTvj8yXoIizeb1FYFS0fC3lpBorC
-	 ZQcwegA8GavgyHQrBwoNgFIPB5AgpnfjYdf0drYTo4U9NlNIRS2FxIJgnH6lGH8QO9A==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793838215;
+	b=O4DJBhxPo2bd2OaBiR7JBDiK199YwV3gmiv5z/Hbv5iK7m4mGlDio1YJKX6eidI/HTpN
+	 LSNCcdPUKmdQnvY7n7eoBs+CMTS8UtMdZSMTXGczFV3S1odcAeE7BgcFvChKNe1cx7cR7
+	 NA0ptDUI5q0DfMHvRjH5SNfVec9PL6kyXkmBKM8YU1LkTDMI9f8wXLtiLat8P9YyTtHES
+	 y45UUiqGPXlXspxSjev8aT8MXcwhkA3vCVNMzGJcZZ9aEn9shSTYxG1p8zth1BesS00sn
+	 q3XNDWiK/3Oqoxew7uYtX/2dHpyEP6VcgjiEf7+KdKF9ZUeU5R0OzuyfgbVIzzkJyyw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793838122;
+	c=relaxed/relaxed; t=1793838215;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -32,111 +32,111 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=dk/GnhlinzZfK8o+R9sToim9KEcm7NMGdQ/f9FWIFdY=;
-	b=XgqvvA0TLsCnfPDSZYD2xWpESe08yJLO0PkdQ+xWJ8nYCCUFmx5e3B5nnRPF444WtGYy
-	 s77/0a0EG+ofYVeA+3QR6JBnvYh4gonRuW/OV0x0aiTZ1AF5pqcRTXlOiIGz05TnpA1hm
-	 Sndo0maU9hucQBYZJoU0+1iZZYYjM1uk/FhgDkM042lq8b6Mfcei57mG6ObdCupgKKE9Y
-	 PFyUuiPPv91XCxtGdkwkTpfAIZ1rw65fBV6q4dGXkxSrEOfGPFk7UuIe7Cepmc8g4e2Qg
-	 AbA+DmZfTvW/5zgJsoFtQa7pwKHxDKsw7og7cKqDQqXHzqpMgSRKSknWZnwZTQ4OSDw==
+	bh=VpiNcPWSsonBiDsD19OutrA9nPr9dOzkLRSlqzQ3Ios=;
+	b=SstujRIoYo7xbDMisiC3huEf+M14z0/5ltlYoSs4EyTcMZgkYux/eo+hrc5KkB3fbhKe
+	 Gh1vnenJdmH7ujxsWwayWu95fmVCclJ0Uy/zKkPC67moksfivR6LfiVFvHp6VZhyabIVq
+	 35X9ipxznnbmI+Bm/3LO7pxrWQwoh6kPHYQLyAQ/kzf7uNTwFf7ZS1dwWZXBfNoyHTUnC
+	 cVzvu6ikaeerxvzeEky46sXur9wRjnBErIRopcpQ/fCCujgt7l5qfUC1qS2hTErmAA86p
+	 QS4h3ICvAI3uNIXCX5UkOeaGnx6qr8SfRs5GhOowR7P7iEcVEvVseimhAgA38fROf/A==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	dmarc=none header.from=telaak.dev;
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793838122;
-	bh=dk/GnhlinzZfK8o+R9sToim9KEcm7NMGdQ/f9FWIFdY=;
+	s=default; t=1793838215;
+	bh=VpiNcPWSsonBiDsD19OutrA9nPr9dOzkLRSlqzQ3Ios=;
 	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=M3T1dOTVotbJfMJEqEZcGvZnQbxyHGjdQSdX+AL5lBXyjwpRRAvab7VOxZa3VOT8d
-	 4Kq/QhiEvEUY5AtsW+0IUhtNprVVk6++SvsLanE4Csycc8Rnv0k5unRfacG/5xJJUN
-	 64h3PHLNSWAFHEX0bozLmw+H4TnEcfhpQeNYrxy+Xkb1A8g8QFUsUHVZoF1AMN1Sk2
-	 Zj7ew2McJPzjdHsvdStSOGrdfNfQ81MQs4RKE+otYDSyypZGYpeCSxp9ATkn8Jb9UH
-	 BwktOn2QChc8ofYG/pwJFdF2q3tuGBBu634Q58YiD5Qk5Qf24+pad95jql2kdhgSph
-	 eHO3PNPKBR2iA==
+	b=Nia87X8o1bmvoz9PbEUnBMSaIIt2nF3ZxvvsvbRxaolooiePLnzZouLldiJLqoNh0
+	 uDOhU5tPZ/uKfda+qKZny+uKw7ytsiCMDfIaKIdlWCGgYm4nUW4m7UFPdj7es4JRdC
+	 hdRn7uFOnSQIVF394xpl6B9umKU6/osPJM/fApvmRCnlMExifJ9L3BE9T75LN8NZq6
+	 cbM61Sh+WGX/0TsEfs/9iLakSZjqwXh/tN+4CvJ15w0ogfo/JtkaJYO7/7UB+kShHf
+	 qzm85VVDIqZX7GBnVvm3bDzHxNPJFJVI/AxvDiLF43WgamK5rkgRQ2zH3WqCHu9XYG
+	 AE7UC3dX8WM6Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 115F580AD0;
-	Thu,  5 Nov 2026 00:22:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 58392177B
- for <buildroot@buildroot.org>; Thu,  5 Nov 2026 00:22:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EC3A880BBE;
+	Thu,  5 Nov 2026 00:23:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5354631F
+ for <buildroot@buildroot.org>; Thu,  5 Nov 2026 00:23:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3DCDD80AD0
- for <buildroot@buildroot.org>; Thu,  5 Nov 2026 00:22:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5043E80BBE
+ for <buildroot@buildroot.org>; Thu,  5 Nov 2026 00:23:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lQ38qsIU4Z5w for <buildroot@buildroot.org>;
- Thu,  5 Nov 2026 00:21:59 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 5DAE080AC8
+ id xaVIIoAWmdlH for <buildroot@buildroot.org>;
+ Thu,  5 Nov 2026 00:23:31 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 0F7C780B86
 Authentication-Results: smtp1.osuosl.org;
- arc=none smtp.remote-ip=209.85.215.181
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.215.181;
- helo=mail-pg1-f181.google.com; envelope-from=jttelaak04@gmail.com;
+ arc=none smtp.remote-ip=209.85.214.181
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.214.181;
+ helo=mail-pl1-f181.google.com; envelope-from=jttelaak04@gmail.com;
  receiver=<UNKNOWN> 
 Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none) header.from=telaak.dev
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com
- [209.85.215.181])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5DAE080AC8
- for <buildroot@buildroot.org>; Thu,  5 Nov 2026 00:21:59 +0000 (UTC)
-Received: by mail-pg1-f181.google.com with SMTP id
- 41be03b00d2f7-cdab938dc83so580366a12.3
- for <buildroot@buildroot.org>; Wed, 04 Nov 2026 16:21:59 -0800 (PST)
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com
+ [209.85.214.181])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0F7C780B86
+ for <buildroot@buildroot.org>; Thu,  5 Nov 2026 00:23:30 +0000 (UTC)
+Received: by mail-pl1-f181.google.com with SMTP id
+ d9443c01a7336-2e987b4a710so607335ad.1
+ for <buildroot@buildroot.org>; Wed, 04 Nov 2026 16:23:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793838118; x=1794442918;
+ d=1e100.net; s=20260707; t=1793838210; x=1794443010;
  h=content-type:cc:to:subject:message-id:date:from:in-reply-to
  :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to:content-type;
- bh=asv9ATa0DwixAhSHGoBfBWECUOT3zGk1yMZ+vZ0oj74=;
- b=NC+cxK/E29XXemhEOMKiovJvp1GM2mg7dOr9IMKhb4kVSffC1/PPtt25mAm9v1Cx4d
- Yfum3x19V6tAFI+7Mc9ltquR5+SFH0b++TYFKiUNOevwQF1J0dvVflrLya6kud/bNnXx
- IG5EQVOxF+XG9oIGq4H8/a5+rupxHNvX0r9IqwLw4gCyUVLesOyaGeqSRcGg2JzkoXs8
- V0dkooFRJCL8b0pbzFCCTh7ERgyCTm6lExlpng9Zq3yymZa/iAlw8wJY6oWp1Ji7yJTl
- AB6Y1vZ/rmHa0HWW4LlpycNpJo4ubnxENc5FkvvnB5La04CVKKyu93A+TPZCkKGg7Q1p
- JTmA==
-X-Gm-Message-State: APuU4Z9iT+6Ek//9XySAkjIzbzuMRPCpAacGR2FsJFnLsYGRDYTmbcK8
- scxQO+63WL62Ck+6Rpx/u5lRFVuKvh8kc25NVS6FjCrXrK9urREcdbP9yJMBJPTj
-X-Gm-Gg: AYBFou1wAmoXxiVtRPSe6ALCjU6M/EOSo14ROfnRxdzzOtVI/furUWwI+4w+TtD1CIR
- gx4iaiaL4WIs6Bfhj1+obG3aZwCZKR1+svzZOUdae69kqu4ZPNjAAUIe5tY0cru8z7rgnhsWsSZ
- Iyq6s9Psz64lRvygUjtNpTwwCSlo5Y9D5F/8C3lNmqHu5dVfPGOZa0jkZ7t7wcSC0kQEB18W4Lb
- Him714X5KiSWTksRX+fRnAhhKX0jc2pIB4zhSFZog488ru61c8UHziJjZCDfkWtg5RgcCR9aYv9
- tE8fg16/5d+F9HC4SjCJqFGwswwrXUUKlgdPAZMIKYlKvKrrzRjXDmabFEbKVca63G62yCkXUTn
- AXrG63bcnSUAXEIkeMFy8IjYMJw8w0k6OTQ8mP7PF36+w6VYISNk2pkZppVzJUd2Cs21dprV4yB
- adtrVOXTPFdPfDDTFDrLkay6z1b3ghTssJXPU62ZbxdgGpdNV7f3zlggkmiAq2ah1JuCrM22C4j
- BQXoWlNhhyKml8WKoMBtYSLXuC5urB1Nbnc1PIz6HsYFeeG5gXQqFrcldw+iJxlPeI/lKOVQ6KZ
- SGAk5n080x6q5QDxO6VgnDlQXcq/SdDd613qOqBevLmPU9Vw6yWuEtrPDw/QpqLc0bLAMmcQWoC
- GQ/FjykdcF0dRoee5pLDRN+hFpWv7svmS/uw9tMReS9U=
-X-Received: by 2002:a17:90a:d30a:b0:3b0:9cc6:62c1 with SMTP id
- 98e67ed59e1d1-3b09cc6a2a7mr1683270a91.63.1793838118121; 
- Wed, 04 Nov 2026 16:21:58 -0800 (PST)
-Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com.
- [74.125.82.178]) by smtp.gmail.com with ESMTPSA id
- 98e67ed59e1d1-3b0b31d4bf1sm965226a91.16.2026.11.04.16.21.57
+ bh=TTxvNV1oxgHtUjuvPIjslS/ChjROMkfE7D6106abuFI=;
+ b=p1ZTabzNE4Yr1MRjZe5TmCf0xfaDB9MQc34T8yJynVQ3/ika6xwJHj3MYx1MISnm2S
+ Xl/KbegEC+S9WhjlMdjVTP6v9ubD2I5ODWRb3fryLVuAv4pXBYPlJQuYPRfDyfh9DIiv
+ 4FcrBRhScoNeKZ2E2jpg3caleqZB0TaykL/91fOW7iuVFBMKEQ96dEYhgoKUIiSNp3jN
+ BhWiSX7W1XHyO1UcYEHCqcVpA7d4C/qr+rVEZrvrsn4srpMGDoBYYTPSAwnBmK+HwQeU
+ oTZzMHWXmkvXNmFpG1gZjEAXUxWiyVEFtYvc5stVx12HQn8ul1Vi7JQ6Exv8buwPeewc
+ 5WNA==
+X-Gm-Message-State: APuU4Z8qZkg8WEwRVIFmJ6AJbZvaRy5RLrEM9RPv9UYqt+5q40fTwdi3
+ yia3zRQZKssi+A0kJV4gHwKSOT0U3jx3Qyc/zu61GNhjlh944dH4FAWglF2uIHFY
+X-Gm-Gg: AYBFou3riEim3Jzvo2WoRrOuiqV4YT/ViGANG+NMM9iePSC0EH8GFmMhP0kRroy2Na1
+ ZNcUDNEyoIX3/6QjOaLuaEpO4k0RKmyjDR84jy0i/oI/uBFu0HV94W8QYVZI5RZsmAYdptsKGFz
+ N6flaxOO0o1jnlZ+8Jr0RXlTAxfQWwmzySejw6RCXcGtFLpRlCGOJ9IO3sStKzn/mkd+jB5ZcAT
+ qdvDpmzGbnn7rF3fxdAApSVJsKhc54pHx+NRClF8J0x6gQFnorSJ5XcoMLNox78JIMcdRLO3X7X
+ 3nnp0gH/8opg76WZpNeJ/S3ulviAZri/zy6Ou07j4ColCqgmrdp65hXWSaHalztOT5VzlhGTrQt
+ AINREC3YoP5SADDRhSZAxbpakTR6Uu2Gpkk1Lm8fJhEgqF3LsQdN9eW0vxp5aMvRw/UsTP+ATw6
+ gjVSCOikFGm6a2BxMcdKGVtdAucvP/lkaf5IcUs0G7MjxOvA57DJioT/wtG9QB9K+lQJdhVF6h+
+ max0n7/Hkv3v5JOsM54Z498Lyekw9PkSO8tKZ9z5uy5MJ5tvvm3xcZJ5LX5G3S+gtCyNN4cbkhs
+ usGU15PTtqqknEUEhskVoD1g4gaeaaeDdez2KKgQ0fQwoVmil+JxJS3yTG0t2Pel4a8nXKnAYk4
+ AyCun/J6hIDntvjelB4dL8rXg4sMFtH1CfwRcs28=
+X-Received: by 2002:a17:90b:1dce:b0:3ab:8288:b8ce with SMTP id
+ 98e67ed59e1d1-3b0afc52c81mr622570a91.24.1793838209521; 
+ Wed, 04 Nov 2026 16:23:29 -0800 (PST)
+Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com.
+ [74.125.82.41]) by smtp.gmail.com with ESMTPSA id
+ 98e67ed59e1d1-3b0b3160634sm1029375a91.6.2026.11.04.16.23.29
  for <buildroot@buildroot.org>
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 04 Nov 2026 16:21:57 -0800 (PST)
-Received: by mail-dy1-f178.google.com with SMTP id
- 5a478bee46e88-36a1947498bso3252777eec.1
- for <buildroot@buildroot.org>; Wed, 04 Nov 2026 16:21:57 -0800 (PST)
-X-Received: by 2002:a05:693c:8945:10b0:36a:3bba:2e07 with SMTP id
- 5a478bee46e88-36a423becbdmr25255024eec.26.1793838117187; Wed, 04 Nov 2026
- 16:21:57 -0800 (PST)
+ Wed, 04 Nov 2026 16:23:29 -0800 (PST)
+Received: by mail-dl1-f41.google.com with SMTP id
+ a92af1059eb24-1438d9363fbso154611c88.0
+ for <buildroot@buildroot.org>; Wed, 04 Nov 2026 16:23:29 -0800 (PST)
+X-Received: by 2002:a05:7022:e88d:b0:144:eb3f:563a with SMTP id
+ a92af1059eb24-1b24f4bd92fmr1488243c88.15.1793838208625; Wed, 04 Nov 2026
+ 16:23:28 -0800 (PST)
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
 References: <20261102224915.69302-1-joseph@telaak.dev>
- <20261102224915.69302-2-joseph@telaak.dev>
- <auurEHw7GaBuvGwe@windsurf>
-In-Reply-To: <auurEHw7GaBuvGwe@windsurf>
+ <20261102224915.69302-3-joseph@telaak.dev>
+ <auusDZ8yOtO-Gebo@windsurf>
+In-Reply-To: <auusDZ8yOtO-Gebo@windsurf>
 From: Joseph Telaak <joseph@telaak.dev>
-Date: Wed, 4 Nov 2026 19:21:46 -0500
-X-Gmail-Original-Message-ID: <CAPY4CJ7n9QTCBb5EsH=txF+pBisH7NxnirkdMt2zMLVL59-1kA@mail.gmail.com>
-X-Gm-Features: AclHuK8J249buptSd3QRo0mX8AxjrAoZar5u3nvzS7LUzv257KEgGk4otALSAjg
-Message-ID: <CAPY4CJ7n9QTCBb5EsH=txF+pBisH7NxnirkdMt2zMLVL59-1kA@mail.gmail.com>
+Date: Wed, 4 Nov 2026 19:23:17 -0500
+X-Gmail-Original-Message-ID: <CAPY4CJ5YYj5KhuX6B9_W+GD1+RBxOmSduPM1UC0EHTdWnHaMzA@mail.gmail.com>
+X-Gm-Features: AclHuK9gDM8wIn71JswSMjehXN6vL0oAx4dLGqXhfurvmfaf9bGVCMeNbvCjK-k
+Message-ID: <CAPY4CJ5YYj5KhuX6B9_W+GD1+RBxOmSduPM1UC0EHTdWnHaMzA@mail.gmail.com>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: buildroot@buildroot.org, Adrian Perez de Castro <aperez@igalia.com>
-Subject: Re: [Buildroot] [PATCH 1/2] package/wpewebkit: add missing
- libxkbcommon dependency
+Subject: Re: [Buildroot] [PATCH 2/2] package/wpewebkit: add WPE Platform
+ options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -151,52 +151,63 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_PASS autolearn=no autolearn_force=no
-	version=4.0.1
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=no
+	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
 Hello Thomas,
 
-On Wed, Nov 04, 2026 at 11:04:01PM +0100, Thomas Petazzoni wrote:
-> When does wpebackend-fdo becomes optional?
+On Wed, Nov 04, 2026 at 11:09:18PM +0100, Thomas Petazzoni wrote:
+> Again, silly questions from someone not familiar with wpewebkit: what
+> is "WPE backend" in this context, and how does "WPE backend" map to
+> what we have (or don't have) in Buildroot?
 >
-> This patch doesn't make it optional, and neither does your PATCH 2/2.
+> In Buildroot as far as I can see, wpewebkit always depends on
+> wpebackend-fdo, which depends on libwpe. Does this mean that we are so
+> far only using "libwpe" and never "WPE backend"?
 
-You're right, it doesn't, and that sentence should not be there.
-Adrian's 2024 series ("package/wpewebkit: do not depend on
-wpebackend-fdo") keeps libwpe, which selects libxkbcommon, so even that
-would not break the chain. Please ignore the matching line in the
-cover letter too.
+We use both: wpebackend-fdo is the WPE backend.
 
-> Overall, is this fixing an actual build issue, or it's for
-> consistency, and preparation for wpebackend-fdo becoming optional in a
-> feature version of wpewebkit, which would break the wpewebkit ->
-> wpebackend-fdo -> libwpe -> libxkbcommon that exists today?
+libwpe is only an interface. WebKit is built against libwpe, and at run
+time libwpe dlopen()s a backend library that implements it. The
+application names the backend with wpe_loader_init(), or libwpe falls
+back to libWPEBackend-default.so. The backend has one part in the web
+process, where WebKit renders, and one in the application, which
+receives the frames. wpebackend-fdo is the freedesktop.org backend: its
+two parts talk over a private Wayland protocol, which carries the
+rendered buffers. It is the only backend packaged in Buildroot; others
+exist outside it (WPEBackend-rdk, vendor backends).
 
-It does not fix a build issue: with 2.50.5, libxkbcommon always comes
-in through wpebackend-fdo -> libwpe.
+WPE Platform is the alternative to both. The DRM, Wayland and headless
+platforms are built into WebKit itself (libWPEPlatform), so no backend
+package is needed; other platforms can be added as modules. In 2.50
+WebKit still links libwpe, since the libwpe API is still built, but an
+application that uses WPE Platform does not go through it.
 
-It is for consistency, and for 2.52. wpewebkit's CMake has an
-unconditional find_package(Libxkbcommon 0.4.0 REQUIRED), and with PATCH
-2/2 the WPE Platform library links libxkbcommon itself for its keymap.
-In 2.52, libwpe becomes optional (ENABLE_WPE_LEGACY_API=OFF, with WPE
-Platform enabled), but libxkbcommon is still required.
+> But if wayland/wayland-protocols are only for wpebackend-fdo, why
+> isn't wpebackend-fdo selecting them, instead of wpewebkit?
 
-If you fix the log when applying, this would be accurate:
+Good point, and my commit log is wrong there too. wpebackend-fdo
+already selects wayland itself. It does not use wayland-protocols, as
+it carries its own protocol files. In 2.50.5, WebKit only looks for
+wayland and wayland-protocols for the WPE Platform Wayland platform
+(and for its test tools and MiniBrowser, which Buildroot disables).
+The selects on BR2_PACKAGE_WPEWEBKIT date back to the original package
+in 2019, so they look like leftovers. That is why the Wayland platform
+selects them on its own.
 
-  WPE WebKit requires libxkbcommon: OptionsWPE.cmake has an
-  unconditional find_package(Libxkbcommon 0.4.0 REQUIRED), and the WPE
-  Platform library added by the next patch links it for its keymap.
-  Today it is only pulled in indirectly, through wpebackend-fdo ->
-  libwpe, so this does not fix a build failure. It keeps the
-  dependency correct once that chain goes away: from 2.52, WebKit can
-  be built without libwpe (ENABLE_WPE_LEGACY_API=OFF) and still
-  requires libxkbcommon.
+If you fix the log when applying, that paragraph could read:
 
-  Select it and add it to the dependencies directly.
+  The Wayland platform selects wayland and wayland-protocols itself:
+  WebKit only uses them for this platform. The main wpewebkit symbol
+  also selects them today, but nothing needs them there.
 
-Thanks for the review,
+Adrian, do you know of anything that still needs these selects? If
+not, I can send a separate patch to drop them, and wayland-protocols
+from WPEWEBKIT_DEPENDENCIES.
+
+Thanks,
 Joseph
 _______________________________________________
 buildroot mailing list
