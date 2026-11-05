@@ -1,28 +1,28 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F747606A31B
-	for <buildroot@archiver.kernel.org>; Thu,  5 Nov 2026 07:29:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B815E606A31B
+	for <buildroot@archiver.kernel.org>; Thu,  5 Nov 2026 07:29:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=VXe/JQXU
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=ljL70ykm
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D428B407F5;
-	Thu,  5 Nov 2026 07:29:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 95E1060833;
+	Thu,  5 Nov 2026 07:29:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VICLlBE1xFc3; Thu,  5 Nov 2026 07:29:17 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 8936A4080A
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793863757;
-	b=FGqJgfOQcGILKbXzN8vVCjZb30rGP8w5IIv1AGHIhydj/sDnyaS5cU/FWyQxPwbMb0si
-	 0D/F90WcWdDnabHlfEToYvmlfxn+5iGjwO1gkP5aeY2XUVXd78QTEZ0ysEuFtlXz8xmXR
-	 i7hMNrW4B4nlTgHp9h/JkWtahxoRie5cnMSULxuysb3zea0i/3a+X3ujEJMw6TdIU3LBM
-	 5SYukENFcJ8zxQcYWyCrfYSbrsxnL2WlrD7/6JKgccJQmE7HI4PdynqsZZSQcn16oyvLO
-	 JpzKcou0gpWmRplAipHEUHJo0Dtqv3vTHvt+7l08O33kacoPjnfeuXVpxCB7FOGz6lA==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SmZ8RUg4tb2v; Thu,  5 Nov 2026 07:29:19 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 9D1B56078E
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793863759;
+	b=jIJyuDMH/CqyiYxDbKHJwjRaL+Qh692MKkBP8fSwuxSnSRNZU2+2upnQeyXUHQw3fiG8
+	 vHQL0SJXVJzt07wiiSwMT0TFkhkPxUQB6oGy1Pk16SXz7M1h9TDY28VeZCO2n8EkzAvXG
+	 lh2DLnXHYwr65qA4cOuH/QkKAZGzgSY1N9Tk3mMbez2buYCP2fCZIYi8OccJtRgAOztEi
+	 UpBndClWh4dq0RUB7U3lK4V2h7S/EjhFAcUK3QswR0HVGQ3slA1LIdwly5SX/ZPAZVNeH
+	 18vLn2SP3rAp8ONbHVmhOCA0GC9iP+RTCWazD/lh7D024J8EDwEOs6CX9R8M/GJhmJA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793863757;
+	c=relaxed/relaxed; t=1793863759;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,58 +30,58 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=91dnl3YzMCAuclhmY1yKEqYtybgTcrmZT4torwLfzpQ=;
-	b=VhkehCY4RozZm3NNzSoCO8YFA4eg0E7kWbNfO2Sv2/Djlj7N9HlOK1oOjzZVr4nVYL+t
-	 568WsziRHEaUkR82ER6/Hy2Az0sp/fA4bV8R4VTsDoLGLKP+HGWxzUSYe39NamA7RtSNc
-	 vmHQHTyje7ZPfh2diLdi3b15Q2rakt+Rew863U4gomWiimmKxTpKi6a1e1N/TVdm5aBfr
-	 DpQqjQmrejaLvK1LMqO+6PvtsClaAdF+vt9Vj9Qa+rJhO/APu9qrnGeAJIenRPpcThLKY
-	 qeEE4h7w8wIiS8x8bs/VCbAiDoFGGtNQrEfwevp6cPTfq/IFjGz2qrG22f92pxKGctA==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+	bh=g/4SSJg6tp49zh03uIahxdCRwTf0wPTaEpNn46bg5CU=;
+	b=I5rcpcY7SaMxGcBF4msAocQkUI5eE3fWVo4SU71H2h/P+lekDPRCiQ+Flmwx09p7gCN/
+	 /auzwyLPFtcZCap+E46hc5nLsloe6eHFmcilZTlDNjRdi69bSwYDCHuXNP0hdoMH7Vz3n
+	 UBXWMKEp91OrA90ePvpBYfQ3XA66QnTO++TrperPnMNRtcEldyUImw/zudwGTmZ+pNsTw
+	 8h70BhtqIGXQs1HmBmc1adiOyXTDGF6nYHAJAjiFbmTzwdEiZmepMfSuseI1FLh+uKNOS
+	 AJ0nzLLfGDRfECkL9uY0smHH5e8apXab9d9QG0PNY5Oz6Ly7g4CCe0BLrGiOKgdgqpg==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793863757;
-	bh=91dnl3YzMCAuclhmY1yKEqYtybgTcrmZT4torwLfzpQ=;
+	s=default; t=1793863759;
+	bh=g/4SSJg6tp49zh03uIahxdCRwTf0wPTaEpNn46bg5CU=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=VXe/JQXUCMGmLSn2k3sZTNHwRp5toD/yb9zgREs1gCU8ZrsJ7oTA9RYgNThJRXwPq
-	 n1NZtGw7jbxnEgo0q70iy84gKuODJnRFvVI9CyTMlGjL/A8qVrofNc8jp3FW+7ttfc
-	 xCu7lZRU7arbiiOjoUdfFWQw+qQ2gn+NcLGWOfcpWjrNRxzgNqV5fJnQfBfyl9YKrf
-	 i/6yLXUDtzu+HayLsLsQVaM/xtrzTryOV8qSDJMyIVSKzKq2BGDN1VnBrylrcegOYk
-	 VMSQekfsCjpqMd3SNRBm1x0Qn7QMcH8cpcgsHBfTBAAXSOQ702QJ6ZD9yEjU9vsJkj
-	 6t/8TxrhIA4eA==
+	b=ljL70ykm76T6dQMUzWTpCPeRffdPzInncVq63BbP55eKHXMk6O0Y/nOsODK1rpFFj
+	 yqE97jPB2wDV/lX/tT69oD3yYgDilAfyDvPI540rd6JTVxXl8E0dI2ytnGMYfB7ORb
+	 S7lhlSM7uJG+ABTOXdnZhpjRQ0VT2LFJrbbAOFvt08zcMl0qEXzcb4ffZTGAIAaCN6
+	 1N6CK1JFhzCvZfDVRdEMKE0nSKXIhtlkyqbeXhhVfst667YHFoqMPuzrJdCD9UXFGv
+	 yHDBc+Oly79yVNF57kw2z8+SBTzMm7V9OQd0gitgoT2us2ej1Xf25S3X817GBZrYxx
+	 so0plySAPzgwg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8936A4080A;
-	Thu,  5 Nov 2026 07:29:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id B714C362
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9D1B56078E;
+	Thu,  5 Nov 2026 07:29:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C09B2177B
  for <buildroot@buildroot.org>; Thu,  5 Nov 2026 07:29:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9AAC9407FE
+ by smtp1.osuosl.org (Postfix) with ESMTP id B2A9E80BDB
  for <buildroot@buildroot.org>; Thu,  5 Nov 2026 07:29:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pyJP-8ee3-Ji for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CZDspL4DaIzr for <buildroot@buildroot.org>;
  Thu,  5 Nov 2026 07:29:13 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org F2857407F5
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 0A92981036
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F2857407F5
- for <buildroot@buildroot.org>; Thu,  5 Nov 2026 07:29:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0A92981036
+ for <buildroot@buildroot.org>; Thu,  5 Nov 2026 07:29:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D1B489DFB5; Thu,  5 Nov 2026 07:27:41 +0000 (UTC)
+ id E229A9DF70; Thu,  5 Nov 2026 07:27:41 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 5 Nov 2026 08:26:00 +0100
+Date: Thu, 5 Nov 2026 08:26:10 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 797fe39f04009c6e753b661a44b20d8357afb7b6
-X-Git-Newrev: 2b3ab90e22cdcac548ce6b49aa989ecaeef89faa
+X-Git-Oldrev: 2b3ab90e22cdcac548ce6b49aa989ecaeef89faa
+X-Git-Newrev: 59349bdd0ffca2b5ccf289e6a4e0d36622c7ba6a
 X-Patchwork-Hint: ignore
-Message-Id: <20261105072741.D1B489DFB5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/mender/x86_64: add a udev rule to
- create /dev/root
+Message-Id: <20261105072741.E229A9DF70@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] test_mender/post-build.sh: use
+ /etc/mender/device_type
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,39 +100,56 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
-	autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	TVD_SPACE_RATIO autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/2b3ab90e22cdcac548ce6b49aa989ecaeef89faa
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/59349bdd0ffca2b5ccf289e6a4e0d36622c7ba6a
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-As /dev/root does not appear automatically, add a rule to
-create /dev/root. Without this rule, even running a simple command
-such as `mender -version` outputs the following warning:
-
-```
-WARN[0000] Could not resolve path link: /dev/root Attempting to continue
-WARN[0000] Could not resolve path link: /dev/root Attempting to continue
-```
-
-Note: This rule is only guaranteed to work properly with the
-mender_x86_64_efi_defconfig example configuration.
+To keep parity with board/mender/x86_64/overlay/etc/mender/mender.conf,
+change /var/lib/mender/device_type to /etc/mender/device_type and
+add a /etc/mender/mender.conf file.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/mender/x86_64/overlay/etc/udev/rules.d/99-root-symlink.rules | 1 +
- 1 file changed, 1 insertion(+)
+ support/testing/tests/package/test_mender/post-build.sh       |  3 +--
+ .../package/test_mender/rootfs-overlay/etc/mender/mender.conf | 11 +++++++++++
+ 2 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/board/mender/x86_64/overlay/etc/udev/rules.d/99-root-symlink.rules b/board/mender/x86_64/overlay/etc/udev/rules.d/99-root-symlink.rules
+diff --git a/support/testing/tests/package/test_mender/post-build.sh b/support/testing/tests/package/test_mender/post-build.sh
+index db075628e0..f27b0f9417 100755
+--- a/support/testing/tests/package/test_mender/post-build.sh
++++ b/support/testing/tests/package/test_mender/post-build.sh
+@@ -21,8 +21,7 @@ generate_mender_bootstrap_artifact() {
+ function mender_fixup() {
+   rm -rf "${TARGET_DIR}"/var/lib/mender
+   mkdir -p "${TARGET_DIR}"/var/lib/mender
+-  echo "device_type=${COMPATIBLE_TYPE}" > "${TARGET_DIR}"/var/lib/mender/device_type
+-
++  echo "device_type=${COMPATIBLE_TYPE}" > "${TARGET_DIR}"/etc/mender/device_type
+ }
+ 
+ mender_fixup
+diff --git a/support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/mender.conf b/support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/mender.conf
 new file mode 100644
-index 0000000000..7d2ae8cb89
+index 0000000000..5f423fb2cb
 --- /dev/null
-+++ b/board/mender/x86_64/overlay/etc/udev/rules.d/99-root-symlink.rules
-@@ -0,0 +1 @@
-+SUBSYSTEM=="block", ACTION=="add|change", PROGRAM="/bin/grep -q root=/dev/%k /proc/cmdline", SYMLINK+="root"
++++ b/support/testing/tests/package/test_mender/rootfs-overlay/etc/mender/mender.conf
+@@ -0,0 +1,11 @@
++{
++  "InventoryPollIntervalSeconds": 1800,
++  "UpdatePollIntervalSeconds": 1800,
++  "RetryPollIntervalSeconds": 300,
++  "RootfsPartA": "/dev/vda2",
++  "RootfsPartB": "/dev/vda3",
++  "ServerCertificate": "/etc/mender/server.crt",
++  "ServerURL": "https://docker.mender.io",
++  "TenantToken": "dummy",
++  "DeviceTypeFile": "/etc/mender/device_type"
++}
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
