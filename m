@@ -2,27 +2,27 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01229606A33B
-	for <buildroot@archiver.kernel.org>; Thu,  5 Nov 2026 11:57:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C89D8606A31B
+	for <buildroot@archiver.kernel.org>; Thu,  5 Nov 2026 12:20:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=WuC3EX50
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=mVhF+xdL
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C2A6B4086D;
-	Thu,  5 Nov 2026 11:57:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1E2AB4087E;
+	Thu,  5 Nov 2026 12:20:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ck_mRq_svAUd; Thu,  5 Nov 2026 11:57:03 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org DCF144085A
+ id 2KVItl6TZlW1; Thu,  5 Nov 2026 12:20:48 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 1823840870
 Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793879823;
-	b=B15sgN8zgaXAMDESttHS1p19PxWMRi2y15HWzsOojwxB0g3K4VTq6EdHHVzzEU7jOr9X
-	 NXkVDUL9/FDa3YjrFL44EdJXHBJ/I6NZp4wiE4mPvebejX0SBpskwcz1G5NtKOPRGSmBs
-	 +q2AxVc7IBveNxrgWkIjuqjkWr15pqMwNrLswFZWa7yyK+tK753/6gaRtSJ7KitCCh6Nw
-	 OpjcxAeeC/nugU8q2lsj0MQ3+qxLeCddCmUm0/ekIBkP7VBShZ4Q2x8xGcPuJe51jVfiW
-	 jHD8vMOO1f3/rvCDWKqam8Dc4IqfRH5OvX6L+h+CoundSksYrUXp4v+sYT0LrmjCzHg==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793881248;
+	b=ZEocsoN3IviAvVHFGMg+5BX+CyLepIKfTw1CEeVJXrRmu6KD8JdDlRmQML2YoWpWggtL
+	 NDfeTOoI4CUiCn/g8Uo7T2zo8/PV8uRISf/Zra3AroDA4TajnZEyu4cPm/e3dhD0vt1FM
+	 GtBaBE8vcqXGhM7v7t+XqJNXc5eQgulaQS8IykupxQYF6E3SwRDH+rt/v3BXf7HgIGxv/
+	 D9xb2SFPiYcJY6IUmk/kt+sbhsyXNo7Gc/AA9TthUxWNdu88XbBE+XVgXcZU5d2MTq6u9
+	 jBWY4lf+jlKbocLU5SmMz7SdD8d2FZyCJ0IdwLAP3BNyv2NQKGbWHOxoxXTZycBEWEg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793879823;
+	c=relaxed/relaxed; t=1793881248;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,91 +31,90 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=R0Ry028wK/uzkBIeCaRdXjfiIwwfZ6wCbhYGJkrsUyg=;
-	b=QHbcS/4JWlMCCHgcRDX73YNDHo95Qe4gqwZQyiszUtDKs/9rjDPyNfHW0S6ZeLTR1+kQ
-	 UT79ByAhOWRaigiZz3Kl+s4uotXy8LbrgGjbCCdZQTCv5nt/7vhd8Daz1QfDjoyyNp9kH
-	 4NefFXvkXJ62W1igatQxnWH04BjZF08G9RCQwoDA27o4P4vRyyXl6TUjvfYSOTV315B9s
-	 VRqmbDh4jCyewVOhEwBYMoKg//Ko2WFnK6QA6yoKBMVRaYwSCqlfZmM1LK140zNwik8WN
-	 P5m3dIjt04tPaeLl+kt0TvaWEs/Y9fuQylsnZbQV8gFVFOdIzf3fKEFLUGc+5EsHicg==
+	bh=MQq9OQn5GF+HCZOpILrNaC8oN01chIHih7SRGgOI+fI=;
+	b=VtPl8hewUWh1c5/Y3A4l5W/VAVgZQlfJrrz1YQMzXy5ge5xJ5Wm6spr9LVUVUzd8PwQm
+	 gWm+Om2PuXwSDAP89j5cW7dTgZzZERfXjNzW4RwW5epSk1JG1oHNGlWrzhL60ooSRo676
+	 Qw65GYdPGiUyKK9EJTxmIr9igvO/OGNWL39Zqrdq1jw5ZAthVyiYbsd3ncdwPTNK9sD9Q
+	 Ob1yLkFfKlrMINyxpD8JeAhK6tXeFRadsuKhWMtPZGrwQYJhg2GCnJS0qCrJ196zR5u27
+	 Apg2vuPY0gljH0ihtLY+FW3tRtH3ABMwMWnZICIp8hhN1yj3QYZjYAVwip2p6AhO2WA==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793879823;
-	bh=R0Ry028wK/uzkBIeCaRdXjfiIwwfZ6wCbhYGJkrsUyg=;
+	s=default; t=1793881248;
+	bh=MQq9OQn5GF+HCZOpILrNaC8oN01chIHih7SRGgOI+fI=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=WuC3EX50cX+6hqEAvUk1Vs0isqaw4o0OOAWKzaFT4Btq14gXklCifL4FPgChY3DMa
-	 4sILVzZV0EJaRvhdbFL+m3FGZOCyn+M+8kIQAGcuku6oyDImrdxTs2Nw3drTeWsTif
-	 Tq3G+qYgy726TiMZYiRXRBOhI2rlhF67Ie+jB3kENsAQlyFnY5cKDZFFtF4fG7lvdH
-	 yQ2YxRpnSUTBdAMxoMRbyJQq45DhhZnpHiJyznrH50NqN/CHuxUVzYsnpXqMOvyPGF
-	 5P1mksfAbhc8YuFwsPFSSB9nRrndEFoEet8fgw+NQDrUEijcF5Y5t4MqoaE8vEzn8g
-	 vaZqHt/NeorAw==
+	b=mVhF+xdL85olqjNqSgrGCiScyobO1KuH380Ccj32yWcVhxm3HTo0pPIIjFjQAOMtF
+	 TTZtMGSEEnFMBDor3rY1mFfHwBPnBIyhfdLvXqSgRkMgZDyhNISY7BvsVlR4tlh6HQ
+	 smGdIqQe/hpvLL8zvVfSDtV4T0FlFM0UCZjF3aBddcdpmIJXlaaz7xDhkPlv2rzpJj
+	 tSWW/ceTn8dd6FN+8RH+AClBkjl4yEuBKn4yX5KIONqYMv9z9+b3ZBoBmLDaOlZH/o
+	 dMU6K+0DVyLval/uQoBsnWhd/76MdPMiQKCqnVALMOKp6Sd+fT8gAvoyK39yquQWE2
+	 hoEVLn3YaiLsg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DCF144085A;
-	Thu,  5 Nov 2026 11:57:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 42434177B
- for <buildroot@buildroot.org>; Thu,  5 Nov 2026 11:57:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1823840870;
+	Thu,  5 Nov 2026 12:20:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 117B652B
+ for <buildroot@buildroot.org>; Thu,  5 Nov 2026 12:20:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 33FB481138
- for <buildroot@buildroot.org>; Thu,  5 Nov 2026 11:57:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EB9374008E
+ for <buildroot@buildroot.org>; Thu,  5 Nov 2026 12:20:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8s-zQjt1mGuO for <buildroot@buildroot.org>;
- Thu,  5 Nov 2026 11:57:01 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 00B8181134
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EyyrejKLzG9C for <buildroot@buildroot.org>;
+ Thu,  5 Nov 2026 12:20:46 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org D4A894007E
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::632; helo=mail-ej1-x632.google.com;
+ client-ip=2a00:1450:4864:20::52e; helo=mail-ed1-x52e.google.com;
  envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 00B8181134
- for <buildroot@buildroot.org>; Thu,  5 Nov 2026 11:57:00 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id
- a640c23a62f3a-c4ceaee6770so263840066b.0
- for <buildroot@buildroot.org>; Thu, 05 Nov 2026 03:57:00 -0800 (PST)
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
+ [IPv6:2a00:1450:4864:20::52e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D4A894007E
+ for <buildroot@buildroot.org>; Thu,  5 Nov 2026 12:20:45 +0000 (UTC)
+Received: by mail-ed1-x52e.google.com with SMTP id
+ 4fb4d7f45d1cf-6b579003f29so1052895a12.0
+ for <buildroot@buildroot.org>; Thu, 05 Nov 2026 04:20:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793879818; x=1794484618;
+ d=1e100.net; s=20260707; t=1793881243; x=1794486043;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=L+126M1c3W8fnI4zaFKjdMf5ErlWbfwrAnEjXHmHJ7M=;
- b=mN/0GvSMrLgtZ8OPukmdTgoVzJ+3z4ydyM+HMzGZuDWTE+Ci4J7yYROzYs3RN0Ft6q
- l0mZCVOJbTxwmI3u2nvDzvUDH+gelPKayCPAHhs+tr6R8rZ8PwjFBQy8NjJqRrYizIWj
- 3mAjo/HYNYrdSfDrWOidfPaLH2pCa/vFNs435etMy1oojg/czlKEaCRJLULVjTmno0ka
- rpDwaPz2kAe4M/d69Ah6aRJtvT0Km/MOu86mHqkGRnTb2x7oX1YgJr4BhepLGymRK1PD
- 6yvlOhvIPBpFgeAnKWkyxWKSzNliGGjbkf5B1kUb3twtafrQin2eejZmfqH+2wZHIG+z
- oLUA==
-X-Gm-Message-State: APuU4Z9d3F/FXMBmX3GdusWzY0+RmFdlVzBB9SOrEzeFxMSqIOcZ4gMA
- ZrcDKRkns+3kmWlp2EIRTrtw6t1dG5cru9Fp2/IxsZErPRV/lkmfu1WbEh1YHQ==
-X-Gm-Gg: AYBFou1E/E9jh9DEt6bajv+RaB/0cSCyLgE8JF3QWxPaLUxoPPNcPctV76HKm8cfbJz
- 8JagtnxZ1mBC08GInVhuaq8oaI2oB/3sVlBxVsQI3IpsuTvB2tJ/3IIiYTa7VRC7owUpPF2bUdB
- Pl6Xo7Dl0GqRA2LB6MdzryWWZuNMBEI0XjiJYXPVz/g0RGWXA2uyR97m6tK1+tXhQCJCzESnOiM
- m7+tzAu1be8MkG+o56h7bHz2huU4NkKDm7DCUK1FFNPUTcPq6AtAy6bqOFrRRx43b45xsxCLKWD
- TEUpzWmxQCJAz16UoKye8g2BHtllj9BCIQEbV9CHlRupj8L0jkV7nje+2cPM/uRIxNmRCG3BGCY
- rNZzSwx4nu1ag6SufWrqQWMP+eCnUg5GvLztewhPlj/8P+k2gkZpNQ3a5HJsEf8pFPyMlMuGnDe
- XBP63/DwmnwUWxYJFNWmuGMwpynDZ99FTbhF/aPYOiXGIq2c45nqOp7IePGQqucXyzX7o9OxUKv
- 1YZ8AXSE35/iWrUKkVQM0NJ7PggkBZO8eJm3OmM5byYJGUjCJbWS1YcMZwu/IcZimovude0s1zC
- 7L7KsQCa15s0NZNeR4Rv0mGVzZo3cbC7npHts7cVra9fLSfAxllXeM4ilyB0FtuOJm4i5bmRx/m
- P+18H9D4X
-X-Received: by 2002:a17:907:930d:b0:c2e:4b90:3c56 with SMTP id
- a640c23a62f3a-c4ca7a19969mr1780661666b.13.1793879818297; 
- Thu, 05 Nov 2026 03:56:58 -0800 (PST)
+ bh=v88Y2LobEseqSEUt5LRvlXomWYVGMoOD13l48fsJbvM=;
+ b=VIWh1EH5X9UVBxFtStJIPnX/ONJ43Smy7b5BdXzTUpAecBvgiBRP2LKCFX22retmIn
+ 4aDE+EACjdCH2jemyc+/rE4mswOdT8jk/aYQB0KDIVeaM9vryRHrvlwEBpQYAvtPwWDW
+ CTJh+0rapI6rtSnA38OgoZ/ntGAjY5+NXNQIE3jRX8/0nnzgAPiDBt7sOSTXuCk85a3R
+ +qyEIiXHnjIldWhBb6+soxESd72onIWcguM+uaDcTN9iarKoG/6lHyUcO4qhwgyJzT7I
+ dq1TZlLqMkceZuA3DvbFX1jdKt/2dBhcfs8Q6H+80vkC9DNmp7lWeYGqbx2QDa7bIHJZ
+ 9HLQ==
+X-Gm-Message-State: APuU4Z/i9eWXHSaZj2Zg1ak0OZFWbuy9sNqsebDqCbGEyxXISXDbzRhY
+ 25MEZAooXCDmp6SLFL+VTuv8HQAIzoRUkW4XyUTlzTjInCbjLnxNSDL5d0g/qA==
+X-Gm-Gg: AYBFou1Zwdb+XGMYuB2HORaTsFutuZ17rkJV+yOza2fyMriIuVv+xk+veki3FC2uvtO
+ mHEGmXkm/y9Nw3bLv4oH+/wuJNjEs5WmhnW3A8lb8lTyUCmBV+kY8JuxsaQK14cQGoHYkif/6D6
+ bFvR9jcvuUZaNayAqcTibWKSGVXMCm/2vZo3MAkdfXXfRb7uYDGOGBP1QbCVhc+7Js1zUFCDhvb
+ BNJlkNG8U8mJUvXBSxY5LWlXkBM0cWbdlk95h1gVyxPlk8j3qxNThRur38gpDIsd7l8fRobCeNs
+ vYv+t8BXHAqkRAlArfSF2+QMe6V8hB3o/7UQJ2wOELwdiBZ97XfDDBYnGTWm7S1qwEhj6vvCO4M
+ sAqNxJGmLfnhk6ei/ktp3j0rSIUMXVt4tJ0eswsVyYqM1nX2JYqtBw9Gi+dihO0cDPPfXW/ZUgc
+ 7SpgSbuARKjGF3S1Kwags/kX7anxtSPRWupaqiofFDV8+zr/KUxEmTro+HyL+pVSA1xOCDbDVK2
+ jFd1crIvBXLtiZClrxOUARz3/ZNSsAC4rzMbRRff+st0vse5fS0Dn4mtu7MN7rOt4U2S6/VEG50
+ wDiKWQQ9bIMk+0t1uzN6rTRVp5iQoyCgex+S1C1axXSz5ep5d4kQIjvLms4KDngV3g9U8iB78xX
+ QytSGvAsD
+X-Received: by 2002:a05:6402:4505:b0:6b4:8d16:f026 with SMTP id
+ 4fb4d7f45d1cf-6b4d3391cd5mr14612020a12.1.1793881243211; 
+ Thu, 05 Nov 2026 04:20:43 -0800 (PST)
 Received: from development2.visionsystems.local (mail.visionsystems.de.
  [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c4d0e4a49fasm162716666b.82.2026.11.05.03.56.57
+ 4fb4d7f45d1cf-6b57e26b0ffsm603885a12.32.2026.11.05.04.20.42
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 05 Nov 2026 03:56:57 -0800 (PST)
+ Thu, 05 Nov 2026 04:20:42 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Thu,  5 Nov 2026 12:56:57 +0100
-Message-Id: <20261105115657.534652-1-yegorslists@googlemail.com>
+Date: Thu,  5 Nov 2026 13:20:42 +0100
+Message-Id: <20261105122042.1167294-1-yegorslists@googlemail.com>
 X-Mailer: git-send-email 2.34.1
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/libbpf: fix arm64 build with kernel
- headers >= 7.3
+Subject: [Buildroot] [PATCH] package/iproute2: bump to version 7.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -127,91 +126,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
 Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: Romain Naour <romain.naour@gmail.com>
+Cc: Petr Vorel <petr.vorel@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-With kernel headers 7.3, libbpf fails to build on arm64 with glibc:
+For the changes, see:
+https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/log/?qt=range&q=v7.1.0..v7.3.0
 
-  In file included from [...]/sysroot/usr/include/bits/sigcontext.h:30,
-                   from [...]/sysroot/usr/include/signal.h:301,
-                   from [...]/sysroot/usr/include/sys/param.h:28,
-                   from btf.c:13:
-  [...]/sysroot/usr/include/asm/sigcontext.h:81:9: error: unknown type name '__u128'; did you mean '__u32'?
-
-Linux 7.3 changed arm64's asm/sigcontext.h and asm/ptrace.h to use the
-__u128 type from linux/types.h. libbpf bundles its own linux/types.h,
-lacking __u128, which shadows the one from the kernel headers as the
-build uses -I../include.
-
-Backport the upstream commit adding the __s128 and __u128 typedefs to
-the bundled header. It is not part of any release yet.
-
-This issue has been present since commit b216661a73f7
-("{toolchain, linux-headers}: add support for 7.3 headers"), which made
-7.3 the latest kernel headers version. It only affects master, no
-release or maintenance branch has 7.3 headers.
-
-Fixes:
-https://autobuild.buildroot.org/results/8de59d8e4eb4772a67248f4dade8676486beed8e
-
-Fixes: b216661a73f7b8e21290a1bc9033e7f9b5fb230e ("{toolchain, linux-headers}: add support for 7.3 headers")
 Assisted-by: Claude:claude-opus-5-5
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- ...8-bit-integer-types-to-linux-types.h.patch | 36 +++++++++++++++++++
- 1 file changed, 36 insertions(+)
- create mode 100644 package/libbpf/0001-include-add-128-bit-integer-types-to-linux-types.h.patch
+ package/iproute2/iproute2.hash | 2 +-
+ package/iproute2/iproute2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libbpf/0001-include-add-128-bit-integer-types-to-linux-types.h.patch b/package/libbpf/0001-include-add-128-bit-integer-types-to-linux-types.h.patch
-new file mode 100644
-index 0000000000..faee034687
---- /dev/null
-+++ b/package/libbpf/0001-include-add-128-bit-integer-types-to-linux-types.h.patch
-@@ -0,0 +1,36 @@
-+From f90a9c487d7542d91fa584b83b6a624a4fbeb341 Mon Sep 17 00:00:00 2001
-+From: Daniel Golle <daniel@makrotopia.org>
-+Date: Mon, 7 Sep 2026 16:54:26 +0100
-+Subject: [PATCH] include: add 128-bit integer types to linux/types.h
-+
-+Linux 7.3 declares the fpsimd registers in the arm64 sigcontext as
-+__u128 instead of __uint128_t, see kernel commit d4bf9e08d412 ("arm64:
-+uapi: Use __u128 instead of __uint128_t in UAPI headers"). The private
-+linux/types.h in include/ shadows the kernel's linux/types.h while
-+building libbpf, so with glibc, whose signal.h pulls in
-+asm/sigcontext.h, the build fails with an unknown type name __u128.
-+Add the __s128 and __u128 typedefs as the kernel's uapi and tools
-+headers define them.
-+
-+Upstream: https://github.com/libbpf/libbpf/commit/f90a9c487d7542d91fa584b83b6a624a4fbeb341
-+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-+---
-+ include/linux/types.h | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/include/linux/types.h b/include/linux/types.h
-+index cfb558ac3..3560e9539 100644
-+--- a/include/linux/types.h
-++++ b/include/linux/types.h
-+@@ -12,6 +12,11 @@
-+ #include <asm/types.h>
-+ #include <asm/posix_types.h>
-+ 
-++#ifdef __SIZEOF_INT128__
-++typedef __signed__ __int128 __s128 __attribute__((aligned(16)));
-++typedef unsigned __int128 __u128 __attribute__((aligned(16)));
-++#endif
-++
-+ #define __bitwise__
-+ #define __bitwise __bitwise__
-+ 
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index 691e87bb43..645b1b5d79 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,3 +1,3 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256  fd9fa1b95809417157ca83dd72957e3261bdbce896353cb936f80af0b33a4b5c  iproute2-7.1.0.tar.xz
++sha256  5c1789d290bba048a6135ed1ab81b0402dd0fb528d1f1421765c42b1fc3d6289  iproute2-7.3.0.tar.xz
+ sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 344a6fa8e4..aa0a094db1 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPROUTE2_VERSION = 7.1.0
++IPROUTE2_VERSION = 7.3.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
 -- 
 2.34.1
 
