@@ -1,28 +1,28 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98D59606A329
-	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 15:58:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E9FA606A326
+	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 15:58:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=frU82rBA
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=C+ETu2p9
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 77082606BB;
-	Fri,  6 Nov 2026 15:58:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 09E158119F;
+	Fri,  6 Nov 2026 15:58:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SL5fb7Fq3ahD; Fri,  6 Nov 2026 15:58:55 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org A7D906085F
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793980735;
-	b=r3SmFcDbxWZGBNrGQIDYHQijdfzLsHANG1j2RsGzogI0KR0eh/fbzjNT274YzvatJDhR
-	 iUugmADNk50qkAy6+mSn+LybOIcAFNAeVgC5wplpztDNuBiJdSBAkRS/AZfyeegWKdkof
-	 yFHAKH763DoflOIEE4SColriBxwf6OFQ5yCzoAx0LNxo9JyUt0Nu7B3GfPk2+mldgVCcc
-	 rjsP7SuOygS2EuQP+vSLZhF1dK4V9jMZOZvmgFAU6hVlYSXPynomjdqQ8bLQoi9mjNTUL
-	 DM2AE2MRffx40vJbfJ2QiaLx6XZMcQwq6P7O2LmEeBwZPspVE4qWaVSlfcFcBLk0tVw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2vkSYHyPq68m; Fri,  6 Nov 2026 15:58:57 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 226C78128C
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793980737;
+	b=YagVeCq48nkY02X5uNOEm+fjR5kUSx5cbDyGi4Q9m+oVxCyHjsLGTkQuLSOfWTMFALct
+	 exORgfLv8/dywz+BeDCZBALWZvUylAG3FUiy8i+oWO7oHcXcB+wUOFgnWKAG65YuXDhxZ
+	 q072ktP44aV3yqhGzo+ws1yk9fEJcouUg5r/8Kc0SvakIOs4E2A5Yp1/MxRD5vbfK3upS
+	 WYDkL5T6UbyilguTVoEzyNyvKCcoDcjkCINw30tQPHQzXMWW9nfH3+dnhbcznsJFqqIuK
+	 MHas5REKjyfSc2/2w+AJJWhu/R8MAeC4b1bAin4w5x+KFW+fPJ3hEVIyCPSGS3Uluow==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793980735;
+	c=relaxed/relaxed; t=1793980737;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,58 +30,58 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
 	 Sender;
-	bh=90qY9czHGDCF6CCSmmxd/vw9JhIBwWhGgfINVLG2Las=;
-	b=md7MT/2gbSSVLta2x3wtT4CzqFJu5qni4RoQKnN18WzWeukQ5PDEjNNczGP1EcQK/JEW
-	 oS3Za3RdHenwGZfuGJkCcnx2nCraPI3seHD/BDPMFMIyz0pEHw/BtfUFGhKeCkeKpfoCT
-	 RUTCe+/vB2Pj96kAEKv/u3arhKD49dQHpTDUboBD9e56Fbo4j6/gitRkkpkbT3bNzKXNg
-	 vD86yIiBqFJysSwoB8tT+GCnI3TFCf/0GftT68klejX+SOq1WER+dCmgdU7zltz5PSXXn
-	 +SleTYevVL1gBCLwVvA45NV361WZsnW51N74qQyY21KvHHPNrfZjujHLLWinBeGxDVg==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+	bh=qQRoKhJR4FStJ63VMedzRUt0Bcmtsxl/7FK1F/Ef22U=;
+	b=YvXVvB35xeGmlJa8y1R15LwruCGFzWiZHCtw6F7LA6Pdpk+Zm4JczGYcTPCHnif+cq5S
+	 9yrGFJBTIIo318IeqUHDnIDW/mk4se2VHJgS5tAixApjSUxAJDl/Luj7Q/EZvwpiFuEIm
+	 cloMkyZGZsp4l+9wRLTlq+UaROAMpbh75cGs+b+kB41Acm0OsOi5/DYmQ6tnIcwUOdLqx
+	 asUiITl12Fr3f5MMeYch9VWD2p31sOHt4RfUHJFCZw2JPzp5h3PQpvZKswy4i1Cj8/akD
+	 QtzPMHoz5icx7i2A/XAwRnt2iGn+H/7RKg2In3tMMNlfRavub7p7qzRjeQGUYhAQoeA==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793980735;
-	bh=90qY9czHGDCF6CCSmmxd/vw9JhIBwWhGgfINVLG2Las=;
+	s=default; t=1793980737;
+	bh=qQRoKhJR4FStJ63VMedzRUt0Bcmtsxl/7FK1F/Ef22U=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=frU82rBAg4GVo3hW5xDm3LuoB1aTOv+4+OucB/oag/EbvzrswHH3TJAc8XsJcfvC9
-	 zZGe6mqIAtf1YWXd7oZATaODPDSXqF6SzKOCu+V+1CjmKoyasNOZczv5bNmib9euP/
-	 DjlXw2zmmCzystRLUdzk3zql95B8x3lsaSGtfpNA09+TYZJEvCEFkWBSuococbdnSP
-	 Coq1ap4CkfboQRuT/WD2NJlURTJyy+46ZckrD3KCIcVvZi9bYyGwudFviq8d+tezEc
-	 DiVCzbrzUI2io/1ggS+LAlKI84t7FQ4Z4p2LYyDp21Of9MN3HwEsObucT7/bKvWW5d
-	 C30hijju5j/4A==
+	b=C+ETu2p9EOr31lFLLs/k5154MvQkWqE+Qp1TquvLEmlHI9LaBzGOVnnEPVkJDwfgf
+	 fNREOSDnCXfckcw9kJtCVd4SyN6VR0a7DYHkjGLyY9Gxadywl6w/i6xMfogjpEaAVy
+	 6Obf6psnQq2B9u3XJJGvFfiWlSICRebpcy/xT+RrGwbJa2VoVdVXgTJBRT6LHdssmO
+	 vHb9Mm2bdPrIkBmfV7sf/1MAPX4MiqjzvCK1Kv7yZtXEbYRDxhht0vbhMDbT1QcgcX
+	 LTnI4ZMe6/9tfMYzJ5avjfOchKgRlR3n59mhHjXBO1vKS6MGaufKbEesRHDsh3Wy/m
+	 c5+aqMIXXW5SA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A7D906085F;
-	Fri,  6 Nov 2026 15:58:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 353C032A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 226C78128C;
+	Fri,  6 Nov 2026 15:58:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3E4D17AA
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 15:58:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 27415403D9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2FE6E4093B
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 15:58:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OuOQHX8a2L3A for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8HEtx_xgyDJc for <buildroot@buildroot.org>;
  Fri,  6 Nov 2026 15:58:28 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 95622403DA
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 8727E40917
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 95622403DA
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8727E40917
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 15:58:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CD8099E09B; Fri,  6 Nov 2026 15:56:55 +0000 (UTC)
+ id BEF029E0A8; Fri,  6 Nov 2026 15:56:55 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Thu, 5 Nov 2026 12:04:26 +0100
 X-Git-Refname: refs/heads/2025.02.x
-X-Git-Oldrev: fcf83bf91f75a68827410b45983d361fc166ffcf
-X-Git-Newrev: d4f97a9acc33629ff0bb7d2895be145d886c94d8
+X-Git-Oldrev: 20f4955e1b93ccdc5114b2e70dc7123e6f8cadfd
+X-Git-Newrev: fcf83bf91f75a68827410b45983d361fc166ffcf
 X-Patchwork-Hint: ignore
-Message-Id: <20261106155655.CD8099E09B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2025.02.x] package/swtpm: fix
- license information
+Message-Id: <20261106155655.BEF029E0A8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2025.02.x] package/swtpm: security
+ bump to v0.8.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -96,7 +96,7 @@ From: =?utf-8?b?UmFwaGHvv73vv71sIE3vv73vv71sb3R0ZSB2aWEgYnVpbGRyb290?=
 Reply-To: Raphaël Mélotte <raphael.melotte@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2446478877581402507=="
+Content-Type: multipart/mixed; boundary="===============6799936708765095992=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DATE_IN_PAST_24_48,
 	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
@@ -106,46 +106,54 @@ X-Spam-Status: No, score=-19.5 required=3.0 tests=BAYES_00,DATE_IN_PAST_24_48,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============2446478877581402507==
+--===============6799936708765095992==
 Content-Type: text/plain
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d4f97a9acc33629ff0bb7d2895be145d886c94d8
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/fcf83bf91f75a68827410b45983d361fc166ffcf
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/2025.02.x
 
-The SPDX identifier matching the LICENSE file is BSD-3-Clause [1], not
-BSD-4-Clause. The LICENSE file was last modified with upstream commit
-5f1ef9565df074b918a39cb4885af4190c98edb7 in 2015, before release
-0.1.0, so the fix applies to all Buildroot stable branches.
+This fixes the following vulnerability:
 
-[1] https://spdx.org/licenses/BSD-3-Clause.html
-[2] https://github.com/stefanberger/swtpm/commit/5f1ef9565df074b918a39cb4885af4190c98edb7
+- CVE-2026-75900: An out-of-bounds read vulnerability was found in swtpm's
+                  SWTPM_NVRAM_CheckHeader() function
 
-Fixes: 87b9b126d23be1e95b3d2b82438f65e28f554a87 "package/swtpm: add host package"
+See the release notes:
+https://github.com/stefanberger/swtpm/releases/tag/v0.8.3
 
-Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
+(alternative to commit b6a653e5fc31ab9e0e0b105583a693938b59711a)
+Signed-off-by: Titouan Christophe <titouan.christophe@mind.be>
 Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-(cherry picked from commit 56f15ebd01b1057fb7d28574c4176e837b586fae)
 Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 ---
- package/swtpm/swtpm.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/swtpm/swtpm.hash | 4 +++-
+ package/swtpm/swtpm.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
+diff --git a/package/swtpm/swtpm.hash b/package/swtpm/swtpm.hash
+index 934d3b6ee0..8d723886c4 100644
+--- a/package/swtpm/swtpm.hash
++++ b/package/swtpm/swtpm.hash
+@@ -1,2 +1,4 @@
+-sha256  b281b4e8c39f68e1928675f788abc70072e4081152e129144359a8c5c304c06b  swtpm-0.8.2.tar.gz
++# Locally computed after verifying signature from
++# https://github.com/stefanberger/swtpm/releases/download/v0.8.3/v0.8.3.tar.gz.asc
++sha256  5c416e3a241d4adb61c66ac04ea46699885476c6c3aaa86011386e14fa4a67ea  swtpm-0.8.3.tar.gz
+ sha256  19d27d6e96d07022e5e688f75c974f1ceb9aae9e90e0fccae68666d02099cc4b  LICENSE
 diff --git a/package/swtpm/swtpm.mk b/package/swtpm/swtpm.mk
-index 636a385db8..b51c2071b3 100644
+index 598d56cf1d..636a385db8 100644
 --- a/package/swtpm/swtpm.mk
 +++ b/package/swtpm/swtpm.mk
-@@ -6,7 +6,7 @@
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- SWTPM_VERSION = 0.8.3
+-SWTPM_VERSION = 0.8.2
++SWTPM_VERSION = 0.8.3
  SWTPM_SITE = $(call github,stefanberger,swtpm,v$(SWTPM_VERSION))
--SWTPM_LICENSE = BSD-4-Clause
-+SWTPM_LICENSE = BSD-3-Clause
+ SWTPM_LICENSE = BSD-4-Clause
  SWTPM_LICENSE_FILES = LICENSE
- 
- HOST_SWTPM_DEPENDENCIES = \
 
---===============2446478877581402507==
+--===============6799936708765095992==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -156,4 +164,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============2446478877581402507==--
+--===============6799936708765095992==--
