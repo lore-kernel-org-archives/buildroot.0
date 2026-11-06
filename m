@@ -1,28 +1,28 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E11D0606A33B
-	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 16:09:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD462606BFB5
+	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 16:09:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Ih/4pLkz
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=LiSCjrP8
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C043381886;
-	Fri,  6 Nov 2026 16:09:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B650860A50;
+	Fri,  6 Nov 2026 16:09:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OH6pkIhkJuPB; Fri,  6 Nov 2026 16:09:36 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 9B4CD8188A
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793981376;
-	b=OnVJvLQGcwL7QZ620j1MoBBlZHePDM7JoE+axM2VUkgmD6THMBhCOsyCwGWWDM87uWjz
-	 rUmR65yCIWN0O0pTKONESm1+P6r48Udy1olSyrKo9EDp20VYp7xIqndZWloOZM8kG9s/J
-	 vB1R8v4FVY8m1h3q6mNXw9eZgjL5vsZTra8I6vTF/q/f/os6UnO6DSgtpS0IN+Rejxp+9
-	 cyXxnuFi29UDjeWr/WKGYzcOMoWH29SX2kowXGgJsIpWoKBD+Vb+JuxymAzLkFxpvOp55
-	 27+hy4dj++C3iZkbyhhfedCfXE3pMALYkhsvto8eg3bGs0P9OVmWPEG7FH72o236Kvw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UN0BFoh06yvj; Fri,  6 Nov 2026 16:09:40 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org E6AEA60A57
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793981380;
+	b=GW9KXe35QGubrOYKRg/jIb98nkwr1zPjrO+2MAoS68u2Bl7SBRpPIVed9zVmcro8AtBp
+	 A8k9b0RfiI0VuNt3Tt7aosOZnM62PmXQFZv+n5lmRabvc4ovqy0EPygybRC7X07VW+q6P
+	 nTAKmErbumIr4p8BOtoXqgufhX0Em/pnWw1BOOhOVDSRD++y8STwjMQ+hA/u7WW9d+8fR
+	 U4ssWW8qAhKO7+TFYyDpWyeeNMnaA/7JvDWYF8Djix41Ww8tH5xb3QNo4z9us7SNMNmvg
+	 m2QQbZRp/m2J5Y7B3IHzJHJ5RxocSAr5JZ3ZIEUEGZUI4ePfXSlppRp9H8mi6kEmLSg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793981376;
+	c=relaxed/relaxed; t=1793981380;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,96 +31,95 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=eLjPiMNrDmsYRXpwlBqR/2fcmrDFsmzUm4V7Jh6PMB4=;
-	b=FziBxkPYLMtYxP9xqxWsOf0UcC43Yfq/qtqaa2GZ5Y8XzxhYtlgQNvTHxWaxKwOUJfL4
-	 jrGPd3DonTZSwr5guUTuReKWPZe1Optulgrxt5v3KF4KzMpitA+4o1l+zoG3wo+TPRukA
-	 5kfpTTMwXpZs14Rh8cYUINjDMIy0a6D+CddIYlfPcEzeIRkQpOGCtE/8iejfNHd/Ubau/
-	 S2AC0dbzSdDi/wHl3f7Sda4M3mWGT4FNlyCCS1Rx4tn4v8wL7br6bR34CJYXTTb9ZNyBr
-	 68e86zHnBFUQ6SiBPYQKTTsMPnnKiDIn48luhG9+o4I21pRsunJ4Gf8WRLBmdlqxqCw==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+	bh=vU2VD5g8dQal4V1yRFo63FRaoQoquRQFuWC3ukzWmIc=;
+	b=rTQCa7dKNSaS0etxbj1RK7LBCbVqstEs5kDAIBPxplV8CGwXyvM+dJmk4d+zlT/Lf0bm
+	 Akzjq4IJPl0PD2cyRprqrEN1kKBPupV1liB1WsLPmyS7QIPaNIva22wjk2DtFDRf6RPNl
+	 GG/DumoB4MntzmPmXf1rbscetIGE5yzW165uHkNnAJmJBD63OGsXilqoTUpOP97b4imaS
+	 EdzdAnndoSu6gzODKgn4mB4sfa679KOWkAn2Qw65lzel0b15xrxatlJHfrynPJZD9tQWj
+	 efVQ03VdIhizTQ0FXjXoZrKKsXgFA+buEXA/i6amAJGK9ER2/lp+3xkCjLmJMHQk/ZQ==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793981376;
-	bh=eLjPiMNrDmsYRXpwlBqR/2fcmrDFsmzUm4V7Jh6PMB4=;
+	s=default; t=1793981380;
+	bh=vU2VD5g8dQal4V1yRFo63FRaoQoquRQFuWC3ukzWmIc=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Ih/4pLkzSF7IqaFD8Gwi9OZlnQhC9dLRSFXHqjpztpH1T1wOKJYQLuL0OtbV7O80w
-	 8cCwDI9+fezSoHoZBNI3+48FT15gnZOju9ot6ewAdnoWYzV5v8m552ho5fjT4dS3Ys
-	 fuzp17obvDlgp6VYBqj8NbJJPfN2nrdje4wZrBo9qiyRIFt1erkghfCBP7r/p7B4M9
-	 1aWvpaMIa3Lni4VW2VuqBTzDqlSbJApXwaJZ2+dgU/erF2bGO4YND75KU8FvLn22Qt
-	 mGrWGGq6NQUg0hhlK3rBqn1y2T9tjPK6Rq9QUYaHLAa2l28ApurDibFlXu+14/J9S7
-	 ea31RY/r0KkBQ==
+	b=LiSCjrP8PumbnKB9AjoJMgbccm29Tx+HB0b7GM5BfggpLJvD0oxwkCohLVJgfnAFD
+	 g/v/bYXg2hZMp1EzwkAe7cscz6v0dcRa0EHWN5EuENNDEiOclXrOcF+0tdnn1bugHY
+	 GgXdh0n8YmMPegzK+uMxTacqV3u368nhY9D2OagYUXwSZdt2yNhA/4EwidBh349F7K
+	 1mFS/95ywBzQVWOnYmHJW1y4yXkHvK3Hh7gswiF8O4UfUi18xVk3dQYLvJ6YXNhJhT
+	 ZBWy83VMHVSytfew/XEQB8nHzHALTf/EDmiAzB53me3XVEtgEXEopBLdNAOI/Qxkiv
+	 D9uit8MbDEb3A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9B4CD8188A;
-	Fri,  6 Nov 2026 16:09:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 3BAFA2E5
- for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:08:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E6AEA60A57;
+	Fri,  6 Nov 2026 16:09:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6CD112E5
+ for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:09:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2D8D160A44
- for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:08:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5DFDB8168A
+ for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:09:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XiUWDr77Oarz for <buildroot@buildroot.org>;
- Fri,  6 Nov 2026 16:08:54 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org DD62E60904
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TsPQ9uHgKxbK for <buildroot@buildroot.org>;
+ Fri,  6 Nov 2026 16:09:02 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 4A5F681293
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
- [IPv6:2a00:1450:4864:20::435])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DD62E60904
- for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:08:53 +0000 (UTC)
-Received: by mail-wr1-x435.google.com with SMTP id
- ffacd0b85a97d-49318428d98so401818f8f.1
- for <buildroot@buildroot.org>; Fri, 06 Nov 2026 08:08:53 -0800 (PST)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4A5F681293
+ for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:09:00 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-49d05d51553so5317515e9.2
+ for <buildroot@buildroot.org>; Fri, 06 Nov 2026 08:09:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793981331; x=1794586131;
+ d=1e100.net; s=20260707; t=1793981339; x=1794586139;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=dLB/sJO3ELowX20esi4bvW3UdSkQeiwrlhgAdzonOww=;
- b=UmUPFoPtuqs6EhD/jxj9XEAsgtJjPN/ZR/2L9S3zNTl4kjUTi4m1fC2iPzYFhwqqer
- tpIeZsxZoYCuJmjdMdVSNv+Ms1JERATtE3uFxO7MQH+CTd70Gci3OLjiKZOf6vg8kHY7
- Mn3Y6Z9pid7wSKTylARL913dLZp9U5tFGJTZeu67lFquC3XKI+nTHiTscx6yORFZDdAp
- 3o4zgToXwtyEJBkn0GrNQE9BkyH/TOysfsPf2ZNVlGZ/Ejw+RYi8z5CQztWfjm2BfB1j
- nR1Yyz6aFN8S7zuvM42WBL9n792GgxnXBpFzuPdXI08mNB8WhcXDpoIF43/mkFWbYGv+
- f2aQ==
-X-Gm-Message-State: APuU4Z8CuXUF9PTtb80vzG1hQEF6MWsuRK5L1/jFmStG9P8koFF+CFhQ
- jI2AntKeIzHDcNPmo7kd5gQ1k3ix42sb7hzR1v5l+80bAwwJXnTs5Y6M0vfQ85Wrz3Ly9Xholit
- 5nNWx/7E=
-X-Gm-Gg: AYBFou16RZNFlM+llCgfrlk1TJFqmEont5PSf2qNn8fWm1gOWHfC4vIzJJjP6kyp+/g
- qXXIPdheZjXkeinesuJbRssmTorjXe2ZyWpH/nxEf0pD6Wp8GSMEOhcQQVjVGpSL56jnVlR+bj+
- PWeX1q1t6IYx6itLp3qfOY0YVh/cp9mPoXx2GgLK6CLWlLfeXa2pgQU/oLhVBABCe8vuWxmvxeG
- 3zTeo5oEZgXHcqQvRvMfGU8l/UigE8AhsgJuqiLgMg3cx+v4E9sTL4y3m3v48w8TOceOc8ekVrr
- SWyvgsVnLd+juOzrS3w5L93WVKJ/VOrrdEbVSuRPYFT+o4b0egtNu5l4rU8KvI1H/P21bGLZvR8
- yinpWGSc2xKU1aC/JHgQMS40mGJ2IIk9y3hYnZU+TDHNxdjK4Q0Xg2uWzz1LmQ4JGy82GbyWBNE
- Kz5bHiK4OrqT34W12Kq17Q5QkFep9Z8/Z6WEARFEkJ7NshaPUO8aRQGUF0vhVMZH8HoIZAU9k+O
- CDkfYuU6Z6o1IMymYxvrCs8YuWs2oKkk/FL/HRFVuBBqZ4Ve5vYoYHIUUZ3WB3cYuTwbB1N80bd
- cAyHBhG3e1pkRmJI1jFiFLAqc0fYyWc=
-X-Received: by 2002:a05:6000:4908:b0:48e:68d5:818d with SMTP id
- ffacd0b85a97d-49274bc8392mr5180133f8f.16.1793981331586; 
- Fri, 06 Nov 2026 08:08:51 -0800 (PST)
+ bh=9OxqOMamlchE84vqSH2R2Enen7NTieoWQcGqX95QE1Y=;
+ b=cemFEXCRbLNXLNokO35ZF7JU/NR5h08ky7fU5E/8RSc5aiwNg0oSTGLwlLkRGHzWV2
+ /b6BzRvzTVJ4wo7xFy9OSitzPxs/qirOvpO8uzfXqPalZidBwhs4NRut95pbB6940DHH
+ 6H2/43WNGZJa+GWvRCg2ngQ10How/IJ/xIcEfvYU3vlYBITvamxU83cos6kEk1iHZclm
+ AJ5sDEUX5cK2t10wu/xsrWhTZZojPOGvI4hZN0FOaW5IUSEiibYlAl5E2izkWLVCtoxt
+ Pjy3JLf7yvC3JoGWiGkH00Ks2rURvf0aZE8glhgAgjFEwX2FKdePFB8Ow/Z9BWXScp+q
+ MEKA==
+X-Gm-Message-State: APuU4Z/CjmM5X4zgYTcejPBIoh6a7i0bl4TteV9a3UxCpe9H6ZFYtlWJ
+ L5FKTmZPiYQF/G2qo8qQK0KiE8vNPhBMUWzN5/bkpdUhf7Cy8VAEmhffJvAJC/Gxe5b9rdBMVJ+
+ SoFUDYXo=
+X-Gm-Gg: AYBFou16pK9evDMfmA3WUkb43ZZ1Z5bt6sYd2FfU3i2daDw09zWTdjLHcSFkEjG52YH
+ 6CMWqEK7fm+2tmRM8dCwLGT3HGBI2upBnkrWuUUDlDQd9jUiQZ96JJhlD7C4MlJnsvCXU+EtHKi
+ LC2DdRJ+6DuYr7gZ/WJNYiemh2xHUFJ87Ntkz8mgHty9oHe6H3eIhaemDgfPNhFPaMuvscg74c2
+ yOzxINeN7Z7odF6kltwW4Mys80cTNd7SgVzkiJeJKuFMDC5ReuCvQLFlZnjA8ep2d8c+ktCnxhP
+ q9uR4552gL6KeQAboGTZ6jFlH+ebc4ibQUn7/kzcbFsVt3wYFHF3SGPt9IPwCWNO6e7LBoqE73w
+ 3Bzy+0Qw7bnR3CkW9am6Z6dkk31YOjD+STx2Xj0ekDTQWxJq4JKfKiHA05/9DILpilwdTwsDgyu
+ 2aKItD/zRCMTLN0Cof1cGZZnI2H3JPbgcGIEJsezcp4VbrfI9Fln/dyITFHADKCzIAt2OJnoXdv
+ 6WcBH1gZ87t3xSzGAnpKVKp5EGSDAhxx0ola3f/ETEQc2N9fvKoJm2HSM/2Grc8GrX7ndg8gn4G
+ 7mTIWfpGd56S+t07PW8iEoYXClPf3UPX
+X-Received: by 2002:a05:600c:c491:b0:4a4:de70:2ad4 with SMTP id
+ 5b1f17b1804b1-4b6dff83dc4mr56777475e9.22.1793981338889; 
+ Fri, 06 Nov 2026 08:08:58 -0800 (PST)
 Received: from debian-hp-1 ([212.233.51.18]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-492d809df2dsm4551116f8f.51.2026.11.06.08.08.50
+ 5b1f17b1804b1-4b572bba207sm140881075e9.10.2026.11.06.08.08.58
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Nov 2026 08:08:50 -0800 (PST)
+ Fri, 06 Nov 2026 08:08:58 -0800 (PST)
 To: buildroot@buildroot.org,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+	James Hilliard <james.hilliard1@gmail.com>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri,  6 Nov 2026 17:08:47 +0100
-Message-ID: <20261106160849.606822-1-raphael.melotte@mind.be>
+Date: Fri,  6 Nov 2026 17:08:55 +0100
+Message-ID: <20261106160857.606879-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260913095115.1622920-2-thomas.petazzoni@bootlin.com>
+In-Reply-To: <20261013164254.1476592-21-james.hilliard1@gmail.com>
 References: 
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH RE-RESEND 2/2]
- toolchain/toolchain-external/toolchain-external-bootlin: regenerate after
- ARMv7 EABIhf toolchain fix
+Subject: Re: [Buildroot] [PATCH] package/python-platformdirs: bump to
+ version 4.13.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -138,167 +137,49 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	UPPERCASE_50_75,USER_AGENT_GIT autolearn=ham autolearn_force=no
-	version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
 In reply of:
-> The gen-bootlin-toolchains script has been fixed to generate more
-> correct conditions for the ARMv7 EABIhf toolchains (both little and
-> big endian). This change will make sure the toolchain cannot be
-> selected in a BR2_arm=y, BR2_ARM_CPU_ARMV8A=y, BR2_ARM_EABI=y
-> configuration.
-> 
-> Fixes:
-> 
->   https://autobuild.buildroot.org/results/3ce1dbd480c71b782ef722c39034cb039a036523/
-> 
-> Reported-by: Julien Olivain <ju.o@free.fr>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 
-Applied to 2025.02.x, 2026.08.x. Thanks
+Applied to 2026.08.x. Thanks
 
 > ---
->  .../Config.in.options                         | 40 ++++++++++++-------
->  1 file changed, 26 insertions(+), 14 deletions(-)
+>  package/python-platformdirs/python-platformdirs.hash | 4 ++--
+>  package/python-platformdirs/python-platformdirs.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-> index 86d951e8a6..81cb3f0a05 100644
-> --- a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-> +++ b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-> @@ -8,8 +8,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS
->  	default y if BR2_arcle && BR2_archs38
->  	default y if BR2_arm && BR2_ARM_CPU_ARMV5 && BR2_ARM_EABI
->  	default y if BR2_arm && BR2_ARM_CPU_ARMV6 && BR2_ARM_EABIHF
-> -	default y if BR2_arm && (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
-> -	default y if BR2_armeb && (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
-> +	default y if BR2_arm && BR2_ARM_EABIHF && (BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A)
-> +	default y if BR2_armeb && BR2_ARM_EABIHF && (BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A)
->  	default y if BR2_arm && BR2_ARM_CPU_ARMV7M && BR2_BINFMT_FLAT
->  	default y if BR2_m68k_m68k && BR2_USE_MMU
->  	default y if BR2_m68k_cf
-> @@ -770,7 +770,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV6_EABIHF_UCLIBC_STABLE
->  config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_BLEEDING_EDGE
->  	bool "armv7-eabihf glibc bleeding-edge 2026.08-1"
->  	depends on BR2_arm
-> -	depends on (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
-> +	depends on BR2_ARM_EABIHF
-> +	depends on (BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A)
->  	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_17
->  	depends on BR2_USE_MMU
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_16
-> @@ -794,7 +795,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_BLEEDING_EDGE
->  config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE
->  	bool "armv7-eabihf glibc stable 2026.08-1"
->  	depends on BR2_arm
-> -	depends on (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
-> +	depends on BR2_ARM_EABIHF
-> +	depends on (BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A)
->  	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
->  	depends on BR2_USE_MMU
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
-> @@ -817,7 +819,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_GLIBC_STABLE
->  config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_MUSL_BLEEDING_EDGE
->  	bool "armv7-eabihf musl bleeding-edge 2026.08-1"
->  	depends on BR2_arm
-> -	depends on (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
-> +	depends on BR2_ARM_EABIHF
-> +	depends on (BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A)
->  	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_17
->  	depends on BR2_USE_MMU
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_16
-> @@ -841,7 +844,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_MUSL_BLEEDING_EDGE
->  config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_MUSL_STABLE
->  	bool "armv7-eabihf musl stable 2026.08-1"
->  	depends on BR2_arm
-> -	depends on (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
-> +	depends on BR2_ARM_EABIHF
-> +	depends on (BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A)
->  	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
->  	depends on BR2_USE_MMU
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
-> @@ -864,7 +868,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_MUSL_STABLE
->  config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_UCLIBC_BLEEDING_EDGE
->  	bool "armv7-eabihf uclibc bleeding-edge 2026.08-1"
->  	depends on BR2_arm
-> -	depends on (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
-> +	depends on BR2_ARM_EABIHF
-> +	depends on (BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A)
->  	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_17
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_16
->  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_12
-> @@ -889,7 +894,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_UCLIBC_BLEEDING_EDGE
->  config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_UCLIBC_STABLE
->  	bool "armv7-eabihf uclibc stable 2026.08-1"
->  	depends on BR2_arm
-> -	depends on (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
-> +	depends on BR2_ARM_EABIHF
-> +	depends on (BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A)
->  	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
->  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
-> @@ -913,7 +919,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7_EABIHF_UCLIBC_STABLE
->  config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_GLIBC_BLEEDING_EDGE
->  	bool "armebv7-eabihf glibc bleeding-edge 2026.08-1"
->  	depends on BR2_armeb
-> -	depends on (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
-> +	depends on BR2_ARM_EABIHF
-> +	depends on (BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A)
->  	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_17
->  	depends on BR2_USE_MMU
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_16
-> @@ -937,7 +944,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_GLIBC_BLEEDING_EDGE
->  config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_GLIBC_STABLE
->  	bool "armebv7-eabihf glibc stable 2026.08-1"
->  	depends on BR2_armeb
-> -	depends on (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
-> +	depends on BR2_ARM_EABIHF
-> +	depends on (BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A)
->  	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
->  	depends on BR2_USE_MMU
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
-> @@ -960,7 +968,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_GLIBC_STABLE
->  config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_MUSL_BLEEDING_EDGE
->  	bool "armebv7-eabihf musl bleeding-edge 2026.08-1"
->  	depends on BR2_armeb
-> -	depends on (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
-> +	depends on BR2_ARM_EABIHF
-> +	depends on (BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A)
->  	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_17
->  	depends on BR2_USE_MMU
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_16
-> @@ -984,7 +993,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_MUSL_BLEEDING_EDGE
->  config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_MUSL_STABLE
->  	bool "armebv7-eabihf musl stable 2026.08-1"
->  	depends on BR2_armeb
-> -	depends on (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
-> +	depends on BR2_ARM_EABIHF
-> +	depends on (BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A)
->  	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
->  	depends on BR2_USE_MMU
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
-> @@ -1007,7 +1017,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_MUSL_STABLE
->  config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_UCLIBC_BLEEDING_EDGE
->  	bool "armebv7-eabihf uclibc bleeding-edge 2026.08-1"
->  	depends on BR2_armeb
-> -	depends on (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
-> +	depends on BR2_ARM_EABIHF
-> +	depends on (BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A)
->  	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_17
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_16
->  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_12
-> @@ -1032,7 +1043,8 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_UCLIBC_BLEEDING_EDGE
->  config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMEBV7_EABIHF_UCLIBC_STABLE
->  	bool "armebv7-eabihf uclibc stable 2026.08-1"
->  	depends on BR2_armeb
-> -	depends on (BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF) || BR2_ARM_CPU_ARMV8A
-> +	depends on BR2_ARM_EABIHF
-> +	depends on (BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A)
->  	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
->  	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
->  	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
+> diff --git a/package/python-platformdirs/python-platformdirs.hash b/package/python-platformdirs/python-platformdirs.hash
+> index 7f7590a6c8..b9051298de 100644
+> --- a/package/python-platformdirs/python-platformdirs.hash
+> +++ b/package/python-platformdirs/python-platformdirs.hash
+> @@ -1,5 +1,5 @@
+>  # md5, sha256 from https://pypi.org/pypi/platformdirs/json
+> -md5  7aed05d0c6d803af78de34d929e51bac  platformdirs-4.12.3.tar.gz
+> -sha256  427fc0bb321ae0c5b037fa03238ca74820437be162e78b4848c4d4055b9b766c  platformdirs-4.12.3.tar.gz
+> +md5  5872f9a2772efb2608f4444b5339f833  platformdirs-4.13.0.tar.gz
+> +sha256  1aa0b0d3f224c1f07c295121e312a5a24a180d6ae5a8425ea1784b3e3863e9c0  platformdirs-4.13.0.tar.gz
+>  # Locally computed sha256 checksums
+>  sha256  29e0fd62e929850e86eb28c3fdccf0cefdf4fa94879011cffb3d0d4bed6d4db6  LICENSE
+> diff --git a/package/python-platformdirs/python-platformdirs.mk b/package/python-platformdirs/python-platformdirs.mk
+> index 9610dccc64..dba59abfdd 100644
+> --- a/package/python-platformdirs/python-platformdirs.mk
+> +++ b/package/python-platformdirs/python-platformdirs.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
+>  
+> -PYTHON_PLATFORMDIRS_VERSION = 4.12.3
+> +PYTHON_PLATFORMDIRS_VERSION = 4.13.0
+>  PYTHON_PLATFORMDIRS_SOURCE = platformdirs-$(PYTHON_PLATFORMDIRS_VERSION).tar.gz
+> -PYTHON_PLATFORMDIRS_SITE = https://files.pythonhosted.org/packages/42/23/4a86fc741c38c5b69792a4ef954b281afa69bea9f083f881de1b0d23bc07
+> +PYTHON_PLATFORMDIRS_SITE = https://files.pythonhosted.org/packages/80/a8/66d45abadff219e36e2a824181b8f6a67e7ed4572934d6252c71c29d5731
+>  PYTHON_PLATFORMDIRS_SETUP_TYPE = hatch
+>  PYTHON_PLATFORMDIRS_LICENSE = MIT
+>  PYTHON_PLATFORMDIRS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
