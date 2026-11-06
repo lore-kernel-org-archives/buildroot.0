@@ -1,29 +1,29 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32369606D82C
-	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 11:16:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41F59606A329
+	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 11:16:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=QaYdMy7Y;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=znUF2WnN
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=gfJ3bYE6;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=iFijhHh7
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CD4E14057D;
-	Fri,  6 Nov 2026 11:16:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1089D6089A;
+	Fri,  6 Nov 2026 11:16:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N09vov1PZUvo; Fri,  6 Nov 2026 11:16:12 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org EEA3C4055C
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793963772;
-	b=Acf72DPQRWWi3qadybqKXLVYEBziqDyka79QeAekBxSEfHBBXfFnwpqDTa7GyqgSZUMm
-	 vG5f2ZNToAJZ1CcB71fpr4Fmqz8Vb83DUszxrlK5WTBCs5iq+DWf6VkCSIuGv3yYImTb0
-	 uzBWFmfKZrUFmC5acdmrnjzzUqkLG1R/5mA/JUmjhiW0TapmItZHCm1b6c6+CGTkc6q/A
-	 oBCspVIhsgrXj++KKYHyzY+MvYw58UwYDD7A/wblwAXOptLkJN/6vY+kh0pjg07r2oDs9
-	 7DsjY7ogCfna0BHhO9eZs0GCU5GtT38KIb74fEcVSbnnl4KgHE24WsGne+KDp4v7YEA==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PoLzFEmXobR3; Fri,  6 Nov 2026 11:16:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 209BC607D0
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793963776;
+	b=Bug3D/vi0XOcDS8ZV/tPvpTs+HzOaygp8qdcxTiC5snZD5ewFyK9BdAiZivELIabQ6/f
+	 51YrWcRXlvUyyeXXNGRWOZAYeuUKYCkvHzAlus8qrFwm0GS6I8jqAqJIStZztFHK8kM4Z
+	 5Hj4kGXK8c8fhjMF+jyo8nga4vu06j0IlcQjaTo6o8iHimOzhFdcGk0XaGX1uMf/GMymA
+	 DYOjEEpPKnSrMTT6E8JkOa6bzjfchOsqi1NZl/BPZUBBziFPernhNJjIstJ0w9fnzjz7m
+	 slvrxYjl182dVVG4XsE+mOfyR3Lu1t/8vwviuDqjF94Zj0b7NaiubqV939S2GVjr1mw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793963772;
+	c=relaxed/relaxed; t=1793963776;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -33,115 +33,114 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:Cc:Content-Type:Content-Transfer-Encoding:Errors-To:
 	 Sender;
-	bh=ALWGXhE0ubWUgjmGSCfbtRa90Nip9YaKZHVUC4Y6gfs=;
-	b=PXWSODA4I9MZgz3OQyAZkI9Qoiwd0on1Y1Pa1RkI4oY4ZoyX3nNlCafN/7aw5SC/VBEm
-	 vK3FUgHSjkE447R1PylLDQg2yoXTXnPaADHXrJPUpvN0CtwZjNSAps5ypXoxm1bNXfQh2
-	 29k0UMZOO/fhroMUpWJbvodHR1ngtqA0N91SazpMk3fvbaJNWzbh0urN5xyyFE44pweBo
-	 x4K9Ujg28qMrmmUHEUh/+HKuvqpkUzEmT1Mr4ICC7e85Av4WS0OrnZ8wD+eqFMF2gWEzo
-	 ksqkTUNHL+jNHclVR/WfNs57CGrTykT5PDZb+ZNYk12tCVOrLSGNZJtGlptwprFKiRg==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
-	dmarc=pass header.from=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=znUF2WnN;
+	bh=urFLxCVZB3VgX5Tfif8agP+gsrmc3RdK6YF9SQXdKYg=;
+	b=pfKx7byenAmyAyhGF4oDoj9hxUiD1lUjmUZ0kN45O0B9AKhzoiVycfmT66wrotnNTm2h
+	 m7q38us9fxMZWntXx3q+lZIX3b0yFa67lIXson4JmYf67D7NkCbUqnQRxTYO/ujQzjZ4b
+	 peHDjsGPC/2+E10xNm4S7xYuX1E6AoLaXQUv5l1ToZYFyAbk75f+dWDWU/8NeO21ZlR6i
+	 nFTE1MX4XbFqyo2EIHtQQcl2GA8wmsaoj5AtitGyXar83T8cESzDzmzTLZdA6tt0gl40l
+	 b2pRy7fhSCEeURuokTUEYDhFYlorLs1PaBjBZDGqwxeUijj7BkZhjus0BEpEx/XuVFA==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793963772;
-	bh=ALWGXhE0ubWUgjmGSCfbtRa90Nip9YaKZHVUC4Y6gfs=;
+	s=default; t=1793963776;
+	bh=urFLxCVZB3VgX5Tfif8agP+gsrmc3RdK6YF9SQXdKYg=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=QaYdMy7YUfa5XJDeJi1un1IosAeyDaIUt51/jdgiqX9GLETMLyNSFtF5WMf49PKSQ
-	 BuxtmZ4XiYKRcy2GEyRKMMzjfirNpLloxo7woExy/YI32UZ+im/L6ztQaREXnr934v
-	 3DmUQ6l2HpEbbjPymZKorkimi9hVeKSTr+ohUPofl95MOn1L2WoebP+Pke4yYkltW5
-	 6ymDMIvbh08ZFac2PNBat54d1o2/OMc9RgUstp3pdNM0Jh3JfVVSXYpzaRWgkySsW0
-	 Cuc0o0bIByJpiAZrpqEwFc+h6WBp00lqCRZGrCb71jEKfLiApyUJRxQR3EV3Qxj+me
-	 yl0gcYnLo0fOg==
+	b=gfJ3bYE6pPX23KmJk89uo4UMYTFZtnBsuzafdm8DO+vvlpcyCt9FWf4dKzoLxyUXX
+	 90JbJh5UGj2sZPRGtZVOLcz8XZa4Ue3Hu/6zxXMov7c7sONnG1aAFhCZLq7EhznmU5
+	 cmORl4aG3Zz9ffXpJCIbm4+q1putDMrZ8+tMhQ9tthuGIfaT31DDVmTqHebxD+jdP7
+	 /FR6D/jA1ZFivc2/w5t/Mt9iFJS0PPw3qAPpG7EREfls57QA4a8gqyMNkvMxvzh0rc
+	 riPK7o09ZZR8/9TK2FqF4n1c/7TFbxJBGCO3gqZdXB1OvrCn/xGf8f1gj/UBKxWd0y
+	 TAZeDVniNWnlw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EEA3C4055C;
-	Fri,  6 Nov 2026 11:16:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9F82B362
- for <buildroot@buildroot.org>; Fri,  6 Nov 2026 11:16:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 209BC607D0;
+	Fri,  6 Nov 2026 11:16:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 98600362
+ for <buildroot@buildroot.org>; Fri,  6 Nov 2026 11:16:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 90B694055C
- for <buildroot@buildroot.org>; Fri,  6 Nov 2026 11:16:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 89DFB811D1
+ for <buildroot@buildroot.org>; Fri,  6 Nov 2026 11:16:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xNzf3rY8x0Pr for <buildroot@buildroot.org>;
- Fri,  6 Nov 2026 11:16:09 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 5B3C74055A
-Authentication-Results: smtp4.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::430"
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0fvUU0cBEFVS for <buildroot@buildroot.org>;
+ Fri,  6 Nov 2026 11:16:12 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 5801480E18
+Authentication-Results: smtp1.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::42c"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
+ client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
  envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org;
+Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
+Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20260707 header.b=znUF2WnN
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5B3C74055A
- for <buildroot@buildroot.org>; Fri,  6 Nov 2026 11:16:08 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id
- ffacd0b85a97d-48e4831c028so506803f8f.0
- for <buildroot@buildroot.org>; Fri, 06 Nov 2026 03:16:08 -0800 (PST)
+ header.s=20260707 header.b=iFijhHh7
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
+ [IPv6:2a00:1450:4864:20::42c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5801480E18
+ for <buildroot@buildroot.org>; Fri,  6 Nov 2026 11:16:10 +0000 (UTC)
+Received: by mail-wr1-x42c.google.com with SMTP id
+ ffacd0b85a97d-48df4f540ebso317024f8f.3
+ for <buildroot@buildroot.org>; Fri, 06 Nov 2026 03:16:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20260707; t=1793963766; x=1794568566; darn=buildroot.org;
+ d=gmail.com; s=20260707; t=1793963769; x=1794568569; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=i2gJeE/NdMlovfFpjBP060MjH04iFU8idSNumM/pt8g=;
- b=znUF2WnNP+YjR6IkmmyajCy0YJlYfQ3qgZLxUFMgypfxGJJB4i0uEQdfKg2XxAjNL+
- P+MOhVIzZSsDGEjxMf9ZOsZeMAlac3gcbSElD2CGXtFX0EYi7ylMeuWGOXcH8g57IotN
- +crQVAOhCNVn5PggMPP9B1p1eehCBbUk695gWkCLeIIDPH4mN9dpYFsagiaNWuRBG2wo
- TiMjLhAsEPHqby25Ql5pTo/WHcmmFtTWsXZE7Twy3wZJoabmzy0Sqena34U2Wxx92Zjk
- Dxrt5hNYS/W3ZMpG9m5DKgIk+xRbVeob+cP30pVpdz22EMCjD8/w7VdaDLuPw8ZFnETT
- BZZw==
+ bh=Uhc5R1YmqhkByZavqaaBfQD7ZLTPqpVFUj6IX/K6Bzg=;
+ b=iFijhHh7742iUBs7xrTL7Dtj93wiQX6HLTaLaLnmWxWS7LDBK3GXNKxj6VYNWE9ML1
+ 8QvtZ8mmhieS+jYsq35Lb546/pMNs4olTdOBBhSO7hiNvMlUK7AM8lQLwC60ZHbr9Y6A
+ C4DsTkT9MEYCbl1ZSjwfbUDKnSAjfLTdnsh35541pouwkriDGZ11RIeh/SGCbxIZ8h+E
+ FqvL1wQoVF6zyir+YGmkzIRNLYLu+uYSP9rqxTHy4TH1YjqgHz2aQoatsFeuTeII/O4j
+ lceEXDEOkTsfo3dGJv+UWsDjAfVs9C6HLDZpCjQFdZTWxoLbBpWD0k/FlUIIdclxPZ46
+ pHQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793963766; x=1794568566;
+ d=1e100.net; s=20260707; t=1793963769; x=1794568569;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=i2gJeE/NdMlovfFpjBP060MjH04iFU8idSNumM/pt8g=;
- b=C7Nlm1fRnrQJXtUYZiHxHwgLcRktueH43vtJUL2G4ON3fvkD3HwO8O3vIaw6V+bHwi
- +ay9K2rrQzx90eYKLgmoSmWTEtNnkW3to9oYqRVp8ymARxjRhhFm9VDMBXscwEyotqYv
- xZLB5qHAJe2rvJQSI0muT2U8v4Ty1v+uRXbA4OFgqiqQq3X1rvlEmaop8f3BBvOh9kjy
- 876l/HRC0nUgsbRQl0//SeiaoCnITaUmjUemTfiQOi2PF/DtK0Gk0K7ReB0kseo1UdQn
- Lsm1DZ9Kb1/rvaixhfM1PdfrXfGLnolIxnqo8YfzA+2gGvMyImzU0X6k2iLYoU9Fb91i
- mYrg==
-X-Gm-Message-State: APuU4Z941di8fWeaWXm98VtFsHa3+ovg+AiuscYqsBDxT153pWfOLM+8
- cg7KXRCvGl5k+EjcjCBiY+p8YFTY1qs455gbXU8SESuDlpN3dnGHT/mgswI0Yw==
-X-Gm-Gg: AYBFou1BbBlQsnya+7ZKMc9IWApryB/FLrfzvCIbVLnQ910soXOR8KCQJy4LOq8GtaI
- UUKSZUtmlD3AcA8CblJUpyMeD0+q+XtRNiC16kA0bMjfDizvo02D/1/fVNr338WbLw1bQbJE3uh
- Y/LttJbdDVU4Rys3/WM7iLV9LYWC5ZLY0QoNvD7iF92B3adT3PIjd2VUW5b4P4Sb0ix1ctgw0gv
- rx5JscEB0TgSvEfZmPaAXBt11dVf37/juCrssgdF8mhlt0dcNzWn+IRpXgtIw+Gv3BtJjjcr/h7
- 0tNaxZQn70OF0TezL09b85lOInkfRN3nwcIJnygMeYV3BZcqzihkZZ7ojl5HlrcZu42SqIBLr46
- hhExrLa5G4Au1PhyP10Ah1zkHlZIrT+SAB/BYnia87sfDidzelcZwFjTDb/tbrgO8CM0TGQrMw5
- lNLcPM4uYltvXXYD0pdPZWAjQGtWlQ8x5wdJSH1pYi7CNpHJWM+Qh8JQ+ZWN5FLfGGbYwYLzXrd
- Sg/Upt9yjLxpYQzon0fg/SR+Yq2ATMyuFuho174cRkYxI4Ug9XYkFQRg/nyB/8Pcjtrei2Be55n
- AZayEW8/RxjlHGduFxjSYf2EwZZNnjRqSMxJiQ8D7CpmCx63Ea1hvho=
-X-Received: by 2002:a05:6000:4903:b0:491:6b1b:7f25 with SMTP id
- ffacd0b85a97d-49276d4e353mr4274395f8f.45.1793963766391; 
- Fri, 06 Nov 2026 03:16:06 -0800 (PST)
+ bh=Uhc5R1YmqhkByZavqaaBfQD7ZLTPqpVFUj6IX/K6Bzg=;
+ b=tFHTTmFvlLpM0qgzh9AWjtJGTfbmN4kJNTEgQmTPYpieh5priLR4wHA5HnRT7fzOBn
+ Xgnka4DZ1/Q5zmHMeNHjyyYSA+WH90Qstmr21HNRxe6XK28DBIYjFkBiVa8TiEZKxsFf
+ GKrCJ+Sy5au0OTT3BgTuqygDcvCNOmo9VUGAGQZyH6FilCF5lZprA4Uw1G7uSBh4nRzc
+ QX+QRd3N17xJz2WamINHcJhQRi51XFQXdT2omsxklqL5875F+ODEfFJ8cMRqjR82x08Y
+ 0wnBwCLa/Ni+WaL8JG/jeYG/ANbD1/23iGwB6OJlWADgjOPHsbDO33telH5JH/rdcRky
+ 8Fsg==
+X-Gm-Message-State: APuU4Z9aysjKBXsZziRp9t0LGroRhUqaYWPnRZsr9Nn78HKCNSl9mOXc
+ r4eKC4xbdDwlCSqYwNhz6DzM0m+WA5SvGzFdAYq8MF6IZ3MTbWMB6jKO43uT+g==
+X-Gm-Gg: AYBFou1OfAatkePrlOHOdtIfHBb9eUFqDhkYCYz9mn0bNuOwZer+lK1F3W/V4ledUoU
+ jNC3QbKCUkykI62uG29WMo1ZzlWI6li/B4/qi1Ptf7b0+iSdULVRbLaooR513Kq79G5MSFNft+2
+ JclDw6DUZF6OjwAw/PO8pjSZlnT++EimOMYTv4NoZgm9HIhkqCLd2i9G2Rf9Kc2C97UAd4pRfXC
+ sSqnoBrMWjb1ZNBlTiIF8p+6/jqkQu/wmSpb3gxtKYP+MX1ySTlFLcYor7Hgkm+xA0SLaFef6Ti
+ FLlamg0ciUdb2MxPP6RcUWccBRNKOrBjGhUPLT0aVPbycLWBDUGmFQnqIxarxc3qs3YEJ2gU0Ea
+ I3KYZm1P8LZx/WYqHG+uaU+cqSmJuBG5nUDaJiGjvughPlfeaYM0FyxA4RqWQKJ7AdJLJh9qaVx
+ q8UZwdzMwNQexvbMTwuusoZnHdm0B9LO6PfYIo8E0TV//eRR2mFi96aSmnNNbNydfmx7VLqzDWh
+ wnRJmlAQNip8SqrO6CpxbsUO5/hznft5emPiECgbFty+8QTWQeY9w2JcIOBQ+gPQ+9tClEX91PN
+ goxhJ3AtS36dmt1PD3s8XgszSrBTodT/eKwHRn+JwAyaWFep0//eRg==
+X-Received: by 2002:a05:6000:1a8f:b0:48d:f9dd:e3de with SMTP id
+ ffacd0b85a97d-4928a4857b3mr4858235f8f.45.1793963768593; 
+ Fri, 06 Nov 2026 03:16:08 -0800 (PST)
 Received: from angelo-Precision-7550.. ([94.154.175.53])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-492d7232832sm3080195f8f.25.2026.11.06.03.16.05
+ ffacd0b85a97d-492d7232832sm3080195f8f.25.2026.11.06.03.16.07
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Nov 2026 03:16:06 -0800 (PST)
+ Fri, 06 Nov 2026 03:16:08 -0800 (PST)
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  6 Nov 2026 12:16:02 +0100
-Message-Id: <20261106111604.1500074-1-angelo.compagnucci@gmail.com>
+Date: Fri,  6 Nov 2026 12:16:04 +0100
+Message-Id: <20261106111604.1500074-3-angelo.compagnucci@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261105175058.3132718-1-angelo.compagnucci@gmail.com>
+In-Reply-To: <20261106111604.1500074-1-angelo.compagnucci@gmail.com>
 References: <20261105175058.3132718-1-angelo.compagnucci@gmail.com>
+ <20261106111604.1500074-1-angelo.compagnucci@gmail.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v4 1/3] website/download: complete the git clone
- box
+Subject: [Buildroot] [PATCH v4 3/3] website: add the showcase page to the
+ navigation bar
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -156,26 +155,24 @@ Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
 	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-The copy button has rounded corners on its outer side only, as the
-end of a box, but the git clone command next to it has no background
-and no border: the box looks cut where the command starts.
+The menu has no room left for a ninth entry at its current size: below
+1400px the labels wrap under their icons, and the Association link
+touches the Download button.
 
-Give the command a gray background and rounded corners on its outer
-side, so that it closes the box together with the button, and some
-padding so that the text does not touch the edge. Move the shadow from
-the button to the whole box, so that the two parts share one outline.
+Move the menu font size from the fs-5 class to main.css, so that it
+can shrink to 1rem between 1200px and 1400px and to 1.1rem above,
+keeping 1.25rem in the collapsed menu. Add a margin before the
+Download button.
 
-Without its own shadow the button looks small next to the command, so
-make it wider and its icon bigger.
+Bump the main.css version, since the file changed.
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
@@ -185,29 +182,80 @@ Changes v3 -> v4:
 Changes v2 -> v3:
   - none
 
- docs/website/download.html | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ docs/website/css/main.css |  8 ++++++++
+ docs/website/header.html  | 20 +++++++++++---------
+ 2 files changed, 19 insertions(+), 9 deletions(-)
 
-diff --git a/docs/website/download.html b/docs/website/download.html
-index 2482c0a26a..0928982e8e 100644
---- a/docs/website/download.html
-+++ b/docs/website/download.html
-@@ -140,11 +140,11 @@
+diff --git a/docs/website/css/main.css b/docs/website/css/main.css
+index 0cc7bbc262..c984dbb154 100644
+--- a/docs/website/css/main.css
++++ b/docs/website/css/main.css
+@@ -21,12 +21,20 @@ a {
+ .navbar .nav-link {
+ 	padding-top: 10px;
+ 	padding-bottom: 10px;
++	font-size: 1.25rem;
+ }
  
-       <p>To grab a copy of the repository use</p>
+ @media (min-width: 1200px) {
+ 	.navbar .nav-link {
+ 		padding-top: 22px;
+ 		padding-bottom: 22px;
++		font-size: 1rem;
++	}
++}
++
++@media (min-width: 1400px) {
++	.navbar .nav-link {
++		font-size: 1.1rem;
+ 	}
+ }
  
--      <div class="input-group">
--	<span class="form-control text-truncate" id="giturl">git clone https://gitlab.com/buildroot.org/buildroot.git</span>
--	<button class="btn btn-secondary" type="button" data-clipboard-target="#giturl"
-+      <div class="input-group rounded shadow-sm">
-+	<span class="form-control text-truncate bg-body-secondary rounded-start ps-3" id="giturl">git clone https://gitlab.com/buildroot.org/buildroot.git</span>
-+	<button class="btn btn-secondary shadow-none px-4" type="button" data-clipboard-target="#giturl"
- 		data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-trigger="manual" data-bs-title="Copied!">
--	  <img class="clippy" src="images/clippy.svg" alt="Copy to clipboard" width="13">
-+	  <img class="clippy" src="images/clippy.svg" alt="Copy to clipboard" width="20">
- 	</button>
-       </div><br>
+diff --git a/docs/website/header.html b/docs/website/header.html
+index 406d4d545b..13759ee651 100644
+--- a/docs/website/header.html
++++ b/docs/website/header.html
+@@ -19,7 +19,7 @@
  
+ 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/5.3.8/materia/bootstrap.min.css" integrity="sha512-lR3pptsOFflVTuIszkLNcibNkPReN2dEA/t1U1++B3/wPEZL4pysMdYsQfaMefLI/X2fjvk5AeaHVBcFoVO2mA==" crossorigin="anonymous">
+ 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css" integrity="sha512-t7Few9xlddEmgd3oKZQahkNI4dS6l80+eGEzFQiqtyVYdvcSG2D3Iub77R20BdotfRPA9caaRkg1tyaJiPmO0g==" crossorigin="anonymous">
+-	<link href="css/main.css?v=2" rel="stylesheet">
++	<link href="css/main.css?v=3" rel="stylesheet">
+ </head>
+ 
+ <body class="bg-body-tertiary">
+@@ -32,21 +32,23 @@
+ 		</button>
+ 		<div class="collapse navbar-collapse" id="navbar-main">
+ 			<ul class="navbar-nav flex-grow-1 justify-content-xl-between pb-1 pb-xl-0">
+-				<li class="nav-item"><a class="nav-link fs-5 fw-light px-2 px-xl-1" href="/news.html">
++				<li class="nav-item"><a class="nav-link fw-light px-2 px-xl-1" href="/news.html">
+ 					<span class="bi bi-star-fill"></span> News</a></li>
+-				<li class="nav-item"><a class="nav-link fs-5 fw-light px-2 px-xl-1" href="/docs.html">
++				<li class="nav-item"><a class="nav-link fw-light px-2 px-xl-1" href="/docs.html">
+ 					<span class="bi bi-book-fill"></span> Documentation</a></li>
+-				<li class="nav-item"><a class="nav-link fs-5 fw-light px-2 px-xl-1" href="/support.html">
++				<li class="nav-item"><a class="nav-link fw-light px-2 px-xl-1" href="/showcase.html">
++					<span class="bi bi-trophy-fill"></span> Showcase</a></li>
++				<li class="nav-item"><a class="nav-link fw-light px-2 px-xl-1" href="/support.html">
+ 					<span class="bi bi-question-circle-fill"></span> Support</a></li>
+-				<li class="nav-item"><a class="nav-link fs-5 fw-light px-2 px-xl-1" href="/contribute.html">
++				<li class="nav-item"><a class="nav-link fw-light px-2 px-xl-1" href="/contribute.html">
+ 					<span class="bi bi-share-fill"></span> Contribute</a></li>
+-				<li class="nav-item"><a class="nav-link fs-5 fw-light px-2 px-xl-1" href="/lts.html">
++				<li class="nav-item"><a class="nav-link fw-light px-2 px-xl-1" href="/lts.html">
+ 					<span class="bi bi-send-fill"></span> LTS</a></li>
+-				<li class="nav-item"><a class="nav-link fs-5 fw-light px-2 px-xl-1" href="/sponsors.html">
++				<li class="nav-item"><a class="nav-link fw-light px-2 px-xl-1" href="/sponsors.html">
+ 					<span class="bi bi-currency-dollar"></span> Sponsors</a></li>
+-				<li class="nav-item"><a class="nav-link fs-5 fw-light px-2 px-xl-1" href="/association.html">
++				<li class="nav-item"><a class="nav-link fw-light px-2 px-xl-1" href="/association.html">
+ 					<span class="bi bi-arrows-angle-contract"></span> Association</a></li>
+-				<li class="nav-item align-self-xl-center"><a class="btn btn-success my-2 my-xl-0" href="/download.html">
++				<li class="nav-item align-self-xl-center ms-xl-3"><a class="btn btn-success my-2 my-xl-0" href="/download.html">
+ 					<span class="bi bi-cloud-download-fill"></span> Download</a></li>
+ 			</ul>
+ 		</div><!--/.navbar-collapse -->
 -- 
 2.34.1
 
