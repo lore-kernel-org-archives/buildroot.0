@@ -1,28 +1,28 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57A29606A329
-	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 21:14:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43E53606A326
+	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 21:14:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=K5vbbr0R
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=hasqwr5Q
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 325D1608E6;
-	Fri,  6 Nov 2026 21:14:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1EC4A813ED;
+	Fri,  6 Nov 2026 21:14:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rkW_28CZnkZp; Fri,  6 Nov 2026 21:14:46 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 351AB60A5C
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793999686;
-	b=RcJANnaOaJGaXZJoVr78uqYhgIzTX5mwa6GwEMfAP8JM4UhPErwrtCTAm++ZrALsnQzJ
-	 wjRTLYXSd2K9l/4gL1tfFw3WSi+VIje8tLtV4QU/HZP4IOq0lFNmPyHI1/6nFExMzriI8
-	 waAkMmdN6Xq1tbunj1PRCIlwOhgroILPxtf7Z6jfqq+GrqyDhoIOIoovt+mgS6HxZEepZ
-	 HCW/9wyFkqt3LhZTbCpPnaA0qDyL/2VfFyk1I1MjCYTB7aNxkxzrrSVB4LAIBeTLhRlc8
-	 hifdBfp//jEiOtiRhNXbUNSqnmzoQVCEBjG6wPpr/vtqk3eosX4m0OYN2ErSJEYT6Kg==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zhuA4Rl9wFqW; Fri,  6 Nov 2026 21:14:48 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 3892E81361
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793999688;
+	b=V2jo/KYRJcP5XvTz0iIVejOVD56UuNn8BrcrzTRHJ2HBpMnh+KJD4HogaDaWAIouUXyq
+	 soF9h6aPK6qf2+TR8a7rZcRdL8HVuLmPWKIB6yayNA1GRvANB5ongMKHOO/MwIB9eZAs6
+	 eoAZWwXZS4o7fr8xgJ8y1Ca+F4PgJGt2HqlWvnr2jlqBzWYSAbvCU3LXzS34VsFw5o1xE
+	 /bndsz9IASBmrO8dx+CzKbgrF49qAJ70fdTQSS/+jxFhEk/bHyMBCf64GUzxUtbb2ODQ4
+	 PXjMRb5VVLX/XKZ9vKHJivKrEZOTkksZATlYxKx+xIaAbO5sWNwZzpdxFxsbdh0slbQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793999686;
+	c=relaxed/relaxed; t=1793999688;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,58 +30,58 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=3YTgAVR/8S381uayf3wi7Ywdk5mKJpVmFvUfCVnT8fI=;
-	b=ckS8A1Dcnt7y8nkdwltjKIdL/HkU7qPc2U2OXCTdknO/vKwimZxTPNWTq9n/J+o3uIWS
-	 MdLJ48xOqE2lJtlDOvd7rCWkm9DGvpsSMUqou9gEgC7RKZ4wHZ3nAdP33OZ8dNbx6yIQW
-	 VNQRu/P3TX5i/Uveqgca4kfVxrtibSfKXLyl60HKCodfDwYelFMFB6RtqjOPLZHqBq3Um
-	 ZeEH1sa9PjHPihO150LEHn9r5bXgNUfe7oMpDMG2rP4Vmom6gwXbbd2oDFGS71VgUiLLc
-	 brF99l1TxPwG/BLDzBW7WgBapvoyMNQg1clj3zAI22Cssx89NTiMPwHA2M3mlX53RxA==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+	bh=cCegOW3nAbAZ0N5i8Q92iVQCXO4RUd8HDqeqx4n4bXU=;
+	b=Q4sWQmHcXRutlw1vDzIvKUnzdkEorsi8rTHmW4VTdNHJdWjOjW18xiii1JTkdNo06mIm
+	 H13bZXtlDfSfZePXYSSbwuOuwHOUI8F1tYXDFVuEzuW8RdpCJHelpkAza9tIO9qPX5aX1
+	 KRBoXFJvbiQ0i4tKO7okirYyG/zx/OsmQyOqyPvDzZJ/aVGbWIM59G3Ts2T2m44tFn5QC
+	 F4Z0INB0UpuQXtasxNjysqHnEItGxYauRg4VwkkTi+54Xsd013byqZtR3rTVprIsM/v0o
+	 ylmQFAzC+skVxVUQTKwsf0SidlA7CLHuskWF4UnonE1gF5rJUPXsVQxHaWIVOa8uE4Q==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793999686;
-	bh=3YTgAVR/8S381uayf3wi7Ywdk5mKJpVmFvUfCVnT8fI=;
+	s=default; t=1793999688;
+	bh=cCegOW3nAbAZ0N5i8Q92iVQCXO4RUd8HDqeqx4n4bXU=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=K5vbbr0Re8nepv0914DGmA8UvcUprXMvlfzFfvcOSBwHVKQbCTr/WhueBu5Ewv5HE
-	 tXUVuUp0zRidSKpNgjTYS+lG6vvBve2ukYCF7KFkGBmhQwWhWYfD4VxjxkEio4FJkp
-	 2/HtNDI4tcvcChs8zP4xL4ZlMpDlTilAGnRNRKspHNuz/mPRTRPQLIwge5M+DTSu06
-	 GevxB3TofcdrTpmxQeca0DGUGEzneBe7OzGi2ZzgWUY4oIdcKgDMdWWGdOnQT4yNni
-	 o2DGNzTYQUH0A7NSXdTofAwnghf82uXHAqPS3+2SgxY10XihryL6+2/agz2eXLZ7lA
-	 guHdJsSsm+onA==
+	b=hasqwr5QUo1iWiuoN7RhsAbe0O37SoVMBnRs8nO+WErXNq3LYpRPr9PLFFDZ3jvv4
+	 L93NvF2i9cx1AEnpu3JyUmJpzlhZPGVAAY+pxM3xNC/pddDKZdYyufszume32S3DsI
+	 F5kniVYSeszoWt4Sv+yrxlBtJWNTzqkLJs91JN77PJqER/EuRDP6MHsLl1HJshFX29
+	 VoNJ6oaExXLedYiqlSy6KDw9Lr8tDrREuTOJ77HBP4YEWAukT30UlhBrvEo0Pwhz8a
+	 P8CkAZu5cCTyLOkB0kV+4yysEBinLzHlWVMZuTL14eA4LDdNurSXg5hA8snfZAoeuc
+	 BeSo5kdanaVzQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 351AB60A5C;
-	Fri,  6 Nov 2026 21:14:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9F01532A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3892E81361;
+	Fri,  6 Nov 2026 21:14:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id A128F4B8
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 21:14:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 904E240907
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8808781250
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 21:14:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nAPj7IOniJXw for <buildroot@buildroot.org>;
- Fri,  6 Nov 2026 21:14:21 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org DF90B409A5
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EwPKYIr-_-rD for <buildroot@buildroot.org>;
+ Fri,  6 Nov 2026 21:14:20 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org C9A7081281
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id DF90B409A5
+ by smtp1.osuosl.org (Postfix) with ESMTP id C9A7081281
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 21:14:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0888B9E0FA; Fri,  6 Nov 2026 21:12:49 +0000 (UTC)
+ id E6B2A9ABB8; Fri,  6 Nov 2026 21:12:48 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 6 Nov 2026 22:05:45 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3d01b689f39d8a432366701c966e41c30297ee53
-X-Git-Newrev: b6685ef8b86098c03648f7c4163d7fadd5cfab60
+X-Git-Oldrev: 8f9a8a07482c41b0cb3bc8b302f541f1adc50ed2
+X-Git-Newrev: a4727f34237304223f93c145a20cc359e357a05e
 X-Patchwork-Hint: ignore
-Message-Id: <20261106211249.0888B9E0FA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-mypy-extensions: bump to
- version 1.2.0
+Message-Id: <20261106211248.E6B2A9ABB8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-ipython: bump to version
+ 9.18.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,49 +100,50 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	TVD_SPACE_RATIO autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/b6685ef8b86098c03648f7c4163d7fadd5cfab60
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/a4727f34237304223f93c145a20cc359e357a05e
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-mypy-extensions/python-mypy-extensions.hash | 4 ++--
- package/python-mypy-extensions/python-mypy-extensions.mk   | 4 ++--
+ package/python-ipython/python-ipython.hash | 4 ++--
+ package/python-ipython/python-ipython.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-mypy-extensions/python-mypy-extensions.hash b/package/python-mypy-extensions/python-mypy-extensions.hash
-index 10e7b74a9e..d8d7561171 100644
---- a/package/python-mypy-extensions/python-mypy-extensions.hash
-+++ b/package/python-mypy-extensions/python-mypy-extensions.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/mypy-extensions/json
--md5  f59bfd7f9dca73f36c8feed12f9e8eba  mypy_extensions-1.1.0.tar.gz
--sha256  52e68efc3284861e772bbcd66823fde5ae21fd2fdb51c62a211403730b916558  mypy_extensions-1.1.0.tar.gz
-+md5  25d0c46efc1c271fd976944f6e66a3e2  mypy_extensions-1.2.0.tar.gz
-+sha256  c6e275a07f1c2fc096b62940452d0eaa3f3af7de45d704787866240a7c6d5a51  mypy_extensions-1.2.0.tar.gz
+diff --git a/package/python-ipython/python-ipython.hash b/package/python-ipython/python-ipython.hash
+index 3a5d5fe34d..921e9db6b5 100644
+--- a/package/python-ipython/python-ipython.hash
++++ b/package/python-ipython/python-ipython.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/ipython/json
+-md5  05d70129fbbf763d51ad3d61f179926b  ipython-9.18.0.tar.gz
+-sha256  93ec98e27d5ce494c962758111c7dff1ef45f9efdd55604ae70a7d4cabb3e1ea  ipython-9.18.0.tar.gz
++md5  ce98d6db5d3019576ff79b47aace5851  ipython-9.18.1.tar.gz
++sha256  6319c0f5372c196397899479e6db1783dd7937abae06815d1317e8d5d51aaaaf  ipython-9.18.1.tar.gz
  # Locally computed sha256 checksums
- sha256  a50450da1d53cd777b80ced77c58ff96abe0ccd879706bd142c3ec20e245f0b4  LICENSE
-diff --git a/package/python-mypy-extensions/python-mypy-extensions.mk b/package/python-mypy-extensions/python-mypy-extensions.mk
-index cf0f7c681c..594037ff68 100644
---- a/package/python-mypy-extensions/python-mypy-extensions.mk
-+++ b/package/python-mypy-extensions/python-mypy-extensions.mk
+ sha256  8387aac32433e5b121c355aa9e6ce2b9a399da7edd59ab94b19d4f5326b1ced0  COPYING.rst
+ sha256  e0e390748ed440ab893ca1f135a88a920aaf5409dbb90a5b427c75c5e51268fb  LICENSE
+diff --git a/package/python-ipython/python-ipython.mk b/package/python-ipython/python-ipython.mk
+index 716d75d386..c6450f9810 100644
+--- a/package/python-ipython/python-ipython.mk
++++ b/package/python-ipython/python-ipython.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MYPY_EXTENSIONS_VERSION = 1.1.0
-+PYTHON_MYPY_EXTENSIONS_VERSION = 1.2.0
- PYTHON_MYPY_EXTENSIONS_SOURCE = mypy_extensions-$(PYTHON_MYPY_EXTENSIONS_VERSION).tar.gz
--PYTHON_MYPY_EXTENSIONS_SITE = https://files.pythonhosted.org/packages/a2/6e/371856a3fb9d31ca8dac321cda606860fa4548858c0cc45d9d1d4ca2628b
-+PYTHON_MYPY_EXTENSIONS_SITE = https://files.pythonhosted.org/packages/d0/6f/43edf3be2748d0e40974a5ee046a8bb4c9961a4bdd3e7d5c6dcbf32d1af6
- PYTHON_MYPY_EXTENSIONS_SETUP_TYPE = flit
- PYTHON_MYPY_EXTENSIONS_LICENSE = MIT
- PYTHON_MYPY_EXTENSIONS_LICENSE_FILES = LICENSE
+-PYTHON_IPYTHON_VERSION = 9.18.0
++PYTHON_IPYTHON_VERSION = 9.18.1
+ PYTHON_IPYTHON_SOURCE = ipython-$(PYTHON_IPYTHON_VERSION).tar.gz
+-PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/c6/9d/fea7fe7e360b6a4992f00600445849374675d82d665ffc194aee50c314ab
++PYTHON_IPYTHON_SITE = https://files.pythonhosted.org/packages/38/04/0d945c72d5b77527273ecb4c66aa2436de7a3b3bbe3da345bf053232b886
+ PYTHON_IPYTHON_LICENSE = BSD-3-Clause
+ PYTHON_IPYTHON_LICENSE_FILES = COPYING.rst LICENSE
+ PYTHON_IPYTHON_CPE_ID_VENDOR = ipython
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
