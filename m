@@ -2,27 +2,27 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2CCC606D80D
-	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 16:09:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E0B606D816
+	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 16:09:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=dQNZcqn3
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=N8sea8M/
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8380F81AEA;
-	Fri,  6 Nov 2026 16:09:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE62481B3E;
+	Fri,  6 Nov 2026 16:09:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LvlT4-pME2K5; Fri,  6 Nov 2026 16:09:52 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org B95C981A6A
+ id m4NNUCHvBVDV; Fri,  6 Nov 2026 16:09:56 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 9676081ABB
 Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793981392;
-	b=BCAP+WXD/JVffB5EIG3m2IknE9stIBEe7yI8v7a/0W8JFg5sfwB4mllEDemodpL/PCg1
-	 qlm8d64K9E8un5qFcVkis64bJ+D0rwdTqLg67iDvipEZn3gpM9NAO2c3yPgIOhh08BTSO
-	 cmsu/NKlybWhS8hz7n55cR8hIrLssPA5sgsDQwhzZmo1yBGH7wcprc9O+U3Ahy/GajWKb
-	 pPsj2SrfDPPERotgYEIVY+mHobZvywcJcrZykdsT5Maq+RLsd33P2YLf19tmF3HibEdzy
-	 ysvCkw5dPCbSSAOaNDJ7LaYGNv9aqTT+qDjzeI/P6f5QILCZFagoWJgQOCJg4cXoBvw==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793981396;
+	b=m/SJZn8AXyh2+zdZZVQ1eDp6+yUrftxLcc4Nd0r2m8tONUcrgCZKsw58ai1s5suu3R0v
+	 4wF/BuwhBlFrMNjQDP+Rikzepa+Q2sbpoYqPmgd7q1fD9Ol9R4KVCOCysy5qkaAbCi2rm
+	 0WmHHdVLCHlv0rGhxFKrVR11y3JyEtcJZyoSnNc0Ij2u74IwF/MA97UDn9Hiy8rzaFyrc
+	 W33D76LQjzxbs/3EIxu49lC+iZjDfq6J8rGLxQ8oNruP03tkoUZiKcJRZ+NyvEXkFy5F1
+	 ondZ0xX0Fls8r7vSWQNNNXu4vuSc/h8GeVlvKhAtf9aOsJHk/BKI+MZtQVs7DZioIHg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793981392;
+	c=relaxed/relaxed; t=1793981396;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,95 +31,94 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=cXQAV0F2JAjxipsjic+QX70cJdItShncjBlFshuSoFw=;
-	b=d8dmHn476Vmx1Lfu/X8C2tOacpGSNdPTsr5HWnc5L5ImI8LOddQG7fXJ0yaO0TGBwWM1
-	 zFsgGnUcqVEW+xT0swdKEh4nz6AzXT64jjHoAXO10jpRFVc0RbfraoTFJBTWfmvrXOjS7
-	 6dcqPkjHxoe/imyCwnYWFBGC4LEttpNmwZq5eWzTichf19D42oQh7q14dSQpXgg1KBatI
-	 ZH5OadMKf3xx2d5mBwsxZq8Nuy3j+S/exhdwPJGR7tu5LVnvxji2VDF4oqCSeFyVMmwiY
-	 Ez47XvDCuWZsSMrzlEPYMIyQX+plRZdxVd762jCM+/GY87c0V4a8g8YCrLAGfWtYJig==
+	bh=2iu1InXPVOixasLCkzwrKXoGqFxCPIYPp8TpqaFZO9s=;
+	b=b9VF3HqdCfoBzVWmMzx/tM/Mxnk3Av7MQ3q88OTI9zpRIWff0hwqENaIdlSMR2HyYP2P
+	 +i8RZGEM35EKE6P6xBT0U4y5iuoaq8vcBIdkh4OgVjWzlO02y9T0vwu6f9ky+FH5EkTKI
+	 Br7+7A14Z0lfrYNtmtnNEFKkgLpCYXfUOGbFsvuRN9yB79qSgF+h0v0d/A4R1c0kjg5DM
+	 dGbyPG9lDqjm3vZfJKZ9MjDhCg+cyS3F8YR6CuJgZ6JfKbx1tMHzA2F+ZNPDTJQc+XlpB
+	 1INICc+ealtKsohEkEXVIGsOTfcK726pFUhVHT/Sw0s1pkh0iyIxiS13yr3vFWZVOGQ==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793981392;
-	bh=cXQAV0F2JAjxipsjic+QX70cJdItShncjBlFshuSoFw=;
+	s=default; t=1793981396;
+	bh=2iu1InXPVOixasLCkzwrKXoGqFxCPIYPp8TpqaFZO9s=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=dQNZcqn3ke5827IYrN8kVWH9KDyssQlohn9ecv9y0+jDOVqcWDlbOavgXEzrKndnM
-	 6GrkDGKRha9KWZ6uGtxiHpmusdgWF03fuDxLa10PRxI2zUKa4nNFXep65gj0T5DdrO
-	 /mulzIeizZVyRQ31Mh7eUylqNCXcXC7nkEhX+MgwCIPfYumBwBKTPgeWHKxET+vaMv
-	 sGuYnU3bINKM9eyp5IzOpVlL0o3iJXITsomc8lq3hCIevAp0ux51teN0mLSSjM/Bp4
-	 aHe2dLOypc0/F/my5IeYUo9yj/H3VEBimlT86JeEj/ESD3i34D8N5Ck/RgNwvxwE1D
-	 X1SKYmkGqoYDQ==
+	b=N8sea8M/lp27zppBTRkSnZZHQUCnzXMnfOBJZFt+P86XxFGo1OHoLyCNeLGXZUJ3k
+	 mXWBY8m0gR7sebb4wH7EF6r0+p+nIGQOX7bZz0pEpPvDs8aIk+N/VRwrq0+vPSDlcJ
+	 pHfznKhdNxdCghXgbo4PrrLdTxH4iYo7SKuMGXBsLK85udUzEuT4tcpDglKpiqr7VY
+	 KhAxfcCQ/NTVpSuTOstfKZtNgDVw0MGXdUiB1BVH/E5BcCkiqv2MjoxEBpu+L9oUyM
+	 7i91bLVpi1de9RgGc/7sTIvP13zNBV+Nrk77V9aHlAwKz486oaKjR6QJEVmiD+5JoB
+	 3qUP2YOQbqjqw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B95C981A6A;
-	Fri,  6 Nov 2026 16:09:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 1448E4B8
- for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:09:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9676081ABB;
+	Fri,  6 Nov 2026 16:09:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 68CE54B8
+ for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:09:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0602B608F2
- for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:09:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4F0B440913
+ for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:09:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6alx76SulQzq for <buildroot@buildroot.org>;
- Fri,  6 Nov 2026 16:09:31 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org CE93E60A69
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V8XyCWtL6cdn for <buildroot@buildroot.org>;
+ Fri,  6 Nov 2026 16:09:35 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org DC0524090B
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
 Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
  [IPv6:2a00:1450:4864:20::330])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CE93E60A69
- for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:09:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DC0524090B
+ for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:09:33 +0000 (UTC)
 Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-4a4d7ae1ae9so7954255e9.1
- for <buildroot@buildroot.org>; Fri, 06 Nov 2026 08:09:30 -0800 (PST)
+ 5b1f17b1804b1-4a5036bbac7so5209125e9.3
+ for <buildroot@buildroot.org>; Fri, 06 Nov 2026 08:09:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793981368; x=1794586168;
+ d=1e100.net; s=20260707; t=1793981372; x=1794586172;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=c7grQANpV4NnFjxTi4OTkTi8Ci/1Vfk/iDyrhskbL78=;
- b=rRmIpHbYR2a/UmPcIr6FAW7yKzF3KAO0fa/Km63Vc01+gtta06kaEjfXvpIgaYKePz
- 7ZYynIonZxkGBc1+fXbK6OYqcV9E2LL6h9+IY0/mqGl9eg2OdVIM/ngZ/p9i3kd9tDvc
- 6mMcYAacYkClrL5e7wxiG8QeaUot0Nf2KlUsTwLnTHcxodqHEKUgaAKKIbliB+VvNmEO
- VxB6dPwwnGWcKl5S/Sz6AhajVp/PI9KekwaveBdXgA4CtV3wL3cwQqYv9V1CEwm0GYpi
- RbyFB9/JUxorMoQGyZzCaq7rDOg7JqvvrDyCL5YUyMNXub3US8vag1ByqOGeBw8UjZnJ
- Pflw==
-X-Gm-Message-State: APuU4Z+XGupIftBXDfUs1NtIvABiV9P+kcn5ylul5HVMxdwdctTM7n1B
- Z7CsHtrhwReOS/Rwudip9DzAW+K7shhotnoqYc7dr1jEycInPdQzUOpsNbZ18yG4VSiX/GZetYY
- xfZQAgA4=
-X-Gm-Gg: AYBFou3O/1O9wf88MuZwcSWanP0ylRMC6nbBX7T1Y5gXDk91psKCkNNljg0WvFYraYr
- o3PQfKQ3fXE0fnskpgh3pDeEflN+4EwGDkCPCk7HS9TbRHz6in71xsO/ux4JCcDpZnnuKWg5S76
- hD1CDH520XKhkjAXi8ee/4Ta7pwT/SfCcb6wfegiasMC+imFzdg5W8oYNHB2x7J/kgaCyNGucow
- c6UDuHriE4PKYtIU+CVlHIb9/xK07YpfHs77R601Rw6EHsQicFlpzUWN2bFU9VgcTzBaNSQparM
- A6PM8Uy78RQlClVD6iTw8ArCHi9kokmrQe9nFzUHf96I4khCHw7fRTP+V5h6BAPUT6hEBwC80Vt
- LY+qTihUhMOnt4tfKZHOsLHWi6TPgQdqOcquIJYczwwm4L+2HzjRga8/a7G3+le+fnPdwrtl4QU
- Du7kxYv3Qj9dRipn53X1OGJvuU7BcoF/YA6894CiL2G6I+aJa5nreEgA4+TBtFSQf3qN+ueHpqj
- lf2THVXyB5R9ZikOn72VI4+4aYIp10EZAhuy92TLsi93FyKTduxNs8jiQf8sIZ1f564P/LzKu5K
- e2uGeGzPqUhPMHiz26Oiry/xyTq4c+5d1i1tu1fXP3XzxV8w7knn
-X-Received: by 2002:a05:600c:4e0e:b0:4a2:1364:252b with SMTP id
- 5b1f17b1804b1-4b6e054920fmr52199135e9.35.1793981368427; 
- Fri, 06 Nov 2026 08:09:28 -0800 (PST)
+ bh=e95wkNHBvArshmPP4pyb03BmGxbxfiq2ugi6kTkBSR4=;
+ b=WHblc2ARsewFxtWBjuB/DycubirmiN37FktlU5fHRLJFOzIVS5lI1v3dQt6fodnWAX
+ 7R/pn7uZsMLxC/N/2D+MzTY7AzuP1Y7O0ptrK+OnXdZYZCAOxdAeOkd6Af0SllvKWlYL
+ xlZRvYI7eH/Vqa7LhH2nutqqySFY/9sE0tmiMUokUa/+WjUpRV34tTdQRgwLt5jd5PLn
+ DtmHUewT+xIfZhSddy4QmrkfsxrB0JiV+PNc70O62YvC4UQhj5rgl8PkYsSCvNpzzxY5
+ ZYwCyQ+cRr41KWiVanQG3un4vToNBQB9QR/euYtnBV7GpXIYXq4DiBgNh8Zol7IU/Iu3
+ 3Ryw==
+X-Gm-Message-State: APuU4Z8zoMJkVbnaS7WPiY7ekrzfBD7ReKqK619yUdxs9TnFDAdGgqFV
+ dSmkoKHBN3dRJ/pwFhYsgQAc/bEjxTj/ICloWtyP1MNMHOUB5VvW+Cy7AHV8WB2p/aIFg+0wumd
+ EZEzZyH4=
+X-Gm-Gg: AYBFou3P3JNODmh66ore/NUKenR/U1gYIcUXRNNxljBmRK1qHUc+Jod5KSFMvblZaR+
+ GTAEq+ehJbSQFAViihQht1D7z7MvqYgY83gIglv47crstC+P+trsOS7rIpm5Jpa2r2sj9Y7dULO
+ XGnpSYDZRP17DaMFVF3CoS88TjW8ouGZOjsioYm6RS5weo3m95imPGtlkHoDXXD63jLgvknpUdT
+ 95m2+kzPoIBifXjEvN+LUvIaobhbvPzyv2xn6pdgCqMtX2QOvCo7ttxSjmLlvQKbLbbDGGTR4Nd
+ XfOKbtksGMb7xPFj7+4d+nntKExZgSZFIrYQFpfOZ5gb+sCO25E0R/Zf7aZu4zOKXNcRExBUNmN
+ iduUZ9KUpQhuKQNtgWU5hX4etJAoudbuhBDqHb7slN+9nmLpF+8WUQrRiXntyopytVssdaAkIHT
+ +6fNqIJr8uZbkkhvzifTnBn8vLxMy4E8Esv1u/YRYBK8F4toSJsTutFvkYUXQgy2kyIBaV2UbAk
+ XrRTkquVaClf+0Ua659cgVKAksKpD14tbiNGm8/7YXqcvYB8/FFUBOk32lbsPIQwXLitmvmYmwv
+ 2PCo8MaIgHiuQgCdC+bP7izSWBqvR2g=
+X-Received: by 2002:a05:600c:34c8:b0:4a1:f90d:6f4c with SMTP id
+ 5b1f17b1804b1-4b6de4a6eb5mr54769705e9.7.1793981371834; 
+ Fri, 06 Nov 2026 08:09:31 -0800 (PST)
 Received: from debian-hp-1 ([212.233.51.18]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4b76cb772e1sm10080875e9.0.2026.11.06.08.09.27
+ 5b1f17b1804b1-4b6e168f331sm81424185e9.3.2026.11.06.08.09.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Nov 2026 08:09:27 -0800 (PST)
+ Fri, 06 Nov 2026 08:09:31 -0800 (PST)
 To: buildroot@buildroot.org,
 	Fiona Klute <fiona.klute@gmx.de>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri,  6 Nov 2026 17:09:25 +0100
-Message-ID: <20261106160926.607165-1-raphael.melotte@mind.be>
+Date: Fri,  6 Nov 2026 17:09:28 +0100
+Message-ID: <20261106160930.607191-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261026190956.376568-1-fiona.klute@gmx.de>
+In-Reply-To: <20261026190956.376568-2-fiona.klute@gmx.de>
 References: 
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] package/swtpm: security bump version to
- 0.10.2
+Subject: Re: [Buildroot] [PATCH 2/2] package/swtpm: fix license information
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -143,44 +142,38 @@ X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
 In reply of:
-> CVE-2026-75900: Fix length check in SWTPM_NVRAM_CheckHeader()
-> https://github.com/advisories/GHSA-gqrg-h59c-j4wj
+> The SPDX identifier matching the LICENSE file is BSD-3-Clause [1], not
+> BSD-4-Clause. The LICENSE file was last modified with upstream commit
+> 5f1ef9565df074b918a39cb4885af4190c98edb7 in 2015, before release
+> 0.1.0, so the fix applies to all Buildroot stable branches.
 > 
-> Upstream changelog:
-> https://github.com/stefanberger/swtpm/releases/tag/v0.10.2
+> [1] https://spdx.org/licenses/BSD-3-Clause.html
+> [2] https://github.com/stefanberger/swtpm/commit/5f1ef9565df074b918a39cb4885af4190c98edb7
+> 
+> Fixes: 87b9b126d23be1e95b3d2b82438f65e28f554a87 "package/swtpm: add host package"
 > 
 > Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
 > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-Applied to 2026.08.x. Thanks
+Applied to 2025.02.x, 2026.08.x. Thanks
 
 > ---
->  package/swtpm/swtpm.hash | 3 ++-
->  package/swtpm/swtpm.mk   | 2 +-
->  2 files changed, 3 insertions(+), 2 deletions(-)
+>  package/swtpm/swtpm.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/package/swtpm/swtpm.hash b/package/swtpm/swtpm.hash
-> index ebad1ef4bf..4f6cbfd61d 100644
-> --- a/package/swtpm/swtpm.hash
-> +++ b/package/swtpm/swtpm.hash
-> @@ -1,2 +1,3 @@
-> -sha256  f8da11cadfed27e26d26c5f58a7b8f2d14d684e691927348906b5891f525c684  swtpm-0.10.1.tar.gz
-> +# locally calculated
-> +sha256  f61cf6f1e9bbcb4cefb30b70cafaf1c4df54c6961e65cfa63830e8ad0e220134  swtpm-0.10.2.tar.gz
->  sha256  19d27d6e96d07022e5e688f75c974f1ceb9aae9e90e0fccae68666d02099cc4b  LICENSE
 > diff --git a/package/swtpm/swtpm.mk b/package/swtpm/swtpm.mk
-> index de7f2fa05e..d6559c22d6 100644
+> index d6559c22d6..3357be9c39 100644
 > --- a/package/swtpm/swtpm.mk
 > +++ b/package/swtpm/swtpm.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
+> @@ -6,7 +6,7 @@
 >  
-> -SWTPM_VERSION = 0.10.1
-> +SWTPM_VERSION = 0.10.2
+>  SWTPM_VERSION = 0.10.2
 >  SWTPM_SITE = $(call github,stefanberger,swtpm,v$(SWTPM_VERSION))
->  SWTPM_LICENSE = BSD-4-Clause
+> -SWTPM_LICENSE = BSD-4-Clause
+> +SWTPM_LICENSE = BSD-3-Clause
 >  SWTPM_LICENSE_FILES = LICENSE
+>  
+>  HOST_SWTPM_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
