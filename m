@@ -1,28 +1,28 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AA6C606D819
-	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 16:10:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68958606D82A
+	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 16:10:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=BmxoMQZc
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=mHXqiqDI
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA8D860A7B;
-	Fri,  6 Nov 2026 16:10:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 40C6981E46;
+	Fri,  6 Nov 2026 16:10:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FQ6DDBoHGJj3; Fri,  6 Nov 2026 16:10:49 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 0B3A860AAC
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793981449;
-	b=iTFZf7irkmcGu8dPgALKpRx3dXaaWgXROi3fPFNR5ixPEhtiP6l3BKbmMggeclKry68E
-	 xw/fDCYzeJC+MmbJwWATrC5wc4Rstdv9/2Tu1Wn/ElWf4eP+Zl16FljFxHgGkhWFm7mNP
-	 w2EJUSyQnFZRQBUuZko0iwZqnbcS3GFZsdNY8wgLV9011KCxYyOwE1V7D+tsw384a1XVf
-	 +BGIfV4mvNqtocUjcTBTE0VacHOCWra7m4ZDwVrn6FLkHPyoh6h/I3JWsU7zUVwYGVR0V
-	 t1iklvL/p1vHf39Ht/ZOGo6o1E3ONaDTkfJj+xFI5v0nCWT1S6s7Q1jTT6N2V3naJlw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id o5yuiEFDl7ff; Fri,  6 Nov 2026 16:10:51 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 712D481E41
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793981451;
+	b=U9M9ISEDzzkfDLvGjenxmgle/qyvhUR2kulmsJIkwmpnaHxU6GJ/aviLAIkBBOaDVLGX
+	 C8hPM6ZkR4xfgqOznOOlc8yWcg5vd9TFGWpiWkGfq9lw9xIh/GBBRSpCDMLhSQuGy1MJg
+	 H5Spq6W2tvRYc1982Ps/iJFJC19UKCUGDccFXY+trHtShnRWnYxIkU78rSoOZ5Vv7m96+
+	 eGJNXzG+JlT3ibAPl/i0w3z5znTKd1kHMcEom0uAeXhW+HfzRE5TRMCyHepfHzIXvtzBF
+	 KZ9qz/7t5jp1T9S1MJZ5nf2D/vTzAsexyV4J5RC7PGGR69V8w0wnVJMjGzFENxFcS1g==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793981449;
+	c=relaxed/relaxed; t=1793981451;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,94 +31,95 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=qNazUG3wwRriwS9cEV2Msc4rxt2Ikvwt8zcPF4beklU=;
-	b=UH+xEqSkf8c4hXltptKT2bCLd6+qVQoHKJatISpV7NdiZ0knQvZydXDseGGzKOhWjvBA
-	 MhH87INy52OoR01JBholW0n+fKhKh9JtvqhxTWtfBBfJBnT0h0QiSv2byXFU1Mp5d+Rvq
-	 bDogBH3LIHOQ1PrHMbZU0e/s1tRRskSynCPLoGcJOlHFabgJ1i+loDGWyw4PKugZSpyBN
-	 FQBs+7sZe4LtdRGx5y43PGVZ2PiXRN0s3HkGgyRuZPg8KsfNKj6MyoIqTOsNet3mP5K4o
-	 oyWSOEdPwJ8FX0vTDqy6j5TF19T0mwvJmUBF2NMHEmR3OFxR/DR4rp+5YbF/LTAPXfA==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+	bh=N8+oAGqngzARfQnWmiHefZIUbuKPlaxAm1OUYYg8JXM=;
+	b=NS9vHsO/+WPkJpuMqJfhKFyswLOKmf/mKoKgvHrxt+IG/UKaMnSlwFvUQlR6m0UVZgTz
+	 k0g/DOBRlIPNUuI5+BolvwGzB+s8v9QyD1G9+5ArMOud3s/rf1jG7xUL1JR8GtDd/kMeB
+	 77vEcWT4D+Jcuq0/+clgYK+dn44pXJPZx3BmIiquLD226saK6wkYUsP2KmB5CgEDXow1w
+	 YmdtVqqu6O0itXxO0+v07rcTM2AwSIHgCVUOHZ5jTngfHl6hzsl2egNFTK9Wxy6hgaFEe
+	 g8864Wrxx/lDxOz6JVUbIKW+XdmWFxp4cEn/jjuGvySwsnZTgK620eInGBlnA7UPCOA==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793981449;
-	bh=qNazUG3wwRriwS9cEV2Msc4rxt2Ikvwt8zcPF4beklU=;
+	s=default; t=1793981451;
+	bh=N8+oAGqngzARfQnWmiHefZIUbuKPlaxAm1OUYYg8JXM=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=BmxoMQZcRhngbGxV0u8zEv9PrnjFHZnjkaAROkkrC73tMe/FSv4+BLgQYjIvbGETU
-	 vdJdIlK1VTiITadxlgJz6mZx18p5p40ZLAjfXQs8xIle75e58e691BtuBT5YrHf1Q6
-	 KItCoRxqxToojHt9ZkBkfOjm9BEgYnF8FO7fnkIdjdMHZynlmS/SN3ZQX+R2C9EtC6
-	 PwE+X4sI3Acn7hNGZag8VA0cibyBlWPc4W0MS3fIWfI0QdhA0SLzj0P3H3IYrU4OWa
-	 PaYa4jXHYE0Pov0mad36b0HMhrq39R0mBmdTsQ4DXU8iw9Sbl4lMNWZbSN/kHmvJet
-	 J9abBkPO/NcDw==
+	b=mHXqiqDISGF36DrQyGNuQDFbnb90uezw1ij5O/NEnSjg9Q8utcY6Kld+nfyg32+cN
+	 aZw3kGoVPP3ma2m5oyy8MmgioHdFXBSrj/JdYxnYExwFDt8OfzZu0Nk210lCN1OfFB
+	 QXDkKJj3fsiK7f7A4kI4RV8omGbsIbLdLKPcw6Mi6MjcrugFIETqEpZ9U+IGYQZUDv
+	 7mEo7smvfu8nL/eGrwwGWtT6fWcFt0XQ6du4ofAzF6VDTCQUp5akFLzofL56EqZrTh
+	 bFdkK+5wNDTQUKOiG25a+PDQ3ndF/PutSvG4DSZl7J1y1XpAD/89LCeSF2S/Btn4yk
+	 HGei3G+YQ00Bg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0B3A860AAC;
-	Fri,  6 Nov 2026 16:10:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6C16C4B8
- for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:10:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 712D481E41;
+	Fri,  6 Nov 2026 16:10:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 93E722E5
+ for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:10:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6876281E41
- for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:10:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 85AC040911
+ for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:10:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E5uM0vZjHNPO for <buildroot@buildroot.org>;
- Fri,  6 Nov 2026 16:10:46 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 9B6B2817A7
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id U_jAnqYuvQxb for <buildroot@buildroot.org>;
+ Fri,  6 Nov 2026 16:10:50 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 93A2F4090B
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
- [IPv6:2a00:1450:4864:20::430])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9B6B2817A7
- for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:10:44 +0000 (UTC)
-Received: by mail-wr1-x430.google.com with SMTP id
- ffacd0b85a97d-492690dd5daso622202f8f.1
- for <buildroot@buildroot.org>; Fri, 06 Nov 2026 08:10:44 -0800 (PST)
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 93A2F4090B
+ for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:10:48 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-4a9a8d6cea8so7867485e9.1
+ for <buildroot@buildroot.org>; Fri, 06 Nov 2026 08:10:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793981443; x=1794586243;
+ d=1e100.net; s=20260707; t=1793981447; x=1794586247;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=8uyz8LfRtyKProMBfdJsx93rcjD+RVWz42Krqod6mFQ=;
- b=D3MWDakZvV0Y7Bn+6qg/bRqypSxSwfsLV5HN6zIWYFz0hcaINKaEtGC2TEClHRgLgI
- Or6VyPJRxurvG6reRgueM69YbbnzkoKY2ludhtDn80EQedNpgwlPoA6Ku6ZzEEt7DnP/
- CLetciutIpJfAQWUXlBb88yJsV5uyFDZ3B994IoiLx3lSvN6xgo9bfizRyuquK1ayeFd
- HPgiWueaxKi89guIdcVMFJ+MQjH6XBbE6xCe18VyZMb3hWZtT8eX/0Fl/qOrjjA79z0S
- QiB8/r8vXaV2eQXijmJFWuCuM2BO838RV20XKSFS0VtWiqs1997eUJGRDm5S4qo2N1RZ
- N7LA==
-X-Gm-Message-State: APuU4Z+Zfzdv9pups9NVzD4LcGxbUN2NKbMG158gdPX+JbMudxzypddq
- GfegxKK0FsVvE2eYnxamc7s985Oil7/C7RD1r0WZK8hcR7LItID5yCPepBh5CS0OQIStwyyKd2w
- uYDrf06s=
-X-Gm-Gg: AYBFou1xi2NKXMYk/vXa+hDuk35pFmqEuvIaFCPSp+i/qreQ8zSKzYxw1PM1vC+wGdO
- 14Hqt5QytEpTYwa0Qlv542t1UFUwLs+CKCUlXTQIUcT87ofI5gvd7cfk5f8Snwxzek0Jgy38zsf
- A9YLq+EGw61YCZHPGLq90n2ar4IfqzaNnPjot5Q1OBoVCU4IpznPoXu99oBguA9EGggiK8b8JqI
- Sj+lm33V2CfzTGBiPD6yWebfDBRY2fvGmYxRDj7/nlHD/XVMTRhdeSCc2kpEoLvPW4dgvszkty/
- qqiz5zrGPqoSkPI258n4Gq3bnZa7NN84dI2DtaeA3MZHMkU4mKR/4f+pU+myZd3nk4q1hDthaiw
- 9hKRXFRW5TPvbIP/opzyL3bOmHbhMtGdjmR3igAGBmIg8pvOMPGX+3sC4j4xR0jsTeF6/foz/s5
- opOB4UTczgU3N85ft9ZWVbfViKL1YJVTI0eusMer9kmV/3EhDTqApwE8p6j+IH4e0eZ1M3MNTUU
- eztzmofBDOP4qKVvHtrTY+LgaKel9jeB320Dq4WJptLHOBGWtuWpf0uY5GaB+bu5FIwFbtBV3El
- kaXW63kX/lgjhAZBtyQWeqRvMT/2NaI=
-X-Received: by 2002:a05:6000:2082:b0:48a:fbcf:6f43 with SMTP id
- ffacd0b85a97d-49277f89034mr6057595f8f.54.1793981443135; 
- Fri, 06 Nov 2026 08:10:43 -0800 (PST)
+ bh=ZnZkD0i9NPTys0OH+YVVUAyARcKAAhKs4wSDqtKhulQ=;
+ b=hoCDeF6JsU64boGCeM+f0O8XR0MxF18OKZ7/busDHkZG4tphdu9xkNxJg07nksFj02
+ qBDGEMNhXBvS7/JBozXGIrKhW835L0opymRpKlptV+gB+XBz+Eoeebgy0JujE0WCIkaN
+ YJ8l83FpRzeaYBxV6zB1GMpOhtT5sQ2Ur4XoEnfnJStag+A9emtxnA0X5Y7IlH/faYKN
+ 0BtYLsZSxO0/CBpMkGsTsV48IoMGFeViumlDzUV9HAEw2VNBGRLehfmyum5BZQmwM5MJ
+ wVoahj6NwzqSImhBADHlFlAYHgDwWvG0HznGITeHVPt+HZdC2NLn+QL87C8OwNIgXeV9
+ j4cA==
+X-Gm-Message-State: APuU4Z+HckCyIls2TB+PC1XEQQs/Nmr8OTOsimBJE+JXcvbwVevs4p5d
+ IqGDxZ1zA8kurLI6Q4FlToCw4oEDwQX9s+PY6q2f3O+GrBo1a8Qc76ZPAQg87Du6TPtx3EUdTaQ
+ H3F4bAk4=
+X-Gm-Gg: AYBFou1Bm2aLf1WYxLER9CKSAXivXCc6LwYFiN427UVcAThrdw/KgAgo0fJreFiV8QT
+ t1DzyrJzg2RDXRez5jMCdU6/Ym0JNQJoB+weH4AjRJbC9rReTeIVac0WU9HTjGJOMmwvuPGImZd
+ V2f+2ZvhZYMVrhvGRRIgmUeGCWp23at2CMcQFnu0CTX3Gj2SxsMyTI93+R0kDfUDaoORHV2nSHb
+ iSTBEtt3QPBpWUiNhj9sA0sd8g6w7azRqi2pE0MmgH/R9EdKK1uJyS2jvO4fY/6pz1ku3RgDOl6
+ pTKnhutyM5YPfbSKIqiH6EgFP0eLMCLazd1GKCsS0EC0xDSNr8VqfIf3HMhTO+13Z1CoXUz+M/m
+ lIDre+OUCBasnL2PudLCA2C7TfkT4540YRDmF83JWHw660G7g093vgv2XI+59y7IUmjR1bVuMls
+ c3sfZQLKTHyjqfxrmTr8qQJyir1JTAHbGKI3h8t9TAX7a7fWqsek/s7o5Zol1ML3UeUmRapOdUK
+ VNHBT7E/LlNFBV7pqoYf5jolAYyzsUjhzb6rs1n6BtUlSkVf5Tp6ONnqxCh6HFSjWTi/qiH2kLL
+ I+/QqH9PbkbCM+pBsepb9B8LxEi+FRo=
+X-Received: by 2002:a05:600c:310f:b0:4a2:18c4:61a5 with SMTP id
+ 5b1f17b1804b1-4b6dea69297mr48462315e9.6.1793981447042; 
+ Fri, 06 Nov 2026 08:10:47 -0800 (PST)
 Received: from debian-hp-1 ([212.233.51.18]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-492d770248esm4640270f8f.42.2026.11.06.08.10.41
+ 5b1f17b1804b1-4b6e2029209sm77884845e9.11.2026.11.06.08.10.45
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Nov 2026 08:10:42 -0800 (PST)
-To: buildroot@buildroot.org, Angelo Compagnucci <angelo.compagnucci@gmail.com>
+ Fri, 06 Nov 2026 08:10:46 -0800 (PST)
+To: buildroot@buildroot.org,
+	Yegor Yefremov <yegorslists@googlemail.com>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri,  6 Nov 2026 17:10:39 +0100
-Message-ID: <20261106161041.607758-1-raphael.melotte@mind.be>
+Date: Fri,  6 Nov 2026 17:10:43 +0100
+Message-ID: <20261106161045.607793-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261030152434.3738285-2-angelo.compagnucci@gmail.com>
+In-Reply-To: <20261030222648.270223-1-yegorslists@gmail.com>
 References: 
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2/9] package/webrtc-audio-processing: fix
- build with musl
+Subject: Re: [Buildroot] [PATCH] package/linux-tools: perf: explicitly
+ disable BPF skeletons
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -142,62 +143,43 @@ X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
 In reply of:
-> webrtc/rtc_base/system/file_wrapper.h uses int64_t without including
-> <stdint.h>. With glibc it is defined anyway, as <stdlib.h>, included by
-> the C++ <string> header, includes <sys/types.h>, but not with musl:
+> perf builds its BPF skeletons by default whenever libelf, zlib, libbpf
+> and openssl support are enabled and a clang >= 12.0.1 is found in the
+> PATH. That clang is the host's one, and it compiles the BPF programs
+> against the host's system headers, so the build fails (here with
+> linux 7.2.6 on ARM and Ubuntu's clang 21.1.8):
 > 
->   ../webrtc/rtc_base/system/file_wrapper.h:86:21: error: 'int64_t' has not been declared
+> /usr/include/linux/ioctl.h:5:10: fatal error: 'asm/ioctl.h' file not found
+> make[6]: *** [.../tools/perf/bpf_skel.mak:87: .../tools/perf/util/bpf_skel/.tmp/bpf_prog_profiler.bpf.o] Error 1
 > 
-> Backport the upstream fix adding the missing include.
+> Without clang on the host, perf silently disables them, so whether the
+> build works depends on the build machine.
 > 
-> This was not noticed before, as webrtc-audio-processing selects
-> libabseil-cpp, which was not available on musl.
+> The perf tool does not depend on host-clang, so always pass
+> BUILD_BPF_SKEL=0 rather than let the host's clang be picked up.
 > 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
 Applied to 2025.02.x, 2026.08.x. Thanks
 
 > ---
->  ...-file_wrapper.h-Fix-build-with-GCC13.patch | 30 +++++++++++++++++++
->  1 file changed, 30 insertions(+)
->  create mode 100644 package/webrtc-audio-processing/0002-file_wrapper.h-Fix-build-with-GCC13.patch
+>  package/linux-tools/linux-tool-perf.mk.in | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/package/webrtc-audio-processing/0002-file_wrapper.h-Fix-build-with-GCC13.patch b/package/webrtc-audio-processing/0002-file_wrapper.h-Fix-build-with-GCC13.patch
-> new file mode 100644
-> index 0000000000..deecb8e3c6
-> --- /dev/null
-> +++ b/package/webrtc-audio-processing/0002-file_wrapper.h-Fix-build-with-GCC13.patch
-> @@ -0,0 +1,30 @@
-> +From 9a202fb8c218223d24dfbbe6130053c68111e97a Mon Sep 17 00:00:00 2001
-> +From: "L. E. Segovia" <amy@centricular.com>
-> +Date: Sat, 23 Mar 2024 16:34:50 -0300
-> +Subject: [PATCH] file_wrapper.h: Fix build with GCC13
-> +
-> +It is a missed instance of cdec109331de34958a892a1418d67806b171b862 (!31).
-> +
-> +Fixes #32
-> +
-> +Upstream: https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/commit/9a202fb8c218223d24dfbbe6130053c68111e97a
-> +Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> +---
-> + webrtc/rtc_base/system/file_wrapper.h | 1 +
-> + 1 file changed, 1 insertion(+)
-> +
-> +diff --git a/webrtc/rtc_base/system/file_wrapper.h b/webrtc/rtc_base/system/file_wrapper.h
-> +index 42c463c..bfd8fcd 100644
-> +--- a/webrtc/rtc_base/system/file_wrapper.h
-> ++++ b/webrtc/rtc_base/system/file_wrapper.h
-> +@@ -13,6 +13,7 @@
-> + 
-> + #include <stddef.h>
-> + #include <stdio.h>
-> ++#include <stdint.h>
-> + 
-> + #include <string>
-> + 
-> +-- 
-> +GitLab
-> +
+> diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
+> index 3271fd5683..45bb2bd7a3 100644
+> --- a/package/linux-tools/linux-tool-perf.mk.in
+> +++ b/package/linux-tools/linux-tool-perf.mk.in
+> @@ -30,7 +30,8 @@ PERF_MAKE_FLAGS = \
+>  	NO_LIBPYTHON=1 \
+>  	NO_LIBBIONIC=1 \
+>  	NO_RUST=1 \
+> -	NO_SHELLCHECK=1
+> +	NO_SHELLCHECK=1 \
+> +	BUILD_BPF_SKEL=0
+>  
+>  # We need to pass an argument to ld for setting the emulation when
+>  # building for MIPS architecture, otherwise the default one will always
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
