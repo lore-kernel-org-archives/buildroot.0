@@ -1,28 +1,28 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B4E3606A326
-	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 21:14:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93CCB606A329
+	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 21:14:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=OMTeIpzF
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=fDvbvCrQ
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EACFC8124A;
-	Fri,  6 Nov 2026 21:14:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 72BFF608DC;
+	Fri,  6 Nov 2026 21:14:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LuGVvQEjF_AB; Fri,  6 Nov 2026 21:14:38 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 1A3CC81250
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793999678;
-	b=UhWxX5WnMT3OGw5vb7v56DlGcKfvs4SFShLpZXRPzd4TvIvmWlK+lKVHPuVXIo8yynbe
-	 wExq5rgDjYVlndoeUnlLZ4xWNhLO3l1FdE/Q7P2E3kXleRvNh8vT3vto7pj6kw7MyUuqx
-	 +jKOH0OZfk/W3a93QZDjCqUI4BO78diF/Y3WO6HNGocCdK/xaFgEvHEb7Lf/d0syB0jf7
-	 XOLKO2DZL/uyBwq2NI4/pPJoKu3SHe+j0Y44q1YtGbRdjQA0uMuL+bAPzuhr+qwz0psfT
-	 m5FqOUR6Ngn4OYtFjymv79fS6T8f9V4zuB5WMUi/Ac1E3UNENhHHkR8wBLSCXJICFkw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ellnUsqCY0JX; Fri,  6 Nov 2026 21:14:39 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 6CF1B60A46
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793999679;
+	b=KY6HM81HwJvHiIihT+Jyj5pHlfqaajnNXNYGReSsugKD9+CNAYvwm35E62Spfmxd3NR0
+	 7XzeSoMzXNj2MOPIOO+JOcyz9F+zUSZjXReKtLQIfc0ixstO108m1GKDy+EWhGTCaEAQf
+	 m3gMps3CyDvBl1bh8cYK2ca4/6tvq3RrOHDII3nomdWeF4bH8W51MappeXEMdiEkC4FFH
+	 fpr/FAIMkIBU0RP3MkNOYFv35n0rTRSNm6yAeQeEcta1geweRkwdh2lWhZreW+DNhtrNP
+	 r3qJka1TTEOxiZsA5sk1YgtWv0BlgwvIjFvgd+eIm2DNZ5SeLZ7CT2gU7IXXa/mM3PQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793999678;
+	c=relaxed/relaxed; t=1793999679;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,58 +30,57 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=WrsnFi3fbiUElB/qVSJqtTnmNhoRWzstmoFfawRuFC0=;
-	b=YEkXfPRnTXLkWZQyNCmJ2W+ps72UCil/PuvA9ZbGIhF5pZT8LhS/RFh+KAf68TbQKDj6
-	 PNEOHQYf5eFnKxQwu+V/6VRowdlrr2TQshDZhyIi5VRYeZRgiPg+lMQfPkGxYP7N3VuKU
-	 jukqNOotdszGemy/8TPBQAOWEkKKnMm1L8rFcuRhpmLhi4ggJ/ERfaZ8iFEZIGRjEro1Z
-	 KA2EWlr9ozcGwwwm+ti9Fi0T1zNqVcif4JY6D19d+JkSVk0q95y4SkqP+zM8uXP09zcdZ
-	 xlX9eJAkK8n8cTBEv48gKlhuFznrxYLrW2Wx0HRosOv7Z5RCzu03TV9CG70gdqSTLZA==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+	bh=IZosioQr+c+6MzGOoZ1jKdVDsLBleypBZNbbWTjTZPQ=;
+	b=qSdep2gkB1bgirJIF/cn2wE2RKBTyXCVeJyty/eGUO2Q24AV/YaCQVT5O6RMg8PUlv7i
+	 49lPAiX8onIbIoHSJE4t1IifkLW39AafhPfpLEzo1cS/QW5f2kwipOnx+pfItnP12HDDt
+	 7ILNmmQz/uii8g2HiZFrqzJ5vlji22mxItRP92IyYCeePuJXfKbo3uDNhajxWrWgd4LwL
+	 pYySCVG13NESSIle641U0+bcQDoT5sPCIOuaSNxZy4RCVUKZuHWjDVEzifp8MNcsDDZlf
+	 B5Xqmnxu6pWGzwSXpnwYsobcwjXm4JhxZZHmgyeL+snQqw5+qq07/3+XtAEwa6Q4cjg==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793999678;
-	bh=WrsnFi3fbiUElB/qVSJqtTnmNhoRWzstmoFfawRuFC0=;
+	s=default; t=1793999679;
+	bh=IZosioQr+c+6MzGOoZ1jKdVDsLBleypBZNbbWTjTZPQ=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=OMTeIpzFrw2+x6fnUXt9XWdWFcutazF1c4IZaeMlstwU+lpmy9Elwn/kSU5iZ2syo
-	 FqHvAxmomb89qYysC1HlKSxt6Krh44/aFXXee3zkKb3M9uLrXUEMMO+AjvA+peB5cQ
-	 3GPrP9jKK1OctdG+nQI5E9jE3tQDginX4io8EgY5Mu05Is6EOO0dQsLYKpB+mir3ii
-	 AbuoQh3VlArIkWmnzjjH6Ck3KTEpgXpg9avm7UOocztp/s56RDOjH++J/iUvKnc+XT
-	 9wWPM06rj23FkmdI+A6yAeIIHcPJQQHmiVgKKe2n/oOlOVG4QWWFdRFQky9tXSZslY
-	 p4lFiW/jgpvMw==
+	b=fDvbvCrQfzRBjCXBUnStILqWv8ybJWcS7ZyG33SD5y80llJaruNi/41RaOD7um+Se
+	 FzWJ4wTFiwM3GtADpoPpkGa6ahCanaBM1MgTMDau36FLaMAz0GDrdePWhcJ2ELV8xb
+	 uqm0nWfFzKZt6T03tH9MsZPccIMVLnRAWA8OG65wdzUbYVCZVAT9buVRE9mvywYHkn
+	 1Ux9ZFpTzx/z3XWac4UnWVUUDJZzLjNF16pUXqywQb4kwFNs4v2YxuZHsdLBSX/L7v
+	 DiLK+o+mRx+oRLiINfZWObaoL/D/osR96JCFwqbc700PVQ3eP0TZDGQoBxzeLPOW2+
+	 0Tov9Z/cipkfw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1A3CC81250;
-	Fri,  6 Nov 2026 21:14:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 65EA9AFC
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6CF1B60A46;
+	Fri,  6 Nov 2026 21:14:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 82E4532A
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 21:14:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 560378128A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 70DA440400
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 21:14:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KyEhxyPjD828 for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vaogJrEGs9K7 for <buildroot@buildroot.org>;
  Fri,  6 Nov 2026 21:14:20 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 9BC218124A
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org B46AA40401
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9BC218124A
+ by smtp2.osuosl.org (Postfix) with ESMTP id B46AA40401
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 21:14:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7EB4E9E0FA; Fri,  6 Nov 2026 21:12:48 +0000 (UTC)
+ id D10C09E0FA; Fri,  6 Nov 2026 21:12:48 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 6 Nov 2026 22:05:45 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5b5c1c9b6b4086a405a5a2a8f3aa64e018e3697c
-X-Git-Newrev: 8b3d08d5bd01f23482c11a8308c6386c23a6ef1c
+X-Git-Oldrev: 4e4b7fd380dacf830fa33dd36ea5793af4d6720c
+X-Git-Newrev: 9db99661f47076e65044c1e19ae1e4d1e77cb1f8
 X-Patchwork-Hint: ignore
-Message-Id: <20261106211248.7EB4E9E0FA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-dnspython: security bump to
- version 2.9.2
+Message-Id: <20261106211248.D10C09E0FA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-gpiod: bump to version 2.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -105,49 +104,44 @@ X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8b3d08d5bd01f23482c11a8308c6386c23a6ef1c
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/9db99661f47076e65044c1e19ae1e4d1e77cb1f8
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
-
-Fix GHSA-vvf4-9x63-8xvv: parsing a WKS record with an out-of-range
-service number could consume excessive memory and CPU.
-
-https://github.com/rthalley/dnspython/security/advisories/GHSA-vvf4-9x63-8xvv
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-dnspython/python-dnspython.hash | 4 ++--
- package/python-dnspython/python-dnspython.mk   | 4 ++--
+ package/python-gpiod/python-gpiod.hash | 4 ++--
+ package/python-gpiod/python-gpiod.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-dnspython/python-dnspython.hash b/package/python-dnspython/python-dnspython.hash
-index b5ed1a16a6..b3fd964fad 100644
---- a/package/python-dnspython/python-dnspython.hash
-+++ b/package/python-dnspython/python-dnspython.hash
+diff --git a/package/python-gpiod/python-gpiod.hash b/package/python-gpiod/python-gpiod.hash
+index a94bbaffaf..6c49833dc5 100644
+--- a/package/python-gpiod/python-gpiod.hash
++++ b/package/python-gpiod/python-gpiod.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/dnspython/json
--md5  264d7e3c65df17a3a23c52b64fae6c76  dnspython-2.9.1.tar.gz
--sha256  9a6d30e55f8dc63e6052597666112bff0586b95a2474a9deda03afbbf820d37a  dnspython-2.9.1.tar.gz
-+md5  7b46ef88a095ea615709c6bbb62c34e3  dnspython-2.9.2.tar.gz
-+sha256  8d4d39a513e649d634004ce4d39ade2352efcea472a0247535a5c2d18a9d7ba9  dnspython-2.9.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/gpiod/json
+-md5  b9df2fa69d4d7a77b0d5c70ff157a6c9  gpiod-2.5.0.tar.gz
+-sha256  53ae5a1f14d6388c155b591ca0fc0cfa73b44d4f6d8d117e8a9e68f5902d187a  gpiod-2.5.0.tar.gz
++md5  f5fda3d5ff274a9a16bc6db89202a9a5  gpiod-2.6.0.tar.gz
++sha256  1076f0384c63fdb9e4438508c511378c57b4236c6b43b65ad609d0dafdfcfd7d  gpiod-2.6.0.tar.gz
  # Locally computed sha256 checksums
- sha256  c3ea3ff5654b329c19d3bc5f7481af623c3dded4a6145585499f843ad3d741cd  LICENSE
-diff --git a/package/python-dnspython/python-dnspython.mk b/package/python-dnspython/python-dnspython.mk
-index 404676275a..2faaed0898 100644
---- a/package/python-dnspython/python-dnspython.mk
-+++ b/package/python-dnspython/python-dnspython.mk
+ sha256  592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  LICENSE
+diff --git a/package/python-gpiod/python-gpiod.mk b/package/python-gpiod/python-gpiod.mk
+index 592107111d..b86c29cda0 100644
+--- a/package/python-gpiod/python-gpiod.mk
++++ b/package/python-gpiod/python-gpiod.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DNSPYTHON_VERSION = 2.9.1
-+PYTHON_DNSPYTHON_VERSION = 2.9.2
- PYTHON_DNSPYTHON_SOURCE = dnspython-$(PYTHON_DNSPYTHON_VERSION).tar.gz
--PYTHON_DNSPYTHON_SITE = https://files.pythonhosted.org/packages/91/21/7fcd6780f61e9756aafaea760560509bb4111375daa2e23c1be7a89f33f1
-+PYTHON_DNSPYTHON_SITE = https://files.pythonhosted.org/packages/76/49/900383b471c645a3c397f47b3211d1fcecb3a540c98f683494cdf86b33de
- PYTHON_DNSPYTHON_LICENSE = ISC
- PYTHON_DNSPYTHON_LICENSE_FILES = LICENSE
- PYTHON_DNSPYTHON_SETUP_TYPE = pep517
+-PYTHON_GPIOD_VERSION = 2.5.0
++PYTHON_GPIOD_VERSION = 2.6.0
+ PYTHON_GPIOD_SOURCE = gpiod-$(PYTHON_GPIOD_VERSION).tar.gz
+-PYTHON_GPIOD_SITE = https://files.pythonhosted.org/packages/fc/c2/c7bc26965855f39ae3e1b09b404a1fdc3b172dac371012c316f5b9b6a314
++PYTHON_GPIOD_SITE = https://files.pythonhosted.org/packages/ae/09/caeafe129570269e85f93f429ac5eb7e15c513b2b788996ee68c640c3fd6
+ PYTHON_GPIOD_SETUP_TYPE = setuptools
+ PYTHON_GPIOD_LICENSE = LGPL-2.1+
+ PYTHON_GPIOD_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
