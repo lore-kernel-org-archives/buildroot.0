@@ -1,86 +1,86 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA994606A326
-	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 17:28:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1466F606A326
+	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 17:29:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=pN7rlKFF
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=s9nvV8j1
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 96E89407CD;
-	Fri,  6 Nov 2026 17:28:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E60AE8128A;
+	Fri,  6 Nov 2026 17:28:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p5VJ79TJvllP; Fri,  6 Nov 2026 17:28:57 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 98E0C40806
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793986137;
-	b=mCj1J9ewsv2kWheU/EUypPeGfkjiU6/70yuSRMHQWc6KH9RISvKFjDDE+EFyXM1mEKRe
-	 1yxr8BxlI3MoYFX0AVO7yz/e3jYkHyM5L4GTzYBUtWLTpiZ3KCVdtFx+v9thd4z0WXIK8
-	 VBY9qGFbLGjFWRTIUmKILbc//DfzUwPz+KqOh+uthzYcEucBDLB7xCipEEZvx085bjWvZ
-	 nBU68/iF5wzPl33vk4SY4dOAk5Ie8VxUMk0Cu4KuWu2rw0xH2lVWFdct6nlJP1b9ggnJN
-	 ga2vN1ptkTWgXcD/fY/LPoNi8XYBR6sX695sH7Fci73rttyqD6BS5i69ofSytRq2+Rw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1WaeDKmMuXOT; Fri,  6 Nov 2026 17:28:59 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 205618128D
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793986139;
+	b=Kfl2pgAuJdwAFOaXmam0W8CAr9kBXlCGx0131wmOedFue2lZUua2se7VGoR6k9Dqp9Mw
+	 w9BBGymeDspb0yas6xlee6I0jlJT2i/fZC44LVHzRU58+hTASRuxNmdw1Ht0qzSP++Tn9
+	 ccibqvFeonIZgduiQ5/v3MPlKvxaLfNO4PMaNfaJIq05/+k4lSQq+8VTLa7VO7RRfbOGS
+	 h8iRle/k78mFk1beQoUeDNjS2g1P3TSMbR70kcNDhukP16tJhfBiwoIVgrAvB72rb8l3L
+	 1fVqo/FoWOICVW7QPWXAw0uxnjjjJ/P9z3Na1AydLsmLI5LQobSsOZ1oCrYcRcj3v7g==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793986137;
+	c=relaxed/relaxed; t=1793986139;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
 	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
-	 Sender;
-	bh=hTdRaKnkq5mcmuDgiRB8/ODvhHVy8uRiFWQSdQXEGZU=;
-	b=c2dqG+puX4hmpsjwYjR8DEZnnssYO+e3tAKS9+j+V7TnmB602nqswczT8Fo6Fq/dnfDI
-	 EZ/rSDXD+z8zJH+ANR57/5/E3u4yn4UQQv5Cb+ifyYMSaZGLW2trfTvS8BnspFF/I7Hoe
-	 flDV3Rv1JnSwzAMpoxRXwNXBtCL8YzVSmxsUviFwSXaYlVHQ1ZK2r713scqldinCLmWos
-	 RYHMnJkclojtUG0Jo2wM26RpvXqte9/iM4onuMu9EZfPn86wj+WZqaxjM5FAACV9/ks1a
-	 g5qik3qeyC/iZcwN0FFv+S/QSeDnAW7AkuYUaMXKlbr7kskVo2tuXgoAYL0jdWDB/Kg==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=U4HEHeHMyPRF/+z4+BNj/1G8971Jcw8csb66MdEJV6w=;
+	b=Dt70JbOlBTHMWTE+tPzWBu1+QFytL4r6ZWPC2YL8JFJ8ptPki49x1VgRVM4MtGie7VFF
+	 XzkGInjGIg7/ob85NVqO+O3iEEEJ/d2yH9PbAkZCJBaG3BztFFFSAos8awOEZ6P4SbKYA
+	 yWjnbPuCRiYkiiR/hwczZr090AIwkvWDBCGYOTOxbdfpaKSGzm1XryHby8BKiDmdWdxhn
+	 XkFzAAljFq5XTGrHPFaC7NTjJLzudGhBNeQBBzqawC2ZQ7A0yaszHZFQKX4h7DIvCzGMt
+	 YFpsaBvibBene8qZWyOyWFg8pgoy98tCY5rg9I3/7LW7uQpCq41G+ipl0ECJYYfGpYQ==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793986137;
-	bh=hTdRaKnkq5mcmuDgiRB8/ODvhHVy8uRiFWQSdQXEGZU=;
+	s=default; t=1793986139;
+	bh=U4HEHeHMyPRF/+z4+BNj/1G8971Jcw8csb66MdEJV6w=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=pN7rlKFFfmc2Fz17B6N7ZFRgv2O4Nry/M5iUk2PUXFmljlvlQffFSGbc9y1YXQHnG
-	 77k9+uLqpkGq2WV9pmT8rjgmygUD5/klqnrVCvlQ5iigC01I0cBFqg3iunIbaCA9pR
-	 g3cctY1KTtLspA6s5IsAoN0UpscL5o4x8Fa8JykZB8Jt7RjqIe3R4og8W9bZTOA92/
-	 cIlB851utctJlkTNZleDvjrHmHyNvHfgXDHmTpUlciWeC39mnlEFvTMZInTde7MNbu
-	 Td2DA2avGJ0G+xlCL2R8EMnRQ3okCo+re+bxoEDKro+BWAGcdd78231OWa3/p967U7
-	 K4P4oJMKWTP3Q==
+	b=s9nvV8j1HwXZVMa9AltOvrek3+LuexVxHBvW4sPkmoEGrDfnM8Jhe2Pt2R+6cQwJD
+	 hMem/yZPZX9uqRJzzAAnK0GJ4ZT/zFis12u4A3jJHhjrCamFRgMVxQsf9AJOe6fDXC
+	 Tuxhsf/JHcb8lIVZovTzYZwI5kioqF4UmASjr8Xgc0KwDDsJqGaQu/uAd82JZ1vORZ
+	 mwYvhU+8MIz7yuTah5nJ1P3CRNhFhQTzzjAl4vj++bCLwz/dqRGuUT61IrtOvl1aQu
+	 2edpiWdlheD+GPGfoda4nt9Qs8KyMaW2OLJUVlmijJH/DVdigQd5MoQj8PL8FS4N8k
+	 /N7+KRu2rERdA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 98E0C40806;
-	Fri,  6 Nov 2026 17:28:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1CD4F32A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 205618128D;
+	Fri,  6 Nov 2026 17:28:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6251732A
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 17:28:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 02C9A40806
+ by smtp3.osuosl.org (Postfix) with ESMTP id 487466073B
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 17:28:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h86xLG98tPJW for <buildroot@buildroot.org>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id s1LK8ppgMnvu for <buildroot@buildroot.org>;
  Fri,  6 Nov 2026 17:28:55 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 35187407CD
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 44B23606EB
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 35187407CD
+ by smtp3.osuosl.org (Postfix) with ESMTP id 44B23606EB
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 17:28:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5527E9E0B2; Fri,  6 Nov 2026 17:27:23 +0000 (UTC)
+ id 618179E0B4; Fri,  6 Nov 2026 17:27:23 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 6 Nov 2026 18:27:39 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9362e608cfcb8e045c4b02c40b859614f93330a7
-X-Git-Newrev: 89623a47f07167c2b34c595af7924c0004434e2c
+X-Git-Oldrev: 89623a47f07167c2b34c595af7924c0004434e2c
+X-Git-Newrev: f37bf98264c6a448e937c8ba7571a9cb72964ef9
 X-Patchwork-Hint: ignore
-Message-Id: <20261106172723.5527E9E0B2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/openocd: fix build with jimtcl 0.84
+Message-Id: <20261106172723.618179E0B4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/jimtcl: bump to version 0.84
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -94,118 +94,53 @@ From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2972343043985216534=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-20.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_PASS autolearn=ham autolearn_force=no
-	version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============2972343043985216534==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/89623a47f07167c2b34c595af7924c0004434e2c
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f37bf98264c6a448e937c8ba7571a9cb72964ef9
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
-jimtcl 0.84 replaced the isproc member of Jim_Cmd with a flags field,
-so openocd 0.12.0 fails to build against it:
-
-src/helper/command.c:51:19: error: 'Jim_Cmd' has no member named 'isproc'
-
-Backport the upstream fix, which checks JIM_CMD_ISPROC at compile time
-and thus also keeps working with jimtcl 0.83. Its context had to be
-refreshed for 0.12.0.
+Release notes:
+https://msteveb.github.io/jimtcl/articles/jim-release-0-84/
 
 Assisted-by: Claude:claude-opus-5-5
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...imtcl-fix-build-with-jimtcl-master-branch.patch | 64 ++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
+ package/jimtcl/jimtcl.hash | 2 +-
+ package/jimtcl/jimtcl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/openocd/0005-jimtcl-fix-build-with-jimtcl-master-branch.patch b/package/openocd/0005-jimtcl-fix-build-with-jimtcl-master-branch.patch
-new file mode 100644
-index 0000000000..4b0c9d8da5
---- /dev/null
-+++ b/package/openocd/0005-jimtcl-fix-build-with-jimtcl-master-branch.patch
-@@ -0,0 +1,64 @@
-+From fe0080478b9e76a4b6b64186b7b705726ac55848 Mon Sep 17 00:00:00 2001
-+From: Antonio Borneo <borneo.antonio@gmail.com>
-+Date: Sat, 28 Sep 2024 17:58:51 +0200
-+Subject: [PATCH] jimtcl: fix build with jimtcl master branch
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Current jimtcl release 0.83 has been tagged on 2024-08-28 and the
-+new 0.84 is on the way.
-+
-+The change [1] merged in jimtcl branch 'master' for 0.84 breaks
-+the build of OpenOCD.
-+OpenOCD releases are not frequent and jimtcl is now by default an
-+external build dependency. The release of jimtcl 0.84 could force
-+OpenOCD to deliver a fix release to support it.
-+
-+Anticipate the change [1] by detecting it at compile time, without
-+relying on jimtcl version, and providing an alternative code.
-+
-+Link: https://github.com/msteveb/jimtcl/commit/5669e84aad22 [1]
-+Change-Id: I61bf100d447083258aea222aaf15608b7cbe2e57
-+Signed-off-by: Antonio Borneo <borneo.antonio@gmail.com>
-+Reviewed-on: https://review.openocd.org/c/openocd/+/8956
-+Tested-by: jenkins
-+Reviewed-by: Andrzej Sierżęga <asier70@gmail.com>
-+
-+Upstream: https://github.com/openocd-org/openocd/commit/fe0080478b9e76a4b6b64186b7b705726ac55848
-+
-+[Yegor: refresh context for 0.12.0]
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+---
-+ src/helper/command.c | 9 +++++++--
-+ 1 file changed, 7 insertions(+), 2 deletions(-)
-+
-+diff --git a/src/helper/command.c b/src/helper/command.c
-+index ca66cf7..31964d5 100644
-+--- a/src/helper/command.c
-++++ b/src/helper/command.c
-+@@ -48,17 +48,22 @@ static int help_del_command(struct command_context *cmd_ctx, const char *cmd_nam
-+ /* set of functions to wrap jimtcl internal data */
-+ static inline bool jimcmd_is_proc(Jim_Cmd *cmd)
-+ {
-++#if defined(JIM_CMD_ISPROC)
-++	// JIM_VERSION >= 84
-++	return cmd->flags & JIM_CMD_ISPROC;
-++#else
-+ 	return cmd->isproc;
-++#endif
-+ }
-+ 
-+ bool jimcmd_is_oocd_command(Jim_Cmd *cmd)
-+ {
-+-	return !cmd->isproc && cmd->u.native.cmdProc == jim_command_dispatch;
-++	return !jimcmd_is_proc(cmd) && cmd->u.native.cmdProc == jim_command_dispatch;
-+ }
-+ 
-+ void *jimcmd_privdata(Jim_Cmd *cmd)
-+ {
-+-	return cmd->isproc ? NULL : cmd->u.native.privData;
-++	return jimcmd_is_proc(cmd) ? NULL : cmd->u.native.privData;
-+ }
-+ 
-+ static void tcl_output(void *privData, const char *file, unsigned line,
-
---===============2972343043985216534==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/jimtcl/jimtcl.hash b/package/jimtcl/jimtcl.hash
+index 906d2ccc23..16655ad85e 100644
+--- a/package/jimtcl/jimtcl.hash
++++ b/package/jimtcl/jimtcl.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  6f2df00009f5ac4ad654c1ae1d2f8ed18191de38d1f5a88a54ea99cc16936686  jimtcl-0.83.tar.gz
++sha256  435095b436b38b96dd85e8cda13878144813bf52066057f76368db178dd8fea2  jimtcl-0.84.tar.gz
+ sha256  419f1146334e57fb258d6c957d1f94d43455ec0d24b1b54c4447e5f61a353950  LICENSE
+diff --git a/package/jimtcl/jimtcl.mk b/package/jimtcl/jimtcl.mk
+index e81b2a250d..283cc0f4be 100644
+--- a/package/jimtcl/jimtcl.mk
++++ b/package/jimtcl/jimtcl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-JIMTCL_VERSION = 0.83
++JIMTCL_VERSION = 0.84
+ JIMTCL_SITE = $(call github,msteveb,jimtcl,$(JIMTCL_VERSION))
+ JIMTCL_INSTALL_STAGING = YES
+ JIMTCL_LICENSE = BSD-2-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2972343043985216534==--
