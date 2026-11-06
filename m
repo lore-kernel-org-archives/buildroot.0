@@ -1,28 +1,28 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3940E606A326
-	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 16:10:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90F80606A326
+	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 16:10:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=rBHYPEdm
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=kEnCUKCf
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 162F081BB2;
-	Fri,  6 Nov 2026 16:10:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5448360A59;
+	Fri,  6 Nov 2026 16:10:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v3OJ60lqPn2W; Fri,  6 Nov 2026 16:09:59 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 6EA5081B83
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793981399;
-	b=Lxd3OP/ttcsXx+j/uFCVLioc0syS29zVROKlDms69Lz67+Oc0YMhmUdhbJD3syrCJ2QL
-	 vDh59pBtr9dQkeG0Jbg6Er3eqthlReMUFjJFRER4jmJxzKAOU6SqDCfsnjOlHmXYu5JDI
-	 FAygcnn7xWC2fAdOIR5SvG7aEZ4g28H17rnkDe2lFWUSwucMg3+n8w5/GYLQSs5Pu8t5M
-	 DfGOEP92/xK2l7QKXblMvWG/s9+VS27JIdHUm3IesOLeNndfZ1Q1w6qwqmyYy9hw7oDOl
-	 87eRxjo+6EQl9IKOUglp1UU7HtOwtuAh/fOCyFvhARYfR/ttmwIzywgN5boERfzyjdg==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id s5WoYb9bdwQJ; Fri,  6 Nov 2026 16:10:02 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 41FBF608F3
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793981402;
+	b=bBvkIww1rslBFlgMUY9D51+ItoJGP3fe47ljYfZ33Mu31LtjF+re1+TyU0D38T/k0rdr
+	 70pT6x9gRtm6Mlpnw4cs1a/bN59yvFDZXADGB6Ysf3ppN4+ui/T9qugJLR2MRlGCF/q4/
+	 RWU524h7VMbcpzDVialVcmukC8A/2jFvcHl3PMXx3fvpk2QdhZZZFFcLHTqyvhICPENcs
+	 fcKucDNqYDUTHa35NF/JPSxikszdNEbXgYEPpnTcgcRYos2VoqpdvRuuY7safJBN5RTII
+	 PI49j+JFZrEAt6+mZJS97oPmzVJW1xNj7EWaARKTT/fPwrG+HlryCHp9pzum2KaugJg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793981399;
+	c=relaxed/relaxed; t=1793981402;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,95 +31,95 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=w3wCWFfRnDjpbbr1omjn9/CA/4e3PrD1Wh4p5RozH2Y=;
-	b=SJv6FA/c5l5eUylJRW1Bs7Oo45ng0FXRfz5X1hw/50dCAGsgyIN0tnw5Fg6BL6kBDxTR
-	 4naRMoMTdqGymYTtsFtFnZrp1Y+NEu5nLR9/EHEzBoojNyVhwZATuv567DFJBb8wA1XRB
-	 afGfovfsu5d6h+1LbDLjQdh+6KpWsqBjD4/pJJzK9E9/Yiy4brKmDa0450f58BabOvx+X
-	 7/haXFJediUr9q9rZDJEnF/ZqE05iVMw4oM31Xl1quitCtTwYiJXBzUVIwlMtQwFke/aE
-	 hdXKnvF0R9EnReBlhyZwrnD0ZIdmCH7kED5+GHzTFm0nrut4t0alh/NIWv5HOG8mKkQ==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+	bh=93e0Wzbi5XBmj5rw+znd8JHnC9JX4FH7IwC430slF64=;
+	b=SHu4Xem3hKlH4Wuem7wqVLTsiTPcbk8FCpnxo45zaZ9N5zFdcOSDLq6F/aXQfm3Uk4Bd
+	 8u1HzZSMTPIIWAqRHbmFIU+Y3axgCDQ8GVMZPepdInnB30abTLKtpdgUPgNF0l9T82S/X
+	 6LPT3mmP+FJHLA+f0BJ2MkAfMr6LLzQXYzlfiyPeiGY95TEWDAXlp06OTtTgzwFXfijZn
+	 2fp8aeONRxC2QClVWhyRtz83bW6aqDjNf50kY+5yxoVyCDLoaP0D/f04/vCyOsJ7mQGta
+	 r68w/Exs34rtRTvaLgXLOQ0yXQZZ0Sd8b+mggNAl4ImQAytBvhqoFWDxyia9eCdWf7w==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793981399;
-	bh=w3wCWFfRnDjpbbr1omjn9/CA/4e3PrD1Wh4p5RozH2Y=;
+	s=default; t=1793981402;
+	bh=93e0Wzbi5XBmj5rw+znd8JHnC9JX4FH7IwC430slF64=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=rBHYPEdm0qodp5qYfMYgxHKzNtR99IuREuOwb29KIMWhwEKpCyZRh/U41lVxMaM5Y
-	 ogJr3OFmRqBgExYfjnpon3rHOfCdBupWzYqzaIaDKdtPo+EoOvWYMzwr+6JJZGNWf3
-	 KzpmG0B9ydOCU16kR/jJPSObxnzBTZb6eFcMRGNdD120xani3KNMP0sRpXeqhxpI1X
-	 qExdXg+oSjrtgIzZ3sagG+ybudQx/DJ1OnCDE6w/owdO8Zv/EOCbgY0xT0g03Fp0ks
-	 EtfXYUU3AdAEtrkqdijMVb1ZfslNFm7A6OE7YUJfQLjU5LSL6Nl4fyOjkOvAyx9IBq
-	 PBZYt0HLh20Uw==
+	b=kEnCUKCfWyGx9HLkiePT3UKniZUx6XPCFX7E1NLxFsoaUWTeL/1AwmpfqliJRTZZ4
+	 QeshGnwpmoznEBGJMrIO2+lHwvkkeovK+aq29M+Nu8X5e6suQHIuhYuHYG9jgbMfK/
+	 grotzQOPeGFSlSRrn07dC7rFtudzdlRIngrTjho3mTqTqlalfJk57k2pVMLpmekibu
+	 JD8CDbX0X14GutmNnLqwbOXWrnpIr9pCqfQKlZ4kcQjbvVIcD9j70RUYKk+GOCAaSo
+	 UXUiLv4/IlDSCnEt2IlX5hk3VGFY/ZDxSzvCSTpROM+On+T+3wNHuIkd7EympzLB7N
+	 ggKqNcs2/M4SQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6EA5081B83;
-	Fri,  6 Nov 2026 16:09:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 7977C4B8
- for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:09:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 41FBF608F3;
+	Fri,  6 Nov 2026 16:10:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 18F952E5
+ for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:09:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5FCC660A81
- for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:09:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 16127403CB
+ for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:09:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id stGdQH5bZidn for <buildroot@buildroot.org>;
- Fri,  6 Nov 2026 16:09:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 1D50F608F2
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5bd4GhiRoOVE for <buildroot@buildroot.org>;
+ Fri,  6 Nov 2026 16:09:48 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org D8F99400AF
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1D50F608F2
- for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:09:40 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-48e47347279so496290f8f.1
- for <buildroot@buildroot.org>; Fri, 06 Nov 2026 08:09:40 -0800 (PST)
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D8F99400AF
+ for <buildroot@buildroot.org>; Fri,  6 Nov 2026 16:09:47 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-4a2153c8525so6396655e9.3
+ for <buildroot@buildroot.org>; Fri, 06 Nov 2026 08:09:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1793981379; x=1794586179;
+ d=1e100.net; s=20260707; t=1793981386; x=1794586186;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=N3yaQgmMRV4m1gIB5o7Rx89zy58lhe3EbcMLTjUKLMc=;
- b=G2ew6QwvuKmEFOwjQ8uevNuYEnAkXp0LjV/qeBttcJzjdAh+Fap5MAg9wNuElC1VWQ
- u5h5UX3DbonKmYyQoVsTsGsTpsG0FrAiwl/l8HueYmt9wBZXzPkvAln3HpqVsX8qx0d+
- oooi4UmBIZejjCob9+NpK/d2IkpmSYZTP63J8lUV0JgHRGC55q9w3WzHitvLDOMfwBxg
- hFPuJ+nw0WrcpxXjFvLngoUcBIUVNOuGpE3+ftUxZMagQ5l26beJuT3VAmksszmEH2/T
- qQ4m0pF7yUlFbTXLe8qJgpo8RWLVcabe60xH54umfoWQU1CzGYgGFb0W+RkJAPTsR5Pt
- F62w==
-X-Gm-Message-State: APuU4Z+y9rmXiHXniPOiomWDtsGADOdrUeeJ6zpVai2uEbLYa5KJLu/T
- 4gneB7q6f3RYM0UbytnouKZt2UQvUHJjxKvgEtDmLYqHauZbAAzBf5nVZmR6+So+onREl8MGzux
- pWuKzL/k=
-X-Gm-Gg: AYBFou35nPPdV94gdeDX7vTB5ilVW0dvMHfVntxfx7HlYSGlgcViuPedn92V4aDK1eP
- kZhpswsLpSfaMI5c27RBvJky0fW+ZvIh5IEtstQoZ5viGpfC+5z5t2xPcs09gjBjTr8F1a/cfXD
- U+sWydT3m/WqdirR2lndv1w+mEW1yyu8Wg3v6pz1oqERDlcq1SHrz7wF1k4i5fF6nJVY7gFG0vX
- uFpXy81abzzC0LpzgGgikBeHr/XkqAQAWh7xq3junHQXamnVcGLjCQ8Y32luw96G5nfpSvm8QNK
- Wi3LJv1Ux1kz0XnNQeaPw8TzH9IV+cQq+Rc//nTDkQ7lcU/eGEE40rw2IJoOy9bHIKLDePnB1c4
- 796cEoSzWPOY+lJgzI2TbehiqpR6Nm06UYT/45X5Gv+8dL6x8ev30HjRwUm8vA5sAP7BhMJtdCZ
- LacMwGY0XOzUY8mkmBKTTwrWdHNbhRPTsP/wSsS9G4Q38X4esfr86+lpvIsVY6WHB1C/vBKqCoH
- oYOOAVMddaqVIi5wc/xS8uPvFBlT+pCEv1/793QdTFa7ktXqVusZ+2+IlztKA+7uqB12JJH80sw
- hUnDTAUAIglLnT9+YHbdcccvHodYn832skRa4pEQOJ4vJr5JzLEuKg==
-X-Received: by 2002:a05:600c:1910:b0:4a1:7e76:d02f with SMTP id
- 5b1f17b1804b1-4b6de4a6b88mr51242185e9.14.1793981378690; 
- Fri, 06 Nov 2026 08:09:38 -0800 (PST)
+ bh=Z1ie/9flNtBh/sdrGs6y1JSk9Te/qAwbq6J8zRSG6ss=;
+ b=KKrRn+7zSot5wBPeOE/kPFdDLijfVMyJARgwGBIyWNZ1RuncxTIFykq5pge45qf5Cz
+ rnmkygL2oySGAFRbcz9uU3PsskKMlGTYSlV5ptCT/KGnCbHBbQoFSr0XaJHYafqd5GXq
+ xFmicDtsVjswTFV4XBZ8g6CqNSolK8lrz4J1ADCpXcFswjVPCnD2qSGDXe/4B5TmLffO
+ 9VV4snDtGfyH173Z4tXo1Qb0MTV+caoP7dwEr8JyNnaq2tOljOkvsyDrSQujldRISxYo
+ Pm13umokD3gowwvn0TQFwGCOh0GM77Mi/7s+LoM2IZBbCUjI9j//YRleLjxlyq/0pXrA
+ DkhA==
+X-Gm-Message-State: APuU4Z/RGfv39u+n/qd4l9BpoCqPvst15asGwHjEUcBiLmKBc6HZvljp
+ uZBTYgg0CCbkCGoltsLv9C7UrI9axHrA8Ogqv3e8NmA11vcfpCpPHOj+KDRub/JCYs7yr9L9lMN
+ e1Af0qF0=
+X-Gm-Gg: AYBFou0ZD1l23beMDXkrYEX6Ppb9qHl9aNJ53TKAjjTxfo5VaIcMZrR0hoQU2ppMzqH
+ f3+A7YA7YaOFArMO8yoWutvfYO1NVGotdrd2/D/qFDSlF4LAtp7z3AaYqzCgLeyt4LtzDBmrNuN
+ 2ySVFbY5i/hMsYx99dCEWkapsMI0vi7R7QiFZIenAjMvDg2+X4zrsgHuoJ8OCckUsGAjVV0gCDq
+ RFt1xia2ZzK4nHNysl7OUfwXrDvYP5ZOw5D6ohlgb8/Lm6zgOBc5NuKPrrMPZDKuPRN0noXQLZE
+ zaUVCFYfv1s7hbx9NHoNGgOyCQuiKuooK90X3Wn+1kJuiS6fE04kIkuWJwwlxXoCaIORjRQfJXX
+ fvtFMuajmNViFIlUAWZMXWo4SOdHamfPIIA65/B3EaxePO/y6Bn1djN1/6noU60mtWNMx3nDKlF
+ 5M2BjfPVMt2vg5uWVg2Vw0XD9pKfjjiIrPnZ1W2rPz/JQdkXSqEcMFOduWGz+xtvf71A/lnLmNT
+ ybEaK+clpLlTm6mh0stZRUoZx618gK1DsoW+beB+KVNDsLHNm3ugBs6x7uvYA9P5Q8OBEjfKAyf
+ s4aoJaEtmb07AqbdHdXoyPLySq2ypho=
+X-Received: by 2002:a05:600c:4e8f:b0:4b6:540d:6317 with SMTP id
+ 5b1f17b1804b1-4b6df3fd1cfmr53010435e9.12.1793981385782; 
+ Fri, 06 Nov 2026 08:09:45 -0800 (PST)
 Received: from debian-hp-1 ([212.233.51.18]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4b6e168f35bsm72477555e9.4.2026.11.06.08.09.37
+ 5b1f17b1804b1-4b571f46538sm142069695e9.5.2026.11.06.08.09.45
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Nov 2026 08:09:38 -0800 (PST)
+ Fri, 06 Nov 2026 08:09:45 -0800 (PST)
 To: buildroot@buildroot.org,
-	Bernd Kuhls <bernd@kuhls.net>
+	Yegor Yefremov <yegorslists@googlemail.com>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri,  6 Nov 2026 17:09:35 +0100
-Message-ID: <20261106160937.607250-1-raphael.melotte@mind.be>
+Date: Fri,  6 Nov 2026 17:09:42 +0100
+Message-ID: <20261106160944.607316-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261027054034.4556-2-bernd@kuhls.net>
+In-Reply-To: <20261027081659.3905442-1-yegorslists@googlemail.com>
 References: 
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2 1/6] package/docker-engine: Fix go module
- version information
+Subject: Re: [Buildroot] [PATCH] package/libwebsockets: fix OpenSSL
+ detection without libatomic
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -135,71 +135,121 @@ Reply-To: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
 In reply of:
-> When using Docker engine built by Buildroot, the BuildKit version
-> information appears as "v0.0.0+unknown" instead of the actual version
-> (e.g., "v0.22.0").
+> Since version 4.5.3, libwebsockets adds -latomic to the libraries used
+> by its OpenSSL API probes whenever 64-bit atomics don't work out of the
+> box, without checking that libatomic is available. Buildroot toolchains
+> without thread support don't provide libatomic, so on a CPU without
+> native 64-bit atomics (e.g. ARMv5) all probes fail to link:
 > 
-> This occurs because Buildroot's build process doesn't preserve Go module
-> version information that Docker reads at runtime via debug.ReadBuildInfo()
-> (see builder/builder-next/worker/worker.go).
+>   ld: cannot find -latomic: No such file or directory
 > 
-> Docker's own build system (hack/make/.binary) uses "-mod=vendor
-> -modfile=vendor.mod" flags, which are crucial for preserving module
-> dependency information. Adding these flags makes the previous vendoring
-> workaround obsolete for modern Docker versions.
+> libwebsockets then assumes a pre-1.1 OpenSSL and fails to build:
 > 
-> Note: Use "docker buildx ls" to verify the BuildKit version. This requires
-> a Docker client with the buildx plugin installed.
+> -- Performing Test HAVE_WORKING_ATOMIC_64 - Failed
+> [...]
+> -- Looking for HMAC_CTX_new - not found
+> [...]
+> include/libwebsockets/lws-genhash.h:93:18: error: field 'ctx' has incomplete type
+>    93 |         HMAC_CTX ctx;
+>       |                  ^~~
 > 
-> Patch downloaded from
-> https://github.com/home-assistant/buildroot/commit/eb49dd0b3e7cbf00ec3849349251b9798a7d7f43
+> Add a patch, sent upstream, to only use libatomic if linking against it
+> makes the 64-bit atomics test pass.
 > 
-> Signed-off-by: Stefan Agner <stefan@agner.ch>
-> [Bernd: rebased]
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> This issue has been present since commit 20c3eb6eb684
+> ("package/libwebsockets: bump version to 4.5.7"), which bumped
+> libwebsockets from 4.4.1 to 4.5.7, the atomic check having been added
+> in 4.5.3. It therefore affects 2026.05 and later.
+> 
+> Fixes:
+> https://autobuild.buildroot.org/results/863c30265623973e15a25c2d38c0e1631a39b7e8
+> 
+> Fixes: 20c3eb6eb68432c37d5db69963be266b7f2d23f7 ("package/libwebsockets: bump version to 4.5.7")
+> Assisted-by: Claude:claude-opus-5-5
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
-Applied to 2025.02.x, 2026.08.x. Thanks
+Applied to 2026.08.x. Thanks
 
 > ---
->  package/docker-engine/docker-engine.mk | 10 +---------
->  1 file changed, 1 insertion(+), 9 deletions(-)
+>  ...ly-link-libatomic-if-it-is-available.patch | 61 +++++++++++++++++++
+>  1 file changed, 61 insertions(+)
+>  create mode 100644 package/libwebsockets/0001-cmake-openssl-only-link-libatomic-if-it-is-available.patch
 > 
-> diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-> index bf2dc588fb..5502284dc3 100644
-> --- a/package/docker-engine/docker-engine.mk
-> +++ b/package/docker-engine/docker-engine.mk
-> @@ -25,6 +25,7 @@ DOCKER_ENGINE_LDFLAGS = \
->  
->  DOCKER_ENGINE_TAGS = cgo exclude_graphdriver_zfs
->  DOCKER_ENGINE_BUILD_TARGETS = cmd/dockerd cmd/docker-proxy
-> +DOCKER_ENGINE_BUILD_OPTS += -mod=vendor -modfile=vendor.mod
->  
->  ifeq ($(BR2_PACKAGE_LIBAPPARMOR),y)
->  DOCKER_ENGINE_DEPENDENCIES += libapparmor
-> @@ -61,15 +62,6 @@ else
->  DOCKER_ENGINE_TAGS += exclude_graphdriver_vfs
->  endif
->  
-> -# create the go.mod file with language version go1.19
-> -# remove the conflicting vendor/modules.txt
-> -# https://github.com/moby/moby/issues/44618#issuecomment-1343565705
-> -define DOCKER_ENGINE_FIX_VENDORING
-> -	printf "module $(DOCKER_ENGINE_GOMOD)\n\ngo 1.19\n" > $(@D)/go.mod
-> -	rm -f $(@D)/vendor/modules.txt
-> -endef
-> -DOCKER_ENGINE_POST_EXTRACT_HOOKS += DOCKER_ENGINE_FIX_VENDORING
-> -
->  define DOCKER_ENGINE_INSTALL_INIT_SYSTEMD
->  	$(INSTALL) -D -m 0644 $(@D)/contrib/init/systemd/docker.service \
->  		$(TARGET_DIR)/usr/lib/systemd/system/docker.service
+> diff --git a/package/libwebsockets/0001-cmake-openssl-only-link-libatomic-if-it-is-available.patch b/package/libwebsockets/0001-cmake-openssl-only-link-libatomic-if-it-is-available.patch
+> new file mode 100644
+> index 0000000000..84724f9c50
+> --- /dev/null
+> +++ b/package/libwebsockets/0001-cmake-openssl-only-link-libatomic-if-it-is-available.patch
+> @@ -0,0 +1,61 @@
+> +From e0480a47e95a0d74c826926ae6bfef14fc8d988f Mon Sep 17 00:00:00 2001
+> +From: Yegor Yefremov <yegorslists@googlemail.com>
+> +Date: Tue, 27 Oct 2026 08:47:29 +0100
+> +Subject: [PATCH] cmake: openssl: only link libatomic if it is available
+> +
+> +Commit 09aade8c9 ("cmake: openssl: Added check for atomic library")
+> +adds -latomic to CMAKE_REQUIRED_LIBRARIES whenever 64-bit atomics
+> +don't work out of the box, without checking that libatomic exists.
+> +
+> +Some toolchains don't provide libatomic at all, e.g. GCC toolchains
+> +built without thread support, as libatomic relies on pthreads. On such
+> +a toolchain for a CPU without native 64-bit atomics (e.g. ARMv5), every
+> +OpenSSL API probe then fails to link:
+> +
+> +  ld: cannot find -latomic: No such file or directory
+> +
+> +so lws believes it deals with a pre-1.1 OpenSSL and the build fails:
+> +
+> +  include/libwebsockets/lws-genhash.h:93:18: error: field 'ctx' has incomplete type
+> +     93 |         HMAC_CTX ctx;
+> +        |                  ^~~
+> +
+> +Only use libatomic if linking against it makes the 64-bit atomics
+> +test pass.
+> +
+> +Assisted-by: Claude:claude-opus-5-5
+> +Upstream: sent to Andy Green <andy@warmcat.com> on 2026-10-27
+> +Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> +---
+> + lib/tls/CMakeLists.txt | 15 +++++++++++----
+> + 1 file changed, 11 insertions(+), 4 deletions(-)
+> +
+> +diff --git a/lib/tls/CMakeLists.txt b/lib/tls/CMakeLists.txt
+> +index d91c3dab6..9060d32fe 100644
+> +--- a/lib/tls/CMakeLists.txt
+> ++++ b/lib/tls/CMakeLists.txt
+> +@@ -564,10 +564,17 @@ if (DEFINED LIB_LIST)
+> + endif()
+> + if(UNIX AND (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID MATCHES "Clang"))
+> +   check_c_source_compiles("int main() { long long x = 0; __atomic_fetch_add(&x, 1, __ATOMIC_SEQ_CST); return 0; }" HAVE_WORKING_ATOMIC_64)
+> +-  if(HAVE_WORKING_ATOMIC_64)
+> +-    set(LWS_ATOMIC_LIB "")
+> +-  else()
+> +-    set(LWS_ATOMIC_LIB atomic)
+> ++  set(LWS_ATOMIC_LIB "")
+> ++  if(NOT HAVE_WORKING_ATOMIC_64)
+> ++    # libatomic is not always available (eg, toolchains without threads),
+> ++    # only use it if it actually provides the 64-bit atomics
+> ++    set(CMAKE_REQUIRED_LIBRARIES_SAVE ${CMAKE_REQUIRED_LIBRARIES})
+> ++    set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES} atomic)
+> ++    check_c_source_compiles("int main() { long long x = 0; __atomic_fetch_add(&x, 1, __ATOMIC_SEQ_CST); return 0; }" HAVE_WORKING_ATOMIC_64_WITH_LIBATOMIC)
+> ++    set(CMAKE_REQUIRED_LIBRARIES ${CMAKE_REQUIRED_LIBRARIES_SAVE})
+> ++    if(HAVE_WORKING_ATOMIC_64_WITH_LIBATOMIC)
+> ++      set(LWS_ATOMIC_LIB atomic)
+> ++    endif()
+> +   endif()
+> + endif()
+> + if (UNIX AND NOT (${CMAKE_SYSTEM_NAME} MATCHES "QNX"))
+> +-- 
+> +2.34.1
+> +
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
