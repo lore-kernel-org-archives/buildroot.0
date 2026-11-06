@@ -1,28 +1,28 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93215606A326
-	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 21:14:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D197E606A326
+	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 21:14:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=YaSGj5Fz
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=L/n9Xaag
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6E94B8137E;
-	Fri,  6 Nov 2026 21:14:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 989B860A5B;
+	Fri,  6 Nov 2026 21:14:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MNRvMZRhLu1S; Fri,  6 Nov 2026 21:14:42 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 9FF58812E1
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793999682;
-	b=Xwod5rnAMilc4foSu1XVIc6iXxTDrzzSwXPD5+3lev6sCxLce0dMvxVLnj0vFYUmLX2W
-	 t1W79koOPYYyffWLpBTgx4Yh1HUionQHyURqzdSUDoO5PqVOiCEoyDILw6emikMVr2hPm
-	 /AKxvlwTWO0jfQkm8gd0W1gs2FQHyiSfHmUYVjjug4Ud9KFlR0VtA8TGoT0nI2P4kbhXG
-	 RgQ/o2uVEFlDCJhliEKNBFdm0tCxpPdM4AyyMqwZM/L6ghfYb2feQY4P8Rt+rKt81n+Ed
-	 nT9oS/hs7RTbh91IeWD//qZzXbh8YdkLynIeAvWYiaUU06UOcgc+jy/q68k0wViASlQ==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YCDXFnr2YjmA; Fri,  6 Nov 2026 21:14:44 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 11C0F608E6
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793999684;
+	b=n1M+icWwsrpjK1a+XLruXe2lJ8heH0x2j7HWqWplZROiTr/fpkqjmhjpra4CPWfEEsUd
+	 FBl/qc8Nnm4BFnAvho8erBM6VypqBcSQbWXk6hlGpE3VxG1eabQw3iRZhQEL0LdVTMuM8
+	 c9mCoowXD+V52GfNDag89pzPJdvBxouYxkIESSVcESz5gSP2Q8XWJ2RezPlMZryp7nrL9
+	 Vj3vg2YL3KWh38YcVuacvhTESc658DcPIjxprh8Qwq7Gt3j/QDXuOSWutfsiSEmQ00MFB
+	 IK38XpwzZ9mF8GL2odQQd4PHxpR2x1okWgidonY6qlW8PrsN39K43AgBqfoQbE8HnGw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793999682;
+	c=relaxed/relaxed; t=1793999684;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,58 +30,58 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=rZKZYXLjzNcuKBW9huTxZXSaghPyaR5SYB9xQ0FdB1A=;
-	b=i5dKK75nez10LrGRN0mmEyXkBuQxv6W3yVFgMtvHaYBqsJ7t5VIgGuSbDyLPuO2exUHa
-	 bZPxsHhetFrhMp37mZZdzbel+3FU//XBpm1zK8E31Cofb9qz88kcr+InFyBAjAlCSal/J
-	 auD2Fo2IRyRKwcnAZiK7h4+Um3ou+U0TbmExQrIMuqVY2G3syDyYoAffvgNu9P71L/rhq
-	 lJPEBFCOSZucKS0ehIC3/Z/uO7uLJ12kq8K3XiBgVk5vBQpC0ARlwTksIFv8GG6OnSwQ8
-	 qAkD4oT3daNDCd/vgSXRQ4NaOh24J4qokWyUi+2yxJfkbBML0zjkeZhTTG0xZxKh67A==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+	bh=ma1NVhgU8PysInlECq83RUS4lubboyw5wuGGeYRoJmE=;
+	b=Z3oUmwjl6L8j3BiJO5PtW7zRwpRGSqfaIu5Q6MKz7btKq4fOGQzQsp3W87FtBOHfru9f
+	 7K97eJ8pms5/YkMpdkAoSwrOxQqZvCVS9mD1+4u9dr8gcv1AANwQj+cYyMbOJ9Emoi6ao
+	 2rTr3NFi/1eEja7z+4LmIXo2oW+5aSo6oNhVHJojDqSip5Za2xLpO5eerb4n/oxo5vkNo
+	 E3vvlTz7coBGfQtgr+ztCcpmjkoDVW82/mkBzxhP4h/iIIhCtazQLwjSQLlC4i5bu97K0
+	 2dOd3vKvweE9Qfn3j+DPw0c8+jFezu63D2Np/ma5FI3937VFskM6/yKkm9LJzJCaBUw==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793999682;
-	bh=rZKZYXLjzNcuKBW9huTxZXSaghPyaR5SYB9xQ0FdB1A=;
+	s=default; t=1793999684;
+	bh=ma1NVhgU8PysInlECq83RUS4lubboyw5wuGGeYRoJmE=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=YaSGj5FzRsPf0HZsQwet3Z9OyK9lfzBqg0FRrBb84jfqD84Usai2BkPuw0FJzKuj0
-	 HI1gSzcX3dwd+t/iittyTHz4f9ULIqlLTCZOFKISBi3qP2ifwaZvgvUscGy2Ff75vp
-	 Jy26R4afLecAATwxdZTTyM1KFh2Zrk3GYWKCgGjrtBLgBZ7K1SnpaLud/EpWoUUz6j
-	 kPUHQp48NWvUloxPHAEMardDCiTBC8mDDbkH9Uqz0pwf9KLtOPfH/p/NjxhTFQ1mc+
-	 EHZ42d4q4/xbhNWdWhgHvYgxFcOVHL0yxVrfV5YsTxcWetMJznvAv1C/Oiq68kGh5M
-	 +N2N9kG29GMCg==
+	b=L/n9Xaag8X28j6AWA5Qy4arYEFN8fsMw6rh4SSgToSrElHAwdt6RDrpoi+9ceKyku
+	 VY9VJKZaCzaYzypGJOUkfutxAZm2pL2FC9/n+H+0i39ZPP8sM9+XWohydEVNdWdPR5
+	 cCUeVVFlp3+51ovIHbNCfRTYZwqyEKrc4DTYoqmg8i61eq+zoUK1K1sj05ysOkHpOC
+	 1tgqLUe5y1r7y7/AS6WtmfCNK4wrFjMkUNkxSAcvWRDuX1LnxD2MCHt7AtSo0pxoJx
+	 1fgRm6IsXaD4B2hGKkB7Ffal+X+SZW14tYuOKZWNviDev/qI5hxKWMap9Ei7StW7bi
+	 9lvWnzQQTX1Hg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9FF58812E1;
-	Fri,  6 Nov 2026 21:14:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 86956A64
+	by smtp3.osuosl.org (Postfix) with ESMTP id 11C0F608E6;
+	Fri,  6 Nov 2026 21:14:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8AB97AFC
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 21:14:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7856A40907
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7142B81289
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 21:14:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QuwCDlBI73h2 for <buildroot@buildroot.org>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QfQMrA1M5DSt for <buildroot@buildroot.org>;
  Fri,  6 Nov 2026 21:14:20 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org BDC8540990
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org AA74081250
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id BDC8540990
+ by smtp1.osuosl.org (Postfix) with ESMTP id AA74081250
  for <buildroot@buildroot.org>; Fri,  6 Nov 2026 21:14:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DAD6C9E103; Fri,  6 Nov 2026 21:12:48 +0000 (UTC)
+ id C78139E0B2; Fri,  6 Nov 2026 21:12:48 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Fri, 6 Nov 2026 22:05:45 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9db99661f47076e65044c1e19ae1e4d1e77cb1f8
-X-Git-Newrev: 8f9a8a07482c41b0cb3bc8b302f541f1adc50ed2
+X-Git-Oldrev: 52d30f93fee0715ae43582cfc15b4242726c8f3c
+X-Git-Newrev: 4e4b7fd380dacf830fa33dd36ea5793af4d6720c
 X-Patchwork-Hint: ignore
-Message-Id: <20261106211248.DAD6C9E103@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-iniparse: bump to version
- 0.5.3
+Message-Id: <20261106211248.C78139E0B2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-google-auth: bump to
+ version 2.62.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -100,50 +100,49 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
 	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/8f9a8a07482c41b0cb3bc8b302f541f1adc50ed2
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/4e4b7fd380dacf830fa33dd36ea5793af4d6720c
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-iniparse/python-iniparse.hash | 4 ++--
- package/python-iniparse/python-iniparse.mk   | 4 ++--
+ package/python-google-auth/python-google-auth.hash | 4 ++--
+ package/python-google-auth/python-google-auth.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-iniparse/python-iniparse.hash b/package/python-iniparse/python-iniparse.hash
-index a64cc17495..cfce25f258 100644
---- a/package/python-iniparse/python-iniparse.hash
-+++ b/package/python-iniparse/python-iniparse.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/iniparse/json
--md5  229454c1e6c5a36a3e8f1c9330f97a4e  iniparse-0.5.2.tar.gz
--sha256  4f4fd009d49e4290a721e9bc5716719e9a767c9c7fdc3d7ebc403ef3379d6129  iniparse-0.5.2.tar.gz
-+md5  c06438d5c3900d910da312ff8db6ba2b  iniparse-0.5.3.tar.gz
-+sha256  9cadfd7dfa551aed58f91f333321753a4d7df6ff765651fda5affefface33fe8  iniparse-0.5.3.tar.gz
+diff --git a/package/python-google-auth/python-google-auth.hash b/package/python-google-auth/python-google-auth.hash
+index 8ed03dd9e5..77e651c676 100644
+--- a/package/python-google-auth/python-google-auth.hash
++++ b/package/python-google-auth/python-google-auth.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/google-auth/json
+-md5  efa6eb1ad00dd54f257b745beb28c363  google_auth-2.62.0.tar.gz
+-sha256  0bef0ce54bdf9ce226c5d66e4264413bd918141c31bbe49fb52eac882f513d69  google_auth-2.62.0.tar.gz
++md5  a0c81651e7aacabb9df4637c2b4a1cc4  google_auth-2.62.1.tar.gz
++sha256  3c8e1ce2553784ae17fd220e6f88df3281d86ab98019278f436d06dffab17a9e  google_auth-2.62.1.tar.gz
  # Locally computed sha256 checksums
- sha256  ff45637d8a96adc414179e502fbed40160e57205bf2e302140e79a0c71eceaa7  LICENSE
- sha256  9b02e3dfe433ccd2bd94636ef6eb08638b5a54deafe5f87a3d9d9104356c48e0  LICENSE-PSF
-diff --git a/package/python-iniparse/python-iniparse.mk b/package/python-iniparse/python-iniparse.mk
-index 4b62405bd2..5b1efc10bb 100644
---- a/package/python-iniparse/python-iniparse.mk
-+++ b/package/python-iniparse/python-iniparse.mk
+ sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+diff --git a/package/python-google-auth/python-google-auth.mk b/package/python-google-auth/python-google-auth.mk
+index 2ec4100fa9..c038af6f35 100644
+--- a/package/python-google-auth/python-google-auth.mk
++++ b/package/python-google-auth/python-google-auth.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_INIPARSE_VERSION = 0.5.2
-+PYTHON_INIPARSE_VERSION = 0.5.3
- PYTHON_INIPARSE_SOURCE = iniparse-$(PYTHON_INIPARSE_VERSION).tar.gz
--PYTHON_INIPARSE_SITE = https://files.pythonhosted.org/packages/9a/5b/f8b3a923142f9e4cfeafce9b8f7343ead2feb71929365486ce96b5372335
-+PYTHON_INIPARSE_SITE = https://files.pythonhosted.org/packages/95/2f/d7637e3cbbeb7ca2fddaf0c5986284d5a086c437139523f4bcea95a9f1d0
- PYTHON_INIPARSE_LICENSE = Python-2.0, MIT
- PYTHON_INIPARSE_LICENSE_FILES = LICENSE-PSF LICENSE
- PYTHON_INIPARSE_SETUP_TYPE = setuptools
+-PYTHON_GOOGLE_AUTH_VERSION = 2.62.0
++PYTHON_GOOGLE_AUTH_VERSION = 2.62.1
+ PYTHON_GOOGLE_AUTH_SOURCE = google_auth-$(PYTHON_GOOGLE_AUTH_VERSION).tar.gz
+-PYTHON_GOOGLE_AUTH_SITE = https://files.pythonhosted.org/packages/f5/b9/4b2528f30114b106e3c3a7298ba38d85e682fd1f83fe7c4a5b77c7677082
++PYTHON_GOOGLE_AUTH_SITE = https://files.pythonhosted.org/packages/c4/38/d79ab09dcfc1e1638d887c8f65657619d3ebc454165c558ef79355971ce3
+ PYTHON_GOOGLE_AUTH_SETUP_TYPE = setuptools
+ PYTHON_GOOGLE_AUTH_LICENSE = Apache-2.0
+ PYTHON_GOOGLE_AUTH_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
