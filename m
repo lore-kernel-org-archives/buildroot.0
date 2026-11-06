@@ -2,237 +2,151 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6BDA606A326
-	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 14:23:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 736FD606A32E
+	for <buildroot@archiver.kernel.org>; Fri,  6 Nov 2026 14:34:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=SDENpK8C
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=pbscA+V6;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UwrNiWtV
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 823F881232;
-	Fri,  6 Nov 2026 14:23:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 493878123C;
+	Fri,  6 Nov 2026 14:34:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ADRlMK2y8l31; Fri,  6 Nov 2026 14:23:37 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 91BE381244
+ id GLqcOH8cOJBh; Fri,  6 Nov 2026 14:34:17 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 30A9081246
 Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793975017;
-	b=hC3sRxEpwzIubJSZBvbZDzZ+T304MC0HM8hoyk1pX19flPm0ocd4HfEg4RC8YsQ8RI0Y
-	 LrFx4SHiLV4qyPXhg/iB1vqk2cNRA/j2uLQHUDVA3rWPIBTuMy2qpOaQDrdLxdCnovbLX
-	 0ykwEBk+JY1QY36HITGaLLhw9QaZrFARREfhAQ5HsXxvv5sq3cmdUTc0Q3xdDzLvbn2o0
-	 RssU1CpZdAJdJPmBzQmvHlVnzMj4io8SUGt2+Ud3I5Sgy72Fi2PyLgPRLJcHUggrPcQkP
-	 njEI9qrbFLgbT1L4jCDHLYeKQ+VN68kdfaqm7ajz3ZnZrDx5y2flUVY9h7OdaNlEXDA==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1793975657;
+	b=iKIgQ6dy761svCT3ZVBNhHwUvQxnkdFIfJ36sGkf9Jr52Z6pE0kv00SiBA8oIhVrtl4F
+	 sOoaKt/lYrZ/zCCBaU3apBpXHZWy9sxneJGfChzt6DjWDm996a0jgh0feAqtYr5FrHtOU
+	 DbPky0NwI2oPt74k+KS5lEXjaIWSumrtX7wm5fV0ecr3FYkd5nrVjCboPrfp3pVtq0qWI
+	 ajSEVkbRA0MjSW4Jb3Z+/iHiQ/dYqr8uYzpz1q4PCJJDOh58fmUhXfLiWtdkvErpjg7AS
+	 evIZMQHuIFZ2N5L0fE8XWPk/QhCyOAswNvxGABmMinVeBDSxtO/UhA67voC7dA0xxYQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1793975017;
+	c=relaxed/relaxed; t=1793975657;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 X-UI-Sender-Class:Received:Message-ID:Date:MIME-Version:User-Agent:To:
-	 Cc:References:Content-Language:Autocrypt:In-Reply-To:X-Provags-ID:
-	 UI-OutboundReport:Subject:X-BeenThere:X-Mailman-Version:Precedence:
-	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
-	 Errors-To:Sender;
-	bh=eVDR3A9cQK75LBeMYgjd1VKx2j34iPH6zf8nUHxLLt4=;
-	b=CEIHHAyA6qLunQjbHsOP3X50mWGkzH7CyOIltsW9XbTeYWvhD9ZhBdKZy5tLZUd5/OfH
-	 VIzdBfhdBpAtcxxBYLOfaZKpqYebqI8/Izyhvw1UuK2ae066suhs6M3sLCc+cXIe8CcQw
-	 iUidDmYEdBiaedV4fkeIP+lljeKFOJlUvfVXKf9VpIz4fsApeiuHvONRbr0Z+UyvD5puK
-	 xMX6JsGCssDGP4lHHHTQ8v+qfpCxrwsXPmRj04T9QjPdG5PuYySkplqEXLZD9oRZUksrg
-	 obuE+Y3nAwyAoh5cVTIBZ52fA2nQk+EP6mZcd/wCzr6SqmQLxoEnaPlMwXix4BXofhA==
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:Received:From:To:Cc:Date:Message-Id:X-Mailer:In-Reply-To:
+	 References:MIME-Version:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
+	 Sender;
+	bh=MXLOYSADtsqshE0Di1nhjA14n//h0t37f4Dig/9+9aA=;
+	b=qb1lrZgUxZm6emvy5GSg7sC5GZN3kSpMsYAn6qRlGiED2cajV7MWrAdcl/qz53gt/hS0
+	 XgEz8wMVYYR5Q9I6SJ2Kqhj3cnWYo5Z1UrUtY3Z4sZHm2N1BeKJNpb5UgRYnRtTySXUs2
+	 ZH4vKutGKyt9o4AQxI9pT44NFHqdfIAOhql1f4yt0Xps8P1SWrN9uhv1YHUvbL2hmkXcu
+	 AYJZjaBCE7960FsKk+EsCPGN8M30zYh2JyYNXeM+1afFqfw1gcNa2jgHqK724q/fOXEKT
+	 rzjzj0dlF10IgwWpQWU6lrDr75CmOw8NH/l336S+KTNfrdYszKxjnCYoMaLJhdIalFw==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1793975017;
-	bh=eVDR3A9cQK75LBeMYgjd1VKx2j34iPH6zf8nUHxLLt4=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	s=default; t=1793975657;
+	bh=MXLOYSADtsqshE0Di1nhjA14n//h0t37f4Dig/9+9aA=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=SDENpK8CJO0e75WrAw1YN7S5vWPndPQaex/6rqVU4nSRU3RIM/hDhrSZs+OB4sRij
-	 xWwZXMeBtPcGvMuxUC66FD6Cz853mIy2IduLSPut3LKVdpnmLm+Naad6hMpQZht/Ht
-	 oCJW5dxwOQ5xZn36ienQrsTELXwNoJcALL4oKgQ4GfZ1bnyZ9wBxgLDGa+g/DT2Cqo
-	 NlZsSFkVRU4m8X/cHf86GAYp4XaDg0BYFKJJAJ3hWiHHEwm9RaoIFmeFcKJfIGId9X
-	 YOdH4pS1/dRpecwJDSZi//8uxA9THFOWchw33TZ7tdvZ+sm59IODxY+XjS03uuejS1
-	 vpg+nVI9TIjIg==
+	 From;
+	b=pbscA+V6YGODR17B5e80D6U334PNtcnGxtkHMwpts4JqyyUjTqJhWFlkVN9LvLxPI
+	 JJyXn6EKebEurzw7gjrjGnFCFPERRCQBjeMJ1f9TrV562PmpAKv9gmY/ItU+OZfIOH
+	 NzWi5S5NLZ1EyZDXRt9S0qLj9kquadUQ3cjL7fXxQJddIZHASLlcAgCxiOhp2hyUTg
+	 AhpjC0RbkLcY/AuzYE4YdjarmQ5MfNwb+FB/Y+xfBHWvsZ4BLxQegoqgPZIgx0KXaL
+	 c9MI+T4JHLsSvOtpYTN9yjuuji0S2E+0Ui6FtdsRgE5NTSbk7ojp2AMHxfA2dy/SMf
+	 lx5BegjgFUCYg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 91BE381244;
-	Fri,  6 Nov 2026 14:23:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 286A32AC
- for <buildroot@buildroot.org>; Fri,  6 Nov 2026 14:23:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 30A9081246;
+	Fri,  6 Nov 2026 14:34:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 2B21432A
+ for <buildroot@buildroot.org>; Fri,  6 Nov 2026 14:34:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0D8D4403BE
- for <buildroot@buildroot.org>; Fri,  6 Nov 2026 14:23:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1BBD540953
+ for <buildroot@buildroot.org>; Fri,  6 Nov 2026 14:34:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yz7HfjwCYUU1 for <buildroot@buildroot.org>;
- Fri,  6 Nov 2026 14:23:35 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 771D7400FF
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 771D7400FF
- for <buildroot@buildroot.org>; Fri,  6 Nov 2026 14:23:33 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MQMyZ-1xBoJO3b3R-00UiTr; Fri, 06
- Nov 2026 15:23:31 +0100
-Message-ID: <b49eb392-cffe-44a5-9ac6-0728147fad81@gmx.de>
-Date: Fri, 6 Nov 2026 15:23:31 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TIeow9olCFNZ for <buildroot@buildroot.org>;
+ Fri,  6 Nov 2026 14:34:15 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org F16994091C
+Authentication-Results: smtp4.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::336"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20260707 header.b=UwrNiWtV
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F16994091C
+ for <buildroot@buildroot.org>; Fri,  6 Nov 2026 14:34:14 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-4a2069b9710so6349995e9.2
+ for <buildroot@buildroot.org>; Fri, 06 Nov 2026 06:34:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20260707; t=1793975652; x=1794580452; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=Ct8qevbNQiMCEEHrh37m7NOECaFefmOynKtdqs2Zc2U=;
+ b=UwrNiWtVQ6F9EaEvUi52eXv2kU+VV6lGNYXZj+Oum6CcecE0MU1IDyuMCZ/s752sW1
+ DVe4YWFbZ0fuL9qMW8+V2pSDvXa8uqKxp+1G7emC7Ke1qwvfaP2w/7Pm+f5qvz5yXiMq
+ uGB2s4oB2M7rbAoV3qKQ8XyicLOpCc1ABcYF2LaiQW22DPOQ1y+bcyrtKnnXzNcW9lRQ
+ 4x68IOuQ0I4ypDL/936BHjIWqOW0gavXTeLl/mVRSesVvJAvCMTPy95RHdZp0cmtEER5
+ 6nw+xYno5W5i+j7njy+SrUnjLfwMrvsC8F2dodOy8yrKosndFuNrvfMXIyBbqbkjZ8af
+ Csrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1793975652; x=1794580452;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to:content-type;
+ bh=Ct8qevbNQiMCEEHrh37m7NOECaFefmOynKtdqs2Zc2U=;
+ b=M61whh3T7bhA9vgKAtbfki5PxA8Ol9iucOmRuloJdq0oBaOH9YIb/bgsalXo3GNO4P
+ 5oTPOgFwkU/vnH+Y9SR5pAh5KJNMSL2wY1VMAjBsMRRVlUY/xTgrRQVUci9GvEuUJQaX
+ 6y7GurfWcMEKvxWieL8kaBWrwprnHR2PNL55QVeyUsvwlP3+vQ0V8bLrKejAtKONZRtH
+ gcMSXaU9TqRiV4snojSFvVG19U7cuSV0N+sIrsGbrlrJ/DLg1lbOCPL9FuHAXT5VmDDB
+ I20D59uT9KGUhxSt3DKDUKHpUJvDyQFiy04dloN8HBO0chRLwu5xMQ/wonXA/tRDV70F
+ 8uXg==
+X-Gm-Message-State: APuU4Z/5EoXXqVpNtGw0glSs/wp/uWrDNWMFqiEIvy6UTUTnS2Twv2wS
+ I11cn7T/WTuE2u/zdeLnDaJo4fh7GCQlTXBUH4ewPjkdQgGtMXBDfg2AmDoAVbOU
+X-Gm-Gg: AYBFou22kFCZ4qaglmM6vL7vjGyO/Q26U7s8Bt66qaA2KU2i9GrjPzdzQ3vAl6/PnQm
+ p/kGRdx2M12AV+MYgx1ZZz8/4zXC+xmN77sC75FsVzTVb7hnlx9XuOJnoW9XhOO0YK7ENV6vVcP
+ 5yFtry97WfD+LaMDT3B7b2KW65Rs7FYHkKlxpJqy4g1UkHcwZdh75GdKFZbH7vEOvwOYLCivMRf
+ q3DPILHIo5T/ATD48t/Z4qIZnfLzfCG6q1k5iVJXUhK6hHD87LY9HzExAB0sBaNhao81zPANb+9
+ kPSBUAjs6z3FCeG1CFPHgxSG80JA+mbqZ4GyAnxw1DhK5/LX6A5IFi9MsmWf2VVxE+1L47AdK1q
+ d6oUkUHsTnEj+DCx/lyyChajoQazEs4sLdoXDtHBqEgPtkLoPxrZuQTdzHH38vY2I36X68SFRAS
+ vJhhFh7kmQgDJHGiz88OBEQ9X9AnFRttIzLISvAG8d2qzn5iw4PB5wjfEU9KiGxS5DI22nWi70k
+ xZBTcoWU8blL24r2RHg1V8FuDCY2mAeZBSIJQwN+9kp9gn6diTsSAE+cHLwnPBrSEtvbb1siRjS
+ f4Y5Ch7P/dAfq4KUJPQUPNp6QOWKNGiGrgKJaNZoBzjyQXs+RV05gA==
+X-Received: by 2002:a05:600c:4e43:b0:4a1:83f0:7c91 with SMTP id
+ 5b1f17b1804b1-4b6de0cda6cmr46725585e9.18.1793975651818; 
+ Fri, 06 Nov 2026 06:34:11 -0800 (PST)
+Received: from angelo-Precision-7550.. ([94.154.175.53])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4b6e2028d9bsm122714665e9.9.2026.11.06.06.34.10
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 06 Nov 2026 06:34:11 -0800 (PST)
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+To: buildroot@buildroot.org
+Cc: Paul Louvel <paul.louvel@bootlin.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Ballasi <thomas.ballasi@savoirfairelinux.com>,
+ Nico Orlando <nico.orlando@dave.eu>, Roberto Zelbi <roberto.zelbi@dave.eu>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Fri,  6 Nov 2026 15:34:08 +0100
+Message-Id: <20261106143409.2581133-1-angelo.compagnucci@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260605111256.107837-1-paul.louvel@bootlin.com>
+References: <20260605111256.107837-1-paul.louvel@bootlin.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Fengwei Tan <tfx2001@outlook.com>, David Luca <davidluca3000@yahoo.com>
-Cc: buildroot@buildroot.org
-References: <1461151393.479397.1793964135398.ref@mail.yahoo.com>
- <1461151393.479397.1793964135398@mail.yahoo.com>
- <SY8P300MB00411E7C51CDFC3DC0EE3A3FB5762@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
-Content-Language: en-US, de-DE-1901, de-DE
-Autocrypt: addr=fiona.klute@gmx.de; keydata=
- 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
-In-Reply-To: <SY8P300MB00411E7C51CDFC3DC0EE3A3FB5762@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
-X-Provags-ID: V03:K1:vRF5HTDiGwG/fJKke1oUOYyCvvNi7xNsv2Ao28hZzz+snIsX0lD
- wuxfc8tc2mlYio1Y+hFMsTVSDTLHM3mAIrjfPUtbKPBKMMUKu0W08vy4ypDTGVPTnhANjGD
- oKSWO84jkLPwyvgnSxEv9TYgCs51NAo8lsP5sw5crjUqrS+twfRoDtyL6bIaOrNgbz2FDI/
- tjrCQL2vc0wWuLzNRgutA==
-UI-OutboundReport: notjunk:1;M01:P0:LXhgr12q6EQ=;Nf+11C63lFJvLwqeZThNDsts9Jz
- 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
-Subject: Re: [Buildroot] NetworkManager not available
+Subject: [Buildroot] [PATCH v2 1/2] package/qt5/qt5base: export the OpenGL
+ and EGL library dirs to CMake
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -242,49 +156,150 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,PDS_PRO_TLD,
+	SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no
+	version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-QW0gMDYuMTEuMjYgdW0gMTU6MDIgc2NocmllYiBGZW5nd2VpIFRhbjoKPiBIaSBEYXZpZCwKPiAK
-PiDlnKggMjAyNi8xMS82IDE5OjIyLCBEYXZpZCBMdWNhIHZpYSBidWlsZHJvb3Qg5YaZ6YGTOgo+
-PiBIZWxsbywKPj4KPj4gV2FzIHVzaW5nIEJ1aWxkcm9vdCAyMDI0LjAyIGFuZCBoYWQgTmV0d29y
-a01hbmFnZXIgYXZhaWxhYmxlIGZvciBubXR1aSBhbmQgbm1jbGkgY29tbWFuZHMgb24geDg2XzY0
-IHBsYXRmb3JtIHdpdGggR0NDMTIuMy4wLCBMaW51eCBrZXJuZWwgNC4xOC4KPiAKPiBUaGUgbW9z
-dCBsaWtlbHkgcmVhc29uIGlzIHRoYXQgeW91ciB0b29sY2hhaW4ncyBMaW51eCBrZXJuZWwgaGVh
-ZGVycwo+IGRvIG5vdCBtZWV0IE5ldHdvcmtNYW5hZ2VyJ3MgcmVxdWlyZW1lbnRzLiBJbiBCdWls
-ZHJvb3QgMjAyNi4wOC4xLAo+IE5ldHdvcmtNYW5hZ2VyIHJlcXVpcmVzIGtlcm5lbCBoZWFkZXJz
-ID49IDUuNC4KPiAKPiBUaGUgbWluaW11bSBoZWFkZXIgdmVyc2lvbiB3YXMgcmFpc2VkIHR3aWNl
-IGJldHdlZW4gQnVpbGRyb290Cj4gMjAyNC4wMiBhbmQgMjAyNi4wOC4xLCBmaXJzdCB0byA0LjIw
-IGFuZCB0aGVuIHRvIDUuNDoKPiAKPiBodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9i
-dWlsZHJvb3QvLS9jb21taXQvMDk3ZmFlYWQ0YTQ2ZTBmYWVlOTg2ODRjZTEyODQ3Mjc3NGZlOTkz
-Mwo+IGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2NvbW1pdC9m
-Zjg1MTEwNzAxY2Y4ODQ4NjlmMDdiMDRiZDA0MWUwNmRjYWMzMDE4Cj4gCj4gSWYgeW91IHdhbnQg
-dG8gdXNlIE5ldHdvcmtNYW5hZ2VyIHdpdGggQnVpbGRyb290IDIwMjYuMDguMSwgeW91IHNob3Vs
-ZAo+IGNvbnNpZGVyIHVwZ3JhZGluZyB5b3VyIHRhcmdldCBrZXJuZWwgdG8gTGludXggNS40IG9y
-IGxhdGVyLCBhbG9uZyB3aXRoCj4gYSB0b29sY2hhaW4gdXNpbmcgc3VpdGFibGUga2VybmVsIGhl
-YWRlcnMuCj4gCj4gVXBkYXRpbmcgdGhlIGhlYWRlcnMgYWxvbmUgZG9lcyBub3QgZW5zdXJlIGNv
-bXBhdGliaWxpdHkgd2l0aCB5b3VyCj4gY3VycmVudCBMaW51eCA0LjE4IGtlcm5lbCwgc2luY2Ug
-dGhlIG5ld2VyIE5ldHdvcmtNYW5hZ2VyIHJlbGllcyBvbgo+IG5ld2VyIGtlcm5lbCBmdW5jdGlv
-bmFsaXR5Ogo+IAo+IGh0dHBzOi8vZ2l0bGFiLmZyZWVkZXNrdG9wLm9yZy9OZXR3b3JrTWFuYWdl
-ci9OZXR3b3JrTWFuYWdlci8tL2Jsb2IvMS41Ni4wL3NyYy9saWJubS1zeXN0ZW1kLWNvcmUvc3Jj
-L2xpYnN5c3RlbWQvc2QtZXZlbnQvc2QtZXZlbnQuYyNMMTYyNgo+IAo+IFsuLi5dCj4gCj4+IFRo
-ZSBkZWZjb25maWcgc3RpbGwgc2hvd3MgIkJSMl9QQUNLQUdFX05FVFdPUktfTUFOQUdFUj15Igo+
-PiBBbnkgaWRlYSB3aGF0IEknbSBtaXNzaW5nPwo+IAo+IEhhdmluZyBCUjJfUEFDS0FHRV9ORVRX
-T1JLX01BTkFHRVI9eSBpbiB5b3VyIGRlZmNvbmZpZyBkb2VzIG5vdCBvdmVycmlkZQo+IHRoZXNl
-IGRlcGVuZGVuY2llcy4gQ291bGQgeW91IGNoZWNrIHdoZXRoZXIKPiBCUjJfVE9PTENIQUlOX0hF
-QURFUlNfQVRfTEVBU1RfNV80PXkgaXMgcHJlc2VudCBpbiB0aGUgZ2VuZXJhdGVkIC5jb25maWc/
-ClRoZSBkZWZjb25maWcgd2lsbCBub3QgYmUgdXBkYXRlZCBhdXRvbWF0aWNhbGx5LiBZb3UgbmVl
-ZCB0byBydW4gIm1ha2UgCnNhdmVkZWZjb25maWciIGFmdGVyIHNhdmluZyB5b3VyIHVwZGF0ZWQg
-Y29uZmlnLgoKQmVzdCByZWdhcmRzLApGaW9uYQoKX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVp
-bGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
-dWlsZHJvb3QK
+When the OpenGL ES2, OpenGL or EGL libraries are found with pkg-config,
+as in Buildroot, their directory only ends up as a -L flag in
+QMAKE_LIBS_OPENGL_ES2, QMAKE_LIBS_OPENGL or QMAKE_LIBS_EGL. qtbase drops
+it when generating Qt5GuiConfigExtras.cmake, whose find_library(...
+NO_DEFAULT_PATH) then never finds the libraries:
+
+  -- Qt OpenGL implementation: GLESv2
+  -- Qt OpenGL libraries:
+  -- Qt EGL libraries:
+
+So Qt5Gui_OPENGL_LIBRARIES and Qt5Gui_EGL_LIBRARIES are empty for every
+CMake project using them, and qt5webkit with OpenGL ES2 (qt5base OpenGL
+support, which enables its WebKit2/QML API) fails to link libWebCore:
+
+  GraphicsContext3DOpenGLES.cpp: undefined reference to `glBindRenderbuffer'
+  ...: undefined reference to `eglGetProcAddress'
+
+Add a patch exporting the directories given with -L when QMAKE_LIBDIR_*
+are not set.
+
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+Changes v1 -> v2:
+  - new patch: with the OpenGL support of qt5base, which enables the
+    WebKit2 QML API of qt5webkit, libWebCore fails to link because
+    Qt5Gui_OPENGL_LIBRARIES and Qt5Gui_EGL_LIBRARIES are empty.
+
+Tested: Bootlin x86_64 glibc stable toolchain, qt5base with OpenGL ES2
+(mesa3d softpipe, EGL) and eglfs, qt5declarative, qt5webkit (WebKit2 ON) and
+qt-webkit-kiosk: everything builds, Qt reports "Qt OpenGL libraries:
+Qt5::Gui_GLESv2" and "Qt EGL libraries: Qt5::Gui_EGL", libWebCore links
+libGLESv2/libEGL, the qt_lib_webkit*.pri files are in
+$(HOST_DIR)/mkspecs/modules, the headers in $(STAGING_DIR)/usr/include/qt5,
+and the QtWebKit QML module in both $(STAGING_DIR)/usr/qml and
+$(TARGET_DIR)/usr/qml. Not run-time tested.
+
+ ...penGL-and-EGL-library-dirs-found-wit.patch | 82 +++++++++++++++++++
+ 1 file changed, 82 insertions(+)
+ create mode 100644 package/qt5/qt5base/0012-gui-export-the-OpenGL-and-EGL-library-dirs-found-wit.patch
+
+diff --git a/package/qt5/qt5base/0012-gui-export-the-OpenGL-and-EGL-library-dirs-found-wit.patch b/package/qt5/qt5base/0012-gui-export-the-OpenGL-and-EGL-library-dirs-found-wit.patch
+new file mode 100644
+index 0000000000..6ab60937de
+--- /dev/null
++++ b/package/qt5/qt5base/0012-gui-export-the-OpenGL-and-EGL-library-dirs-found-wit.patch
+@@ -0,0 +1,82 @@
++From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
++From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
++Date: Fri, 6 Nov 2026 14:27:11 +0100
++Subject: [PATCH] gui: export the OpenGL and EGL library dirs found with -L to
++ CMake
++
++When the OpenGL ES2, OpenGL or EGL libraries are detected with
++pkg-config, their library directory ends up as a -L flag in
++QMAKE_LIBS_OPENGL_ES2, QMAKE_LIBS_OPENGL or QMAKE_LIBS_EGL, while
++QMAKE_LIBDIR_* stay empty.
++
++cmakeProcessLibs() drops the -L flags, so the generated
++Qt5GuiConfigExtras.cmake calls _qt5gui_find_extra_libs() with an empty
++library directory, and its find_library(... NO_DEFAULT_PATH) never finds
++the libraries: Qt5Gui_OPENGL_LIBRARIES and Qt5Gui_EGL_LIBRARIES are
++empty, and CMake projects using them (e.g. QtWebKit with OpenGL ES2)
++fail to link with undefined references to the gl* and egl* functions.
++
++Use the directories given with -L when QMAKE_LIBDIR_* are not set.
++
++Upstream: N/A, Qt 5 is end of life and Qt 6 builds with CMake
++Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
++---
++ mkspecs/features/cmake_functions.prf | 12 ++++++++++++
++ src/gui/gui.pro                      |  4 ++++
++ 2 files changed, 16 insertions(+)
++
++diff --git a/mkspecs/features/cmake_functions.prf b/mkspecs/features/cmake_functions.prf
++index 0c62b46..1b217ef 100644
++--- a/mkspecs/features/cmake_functions.prf
+++++ b/mkspecs/features/cmake_functions.prf
++@@ -71,6 +71,18 @@ defineReplace(cmakeProcessLibs) {
++     return ($$join(out, ";"))
++ }
++ 
+++defineReplace(cmakeProcessLibDirs) {
+++    variable = $$1
+++    out =
+++    for(v, variable) {
+++        contains(v, -L.*) {
+++            v ~= s,^-L,,
+++            out += $$v
+++        }
+++    }
+++    return ($$out)
+++}
+++
++ defineReplace(cmakeRelativePath) {
++     path = $$relative_path($$1, $$2)
++     return($$replace(path, ([^/])$, \\1/))
++diff --git a/src/gui/gui.pro b/src/gui/gui.pro
++index 20372d9..21b5d55 100644
++--- a/src/gui/gui.pro
+++++ b/src/gui/gui.pro
++@@ -76,6 +76,8 @@ qtConfig(angle) {
++     qtConfig(egl) {
++         CMAKE_EGL_LIBS = $$cmakeProcessLibs($$QMAKE_LIBS_EGL)
++         !isEmpty(QMAKE_LIBDIR_EGL): CMAKE_EGL_LIBDIR += $$cmakeTargetPath($$QMAKE_LIBDIR_EGL)
+++        else: for(dir, $$list($$cmakeProcessLibDirs($$QMAKE_LIBS_EGL))): \
+++            CMAKE_EGL_LIBDIR += $$cmakeTargetPath($$dir)
++     }
++ 
++     qtConfig(opengles2) {
++@@ -83,6 +85,7 @@ qtConfig(angle) {
++         CMAKE_OPENGL_INCDIRS = $$cmakePortablePaths($$QMAKE_INCDIR_OPENGL_ES2)
++         CMAKE_OPENGL_LIBS = $$cmakeProcessLibs($$QMAKE_LIBS_OPENGL_ES2)
++         !isEmpty(QMAKE_LIBDIR_OPENGL_ES2): CMAKE_OPENGL_LIBDIR = $$cmakePortablePaths($$QMAKE_LIBDIR_OPENGL_ES2)
+++        else: CMAKE_OPENGL_LIBDIR = $$cmakePortablePaths($$cmakeProcessLibDirs($$QMAKE_LIBS_OPENGL_ES2))
++         CMAKE_GL_HEADER_NAME = GLES2/gl2.h
++         CMAKE_QT_OPENGL_IMPLEMENTATION = GLESv2
++     } else: qtConfig(opengl) {
++@@ -90,6 +93,7 @@ qtConfig(angle) {
++         CMAKE_OPENGL_INCDIRS = $$cmakePortablePaths($$QMAKE_INCDIR_OPENGL)
++         !qtConfig(dynamicgl): CMAKE_OPENGL_LIBS = $$cmakeProcessLibs($$QMAKE_LIBS_OPENGL)
++         !isEmpty(QMAKE_LIBDIR_OPENGL): CMAKE_OPENGL_LIBDIR = $$cmakePortablePaths($$QMAKE_LIBDIR_OPENGL)
+++        else: CMAKE_OPENGL_LIBDIR = $$cmakePortablePaths($$cmakeProcessLibDirs($$QMAKE_LIBS_OPENGL))
++         CMAKE_GL_HEADER_NAME = GL/gl.h
++         mac: CMAKE_GL_HEADER_NAME = gl.h
++         CMAKE_QT_OPENGL_IMPLEMENTATION = GL
++-- 
++2.34.1
++
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
