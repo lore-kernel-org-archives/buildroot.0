@@ -2,28 +2,28 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C84A606A326
-	for <buildroot@archiver.kernel.org>; Sat,  7 Nov 2026 16:34:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC36A606A32D
+	for <buildroot@archiver.kernel.org>; Sat,  7 Nov 2026 16:34:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=kHIt5X5R;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bOSQz5bk
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=sM6oln1L;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ZdfMgvgb
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 686B84072B;
-	Sat,  7 Nov 2026 16:34:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E0B7540718;
+	Sat,  7 Nov 2026 16:34:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2hgXxf0V4JJL; Sat,  7 Nov 2026 16:34:26 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 6FB4A4070F
+ id C5exMILalo6u; Sat,  7 Nov 2026 16:34:29 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org D227840748
 Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794069266;
-	b=jyW0+cnHgaRsHD8fEZCMTLFaZAxZPuZ/qaarO0S+suvLk72BXXC6FqOcUplo7QIuTK1D
-	 XdXJgQDFwYKVni3kra3r8NPOCQ4OG5OyvUQ6agI7MIxlJpo3odC8p8ZJbP2A5RGmWTZoT
-	 5xYJGZBbnN+c3VZVc1MgHWMMofvNMcwcFBlUQb269mWfYQyIUcKXI0ksEcwXeijHRVXpL
-	 lEhY0pAmjY071ot0dpUgcqzDvQEjmKcJNoBcRtp+S/lUMaD89Ob6dxLIU05BpE3+lFayu
-	 e+Sx3/allpNfOa7Kh/UJpiLyTD8X0d9RLg857wF3fmwOXLo6dqBT7VBYOKuu7e7MJvQ==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794069269;
+	b=Kgev073fthQh7dM6Tj4+eGs82h1nP8VftSTEevm+s032O3V254lV7h8mracWaDmaGusO
+	 uARgDZGe6zIIaPuMMdGxRuhPjaMyTNUux9u13BMzDxW6Hmn2LSOKZb0ymDMP60OtporrP
+	 ttGUhoB8GdOpYXAhAn2V5eY1z4sDOC1iw2ULDja2mw2DHQTyG2TEMCQaBkWwvoDbiksKW
+	 g8oCtK16Bsz6VPQWSTK7WdL9DtAfgcp6vzKdkKg8PiPNKiTUScNMhhDmp5YjKy8U4YcFN
+	 ONAGWJxOZuuiL1dS1CrY0TR8k/jRda3Qc/KFY/XU63qM72ic5jycb/X/B81GFyp2qGA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794069266;
+	c=relaxed/relaxed; t=1794069269;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -33,116 +33,114 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:Cc:Content-Type:Content-Transfer-Encoding:Errors-To:
 	 Sender;
-	bh=MYa6G8epPONrBC5rn8q//nUcnN8EBz2Hh0MInrzRqjM=;
-	b=JYVzJujGRzLrYSAGQvHMDkZXnUHxrhpqv0aDvRcAxdQqjVyHiPTHV8SoTwnqi/Uo6vxp
-	 yzRrp+2eAWpH9nQgOxRvItxIZktYzvDUz8p8a6NPBEs1yOcTJ9H5DzQJsjA4DoocI66z2
-	 8AqlGoypc4ss2egBauR91woA7Q3yZBNzmMTzTIbXK9ohmaTKjwkrSKuHNltUXSObq35yB
-	 8/QV70sBuxZYuhGbiJY5LDGuU1s1UmLip4vTW15OEAUrxBPTQNrS18sJUnaX/VtQdrlzM
-	 qTSdzaqIOSPaDIk88LQWDB+uhEmiOx/zFH2wn/UPftgvjydj05mWNAUJbOwqxEl77kg==
+	bh=H9wPzJUw4qiN4aRHN/Uoxe19RvK8+wqGSXYNFLZTOkQ=;
+	b=GzjzEwOc5HOQ/5c/DTV88rO6+PsthzDHlVsVv+VFrKhBgR2WxKruH2twLp+3kXQQoO5q
+	 dB33wzX2DckDZBYR8Idzu7bHJeGe0YiksK8RYtRA9AtaLnaN05FynKjmZXKexBdGNlc1W
+	 MbWBk1BA5MLLEkQViINcI2LC9rJ60vJhwjHJRwygEKjcLPHF6Pa8OqcGVnoCa6T5u7rfq
+	 yrxW1DNqr+FY4kaF/73JQyXShePwcat0qguMRTKKAP1RoMrPRS3wFO8xFuFa2Isohq95w
+	 AjvLMxSjdB9TME5mISfZbq+JvVIUa52lHjkJxlBSR49EWlKHqbjBFmwqG9W5G9ffb8w==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
-	dmarc=pass header.from=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=bOSQz5bk;
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794069266;
-	bh=MYa6G8epPONrBC5rn8q//nUcnN8EBz2Hh0MInrzRqjM=;
+	s=default; t=1794069268;
+	bh=H9wPzJUw4qiN4aRHN/Uoxe19RvK8+wqGSXYNFLZTOkQ=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=kHIt5X5Rpg3Dx3bUEhAhvOf9bJAXBQ0ZZCIqUeaFkadqLQEsNigSJh1k6xrCvcbud
-	 NqJlyuFuBcbUAjUA54ncIUHP7d0xpoLuSPCrKbQqmDxc4ov2dotYYwC/csUSRMCFum
-	 l4EgwupNglwvMy1qFbbPV2JXblCeg+B8tIv5uXJuAO+rLHK1aI/yVfTJewD4fjnH7l
-	 wqql8AqSMSyhMWOLk/3iXGJob9IiTOzo90Qi3tRMVdv/00ZO1Pad6bJRJCPd9M6/fk
-	 S/XY8nUCdoDNlAr3RTmRRi/aebEv8UOisdnjNm0JUtAjPIXMBEtqhseqK1hNsQZQKE
-	 R45OQbfnyRBLg==
+	b=sM6oln1L+j/Ib1F/aHD/y+uc7cOH9NP0iAi5ZH3UbwZN45HMGIVV7NtwU6oq4feIv
+	 jn2HLf4I/Jb6EO6hfQIK2SXZ74JbM/MZgB1YnxHkV9WqF5/1ucuvPIUfwg6OkEI18Z
+	 fFU6lvCXNaSblr1IIHOEkTFF+oJHbXTEhzUwJF4AH9zP4mZukEzynkI5nqTRpwgcKT
+	 vO91MH1jRulmpBmx8veeS7Y+caa+9AI/5SmnNUcIfxqwH5JtDbnXCBlgyix8irySSz
+	 OPuDbB+Py8d0qHy2mmoHXOftpLMmPD04ZI+Y+xvGKQ04tZPFUoJMTHVPytO8Kzs8jb
+	 Ic9nwxY6Nbj7A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6FB4A4070F;
-	Sat,  7 Nov 2026 16:34:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4C62634D
- for <buildroot@buildroot.org>; Sat,  7 Nov 2026 16:34:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D227840748;
+	Sat,  7 Nov 2026 16:34:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 890CF317
+ for <buildroot@buildroot.org>; Sat,  7 Nov 2026 16:34:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 49D2D4070F
- for <buildroot@buildroot.org>; Sat,  7 Nov 2026 16:34:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8658F400A9
+ for <buildroot@buildroot.org>; Sat,  7 Nov 2026 16:34:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id so-nOMHXMXcY for <buildroot@buildroot.org>;
- Sat,  7 Nov 2026 16:34:24 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 3105B4069A
-Authentication-Results: smtp4.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::331"
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FToCmfaWmdkj for <buildroot@buildroot.org>;
+ Sat,  7 Nov 2026 16:34:25 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 3B1544009B
+Authentication-Results: smtp2.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::336"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org;
+Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20260707 header.b=bOSQz5bk
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3105B4069A
- for <buildroot@buildroot.org>; Sat,  7 Nov 2026 16:34:22 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-4a2153c8525so12013095e9.3
- for <buildroot@buildroot.org>; Sat, 07 Nov 2026 08:34:22 -0800 (PST)
+Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20260707 header.b=ZdfMgvgb
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3B1544009B
+ for <buildroot@buildroot.org>; Sat,  7 Nov 2026 16:34:24 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-4a35db1f202so12641685e9.3
+ for <buildroot@buildroot.org>; Sat, 07 Nov 2026 08:34:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20260707; t=1794069261; x=1794674061; darn=buildroot.org;
+ d=gmail.com; s=20260707; t=1794069263; x=1794674063; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=BeK5WKzPCRvc+bOq9Sdhu9nQx4X0G+VIMtdyEvWJPes=;
- b=bOSQz5bkZbwIlQ+4xzYG0I6ccFIJ+iXOFWCYXhaCBfmHCR3q0g3DXZ0lqI6iDel+HB
- kz/QOaXVyXPttfjTB/HrZIejIhINNPYcrbsP7BKeRbEwf7j+g60DO25u4++hy+ysvcHI
- DWZLN9MikzjWwMbnAWYhWvXE7mv8ObBTs4SjVvmkTyAq37h3cjbmcl1Amdl/fuEJ4IrW
- BHCqD4mpkz8HLWiE+Zs8A9bKSZOPOhTDAn9+1um56jRFYkKLEZU1ql81JjgPcVymWZ83
- LgH0rDI4xbtBuWDJta0Qi+cQ0ZTaV+en5x6ZAerbUAd6lHGgLQ5c70gFYZQ8AVdwPlRG
- K9Xg==
+ bh=zsqWLYIaZARt7mjcnJHC9ovqq9B4rrGQAUziYx9l/Fo=;
+ b=ZdfMgvgbt3zaUVNNUHW7i7mSDhrobd2vnZaQ0Zy4oNzha554fajZEaxJy8MpGk/LYk
+ 31uN1kpYFsljSnaWGlqNDFVRViItvB7+cCO1Ooodc+vltvh7uaigqXsdsmC/6AfPo929
+ Rsf4UXjfx+aYY8gSi68IBpC3kggoEMchzmHCLmnU0qD3xHUg3//7xst2VHomJJ+DTmzf
+ BK9PReXun+wbeKG3hYL2U3MT9I2GuHnHMK1I6h3Nbx03y+C7clFz3hL/1B7i0m9j1htz
+ PJWBPTNEHQ3vQnsKXnojgYRFFSLIY6SDpK7RaWGs+7TpPuzZApxBC9g86Y+fB9nsfBro
+ fGBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1794069261; x=1794674061;
+ d=1e100.net; s=20260707; t=1794069263; x=1794674063;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=BeK5WKzPCRvc+bOq9Sdhu9nQx4X0G+VIMtdyEvWJPes=;
- b=kvMc0Xqkj7X8JhIoYUvNzH1m9RHzc/GUXyB3C7gpzMiJW7AzfXP3h0UYq24LU5BJ0M
- Bz0NSVpH/6ecPhlKvXMmv40Q+Vwgg7TNjOP8zYWehWWe+Gzc3B1uOkZitf+EiPTg2PT5
- B82JJ9Z3Ac6Kpk4a6k+62yxR7eYQhIVVWvwvTlDSW1qd9rM4OvQSCB2n3XUnNVTs2LTI
- srjU8wXEgKOogwti9mSoxhjy+ZuxVq2GeJDfe+yu0G6Jiuuyl5S7XIFGWTkxRsGHPh6l
- njqtoiimlIvuNuya9srJgYglld4nZJZqu2+jg3yxEktymknPXHzlCK6axF9h4CVWG5fy
- 6Zlw==
-X-Gm-Message-State: APuU4Z8ffkmSN98BchFgK0LM1Sr2zmcqBjKQJrpXDCS16r3NxWyk2kV5
- f8gIFUue8tctq+65JrA2jJuDto7G63n+rCG85TTdpJF01IbKXrSZ+k8K9fTSrEhh
-X-Gm-Gg: AYBFou3om9c4HtvbCly+ocD3pqmdxWlTdJys1mCVT4qZXoeWO35DrPibTpiMUm0aR2R
- C8Zn+Ut4QX6u/995Fizur5dSA/GkjEqJfTC2IYV0WM71m7yTiD++HLy2JkwjafJq+UXJhVMOGn6
- IlF7Lyy7/VNvvMzrZUoklhJgWKLJRDGDM+uTcIi0GyvcZCTd9vt/AMVXUnMzNsqY4HMDge2XkDc
- K0RksDi257hqzQvo8+2ZmkFGawYtcQxHbjHsjv0xjHIeFfAw0hLMIbEgukALBAFm+eYpSqcFgnU
- Ae9Rg/U610KxixfbwVqatw+yMP9gIOIAIarKjtV5MHnWJTNK2ihd4glAFlmgwICoeQbzgXrg9sK
- RSvSF4hDmThrFABfc/8abF0u+uEZKk1myVN2ykygaSpV0WT/DGDfUiyJd4Yr5VDxSNWZUQ7odzH
- AhesY1sAy4gP6VD4/9BFf9fzTvIxzI/xbB8ba71veWltx2nd4l+ssf6WKewjzWSVin3V8vwxAhl
- pEKYl3KlIt5nRkT7oeDE8lz03IOYjp6CXDYQgJSv64fovKlaQnsAHQ9LJ/y9WC9YImcc8R2SZZ2
- 9KsYFzYCz5uf07AOy/etXPCSHGnZx2EUpkFaKN1fVgjs72zdNWHr
-X-Received: by 2002:a05:600c:8b84:b0:4a2:1a:a120 with SMTP id
- 5b1f17b1804b1-4b6de7891a4mr95203615e9.6.1794069260890; 
- Sat, 07 Nov 2026 08:34:20 -0800 (PST)
+ bh=zsqWLYIaZARt7mjcnJHC9ovqq9B4rrGQAUziYx9l/Fo=;
+ b=w3geU3DRHFYFsVEKu+9psvAlqYsfnxplxTEqeaJsWR80R4wKfcfFfIVkJPjG8Kk2Cu
+ yX5/AkPkCov4rWdatwhjy1+kR+xlB7ojs+Wqqf99xVdfsnyiP3EwFZspPofBrZ5nstf2
+ Ah1RUA4NnLZS+uIYrCAVGitiibqLOzLVVdOYQTzJCOGMRdE6EQ9M8PYxo2abzB8mNbeh
+ mOvUnFdLxjcY7W21HEvd6fUSMcl+hZy8xdZIDfTCJ9+tyUHNr8ty+u0g6zDA6LdRtB5B
+ eDvgF5CcHF/37/zyVeD4sBVqawiEoKGHkEilYoIAEbAF2ATes0lUxOpRQPcxoSBfTf9/
+ Ek8w==
+X-Gm-Message-State: APuU4Z/T1g2tBbdaYctNZOhO0J/NdLiGMFlvGXo9svg5ldQlqSixRsZR
+ ETYGd/iD/MZBx6stC/PE4HeVphNZ2/axLr3AMWU9EAYDuScJ72pje3LVOImDjk4k
+X-Gm-Gg: AYBFou0iepDmwUk5hv4NyArAaX9y0NpylzVUzXd2Zuegsc9Rmaec7rckHWa4gTFpthx
+ GCuaS7MOkk/1rAIUgT8h96patnIBURBJCF374/ZhC6kJBd+YLhburUqqAubSVjbYh83vut1n+ne
+ g2fsJ5Tz6kmBCKVcWRK8DMCNnr81WRzSw2ljBM/h75VcZIXEKC+C4xmDOrMi4fvspgfVwxYFshK
+ BTLg6KNheHZQX9Wqvi2Eh9/BnkC1vVN0rWYXWLvrqoMnTvysBqeFh2Lql1ySUbzr7gs9ZJzBRRR
+ I8uobSD4s6sV8Y1BoFlRsy+I7FewT9gV9U4+pTlQPJ9R9oIWhmbnEgt+cvmMwS/GUR4XuIOGj6e
+ 6OBhAojkSSRQlRvYp4OB+SrO1n00KD8gsIxRzyqqJdYMYz5sUU2MRr/QYaLS6e2vVvmMDDj5Zmh
+ yJnTxsnsrabGUNLli47J3ilUyy0ShdmOWr0Zi3eadKGhgvBWIVsFs6PVndOh2VKyMFSX7IsratR
+ 0lopVTa/pFjcBGlzno0OVHYSt9+9v/Ldxu42klIOOh7Qc83LtoMnTQJ3B07JYKizzscJHxjLxWe
+ PTNRDjaIsY/FdqR83arzeNNoHuGwBT7TeWrxacV95HSctPzghkPhGA==
+X-Received: by 2002:a05:600c:3e8f:b0:4a5:87b3:ddc1 with SMTP id
+ 5b1f17b1804b1-4b6de4a6ba1mr97685335e9.13.1794069262727; 
+ Sat, 07 Nov 2026 08:34:22 -0800 (PST)
 Received: from angelo-Precision-7550 ([94.154.175.53])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4b7e6eca30asm82268255e9.7.2026.11.07.08.34.17
+ 5b1f17b1804b1-4b7e6eca30asm82268255e9.7.2026.11.07.08.34.21
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 07 Nov 2026 08:34:19 -0800 (PST)
+ Sat, 07 Nov 2026 08:34:22 -0800 (PST)
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat,  7 Nov 2026 17:34:00 +0100
-Message-ID: <20261107163414.560896-2-angelo.compagnucci@gmail.com>
+Date: Sat,  7 Nov 2026 17:34:01 +0100
+Message-ID: <20261107163414.560896-3-angelo.compagnucci@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261107163414.560896-1-angelo.compagnucci@gmail.com>
 References: <20230903163509.614740-1-ricardo.martincoski@gmail.com>
  <20261107163414.560896-1-angelo.compagnucci@gmail.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v4 01/15] utils/check-package: factor-out
- check_disabled()
+Subject: [Buildroot] [PATCH v4 02/15] utils/check-package: support inline
+ flags
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -160,7 +158,6 @@ Cc: Joseph Kogut <joseph.kogut@gmail.com>,
  Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
  Fabrice Fontaine <fontaine.fabrice@gmail.com>,
  Maxim Kochetkov <fido_max@inbox.ru>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
  Francois Perrad <francois.perrad.86@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  James Knight <james.d.knight@live.com>,
@@ -173,8 +170,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
 	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
@@ -186,90 +183,88 @@ next line of the source file:
 
     # check-package Indent
 
-Currently the logic that implements this is at the main check-package
-script. But the main package script is not covered by unit tests.
+Extend that functionality to also support flags that will trigger
+special behaviour.
+For instance, by adding the line to a Config.in file:
 
-In preparation to support not only
-'ignore this CheckFunction for the next source line'
-but also
-'use special rules for this CheckFunction when testing this file'
-move the logic that parses such special comments into the base class
-_CheckFunction.
+    # check-package Indent_ignore-menu-indent-below
 
-At same time, create unit tests that exercise such code.
+makes the CheckFunction named Indent to set a flag named
+ignore-menu-indent-below and use it until the end of the source file
+under test.
+
+One example of use for this new special comment is Indent() from
+lib_config.py, that currently keeps a list of 4 intree Config.in files
+that have a special but legitimate indentation rule.
+Instead of keeping the list inside the code, now a special comment can
+be used in each of these 4 Config.in files.
+
+A great side effect of this new type of special comment is that it can
+also be used in source files from br2-external trees.
+
+Concept reused from James Knight's work in [1] and [2].
+[1] http://patchwork.ozlabs.org/project/buildroot/patch/SN4P221MB0682AE13FB1ACA5A755024F1A0689@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM/
+[2] http://patchwork.ozlabs.org/project/buildroot/patch/SN4P221MB06823B0F7326D27ECD5E0FAEA0689@SN4P221MB0682.NAMP221.PROD.OUTLOOK.COM/
 
 Cc: James Knight <james.d.knight@live.com>
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Ricardo Martincoski <ricardo.martincoski@gmail.com>
-Co-authored-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
 Changes v3 -> v4:
-  - rebase on current master: check_file_using_lib() now reads the file
-    in a try/except and also skips the after() check of a disabled
-    function; use check_disabled() there too;
-  - send together with the package infra checks of the "warn about
-    symbols not recognized by a package infra" series and the fixes
-    they need.
+  - none (rebased on current master).
 
- utils/check-package                |  4 +--
- utils/checkpackagelib/base.py      |  5 +++
- utils/checkpackagelib/test_base.py | 49 ++++++++++++++++++++++++++++++
- utils/checkpackagelib/test_util.py |  5 ++-
- 4 files changed, 60 insertions(+), 3 deletions(-)
- create mode 100644 utils/checkpackagelib/test_base.py
+ utils/checkpackagelib/base.py      | 20 ++++++--
+ utils/checkpackagelib/test_base.py | 82 ++++++++++++++++++++++++++++++
+ 2 files changed, 99 insertions(+), 3 deletions(-)
 
-diff --git a/utils/check-package b/utils/check-package
-index aa10280f4d..f9978adef4 100755
---- a/utils/check-package
-+++ b/utils/check-package
-@@ -262,7 +262,7 @@ def check_file_using_lib(fname):
-             for lineno, text in enumerate(f):
-                 nlines += 1
-                 for name, cf in objects:
--                    if cf.disable.search(lastline):
-+                    if cf.check_disabled(lastline):
-                         continue
-                     line_sts = cf.check_line(lineno + 1, text)
-                     warn, fail = print_warnings(line_sts, name in xfail)
-@@ -276,7 +276,7 @@ def check_file_using_lib(fname):
-         return nwarnings, nlines
- 
-     for name, cf in objects:
--        if cf.disable.search(lastline):
-+        if cf.check_disabled(lastline):
-             continue
-         warn, fail = print_warnings(cf.after(), name in xfail)
-         if fail > 0:
 diff --git a/utils/checkpackagelib/base.py b/utils/checkpackagelib/base.py
-index 0ab6eba9f6..4636eca3a6 100644
+index 4636eca3a6..a3aff9e3d8 100644
 --- a/utils/checkpackagelib/base.py
 +++ b/utils/checkpackagelib/base.py
-@@ -9,6 +9,11 @@ class _CheckFunction(object):
+@@ -4,14 +4,28 @@ import os
+ 
+ 
+ class _CheckFunction(object):
++    flags = []
++
+     def __init__(self, filename, url_to_manual):
+         self.filename = filename
          self.url_to_manual = url_to_manual
-         self.disable = re.compile(r"^\s*# check-package .*\b{}\b".format(self.__class__.__name__))
+-        self.disable = re.compile(r"^\s*# check-package .*\b{}\b".format(self.__class__.__name__))
++        if self.flags:
++            flags_pattern = '|_' + '|_'.join(self.flags)
++        else:
++            flags_pattern = ''
++        self.disable = re.compile(r"^\s*# check-package .*\b{}({})\b".format(self.__class__.__name__, flags_pattern))
++        self.enabled_flags = {f: False for f in self.flags}
  
-+    def check_disabled(self, line_before):
-+        if self.disable.search(line_before):
-+            return True
-+        return False
+     def check_disabled(self, line_before):
+-        if self.disable.search(line_before):
+-            return True
++        found = self.disable.findall(line_before)
++        if found:
++            # catch flags to be used by CheckFunction for a source file, for all lines below
++            flags_found = [f[1:] for f in found if (f != '' and f[0] == '_')]
++            for f in flags_found:
++                self.enabled_flags[f] = True
 +
++            ignore_this_line = '' in found
++            return ignore_this_line
+         return False
+ 
      def before(self):
-         pass
- 
 diff --git a/utils/checkpackagelib/test_base.py b/utils/checkpackagelib/test_base.py
-new file mode 100644
-index 0000000000..ef266d542c
---- /dev/null
+index ef266d542c..bbe9285466 100644
+--- a/utils/checkpackagelib/test_base.py
 +++ b/utils/checkpackagelib/test_base.py
-@@ -0,0 +1,49 @@
-+import pytest
-+import checkpackagelib.test_util as util
-+import checkpackagelib.base as m
+@@ -47,3 +47,85 @@ def test_IgnoreNextLine(testname, filename, string, expected):
+ 
+     warnings = util.check_file(CheckFunctionUnderTest, filename, string)
+     assert warnings == expected
 +
 +
-+IgnoreNextLine = [
-+    ('without comment to ignore a given CheckFunction',
++SpecialCheckForThisFile = [
++    ('without special comment',
 +     'any',
 +     'content to test\n'
 +     '# commented content to test\n'
@@ -277,7 +272,7 @@ index 0000000000..ef266d542c
 +     'content to test\n'
 +     'content to test\n',
 +     [1, 2, 3, 4, 5]),  # set of line numbers for all lines not ignored while testing
-+    ('ignore next line',
++    ('ignore next line (CheckFunction with flags)',
 +     'any',
 +     'content to test\n'
 +     '# check-package CheckFunctionUnderTest\n'
@@ -285,7 +280,7 @@ index 0000000000..ef266d542c
 +     'content to test\n'
 +     'content to test\n',
 +     [1, 2, 4, 5]),
-+    ('comment to ignore one CheckFunction does not affect another one',
++    ('comment to ignore one CheckFunction does not affect another one (CheckFunction with flags)',
 +     'any',
 +     'content to test\n'
 +     '# check-package AnotherCheckFunction\n'
@@ -293,7 +288,7 @@ index 0000000000..ef266d542c
 +     'content to test\n'
 +     'content to test\n',
 +     [1, 2, 3, 4, 5]),
-+    ('ignore 2 CheckFunctions for next line',
++    ('ignore 2 CheckFunctions for next line (CheckFunction with flags)',
 +     'any',
 +     '# check-package CheckFunctionUnderTest, AnotherCheckFunction\n'
 +     'content to ignore\n'
@@ -301,33 +296,53 @@ index 0000000000..ef266d542c
 +     'content to ignore\n'
 +     'content to test\n',
 +     [1, 3, 5]),
++    ('one flag',
++     'any',
++     'content to test using default code\n'
++     '# check-package CheckFunctionUnderTest_flag-2\n'
++     'content to test using flag-2\n'
++     'content to test using flag-2\n',
++     [1, 2, [3, [-2]], [4, [-2]]]),
++    ('flag and ignore next line in the same file',
++     'any',
++     'content to test using default code\n'
++     '# check-package CheckFunctionUnderTest\n'
++     'content to ignore\n'
++     '# check-package CheckFunctionUnderTest_flag-2\n'
++     'content to test using flag-2\n'
++     '# check-package CheckFunctionUnderTest\n'
++     'content to ignore\n'
++     'content to test using flag-2\n',
++     [1, 2, 4, [5, [-2]], [6, [-2]], [8, [-2]]]),
++    ('2 flags',
++     'any',
++     'content to test using default code\n'
++     '# check-package CheckFunctionUnderTest_flag-2\n'
++     'content to test using flag-2\n'
++     '# check-package CheckFunctionUnderTest_flag-1\n'
++     'content to test using flag-1 and flag-2\n'
++     'content to test using flag-1 and flag-2\n',
++     [1, 2, [3, [-2]], [4, [-2]], [5, [-1, -2]], [6, [-1, -2]]]),
 +    ]
 +
 +
-+@pytest.mark.parametrize('testname,filename,string,expected', IgnoreNextLine)
-+def test_IgnoreNextLine(testname, filename, string, expected):
++@pytest.mark.parametrize('testname,filename,string,expected', SpecialCheckForThisFile)
++def test_SpecialCheckForThisFile(testname, filename, string, expected):
 +    class CheckFunctionUnderTest(m._CheckFunction):
++        flags = ['flag-1', 'flag-2']
++
 +        def check_line(self, lineno, text):
++            flags = []
++            if self.enabled_flags['flag-1']:
++                flags.append(-1)
++            if self.enabled_flags['flag-2']:
++                flags.append(-2)
++            if flags:
++                return [lineno, flags]
 +            return lineno
 +
 +    warnings = util.check_file(CheckFunctionUnderTest, filename, string)
 +    assert warnings == expected
-diff --git a/utils/checkpackagelib/test_util.py b/utils/checkpackagelib/test_util.py
-index 23f2995e27..b06e218498 100644
---- a/utils/checkpackagelib/test_util.py
-+++ b/utils/checkpackagelib/test_util.py
-@@ -2,7 +2,10 @@ def check_file(check_function, filename, string):
-     obj = check_function(filename, 'url')
-     result = []
-     result.append(obj.before())
-+    lastline = ""
-     for i, line in enumerate(string.splitlines(True)):
--        result.append(obj.check_line(i + 1, line))
-+        if not obj.check_disabled(lastline):
-+            result.append(obj.check_line(i + 1, line))
-+        lastline = line
-     result.append(obj.after())
-     return [r for r in result if r is not None]
 -- 
 2.53.0
 
