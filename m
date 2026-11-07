@@ -1,241 +1,100 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09E09606A32E
-	for <buildroot@archiver.kernel.org>; Sat,  7 Nov 2026 14:26:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C78A606A9C2
+	for <buildroot@archiver.kernel.org>; Sat,  7 Nov 2026 15:17:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=NTVTbWvA
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=cLEQp4Wf;
+	dkim=temperror header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256 header.s=2022 header.b=ljIp3Q7I
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 27A066078D;
-	Sat,  7 Nov 2026 14:26:21 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5fTDa4oBRstZ; Sat,  7 Nov 2026 14:26:19 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org D4AFF60730
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794061579;
-	b=dCbSIE4Uf9GHgogy5yvl5npNzFxP5/7O/MFr+46/q6D6DSajy+zdkQF2xUyMProKp0Vq
-	 O8381+Cr3xwvdr/1/KFc2fr6+VHcjHacYn49L+YWanXrRcviTTaKnrBp3RppD0GjRRMcD
-	 0NHu2QHql4K8Zm9NhVz2YblL4sy3aPbM59UUfazdfx2M/l1v9tBTN910EpkXjZLrR0lEL
-	 lmzbvKWvF12kAk+xhHx4vMBeBpR94WAafV6GfU5AFQhMKkl0c4SHl/0R8mzD2HPn5kMdw
-	 PSOGq7e3IGryLjrlM9bcQsB0q0E0+L3/b9Xv43G7oV9jLFTJiM7EWkFJ36zBYxZZG8w==
-ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794061579;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 X-UI-Sender-Class:Received:Message-ID:Date:MIME-Version:User-Agent:To:
-	 Cc:References:Content-Language:Autocrypt:In-Reply-To:X-Provags-ID:
-	 UI-OutboundReport:Subject:X-BeenThere:X-Mailman-Version:Precedence:
-	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
-	 Errors-To:Sender;
-	bh=lKcLPMelLGRI2dJXm6ESfeBO0+p7f1thdOhkwZR/TyY=;
-	b=HbrCtVRZH0GL76N48L1JQ54X+aR7jL3L0FuKqgSMa+pLd4xqjVtiYWXTjIB48+Jyx6Xv
-	 EPOSqcYv2GQDzjihL8KJ5jFFCJxu1sRHsZtWOMLtD8J6QfZT8UJlAjjB0MtZglABhSv/W
-	 1/GpsyRkN0O0P1wUUNR8WfkmRgiiyffTzoecJpJdYyKeYTa6GO5xePS1cbZVvpCHaUEGV
-	 CBPEpcIGVtdzxdHlhF+/hoqa6hNZNWn6iOZ4QTqUNk0uKbDv+oF2mV43VFjA+yy1JgrLl
-	 GGUfY0lMCSDx1N0HJcJaR5h0EyvcElFui8Elah5faF69vHZnzqgrP+kVlJGwfXLiAFw==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
-	arc=none smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794061578;
-	bh=lKcLPMelLGRI2dJXm6ESfeBO0+p7f1thdOhkwZR/TyY=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=NTVTbWvArs7MqdSZR9CY2ei2jWXZfxcUKAYnSunJ23RAmq1ccl24us+7twfQ14Q3b
-	 3afhOQLwuzTlgoA5/vNQfLwu/NcBCKOBfnhLx+g2jKMZJ+vpHB4aDvQvQTzJy+LWZX
-	 AVwvVMAtLDezFPtq0s9gNWstGcn57jFbziNdZHVEX1LUozGEi96A9BUbL9DCJUun+X
-	 njciaYgInZXM8hXNqTlX17HaK7Q9lD0+Zcs2EM1F79Mj485N5z+gNIJu4OrbvipdVR
-	 QprMgjzy2PWaR/RG2PHkZcWyW20JG8s3ZWAIIT5bT5d3dFV+iWxVrw9TaPSVp/Ount
-	 Rz8IzCB8K+V7A==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D4AFF60730;
-	Sat,  7 Nov 2026 14:26:18 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id D29C637D
- for <buildroot@buildroot.org>; Sat,  7 Nov 2026 14:26:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B7F564064B
- for <buildroot@buildroot.org>; Sat,  7 Nov 2026 14:26:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DA7D140758;
+	Sat,  7 Nov 2026 15:17:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oLCM51nmIIzT for <buildroot@buildroot.org>;
- Sat,  7 Nov 2026 14:26:16 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 1FA3F40602
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1FA3F40602
- for <buildroot@buildroot.org>; Sat,  7 Nov 2026 14:26:14 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from client.hidden.invalid by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mnpru-1wjRsc1k4I-00eL91; Sat, 07
- Nov 2026 15:26:12 +0100
-Message-ID: <acb5cce5-1a6c-4b45-9b7d-a734582f8689@gmx.de>
-Date: Sat, 7 Nov 2026 15:26:11 +0100
+ id dZURYXCZB8WA; Sat,  7 Nov 2026 15:17:09 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org D2C034069A
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794064629;
+	b=qJu4VO/3uHSxXBvKIL2/r+ueOMmVaNZxBCBkgWuQ+9qfO8hTWsY+YHxIS9cV+cjKQTvk
+	 yq5RUsfcXs0o957ATuKS4JvIaYKgIIhromyZnS7dP4RrMvrIqKbu1hVMEoNDTp9SgsLxC
+	 cr/JNoKKN81P2I1jEy67IA0pUtFkWDOyJ9zIWRdi93THA1spS8/1kimVTwRY/QWkZhL5U
+	 GlPGg7OmYnA8eV0vU4OZ30j4PV/1Dnsvwgdgvd4wqxnsvir7mS0wjrlOnGqI9PcXtXlss
+	 djQ+maDFEJkIkdWl6GgVG8mPalh99gbuy8rBgmzqA2WVhCB9miBwTvhBouL8c48PlAg==
+ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1794064629;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 DKIM-Signature:Received:Date:From:To:Message-ID:MIME-Version:
+	 Content-Disposition:X-Operating-System:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=vdsf4xvOwuhpwwl99kJPN9KkgAxBuZIMsz9CuXIuxto=;
+	b=oZfAXA5uJADCHpOqmKhrxDOZthprBFB6BU29sd86/rJ/rZie68NtkER2jXkZrJ8WXzyi
+	 o2m48rNAg4RVY88VyTTJlJ1cEBaYZqiRq9qQlgi7pxTP7jgdjjd+0qgkvFKkeDXSK+1kd
+	 NTulVee8COgjR1qPnVD75C0WxKGwkjC/P5fbt6auGZ3RwQ7bJiRuQbg8+0g9MOaG4GvH1
+	 XvwOZmp/r5gyiDYmvpoBSUDr1m2egMvLfMM+Z34HXGylBUhgFN+h3Cvv+3Jk4kwK4N+jc
+	 q2cGT51Qw3tlmwLENT/R+2dc3j32vGZigK7m54o52wZWb/LwSJ8eFRo9O5DQrGeQtbw==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+	arc=none smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1794064628;
+	bh=vdsf4xvOwuhpwwl99kJPN9KkgAxBuZIMsz9CuXIuxto=;
+	h=Date:From:To:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=cLEQp4WffUkqaletDP00NGNDbQEPQcK2Ggc/Hr73VPHUgOTQv2hsMALl5vD9WCWM4
+	 D08Xoad81zD/VqTJrayYDr/pL6+18PyV8JERgRPIg4Jo7GcPvr0mR+i8rAdGFly5y7
+	 Uz907M9IXjMFOEFj9qhprDRQsdXn/1pYH7wIqh6V7VYxqPd2J2rKB+2bMSAf1LBe2q
+	 RYSPvNnWA5ULFku7A0r6DhRwspCgqwjq00wvJnYcs2+n7klVF8wfe8ml14j69DD4bL
+	 ZX+ejqdIoUVNN0B3Ftphh4qddFnX+pJMdKhGt2t60lgVutJO5VHZEjNZhskrYqy926
+	 gmalAirUkCl4w==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp4.osuosl.org (Postfix) with ESMTP id D2C034069A;
+	Sat,  7 Nov 2026 15:17:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 999C41E3
+ for <buildroot@buildroot.org>; Sat,  7 Nov 2026 15:17:06 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 82F8E80F13
+ for <buildroot@buildroot.org>; Sat,  7 Nov 2026 15:17:06 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id A_FKtOJvBJO3 for <buildroot@buildroot.org>;
+ Sat,  7 Nov 2026 15:17:04 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 6E96480EC7
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=89.238.66.15
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
+ helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=openadk.org
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6E96480EC7
+ for <buildroot@buildroot.org>; Sat,  7 Nov 2026 15:17:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=openadk.org; s=2022;
+ t=1794064620; bh=v8boPVpxQfH4iDwtvBb4cNvM6UrM+NhJu3ek1OvXqTY=;
+ h=Date:From:To:Subject:From;
+ b=ljIp3Q7IZ8Ouyh9A/qEkvik8hjJJsGUWM7sY6ytQq2cTnywp+DEgh4xvDYev7lo33
+ QmL+9PptRrjV2neHlX1gOkvmjT1OdAPtHNXky2onC0z7y9J1kN/zJiYYXfQ0wFEHbh
+ wAiOwGgvN/dANJlBXghT9HUgL8FYjmDqY8SITiD3b//PZNPwOOOjm9qLvYvLJLMY0G
+ +tHNvavfWafLTCAFmkDFxoN6ePNYtVG6VaPcMZHZ1pAkLSeOWol4e8AusOiMglmxf6
+ w/CknVaVp56HMQ+AFZMJEidQezXPLtoCdCCjemNaidJL6o/zsoeTMURo2kILgT3Bvm
+ 2jcS5dkBnYv3w==
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 66B2131E0752; Sat, 07 Nov 2026 16:17:00 +0100 (CET)
+Date: Sat, 7 Nov 2026 16:17:00 +0100
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: buildroot@buildroot.org
+Message-ID: <au9A7BZP4DK9CM3t@waldemar-brodkorb.de>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Julien Olivain <ju.o@free.fr>
-Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20260712151755.599427-1-fiona.klute@gmx.de>
- <8553c8ecd56b953f697e767deedfa7c7@free.fr>
- <b4c2aef5-df5d-402d-aa9f-f03ead8e5f88@gmx.de>
-Content-Language: en-US, de-DE-1901, de-DE
-Autocrypt: addr=fiona.klute@gmx.de; keydata=
- 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
-In-Reply-To: <b4c2aef5-df5d-402d-aa9f-f03ead8e5f88@gmx.de>
-X-Provags-ID: V03:K1:sMloiRefiXtZWp4g+alXsOp4wUOIW/iUamQmpyYOVZEbnH45flI
- j6BZRaowdbD8WssyPpKurwqvL9G+63fDnMCpyg7WcfM+4yYiCGnpCEeQ/Z2fr3OdTNBesQ/
- b/CbsNqJBXxzTJ1vzg4OEPbGf9TrmriMCrL6LCsm0INhtUp1HF9zwbg1KqSx0MVmBEAUd0h
- gh9g7ud7HaZ/t2xlYQ4bg==
-UI-OutboundReport: notjunk:1;M01:P0:jgYrqorbK2A=;21h4NXD9Nb+LnmFyUUmsp0ailTL
- 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
-Subject: Re: [Buildroot] [PATCH v2 1/2] package/fakeroot: bump to version
- 2.1.4
+Content-Disposition: inline
+X-Operating-System: Linux 6.12.113+deb13-amd64 x86_64
+Subject: [Buildroot] [PATCH v2] package/uclibc: bump to 1.0.60
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -245,120 +104,1127 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-22.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-18.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS autolearn=ham
+	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-QW0gMDcuMTEuMjYgdW0gMTQ6NTEgc2NocmllYiBGaW9uYSBLbHV0ZToKPiBIaSBKdWxpZW4hCj4g
-Cj4gQW0gMDIuMDguMjYgdW0gMTU6Mzggc2NocmllYiBKdWxpZW4gT2xpdmFpbjoKPj4gT24gMTIv
-MDcvMjAyNiAxNzoxNywgRmlvbmEgS2x1dGUgdmlhIGJ1aWxkcm9vdCB3cm90ZToKPj4+IFRoZSBz
-b3VyY2UgYXJjaGl2ZSBkb2VzIG5vdCBjb250YWluIGEgcHJlLWJ1aWxkIGNvbmZpZ3VyZSBzY3Jp
-cHQgYW55Cj4+PiBtb3JlLCBzbyBlbmFibGUgYXV0b3JlY29uZi4gRmFrZXJvb3QgYWxzbyBjb250
-YWlucyBhbiBleHBlcmltZW50YWwKPj4+IE1lc29uIGJ1aWxkIGRlZmluaXRpb24gc2luY2UgMi4x
-LCBidXQgQnVpbGRyb290IHNob3VsZCBrZWVwIHVzaW5nCj4+PiBhdXRvdG9vbHMgdW50aWwgdGhl
-IE1lc29uIGJ1aWxkIGlzIHN0YWJsZS4KPj4+Cj4+PiBTaW5jZSB2Ni4xMC4xIGJ0cmZzLXByb2dz
-IHVzZXMgbmZ0dygpIFsxXSwgd2hpY2ggcGFja2FnZS9mYWtlcm9vdCBkaWQKPj4+IG5vdCBzdXBw
-b3J0IGJlZm9yZSB2Mi4wIFsyXS4gVGhpcyB1cGRhdGUgYWxsb3dzIHVwZGF0aW5nIGJ0cmZzLXBy
-b2dzCj4+PiBwYXN0IHY2LjEwIHdpdGhvdXQgYnJlYWtpbmcgYnVpbGQgb2YgYnRyZnMgcm9vdGZz
-IGltYWdlcy4KPj4+Cj4+PiBVcHN0cmVhbSBjaGFuZ2VzOgo+Pj4gaHR0cHM6Ly9zYWxzYS5kZWJp
-YW4ub3JnL2NsaW50L2Zha2Vyb290Ly0vY29tcGFyZS8gCj4+PiB1cHN0cmVhbSUyRjEuMzcuMi4u
-LnVwc3RyZWFtJTJGMi4xLjQKPj4+Cj4+PiBbMV0gaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIv
-c2NtL2xpbnV4L2tlcm5lbC9naXQva2RhdmUvYnRyZnMtIAo+Pj4gcHJvZ3MuZ2l0L2NvbW1pdD9p
-ZD1jNjQ2NGQzZjk5ZWQxZGFiY2VmZjExNjhlYWJiMjA3NDkyYzM3NjI0Cj4+PiBbMl0gaHR0cHM6
-Ly9zYWxzYS5kZWJpYW4ub3JnL2NsaW50L2Zha2Vyb290Ly0vIAo+Pj4gY29tbWl0LzM1MDJjNTE1
-YzczZWUwMmU3ZjU1N2U2YTNiZmMxYWY2NzVkZDNkMzQKPj4+Cj4+PiBTaWduZWQtb2ZmLWJ5OiBG
-aW9uYSBLbHV0ZSA8ZmlvbmEua2x1dGVAZ214LmRlPgo+Pj4gLS0tCj4+PiBDaGFuZ2VzIHYxIC0+
-IHYyOgo+Pj4gKiBjb21taXQgbWVzc2FnZTogZXhwbGljaXRseSBzdGF0ZSB3aHkgQnVpbGRyb290
-IHNob3VsZCBrZWVwIHVzaW5nCj4+PiDCoCBhdXRvdG9vbHMgZm9yIG5vdwo+Pj4gKiBhZGQgY29t
-bWVudCBleHBsYWluaW5nIHdoeSBhdXRvcmVjb25mIGlzIG5lZWRlZAo+Pj4KPj4+IMKgcGFja2Fn
-ZS9mYWtlcm9vdC9mYWtlcm9vdC5oYXNoIHwgNiArKystLS0KPj4+IMKgcGFja2FnZS9mYWtlcm9v
-dC9mYWtlcm9vdC5ta8KgwqAgfCA5ICsrKysrKy0tLQo+Pj4gwqAyIGZpbGVzIGNoYW5nZWQsIDkg
-aW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMoLSkKPj4+Cj4+PiBkaWZmIC0tZ2l0IGEvcGFja2Fn
-ZS9mYWtlcm9vdC9mYWtlcm9vdC5oYXNoIGIvcGFja2FnZS9mYWtlcm9vdC8gCj4+PiBmYWtlcm9v
-dC5oYXNoCj4+PiBpbmRleCA4MmE2MjE0MzgwLi4wYzMzMGI3NzkyIDEwMDY0NAo+Pj4gLS0tIGEv
-cGFja2FnZS9mYWtlcm9vdC9mYWtlcm9vdC5oYXNoCj4+PiArKysgYi9wYWNrYWdlL2Zha2Vyb290
-L2Zha2Vyb290Lmhhc2gKPj4+IEBAIC0xLDUgKzEsNSBAQAo+Pj4gLSMgRnJvbSBodHRwczovL2Rl
-Yi5kZWJpYW4ub3JnL2RlYmlhbi9wb29sL21haW4vZi9mYWtlcm9vdC8gCj4+PiBmYWtlcm9vdF8x
-LjM3LjItMS5kc2MKPj4+IC1zaGExwqAgMWE3MjFjMmI0MDkzYTRlODNkYzA5MWRjNDFhMDI4ZjE5
-MzQwYzFiMyAKPj4+IGZha2Vyb290XzEuMzcuMi5vcmlnLnRhci5nego+Pj4gLXNoYTI1NiAKPj4+
-IDBlZWE2MGZiZTg5NzcxYjg4ZmNmNDE1YzhmMmYwYTZjY2ZlOWVkZWJiY2YzYmE1ZGMwMjEyNzE4
-ZDk4ODg0ZGIgCj4+PiBmYWtlcm9vdF8xLjM3LjIub3JpZy50YXIuZ3oKPj4+ICsjIEZyb20gaHR0
-cHM6Ly9zbmFwc2hvdC5kZWJpYW4ub3JnL2FyY2hpdmUvZGViaWFuLzIwMjYwNzExVDIwMjQwNVov
-IAo+Pj4gcG9vbC9tYWluL2YvZmFrZXJvb3QvZmFrZXJvb3RfMi4xLjQtMS5kc2MKPj4+ICtzaGEx
-wqAgOWQ1NWU2MmEzNDYxMjMxNjA1ODE2NmY3YzUyOGQ5ZmMyZjMwYzcxOSAKPj4+IGZha2Vyb290
-XzIuMS40Lm9yaWcudGFyLnh6Cj4+PiArc2hhMjU2IAo+Pj4gMDgyMmJkNWE5ZjBjZjE5ZDJiYTA1
-NDZiODhiMDQzMmQ0ZDNkOTkxN2RiNjJjNTdiNzQwNDRjY2FkYmEwNmU0OSAKPj4+IGZha2Vyb290
-XzIuMS40Lm9yaWcudGFyLnh6Cj4+PiDCoCMgTGljZW5zZSBmaWxlcywgbG9jYWxseSBjYWxjdWxh
-dGVkCj4+PiDCoHNoYTI1NiAKPj4+IGZjODJjYThiNmZkYjE4ZDRlM2U4NWNmZDhhYjU4ZDFiY2Qz
-ZjFiMjlhYmU3ODI4OTVhYmQ5MWQ2NDc2M2Y4ZTcgQ09QWUlORwo+Pj4gZGlmZiAtLWdpdCBhL3Bh
-Y2thZ2UvZmFrZXJvb3QvZmFrZXJvb3QubWsgYi9wYWNrYWdlL2Zha2Vyb290L2Zha2Vyb290Lm1r
-Cj4+PiBpbmRleCAxMmQ3ZjFjNGExLi44MzU0Zjk5NGVlIDEwMDY0NAo+Pj4gLS0tIGEvcGFja2Fn
-ZS9mYWtlcm9vdC9mYWtlcm9vdC5tawo+Pj4gKysrIGIvcGFja2FnZS9mYWtlcm9vdC9mYWtlcm9v
-dC5tawo+Pj4gQEAgLTQsOSArNCw5IEBACj4+PiDCoCMKPj4+Cj4+PiAjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIwo+Pj4KPj4+IC1GQUtFUk9PVF9WRVJTSU9OID0gMS4zNy4yCj4+PiAtRkFLRVJPT1Rf
-U09VUkNFID0gZmFrZXJvb3RfJChGQUtFUk9PVF9WRVJTSU9OKS5vcmlnLnRhci5nego+Pj4gLUZB
-S0VST09UX1NJVEUgPSBodHRwczovL3NuYXBzaG90LmRlYmlhbi5vcmcvYXJjaGl2ZS8gCj4+PiBk
-ZWJpYW4vMjAyNjA0MDFUMDAwMDAwWi9wb29sL21haW4vZi9mYWtlcm9vdAo+Pj4gK0ZBS0VST09U
-X1ZFUlNJT04gPSAyLjEuNAo+Pgo+PiBXaGlsZSB0ZXN0aW5nIHRoaXMgbmV3IGZha2Vyb290IHZl
-cnNpb24sIEkgZm91bmQgYW4gaXNzdWUgb24gaG9zdHMKPj4gd2l0aCBTRUxpbnV4IGVuYWJsZWQu
-Cj4+Cj4+IEZvciBpbmZvLCBpdCBpcyB3b3JraW5nIHdlbGwgaW4gdGhlIEJ1aWxkcm9vdCBEb2Nr
-ZXIgaW1hZ2UsCj4+IGluIHRoZSBHaXRsYWIgaW5mcmE6Cj4+IGh0dHBzOi8vZ2l0bGFiLmNvbS9q
-b2xpdmFpbi9idWlsZHJvb3QvLS9qb2JzLzE1NjYzODQ5MzI1Cj4+Cj4+IFdoZW4gcnVubmluZyBv
-biBteSBGZWRvcmEgNDQgaG9zdCAod2l0aCBzZWxpbnV4IGVuYWJsZWQpLAo+PiBta2ZzLmJ0cmZz
-IGlzIGZhaWxpbmcgd2l0aCB0aGlzIGVycm9yOgo+Pgo+PiBFUlJPUjogem9uZWQ6IHVuYWJsZSB0
-byBzdGF0IC9idWlsZHJvb3Qvb3V0cHV0X2ZvbGRlci9UZXN0QnRyZnMvIAo+PiBpbWFnZXMvIHJv
-b3Rmcy5idHJmcwo+PiBFUlJPUjogZ2V0dGluZyBhIHhhdHRyIHZhbHVlIGZhaWxlZCBmb3IgL2J1
-aWxkcm9vdC9vdXRwdXRfZm9sZGVyLyAKPj4gVGVzdEJ0cmZzL2J1aWxkL2J1aWxkcm9vdC1mcy9i
-dHJmcy90YXJnZXQgYXR0ciBzZWN1cml0eS5zZWxpbnV4OiBObyAKPj4gZGF0YSBhdmFpbGFibGUK
-Pj4gRVJST1I6IGZhaWxlZCB0byBhZGQgeGF0dHIgaXRlbSBmb3IgdGhlIHRvcCBsZXZlbCBpbm9k
-ZTogT3BlcmF0aW9uIG5vdCAKPj4gcGVybWl0dGVkCj4+IEVSUk9SOiB1bmFibGUgdG8gdHJhdmVy
-c2UgZGlyZWN0b3J5IC9idWlsZHJvb3Qvb3V0cHV0X2ZvbGRlci8gCj4+IFRlc3RCdHJmcy8gYnVp
-bGQvYnVpbGRyb290LWZzL2J0cmZzL3RhcmdldDogLTEKPj4gRVJST1I6IGVycm9yIHdoaWxlIGZp
-bGxpbmcgZmlsZXN5c3RlbTogT3BlcmF0aW9uIG5vdCBwZXJtaXR0ZWQKPj4KPj4gSSB3YXMgYWJs
-ZSB0byB3b3JrYXJvdW5kIHRoZSBpc3N1ZSB3aXRoIHRoZSBmb2xsb3dpbmcgcGF0Y2ggSSBwcm9w
-b3NlZCAKPj4gaW46Cj4+IGh0dHBzOi8vc2Fsc2EuZGViaWFuLm9yZy9jbGludC9mYWtlcm9vdC8t
-L21lcmdlX3JlcXVlc3RzLzM4Cj4+Cj4+IENvdWxkIHlvdSBjaGVjayBvbiB5b3VyIHNpZGUgdGhp
-cyBmYWtlcm9vdCBwYXRjaCBpcyB3b3JraW5nIGZvciB5b3U/Cj4+Cj4+IElmIGl0IGRvZXMsIGNv
-dWxkIHlvdSBzZW5kIGEgdjMgaW5jbHVkaW5nIG15IHBhdGNoPwo+IEkgdG9vayBhbm90aGVyIGxv
-b2sgYXQgdGhpcyAoYnkgYnVpbGRpbmcgZmFrZXJvb3QgYXMgYSB0YXJnZXQgcGFja2FnZSAKPiBm
-b3IgbXkgU0VMaW51eC1idWlsZCksIGFuZCBmb3VuZCB0aGUgZm9sbG93aW5nOgo+IAo+ICogSW4g
-dGhlIGZha2Vyb290IGVudmlyb25tZW50IHNlY3VyaXR5LnNlbGludXggaXMgaW5pdGlhbGx5IHVu
-c2V0LCBubyAKPiBtYXR0ZXIgd2hhdCB0aGUgcmVhbCBmaWxlc3lzdGVtIHNheXMuCj4gKiBTZXR0
-aW5nIGl0IHdvcmtzIGp1c3QgZmluZSBhbmQgc3RpY2tzICh3aXRoaW4gdGhlIGZha2Vyb290IGVu
-dikuCj4gCj4gRXhhbXBsZToKPiAjIGZha2Vyb290IC0tIHNoIC1jICdnZXRmYXR0ciAtbiBzZWN1
-cml0eS5zZWxpbnV4IC47IHNldGZpbGVjb24gCj4gcm9vdDpvYmplY3Rfcjp1c2VyX2hvbWVfZGly
-X3QgLjsgZ2V0ZmF0dHIgLW4gc2VjdXJpdHkuc2VsaW51eCAuJwo+IC46IHNlY3VyaXR5LnNlbGlu
-dXg6IE5vIHN1Y2ggYXR0cmlidXRlCj4gIyBmaWxlOiAuCj4gc2VjdXJpdHkuc2VsaW51eD0icm9v
-dDpvYmplY3Rfcjp1c2VyX2hvbWVfZGlyX3QiCj4gCj4gZnMvY29tbW9uLm1rIHNob3VsZCBiZSBy
-dW5uaW5nIHNldGZpbGVzIG9uIFRBUkdFVF9ESVIgd2l0aGluIGZha2Vyb290IAo+IGJlZm9yZSBi
-dWlsZGluZyB0aGUgcm9vdGZzIGltYWdlIGlmIGJ1aWxkaW5nIHdpdGggcmVmcG9saWN5LCBzZWUg
-Cj4gUk9PVEZTX1NFTElOVVguCj4gCj4gUXVlc3Rpb24gaXM6IERvZXMgdGhlIHByb2JsZW0gb2Nj
-dXIgd2hlbiB5b3VyIEJ1aWxkcm9vdCBzeXN0ZW0gdXNlcyAKPiBTRUxpbnV4LCBvbmx5ICpub24q
-LVNFTGludXgsIG9yIGJvdGg/Cj4gCj4gSWYgU0VMaW51eCB0YXJnZXQgaXMgYWZmZWN0ZWQ6IEkn
-ZCBsaWtlIHRvIHNlZSB3aGF0IHRoZSBzZXRmaWxlcyBjYWxsIGlzIAo+IG1pc3NpbmcsIHBvc3Np
-Ymx5IGp1c3QgVEFSR0VUX0RJUi4gQWRkaW5nICJscyAtYWxaICQoVEFSR0VUX0RJUikiIGFmdGVy
-IAo+IHRoZSBzZXRmaWxlcyBjYWxsIHdvdWxkIGJlIGEgZ29vZCBzdGFydC4KPiAKPiBJZiBub24t
-U0VMaW51eCBpcyBhZmZlY3RlZCBJIHdvbmRlciB3aHkgbWtmcy5idHJmcyBpcyBmYWlsaW5nLCB0
-aGVyZSAKPiBzaG91bGQgYmUgbm8gcmVhc29uIHRvIGNvcHkgbm9uLWV4aXN0aW5nIHhhdHRycy4g
-T3IgYXJlIHRob3NlIGhvc3QgCj4gcGVybWlzc2lvbiBjaGVja3M/IEFueSBpc3N1ZXMgaW4gdGhl
-IGF1ZGl0IGxvZz8KPiAKPiBObyBwcm9taXNlcywgYnV0IHRoYXQgc2hvdWxkIGhlbHAgbmFycm93
-aW5nIGl0IGRvd24uIDstKQpPa2F5LCBJIHdhcyBhYmxlIHRvIG5hcnJvdyBpdCBkb3duIGEgYml0
-IG1vcmUuIE1pZ2h0IGJlIGEgZmFrZXJvb3QgYnVnLCAKd2UnbGwgc2VlLiBUaGlzIHNlZW1zIGtl
-eToKCiMgZmFrZXJvb3QgLS0gZ2V0ZmF0dHIgLW0gLSB0YXJnZXQvbWVvdwojIGZpbGU6IHRhcmdl
-dC9tZW93CnNlY3VyaXR5LnNlbGludXgKCiMgZmFrZXJvb3QgLS0gZ2V0ZmF0dHIgLW4gc2VjdXJp
-dHkuc2VsaW51eCB0YXJnZXQvbWVvdwp0YXJnZXQvbWVvdzogc2VjdXJpdHkuc2VsaW51eDogTm8g
-c3VjaCBhdHRyaWJ1dGUKClNvIGxpc3RpbmcgYWxsIGF0dHJpYnV0ZXMgc2hvd3Mgc2VjdXJpdHku
-c2VsaW51eCBhcyBleGlzdGluZywgYnV0IApyZWFkaW5nIGl0IGRvZXNuJ3Qgd29yay4gVGhhdCdk
-IGV4cGxhaW4gd2h5IG1rZnMuYnRyZnMgdHJpZXMgdG8gY29weSBpdCAKYW5kIHRoZW4gZmFpbHMu
-IDotKQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
-bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
-LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+All patches are applied upstream.
+See here for changes in this release:
+https://github.com/wbx-github/uclibc-ng/commits/v1.0.60/
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+v1->v2:
+ - add hotfix for mips32 build error
+
+---
+ .../0001-Fix-SSP-support-for-riscv32.patch    | 174 -------------
+ ...s-parenthesize-the-syscall-arguments.patch | 185 ++++++++++++++
+ .../0002-ppc-fix-e500-fenv-support.patch      | 237 ------------------
+ ...tx-should-be-private-and-not-exposed.patch | 151 -----------
+ ...nel-helper-on-every-core-without-CAS.patch | 116 ---------
+ ...threads-add-dummy-for-pthread_atfork.patch |  43 ----
+ ...l-sys-auxv.h-for-static-builds-again.patch |  57 -----
+ ...ar.h-declare-wcsdup-for-POSIX.1-2008.patch |  41 ---
+ package/uclibc/uclibc.hash                    |   4 +-
+ package/uclibc/uclibc.mk                      |   2 +-
+ 10 files changed, 188 insertions(+), 822 deletions(-)
+ delete mode 100644 package/uclibc/0001-Fix-SSP-support-for-riscv32.patch
+ create mode 100644 package/uclibc/0001-mips-parenthesize-the-syscall-arguments.patch
+ delete mode 100644 package/uclibc/0002-ppc-fix-e500-fenv-support.patch
+ delete mode 100644 package/uclibc/0003-fenv-struct-rm_ctx-should-be-private-and-not-exposed.patch
+ delete mode 100644 package/uclibc/0004-m68k-use-the-kernel-helper-on-every-core-without-CAS.patch
+ delete mode 100644 package/uclibc/0005-Revert-linuxthreads-add-dummy-for-pthread_atfork.patch
+ delete mode 100644 package/uclibc/0006-buildsys-install-sys-auxv.h-for-static-builds-again.patch
+ delete mode 100644 package/uclibc/0007-wchar.h-declare-wcsdup-for-POSIX.1-2008.patch
+
+diff --git a/package/uclibc/0001-Fix-SSP-support-for-riscv32.patch b/package/uclibc/0001-Fix-SSP-support-for-riscv32.patch
+deleted file mode 100644
+index b2e38726f5..0000000000
+--- a/package/uclibc/0001-Fix-SSP-support-for-riscv32.patch
++++ /dev/null
+@@ -1,174 +0,0 @@
+-From c6efc293a52fdde7d4876243faaaa768fe052719 Mon Sep 17 00:00:00 2001
+-From: Waldemar Brodkorb <wbx@openadk.org>
+-Date: Sat, 15 Aug 2026 18:20:33 +0200
+-Subject: [PATCH] Fix SSP support for riscv32
+-
+-On modern 32-bit architectures like RISC-V (riscv32), legacy 32-bit
+-time syscalls like __NR_gettimeofday are intentionally omitted because
+-RV32 implements a strict time64-only ABI to avoid the Year 2038 bug.
+-
+-Therefore, use AT_RANDOM from the auxiliary vector first, as glibc does,
+-to obtain random data for the stack canary. If AT_RANDOM is unavailable,
+-fall back to reading random data from /dev/urandom.
+-
+-Tested with aarch64, riscv32 and riscv32 noMMU targets.
+-
+-Upstream: https://mailman.openadk.org/mailman3/hyperkitty/list/devel@uclibc-ng.org/thread/WIKMWPXJYAPTVVZ2MMZINUJNPIJXBMOE/
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+----
+- extra/Configs/Config.in               | 10 -------
+- ldso/include/dl-syscall.h             | 12 --------
+- ldso/ldso/ldso.c                      |  4 ++-
+- libc/misc/internals/__uClibc_main.c   |  4 ++-
+- libc/sysdeps/linux/common/dl-osinfo.h | 40 +++++++++++++++++----------
+- 5 files changed, 32 insertions(+), 38 deletions(-)
+-
+-diff --git a/extra/Configs/Config.in b/extra/Configs/Config.in
+-index c3aabf1b4..15a072593 100644
+---- a/extra/Configs/Config.in
+-+++ b/extra/Configs/Config.in
+-@@ -2211,16 +2211,6 @@ config UCLIBC_HAS_SSP
+- 
+- 	  Most people will answer N.
+- 
+--config SSP_QUICK_CANARY
+--	bool "Use simple guard values without accessing /dev/urandom"
+--	depends on UCLIBC_HAS_SSP
+--	help
+--	  Use gettimeofday(2) to define the __guard without accessing
+--	  /dev/urandom.
+--	  WARNING: This makes smashing stack protector vulnerable to timing
+--	  	attacks.
+--	  Most people will answer N.
+--
+- choice
+- 	prompt "Propolice protection blocking signal"
+- 	depends on UCLIBC_HAS_SSP
+-diff --git a/ldso/include/dl-syscall.h b/ldso/include/dl-syscall.h
+-index c143b8d45..e08b2cd41 100644
+---- a/ldso/include/dl-syscall.h
+-+++ b/ldso/include/dl-syscall.h
+-@@ -260,18 +260,6 @@ _dl_pread(int fd, void *buf, size_t count, off_t offset)
+- }
+- #endif
+- 
+--#ifdef __UCLIBC_HAS_SSP__
+--# include <sys/time.h>
+--# define __NR__dl_gettimeofday __NR_gettimeofday
+--static __always_inline _syscall2(int, _dl_gettimeofday, struct timeval *, tv,
+--# ifdef __USE_BSD
+--                        struct timezone *
+--# else
+--                        void *
+--# endif
+--						, tz)
+--#endif
+--
+- /* Some architectures always use 12 as page shift for mmap2() eventhough the
+-  * real PAGE_SHIFT != 12.  Other architectures use the same value as
+-  * PAGE_SHIFT...
+-diff --git a/ldso/ldso/ldso.c b/ldso/ldso/ldso.c
+-index 55f7d7e45..96ee3d496 100755
+---- a/ldso/ldso/ldso.c
+-+++ b/ldso/ldso/ldso.c
+-@@ -1225,7 +1225,9 @@ of this helper program; chances are you did not intend to run this program.\n\
+- #ifdef __UCLIBC_HAS_SSP__
+- 	_dl_debug_early("Setting up SSP guards\n");
+- 	/* Set up the stack checker's canary.  */
+--	stack_chk_guard = _dl_setup_stack_chk_guard ();
+-+	stack_chk_guard = _dl_setup_stack_chk_guard (
+-+		_dl_auxvt[AT_RANDOM].a_type == AT_RANDOM ?
+-+		(void *)_dl_auxvt[AT_RANDOM].a_un.a_val : NULL);
+- # ifdef THREAD_SET_STACK_GUARD
+- 	THREAD_SET_STACK_GUARD (stack_chk_guard);
+- # else
+-diff --git a/libc/misc/internals/__uClibc_main.c b/libc/misc/internals/__uClibc_main.c
+-index 549606505..bbf471b17 100644
+---- a/libc/misc/internals/__uClibc_main.c
+-+++ b/libc/misc/internals/__uClibc_main.c
+-@@ -296,7 +296,9 @@ void __uClibc_init(void)
+- #ifndef SHARED
+- # ifdef __UCLIBC_HAS_SSP__
+-     /* Set up the stack checker's canary.  */
+--    stack_chk_guard = _dl_setup_stack_chk_guard();
+-+    stack_chk_guard = _dl_setup_stack_chk_guard(
+-+    _dl_auxvt[AT_RANDOM].a_type == AT_RANDOM ?
+-+        (void *)_dl_auxvt[AT_RANDOM].a_un.a_val : NULL);
+- #  ifdef THREAD_SET_STACK_GUARD
+-     THREAD_SET_STACK_GUARD (stack_chk_guard);
+- #  else
+-diff --git a/libc/sysdeps/linux/common/dl-osinfo.h b/libc/sysdeps/linux/common/dl-osinfo.h
+-index 3110cb05d..0a42ea094 100644
+---- a/libc/sysdeps/linux/common/dl-osinfo.h
+-+++ b/libc/sysdeps/linux/common/dl-osinfo.h
+-@@ -21,22 +21,42 @@
+- #  ifdef IS_IN_libc
+- #   include <fcntl.h>
+- #   include <unistd.h>
+--#   include <sys/time.h>
+-+#   include <string.h>
+- #   define OPEN open
+- #   define READ read
+- #   define CLOSE close
+--#   define GETTIMEOFDAY gettimeofday
+-+#   define MEMCPY memcpy
+- #  else
+-+#   include <dl-string.h>
+- #   define OPEN _dl_open
+- #   define READ _dl_read
+- #   define CLOSE _dl_close
+--#   define GETTIMEOFDAY _dl_gettimeofday
+-+#   define MEMCPY _dl_memcpy
+- #  endif
+- 
+--static __always_inline uintptr_t _dl_setup_stack_chk_guard(void)
+-+static __always_inline uintptr_t
+-+_dl_setup_stack_chk_guard(void *dl_random)
+- {
+- 	uintptr_t ret;
+--#  ifndef __SSP_QUICK_CANARY__
+-+
+-+	/*
+-+	 * Linux supplies random data through AT_RANDOM.
+-+	 * Use it directly when available.
+-+	 */
+-+	if (dl_random != NULL) {
+-+		MEMCPY(&ret, dl_random, sizeof(ret));
+-+
+-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+-+		ret &= ~(uintptr_t)0xff;
+-+#elif __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+-+		ret &= ~((uintptr_t)0xff << (8 * (sizeof(ret) - 1)));
+-+#else
+-+# error "Unknown byte order"
+-+#endif
+-+
+-+		return ret;
+-+	}
+-+
+- 	{
+- 		int fd = OPEN("/dev/urandom", O_RDONLY, 0);
+- 		if (fd >= 0) {
+-@@ -46,18 +66,10 @@ static __always_inline uintptr_t _dl_setup_stack_chk_guard(void)
+- 				return ret;
+- 		}
+- 	}
+--#  endif /* !__SSP_QUICK_CANARY__ */
+- 
+--	/* Start with the "terminator canary". */
+-+	/* Fallback just the "terminator canary". */
+- 	ret = 0xFF0A0D00UL;
+- 
+--	/* Everything failed? Or we are using a weakened model of the
+--	 * terminator canary */
+--	{
+--		struct timeval tv;
+--		if (GETTIMEOFDAY(&tv, NULL) != (-1))
+--			ret ^= tv.tv_usec ^ tv.tv_sec;
+--	}
+- 	return ret;
+- }
+- # endif /* libc || rtld */
+--- 
+-2.47.3
+-
+diff --git a/package/uclibc/0001-mips-parenthesize-the-syscall-arguments.patch b/package/uclibc/0001-mips-parenthesize-the-syscall-arguments.patch
+new file mode 100644
+index 0000000000..e2f9beb29c
+--- /dev/null
++++ b/package/uclibc/0001-mips-parenthesize-the-syscall-arguments.patch
+@@ -0,0 +1,185 @@
++From bbc1470d5d1c0f206cfdc3e9ebf60f6fd9cd3961 Mon Sep 17 00:00:00 2001
++From: ramin <lordrasmus@gmail.com>
++Date: Sat, 7 Nov 2026 12:04:15 +0100
++Subject: [PATCH] mips: parenthesize the syscall arguments
++
++The register setup in internal_syscallN cast each argument without
++parentheses, (ARG_TYPE) arg2.  An argument like "value ? &itv32 : NULL"
++then reads ((long) value) ? &itv32 : NULL, and the pointer goes into a
++long without a cast.  With UCLIBC_USE_TIME64 on 32-bit mips the build
++stops in getitimer, sched_rr_get_interval, timer_gettime and
++timerfd_gettime:
++
++  error: initialization of 'long int' from 'struct __itimerval32_struct *'
++  makes integer from pointer without a cast [-Wint-conversion]
++
++Upstream: https://github.com/wbx-github/uclibc-ng/commit/bbc1470d5d1c0f206cfdc3e9ebf60f6fd9cd3961
++Signed-off-by: Ramin Moussavi <lordrasmus@gmail.com>
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++---
++ libc/sysdeps/linux/mips/bits/syscalls.h | 72 ++++++++++++-------------
++ 1 file changed, 36 insertions(+), 36 deletions(-)
++
++diff --git a/libc/sysdeps/linux/mips/bits/syscalls.h b/libc/sysdeps/linux/mips/bits/syscalls.h
++index ee569ee22..10d759a71 100644
++--- a/libc/sysdeps/linux/mips/bits/syscalls.h
+++++ b/libc/sysdeps/linux/mips/bits/syscalls.h
++@@ -85,7 +85,7 @@
++ 									\
++ 	{								\
++ 	register ARG_TYPE __v0 __asm__("$2") ncs_init;			\
++-	register ARG_TYPE __a0 __asm__("$4") = (ARG_TYPE) arg1;		\
+++	register ARG_TYPE __a0 __asm__("$4") = (ARG_TYPE) (arg1);		\
++ 	register ARG_TYPE __a3 __asm__("$7");				\
++ 	__asm__ __volatile__ (						\
++ 	".set\tnoreorder\n\t"						\
++@@ -107,8 +107,8 @@
++ 									\
++ 	{								\
++ 	register ARG_TYPE __v0 __asm__("$2") ncs_init;			\
++-	register ARG_TYPE __a0 __asm__("$4") = (ARG_TYPE) arg1;		\
++-	register ARG_TYPE __a1 __asm__("$5") = (ARG_TYPE) arg2;		\
+++	register ARG_TYPE __a0 __asm__("$4") = (ARG_TYPE) (arg1);		\
+++	register ARG_TYPE __a1 __asm__("$5") = (ARG_TYPE) (arg2);		\
++ 	register ARG_TYPE __a3 __asm__("$7");				\
++ 	__asm__ __volatile__ (						\
++ 	".set\tnoreorder\n\t"						\
++@@ -130,9 +130,9 @@
++ 									\
++ 	{								\
++ 	register ARG_TYPE __v0 __asm__("$2") ncs_init;			\
++-	register ARG_TYPE __a0 __asm__("$4") = (ARG_TYPE) arg1;		\
++-	register ARG_TYPE __a1 __asm__("$5") = (ARG_TYPE) arg2;		\
++-	register ARG_TYPE __a2 __asm__("$6") = (ARG_TYPE) arg3;		\
+++	register ARG_TYPE __a0 __asm__("$4") = (ARG_TYPE) (arg1);		\
+++	register ARG_TYPE __a1 __asm__("$5") = (ARG_TYPE) (arg2);		\
+++	register ARG_TYPE __a2 __asm__("$6") = (ARG_TYPE) (arg3);		\
++ 	register ARG_TYPE __a3 __asm__("$7");				\
++ 	__asm__ __volatile__ (						\
++ 	".set\tnoreorder\n\t"						\
++@@ -154,10 +154,10 @@
++ 									\
++ 	{								\
++ 	register ARG_TYPE __v0 __asm__("$2") ncs_init;			\
++-	register ARG_TYPE __a0 __asm__("$4") = (ARG_TYPE) arg1;		\
++-	register ARG_TYPE __a1 __asm__("$5") = (ARG_TYPE) arg2;		\
++-	register ARG_TYPE __a2 __asm__("$6") = (ARG_TYPE) arg3;		\
++-	register ARG_TYPE __a3 __asm__("$7") = (ARG_TYPE) arg4;		\
+++	register ARG_TYPE __a0 __asm__("$4") = (ARG_TYPE) (arg1);		\
+++	register ARG_TYPE __a1 __asm__("$5") = (ARG_TYPE) (arg2);		\
+++	register ARG_TYPE __a2 __asm__("$6") = (ARG_TYPE) (arg3);		\
+++	register ARG_TYPE __a3 __asm__("$7") = (ARG_TYPE) (arg4);		\
++ 	__asm__ __volatile__ (						\
++ 	".set\tnoreorder\n\t"						\
++ 	cs_init								\
++@@ -187,10 +187,10 @@
++ 	int* array = FORCE_FRAME_POINTER;				\
++ 	{								\
++ 	register long __v0 __asm__("$2") ncs_init;			\
++-	register long __a0 __asm__("$4") = (long) arg1;			\
++-	register long __a1 __asm__("$5") = (long) arg2;			\
++-	register long __a2 __asm__("$6") = (long) arg3;			\
++-	register long __a3 __asm__("$7") = (long) arg4;			\
+++	register long __a0 __asm__("$4") = (long) (arg1);			\
+++	register long __a1 __asm__("$5") = (long) (arg2);			\
+++	register long __a2 __asm__("$6") = (long) (arg3);			\
+++	register long __a3 __asm__("$7") = (long) (arg4);			\
++ 	__asm__ __volatile__ (						\
++ 	".set\tnoreorder\n\t"						\
++ 	"subu\t$29, 32\n\t"                                             \
++@@ -202,7 +202,7 @@
++ 	".set\treorder"						        \
++ 	: "=r" (__v0), "+r" (__a3)					\
++ 	: input, "r" (__a0), "r" (__a1), "r" (__a2),			\
++-	  "r" ((long)arg5), "r" (array)					\
+++	  "r" ((long) (arg5)), "r" (array)					\
++ 	: __SYSCALL_CLOBBERS);						\
++ 	err = __a3;							\
++ 	_sys_result = __v0;						\
++@@ -217,10 +217,10 @@
++ 	int* array = FORCE_FRAME_POINTER;				\
++ 	{								\
++ 	register long __v0 __asm__("$2") ncs_init;			\
++-	register long __a0 __asm__("$4") = (long) arg1;			\
++-	register long __a1 __asm__("$5") = (long) arg2;			\
++-	register long __a2 __asm__("$6") = (long) arg3;			\
++-	register long __a3 __asm__("$7") = (long) arg4;			\
+++	register long __a0 __asm__("$4") = (long) (arg1);			\
+++	register long __a1 __asm__("$5") = (long) (arg2);			\
+++	register long __a2 __asm__("$6") = (long) (arg3);			\
+++	register long __a3 __asm__("$7") = (long) (arg4);			\
++ 	__asm__ __volatile__ (						\
++ 	".set\tnoreorder\n\t"                                           \
++ 	"subu\t$29, 32\n\t"                                             \
++@@ -233,7 +233,7 @@
++ 	".set\treorder"						        \
++ 	: "=r" (__v0), "+r" (__a3)					\
++ 	: input, "r" (__a0), "r" (__a1), "r" (__a2),			\
++-	  "r" ((long)arg5), "r" ((long)arg6), "r" (array)		\
+++	  "r" ((long) (arg5)), "r" ((long) (arg6)), "r" (array)		\
++ 	: __SYSCALL_CLOBBERS);						\
++ 	err = __a3;							\
++ 	_sys_result = __v0;						\
++@@ -248,10 +248,10 @@
++ 	int* array = FORCE_FRAME_POINTER;				\
++ 	{								\
++ 	register long __v0 __asm__("$2") ncs_init;			\
++-	register long __a0 __asm__("$4") = (long) arg1;			\
++-	register long __a1 __asm__("$5") = (long) arg2;			\
++-	register long __a2 __asm__("$6") = (long) arg3;			\
++-	register long __a3 __asm__("$7") = (long) arg4;			\
+++	register long __a0 __asm__("$4") = (long) (arg1);			\
+++	register long __a1 __asm__("$5") = (long) (arg2);			\
+++	register long __a2 __asm__("$6") = (long) (arg3);			\
+++	register long __a3 __asm__("$7") = (long) (arg4);			\
++ 	__asm__ __volatile__ (						\
++ 	".set\tnoreorder\n\t"						\
++ 	"subu\t$29, 32\n\t"                                             \
++@@ -265,7 +265,7 @@
++ 	".set\treorder"							\
++ 	: "=r" (__v0), "+r" (__a3)					\
++ 	: input, "r" (__a0), "r" (__a1), "r" (__a2),			\
++-	  "r" ((long)arg5), "r" ((long)arg6), "r" ((long)arg7),		\
+++	  "r" ((long) (arg5)), "r" ((long) (arg6)), "r" ((long) (arg7)),		\
++ 	  "r" (array)							\
++ 	: __SYSCALL_CLOBBERS);						\
++ 	err = __a3;							\
++@@ -290,11 +290,11 @@
++ 									\
++ 	{								\
++ 	register ARG_TYPE __v0 __asm__("$2") ncs_init;			\
++-	register ARG_TYPE __a0 __asm__("$4") = (ARG_TYPE) arg1; 	\
++-	register ARG_TYPE __a1 __asm__("$5") = (ARG_TYPE) arg2; 	\
++-	register ARG_TYPE __a2 __asm__("$6") = (ARG_TYPE) arg3; 	\
++-	register ARG_TYPE __a3 __asm__("$7") = (ARG_TYPE) arg4; 	\
++-	register ARG_TYPE __a4 __asm__("$8") = (ARG_TYPE) arg5; 	\
+++	register ARG_TYPE __a0 __asm__("$4") = (ARG_TYPE) (arg1); 	\
+++	register ARG_TYPE __a1 __asm__("$5") = (ARG_TYPE) (arg2); 	\
+++	register ARG_TYPE __a2 __asm__("$6") = (ARG_TYPE) (arg3); 	\
+++	register ARG_TYPE __a3 __asm__("$7") = (ARG_TYPE) (arg4); 	\
+++	register ARG_TYPE __a4 __asm__("$8") = (ARG_TYPE) (arg5); 	\
++ 	__asm__ __volatile__ ( 						\
++ 	".set\tnoreorder\n\t" 						\
++ 	cs_init								\
++@@ -315,12 +315,12 @@
++ 									\
++ 	{								\
++ 	register ARG_TYPE __v0 __asm__("$2") ncs_init;			\
++-	register ARG_TYPE __a0 __asm__("$4") = (ARG_TYPE) arg1; 	\
++-	register ARG_TYPE __a1 __asm__("$5") = (ARG_TYPE) arg2; 	\
++-	register ARG_TYPE __a2 __asm__("$6") = (ARG_TYPE) arg3; 	\
++-	register ARG_TYPE __a3 __asm__("$7") = (ARG_TYPE) arg4; 	\
++-	register ARG_TYPE __a4 __asm__("$8") = (ARG_TYPE) arg5; 	\
++-	register ARG_TYPE __a5 __asm__("$9") = (ARG_TYPE) arg6; 	\
+++	register ARG_TYPE __a0 __asm__("$4") = (ARG_TYPE) (arg1); 	\
+++	register ARG_TYPE __a1 __asm__("$5") = (ARG_TYPE) (arg2); 	\
+++	register ARG_TYPE __a2 __asm__("$6") = (ARG_TYPE) (arg3); 	\
+++	register ARG_TYPE __a3 __asm__("$7") = (ARG_TYPE) (arg4); 	\
+++	register ARG_TYPE __a4 __asm__("$8") = (ARG_TYPE) (arg5); 	\
+++	register ARG_TYPE __a5 __asm__("$9") = (ARG_TYPE) (arg6); 	\
++ 	__asm__ __volatile__ ( 						\
++ 	".set\tnoreorder\n\t" 						\
++ 	cs_init								\
++-- 
++2.47.3
++
+diff --git a/package/uclibc/0002-ppc-fix-e500-fenv-support.patch b/package/uclibc/0002-ppc-fix-e500-fenv-support.patch
+deleted file mode 100644
+index bc64b8f762..0000000000
+--- a/package/uclibc/0002-ppc-fix-e500-fenv-support.patch
++++ /dev/null
+@@ -1,237 +0,0 @@
+-From dff69277d71965cff0a757a030e03994a4a83aa6 Mon Sep 17 00:00:00 2001
+-From: Waldemar Brodkorb <wbx@openadk.org>
+-Date: Tue, 18 Aug 2026 06:02:54 +0200
+-Subject: [PATCH] ppc: fix e500 fenv support
+-
+-Upstream: https://gogs.waldemar-brodkorb.de/oss/uclibc-ng/commit/dff69277d71965cff0a757a030e03994a4a83aa6
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+----
+- libm/powerpc/e500/fpu/fclrexcpt.c    | 1 -
+- libm/powerpc/e500/fpu/fe_nomask.c    | 1 -
+- libm/powerpc/e500/fpu/fedisblxcpt.c  | 1 -
+- libm/powerpc/e500/fpu/feenablxcpt.c  | 1 -
+- libm/powerpc/e500/fpu/fegetenv.c     | 1 -
+- libm/powerpc/e500/fpu/fegetexcept.c  | 1 -
+- libm/powerpc/e500/fpu/fegetround.c   | 1 -
+- libm/powerpc/e500/fpu/feholdexcpt.c  | 2 --
+- libm/powerpc/e500/fpu/fenv_const.c   | 1 -
+- libm/powerpc/e500/fpu/fesetenv.c     | 5 +----
+- libm/powerpc/e500/fpu/fesetround.c   | 2 --
+- libm/powerpc/e500/fpu/feupdateenv.c  | 1 -
+- libm/powerpc/e500/fpu/fgetexcptflg.c | 1 -
+- libm/powerpc/e500/fpu/fraiseexcpt.c  | 3 ---
+- libm/powerpc/e500/fpu/fsetexcptflg.c | 1 -
+- libm/powerpc/e500/fpu/ftestexcept.c  | 1 -
+- 16 files changed, 1 insertion(+), 23 deletions(-)
+-
+-diff --git a/libm/powerpc/e500/fpu/fclrexcpt.c b/libm/powerpc/e500/fpu/fclrexcpt.c
+-index 805aaa487..02dc4bcf8 100644
+---- a/libm/powerpc/e500/fpu/fclrexcpt.c
+-+++ b/libm/powerpc/e500/fpu/fclrexcpt.c
+-@@ -1,6 +1,5 @@
+- /* Clear given exceptions in current floating-point environment.
+-    Copyright (C) 2004 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+- 
+-    The GNU C Library is free software; you can redistribute it and/or
+-    modify it under the terms of the GNU Lesser General Public
+-diff --git a/libm/powerpc/e500/fpu/fe_nomask.c b/libm/powerpc/e500/fpu/fe_nomask.c
+-index d5915165c..fe709803d 100644
+---- a/libm/powerpc/e500/fpu/fe_nomask.c
+-+++ b/libm/powerpc/e500/fpu/fe_nomask.c
+-@@ -1,6 +1,5 @@
+- /* Procedure definition for FE_NOMASK_ENV.
+-    Copyright (C) 1997 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+- 
+-    The GNU C Library is free software; you can redistribute it and/or
+-    modify it under the terms of the GNU Lesser General Public
+-diff --git a/libm/powerpc/e500/fpu/fedisblxcpt.c b/libm/powerpc/e500/fpu/fedisblxcpt.c
+-index 0700f4577..0a54df6fb 100644
+---- a/libm/powerpc/e500/fpu/fedisblxcpt.c
+-+++ b/libm/powerpc/e500/fpu/fedisblxcpt.c
+-@@ -1,6 +1,5 @@
+- /* Disable floating-point exceptions.
+-    Copyright (C) 2004 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+-    Contributed by Aldy Hernandez <aldyh@redhat.com>, 2004.
+- 
+-    The GNU C Library is free software; you can redistribute it and/or
+-diff --git a/libm/powerpc/e500/fpu/feenablxcpt.c b/libm/powerpc/e500/fpu/feenablxcpt.c
+-index 9f03181f4..bc1c30a83 100644
+---- a/libm/powerpc/e500/fpu/feenablxcpt.c
+-+++ b/libm/powerpc/e500/fpu/feenablxcpt.c
+-@@ -1,6 +1,5 @@
+- /* Enable floating-point exceptions.
+-    Copyright (C) 2004 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+-    Contributed by Aldy Hernandez <aldyh@redhat.com>, 2004.
+- 
+-    The GNU C Library is free software; you can redistribute it and/or
+-diff --git a/libm/powerpc/e500/fpu/fegetenv.c b/libm/powerpc/e500/fpu/fegetenv.c
+-index c1a914dc3..934ac92e9 100644
+---- a/libm/powerpc/e500/fpu/fegetenv.c
+-+++ b/libm/powerpc/e500/fpu/fegetenv.c
+-@@ -1,7 +1,6 @@
+- /* Store current floating-point environment.
+-    Copyright (C) 2004 Free Software Foundation, Inc.
+-    Contributed by Aldy Hernandez <aldyh@redhat.com>, 2004
+--   This file is part of the GNU C Library.
+- 
+-    The GNU C Library is free software; you can redistribute it and/or
+-    modify it under the terms of the GNU Lesser General Public
+-diff --git a/libm/powerpc/e500/fpu/fegetexcept.c b/libm/powerpc/e500/fpu/fegetexcept.c
+-index bf0215d62..b932f8036 100644
+---- a/libm/powerpc/e500/fpu/fegetexcept.c
+-+++ b/libm/powerpc/e500/fpu/fegetexcept.c
+-@@ -1,6 +1,5 @@
+- /* Get floating-point exceptions.
+-    Copyright (C) 2004 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+-    Contributed by Aldy Hernandez <aldyh@redhat.com>, 2004.
+- 
+-    The GNU C Library is free software; you can redistribute it and/or
+-diff --git a/libm/powerpc/e500/fpu/fegetround.c b/libm/powerpc/e500/fpu/fegetround.c
+-index f501c6ce8..7b54ead30 100644
+---- a/libm/powerpc/e500/fpu/fegetround.c
+-+++ b/libm/powerpc/e500/fpu/fegetround.c
+-@@ -1,6 +1,5 @@
+- /* Return current rounding direction.
+-    Copyright (C) 2004 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+-    Contributed by Aldy Hernandez <aldyh@redhat.com>, 2004.
+- 
+-    The GNU C Library is free software; you can redistribute it and/or
+-diff --git a/libm/powerpc/e500/fpu/feholdexcpt.c b/libm/powerpc/e500/fpu/feholdexcpt.c
+-index edeb2cf81..2b0c4ca4c 100644
+---- a/libm/powerpc/e500/fpu/feholdexcpt.c
+-+++ b/libm/powerpc/e500/fpu/feholdexcpt.c
+-@@ -1,6 +1,5 @@
+- /* Store current floating-point environment and clear exceptions.
+-    Copyright (C) 2004, 2006 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+-    Contributed by Aldy Hernandez <aldyh@redhat.com>, 2004.
+- 
+-    The GNU C Library is free software; you can redistribute it and/or
+-@@ -41,4 +40,3 @@ feholdexcept (fenv_t *envp)
+- 
+-   return 0;
+- }
+--libm_hidden_def (feholdexcept)
+-diff --git a/libm/powerpc/e500/fpu/fenv_const.c b/libm/powerpc/e500/fpu/fenv_const.c
+-index 3c9f5578a..cfbff0793 100644
+---- a/libm/powerpc/e500/fpu/fenv_const.c
+-+++ b/libm/powerpc/e500/fpu/fenv_const.c
+-@@ -1,6 +1,5 @@
+- /* Constants for fenv_bits.h.
+-    Copyright (C) 2004 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+-    Contributed by Aldy Hernandez <aldyh@redhat.com>, 2004.
+- 
+-    The GNU C Library is free software; you can redistribute it and/or
+-diff --git a/libm/powerpc/e500/fpu/fesetenv.c b/libm/powerpc/e500/fpu/fesetenv.c
+-index 392e0c0bf..28d113959 100644
+---- a/libm/powerpc/e500/fpu/fesetenv.c
+-+++ b/libm/powerpc/e500/fpu/fesetenv.c
+-@@ -1,6 +1,5 @@
+- /* Install given floating-point environment.
+-    Copyright (C) 1997,99,2000,01,02 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+- 
+-    The GNU C Library is free software; you can redistribute it and/or
+-    modify it under the terms of the GNU Lesser General Public
+-@@ -21,7 +20,7 @@
+- #include <sys/prctl.h>
+- 
+- int
+--__fesetenv (const fenv_t *envp)
+-+fesetenv (const fenv_t *envp)
+- {
+-   fenv_union_t u;
+-   INTERNAL_SYSCALL_DECL (err);
+-@@ -33,5 +32,3 @@ __fesetenv (const fenv_t *envp)
+-   /* Success.  */
+-   return 0;
+- }
+--
+--libm_hidden_ver (__fesetenv, fesetenv)
+-diff --git a/libm/powerpc/e500/fpu/fesetround.c b/libm/powerpc/e500/fpu/fesetround.c
+-index 783541d5b..800a8a4d2 100644
+---- a/libm/powerpc/e500/fpu/fesetround.c
+-+++ b/libm/powerpc/e500/fpu/fesetround.c
+-@@ -1,6 +1,5 @@
+- /* Set current rounding direction.
+-    Copyright (C) 2004, 2006 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+-    Contributed by Aldy Hernandez <aldyh@redhat.com>, 2004.
+- 
+-    The GNU C Library is free software; you can redistribute it and/or
+-@@ -33,4 +32,3 @@ fesetround (int round)
+- 
+-   return 0;
+- }
+--libm_hidden_def (fesetround)
+-diff --git a/libm/powerpc/e500/fpu/feupdateenv.c b/libm/powerpc/e500/fpu/feupdateenv.c
+-index 47f316318..6c1f8941c 100644
+---- a/libm/powerpc/e500/fpu/feupdateenv.c
+-+++ b/libm/powerpc/e500/fpu/feupdateenv.c
+-@@ -1,6 +1,5 @@
+- /* Install given floating-point environment and raise exceptions.
+-    Copyright (C) 2004 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+-    Contributed by Aldy Hernandez <aldyh@redhat.com>, 2004.
+- 
+-    The GNU C Library is free software; you can redistribute it and/or
+-diff --git a/libm/powerpc/e500/fpu/fgetexcptflg.c b/libm/powerpc/e500/fpu/fgetexcptflg.c
+-index d27356574..d4847ef6d 100644
+---- a/libm/powerpc/e500/fpu/fgetexcptflg.c
+-+++ b/libm/powerpc/e500/fpu/fgetexcptflg.c
+-@@ -1,6 +1,5 @@
+- /* Store current representation for exceptions.
+-    Copyright (C) 2004 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+-    Contributed by Aldy Hernandez <aldyh@redhat.com>, 2004.
+- 
+-    The GNU C Library is free software; you can redistribute it and/or
+-diff --git a/libm/powerpc/e500/fpu/fraiseexcpt.c b/libm/powerpc/e500/fpu/fraiseexcpt.c
+-index 0c92b2868..43025fe25 100644
+---- a/libm/powerpc/e500/fpu/fraiseexcpt.c
+-+++ b/libm/powerpc/e500/fpu/fraiseexcpt.c
+-@@ -1,6 +1,5 @@
+- /* Raise given exceptions.
+-    Copyright (C) 2004, 2006 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+-    Contributed by Aldy Hernandez <aldyh@redhat.com>, 2004.
+- 
+-    The GNU C Library is free software; you can redistribute it and/or
+-@@ -24,5 +23,3 @@
+- #define __FERAISEEXCEPT_INTERNAL feraiseexcept
+- 
+- #include "../spe-raise.c"
+--
+--libm_hidden_def (feraiseexcept)
+-diff --git a/libm/powerpc/e500/fpu/fsetexcptflg.c b/libm/powerpc/e500/fpu/fsetexcptflg.c
+-index 11ea89f16..2fde513a0 100644
+---- a/libm/powerpc/e500/fpu/fsetexcptflg.c
+-+++ b/libm/powerpc/e500/fpu/fsetexcptflg.c
+-@@ -1,6 +1,5 @@
+- /* Set floating-point environment exception handling.
+-    Copyright (C) 1997,99,2000,01,04 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+- 
+-    The GNU C Library is free software; you can redistribute it and/or
+-    modify it under the terms of the GNU Lesser General Public
+-diff --git a/libm/powerpc/e500/fpu/ftestexcept.c b/libm/powerpc/e500/fpu/ftestexcept.c
+-index 55f752b25..2c082f509 100644
+---- a/libm/powerpc/e500/fpu/ftestexcept.c
+-+++ b/libm/powerpc/e500/fpu/ftestexcept.c
+-@@ -1,6 +1,5 @@
+- /* Test exception in current environment.
+-    Copyright (C) 2004 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+-    Contributed by Aldy Hernandez <aldyh@redhat.com>, 2004.
+- 
+-    The GNU C Library is free software; you can redistribute it and/or
+--- 
+-2.47.3
+-
+diff --git a/package/uclibc/0003-fenv-struct-rm_ctx-should-be-private-and-not-exposed.patch b/package/uclibc/0003-fenv-struct-rm_ctx-should-be-private-and-not-exposed.patch
+deleted file mode 100644
+index e77f079dcc..0000000000
+--- a/package/uclibc/0003-fenv-struct-rm_ctx-should-be-private-and-not-exposed.patch
++++ /dev/null
+@@ -1,151 +0,0 @@
+-From 1105fd6c97f020f6ca7426e19d29081f404b567d Mon Sep 17 00:00:00 2001
+-From: Waldemar Brodkorb <wbx@openadk.org>
+-Date: Tue, 18 Aug 2026 18:13:29 +0200
+-Subject: [PATCH] fenv: struct rm_ctx should be private and not exposed in a
+- public header
+-
+-Upstream: https://gogs.waldemar-brodkorb.de/oss/uclibc-ng/commit/1105fd6c97f020f6ca7426e19d29081f404b567d
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+----
+- include/fenv.h              | 10 ----------
+- include/fenv_private.h      | 24 ++++++++++++++++++++++++
+- libm/aarch64/fenv_private.h |  1 +
+- libm/arc/fenv_private.h     |  1 +
+- libm/arm/fenv_private.h     |  1 +
+- libm/csky/fenv_private.h    |  1 +
+- libm/mips/fenv_private.h    |  1 +
+- libm/sparc/fenv_private.h   |  1 +
+- 8 files changed, 30 insertions(+), 10 deletions(-)
+- create mode 100644 include/fenv_private.h
+-
+-diff --git a/include/fenv.h b/include/fenv.h
+-index 4b532c573..34042d5ac 100644
+---- a/include/fenv.h
+-+++ b/include/fenv.h
+-@@ -1,5 +1,4 @@
+- /* Copyright (C) 1997, 1999, 2000 Free Software Foundation, Inc.
+--   This file is part of the GNU C Library.
+- 
+-    The GNU C Library is free software; you can redistribute it and/or
+-    modify it under the terms of the GNU Lesser General Public
+-@@ -131,15 +130,6 @@ extern int fedisableexcept (int __excepts) __THROW;
+- extern int fegetexcept (void) __THROW;
+- #endif
+- 
+--/* Rounding mode context.  This allows functions to set/restore rounding mode
+--   only when the desired rounding mode is different from the current rounding
+--   mode.  */
+--struct rm_ctx
+--{
+--  fenv_t env;
+--  bool updated_status;
+--};
+--
+- __END_DECLS
+- 
+- #endif /* fenv.h */
+-diff --git a/include/fenv_private.h b/include/fenv_private.h
+-new file mode 100644
+-index 000000000..5e81c71aa
+---- /dev/null
+-+++ b/include/fenv_private.h
+-@@ -0,0 +1,24 @@
+-+/* Copyright (C) 1997, 1999, 2000 Free Software Foundation, Inc.
+-+
+-+   The GNU C Library is free software; you can redistribute it and/or
+-+   modify it under the terms of the GNU Lesser General Public
+-+   License as published by the Free Software Foundation; either
+-+   version 2.1 of the License, or (at your option) any later version.
+-+
+-+   The GNU C Library is distributed in the hope that it will be useful,
+-+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+-+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+-+   Lesser General Public License for more details.
+-+
+-+   You should have received a copy of the GNU Lesser General Public
+-+   License along with the GNU C Library; if not, see
+-+   <http://www.gnu.org/licenses/>.  */
+-+
+-+/* Rounding mode context.  This allows functions to set/restore rounding mode
+-+   only when the desired rounding mode is different from the current rounding
+-+   mode.  */
+-+struct rm_ctx
+-+{
+-+  fenv_t env;
+-+  bool updated_status;
+-+};
+-diff --git a/libm/aarch64/fenv_private.h b/libm/aarch64/fenv_private.h
+-index 5afb790ea..3eaf0eb3f 100644
+---- a/libm/aarch64/fenv_private.h
+-+++ b/libm/aarch64/fenv_private.h
+-@@ -19,6 +19,7 @@
+- #define AARCH64_FENV_PRIVATE_H 1
+- 
+- #include <fenv.h>
+-+#include <fenv_private.h>
+- #include <fpu_control.h>
+- 
+- static __always_inline void
+-diff --git a/libm/arc/fenv_private.h b/libm/arc/fenv_private.h
+-index 5f74c5e13..2e985722f 100644
+---- a/libm/arc/fenv_private.h
+-+++ b/libm/arc/fenv_private.h
+-@@ -19,6 +19,7 @@
+- #define _FENV_PRIVATE_H 1
+- 
+- #include <fenv.h>
+-+#include <fenv_private.h>
+- #include "get-rounding-mode.h"
+- 
+- /* The standards only specify one variant of the fenv.h interfaces.
+-diff --git a/libm/arm/fenv_private.h b/libm/arm/fenv_private.h
+-index 566bf443c..61418d9f4 100644
+---- a/libm/arm/fenv_private.h
+-+++ b/libm/arm/fenv_private.h
+-@@ -19,6 +19,7 @@
+- #define ARM_FENV_PRIVATE_H 1
+- 
+- #include <fenv.h>
+-+#include <fenv_private.h>
+- #include <fpu_control.h>
+- 
+- static __always_inline void
+-diff --git a/libm/csky/fenv_private.h b/libm/csky/fenv_private.h
+-index f0f48a88a..e6015abee 100644
+---- a/libm/csky/fenv_private.h
+-+++ b/libm/csky/fenv_private.h
+-@@ -19,6 +19,7 @@
+- #define CSKY_FENV_PRIVATE_H 1
+- 
+- #include <fenv.h>
+-+#include <fenv_private.h>
+- #include <fpu_control.h>
+- #include "fenv_libc.h"
+- 
+-diff --git a/libm/mips/fenv_private.h b/libm/mips/fenv_private.h
+-index bc9be3b62..273d6faf8 100644
+---- a/libm/mips/fenv_private.h
+-+++ b/libm/mips/fenv_private.h
+-@@ -24,6 +24,7 @@
+-    code instead.  */
+- 
+- #include <fenv.h>
+-+#include <fenv_private.h>
+- #include "fenv_libc.h"
+- #include <fpu_control.h>
+- 
+-diff --git a/libm/sparc/fenv_private.h b/libm/sparc/fenv_private.h
+-index b888d8442..c76fbad7f 100644
+---- a/libm/sparc/fenv_private.h
+-+++ b/libm/sparc/fenv_private.h
+-@@ -2,6 +2,7 @@
+- #define SPARC_FENV_PRIVATE_H 1
+- 
+- #include <fenv.h>
+-+#include <fenv_private.h>
+- #include <fpu_control.h>
+- 
+- /* For internal use only: access the fp state register.  */
+--- 
+-2.47.3
+-
+diff --git a/package/uclibc/0004-m68k-use-the-kernel-helper-on-every-core-without-CAS.patch b/package/uclibc/0004-m68k-use-the-kernel-helper-on-every-core-without-CAS.patch
+deleted file mode 100644
+index 3ac756f4c7..0000000000
+--- a/package/uclibc/0004-m68k-use-the-kernel-helper-on-every-core-without-CAS.patch
++++ /dev/null
+@@ -1,116 +0,0 @@
+-From 5222fefffa0270c2f2d50961a4b75ef7f5605c29 Mon Sep 17 00:00:00 2001
+-From: ramin <lordrasmus@gmail.com>
+-Date: Mon, 24 Aug 2026 13:06:02 +0200
+-Subject: [PATCH] m68k: use the kernel helper on every core without CAS, not
+- just ColdFire
+-
+-The atomic header split the world into ColdFire and "the rest", assuming the
+-rest was 68020 and up. That holds for the MMU port, but not for the 68000 and
+-68010, which have no atomic read-modify-write instruction either. Building for
+-one of them stops at the first cas:
+-
+-  Error: invalid instruction for this architecture; needs 68020 or higher
+-         (68020 [68k, 68ec020], 68030 [68ec030], 68040 [68ec040],
+-          68060 [68ec060]) -- statement `cas.l %d0,%d1,(%a1)' ignored
+-
+-Reported by Waldemar Brodkorb from a Buildroot autobuilder failure; Buildroot
+-supports m68000 and has at least one user on it.
+-
+-Decide by the presence of CAS instead. The instruction came with the 68020, so
+-the test is the list of the 68020-and-up cores: gcc defines a separate macro
+-per core and does not imply __mc68020__ on the later ones, and __mc68000__ is
+-no help because it is defined on every m68k, the 68040 and ColdFire included.
+-
+-Nothing else changes: the kernel's atomic_cmpxchg_32 is syscall 335 "common"
+-in arch/m68k/kernel/syscalls/syscall.tbl and has an implementation for the MMU
+-as well as the noMMU port, so the branch the old cores now take is the one
+-ColdFire has been using all along - including its documented limit that the
+-8- and 16-bit variants stay non-atomic, since the helper is 32-bit only.
+-
+-Checked with a cross gcc over -m68000, -m68010, -m68020, -m68030, -m68040,
+--m68060, -mcpu=5206 and -mcpu=5208: the three old cores and both ColdFires
+-select the helper, the four others select cas, and each branch assembles for
+-the cores that select it.
+-
+-Upstream: https://gogs.waldemar-brodkorb.de/oss/uclibc-ng/commit/5222fefffa0270c2f2d50961a4b75ef7f5605c29
+-Signed-off-by: Ramin Moussavi <ramin.moussavi@yacoub.de>
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+----
+- libc/sysdeps/linux/m68k/bits/atomic.h | 32 ++++++++++++++++++---------
+- 1 file changed, 22 insertions(+), 10 deletions(-)
+-
+-diff --git a/libc/sysdeps/linux/m68k/bits/atomic.h b/libc/sysdeps/linux/m68k/bits/atomic.h
+-index cf7fd5f65..6acec1ed8 100644
+---- a/libc/sysdeps/linux/m68k/bits/atomic.h
+-+++ b/libc/sysdeps/linux/m68k/bits/atomic.h
+-@@ -3,13 +3,15 @@
+- 
+-    Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
+- 
+--   m68k (68020 and up, which is everything the MMU Linux port runs on) has
+--   the CAS instruction.  We implement the compare-and-exchange primitive
+--   with cas.b/cas.w/cas.l; include/atomic.h derives every higher-level
+--   operation from it.
+-+   The CAS instruction arrived with the 68020.  Where it exists we implement
+-+   the compare-and-exchange primitive with cas.b/cas.w/cas.l and let
+-+   include/atomic.h derive every higher-level operation from it.
+- 
+--   ColdFire has no CAS at all, so there we use the kernel's
+--   atomic_cmpxchg_32 helper, which exists for exactly this reason.
+-+   ColdFire, 68000 and 68010 have no atomic read-modify-write instruction at
+-+   all.  There we use the kernel's atomic_cmpxchg_32 helper, which exists for
+-+   exactly this reason and is available on every m68k (syscall 335, "common"
+-+   in arch/m68k/kernel/syscalls/syscall.tbl, with an implementation for both
+-+   the MMU and the noMMU port).
+- 
+-    Without this file m68k fell back to the generic non-atomic
+-    bits/atomic.h, whose "atomic" compare-and-exchange is a plain
+-@@ -22,7 +24,17 @@
+- #define _M68K_BITS_ATOMIC_H	1
+- 
+- #include <stdint.h>
+--#ifdef __mcoldfire__
+-+
+-+/* CAS came with the 68020.  gcc sets a separate macro per core and does not
+-+   imply __mc68020__ on the later ones, hence the list; __mc68000__ is no help
+-+   here, it is defined on every m68k, the 68040 and ColdFire included.
+-+   Everything without CAS - ColdFire, 68000, 68010 - uses the kernel helper.  */
+-+#if defined __mc68020__ || defined __mc68030__ \
+-+    || defined __mc68040__ || defined __mc68060__
+-+# define __M68K_HAVE_CAS	1
+-+#endif
+-+
+-+#ifndef __M68K_HAVE_CAS
+- # include <sys/syscall.h>
+- #endif
+- 
+-@@ -58,7 +70,7 @@ typedef uintmax_t uatomic_max_t;
+- #define atomic_read_barrier()	atomic_full_barrier ()
+- #define atomic_write_barrier()	atomic_full_barrier ()
+- 
+--#ifndef __mcoldfire__
+-+#ifdef __M68K_HAVE_CAS
+- 
+- /* cas Dc,Du,<ea>: compare <ea> with Dc; if equal store Du, else load <ea>
+-    into Dc.  Either way Dc ends up holding the original *MEM, which is the
+-@@ -87,7 +99,7 @@ typedef uintmax_t uatomic_max_t;
+- 		       : "memory");					\
+-      __ret; })
+- 
+--#else /* __mcoldfire__ */
+-+#else /* !__M68K_HAVE_CAS */
+- 
+- /* d0 = syscall number, d1 = newval, d2 = oldval, a0 = mem; the helper
+-    returns the previous value.  The swap happens inside the syscall, so
+-@@ -116,7 +128,7 @@ typedef uintmax_t uatomic_max_t;
+- #define __arch_compare_and_exchange_val_16_acq(mem, newval, oldval) \
+-   __arch_compare_and_exchange_val_8_acq (mem, newval, oldval)
+- 
+--#endif /* __mcoldfire__ */
+-+#endif /* __M68K_HAVE_CAS */
+- 
+- /* m68k has no 64-bit CAS; NPTL and include/atomic.h only use int- and
+-    pointer-sized objects, so the bysize dispatch never reaches this.  */
+--- 
+-2.47.3
+-
+diff --git a/package/uclibc/0005-Revert-linuxthreads-add-dummy-for-pthread_atfork.patch b/package/uclibc/0005-Revert-linuxthreads-add-dummy-for-pthread_atfork.patch
+deleted file mode 100644
+index 66605aa657..0000000000
+--- a/package/uclibc/0005-Revert-linuxthreads-add-dummy-for-pthread_atfork.patch
++++ /dev/null
+@@ -1,43 +0,0 @@
+-From 2e902dccb925f1f185836bbad2284e2879550cb3 Mon Sep 17 00:00:00 2001
+-From: Waldemar Brodkorb <wbx@openadk.org>
+-Date: Sun, 11 Oct 2026 16:25:53 +0200
+-Subject: [PATCH] Revert "linuxthreads: add dummy for pthread_atfork"
+-
+-This reverts commit 9e38e0aa45cca21d5023d0af94377f0e1e41d2f4.
+-
+-As reported on the uClibc-ng mailinglist by Thomas Petazzoni
+-this dummy without proper prototype is breaking util-linux
+-compilation. My usecase in 2017 was curl+libressl. Since then
+-I moved from libressl to libopenssl and that works fine without
+-pthread_atfork(). Tested with curl in Qemu for RISCV64 noMMU flat.
+-
+-Upstream: https://gogs.waldemar-brodkorb.de/oss/uclibc-ng/commit/2e902dccb925f1f185836bbad2284e2879550cb3
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+----
+- libpthread/linuxthreads/ptfork.c | 12 ------------
+- 1 file changed, 12 deletions(-)
+-
+-diff --git a/libpthread/linuxthreads/ptfork.c b/libpthread/linuxthreads/ptfork.c
+-index a1bad3d54..74d630830 100644
+---- a/libpthread/linuxthreads/ptfork.c
+-+++ b/libpthread/linuxthreads/ptfork.c
+-@@ -150,16 +150,4 @@ static pid_t __fork(void)
+- strong_alias(__fork,fork)
+- strong_alias(__fork,vfork)
+- 
+--#else
+--
+--/* We can't support pthread_atfork without MMU, since we don't have
+--   fork(), and we can't offer the correct semantics for vfork().
+--   But instead of failing, just provide a dummy */
+--int pthread_atfork(void (*prepare)(void),
+--                  void (*parent)(void),
+--                  void (*child)(void))
+--{
+--  return 0;
+--}
+--
+- #endif
+--- 
+-2.47.3
+-
+diff --git a/package/uclibc/0006-buildsys-install-sys-auxv.h-for-static-builds-again.patch b/package/uclibc/0006-buildsys-install-sys-auxv.h-for-static-builds-again.patch
+deleted file mode 100644
+index 74d14b5501..0000000000
+--- a/package/uclibc/0006-buildsys-install-sys-auxv.h-for-static-builds-again.patch
++++ /dev/null
+@@ -1,57 +0,0 @@
+-From 6dc9f06a0330f11171f76f4b831724c02642f11f Mon Sep 17 00:00:00 2001
+-From: ramin <lordrasmus@gmail.com>
+-Date: Mon, 12 Oct 2026 16:30:56 +0200
+-Subject: [PATCH] buildsys: install sys/auxv.h for static builds again
+-
+-getauxval() has not needed ld.so since 227b7c825 and 737a0edf4 ("Make
+-getauxval work with static linking", "Support non-cached entries in
+-getauxval", v1.0.52): _dl_auxvt and _dl_auxv_start are defined in
+-libc/misc/elf/dl-support.c for the static libc, and __uClibc_main calls
+-_dl_aux_init() on that path too.  The static libc.a carries getauxval,
+-__getauxval, _dl_aux_init, _dl_auxvt and _dl_auxv_start.
+-
+-Its header is still withheld, though.  df81bd1e2 ("getauxval: remove
+-header for static builds") put sys/auxv.h next to dlfcn.h in the
+-HEADERS_RM line that applies when HAVE_SHARED is unset, as a way around
+-the link error of the day -- a package that probed for getauxval would
+-not find a declaration and would take its fallback path.  That error is
+-gone and the workaround outlived it: a static sysroot installs 70 of the
+-71 headers in include/sys, and the one missing is auxv.h.
+-
+-So a static configuration of, say, openssl fails with "sys/auxv.h: No
+-such file or directory", which reads like a missing feature rather than
+-a withheld declaration.
+-
+-Measured on riscv64 with a static configuration and gcc 10.5.0: with the
+-header installed, a
+-statically linked program answers AT_PAGESZ as 4096, matching
+-sysconf(_SC_PAGESIZE), returns every entry of /proc/self/auxv unchanged,
+-and reports ENOENT for a type that was not passed -- both for a type
+-inside the cached range and for one above it, which takes the search
+-over the whole vector.
+-
+-dlfcn.h and bits/dlfcn.h stay removed.
+-
+-Upstream: https://gogs.waldemar-brodkorb.de/oss/uclibc-ng/commit/6dc9f06a0330f11171f76f4b831724c02642f11f
+-Signed-off-by: Ramin Moussavi <lordrasmus@gmail.com>
+-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+----
+- Makefile.in | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/Makefile.in b/Makefile.in
+-index 3b28fbf60..72865863d 100644
+---- a/Makefile.in
+-+++ b/Makefile.in
+-@@ -257,7 +257,7 @@ HEADERS_RM- := \
+- ifeq ($(UCLIBC_STRICT_HEADERS),y)
+- HEADERS_RM- += sgtty.h
+- endif
+--HEADERS_RM-$(HAVE_SHARED)                    += dlfcn.h bits/dlfcn.h sys/auxv.h
+-+HEADERS_RM-$(HAVE_SHARED)                    += dlfcn.h bits/dlfcn.h
+- HEADERS_RM-$(PTHREADS_DEBUG_SUPPORT)         += thread_db.h
+- HEADERS_RM-$(UCLIBC_HAS_ARGP)                += argp.h
+- HEADERS_RM-$(UCLIBC_HAS_BSD_ERR)             += err.h
+--- 
+-2.47.3
+-
+diff --git a/package/uclibc/0007-wchar.h-declare-wcsdup-for-POSIX.1-2008.patch b/package/uclibc/0007-wchar.h-declare-wcsdup-for-POSIX.1-2008.patch
+deleted file mode 100644
+index 9cdbbaf2e8..0000000000
+--- a/package/uclibc/0007-wchar.h-declare-wcsdup-for-POSIX.1-2008.patch
++++ /dev/null
+@@ -1,41 +0,0 @@
+-From 936a08b682e761afba98ef3800265add951201fc Mon Sep 17 00:00:00 2001
+-From: Yegor Yefremov <yegorslists@googlemail.com>
+-Date: Thu, 22 Oct 2026 13:55:32 +0200
+-Subject: [PATCH] wchar.h: declare wcsdup() for POSIX.1-2008
+-
+-wcsdup() is part of POSIX.1-2008, and glibc declares it under
+-__USE_XOPEN2K8, but uClibc-ng only declares it under __USE_GNU.
+-
+-As a consequence, code that doesn't define _GNU_SOURCE (for example
+-hidapi's Linux hidraw backend) gets an implicit declaration of wcsdup().
+-With GCC >= 14 this is an error:
+-
+-  hid.c:116:32: error: implicit declaration of function 'wcsdup'; did you mean 'wcscmp'? [-Wimplicit-function-declaration]
+-
+-and with older compilers the returned pointer is silently truncated to
+-int on 64-bit targets.
+-
+-Move the declaration under __USE_XOPEN2K8, which is also enabled by
+-default (_DEFAULT_SOURCE) and by _GNU_SOURCE.
+-
+-Assisted-by: Claude:claude-opus-5-5
+-Upstream: https://github.com/wbx-github/uclibc-ng/commit/936a08b682e761afba98ef3800265add951201fc
+-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+----
+- include/wchar.h | 2 ++
+- 1 file changed, 2 insertions(+)
+-
+-diff --git a/include/wchar.h b/include/wchar.h
+-index 2e6ff77c0..0056f93da 100644
+---- a/include/wchar.h
+-+++ b/include/wchar.h
+-@@ -210,7 +210,9 @@ extern size_t wcsxfrm_l (wchar_t *__s1, const wchar_t *__s2,
+- libc_hidden_proto(wcsxfrm_l)
+- 
+- #endif /* __UCLIBC_HAS_XLOCALE__ */
+-+#endif
+- 
+-+#ifdef __USE_XOPEN2K8
+- /* Duplicate S, returning an identical malloc'd string.  */
+- extern wchar_t *wcsdup (const wchar_t *__s) __THROW __attribute_malloc__;
+- #endif
+diff --git a/package/uclibc/uclibc.hash b/package/uclibc/uclibc.hash
+index 4e5fd587e2..19c328471e 100644
+--- a/package/uclibc/uclibc.hash
++++ b/package/uclibc/uclibc.hash
+@@ -1,4 +1,4 @@
+-# From https://downloads.uclibc-ng.org/releases/1.0.59/uClibc-ng-1.0.59.tar.xz.sha256
+-sha256  86c6f15971bfb14156850f2e36906dac5a69df7b3e688216d1aea09d2db54174  uClibc-ng-1.0.59.tar.xz
++# From https://downloads.uclibc-ng.org/releases/1.0.60/uClibc-ng-1.0.60.tar.xz.sha256
++sha256  4ff2ca4de4fe47e85b8ce9a62f73e3f05c9bc675de8349fccd0d224574357c44  uClibc-ng-1.0.60.tar.xz
+ # Locally calculated
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index beaa32e67f..cf5cb6cc75 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UCLIBC_VERSION = 1.0.59
++UCLIBC_VERSION = 1.0.60
+ UCLIBC_SOURCE = uClibc-ng-$(UCLIBC_VERSION).tar.xz
+ UCLIBC_SITE = https://downloads.uclibc-ng.org/releases/$(UCLIBC_VERSION)
+ UCLIBC_LICENSE = LGPL-2.1+
+-- 
+2.47.3
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
