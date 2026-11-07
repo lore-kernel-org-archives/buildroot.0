@@ -1,124 +1,140 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97107606A326
-	for <buildroot@archiver.kernel.org>; Sat,  7 Nov 2026 22:52:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF2E8606A326
+	for <buildroot@archiver.kernel.org>; Sat,  7 Nov 2026 23:55:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=rkgjdcl+
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=UYYRxWD1;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256 header.s=20260707 header.b=DzoXaay1
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 48DD9405DF;
-	Sat,  7 Nov 2026 22:52:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 31F1280CF0;
+	Sat,  7 Nov 2026 23:55:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T29Dta5QhaGA; Sat,  7 Nov 2026 22:52:43 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 63F4B405BB
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794091963;
-	b=Wuco1u20ky8BSFJhLGOGZOrPpdNBLvYpe4GKn594SIG6brHpothnFCWpp9ztfdEEUvpL
-	 Jj1coN3sKeZetW4kZ4elR/dGqxwpOuONjOngeibv5QRUEMRvUr1WDHcot2IOYHTvt7oJ2
-	 pFbZuZZs/k+WPktQAlBzLzvuzo7JJmHMr1tUjQb+e4vASJLmMVOkYqvH0rwv6wT04gJ2W
-	 aC7/z0wbQD7st7WZhwaqwV+/FyzFRg3YB3l3hrgxXnZQqzAz7dLhxo3c7aZmVZBcvJ8CO
-	 8Iu0thRqu/e41r/f7lWa4DwOsAyAF+LYK6ijW+IIpWjy3oXDX3ZUEEJF6hXftmEA/HA==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vhV0-Vvix2FJ; Sat,  7 Nov 2026 23:55:44 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 372F880C94
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794095744;
+	b=Jj7SlkW8/6hKkCuoCMLamGZpektp8kC5xicKuoFBX8MfAIwacjhLq5+HLgJL/kGIAum5
+	 A6iKgFrBGQ6WI+czZSgSctDQ+qqxoEqAtpyH8pnF5kWsRXNi2WTW6KhETarvpIT0Bw1A8
+	 k1EygqO01xRpvsOX/ZCbzAM6HLq4idIbkLu/8ezAvN6D8bBIdAy9GsTxkgtNs8Ecj84/S
+	 SXi3VlPWS52anw98NUiWxbnYymArbccwygSwPAa7bLkxXngyfUsvwhWfbIMV5d2XPkIS3
+	 RQG2yXAdrPgt7Q2x8nVFo1bZpW7ZMDZO0LSijQa36BDv8jkKEixFrbPjm/dAIT/QI7g==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794091963;
+	c=relaxed/relaxed; t=1794095744;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 Received:To:Date:Message-Id:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
-	 Reply-To:Cc:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=tEwTgtLzHdsCLZnIHweiqvR0rK8yj7X3ChCpgpEjg6Y=;
-	b=jylv1j6wKWOgW045qx6qHFqhoJDpfmoQn3w+9K4ReYfUnpHoMzccYqghfPllmeKURFaT
-	 Qe9XYARLQVVuGS99Az+BCeRb0csPpXIbFVyKuxhO7PuqzQT7W1HPTtT/9rZ963dzWG+wD
-	 NCyNeXxPDKyqJxQ1cGs+NFsZa4QaGJ4BXxpykrfRtA/uI5eEQlce2XtE6uqjtwzJzvnmw
-	 QXuYlc4GgYSzXSH6y9UdFKps23oilhBgjcf8c0ScELQJznm6KrFkHKNkgQmnlC+pRY8L4
-	 9j3MonIHlVjPDt87kh2wvDZJrmEm1p2r7iY/Zl4sJZedWvagQETvhbl08j1YL7aZgSw==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:Received:From:To:Date:Message-Id:X-Mailer:MIME-Version:
+	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=gB9N6AnZBEVYBFWSAZ/RqH22+Bc082Hn6iRqlyCSMrI=;
+	b=gPfsl99dGSrSoDNwQsEGHh/YPMGxBz/wxNAOByr3iy8Vdug2m1CeB2tujacHp4jXuXqt
+	 tNfXIhX/ahGdbeMYbKwDOFVKPX8OY7cE3thdMatFKckV9+74v4Ra8FcjNjvldQCz2JTI5
+	 byKOhkyaNjQ1Gjx6loNwJwKG3ktYL1JRjPl7CAn8d9fYXdygUfFe0AycIKw85iCNzc7GM
+	 j3H6+XzqEcUYItqUAYXj2vdOrdEBD/Vp6afRpdhecha+/EQll4XlkzUzdqiJl26m0mWD2
+	 Dly9hPYsoy8YcABCerNbE+nrZM2LusjYcQTHa8/YvgVFTK+PN+me+yMyWKA+PAic55g==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794091963;
-	bh=tEwTgtLzHdsCLZnIHweiqvR0rK8yj7X3ChCpgpEjg6Y=;
-	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
-	 From;
-	b=rkgjdcl+cBYLqGuQRQOdGb/tmeyat78ixbRe3qsG7OXC1TDoyu4v3CVfRl3Ch/suc
-	 jcNyTchc1Qv301FjsOmAEvUIBtXCGMeDXGnjlBXDp2FjQOjAdr9IyPB5z3uNLHvVVF
-	 84Fh2bVVKJA1AjIy78k5jMGwkibSKOv2XH6x6RLhZYF3r6FG7G1TVvbylUHWFF8OMD
-	 qkcqWB0odXDvFW/LqOzlDaiF/AQuAEAtC6jRs0albTZTdwOCHdGUVKemkekqafydp9
-	 C2aYEOyyPDfCRCRC13YjLzTlM1IUAKQjZ8BaPmuRXRyNaBkt8OItF8zBA9kZEkApGl
-	 F2CKNyxZrszlQ==
+	s=default; t=1794095744;
+	bh=gB9N6AnZBEVYBFWSAZ/RqH22+Bc082Hn6iRqlyCSMrI=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=UYYRxWD1zo2gbSlW5abPbIr+f2vA9dBCgeHsCeUUdaAMKxGyPmC5JjIxPPMol+I6+
+	 CLMs8xXEgyPxdjfzoEF16VNtRWfEXZHPrS7mBAJAL4IEBNbbcKnjeymF5L3MiY6pJI
+	 Ze50ZLQD5BeQC/A4vA19tO8WMpXbbaiwC9mYSTSZtJ1N/ZY3srzbdPvaruNke/IEFd
+	 vBNsJSCqXba16xAhVzs7iAj45XiF9KaHi+l3EeSNInp2flaWlkzsa7aKSyJRjNDLSq
+	 Q7uyDLXJPEENp/UPD4QMCXoM4IYRfflvmoc4rjJ48h4NVkJZrHdfR8ldlMPuMICDOu
+	 wHo0xSHP+fBFg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 63F4B405BB;
-	Sat,  7 Nov 2026 22:52:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 3967C1E3
- for <buildroot@buildroot.org>; Sat,  7 Nov 2026 22:52:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 372F880C94;
+	Sat,  7 Nov 2026 23:55:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 76F673AD
+ for <buildroot@buildroot.org>; Sat,  7 Nov 2026 23:55:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 36E5840437
- for <buildroot@buildroot.org>; Sat,  7 Nov 2026 22:52:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6ADF260618
+ for <buildroot@buildroot.org>; Sat,  7 Nov 2026 23:55:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I6rT3dPVmT1L for <buildroot@buildroot.org>;
- Sat,  7 Nov 2026 22:52:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org E3499405B8
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w6qusJ4MdeH6 for <buildroot@buildroot.org>;
+ Sat,  7 Nov 2026 23:55:41 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 2629160609
+Authentication-Results: smtp3.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::52e"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::630; helo=mail-ej1-x630.google.com;
+ client-ip=2a00:1450:4864:20::52e; helo=mail-ed1-x52e.google.com;
  envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E3499405B8
- for <buildroot@buildroot.org>; Sat,  7 Nov 2026 22:52:40 +0000 (UTC)
-Received: by mail-ej1-x630.google.com with SMTP id
- a640c23a62f3a-c4d5b2db4bbso15607166b.0
- for <buildroot@buildroot.org>; Sat, 07 Nov 2026 14:52:40 -0800 (PST)
+Authentication-Results: smtp3.osuosl.org; dmarc=pass (p=quarantine dis=none)
+ header.from=googlemail.com
+Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=googlemail.com header.i=@googlemail.com
+ header.a=rsa-sha256 header.s=20260707 header.b=DzoXaay1
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
+ [IPv6:2a00:1450:4864:20::52e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2629160609
+ for <buildroot@buildroot.org>; Sat,  7 Nov 2026 23:55:40 +0000 (UTC)
+Received: by mail-ed1-x52e.google.com with SMTP id
+ 4fb4d7f45d1cf-6b561b60b78so1154925a12.1
+ for <buildroot@buildroot.org>; Sat, 07 Nov 2026 15:55:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=googlemail.com; s=20260707; t=1794095739; x=1794700539; darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=0mj+1Wfl8uVJKi5X5/QiTI+dPa6x0PiCbMutdECKjfU=;
+ b=DzoXaay1gjimveep5Ae6FCxAbFaHZf65qo9/njDVejltfdVn7LkXbUpZhv+iY8/GhB
+ I2aUFUsYia3JjUEmaBSGyAthemXNNeBU1yXs30rDScNsWH+cneqlRVHdlZkEDD1f00Bm
+ 5/mlmIclWMeiZIJ2EON52SWVz1hy7CK2uBmYXvm3KbFa0dGWZs1lqgT5gX9IwhfiENco
+ 7B8elgJK7ibC+CkEMd35OkfbOHw9KQQEDRed9tgz/L7HAYYf//5KqhaEBh3+vBAYj58Q
+ SMLn8+tHHNe8Dkf9+iSJGdrG285PpfFqF2fhBFS4ssWd4GWuURD+hG5ePkrV43ZNxwNv
+ IfGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1794091958; x=1794696758;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=X6mXjj0Algq+K5P7+aeDOcontiuzvjOy8zkbQCMShjI=;
- b=VTigj25/OKqtVNGwQ6iiKurFm1qkSE+UQLSyLtoHjSAb/gziPcLai8oouGICXdMJ83
- NoSOMZjrT7TRAQc/kdM+NpFhnIcj5Rs25WkSbF+Xt9qbsQgb9nWY77dl3KFK7rwFdNHZ
- 7DhLn5bwuUdXRGkwp/98yHfr6wsJSED/Ebdp+iKmAjlCO5eny5B5ZS/0ssbWOb85SE1b
- ox+IpT4Bbmj5u/Xv4x8BwARergjMNe0EJa6ZaIo8Tyo3/NHowmx98AUD29+OvInDA8AS
- w5XpvUpGf/TqaA13Np5YqXFSs5XqlU91WOxVetBvaokrBQ9bGDD707MaSPp4CfrbCc42
- JGaw==
-X-Gm-Message-State: APuU4Z8upAombMbJ9MYi826I/MzsVINyzAp83D1/rCoBkDcI68Xb+cXM
- ZpJ7jK8j6kqrWyGovW7JoTVxvWEv6sDtX/q1VRLtPYZYwLrwPd8TBikXwRsz/A==
-X-Gm-Gg: AYBFou0zTeIwL1q1SOXie+Yc+JmqEcL+qZBaSDpdvGbgK42IVd8pkIFJtxrgjKKd645
- jB8lAhzQ5OCFGNihoiu6TIJrmBHUlIaASEMo3NW6ZYBK5VBzWceDyvoImeg9RpFxeTvLGxP6k7R
- dsGXsUGHHqrlaNjV1D6nla2NCJFA/wm2pltOVVmXNICX4M9b/gkqZb2zc1JkhFWdfiVvTxdnR5m
- 2RakEXsXaFaZxlhVMX7telJB6K9c6snIeSZo1wut7Kai5W3oWE0CpCRLiPzmBwbe3AN+j3Iu84U
- jnRouWy6s7c9bFwhK0wO72dtH9EA6KNIctpxz3Ae2tnzFowHMb7oGnhNYRYFumo18lLlIJgvTkY
- TetmXDDZL+bNvPdzU3czd6HcnmzXAP2kAxK+hy1KbHTKiGbKFygEiO307noyROoXNp0waeqJjIF
- MY4GsntHr3H4JWAUCCuI2ngFB08AWm5S/Tf/gKRnxz6X1qacJIGjJkGG0SgQQSGLyaBOLL5duez
- ovWNEqjjRuKagjW2IrF+Inh6WYKCYeXYhomzROcNMiHOCV4lNzvoRx62aP/HZdnTlcvru7scwP2
- iY9bJTLMTdSfKwQk3l4Lpsj4dJRmUwEm0TuR3l3dKYfdAXgbY4y/npaGWUQ6Vv01/CWITwYpnvK
- EP/1Ntx6n
-X-Received: by 2002:a17:907:2d90:b0:c49:8bf8:a7a7 with SMTP id
- a640c23a62f3a-c4d6dad8ea8mr16480366b.7.1794091958406; 
- Sat, 07 Nov 2026 14:52:38 -0800 (PST)
+ d=1e100.net; s=20260707; t=1794095739; x=1794700539;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=0mj+1Wfl8uVJKi5X5/QiTI+dPa6x0PiCbMutdECKjfU=;
+ b=TK38h0yoqwBgPhwrDKvkFaR6UcWEk9NraNPHmrBpK5D+rXyRuZFUyybXmVR3jRsp0A
+ JRGNpCI0rOap9yyCfUNXp+dkfc1Mqq5jrPI0Tsa7GyKjYu46q0MvzvXCRJB9UwYjlDte
+ v2o/KyPixYWNJ799A53/SBy3FygjyCwhc4hBrN9gPbXKrfH26NUHHzzLAT2DOcYqpu0e
+ FBEUhgRxOrB39jc6TBIHGwA+B9vVfw0rS+uPUdnSFMGXpdazMFhuB/gHV7hVznSrMpF0
+ YEpU5Gmf5MG4hZui/saSsTCXgRjPQ+4pRdNEwIHwHqZ6Vr6w/FVKgPeSJMqtn7pVpKPa
+ Yo2A==
+X-Gm-Message-State: APuU4Z8BjyqSnbYfkNHPyx8Ja2PnFrpKB5SN4NiaSZ/53OUfsZX9UNMn
+ u4BlMxnXfsHLUIy74DGPbazO65Iy0mqWS0G7lM+CFyGyO97hAPP5TZk7yY5e5Q==
+X-Gm-Gg: AYBFou38JtwhQxzLyGlbcT4wGBkLQF1jCtj8Qg1GU+rc+BXGanygjMgq4ercW5lS7xk
+ 43xUydm4JXOFo3ObowtK7YB+6znOvRuSY+De5basY0aBtG+VSsJ9DQrmVFVW/ojCzutXtcMFKhT
+ /VZFYFw4q4D49n8FXYCCflO0GLL0S1Gst54cOlWuh0B9hnq2nR545uQZQk9jf8ZnDbaqaq0trCp
+ Q3CLEKdBaB3zop14qNHgmy5W+NykYlAAz+U71zgispULUF6xHm/aD/0Fp7MyhBbdrv3tItxu/8v
+ cPIA/kaRiuOT8UeG2VumdVSOr4hEjEp8+Tsnd0T0C6woPOCdBRPV57SBwDMBhP3ijUbmRADW1ok
+ 16kuf3NETbLWERFKLTjBY9xpVdo+v2Po4E1mNRGBySMoz4k4seTTZIDESJMuWxjbqmApsPo8KWr
+ bJS/po0rVDQRlLBa9lhPA+RvjnXiS3o/we1iQioS6UpjPbbulM4ewrHVEF1MxUK0kzARwNtR3TI
+ If4siln+/Kc4/OmHeHlZ4eEhUP6j2OXe6c4akMk9dVsnJDk5ZwLP8gctlmYhdlHJkd084qKabVN
+ 3FLyNv9ABlUt5NdRemwFD68o3imcKebeQ3cXa506WCtfOsIkzBTk+0viH7zZSboayNmcas79IUS
+ wZHfgWlMy
+X-Received: by 2002:a05:6402:540c:b0:6b1:e072:763b with SMTP id
+ 4fb4d7f45d1cf-6b6fb939315mr2102382a12.5.1794095738406; 
+ Sat, 07 Nov 2026 15:55:38 -0800 (PST)
 Received: from development2.visionsystems.local (mail.visionsystems.de.
  [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c4d69f94805sm15972266b.26.2026.11.07.14.52.37
+ 4fb4d7f45d1cf-6b721eedfd7sm97998a12.31.2026.11.07.15.55.37
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 07 Nov 2026 14:52:37 -0800 (PST)
+ Sat, 07 Nov 2026 15:55:37 -0800 (PST)
+From: Yegor Yefremov <yegorslists@googlemail.com>
 To: buildroot@buildroot.org
-Date: Sat,  7 Nov 2026 23:52:37 +0100
-Message-Id: <20261107225237.2045107-1-yegorslists@googlemail.com>
+Date: Sun,  8 Nov 2026 00:55:37 +0100
+Message-Id: <20261107235537.2546061-1-yegorslists@googlemail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20261105130004.1462915-1-yegorslists@googlemail.com>
-References: <20261105130004.1462915-1-yegorslists@googlemail.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2] package/libcap: fix build with C libraries
- lacking static_assert
+Subject: [Buildroot] [PATCH] package/ed: bump to version 1.22.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,100 +144,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
-Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: Bernd Kuhls <bernd@kuhls.net>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
 	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Since libcap 2.77, libcap_static_assert() expands to static_assert() in
-C11 mode. Before C23, static_assert is a macro that <assert.h> has to
-provide, which older C libraries such as uClibc-ng < 1.0.42 lack, so
-the build fails, e.g. with the br-arm-full-static toolchain:
+Changes in 1.22.6 (released 2026-08-20):
+- Some changes have been made to the code to pacify gcc's static
+  analyzer.
+- 'regex(7)' has been added to the --help output and to section
+  'SEE ALSO' in the man page.
+- It has been documented in the manual that the cut buffer is deleted
+  when a new file is read with 'e' or 'E'.
+- It has been documented in the manual that using a regular expression
+  inside the command-list of a global command may cause the "last
+  regular expression processed" to differ between the first and
+  subsequent executions of the command-list.
 
-  cap_alloc.c:53:25: error: expected declaration specifiers or '...' before '__builtin_offsetof'
-     53 | #define CAP_ALLOC_OFF_U offsetof(struct _cap_alloc_s, u)
-  libcap.h:342:19: note: in definition of macro 'libcap_static_assert'
-    342 |     static_assert(cond, #text)
+https://lists.gnu.org/archive/html/bug-ed/2026-08/msg00003.html
 
-Backport the upstream fix, which defines static_assert as the
-_Static_assert keyword on uClibc-ng < 1.0.42.
+Tested using:
+- utils/test-pkg -a -p ed
 
-This issue has been present since commit 42f2b480a5a8
-("package/libcap: bump version to 2.77"), as libcap_static_assert() was
-introduced in libcap 2.77. It therefore affects 2025.11 and later; the
-2025.02.x LTS branch still has libcap 2.73 and is not affected.
-
-Fixes: 42f2b480a5a81c7443f177bf541632b0fe501720 ("package/libcap: bump version to 2.77")
 Assisted-by: Claude:claude-opus-5-5
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
-Changes v1 -> v2:
-  - replace the local patch with the fix merged upstream as
-    7bb5a1d487a9 ("Work around the lack of static_assert() in older
-    ulibc-ng headers."), which only defines static_assert on
-    uClibc-ng < 1.0.42 (suggested by Andrew G. Morgan)
+ package/ed/ed.hash | 4 ++--
+ package/ed/ed.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- ...tic_assert-in-older-ulibc-ng-headers.patch | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 package/libcap/0001-Work-around-the-lack-of-static_assert-in-older-ulibc-ng-headers.patch
-
-diff --git a/package/libcap/0001-Work-around-the-lack-of-static_assert-in-older-ulibc-ng-headers.patch b/package/libcap/0001-Work-around-the-lack-of-static_assert-in-older-ulibc-ng-headers.patch
-new file mode 100644
-index 0000000000..032914b18b
---- /dev/null
-+++ b/package/libcap/0001-Work-around-the-lack-of-static_assert-in-older-ulibc-ng-headers.patch
-@@ -0,0 +1,42 @@
-+From 7bb5a1d487a94b708ae34a5da7e71fa1fd5aff8b Mon Sep 17 00:00:00 2001
-+From: "Andrew G. Morgan" <morgan@kernel.org>
-+Date: Sat, 7 Nov 2026 09:45:18 -0800
-+Subject: Work around the lack of static_assert() in older ulibc-ng headers.
-+
-+Yegor Yefremov reported that builds were failing with an old version
-+of ARM ulibc-ng. In particular uClibc-ng < 1.0.42 lack it. Issue
-+described more fully here:
-+
-+https://github.com/AndrewGMorgan/libcap_mirror/issues/17
-+
-+Upstream: https://git.kernel.org/pub/scm/libs/libcap/libcap.git/commit/?id=7bb5a1d487a94b708ae34a5da7e71fa1fd5aff8b
-+Signed-off-by: Andrew G. Morgan <morgan@kernel.org>
-+---
-+ libcap/libcap.h | 11 +++++++++++
-+ 1 file changed, 11 insertions(+)
-+
-+diff --git a/libcap/libcap.h b/libcap/libcap.h
-+index 829886b..bce3a4d 100644
-+--- a/libcap/libcap.h
-++++ b/libcap/libcap.h
-+@@ -337,6 +337,17 @@ struct cap_launch_s {
-+ #define good_cap_iab_t(x)     (CAP_IAB_MAGIC == magic_of(x))
-+ #define good_cap_launch_t(x)  (CAP_LAUNCH_MAGIC == magic_of(x))
-+ 
-++/* Older uClibc-ng environments lack the static_assert macro */
-++#if !defined(__cplusplus) && !defined(static_assert)
-++    #if defined(__UCLIBC__)
-++        /* Check if we are on uClibc-ng < 1.0.42 */
-++        #if (__UCLIBC_MAJOR__ < 1) || \
-++            (__UCLIBC_MAJOR__ == 1 && __UCLIBC_MINOR__ == 0 && __UCLIBC_SUBLEVEL__ < 42)
-++            #define static_assert _Static_assert
-++        #endif
-++    #endif
-++#endif
-++
-+ #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
-+ #define libcap_static_assert(cond, text) \
-+     static_assert(cond, #text)
-+-- 
-+cgit 1.3.1-korg
-+
+diff --git a/package/ed/ed.hash b/package/ed/ed.hash
+index 39a6ff5f22..acd4896fdb 100644
+--- a/package/ed/ed.hash
++++ b/package/ed/ed.hash
+@@ -1,4 +1,4 @@
+-# From https://lists.gnu.org/archive/html/bug-ed/2026-02/msg00000.html
+-sha256  56e107ddc2f29dad6690376c15bf9751509e1ee3b8241710e44edbe5c3a158cc  ed-1.22.5.tar.lz
++# From https://lists.gnu.org/archive/html/bug-ed/2026-08/msg00003.html
++sha256  3f33b22135219c39c3c695f7b7171c2567d3e2a17c798c0a90607320cbb268f2  ed-1.22.6.tar.lz
+ # Locally calculated
+ sha256  022e9c2e9cc1aac3622313df6f971fbb39c1d1b0cb45324c16b8a1fe231c5ea6  COPYING
+diff --git a/package/ed/ed.mk b/package/ed/ed.mk
+index 6e1d5a3d05..32638ae081 100644
+--- a/package/ed/ed.mk
++++ b/package/ed/ed.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ED_VERSION = 1.22.5
++ED_VERSION = 1.22.6
+ ED_SITE = $(BR2_GNU_MIRROR)/ed
+ ED_SOURCE = ed-$(ED_VERSION).tar.lz
+ ED_LICENSE = GPL-2.0+
 -- 
 2.34.1
 
