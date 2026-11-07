@@ -1,28 +1,28 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C6A606A326
-	for <buildroot@archiver.kernel.org>; Sat,  7 Nov 2026 10:30:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC16606A32F
+	for <buildroot@archiver.kernel.org>; Sat,  7 Nov 2026 10:30:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=HUYaNwU2
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=YxRvYUXv
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 324D38119E;
-	Sat,  7 Nov 2026 10:30:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9CE1740785;
+	Sat,  7 Nov 2026 10:30:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jFYVhsP4pALp; Sat,  7 Nov 2026 10:30:01 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 43D01811AA
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794047401;
-	b=lhgi7NG/sh0JVbyRM7VRa8uL/sI21RUfVriH+2ZGbO/Z0qyOcKudkvZZ5WT7McVpdwaX
-	 B+7InbjQ7N92b2oHqeYn1Tg6XEvSszPc+ZFy8SvGjXw4Xj8a+FlLtjImS6pgZShuoaq5r
-	 8PQaA3RxEOwJPaf+iCjdKeXhnUzjDIwCyMh/hnZbd74FNmYVeRz3ZHkroRedpc4B5P36v
-	 Yk6Ko11H4ep/8h8NdIU+J2AyzJGbnnIej1GBu+9lsNTf2VghxfQUAR6r7hNO43d4wV762
-	 /W2gjZJV2BHXvEPJ8fymFODuGgjQS1YQSzK6mV9CnAHclLpenok9WQJ/FrO2+Nu2Nbg==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KHQHQLuuqueD; Sat,  7 Nov 2026 10:30:02 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org B43764078D
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794047402;
+	b=rWBZYDS0aYV+PrFoSQKHhuN8FfR4Oe7L5cOPYnPgKOq8xLAFVstkyaKubGab608cYDCI
+	 Jn/UtisFco/Tb7Il0KCfrTa87qFYxfzPx2zTUNLpaUKZa7FJcUfsvFs/y1Asn/dWXcX84
+	 W/1nnNhnfuso5nxndztekmwKPeH6807OUwez5obKMbbZyDAQ9SQYBSssxRZvjN1m3Jbde
+	 a/QEcEm6JOD8LPqY85JtFKG8s1kPO9QcpeE2opjWsmw0HOfDKhmrGGe4pP+ktU2fploN+
+	 bVZ846BtPN2/J7n0AJQVdN9txjFNF69dqvxXZr5xGU4Qw9HGlyQN/H/2pjKP46VC32w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794047401;
+	c=relaxed/relaxed; t=1794047402;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
@@ -30,57 +30,58 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=8bdQaI2Om3TZh8naG/oXhmVTT2sm2v9OveUNV0a3aOM=;
-	b=SF9ZwPpc6Gal7jA05jWRVukVt5jVShHurpWhKCnp1HCUCyLTOMhUfE9TyEU3nxjJs8Wk
-	 Ma8sJFY8Rh21gy3Dsc++qlgmED3YFbUkaOKPYNBbRzunw5kFmidyeCQcuvUUH5aZkmhp0
-	 qHud721pd4SfR39qmf4nswBxegwANL9y4u+E3PjqNfykUdVPDvoTPTc4srF8Ev0dLACKZ
-	 F4aOw673fgWnNrkL5L3zIa9L//0rxtKPLsNCkgxksP2kpxoMi466nIPsupM51q3kvDO3v
-	 KzH3wLou2A7we1OdBVKevWk3wJtiJMR1eb6pxHOmtcES/tE0ZpNaTZE3+ZNaAaCXWdg==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+	bh=HpHfDgUwrchj8BwHBnbpKd21wYSWuxByO9/G7opQ+N4=;
+	b=HuMk2z62uFJ8/Tazgn+0FpQEnUHf8kLcDP6APljwG1Zq0PBxzCcCk6zfoS24gDPn8BMo
+	 wj/xpgJL+ZgfVMgoKZKwOku4FTs8VGuytIU3ANtERufqB6I/vFbBozZV1fRSEmvp1M8MT
+	 YZu/rMDkZAsLJnmVoolJ9h8fpI1JmsFNsXdyyMHuzhGntc2iQicEqb71Q5d+6c+c8NhcQ
+	 1bM5XinN4Ic/CA3Wll+nvIksej30BAzdqqBuRr5aSB6ltxj36noaUoHZFuJhR/KIRl7pT
+	 Q32Mxiqz+H75C8QxKzMneSbb/1w9FOy8KD7xVm4ElZcLEEy9BwAhLYxtUsr5MSyAqsQ==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794047401;
-	bh=8bdQaI2Om3TZh8naG/oXhmVTT2sm2v9OveUNV0a3aOM=;
+	s=default; t=1794047402;
+	bh=HpHfDgUwrchj8BwHBnbpKd21wYSWuxByO9/G7opQ+N4=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=HUYaNwU21A3hr0biOXInvHp8ecOYi5EyyWxicUe2ZJPR17xpLj4qY1SDG7J4dv8VX
-	 lSYnXh3KZIDnXhq9EPZmh4FMNeD9jJW+TsshFBUND7vNoFu4d44g5cXpxy2iSI9q5e
-	 Q0ju2xKnKNDoeNJQ/UP0GsX+ZB+N+otR7ovnRUacQhNUWxaad7khDOBSFCpwdtX1fI
-	 W0CKTRqsOLnbw7RvolgV5+RsejdwG6gTRd6/7PpoP7djcXoL5Pg6fSE2lEVi+3OXxc
-	 ratEXXPpalZUSfDWphRfmus/mlU/wuCuCsnZEYtH2EPXat5eXhSXZOZIuW8vNKiZV0
-	 F3/pG3zd9dtgg==
+	b=YxRvYUXvxNXeWEx5wZbEqu/1kutOvRDQNQ+DlmZ94VgQ1+hk7vkJmPj3DiOkxYWfg
+	 zt9TprT09Er10vVUjITueh07nCKp1hJRdv7LbHxFRhCWCxLVhn08yEUh8SLR/WZEAr
+	 SSR1Vi3XbFWBLifX+4ZEJegXKRAQ3oLXptG/o8KuUigCpDngR+ECOjGGrHTqoH+Wph
+	 R6VhEhlxwRf3m0F9gnRdsynbA8UdLo3dZxxeo2olqyjZcJLjrNwBIDNW9Zg6cPmU6H
+	 RsjP91NA9d9PubvlyP+o7xfXTXI/odiNvQ0Cw1jd/TzKXqsiFWhD34pZHsMbeUYxEc
+	 KBPEh2gY/D3+g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 43D01811AA;
-	Sat,  7 Nov 2026 10:30:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 1B3DE32A
+	by smtp4.osuosl.org (Postfix) with ESMTP id B43764078D;
+	Sat,  7 Nov 2026 10:30:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 71D4C32A
  for <buildroot@buildroot.org>; Sat,  7 Nov 2026 10:30:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 013574077E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 63B0F400BB
  for <buildroot@buildroot.org>; Sat,  7 Nov 2026 10:30:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2Ht39aNCrg1b for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MhfkSNhZYPgV for <buildroot@buildroot.org>;
  Sat,  7 Nov 2026 10:29:59 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 54B0A40785
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 69E1D4008C
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 54B0A40785
+ by smtp2.osuosl.org (Postfix) with ESMTP id 69E1D4008C
  for <buildroot@buildroot.org>; Sat,  7 Nov 2026 10:29:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 239BF8B568; Sat,  7 Nov 2026 10:28:27 +0000 (UTC)
+ id 36F1F8398C; Sat,  7 Nov 2026 10:28:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 7 Nov 2026 11:14:06 +0100
+Date: Sat, 7 Nov 2026 11:14:14 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 70aec3f489e20be3d0aed9199f7d37c92c9fed6c
-X-Git-Newrev: d53d927df5036416d5f6d0dafe18646093efde02
+X-Git-Oldrev: d53d927df5036416d5f6d0dafe18646093efde02
+X-Git-Newrev: 848f077b5c38ced42fd5925bc30169ec6468a9be
 X-Patchwork-Hint: ignore
-Message-Id: <20261107102827.239BF8B568@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-click: bump to version 8.5.1
+Message-Id: <20261107102827.36F1F8398C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-maturin: bump to version
+ 1.16.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,49 +100,48 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
 	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/d53d927df5036416d5f6d0dafe18646093efde02
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/848f077b5c38ced42fd5925bc30169ec6468a9be
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/python-click/python-click.hash | 4 ++--
- package/python-click/python-click.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-maturin/python-maturin.hash | 2 +-
+ package/python-maturin/python-maturin.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-click/python-click.hash b/package/python-click/python-click.hash
-index dc080ea79c..e1e0d1154d 100644
---- a/package/python-click/python-click.hash
-+++ b/package/python-click/python-click.hash
+diff --git a/package/python-maturin/python-maturin.hash b/package/python-maturin/python-maturin.hash
+index 45e8492bf0..678456ca4a 100644
+--- a/package/python-maturin/python-maturin.hash
++++ b/package/python-maturin/python-maturin.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/click/json
--md5  39f57e4f423de0d075dd968c29b01539  click-8.5.0.tar.gz
--sha256  ba0d2089de75ea0310e2dde03160e6ca10009947fb95a182f9b54021bb272e34  click-8.5.0.tar.gz
-+md5  c14d89eb9273f2ece4ae6cb7d3b0ed90  click-8.5.1.tar.gz
-+sha256  9bbfada76703fd1d784b83eea012e3e8c6a001a876543ef104fa56aaaeb072b4  click-8.5.1.tar.gz
+ # Locally calculated after vendoring
+-sha256  df0b5d46b6a70ec13b5610de795e055c34b8cc898640c918b14e22fdbc92c9d0  python-maturin-1.15.0-cargo6.tar.gz
++sha256  ad246fc2309b2c0a5479872929db5ff001fcc6670b78eb2d5ee376deb345513f  python-maturin-1.16.0-cargo6.tar.gz
  # Locally computed sha256 checksums
- sha256  9a8ad106a394e853bfe21f42f4e72d592819a22805d991b5f3275029292b658d  LICENSE.txt
-diff --git a/package/python-click/python-click.mk b/package/python-click/python-click.mk
-index 8dd3d25f3f..f6854abc17 100644
---- a/package/python-click/python-click.mk
-+++ b/package/python-click/python-click.mk
+ sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  license-apache
+ sha256  ea7882c559733766ad08343bde1d1ec80a4967c03a738fb8e0058ef6289f7b7c  license-mit
+diff --git a/package/python-maturin/python-maturin.mk b/package/python-maturin/python-maturin.mk
+index 5cab6697bf..062d734cde 100644
+--- a/package/python-maturin/python-maturin.mk
++++ b/package/python-maturin/python-maturin.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CLICK_VERSION = 8.5.0
-+PYTHON_CLICK_VERSION = 8.5.1
- PYTHON_CLICK_SOURCE = click-$(PYTHON_CLICK_VERSION).tar.gz
--PYTHON_CLICK_SITE = https://files.pythonhosted.org/packages/c7/0e/7fa0ef50764b67090eca4114772a2abf8b6148198475e54c660b97caeee6
-+PYTHON_CLICK_SITE = https://files.pythonhosted.org/packages/45/37/edbf1b0707709013c0cf2e8317e03d97ed29bf4cac709fe328904ae92a38
- PYTHON_CLICK_SETUP_TYPE = flit
- PYTHON_CLICK_LICENSE = BSD-3-Clause
- PYTHON_CLICK_LICENSE_FILES = LICENSE.txt
+-PYTHON_MATURIN_VERSION = 1.15.0
++PYTHON_MATURIN_VERSION = 1.16.0
+ PYTHON_MATURIN_SOURCE_PYPI = maturin-$(PYTHON_MATURIN_VERSION).tar.gz
+-PYTHON_MATURIN_SITE_PYPI = https://files.pythonhosted.org/packages/b9/c8/22e5e21b2679c9bce6415ca578034ca2cc9316be0642ae21e051a2d5198c
++PYTHON_MATURIN_SITE_PYPI = https://files.pythonhosted.org/packages/bd/71/eb078174335ff30bde1be2ad54fb6256db4b160eb3efa81163fa30f8c814
+ PYTHON_MATURIN_SITE = $(PYTHON_MATURIN_SITE_PYPI)/$(PYTHON_MATURIN_SOURCE_PYPI)?buildroot-path=filename
+ PYTHON_MATURIN_SETUP_TYPE = setuptools-rust
+ PYTHON_MATURIN_LICENSE = Apache-2.0 or MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
