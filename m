@@ -2,96 +2,240 @@ Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCBEF606D804
-	for <buildroot@archiver.kernel.org>; Sat,  7 Nov 2026 14:06:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09E09606A32E
+	for <buildroot@archiver.kernel.org>; Sat,  7 Nov 2026 14:26:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=pjSp/jSS
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=NTVTbWvA
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A4FE560749;
-	Sat,  7 Nov 2026 14:06:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 27A066078D;
+	Sat,  7 Nov 2026 14:26:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8BXaS2JFBUXn; Sat,  7 Nov 2026 14:06:29 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 0CAC560730
+ id 5fTDa4oBRstZ; Sat,  7 Nov 2026 14:26:19 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org D4AFF60730
 Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794060389;
-	b=bwyqrAK7mCoaDFER+vEMGQs3fAI4gSwZoDRWN5sBvrf7dF+SpAvomRFCffqNAHw/XmkI
-	 Ee41tV+sCNa5Fr+NAW4OEeUtrqxuULP94a59+He6St3tFTjsqzT+vEJERGDJmvfUyeS/5
-	 uJziezy9CWKSz56Dg0NAX73eCXZt+p5iMl3wGEt/UWBWG8V8j5fZCe6SUog59EvqmlBFU
-	 jAE6jcAhXK761X/34jV4tWi7dT0D+gnTaf+3asPW8ACyjo0xeWghAMor9i/UZv/8KjJ1b
-	 cMsnZ45AGOlsAkBmGRKRpJP/tpYjHkhnPji2JCUcU3FD3kwkf2U2muWdZwChB+Mrzow==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794061579;
+	b=dCbSIE4Uf9GHgogy5yvl5npNzFxP5/7O/MFr+46/q6D6DSajy+zdkQF2xUyMProKp0Vq
+	 O8381+Cr3xwvdr/1/KFc2fr6+VHcjHacYn49L+YWanXrRcviTTaKnrBp3RppD0GjRRMcD
+	 0NHu2QHql4K8Zm9NhVz2YblL4sy3aPbM59UUfazdfx2M/l1v9tBTN910EpkXjZLrR0lEL
+	 lmzbvKWvF12kAk+xhHx4vMBeBpR94WAafV6GfU5AFQhMKkl0c4SHl/0R8mzD2HPn5kMdw
+	 PSOGq7e3IGryLjrlM9bcQsB0q0E0+L3/b9Xv43G7oV9jLFTJiM7EWkFJ36zBYxZZG8w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794060389;
+	c=relaxed/relaxed; t=1794061579;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
-	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 X-UI-Sender-Class:Received:Message-ID:Date:MIME-Version:User-Agent:To:
+	 Cc:References:Content-Language:Autocrypt:In-Reply-To:X-Provags-ID:
+	 UI-OutboundReport:Subject:X-BeenThere:X-Mailman-Version:Precedence:
 	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
 	 Errors-To:Sender;
-	bh=g2ZHXVH4FfUiAsoeJXWTnw0VltzKCmjJX8oSpcpjw8w=;
-	b=mfttvy4fdltm1oFfE8VT8qIljp5vGInWt8bklNXhdzbQkbsRvV7AF0Rs7HK1Cv1i+3Qq
-	 5CRsDIuFSLHXiCHeCB5DxDDQIqWfaxj/pfu8wZagpOStuHK7R8TDv1mTtLu3+oh+FYwqm
-	 46F4D7p1x7Ogczv2GDChliDFmjqPXEL6fEgcFY20NXuXcy/JSklsHqAjxvP4m8I2GgnfV
-	 jZq4tMyE5e9uJoL9JW5QH5ZX3BR7PJ7mrmX+p7G3UqlRWZFYhNgzQ6DNYruRzYi/eFgBs
-	 R1X1KGn0cqOEbZutANvjuzbIbcxoRbR9c692iFq+1hid7z7G3rie+oW2SAdHqTDTs0A==
+	bh=lKcLPMelLGRI2dJXm6ESfeBO0+p7f1thdOhkwZR/TyY=;
+	b=HbrCtVRZH0GL76N48L1JQ54X+aR7jL3L0FuKqgSMa+pLd4xqjVtiYWXTjIB48+Jyx6Xv
+	 EPOSqcYv2GQDzjihL8KJ5jFFCJxu1sRHsZtWOMLtD8J6QfZT8UJlAjjB0MtZglABhSv/W
+	 1/GpsyRkN0O0P1wUUNR8WfkmRgiiyffTzoecJpJdYyKeYTa6GO5xePS1cbZVvpCHaUEGV
+	 CBPEpcIGVtdzxdHlhF+/hoqa6hNZNWn6iOZ4QTqUNk0uKbDv+oF2mV43VFjA+yy1JgrLl
+	 GGUfY0lMCSDx1N0HJcJaR5h0EyvcElFui8Elah5faF69vHZnzqgrP+kVlJGwfXLiAFw==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794060389;
-	bh=g2ZHXVH4FfUiAsoeJXWTnw0VltzKCmjJX8oSpcpjw8w=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1794061578;
+	bh=lKcLPMelLGRI2dJXm6ESfeBO0+p7f1thdOhkwZR/TyY=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=pjSp/jSSAd7aBfUL/yJy2qYhYHL0viDZP0OXZB+OUXHZVR8FPGTejp2aXQk3aqBiG
-	 U5h3VYqfzg3gn9YDFe+Gif3/BmeUmiSMhbayKcC5HQjPyy4cB92rphhEQ3oTl+Cq7v
-	 0LAlBn9wqFr+2J5gm4nNKq4NaZZUGdQm4tBgLpY3zv8q3m8U//lBlZAOqmqmXNbU3t
-	 9KcpKDF5kItf+7rrDr3+9bj2mlrUztdKo9Lam6yRa0yoyT2+knCXYZozSlQXX6ytq0
-	 ph/E6rVRjSA1PjmyckbqosfxYxRMKN/hDBtdL9mSvYbxX1/ur8SGcNK47TROV5Mdc4
-	 tkH7rg7VN9RLg==
+	b=NTVTbWvArs7MqdSZR9CY2ei2jWXZfxcUKAYnSunJ23RAmq1ccl24us+7twfQ14Q3b
+	 3afhOQLwuzTlgoA5/vNQfLwu/NcBCKOBfnhLx+g2jKMZJ+vpHB4aDvQvQTzJy+LWZX
+	 AVwvVMAtLDezFPtq0s9gNWstGcn57jFbziNdZHVEX1LUozGEi96A9BUbL9DCJUun+X
+	 njciaYgInZXM8hXNqTlX17HaK7Q9lD0+Zcs2EM1F79Mj485N5z+gNIJu4OrbvipdVR
+	 QprMgjzy2PWaR/RG2PHkZcWyW20JG8s3ZWAIIT5bT5d3dFV+iWxVrw9TaPSVp/Ount
+	 Rz8IzCB8K+V7A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0CAC560730;
-	Sat,  7 Nov 2026 14:06:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id A21ED34D
- for <buildroot@buildroot.org>; Sat,  7 Nov 2026 14:06:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D4AFF60730;
+	Sat,  7 Nov 2026 14:26:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D29C637D
+ for <buildroot@buildroot.org>; Sat,  7 Nov 2026 14:26:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 872BF812B4
- for <buildroot@buildroot.org>; Sat,  7 Nov 2026 14:06:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B7F564064B
+ for <buildroot@buildroot.org>; Sat,  7 Nov 2026 14:26:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 13vCnL8sNmlv for <buildroot@buildroot.org>;
- Sat,  7 Nov 2026 14:06:26 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 9B3EC812B1
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9B3EC812B1
- for <buildroot@buildroot.org>; Sat,  7 Nov 2026 14:06:23 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.2])
- (Authenticated sender: ju.o@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPA id 6D7882003CA;
- Sat,  7 Nov 2026 15:06:19 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 via
- 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by webmail.free.fr with HTTP (HTTP/1.0
- POST); Sat, 07 Nov 2026 15:06:19 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oLCM51nmIIzT for <buildroot@buildroot.org>;
+ Sat,  7 Nov 2026 14:26:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 1FA3F40602
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1FA3F40602
+ for <buildroot@buildroot.org>; Sat,  7 Nov 2026 14:26:14 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mnpru-1wjRsc1k4I-00eL91; Sat, 07
+ Nov 2026 15:26:12 +0100
+Message-ID: <acb5cce5-1a6c-4b45-9b7d-a734582f8689@gmx.de>
+Date: Sat, 7 Nov 2026 15:26:11 +0100
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Date: Sat, 07 Nov 2026 15:06:19 +0100
-To: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+User-Agent: Mozilla Thunderbird
+To: Julien Olivain <ju.o@free.fr>
 Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-In-Reply-To: <20261106111604.1500074-2-angelo.compagnucci@gmail.com>
-References: <20261105175058.3132718-1-angelo.compagnucci@gmail.com>
- <20261106111604.1500074-1-angelo.compagnucci@gmail.com>
- <20261106111604.1500074-2-angelo.compagnucci@gmail.com>
-User-Agent: Webmail Free/1.6.20
-Message-ID: <23bd9f8e90ca12911336ca571708b3ea@free.fr>
-X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH v4 2/3] website: add a showcase page
+References: <20260712151755.599427-1-fiona.klute@gmx.de>
+ <8553c8ecd56b953f697e767deedfa7c7@free.fr>
+ <b4c2aef5-df5d-402d-aa9f-f03ead8e5f88@gmx.de>
+Content-Language: en-US, de-DE-1901, de-DE
+Autocrypt: addr=fiona.klute@gmx.de; keydata=
+ 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
+In-Reply-To: <b4c2aef5-df5d-402d-aa9f-f03ead8e5f88@gmx.de>
+X-Provags-ID: V03:K1:sMloiRefiXtZWp4g+alXsOp4wUOIW/iUamQmpyYOVZEbnH45flI
+ j6BZRaowdbD8WssyPpKurwqvL9G+63fDnMCpyg7WcfM+4yYiCGnpCEeQ/Z2fr3OdTNBesQ/
+ b/CbsNqJBXxzTJ1vzg4OEPbGf9TrmriMCrL6LCsm0INhtUp1HF9zwbg1KqSx0MVmBEAUd0h
+ gh9g7ud7HaZ/t2xlYQ4bg==
+UI-OutboundReport: notjunk:1;M01:P0:jgYrqorbK2A=;21h4NXD9Nb+LnmFyUUmsp0ailTL
+ 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
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/fakeroot: bump to version
+ 2.1.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -101,317 +245,120 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-22.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
-	autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Hi Angelo,
-
-Thanks for this patch. I have few suggestions, see below.
-
-On 06/11/2026 12:16, Angelo Compagnucci wrote:
-> Add a page listing products and projects whose operating system is
-> built with Buildroot, each one with a link to a public source:
-> 
-> - well known products: Tesla, Home Assistant OS, Sipeed NanoKVM and
->   Analog Devices ADALM-PLUTO;
-> - testimonials from Arm, Home Assistant OS, EVS and Texas Instruments,
->   quoted from the Buildroot at 25 talk at ELC Europe 2026;
-> - open source projects: Batocera.linux, Recalbox, OpenIPC, Thingino,
->   minikube, Nerves, SeedSigner OS, SkiffOS and Tomato64;
-> - vendor SDKs: Texas Instruments, Microchip, STMicroelectronics,
->   Analog Devices, Canaan Kendryte K230, StarFive JH7110 and Espressif
->   ESP32-S31.
-> 
-> The page ends by inviting users to tell about their products on the
-> mailing list.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-> ---
-> Changes v3 -> v4:
->   - add a "What users say" section, quoting verbatim the testimonials
->     collected for the Buildroot at 25 talk at ELC Europe 2026 (Arm, 
-> Home
->     Assistant OS, EVS and Texas Instruments), with a link to the
->     published slides; the EVS one is shortened to fit the layout;
->   - projects: drop MiSTer FPGA, whose Linux image repository is barely
->     known, and add Tomato64, which also gave a testimonial for the 
-> talk.
-> 
-> Changes v2 -> v3:
->   - reorganize the page to prioritize active projects, each one
->     checked against its public repository, documentation or
->     image [Thomas]:
->     - tagline: "From cars and smart homes to cameras and retro
->       consoles";
->     - well known: keep Tesla even if it is old, because its Buildroot
->       tree is still public and verifiable on GitHub; describe it as the
->       tree building the infotainment and Autopilot images;
->     - well known: mention the br2-external tree of Home Assistant OS
->       and link its GitHub repository; replace Google Fiber and GoPro
->       with Sipeed NanoKVM and Analog Devices ADALM-PLUTO;
->     - projects: drop KNULLI, RaspberryMatic, OpenWrt (not Buildroot
->       based anymore), Kerberos.io KiOS (archived) and Open Voice OS
->       (barely active); add MiSTer FPGA, Thingino, minikube,
->       SeedSigner OS and SkiffOS; reword Recalbox;
->     - vendor SDKs: drop Rockchip (only a Web Archive copy of its guide
->       is left); update the Texas Instruments link to SDK 12.01 and the
->       Microchip link to the linux4microchip repository, with PolarFire
->       SoC; list the STM32MP1 and STM32MP2 for ST; add Analog Devices,
->       Canaan Kendryte K230, StarFive JH7110 and Espressif ESP32-S31.
-> 
-> Changes v1 -> v2:
-> - link the Rockchip Linux SDK to an official Rockchip document, the
->   RK3399 Linux Buildroot development guide, instead of the Khadas
->   documentation. The link points to the Web Archive copy, since
->   opensource.rock-chips.com is not reachable anymore.
-> 
->  docs/website/showcase.html | 340 +++++++++++++++++++++++++++++++++++++
->  1 file changed, 340 insertions(+)
->  create mode 100644 docs/website/showcase.html
-> 
-> diff --git a/docs/website/showcase.html b/docs/website/showcase.html
-> new file mode 100644
-> index 0000000000..a1b8d827af
-> --- /dev/null
-> +++ b/docs/website/showcase.html
-> @@ -0,0 +1,340 @@
-> +<!--#include file="header.html" -->
-> +
-> +<div class="bg-primary py-5">
-> +<div class="container">
-> +<div class="row justify-content-center">
-> +<div class="col-xxl-10 text-center">
-> +	<h1 class="display-4 fw-bold text-white">Powered by Buildroot</h1>
-> +	<p class="fs-4 fw-light text-white-50 mb-0">From cars and smart homes 
-> to cameras
-
-Here, the "text-white-50" makes this line hardly readable
-for me. Would it be possible to change it just to "text-white"
-in order to have to a bit more contrast?
-
-> +		and retro consoles: products and projects whose operating system is 
-> built with
-> +		Buildroot.</p>
-> +</div>
-> +</div>
-> +</div><!-- /container -->
-> +</div>
-
-[...]
-
-> +
-> +	<!-- Famous projects -->
-
-In the popular project list, we could also mention the Godot
-game engine, which uses Buildroot as its build system.
-https://github.com/godotengine/buildroot
-Also mentioned in:
-https://docs.godotengine.org/en/stable/about/list_of_features.html
-
-
-> +	<div class="card my-5">
-> +	<div class="card-header text-bg-primary rounded-top fs-5">
-> +		<span class="bi bi-people-fill"></span>&nbsp; Famous projects</div>
-> +	<div class="card-body p-4">
-> +		<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
-> +
-> +		<div class="col"><div class="card h-100"><div class="card-body">
-> +			<h4 class="mb-1"><span class="bi bi-controller 
-> text-primary"></span>
-> +				<a href="https://batocera.org">Batocera.linux</a></h4>
-> +			<p class="small text-body-secondary mb-2">Retro gaming</p>
-> +			<p class="mb-0">Plug-and-play retro gaming OS for PCs, single board
-> +				computers and handhelds.</p>
-> +		</div></div></div>
-> +
-> +		<div class="col"><div class="card h-100"><div class="card-body">
-> +			<h4 class="mb-1"><span class="bi bi-joystick text-primary"></span>
-> +				<a href="https://www.recalbox.com">Recalbox</a></h4>
-> +			<p class="small text-body-secondary mb-2">Retro gaming</p>
-> +			<p class="mb-0">Retro gaming distribution for single board
-> +				computers and PCs.</p>
-> +		</div></div></div>
-> +
-> +		<div class="col"><div class="card h-100"><div class="card-body">
-> +			<h4 class="mb-1"><span class="bi bi-camera-fill 
-> text-primary"></span>
-> +				<a href="https://openipc.org">OpenIPC</a></h4>
-> +			<p class="small text-body-secondary mb-2">IP cameras</p>
-> +			<p class="mb-0">Open firmware for IP cameras on HiSilicon, Ingenic,
-> +				SigmaStar, Novatek, Ambarella and more.</p>
-> +		</div></div></div>
-> +
-> +		<div class="col"><div class="card h-100"><div class="card-body">
-> +			<h4 class="mb-1"><span class="bi bi-camera-video-fill 
-> text-primary"></span>
-> +				<a 
-> href="https://github.com/themactep/thingino-firmware">Thingino</a></h4>
-> +			<p class="small text-body-secondary mb-2">IP cameras</p>
-> +			<p class="mb-0">Open firmware for cameras based on Ingenic 
-> SoCs.</p>
-> +		</div></div></div>
-> +
-> +		<div class="col"><div class="card h-100"><div class="card-body">
-> +			<h4 class="mb-1"><span class="bi bi-boxes text-primary"></span>
-> +				<a 
-> href="https://github.com/kubernetes/minikube/tree/master/deploy/iso/minikube-iso">minikube</a></h4>
-> +			<p class="small text-body-secondary mb-2">Kubernetes 
-> development</p>
-> +			<p class="mb-0">Virtual machine image for local Kubernetes 
-> clusters,
-> +				with its own br2-external tree.</p>
-> +		</div></div></div>
-> +
-> +		<div class="col"><div class="card h-100"><div class="card-body">
-> +			<h4 class="mb-1"><span class="bi bi-droplet-fill 
-> text-primary"></span>
-> +				<a href="https://nerves-project.org">Nerves</a></h4>
-> +			<p class="small text-body-secondary mb-2">Elixir embedded 
-> framework</p>
-> +			<p class="mb-0">Elixir and Erlang firmware on top of a Buildroot
-> +				base system, <code>nerves_system_br</code>.</p>
-> +		</div></div></div>
-> +
-> +		<div class="col"><div class="card h-100"><div class="card-body">
-> +			<h4 class="mb-1"><span class="bi bi-shield-lock-fill 
-> text-primary"></span>
-> +				<a href="https://github.com/SeedSigner/seedsigner-os">SeedSigner 
-> OS</a></h4>
-> +			<p class="small text-body-secondary mb-2">Bitcoin signing 
-> device</p>
-> +			<p class="mb-0">Minimal OS of the air-gapped SeedSigner hardware 
-> wallet.</p>
-> +		</div></div></div>
-> +
-> +		<div class="col"><div class="card h-100"><div class="card-body">
-> +			<h4 class="mb-1"><span class="bi bi-layers-fill 
-> text-primary"></span>
-> +				<a href="https://github.com/skiffos/SkiffOS">SkiffOS</a></h4>
-> +			<p class="small text-body-secondary mb-2">Configuration layers</p>
-> +			<p class="mb-0">Layered Buildroot configurations for more than 50
-> +				targets, from the Raspberry Pi to the PinePhone.</p>
-> +		</div></div></div>
-> +
-> +		<div class="col"><div class="card h-100"><div class="card-body">
-> +			<h4 class="mb-1"><span class="bi bi-router-fill 
-> text-primary"></span>
-> +				<a href="https://github.com/tomato64/tomato64">Tomato64</a></h4>
-> +			<p class="small text-body-secondary mb-2">Router firmware</p>
-> +			<p class="mb-0">Port of the Tomato router firmware to x86_64 and
-> +				arm64, on a br2-external tree.</p>
-> +		</div></div></div>
-> +
-> +		</div><!-- /row -->
-> +	</div>
-> +	</div>
-> +
-> +	<!-- Vendor SDKs -->
-
-In the vendor SDKs, we could mention the AMD / Xilinx SoC support:
-https://xilinx-wiki.atlassian.net/wiki/spaces/A/pages/2804187327/Buildroot
-While the page says it is not an official support, Neal Frager
-from AMD is doing a great job maintaining the defconfigs for
-those boards.
-
-> +	<div class="card my-5">
-> +	<div class="card-header text-bg-primary rounded-top fs-5">
-> +		<span class="bi bi-cpu-fill"></span>&nbsp; Vendor SDKs</div>
-> +	<div class="card-body p-4">
-> +		<p class="text-body-secondary">Silicon and board vendors ship 
-> Buildroot in
-> +			their SDKs, so countless devices run it without saying so.</p>
-> +		<div class="list-group list-group-flush">
-> +			<a class="list-group-item list-group-item-action d-flex gap-3 py-3"
-> +			   
-> href="https://software-dl.ti.com/processor-sdk-linux/esd/AM62X/12_01_00_05_03_Buildroot/exports/docs/buildroot/Overview.html">
-> +				<span class="bi bi-motherboard-fill fs-3 text-primary"></span>
-> +				<span><b>Texas Instruments Processor SDK</b><br>
-> +				<span class="text-body-secondary">Official Buildroot flavour for 
-> AM62x and
-> +					AM62Lx, with the TI external tree.</span></span>
-> +			</a>
-> +			<a class="list-group-item list-group-item-action d-flex gap-3 py-3"
-> +			   
-> href="https://github.com/linux4microchip/buildroot-external-microchip">
-> +				<span class="bi bi-motherboard-fill fs-3 text-primary"></span>
-> +				<span><b>Microchip</b><br>
-> +				<span class="text-body-secondary">Buildroot external tree for the 
-> SAMA5, SAMA7, SAM9
-> +					and PolarFire SoC families.</span></span>
-> +			</a>
-> +			<a class="list-group-item list-group-item-action d-flex gap-3 py-3"
-> +			   href="https://github.com/bootlin/buildroot-external-st">
-> +				<span class="bi bi-motherboard-fill fs-3 text-primary"></span>
-> +				<span><b>STMicroelectronics</b><br>
-> +				<span class="text-body-secondary">Buildroot external tree for the 
-> STM32MP1 and STM32MP2
-> +					boards, maintained by Bootlin.</span></span>
-> +			</a>
-> +			<a class="list-group-item list-group-item-action d-flex gap-3 py-3"
-> +			   href="https://github.com/analogdevicesinc/br2-external">
-> +				<span class="bi bi-motherboard-fill fs-3 text-primary"></span>
-> +				<span><b>Analog Devices</b><br>
-> +				<span class="text-body-secondary">Buildroot external tree for the 
-> ADSP-SC5xx processors and
-> +					the ADI boards based on AMD Xilinx SoCs.</span></span>
-> +			</a>
-> +			<a class="list-group-item list-group-item-action d-flex gap-3 py-3"
-> +			   href="https://github.com/kendryte/k230_linux_sdk">
-> +				<span class="bi bi-motherboard-fill fs-3 text-primary"></span>
-> +				<span><b>Canaan Kendryte K230</b><br>
-> +				<span class="text-body-secondary">Buildroot based Linux SDK for 
-> the K230 RISC-V AI SoC.</span></span>
-> +			</a>
-> +			<a class="list-group-item list-group-item-action d-flex gap-3 py-3"
-> +			   href="https://github.com/starfive-tech/VisionFive2">
-> +				<span class="bi bi-motherboard-fill fs-3 text-primary"></span>
-> +				<span><b>StarFive JH7110</b><br>
-> +				<span class="text-body-secondary">VisionFive 2 SDK, with Buildroot 
-> for the root
-> +					filesystem.</span></span>
-> +			</a>
-> +			<a class="list-group-item list-group-item-action d-flex gap-3 py-3"
-> +			   href="https://github.com/espressif/esp-buildroot-external">
-> +				<span class="bi bi-motherboard-fill fs-3 text-primary"></span>
-> +				<span><b>Espressif ESP32-S31</b><br>
-> +				<span class="text-body-secondary">Buildroot external tree for 
-> Linux on the ESP32-S31,
-> +					as a developer preview.</span></span>
-> +			</a>
-> +		</div>
-> +	</div>
-> +	</div>
-> +
-> +	<div class="row my-5 text-center">
-> +	<div class="col-lg-8 offset-lg-2">
-> +		<h1 class="fw-light">Your product here?</h1>
-> +		<h3 class="text-body-secondary">Tell us about it on the
-> +			<a href="support.html">mailing list</a>.</h3>
-> +	</div>
-> +	</div>
-> +	<hr>
-> +
-> +</div>
-> +</div>
-> +</div><!-- /container -->
-> +
-> +<!--#include file="footer.html" -->
-> --
-> 2.34.1
-
-Best regards,
-
-Julien.
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+QW0gMDcuMTEuMjYgdW0gMTQ6NTEgc2NocmllYiBGaW9uYSBLbHV0ZToKPiBIaSBKdWxpZW4hCj4g
+Cj4gQW0gMDIuMDguMjYgdW0gMTU6Mzggc2NocmllYiBKdWxpZW4gT2xpdmFpbjoKPj4gT24gMTIv
+MDcvMjAyNiAxNzoxNywgRmlvbmEgS2x1dGUgdmlhIGJ1aWxkcm9vdCB3cm90ZToKPj4+IFRoZSBz
+b3VyY2UgYXJjaGl2ZSBkb2VzIG5vdCBjb250YWluIGEgcHJlLWJ1aWxkIGNvbmZpZ3VyZSBzY3Jp
+cHQgYW55Cj4+PiBtb3JlLCBzbyBlbmFibGUgYXV0b3JlY29uZi4gRmFrZXJvb3QgYWxzbyBjb250
+YWlucyBhbiBleHBlcmltZW50YWwKPj4+IE1lc29uIGJ1aWxkIGRlZmluaXRpb24gc2luY2UgMi4x
+LCBidXQgQnVpbGRyb290IHNob3VsZCBrZWVwIHVzaW5nCj4+PiBhdXRvdG9vbHMgdW50aWwgdGhl
+IE1lc29uIGJ1aWxkIGlzIHN0YWJsZS4KPj4+Cj4+PiBTaW5jZSB2Ni4xMC4xIGJ0cmZzLXByb2dz
+IHVzZXMgbmZ0dygpIFsxXSwgd2hpY2ggcGFja2FnZS9mYWtlcm9vdCBkaWQKPj4+IG5vdCBzdXBw
+b3J0IGJlZm9yZSB2Mi4wIFsyXS4gVGhpcyB1cGRhdGUgYWxsb3dzIHVwZGF0aW5nIGJ0cmZzLXBy
+b2dzCj4+PiBwYXN0IHY2LjEwIHdpdGhvdXQgYnJlYWtpbmcgYnVpbGQgb2YgYnRyZnMgcm9vdGZz
+IGltYWdlcy4KPj4+Cj4+PiBVcHN0cmVhbSBjaGFuZ2VzOgo+Pj4gaHR0cHM6Ly9zYWxzYS5kZWJp
+YW4ub3JnL2NsaW50L2Zha2Vyb290Ly0vY29tcGFyZS8gCj4+PiB1cHN0cmVhbSUyRjEuMzcuMi4u
+LnVwc3RyZWFtJTJGMi4xLjQKPj4+Cj4+PiBbMV0gaHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIv
+c2NtL2xpbnV4L2tlcm5lbC9naXQva2RhdmUvYnRyZnMtIAo+Pj4gcHJvZ3MuZ2l0L2NvbW1pdD9p
+ZD1jNjQ2NGQzZjk5ZWQxZGFiY2VmZjExNjhlYWJiMjA3NDkyYzM3NjI0Cj4+PiBbMl0gaHR0cHM6
+Ly9zYWxzYS5kZWJpYW4ub3JnL2NsaW50L2Zha2Vyb290Ly0vIAo+Pj4gY29tbWl0LzM1MDJjNTE1
+YzczZWUwMmU3ZjU1N2U2YTNiZmMxYWY2NzVkZDNkMzQKPj4+Cj4+PiBTaWduZWQtb2ZmLWJ5OiBG
+aW9uYSBLbHV0ZSA8ZmlvbmEua2x1dGVAZ214LmRlPgo+Pj4gLS0tCj4+PiBDaGFuZ2VzIHYxIC0+
+IHYyOgo+Pj4gKiBjb21taXQgbWVzc2FnZTogZXhwbGljaXRseSBzdGF0ZSB3aHkgQnVpbGRyb290
+IHNob3VsZCBrZWVwIHVzaW5nCj4+PiDCoCBhdXRvdG9vbHMgZm9yIG5vdwo+Pj4gKiBhZGQgY29t
+bWVudCBleHBsYWluaW5nIHdoeSBhdXRvcmVjb25mIGlzIG5lZWRlZAo+Pj4KPj4+IMKgcGFja2Fn
+ZS9mYWtlcm9vdC9mYWtlcm9vdC5oYXNoIHwgNiArKystLS0KPj4+IMKgcGFja2FnZS9mYWtlcm9v
+dC9mYWtlcm9vdC5ta8KgwqAgfCA5ICsrKysrKy0tLQo+Pj4gwqAyIGZpbGVzIGNoYW5nZWQsIDkg
+aW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMoLSkKPj4+Cj4+PiBkaWZmIC0tZ2l0IGEvcGFja2Fn
+ZS9mYWtlcm9vdC9mYWtlcm9vdC5oYXNoIGIvcGFja2FnZS9mYWtlcm9vdC8gCj4+PiBmYWtlcm9v
+dC5oYXNoCj4+PiBpbmRleCA4MmE2MjE0MzgwLi4wYzMzMGI3NzkyIDEwMDY0NAo+Pj4gLS0tIGEv
+cGFja2FnZS9mYWtlcm9vdC9mYWtlcm9vdC5oYXNoCj4+PiArKysgYi9wYWNrYWdlL2Zha2Vyb290
+L2Zha2Vyb290Lmhhc2gKPj4+IEBAIC0xLDUgKzEsNSBAQAo+Pj4gLSMgRnJvbSBodHRwczovL2Rl
+Yi5kZWJpYW4ub3JnL2RlYmlhbi9wb29sL21haW4vZi9mYWtlcm9vdC8gCj4+PiBmYWtlcm9vdF8x
+LjM3LjItMS5kc2MKPj4+IC1zaGExwqAgMWE3MjFjMmI0MDkzYTRlODNkYzA5MWRjNDFhMDI4ZjE5
+MzQwYzFiMyAKPj4+IGZha2Vyb290XzEuMzcuMi5vcmlnLnRhci5nego+Pj4gLXNoYTI1NiAKPj4+
+IDBlZWE2MGZiZTg5NzcxYjg4ZmNmNDE1YzhmMmYwYTZjY2ZlOWVkZWJiY2YzYmE1ZGMwMjEyNzE4
+ZDk4ODg0ZGIgCj4+PiBmYWtlcm9vdF8xLjM3LjIub3JpZy50YXIuZ3oKPj4+ICsjIEZyb20gaHR0
+cHM6Ly9zbmFwc2hvdC5kZWJpYW4ub3JnL2FyY2hpdmUvZGViaWFuLzIwMjYwNzExVDIwMjQwNVov
+IAo+Pj4gcG9vbC9tYWluL2YvZmFrZXJvb3QvZmFrZXJvb3RfMi4xLjQtMS5kc2MKPj4+ICtzaGEx
+wqAgOWQ1NWU2MmEzNDYxMjMxNjA1ODE2NmY3YzUyOGQ5ZmMyZjMwYzcxOSAKPj4+IGZha2Vyb290
+XzIuMS40Lm9yaWcudGFyLnh6Cj4+PiArc2hhMjU2IAo+Pj4gMDgyMmJkNWE5ZjBjZjE5ZDJiYTA1
+NDZiODhiMDQzMmQ0ZDNkOTkxN2RiNjJjNTdiNzQwNDRjY2FkYmEwNmU0OSAKPj4+IGZha2Vyb290
+XzIuMS40Lm9yaWcudGFyLnh6Cj4+PiDCoCMgTGljZW5zZSBmaWxlcywgbG9jYWxseSBjYWxjdWxh
+dGVkCj4+PiDCoHNoYTI1NiAKPj4+IGZjODJjYThiNmZkYjE4ZDRlM2U4NWNmZDhhYjU4ZDFiY2Qz
+ZjFiMjlhYmU3ODI4OTVhYmQ5MWQ2NDc2M2Y4ZTcgQ09QWUlORwo+Pj4gZGlmZiAtLWdpdCBhL3Bh
+Y2thZ2UvZmFrZXJvb3QvZmFrZXJvb3QubWsgYi9wYWNrYWdlL2Zha2Vyb290L2Zha2Vyb290Lm1r
+Cj4+PiBpbmRleCAxMmQ3ZjFjNGExLi44MzU0Zjk5NGVlIDEwMDY0NAo+Pj4gLS0tIGEvcGFja2Fn
+ZS9mYWtlcm9vdC9mYWtlcm9vdC5tawo+Pj4gKysrIGIvcGFja2FnZS9mYWtlcm9vdC9mYWtlcm9v
+dC5tawo+Pj4gQEAgLTQsOSArNCw5IEBACj4+PiDCoCMKPj4+Cj4+PiAjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIwo+Pj4KPj4+IC1GQUtFUk9PVF9WRVJTSU9OID0gMS4zNy4yCj4+PiAtRkFLRVJPT1Rf
+U09VUkNFID0gZmFrZXJvb3RfJChGQUtFUk9PVF9WRVJTSU9OKS5vcmlnLnRhci5nego+Pj4gLUZB
+S0VST09UX1NJVEUgPSBodHRwczovL3NuYXBzaG90LmRlYmlhbi5vcmcvYXJjaGl2ZS8gCj4+PiBk
+ZWJpYW4vMjAyNjA0MDFUMDAwMDAwWi9wb29sL21haW4vZi9mYWtlcm9vdAo+Pj4gK0ZBS0VST09U
+X1ZFUlNJT04gPSAyLjEuNAo+Pgo+PiBXaGlsZSB0ZXN0aW5nIHRoaXMgbmV3IGZha2Vyb290IHZl
+cnNpb24sIEkgZm91bmQgYW4gaXNzdWUgb24gaG9zdHMKPj4gd2l0aCBTRUxpbnV4IGVuYWJsZWQu
+Cj4+Cj4+IEZvciBpbmZvLCBpdCBpcyB3b3JraW5nIHdlbGwgaW4gdGhlIEJ1aWxkcm9vdCBEb2Nr
+ZXIgaW1hZ2UsCj4+IGluIHRoZSBHaXRsYWIgaW5mcmE6Cj4+IGh0dHBzOi8vZ2l0bGFiLmNvbS9q
+b2xpdmFpbi9idWlsZHJvb3QvLS9qb2JzLzE1NjYzODQ5MzI1Cj4+Cj4+IFdoZW4gcnVubmluZyBv
+biBteSBGZWRvcmEgNDQgaG9zdCAod2l0aCBzZWxpbnV4IGVuYWJsZWQpLAo+PiBta2ZzLmJ0cmZz
+IGlzIGZhaWxpbmcgd2l0aCB0aGlzIGVycm9yOgo+Pgo+PiBFUlJPUjogem9uZWQ6IHVuYWJsZSB0
+byBzdGF0IC9idWlsZHJvb3Qvb3V0cHV0X2ZvbGRlci9UZXN0QnRyZnMvIAo+PiBpbWFnZXMvIHJv
+b3Rmcy5idHJmcwo+PiBFUlJPUjogZ2V0dGluZyBhIHhhdHRyIHZhbHVlIGZhaWxlZCBmb3IgL2J1
+aWxkcm9vdC9vdXRwdXRfZm9sZGVyLyAKPj4gVGVzdEJ0cmZzL2J1aWxkL2J1aWxkcm9vdC1mcy9i
+dHJmcy90YXJnZXQgYXR0ciBzZWN1cml0eS5zZWxpbnV4OiBObyAKPj4gZGF0YSBhdmFpbGFibGUK
+Pj4gRVJST1I6IGZhaWxlZCB0byBhZGQgeGF0dHIgaXRlbSBmb3IgdGhlIHRvcCBsZXZlbCBpbm9k
+ZTogT3BlcmF0aW9uIG5vdCAKPj4gcGVybWl0dGVkCj4+IEVSUk9SOiB1bmFibGUgdG8gdHJhdmVy
+c2UgZGlyZWN0b3J5IC9idWlsZHJvb3Qvb3V0cHV0X2ZvbGRlci8gCj4+IFRlc3RCdHJmcy8gYnVp
+bGQvYnVpbGRyb290LWZzL2J0cmZzL3RhcmdldDogLTEKPj4gRVJST1I6IGVycm9yIHdoaWxlIGZp
+bGxpbmcgZmlsZXN5c3RlbTogT3BlcmF0aW9uIG5vdCBwZXJtaXR0ZWQKPj4KPj4gSSB3YXMgYWJs
+ZSB0byB3b3JrYXJvdW5kIHRoZSBpc3N1ZSB3aXRoIHRoZSBmb2xsb3dpbmcgcGF0Y2ggSSBwcm9w
+b3NlZCAKPj4gaW46Cj4+IGh0dHBzOi8vc2Fsc2EuZGViaWFuLm9yZy9jbGludC9mYWtlcm9vdC8t
+L21lcmdlX3JlcXVlc3RzLzM4Cj4+Cj4+IENvdWxkIHlvdSBjaGVjayBvbiB5b3VyIHNpZGUgdGhp
+cyBmYWtlcm9vdCBwYXRjaCBpcyB3b3JraW5nIGZvciB5b3U/Cj4+Cj4+IElmIGl0IGRvZXMsIGNv
+dWxkIHlvdSBzZW5kIGEgdjMgaW5jbHVkaW5nIG15IHBhdGNoPwo+IEkgdG9vayBhbm90aGVyIGxv
+b2sgYXQgdGhpcyAoYnkgYnVpbGRpbmcgZmFrZXJvb3QgYXMgYSB0YXJnZXQgcGFja2FnZSAKPiBm
+b3IgbXkgU0VMaW51eC1idWlsZCksIGFuZCBmb3VuZCB0aGUgZm9sbG93aW5nOgo+IAo+ICogSW4g
+dGhlIGZha2Vyb290IGVudmlyb25tZW50IHNlY3VyaXR5LnNlbGludXggaXMgaW5pdGlhbGx5IHVu
+c2V0LCBubyAKPiBtYXR0ZXIgd2hhdCB0aGUgcmVhbCBmaWxlc3lzdGVtIHNheXMuCj4gKiBTZXR0
+aW5nIGl0IHdvcmtzIGp1c3QgZmluZSBhbmQgc3RpY2tzICh3aXRoaW4gdGhlIGZha2Vyb290IGVu
+dikuCj4gCj4gRXhhbXBsZToKPiAjIGZha2Vyb290IC0tIHNoIC1jICdnZXRmYXR0ciAtbiBzZWN1
+cml0eS5zZWxpbnV4IC47IHNldGZpbGVjb24gCj4gcm9vdDpvYmplY3Rfcjp1c2VyX2hvbWVfZGly
+X3QgLjsgZ2V0ZmF0dHIgLW4gc2VjdXJpdHkuc2VsaW51eCAuJwo+IC46IHNlY3VyaXR5LnNlbGlu
+dXg6IE5vIHN1Y2ggYXR0cmlidXRlCj4gIyBmaWxlOiAuCj4gc2VjdXJpdHkuc2VsaW51eD0icm9v
+dDpvYmplY3Rfcjp1c2VyX2hvbWVfZGlyX3QiCj4gCj4gZnMvY29tbW9uLm1rIHNob3VsZCBiZSBy
+dW5uaW5nIHNldGZpbGVzIG9uIFRBUkdFVF9ESVIgd2l0aGluIGZha2Vyb290IAo+IGJlZm9yZSBi
+dWlsZGluZyB0aGUgcm9vdGZzIGltYWdlIGlmIGJ1aWxkaW5nIHdpdGggcmVmcG9saWN5LCBzZWUg
+Cj4gUk9PVEZTX1NFTElOVVguCj4gCj4gUXVlc3Rpb24gaXM6IERvZXMgdGhlIHByb2JsZW0gb2Nj
+dXIgd2hlbiB5b3VyIEJ1aWxkcm9vdCBzeXN0ZW0gdXNlcyAKPiBTRUxpbnV4LCBvbmx5ICpub24q
+LVNFTGludXgsIG9yIGJvdGg/Cj4gCj4gSWYgU0VMaW51eCB0YXJnZXQgaXMgYWZmZWN0ZWQ6IEkn
+ZCBsaWtlIHRvIHNlZSB3aGF0IHRoZSBzZXRmaWxlcyBjYWxsIGlzIAo+IG1pc3NpbmcsIHBvc3Np
+Ymx5IGp1c3QgVEFSR0VUX0RJUi4gQWRkaW5nICJscyAtYWxaICQoVEFSR0VUX0RJUikiIGFmdGVy
+IAo+IHRoZSBzZXRmaWxlcyBjYWxsIHdvdWxkIGJlIGEgZ29vZCBzdGFydC4KPiAKPiBJZiBub24t
+U0VMaW51eCBpcyBhZmZlY3RlZCBJIHdvbmRlciB3aHkgbWtmcy5idHJmcyBpcyBmYWlsaW5nLCB0
+aGVyZSAKPiBzaG91bGQgYmUgbm8gcmVhc29uIHRvIGNvcHkgbm9uLWV4aXN0aW5nIHhhdHRycy4g
+T3IgYXJlIHRob3NlIGhvc3QgCj4gcGVybWlzc2lvbiBjaGVja3M/IEFueSBpc3N1ZXMgaW4gdGhl
+IGF1ZGl0IGxvZz8KPiAKPiBObyBwcm9taXNlcywgYnV0IHRoYXQgc2hvdWxkIGhlbHAgbmFycm93
+aW5nIGl0IGRvd24uIDstKQpPa2F5LCBJIHdhcyBhYmxlIHRvIG5hcnJvdyBpdCBkb3duIGEgYml0
+IG1vcmUuIE1pZ2h0IGJlIGEgZmFrZXJvb3QgYnVnLCAKd2UnbGwgc2VlLiBUaGlzIHNlZW1zIGtl
+eToKCiMgZmFrZXJvb3QgLS0gZ2V0ZmF0dHIgLW0gLSB0YXJnZXQvbWVvdwojIGZpbGU6IHRhcmdl
+dC9tZW93CnNlY3VyaXR5LnNlbGludXgKCiMgZmFrZXJvb3QgLS0gZ2V0ZmF0dHIgLW4gc2VjdXJp
+dHkuc2VsaW51eCB0YXJnZXQvbWVvdwp0YXJnZXQvbWVvdzogc2VjdXJpdHkuc2VsaW51eDogTm8g
+c3VjaCBhdHRyaWJ1dGUKClNvIGxpc3RpbmcgYWxsIGF0dHJpYnV0ZXMgc2hvd3Mgc2VjdXJpdHku
+c2VsaW51eCBhcyBleGlzdGluZywgYnV0IApyZWFkaW5nIGl0IGRvZXNuJ3Qgd29yay4gVGhhdCdk
+IGV4cGxhaW4gd2h5IG1rZnMuYnRyZnMgdHJpZXMgdG8gY29weSBpdCAKYW5kIHRoZW4gZmFpbHMu
+IDotKQoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
+bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
+LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
