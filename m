@@ -2,139 +2,119 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98DAA606A31C
-	for <buildroot@archiver.kernel.org>; Mon,  9 Nov 2026 07:55:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FF73606A325
+	for <buildroot@archiver.kernel.org>; Mon,  9 Nov 2026 08:42:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=PZpjVgIG;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=suNfPA+Q
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=q13Dyy2F
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 38EAF406A2;
-	Mon,  9 Nov 2026 07:55:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 366E540636;
+	Mon,  9 Nov 2026 08:42:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bIV3Wa3VLbA0; Mon,  9 Nov 2026 07:55:55 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 5EF4B40695
+ id FRWV3H3aud-H; Mon,  9 Nov 2026 08:42:00 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 1FEA340612
 Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794210955;
-	b=CnzoZo7urAQNMY4C7qGjoi5kg1ms2QlN8evqlTua/04M/CJnqAIhtuhHOJIwl6vKNbW/
-	 ARX3uC6Yovyy1AZ6baaauhbPJpVkHGqwDIjhx+aekFFiiiB09pD60kg6KzBXpbpE0tKPi
-	 TaMfEaSV+dwwUsURGDd6OZiKEKrFR9TYv5YbRTvJsjRXLWXdBtvt5OsXmp2zLa4P6f2+O
-	 B5SQCAeuoQo7fdFVXk5Z2lQikzohQIKcjpTv5O4g3bRhTM5Wr4pHP41QQf+0Z5NO02A0/
-	 UwkX7IceyiVgrhXIAF+FbzNzAEP74Fi5SHI2kZPbBENrnL8DaNGEBeH722CrVTl030A==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794213720;
+	b=pK6NQPE1lsdlFvVczCd+SxGc1ndMEKxhJj3ZXcrn4iukK0UbOniBx/xFwgqC8/Gcmb7j
+	 Cnzcbcpn2nYO1f/6GNKogmDQEnqbFqaRkuVCNBWtsITXfPqZwe81JX5XwTkWEraogj44T
+	 xYpU8BSmOf1djvrYLfzhyl+FNpH9bn2gI00SaBU50aWIAkQjCVgDaJASaIX5DEwLg2EuF
+	 SAbP3UNtAepx/luh02OFeOxKKKnq4Aad75tG9T7+pyY3sG3lbhEq5xjh7FYbvO5k840xU
+	 8htYTSwVoZfwfZoWQ3eqS17AluDl9kSeCkPEasIZXxiJ3bUj1d/bnKunUPegxJwViSg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794210955;
+	c=relaxed/relaxed; t=1794213720;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
-	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=WAykfVOuHEIH/yAmCPOYwixwMbOkhZvsxnQ6mlUJ1fg=;
-	b=osyNUxWqJp/pA02EjHPkYYm8Ub0TpIwQ4ly8Rc5Qw2IVxU5AEIr8SUM/gT9RWu1pWFfM
-	 5tlA2CAegGCa6vSd7YjJCWcr8vtYMNraKmX+BCNOBJBQrDZxm4gdMx3eNoEUDfvBS2T/E
-	 gZDuzsxebERVd6n1VF9lKszQw+xYVDyELr+yneSWHGSJBzm42NFJpc6vnA9rXHaexAeo8
-	 9ehn5646F0XAtfjbyzupuWq5LUzDIz5WVsTBbuhftSHPuBMJ0QS1Z81g/5CInNKMAZ3YE
-	 +H+l4Ge019WkRX5MpX5MdZblhrujPxmb0GiCaJ7HhcbUN2zSdrJ18PHvuqRNdSt8+2Q==
+	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 Received:To:Date:Message-Id:X-Mailer:MIME-Version:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=pYXuo6IoaEnVXy/4EU6QwsCq0DSw0uYBHeL+fUR1pNQ=;
+	b=NNaCVcWotFcoco1a3vfIY8Dpz//C8c5pbC3WZywfKGtBLmqVWT4ZQLbgBGaJGD3YNrlT
+	 KEbXlGAdNOpth/gm05+WCyYBO+/4yrS1k0DiWwlB3x7Q+B36Qlsxgm2cVut9Yadpx3GYX
+	 2AgoxsZ37V1QZ1n8XVrQ0w6+ol/62gFYMl36AdZUjvHPfI26BIO4kl5kGbTZkCHkvxWaG
+	 PNQGD4h59Gq6msv9KO+MatncFaTWSrRpu1hwyff/rfgJ/zjTFydCFlbsCOtpbxc9r0DVy
+	 83qrKOGdG0G+M8PtT4aP91LI2garCSESUy2ofsPKLDz93XhMqkFiRTM3pWatr2t6XwA==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794210955;
-	bh=WAykfVOuHEIH/yAmCPOYwixwMbOkhZvsxnQ6mlUJ1fg=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=PZpjVgIGxURnAjKqu9wueYn6x2uex6mlup7vS+tMX8ZT54BQ+oTEyilvO34IbryMh
-	 F6XcD3VSJtjAZKArfabYjghAm3hzZP66Xq5eixS0aGLn5q4h8yOnCFOym2/ChH8081
-	 NJndb9V6B70J7o90TRBhn616OKXsGJEohSQ8V/DkbEYBXmkaRVZ0S9f4OLOVSqzKnp
-	 7onbsv9C0q5CBEXOKm28E02pRmjACW7W3DPbjVV+On6J3xbD6vIQBWs+OxH5H2r35F
-	 1+DHTkz9du6WXdgVeIrst/08+0dc57yK6m/M0lCLGsybRRFuuZO5gDD9muFdiHVA5V
-	 jYbzShHqhy7Sw==
+	s=default; t=1794213720;
+	bh=pYXuo6IoaEnVXy/4EU6QwsCq0DSw0uYBHeL+fUR1pNQ=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:From;
+	b=q13Dyy2F0b6hsfwFz9kI85hd8roTl8qmgbpkkgAKj5HyL2HUVQKkq0vMF8ErUxafB
+	 9gjAcWShUfzKO5erCcdqeDFN7jIoV4407VMxE8XaLF2Atg0xlFFNpjTgZ/IPVsKsmq
+	 x/Na7X6sLFw11C65r8L0dONF9xDaUYDYmnjuLNG0BiILGCChyJBoJHzkbGrAh0PNzh
+	 y9kbRFkobUEnV6RZ9Wk5Jf/eDrb+75c2S9XEUscPZ8GbiaDuNGLGwia6IzRiZssjHi
+	 rabfcZ1A78K1nQwTZO8vCCqOM07GrPPkyJKTlmAbjplPLuti71FPOKxTt7HRf3qHR6
+	 dMpsAXH/tut8A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5EF4B40695;
-	Mon,  9 Nov 2026 07:55:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4ECD9111
- for <buildroot@buildroot.org>; Mon,  9 Nov 2026 07:55:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1FEA340612;
+	Mon,  9 Nov 2026 08:42:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6FB0E1A6
+ for <buildroot@buildroot.org>; Mon,  9 Nov 2026 08:41:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 407FB80F45
- for <buildroot@buildroot.org>; Mon,  9 Nov 2026 07:55:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5595A6066C
+ for <buildroot@buildroot.org>; Mon,  9 Nov 2026 08:41:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ahgbs4fCSMQL for <buildroot@buildroot.org>;
- Mon,  9 Nov 2026 07:55:53 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 263BA80F3D
-Authentication-Results: smtp1.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::429"
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DAxD6qONltI2 for <buildroot@buildroot.org>;
+ Mon,  9 Nov 2026 08:41:57 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org EF65F605F8
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
- envelope-from=shirokovalexs@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20260707 header.b=suNfPA+Q
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 263BA80F3D
- for <buildroot@buildroot.org>; Mon,  9 Nov 2026 07:55:52 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-490585eddfcso441001f8f.0
- for <buildroot@buildroot.org>; Sun, 08 Nov 2026 23:55:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20260707; t=1794210950; x=1794815750; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=u1UiDRYtmcA61BbfItXMw/B8Sb6vMaynk9U8Ip292zg=;
- b=suNfPA+QYILTrlY+Y+2GeaBMFALBr2xOnJxgSHF4Hascs8dwtin+Vn/LShFBi3ZVGg
- 9XliVUNo6F+Q1cmwz5vb25WhEeRm2B+WXjwbyzJQzxPfG8bHGDB+zaqEOLp+HsqtMsSD
- VjhYbA5to6UA4VcGCzOpSKUKhmW4lZsNQkQo8D+pMKF1w+UO4KvuhuDZ3rq/NiVldT5B
- +t7/8tR0pnKztz7TUAuXRRAVmHC90T+yE3FV5j/ZcV1UHad+6GBxhyd1PP1SOsECfz2A
- A1owudKaC6Y9SQoIjhLgMCBrR4A0fZNVBkgpXJwOOpQtdW9/hwaveMG2RmJRWrp0Q7Q7
- EunA==
+ client-ip=2a00:1450:4864:20::62e; helo=mail-ej1-x62e.google.com;
+ envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
+ [IPv6:2a00:1450:4864:20::62e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EF65F605F8
+ for <buildroot@buildroot.org>; Mon,  9 Nov 2026 08:41:56 +0000 (UTC)
+Received: by mail-ej1-x62e.google.com with SMTP id
+ a640c23a62f3a-c4d58c50743so81283366b.1
+ for <buildroot@buildroot.org>; Mon, 09 Nov 2026 00:41:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1794210950; x=1794815750;
+ d=1e100.net; s=20260707; t=1794213714; x=1794818514;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=u1UiDRYtmcA61BbfItXMw/B8Sb6vMaynk9U8Ip292zg=;
- b=bVMZ1QOm/YKe7ARU/38W/fv38iTvMVxfJkO8CGh/l0ZLn2f6b0G1gJ7UT2yoM6x170
- sBWx7SQPuf2a+agmeX2waBxo8CSXEbvuszJ3bvERCC3pfWNeXlO41I/L0jMHrL/yJ/TW
- sspiWfQgA0a9lQP9ABlgRyoZk3lKAqMJKn8gTpd9F5s+YDjIhmLjPHJ6QjG06z56QSZ1
- V0spmGEp3t407CtpOHANFf75eUbwHmTBVXbt6X6QtYlQRWJAwjwHTekolMvyx2HihCt6
- JzWUGx0BGSkRaDmNrdKR/UYNKd58vEKc4SwRFRWgmSxC7FDcnWcvrX2amjeo9yj6pupC
- GPDg==
-X-Gm-Message-State: APuU4Z+cREEPUeSukyS2ObmCZ+wTTXD2zc48cwo3Is092qo3YIQjg3so
- CyRKYLI9CXwHVbEoLMjkh1gwvdrhjlgDd6Y16vo4di1IRlpbSyWntVk17Nbz
-X-Gm-Gg: AYBFou3yxAXu3Xdgizyj6NZOSccPhMlPIxwL3j0P94j5BuHoUfEd3AwB97YEfVIOtg7
- ET/zeIWyZSSxbEUlbfOjc322Yb95NGEZEhiP7AV/7uXQvDK7y6VrK/wmhnknQ1BWM9qid4QSyYh
- e6YIi9dqO+3am4U6BQSxDcT0R5TJOiuwOHNDII7BBWbq9xh5KT53FlwqkTFURGRC68tXXlxtXVA
- jlIh8QZiWaNFslOg0yTh/pbfbujfiBcTkg7CqmIX+qcIFr2XULyKoqp08pByKT1+Kaf5tfx4Bvn
- ML9Bz9yY6QO89k09waHZXH9rXwKCaGRU+37UBkEdPZ6FJGmOKmR1hNMlWkn3n134FOYLqr5DuVb
- jDc9rFyms7kFigiZfRbZZl/r7xeAqojIaEPm+2UTHatygZWbhFMGc1o5o09yO/erW/3OIivkIuY
- BH9QQJCyqJWYxw+ZekAJLUqAZmTHhj2vv5L5NvL/BSm5oWOSE+ZTkzLUxEYRdWJs/+EOy7/4ikJ
- u/U8pPGOhpatWCj9nISk9/McVakGHQvkkaawLGbBnmtyQLa1UVpOdjeLZeGeceExXGzbH2EUdTS
- l182Mq1m+mTwguTfk8qUnArmTcWlBThltHxN1DIfyLgWEC3QFvk=
-X-Received: by 2002:a05:6000:4a07:b0:48e:5d33:da5c with SMTP id
- ffacd0b85a97d-495877ba012mr6017608f8f.1.1794210950278; 
- Sun, 08 Nov 2026 23:55:50 -0800 (PST)
-Received: from devhost1 (77-236-0-65.static.play.pl. [77.236.0.65])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-49592f398afsm7894394f8f.5.2026.11.08.23.55.49
+ bh=VyG5R+a3rbWAwL6hK7V/yf/Cr2uS2NSU+laW6591Pq4=;
+ b=JwqYDFpip5d1117dXus/nEDlUjEK6IlB2wcAQxKX302F6w8HmxWdM2dXVQMxTcaYJj
+ 0KtnnVrHionLlEAWaSE4hDgUCS4/u7TedIgf+KVfbiGvIsw17XFvNv7UPoAuxcdw3bnK
+ 4XngZXDF4NW27W6o5+lfy+IyNTp9cs7dus4wjJwJ717VDvDvUz/Y88mwuyOuyxwVQ0Ni
+ YAB3KFmRZAngJ+iY+su0SWcdLlGxIyI7TF01CcyVkyR+3Oi9XAxdukghdk7FTpMKzCo/
+ zSl1/MG53rKCD0mZw4Ed8xsBkPvFItIJd4zvfYXKnimD6bcjzj3Ygj6gXyfr0TuA5mhb
+ LVmA==
+X-Gm-Message-State: APuU4Z9k1y+6txpvoZ6u90HlhOg9bQhTDj3L3JPNJmhXJqfx95Cw1atk
+ 7PccswI2GxU1J1frA1fNPjUkvZmmiYqvZLZ1pevYdYoQIXq5SI2hPOOgbdFcKg==
+X-Gm-Gg: AYBFou0/YCCCx1WHpHw54N06Pl/S7OM4nRRj/+jRwklWUq4zBXrjU7BtR0jaajjFMN7
+ 3iiofFWtcf35845hp3rPohP5Z8KikqefBI2nGIRt/2p8yiOO9oN27h07NvmlwBQNe2aNb3ZmCDm
+ /eVFaw2WziOPqaniUh3psxet8dFqoh/1bscgWoxxPV1X7dfJGKGbxgXkhhSAlcW/QcdSIO6ZcBL
+ l0EGq13fwf3AzaoqpPdAhRM5Ihs6PuOcYQX+FkwjnY87Uml/WUhDfC3xY85xa/cCwJCLfAMb/Xl
+ pojnU7ShDZPuZy+01yugeoKecD9wiVqazLKisquYvzS8+ml55A5+5aTButUzCxoIrYUdegDCwDs
+ 12eltooW7tx4zvAUx69DzQqkfFm7a49zDeJ5qGabQcUXOFMgaz9FvTpH57kVe2ToEsIUmJc4UPM
+ bW3CYUm8NYfzE2cpwmrO1PrzCzhEpcFh8X9kqt4jVlyegfNHV1fZGo15Jj9OShvME26RqmbiSFv
+ 5SSKVec/BI6gh26GIHhNxpR72MhFMLnuQGvukLXylTqFXhfDRHMVsKwCRYCApPq6k0PXlCy3RYR
+ ARQ2nZwiibSMIZGniFSgN5BsH0XN1FaCXU/oVxUtjJagX+eqIqlKY4N+YhU26JT50Zy6yqm/Bgm
+ UaeEPwSiEpTFFaH2IkvKN9Vy7OS+5Wg==
+X-Received: by 2002:a17:907:d8a:b0:c2d:bc33:7be3 with SMTP id
+ a640c23a62f3a-c4d6d84dcb5mr219167366b.47.1794213714367; 
+ Mon, 09 Nov 2026 00:41:54 -0800 (PST)
+Received: from development2.visionsystems.local (mail.visionsystems.de.
+ [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-c4d69f9440esm141654366b.21.2026.11.09.00.41.53
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 08 Nov 2026 23:55:49 -0800 (PST)
-From: Alexander Shirokov <shirokovalexs@gmail.com>
+ Mon, 09 Nov 2026 00:41:53 -0800 (PST)
 To: buildroot@buildroot.org
-Cc: Alexander Shirokov <shirokovalexs@gmail.com>
-Date: Mon,  9 Nov 2026 08:55:41 +0100
-Message-ID: <20261109075547.418921-1-shirokovalexs@gmail.com>
-X-Mailer: git-send-email 2.56.0
+Date: Mon,  9 Nov 2026 09:41:53 +0100
+Message-Id: <20261109084153.3832689-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.34.1
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/1] package/broot: bump to version 1.62.0
+Subject: [Buildroot] [PATCH] package/berkeleydb: fix build on ARM FDPIC
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -144,50 +124,113 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
+Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-18.9 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Changelog: https://github.com/Canop/broot/blob/v1.62.0/CHANGELOG.md
+Building berkeleydb for an ARM FDPIC target with GCC >= 14 fails with:
 
-Signed-off-by: Alexander Shirokov <shirokovalexs@gmail.com>
+../src/os/os_yield.c: In function '__os_yield':
+../src/os/os_yield.c:53:17: error: implicit declaration of function 'pthread_yield'; did you mean 'pthread_self'? [-Wimplicit-function-declaration]
+   53 |                 pthread_yield();
+
+dist/configure only adds -D_GNU_SOURCE -D_REENTRANT to CPPFLAGS when
+host_os matches "linux*", but the FDPIC tuple
+arm-buildroot-uclinuxfdpiceabi has host_os "uclinuxfdpiceabi". Without
+_GNU_SOURCE, uClibc-ng's pthread.h does not declare pthread_yield(),
+while configure still detects it at link time (HAVE_PTHREAD_YIELD), so
+os_yield.c calls it without a prototype, which is an error since
+GCC 14.
+
+Add a patch so that dist/configure.ac and the pre-generated
+dist/configure handle uclinux* like linux*.
+
+This issue has been present since commit 45c0a5114d44 ("Revert: "arch:
+drop now useless support for FDPIC""), which re-introduced FDPIC support
+and thus the uclinuxfdpiceabi tuple. It therefore affects 2024.11 and
+later, including 2025.02.x and 2026.02.x.
+
+Fixes:
+https://autobuild.buildroot.org/results/29766038fbefeb00ccc2a457ed0ff52c8f93d158
+
+Fixes: 45c0a5114d44fa1c20b06ef9d2a4ae7ecf26658a ("Revert: "arch: drop now useless support for FDPIC"")
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/broot/broot.hash | 2 +-
- package/broot/broot.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...ac-define-_GNU_SOURCE-on-uClinux-too.patch | 54 +++++++++++++++++++
+ 1 file changed, 54 insertions(+)
+ create mode 100644 package/berkeleydb/0003-dist-configure.ac-define-_GNU_SOURCE-on-uClinux-too.patch
 
-diff --git a/package/broot/broot.hash b/package/broot/broot.hash
-index 1f45965fd5..bfe724c3c1 100644
---- a/package/broot/broot.hash
-+++ b/package/broot/broot.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256  6daf2a7381fdbce5acc08261c2899304b4a1efa7c33623e456b8c45853cdb7a0  broot-1.60.1-cargo6.tar.gz
-+sha256  053931463684c7f5b912c1b55b1bf49dbb325dd4cc45c5995b45ff476da41381  broot-1.62.0-cargo6.tar.gz
- sha256  89461664ce2aee7d80ea8fba7118fe7abd490d76ba435cf1d81d3128e060711f  LICENSE
-diff --git a/package/broot/broot.mk b/package/broot/broot.mk
-index 1467f55279..c979c2de51 100644
---- a/package/broot/broot.mk
-+++ b/package/broot/broot.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BROOT_VERSION = 1.60.1
-+BROOT_VERSION = 1.62.0
- BROOT_SITE = $(call github,Canop,broot,v$(BROOT_VERSION))
- BROOT_LICENSE = MIT
- BROOT_LICENSE_FILES = LICENSE
+diff --git a/package/berkeleydb/0003-dist-configure.ac-define-_GNU_SOURCE-on-uClinux-too.patch b/package/berkeleydb/0003-dist-configure.ac-define-_GNU_SOURCE-on-uClinux-too.patch
+new file mode 100644
+index 0000000000..3db1de9be3
+--- /dev/null
++++ b/package/berkeleydb/0003-dist-configure.ac-define-_GNU_SOURCE-on-uClinux-too.patch
+@@ -0,0 +1,54 @@
++From 3004864ef0e8803b0bf974425451f2b6862c16e4 Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Mon, 9 Nov 2026 09:15:09 +0100
++Subject: [PATCH] dist/configure.ac: define _GNU_SOURCE on uClinux too
++
++uClinux (noMMU) toolchains use host triplets such as
++arm-buildroot-uclinuxfdpiceabi or arm-buildroot-uclinux-uclibcgnueabi,
++whose host_os ("uclinuxfdpiceabi", "uclinux-uclibcgnueabi") does not
++match the "linux*" pattern. As a result, _GNU_SOURCE and _REENTRANT are
++not defined, so GNU extensions such as pthread_yield() are not
++declared, while configure still detects them as available:
++
++../src/os/os_yield.c:53:17: error: implicit declaration of function 'pthread_yield'; did you mean 'pthread_self'? [-Wimplicit-function-declaration]
++
++Treat uclinux* like linux*. The generated dist/configure is updated
++accordingly.
++
++Upstream: N/A, Berkeley DB 5.x is no longer maintained
++Assisted-by: Claude:claude-opus-5-5
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ dist/configure    | 2 +-
++ dist/configure.ac | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/dist/configure b/dist/configure
++index 32b2c66..3fa913b 100755
++--- a/dist/configure
+++++ b/dist/configure
++@@ -5115,7 +5115,7 @@ cygwin*)
++ freebsd*)
++ 	CPPFLAGS="$CPPFLAGS -D_THREAD_SAFE"
++ 	LDFLAGS="$LDFLAGS -pthread";;
++-gnu*|k*bsd*-gnu|linux*)
+++gnu*|k*bsd*-gnu|linux*|uclinux*)
++ 	CPPFLAGS="$CPPFLAGS -D_GNU_SOURCE -D_REENTRANT";;
++ hpux*)	CPPFLAGS="$CPPFLAGS -D_REENTRANT";;
++ irix*)	optimize_flag="-O2"
++diff --git a/dist/configure.ac b/dist/configure.ac
++index 689f3b8..a9808bd 100644
++--- a/dist/configure.ac
+++++ b/dist/configure.ac
++@@ -199,7 +199,7 @@ cygwin*)
++ freebsd*)
++ 	CPPFLAGS="$CPPFLAGS -D_THREAD_SAFE"
++ 	LDFLAGS="$LDFLAGS -pthread";;
++-gnu*|k*bsd*-gnu|linux*)
+++gnu*|k*bsd*-gnu|linux*|uclinux*)
++ 	CPPFLAGS="$CPPFLAGS -D_GNU_SOURCE -D_REENTRANT";;
++ hpux*)	CPPFLAGS="$CPPFLAGS -D_REENTRANT";;
++ irix*)	optimize_flag="-O2"
++-- 
++2.34.1
++
 -- 
-2.56.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
