@@ -1,120 +1,123 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DCC7606A326
-	for <buildroot@archiver.kernel.org>; Mon,  9 Nov 2026 15:33:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4173606A31C
+	for <buildroot@archiver.kernel.org>; Mon,  9 Nov 2026 15:33:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=IQ9xz8PP
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=pCztzfox
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 166C4607D3;
-	Mon,  9 Nov 2026 15:33:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7B3B380F6E;
+	Mon,  9 Nov 2026 15:33:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6iiBKs8SQDht; Mon,  9 Nov 2026 15:33:38 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 2BE5360703
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794238418;
-	b=e8gVNx5tC9jvCBukLy/ngbO+yahgSvLueU6XdMH3SZ6728MEMQ7mycEyTN3N76j/ZNAF
-	 aTgJJYNYtOGeLYblfRdEIdDFIP7d+2s4AlEi2Afg1ayCa4eAKu/YV+NtPIQeReWjcxXN2
-	 PdflaD+aaAaAzwLKaVybQX/gzoDhUtSPDnh5UtDF/1Eh5jNP5lkM4sB8GUWwmaqPddLfs
-	 cQxGbi0B759loYFNp/Fjm6NefJjXntYP3AboRfnW7Q5ruAeQr+/oV571oviIajgcjuuKp
-	 gYIHl1oUt4JFDTG/k0jPlg+9zw3j1J9e4oStDWt72fNRw8CLsHWvwXybS1c0MOb8eZg==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FOiyJH5FQMxe; Mon,  9 Nov 2026 15:33:39 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 6A93280F77
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794238419;
+	b=fXSWt8dN158ycYLE3DtP696JBMYW4l+/wVj5OUVWQpyu4LyFdLHu8XhD1zUz2TzY9DLI
+	 Pbb/v/opDC6IvX57GRRPE4tiivAP31PCoaqNj0Pwc8mhSPibgEqWRazHJGwFsiefT+GCG
+	 hNGpDINoMncI/Rw3EGyjST0vBvGv93YsnPFWWMpSnFUPClBNRI+o6bTdw9Z2QJTp/vEUj
+	 UNWkA3uQzZIyGU5V288dC/BurJllqi1z6Mxnef7IulFnobeRmQkrfqj0obNtAXraYCG26
+	 WMaXY/eCzvJ+JXpQav/qOd109RchGzCtA53jMzTr1xIIMsglmsWjJfnbxXWfFisCB0w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794238418;
+	c=relaxed/relaxed; t=1794238419;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
 	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 Received:To:Date:Message-ID:X-Mailer:MIME-Version:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=BUTTAJ7/r39seb8G1+HN4unlXfvML83s1vhBbHMOqO8=;
-	b=fPLnN0UKNV/o4/hKCoK8YCA2Q7UgYQleiKW7n4nfl4ad45InRPEpSvPGNS3SVJy9Plal
-	 95MiIYZBSY1miHzj6ecp+gIfCsdJ6Rwbe3j1wCg5v1vrw7AjUzvDlsk0PpGj1pFTN7bmJ
-	 Smrb1vgsO68OqW47Uud3VJaDdzHgZBxfUKyGt+3VlRK2i3EsPsGGNbUlE81H6llNUqs3j
-	 yKqAvckhUAMYZg+SKvIQnJpESHXsw2M06U+ScdNSYsbEHO898k761NkF5MuimbACiWGYG
-	 UCEfgnth5XvEX9/ZIZxV/uFvBgo1wkTsbuyUhof1eQbBKg0XiwAmvbA6m5qN19o6MsA==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+	 Received:To:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
+	 Reply-To:Cc:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=BPc84aUCmHnrdflyaqrKJh+LRVRQHjrKoRNlmkx/Dao=;
+	b=lGGXJ2pZhl4Kce1A2GfRXBifAog9Bw/6w8HiRmwK9Qs6dtj+gn5bA9uFWRwBjUQ5uqS3
+	 plaqOWv8yAnI9oJhdK700ng6nFWoee5YLFjrL0M44Wkv7wKaWZAKtlC2R9vCOVDUCf+7m
+	 4so4xdoYhe23d38oimvQsphfWzgvB3x4r1T4ZaXaFN8bjWYQjmQPw41mqytOdUuR7W8sA
+	 ynZtq7T64cGnercRrBK8lSEfIg9nsVYz+WpLI4PG7PANmkX4lHYGPuqyx5qdW+teR6m7X
+	 boeKf1gkGsmKrZreSuNIVEKUz+p8Gw9a3XsIAbUeGlgDoVmbaQRadbEnvu7XXKhfTBA==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794238418;
-	bh=BUTTAJ7/r39seb8G1+HN4unlXfvML83s1vhBbHMOqO8=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=IQ9xz8PPmjZqm491u4vBYvjJgiIKzK/ahcpy0EjMyq/8EDNneSJFdXPkow8YoIjLD
-	 83aYz8KOkpjyLiNG16Upr5AYbnHntkUobzFftCXiCNQJR7RP/fQ6oO1M/sfjcXZvXl
-	 V8rxTNCfIDTrTaJ2rjJ9+ARsbIfaHbMHoMcV/D8jIjdcWGidBvpeO9DxkVwScZE6jD
-	 01MDQh+JBTqMwDAoiVjlS4AsjLm3URUm8KSuF00608HdoTLVApQVUUr7tfG+N6i/jP
-	 ovJRKk+7F6SM0KPS495fJI35VJS07ak1NMBJbclN6Cv0W0t5DM610nGoaM9Xykloqq
-	 cFXmZnT2Pw3FQ==
+	s=default; t=1794238419;
+	bh=BPc84aUCmHnrdflyaqrKJh+LRVRQHjrKoRNlmkx/Dao=;
+	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:
+	 From;
+	b=pCztzfoxq1SJAynrSbb9/cKVf9Nh8FYlXjqkbruk/phq1J9efdhkOp/K69QmVHdE6
+	 CQvAHz4bpbFPb42MzXcpm8cBtGyt1RnidfTSdEmjudT1dAHdxGhHn5GbeAX69kXWDk
+	 DFO/X0lkmvc2HDA+TwdhtfSzPzd2TD3HdFMlLuuaQqAGUPnMSer4qoOEt5rNESGzpg
+	 uwiO6AQ7/wSyQQWuqD4xHTnj33dKjC7b6wQ37d0vxIQ2bi2LK0tiFPQuMVPET53jne
+	 nkVDSPlLy+dO5My7kMKKRhv8QjnB+V5uTXe1oROg3Iv/aTCwaukF2YY2dFMngTRMdE
+	 Wvdw/OOBi/x9A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2BE5360703;
-	Mon,  9 Nov 2026 15:33:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 4B8A4235
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6A93280F77;
+	Mon,  9 Nov 2026 15:33:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 65B80B6C
  for <buildroot@buildroot.org>; Mon,  9 Nov 2026 15:33:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3CCF2607C5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 57407605E3
  for <buildroot@buildroot.org>; Mon,  9 Nov 2026 15:33:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 04XA0vsiq4we for <buildroot@buildroot.org>;
+ id gPHnJVvd4Ypa for <buildroot@buildroot.org>;
  Mon,  9 Nov 2026 15:33:35 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 182C8605E3
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 1830A60703
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
  envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 182C8605E3
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1830A60703
  for <buildroot@buildroot.org>; Mon,  9 Nov 2026 15:33:33 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-4a3517554f7so10779815e9.2
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-4b79502c27aso10595645e9.1
  for <buildroot@buildroot.org>; Mon, 09 Nov 2026 07:33:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1794238411; x=1794843211;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=0xf79L4oEMIVgulaLPFIXZ0iIwAjypaPqgyrAa2bCV4=;
- b=Hm9X+DbCRj+y6Q/LHKzjEv6ktyj670CR1AFO8GmuIgMmVGy9U9eSYWvPdD00WQE8bK
- jhOGv/MFABwF11xLvSkbbxITSutz/qMWN5F4MvEmFW4NPiRod3J/3VxbRp9KUfAiAtL7
- g19UTbN3VdR29z2POv1cmZD/TBKsgnFmKgNEZA4pkyF3ycZy8nLqmmzsk7nD+QitXDlg
- xEZ0lsOsV2HBBPH79WiyFpqvY1E1j44y9PCTibW41zoxl2gPYuOReXA4rV3QOiGKKHrZ
- N52CYnUpHK8BHOEVEHKDxINxhIt1HxczitEHdsAcxhHiBPTE0yrohnjm1TkwFzVbw0Ku
- 5TlA==
-X-Gm-Message-State: APuU4Z9vo+3zO3MFy0mSWV7O7aRewebgVmKjjDuegP8/RPcASyMcxwIv
- RkTznbGaOdhHqRfPMAyX+yQZETxSQH4iAWutYFFb8mosKxQfoIXjC80DjS9XlO6e1bS/sOv+83b
- GGROG
-X-Gm-Gg: AYBFou2N+9G7flarK57Hi7KHDmubLjA/A+YXSGktH0x6eG2rSPnwAxZULVM0O1Daiyd
- z3ShIGDNVPoVKLQVtZsAWKiw5n9ygX7zM7j8z5m/YrULNTTPqVjnqTFOkSGg2zC+XCay/z6hcS4
- KWQloN93RzM10o5hZyTLueNIpJIjgKRQU3SAF9FSvt3WkLIbkLopHNsk234n8Sr/YwEMehrRRdN
- igLKODVguYmRp5vuK0CN7Loxcu00WUkJpP15tDq3wBc2Hmf0VSr8i+EQt+uWoTrO4QCi+DT7CqY
- ECQbJAwVxFPbad+Z9XO4OSJhJI9y1nPujnaDI8JwDWsXjxM56llAgTtLQz/VwQ5BHIe2K2R+JFR
- LPXQmIwTymeFa/iKqdaumVJiI7YFcqjrEwGffGl5MyGU63Q/KtWUkrYmRifrZjdLn/IQ1dkjorW
- nGoATPDYk7wzpMjopS3aqChrxnNhigJh4i8dx65Y19YXCDoCGZy1TmhRcbqKMjYCAR3NS2p3G8v
- yKs6t0lFCv+zRJV5QfdIrj25asCj8LXWjLgARl1AkX+mOOApp2cUFPwGuS2NbvUxHdtOtW8QKzf
- 5+Zwb4J2oudMtYacQwDkuA==
-X-Received: by 2002:a05:600c:8b63:b0:4a3:59c7:f226 with SMTP id
- 5b1f17b1804b1-4b960d9b007mr78570165e9.6.1794238411336; 
+ d=1e100.net; s=20260707; t=1794238412; x=1794843212;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to:content-type;
+ bh=waljp2xN3m2hQFxcGKcBQr27SYHSrW+50OFCNyMbROw=;
+ b=1o7bS1R2qfMpAcad2gPrTheGHZFFoKNIX2Hpph+QZxFGMMMCun/yRwgInDL8NLVg8r
+ ScnO2RdWw4cOcH9YmoVKkIoWL4lbn5vtE9uhrqfBwqxrMOcQmERL73Xlcon/uFjO6kvT
+ Nuwi/T5CGZQtYR6whTcCO+1NiX4pJUXBV3gLtZIKMbHa/7Qv8vHJktVE1Fns6l06Kknu
+ dxDdcJaGBaWHgc5i1IVubHObmWxwqafJI8kZKov/MLOjn5lXIfUSFSWdIMqp2kvIESln
+ 21Z8IH8BP9mBNk3Rn467R7WXiomVAntKLYenVaekOIFGJC7DwMVD1z5xNf/loqlp5R77
+ kDuQ==
+X-Gm-Message-State: APuU4Z/9P3rai0QdPJ9SaiPTCJVFJgJw3af3qoFRZUm5cz31mqXgCuFo
+ dy/wKzz4WINezCvxMHR+fAzPI51TJykLAA6O8oOr6szWqg0DKZFWnnTNyWOWojsOml5UIJXJsQl
+ VXN4+
+X-Gm-Gg: AYBFou0dE3u1sQEsRI7fsdJnxh0nMds/VlibiTxWpCO2KxqgOvzDugD9oE6Khxs9L0S
+ AyscUriVH47S96jfJpVY+LDRNwDImtv6SV75G2ELUiultSggtXr1SuGuU+ErvD8bvpYFXQQx25c
+ 4jS/8usnWOG7Sy8DNR3ZGJA9gyA0sWzP5kBo91MoJjYqyPqORuAYieqVfWutJhmxamMd6L7THnB
+ a2Zl4QyF7TNyi23LKg6ZIHJ/3DGAKz1fAezfHABJ0xVj5/7eTmtIiQjOOarTtrwOkVGTo5na5tm
+ 8lVyfIgndOKmULU2JKqywr5IZi7yv2kCsQLdTLl+LY0JIWJ268lV2g04w+XqJvaFjaIUZuW9B+v
+ PCXD8wEYX005YKQNHCcF7626bD9lhHaQBBwliKttNPmfBYLAMOc98iD8G6mLU9DpbR5O88gnytH
+ UYirUnAq9Ma/shl3TNESVHhrMiPd6EAouFTqk2dEp+AYnahsewcixQMLUJGtIHlJX/xiQYYcRcq
+ yx8s+f8zgsY9ufXYawsTVe7n/4JozNaihggz6Eu8tV2VDy6DPA2sdeMHQ28PUcOcp6Kmk5/7QuV
+ 7Mjz7wL3EzDq+25nmUkrOg==
+X-Received: by 2002:a05:600c:3494:b0:4a2:1a:a120 with SMTP id
+ 5b1f17b1804b1-4b960d9bc41mr88529675e9.6.1794238411839; 
  Mon, 09 Nov 2026 07:33:31 -0800 (PST)
 Received: from arch ([79.132.229.115]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4b795024730sm181601275e9.4.2026.11.09.07.33.30
+ 5b1f17b1804b1-4b795024730sm181601275e9.4.2026.11.09.07.33.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Mon, 09 Nov 2026 07:33:31 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Mon,  9 Nov 2026 16:33:29 +0100
-Message-ID: <20261109153330.473742-1-thomas.perale@mind.be>
+Date: Mon,  9 Nov 2026 16:33:30 +0100
+Message-ID: <20261109153330.473742-2-thomas.perale@mind.be>
 X-Mailer: git-send-email 2.56.0
+In-Reply-To: <20261109153330.473742-1-thomas.perale@mind.be>
+References: <20261109153330.473742-1-thomas.perale@mind.be>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 2025.02.x 1/2] package/python-sqlparse: backport
- fix for CVE-2026-59894
+Subject: [Buildroot] [PATCH 2025.02.x 2/2] package/python-sqlparse: backport
+ fix for CVE-2026-112307
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -133,99 +136,93 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
 Fixes the following vulnerability:
 
-- CVE-2026-59894:
-    sqlparse is a non-validating SQL parser module for Python. Prior to
-    0.6.0, sqlparse/filters/output.py fails to escape existing backslashes
-    before quotes in sqlparse.format output_format='python' and
-    output_format='php' and the corresponding sqlformat -l modes, allowing
-    crafted SQL to terminate the generated string and inject Python or PHP
-    code when a downstream consumer executes or imports the generated
-    source. This issue is fixed in version 0.6.0.
+- CVE-2026-112307:
+    sqlparse through 0.6.0 contains a PHP code injection vulnerability
+    that allows attackers to inject PHP expressions by supplying SQL text
+    containing unescaped dollar signs. Attackers can embed ${expr} or
+    {${expr}} sequences that OutputPHPFilter places in double-quoted
+    strings, executing arbitrary PHP code when the generated snippet runs.
 
 For more information, see:
-  - https://www.cve.org/CVERecord?id=CVE-2026-59894
-  - https://github.com/andialbrecht/sqlparse/security/advisories/GHSA-3496-9g83-7v6x
-  - https://github.com/andialbrecht/sqlparse/commit/53ff44b53e27cff78259acc1af015506fea60f63
+  - https://www.cve.org/CVERecord?id=CVE-2026-112307
+  - https://github.com/advisories/GHSA-457h-p88w-wq8p
+  - https://github.com/andialbrecht/sqlparse/pull/937/changes/bb3c50a52dc2f267c786f0d99c27b25519f9331f
 
 Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 ---
- ...ape-backslashes-in-output-formatters.patch | 49 +++++++++++++++++++
+ ...pe-dollar-signs-in-PHP-output-format.patch | 45 +++++++++++++++++++
  package/python-sqlparse/python-sqlparse.mk    |  3 ++
- 2 files changed, 52 insertions(+)
- create mode 100644 package/python-sqlparse/0001-Escape-backslashes-in-output-formatters.patch
+ 2 files changed, 48 insertions(+)
+ create mode 100644 package/python-sqlparse/0002-fix-escape-dollar-signs-in-PHP-output-format.patch
 
-diff --git a/package/python-sqlparse/0001-Escape-backslashes-in-output-formatters.patch b/package/python-sqlparse/0001-Escape-backslashes-in-output-formatters.patch
+diff --git a/package/python-sqlparse/0002-fix-escape-dollar-signs-in-PHP-output-format.patch b/package/python-sqlparse/0002-fix-escape-dollar-signs-in-PHP-output-format.patch
 new file mode 100644
-index 0000000000..c379d32155
+index 0000000000..fee0396cde
 --- /dev/null
-+++ b/package/python-sqlparse/0001-Escape-backslashes-in-output-formatters.patch
-@@ -0,0 +1,49 @@
-+From 53ff44b53e27cff78259acc1af015506fea60f63 Mon Sep 17 00:00:00 2001
-+From: Andi Albrecht <albrecht.andi@gmail.com>
-+Date: Mon, 29 Jun 2026 08:29:32 +0200
-+Subject: [PATCH] Escape backslashes in output formatters.
++++ b/package/python-sqlparse/0002-fix-escape-dollar-signs-in-PHP-output-format.patch
+@@ -0,0 +1,45 @@
++From bb3c50a52dc2f267c786f0d99c27b25519f9331f Mon Sep 17 00:00:00 2001
++From: cve-zh00 <bastiang@uc.cl>
++Date: Tue, 20 Oct 2026 10:56:23 -0300
++Subject: [PATCH] fix: escape dollar signs in PHP output format
++ (CVE-2026-112307)
 +
-+CVE: CVE-2026-59894
-+Upstream: https://github.com/andialbrecht/sqlparse/commit/53ff44b53e27cff78259acc1af015506fea60f63
-+[thomas: backport: 
++PHP interpolates $var, ${expr} and {$expr} inside double-quoted strings,
++so SQL text containing them could inject PHP code into the snippet
++generated by output_format='php'. Escape "$" as "\$" after the existing
++backslash and double-quote escaping.
++
++Adds regression tests for SQL literals, ${expr}/{${expr}} payloads,
++PostgreSQL dollar quoting, quoted identifiers, comments and a preceding
++backslash.
++
++CVE: CVE-2026-112307
++Upstream: https://github.com/andialbrecht/sqlparse/commit/bb3c50a52dc2f267c786f0d99c27b25519f9331f
++[thomas: backport:
 +  - stripped tests and changelog
 +]
 +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 +---
-+ sqlparse/filters/output.py | 16 ++++++++++------
-+ 1 file changed, 10 insertions(+), 6 deletions(-)
++ sqlparse/filters/output.py | 8 ++++++--
++ 1 file changed, 6 insertions(+), 2 deletions(-)
 +
 +diff --git a/sqlparse/filters/output.py b/sqlparse/filters/output.py
-+index 253537e..697ebc3 100644
++index 697ebc3..06015ec 100644
 +--- a/sqlparse/filters/output.py
 ++++ b/sqlparse/filters/output.py
-+@@ -61,9 +61,11 @@ class OutputPythonFilter(OutputFilter):
-+                     yield sql.Token(T.Whitespace, after_lb)
-+                 continue
++@@ -114,9 +114,13 @@ class OutputPHPFilter(OutputFilter):
 + 
-+-            # Token has escape chars
-+-            elif "'" in token.value:
-+-                token.value = token.value.replace("'", "\\'")
-++            # Escape backslashes before quotes so a backslash preceding a
-++            # quote cannot break out of the generated string literal
-++            # (GHSA-3496-9g83-7v6x).
-++            else:
-++                token.value = token.value.replace('\\', '\\\\').replace("'", "\\'")
-+ 
-+             # Put the token
-+             yield sql.Token(T.Text, token.value)
-+@@ -110,9 +112,11 @@ class OutputPHPFilter(OutputFilter):
-+                     yield sql.Token(T.Whitespace, after_lb)
-+                 continue
-+ 
-+-            # Token has escape chars
-+-            elif '"' in token.value:
-+-                token.value = token.value.replace('"', '\\"')
-++            # Escape backslashes before quotes so a backslash preceding a
-++            # quote cannot break out of the generated string literal
-++            # (GHSA-3496-9g83-7v6x).
-++            else:
-++                token.value = token.value.replace('\\', '\\\\').replace('"', '\\"')
++             # Escape backslashes before quotes so a backslash preceding a
++             # quote cannot break out of the generated string literal
++-            # (GHSA-3496-9g83-7v6x).
+++            # (GHSA-3496-9g83-7v6x). Dollar signs are escaped last because
+++            # PHP interpolates $var, ${expr} and {$expr} inside double-quoted
+++            # strings (CVE-2026-112307).
++             else:
++-                token.value = token.value.replace('\\', '\\\\').replace('"', '\\"')
+++                token.value = (token.value.replace('\\', '\\\\')
+++                               .replace('"', '\\"')
+++                               .replace('$', '\\$'))
 + 
 +             # Put the token
 +             yield sql.Token(T.Text, token.value)
 diff --git a/package/python-sqlparse/python-sqlparse.mk b/package/python-sqlparse/python-sqlparse.mk
-index 0140961393..97f0ad389b 100644
+index 97f0ad389b..2b30975f82 100644
 --- a/package/python-sqlparse/python-sqlparse.mk
 +++ b/package/python-sqlparse/python-sqlparse.mk
-@@ -13,4 +13,7 @@ PYTHON_SQLPARSE_LICENSE_FILES = LICENSE
- PYTHON_SQLPARSE_CPE_ID_VENDOR = sqlparse_project
- PYTHON_SQLPARSE_CPE_ID_PRODUCT = sqlparse
+@@ -16,4 +16,7 @@ PYTHON_SQLPARSE_CPE_ID_PRODUCT = sqlparse
+ # 0001-Escape-backslashes-in-output-formatters.patch
+ PYTHON_SQLPARSE_IGNORE_CVES += CVE-2026-59894
  
-+# 0001-Escape-backslashes-in-output-formatters.patch
-+PYTHON_SQLPARSE_IGNORE_CVES += CVE-2026-59894
++# 0002-fix-escape-dollar-signs-in-PHP-output-format.patch
++PYTHON_SQLPARSE_IGNORE_CVES += CVE-2026-112307
 +
  $(eval $(python-package))
 -- 
