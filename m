@@ -1,113 +1,141 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C52A6606A333
-	for <buildroot@archiver.kernel.org>; Mon,  9 Nov 2026 13:23:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4879E606A31C
+	for <buildroot@archiver.kernel.org>; Mon,  9 Nov 2026 13:25:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=bex43LUN;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b=iu7ge1D5
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=o6RRSh4h;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256 header.s=20260707 header.b=eQ87I14d
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8B42B80F6E;
-	Mon,  9 Nov 2026 13:23:09 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SMYXp6MUJNfp; Mon,  9 Nov 2026 13:23:08 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org E2E3A80F24
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794230588;
-	b=YiZl1yjIG11rGpD4WmIdQJMu6VidYE9BEsYuT+9nHe2P7iySHT+Ci0Hd6EUvSyREBqVo
-	 yBk91o9g2dxytN0XOI+G2vwn7uF+h8OsLkjHsYNAVb8cB0qWV22IV8/ECBY+THWPnwVEB
-	 TuYEBANLr+wLjioUeu5Z4cXINewOKmKDfca7D1Bfy+r6d28O0/M0SWzGTla5Ew1P2RTi3
-	 c0d4FlcC7ExxPnDumWopR9U0aPCmeCYWsGbH7pFgFMsP0JcRoNUhJ0lAt+1WWKBP82O0m
-	 whkOC5fCiYu5Q4BDiyG9qjaq/C4ph230BpAUWDGis/NKAnERKTggV6IfV4xrHrWN2xg==
-ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794230588;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:Message-ID:Date:MIME-Version:User-Agent:To:Cc:
-	 References:Content-Language:From:In-Reply-To:X-CMAE-Envelope:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:
-	 Content-Transfer-Encoding:Content-Type:Errors-To:Sender;
-	bh=xmvKh8e4UCiW5esXRkHh84SNSsKDNyphBcvh7a6eIVI=;
-	b=NshAO2clUB71HiiuAbcNechCUHueEISuobt9XytZm+QJrx/sUHsGTOT1WGMPkqzj5OUj
-	 Womz5fEJ2s7VYTf9HdeUT7Jv/fOfILAULUZqJxWfBODEwPrOETBRB1jn2iZsdBTfOTiIz
-	 oC7KKYBYs/RzCoB4f7b3tyggZCG3JPtwkV2LF7c0OJnGd2RSLFbG/1HyJOpAsCTq4ZMMT
-	 l2uUXA5KzCL2kLTqyxJtxOUAQxySX1yi43htuFYojCFXLHrYJUnwUP23ns+awNFx1qJYB
-	 r+DILxGvFCmv34eNdlO0T2TF+5185pz+SHccvxDbWP6lXYSktZNunSXiP0U0ANrzu0g==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
-	arc=none smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794230588;
-	bh=xmvKh8e4UCiW5esXRkHh84SNSsKDNyphBcvh7a6eIVI=;
-	h=Date:To:Cc:References:From:In-Reply-To:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=bex43LUNhx/7ywNDsvOXWQgFRPUChWOMGrvNE75lCKj5qaOldH4DsUdhvDGnoQfIV
-	 HprtYDu0nlKyZRmFudmQFlmONkjr65YqAqdquPPGIvd7yjQ8Ip84ZmaiAg4pKzZ3M/
-	 JFwsZkd1shQjIF3lwowBbTi9mN8l3+NUb9tvXs2XN2sWmWz4x/7iWd3hQZ12TMzBaJ
-	 KGlNbogpOHq0fPGg5Gua2lfZzxjdqUA55KK0rmWVaZWHkHiqCafpkUl/4iwmdjmawa
-	 H6Kv2TavyDCsaRaQz5WsTsr/RAYtH/RhIskBOCw3diJxRU70J5i/YntndzBYQk0bTm
-	 levWkhJrOA6Rg==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E2E3A80F24;
-	Mon,  9 Nov 2026 13:23:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 6A6BA251
- for <buildroot@buildroot.org>; Mon,  9 Nov 2026 13:23:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5090B60744
- for <buildroot@buildroot.org>; Mon,  9 Nov 2026 13:23:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 224DB60744;
+	Mon,  9 Nov 2026 13:25:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gA6HzkE93mF4 for <buildroot@buildroot.org>;
- Mon,  9 Nov 2026 13:23:04 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org C315B60741
-Authentication-Results: smtp3.osuosl.org;
- arc=none smtp.remote-ip=62.149.158.147
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.147;
- helo=smtpweb147.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
- receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org; dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=iu7ge1D5
-Received: from smtpweb147.aruba.it (smtpweb147.aruba.it [62.149.158.147])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C315B60741
- for <buildroot@buildroot.org>; Mon,  9 Nov 2026 13:23:02 +0000 (UTC)
-Received: from [192.168.1.115] ([151.95.84.63]) by Aruba SMTP with ESMTPSA
- id QPKuxtpBjyeI3QPKuxMnk2; Mon, 09 Nov 2026 14:23:00 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1794230580; bh=+SDttmEBz4GAEoDntdayYIHf0TkWckHgYRz60MWmQHM=;
- h=Date:MIME-Version:Subject:To:From:Content-Type;
- b=iu7ge1D5pRv3YfaMD+ZART/pnvxgsu3iHnxLl5lLSxkvTBt/sT5BLNO9rWReXSTBa
- Z9MZ6gNki6vOjokIzwMHnk8Tgzpi2A7Uq8lbu2KncHgH2RCSxle/2u0vpLks0ubJLG
- GidhorocZsDaW2JSXxRMw1BnFXChWI1br0EmQMEfq5qnJXkfOab96WHP/72iM6G6Gx
- uPu+h6hGGRJlkdAvOFDZoJ/s4Y5aGlTvKOMBoarnyFBsiwy6/H7OIc/SvoAST7KgN9
- 5eaB5Ptazvymrvwt8EtkLKC8HyQF3Pzsa5D1fnRMdeKiY4jQ2PqkTgQeWZ4l+pd0xx
- bI2vD11SKBcqw==
-Message-ID: <397db084-f5c3-4e61-940f-e170849d8442@benettiengineering.com>
-Date: Mon, 9 Nov 2026 14:22:59 +0100
+ id Ao0bcJluklC7; Mon,  9 Nov 2026 13:25:08 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 213BF6074C
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794230708;
+	b=rAJESvY9EXSbGDsyDZ0wKmOEGecUUQg31R1PiO0DtUK56POzpOMOuN2JkIKPie9QJ962
+	 CacCVgg/oK+VVvzQRj30cg5zs4qf9u8oDh7vyVPCDV1ljzuGhMI6DKo44dO652tEJS/EM
+	 uC62qacPh4VBjyvZCyKDQaLErIs9D0iWkDaDfyV+lSW9xW4FfmElJbEKVnwgzqsoh/f2c
+	 Tiw28BSfUIAOMhXRAq8w8oNcwmpLhOkcsQteU5RSvRmeX6hWFyaO5cb0UlXM8rP7sY4Ql
+	 WwAmbcnYXytHHJEyc1dyIl2cnf7wDR3Kf8PSOdAjZfTG0ch3xL6T2y9SrGKRuOhvvcQ==
+ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1794230708;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:Received:From:To:Date:Message-Id:X-Mailer:MIME-Version:
+	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=5xUpuH+WK/2+wbrLotHlrWMavNJ9efOcpFWoaG0LlfI=;
+	b=pNCWQWBvx/sOyWHYvAMXiAGynXlTHI6KDXZVoVBnnDfo/bIvHKMdqzj4f4BFURuSOTHH
+	 JZT4xgLvzg72B/oj7CxwbVVLC3QJvSYNM1NeTrgxCSwvQKMIGKtd9tWGZmYsRbI6QiE2R
+	 u8e98ph86wzFF+6ckNqzJHcesT1KKVT8hZSfPAvkaTE94J2ohIFQ/ld7Fh5R9gxbnxGCy
+	 yLw3LuWBTKDoFIM5RNiSxzBlkLVLm9s+E/9Dt2kBIGO9+9OKvrynNRzczA8PKNwUbvnpB
+	 rBwQco1UQZ/CfZ8FTclpLo/7Rw0Px69gafTZAEyUBJ9U11KsY39mDh5zXfPVTlM1W/Q==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+	arc=none smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1794230708;
+	bh=5xUpuH+WK/2+wbrLotHlrWMavNJ9efOcpFWoaG0LlfI=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=o6RRSh4hBDceiQrCjq6gj4E/Ri8UDD4IEGoV0dANNsZDuosfKLYA6iay7LsJhY2b1
+	 cQ1IAgEXXIoBtHaC5izhJMK220Ulftt9u8ycFfWi2mImSk9tiTPxTokzXZ+36DaKSE
+	 cWbXdhBuV6LOEDU3ffqTxBNRpXg/5E15m57mp4E8i1mNOBRQ65yQa/NDgDNiPW38nY
+	 +uIc6ua+7KeLcmZbjfmVyqm8spk1vMKiOZfFEZf4KBpIzvgvIwmLAmix1ehus2s8YV
+	 OUb8PSQsJRQELINisA04iVF4LaiWl6nf8bSbrXoFarK7H3paZHUHhZWHqpgiow8G6V
+	 /UZjz84y1Uhxw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 213BF6074C;
+	Mon,  9 Nov 2026 13:25:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id BBC0E4B8
+ for <buildroot@buildroot.org>; Mon,  9 Nov 2026 13:25:06 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id AD2A4406EB
+ for <buildroot@buildroot.org>; Mon,  9 Nov 2026 13:25:06 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PPvTJ7qIqlAi for <buildroot@buildroot.org>;
+ Mon,  9 Nov 2026 13:25:06 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 81939406E8
+Authentication-Results: smtp4.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::531"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::531; helo=mail-ed1-x531.google.com;
+ envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp4.osuosl.org; dmarc=pass (p=quarantine dis=none)
+ header.from=googlemail.com
+Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
+ header.a=rsa-sha256 header.s=20260707 header.b=eQ87I14d
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 81939406E8
+ for <buildroot@buildroot.org>; Mon,  9 Nov 2026 13:25:04 +0000 (UTC)
+Received: by mail-ed1-x531.google.com with SMTP id
+ 4fb4d7f45d1cf-6b750e40ce2so9567a12.0
+ for <buildroot@buildroot.org>; Mon, 09 Nov 2026 05:25:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=googlemail.com; s=20260707; t=1794230703; x=1794835503; darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=w7fFM1n82nLlOczESbMqIudIgitQ0J33dMxIBU1Y134=;
+ b=eQ87I14djwsqQpGf43Dlu4caXRTcGJ5LdzREXqEx9QIQazlqitu3XO8JZQfVS/1xsi
+ VRwva7ocTkJw9QjMN++vNlJFx5KeMmSngJCSbbdRLGYS/FVpJOh5a3bJUtN9Bu0cPJUb
+ j7mZcQ6n5M2q0PyrthUtYA/dbFo3juDbUBdr7A1gTKL84tsfZXDNNCpaKJBvXV8ykmgR
+ 77tQqpquUctAjbiKDw779h0/Vy1JcHcYXWYs68gyG24Guo1QHblzGNWyieALfwIj/yhG
+ jvMFP7+lj6qt3eVPHU1ajZw4VjBLnyjFdnQX4nyH8uEvXhf5rY3PY3nEqfm4yjlT29l9
+ hf+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1794230703; x=1794835503;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=w7fFM1n82nLlOczESbMqIudIgitQ0J33dMxIBU1Y134=;
+ b=OdjCO9rVSKVaRiyHKmNGK2oyMMKMiNWashIJVRxBmOh99dhgmJmwBrgK6GdKPmHfle
+ gaBMbhKHXZvqnqSsbFVgE/na7OS7CCApTipAPo4uyqJ2B/ZPqJTR63MDi0ovuLaXVWn6
+ SQMjPZzWOjGGhkzEAc5i/bXNRKGT1nBoBxiIoOpoVDT1qOaYstBuGM00qNDiuEXYLv/g
+ h0s8V9KwOVftFEbZetKgz4B35UcsPY7//owYo5/jabqW1O9aI+l3+tVM9xp7t0Qxuwr0
+ 7W2Q5RkZyGAWsjawep4ZDIEj9lNiAo2QhUJpBEQJkY//7z4ed4SnMC7J32nysigj8UCa
+ 3FcQ==
+X-Gm-Message-State: APuU4Z82UGNpfDf6ft9CW+ufOVcX7dW7BaAKXdsai10ODlr4WaEuEpRZ
+ cn/jKDgofnXGvd3+tsZ89E+tU/02X/NaDRpplMYwI2avCiwkE64r9aJxDdpE3A==
+X-Gm-Gg: AYBFou2VF+vtQqbJT3x5doXpO2xxZYMxMWQG/vJRad8MquefkwOH47x3QKNKK4GcPAA
+ qN2bLL52tYkXfjgzCgD+/n0kkT1wTnfvhoXL2cBxRAX790p2T+Q7d/QzWb4A6XkBsoI+HUkcc6H
+ tLYzSouBIolF5cbomiTzE7TwxebQOKi+HW4HvIKuKoUxNNOmeU6XSIB7Nyb5Vsp3YiaKmXMkNvA
+ EyaED5tIt/ddF6Oi/xhCF/GZ5kDlaGxdtFKMU4Ug/4V6ZKWR/Jn2wpU2dxvcqFH9WvyEYuT51/o
+ mIhpa3aynnJ3B/yFeEs9SOlrgDhgDI8Ae6k5VWnox3PR4MfBpPA42Owqi9EIxYhFOx1o+/9Ua4E
+ BDcd5PJ7iT0oP4z19PLFkKK4YCob1bYcMAc4IcNafOnqNhTHBRx87VtIZGzJQuqglcMiKcXuphb
+ BSaochTWJRdMk3dysuNJF+u/mjJx+ne6nXHGcJGHIkYjntEfoSVdZgNCwGCu8FxK/NJeZR0cVsQ
+ mgBkmMFjZwTbq68zyFjiddM0gVy3DNMCVcHWpVsPR/LZB8moCGWHaINmQigaR+YU/RI5H5WFS9G
+ a67C+8SBsYx/NdByb9nsy9ZlqNpfC5dEUGw8omFCt/ZwH80qu3iUxuLwlQXEOWqwsO+fhppRadw
+ dVzx78VcY
+X-Received: by 2002:a17:907:6d27:b0:c42:102f:15d7 with SMTP id
+ a640c23a62f3a-c4d6d4a7b24mr258188266b.10.1794230702798; 
+ Mon, 09 Nov 2026 05:25:02 -0800 (PST)
+Received: from development2.visionsystems.local (mail.visionsystems.de.
+ [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-c4d6a474e3dsm175658166b.42.2026.11.09.05.25.02
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 09 Nov 2026 05:25:02 -0800 (PST)
+From: Yegor Yefremov <yegorslists@googlemail.com>
+To: buildroot@buildroot.org
+Date: Mon,  9 Nov 2026 14:25:01 +0100
+Message-Id: <20261109132501.233001-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.34.1
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: buildroot@buildroot.org
-Cc: Christian Stewart <christian@aperture.us>
-References: <20261109110029.1306930-1-giulio.benetti@benettiengineering.com>
-Content-Language: en-US
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-In-Reply-To: <20261109110029.1306930-1-giulio.benetti@benettiengineering.com>
-X-CMAE-Envelope: MS4xfPLoi6abqA5gTQvXQZ+unoDI2zWAdbu+QFBdVQ56oCufBbdvVsMWssTQ51PHEaH54QGJAd3yGxXs/B0nLnTNsN+YKggNDViLFQzJ3SPkAfuRrMEnc6f3
- FM11XsykL46mDJ0NmHoMqqg3uLWwj9d4wfs6vi6BwLwnZQVeotDg3LN9FlNnxc+8jsYdUYJ91k1PzoJeqr+YM4TFN+ZOc9IqUB3iN+0aSZYiaH2sSdeD8LL3
- H3rkXdo+8GlKIjLJmw0KpA==
-Subject: Re: [Buildroot] [PATCH] package/rtl8821au: bump to version
- 2025-12-13
+Subject: [Buildroot] [PATCH] package/libcurl: fix build on LoongArch with
+ musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,51 +145,102 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-15.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=4.0.1
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-On 11/9/26 12:00, Giulio Benetti wrote:
-> This commit allows to build with Linux up to version 7.3.
+Since libcurl 8.21.0, building the curl tool for loongarch64 with a musl
+toolchain fails with:
+
+ld: read-only segment has dynamic relocations
+collect2: error: ld returned 1 exit status
+
+On musl, none of the secure memory zeroing functions curl knows about
+are detected, so curlx_memzero_low() falls back to calling memset()
+through a 'const volatile' function pointer. In non-PIC code, GCC places
+this pointer in .rodata, and on LoongArch the linker emits a dynamic
+R_LARCH_64 relocation against memset() there, i.e. a text relocation.
+musl's dynamic loader does not support DT_TEXTREL, so the Buildroot
+toolchain wrapper links with -z text, which turns it into an error.
+Other architectures resolve the address to a PLT entry at link time and
+are not affected.
+
+Add a patch, submitted upstream, that drops the 'const' qualifier, so
+that the pointer is placed in .data.
+
+This issue has been present since commit be2789d08432 ("package/libcurl:
+security bump to version 8.21.0"), which brought in the upstream code
+using the 'const volatile' pointer. It therefore affects 2026.08 and
+later, and 2026.05.x since 2026.05.1.
 
 Fixes:
-https://autobuild.buildroot.org/results/bb893e7cab68477a5e3000d3fefabd4ee7094f24/
+https://autobuild.buildroot.org/results/558c08d552920e45628254bdc029518120a35ae1
 
-> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-> ---
->   package/rtl8821au/rtl8821au.hash | 2 +-
->   package/rtl8821au/rtl8821au.mk   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/rtl8821au/rtl8821au.hash b/package/rtl8821au/rtl8821au.hash
-> index ca5f9f15df..0eeb72288a 100644
-> --- a/package/rtl8821au/rtl8821au.hash
-> +++ b/package/rtl8821au/rtl8821au.hash
-> @@ -1,3 +1,3 @@
->   # Locally calculated
-> -sha256  1d9f87c7a30d54f67cb09e98a436565ba9c64a28feca95205f66212d8833836c  rtl8821au-bb26b6b06c47b79c17426ef186f44a608dbed7a0.tar.gz
-> +sha256  866b642868faf6844f7e2c7f83f05f965355eacb51c7d07e24ab6ed9df22bbc4  rtl8821au-3eee07cb78dd0bc9a89b7fe383e467403efb3b97.tar.gz
->   sha256  640d90f6ee401241ff62834d0d1b33f83049e99b8bfdfa04ed1b0a1635dde3e7  LICENSE
-> diff --git a/package/rtl8821au/rtl8821au.mk b/package/rtl8821au/rtl8821au.mk
-> index 4e7aee4204..7c5a3dfa50 100644
-> --- a/package/rtl8821au/rtl8821au.mk
-> +++ b/package/rtl8821au/rtl8821au.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -RTL8821AU_VERSION = bb26b6b06c47b79c17426ef186f44a608dbed7a0
-> +RTL8821AU_VERSION = 3eee07cb78dd0bc9a89b7fe383e467403efb3b97
->   RTL8821AU_SITE = $(call github,benetti-engineering,rtl8821au,$(RTL8821AU_VERSION))
->   RTL8821AU_LICENSE = GPL-2.0
->   RTL8821AU_LICENSE_FILES = LICENSE
+Fixes: be2789d08432da951c0ebfb23b034072601bc8fe ("package/libcurl: security bump to version 8.21.0")
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ ...-relocation-in-curlx_memzero_low-fal.patch | 41 +++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+ create mode 100644 package/libcurl/0001-curlx-avoid-text-relocation-in-curlx_memzero_low-fal.patch
+
+diff --git a/package/libcurl/0001-curlx-avoid-text-relocation-in-curlx_memzero_low-fal.patch b/package/libcurl/0001-curlx-avoid-text-relocation-in-curlx_memzero_low-fal.patch
+new file mode 100644
+index 0000000000..4bb1ad83c8
+--- /dev/null
++++ b/package/libcurl/0001-curlx-avoid-text-relocation-in-curlx_memzero_low-fal.patch
+@@ -0,0 +1,41 @@
++From 8c05728ff2dfd5481379280ee7215518a2817725 Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Mon, 9 Nov 2026 13:42:51 +0100
++Subject: [PATCH] curlx: avoid text relocation in curlx_memzero_low() fallback
++
++The const volatile function pointer is placed in .rodata in non-PIC
++code. On LoongArch this needs a dynamic relocation for memset(), so
++linking the curl tool against musl with -z text fails:
++
++  ld: read-only segment has dynamic relocations
++
++Drop the const. volatile is enough to keep the call.
++
++Follow-up to 066478f6346a2d987a9ecc3bd3bf45764d69c1c4 #21598
++
++Upstream: https://github.com/curl/curl/pull/23844
++Assisted-by: Claude:claude-opus-5-5
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ lib/curlx/strdup.c | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/lib/curlx/strdup.c b/lib/curlx/strdup.c
++index ebc58c236..6f6d7c673 100644
++--- a/lib/curlx/strdup.c
+++++ b/lib/curlx/strdup.c
++@@ -96,8 +96,9 @@ void *curlx_memdup0(const char *src, size_t length)
++ }
++ 
++ #ifdef USE_CURLX_MEMZERO
++-static void *(* const volatile p_curlx_memset)(void *buf, int val,
++-                                               size_t size) = memset;
+++/* not const, to keep it out of .rodata and avoid a text relocation */
+++static void *(* volatile p_curlx_memset)(void *buf, int val,
+++                                         size_t size) = memset;
++ 
++ /* Local fallback in case there is no system function to securely zero a memory
++    buffer. */
++-- 
++2.34.1
++
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
