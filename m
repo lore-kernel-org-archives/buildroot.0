@@ -1,87 +1,87 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86677606A31C
-	for <buildroot@archiver.kernel.org>; Mon,  9 Nov 2026 21:03:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1D74606A31C
+	for <buildroot@archiver.kernel.org>; Mon,  9 Nov 2026 21:03:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=LRgF+GTq
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=hoWtHAj5
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5B2ED40704;
-	Mon,  9 Nov 2026 21:03:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7AE8D80D4A;
+	Mon,  9 Nov 2026 21:03:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CI-K0g9P7Qlo; Mon,  9 Nov 2026 21:03:14 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 6A928406FE
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794258194;
-	b=UdBxkuchjsGXUleswuy6gAjWeN8io25GSaYcvpUMvylRRkr6D+qa+NkO8mygwe7JSd8m
-	 /9Nibv2Fsh7Dbq2s2deG7xMHNIsK2IFiOq2ug4W/H0aPQmgUkU5RIZxqqtNs4feJ/QPgL
-	 Zxs5zXvZVMQzme0kLNM6UFw1EbzJGqXYqRWjBSyJkdY/ay8DVI6oRiJkyJvXaaCIQYdJR
-	 T5RXVQiaOydBVRDTiQLGA3IC0MXCztpxw7r3V1WqBm/AAGz1+/dWCgbAc7dJ/4Wssqo4w
-	 bgHzRynWmOW64UGmxuQNP5aOIZg8tUwMw9cFAeo/RAcVEn2MgNgI1wjRzbmisxF9xzw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H7fBwMJHSm6a; Mon,  9 Nov 2026 21:03:15 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org A44E380D74
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794258195;
+	b=gem4D2yPlF0eVOjO7tpRjE+G2exlJHiwhCH7RPYbEFc7WmcoIFj07Lm1/ADyjKgZS5Me
+	 q18TTkEOAEsa+3XzGB8BMzxFJ8NDYR/ZOowDCSJNM6cnpvu5xfDX7nc7h6uyyqZMm7G2U
+	 J8Zkx4xAqBnzL3zbCLTdxWpyfvGbq2cUg+E352h2nz8jkD3wH1DGCzPuhUCK6M7EG1+kE
+	 H9/FsP5a4n5C2KVhHpFPX/Xzg8yoZFVpyNNT2j6ZMSYQJ7iF6zaKmNu1OOEZNeryH4APt
+	 sAhoSpWi3lRqjnzM+YyQ14eZLHIViz4oziFDofTDn3XXHqY9talpnI7e7he1laGV6Ag==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794258194;
+	c=relaxed/relaxed; t=1794258195;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:Received:ARC-Filter:X-Comment:Received:
 	 Received:To:Date:X-Git-Refname:X-Git-Oldrev:X-Git-Newrev:
 	 X-Patchwork-Hint:Message-Id:Subject:X-BeenThere:X-Mailman-Version:
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:Errors-To:
-	 Sender;
-	bh=Ptsx6iKUfpezNMkw1uuBsCHnXgMpvhJFT5yjyTsu5WQ=;
-	b=R8G83mam4/s47nt3bbrYolwtcnD9pFnMlffFGZ2PwTkpBxEjMCMD/HIZv05/JM6UbH+x
-	 nTRtBBBWSOCx7Fd49EHLmbjcqo/Jnq6rLwI26tBYuavAwFiD5JrbTBXOS/m2GzvqZdvdq
-	 lRlXYN0eUjHY+z9CmpC6dgIcbrm49YRR7offQL0yiRV8MZ7cvwjCD2xYICeXGojUC61os
-	 K+6eOBZ7vULjB4FCYhlw5Nd9R8RNt/rmM594gT5oQkQtibA/F5+phHR+JLOPnGfdqzHP7
-	 SfPqfBmRCpPbZKMBGy7tSpmdaSA+9v1a0tf6OrdfNVmEAsQ9V1W35nuX0GmIDyMPqEQ==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+	 List-Subscribe:From:Reply-To:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=yyso8bMQmafE5Jo9Uc/cZYMKQSuL13JHHZ4WTdlBcyk=;
+	b=ikRROWjmwLsX9WdNijrU9VA1BWRkDmIp9bbrQ4biRqSavf9/u9PlXQB+c9SRY1tggFIA
+	 P5wX3+Ger6j183eGRabBkhPu/krtO878Khu2PIBFMCkwWUC2QgmZMn4CaEuBmhe/uKBTd
+	 k7wv5lcF1PyhyOodHI741vRzN0QHOeWLn+qXU+t6Uuxoys4qvK9X85w0yjNPncSYQ9siH
+	 z+BfW1aq2rV/waLIXw4rR6ErJ3Xf6SaI7JFJBbyiOzY40TNHtkezELAG7w/LW3w02uNfm
+	 S6/gU9V2VAd4rnNowlZVPPdx1ood/8gV6VQNhmHhpWKyxHDgVnbiQST1ePSyf5+oKKg==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794258194;
-	bh=Ptsx6iKUfpezNMkw1uuBsCHnXgMpvhJFT5yjyTsu5WQ=;
+	s=default; t=1794258195;
+	bh=yyso8bMQmafE5Jo9Uc/cZYMKQSuL13JHHZ4WTdlBcyk=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=LRgF+GTqXmxuEQi/BG9KrkyejNCWdzkI4OTOePDQvDY0PGVYjcp0oMDba6yMGxEUj
-	 3SpH3LEVYkD8/m2IUxpVpWIa9XKzw2jFxl18uPIIyMVW5EC9wGJjedmOjgzEwYM4re
-	 zVkEB7j5tMxvnrnf1GSvS7UEdW0EGLvvG8QLBQ4vDUKYndFmHnxiy9aABvedABLfe8
-	 84g04ewgvogwueWubYfiEsEWUGP+vR9hY8TNvP68QrSmvP8k/SFB2iSM5EylBAS+dw
-	 MbMq86cYB29LLEXplVxLrZU7KMk3kAyDU52vOc8pNX62e6th/xSCOxf7sToNCeM5Os
-	 NwcYFUowHs8fw==
+	b=hoWtHAj5GVB0+bc6VLJX8RTVDPUuUXJs5UBWYeFsTIO86eO7dtgkEeOzvOZzJG7pa
+	 KLjPdXpyB+bRsm016iMyn2Kfi5KwQjnoxObEPK61IDIXmRa74H+j+KBpWtHGQv2RqB
+	 f9OGqS6SK8f7bRGY6NP14WoLbq1QA4cYSrEXIHXX0urZ/TBsc32BLdyLODuOqNIvo3
+	 jSD2BOw3j2nl6isR15pxzrl3VFNYBSXgqnYH3HPltTfGE2ovZVK++Gj8+2jBtKVOlV
+	 y87BYYRpTgIcK0VP0DQq0Co097PWZXUtaj5HK/2fBCzXYSJMDdaHpu7P1a8DNM1DVO
+	 0J2QCZvVnGx+Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6A928406FE;
-	Mon,  9 Nov 2026 21:03:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 46ACE28C
- for <buildroot@buildroot.org>; Mon,  9 Nov 2026 21:03:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A44E380D74;
+	Mon,  9 Nov 2026 21:03:15 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 61E50335
+ for <buildroot@buildroot.org>; Mon,  9 Nov 2026 21:03:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4320A80D4A
- for <buildroot@buildroot.org>; Mon,  9 Nov 2026 21:03:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4493E406FE
+ for <buildroot@buildroot.org>; Mon,  9 Nov 2026 21:03:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fDiB8sdJOmPi for <buildroot@buildroot.org>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WLpiKDDxQvLB for <buildroot@buildroot.org>;
  Mon,  9 Nov 2026 21:03:11 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 7FCF980D74
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 7292D40704
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7FCF980D74
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7292D40704
  for <buildroot@buildroot.org>; Mon,  9 Nov 2026 21:03:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F00488A32B; Mon,  9 Nov 2026 21:01:37 +0000 (UTC)
+ id B965A8C5D0; Mon,  9 Nov 2026 21:01:37 +0000 (UTC)
 To: buildroot@buildroot.org
 Date: Mon, 9 Nov 2026 20:29:06 +0100
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7461a6acea0418f8acb48fcea04394ded540f422
-X-Git-Newrev: f753f0980f5952cd57f51081ad09573aa5640aa7
+X-Git-Oldrev: cdd3776b4ea728fdda5fcde708e25d0a092e6864
+X-Git-Newrev: 7461a6acea0418f8acb48fcea04394ded540f422
 X-Patchwork-Hint: ignore
-Message-Id: <20261109210137.F00488A32B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt5/qt5webengine: security bump to
- version 5.15.19
+Message-Id: <20261109210137.B965A8C5D0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt5: security bump to version
+ 5.15.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,397 +95,855 @@ From: Julien Olivain via buildroot <buildroot@buildroot.org>
 Reply-To: Julien Olivain <ju.o@free.fr>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============7436156122581531954=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-20.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
-	PP_MIME_FAKE_ASCII_TEXT,SPF_HELO_NONE autolearn=ham autolearn_force=no
-	version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============7436156122581531954==
-Content-Type: text/plain
-
-commit: https://gitlab.com/buildroot.org/buildroot/-/commit/f753f0980f5952cd57f51081ad09573aa5640aa7
+commit: https://gitlab.com/buildroot.org/buildroot/-/commit/7461a6acea0418f8acb48fcea04394ded540f422
 branch: https://gitlab.com/buildroot.org/buildroot/-/tree/master
 
 Fixes the following security issues:
 
-- CVE-2024-10229: inappropriate implementation in Extensions
-- CVE-2024-10827: use after free in Serial
-- CVE-2024-12694: use after free in Compositing
-- CVE-2025-0436: integer overflow in Skia
-- CVE-2024-11477: issue in the LZMA SDK
-- CVE-2025-0996: inappropriate implementation in Browser UI
-- CVE-2025-1426: heap buffer overflow in GPU
-- CVE-2025-0762: use after free in DevTools
-- CVE-2025-0999: heap buffer overflow in V8
-- CVE-2024-55549: use after free related to excluded namespaces in
-  libxslt
-- CVE-2025-24855: use after free of XPath context node in libxslt
-- CVE-2025-1919: issue in Chromium
-- CVE-2025-2783: incorrect handle provided in unspecified circumstances
-  in Mojo on Windows
-- CVE-2025-24201: issue in ANGLE
-- CVE-2025-2136: issue in Chromium
-- CVE-2025-3619: issue in Chromium
+- CVE-2025-5455: remotely triggerable assertion in data: URL handling
+  (qtbase)
+- CVE-2025-4211: improper link resolution before file access in
+  QFileSystemEngine on Windows (qtbase)
+- CVE-2025-30348: denial of service in the Qt XML module (qtbase)
+- CVE-2025-23050: read past the end of the buffer and division by zero
+  in QLowEnergyController on Linux (qtconnectivity)
+- CVE-2025-12385: improper validation of <img> tag size in the Text
+  component parser (qtdeclarative)
 
-Bump qt5webengine to the v5.15.19-lts tag, following QT5_VERSION again,
-and qt5webengine-chromium to the submodule version of this tag.
+The fixes of CVE-2025-5455, CVE-2025-4211 and CVE-2025-30348 were
+already in the previous qtbase version from KDE, but they are fixed by
+Qt 5.15.19 and still reported for 5.15.18, the version used for the
+CVE tracking.
 
-For qt5webengine-chromium, the Python 3.12/3.13 fixes backported by Qt
-make some of our patches obsolete:
-- 0002-Remove-unused-python-import.patch is dropped, merged upstream in
-  cd438f6f3546 ("[backport] Fix builds with pyhton 3.12");
-- 0004-tools-grit-grit-util.py-fix-Python-3.12-build-issue.patch is
-  dropped, as e78dbf724ae0 ("[backport] Fixes for python 3.12") fixes
-  the same imports;
-- 0008-Shorted-printed-cmd-when-long-commands-fail.patch is dropped, as
-  480e246dfe9d ("Fix build with python 3.12/3.13") already removes the
-  pipes module, which is what we needed it for;
-- 0006-protobuf-python-google-protobuf-internal-python_mess.patch is
-  refreshed: its first hunk is dropped, as 480e246dfe9d removes the
-  six.moves import itself, and keeps the six import that new code uses.
-The remaining patches are renumbered.
+Bump the qt5 packages to the latest submodule versions of the kde/5.15
+branch of KDE's Qt5 Patch Collection, now rebased on Qt 5.15.19:
+https://invent.kde.org/qt/qt/qt5/-/tree/kde/5.15
 
-The LICENSE hash of the LZMA SDK changed in qt5webengine-chromium: a
-paragraph detailing the public domain terms was added to it with the
-update of the LZMA SDK.
+qtbase carries the v5.15.19-lts-lgpl tag, so QT5_VERSION is now
+5.15.19. qt5webengine, which follows QT5_VERSION, stays at 5.15.18 and
+is bumped by the next commit, together with qt5webengine-chromium.
+
+License hash changes:
+- qt5base: the hash of src/3rdparty/harfbuzz-ng/COPYING was already
+  outdated, the file did not change in this bump (it is only checked
+  when the bundled harfbuzz is used);
+- qt5virtualkeyboard: the Apache-2.0 appendix was added to
+  src/plugins/pinyin/3rdparty/pinyin/NOTICE.
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- ...tch => 0002-Migrate-presubmit-to-python3.patch} |  0
- .../0002-Remove-unused-python-import.patch         | 47 ---------------
- ...Fix-build-in-Python-3.11-invalid-mode-rU.patch} |  0
- ...hon-google-protobuf-internal-python_mess.patch} | 14 +----
- ...-grit-util.py-fix-Python-3.12-build-issue.patch | 70 ----------------------
- ...-command_buffer-service-program_manager..patch} |  0
- ...nclude-cstdint-for-uintptr_t-uint8_t-etc.patch} |  0
- ...0007-Fix-build-with-glibc-2.43-and-above.patch} |  0
- ...orted-printed-cmd-when-long-commands-fail.patch | 57 ------------------
- .../qt5webengine-chromium.hash                     |  4 +-
- .../qt5webengine-chromium/qt5webengine-chromium.mk |  2 +-
- package/qt5/qt5webengine/qt5webengine.hash         |  2 +-
- package/qt5/qt5webengine/qt5webengine.mk           |  2 +-
- 13 files changed, 7 insertions(+), 191 deletions(-)
+ package/qt5/qt5.mk                                       | 2 +-
+ package/qt5/qt53d/qt53d.hash                             | 2 +-
+ package/qt5/qt53d/qt53d.mk                               | 2 +-
+ package/qt5/qt5base/qt5base.hash                         | 4 ++--
+ package/qt5/qt5base/qt5base.mk                           | 4 ++--
+ package/qt5/qt5charts/qt5charts.hash                     | 2 +-
+ package/qt5/qt5charts/qt5charts.mk                       | 2 +-
+ package/qt5/qt5connectivity/qt5connectivity.hash         | 2 +-
+ package/qt5/qt5connectivity/qt5connectivity.mk           | 2 +-
+ package/qt5/qt5declarative/qt5declarative.hash           | 2 +-
+ package/qt5/qt5declarative/qt5declarative.mk             | 2 +-
+ package/qt5/qt5doc/qt5doc.hash                           | 2 +-
+ package/qt5/qt5doc/qt5doc.mk                             | 2 +-
+ package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash | 2 +-
+ package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk   | 2 +-
+ package/qt5/qt5imageformats/qt5imageformats.hash         | 2 +-
+ package/qt5/qt5imageformats/qt5imageformats.mk           | 2 +-
+ package/qt5/qt5location/qt5location.hash                 | 2 +-
+ package/qt5/qt5location/qt5location.mk                   | 2 +-
+ package/qt5/qt5lottie/qt5lottie.hash                     | 2 +-
+ package/qt5/qt5lottie/qt5lottie.mk                       | 2 +-
+ package/qt5/qt5multimedia/qt5multimedia.hash             | 2 +-
+ package/qt5/qt5multimedia/qt5multimedia.mk               | 2 +-
+ package/qt5/qt5quickcontrols/qt5quickcontrols.hash       | 2 +-
+ package/qt5/qt5quickcontrols/qt5quickcontrols.mk         | 2 +-
+ package/qt5/qt5quickcontrols2/qt5quickcontrols2.hash     | 2 +-
+ package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk       | 2 +-
+ package/qt5/qt5quicktimeline/qt5quicktimeline.hash       | 2 +-
+ package/qt5/qt5quicktimeline/qt5quicktimeline.mk         | 2 +-
+ package/qt5/qt5remoteobjects/qt5remoteobjects.hash       | 2 +-
+ package/qt5/qt5remoteobjects/qt5remoteobjects.mk         | 2 +-
+ package/qt5/qt5scxml/qt5scxml.hash                       | 2 +-
+ package/qt5/qt5scxml/qt5scxml.mk                         | 2 +-
+ package/qt5/qt5sensors/qt5sensors.hash                   | 2 +-
+ package/qt5/qt5sensors/qt5sensors.mk                     | 2 +-
+ package/qt5/qt5serialbus/qt5serialbus.hash               | 2 +-
+ package/qt5/qt5serialbus/qt5serialbus.mk                 | 2 +-
+ package/qt5/qt5serialport/qt5serialport.hash             | 2 +-
+ package/qt5/qt5serialport/qt5serialport.mk               | 2 +-
+ package/qt5/qt5speech/qt5speech.hash                     | 2 +-
+ package/qt5/qt5speech/qt5speech.mk                       | 2 +-
+ package/qt5/qt5svg/qt5svg.hash                           | 2 +-
+ package/qt5/qt5svg/qt5svg.mk                             | 2 +-
+ package/qt5/qt5tools/qt5tools.hash                       | 2 +-
+ package/qt5/qt5tools/qt5tools.mk                         | 2 +-
+ package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash   | 4 ++--
+ package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk     | 2 +-
+ package/qt5/qt5wayland/qt5wayland.hash                   | 2 +-
+ package/qt5/qt5wayland/qt5wayland.mk                     | 2 +-
+ package/qt5/qt5webchannel/qt5webchannel.hash             | 2 +-
+ package/qt5/qt5webchannel/qt5webchannel.mk               | 2 +-
+ package/qt5/qt5webengine/qt5webengine.mk                 | 2 +-
+ package/qt5/qt5websockets/qt5websockets.hash             | 2 +-
+ package/qt5/qt5websockets/qt5websockets.mk               | 2 +-
+ package/qt5/qt5webview/qt5webview.hash                   | 2 +-
+ package/qt5/qt5webview/qt5webview.mk                     | 2 +-
+ package/qt5/qt5x11extras/qt5x11extras.hash               | 2 +-
+ package/qt5/qt5x11extras/qt5x11extras.mk                 | 2 +-
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash           | 2 +-
+ package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk             | 2 +-
+ 60 files changed, 63 insertions(+), 63 deletions(-)
 
-diff --git a/package/qt5/qt5webengine-chromium/0003-Migrate-presubmit-to-python3.patch b/package/qt5/qt5webengine-chromium/0002-Migrate-presubmit-to-python3.patch
-similarity index 100%
-rename from package/qt5/qt5webengine-chromium/0003-Migrate-presubmit-to-python3.patch
-rename to package/qt5/qt5webengine-chromium/0002-Migrate-presubmit-to-python3.patch
-diff --git a/package/qt5/qt5webengine-chromium/0002-Remove-unused-python-import.patch b/package/qt5/qt5webengine-chromium/0002-Remove-unused-python-import.patch
-deleted file mode 100644
-index df9e9cfe24..0000000000
---- a/package/qt5/qt5webengine-chromium/0002-Remove-unused-python-import.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From f684c6fb3532138e3408fa17d4b6610162647365 Mon Sep 17 00:00:00 2001
--From: Bruno Pitrus <brunopitrus@hotmail.com>
--Date: Tue, 25 Jul 2023 18:34:09 +0000
--Subject: [PATCH] Remove unused python import
--
--The `imp` module has been removed in Python 3.12 causing these scripts to error out.
--
--Change-Id: Ic7c038d21b86052bdda13015f80934db52a2143e
--Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/4714859
--Auto-Submit: Bruno Pitrus <brunopitrus@hotmail.com>
--Reviewed-by: Ken Rockot <rockot@google.com>
--Commit-Queue: Ken Rockot <rockot@google.com>
--Cr-Commit-Position: refs/heads/main@{#1174966}
--Upstream: https://github.com/chromium/chromium/commit/f5f6e361d037c31630661186e7bd7b31d2784cb8
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- chromium/mojo/public/tools/mojom/mojom/fileutil.py    | 1 -
-- chromium/mojo/public/tools/mojom/mojom/parse/lexer.py | 1 -
-- 2 files changed, 2 deletions(-)
--
--diff --git a/chromium/mojo/public/tools/mojom/mojom/fileutil.py b/chromium/mojo/public/tools/mojom/mojom/fileutil.py
--index bf626f54798..e1c823daa3c 100644
----- a/chromium/mojo/public/tools/mojom/mojom/fileutil.py
--+++ b/chromium/mojo/public/tools/mojom/mojom/fileutil.py
--@@ -3,7 +3,6 @@
-- # found in the LICENSE file.
-- 
-- import errno
---import imp
-- import os.path
-- import sys
-- 
--diff --git a/chromium/mojo/public/tools/mojom/mojom/parse/lexer.py b/chromium/mojo/public/tools/mojom/mojom/parse/lexer.py
--index 3e084bbf22b..1e8b49f245f 100644
----- a/chromium/mojo/public/tools/mojom/mojom/parse/lexer.py
--+++ b/chromium/mojo/public/tools/mojom/mojom/parse/lexer.py
--@@ -2,7 +2,6 @@
-- # Use of this source code is governed by a BSD-style license that can be
-- # found in the LICENSE file.
-- 
---import imp
-- import os.path
-- import sys
-- 
---- 
--2.25.1
--
-diff --git a/package/qt5/qt5webengine-chromium/0005-Fix-build-in-Python-3.11-invalid-mode-rU.patch b/package/qt5/qt5webengine-chromium/0003-Fix-build-in-Python-3.11-invalid-mode-rU.patch
-similarity index 100%
-rename from package/qt5/qt5webengine-chromium/0005-Fix-build-in-Python-3.11-invalid-mode-rU.patch
-rename to package/qt5/qt5webengine-chromium/0003-Fix-build-in-Python-3.11-invalid-mode-rU.patch
-diff --git a/package/qt5/qt5webengine-chromium/0006-protobuf-python-google-protobuf-internal-python_mess.patch b/package/qt5/qt5webengine-chromium/0004-protobuf-python-google-protobuf-internal-python_mess.patch
-similarity index 81%
-rename from package/qt5/qt5webengine-chromium/0006-protobuf-python-google-protobuf-internal-python_mess.patch
-rename to package/qt5/qt5webengine-chromium/0004-protobuf-python-google-protobuf-internal-python_mess.patch
-index 810e71475a..f2e72f5e95 100644
---- a/package/qt5/qt5webengine-chromium/0006-protobuf-python-google-protobuf-internal-python_mess.patch
-+++ b/package/qt5/qt5webengine-chromium/0004-protobuf-python-google-protobuf-internal-python_mess.patch
-@@ -18,17 +18,7 @@ diff --git a/chromium/third_party/protobuf/python/google/protobuf/internal/pytho
- index 803ae848493..a1954ce88c9 100755
- --- a/chromium/third_party/protobuf/python/google/protobuf/internal/python_message.py
- +++ b/chromium/third_party/protobuf/python/google/protobuf/internal/python_message.py
--@@ -55,9 +55,6 @@ import struct
-- import sys
-- import weakref
-- 
---import six
---from six.moves import range
---
-- # We use "as" to avoid name collisions with variables.
-- from google.protobuf.internal import api_implementation
-- from google.protobuf.internal import containers
--@@ -467,7 +464,7 @@ def _ReraiseTypeErrorWithFieldName(message_name, field_name):
-+@@ -466,7 +466,7 @@ def _ReraiseTypeErrorWithFieldName(message_name, field_name):
-      exc = TypeError('%s for field %s.%s' % (str(exc), message_name, field_name))
-  
-    # re-raise possibly-amended exception with original traceback:
-@@ -37,7 +27,7 @@ index 803ae848493..a1954ce88c9 100755
-  
-  
-  def _AddInitMethod(message_descriptor, cls):
--@@ -480,7 +477,7 @@ def _AddInitMethod(message_descriptor, cls):
-+@@ -479,7 +479,7 @@ def _AddInitMethod(message_descriptor, cls):
-      enum_type with the same name.  If the value is not a string, it's
-      returned as-is.  (No conversion or bounds-checking is done.)
-      """
-diff --git a/package/qt5/qt5webengine-chromium/0004-tools-grit-grit-util.py-fix-Python-3.12-build-issue.patch b/package/qt5/qt5webengine-chromium/0004-tools-grit-grit-util.py-fix-Python-3.12-build-issue.patch
-deleted file mode 100644
-index f08f6467e2..0000000000
---- a/package/qt5/qt5webengine-chromium/0004-tools-grit-grit-util.py-fix-Python-3.12-build-issue.patch
-+++ /dev/null
-@@ -1,70 +0,0 @@
--From 5201c34a4c0f2fed56f6cff3acada3da2405a363 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Sat, 13 Jul 2024 16:02:38 +0200
--Subject: [PATCH] tools/grit/grit/util.py: fix Python 3.12 build issue
--
--This commit is an extract from upstream commit
--https://github.com/chromium/chromium/commit/b3abd7e4c9467415da3a5e13d9500d2ab3abc2ec
--which is too large to be backported.
--
--It fixes:
--
--Traceback (most recent call last):
--  File "/home/thomas/buildroot/buildroot/output/build/qt5webengine-5.15.14/src/core/release/../../3rdparty/chromium/tools/grit/grit.py", line 14, in <module>
--    import grit.grit_runner
--  File "/home/thomas/buildroot/buildroot/output/build/qt5webengine-5.15.14/src/3rdparty/chromium/tools/grit/grit/grit_runner.py", line 19, in <module>
--    from grit import util
--  File "/home/thomas/buildroot/buildroot/output/build/qt5webengine-5.15.14/src/3rdparty/chromium/tools/grit/grit/util.py", line 21, in <module>
--    from six.moves import html_entities as entities
--ModuleNotFoundError: No module named 'six.moves'
--
--Upstream: https://github.com/chromium/chromium/commit/b3abd7e4c9467415da3a5e13d9500d2ab3abc2ec (part of)
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- chromium/tools/grit/grit/util.py | 9 ++++-----
-- 1 file changed, 4 insertions(+), 5 deletions(-)
--
--diff --git a/chromium/tools/grit/grit/util.py b/chromium/tools/grit/grit/util.py
--index 528d766ad6b..77db06adffb 100644
----- a/chromium/tools/grit/grit/util.py
--+++ b/chromium/tools/grit/grit/util.py
--@@ -8,6 +8,7 @@
-- from __future__ import print_function
-- 
-- import codecs
--+import html.entities
-- import io
-- import os
-- import re
--@@ -17,8 +18,6 @@ import tempfile
-- from xml.sax import saxutils
-- 
-- import six
---from six import StringIO
---from six.moves import html_entities as entities
-- 
-- from grit import lazy_re
-- 
--@@ -226,7 +225,7 @@ def WrapOutputStream(stream, encoding = 'utf-8'):
-- def ChangeStdoutEncoding(encoding = 'utf-8'):
--   '''Changes STDOUT to print characters using the specified encoding.'''
--   # If we're unittesting, don't reconfigure.
---  if isinstance(sys.stdout, StringIO):
--+  if isinstance(sys.stdout, io.StringIO):
--     return
-- 
--   if sys.version_info.major < 3:
--@@ -280,8 +279,8 @@ def UnescapeHtml(text, replace_nbsp=True):
--       if name == 'nbsp' and not replace_nbsp:
--         return match.group()  # Don't replace &nbsp;
--       assert name != None
---      if name in entities.name2codepoint:
---        return six.unichr(entities.name2codepoint[name])
--+      if name in html.entities.name2codepoint:
--+        return six.unichr(html.entities.name2codepoint[name])
--       else:
--         return match.group()  # Unknown HTML character entity - don't replace
-- 
---- 
--2.25.1
--
-diff --git a/package/qt5/qt5webengine-chromium/0007-chromium-gpu-command_buffer-service-program_manager..patch b/package/qt5/qt5webengine-chromium/0005-chromium-gpu-command_buffer-service-program_manager..patch
-similarity index 100%
-rename from package/qt5/qt5webengine-chromium/0007-chromium-gpu-command_buffer-service-program_manager..patch
-rename to package/qt5/qt5webengine-chromium/0005-chromium-gpu-command_buffer-service-program_manager..patch
-diff --git a/package/qt5/qt5webengine-chromium/0009-Include-cstdint-for-uintptr_t-uint8_t-etc.patch b/package/qt5/qt5webengine-chromium/0006-Include-cstdint-for-uintptr_t-uint8_t-etc.patch
-similarity index 100%
-rename from package/qt5/qt5webengine-chromium/0009-Include-cstdint-for-uintptr_t-uint8_t-etc.patch
-rename to package/qt5/qt5webengine-chromium/0006-Include-cstdint-for-uintptr_t-uint8_t-etc.patch
-diff --git a/package/qt5/qt5webengine-chromium/0010-Fix-build-with-glibc-2.43-and-above.patch b/package/qt5/qt5webengine-chromium/0007-Fix-build-with-glibc-2.43-and-above.patch
-similarity index 100%
-rename from package/qt5/qt5webengine-chromium/0010-Fix-build-with-glibc-2.43-and-above.patch
-rename to package/qt5/qt5webengine-chromium/0007-Fix-build-with-glibc-2.43-and-above.patch
-diff --git a/package/qt5/qt5webengine-chromium/0008-Shorted-printed-cmd-when-long-commands-fail.patch b/package/qt5/qt5webengine-chromium/0008-Shorted-printed-cmd-when-long-commands-fail.patch
-deleted file mode 100644
-index 46349abc50..0000000000
---- a/package/qt5/qt5webengine-chromium/0008-Shorted-printed-cmd-when-long-commands-fail.patch
-+++ /dev/null
-@@ -1,57 +0,0 @@
--From 1a713c6e4861f0672252425a1ccbfa9f45834d5d Mon Sep 17 00:00:00 2001
--From: Mohamed Heikal <mheikal@chromium.org>
--Date: Tue, 4 Apr 2023 17:04:04 +0000
--Subject: [PATCH] Shorted printed cmd when long commands fail
--MIME-Version: 1.0
--Content-Type: text/plain; charset=UTF-8
--Content-Transfer-Encoding: 8bit
--
--Some commands (eg: javac) are very long and when they fail most of the
--screen/log is filled with the actual cmd vs the error message output.
--Shorten printed CMDs to 200 chars unless an environment variable is set.
--
--Bug: None
--Change-Id: I92809a7e4a2b1204931a74fd6239803feddd430e
--Reviewed-on: https://chromium-review.googlesource.com/c/chromium/src/+/4395905
--Reviewed-by: Andrew Grieve <agrieve@chromium.org>
--Commit-Queue: Mohamed Heikal <mheikal@chromium.org>
--Cr-Commit-Position: refs/heads/main@{#1126065}
--Upstream: Backport [https://github.com/chromium/chromium/commit/4c6fc1984970af4b2b1765014c9ddcd957ad7dda]
--Signed-off-by: Gaël PORTAY <gael.portay@rtone.fr>
--[gportay: remove import pipes]
-----
-- chromium/build/android/gyp/util/build_utils.py | 10 +++++++---
-- 1 file changed, 7 insertions(+), 3 deletions(-)
--
--diff --git a/chromium/build/android/gyp/util/build_utils.py b/chromium/build/android/gyp/util/build_utils.py
--index 02298051702..5fa753af459 100644
----- a/chromium/build/android/gyp/util/build_utils.py
--+++ b/chromium/build/android/gyp/util/build_utils.py
--@@ -12,7 +12,6 @@ import fnmatch
-- import json
-- import logging
-- import os
---import pipes
-- import re
-- import shutil
-- import stat
--@@ -196,9 +195,14 @@ class CalledProcessError(Exception):
-- 
--   def __str__(self):
--     # A user should be able to simply copy and paste the command that failed
---    # into their shell.
--+    # into their shell (unless it is more than 200 chars).
--+    # User can set PRINT_FULL_COMMAND=1 to always print the full command.
--+    print_full = os.environ.get('PRINT_FULL_COMMAND', '0') != '0'
--+    full_cmd = shlex.join(self.args)
--+    short_cmd = textwrap.shorten(full_cmd, width=200)
--+    printed_cmd = full_cmd if print_full else short_cmd
--     copyable_command = '( cd {}; {} )'.format(os.path.abspath(self.cwd),
---        ' '.join(map(pipes.quote, self.args)))
--+                                              printed_cmd)
--     return 'Command failed: {}\n{}'.format(copyable_command, self.output)
-- 
-- 
---- 
--2.39.5
--
-diff --git a/package/qt5/qt5webengine-chromium/qt5webengine-chromium.hash b/package/qt5/qt5webengine-chromium/qt5webengine-chromium.hash
-index 63df676a9d..8c536c1c16 100644
---- a/package/qt5/qt5webengine-chromium/qt5webengine-chromium.hash
-+++ b/package/qt5/qt5webengine-chromium/qt5webengine-chromium.hash
+diff --git a/package/qt5/qt5.mk b/package/qt5/qt5.mk
+index 9895f337f0..9c2e4f0717 100644
+--- a/package/qt5/qt5.mk
++++ b/package/qt5/qt5.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ QT5_VERSION_MAJOR = 5.15
+-QT5_VERSION = $(QT5_VERSION_MAJOR).18
++QT5_VERSION = $(QT5_VERSION_MAJOR).19
+ QT5_SITE = https://invent.kde.org/qt/qt
+ 
+ include $(sort $(wildcard package/qt5/*/*.mk))
+diff --git a/package/qt5/qt53d/qt53d.hash b/package/qt5/qt53d/qt53d.hash
+index 966da7d3e5..75f1d56bec 100644
+--- a/package/qt5/qt53d/qt53d.hash
++++ b/package/qt5/qt53d/qt53d.hash
 @@ -1,5 +1,5 @@
  # Locally calculated
--sha256  c1c73b6b72a90bb345e0d4365b9e69ce05e898d1c4480a4e9444e39a1c2801da  qtwebengine-chromium-85337c28bae7d7d2c79282c4f4c92435cd7649b8.tar.bz2
-+sha256  a1a41e5bb70594081c475af697abc4121df5a504815b99da9bbe66dd99604271  qtwebengine-chromium-6d29e9cfcfffa7632cc3858ceaf8940677ba9c91.tar.bz2
+-sha256  a7bab355f0a1d7b17b0e41179f21af8d30d0d1075af5876e9a9fb0a6a12ac982  qt3d-208f5835e6c2415c9dc5cbe92bba83aa28bab7ea.tar.bz2
++sha256  e673a5a2e31964a9a5e94db0287db7a294e3f39a94742755b63792362cc12742  qt3d-c3892c3ee3c0a2b8a050d0a1532f34806636eade.tar.bz2
  
- # Locally calculated with:
- # for i in $(find * -type f \( -iname 'license*' -o -iname 'copying*' -o -name 'APPLE_LICENSE' -o -name 'Copyright' -o -path '*/license_texts/*' -o -path '*/licenses/*' \) -a -not -name '*.cc' -not -name '*.py' -not -name '*.pyc' -not -name '*.h' -not -name 'LICENSE.sha1' -not -name 'licensecheck.pl*' -not -name 'license.after' -not -name 'license.before' -not -path 'chromium/third_party/catapult/*') ; do echo -n "sha256  " ; sha256sum $i ; done | sort --key=3
-@@ -1055,7 +1055,7 @@ sha256  31346421254a3e6e12687cf17f19f6357ee73a617fa7b3d3ccefdcbabe49bdd3  chromi
- sha256  7e48e290b6bfccc2ec1b297023a1d77f2fd87417f71fbb9f50aabef40a851819  chromium/third_party/libxslt/src/Copyright
- sha256  2b2cc1180c7e6988328ad2033b04b80117419db9c4c584918bbb3cfec7e9364f  chromium/third_party/libyuv/LICENSE
- sha256  0d4077a7055ead389c4c5a9a6ac4bb8b784fc6e9e37be2caf544fcceed26cb16  chromium/third_party/lottie/LICENSE
--sha256  6e3e0a978f1e136cb3efb89702f4314671581a0c70c9a52447669e00f7b129e8  chromium/third_party/lzma_sdk/LICENSE
-+sha256  7de6196d9c03ec05e626d4fe7ab86a9c900f11d73176a816423fc14e0a1ee0de  chromium/third_party/lzma_sdk/LICENSE
- sha256  c3b124673c93872156757a934c75b498d68eec09510e25e549d9dc2013776499  chromium/third_party/mako/LICENSE
- sha256  0bbe88228fd63d20ec097f64e58d5a0a465123ae139140a18d406c60b48824b5  chromium/third_party/markupsafe/LICENSE
- sha256  58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  chromium/third_party/material_design_icons/LICENSE
-diff --git a/package/qt5/qt5webengine-chromium/qt5webengine-chromium.mk b/package/qt5/qt5webengine-chromium/qt5webengine-chromium.mk
-index ce1f204b3d..e9a10ddf97 100644
---- a/package/qt5/qt5webengine-chromium/qt5webengine-chromium.mk
-+++ b/package/qt5/qt5webengine-chromium/qt5webengine-chromium.mk
+ # Hashes for license files:
+ sha256  edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPL
+diff --git a/package/qt5/qt53d/qt53d.mk b/package/qt5/qt53d/qt53d.mk
+index f058454463..9730daf6a2 100644
+--- a/package/qt5/qt53d/qt53d.mk
++++ b/package/qt5/qt53d/qt53d.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--QT5WEBENGINE_CHROMIUM_VERSION = 85337c28bae7d7d2c79282c4f4c92435cd7649b8
-+QT5WEBENGINE_CHROMIUM_VERSION = 6d29e9cfcfffa7632cc3858ceaf8940677ba9c91
- QT5WEBENGINE_CHROMIUM_SITE = $(QT5_SITE)/qtwebengine-chromium/-/archive/$(QT5WEBENGINE_CHROMIUM_VERSION)
- QT5WEBENGINE_CHROMIUM_SOURCE = qtwebengine-chromium-$(QT5WEBENGINE_CHROMIUM_VERSION).tar.bz2
- QT5WEBENGINE_CHROMIUM_PATCH_DEPENDENCIES = qt5webengine-chromium-catapult
-diff --git a/package/qt5/qt5webengine/qt5webengine.hash b/package/qt5/qt5webengine/qt5webengine.hash
-index fe140df9ae..bbe84ff047 100644
---- a/package/qt5/qt5webengine/qt5webengine.hash
-+++ b/package/qt5/qt5webengine/qt5webengine.hash
+-QT53D_VERSION = 208f5835e6c2415c9dc5cbe92bba83aa28bab7ea
++QT53D_VERSION = c3892c3ee3c0a2b8a050d0a1532f34806636eade
+ QT53D_SITE = $(QT5_SITE)/qt3d/-/archive/$(QT53D_VERSION)
+ QT53D_SOURCE = qt3d-$(QT53D_VERSION).tar.bz2
+ QT53D_DEPENDENCIES = qt5declarative
+diff --git a/package/qt5/qt5base/qt5base.hash b/package/qt5/qt5base/qt5base.hash
+index def257b2b4..6a310ad1a0 100644
+--- a/package/qt5/qt5base/qt5base.hash
++++ b/package/qt5/qt5base/qt5base.hash
 @@ -1,5 +1,5 @@
  # Locally calculated
--sha256  8fa9d026fe0d04cb436ab7a66cdf249d189a91b61c565a1564a9bf05c7c73f7a  qtwebengine-v5.15.18-lts.tar.bz2
-+sha256  0d11c3ca5bf6f23d9d77fc43c53afad5b0deed6909f3a84b6ee7ed5790222393  qtwebengine-v5.15.19-lts.tar.bz2
+-sha256  3b4bfbd1844aba3b753146ca7d008177010ebb819fcb224c6c0afd8496d8abff  qt5base-bebdfd54917e25d1c100e6bd9f5dd53c2e645fd8-git4.tar.gz
++sha256  a2070894fab5e9c143d420dd5523f26547b4eaa664ea925cffaea7f85aa35297  qt5base-fbed962c3195ab3952fa54d40e012ad1a4fdc42b-git4.tar.gz
  
+ # Hashes for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+@@ -7,4 +7,4 @@ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENS
+ sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
+ sha256  88ec689407cf2df9b2eb5c45952564d51ce73c129a3bdffb15c0d2d161ad7558  LICENSE.LGPLv3
+ sha256  ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
+-sha256  2a886915de4f296cdae5ed67064f86dba01d0c55286d86e8487f2a5caaf40216  src/3rdparty/harfbuzz-ng/COPYING
++sha256  ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64  src/3rdparty/harfbuzz-ng/COPYING
+diff --git a/package/qt5/qt5base/qt5base.mk b/package/qt5/qt5base/qt5base.mk
+index 3e54465ed7..ff97da8dc4 100644
+--- a/package/qt5/qt5base/qt5base.mk
++++ b/package/qt5/qt5base/qt5base.mk
+@@ -4,13 +4,13 @@
+ #
+ ################################################################################
+ 
+-QT5BASE_VERSION = bebdfd54917e25d1c100e6bd9f5dd53c2e645fd8
++QT5BASE_VERSION = fbed962c3195ab3952fa54d40e012ad1a4fdc42b
+ QT5BASE_SITE = $(QT5_SITE)/qtbase
+ QT5BASE_SITE_METHOD = git
+ QT5BASE_CPE_ID_VENDOR = qt
+ QT5BASE_CPE_ID_PRODUCT = qt
+ # Closest upstream version
+-QT5BASE_CPE_ID_VERSION = 5.15.18
++QT5BASE_CPE_ID_VERSION = 5.15.19
+ 
+ QT5BASE_DEPENDENCIES = host-pkgconf pcre2 zlib
+ QT5BASE_INSTALL_STAGING = YES
+diff --git a/package/qt5/qt5charts/qt5charts.hash b/package/qt5/qt5charts/qt5charts.hash
+index 468b77b3ab..bb742c57e5 100644
+--- a/package/qt5/qt5charts/qt5charts.hash
++++ b/package/qt5/qt5charts/qt5charts.hash
+@@ -1,5 +1,5 @@
  # Locally calculated
- sha256  f34787ef0342c614b667186a6ec2f5d6b9d650e30142a2788a589a89743e88e9  LICENSE.Chromium
+-sha256  e7421098d79b6c030392e6679a5a91c594bd2075e545555a67d05665c79ecb44  qtcharts-1093fb53ced126100d14af30a8adffd29b7ef855.tar.bz2
++sha256  c63722904859ba2dbf87bc7cd00f23d5d8e861940607aea6f2faa67851097eba  qtcharts-16e9aff210cd4de7192adfc6cd91cdd44ba45a3d.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
+diff --git a/package/qt5/qt5charts/qt5charts.mk b/package/qt5/qt5charts/qt5charts.mk
+index 348f3643d4..418ed11298 100644
+--- a/package/qt5/qt5charts/qt5charts.mk
++++ b/package/qt5/qt5charts/qt5charts.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5CHARTS_VERSION = 1093fb53ced126100d14af30a8adffd29b7ef855
++QT5CHARTS_VERSION = 16e9aff210cd4de7192adfc6cd91cdd44ba45a3d
+ QT5CHARTS_SITE = $(QT5_SITE)/qtcharts/-/archive/$(QT5CHARTS_VERSION)
+ QT5CHARTS_SOURCE = qtcharts-$(QT5CHARTS_VERSION).tar.bz2
+ QT5CHARTS_INSTALL_STAGING = YES
+diff --git a/package/qt5/qt5connectivity/qt5connectivity.hash b/package/qt5/qt5connectivity/qt5connectivity.hash
+index 6dc9eda4bb..0d7a9ad8ff 100644
+--- a/package/qt5/qt5connectivity/qt5connectivity.hash
++++ b/package/qt5/qt5connectivity/qt5connectivity.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  321b3a484e4c488156dd018ee38a5b869cc0ee1fcd676a59b4e026eebc5021d8  qtconnectivity-f1be05c8efeb65b77a8bfd21763ab55bb5c04906.tar.bz2
++sha256  15f4f7694e1e0feef588b8342c75cf7b49e1c84185daa1500a7e75798f0bb921  qtconnectivity-7e29434e06372efbb2127d0ef41538ff9aec1597.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+diff --git a/package/qt5/qt5connectivity/qt5connectivity.mk b/package/qt5/qt5connectivity/qt5connectivity.mk
+index 8af36ad90c..0888d4dcd6 100644
+--- a/package/qt5/qt5connectivity/qt5connectivity.mk
++++ b/package/qt5/qt5connectivity/qt5connectivity.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5CONNECTIVITY_VERSION = f1be05c8efeb65b77a8bfd21763ab55bb5c04906
++QT5CONNECTIVITY_VERSION = 7e29434e06372efbb2127d0ef41538ff9aec1597
+ QT5CONNECTIVITY_SITE = $(QT5_SITE)/qtconnectivity/-/archive/$(QT5CONNECTIVITY_VERSION)
+ QT5CONNECTIVITY_SOURCE = qtconnectivity-$(QT5CONNECTIVITY_VERSION).tar.bz2
+ QT5CONNECTIVITY_INSTALL_STAGING = YES
+diff --git a/package/qt5/qt5declarative/qt5declarative.hash b/package/qt5/qt5declarative/qt5declarative.hash
+index e8ed01341b..8c032ec308 100644
+--- a/package/qt5/qt5declarative/qt5declarative.hash
++++ b/package/qt5/qt5declarative/qt5declarative.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  fe9a13d56162c09d37bdf6677074b7f8dd3cf529b19c255327cef0bd37ff710b  qtdeclarative-f78bc0b2c6884fd730bf34a931870d67936cf01d.tar.bz2
++sha256  537cce323d9c73719fdfb77235876af4b9243a81456b4d48e4e8def725f72708  qtdeclarative-5bc1ac07b2d2c7839368084a4bb97e4c67eb8294.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+diff --git a/package/qt5/qt5declarative/qt5declarative.mk b/package/qt5/qt5declarative/qt5declarative.mk
+index 7f274d6653..fe90c22916 100644
+--- a/package/qt5/qt5declarative/qt5declarative.mk
++++ b/package/qt5/qt5declarative/qt5declarative.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5DECLARATIVE_VERSION = f78bc0b2c6884fd730bf34a931870d67936cf01d
++QT5DECLARATIVE_VERSION = 5bc1ac07b2d2c7839368084a4bb97e4c67eb8294
+ QT5DECLARATIVE_SITE = $(QT5_SITE)/qtdeclarative/-/archive/$(QT5DECLARATIVE_VERSION)
+ QT5DECLARATIVE_SOURCE = qtdeclarative-$(QT5DECLARATIVE_VERSION).tar.bz2
+ QT5DECLARATIVE_INSTALL_STAGING = YES
+diff --git a/package/qt5/qt5doc/qt5doc.hash b/package/qt5/qt5doc/qt5doc.hash
+index 9d2c8c1cad..bec3665d7e 100644
+--- a/package/qt5/qt5doc/qt5doc.hash
++++ b/package/qt5/qt5doc/qt5doc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  f70449c1c55f18993733d0aa9af9c84a3ed43215be88316e6f4b87dc248944a4  qtdoc-ddb2afda6f713259fc8d95fb22a1c96bb448c36a.tar.bz2
++sha256  cf90c9c646460a5c865864b1f3cac19e88902dc841b3b4454ee1224287595de6  qtdoc-385efd460ec13a465765fc30dd11217ae46d1846.tar.bz2
+ sha256  ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
+diff --git a/package/qt5/qt5doc/qt5doc.mk b/package/qt5/qt5doc/qt5doc.mk
+index 8de814657b..c530c11d00 100644
+--- a/package/qt5/qt5doc/qt5doc.mk
++++ b/package/qt5/qt5doc/qt5doc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5DOC_VERSION = ddb2afda6f713259fc8d95fb22a1c96bb448c36a
++QT5DOC_VERSION = 385efd460ec13a465765fc30dd11217ae46d1846
+ QT5DOC_SITE = $(QT5_SITE)/qtdoc/-/archive/$(QT5DOC_VERSION)
+ QT5DOC_SOURCE = qtdoc-$(QT5DOC_VERSION).tar.bz2
+ QT5DOC_DEPENDENCIES = qt5declarative
+diff --git a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
+index a6d799f32b..24373789d1 100644
+--- a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
++++ b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  9e0809574fc3fae648d505528cfdfa681edb6b41e29a69e2e7e633fb48621f28  qtgraphicaleffects-dfb2e7b2c98a9b7185c300d0b92b4048f5d89ba5.tar.bz2
++sha256  1e1567942c6984312d7e134f56fcd5b970c1f9013e02e62b714e7a197fda9e00  qtgraphicaleffects-551732fb1d963e53af437e3982a010f69eb76253.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+diff --git a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
+index 8aae5ccae8..74b4f2ad44 100644
+--- a/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
++++ b/package/qt5/qt5graphicaleffects/qt5graphicaleffects.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5GRAPHICALEFFECTS_VERSION = dfb2e7b2c98a9b7185c300d0b92b4048f5d89ba5
++QT5GRAPHICALEFFECTS_VERSION = 551732fb1d963e53af437e3982a010f69eb76253
+ QT5GRAPHICALEFFECTS_SITE = $(QT5_SITE)/qtgraphicaleffects/-/archive/$(QT5GRAPHICALEFFECTS_VERSION)
+ QT5GRAPHICALEFFECTS_SOURCE = qtgraphicaleffects-$(QT5GRAPHICALEFFECTS_VERSION).tar.bz2
+ QT5GRAPHICALEFFECTS_DEPENDENCIES = qt5declarative
+diff --git a/package/qt5/qt5imageformats/qt5imageformats.hash b/package/qt5/qt5imageformats/qt5imageformats.hash
+index cb65976822..13892eac27 100644
+--- a/package/qt5/qt5imageformats/qt5imageformats.hash
++++ b/package/qt5/qt5imageformats/qt5imageformats.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  6c49db8c44cda8559692427ec5c32429efe406cc66c88afdc70fdd23993ae511  qtimageformats-c91e4c63c1eaf1e23806d9df10e3d5a9ae353c1d.tar.bz2
++sha256  6dc7d4bc2f9c894452fbd0f8ef6e726a931a5c8bd938a4e983098a30716ce4d0  qtimageformats-4076e38d68f05f5e1bcdedb79442d9008f18702c.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPLv2
+diff --git a/package/qt5/qt5imageformats/qt5imageformats.mk b/package/qt5/qt5imageformats/qt5imageformats.mk
+index 4e83eb9cb3..361c9ea056 100644
+--- a/package/qt5/qt5imageformats/qt5imageformats.mk
++++ b/package/qt5/qt5imageformats/qt5imageformats.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5IMAGEFORMATS_VERSION = c91e4c63c1eaf1e23806d9df10e3d5a9ae353c1d
++QT5IMAGEFORMATS_VERSION = 4076e38d68f05f5e1bcdedb79442d9008f18702c
+ QT5IMAGEFORMATS_SITE = $(QT5_SITE)/qtimageformats/-/archive/$(QT5IMAGEFORMATS_VERSION)
+ QT5IMAGEFORMATS_SOURCE = qtimageformats-$(QT5IMAGEFORMATS_VERSION).tar.bz2
+ QT5IMAGEFORMATS_INSTALL_STAGING = YES
+diff --git a/package/qt5/qt5location/qt5location.hash b/package/qt5/qt5location/qt5location.hash
+index ee65c7fa84..8fecff6b0e 100644
+--- a/package/qt5/qt5location/qt5location.hash
++++ b/package/qt5/qt5location/qt5location.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  40dbee28e205482d8fb2345cde648d38c64910847463ccb05065e2fe7cc373a2  qt5location-ba48a8b5cedd157d972c08d371ac2581db166bf7-git4.tar.gz
++sha256  07500bea8ef9b91ed0228748df11522703ff772532158a752c060f66bcf15711  qt5location-81f560be2274958011c255efa1d2d573874bed11-git4.tar.gz
+ 
+ # Hashes for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+diff --git a/package/qt5/qt5location/qt5location.mk b/package/qt5/qt5location/qt5location.mk
+index 451dd953ed..1adebe87e4 100644
+--- a/package/qt5/qt5location/qt5location.mk
++++ b/package/qt5/qt5location/qt5location.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5LOCATION_VERSION = ba48a8b5cedd157d972c08d371ac2581db166bf7
++QT5LOCATION_VERSION = 81f560be2274958011c255efa1d2d573874bed11
+ QT5LOCATION_SITE = $(QT5_SITE)/qtlocation
+ QT5LOCATION_SITE_METHOD = git
+ QT5LOCATION_GIT_SUBMODULES = YES
+diff --git a/package/qt5/qt5lottie/qt5lottie.hash b/package/qt5/qt5lottie/qt5lottie.hash
+index a81fe5ea6e..8f0b05f5d8 100644
+--- a/package/qt5/qt5lottie/qt5lottie.hash
++++ b/package/qt5/qt5lottie/qt5lottie.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  d872dfeb3b1b812165506e7e7cef5039b2fd441187f0ca30e6a93a968e9392a7  qtlottie-27ed5a3c95a0810a96fac2a8661ea94d8ea3c44e.tar.bz2
++sha256  d3a292eecfcf9b5e9b8180f8f92bb3a84eb841062144ca812947b95e595c4719  qtlottie-5f1be885cf4ee0f1eb5400bf0c5d138818fc01d0.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
+diff --git a/package/qt5/qt5lottie/qt5lottie.mk b/package/qt5/qt5lottie/qt5lottie.mk
+index 7b3bfe6ffd..42f23897e6 100644
+--- a/package/qt5/qt5lottie/qt5lottie.mk
++++ b/package/qt5/qt5lottie/qt5lottie.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5LOTTIE_VERSION = 27ed5a3c95a0810a96fac2a8661ea94d8ea3c44e
++QT5LOTTIE_VERSION = 5f1be885cf4ee0f1eb5400bf0c5d138818fc01d0
+ QT5LOTTIE_SITE = $(QT5_SITE)/qtlottie/-/archive/$(QT5LOTTIE_VERSION)
+ QT5LOTTIE_SOURCE = qtlottie-$(QT5LOTTIE_VERSION).tar.bz2
+ QT5LOTTIE_DEPENDENCIES = qt5declarative
+diff --git a/package/qt5/qt5multimedia/qt5multimedia.hash b/package/qt5/qt5multimedia/qt5multimedia.hash
+index 1a4f889de6..d2ac0095a1 100644
+--- a/package/qt5/qt5multimedia/qt5multimedia.hash
++++ b/package/qt5/qt5multimedia/qt5multimedia.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  a160196093ee0bcd30383104da9143f0ed09e2074e3025a2b1d987946b2d1a53  qtmultimedia-ff83d119c75cd8406f73ccc08958fe36747e7390.tar.bz2
++sha256  e756e8ae67e0c2dc5aed5c114f43c2e8af076e07fa517efefd050b67740a95e2  qtmultimedia-8ddc44103baf166525d6650c842d7f08f651e7bb.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+diff --git a/package/qt5/qt5multimedia/qt5multimedia.mk b/package/qt5/qt5multimedia/qt5multimedia.mk
+index c18561d1aa..12d7d1c496 100644
+--- a/package/qt5/qt5multimedia/qt5multimedia.mk
++++ b/package/qt5/qt5multimedia/qt5multimedia.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5MULTIMEDIA_VERSION = ff83d119c75cd8406f73ccc08958fe36747e7390
++QT5MULTIMEDIA_VERSION = 8ddc44103baf166525d6650c842d7f08f651e7bb
+ QT5MULTIMEDIA_SITE = $(QT5_SITE)/qtmultimedia/-/archive/$(QT5MULTIMEDIA_VERSION)
+ QT5MULTIMEDIA_SOURCE = qtmultimedia-$(QT5MULTIMEDIA_VERSION).tar.bz2
+ QT5MULTIMEDIA_INSTALL_STAGING = YES
+diff --git a/package/qt5/qt5quickcontrols/qt5quickcontrols.hash b/package/qt5/qt5quickcontrols/qt5quickcontrols.hash
+index 44a68b4d56..625eae59b5 100644
+--- a/package/qt5/qt5quickcontrols/qt5quickcontrols.hash
++++ b/package/qt5/qt5quickcontrols/qt5quickcontrols.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  11dd2a55a9c877f8766cc0dab04908cf3acd6fa933895c0ed64828be79babb9c  qtquickcontrols-0c3c18bf8bdac1ef1afdb8aade903edb5c2bc041.tar.bz2
++sha256  646d9791662e49030a648b48c3d2aabf0dfc286ffb8a906eaa5ea64ea498c2a5  qtquickcontrols-af7fc486c8910b51733e1c7e758d50ca1a158b36.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+diff --git a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
+index f0949ca253..fd593c9c31 100644
+--- a/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
++++ b/package/qt5/qt5quickcontrols/qt5quickcontrols.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5QUICKCONTROLS_VERSION = 0c3c18bf8bdac1ef1afdb8aade903edb5c2bc041
++QT5QUICKCONTROLS_VERSION = af7fc486c8910b51733e1c7e758d50ca1a158b36
+ QT5QUICKCONTROLS_SITE = $(QT5_SITE)/qtquickcontrols/-/archive/$(QT5QUICKCONTROLS_VERSION)
+ QT5QUICKCONTROLS_SOURCE = qtquickcontrols-$(QT5QUICKCONTROLS_VERSION).tar.bz2
+ QT5QUICKCONTROLS_DEPENDENCIES = qt5declarative
+diff --git a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.hash b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.hash
+index 2102a7320c..073fdd57ac 100644
+--- a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.hash
++++ b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  3922c0f1de88aca778a0835e4f9928f13acecebec4abca2cb47fbdebc4b69de9  qtquickcontrols2-e464888c53a641ee44a34ff2350cfb156c8ed59f.tar.bz2
++sha256  eb9dd065dbf0c1a8d7d06584f1f44d7b25fcb31e5297a27796323c03f93d220f  qtquickcontrols2-5b808e0995d018c6de9f075d4a61f58d3641c11b.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  d2cfc059acb4abd8e513cd0a73cd8489f34cbafa7bc34d5d31fb3210821cf8ca  LICENSE.GPLv3
+diff --git a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
+index 48a56d399f..4e90f2d500 100644
+--- a/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
++++ b/package/qt5/qt5quickcontrols2/qt5quickcontrols2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5QUICKCONTROLS2_VERSION = e464888c53a641ee44a34ff2350cfb156c8ed59f
++QT5QUICKCONTROLS2_VERSION = 5b808e0995d018c6de9f075d4a61f58d3641c11b
+ QT5QUICKCONTROLS2_SITE = $(QT5_SITE)/qtquickcontrols2/-/archive/$(QT5QUICKCONTROLS2_VERSION)
+ QT5QUICKCONTROLS2_SOURCE = qtquickcontrols2-$(QT5QUICKCONTROLS2_VERSION).tar.bz2
+ QT5QUICKCONTROLS2_DEPENDENCIES = qt5declarative
+diff --git a/package/qt5/qt5quicktimeline/qt5quicktimeline.hash b/package/qt5/qt5quicktimeline/qt5quicktimeline.hash
+index 31405675d6..312359288c 100644
+--- a/package/qt5/qt5quicktimeline/qt5quicktimeline.hash
++++ b/package/qt5/qt5quicktimeline/qt5quicktimeline.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  dbd5d9acafc73825c8f6565f2933642c3c786765867badeeced72bacde2ed9cf  qtquicktimeline-43130f2681b76a8d743a04704465b716b6b2faee.tar.bz2
++sha256  b80f9152bb7ebfc8e761a08c439ed861bd0f5c73a81ed93a51e324d616426a3c  qtquicktimeline-ea9d6c4d5a0a172b4778e8f37d694d02aab83f37.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
+diff --git a/package/qt5/qt5quicktimeline/qt5quicktimeline.mk b/package/qt5/qt5quicktimeline/qt5quicktimeline.mk
+index 7e4efc318e..1a9d91a82a 100644
+--- a/package/qt5/qt5quicktimeline/qt5quicktimeline.mk
++++ b/package/qt5/qt5quicktimeline/qt5quicktimeline.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5QUICKTIMELINE_VERSION = 43130f2681b76a8d743a04704465b716b6b2faee
++QT5QUICKTIMELINE_VERSION = ea9d6c4d5a0a172b4778e8f37d694d02aab83f37
+ QT5QUICKTIMELINE_SITE = $(QT5_SITE)/qtquicktimeline/-/archive/$(QT5QUICKTIMELINE_VERSION)
+ QT5QUICKTIMELINE_SOURCE = qtquicktimeline-$(QT5QUICKTIMELINE_VERSION).tar.bz2
+ QT5QUICKTIMELINE_DEPENDENCIES = qt5declarative
+diff --git a/package/qt5/qt5remoteobjects/qt5remoteobjects.hash b/package/qt5/qt5remoteobjects/qt5remoteobjects.hash
+index db164e60db..1276e9f5ac 100644
+--- a/package/qt5/qt5remoteobjects/qt5remoteobjects.hash
++++ b/package/qt5/qt5remoteobjects/qt5remoteobjects.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  222c2754d0921dceff0697e95cc0d117d69957ce2b59605ecaa62b172bd259fa  qtremoteobjects-b2740a7c7f5b6ac810240404a947ca5cff9de5f7.tar.bz2
++sha256  7937be573022e644a655371df914197c82d0b707e8884d4abab9ae9f71cdd1fa  qtremoteobjects-48d10f341279e08c1bc4abb764c2d3ab9a259a51.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+diff --git a/package/qt5/qt5remoteobjects/qt5remoteobjects.mk b/package/qt5/qt5remoteobjects/qt5remoteobjects.mk
+index ba0cf6f4b3..f7cd663fc2 100644
+--- a/package/qt5/qt5remoteobjects/qt5remoteobjects.mk
++++ b/package/qt5/qt5remoteobjects/qt5remoteobjects.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5REMOTEOBJECTS_VERSION = b2740a7c7f5b6ac810240404a947ca5cff9de5f7
++QT5REMOTEOBJECTS_VERSION = 48d10f341279e08c1bc4abb764c2d3ab9a259a51
+ QT5REMOTEOBJECTS_SITE = $(QT5_SITE)/qtremoteobjects/-/archive/$(QT5REMOTEOBJECTS_VERSION)
+ QT5REMOTEOBJECTS_SOURCE = qtremoteobjects-$(QT5REMOTEOBJECTS_VERSION).tar.bz2
+ QT5REMOTEOBJECTS_DEPENDENCIES = qt5base
+diff --git a/package/qt5/qt5scxml/qt5scxml.hash b/package/qt5/qt5scxml/qt5scxml.hash
+index 6681328e4b..e0e305536b 100644
+--- a/package/qt5/qt5scxml/qt5scxml.hash
++++ b/package/qt5/qt5scxml/qt5scxml.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  867db30640540f08506446191a7a963d17055778e6c2f570a9e873386571923b  qtscxml-57491f554bc53bd020978b5744437b7ac7e56a27.tar.bz2
++sha256  cf23a7ba24714539636b05ac92df476f5fd39205f0bb44dc1a7a1862b63403b8  qtscxml-edc6f0dd5e806cced1937b2b853717f588e14fd2.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  0dbe024961f6ab5c52689cbd036c977975d0d0f6a67ff97762d96cb819dd5652  LICENSE.GPL3-EXCEPT
+diff --git a/package/qt5/qt5scxml/qt5scxml.mk b/package/qt5/qt5scxml/qt5scxml.mk
+index 2e5a12a6be..068b9d7059 100644
+--- a/package/qt5/qt5scxml/qt5scxml.mk
++++ b/package/qt5/qt5scxml/qt5scxml.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5SCXML_VERSION = 57491f554bc53bd020978b5744437b7ac7e56a27
++QT5SCXML_VERSION = edc6f0dd5e806cced1937b2b853717f588e14fd2
+ QT5SCXML_SITE = $(QT5_SITE)/qtscxml/-/archive/$(QT5SCXML_VERSION)
+ QT5SCXML_SOURCE = qtscxml-$(QT5SCXML_VERSION).tar.bz2
+ QT5SCXML_DEPENDENCIES = qt5declarative
+diff --git a/package/qt5/qt5sensors/qt5sensors.hash b/package/qt5/qt5sensors/qt5sensors.hash
+index 6ba9d7ae07..d66b169af1 100644
+--- a/package/qt5/qt5sensors/qt5sensors.hash
++++ b/package/qt5/qt5sensors/qt5sensors.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  a9c64bbec1eb0275fd8a65aad3266d7699a8456e95adfcab75bffcaa2eb0d0a7  qtsensors-50a61b360877e7c1300df76b5aabf8d75554a398.tar.bz2
++sha256  994d5989ca87aea80677e7a0f063f38a88d7c3991f6c259f0df027a13bba37d9  qtsensors-8c6d11df60d4d783869c2d81568e3178f5ae75ce.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+diff --git a/package/qt5/qt5sensors/qt5sensors.mk b/package/qt5/qt5sensors/qt5sensors.mk
+index cddfbaf588..b362a2c84c 100644
+--- a/package/qt5/qt5sensors/qt5sensors.mk
++++ b/package/qt5/qt5sensors/qt5sensors.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5SENSORS_VERSION = 50a61b360877e7c1300df76b5aabf8d75554a398
++QT5SENSORS_VERSION = 8c6d11df60d4d783869c2d81568e3178f5ae75ce
+ QT5SENSORS_SITE = $(QT5_SITE)/qtsensors/-/archive/$(QT5SENSORS_VERSION)
+ QT5SENSORS_SOURCE = qtsensors-$(QT5SENSORS_VERSION).tar.bz2
+ QT5SENSORS_INSTALL_STAGING = YES
+diff --git a/package/qt5/qt5serialbus/qt5serialbus.hash b/package/qt5/qt5serialbus/qt5serialbus.hash
+index 7ec310cd81..6d65f00cc3 100644
+--- a/package/qt5/qt5serialbus/qt5serialbus.hash
++++ b/package/qt5/qt5serialbus/qt5serialbus.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  f7adf196dca88859b1d2962cd37c638b4d7f7ee261849cc43bea88db86569cef  qtserialbus-c23069351ec31563c9ea9fcdce42ccdba95ea518.tar.bz2
++sha256  f247c1838a0a68f0346be604639e2d57148d003d4c4f52f436200fa94782c47b  qtserialbus-6734222bccc5541f9527281c810c6b5f8fdd092f.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  edfe70e99be2a7c109d860b19204609e582720b211c50caedac729da372a1253  LICENSE.GPLv2
+diff --git a/package/qt5/qt5serialbus/qt5serialbus.mk b/package/qt5/qt5serialbus/qt5serialbus.mk
+index 87a3ef639e..418553a2a5 100644
+--- a/package/qt5/qt5serialbus/qt5serialbus.mk
++++ b/package/qt5/qt5serialbus/qt5serialbus.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5SERIALBUS_VERSION = c23069351ec31563c9ea9fcdce42ccdba95ea518
++QT5SERIALBUS_VERSION = 6734222bccc5541f9527281c810c6b5f8fdd092f
+ QT5SERIALBUS_SITE = $(QT5_SITE)/qtserialbus/-/archive/$(QT5SERIALBUS_VERSION)
+ QT5SERIALBUS_SOURCE = qtserialbus-$(QT5SERIALBUS_VERSION).tar.bz2
+ QT5SERIALBUS_DEPENDENCIES = qt5serialport
+diff --git a/package/qt5/qt5serialport/qt5serialport.hash b/package/qt5/qt5serialport/qt5serialport.hash
+index b867abd4af..6cbb6a8f3b 100644
+--- a/package/qt5/qt5serialport/qt5serialport.hash
++++ b/package/qt5/qt5serialport/qt5serialport.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  e444f67762ca7641e7e9288c6f7a7f877a149bff3c84abc07bf06ef3bf55e173  qtserialport-b64a7eeda9b6a65b5ed01b1b40b07177f0aa4c0f.tar.bz2
++sha256  f876a002891a92f25cc5b9aacc8f37ebcbcb9e1efae6c92087a649b17b5e61f3  qtserialport-ca1f2486527e7acf87d466062c035845f9774573.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+diff --git a/package/qt5/qt5serialport/qt5serialport.mk b/package/qt5/qt5serialport/qt5serialport.mk
+index 729ac10be6..d9b48c0aed 100644
+--- a/package/qt5/qt5serialport/qt5serialport.mk
++++ b/package/qt5/qt5serialport/qt5serialport.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5SERIALPORT_VERSION = b64a7eeda9b6a65b5ed01b1b40b07177f0aa4c0f
++QT5SERIALPORT_VERSION = ca1f2486527e7acf87d466062c035845f9774573
+ QT5SERIALPORT_SITE = $(QT5_SITE)/qtserialport/-/archive/$(QT5SERIALPORT_VERSION)
+ QT5SERIALPORT_SOURCE = qtserialport-$(QT5SERIALPORT_VERSION).tar.bz2
+ QT5SERIALPORT_INSTALL_STAGING = YES
+diff --git a/package/qt5/qt5speech/qt5speech.hash b/package/qt5/qt5speech/qt5speech.hash
+index 04001e6256..4674ec4d64 100644
+--- a/package/qt5/qt5speech/qt5speech.hash
++++ b/package/qt5/qt5speech/qt5speech.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  460f33a11110e0a730543799b7946ed92d286b1f6dc6f4681575434a5a71fd86  qtspeech-aa2376f9b1302222edcd16b4641bbd7004318c00.tar.bz2
++sha256  165d64b1014f6c382096340a1740b27d8d0160f89733d7092a14285a73491116  qtspeech-a384f0d4fb8a2d0743d5dfdf12e40f6d76f8714c.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  6c3f3c31b93985f1b93bfbb35fb609d37281697d0efc220c9f91cf4b59eaabde  LICENSE.GPLv2
+diff --git a/package/qt5/qt5speech/qt5speech.mk b/package/qt5/qt5speech/qt5speech.mk
+index e5336e64d0..26ee57b4e7 100644
+--- a/package/qt5/qt5speech/qt5speech.mk
++++ b/package/qt5/qt5speech/qt5speech.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5SPEECH_VERSION = aa2376f9b1302222edcd16b4641bbd7004318c00
++QT5SPEECH_VERSION = a384f0d4fb8a2d0743d5dfdf12e40f6d76f8714c
+ QT5SPEECH_SITE = $(QT5_SITE)/qtspeech/-/archive/$(QT5SPEECH_VERSION)
+ QT5SPEECH_SOURCE = qtspeech-$(QT5SPEECH_VERSION).tar.bz2
+ QT5SPEECH_INSTALL_STAGING = YES
+diff --git a/package/qt5/qt5svg/qt5svg.hash b/package/qt5/qt5svg/qt5svg.hash
+index 01c8c828ca..8c23aea7d9 100644
+--- a/package/qt5/qt5svg/qt5svg.hash
++++ b/package/qt5/qt5svg/qt5svg.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  3df1f47c5f9ac9af9cc505b8aca71b40cd142d7ce79bac3570f8456bf6ba3e38  qtsvg-b74f7291f343dcbcb487b020868f042d8fe83098.tar.bz2
++sha256  e42cda3109929ad1fb809d7114df040dc340de8c7ff6c535f781b86f52700e1b  qtsvg-d2abfb9cb1f036446e5913fadb0f065dab9f0159.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+diff --git a/package/qt5/qt5svg/qt5svg.mk b/package/qt5/qt5svg/qt5svg.mk
+index 34e74cb629..85f8b61202 100644
+--- a/package/qt5/qt5svg/qt5svg.mk
++++ b/package/qt5/qt5svg/qt5svg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5SVG_VERSION = b74f7291f343dcbcb487b020868f042d8fe83098
++QT5SVG_VERSION = d2abfb9cb1f036446e5913fadb0f065dab9f0159
+ QT5SVG_SITE = $(QT5_SITE)/qtsvg/-/archive/$(QT5SVG_VERSION)
+ QT5SVG_SOURCE = qtsvg-$(QT5SVG_VERSION).tar.bz2
+ QT5SVG_INSTALL_STAGING = YES
+diff --git a/package/qt5/qt5tools/qt5tools.hash b/package/qt5/qt5tools/qt5tools.hash
+index d8e684b8d5..1d190ed547 100644
+--- a/package/qt5/qt5tools/qt5tools.hash
++++ b/package/qt5/qt5tools/qt5tools.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  f53f515c1b00ded46ca7437bbdb0a0db4cab86d7ff5bc1dfa98b6d842a16845d  qttools-fa40a2d3373b89be0cd0a43fe0c1d047e3d34058.tar.bz2
++sha256  f32286a45861115c067125f15f28bcbdca8a8d6620c8a7b0dda8955b0f6d1203  qttools-3e3ab58b40734a1b9bbb7e72b2969d1f752351b1.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+diff --git a/package/qt5/qt5tools/qt5tools.mk b/package/qt5/qt5tools/qt5tools.mk
+index 26742d1566..64e38215d5 100644
+--- a/package/qt5/qt5tools/qt5tools.mk
++++ b/package/qt5/qt5tools/qt5tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5TOOLS_VERSION = fa40a2d3373b89be0cd0a43fe0c1d047e3d34058
++QT5TOOLS_VERSION = 3e3ab58b40734a1b9bbb7e72b2969d1f752351b1
+ QT5TOOLS_SITE = $(QT5_SITE)/qttools/-/archive/$(QT5TOOLS_VERSION)
+ QT5TOOLS_SOURCE = qttools-$(QT5TOOLS_VERSION).tar.bz2
+ 
+diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash
+index e748f328d6..2634351052 100644
+--- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash
++++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.hash
+@@ -1,9 +1,9 @@
+ # Locally calculated
+-sha256  356f2edd84b626191b15e76d71a484ebe9daf64d8156554ecde09403971539d7  qtvirtualkeyboard-859d2a6ee329cc08414410b2ef8c0af77a6853d3.tar.bz2
++sha256  44edb033fa010c16c5ba8ce7fe160ee3a93117f99a12de014087b1f66856f29c  qtvirtualkeyboard-4fc9919ee3fad1d520d0921ba3069dca3c34ff78.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE.GPL3
+ sha256  7a45a9769d19545480a241230e6ea520b5156fac00930dcd69b6886749743d10  src/plugins/lipi-toolkit/3rdparty/lipi-toolkit/MIT_LICENSE.txt
+ sha256  05cc719deafd0ab083b03296bb2911de10d116953b626a7629b9ca59938038b1  src/plugins/openwnn/3rdparty/openwnn/NOTICE
+-sha256  b5830d96fb5a7e7e7ebcc295f352846b4b998e78fdc8f9aa68e134d2e4b39986  src/plugins/pinyin/3rdparty/pinyin/NOTICE
++sha256  cfe4f79e6a8ba7c281f485a0cc100b2d0d4b4054f4594428a7a22a5a52cbabed  src/plugins/pinyin/3rdparty/pinyin/NOTICE
+ sha256  9400a6128693d2f25653698e695f554660c71efccc8c21af28bf143e35199db6  src/plugins/tcime/3rdparty/tcime/COPYING
+diff --git a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+index a2e86e6499..55de9a5a03 100644
+--- a/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
++++ b/package/qt5/qt5virtualkeyboard/qt5virtualkeyboard.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5VIRTUALKEYBOARD_VERSION = 859d2a6ee329cc08414410b2ef8c0af77a6853d3
++QT5VIRTUALKEYBOARD_VERSION = 4fc9919ee3fad1d520d0921ba3069dca3c34ff78
+ QT5VIRTUALKEYBOARD_SITE = $(QT5_SITE)/qtvirtualkeyboard/-/archive/$(QT5VIRTUALKEYBOARD_VERSION)
+ QT5VIRTUALKEYBOARD_SOURCE = qtvirtualkeyboard-$(QT5VIRTUALKEYBOARD_VERSION).tar.bz2
+ QT5VIRTUALKEYBOARD_DEPENDENCIES = qt5declarative qt5svg
+diff --git a/package/qt5/qt5wayland/qt5wayland.hash b/package/qt5/qt5wayland/qt5wayland.hash
+index e1fb1b3b18..912c6cf33d 100644
+--- a/package/qt5/qt5wayland/qt5wayland.hash
++++ b/package/qt5/qt5wayland/qt5wayland.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  81a250da038d7270c06d66463c6dbab665e1eb7bad84b1f9796f5d23f39faf0b  qtwayland-df49b9f3badce793a0a9ea850cf1a02cc5bafef6.tar.bz2
++sha256  edf5772fd56b312ec3574377d04aa5ddf2f45cdd0dba5c8df04e35a2a232ea49  qtwayland-605b8bc942ab263b9d1892af33a81b408f522ccc.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+diff --git a/package/qt5/qt5wayland/qt5wayland.mk b/package/qt5/qt5wayland/qt5wayland.mk
+index 8e21ec6da3..bcd04d5fd7 100644
+--- a/package/qt5/qt5wayland/qt5wayland.mk
++++ b/package/qt5/qt5wayland/qt5wayland.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5WAYLAND_VERSION = df49b9f3badce793a0a9ea850cf1a02cc5bafef6
++QT5WAYLAND_VERSION = 605b8bc942ab263b9d1892af33a81b408f522ccc
+ QT5WAYLAND_SITE = $(QT5_SITE)/qtwayland/-/archive/$(QT5WAYLAND_VERSION)
+ QT5WAYLAND_SOURCE = qtwayland-$(QT5WAYLAND_VERSION).tar.bz2
+ QT5WAYLAND_DEPENDENCIES = wayland
+diff --git a/package/qt5/qt5webchannel/qt5webchannel.hash b/package/qt5/qt5webchannel/qt5webchannel.hash
+index f668b76cf8..26ecdf8bfd 100644
+--- a/package/qt5/qt5webchannel/qt5webchannel.hash
++++ b/package/qt5/qt5webchannel/qt5webchannel.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  d5215daf4c023f1ae256230155e42e8b8806d0166d8c9609251de5e0a93911c9  qtwebchannel-2a157921861e651f43456cb7941b250c89feb736.tar.bz2
++sha256  53dff72f087b62ca380d5acb5cca1610036e72212fd52f40527d18c4e69719f6  qtwebchannel-6a20afaeba182ce6e3faee592e1e85a0d3ec0fc6.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+diff --git a/package/qt5/qt5webchannel/qt5webchannel.mk b/package/qt5/qt5webchannel/qt5webchannel.mk
+index e72ff03944..62b0828ccd 100644
+--- a/package/qt5/qt5webchannel/qt5webchannel.mk
++++ b/package/qt5/qt5webchannel/qt5webchannel.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5WEBCHANNEL_VERSION = 2a157921861e651f43456cb7941b250c89feb736
++QT5WEBCHANNEL_VERSION = 6a20afaeba182ce6e3faee592e1e85a0d3ec0fc6
+ QT5WEBCHANNEL_SITE = $(QT5_SITE)/qtwebchannel/-/archive/$(QT5WEBCHANNEL_VERSION)
+ QT5WEBCHANNEL_SOURCE = qtwebchannel-$(QT5WEBCHANNEL_VERSION).tar.bz2
+ QT5WEBCHANNEL_DEPENDENCIES = qt5websockets
 diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
-index 3390e4d86b..00df7e1ede 100644
+index 00df7e1ede..3390e4d86b 100644
 --- a/package/qt5/qt5webengine/qt5webengine.mk
 +++ b/package/qt5/qt5webengine/qt5webengine.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--QT5WEBENGINE_VERSION = 5.15.18
-+QT5WEBENGINE_VERSION = $(QT5_VERSION)
+-QT5WEBENGINE_VERSION = $(QT5_VERSION)
++QT5WEBENGINE_VERSION = 5.15.18
  QT5WEBENGINE_SITE = $(QT5_SITE)/qtwebengine/-/archive/v$(QT5WEBENGINE_VERSION)-lts
  QT5WEBENGINE_SOURCE = qtwebengine-v$(QT5WEBENGINE_VERSION)-lts.tar.bz2
  QT5WEBENGINE_DEPENDENCIES = qt5declarative qt5webchannel
-
---===============7436156122581531954==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/package/qt5/qt5websockets/qt5websockets.hash b/package/qt5/qt5websockets/qt5websockets.hash
+index 212b6829b5..aa7146fbc8 100644
+--- a/package/qt5/qt5websockets/qt5websockets.hash
++++ b/package/qt5/qt5websockets/qt5websockets.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  565f37e5d4c497c0b60a3411afe64d11f254c7fbc1e558c39b77b41cabb39ebf  qtwebsockets-0f910acb737cefc889ce1088fc60d15bc18efe9c.tar.bz2
++sha256  1554c0bd5e24b533c2410a9394de991524953679a6dc15bb9065ce5f2bcbe00d  qtwebsockets-10eb706b24aa05f4ee69c2f2fec99b21994dfe2b.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+diff --git a/package/qt5/qt5websockets/qt5websockets.mk b/package/qt5/qt5websockets/qt5websockets.mk
+index c3a97adbe0..5149b65b7a 100644
+--- a/package/qt5/qt5websockets/qt5websockets.mk
++++ b/package/qt5/qt5websockets/qt5websockets.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5WEBSOCKETS_VERSION = 0f910acb737cefc889ce1088fc60d15bc18efe9c
++QT5WEBSOCKETS_VERSION = 10eb706b24aa05f4ee69c2f2fec99b21994dfe2b
+ QT5WEBSOCKETS_SITE = $(QT5_SITE)/qtwebsockets/-/archive/$(QT5WEBSOCKETS_VERSION)
+ QT5WEBSOCKETS_SOURCE = qtwebsockets-$(QT5WEBSOCKETS_VERSION).tar.bz2
+ QT5WEBSOCKETS_INSTALL_STAGING = YES
+diff --git a/package/qt5/qt5webview/qt5webview.hash b/package/qt5/qt5webview/qt5webview.hash
+index dbaa068d20..604d926eb6 100644
+--- a/package/qt5/qt5webview/qt5webview.hash
++++ b/package/qt5/qt5webview/qt5webview.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  efcc711f71fdccd58ea3d43c5ca259a38b99222882459de545e81614963baaba  qtwebview-34342073a59f3a27ef3de02f6b21337c4f8db6cf.tar.bz2
++sha256  daeb5dd775d4d0ccca5e31d122025b88743a523249e4829999d48d7651d3879c  qtwebview-043cb7c0eaf8d1bcee56a62d6a102f727a22fcbc.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  ed8742a95cb9db653a09b050e27ccff5e67ba69c14aa2c3137f2a4e1892f6c0d  LICENSE.FDL
+diff --git a/package/qt5/qt5webview/qt5webview.mk b/package/qt5/qt5webview/qt5webview.mk
+index 2b3e554ac3..a25534d694 100644
+--- a/package/qt5/qt5webview/qt5webview.mk
++++ b/package/qt5/qt5webview/qt5webview.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5WEBVIEW_VERSION = 34342073a59f3a27ef3de02f6b21337c4f8db6cf
++QT5WEBVIEW_VERSION = 043cb7c0eaf8d1bcee56a62d6a102f727a22fcbc
+ QT5WEBVIEW_SITE = $(QT5_SITE)/qtwebview/-/archive/$(QT5WEBVIEW_VERSION)
+ QT5WEBVIEW_SOURCE = qtwebview-$(QT5WEBVIEW_VERSION).tar.bz2
+ QT5WEBVIEW_DEPENDENCIES = qt5webengine
+diff --git a/package/qt5/qt5x11extras/qt5x11extras.hash b/package/qt5/qt5x11extras/qt5x11extras.hash
+index 07cda343b6..66860c4109 100644
+--- a/package/qt5/qt5x11extras/qt5x11extras.hash
++++ b/package/qt5/qt5x11extras/qt5x11extras.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  b10784b71e6ed9451d4b52c74e512f4bb61f1fed1a1da6c263210935bdbbbd3a  qtx11extras-c44c4fa86fa0794c25baef4ee1f6272aca8c511a.tar.bz2
++sha256  3aa91306f55545d53ad70c4798533623baa82c095797db0cf49b016875833638  qtx11extras-6695a3df4460577b3fcb5546b45a0c5cb3addac4.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+diff --git a/package/qt5/qt5x11extras/qt5x11extras.mk b/package/qt5/qt5x11extras/qt5x11extras.mk
+index 93e61677de..96796362f5 100644
+--- a/package/qt5/qt5x11extras/qt5x11extras.mk
++++ b/package/qt5/qt5x11extras/qt5x11extras.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5X11EXTRAS_VERSION = c44c4fa86fa0794c25baef4ee1f6272aca8c511a
++QT5X11EXTRAS_VERSION = 6695a3df4460577b3fcb5546b45a0c5cb3addac4
+ QT5X11EXTRAS_SITE = $(QT5_SITE)/qtx11extras/-/archive/$(QT5X11EXTRAS_VERSION)
+ QT5X11EXTRAS_SOURCE = qtx11extras-$(QT5X11EXTRAS_VERSION).tar.bz2
+ QT5X11EXTRAS_INSTALL_STAGING = YES
+diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
+index e97ad378e7..3f4f745064 100644
+--- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
++++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  ef029d2ce7ce5226d777640783b2d953bf57b23e9d3be3c08149b838e45d0a31  qtxmlpatterns-0b644263abca66503db1ce8a4e126cf358a34685.tar.bz2
++sha256  65074e1a4e8f6468e091710c703ee26c438bdcb8b6a26db63dd71dc674384b8d  qtxmlpatterns-ed3b333aa56ac193e969725e3c34be9070441271.tar.bz2
+ 
+ # Hashes for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL2
+diff --git a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
+index b098cb8034..6e9cb89d64 100644
+--- a/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
++++ b/package/qt5/qt5xmlpatterns/qt5xmlpatterns.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-QT5XMLPATTERNS_VERSION = 0b644263abca66503db1ce8a4e126cf358a34685
++QT5XMLPATTERNS_VERSION = ed3b333aa56ac193e969725e3c34be9070441271
+ QT5XMLPATTERNS_SITE = $(QT5_SITE)/qtxmlpatterns/-/archive/$(QT5XMLPATTERNS_VERSION)
+ QT5XMLPATTERNS_SOURCE = qtxmlpatterns-$(QT5XMLPATTERNS_VERSION).tar.bz2
+ QT5XMLPATTERNS_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7436156122581531954==--
