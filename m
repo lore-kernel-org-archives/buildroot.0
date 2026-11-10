@@ -2,118 +2,145 @@ Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB209606A333
-	for <buildroot@archiver.kernel.org>; Tue, 10 Nov 2026 21:49:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BB5C60A380F
+	for <buildroot@archiver.kernel.org>; Tue, 10 Nov 2026 21:56:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=JDLIDamD
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=NdkKZ8d1;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BY2Ve1+l
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9D24B60AB4;
-	Tue, 10 Nov 2026 21:49:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3252960AC1;
+	Tue, 10 Nov 2026 21:56:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ii_29uYXxhos; Tue, 10 Nov 2026 21:49:06 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org D2B2F60AA8
+ id VUuzxs9YixA1; Tue, 10 Nov 2026 21:56:04 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 58A02605E3
 Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794347346;
-	b=P0xVZGtKYOZnEtvyy3zY7/3vWHdPBnoUmWNOuoNB/JYXlKHnOsAfViN7jKQBaCvE8kx3
-	 Aluxndd79PjAKa0lkMVH7M2MSLvD0xoxtHHr/8KmCtTxS7MxtPg3FYSrh1lM1kx+NnF8h
-	 V5DwyHzhY7pkSO44KVGlYbmuGfLb90gvneRO3drNvgWZd+FKeDiySlkqAj2Y1m5/9w5zJ
-	 Waxn2jGIAVoYuNppM5knuYVsLGMJ3IwECIJ6AbH0+bTnbepn5YtS96s4NXhxDzG24Xm3U
-	 mE1U9T+6WL9ZIJ3khz1CqSX2kv1qYw4yWcrqHyeML+a9TY8WtIH0ciqf52u6Nf83wiQ==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794347764;
+	b=Qc0EiNvE1Polb8IKz8WwtEVJwpdUIHrMP+46Pr0LMMmIAfgLDBUtJWqRXkSbqXziVOJU
+	 PwG6/rMDFO3sPz9/8WIznODXZMQKG9a3vUpEaWNDMTzsMXJZ1lHqtCia9JHFG5V6WPFdO
+	 tWIoNA7TtSaz7hgcJ6YtG9RXm6Y92W/ZQ0nmCR/TEDUgsWGh4i5iSCObKbc6ROplTrJPx
+	 KZ1f2YNmEmaCCvE2vjrnund+j3u/DCqxXYpS+o3kkA2CV9N/G25rRrGYT+NIuEocnwi+a
+	 WjuQgDppNFBhrClABizuFl6vl23lAoqN/EhuRI6/WBvKR7cIW2xJnf2XCFadERmw7mA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794347346;
+	c=relaxed/relaxed; t=1794347764;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 MIME-Version:References:In-Reply-To:Date:X-Gm-Features:Message-ID:To:
-	 Cc:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
-	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=rhCJBol8IhwyEQupn4ALipsniveTUeUGEkKbHsiQEkE=;
-	b=ilSPd/N9UIVsGvST/GmdM8U5OdAK7Hzge77srQso0K6VlpjYIyd/tKNeNnvH4dSIMMHv
-	 VW+F0+Z+duWQDKQHsqy/ZP7qbMlfrom2vbNFw/Ho16n17ymIjtEtwrQ13+4Zt7zlAsybC
-	 lFBidx8syPScPnsfbUdZ4jcHjUZ/IVu7tUkEcjgipL/LuLydhOcKoHqJG0zjrYoGdEib9
-	 CXclSeKfkmQUBvmAndmQo3AtDL0WVCAw2hI5U0ZPZ9soZLy0O4XzXbzz8I8SJ6s9i5H3d
-	 EOqYs7CuG+vcoSQpgsSsHmtZEU5A9+ubHzAyhRHPcFnh7PvlWy4WjkwCXTqRp9DUkpA==
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
+	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=jPkzz5PAB6tT3qzjT2lrdxIq4Xt3+O5GMjkgfiqBxSg=;
+	b=OZt2hZj/GiRL7/moEOkFnbsEEg529XBPSrDQya3nB3dXrHQ+vVeO+6Hx60EFJcCRr9qA
+	 ww2FekRVbBKbVRNjKu+MBaGdnEW9qBvco8KGydK+E0m+k+2MjeFZ30akoSoTV6AQ/4MaE
+	 oU0i2Ejt4xCUHUqxGvnRBKvHze4ln0x2FIB59uix8MzL0ogzRu/JdsgXz668xz2pTj5jp
+	 PI71AVcUAPQmIJwzXbKT+6f344cb1MjF+mfqpzVqJhNioRjyZ/0L+6y8jiexK4rZiSfSf
+	 NDqhV1h1F9OMa4pY3omODK07uAPSvjKZEj8AQQHUPn1TIgU9cbjrduIzBQDWVw2i0YA==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794347345;
-	bh=rhCJBol8IhwyEQupn4ALipsniveTUeUGEkKbHsiQEkE=;
-	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=JDLIDamDuLL0pcgqAx1mTBTQzvFL5bfNBv0qawhX3TZTGIO65nvBvnbk3J+LTwAK+
-	 P3fDIknjtRpMb9LIrRnJJ1aGj5CFzsrZaX0L178p2tggtA6+F8FYVCaboJ9F1dbXOn
-	 uCmI3RZJIKR4XD0rBL3cTLjO6Cs0sUgcbsi4fPEr6McF2uFzfzp6X5XepW741GVb+k
-	 RG4Nx7YrvphbJRZzQLQnB0hgjwZBmYeWrwZj9i6tlBMT7E2oYTmJLuWU6qFQzgc4m8
-	 ygQvqz/uTatIWcJbj5/64D/+5XGGqR+j2RM/MQjFfrtgFdRBeAj3PouHu37ypJdX24
-	 tHthMUAzDQgaQ==
+	s=default; t=1794347764;
+	bh=jPkzz5PAB6tT3qzjT2lrdxIq4Xt3+O5GMjkgfiqBxSg=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=NdkKZ8d1/PPpnjtECBZsvl8cZTftx0hHtriTbd3Y9CP1/DvKpOMbBNrCIbAEBn52m
+	 LBk85S2frZglTJtXLFT956pljuApI54zNCJDYuEzhmYGaM1Wbs590jCu2hZIgWeRz/
+	 Q1lxt+dJKQczGtxOMXKV2yJgOV3Llaz8oafu5Ek0bGCk9997ZCjLXvyONN9lwxnCuk
+	 0Orwmo4gT0A70fODtJ1Qf16fpqw+q5pvfA+JDzYn217vugXanHsHtB1IJmtMJYqI3e
+	 /3uVEfPhE3R9b7WMTltYRPmxOAJ2Xc7aRKK335Rec4YG4jFcp3LkOfxoJ7E9Aq9wGr
+	 4gTn4opStjKRQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D2B2F60AA8;
-	Tue, 10 Nov 2026 21:49:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 42570731
- for <buildroot@buildroot.org>; Tue, 10 Nov 2026 21:49:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 58A02605E3;
+	Tue, 10 Nov 2026 21:56:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id EE9851FC
+ for <buildroot@buildroot.org>; Tue, 10 Nov 2026 21:56:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3F8B381415
- for <buildroot@buildroot.org>; Tue, 10 Nov 2026 21:49:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E015681298
+ for <buildroot@buildroot.org>; Tue, 10 Nov 2026 21:56:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VtbKG05w72dq for <buildroot@buildroot.org>;
- Tue, 10 Nov 2026 21:49:04 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 34ECE81414
+ id 8dYflOe7Tuug for <buildroot@buildroot.org>;
+ Tue, 10 Nov 2026 21:56:02 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 039B481291
+Authentication-Results: smtp1.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::435"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::630; helo=mail-ej1-x630.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 34ECE81414
- for <buildroot@buildroot.org>; Tue, 10 Nov 2026 21:49:03 +0000 (UTC)
-Received: by mail-ej1-x630.google.com with SMTP id
- a640c23a62f3a-c40e30c26a4so384864366b.0
- for <buildroot@buildroot.org>; Tue, 10 Nov 2026 13:49:03 -0800 (PST)
+ client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
+ envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20260707 header.b=BY2Ve1+l
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 039B481291
+ for <buildroot@buildroot.org>; Tue, 10 Nov 2026 21:56:01 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-48fd2e38825so1597046f8f.2
+ for <buildroot@buildroot.org>; Tue, 10 Nov 2026 13:56:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20260707; t=1794347759; x=1794952559; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=RVcg1OhJjOmbxHJPRw907zw28elcp/ITJc0cURBUoes=;
+ b=BY2Ve1+l6EISAkpWmxFhl9UmOPWT/jICVpXYYNB66JdIMlb3AEamQnk0U5D7WEqjGK
+ 8I9FiXNgqjYeXayB3ceNU16KoSFLigl0AmgfWskbT3qSbu7a5uOiSK4jLT1WKvQcGao6
+ TaVFRC0PYXvooVd29kluqOXjWNL4XA8O3SkOTlooWy63sGiH4xMXYxgXQiEZ5qMW9oHH
+ DcwG9MLmOSi2SNgjI51M8N9Q6qAxTP+DkOqi/MTmfsB4GN38vUQG2wrM/bdqBhgsko1u
+ kkvdoKWgLvpS/ZWUk0mFhFU4PFfnI4PAkCI87r1UnCFKGENX+sddb9qzPUdBCyj7pFsL
+ M97Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1794347342; x=1794952142;
- h=content-transfer-encoding:content-type:cc:to:subject:message-id
- :date:from:in-reply-to:references:mime-version:x-gm-gg
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
- :content-type;
- bh=7buersOn/44+kVVbvN94pYeZ3jljPIm/dPcL0HpPLNQ=;
- b=Fz925um6wuMzXu28S9SQXq2+HpYpf4UcikUq21oC0Ii+BK0niTZO3Xb56KaXmOunVF
- 3Z0pzFLqmvRw/nr8lnlLdsFuaZTbS9tAPNssrwIjy9pxibuQQRq7Cbi0PN5uVSBnnJeA
- YrQSKlgsJvdjhNdlLOPeTOCzbiRJCWWu0hTCSOW/Pch8WtvlR79wfXVbIo1GvRCWWz8t
- XOaSUAkT5s7az84l+UqKeGgqggFQuj+qg7MkoxtSVP3qitH7J82pyBrqRdOgGLJ0dmXG
- HcKA0g2gmriwOX3xEWDwgDd8k/tJ49ES80Z1cId/amUW/81ta2qZPI5zH6nQwJ3UPFzB
- J3rA==
-X-Gm-Message-State: APuU4Z/f+FGtHT57djI8GKwUQAz2Pw7yJuPp/v73/g1L/IGev1j7LMk9
- xx7Ot9TaFCQsj0w/+6PULbcdPvT15QdcaWqBGC1/jou6al7uK+dy1q/K0Yv8hriwcQWd7/M+77H
- QJPB070t7R3RYvN5LkBOo6R9AVmb749g=
-X-Gm-Gg: AYBFou3Zgzirez5zVfX7kmO/M4wPhMTJ7reU7Z8OUAIYOTmBGmnYP7fGurXbzNr4FCE
- ahrZgacrTv8f8S0pJlT7qfakU5Uqv7lpDWgJECjcoGvlNEL1UboeQWt8nK3id8qQiMNRmjSPK/w
- uUshtrQT8NpuYgSbPNlluezyHtSied1SpoTogH+7USFY3zV3DsXfIGrNMI5xAxAVxJePScvhR/D
- xEZ7X63sn3VMze9aOuy9S4SQLjPPN+UxO5nMFAPYgVmHOFFLhzOAy/GfW0842K5XzXp4C3+/s7c
- r68591XmO7JgfsHmIOAee2nn4EG/qabq8rUEulqD+BiklsISDr85KkLQyDCU4jSQBB/4aDO+diP
- TUYFxedaF42mqmE1N496sei8tAZN64wS1BhajdKY=
-X-Received: by 2002:a17:907:6e89:b0:c3e:d0ca:d30a with SMTP id
- a640c23a62f3a-c5066a7e866mr34643866b.4.1794347341738; Tue, 10 Nov 2026
- 13:49:01 -0800 (PST)
+ d=1e100.net; s=20260707; t=1794347759; x=1794952559;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=RVcg1OhJjOmbxHJPRw907zw28elcp/ITJc0cURBUoes=;
+ b=h3/MOb0feJumqpWZ5iw58vFn+4+VZBr9fz7ZeSYO416lNrnl+0aduJxqG8Glqs6xsv
+ O/7CEjFszDG0x3Nj4C23+qk/rpxX19j2kbkAOfWZohuxvAM7uFaUs7SpYmmvBRU5nx5o
+ tPqEjeYqh0dwlOO8+tI50PpxrD2gRRQ7VRzOVZA6sTdLe5soStegF1J8LRM0Un2NB3Do
+ tRJObGUZG7KOhjNK4l2a8CR3nZFjNVyDvQXL72YWEixccuz6dP8xCySL/xTQ6h8BjKPA
+ aW9knFKGVHLU1+U+19OTfdIb9gtxqugSdyKwtA009uQk4yrJa7QeXwE/byBNFcMe1Qnh
+ s5/Q==
+X-Gm-Message-State: APuU4Z/N93mVFi5HUxRYJaIw41MhTvlkLheGVq3MPucE05xvyGYFqXE6
+ cjuWDGcv/E/q6C2bu7HjOsPDfOa759g37YfXue1aAFIKmkS8uhqqbiLDHtEHRQ==
+X-Gm-Gg: AYBFou2VqB17aMxlgCsplezcCQK2L+t9Picgs6M24GLtk9iNxAQD/ZegkHKlih1DHr1
+ ibc4idLeVQNeXWxPn/AF/GaKzzxIUmq/k5AW1JRA/CxI2O8tKCoHOYO0p1sqlJWcS4eZ4gtx5dW
+ dY/UtLiMtN8mzcBZCbP9FGbTQ8/ux02RkmBR94ShxY+7tuEMHKNontAsP4P9LyRWX6si8YveJZS
+ N4tHNbUFESwEaXIVgPcHf7+ALm9jF69IliLU6a7FDwk/KS/dtToyOxAdldLr32fuqCZm2wFv1uK
+ 8azxhQ9DXcBKkJd8FRh0Mz2TpHjs4+M02uZyQVvUg20D9PeiMVfh20MkNn1/lGwTXOnxbkKq9Y9
+ aewnWODMt3wGaHqHz6pt+63Zb0CKdx9PFB8BNz3D3avu1sGsB5Yv8/nI1G5vsHg7fjZHiKXQCjw
+ c+ArVJz3xX1ETrlRPhpqj3KC0pRL73F04YeX3kMNWw6YG7LWf5tyOq+/sPeQ3jg4/2Ks33vzJGE
+ j1MHmqqjIvX4Hf0Pitm6fTooAejnZ7qUJ4Z5SxVYs5mzBwNbd1D2LIWiUA9gJTZ2GbT0GRfG/Qq
+ JaBAMq9Gr7w5z7b9fG5yfuRaQa2yM3163Afg6IuyT1yPXbC/8nD8PlKghZ3wfk1tbZAzrKW4TA=
+ =
+X-Received: by 2002:a05:6000:2404:b0:487:27f9:834 with SMTP id
+ ffacd0b85a97d-499c7087dd2mr418638f8f.41.1794347759286; 
+ Tue, 10 Nov 2026 13:55:59 -0800 (PST)
+Received: from angelo-Precision-7550 ([94.154.175.53])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-49836b8eb11sm7767889f8f.57.2026.11.10.13.55.58
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 10 Nov 2026 13:55:58 -0800 (PST)
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+To: buildroot@buildroot.org
+Cc: Biagio Montaruli <biagio.hkr@gmail.com>,
+ Edgar Bonet <bonet@grenoble.cnrs.fr>,
+ Ludovic Desroches <ludovic.desroches@microchip.com>,
+ Simon Dawson <spdawson@gmail.com>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue, 10 Nov 2026 22:55:52 +0100
+Message-ID: <20261110215557.2248804-1-angelo.compagnucci@gmail.com>
+X-Mailer: git-send-email 2.53.0
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-References: <20261110140830.3359501-1-yegorslists@googlemail.com>
- <87v764tx8k.fsf@dell.be.48ers.dk>
-In-Reply-To: <87v764tx8k.fsf@dell.be.48ers.dk>
-Date: Tue, 10 Nov 2026 22:49:25 +0100
-X-Gm-Features: AclHuK_zQfoufoL5b6GSmN1t0iIciFpm9SYEESMpgjGjnvaHWN5s46gccDyVwAM
-Message-ID: <CAGm1_kuJsUerY5Fg9dAPRBs_jDtj3mbrFUHw51v51rfiSn+XDg@mail.gmail.com>
-To: Peter Korsgaard <peter@korsgaard.com>
-Cc: buildroot@buildroot.org, Ash Charles <ashcharles@gmail.com>
-Subject: Re: [Buildroot] [PATCH] package/pru-software-support: download from
- git
+Subject: [Buildroot] [PATCH 0/5] at91bootstrap3: bump to 3.10.4,
+ re-add the Arietta G25 defconfigs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,43 +150,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
-Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-SGkgUGV0ZXIsCgpPbiBUdWUsIE5vdiAxMCwgMjAyNiBhdCA2OjI14oCvUE0gUGV0ZXIgS29yc2dh
-YXJkIDxwZXRlckBrb3JzZ2FhcmQuY29tPiB3cm90ZToKPgo+ID4+Pj4+ICJZZWdvciIgPT0gWWVn
-b3IgWWVmcmVtb3YgPHllZ29yc2xpc3RzQGdvb2dsZW1haWwuY29tPiB3cml0ZXM6Cj4KPiAgPiBn
-aXQudGkuY29tIG5vIGxvbmdlciBzZXJ2ZXMgY2dpdCBzbmFwc2hvdHMuIERvd25sb2FkaW5nIHRo
-ZSB0YXJiYWxsCj4gID4gbm93IGZhaWxzIHdpdGggSFRUUCA0MDAgYW5kIHRoZSBtZXNzYWdlOgo+
-Cj4gID4gICBVbnN1cHBvcnRlZCBzbmFwc2hvdCBmb3JtYXQ6IHBydS1zb2Z0d2FyZS1zdXBwb3J0
-LXBhY2thZ2UtdjYuMC4xLnRhci5nego+Cj4gSSBkbyBnZXQgdGhhdCA0MDAgQmFkIFJlcXVlc3Qs
-IGJ1dCBJIGRvIG5vdCBzZWUgdGhhdCBlcnJvciBtZXNzYWdlPwoKVGhlIG1lc3NhZ2UgaXMgaW4g
-dGhlIGJvZHkgb2YgdGhlIDQwMCByZXNwb25zZSwgc28gaXQgb25seSBzaG93cyB1cCB3aXRoCmUu
-Zy4gY3VybCA8dXJsPjsgd2dldCAoYW5kIHRodXMgQnVpbGRyb290KSBvbmx5IHByaW50cyB0aGUg
-c3RhdHVzIGxpbmUuCmdpdC50aS5jb20gY3VycmVudGx5IGFuc3dlcnMgNTAzIChtYWludGVuYW5j
-ZSksIHNvIEkgY2FuJ3Qgc2hvdyBpdAphZ2FpbiByaWdodCBub3cuCgpZZWdvcgoKPgo+ICA+IEFs
-bCBvdGhlciBhcmNoaXZlIGZvcm1hdHMgZmFpbCB0aGUgc2FtZSB3YXksIGFuZCB0aGUgdGFnIHBh
-Z2Ugbm8gbG9uZ2VyCj4gID4gb2ZmZXJzIGFueSBkb3dubG9hZCBsaW5rcy4gVGhlIHBhY2thZ2Ug
-aXMgY3VycmVudGx5IG9ubHkgZmV0Y2hlZCB0aGFua3MKPiAgPiB0byB0aGUgY29weSBvbiBzb3Vy
-Y2VzLmJ1aWxkcm9vdC5uZXQuCj4KPiAgPiBGZXRjaCB0aGUgdjYuMC4xIHRhZyBmcm9tIHRoZSBn
-aXQgcmVwb3NpdG9yeSBpbnN0ZWFkLCB3aGljaCBpcyBzdGlsbAo+ICA+IGF2YWlsYWJsZS4gVGhl
-IGNvbnRlbnRzIG9mIHRoZSBnZW5lcmF0ZWQgdGFyYmFsbCBhcmUgaWRlbnRpY2FsIHRvIHRoZQo+
-ICA+IHByZXZpb3VzIHNuYXBzaG90IHRhcmJhbGwuIE9ubHkgaXRzIGhhc2ggY2hhbmdlcy4gVGhl
-IGxpY2Vuc2UgZmlsZQo+ICA+IGlzIHVuY2hhbmdlZC4KPgo+ICA+IEFzIHRoaXMgaXMgYSBjaGFu
-Z2Ugb24gdGhlIFRJIHNlcnZlciBzaWRlLCBhbGwgbWFpbnRhaW5lZCBicmFuY2hlcwo+ICA+ICgy
-MDI1LjAyLnggYW5kIGxhdGVyKSB1c2UgdGhlIHNhbWUgc25hcHNob3QgVVJMIGFuZCBhcmUgYWZm
-ZWN0ZWQuCj4KPiAgPiBBc3Npc3RlZC1ieTogQ2xhdWRlOmNsYXVkZS1vcHVzLTUtNQo+ICA+IFNp
-Z25lZC1vZmYtYnk6IFllZ29yIFllZnJlbW92IDx5ZWdvcnNsaXN0c0Bnb29nbGVtYWlsLmNvbT4K
-Pgo+IENvbW1pdHRlZCwgdGhhbmtzLgo+Cj4gLS0KPiBCeWUsIFBldGVyIEtvcnNnYWFyZApfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFp
-bGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290
-Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+This series bumps the 3.x version of the at91bootstrap3 package to
+3.10.4, the last 3.x release, moves the boards still on 3.10.3 (Acqua A5,
+at91sam9x5ek) to it, and re-adds the Acme Systems Arietta G25 defconfigs
+removed by commit c8bf258e5b ("configs/acmesystems_arietta_g25_{128mb,
+256mb}_defconfig: remove defconfig").
+
+AT91Bootstrap 4 no longer supports the SAM9X5 devices, so the Arietta
+stays on the 3.x series. Between 3.10.3 and 3.10.4 no C source changed
+and the defconfigs of these boards are identical; the GCC 15 build fix
+is carried over to 3.10.4.
+
+The Arietta defconfigs use Linux 6.18.63, the Bootlin armv5-eabi glibc
+stable toolchain and the same boot flow as before: AT91Bootstrap loads
+the kernel and its device tree from the FAT partition of the microSD
+card, without U-Boot.
+
+Angelo Compagnucci (5):
+  boot/at91bootstrap3: bump 3.x series to 3.10.4
+  configs/acmesystems_acqua_a5_*: bump AT91Bootstrap to 3.10.4
+  configs/at91sam9x5ek*: bump AT91Bootstrap to 3.10.4
+  boot/at91bootstrap3: drop the patch for 3.10.3
+  configs/acmesystems_arietta_g25_{128mb, 256mb}_defconfig: re-add
+    defconfigs
+
+ DEVELOPERS                                    |  2 +
+ .../at91bootstrap3/at91bootstrap3.hash        |  2 -
+ board/acmesystems/arietta-g25/genimage.cfg    | 36 +++++++++++++
+ .../arietta-g25/patches/linux/linux.hash      |  7 +++
+ board/acmesystems/arietta-g25/readme.txt      | 54 +++++++++++++++++++
+ .../at91bootstrap3/at91bootstrap3.hash        |  2 -
+ boot/at91bootstrap3/Config.in                 |  4 +-
+ boot/at91bootstrap3/at91bootstrap3.hash       |  2 +-
+ ...conditionally-define-bool-false-and-.patch |  0
+ configs/acmesystems_acqua_a5_256mb_defconfig  |  5 +-
+ configs/acmesystems_acqua_a5_512mb_defconfig  |  5 +-
+ .../acmesystems_arietta_g25_128mb_defconfig   | 26 +++++++++
+ .../acmesystems_arietta_g25_256mb_defconfig   | 26 +++++++++
+ configs/at91sam9x5ek_defconfig                |  5 +-
+ configs/at91sam9x5ek_dev_defconfig            |  5 +-
+ configs/at91sam9x5ek_mmc_defconfig            |  5 +-
+ configs/at91sam9x5ek_mmc_dev_defconfig        |  5 +-
+ 17 files changed, 160 insertions(+), 31 deletions(-)
+ delete mode 100644 board/acmesystems/acqua-a5/patches/at91bootstrap3/at91bootstrap3.hash
+ create mode 100644 board/acmesystems/arietta-g25/genimage.cfg
+ create mode 100644 board/acmesystems/arietta-g25/patches/linux/linux.hash
+ create mode 100644 board/acmesystems/arietta-g25/readme.txt
+ delete mode 100644 board/atmel/at91sam9x5ek/patches/at91bootstrap3/at91bootstrap3.hash
+ rename boot/at91bootstrap3/{v3.10.3 => v3.10.4}/0001-include-types.h-conditionally-define-bool-false-and-.patch (100%)
+ create mode 100644 configs/acmesystems_arietta_g25_128mb_defconfig
+ create mode 100644 configs/acmesystems_arietta_g25_256mb_defconfig
+
+-- 
+2.53.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
