@@ -2,142 +2,141 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C920606A32A
-	for <buildroot@archiver.kernel.org>; Tue, 10 Nov 2026 12:52:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F3C606A32A
+	for <buildroot@archiver.kernel.org>; Tue, 10 Nov 2026 13:58:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=KEptrg4V;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xFnAJF8s
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Fia8Xb8V;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=q5l3NGs/
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2CF1D80D29;
-	Tue, 10 Nov 2026 12:52:30 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C335380DBA;
+	Tue, 10 Nov 2026 13:58:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uE2SPsKxhnYz; Tue, 10 Nov 2026 12:52:29 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 3A55080D2B
+ id 6GpVOR5sXQpv; Tue, 10 Nov 2026 13:58:34 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org A7F1780E1F
 Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794315149;
-	b=B9dqAR/KXpbmZ410/GjtP2yNO6bvCIxEb6cjjQdXzRliPBU9vKXgbFfMowKhInm67zrF
-	 HBdg/PCx2vO0WETEl8cuASVzZoU5F8yciLS1n29I42FBlUdekeEL5IGD1CuiF6HuYxVPU
-	 /4iBXNvaOqmYCWoAj8drmAJWjyVHQKMDUtes0FjR+Y//7y1vrcc88iG6NX4leg3CEtjm5
-	 sG/Pd3O/eTt1LhQK0g89B/9be6d/w8GnWsG9bFo/xMKhlgKY1qh+fFRuyclWOw5lzPyH+
-	 Aj2FgUgwofpI1lyhcP9/lodMJZ51csdAF+9q16JucrLkgPhtLse1md1mwXAJzAk7TIg==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794319114;
+	b=Ar+/RzU+acdius2EUUDViZ8Qpt/8cbQgB7SZI0qaMDgM7P70o/JdZvTAQU7wtNABryO4
+	 2Mjt4pYd3giSHHE+uL6WInXKN9KNVVKdJ7aEE5TEd3lBy5ZVzhNbSxPW4g5N4zVs0Sr55
+	 NLRO/ATsrXRXoTuSDFEc3M+X7sItVGh5AH1jrBWu6O+OpDKw3bgIBvovZsQK/Rwr8HAcB
+	 QtPJiHhM/OCPKeLmKAOI7WpVmYZNJtNJK4M0FqT3GbJW4BI77KZ0Ta5AT1HWHwDRNurgt
+	 AwwZJfi3i87O+GngpRNCj/vIzMc8Kyse+4UUTJDbygPRk7kA1bZDByw19NwBrJiXc7g==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794315149;
+	c=relaxed/relaxed; t=1794319114;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
 	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
 	 X-Received:MIME-Version:References:In-Reply-To:From:Date:
-	 X-Gm-Features:Message-ID:To:Subject:X-BeenThere:X-Mailman-Version:
+	 X-Gm-Features:Message-ID:To:Cc:Subject:X-BeenThere:X-Mailman-Version:
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:Cc:Content-Type:Content-Transfer-Encoding:Errors-To:
-	 Sender;
-	bh=4cUZi/w9WIJztkwKBEUvQ6m4o/FbJps+aC1ZaJNwhMc=;
-	b=pEB8Yx0XrLa6ecHKsT+t3BOnIGZIHibQKZJi8SSXNPNrEeLyHdjcIHnIsMrfjK1aEq+9
-	 H9438IM09NdHiRWdqNIUcl8zKTBeXWIKq/zao2pcImA81uwqzBG3MQLC3ZL1M1G6ZlJx2
-	 1urEJ/obR5r5pMMPJCDLG/zEWb4inSVauU2FzbD/X8c50NR+pQKhoomCMo0jqXnWyFvez
-	 OpEwkuFcbcr+sDgqSardYsbCsy9ou3eSORBc83fImgqNb9vaVbneS+v+zKP4kyZAC2wZP
-	 lCH1Okwh2ch8NNJER5xgE2d+R2QappzjrQI8JIzC370oHcJ5VrO1qpVQRGzXmFB6UUg==
+	 List-Subscribe:Content-Type:Errors-To:Sender;
+	bh=g+SAZz2Zk1Vy+raZ2cYJ3JlumxdhhlmNUKwEyvwwdi0=;
+	b=llDJG5ckWxq3pLOgaG6OVtsG2Z8K9U7bT3Oj4sfKtJ1h9ZQEQRQNgtEC1YwotcWwDEnw
+	 1YARUWVBDEDy5MynBUa6Sl0fcJN84/BR6PQ30qt3Oa4nRnobMzqbUM8fxrGYR5kFYp15a
+	 mbvriCInqpb0FvPyTJLGGsZ819nX8fce4KcRJUHEGVNod0dg0ZNWsPqSl+47oAMo6Alzx
+	 mWS5iLA6MKbzu1NzpEw1cT9AXO+8fJCIZvzeHvwPmM49gsjdwUfN4ZpNSjWxv//fTBjJO
+	 UhDr3ygR8VRwm7283Hg3UbLMq/j40F4lLXf9ln6CrUEcbNIkzW8apZXfpnTzRuQilWA==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
-	dmarc=pass header.from=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=xFnAJF8s;
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794315149;
-	bh=4cUZi/w9WIJztkwKBEUvQ6m4o/FbJps+aC1ZaJNwhMc=;
-	h=References:In-Reply-To:From:Date:To:Subject:List-Id:
+	s=default; t=1794319114;
+	bh=g+SAZz2Zk1Vy+raZ2cYJ3JlumxdhhlmNUKwEyvwwdi0=;
+	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=KEptrg4V0S32FxJqxHMvEqTRMTcDeMJ2OFJL+IftaoeAp8ithkAMRX39bO9QIXLr0
-	 T1VkjVgba9EmFrmAhmyx1nRddu07SYnFG7HEVwyXPQKiufbYeaQacRmXJ4MvvEhaCV
-	 MoV5LFW3sgr+KEU3ZT/S5JvdQhVZmvgDpMkG9tK/aWtDCjVGFvlqKLuJro2bCV4rkw
-	 dcR9DYyEOQMNqt/Pag77nXBOKP9uchPViB5cUGTLjG02ffdaK69nG/wBH7hSSq0hHh
-	 41644/hE14+7baVY1YRdF9Ox5NnA37/x3WYRlOidBn29YcjyZCKAjY6yMMwTzcEz8A
-	 ecta4dFBxZ53g==
+	 From;
+	b=Fia8Xb8VxseaW3juYFVow6cXjdYPo5KIpZfy86T3n89XFPGm6Z1YU8fO+vahF06Lm
+	 6Bd+uRidFrN01YniFlLa3j48rQJ1Al7NlMHBQAN+qNpXuojTM3gLlNH0Fw6xCiOoUy
+	 A6rx9X5mmDa/fem2Wd/XP0hg7mwjWv9Ko7g3A+ybVr7YgW1lZHEAQpK/lrdbgqZapB
+	 gBph3F2voz/Qt2g+LbsmsojhygmvugIW3w8fxqSJpDBs+e3kWdk/xabJY5LEYnM9eV
+	 AFe1CmtIGsgySeOLador7dAWhzSDtaVqiUor17Jh6CQgbq40BMAcOmeBwL6gkYju/v
+	 9PvSpqj95ip6g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3A55080D2B;
-	Tue, 10 Nov 2026 12:52:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6B20F9D1
- for <buildroot@buildroot.org>; Tue, 10 Nov 2026 12:52:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A7F1780E1F;
+	Tue, 10 Nov 2026 13:58:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id D4A36731
+ for <buildroot@buildroot.org>; Tue, 10 Nov 2026 13:58:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 50FD380D2B
- for <buildroot@buildroot.org>; Tue, 10 Nov 2026 12:52:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B94D340941
+ for <buildroot@buildroot.org>; Tue, 10 Nov 2026 13:58:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IUtvpLzIKHrA for <buildroot@buildroot.org>;
- Tue, 10 Nov 2026 12:52:26 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 7B2F380D29
-Authentication-Results: smtp1.osuosl.org; arc=pass header.oldest-pass=0
- smtp.remote-ip="2607:f8b0:4864:20::e2a"
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZSMcoN7lnBKb for <buildroot@buildroot.org>;
+ Tue, 10 Nov 2026 13:58:32 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org A2A404093F
+Authentication-Results: smtp4.osuosl.org; arc=pass header.oldest-pass=0
+ smtp.remote-ip="2001:4860:4864:20::36"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::e2a; helo=mail-vs1-xe2a.google.com;
- envelope-from=softwarej@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
+ client-ip=2001:4860:4864:20::36; helo=mail-oa1-x36.google.com;
+ envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20260707 header.b=xFnAJF8s
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com
- [IPv6:2607:f8b0:4864:20::e2a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7B2F380D29
- for <buildroot@buildroot.org>; Tue, 10 Nov 2026 12:52:26 +0000 (UTC)
-Received: by mail-vs1-xe2a.google.com with SMTP id
- ada2fe7eead31-7d2ee9e7093so631795137.1
- for <buildroot@buildroot.org>; Tue, 10 Nov 2026 04:52:26 -0800 (PST)
+ header.a=rsa-sha256 header.s=20260707 header.b=q5l3NGs/
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com
+ [IPv6:2001:4860:4864:20::36])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A2A404093F
+ for <buildroot@buildroot.org>; Tue, 10 Nov 2026 13:58:31 +0000 (UTC)
+Received: by mail-oa1-x36.google.com with SMTP id
+ 586e51a60fabf-48eee44b908so1047323fac.1
+ for <buildroot@buildroot.org>; Tue, 10 Nov 2026 05:58:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20260707; t=1794315145; x=1794919945; darn=buildroot.org;
- h=content-transfer-encoding:content-type:cc:to:subject:message-id
- :date:from:in-reply-to:references:mime-version:from:to:cc:subject
- :date:message-id:reply-to:content-type;
- bh=x2AFe2m38KWC2O5N48i8p0OWCL3nUJJoBRGyT3HvXJk=;
- b=xFnAJF8szGU7Ldeeo75TibQKScSckFVDOYpt6jpk/7WjLN3qKqBT/gNVl4uwhC9pTO
- UHlgkHeGCfJZMucFtwTjEhkqn8kQxCZXwFtOVoNL9cPjsoWzmVRusYDGdmrCopo8+HN3
- wV2VDj3d5rKYF6TKObIhB5JLC0rn/REtZsojEpla3iguop9xxim6dtFGhtF0neXT70O3
- 5JY+H7LZl+KNVh+wx2MSDBa6wBvKRoiBPazsygLCL5MmscGH6F/6LqAAPv04ozRvPv1i
- 1yz98+rG/NiQUnoZ9AhX/PDedAL87aQP+8KkQKoesEyMODp1Vl8c8sxMffBN7nW9bRaZ
- POBw==
+ d=gmail.com; s=20260707; t=1794319110; x=1794923910; darn=buildroot.org;
+ h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+ :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+ :content-type; bh=EAqYF5m4jW49UeJ0VJ92Mu5i+E9buGqzRUmtu/kAZEU=;
+ b=q5l3NGs/TmK3PC3wFyupRBwO09bBrKKsVvj5hmkJs686kpzVaEUf1qk5NYy02gybp3
+ apfpysRGHaEBCh3lgEdbYhFNHT28t1aJx0jdg1aqa7kvjSc6BPU2gVzXSemUXzEUi4qE
+ W5cWp1wQFzpWWtZYy4GO/ztiymsOOcrsb8xr6CG8EwURYpzEqCEuMTufpib+JtKA4mPx
+ MI6gZiN6zpZCcimkomnfBTX6k0nHDaM98PBtGS670a/M0BA3kcZt+w4TBI/M0Ndz8sDj
+ GYxHYeZ8EJ9uYDnwk9NBVzKwZwsZKc4/zVIOaFrbE+FcDX6ta1RPJaluM4YKQUoDe9jf
+ bP5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1794315145; x=1794919945;
- h=content-transfer-encoding:content-type:cc:to:subject:message-id
- :date:from:in-reply-to:references:mime-version:x-gm-gg
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
- :content-type;
- bh=x2AFe2m38KWC2O5N48i8p0OWCL3nUJJoBRGyT3HvXJk=;
- b=EdNoabbs21lmwjweylbqfuQZFmPsCYqUlOxw2W4Xg9bowSRH4DpVArfccDa798J4hN
- whqLvArZ3rL60MwYMW4udWLZezNx6c2qrBmEdvHh9UCz/vc3uDWlwSMwkos+RnPeme9B
- 3Mb0LpsvHfKsyKBnZO4KBJ7h0jiGlT2jlVNfL+t31TFhcw+Cmutq2UpmY2xFnhadz2l9
- 2Lck8PKDjQjPslD0PYEyskHU2FG9sLEg2vXcRgPKS5h4QeifOmRWFPvBrli96luSmA8T
- ZYI9ApvwHuyobwpWCwy7X4pcn/7lS4wYW3tjdt4pZhtSKDcgi9PGkP4dAHl8s/tyOAyi
- 5+/w==
-X-Gm-Message-State: APuU4Z/l/KpjKD93GhPhnXe8Kdg2otHxdNAqfdSEbQCz2sVxFEAy0MCm
- GRqDlYQEIPzMWolPK5aR/oucYUF5ZsM9bjXS4Ck6LJ3u6pNo1k7FIwiDL2bBYBmHWNkewhvbBAD
- VuGI51tuwKIrX1gH54Fh9tcK850uORqo=
-X-Gm-Gg: AYBFou1ljU6Er8AHHSpYYwHDDg2+saI6fAFHYeE2Qq2jg/m3bh7mPZdK28avnhqsudy
- 8n4Uu96syE6YqZkNHjQf7S+CIzcKqs2rx9gm0ebYxqDn8arFVHrZyJutyzleEvf30wb4+32amiV
- bvaDGGN5NiWNbCpFdtpnllf4Hke8TZorpR57KClyhoUwNg65aPzzW/3yMA3PBhHdlroVOaw8ZAx
- Nm25Mgpn3tSg6pK/20+lHlg4CloDM+qRjQusx2xlRb9YtJWKVrlrdkD3wuTM/6857hAGih9+c3P
- 6x6l4Y4t3hCMDEOt3MURvK6JvKGojgII1j//1q3x07K0jcWkbmeED2GoJceIMPD3xUAQRH/x42s
- Kxm40AeOeW2Lk9hHEVEVlLyscwrDWenwJkZmg
-X-Received: by 2002:a67:e103:0:b0:7cc:26e4:1943 with SMTP id
- ada2fe7eead31-7d301bf1816mr600890137.28.1794315144747; Tue, 10 Nov 2026
- 04:52:24 -0800 (PST)
+ d=1e100.net; s=20260707; t=1794319110; x=1794923910;
+ h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+ :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to:content-type;
+ bh=EAqYF5m4jW49UeJ0VJ92Mu5i+E9buGqzRUmtu/kAZEU=;
+ b=cfCtVMDIZpd+i/cAe3FdDGkbF0TFKugeaEo0/OQqe7NHHjMq9qeKX+wnZ17o+re2vp
+ PBb6LBfPH9vnViQplmr43PyMq1vx2aSUDXswQrZP2fGLx+W+/eH3Es4kNJNHnSuEU5Lm
+ gBowRum26MHgUFoY+eNmObf16j6W8XuQJQe/qQf6y3ABv/M9WQHPXQnJ2CuNlbr+iqNj
+ Eqq4RusYygO6YAQ3Q1ITSEtAeBUn4jBt846WfAYwPBKjjnxC7h7CCAqg7Jvlqet8AMNs
+ yMxVGcPtu3XC7iNeHjfnQXlG79wmcrPmJCCEm3E4dP3e9VG+4VvJ3kuw9sVOyAkXay34
+ IdPQ==
+X-Gm-Message-State: APuU4Z875G2kRDOl7ALjw7GWRz6UAAUQOg12EG3bUl/HiX63ESyopluU
+ u9LOiDfeQ+grH4mE7YOUX2QVDzPHUpVgVwLdrlf1JHcsOELtXF9gEkeN8t2gvoVEWfpTLvaW6Fq
+ lgJwPkQ7ts63l4YuS5fVbdvbxai3jUpE=
+X-Gm-Gg: AYBFou0w0q5rR5UpbWo25E9MEC8MW13jY6qTeRhWAXWM4emqJ3O0dLWp8X1UBnokL/L
+ X2Mqc5QZ0zLWc2Z43+hRY7BL2c+Cnvk32MJ8yF/olT6gP+a4aMT/mltVtRY66Oo0uB2mT2B6UWl
+ C+E3CkpEhkifSEgQ2ut0sienJJp7yqnfsbffaaS87BitueKKfG1yOMorahS6fy7CwT2J1+T/cNx
+ wW2w1KahLqToes+Yh9lEOkILQAU1ePlqJPtDf23D/tNj99A7pGd3mUJiFcZb1FTWIMZAYC8x+rm
+ yg1kSa6QdGd0TKWFT6J/c1Xf0bcxUhzfwe2PIb6e0Vn3c9hw2QopGZs49XfN/hyHGxKKNk+aXCa
+ BkPPUU/6gktwfk207r5SB7C2L/7+gZC2AJMhs
+X-Received: by 2002:a05:6808:1a0a:b0:4f7:a3f2:d8b8 with SMTP id
+ 5614622812f47-5683cc79ccfmr2033934b6e.29.1794319110150; Tue, 10 Nov 2026
+ 05:58:30 -0800 (PST)
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-References: <20230903163509.614740-1-ricardo.martincoski@gmail.com>
- <20261107163414.560896-1-angelo.compagnucci@gmail.com>
- <20261107163414.560896-10-angelo.compagnucci@gmail.com>
-In-Reply-To: <20261107163414.560896-10-angelo.compagnucci@gmail.com>
-From: =?UTF-8?Q?Jos=C3=A9_Luis_Salvador_Rufo?= <salvador.joseluis@gmail.com>
-Date: Tue, 10 Nov 2026 13:52:13 +0100
-X-Gm-Features: AclHuK_WMHKQopc6eL2BP76Z_QDN_SMzyl3n5r028FBIPIAojoYro54acjKPaHE
-Message-ID: <CAH+XeQbnB5H-NX=gaq3Vfu8=7C0no4bt6nw5k_BYcbhuQFPz8g@mail.gmail.com>
-To: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Subject: Re: [Buildroot] [PATCH v4 09/15] package/zfs: drop the unused
- module subdirectories
+References: <20261109130533.4171508-1-angelo.compagnucci@gmail.com>
+ <avKrY-io3kEIaRen@waldemar-brodkorb.de>
+In-Reply-To: <avKrY-io3kEIaRen@waldemar-brodkorb.de>
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Tue, 10 Nov 2026 14:57:54 +0100
+X-Gm-Features: AclHuK8brQnPehq8IXecZoUutP_gNGL3hR5NVnRdWjvXAY1XBdxUVkbDX2bbQ5k
+Message-ID: <CA+TH9VngRP4VrbpeaQYim8_FSp6cZD_DizJdNAOfnuckwQKtkA@mail.gmail.com>
+To: Waldemar Brodkorb <wbx@openadk.org>
+Cc: buildroot@buildroot.org, Quentin Schulz <quentin.schulz@cherry.de>, 
+ Joshua Henderson <joshua.henderson@microchip.com>,
+ Bartosz Bilas <b.bilas@grinn-global.com>, 
+ Peter Seiderer <ps.report@gmx.net>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
+Subject: Re: [Buildroot] [PATCH 0/2] package/qt5: security bump to version
+ 5.15.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -147,54 +146,126 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
- Marcus Folkesson <marcus.folkesson@gmail.com>,
- Leo Yu-Chi Liang <ycliang@andestech.com>,
- Romain Naour <romain.naour@gmail.com>, Antoine Tenart <atenart@kernel.org>,
- James Knight <james.d.knight@live.com>, Bernd Kuhls <bernd@kuhls.net>,
- Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
- Maxim Kochetkov <fido_max@inbox.ru>,
- Francois Perrad <francois.perrad.86@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="===============3161372810370015542=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-10.8 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS
-	autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=2.1 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,HTML_MESSAGE,
+	MAILING_LIST_MULTI,SPF_HELO_PASS autolearn=no autolearn_force=no
+	version=4.0.1
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-RWwgc8OhYiwgNyBub3YgMjAyNiBhIGxhcyAxNzozNCwgQW5nZWxvIENvbXBhZ251Y2NpCig8YW5n
-ZWxvLmNvbXBhZ251Y2NpQGdtYWlsLmNvbT4pIGVzY3JpYmnDszoKPgo+IFpGU19NT0RVTEVfU1VC
-RElSUyBpcyBub3QgdXNlZCBzaW5jZSA0MTQ5M2NhZTcxICgicGFja2FnZS96ZnM6IG5vdAo+IHVz
-aW5nIGtlcm5lbC1tb2R1bGUgaW5mcmEiKTogdGhlIGtlcm5lbCBtb2R1bGVzIGFyZSBidWlsdCBi
-eSB0aGUKPiBhdXRvdG9vbHMgYnVpbGQgc3lzdGVtIG9mIHpmcywgYW5kIHRoZSB2YXJpYWJsZSB3
-YXMgb25seSByZWFkIGJ5IHRoZQo+IGtlcm5lbC1tb2R1bGUgaW5mcmEuIERyb3AgaXQuCj4KPiBT
-aWduZWQtb2ZmLWJ5OiBBbmdlbG8gQ29tcGFnbnVjY2kgPGFuZ2Vsby5jb21wYWdudWNjaUBnbWFp
-bC5jb20+ClJldmlld2VkLWJ5OiBKb3PDqSBMdWlzIFNhbHZhZG9yIFJ1Zm8gPHNhbHZhZG9yLmpv
-c2VsdWlzQGdtYWlsLmNvbT4KPiAtLS0KPiBDaGFuZ2VzIHYzIC0+IHY0Ogo+ICAgLSBuZXcgcGF0
-Y2g6IGZpeCBhIGZpbGUgd2FybmVkIGFib3V0IGJ5IHRoZSBwYWNrYWdlIGluZnJhIGNoZWNrcwo+
-ICAgICBhZGRlZCBhdCB0aGUgZW5kIG9mIHRoZSBzZXJpZXMuCj4KPiAgcGFja2FnZS96ZnMvemZz
-Lm1rIHwgMTIgLS0tLS0tLS0tLS0tCj4gIDEgZmlsZSBjaGFuZ2VkLCAxMiBkZWxldGlvbnMoLSkK
-Pgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3pmcy96ZnMubWsgYi9wYWNrYWdlL3pmcy96ZnMubWsK
-PiBpbmRleCAwNzE1NTdiZjNlLi42YzIwOTM5ZGE1IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvemZz
-L3pmcy5tawo+ICsrKyBiL3BhY2thZ2UvemZzL3pmcy5tawo+IEBAIC02MywxOCArNjMsNiBAQCBa
-RlNfTUFLRV9FTlYgKz0gXAo+ICAgICAgICAgQVJDSD0kKEtFUk5FTF9BUkNIKSBcCj4gICAgICAg
-ICBDUk9TU19DT01QSUxFPSIkKFRBUkdFVF9DUk9TUykiCj4KPiAtIyBaRlMgdXNlcmxhbmQgdG9v
-bHMgYXJlIHVuZnVuY3Rpb25hbCB3aXRob3V0IHRoZSBMaW51eCBrZXJuZWwgbW9kdWxlcy4KPiAt
-WkZTX01PRFVMRV9TVUJESVJTID0gXAo+IC0gICAgICAgbW9kdWxlL2F2bCBcCj4gLSAgICAgICBt
-b2R1bGUvaWNwIFwKPiAtICAgICAgIG1vZHVsZS9sdWEgXAo+IC0gICAgICAgbW9kdWxlL252cGFp
-ciBcCj4gLSAgICAgICBtb2R1bGUvc3BsIFwKPiAtICAgICAgIG1vZHVsZS91bmljb2RlIFwKPiAt
-ICAgICAgIG1vZHVsZS96Y29tbW9uIFwKPiAtICAgICAgIG1vZHVsZS96c3RkIFwKPiAtICAgICAg
-IG1vZHVsZS96ZnMKPiAtCj4gICMgVGhlc2UgcmVxdWlyZW1lbnRzIHdpbGwgYmUgdmFsaWRhdGVk
-IGJ5IHpmcy9jb25maWcva2VybmVsLWNvbmZpZy1kZWZpbmVkLm00Cj4gIGRlZmluZSBaRlNfTElO
-VVhfQ09ORklHX0ZJWFVQUwo+ICAgICAgICAgJChjYWxsIEtDT05GSUdfRElTQUJMRV9PUFQsQ09O
-RklHX0RFQlVHX0xPQ0tfQUxMT0MpCj4gLS0KPiAyLjUzLjAKPgpfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxk
-cm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
-c3RpbmZvL2J1aWxkcm9vdAo=
+--===============3161372810370015542==
+Content-Type: multipart/alternative; boundary="0000000000002c9f11065fec799f"
+
+--0000000000002c9f11065fec799f
+Content-Type: text/plain; charset="UTF-8"
+
+Il giorno mar 10 nov 2026 alle ore 06:28 Waldemar Brodkorb <wbx@openadk.org>
+ha scritto:
+
+> Hi Angelo, all,
+> Angelo Compagnucci wrote,
+>
+> > This bumps the qt5 packages to Qt 5.15.19, from the kde/5.15 branch of
+> > KDE's Qt5 Patch Collection, which is now rebased on it. qt5webengine
+> > is bumped in its own patch, as it drops and refreshes some patches of
+> > qt5webengine-chromium.
+> >
+> > This should be the last Qt5 bump: Qt 5.15.19 is the very last Qt 5.15
+> > release, and the Qt Company ended its support of Qt 5.15 after 26 May
+> > 2025 [1]. KDE keeps its Qt5 Patch Collection only for the open source
+> > projects still on Qt 5.15 until they move to Qt 6, and only for very
+> > critical fixes [2]. Qt5 users should plan their move to Qt6.
+> >
+> > FYI: I am working on a series moving the Qt5 users to Qt6 and removing
+> > Qt5 from Buildroot. Before sending it, I would like to get feedback on
+> > this: would the removal be welcome, and when (for example after the
+> > next LTS)?
+>
+> We are still using QT5, so it would be nice to keep it for the next
+> LTS and remove it afterwards.
+>
+
+Thanks for the feedback. Not my decision to take, but I suspect that
+maintaining an unmaintained big project like that for the next 3 years
+doesn't look that appealing to the LTS guys ...
+
+
+> best regards
+>  Waldemar
+>
+
+
+-- 
+Profile: http://it.linkedin.com/in/compagnucciangelo
+
+--0000000000002c9f11065fec799f
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><br></div><br><div class=3D"gmail_quote g=
+mail_quote_container"><div dir=3D"ltr" class=3D"gmail_attr">Il giorno mar 1=
+0 nov 2026 alle ore 06:28 Waldemar Brodkorb &lt;<a href=3D"mailto:wbx@opena=
+dk.org">wbx@openadk.org</a>&gt; ha scritto:<br></div><blockquote class=3D"g=
+mail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204=
+,204,204);padding-left:1ex">Hi Angelo, all,<br>
+Angelo Compagnucci wrote,<br>
+<br>
+&gt; This bumps the qt5 packages to Qt 5.15.19, from the kde/5.15 branch of=
+<br>
+&gt; KDE&#39;s Qt5 Patch Collection, which is now rebased on it. qt5webengi=
+ne<br>
+&gt; is bumped in its own patch, as it drops and refreshes some patches of<=
+br>
+&gt; qt5webengine-chromium.<br>
+&gt; <br>
+&gt; This should be the last Qt5 bump: Qt 5.15.19 is the very last Qt 5.15<=
+br>
+&gt; release, and the Qt Company ended its support of Qt 5.15 after 26 May<=
+br>
+&gt; 2025 [1]. KDE keeps its Qt5 Patch Collection only for the open source<=
+br>
+&gt; projects still on Qt 5.15 until they move to Qt 6, and only for very<b=
+r>
+&gt; critical fixes [2]. Qt5 users should plan their move to Qt6.<br>
+&gt; <br>
+&gt; FYI: I am working on a series moving the Qt5 users to Qt6 and removing=
+<br>
+&gt; Qt5 from Buildroot. Before sending it, I would like to get feedback on=
+<br>
+&gt; this: would the removal be welcome, and when (for example after the<br=
+>
+&gt; next LTS)?<br>
+<br>
+We are still using QT5, so it would be nice to keep it for the next<br>
+LTS and remove it afterwards.<br></blockquote><div><br></div><div>Thanks fo=
+r the feedback. Not my decision to take, but I suspect that maintaining an =
+unmaintained big project like that for the next 3 years doesn&#39;t look th=
+at appealing to the LTS guys ...=C2=A0</div><div><br></div><blockquote clas=
+s=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid r=
+gb(204,204,204);padding-left:1ex">
+<br>
+best regards<br>
+=C2=A0Waldemar<br>
+</blockquote></div><div><br clear=3D"all"></div><br><span class=3D"gmail_si=
+gnature_prefix">-- </span><br><div dir=3D"ltr" class=3D"gmail_signature">Pr=
+ofile: <a href=3D"http://it.linkedin.com/in/compagnucciangelo" target=3D"_b=
+lank">http://it.linkedin.com/in/compagnucciangelo</a></div></div>
+
+--0000000000002c9f11065fec799f--
+
+--===============3161372810370015542==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============3161372810370015542==--
