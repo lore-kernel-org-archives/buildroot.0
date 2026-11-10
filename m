@@ -2,140 +2,123 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CDEC606A330
-	for <buildroot@archiver.kernel.org>; Tue, 10 Nov 2026 11:39:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7556606A31C
+	for <buildroot@archiver.kernel.org>; Tue, 10 Nov 2026 11:49:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=GWr2GaAR;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256 header.s=20260707 header.b=Al9XxJgD
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=MwGt+53F
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3CA054082E;
-	Tue, 10 Nov 2026 11:39:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9376A4081A;
+	Tue, 10 Nov 2026 11:49:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ddg8JXuoMUVn; Tue, 10 Nov 2026 11:39:14 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 6979F40813
+ id IAwBwa6-Q4Ix; Tue, 10 Nov 2026 11:49:19 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 54F334082C
 Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794310754;
-	b=fSj4FvNM6X5wUglvVHl7QIKY+Tha1z8/TjYeoYSl8juCvDVGUTMpETmrG3SlI6YcdBr0
-	 noHqiAgqpQ1fKzbiypV5Rfph1PI6TEjdmkJPB1z1VqJCeb2MYAfok7ePBCqvsxPgVikfr
-	 fUw5R+83HVKxrnRcbp6QSk1KLguqYvQsCHe2ijvwaPfibjDVutXkZOr7AzTOfp9THWCUS
-	 chv1yz9Da/Cqo/FGVaGqnzxH208OJ4HRs9y0i0TkpulahTkepuLyb21PSU8MSa9+bcCsY
-	 nmU0HdSPDeEcxCAqM7UQqnjb70k3ulK3PVM19oy7NmETzaGi6+vssLZHsQ4DGslRrmw==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794311359;
+	b=FCcE26F1QzuKs9UPvB+5OzCCkLr/b5NdPSQ1ELyfDa1o4JrRrDWFVNV1ep59CYxj4Lg6
+	 Oj1n/aMkx7QgyXFjGZ6OauEnIC01MpmZc82dxB+ntxyY5MZF21/Z77f+37DRy9fmxFuF4
+	 IGl5ce0PoSzRmyRIvD9NmHHoi3Zs9ZJvLWCXR7+1Q3slO4cQChbzkypgF53GLu+pXi7n7
+	 daKQ85t5tkXwr7zuvpN/eLRmPEz9MYHfCjbMBblHl663FWx9AyQ5iYfOQ8ggUHLwXD263
+	 n++230Z3exEmrWmLWOQtIkVpEPT5PUtEAAxAzX9fvFl/k8dN3svZN7nueGwDLx3hBxg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794310754;
+	c=relaxed/relaxed; t=1794311359;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:From:To:Date:Message-Id:X-Mailer:MIME-Version:
-	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:Cc:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=MD7Z3TtT9QC7aBmYOn3s7we2mF11U1AMibSXODic3J8=;
-	b=SX5Gjkism+kAy/34s+ajy/sK20+RLlyMPfZ2Zf7kU4N+s/OjqqxIZuSkCK4Cvc1QCg2y
-	 /W3Fg8lM110t2w8A2OJVi3R0wamiCEuDT+kX6ZeMQx9hNyyptDHNGJStKYcbXf8l3qjmm
-	 1TtmfU0gQrK4LQlPmdhnDnHkVyRxl/U6UkKDq+AwZ91WObEZGCW68dl7PoCHUB1lHyLJA
-	 L7QRPFthIug3UlgnWwxfdb6G0KeOkRMiJDURkCHon4wQkS47m66LOAT8SKMcymo9hXK42
-	 rT5YHzSbiO6bKz80uuI56N7oQE0UB/wmzQ77QZl4H5/rDScf+eY6EF52gYs/D12FbmQ==
+	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 Received:To:Date:Message-Id:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
+	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=O8eWIHjK/wzewr8DfMI27yTLQ/u5Up6BJaeTmcdO4kw=;
+	b=sCUglaLeK5e53Orz6AB9p/GbuQjvpfYajJ5OuZmPe1/QL7GFCs8thWs+qzHSupvzjQhw
+	 s6fCMfXJGJ452Kbr5+ajAOHArsT4OfSdGbGSRCzGBsN08AQ6J3fJ011xXEaDSWl8Lwgez
+	 xW2vPUcxM3LpoM/JtatQfqTk2vRFEUJt8NRKWTZVDKrrFJXUhUzcPGndDaVMFTzotNC2i
+	 +2CjB8ij5JCngj8L0ZyZe2qSmq1VEZjYJXoE4nt/UzNFNWi/PBjkgM9Y8SMT56FTExu1Z
+	 g0c0J58AuJ7DILkTyEU9IRxZ3pXFrDENDmIDVirJy6sGlCWk+l3QIIhUWoy4RzDKMCA==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794310754;
-	bh=MD7Z3TtT9QC7aBmYOn3s7we2mF11U1AMibSXODic3J8=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=GWr2GaARWpM4euLwRIpwON7bAYcfgJE3OYDiTLjLyCiFWwuHf1Uovnear356Bw3fi
-	 Xa18kYrhTUmiS0smKDRZdHyDvo6kFB079005giEOLs7FcrlWqOyhqFZNqxmf7U6ako
-	 zwHzN3Zo+cPQxDC9baAEuxNFbwk1Ndmf5tJkb1Bn6LM/LpPAS8xOJjz5gnGpAhOWWm
-	 IdQEXMcgiqTiGfOmhxGqy9EhyT9M48sv8tC0QJEWQH2+GTjTxH9BdQ+6KfaIOvQ9uE
-	 H54XB0KtN0eiS4QfiR9CdLTxLNYylUF4bA3W3+bL6bkffsjqwyCHHZ2ZuFi1USF66v
-	 YxyD3xgb3bH2Q==
+	s=default; t=1794311359;
+	bh=O8eWIHjK/wzewr8DfMI27yTLQ/u5Up6BJaeTmcdO4kw=;
+	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=MwGt+53FqZY+JtXdtslPY2WaMHY9o5EV0sekcmGGodD30Ct6e8eYQfw5nBfni57fb
+	 7apss/X7fLlyWzaR2tFGIwOtycFbT3rYk9D8cfb+DunXA35ETmbWfDSDtroksyiZ/f
+	 jqPAn9cxf5J3pKqR3nyfyf09ud9luVh3DU8gxiyL0t3iyYF5bA4X5b7b3z1hYCsdpe
+	 7yX9PwqT2CLUmTd095Ws2nPjHNvRR53da1qBR1eyEALD85bUN9sh5vG+TuWgl6JGnf
+	 aYgVHmKAU28fXX8N745d174oKalPUyVx8m8zKxuImTEyddS34AH3JisjK9++0fwlal
+	 ohwM/pIaLWLew==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6979F40813;
-	Tue, 10 Nov 2026 11:39:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 461B9CC4
- for <buildroot@buildroot.org>; Tue, 10 Nov 2026 11:39:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 54F334082C;
+	Tue, 10 Nov 2026 11:49:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3B631AF2
+ for <buildroot@buildroot.org>; Tue, 10 Nov 2026 11:49:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2BEB94032F
- for <buildroot@buildroot.org>; Tue, 10 Nov 2026 11:39:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 20D1D4082C
+ for <buildroot@buildroot.org>; Tue, 10 Nov 2026 11:49:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iqlfx6Awf9kX for <buildroot@buildroot.org>;
- Tue, 10 Nov 2026 11:39:11 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 07EC64008A
-Authentication-Results: smtp2.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::535"
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pkmdaiBE9DJg for <buildroot@buildroot.org>;
+ Tue, 10 Nov 2026 11:49:17 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 85F964081A
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::535; helo=mail-ed1-x535.google.com;
+ client-ip=2a00:1450:4864:20::62e; helo=mail-ej1-x62e.google.com;
  envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org; dmarc=pass (p=quarantine dis=none)
- header.from=googlemail.com
-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20260707 header.b=Al9XxJgD
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com
- [IPv6:2a00:1450:4864:20::535])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 07EC64008A
- for <buildroot@buildroot.org>; Tue, 10 Nov 2026 11:39:10 +0000 (UTC)
-Received: by mail-ed1-x535.google.com with SMTP id
- 4fb4d7f45d1cf-6a642495d81so2928780a12.2
- for <buildroot@buildroot.org>; Tue, 10 Nov 2026 03:39:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20260707; t=1794310748; x=1794915548; darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=HCBirm8yMNpEV/tPN50HKG//XHGk3wOzfvOvLep/5dA=;
- b=Al9XxJgD9ZFnTm/mjiv821KOABMestPePqS6dYk0tv6tgc0x/pHGoNcGk3zzLgdO8m
- UKC4H50z5qH+Puc+H3P3NbajVh+tC/UXwJd1LjXM4wC6DTwtDCZAj+92w2tS6frmCiCk
- o69bN7YBiqioS+9+orE8lgh1pwmu81adiRdvun+IE1zm0DmZ0Eq8cLw0fgeczRZ0Na7M
- 6M8YcCNyJeYjMQKfVDcF8SaYHd2PUUIIvszl6pAsrLH8E3Gz2LNLuEff2gQmLxusqPmd
- CclD5/9Hy2g5emc4Nl02wX+rW/qIuqXmkbhZBxjlSyKHw6tuADRROq4PmeCKIyQ7zWIf
- 087g==
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
+ [IPv6:2a00:1450:4864:20::62e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 85F964081A
+ for <buildroot@buildroot.org>; Tue, 10 Nov 2026 11:49:15 +0000 (UTC)
+Received: by mail-ej1-x62e.google.com with SMTP id
+ a640c23a62f3a-c3fd91337baso333590866b.3
+ for <buildroot@buildroot.org>; Tue, 10 Nov 2026 03:49:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1794310748; x=1794915548;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=HCBirm8yMNpEV/tPN50HKG//XHGk3wOzfvOvLep/5dA=;
- b=p2BF5gUL9fHU9HHs3wH1HUEe7TPuPBwSSoT7Xlf/NoQe5lvT5WSxaabQ0NGi2/5kMv
- 476rBqEKQrUNESfxc1oDyK4WgVe8vOjPp7rnxFWzOZTlEhkOEHiIIppW/8kGLRDP2ANP
- +t9jrLjhPkRTq60j2ixe/OtoTyKRq8nY/3PqpSNidJdFVpNXZFhaSjqc6+EaKXRksJho
- GEdV4UNAsHBBYpDFaTyt5EV1HakNcb9fHJGHgkGs3oWAbwmWBpugPVGjxZeiJPHNJvUq
- CqT3yq6Ki+Fd5jogj3gL3VXXb/h5VaPmEy6Pf3fd7fFk80IJhE9L1Q3OYnmJ5UgHOkoj
- 8z5Q==
-X-Gm-Message-State: APuU4Z/KGGXzt9ulLHFPQjd3UfzhwCxehzJhkfFYo/zF0iqjmEOvR6O/
- dQLhXnvrWrZykIBqfe88RPrkUCLnuhpkSzyO7aLBRj+qKPhqjjLQ4ZF5AH/xSA==
-X-Gm-Gg: AYBFou0+vu3fQhp5wccSMzvsTWlSXb1kqXfMLTeF5VAlZn1t1Qu8c6DC2UhHqXHS+KR
- TnCk1IMr+TaO8+vQKnVUxRA5YegXv2r2bkLT0c1uXn9IaxqZPw+4bUYMyNeD9rbyiSDRDLxfKvU
- H/I5dyGhTMnU6za5AgDd1KSaq5do8a12TceSfcalL8LTSPdw4SShtD5IcbelhELSyxDVvA1wcw+
- b8r78UPYtq/MVoU7L1fo1ApGUbxGmNpbTzKpUQkqUtxHGdDpGjkA+o6w0mNTZdBhYVQX/AQjMVZ
- Wx2ixVu63wRN/Oj6fsyJANZlQWOyrNWYEEpP11wDeVsxBSXcz4KPf2MXjhtj1ejCYy/vo1ykBNI
- H/l8tjyP7Ojj/flkhEfqNXmCydkaNmMzCuaMCja/9FoNriOg0duxjqM2K0oBGcUMRNtXOMoTzil
- uzoQtc7bIYwk9vno41oTxYkM9dzmCVlv8ISQKz5ISw1QT2LprlFTA0wP5O/82nQ5hi1vbdwb1Pk
- vq87HgNrtHuOvch5oBc0B3/rXK1Mh1gRjbyx50pPvTrtOhUhjnaTdyY9z+vgv0JV4LAOP+0/qXP
- u6qu+UUBQ7GQRTANBanG155kGiw2nY+KS+ON020rht+UH0JbJPbtPPIGmEPmvefeGPyAVC73Wpy
- Dy+VKuQrF98mb/cSZVH7ZJkjQyFTKfJ4=
-X-Received: by 2002:a05:6402:1eca:b0:6b5:76be:62e0 with SMTP id
- 4fb4d7f45d1cf-6b756b064c7mr2062405a12.35.1794310748363; 
- Tue, 10 Nov 2026 03:39:08 -0800 (PST)
+ d=1e100.net; s=20260707; t=1794311353; x=1794916153;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to:content-type;
+ bh=BsXqzs0FEa+NVZwcRFjFzrJJlMG7Bj7yRoqS/OhYFu0=;
+ b=Z3L3LFkALnQDJ5yHNrv0aOUwfFDSWBzgaHz+ZNIHupvWYYYWI+lQ/PrjsW7nZFJhma
+ JD8IbeCl9b7PV0xB//FfPpuO1P8gpba1PcOPKJqNrqh46VuTY4M4i2w1LL/q0ck+q2EH
+ JlfWnANwNKwFjCtzHG7X8uhN/jFs61nCR4zgcUpISwLhI91Oi6MGGYZca6UPGcHkSq8o
+ lkiLtdNqmnPc6ITuSmw19PKr8toOE5XLjdUMoX/tEHKBGSA9jJJIW1GvSsr+qc5Ht0eg
+ NAYBuJyal6gWX9OAldGdeoQYY33SmAWM+uIR9X65gxgtX4rwPzyW4/jA0XPo3/+wT+K4
+ ETEw==
+X-Gm-Message-State: APuU4Z9tv4Yc4nnU89hLxunZDkXDTbUBf3U/J4KjQHdLLmvIx037DOBy
+ Xcvu87FsyslopZWkkkHOlUc+4niyroJbkhXdK4jd9G2LfqHY9+jCNKYKHDPl4Q==
+X-Gm-Gg: AYBFou1jciyf87mWhvNcAIcvFKqcDeTLz0lFSunMdoiKlitbP/yKxT/CWMt9wuSUhHc
+ XNdvu9paNhFqgXxh9Z45jwIcG8ex4PoydZYdpOEnjgzaaE80BcpHrSc8OAnkafGhKlgWZUcLVLz
+ FmBDC00K6ZLrUoTNm2/C0hUMGZ+g5fnVyIKgtcRj3SWn3Hh3S9XrLqe+f9wCSL5X2mvarIf1iWJ
+ FPKBSk9jI6WM3ugFXdMTCOkODIbNH/3LvjmWvxtM4NBZH0jpKdNjDU3kqn6FCykejbKrNmMb2UO
+ sL00EVcXAeYmYmSdZe/KP3dy8du8QWYkt4IBvvNeOkBccYUdntUcOMbKScflcjlWSaSVEuqOTWh
+ jNpxWv+HfDO0Hkz808ulHhBvubOwqSAn9XrLND6BeiFUsh/PhZ7/DkOiQLdSkhjc/jP9f+7T2uF
+ hRta1Cu/CLDmvm/Xc+oDt6CWA8m2sNA25stuSKgvTnP6CDpTlbSAdDDm1PvLThlDYd8En9RikJY
+ fSog+hjmA9ZV0fi5zg2aPCS26ZvtRzsFDrSENBHVTtqpQFkYm2P5IQYGP2279I9g/qxCG1hSsYE
+ Zba9FDDR55bXOxQAebuFgl6ICcnOBC3AIT3N9Z30oNFZZ/Inm3LA8apNmTefaP00EciIIDSYx6D
+ amW6k+6qg
+X-Received: by 2002:a17:906:c112:b0:c41:8e21:4d5a with SMTP id
+ a640c23a62f3a-c5048f7b648mr194841566b.5.1794311353104; 
+ Tue, 10 Nov 2026 03:49:13 -0800 (PST)
 Received: from development2.visionsystems.local (mail.visionsystems.de.
  [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-6b7578ece26sm992865a12.24.2026.11.10.03.39.06
+ a640c23a62f3a-c504a595fe7sm99518866b.37.2026.11.10.03.49.08
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 10 Nov 2026 03:39:07 -0800 (PST)
-From: Yegor Yefremov <yegorslists@googlemail.com>
+ Tue, 10 Nov 2026 03:49:08 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Tue, 10 Nov 2026 12:39:06 +0100
-Message-Id: <20261110113906.1970390-1-yegorslists@googlemail.com>
+Date: Tue, 10 Nov 2026 12:49:07 +0100
+Message-Id: <20261110114907.2273598-1-yegorslists@googlemail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20261109132501.233001-1-yegorslists@googlemail.com>
+References: <20261109132501.233001-1-yegorslists@googlemail.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/virglrenderer: fix i915 backend build
- on 32-bit platforms
+Subject: [Buildroot] [PATCH v2] package/libcurl: fix build on LoongArch with
+ musl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -145,93 +128,316 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>
+From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
+Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
 	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-When the Intel (i915) DRM backend is enabled, the build fails on 32-bit
-platforms:
+Since libcurl 8.21.0, building the curl tool for loongarch64 with a musl
+toolchain fails with:
 
-  ../src/drm/i915/i915_ccmd.c:267:63: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
-    267 |          struct drm_i915_gem_memory_class_instance *classes = (void*)mem_regions->regions;
-        |                                                               ^
+ld: read-only segment has dynamic relocations
+collect2: error: ld returned 1 exit status
 
-drm_i915_gem_create_ext_memory_regions::regions is a __u64, which cannot
-be cast directly to a 32-bit pointer. Backport the upstream fix, which
-casts through uintptr_t first.
+On musl, none of the secure memory zeroing functions curl knows about
+are detected, so curlx_memzero_low() falls back to calling memset()
+through a 'const volatile' function pointer. In non-PIC code, GCC places
+this pointer in .rodata, and on LoongArch the linker emits a dynamic
+R_LARCH_64 relocation against memset() there, i.e. a text relocation.
+musl's dynamic loader does not support DT_TEXTREL, so the Buildroot
+toolchain wrapper links with -z text, which turns it into an error.
+Other architectures resolve the address to a PLT entry at link time and
+are not affected.
 
-This issue has been present since commit 76d4a9b297eb
-("package/virglrenderer: new package"), which added the package with
-the i915 backend. It therefore affects 2026.08 and later.
+Backport the upstream fix, which detects explicit_bzero() at configure
+time. musl provides it since 1.1.20, so the memset() fallback is no
+longer used. As the patch touches configure.ac and m4/, autoreconf the
+package.
+
+This issue has been present since commit be2789d08432 ("package/libcurl:
+security bump to version 8.21.0"), which brought in the upstream code
+using the 'const volatile' pointer. It therefore affects 2026.08 and
+later, and 2026.05.x since 2026.05.1.
 
 Fixes:
-https://autobuild.buildroot.org/results/72c81920e6d1fbc36de8930f4ad2f70f88c4cf29
+https://autobuild.buildroot.org/results/558c08d552920e45628254bdc029518120a35ae1
 
-Fixes: 76d4a9b297ebd4ed15000bce62873049b9e75f5a ("package/virglrenderer: new package")
+Fixes: be2789d08432da951c0ebfb23b034072601bc8fe ("package/libcurl: security bump to version 8.21.0")
 Assisted-by: Claude:claude-opus-5-5
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- ...m-i915-fix-build-on-32-bit-platforms.patch | 43 +++++++++++++++++++
- 1 file changed, 43 insertions(+)
- create mode 100644 package/virglrenderer/0002-drm-i915-fix-build-on-32-bit-platforms.patch
+Changes v1 -> v2:
+  - replace the local patch with the upstream fix, which detects
+    explicit_bzero() at configure time instead (suggested by Viktor
+    Szakats in the upstream review)
+  - autoreconf the package, as the patch touches configure.ac and m4/
 
-diff --git a/package/virglrenderer/0002-drm-i915-fix-build-on-32-bit-platforms.patch b/package/virglrenderer/0002-drm-i915-fix-build-on-32-bit-platforms.patch
+ ...o-detect-explicit_bzero-in-configure.patch | 235 ++++++++++++++++++
+ package/libcurl/libcurl.mk                    |   2 +
+ 2 files changed, 237 insertions(+)
+ create mode 100644 package/libcurl/0001-build-auto-detect-explicit_bzero-in-configure.patch
+
+diff --git a/package/libcurl/0001-build-auto-detect-explicit_bzero-in-configure.patch b/package/libcurl/0001-build-auto-detect-explicit_bzero-in-configure.patch
 new file mode 100644
-index 0000000000..69039d329b
+index 0000000000..475c55b6e6
 --- /dev/null
-+++ b/package/virglrenderer/0002-drm-i915-fix-build-on-32-bit-platforms.patch
-@@ -0,0 +1,43 @@
-+From 8d6123bb9e3b1959077bc3792a9163f85c78d0d4 Mon Sep 17 00:00:00 2001
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Sat, 7 Nov 2026 09:33:13 +0100
-+Subject: [PATCH] drm/i915: fix build on 32-bit platforms
++++ b/package/libcurl/0001-build-auto-detect-explicit_bzero-in-configure.patch
+@@ -0,0 +1,235 @@
++From e55a7ff40ebe1974735205135dfb3bf9e3db269b Mon Sep 17 00:00:00 2001
++From: Viktor Szakats <commit@vsz.me>
++Date: Mon, 9 Nov 2026 19:24:43 +0100
++Subject: [PATCH] build: auto-detect `explicit_bzero()` in configure
 +
-+drm_i915_gem_create_ext_memory_regions::regions is a __u64. Casting it
-+directly to a pointer fails on 32-bit platforms, where pointers are
-+only 32 bits wide:
++Replacing compile-time auto-detection. Mainly due to MUSL, which offers
++no means to detect its presence or version via the preprocessor,
++requiring costly configure-time detection.
 +
-+  ../src/drm/i915/i915_ccmd.c:267:63: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
-+    267 |          struct drm_i915_gem_memory_class_instance *classes = (void*)mem_regions->regions;
-+        |                                                               ^
++After this patch `explicit_bzero()` is used with MUSL 1.1.20+
++(2018-09-04), and potentially more platforms which wasn't expliticly
++opted-in previously.
 +
-+Cast through uintptr_t first. The value was assigned from a uintptr_t
-+just above, so no information is lost.
++This in turn avoids this link-time error, and suspect toolchain bug,
++when falling back to the local memzero, combined with LoongArch ld
++2.45.1 + gcc 16.2.0:
++```
++gcc/loongarch64-buildroot-linux-musl/16.2.0/.../loongarch64-buildroot-linux-musl/bin/ld: read-only segment has dynamic relocations
++```
++Ref: https://autobuild.buildroot.org/results/558c08d552920e45628254bdc029518120a35ae1
 +
-+Seen in Buildroot's autobuilder:
++Reported-by: Yegor Yefremov
++Fixes #23844
++Follow-up to 982e2e8c75f157940ef100f59dea94c4eb607058 #21989
++Follow-up to 066478f6346a2d987a9ecc3bd3bf45764d69c1c4 #21598
 +
-+https://autobuild.buildroot.org/results/72c81920e6d1fbc36de8930f4ad2f70f88c4cf29
++Closes #23866
 +
-+Upstream: https://gitlab.freedesktop.org/virgl/virglrenderer/-/commit/8d6123bb9e3b1959077bc3792a9163f85c78d0d4
++Upstream: https://github.com/curl/curl/commit/e55a7ff40ebe1974735205135dfb3bf9e3db269b
 +Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
-+Part-of: <https://gitlab.freedesktop.org/virgl/virglrenderer/-/merge_requests/1712>
 +---
-+ src/drm/i915/i915_ccmd.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ CMake/unix-cache.cmake     |  9 +++++
++ CMakeLists.txt             |  5 ++-
++ configure.ac               |  6 +++-
++ lib/cf-socket.c            |  4 +++
++ lib/curl_config-cmake.h.in |  3 ++
++ lib/curl_setup.h           | 15 +++------
++ m4/curl-functions.m4       | 67 ++++++++++++++++++++++++++++++++++++++
++ 7 files changed, 96 insertions(+), 13 deletions(-)
 +
-+diff --git a/src/drm/i915/i915_ccmd.c b/src/drm/i915/i915_ccmd.c
-+index 2db97ed15..cc07e2802 100644
-+--- a/src/drm/i915/i915_ccmd.c
-++++ b/src/drm/i915/i915_ccmd.c
-+@@ -276,7 +276,7 @@ i915_ccmd_gem_create_ext(struct drm_context *dctx, struct vdrm_ccmd_req *hdr)
-+          if (ext_size < 0)
-+             break;
++diff --git a/CMake/unix-cache.cmake b/CMake/unix-cache.cmake
++index b6b544442046..468bd3e4dc01 100644
++--- a/CMake/unix-cache.cmake
+++++ b/CMake/unix-cache.cmake
++@@ -69,6 +69,15 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux" OR
++        CMAKE_SYSTEM_NAME STREQUAL "NetBSD")
++   set(HAVE_EVENTFD 1)
++ endif()
+++if(CYGWIN OR
+++   CMAKE_SYSTEM_NAME STREQUAL "Linux" OR  # glibc 2.25+, MUSL 1.1.20+
+++   CMAKE_SYSTEM_NAME STREQUAL "DragonFlyBSD" OR  # 5.6+
+++   CMAKE_SYSTEM_NAME STREQUAL "FreeBSD" OR  # 11 r272673+
+++   CMAKE_SYSTEM_NAME STREQUAL "OpenBSD")  # 5.5+
+++  set(HAVE_EXPLICIT_BZERO 1)
+++elseif(APPLE)
+++  set(HAVE_EXPLICIT_BZERO 0)
+++endif()
++ if(ANDROID AND ANDROID_PLATFORM_LEVEL GREATER_EQUAL 34)
++   set(HAVE_MEMSET_EXPLICIT 1)
++ endif()
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index a9df7a21bc3c..23f21dd37d47 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -1739,7 +1739,10 @@ if(NOT WIN32)
 + 
-+-         struct drm_i915_gem_memory_class_instance *classes = (void*)mem_regions->regions;
-++         struct drm_i915_gem_memory_class_instance *classes = (void *)(uintptr_t)mem_regions->regions;
++   check_symbol_exists("memset_s" "string.h" HAVE_MEMSET_S)
++   if(NOT HAVE_MEMSET_S)
++-    check_function_exists("memset_explicit" HAVE_MEMSET_EXPLICIT)
+++    check_symbol_exists("explicit_bzero" "string.h" HAVE_EXPLICIT_BZERO)
+++    if(NOT HAVE_EXPLICIT_BZERO)
+++      check_function_exists("memset_explicit" HAVE_MEMSET_EXPLICIT)
+++    endif()
++   endif()
++ endif()
 + 
-+          for (unsigned i = 0; i < mem_regions->num_regions; i++) {
-+             struct drm_i915_gem_memory_class_instance *class = classes + i;
-+-- 
-+GitLab
-+
++diff --git a/configure.ac b/configure.ac
++index d6a542311116..ebefb158a27f 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -4242,7 +4242,11 @@ if test "$curl_cv_native_windows" != "yes"; then
++ 
++   CURL_CHECK_FUNC_MEMSET_S
++   if test "$curl_cv_func_memset_s" = "no"; then
++-    AC_CHECK_FUNCS([memset_explicit])
+++    dnl Use complex detection to avoid misdetection on old Linux.
+++    CURL_CHECK_FUNC_EXPLICIT_BZERO
+++    if test "$curl_cv_func_explicit_bzero" = "no"; then
+++      AC_CHECK_FUNCS([memset_explicit])
+++    fi
++   fi
++ fi
++ 
++diff --git a/lib/cf-socket.c b/lib/cf-socket.c
++index 97b5fa89d219..9073274ba0c2 100644
++--- a/lib/cf-socket.c
+++++ b/lib/cf-socket.c
++@@ -59,6 +59,10 @@
++ #include <inet.h>
++ #endif
++ 
+++#ifdef __DragonFly__
+++#include <sys/param.h>  /* for __DragonFly_version */
+++#endif
+++
++ #include "urldata.h"
++ #include "curl_trc.h"
++ #include "if2ip.h"
++diff --git a/lib/curl_config-cmake.h.in b/lib/curl_config-cmake.h.in
++index 45c5de970dce..dbbbd04fdfb8 100644
++--- a/lib/curl_config-cmake.h.in
+++++ b/lib/curl_config-cmake.h.in
++@@ -234,6 +234,9 @@
++ /* Define to 1 if you have the `opendir' function. */
++ #cmakedefine HAVE_OPENDIR 1
++ 
+++/* Define to 1 if you have the explicit_bzero function. */
+++#cmakedefine HAVE_EXPLICIT_BZERO 1
+++
++ /* Define to 1 if you have the memset_explicit (C23) function. */
++ #cmakedefine HAVE_MEMSET_EXPLICIT 1
++ 
++diff --git a/lib/curl_setup.h b/lib/curl_setup.h
++index d4d0f25bfe24..504b21210352 100644
++--- a/lib/curl_setup.h
+++++ b/lib/curl_setup.h
++@@ -1638,9 +1638,8 @@ typedef struct sockaddr_un {
++ #endif
++ 
++ /* For FreeBSD it is included from curl/curl.h */
++-#if defined(__DragonFly__) || defined(__OpenBSD__) || defined(__NetBSD__)
++-#include <sys/param.h>  /* for __DragonFly_version, OpenBSD,
++-                           __NetBSD_Version__ */
+++#ifdef __NetBSD__
+++#include <sys/param.h>  /* for __NetBSD_Version__ */
++ #endif
++ 
++ /* NetBSD before 6.1 did not set SS_NBIO for SOCK_NONBLOCK. */
++@@ -1660,16 +1659,10 @@ typedef struct sockaddr_un {
++ #endif
++ #elif defined(HAVE_MEMSET_S)
++ #define curlx_memzero_low(buf, size)  (void)memset_s(buf, size, 0, size)
+++#elif defined(HAVE_EXPLICIT_BZERO)
+++#define curlx_memzero_low(buf, size)  explicit_bzero(buf, size)
++ #elif defined(HAVE_MEMSET_EXPLICIT)
++ #define curlx_memzero_low(buf, size)  (void)memset_explicit(buf, 0, size)
++-#elif defined(__CYGWIN__) || \
++-  (defined(__NEWLIB__) && !defined(__CLIB2__)) || \
++-  (defined(__GLIBC__) && \
++-    (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 25))) || \
++-  (defined(__DragonFly__) && __DragonFly_version >= 500600 /* 5.6+ */) || \
++-  (defined(__FreeBSD__) && __FreeBSD_version >= 1100037 /* 11.0+ */) || \
++-  (defined(__OpenBSD__) && OpenBSD >= 201405 /* 5.5+ */)
++-#define curlx_memzero_low(buf, size)  explicit_bzero(buf, size)
++ #elif defined(__NetBSD__) && __NetBSD_Version__ >= 702000000 /* 7.2+ */
++ #define curlx_memzero_low(buf, size)  (void)explicit_memset(buf, 0, size)
++ #endif
++diff --git a/m4/curl-functions.m4 b/m4/curl-functions.m4
++index 64046a834afb..2edbdf0fb5f4 100644
++--- a/m4/curl-functions.m4
+++++ b/m4/curl-functions.m4
++@@ -3956,6 +3956,73 @@ AC_DEFUN([CURL_CHECK_FUNC_MEMSET_S], [
++   fi
++ ])
++ 
+++dnl CURL_CHECK_FUNC_EXPLICIT_BZERO
+++dnl -------------------------------------------------
+++dnl Verify if explicit_bzero is available.
+++
+++AC_DEFUN([CURL_CHECK_FUNC_EXPLICIT_BZERO], [
+++
+++  tst_links_explicit_bzero="unknown"
+++  tst_proto_explicit_bzero="unknown"
+++  tst_compile_explicit_bzero="unknown"
+++
+++  AC_MSG_CHECKING([if explicit_bzero can be linked])
+++  AC_LINK_IFELSE([
+++    AC_LANG_FUNC_LINK_TRY([explicit_bzero])
+++  ],[
+++    AC_MSG_RESULT([yes])
+++    tst_links_explicit_bzero="yes"
+++  ],[
+++    AC_MSG_RESULT([no])
+++    tst_links_explicit_bzero="no"
+++  ])
+++
+++  if test "$tst_links_explicit_bzero" = "yes"; then
+++    AC_MSG_CHECKING([if explicit_bzero is prototyped])
+++    AC_EGREP_CPP([explicit_bzero],[
+++      $curl_includes_string
+++    ],[
+++      AC_MSG_RESULT([yes])
+++      tst_proto_explicit_bzero="yes"
+++    ],[
+++      AC_MSG_RESULT([no])
+++      tst_proto_explicit_bzero="no"
+++    ])
+++  fi
+++
+++  if test "$tst_proto_explicit_bzero" = "yes"; then
+++    AC_MSG_CHECKING([if explicit_bzero is compilable])
+++    AC_COMPILE_IFELSE([
+++      AC_LANG_PROGRAM([[
+++        $curl_includes_string
+++      ]],[[
+++        char buf[2];
+++        explicit_bzero(buf, sizeof(buf));
+++      ]])
+++    ],[
+++      AC_MSG_RESULT([yes])
+++      tst_compile_explicit_bzero="yes"
+++    ],[
+++      AC_MSG_RESULT([no])
+++      tst_compile_explicit_bzero="no"
+++    ])
+++  fi
+++
+++  AC_MSG_CHECKING([if explicit_bzero might be used])
+++  if test "$tst_links_explicit_bzero" = "yes" &&
+++     test "$tst_proto_explicit_bzero" = "yes" &&
+++     test "$tst_compile_explicit_bzero" = "yes" &&
+++     test "x$curl_disallow_explicit_bzero" != "xyes"; then
+++    AC_MSG_RESULT([yes])
+++    AC_DEFINE_UNQUOTED(HAVE_EXPLICIT_BZERO, 1,
+++      [Define to 1 if you have the explicit_bzero function.])
+++    curl_cv_func_explicit_bzero="yes"
+++  else
+++    AC_MSG_RESULT([no])
+++    curl_cv_func_explicit_bzero="no"
+++  fi
+++])
+++
++ dnl CURL_RUN_IFELSE
++ dnl -------------------------------------------------
++ dnl Wrapper macro to use instead of AC_RUN_IFELSE. It
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 00f718fbec..a8cbe65385 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -14,6 +14,8 @@ LIBCURL_LICENSE = curl
+ LIBCURL_LICENSE_FILES = COPYING
+ LIBCURL_CPE_ID_VENDOR = haxx
+ LIBCURL_INSTALL_STAGING = YES
++# 0001-build-auto-detect-explicit_bzero-in-configure.patch
++LIBCURL_AUTORECONF = YES
+ 
+ # Likewise, there is no compiler on the target, so libcurl-option (to
+ # generate C code) isn't very useful
 -- 
 2.34.1
 
