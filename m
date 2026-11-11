@@ -2,109 +2,120 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C34E606A31C
-	for <buildroot@archiver.kernel.org>; Wed, 11 Nov 2026 10:41:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C233A606A324
+	for <buildroot@archiver.kernel.org>; Wed, 11 Nov 2026 10:56:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Lt/6lFoX;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b=ff3YtHnR
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=PLPn0jkY
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4B91C4076E;
-	Wed, 11 Nov 2026 10:41:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A046A40517;
+	Wed, 11 Nov 2026 10:56:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LKdSgCo5TMgS; Wed, 11 Nov 2026 10:41:11 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org DB90C405F5
+ id 2tB9nu_3hiOX; Wed, 11 Nov 2026 10:56:23 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 3720340519
 Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794393671;
-	b=YrKp5tMvH+2Dh2FKvEX7h3YQ8cArZpe6SbuxjL8pgnMF+kqz65MLRgxK7l6fQrgpRHYB
-	 9bFrpwamVbmq7n0BJ3sJh6X4eKxGn9HoD2rABH7Kzu0i2SiqvJboaru4kRbtYgW9iAzhs
-	 Nn7AgLsAW+3OmABXe78+cbNK55nnboSWWYetu5BNCuiNleSTgCs9mOyDomQ+O2S4qbgX1
-	 bYM0+QdJl4EMSrzSJqYTQwbSyHA4rOdNiXeSV9UD9b/7rfc128PCnQAl4zUKxyH654yo4
-	 F4AAm2BKa4AJZDyTypfBHMKKCtHwt3Oh99hZcVSKH/EpxaOLYL+byK0P3YUhyiSlEmg==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794394583;
+	b=Gnpi7MhOHelGeF+bqlGzvKC1/xHvTelsiW2CPQrNgE1CeI8lARN3pHZ4WvhJXFz1b0QI
+	 KbF/N0N7uhynWfBjxecla4m1IIpIKAb+dAZYQrDqKKgVHqhgNd3JqmFD9IpJMQhR5c54d
+	 KjoR9HqRPTZpZvSvD5EVVsI9K1WQiLEaJte91BJuQCLoEtgkIeuC6tecTvG1h4jNWC+be
+	 SWR4qqw/EKwS/d8IqcRwz3Iy/hSzI0Stji9GGApuGy1Th+bSe+rDk4L1DurHPNOymiPv4
+	 ohi85/RISbusdUK017oAjRt0RdhcZ9QtrazYNGbzMEmH1hCqHpNTT6OiNtwiWfjfv7w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794393671;
+	c=relaxed/relaxed; t=1794394583;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
-	 X-CMAE-Envelope:Subject:X-BeenThere:X-Mailman-Version:Precedence:
-	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
-	 Sender;
-	bh=zheJYqwBR55vdUVFwRZnDZROkjG+3OYZRH9QCM+kznY=;
-	b=Qy0+f5OmYu2jav/zk6m/B4vcqsxtQVlOqZEp6TSDLOeGhg3NVEWi2g2vi2OC6DW629vS
-	 rLSWW0ZsE82fZTd0UfCxK/iT13k4PzErZnLrA7PTRIFMMpRiVXv9eTAIfSbbVuqScqdMQ
-	 t1jekaWBeYw7MFP7sF9z+0vM1S1KkprMBhXUs2luqyMk5niIfA/Qfy+uuF/XbPLHwD0dW
-	 yuGw1LRZcekLqpIbtgGTrDs2Q3i8o9WGAU+MuVLqGzWSFpXWYRIWYA6umlNBNTUptwBYZ
-	 n3Utn2ZD7f7kNEFZXF8Qjf9CVt1zs0iScmRW2i3zRDvv8eVwL0tvn5Laidd8oEB2XBg==
+	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 Received:To:Date:Message-Id:X-Mailer:MIME-Version:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=FmaPbiIuR1B76bPY9KhOWyyjRF6sFvJ596hM5D0Crnk=;
+	b=NNH6BHOUG06wTXdKmdZDR2d+VA+/40Axg5enrfdxGW8eXLqh9LPicSqo9etuSnM5xtnp
+	 im+VO7TGtHF7OIXX6AskUNcgBm/fkKnxGZSIo7DvkWMJcGDMfFPMXp9IKead2eJL4T1i/
+	 UtFuy340MsERfnF64JTXTNhOhP3KUIR4RDcJCNUyNDkISyFWqhHeBYu3+sfZoCHu3R2sP
+	 WKvRDosgfsbUbbr/12DQCnfGl+dcVbKj9O48ekDxaIWFHvM7ESWpd+k4SYnpRHhXPnELB
+	 f6S9BAHOs4Hr0htMHKOiG3Jy48FU6H7DBYxENiH0OZa1s2zOkHOlKVo06bFZs+AwvkQ==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794393670;
-	bh=zheJYqwBR55vdUVFwRZnDZROkjG+3OYZRH9QCM+kznY=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=Lt/6lFoXV5od+fnVP8EGdu2YmB4t0ijh66riHMB1HiK3XZBcLbQI/r+BDBv9f5Ih5
-	 blHbDxVLT9EcSIHmW6hNDsRPcxqY4O0NBElrvCgrjynw/6dNC9rOks9pO75gtFNLMr
-	 kfCvQ84tsAMswui6/O1T+8A5w7YlK5WLWdk5Nn6eihzMdnfqA2fuk5qbbHxqQSDUCg
-	 pnW/tSB0G4P0Rf1ulXWo9GyNT+AP/ftE1eHA8kTOJcl54xv4S6lvYZ7RNaBWRvUDwM
-	 KBm4GfW1eWwxnXJnbSdt9NHxm6tfNkPISf8OJk428s2rep56vIUJaiiRAgwxGJryn4
-	 1v4tm/l0vfQwg==
+	s=default; t=1794394583;
+	bh=FmaPbiIuR1B76bPY9KhOWyyjRF6sFvJ596hM5D0Crnk=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=PLPn0jkYMUn7dJ/tEkxB2cE8YWGP2v8p0rkm/5MFiQgx9c5envwe/Q7H8oMGYYmCu
+	 hMByJcLpav7S+q2zo8YnC1TzxVUeXR13p0xYZmt8yr138uwqAD9vqvJLqo607sBcri
+	 FKmTix5urxjlLVdaNXmbNrms4xCqfmQil2tcxy6betN8s1bRr1GapecvK+W6Prh8ZQ
+	 y0C/FWfowTnXo/u//ACbHmdy5IbbcSyw/rI19kvApthg3hWnzk/XTK1Cxca8JJ1hxs
+	 zIvesVrElurXyYlHXZWd/dkzVOnblBrSBqOZ/eziptQEbRs0ECKtw0Hg3qGXcIQCCI
+	 rxaozbD87gZYw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DB90C405F5;
-	Wed, 11 Nov 2026 10:41:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3720340519;
+	Wed, 11 Nov 2026 10:56:23 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id B868117CC
- for <buildroot@buildroot.org>; Wed, 11 Nov 2026 10:41:09 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id EC472731
+ for <buildroot@buildroot.org>; Wed, 11 Nov 2026 10:56:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A973D6079B
- for <buildroot@buildroot.org>; Wed, 11 Nov 2026 10:41:09 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D25C7606ED
+ for <buildroot@buildroot.org>; Wed, 11 Nov 2026 10:56:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kKnwC8w3iu1G for <buildroot@buildroot.org>;
- Wed, 11 Nov 2026 10:41:07 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org F2D8B60793
-Authentication-Results: smtp3.osuosl.org;
- arc=none smtp.remote-ip=62.149.155.101
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.155.101;
- helo=smtpdh16-2.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
- receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org; dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=ff3YtHnR
-Received: from smtpdh16-2.aruba.it (smtpdh16-2.aruba.it [62.149.155.101])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F2D8B60793
- for <buildroot@buildroot.org>; Wed, 11 Nov 2026 10:41:05 +0000 (UTC)
-Received: from localhost.localdomain ([151.95.84.63])
- by Aruba SMTP with ESMTPSA
- id R5lFxhDUB6KjvR5lGxAIj3; Wed, 11 Nov 2026 11:41:02 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1794393662; bh=nmJL8oZOxTySrw+KR2YKWVDe3IN9GYoYlwN7obwZclQ=;
- h=From:To:Subject:Date:MIME-Version;
- b=ff3YtHnRy3t5GwjbxiQc3tDJundgZ5wbuOQJMt5yVU6bdS0wFcjVYsRHqaY7NrGDT
- /+nG+DaXvdF8/Uoc7KfLPMHkMngFV1sCk9ehECLqpvaVEf5rd8N/3zNsOc8gB1zvmJ
- N19lUGI8/93Kfju3AR1+11D2BGr4J7Neu1Nx0GNt9eYtaZr1zz2DnvBFsLCHOwl215
- 9RlmivcY8wCmVdtGv9QmNMKs6THSj3wgx2zSpC8zlURRm0tbDLw0G+kCPUtBXpVhqO
- GqAKbtWJX+ovu375AxP3PWgesillEq3YmNf67niGS+PTYBKQmWhjdXfDPV0XdPTDgF
- 6gaBWz1z4xHmw==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ id frPhx1tNuSTm for <buildroot@buildroot.org>;
+ Wed, 11 Nov 2026 10:56:20 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 3CEA7606E0
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::634; helo=mail-ej1-x634.google.com;
+ envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
+ [IPv6:2a00:1450:4864:20::634])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3CEA7606E0
+ for <buildroot@buildroot.org>; Wed, 11 Nov 2026 10:56:19 +0000 (UTC)
+Received: by mail-ej1-x634.google.com with SMTP id
+ a640c23a62f3a-c247f6687dcso499618366b.2
+ for <buildroot@buildroot.org>; Wed, 11 Nov 2026 02:56:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1794394578; x=1794999378;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=u5u/BmFV2aXDLX6Ma/aGxAzo51vXMYKjfW9PAGdwAQU=;
+ b=gDfssv5W5PF4yDoBkItCtTPdKGB8+zC/biX975/utzFpSWxI5auVaL5F9wjzxrzuGm
+ /Y2hUb6b/F0pUM18sDjVFFmBEW2Cpy92DmHNKZ5llOOfvNaazT9LCQVjldg/foXk2wBm
+ jlIi4qo9kCdJlDxJA/KbwJ/v/IySH2w67+uZTY1KWTLtebv6V4LBYjRvmp/1TP5e0ziT
+ gDHmkePd7IrBtWJjtbjHjsg+EwpHciK3EzTNd74rInJs817MdMlP/hpUdV6zAoQjOhBj
+ L4MLAlHN5YuaCZ5nFNeK0FOWPw7RJ2Ke40uvyFNcHIECenJo4JzdOMYM1usTMQe701gS
+ L3yQ==
+X-Gm-Message-State: APuU4Z/eXmwWcmXKZLVtvJG0csf0rKOtuIIDiktJrF42L+86aU3Lh3F3
+ zouw0JT+5F9Ki1IJT4h2XaXKBHQzimZ9syIM+uQX0uxY2lcpJesTKp7tbk3vXQ==
+X-Gm-Gg: AYBFou3e0eQSqPW6ghUbV5NbHoK5ZAEOjKTchAt+rl6WloK9IhQkSRmQXwd81VeutV6
+ vuU4f8Bhs/W6An17WEU+5zBitWtR0avIB8lSBDvzX4V9MdqddXUsetWWFGchJrpHfLEbrIc3N1q
+ ETMJhOaeMIK9x7tavXthnTbrP1UbdCiQtlh7UQ44kQ3xboxzjVcAGAtHBT5QpoimkzLpgAYNs5i
+ hp1meHuMwBZPXVzW+1Qox2HZjhEI5QQ0xlND6n6pR+bcISqkipYml7qWM2OIAFbzghZBA6EJZ0v
+ sOEKo86UuPEqnIhSvsKE84b5qSgWDtrkw6H/tchWjQL76hr85zPvO1c/bfrIkZfO1gNwPqx36vp
+ IIkJSqmOt7vj9/85gforvrJamkjy4z+FaXrC2OunZdv5B4T2voi461Y5uIcs+yd/fcv50WQbAYD
+ Ez8yxbO3z05GnvJd/gcbkWgsJhz3plh8AK9vx3QiG5PuR5Onwd4WgmlnhWflaKmg+PjVabmilDn
+ uh9EeFG/d6YCGRH9F3jA92xbktkv6C6oX2k5sJbrzlNfQ3vk02ZkxXtQJvVrIMaDVkqeR004P/m
+ fv9UeSKtDAc/32a+n7PIseqWDm/gKB4qrBmWzlT1Tk75zRcEZtrnvtLHfDjOMhyYnTnBEdEeIaO
+ 94vr6hvR+
+X-Received: by 2002:a17:907:1c9b:b0:c50:5f6a:7009 with SMTP id
+ a640c23a62f3a-c50668614bdmr141655466b.7.1794394577453; 
+ Wed, 11 Nov 2026 02:56:17 -0800 (PST)
+Received: from development2.visionsystems.local (mail.visionsystems.de.
+ [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-c504a5701a1sm219944566b.21.2026.11.11.02.56.16
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 11 Nov 2026 02:56:16 -0800 (PST)
 To: buildroot@buildroot.org
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
-Date: Wed, 11 Nov 2026 11:41:00 +0100
-Message-ID: <20261111104100.41443-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.47.3
+Date: Wed, 11 Nov 2026 11:56:16 +0100
+Message-Id: <20261111105616.1040501-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.34.1
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfDUBsExDll5HphVvLVIJeEkxuOSTfPqCxJY0gsprdakUfLqJs1JMvcs07MzDVrua4ypaiOtbSgar2wZxRVJr0S3KqC5M1Lfnx1i7671THkN8gzy4g1pT
- Fu9hXEF+qS+3wVaIYXJPFG0XGd1CPL/TNlz/RKZ8S2ytQ8lALUuxaPQlnqv8SbE9JbrCDJ3v0wpLcGosDcZQuGMVJaEsXsZo7dne9CIPfA5j5FGYYj72Qavj
- 3Y8lstEZXzLNA6zY0NWViv6CPd76qc1zSbGKJ6rAPvdhksJwN++T24GH75eJ9CygT9d8JuXBOxqxokOK7D36Ow==
-Subject: [Buildroot] [PATCH] package/rtl8723ds: bump to version 2026-11-11
+Subject: [Buildroot] [PATCH] package/grpc: install utf8_range_lib for
+ host-grpc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -114,51 +125,107 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
+Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: Robert Rose <robertroyrose@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-16.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-This commit allows to build up to Linux version 7.3
+On build hosts whose linker does not default to --as-needed (e.g. Arch
+Linux), packages using the host grpc_cpp_plugin fail to build:
+
+  PROTOC   collectd.grpc.pb.cc
+  .../host/bin/grpc_cpp_plugin: error while loading shared libraries: libutf8_range_lib.so.56: cannot open shared object file: No such file or directory
+  --grpc_out: protoc-gen-grpc: Plugin failed with status code 127.
+
+Since grpc 1.76.0, grpc_plugin_support links with grpc's bundled
+utf8_range_lib. Our patch adding the gRPC_BUILD_PLUGIN_SUPPORT_ONLY
+option, used for host-grpc, was updated accordingly to build
+utf8_range_lib, but kept its installation disabled in this mode, while
+grpc_plugin_support and grpc_cpp_plugin are installed. As host-grpc is
+built as shared libraries, the installed libgrpc_plugin_support.so then
+depends on a library missing from $(HOST_DIR)/lib. With --as-needed,
+the dependency is dropped as the symbols are also provided by
+protobuf's libutf8_range, which hides the issue on most distributions.
+
+Update the patch to also install utf8_range_lib in plugin support only
+mode, like grpc_plugin_support.
+
+This issue has been present since commit 656fc0f78e ("package/grpc:
+bump to version 1.76.0"), which made the patch build utf8_range_lib
+without installing it. It therefore affects 2026.02 and later,
+including the 2026.02.x LTS branch.
 
 Fixes:
-https://autobuild.buildroot.org/results/9f59601d90aa6d764e722466be990ca039c1e349/
+https://autobuild.buildroot.org/results/0b105f951e923ac1c8292a1655f6b87e73cb19de
+https://autobuild.buildroot.org/results/cdb4dba11d1cb2854184da3ebe2f5d82a4745e56
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Fixes: 656fc0f78e9f225136a0161998b328902ca514d2 ("package/grpc: bump to version 1.76.0")
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/rtl8723ds/rtl8723ds.hash | 2 +-
- package/rtl8723ds/rtl8723ds.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...strict-building-of-host-grpc-to-grpc.patch | 28 ++++++++-----------
+ 1 file changed, 11 insertions(+), 17 deletions(-)
 
-diff --git a/package/rtl8723ds/rtl8723ds.hash b/package/rtl8723ds/rtl8723ds.hash
-index 580f5d09f6..8557414e0e 100644
---- a/package/rtl8723ds/rtl8723ds.hash
-+++ b/package/rtl8723ds/rtl8723ds.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  a04bc28cbaead30aca2894633ffa93d4bf0bf407a8c5b7120dd9832ceaf0310e  rtl8723ds-122a574f780da32bb0de760bf089a3a9ec1e8f87.tar.gz
-+sha256  e0cd998331f37d4ec5b18df695638ff9f3c2c564bcea936b55ef4b40d9c4613d  rtl8723ds-83191afe47af29d622701bab24020e2dc8b0fc48.tar.gz
- sha256  cd5c66af63b509ccd75ec85fee41b6e5cbb77cd6bf9392a54900acc0f02be4a6  COPYING
-diff --git a/package/rtl8723ds/rtl8723ds.mk b/package/rtl8723ds/rtl8723ds.mk
-index d8072f14bc..8dfda059f3 100644
---- a/package/rtl8723ds/rtl8723ds.mk
-+++ b/package/rtl8723ds/rtl8723ds.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/grpc/0002-Add-option-to-restrict-building-of-host-grpc-to-grpc.patch b/package/grpc/0002-Add-option-to-restrict-building-of-host-grpc-to-grpc.patch
+index 03ca1d7bf4..a74b44258c 100644
+--- a/package/grpc/0002-Add-option-to-restrict-building-of-host-grpc-to-grpc.patch
++++ b/package/grpc/0002-Add-option-to-restrict-building-of-host-grpc-to-grpc.patch
+@@ -17,9 +17,12 @@ Updated for 1.76.0:
+ Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+ [Bernd: rebased for 1.83.1]
+ Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++[Yegor: install utf8_range_lib in plugin support only mode, as the
++ installed grpc_plugin_support library links with it]
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+ ---
+- CMakeLists.txt | 39 +++++++++++++++++++++++++++++++++------
+- 1 file changed, 33 insertions(+), 6 deletions(-)
++ CMakeLists.txt | 37 +++++++++++++++++++++++++++++++------
++ 1 file changed, 31 insertions(+), 6 deletions(-)
  
--RTL8723DS_VERSION = 122a574f780da32bb0de760bf089a3a9ec1e8f87
-+RTL8723DS_VERSION = 83191afe47af29d622701bab24020e2dc8b0fc48
- RTL8723DS_SITE = $(call github,benetti-engineering,rtl8723ds,$(RTL8723DS_VERSION))
- RTL8723DS_LICENSE = GPL-2.0
- RTL8723DS_LICENSE_FILES = COPYING
+ diff --git a/CMakeLists.txt b/CMakeLists.txt
+ index bc86c00463..08441ddbd2 100644
+@@ -113,24 +116,15 @@ index bc86c00463..08441ddbd2 100644
+  
+  add_library(utf8_range_lib
+    third_party/utf8_range/utf8_range.c
+-@@ -4681,7 +4698,7 @@ target_link_libraries(utf8_range_lib
+-   ${_gRPC_ALLTARGETS_LIBRARIES}
+- )
++@@ -4683,7 +4700,7 @@ target_link_libraries(utf8_range_lib
+  
+--
+-+if (NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
+  
+- if(gRPC_INSTALL)
+-   install(TARGETS utf8_range_lib EXPORT gRPCTargets
+-@@ -4692,6 +4709,8 @@ if(gRPC_INSTALL)
+-   )
+- endif()
+  
+-+endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
+-+
+- if(gRPC_BUILD_TESTS)
+- 
+- if(gRPC_BUILD_CODEGEN)
++-if(gRPC_INSTALL)
+++if(gRPC_INSTALL OR gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
++   install(TARGETS utf8_range_lib EXPORT gRPCTargets
++     RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
++     BUNDLE DESTINATION  ${gRPC_INSTALL_BINDIR}
+ @@ -4784,6 +4803,8 @@ endif()
+  
+  endif()
 -- 
-2.47.3
+2.34.1
 
 _______________________________________________
 buildroot mailing list
