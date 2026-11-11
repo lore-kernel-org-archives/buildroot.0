@@ -1,28 +1,28 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B47B6606A31C
-	for <buildroot@archiver.kernel.org>; Wed, 11 Nov 2026 11:55:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACFA1606A31C
+	for <buildroot@archiver.kernel.org>; Wed, 11 Nov 2026 11:56:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Tofy3cs2
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=LxoanvAL
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D818811F2;
-	Wed, 11 Nov 2026 11:55:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A3D7160B0C;
+	Wed, 11 Nov 2026 11:56:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yO2nqarbCrEZ; Wed, 11 Nov 2026 11:55:24 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 20699811BB
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794398124;
-	b=V21Y7kY4h3SKWddSnUOe9jlw6yGa1A7gq3irUIb8d/mvZuAxef3l9blm6lowUvBDBfta
-	 fVuEaDCbTZMNKthvR/z6mZth6zg9Wz8q24TtxeXGD+Ack0iCnYMquqtfOzDQScpvZPXz0
-	 SO/ybcegwa8pLiDX2/IiSRwE9AptIAECEh757kPhzUHeBaULkxvf8qRIxIXleqH+lSarT
-	 QSaq1w8tnCLveT3lWoxZ138TtMffyyHD35BUcsoYQPiFbWVnHvjeMk48i2iMWgQnLks/r
-	 nShAUpbMyDobSGisZUnyschq+wXOl6ra6fQD1iDpcBNxdtXCZg9P2H9FKRbPoAKLY7Q==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kdhD_T0jTzHM; Wed, 11 Nov 2026 11:55:59 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 9D34660784
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794398159;
+	b=lbpGgCl3z2f0czjpXK02tJHiyLLwuKpn+INFjHFHZWUsv0AvSILVmbs68fB7w/sWQk38
+	 yx+80KcQgBCUZOKkfbCCRJl6N93gVqE8WVC0+VVaRVbvjFUPmtx+1bzahNuwE0iTGBdCV
+	 CRjTGfwRS0YdnokCD/xXnnsmYwxql4URKlLU3cJQLqNRgYal9oSsSNb260dtkEK1yvBjr
+	 iwGEANmQeCjOS4MGd5wWdC5GAVyB3JZ1grZzJE7IFsFmzv0Mt3FXZRByb4VJHJFxUiPL7
+	 5qg2rXnX1m/E6eea68D3LKyBU4Grk69G1o0ue205q0fCOiGn10IUvwBHi1R/F9bR1zg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794398124;
+	c=relaxed/relaxed; t=1794398159;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,58 +31,57 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:Content-Type:Content-Transfer-Encoding:
 	 Errors-To:Sender;
-	bh=MsLmFGn2xIzhmR/ExZNY5UjQQ67pux7CgTfPerWcWm8=;
-	b=ERQD5exWKj93tx8HWN309vJE8DpQRp1X5uhmN5c9C2QcHx5FT1HipMsy23nRjdc5gS2+
-	 e+5B4SYJdLBouhBEvw4l3J6vVCDQqNL6RkiTiwZK1AeGZsj+TlxzZCJOe1TsDq2XHWPi/
-	 vFlLCt5R6gMIRwUHTJ/vobMwSfxDoHEt9mmF4cbivqsj2+D7rH1D8oHJfx8YWU2SpZhWI
-	 7m6CPrznY7QAyyE/uOMqpFWN2WhNxw4dPSJh7XQbVO9sqPz2wIYl5sVkDZhIGUVzKX/JF
-	 NXYvsqesXC3Ee03MwperGx4Bvg4alTyFJVyJYo2UX8KoVFQmu6B4OFzqcvhiFdHdVrA==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+	bh=+NQkI79uXxWW/5+LySrmZP5yYKEqP3MZTQJdX7kMa24=;
+	b=FD7Gltf71mj5ZhOVwKGVFwRW/Y9FwOusdN4qozcZjUxbrRsfT5VRFrsCUjrdUrv8o9ny
+	 buEiiY1QVe303bmDnCWyI/BARoqSwu1Lwi/XuDDH2x+MuvvGEQyAD4XHoB17iP0KmZAMc
+	 +7iS06IURwRfWDbFk70h0RicZsuBxBg9588awUS3XKDYvcb8HcbP2Qz6gKFzUvCcMMt/A
+	 4reTT+rdch/SPijPzSBQl53piizI5KAJqNLiV4SLPe10AEazrCUDRWvq/FHOFcjPXgbBK
+	 88rcV/4wNQDy6gjX/opI8fmR3dV2eZYXXvgdSXP4GKQ2TJNRLfXXlT4vDcizfINlLMw==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794398124;
-	bh=MsLmFGn2xIzhmR/ExZNY5UjQQ67pux7CgTfPerWcWm8=;
+	s=default; t=1794398159;
+	bh=+NQkI79uXxWW/5+LySrmZP5yYKEqP3MZTQJdX7kMa24=;
 	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=Tofy3cs2bBFPuEsAEVngyLcC23+v0sAxDGs+f6/VpNictsdxY099ilHf3nZ4/SXgM
-	 l1+krC6lnywavMIuweL1cWxL2c7tgAMmKFgLSTrg7dk6TuMX4iHreVa6WJLoQrdCZk
-	 IJ+3Xm5OKaf2o3N1msVOmZ70LRS9xGjyCIQmtxg+RTu3yvt0p8Qz4eupRA2eHAcm8F
-	 1FHmIo0u5CBq+wZaXJQhPc5eSvP7RgOwrOXPEZZsvVgXPS1XteK+SHb32J+e0XmMJH
-	 eDw9M+aiuJbaiMFUxXT7UQVaT2t0tLQW/6tzF9HhtCCw9hqo1S2xFoPDRnhlW3G5lY
-	 xh1TVuhnFtRXA==
+	b=LxoanvAL/drpp0O0MHuMMr3HOHi19mGC3ZbgKTneCIcvnbuy9NSoq4NNYTGWFk5It
+	 sNgyEV5XwbM8aaAyfDKNzR5+5UrYuRqoPhB0nUfVim12CqD4RpO0wb8qeosk95qR/Q
+	 We7yR3wRG8US2VvCoJdaUIqDvSfBEud4qgIz+roxou01iuQG/mZeRtsVHPH0UnohD6
+	 0z5noQyjl3LFkUXG2d8+0T/tR1jQpXhcHciYF7fF6BQv2kuB2ua3rWmM9IG9jNarTW
+	 iZLF+djly9c5fq+YWS4D+bwxmLmKPQ6LlIdLb3QvwWM6vZFqk2B7FPOXasw3eoGGAj
+	 x9/KWGPRtLxcQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 20699811BB;
-	Wed, 11 Nov 2026 11:55:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 9378828C
- for <buildroot@buildroot.org>; Wed, 11 Nov 2026 11:55:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9D34660784;
+	Wed, 11 Nov 2026 11:55:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id B4DDE17CC
+ for <buildroot@buildroot.org>; Wed, 11 Nov 2026 11:55:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 849C140217
- for <buildroot@buildroot.org>; Wed, 11 Nov 2026 11:55:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A6446811F2
+ for <buildroot@buildroot.org>; Wed, 11 Nov 2026 11:55:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hbZOnfC2Z417 for <buildroot@buildroot.org>;
- Wed, 11 Nov 2026 11:55:20 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org BB289400D5
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:660:530d:201::44; helo=mailgw-out1.grenoble.cnrs.fr;
- envelope-from=bonet@grenoble.cnrs.fr; receiver=<UNKNOWN> 
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HHJPGkos-uG2 for <buildroot@buildroot.org>;
+ Wed, 11 Nov 2026 11:55:57 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org E6A69811D0
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=147.173.1.68;
+ helo=mailgw-out1.grenoble.cnrs.fr; envelope-from=bonet@grenoble.cnrs.fr;
+ receiver=<UNKNOWN> 
 Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
- [IPv6:2001:660:530d:201::44])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BB289400D5
- for <buildroot@buildroot.org>; Wed, 11 Nov 2026 11:55:17 +0000 (UTC)
+ [147.173.1.68])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E6A69811D0
+ for <buildroot@buildroot.org>; Wed, 11 Nov 2026 11:55:56 +0000 (UTC)
 Received: from [IPV6:2a01:e0a:1164:dba0:bf0c:75c5:43f0:4c00] (unknown
  [IPv6:2a01:e0a:1164:dba0:bf0c:75c5:43f0:4c00])
  (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id CBA84180DDE;
- Wed, 11 Nov 2026 12:55:14 +0100 (CET)
-Message-ID: <89062ef9-f704-4714-a86f-8bf0f3123f49@grenoble.cnrs.fr>
-Date: Wed, 11 Nov 2026 12:55:14 +0100
+ key-exchange x25519) (No client certificate requested)
+ by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id 3522C180DDE;
+ Wed, 11 Nov 2026 12:55:54 +0100 (CET)
+Message-ID: <453e2807-4baf-4b9e-a671-141dc9f62f79@grenoble.cnrs.fr>
+Date: Wed, 11 Nov 2026 12:55:53 +0100
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
@@ -91,11 +90,11 @@ Cc: Biagio Montaruli <biagio.hkr@gmail.com>,
  Ludovic Desroches <ludovic.desroches@microchip.com>,
  Simon Dawson <spdawson@gmail.com>
 References: <20261110215557.2248804-1-angelo.compagnucci@gmail.com>
- <20261110215557.2248804-2-angelo.compagnucci@gmail.com>
+ <20261110215557.2248804-3-angelo.compagnucci@gmail.com>
 Content-Language: en-US, fr
-In-Reply-To: <20261110215557.2248804-2-angelo.compagnucci@gmail.com>
-Subject: Re: [Buildroot] [PATCH 1/5] boot/at91bootstrap3: bump 3.x series to
- 3.10.4
+In-Reply-To: <20261110215557.2248804-3-angelo.compagnucci@gmail.com>
+Subject: Re: [Buildroot] [PATCH 2/5] configs/acmesystems_acqua_a5_*: bump
+ AT91Bootstrap to 3.10.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -107,102 +106,85 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Edgar Bonet via buildroot <buildroot@buildroot.org>
 Reply-To: Edgar Bonet <bonet@grenoble.cnrs.fr>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-22.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
+	version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-T24gMTAvMTEvMjAyNiAyMjo1NSwgQW5nZWxvIENvbXBhZ251Y2NpIHdyb3RlOgo+IFRoZSBwYXRj
-aCBmaXhpbmcgdGhlIGJ1aWxkIHdpdGggR0NDIDE1IGlzIG5vdCB1cHN0cmVhbSBpbiAzLjEwLjQg
-eWV0Cj4gYW5kIGFwcGxpZXMgYXMgaXM6IGNvcHkgaXQgdG8gdGhlIHYzLjEwLjQgZGlyZWN0b3J5
-LiBUaGUgdjMuMTAuMyBjb3B5Cj4gc3RheXMsIHVzZWQgYnkgdGhlIGRlZmNvbmZpZ3MgdGhhdCBm
-ZXRjaCB2My4xMC4zIGZyb20gZ2l0Cj4gKGFjbWVzeXN0ZW1zX2FjcXVhX2E1XyogYW5kIGF0OTFz
-YW05eDVla18qKS4KPiAKPiBSZWxlYXNlIG5vdGVzOgo+IGh0dHBzOi8vZ2l0aHViLmNvbS9saW51
-eDRzYW0vYXQ5MWJvb3RzdHJhcC9yZWxlYXNlcy90YWcvdjMuMTAuNAo+IAo+IFNpZ25lZC1vZmYt
-Ynk6IEFuZ2VsbyBDb21wYWdudWNjaSA8YW5nZWxvLmNvbXBhZ251Y2NpQGdtYWlsLmNvbT4KClRl
-c3RlZC1ieTogRWRnYXIgQm9uZXQgPGJvbmV0QGdyZW5vYmxlLmNucnMuZnI+CkFja2VkLWJ5OiBF
-ZGdhciBCb25ldCA8Ym9uZXRAZ3Jlbm9ibGUuY25ycy5mcj4KClNwZWNpZmljYWxseSwgSSBhcHBs
-aWVkIHBhdGNoZXMgMSBhbmQgMiBvbiB0b3Agb2YgbWFzdGVyICg3OTY2ZmE5NjA1NTYKInBhY2th
-Z2UvbGliY3VybDogZml4IGJ1aWxkIG9uIExvb25nQXJjaCB3aXRoIG11c2wiKSwgYnVpbHQgdGhl
-CmFjbWVzeXN0ZW1zX2FjcXVhX2E1XzUxMm1iX2RlZmNvbmZpZywgYm9vdGVkIG9uIGFuIEFjcXVh
-IDUxMsKgTWlCCmJvYXJkLCBhbmQgbG9nZ2VkLWluIG9uIHRoZSBzZXJpYWwgY29uc29sZS4KCkJl
-c3QgcmVnYXJkcywKCkVkZ2FyLgoKPiAtLS0KPiAgYm9vdC9hdDkxYm9vdHN0cmFwMy9Db25maWcu
-aW4gICAgICAgICAgICAgICAgIHwgIDQgKy0KPiAgYm9vdC9hdDkxYm9vdHN0cmFwMy9hdDkxYm9v
-dHN0cmFwMy5oYXNoICAgICAgIHwgIDIgKy0KPiAgLi4uY29uZGl0aW9uYWxseS1kZWZpbmUtYm9v
-bC1mYWxzZS1hbmQtLnBhdGNoIHwgNDcgKysrKysrKysrKysrKysrKysrKwo+ICAzIGZpbGVzIGNo
-YW5nZWQsIDUwIGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCj4gIGNyZWF0ZSBtb2RlIDEw
-MDY0NCBib290L2F0OTFib290c3RyYXAzL3YzLjEwLjQvMDAwMS1pbmNsdWRlLXR5cGVzLmgtY29u
-ZGl0aW9uYWxseS1kZWZpbmUtYm9vbC1mYWxzZS1hbmQtLnBhdGNoCj4gCj4gZGlmZiAtLWdpdCBh
-L2Jvb3QvYXQ5MWJvb3RzdHJhcDMvQ29uZmlnLmluIGIvYm9vdC9hdDkxYm9vdHN0cmFwMy9Db25m
-aWcuaW4KPiBpbmRleCA4M2QzYTAyMTIxLi42MTgxZjM5YmIxIDEwMDY0NAo+IC0tLSBhL2Jvb3Qv
-YXQ5MWJvb3RzdHJhcDMvQ29uZmlnLmluCj4gKysrIGIvYm9vdC9hdDkxYm9vdHN0cmFwMy9Db25m
-aWcuaW4KPiBAQCAtMjIsNyArMjIsNyBAQCBjb25maWcgQlIyX1RBUkdFVF9BVDkxQk9PVFNUUkFQ
-M19MQVRFU1RfVkVSU0lPTgo+ICAJYm9vbCAiNC4wLjAiCj4gIAo+ICBjb25maWcgQlIyX1RBUkdF
-VF9BVDkxQk9PVFNUUkFQM19MQVRFU1RfVkVSU0lPTl8zWAo+IC0JYm9vbCAiMy4xMC4zIgo+ICsJ
-Ym9vbCAiMy4xMC40Igo+ICAKPiAgY29uZmlnIEJSMl9UQVJHRVRfQVQ5MUJPT1RTVFJBUDNfQ1VT
-VE9NX0dJVAo+ICAJYm9vbCAiQ3VzdG9tIEdpdCByZXBvc2l0b3J5Igo+IEBAIC02MSw3ICs2MSw3
-IEBAIGVuZGlmCj4gIGNvbmZpZyBCUjJfVEFSR0VUX0FUOTFCT09UU1RSQVAzX1ZFUlNJT04KPiAg
-CXN0cmluZwo+ICAJZGVmYXVsdCAidjQuMC4wIiBpZiBCUjJfVEFSR0VUX0FUOTFCT09UU1RSQVAz
-X0xBVEVTVF9WRVJTSU9OCj4gLQlkZWZhdWx0ICJ2My4xMC4zIiBpZiBCUjJfVEFSR0VUX0FUOTFC
-T09UU1RSQVAzX0xBVEVTVF9WRVJTSU9OXzNYCj4gKwlkZWZhdWx0ICJ2My4xMC40IiBpZiBCUjJf
-VEFSR0VUX0FUOTFCT09UU1RSQVAzX0xBVEVTVF9WRVJTSU9OXzNYCj4gIAlkZWZhdWx0IEJSMl9U
-QVJHRVRfQVQ5MUJPT1RTVFJBUDNfQ1VTVE9NX1JFUE9fVkVSU0lPTiBcCj4gIAkJaWYgQlIyX1RB
-UkdFVF9BVDkxQk9PVFNUUkFQM19DVVNUT01fR0lUIHx8IEJSMl9UQVJHRVRfQVQ5MUJPT1RTVFJB
-UDNfQ1VTVE9NX1NWTgo+ICAJZGVmYXVsdCAiY3VzdG9tIglpZiBCUjJfVEFSR0VUX0FUOTFCT09U
-U1RSQVAzX0NVU1RPTV9UQVJCQUxMCj4gZGlmZiAtLWdpdCBhL2Jvb3QvYXQ5MWJvb3RzdHJhcDMv
-YXQ5MWJvb3RzdHJhcDMuaGFzaCBiL2Jvb3QvYXQ5MWJvb3RzdHJhcDMvYXQ5MWJvb3RzdHJhcDMu
-aGFzaAo+IGluZGV4IGU2MTFmMTYzYzkuLjk3MjdhODg4NTAgMTAwNjQ0Cj4gLS0tIGEvYm9vdC9h
-dDkxYm9vdHN0cmFwMy9hdDkxYm9vdHN0cmFwMy5oYXNoCj4gKysrIGIvYm9vdC9hdDkxYm9vdHN0
-cmFwMy9hdDkxYm9vdHN0cmFwMy5oYXNoCj4gQEAgLTEsNCArMSw0IEBACj4gICMgTG9jYWxseSBj
-YWxjdWxhdGVkCj4gLXNoYTI1NiAgYjZhZTViY2FhY2M1YTk0OWY0MDAxODJlMDM2YWUwNTMwNDk2
-Mzg0NDRhM2JhOGIxZGQxNTRlYzVmNzg5OGQ4ZSAgYXQ5MWJvb3RzdHJhcDMtdjMuMTAuMy50YXIu
-Z3oKPiArc2hhMjU2ICBiNmI0Y2Q0YjEyN2VmYmUxMDM3NTQ2NzNkMjhlYjJhYmI5NzcyYjUzNzhk
-OWM4Y2JmYzAxYzYzYjU4ZDI3NDUxICBhdDkxYm9vdHN0cmFwMy12My4xMC40LnRhci5nego+ICBz
-aGEyNTYgIDA4YzViOTVkZjI4YmU3ZjJlMDQzOWZiMmI3N2ZlMjc1MjRmOTdjNDk5ODUwNjQxZTQ1
-NDBjMDdlYTBiMmMyNWQgIGF0OTFib290c3RyYXAzLXY0LjAuMC50YXIuZ3oKPiAgc2hhMjU2ICA1
-YTM4MDliMWMyYmExM2I3MjQyNTcyMzIyOTUxMzExYzU4NDQxOWYxZjg1MTZmNjY1ZDZjMDZmMDY2
-OGQ3OGRlICBMSUNFTlNFUy9NSVQudHh0Cj4gZGlmZiAtLWdpdCBhL2Jvb3QvYXQ5MWJvb3RzdHJh
-cDMvdjMuMTAuNC8wMDAxLWluY2x1ZGUtdHlwZXMuaC1jb25kaXRpb25hbGx5LWRlZmluZS1ib29s
-LWZhbHNlLWFuZC0ucGF0Y2ggYi9ib290L2F0OTFib290c3RyYXAzL3YzLjEwLjQvMDAwMS1pbmNs
-dWRlLXR5cGVzLmgtY29uZGl0aW9uYWxseS1kZWZpbmUtYm9vbC1mYWxzZS1hbmQtLnBhdGNoCj4g
-bmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi4zNTJjMWMwYTQzCj4gLS0t
-IC9kZXYvbnVsbAo+ICsrKyBiL2Jvb3QvYXQ5MWJvb3RzdHJhcDMvdjMuMTAuNC8wMDAxLWluY2x1
-ZGUtdHlwZXMuaC1jb25kaXRpb25hbGx5LWRlZmluZS1ib29sLWZhbHNlLWFuZC0ucGF0Y2gKPiBA
-QCAtMCwwICsxLDQ3IEBACj4gK0Zyb20gOTA4YzY1Njc4ODY3NTY1YTkzNGVhNWE5NjdiZmU3ZTIw
-NGQxY2NhZiBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKPiArRnJvbTogRWRnYXIgQm9uZXQgPGJv
-bmV0QGdyZW5vYmxlLmNucnMuZnI+Cj4gK0RhdGU6IFdlZCwgMjUgSnVuIDIwMjUgMTE6MTM6NDMg
-KzAyMDAKPiArU3ViamVjdDogW1BBVENIXSBpbmNsdWRlL3R5cGVzLmg6IGNvbmRpdGlvbmFsbHkg
-ZGVmaW5lIGJvb2wsIGZhbHNlIGFuZCB0cnVlCj4gK01JTUUtVmVyc2lvbjogMS4wCj4gK0NvbnRl
-bnQtVHlwZTogdGV4dC9wbGFpbjsgY2hhcnNldD1VVEYtOAo+ICtDb250ZW50LVRyYW5zZmVyLUVu
-Y29kaW5nOiA4Yml0Cj4gKwo+ICtpbmNsdWRlL3R5cGVzLmggdHlwZWRlZnMg4oCYYm9vbOKAmSBh
-bmQgbWFjcm8tZGVmaW5lcyDigJhmYWxzZeKAmSBhbmQg4oCYdHJ1ZeKAmS4KPiArSG93ZXZlciwg
-c2luY2UgQzIzLCB0aGVzZSBhcmUgcHJlZGVmaW5lIGtleXdvcmRzLiBBcyBDMjMgaXMgdGhlIGRl
-ZmF1bHQKPiArQyBkaWFsZWN0IGZvciBHQ0MgMTUsIGJ1aWxkaW5nIHdpdGggdGhpcyBjb21waWxl
-ciBmYWlscyB3aXRoOgo+ICsKPiArICAgIGluY2x1ZGUvdHlwZXMuaDoyMzoyMzogZXJyb3I6IOKA
-mGJvb2zigJkgY2Fubm90IGJlIGRlZmluZWQgdmlhIOKAmHR5cGVkZWbigJkKPiArICAgICAgIDIz
-IHwgdHlwZWRlZiB1bnNpZ25lZCBjaGFyIGJvb2w7Cj4gKyAgICAgICAgICB8ICAgICAgICAgICAg
-ICAgICAgICAgICBefn5+Cj4gKyAgICBpbmNsdWRlL3R5cGVzLmg6MjM6MjM6IG5vdGU6IOKAmGJv
-b2zigJkgaXMgYSBrZXl3b3JkIHdpdGgg4oCYLXN0ZD1jMjPigJkgb253YXJkcwo+ICsKPiArRml4
-IHRoaXMgYnVpbGQgZmFpbHVyZSBieSBvbmx5IGRlZmluaW5nIOKAmGJvb2zigJksIOKAmGZhbHNl
-4oCZIGFuZCDigJh0cnVl4oCZIG9uIEMKPiArZGlhbGVjdHMgb2xkZXIgdGhhbiBDMjMuCj4gKwo+
-ICtVcHN0cmVhbTogaHR0cHM6Ly9naXRodWIuY29tL2xpbnV4NHNhbS9hdDkxYm9vdHN0cmFwL3B1
-bGwvMTg4Cj4gK1tFZGdhcjogYmFja3BvcnQgdG8gdjMuMTAuM10KPiArCj4gK1NpZ25lZC1vZmYt
-Ynk6IEVkZ2FyIEJvbmV0IDxib25ldEBncmVub2JsZS5jbnJzLmZyPgo+ICstLS0KPiArIGluY2x1
-ZGUvdHlwZXMuaCB8IDMgKysrCj4gKyAxIGZpbGUgY2hhbmdlZCwgMyBpbnNlcnRpb25zKCspCj4g
-Kwo+ICtkaWZmIC0tZ2l0IGEvaW5jbHVkZS90eXBlcy5oIGIvaW5jbHVkZS90eXBlcy5oCj4gK2lu
-ZGV4IDEyNDZhNGRmLi4yYzFhNDFjZiAxMDA2NDQKPiArLS0tIGEvaW5jbHVkZS90eXBlcy5oCj4g
-KysrKyBiL2luY2x1ZGUvdHlwZXMuaAo+ICtAQCAtNDIsOCArNDIsMTEgQEAgdHlwZWRlZiBzaWdu
-ZWQgbG9uZyBsb25nIHM2NDsKPiArIHR5cGVkZWYgdW5zaWduZWQgbG9uZyBzaXplX3Q7Cj4gKyB0
-eXBlZGVmIHNpZ25lZCBsb25nIHNzaXplX3Q7Cj4gKyAKPiArKy8qIGJvb2wsIGZhbHNlIGFuZCB0
-cnVlIGFyZSBwcmVkZWZpbmVkIHNpbmNlIEMyMy4gKi8KPiArKyNpZiBfX1NURENfVkVSU0lPTl9f
-IDwgMjAyMzExTAo+ICsgdHlwZWRlZiB1bnNpZ25lZCBjaGFyIGJvb2w7Cj4gKyAjZGVmaW5lIGZh
-bHNlCTBVCj4gKyAjZGVmaW5lIHRydWUJMVUKPiArKyNlbmRpZgo+ICsgCj4gKyAjZW5kaWYgLyog
-VFlQRVNfSF8gKi8KPiArLS0gCj4gKzIuNDMuMAo+ICsKCl9fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290
-QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGlu
-Zm8vYnVpbGRyb290Cg==
+On 10/11/2026 22:55, Angelo Compagnucci wrote:
+> Use the 3.x version of the at91bootstrap3 package, now 3.10.4, instead
+> of fetching v3.10.3 from git, and drop the board hash file of the git
+> tarball: the package hash file covers the release tarball.
+> 
+> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+
+Tested-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
+Acked-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
+
+Specifically, I applied patches 1 and 2 on top of master (7966fa960556
+"package/libcurl: fix build on LoongArch with musl"), built the
+acmesystems_acqua_a5_512mb_defconfig, booted on an Acqua 512 MiB
+board, and logged-in on the serial console.
+
+Best regards,
+
+Edgar.
+
+> ---
+>  .../acqua-a5/patches/at91bootstrap3/at91bootstrap3.hash      | 2 --
+>  configs/acmesystems_acqua_a5_256mb_defconfig                 | 5 +----
+>  configs/acmesystems_acqua_a5_512mb_defconfig                 | 5 +----
+>  3 files changed, 2 insertions(+), 10 deletions(-)
+>  delete mode 100644 board/acmesystems/acqua-a5/patches/at91bootstrap3/at91bootstrap3.hash
+> 
+> diff --git a/board/acmesystems/acqua-a5/patches/at91bootstrap3/at91bootstrap3.hash b/board/acmesystems/acqua-a5/patches/at91bootstrap3/at91bootstrap3.hash
+> deleted file mode 100644
+> index 6edf3d3345..0000000000
+> --- a/board/acmesystems/acqua-a5/patches/at91bootstrap3/at91bootstrap3.hash
+> +++ /dev/null
+> @@ -1,2 +0,0 @@
+> -# Locally calculated
+> -sha256  5ea2a8fed1ba0024229c6f6d77176679e1b24791bdbce8e285634013d4a93551  at91bootstrap3-v3.10.3-git4.tar.gz
+> diff --git a/configs/acmesystems_acqua_a5_256mb_defconfig b/configs/acmesystems_acqua_a5_256mb_defconfig
+> index 5b31f4c692..725b82e86f 100644
+> --- a/configs/acmesystems_acqua_a5_256mb_defconfig
+> +++ b/configs/acmesystems_acqua_a5_256mb_defconfig
+> @@ -22,10 +22,7 @@ BR2_TARGET_ROOTFS_EXT2=y
+>  BR2_TARGET_ROOTFS_EXT2_4=y
+>  # BR2_TARGET_ROOTFS_TAR is not set
+>  BR2_TARGET_AT91BOOTSTRAP3=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.3"
+> -BR2_TARGET_AT91BOOTSTRAP3_LICENSE_FILES=""
+> +BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X=y
+>  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="acqua-256m"
+>  BR2_PACKAGE_HOST_DOSFSTOOLS=y
+>  BR2_PACKAGE_HOST_GENIMAGE=y
+> diff --git a/configs/acmesystems_acqua_a5_512mb_defconfig b/configs/acmesystems_acqua_a5_512mb_defconfig
+> index ed74dd30d6..470ac36de8 100644
+> --- a/configs/acmesystems_acqua_a5_512mb_defconfig
+> +++ b/configs/acmesystems_acqua_a5_512mb_defconfig
+> @@ -22,10 +22,7 @@ BR2_TARGET_ROOTFS_EXT2=y
+>  BR2_TARGET_ROOTFS_EXT2_4=y
+>  # BR2_TARGET_ROOTFS_TAR is not set
+>  BR2_TARGET_AT91BOOTSTRAP3=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
+> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.3"
+> -BR2_TARGET_AT91BOOTSTRAP3_LICENSE_FILES=""
+> +BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X=y
+>  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="acqua-512m"
+>  BR2_PACKAGE_HOST_DOSFSTOOLS=y
+>  BR2_PACKAGE_HOST_GENIMAGE=y
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
