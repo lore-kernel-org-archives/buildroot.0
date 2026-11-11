@@ -2,112 +2,112 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53550606A33C
-	for <buildroot@archiver.kernel.org>; Wed, 11 Nov 2026 11:09:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49317606A331
+	for <buildroot@archiver.kernel.org>; Wed, 11 Nov 2026 11:09:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=iXHZhwnD;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256 header.s=purelymail3 header.b=fwExgHTE
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=BF6+aYX3;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256 header.s=purelymail3 header.b=GLCcy2yU
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2EF8240AEF;
-	Wed, 11 Nov 2026 11:09:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2352740B23;
+	Wed, 11 Nov 2026 11:09:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mSWmHb1-C1L9; Wed, 11 Nov 2026 11:08:59 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 0BF1240AF6
+ id l2o2F-FRboMo; Wed, 11 Nov 2026 11:09:05 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 3A8E940B21
 Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794395339;
-	b=gRB7/z+qiMdwGEldUNI+TKJWul7L2ylUbEsY4AXvNjK9Tef+/5XyFzMn8Ttq6LpmMufR
-	 4kkfX239uFX9aMDVUygs56Zcslo1YE4R4bSLzjqK/zHDKXUmawwuZqOVNVxL0pZINxKEa
-	 OEbx8+LmZGxIZ2XJITO1EMPhbob6BI75yUYgfKzBSuL7u5YiImMvhaVYmf9keopMBvIfZ
-	 0DtEGO3NllChuk6WaD7S3TR6ugmVuoTSD3hxPIWVTLzwWt70Bv9S2CtLlGJxmlxBcK74r
-	 thn+mjwzVHoYpDrp5laLMYKjROECCeU7HNqcN8qqAhEUTfdRSoMof5+wnEyajzmM3gg==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794395345;
+	b=Iu+ekaysC+LCQ1kYuOOecFG6/7rdLZdMM66ozkEU7tq03o4CKB/FFPsELloxTDuRchIE
+	 YXXrTJWzYSYcGFEWFQjrg2+3tuUHXRjK07u+McSTh+fki9pFN4QeIVYrtDdYAU1dgqiQb
+	 xdzU6HIdyrJFDBRzo2UCpGiEkuhZt/D55By//EvKGpsg+aVJFBtDzciakIx2czlDagI5x
+	 qQsgZQNYw4JW6C0dHETgsR2iieiARh2ggUOhgMO5InKUYkXSZbR4pinzt8rJpY9Zmxn+p
+	 34PE/CtN9rfxVeJnm9j2KCtdKxYIqKsLSYydVeF5fwdolENzyO+qal5a98dbok9qt9g==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794395339;
+	c=relaxed/relaxed; t=1794395345;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
 	 DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:Received:From:To:
 	 In-Reply-To:References:Date:Message-ID:User-Agent:MIME-Version:
 	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:Cc:
 	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=w0PVRkgcFZuCRd+fUHh9e6LK685tAWnsxQ8eVQgzk4g=;
-	b=szNfxDybZ1ozirvvcPWMjx5eUqfR6QqV6rFdJAGef/ot4hngxBIuqWP97yflluq3yh/w
-	 GWQn+3JT07VA/8VSsRaXzRv8mXlEfZ6DrhDGA1VTGjll/lZP9qbD03iyUedNMoZbotmtt
-	 ugcgrswPX2W5kItOgq40E349sjUVt01eGHS4oOesX6Knyf4INlll1FXbAl84DoxHpFfjR
-	 /7yqcjhC3JgQLYrC+HKAT8yZ4OlwzvGAxF9NiC/nm5nFnRQ7GPGeKbR2dR064U/vI7OAh
-	 TgMjCNGYDmEoCnkcniaLcfa3Kx8Z3WEG6oDHGNG1vn2Cht5+JccDt8gIwJ6qL5ukt6g==
+	bh=0uYtokfQJIKpFYF/bPkzvEJlCVKuUD6sa1Kc2i6BbdA=;
+	b=ObnCQ3nEl1HBJJSp67kdA79W2brgZGQ33QOUgDYbRE31sIx6KAnjbfQag9+usdvBT1M1
+	 Hw89YcHtxJznbUrbBROu+YdmiDUTvIhQUp1ue/vhVOduZ1hJnmPwYS8I9KyIF9bnTjsn0
+	 r7X8YYK0ClY+sfdSPFm5CNQEE/gariUYHZsgD+1vZIn3O4ipSj2ikdfOdOmtxjXOYQsj9
+	 87B49j36fQK4PG+X/5KVAdqFlbdaOoUPK7lNcamkswRGNGq8aQWpuGGS6FR3Byg3gHm1v
+	 XuJrOlFe/2uMkR8M6Md2FQf9+qfifNoUnQ+aN09c2cINBy4h83F0+hD95xA3nZjk+PA==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794395339;
-	bh=w0PVRkgcFZuCRd+fUHh9e6LK685tAWnsxQ8eVQgzk4g=;
+	s=default; t=1794395345;
+	bh=0uYtokfQJIKpFYF/bPkzvEJlCVKuUD6sa1Kc2i6BbdA=;
 	h=From:To:In-Reply-To:References:Date:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=iXHZhwnDG+SPNHUiyVnC9JmuPmqKvfBngg9RW8FHELPGQ/cBtygfKazYiYNH4BUgF
-	 jeAVUBJJHSh+n14nMdyLGuiNge8dpDWqHG5pBbGmfMsmFi+F9dMze7yMtEdAsLKmVi
-	 JI/KL6lpaqMTFpXblnDLLnsWdlxK0DRXQffQErOj9yQmv2KJJFt3ITBfLb6r/NptT7
-	 LPfe30kRgiAAYEkllImtE7uG2BA/lb5gAPaRpbSdcoFPEul4Q0oTCtVpxhR1rIlGme
-	 sjjAc1pxNF4W5p9a9z/lCfYDQYFISU+kkSDPWK/rOJgk0Y0o1W0286S/7qrjNcvvjD
-	 LzE3i5G71PtIA==
+	 Cc:From;
+	b=BF6+aYX30AHAyFwl3i/bQYobqj3QKfgaW0kwvpl+daeei/SDvP927cGsNEApOcTS8
+	 r192VXWPN6tz/vxwf+wuHc6AcbQnjoWz6Yc+pG5G/+jAua8ydHoDgR5QVwOX4A75gm
+	 m+fCh/5Xwkqy5gyQcyZWLMCygwZG7UHuYuVFKEcVs6pB4q6oqch+0etTK/+Yphqs8s
+	 7oZDIc9FwD8bj6fheY2FCN1eOM8gWi/Bp4GYfNdXi3wXkjY+6A2vyHWOp4yy1pD3yp
+	 TkkYRbS+zSUVpvWsTDzGQz1nEH0y4yoWrZiEDFHKwVcxoVlVdkDbhJcGTjMQxzy0yc
+	 HfTU4nqMNKBiA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0BF1240AF6;
-	Wed, 11 Nov 2026 11:08:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 98FAD731
- for <buildroot@buildroot.org>; Wed, 11 Nov 2026 11:08:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3A8E940B21;
+	Wed, 11 Nov 2026 11:09:05 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id E7F5917CC
+ for <buildroot@buildroot.org>; Wed, 11 Nov 2026 11:09:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8A33C60796
- for <buildroot@buildroot.org>; Wed, 11 Nov 2026 11:08:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DA091811FA
+ for <buildroot@buildroot.org>; Wed, 11 Nov 2026 11:09:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id phTNrYeoc7BQ for <buildroot@buildroot.org>;
- Wed, 11 Nov 2026 11:08:56 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 99D50606E0
-Authentication-Results: smtp3.osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3vawlFIctw1e for <buildroot@buildroot.org>;
+ Wed, 11 Nov 2026 11:09:02 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 80225812C4
+Authentication-Results: smtp1.osuosl.org;
  arc=none smtp.remote-ip=34.202.193.197
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
  helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
+Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none) header.from=korsgaard.com
-Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
+Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
  unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=fwExgHTE
+ header.a=rsa-sha256 header.s=purelymail3 header.b=GLCcy2yU
 Received: from sendmail.purelymail.com (sendmail.purelymail.com
  [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 99D50606E0
- for <buildroot@buildroot.org>; Wed, 11 Nov 2026 11:08:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 80225812C4
+ for <buildroot@buildroot.org>; Wed, 11 Nov 2026 11:09:01 +0000 (UTC)
 DKIM-Signature: a=rsa-sha256;
- b=fwExgHTE33DHMEtHrOJ8sNA+dChiDwXGzhmSWgrIHT9CznENPvtiU23VctnNYYtEhi9RnDJr7TO0duj47hedW9+1N3rIEO6hJ1Jg5WIOEfJveSB5ewn4nkIXCHQLcaEmzXiuYnmdl/zTAqU03We5EJNiYuKZyGwGWzhjinslH2MOg4ulifa9MOdwivP8gI/ZQSywBigFoUYupf9DsCfN23An8f1yolyBh/gOWNw1T02R7QpwHbic4QIj0Y9rztQ45wjrCNsj5bWAOuMer7mwKEStDnoLyvKW8Ak4suKLHEUUbnENGm/4Nl/BWkM6+X04qzgO76RCBnOoj91+IR+LYQ==;
+ b=GLCcy2yUM3GAKpdOJ6ERKl0wTTueXX8pN/nY4nGMMdYoXTqoTrjU7F7g64lqVPlg8V/M9r/hRGcHg6F41+Qoz/ccneNylgwpHL+shGFArVmEPb9GKDgn36N8QQs7ZOGmr6jVIZDOzCAfqTNaaVdw6duo7gmz1u9TdmQ6YBSnUsWC9fUTPq+3t+70tyMmDIJBVLA87LxhpngFAsA/oIjIOqfxNw5qZWu7PV7S57IdwrMA6Tl44spoqHrPNEBNaeJB6s+eo8tY1EKrYCUX7GVYowQ0zrYbzMPQvy4IxsBl/QmCMLYgS9zdOj1ACqehHrUSUCjXm1A8y47fTyec/bEAMg==;
  s=purelymail3; d=purelymail.com; v=1;
- bh=Wj7k8TRAmGSPFXphmvUgFeJWE+aqFxMgmIubrDlWI1M=;
+ bh=bMGlAK5wt9PcdVP8DJ0C40O34G6WX36YNRxl52u3XrU=;
  h=Feedback-ID:Received:Received:From:To:Subject:Date:Message-ID; 
 Feedback-ID: 21632:4007:null:purelymail
 X-Pm-Original-To: buildroot@buildroot.org
 Authentication-Results: purelymail.com; auth=pass
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 324492242; 
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 988171926; 
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Wed, 11 Nov 2026 11:08:47 +0000 (UTC)
+ Wed, 11 Nov 2026 11:08:57 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1xR6C6-00000002QK9-3agM;
- Wed, 11 Nov 2026 12:08:46 +0100
+ (envelope-from <peter@korsgaard.com>) id 1xR6CG-00000002QKG-0mwh;
+ Wed, 11 Nov 2026 12:08:56 +0100
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Yegor Yefremov via buildroot <buildroot@buildroot.org>
-In-Reply-To: <20261111081946.3850218-1-yegorslists@googlemail.com> (Yegor
- Yefremov via buildroot's message of "Wed, 11 Nov 2026 09:19:46 +0100")
-References: <20261111081946.3850218-1-yegorslists@googlemail.com>
-Date: Wed, 11 Nov 2026 12:08:46 +0100
-Message-ID: <878q2zmxq9.fsf@dell.be.48ers.dk>
+In-Reply-To: <20261111080006.3832953-1-yegorslists@googlemail.com> (Yegor
+ Yefremov via buildroot's message of "Wed, 11 Nov 2026 09:00:06 +0100")
+References: <20261111080006.3832953-1-yegorslists@googlemail.com>
+Date: Wed, 11 Nov 2026 12:08:56 +0100
+Message-ID: <874idnmxpz.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13)
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/am335x-pru-package: fix host build
- with GCC 15
+Subject: Re: [Buildroot] [PATCH] package/libecoli: fix uninitialized width
+ build failure with -Ofast
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -117,6 +117,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Vincent Jardin <vjardin@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
@@ -129,32 +130,31 @@ X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 
 >>>>> "Yegor" == Yegor Yefremov via buildroot <buildroot@buildroot.org> writes:
 
- > The host pasm assembler fails to build with GCC >= 15 on the host:
- >   pasm.c: In function 'main':
- >   pasm.c:437:9: error: too many arguments to function 'ppCleanup'; expected 0, have 1
- >     437 |         ppCleanup(Pass);
- >         |         ^~~~~~~~~ ~~~~
- >   In file included from pasm.c:75:
- >   pasm.h:576:6: note: declared here
- >     576 | void ppCleanup();
- >         |      ^~~~~~~~~
+ > libecoli builds with -Werror. With GCC 15 and BR2_OPTIMIZE_FAST, the
+ > build fails with:
 
- > ppCleanup() takes no arguments, but main() passes one. The empty
- > parameter list in pasm.h hid the mismatch until GCC 15, which defaults
- > to C23, where "()" means "no parameters".
+ >   ../src/editline.c: In function 'ec_editline_complete':
+ >   ../src/editline.c:304:22: error: 'width' may be used uninitialized [-Werror=maybe-uninitialized]
+ >   ../src/editline.c: In function 'ec_editline_interact':
+ >   ../src/editline.c:657:22: error: 'width' may be used uninitialized [-Werror=maybe-uninitialized]
 
- > Add a patch, submitted upstream, that drops the extra argument.
+ > This is a real bug: ec_editline_term_size() only writes its width
+ > output when both el_get(EL_GETTC) calls succeed, and these two callers
+ > neither check its return value nor initialize width beforehand.
 
- > This issue has been present since commit 725efef8313a
- > ("am335x-pru-package: new package"), as the bogus call has been in
- > pasm since 2012, but it only shows up with a GCC 15 host compiler. It
- > therefore affects 2014.11 and later, including the 2025.02.x and
- > 2026.02.x LTS branches.
+ > Add a patch, submitted upstream, that defaults width to 80 columns, as
+ > the other ec_editline_term_size() callers already do.
+
+ > This issue has been present since commit 5638ee04c8dd ("package/libecoli:
+ > bump version to 0.11.3"), as upstream commit bc90312a4285 ("editline:
+ > split in 2 files"), first released in v0.11.0, dropped the width
+ > initialization. It therefore affects 2026.08 and later. The 2026.02.x
+ > LTS branch still has libecoli 0.10.1 and is not affected.
 
  > Fixes:
- > https://autobuild.buildroot.org/results/d6e70d200a3a7003a1d3fb03000fcfbd6b9dcc56
+ > https://autobuild.buildroot.org/results/a0a7e17f1a76588932a8a7f8db35a832d540cc69
 
- > Fixes: 725efef8313ae5591bb497fec3aa7e62717af9a2 ("am335x-pru-package: new package")
+ > Fixes: 5638ee04c8dddb9ebfb7b047efb574f657e1b052 ("package/libecoli: bump version to 0.11.3")
  > Assisted-by: Claude:claude-opus-5-5
  > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 
