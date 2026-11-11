@@ -1,100 +1,116 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACFA1606A31C
-	for <buildroot@archiver.kernel.org>; Wed, 11 Nov 2026 11:56:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91DFE606A8A1
+	for <buildroot@archiver.kernel.org>; Wed, 11 Nov 2026 11:57:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=LxoanvAL
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=NGMg4eP/;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256 header.s=purelymail3 header.b=h8Z0CY1v
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A3D7160B0C;
-	Wed, 11 Nov 2026 11:56:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6EF6D40977;
+	Wed, 11 Nov 2026 11:57:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kdhD_T0jTzHM; Wed, 11 Nov 2026 11:55:59 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 9D34660784
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794398159;
-	b=lbpGgCl3z2f0czjpXK02tJHiyLLwuKpn+INFjHFHZWUsv0AvSILVmbs68fB7w/sWQk38
-	 yx+80KcQgBCUZOKkfbCCRJl6N93gVqE8WVC0+VVaRVbvjFUPmtx+1bzahNuwE0iTGBdCV
-	 CRjTGfwRS0YdnokCD/xXnnsmYwxql4URKlLU3cJQLqNRgYal9oSsSNb260dtkEK1yvBjr
-	 iwGEANmQeCjOS4MGd5wWdC5GAVyB3JZ1grZzJE7IFsFmzv0Mt3FXZRByb4VJHJFxUiPL7
-	 5qg2rXnX1m/E6eea68D3LKyBU4Grk69G1o0ue205q0fCOiGn10IUvwBHi1R/F9bR1zg==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ErWDYVWtY47w; Wed, 11 Nov 2026 11:57:12 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 1A7CE4097A
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794398232;
+	b=o6vVwRD0tza5K3Qa24lqggjikvfVK6m/UP2NvybOKw6B/nEkxGmWhRRCenCRwa+olBjt
+	 Lis1DVKrHLcKEEa2/2BHGiv6Uxb64Ods8EYNPf+V+We/86zsx7lA2R5UkkULi/ziBqL36
+	 qPOntBwfr7225H2zu/WqbDRMPkc6pKUgOly0vz9Cz24rrtDjR74XpbY02R1aK85xukZLp
+	 N/+wUe9VInI1Ijo7SlP/7K3sl1PAaFg05oF2vOIkg/MqZxFHITGP12Ak/VSENhDQmsY2X
+	 RJjKci6RQIeCsT0PA8NoCTPF5P6Xh7ArxX7RB93xSMbTOPnLiPGBf9ycQDe+/huqUWg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794398159;
+	c=relaxed/relaxed; t=1794398232;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:To:Cc:References:
-	 Content-Language:In-Reply-To:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:Content-Type:Content-Transfer-Encoding:
-	 Errors-To:Sender;
-	bh=+NQkI79uXxWW/5+LySrmZP5yYKEqP3MZTQJdX7kMa24=;
-	b=FD7Gltf71mj5ZhOVwKGVFwRW/Y9FwOusdN4qozcZjUxbrRsfT5VRFrsCUjrdUrv8o9ny
-	 buEiiY1QVe303bmDnCWyI/BARoqSwu1Lwi/XuDDH2x+MuvvGEQyAD4XHoB17iP0KmZAMc
-	 +7iS06IURwRfWDbFk70h0RicZsuBxBg9588awUS3XKDYvcb8HcbP2Qz6gKFzUvCcMMt/A
-	 4reTT+rdch/SPijPzSBQl53piizI5KAJqNLiV4SLPe10AEazrCUDRWvq/FHOFcjPXgbBK
-	 88rcV/4wNQDy6gjX/opI8fmR3dV2eZYXXvgdSXP4GKQ2TJNRLfXXlT4vDcizfINlLMw==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:Received:From:To:
+	 Cc:In-Reply-To:References:Date:Message-ID:User-Agent:MIME-Version:
+	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=IjckZIO0j996OcOAveLCl+tZouCwyMv0y7VcJmublKc=;
+	b=FPg8k2/hO/xU9+RujOQJMbrofNjxK37/jIAqzzD3m9zb6T0m+/8NVCdQEl8/VXpeFm3Z
+	 46bM3zeyUwaYHgSgWiZ9xU5qWRjQjkrtzNUfSAuhvQdjPD2Qv99eWyPCgHrPemX1FAMgG
+	 MxYqMZmLbU7yWt65h9pehgKSDP6bhctqsNxeMz4XI9e+jaId+qlKweJJF8pglk5CIouq+
+	 Ny8gesEZJj9Co7mdykHpa1tO1VXhjKGJJmA9m0/4V/UqwLKig99m9UkcmrCqmsy47iCq6
+	 YhQaP1mZhEYnqM1mgLtnlZePgp3M6+DlbeBnFevg1wEPctlNpjtS59AWHcUfdt3KFUw==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794398159;
-	bh=+NQkI79uXxWW/5+LySrmZP5yYKEqP3MZTQJdX7kMa24=;
-	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
+	s=default; t=1794398232;
+	bh=IjckZIO0j996OcOAveLCl+tZouCwyMv0y7VcJmublKc=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=LxoanvAL/drpp0O0MHuMMr3HOHi19mGC3ZbgKTneCIcvnbuy9NSoq4NNYTGWFk5It
-	 sNgyEV5XwbM8aaAyfDKNzR5+5UrYuRqoPhB0nUfVim12CqD4RpO0wb8qeosk95qR/Q
-	 We7yR3wRG8US2VvCoJdaUIqDvSfBEud4qgIz+roxou01iuQG/mZeRtsVHPH0UnohD6
-	 0z5noQyjl3LFkUXG2d8+0T/tR1jQpXhcHciYF7fF6BQv2kuB2ua3rWmM9IG9jNarTW
-	 iZLF+djly9c5fq+YWS4D+bwxmLmKPQ6LlIdLb3QvwWM6vZFqk2B7FPOXasw3eoGGAj
-	 x9/KWGPRtLxcQ==
+	 From;
+	b=NGMg4eP/y7I2oja2zHHZUll01P028D+M4EX7z4+n+0qPT2XypenS5vzy8RR5WHGuD
+	 3cApsYKNk0cNdj/KcTw8yLjNnF1BhV3dt+/qFbCA+H/2uOyQUAfhWB+itASdPi5D4i
+	 wQU880qvj0XH+xGheAVMNVFnYn6kWTg4leqWSA1Y/DQjZoxhXhXYkZ59y+ymQtE+tJ
+	 hdvnswLcs9QEsQnoKT4d3scIaudVGv0GD+XAUaSYiAEPyegx0gAFK1cRFeIpTg7OGS
+	 WC6xi9zc0CvIvadQl1LwbhuaZyjhbgcXJ8P9U3JGPoa54W8WjN0Zuj4xnBoOsTghPT
+	 dneoHWctuCADQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9D34660784;
-	Wed, 11 Nov 2026 11:55:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id B4DDE17CC
- for <buildroot@buildroot.org>; Wed, 11 Nov 2026 11:55:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A7CE4097A;
+	Wed, 11 Nov 2026 11:57:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4063028C
+ for <buildroot@buildroot.org>; Wed, 11 Nov 2026 11:57:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A6446811F2
- for <buildroot@buildroot.org>; Wed, 11 Nov 2026 11:55:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3245B40217
+ for <buildroot@buildroot.org>; Wed, 11 Nov 2026 11:57:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HHJPGkos-uG2 for <buildroot@buildroot.org>;
- Wed, 11 Nov 2026 11:55:57 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org E6A69811D0
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=147.173.1.68;
- helo=mailgw-out1.grenoble.cnrs.fr; envelope-from=bonet@grenoble.cnrs.fr;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9lSubUn7B-dF for <buildroot@buildroot.org>;
+ Wed, 11 Nov 2026 11:57:09 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 516AD400D5
+Authentication-Results: smtp2.osuosl.org;
+ arc=none smtp.remote-ip=34.202.193.197
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
- [147.173.1.68])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E6A69811D0
- for <buildroot@buildroot.org>; Wed, 11 Nov 2026 11:55:56 +0000 (UTC)
-Received: from [IPV6:2a01:e0a:1164:dba0:bf0c:75c5:43f0:4c00] (unknown
- [IPv6:2a01:e0a:1164:dba0:bf0c:75c5:43f0:4c00])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange x25519) (No client certificate requested)
- by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id 3522C180DDE;
- Wed, 11 Nov 2026 12:55:54 +0100 (CET)
-Message-ID: <453e2807-4baf-4b9e-a671-141dc9f62f79@grenoble.cnrs.fr>
-Date: Wed, 11 Nov 2026 12:55:53 +0100
+Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=korsgaard.com
+Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail3 header.b=h8Z0CY1v
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 516AD400D5
+ for <buildroot@buildroot.org>; Wed, 11 Nov 2026 11:57:08 +0000 (UTC)
+DKIM-Signature: a=rsa-sha256;
+ b=h8Z0CY1vusPehc/tADhr82QX9c2OcVAA0m98gMbLLenK+lOs32PZuJGyAv1yW59vP9RWgXHXQftw+3igsqBJtae6HYl92VTjfR9dax9gJ2zchfitF8UW+PyHfVrVKYH7s+Z4bKRz2Dt4rEQixIIFe2GSEunrSslBYV3A0xjpAFCkuwB773ZXX/PKyjiqMrhyoc/UK8RaVVzJDqjRLPJsRE9HxQlE5XCzEj1QMlrnWs1kcDOZ1faLAinA5ciWqtaVT0H4mA2d5D+9qdt7BZng42pt7v9KZSHRDHkzS5xznpKwJWCvmGs7NF/jPGa3gE5POZHt+Owq8gdvry2WhMSeEA==;
+ s=purelymail3; d=purelymail.com; v=1;
+ bh=HSu1LKlGNkV0nkKChrU1QFpcsW5WUUUSgr+EIL+8cUY=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date:Message-ID; 
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Authentication-Results: purelymail.com; auth=pass
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1496849133; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Wed, 11 Nov 2026 11:57:00 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1xR6wl-00000002emo-1qOf;
+ Wed, 11 Nov 2026 12:56:59 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Yegor Yefremov <yegorslists@googlemail.com>, fhunleth@troodon-software.com
+Cc: Yegor Yefremov via buildroot <buildroot@buildroot.org>
+In-Reply-To: <CAGm1_ks5cqsnUXwepApaQ0C=s3b1u8rqu-Xiv2mStVAKWj6KHg@mail.gmail.com>
+ (Yegor Yefremov's message of "Wed, 11 Nov 2026 12:15:06 +0100")
+References: <20261111081946.3850218-1-yegorslists@googlemail.com>
+ <878q2zmxq9.fsf@dell.be.48ers.dk>
+ <CAGm1_ks5cqsnUXwepApaQ0C=s3b1u8rqu-Xiv2mStVAKWj6KHg@mail.gmail.com>
+Date: Wed, 11 Nov 2026 12:56:59 +0100
+Message-ID: <875wy3k2d0.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Angelo Compagnucci <angelo.compagnucci@gmail.com>, buildroot@buildroot.org
-Cc: Biagio Montaruli <biagio.hkr@gmail.com>,
- Ludovic Desroches <ludovic.desroches@microchip.com>,
- Simon Dawson <spdawson@gmail.com>
-References: <20261110215557.2248804-1-angelo.compagnucci@gmail.com>
- <20261110215557.2248804-3-angelo.compagnucci@gmail.com>
-Content-Language: en-US, fr
-In-Reply-To: <20261110215557.2248804-3-angelo.compagnucci@gmail.com>
-Subject: Re: [Buildroot] [PATCH 2/5] configs/acmesystems_acqua_a5_*: bump
- AT91Bootstrap to 3.10.4
+Subject: Re: [Buildroot] [PATCH] package/am335x-pru-package: fix host build
+ with GCC 15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -104,86 +120,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Edgar Bonet via buildroot <buildroot@buildroot.org>
-Reply-To: Edgar Bonet <bonet@grenoble.cnrs.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-22.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_SANE_1 autolearn=ham autolearn_force=no
-	version=4.0.1
+X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+	MAILING_LIST_MULTI,SPF_HELO_PASS,SPF_PASS,USER_AGENT_SANE_1
+	autolearn=no autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-On 10/11/2026 22:55, Angelo Compagnucci wrote:
-> Use the 3.x version of the at91bootstrap3 package, now 3.10.4, instead
-> of fetching v3.10.3 from git, and drop the board hash file of the git
-> tarball: the package hash file covers the release tarball.
-> 
-> Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+>>>>> "Yegor" == Yegor Yefremov <yegorslists@googlemail.com> writes:
 
-Tested-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
-Acked-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
+Hi,
 
-Specifically, I applied patches 1 and 2 on top of master (7966fa960556
-"package/libcurl: fix build on LoongArch with musl"), built the
-acmesystems_acqua_a5_512mb_defconfig, booted on an Acqua 512 MiB
-board, and logged-in on the serial console.
+ >> Committed, thanks.
 
-Best regards,
+ > Thanks. Should we keep this package at all? The last commit was in
+ > 2018. It looks abandoned.
 
-Edgar.
+Ehh, no idea. I've added Frank, who is listed in DEVELOPERS for it. What
+do people use to program the PRUs nowadays?
 
-> ---
->  .../acqua-a5/patches/at91bootstrap3/at91bootstrap3.hash      | 2 --
->  configs/acmesystems_acqua_a5_256mb_defconfig                 | 5 +----
->  configs/acmesystems_acqua_a5_512mb_defconfig                 | 5 +----
->  3 files changed, 2 insertions(+), 10 deletions(-)
->  delete mode 100644 board/acmesystems/acqua-a5/patches/at91bootstrap3/at91bootstrap3.hash
-> 
-> diff --git a/board/acmesystems/acqua-a5/patches/at91bootstrap3/at91bootstrap3.hash b/board/acmesystems/acqua-a5/patches/at91bootstrap3/at91bootstrap3.hash
-> deleted file mode 100644
-> index 6edf3d3345..0000000000
-> --- a/board/acmesystems/acqua-a5/patches/at91bootstrap3/at91bootstrap3.hash
-> +++ /dev/null
-> @@ -1,2 +0,0 @@
-> -# Locally calculated
-> -sha256  5ea2a8fed1ba0024229c6f6d77176679e1b24791bdbce8e285634013d4a93551  at91bootstrap3-v3.10.3-git4.tar.gz
-> diff --git a/configs/acmesystems_acqua_a5_256mb_defconfig b/configs/acmesystems_acqua_a5_256mb_defconfig
-> index 5b31f4c692..725b82e86f 100644
-> --- a/configs/acmesystems_acqua_a5_256mb_defconfig
-> +++ b/configs/acmesystems_acqua_a5_256mb_defconfig
-> @@ -22,10 +22,7 @@ BR2_TARGET_ROOTFS_EXT2=y
->  BR2_TARGET_ROOTFS_EXT2_4=y
->  # BR2_TARGET_ROOTFS_TAR is not set
->  BR2_TARGET_AT91BOOTSTRAP3=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.3"
-> -BR2_TARGET_AT91BOOTSTRAP3_LICENSE_FILES=""
-> +BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X=y
->  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="acqua-256m"
->  BR2_PACKAGE_HOST_DOSFSTOOLS=y
->  BR2_PACKAGE_HOST_GENIMAGE=y
-> diff --git a/configs/acmesystems_acqua_a5_512mb_defconfig b/configs/acmesystems_acqua_a5_512mb_defconfig
-> index ed74dd30d6..470ac36de8 100644
-> --- a/configs/acmesystems_acqua_a5_512mb_defconfig
-> +++ b/configs/acmesystems_acqua_a5_512mb_defconfig
-> @@ -22,10 +22,7 @@ BR2_TARGET_ROOTFS_EXT2=y
->  BR2_TARGET_ROOTFS_EXT2_4=y
->  # BR2_TARGET_ROOTFS_TAR is not set
->  BR2_TARGET_AT91BOOTSTRAP3=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_GIT=y
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_URL="https://github.com/linux4sam/at91bootstrap.git"
-> -BR2_TARGET_AT91BOOTSTRAP3_CUSTOM_REPO_VERSION="v3.10.3"
-> -BR2_TARGET_AT91BOOTSTRAP3_LICENSE_FILES=""
-> +BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X=y
->  BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="acqua-512m"
->  BR2_PACKAGE_HOST_DOSFSTOOLS=y
->  BR2_PACKAGE_HOST_GENIMAGE=y
-
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
