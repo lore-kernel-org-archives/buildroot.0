@@ -2,113 +2,93 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CC9E606A321
-	for <buildroot@archiver.kernel.org>; Wed, 11 Nov 2026 11:25:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4862606A31C
+	for <buildroot@archiver.kernel.org>; Wed, 11 Nov 2026 11:35:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=FpkR6JGM;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256 header.s=purelymail3 header.b=Lp35kUK8
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=ivTYC4E2
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E267B40AE7;
-	Wed, 11 Nov 2026 11:25:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 88DE840B23;
+	Wed, 11 Nov 2026 11:35:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x4qrFNAiHQzP; Wed, 11 Nov 2026 11:25:24 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org EC91E40B04
+ id LQxwrUqViARl; Wed, 11 Nov 2026 11:35:35 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org AE56B40B17
 Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794396324;
-	b=Gr1QK+jqq0tzOpfFl8xXksd3i67U7os2CYyM/Hu9KyNcGuseANeA1wkn54IIMxOipUfY
-	 oRkq45B0drkhJrVJ/fKPrcSbpBefVNj7b6ptJ2lOLZFg46XYONjD7JKg0u/ArdGLt25Ph
-	 4fLjEjL0REFjti+iOgTy2/pbyRsp3tAtoevXgdgeGhDdEKOh0/CiG6maZ6himIqmwi/ch
-	 pMgBIZ6/kEFtFgn0jtHmyjWGDWlrMuE5tXaUW/Gi80Gpoovvj4D3sNIkRHgJb46BILKr+
-	 45xiKAvILsYIbn1cU8tfIe8pFSlg0U+yPOVlukP+0RPHamTShmXhIHIHT2akCUa0t/g==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794396935;
+	b=VfE5yFSdbP1x346cEyGRD+vIssgdl+hgFG/9HcSqY9aQTmy/19jnqWrYiROFh6jvyxDP
+	 haNUbuYAGUHyR1+WBqR1axrFWq5GvtktkUjQuWAPohPsW1aOjxfDFUzdsn5GXZ7urlPfq
+	 IIwI6VBBuTQ5qsjFufCyTErtVNC8OVcXifj1cJa+cX5uNruWGTUUwXFSfI0o5OM/yZ2+u
+	 +luiqKAJ/UVuZRwXnkKPiHIU7aSlogIaOlaDbQS7ABTz/Agg1a45QXd3CnAT+O/auEHnY
+	 VFgnMBOqc1EU5YWerjVve6kAeheBZkqxMBcZLv0C+zHgn4OkEHfSVrTzx2k0ET8P8dg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794396324;
+	c=relaxed/relaxed; t=1794396935;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:Received:From:To:
-	 In-Reply-To:References:Date:Message-ID:User-Agent:MIME-Version:
-	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=nlwWltEJxNGGzCinbCly9M60mQOw3ndOitVTSR9MpLY=;
-	b=tcsKmxyLB8PI+NyueAjJv17hll1MTXxmzt1THAPchND9jKqoUpJ5VfTWjPmd5Gw5FJm/
-	 olMtXPyBEAkQBdl2KyPAXlXzeRjx88vSoZkGbpuF/nhYEwsyU2Gzch9tqv6QrStwPoJkz
-	 o1Qp3YKXVI799ZC31WVMY4mGMRoxyomZrfsECt9khE3HNOtYitUHAZ3XhmajViJ9tliTc
-	 lzp/g9F1ozsCL79wv4Lc6+QS5ZqkRvnvgqhV2bd8w5PwEU3PYEfRNIoHhjoeHQm7nIDJw
-	 pyYjRdG64Mmt81C4nTijPWwVrbsbBlViVgjD/aCc6fPiNFSE1XuqRU2YLcjbykZhh8w==
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
+	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
+	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
+	 Errors-To:Sender;
+	bh=KYbu4ps1GMb+LCPFTeVEht0h3DNOHZE3KnKIKfpywmc=;
+	b=MauMCjTlYvDeXGvAXWDAgMDCybETpLAbQdSoQWgMhzYq6h3tPUb39ubGEiI2NidDMC/4
+	 LmfoYvsJf2KAq5c96++ZPnX63/F0okW72dZalfdLgK1u1pWHu5uV+8zT4iWn8hdyLXeN7
+	 hioJZpgG5LhvMroPGA1aX8Fy+CoRt+WMraa80oOy4SiVOys7wg/UFbVhuwTYSULEM+PGP
+	 R/s/PLZ2WN5AIDD6G3pAYF+731iB/51IL1M+rFw6zjk6djmIzsV8RvhRGdqR8r2Q1yOjo
+	 AV1cQdrFCeeWf3iWywAarc1+FfVCeWOrPoausyycGK4SIAFaW0wKcfo4uiWqYZToKmQ==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794396324;
-	bh=nlwWltEJxNGGzCinbCly9M60mQOw3ndOitVTSR9MpLY=;
-	h=From:To:In-Reply-To:References:Date:Subject:List-Id:
+	s=default; t=1794396935;
+	bh=KYbu4ps1GMb+LCPFTeVEht0h3DNOHZE3KnKIKfpywmc=;
+	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=FpkR6JGMyljp7LhPGz91rcCUtXcy8x24AqQl8MfGYBfmFU3ZqjNBcnLId/dx3Tqoh
-	 5oTTyfW2aDUS7XIUl9Zh3QpBxp8Aqom7qrThkrIeFzLUpIKI631XjFGI6aGzKwLnni
-	 pYoK6Zn1LYRc0sV9BjJm7xxlxDfZ/RQ4FYKcj4panEmcg//LTSjrB2zqgISlCin70T
-	 lHIuogJzt+eXthG0HNcrdHkkKj3EwW86NOrS+wTEajZ+IlH0c4IKl+VdkgE7U9ANHb
-	 BdU5HNiLmAM936JcdP63ZcynbjyuBxuRkZsxReyXaxbQvDlhSpzo4z5dUpGcI/4G7o
-	 6YBh40Ut78lHA==
+	 From:Reply-To:From;
+	b=ivTYC4E2naI69ZF6VgmNu0WPDhHHjPGqYRgV+wtTT8y2HK2SGcLjx19VEwIBdcqbu
+	 uBeEUJDcWCdM8bv5cKaSdniSoKyXNBH5LdIzMq392WwuoDq3YqD5ACgEiWxJcJjZTy
+	 2chPoRH6bCL6wTjZm0NzrRS2r/GZQ3jt7DMiSCjUtTOkjw09ZCS6842LCY8tLUcgdB
+	 2SRyO4/uROKTC5I0WupZwVrTRUnb3W3ZSy577Fdv31z87p6zXH+cJrFTwi46l2d/VY
+	 ct3NwUUEmRVBY3v4ypC4jGZnTmQs4VdJ9ENay8KcuP9BvDkUL71wTMTv5i8+B5RXK1
+	 6fLgkhjyTiMng==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC91E40B04;
-	Wed, 11 Nov 2026 11:25:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8B4C217CC
- for <buildroot@buildroot.org>; Wed, 11 Nov 2026 11:25:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AE56B40B17;
+	Wed, 11 Nov 2026 11:35:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id B691017CC
+ for <buildroot@buildroot.org>; Wed, 11 Nov 2026 11:35:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7C3E840217
- for <buildroot@buildroot.org>; Wed, 11 Nov 2026 11:25:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 92DD540B17
+ for <buildroot@buildroot.org>; Wed, 11 Nov 2026 11:35:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xtiRKLMYKmOc for <buildroot@buildroot.org>;
- Wed, 11 Nov 2026 11:25:21 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 3DF6E400D5
-Authentication-Results: smtp2.osuosl.org;
- arc=none smtp.remote-ip=34.202.193.197
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none) header.from=korsgaard.com
-Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail3 header.b=Lp35kUK8
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3DF6E400D5
- for <buildroot@buildroot.org>; Wed, 11 Nov 2026 11:25:20 +0000 (UTC)
-DKIM-Signature: a=rsa-sha256;
- b=Lp35kUK8zxeYMOO7vN1d6qeH2f6pdzC+WgwXJ7Vlejxc160kcGORjKeEYjKEH8VfdzZClWtC1C0oZ8u+Ta1VBYHDKKgJXte/V0goSu2wNPh4Tp7HpJa4bb3G0vNYZb2weOxdjdKcMdjaysaR2tU305yMQ5LbboNTIicN3hNznyvr5KFebmFr3Fdzu40I6x8J/Vd41PYuUB1k7p0yz0Zjy4Q5pACHd8wWwjS6YVrzefk8aiLsb1CLoCI9Pl9zTl3ZPjAP/O90oyxnoouuk+ILTS8FjQj8H6pwNDn6UcMqAW2ahLc5WT7pHAWvXlSg6asb0gpYw0E+f8eOWp66gwAB/Q==;
- s=purelymail3; d=purelymail.com; v=1;
- bh=1a7U6IEH1N5WHrrgjyn1jfXAD9n0g5I2i+hBHm7tniQ=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date:Message-ID; 
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Authentication-Results: purelymail.com; auth=pass
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1606359563; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Wed, 11 Nov 2026 11:25:11 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1xR6Ry-00000002cWu-2Jkt;
- Wed, 11 Nov 2026 12:25:10 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Yegor Yefremov via buildroot <buildroot@buildroot.org>
-In-Reply-To: <20261110114907.2273598-1-yegorslists@googlemail.com> (Yegor
- Yefremov via buildroot's message of "Tue, 10 Nov 2026 12:49:07 +0100")
-References: <20261109132501.233001-1-yegorslists@googlemail.com>
- <20261110114907.2273598-1-yegorslists@googlemail.com>
-Date: Wed, 11 Nov 2026 12:25:10 +0100
-Message-ID: <87cxsbk3u1.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w-Tzdu664p3Z for <buildroot@buildroot.org>;
+ Wed, 11 Nov 2026 11:35:33 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org DBD1D40B16
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DBD1D40B16
+ for <buildroot@buildroot.org>; Wed, 11 Nov 2026 11:35:31 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.4])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id AFCBC78034D;
+ Wed, 11 Nov 2026 12:35:28 +0100 (CET)
+Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by localhost with HTTP
+ (HTTP/1.0 POST); Wed, 11 Nov 2026 12:35:28 +0100
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH v2] package/libcurl: fix build on LoongArch
- with musl
+Date: Wed, 11 Nov 2026 12:35:28 +0100
+To: Alexander Shirokov <shirokovalexs@gmail.com>
+Cc: buildroot@buildroot.org
+In-Reply-To: <20261109075547.418921-1-shirokovalexs@gmail.com>
+References: <20261109075547.418921-1-shirokovalexs@gmail.com>
+User-Agent: Webmail Free/1.6.21
+Message-ID: <997825ad9d4add278985e387f33e13d6@free.fr>
+X-Sender: ju.o@free.fr
+Subject: Re: [Buildroot] [PATCH 1/1] package/broot: bump to version 1.62.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -118,61 +98,24 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
+From: Julien Olivain via buildroot <buildroot@buildroot.org>
+Reply-To: Julien Olivain <ju.o@free.fr>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-10.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,SPF_HELO_PASS,SPF_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-16.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS autolearn=ham
+	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
->>>>> "Yegor" == Yegor Yefremov via buildroot <buildroot@buildroot.org> writes:
+On 09/11/2026 08:55, Alexander Shirokov wrote:
+> Changelog: https://github.com/Canop/broot/blob/v1.62.0/CHANGELOG.md
+> 
+> Signed-off-by: Alexander Shirokov <shirokovalexs@gmail.com>
 
- > Since libcurl 8.21.0, building the curl tool for loongarch64 with a musl
- > toolchain fails with:
-
- > ld: read-only segment has dynamic relocations
- > collect2: error: ld returned 1 exit status
-
- > On musl, none of the secure memory zeroing functions curl knows about
- > are detected, so curlx_memzero_low() falls back to calling memset()
- > through a 'const volatile' function pointer. In non-PIC code, GCC places
- > this pointer in .rodata, and on LoongArch the linker emits a dynamic
- > R_LARCH_64 relocation against memset() there, i.e. a text relocation.
- > musl's dynamic loader does not support DT_TEXTREL, so the Buildroot
- > toolchain wrapper links with -z text, which turns it into an error.
- > Other architectures resolve the address to a PLT entry at link time and
- > are not affected.
-
- > Backport the upstream fix, which detects explicit_bzero() at configure
- > time. musl provides it since 1.1.20, so the memset() fallback is no
- > longer used. As the patch touches configure.ac and m4/, autoreconf the
- > package.
-
- > This issue has been present since commit be2789d08432 ("package/libcurl:
- > security bump to version 8.21.0"), which brought in the upstream code
- > using the 'const volatile' pointer. It therefore affects 2026.08 and
- > later, and 2026.05.x since 2026.05.1.
-
- > Fixes:
- > https://autobuild.buildroot.org/results/558c08d552920e45628254bdc029518120a35ae1
-
- > Fixes: be2789d08432da951c0ebfb23b034072601bc8fe ("package/libcurl: security bump to version 8.21.0")
- > Assisted-by: Claude:claude-opus-5-5
- > Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
- > ---
- > Changes v1 -> v2:
- >   - replace the local patch with the upstream fix, which detects
- >     explicit_bzero() at configure time instead (suggested by Viktor
- >     Szakats in the upstream review)
- >   - autoreconf the package, as the patch touches configure.ac and m4/
-
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+Applied to master, thanks.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
