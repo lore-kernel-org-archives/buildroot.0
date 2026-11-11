@@ -2,28 +2,28 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF9D7606A321
-	for <buildroot@archiver.kernel.org>; Wed, 11 Nov 2026 15:46:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C786606A324
+	for <buildroot@archiver.kernel.org>; Wed, 11 Nov 2026 15:46:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=RSgXMsnR;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Uc4fxAOi
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=rz8aEjN/;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ShBAilB2
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8269A81307;
-	Wed, 11 Nov 2026 15:46:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8D12D8118F;
+	Wed, 11 Nov 2026 15:46:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TY32LT8Z3s4y; Wed, 11 Nov 2026 15:46:09 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 7087A81338
+ id rHvzOFKppY8n; Wed, 11 Nov 2026 15:46:12 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org C9BAE81366
 Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794411969;
-	b=qdudxO7xaHmuxwTJ3mE9U1otXwkYc1m07wJtNZc9MG996dVsNXxvZwQGD5hT2OOPoT6X
-	 OHMnFjFCe6Y64hgKRlyB3dXkT69xIUx9gop5j/GkBcfby9W/Smj8Yuh53XDiKFvFLL30A
-	 z4L5BWkAVItQVRGbxvygNE9Z8CeL2JpIoG+8ANwG+Pz8/zLHZC8mhIYnqC5leTG/ZvMUV
-	 UEYnH5Ta9eHkcJsFmJD8jeCqpoGGKrcL6cghLbI4A39jPHdItrgSdATbAlb0azJb8bBQ/
-	 JIHePReexrmKMjUjEx/XQhgxvvOkACFLbIbVhQb8s4ZDHDVUg1xraY89XF5DpKSpB/Q==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794411972;
+	b=ocll9j65Ybc+mOUndvgDGpbQY2LCCpYx1sCQewgnBh/SdN7hwo8n/+vfscTIVjDeYOVE
+	 ABWUpJi+nR7N+7zlJ8pOtNNlNIEkeRFaBgGwJ6OpHkrhhwZdRbe9qe/IPY2wNlK+OSJaE
+	 XZ91uevhJ617W4ue4eLMf8Aswg0Z3Az/jY94Rc89DXVuecAFGA7lg0K3MqrSM71J/QRCs
+	 OtH3tRlmyET4d5R3OiYRkCGb4MGJOTD9sLX8YLBxtwcZ6urxYIHm9odDNBjcDCb0ujtw8
+	 NpDRl2RuELWkzuJU3lkxC4CXS2Lgv94ZIi1eGEdEMHyYTbEE7o1pz70uZjaahUtxc5g==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794411969;
+	c=relaxed/relaxed; t=1794411972;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -33,102 +33,103 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
 	 Sender;
-	bh=l0+elj+Ma3PQmqelDqVVhIyGebVKdoL7+aLzSRfwHqM=;
-	b=kpHxkFkpIyl5sXEXsLJtSmnIPvH9uShiwgB77W8+oj6X5zcIN1ib0bRqpvyYMcAt/Gu3
-	 /NcJCfvFyV3GFS1/mkVxPggmJPNMJo0qZdjQO2fSiiAmL0+FafqhJuCcafaRbshDiK2kz
-	 f/w2lHAXuvE4B5ywsWUcaBnyTBmw+a4cpwoDwtK+6IlGzXwEUsWHz+aICPHbhs8hXiNiX
-	 kIQBgn3z/EF/YvY4hzEf+gjttmn3NIgm477r5i8ZlxY5IDzwi3+upiW8Dy3BRtlhpiHNA
-	 vhmrcf2VwG/F5g9X+r1Xgd3gHHProYR6yyCm8keWOZsclmjfSNn79/YswabS+wcu39A==
+	bh=vG4n7ke52aX//fTOGjyrBnff/gEowsqDc3b7oW0yFpI=;
+	b=GNHhda9gA7hz4IW5gYEP8UY/11SBrJY+R+Q4fotM1tK4vZxVq62PRH16H7KPY0AchK+N
+	 PgUpw9hShFVUVFTg6lGXa4xPkM2+bR2QdTLv+amj4EylmySvDUOYrJ6wwxUXN51HhWuVJ
+	 NopeQeXgxehOQi4xBspKgPcpn7R2KSrrd4bpWxaM/qVTZSZ/5sbXkXAv6jx2uZ/Gvlggu
+	 ypgXHCaRC+hBVR5Bep+bokSl1V6YXPg3ZQRGQhe4DKg0lhxULBq8/GpdmpwhKnP2cbNEI
+	 fQC9ImiE//dSHLHeIgjbh+F0h4OAnnbqQL7x3cCleYPcSFbgLSoCCOAQ1I1ByCvq5vw==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794411969;
-	bh=l0+elj+Ma3PQmqelDqVVhIyGebVKdoL7+aLzSRfwHqM=;
+	s=default; t=1794411972;
+	bh=vG4n7ke52aX//fTOGjyrBnff/gEowsqDc3b7oW0yFpI=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=RSgXMsnRMuHQpM85/KqeS7jRPYmGa/RLWujuFJn7gYKqV8ybwV9pm2Nuth+cS+OZT
-	 7sT+G3a+Gb5GG4zE/6RdL0FffDNp6ElWK5C4Ad+Lp7JYJ9e6CBNqnza3mCFhERxcWV
-	 PaMnz76k05yVNacIwmi7iWI16HOr9bbeGbhbBIOAKHAfYPjEXar08IFMUXGpBW4I1Y
-	 3TkaPPvKzjwnCmt4h8BahcDAX8V1h4Qri8oElnesNf3N+N+OkSHHZUV9claOqSQFE5
-	 M+el8R2/ykbg0awqHPUpj/Gj0uewG7EuQsrOLUoHx23Xx36woGjZCk7jnmHcs6lFfM
-	 MYaPtPi+WM8fw==
+	b=rz8aEjN/gxkidG3uVU8FCSXvVRSN9LjmiLymSXbpgp5OIZi6pvcIygqr5RRCzqYil
+	 bmazXBeF1wkaEr77X8ccrwnLcqbiv8Tcv3F3WFVz1+n5jSFoi814WEbIHK8gLazrFm
+	 vmB6rERZCmTN/+5kcfcmsKzpHZA/Bp+/GAbAlRmfKpQ5KVgCUrhoHbjN9NCuZezQ2y
+	 S8hfs9H0COCTNxKEtQ9jJZ9S8S5bWp1gi5fmYeokUGryO+brf/CyXDthcJ0djj9zNo
+	 VJhRsG5rDDrN8TI2gyEEzThJdsFibM3Z+iTm4sZmiOMzpt1xtHoDX+RvsPvMt+FxOr
+	 k04HchUr4ne8w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7087A81338;
-	Wed, 11 Nov 2026 15:46:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id D86E631F
- for <buildroot@buildroot.org>; Wed, 11 Nov 2026 15:46:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C9BAE81366;
+	Wed, 11 Nov 2026 15:46:11 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id D515E2FE
+ for <buildroot@buildroot.org>; Wed, 11 Nov 2026 15:46:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C6B0140518
- for <buildroot@buildroot.org>; Wed, 11 Nov 2026 15:46:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C63BC4006F
+ for <buildroot@buildroot.org>; Wed, 11 Nov 2026 15:46:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8DIvL760Fh8a for <buildroot@buildroot.org>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6jWifkz4Y2bd for <buildroot@buildroot.org>;
  Wed, 11 Nov 2026 15:46:04 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org A35F540891
-Authentication-Results: smtp4.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::336"
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 5E00B403A8
+Authentication-Results: smtp2.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::32f"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
  envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org;
+Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp4.osuosl.org;
+Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20260707 header.b=Uc4fxAOi
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A35F540891
- for <buildroot@buildroot.org>; Wed, 11 Nov 2026 15:46:02 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-4a5087a5348so29010005e9.0
- for <buildroot@buildroot.org>; Wed, 11 Nov 2026 07:46:02 -0800 (PST)
+ header.a=rsa-sha256 header.s=20260707 header.b=ShBAilB2
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5E00B403A8
+ for <buildroot@buildroot.org>; Wed, 11 Nov 2026 15:46:03 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-4a215e64962so37179375e9.1
+ for <buildroot@buildroot.org>; Wed, 11 Nov 2026 07:46:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20260707; t=1794411960; x=1795016760; darn=buildroot.org;
+ d=gmail.com; s=20260707; t=1794411962; x=1795016762; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=x6tkEmW1bIwRfLIAu16y0YNw+taF4Gv92grK3VcA0og=;
- b=Uc4fxAOiw9Z2myHdMlX0L9CQgBobzpQ4Hdscyu9Y5IGzt0eOBcKDDzXLQOjk/q50ll
- QR+ZcZXPz1IbjiPAGoZCX0K+QcrvcwaG/6I4T9N121WgwDNT7La3zaxHu873SmvyTPrk
- c2Vsx67hILOHygIR19BxfH/lldzkP3iP2gA/d8njZVGZvshaWK9wo7SXuKLh2Tbn4LwF
- 0iev0+0oa6Fa3MWUvNLMZ8Zw2mGkQORpfTStWxaGrnQRF5MyFwaNv4gpIXw8N8yi5ce8
- QtYrIX0LYDh5lqv4I6cNU4EB2hICEfkUXM0Wl45WY+wlavbgHi+kZWPWTP/oQv8U+t/c
- x8ZQ==
+ bh=LsBacCvJz88TC4g8GiBKba7+Gy3Z2+UiHMTCsdJKfXY=;
+ b=ShBAilB244flmTpdS1BC11Ld3y7eKl1Qs4Q2xsgLXL7PLd6ymRWSb+S6WfDk7N5ZbO
+ CfNjSvmezZ4yq2/8YTnub7A4YvO29NbyJqSSart/JEV/nbBBfhdlDPvbBHNBUQ89Z8My
+ rbSgHXzhwxihnPHwVV60M4l0bNeWPp1TqCOh+65akZS7qfYCFTjuK4jRFK1WZIKxv0HE
+ qLkgmWy5J340+J1NcW51syBSQfxCcxzr1VEtfBCIUJovi32k4NJmrOyyFoU2psUwvGlB
+ uP7cas9L+LXjfNNI35tjFn7sfGs+XJz3pxz1EWYbS46Stn4SUdfmIqlQKeDp7sSnCcVQ
+ ZBcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1794411960; x=1795016760;
+ d=1e100.net; s=20260707; t=1794411962; x=1795016762;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=x6tkEmW1bIwRfLIAu16y0YNw+taF4Gv92grK3VcA0og=;
- b=FSZsw1zLFI3U4eUNTPX2Z8q/82WzJoOJ8pfM1IB0KtWiHIKFE5W6xS1YLubfn2d2L7
- LzdWGRNVykqxHic8fpCKcm3ZgK+Oe4oWpgoCOuLIgndC48jAtEdpJKb/RM7cxDJFWADf
- 6fySGtSBAKZqNglDYE0Hor7YoyYbdpYdl8Z/ZM1fEGqs3F3s6aX8hTGaOTBPW4E0ZxQ7
- VsG2oh/+sujpgZbMy2CDnYhCYPYAXnUziPR2oxHA82kL8HvVpR8eFm/AaxouYSrgzMf+
- eOXNtmKW7j7G16jwihMTLYEfG4tXObpBaua+VOoP5ZDyA6PBG2LQ4auFFbbXGjDcmbjz
- MSYQ==
-X-Gm-Message-State: APuU4Z+07Oqg0TNBwMSP8x2rqsE1zP2nusEzzizEfRJNd/4jxDroiPPH
- bwq2vdkvNC6J4yzOIQAadMteKhHNYad1KNcjsXWvIINqiqhtafT+M0fqo4OD3Za5
-X-Gm-Gg: AYBFou0XY0adtIft7xt1DEC6h8rACpuRjsqBD7Un+ZVBmQtGULYyOxsYYvQSbTHmK6v
- mnZeK0oT0obF7MAoW2hxTboxO/b1enwazuidIF7UXwBM5sWeNTPULYNgIVF2IpMcnZrIAYWSo4R
- 5eJ+ZewszWpakeXEZJ6mVUxivmhhcxXA9QbSGgF7a24ko3QZM6ID8ZLNJ86oTyKwY1QB0lJJzH7
- olu3pbMlu1IX62IebspRr3LDLteOOiLyHn4y/nRIiCBFOms5Ly+3KxTARGBJQ05tHtWgL1gw48p
- NJ8BoPrw7sQEDJcMzLBwFUrNR/kKI170KJZmy/mh0ukcBgCVOK2hS1y3LZ+fagZXI5wAg7L609K
- dhZ4NT9I8cLACxqP0Kt8S6ZewRSzQbpWPay+r3OseBSwzNuOlAhrBcHqgIsmL+NpD4fB3DW/ZiD
- xhcZqZy6Y6gb+rKVN+WF+VF/sJOc0GDNM0Xijcouc4IREumZ8xLR904ktD+ihuiVwgbs5U5mrzF
- VPuzri5iGhnSmcjM80W78gTMgBRqcPugGce8t1f+WGo+OIHQSihQ3sOtDIsSdhLppgZrUU4AtpN
- 1WxcpexZw+p4XvYye03j3yqJwtikfLtQAw4JXBkHwgasDxwjSh8b
-X-Received: by 2002:a05:600c:6819:b0:4a2:167a:c946 with SMTP id
- 5b1f17b1804b1-4ba0935f880mr49209715e9.13.1794411960265; 
- Wed, 11 Nov 2026 07:46:00 -0800 (PST)
+ bh=LsBacCvJz88TC4g8GiBKba7+Gy3Z2+UiHMTCsdJKfXY=;
+ b=ECiZUoqdDlaudr01VgSyl1sA/xDcm9vlPWWq49WxnFfriEK69Yb0Pn2i3qfTWbbYkc
+ Jp/nmpQZjvZFuNRIeYRNp+olru4cKhpFftpD/+fucInpYoe3uOK8VL0+eLqw8k5E12Hs
+ tUDOvljbK5WgAS2DzvHQmRweG0B+9ZHaTN1IzUYLZtrzQkxLmwzdG4MUHQfE1Pohb0rp
+ Xcbhui8CMUO9MEErf+YcCLtPtim2H3CNQmw+JuEa5vhXLLt1bxFy6aRQTKjjnnjbrYjm
+ ChOjrxbIewJpY5s7HcZGf9lqdEAb/8CaIdP7Phve+I4X24Rbb7Q9nnkfImozHzqgBVDp
+ Ltgg==
+X-Gm-Message-State: APuU4Z/TVKZrFeF6x+CBGrUwXDohAXwb/9gkNJnLzBRuralqHgBvyVy8
+ dfV/QQWcglUp4HWB6JzmiWznXV+LnxNhmDZdOK9Rg/YzwergbZRbt8wFB6IEmJl9
+X-Gm-Gg: AYBFou30xRk6O8NApQ2f3EU4EjyhlvZRd3j+TJ0fvEO5coum1m6axei0KLs259Bv8Ld
+ N/MwWXXnpdljKpj3L1bfGiA+wsBHiSwvFZo+A+/iId/YtO2ckln9peeJcYJHIjTGG/kAFnWdZz5
+ T0RNOyhPbwWF/jf8RMB8p+cAhyangCj96N1mij/ycNBOBwEpbNrd3LKEeuAzYJ/04gZPh1ThnHK
+ 4BPs27yXxe5C6tXgOaQUZVZJZcAZF3Ph0vRPjGSe60g0jSGkfjElDHfT4cWwsjqKb/wxX+J+8vO
+ 6jo9TEm/njToabodPL6CeM64FJ/Pf+Jr05E4Ome95CRrany6+GH7MNdBOHl2kQY6aRDkvSurCny
+ oYjWsI9pWk+CaBJF5RiOdA8B00EYipCZnfrNLizasNNsSSm7NVqme4YMDG1ovDhJnDblvokeJwG
+ CAGYZzX7m/rzMjosQvQUxh0m4anGBYJdaytbgYSU5/KEu76t7t0dRvyKVHZWYKC5I46Uf4lD82P
+ Dpx9HAi6syf4uoXiuPNz4zYOZETKFmRUWjUBlS2EAa6/Uae3NfZCGOmUsE/h++Z/wnBwYJMpiG9
+ cvHu4SlQLBzQH+7vQ5Q0D1x6wCcRsgyUwMAUMQMRFbdbMLBs/zk/GyOhJjOSlVie5W+lwD9Czw=
+ =
+X-Received: by 2002:a05:600c:1986:b0:4a1:f7f4:7ced with SMTP id
+ 5b1f17b1804b1-4ba0937a886mr51007725e9.17.1794411961492; 
+ Wed, 11 Nov 2026 07:46:01 -0800 (PST)
 Received: from angelo-Precision-7550 ([94.154.175.53])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4bb4c53bb94sm4574095e9.8.2026.11.11.07.45.59
+ 5b1f17b1804b1-4bb4c53bb94sm4574095e9.8.2026.11.11.07.46.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 11 Nov 2026 07:45:59 -0800 (PST)
+ Wed, 11 Nov 2026 07:46:00 -0800 (PST)
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 To: buildroot@buildroot.org
 Cc: Biagio Montaruli <biagio.hkr@gmail.com>,
@@ -136,16 +137,16 @@ Cc: Biagio Montaruli <biagio.hkr@gmail.com>,
  Ludovic Desroches <ludovic.desroches@microchip.com>,
  Simon Dawson <spdawson@gmail.com>,
  Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Wed, 11 Nov 2026 16:45:51 +0100
-Message-ID: <20261111154553.673632-5-angelo.compagnucci@gmail.com>
+Date: Wed, 11 Nov 2026 16:45:52 +0100
+Message-ID: <20261111154553.673632-6-angelo.compagnucci@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261111154553.673632-1-angelo.compagnucci@gmail.com>
 References: <20261110215557.2248804-1-angelo.compagnucci@gmail.com>
  <20261111154553.673632-1-angelo.compagnucci@gmail.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 5/6] boot/at91bootstrap3: find the memory@
- node of Linux device trees
+Subject: [Buildroot] [PATCH v2 6/6] configs/acmesystems_arietta_g25_{128mb,
+ 256mb}_defconfig: re-add defconfigs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -158,71 +159,243 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
 	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Before booting Linux, at91bootstrap 3.x sets the memory node of its
-device tree, which it looks for by the name "memory": the Linux device
-trees name it memory@<address> (e.g. memory@20000000 in
-at91-ariettag25.dts), and at91bootstrap stops before booting:
+The Arietta G25 defconfigs were removed by commit c8bf258e5b
+("configs/acmesystems_arietta_g25_{128mb, 256mb}_defconfig: remove
+defconfig") because they still used the unmaintained Linux 4.19.
 
-  DT: doesn't support add node (memory)
-  SD/MMC: Failed to load image
+Re-add them with current components and the same boot flow as before:
+AT91Bootstrap loads the kernel (zImage) and its device tree from the
+FAT partition of the microSD card and starts Linux with the root
+filesystem on the second partition, without U-Boot:
+- Linux 6.18.63 (LTS), at91_dt defconfig and the in-tree
+  microchip/at91-ariettag25 device tree;
+- AT91Bootstrap 3.10.4, the latest 3.x release: AT91Bootstrap 4 no
+  longer supports the SAM9X5 devices;
+- the Bootlin armv5-eabi glibc stable toolchain;
+- hashes for Linux and its license files (BR2_DOWNLOAD_FORCE_CHECK_HASHES).
 
-Backport the fix of the 4.x series.
+Also add myself to DEVELOPERS for the Acme Systems boards.
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
 Changes v1 -> v2:
-  - new patch
+  - none
 ---
- ...w-name-of-memory-node-in-device-tree.patch | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
- create mode 100644 boot/at91bootstrap3/v3.10.4/0002-lib-fdt-adapt-new-name-of-memory-node-in-device-tree.patch
+ DEVELOPERS                                    |  2 +
+ board/acmesystems/arietta-g25/genimage.cfg    | 36 +++++++++++++
+ .../arietta-g25/patches/linux/linux.hash      |  7 +++
+ board/acmesystems/arietta-g25/readme.txt      | 54 +++++++++++++++++++
+ .../acmesystems_arietta_g25_128mb_defconfig   | 26 +++++++++
+ .../acmesystems_arietta_g25_256mb_defconfig   | 26 +++++++++
+ 6 files changed, 151 insertions(+)
+ create mode 100644 board/acmesystems/arietta-g25/genimage.cfg
+ create mode 100644 board/acmesystems/arietta-g25/patches/linux/linux.hash
+ create mode 100644 board/acmesystems/arietta-g25/readme.txt
+ create mode 100644 configs/acmesystems_arietta_g25_128mb_defconfig
+ create mode 100644 configs/acmesystems_arietta_g25_256mb_defconfig
 
-diff --git a/boot/at91bootstrap3/v3.10.4/0002-lib-fdt-adapt-new-name-of-memory-node-in-device-tree.patch b/boot/at91bootstrap3/v3.10.4/0002-lib-fdt-adapt-new-name-of-memory-node-in-device-tree.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 08fa49faf4..e540154254 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -222,8 +222,10 @@ N:	Andrey Yurovsky <yurovsky@gmail.com>
+ F:	package/rauc/
+ 
+ N:	Angelo Compagnucci <angelo.compagnucci@gmail.com>
++F:	board/acmesystems/
+ F:	board/sipeed/lichee_rv/
+ F:	board/sipeed/lichee_rv_dock/
++F:	configs/acmesystems_*
+ F:	configs/sipeed_lichee_rv*
+ F:	docs/website/
+ F:	package/apparmor/
+diff --git a/board/acmesystems/arietta-g25/genimage.cfg b/board/acmesystems/arietta-g25/genimage.cfg
 new file mode 100644
-index 0000000000..ef6f5e14b3
+index 0000000000..e49e35dec5
 --- /dev/null
-+++ b/boot/at91bootstrap3/v3.10.4/0002-lib-fdt-adapt-new-name-of-memory-node-in-device-tree.patch
-@@ -0,0 +1,31 @@
-+From 72da9d23ed07bbfc793d767dc5a4044cc0a95706 Mon Sep 17 00:00:00 2001
-+From: Xing Chen <xing.chen@microchip.com>
-+Date: Fri, 24 Sep 2021 10:47:35 +0800
-+Subject: [PATCH] lib: fdt: adapt new name of memory node in device tree file
++++ b/board/acmesystems/arietta-g25/genimage.cfg
+@@ -0,0 +1,36 @@
++# Minimal SD card image for the Acmesystems Arietta G25
 +
-+The name of memory node was changed from 'memory' to 'memory@address'
-+in device tree files in Linux. For example, 'memory@20000000' .
-+This commit checks if the memory node is named 'memory' or it has a trailing
-+'@' .
++image boot.vfat {
++	vfat {
++		file zImage {
++			image = "zImage"
++		}
 +
-+Signed-off-by: Xing Chen <xing.chen@microchip.com>
-+Upstream: https://github.com/linux4sam/at91bootstrap/commit/72da9d23ed07bbfc793d767dc5a4044cc0a95706
-+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-+---
-+ lib/fdt.c | 3 ++-
-+ 1 file changed, 2 insertions(+), 1 deletion(-)
++		file acme-arietta.dtb {
++			image = "at91-ariettag25.dtb"
++		}
 +
-+diff --git a/lib/fdt.c b/lib/fdt.c
-+index 8d1fdfdc5..aa20426c9 100644
-+--- a/lib/fdt.c
-++++ b/lib/fdt.c
-+@@ -254,7 +254,8 @@ static int of_get_node_offset(void *blob, const char *name, int *offset)
-+ 
-+ 		nodename = (char *)of_dt_struct_offset(blob,(nodeoffset + 4));
-+ 		if ((memcmp(nodename, name, namelen) == 0)
-+-			&& (nodename[namelen] == '\0'))
-++			&& ((nodename[namelen] == '\0')
-++				|| (nodename[namelen] == '@')))
-+ 			break;
-+ 
-+ 		start_offset = nextoffset;
++		file boot.bin {
++			image = "at91sam9x5_arietta-sdcardboot-linux-zimage-dt-3.10.4.bin"
++		}
++	}
++
++	size = 16M
++}
++
++image sdcard.img {
++	hdimage {
++	}
++
++	partition boot {
++		partition-type = 0xC
++		bootable = "true"
++		image = "boot.vfat"
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++		size = 512M
++	}
++}
+diff --git a/board/acmesystems/arietta-g25/patches/linux/linux.hash b/board/acmesystems/arietta-g25/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..6acf301c54
+--- /dev/null
++++ b/board/acmesystems/arietta-g25/patches/linux/linux.hash
+@@ -0,0 +1,7 @@
++# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
++sha256  81764a545072d160748beff4d9de2e7d95aa9f16e8261110288f067a2cc61d71  linux-6.18.63.tar.xz
++
++# Locally calculated
++sha256  fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0  COPYING
++sha256  8780e78a1a737e127f25a65f6d95269bffd36158dc261114de7859b490bfc5aa  LICENSES/preferred/GPL-2.0
++sha256  8e378ab93586eb55135d3bc119cce787f7324f48394777d00c34fa3d0be3303f  LICENSES/exceptions/Linux-syscall-note
+diff --git a/board/acmesystems/arietta-g25/readme.txt b/board/acmesystems/arietta-g25/readme.txt
+new file mode 100644
+index 0000000000..e3a0f7cf56
+--- /dev/null
++++ b/board/acmesystems/arietta-g25/readme.txt
+@@ -0,0 +1,54 @@
++Acme Systems Arietta G25
++
++Intro
++=====
++
++This default configuration will allow you to start experimenting with the
++buildroot environment for the Arietta G25. With the current configuration
++it will bring-up the board, and allow access through the serial console.
++
++AT91Bootstrap loads the kernel (zImage) and its device tree
++(acme-arietta.dtb) from the first partition of the microSD card and starts
++Linux with the root filesystem on the second partition; there is no
++U-Boot.
++
++You can find additional information, tutorials and a very comprehensive
++documentation on https://www.acmesystems.it/arietta.
++
++Build instructions
++==================
++
++To build an image for the Arietta G25 choose the configuration
++corresponding to the Arietta variant.
++
++For 128MB RAM variant type:
++
++$ make acmesystems_arietta_g25_128mb_defconfig
++
++else for 256MB RAM variant type:
++
++$ make acmesystems_arietta_g25_256mb_defconfig
++
++To customize the configuration chosen type:
++
++$ make menuconfig
++
++When you are ready to start building Buildroot type:
++
++$ make
++
++How to write the microSD card
++=============================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
++
++Insert the microSD card into the Arietta slot and power it.
++
++The image just built is fairly basic and the only output you will get is
++on the serial console (115200 8N1, on the debug UART pins), please consider
++using a DPI cable (https://www.acmesystems.it/DPI).
+diff --git a/configs/acmesystems_arietta_g25_128mb_defconfig b/configs/acmesystems_arietta_g25_128mb_defconfig
+new file mode 100644
+index 0000000000..14e2cec73b
+--- /dev/null
++++ b/configs/acmesystems_arietta_g25_128mb_defconfig
+@@ -0,0 +1,26 @@
++BR2_arm=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_STABLE=y
++BR2_GLOBAL_PATCH_DIR="board/acmesystems/arietta-g25/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++BR2_TARGET_GENERIC_HOSTNAME="arietta"
++BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Arietta G25"
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/arietta-g25/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.63"
++BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="microchip/at91-ariettag25"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_AT91BOOTSTRAP3=y
++BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X=y
++BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="arietta-128m"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
+diff --git a/configs/acmesystems_arietta_g25_256mb_defconfig b/configs/acmesystems_arietta_g25_256mb_defconfig
+new file mode 100644
+index 0000000000..4a504463b1
+--- /dev/null
++++ b/configs/acmesystems_arietta_g25_256mb_defconfig
+@@ -0,0 +1,26 @@
++BR2_arm=y
++BR2_TOOLCHAIN_EXTERNAL=y
++BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV5_EABI_GLIBC_STABLE=y
++BR2_GLOBAL_PATCH_DIR="board/acmesystems/arietta-g25/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++BR2_TARGET_GENERIC_HOSTNAME="arietta"
++BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the Arietta G25"
++BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/acmesystems/arietta-g25/genimage.cfg"
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.18.63"
++BR2_LINUX_KERNEL_DEFCONFIG="at91_dt"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="microchip/at91-ariettag25"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++# BR2_TARGET_ROOTFS_TAR is not set
++BR2_TARGET_AT91BOOTSTRAP3=y
++BR2_TARGET_AT91BOOTSTRAP3_LATEST_VERSION_3X=y
++BR2_TARGET_AT91BOOTSTRAP3_DEFCONFIG="arietta-256m"
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
 -- 
 2.53.0
 
