@@ -2,112 +2,127 @@ Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAFF2606A321
-	for <buildroot@archiver.kernel.org>; Thu, 12 Nov 2026 17:43:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32F80606A335
+	for <buildroot@archiver.kernel.org>; Thu, 12 Nov 2026 19:10:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Q9X66L5d;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b=WOKhbZZu
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=hrgqLhaP;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=F7rydhs2
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8EF88607E7;
-	Thu, 12 Nov 2026 17:43:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 02AC960B18;
+	Thu, 12 Nov 2026 19:10:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 44TEFNnTargx; Thu, 12 Nov 2026 17:43:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org B2EF5607F7
+ id Q0bydpHMeJZ8; Thu, 12 Nov 2026 19:10:04 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org C288460A3C
 Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794505421;
-	b=Xg54Q5lAuN2hEaF834cqAT3MucQHbEMbUTL55A+8qwd+0+MQCgXoJ5C3pXT20OnaT5NG
-	 Lcv3A6T8LGkjFVqI1iIpwsB1A2BU+vxncI8a5/KhIUg0lKriRdKNZJxNEnQypyexI8gDL
-	 T1MWkKjyzHut54euQd+lNK4mnfISfHovwfLV7+cN6nG2m/7jIthYgxRO5dKLqrqZjhuJH
-	 qUHBsWKEdjVjOTjuCsqsRRjjQcIpwbZLpdWsjQ8z9B6l2MB6fCUU6r94E/HVB2DQN06du
-	 Vi2XF3o1776wonGj1QplwMkO/Cykb7/qN+ydaCmelCzQe7MGDnUZAmoiDGuAF28bhwQ==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794510603;
+	b=lTe1YHqUXckllBGthRrTOmuCXoyaZc2tn61xfyR5BB55yhq4t+bMzRvRoygSYbbI6jZ1
+	 hOlbFhZh4yaTaYo2J/X1fd5WJosn/31pfuDomdW0O7C8I8XKkyMNSbjHeQbUdmPt1o4EJ
+	 65+8JDDkpS8enBB8tQ6DLIup3Tnfeh1JwarCrxDq6bf58fRZc8zd4Uc25lU78I74vhUmn
+	 mWNaA8neatqfqzlqfnB0hdCrHnn32IM+B81Lxb8vdAve5L+Sim2JR9hqD85mUhPOQFDSS
+	 nJkIFL75dhGe4tMbey2GMfnJ9sZMTUYBDHtJ0XpuCv0GQnbGd6N/Oi3lJYR7VL2Uu+A==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794505421;
+	c=relaxed/relaxed; t=1794510603;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
-	 X-CMAE-Envelope:Subject:X-BeenThere:X-Mailman-Version:Precedence:
-	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
-	 Sender;
-	bh=2QSrrDGEgPLlD0RoCw0KnNkv7qPALafXQ7H5rtSgo+I=;
-	b=cCsNFKJzQ01/r2O5EgP38YdGn61oqEdn8yvm0CdyYAFKWH/pNY22vwEpUygRPrYUMbm0
-	 3UJWOHlF/se44shRpkniSmH5gKKSzeRZnQNz/HNEH2wezf++wKpbX7xfucOICr1j2pS8L
-	 +BddJlf9+TR2QrEZFApw+596Q2Xt44eqY7VUdJxfUWcxEE12Jtd00FKHkReL9rXdQkYaf
-	 nORnU7y+NujQTxZ/6WSVdN0I/+xygiyrZmAOGJZ9ThS/faixG/CxMDangdz200CmXsqFE
-	 vl6X+yKDGtANy/z1pm9F0yHXtXfyN9+FyMVAB73le0KsGTZ2j7iBqLXuCAfGYdXNB3A==
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:Date:Message-ID:
+	 X-Mailer:MIME-Version:X-Spamd-Bar:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=f3oG24f1v213JA0KHoHjEmySEEZ8hScZ1fPgl21uDiM=;
+	b=XTcKEZ1YhHyaIwD3i2nGWJs7dRwsSi7Dn3osVOs3NbybhRZLWKLuaJsfE/SM4EZ31SGv
+	 A6V30zFZOJIPwwxaW6e8nnKHWTIJXu2B3xV5CaAqTFFBIgAYECzibCgaRnrTpSwLwrOXn
+	 fF4vo7e/68UX1fV20GljY43c1yatvV0t8voVyOQZYlAGgJaa5VFC+pu4SprmlPQo22pdO
+	 p8mAspPTb6+BPkLBs76ySRJwwGgKj78eAfDMWBm1BL3HnwMjP+ydiMdecOykglMWFDljl
+	 GrX+r1ZbOinLnny+KJv8FKOTQBodo7pB3joOfwuSjL6i4AAtrdkc+2bh0kGxJyjf/1w==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+	dmarc=pass header.from=kuhls.net;
+	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=F7rydhs2;
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794505421;
-	bh=2QSrrDGEgPLlD0RoCw0KnNkv7qPALafXQ7H5rtSgo+I=;
+	s=default; t=1794510603;
+	bh=f3oG24f1v213JA0KHoHjEmySEEZ8hScZ1fPgl21uDiM=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=Q9X66L5dQQVI4Xya9Hr47kIuR8h7XFypxvcH9FtRzLS7zIEHpSsUMQWO5QmHkmRti
-	 y1lKwWqFr/71mAk4YXv3XMFVRempIJdYAN8FLDjpbQnTwdP381NawEbEcmiLmTNPZ+
-	 UU/trNReEtLqwWrLshYF1I2AopV/I1mtr0HTBaHVZ6l2bmFR9qqDuEWRvKjAZBEDQD
-	 28Rc1MEIAjrv1JUXQkrOxIaYV3HywfLfxCOFKpvj2OA46DJUnDao6Am+dcTb4YdYHk
-	 mCP8lWdQshCFHgKgv22W1pHk2qCqxqudnRdQ3GrAR1f8Ltk2MUfZjKYy9dvUHCkmPr
-	 NbPwmIPFMIjSA==
+	b=hrgqLhaPbNoQ0E87cj1Hs7lDxmZr2irAwTZ1ttV0210TQbyNvDNyOAuCgq9ThcSrR
+	 UO4VBfDPz4x1v/yzlbylf8ZzuZyYFvScGVICudwRnr7omVLGXEX19gkHASN/n0GaNc
+	 momqYSmZ8A8Zgqd5YqI6lgAVhFqyuIch5/YvY5GYz9IobYf4XtzQ2o6Fhu2T4ChE/z
+	 rDnfz8WAkci/+TKimBjg5DuyBNovyC1saeWFRvUItIGOYYyRN75OsSXKSgpbIWZak0
+	 zPZHA+be80njnI7L75F0udx0Yf6/c2SnPmBZhOKrqpdvNPnoi73lRUGTh7oP7uH/9q
+	 FtG8jONdtapMg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B2EF5607F7;
-	Thu, 12 Nov 2026 17:43:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2DBA62FE
- for <buildroot@buildroot.org>; Thu, 12 Nov 2026 17:43:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C288460A3C;
+	Thu, 12 Nov 2026 19:10:03 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 6D184AF8
+ for <buildroot@buildroot.org>; Thu, 12 Nov 2026 19:10:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 102BB81488
- for <buildroot@buildroot.org>; Thu, 12 Nov 2026 17:43:40 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5D9F160A3C
+ for <buildroot@buildroot.org>; Thu, 12 Nov 2026 19:10:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N2_XR9egaZs5 for <buildroot@buildroot.org>;
- Thu, 12 Nov 2026 17:43:38 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 8443681213
-Authentication-Results: smtp1.osuosl.org;
- arc=none smtp.remote-ip=62.149.158.131
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.131;
- helo=smtpcmd04131.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org; dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=WOKhbZZu
-Received: from smtpcmd04131.aruba.it (smtpcmd04131.aruba.it [62.149.158.131])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8443681213
- for <buildroot@buildroot.org>; Thu, 12 Nov 2026 17:43:36 +0000 (UTC)
-Received: from localhost.localdomain ([151.95.84.63])
- by Aruba SMTP with ESMTPSA
- id RYphx6FlbtleFRYphx8X9b; Thu, 12 Nov 2026 18:43:33 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1794505413; bh=nYQUC3XxaDaJ54bZto25RKPHq84z3UfjvEr8MTvu4kM=;
- h=From:To:Subject:Date:MIME-Version;
- b=WOKhbZZuSSNa+scXV0UylB9nQJYf2F/Sqr0bhTLAoTv0VTqH6vBf9FKoE/km239+T
- 2k5pA6ZoYKdmfYGAdLPdbHN4rL6C3Jwi3hSUOeqs8yXrSGZAS5nZqHCpDXgL6UyI/Q
- kisNNB7pmngKBkRFpSPgqfNFNshA8NyV4jT8F3eDvzD7u0GkkdA7GE+qWOLOKPFhaC
- OItKMVGRcWNcYIwJB/LXyHKH16SrAZBz5bTFalETwkazJbPsm5R8AuB1B1mbz1V1NI
- QkkWeA+DuKZwHX4ldEYGC0m+NKf441w7tTqBzW//pxVbGQXE3f8hLBxlraBLqlz3OP
- hNGpm6rNZXC9g==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LqmXszwT3GIH for <buildroot@buildroot.org>;
+ Thu, 12 Nov 2026 19:10:00 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 323AA60909
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=kuhls.net
+Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=F7rydhs2
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 323AA60909
+ for <buildroot@buildroot.org>; Thu, 12 Nov 2026 19:09:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
+ s=kas202605290044; t=1794510594;
+ bh=bqJ0irwfqfVHhgC0FPupDS1Dc5WtewXU2gXT9Z+xlEE=;
+ h=From:To:Cc:Subject:Date:From;
+ b=F7rydhs2dCXDpeTdViv8Y5kwRBB+GgaAu5+GOgkMq5bPbwauekun3TrFpsRgFDHv0
+ z6Mikd0FOsxH61HnzRnnq4xsTPIpMZ5H7eU+j0ug+auHQ8W/ZhkVUn+RqKinakA+nJ
+ zYswH6OiL+6mR6u5pXoVBddnLXv+0liWbcH6jozPZN65E3PqmDgGhwy5CKkb4t8WiK
+ 8P5GKDHJiV4dwiQnSOh+aCnUTNy/W4y9sflLqIQOiAEeGwWEf5L1HM4s6NYyiiMcaq
+ BQi9Jl1LVVN1s3W0KNtuYyryilnUq+unXGv7qBHwwMVZWRDpuWbFSuda7BeUOXy4AX
+ XizLoavfgVJzw==
+X-KAS-Sym: v3:f51bdf72230551df:Clbr0x+vcQ+nh8vBqvFoeZstHusRJYrRDDnZznkXjRYlN
+ ebf6e7/iHV/u9RUYEfS4E0HJ6KsO48+V/xEOn5+Cg7YfAAMuZXQQYhoLw9y4MTpkcyz2l8s900H
+ teTo6LqQtb59w/+q6FSzp4L2qxSCANHJvRVokv3rVcpk1QnraAosmkIulJqTmlcrxPkrG+iaHfW
+ TMy2RGQXSDOsYZZske4MwoIehla6vD2WGp+Ss+N70BpW/K5niNVj6AY8sac7aEyGuBTbAOp1L99
+ rAeX55JwxJy1koM809WZ+qR2MB9hNg3x4WkKIZc+h9dFkHqDHChn0WJFJ9irW0BvXmZ2fX9g==:
+ uUfIVm6OvT6Kmg6GG//SdZzrwW7L9Dq9nuQskmV93wWxmCdaQC+XVbXxS5demQGN+3FYS98bqEe
+ pH/WH4bNENb0LHD78ZXGlS/jcq52HrL5e3R/SliuTDnEOt37qOwfXSWhYVutPV2NhYe7Aoiw32y
+ vqmRBSk69lR4uKJqJ9RlpxD6YglCf5K7XUCPMLzAL2Z/GosDFJ2YHhJ/Wgty08qmAL4b96ZTjbm
+ /4JtuP4Kq0tusIswT1ZGr9Hih06PpeIgbTjRC8mAWOOKshqpgiBa//9lgcggH8ybAQcvYIKpdh4
+ mHaA95ChWCj4T7Y/z3Ntc2NsRz7L4eZ/ftyDbz7d+HgVO3XnTMN8rIdNINPxyRVioyCiq8RXmy7
+ SvD0ReP/5wZ9Osvoz8SWUOIX5r//ljKoIk4HiKk4y68/HfcD44iOMsonX19UBIYq/q36CrLAwqM
+ /0bcWTVZgBwygvgC5NHqJp6NlMaRO/bAt7TxDBNUv6dehrXO3itKLt/eoow8tS/d/GRM3lwwor3
+ SnwqsbpUURu310rXocMZ07r+Mc0yl2Ibrtkpd+NGBZgRf1ivcbvUs1vQKhvhBYXR+fRtilzV9ZT
+ CHcmP76444mywAQLevetsWR8ZkPLAwzTjHiulQEsyucQ7mIlO042N8BQeaLHnA==
+Received: from fli4l.lan.fli4l (p54a1b984.dip0.t-ipconnect.de [84.161.185.132])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 84284A4C1233;
+ Thu, 12 Nov 2026 20:09:54 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:34708)
+ by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
+ (envelope-from <bernd@kuhls.net>) id 1xRaBF-000000008EU-1qEv;
+ Thu, 12 Nov 2026 19:09:54 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Petr Vorel <petr.vorel@gmail.com>,
- "Claude Opus 5.5" <noreply@anthropic.com>
-Date: Thu, 12 Nov 2026 18:31:41 +0100
-Message-ID: <20261112173141.400268-1-giulio.benetti@benettiengineering.com>
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ Romain Naour <romain.naour@gmail.com>
+Date: Thu, 12 Nov 2026 20:09:53 +0100
+Message-ID: <20261112190953.100951-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfAd48zaKeTxGjm94xhw1ehdNfBFL2P9ENw9gJgEXrA8hiiJV2XkZfxnx+IiRokEabWtdykZnwSbVgrdSJoVRrUD3cVGoLVGiaDLQWp169bfP3+QNgBo1
- z090tSPlTl/Gpep2lqYWJMDelbP0OKh6K8OVcQH0Pw67aBwRykPNiAtCKzlr2tBfJjWOyuHBWrkXmBQWS6i21LrlHof2Mcov1gFnhlBP0jzCWlWnH383RgpS
- w2go8jOlQXwDB2y0bTSRpwim2HlioCgXG0MAT0g+1QOMCpLPREplaKYfkQX8gzW8t0f2GJsFnjJEClRA4zq8bsqeOOa/o83U4QBrowlx/owE7w1I5qn+qnx9
- UeD2Ai2A
-Subject: [Buildroot] [PATCH v3] package/nfs-utils: fix build failure with
- musl libc
+X-Spamd-Bar: --
+Subject: [Buildroot] [PATCH v2 1/1] package/{mesa3d,
+ mesa3d-headers}: bump version to 26.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -128,261 +143,440 @@ X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Since nfs-utils 2.7.1, with upstream commit:
-https://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=c0bdcb67c5c30951b497fa794bacec282b524331
-printerr() is declared with __attribute__((format(printf, 2, 3))), so
-its arguments are now checked against the format string. Together with
--Werror=format=2, which nfs-utils always adds to AM_CFLAGS, this turns
-printing a pthread_t with '%lx' into a build failure on musl, where
-pthread_t is a pointer type. Buildroot picked up this change when
-bumping from 2.6.4 to 2.8.1 in commit 37a33d865d ("package/nfs-utils:
-bump version to 2.8.1").
+https://gitlab.freedesktop.org/mesa/mesa/-/blob/mesa-26.3.0/docs/relnotes/26.3.0.rst
+https://lists.freedesktop.org/archives/mesa-announce/2026-November/000875.html
 
-Add local patch pending upstream to cast pthread_t to unsigned long
-wherever it's printed with '%lx'.
+Removed patches which are included in this release.
 
-Fixes:
-https://autobuild.buildroot.org/results/7c52ec55756d30da14609d57766b85340dc020dd
+Renumbered patch.
 
-Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- ...ssd-fix-build-failure-with-musl-libc.patch | 226 ++++++++++++++++++
- 1 file changed, 226 insertions(+)
- create mode 100644 package/nfs-utils/0001-gssd-fix-build-failure-with-musl-libc.patch
+Gitlab pipelines passed:
+https://gitlab.com/bkuhls/buildroot/-/commits/1b0f77577ee2fc8a8ef7fcd26916d4ff30f362b2
 
-diff --git a/package/nfs-utils/0001-gssd-fix-build-failure-with-musl-libc.patch b/package/nfs-utils/0001-gssd-fix-build-failure-with-musl-libc.patch
-new file mode 100644
-index 0000000000..9c54473586
---- /dev/null
-+++ b/package/nfs-utils/0001-gssd-fix-build-failure-with-musl-libc.patch
-@@ -0,0 +1,226 @@
-+From bd17dbf6c32d04622e6ef5fbec3dfa023422d49b Mon Sep 17 00:00:00 2001
-+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+Date: Thu, 12 Nov 2026 17:27:45 +0100
-+Subject: [PATCH] gssd: fix build failure with musl libc
-+
-+gssd prints thread IDs with the '%lx' format specifier, which assumes
-+pthread_t is an unsigned long. This holds on glibc, but on musl
-+pthread_t is an opaque pointer type ('struct __pthread *'), so building
-+with -Werror=format fails:
-+
-+gssd.c:546:78: error: format '%lx' expects argument of type 'long unsigned int', but argument 3 has type 'pthread_t' {aka 'struct __pthread *'} [-Werror=format=]
-+
-+Fix this by explicitly casting pthread_t to unsigned long wherever it
-+is printed with '%lx' in gssd.c, gssd_proc.c and krb5_util.c. The cast
-+is safe since the value is only used for logging and unsigned long is
-+pointer-sized on all Linux ABIs. The output is unchanged on glibc.
-+
-+Upstream: https://lore.kernel.org/linux-nfs/20261112172732.397411-1-giulio.benetti@benettiengineering.com/T/#u
-+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ utils/gssd/gssd.c      | 14 +++++++-------
-+ utils/gssd/gssd_proc.c | 18 +++++++++---------
-+ utils/gssd/krb5_util.c | 10 +++++-----
-+ 3 files changed, 21 insertions(+), 21 deletions(-)
-+
-+diff --git a/utils/gssd/gssd.c b/utils/gssd/gssd.c
-+index 022f0a89..5203d0a7 100644
-+--- a/utils/gssd/gssd.c
-++++ b/utils/gssd/gssd.c
-+@@ -544,7 +544,7 @@ cleanup_active_thread_list(void)
-+ 		default:
-+ 			/* EDEADLK, EINVAL, and ESRCH... none of which should happen! */
-+ 			printerr(0, "watchdog: attempt to join thread id 0x%lx returned %d (%s)!\n",
-+-					info->tid, err, strerror(err));
-++					(unsigned long)info->tid, err, strerror(err));
-+ 			break;
-+ 		}
-+ 	}
-+@@ -554,12 +554,12 @@ cleanup_active_thread_list(void)
-+ 			switch (err) {
-+ 			case EBUSY:
-+ 				printerr(0, "watchdog: thread id 0x%lx still busy on shutdown\n",
-+-					 info->tid);
-++					 (unsigned long)info->tid);
-+ 				/* fall through */
-+ 			default:
-+ 				/* EDEADLK, EINVAL, and ESRCH... none of which should happen! */
-+ 				printerr(0, "watchdog: attempt to join thread id 0x%lx returned %d (%s)!\n",
-+-						info->tid, err, strerror(err));
-++						(unsigned long)info->tid, err, strerror(err));
-+ 				/* fall through */
-+ 			case 0:
-+ 				saveprev = info->list.tqe_prev;
-+@@ -611,7 +611,7 @@ scan_active_thread_list(void)
-+ 			 */
-+ 			if (tret == PTHREAD_CANCELED)
-+ 				printerr(2, "watchdog: thread id 0x%lx cancelled successfully\n",
-+-						info->tid);
-++						(unsigned long)info->tid);
-+ 			saveprev = info->list.tqe_prev;
-+ 			TAILQ_REMOVE(&active_thread_list, info, list);
-+ 			free(info);
-+@@ -628,14 +628,14 @@ scan_active_thread_list(void)
-+ 			if (now.tv_sec >= info->timeout.tv_sec) {
-+ 				if (cancel_timed_out_upcalls && !(info->flags & UPCALL_THREAD_CANCELED)) {
-+ 					printerr(0, "watchdog: thread id 0x%lx timed out\n",
-+-							info->tid);
-++							(unsigned long)info->tid);
-+ 					pthread_cancel(info->tid);
-+ 					info->flags |= (UPCALL_THREAD_CANCELED|UPCALL_THREAD_WARNED);
-+ 					do_error_downcall(info->fd, info->uid, -ETIMEDOUT);
-+ 				} else {
-+ 					if (!(info->flags & UPCALL_THREAD_WARNED)) {
-+ 						printerr(0, "watchdog: thread id 0x%lx running for %lld seconds\n",
-+-								info->tid,
-++								(unsigned long)info->tid,
-+ 								(long long int)(now.tv_sec - info->timeout.tv_sec + upcall_timeout));
-+ 						info->flags |= UPCALL_THREAD_WARNED;
-+ 					}
-+@@ -656,7 +656,7 @@ scan_active_thread_list(void)
-+ 		default:
-+ 			/* EDEADLK, EINVAL, and ESRCH... none of which should happen! */
-+ 			printerr(0, "watchdog: attempt to join thread id 0x%lx returned %d (%s)!\n",
-+-					info->tid, err, strerror(err));
-++					(unsigned long)info->tid, err, strerror(err));
-+ 			break;
-+ 		}
-+ 	}
-+diff --git a/utils/gssd/gssd_proc.c b/utils/gssd/gssd_proc.c
-+index d59c8a19..6bf5f2b5 100644
-+--- a/utils/gssd/gssd_proc.c
-++++ b/utils/gssd/gssd_proc.c
-+@@ -186,7 +186,7 @@ do_downcall(int k5_fd, uid_t uid, struct authgss_private_data *pd,
-+ 
-+ 	if (get_verbosity() > 1)
-+ 		printerr(2, "do_downcall(0x%lx): lifetime_rec=%s acceptor=%.*s\n",
-+-			tid, sec2time(lifetime_rec), (int)acceptor->length, (char *)acceptor->value);
-++			(unsigned long)tid, sec2time(lifetime_rec), (int)acceptor->length, (char *)acceptor->value);
-+ 	buf_size = sizeof(uid) + sizeof(timeout) + sizeof(pd->pd_seq_win) +
-+ 		sizeof(pd->pd_ctx_hndl.length) + pd->pd_ctx_hndl.length +
-+ 		sizeof(context_token->length) + context_token->length +
-+@@ -212,7 +212,7 @@ do_downcall(int k5_fd, uid_t uid, struct authgss_private_data *pd,
-+ 	return;
-+ out_err:
-+ 	free(buf);
-+-	printerr(1, "do_downcall(0x%lx): Failed to write downcall!\n", tid);
-++	printerr(1, "do_downcall(0x%lx): Failed to write downcall!\n", (unsigned long)tid);
-+ 	return;
-+ }
-+ 
-+@@ -225,7 +225,7 @@ do_error_downcall(int k5_fd, uid_t uid, int err)
-+ 	int	zero = 0;
-+ 	pthread_t tid = pthread_self();
-+ 
-+-	printerr(2, "do_error_downcall(0x%lx): uid %d err %d\n", tid, uid, err);
-++	printerr(2, "do_error_downcall(0x%lx): uid %d err %d\n", (unsigned long)tid, uid, err);
-+ 
-+ 	if (WRITE_BYTES(&p, end, uid)) goto out_err;
-+ 	if (WRITE_BYTES(&p, end, timeout)) goto out_err;
-+@@ -388,7 +388,7 @@ create_auth_rpc_client(struct clnt_info *clp,
-+ 	/* create an rpc connection to the nfs server */
-+ 
-+ 	printerr(3, "create_auth_rpc_client(0x%lx): creating %s client for server %s\n", 
-+-		tid, clp->protocol, clp->servername);
-++		(unsigned long)tid, clp->protocol, clp->servername);
-+ 
-+ 	protocol = IPPROTO_TCP;
-+ 	if ((strcmp(clp->protocol, "udp")) == 0)
-+@@ -432,7 +432,7 @@ create_auth_rpc_client(struct clnt_info *clp,
-+ 		tgtname = clp->servicename;
-+ 
-+ 	printerr(3, "create_auth_rpc_client(0x%lx): creating context with server %s\n", 
-+-		tid, tgtname);
-++		(unsigned long)tid, tgtname);
-+ #ifdef HAVE_TIRPC_GSS_SECCREATE
-+ 	memset(&req, 0, sizeof(req));
-+ 	req.my_cred = sec.cred;
-+@@ -583,7 +583,7 @@ krb5_not_machine_creds(struct clnt_info *clp, uid_t uid, char *tgtname,
-+ 	pthread_t tid = pthread_self();
-+ 
-+ 	printerr(2, "krb5_not_machine_creds(0x%lx): uid %d tgtname %s\n", 
-+-		tid, uid, tgtname);
-++		(unsigned long)tid, uid, tgtname);
-+ 
-+ 	*chg_err = change_identity(uid);
-+ 	if (*chg_err) {
-+@@ -632,7 +632,7 @@ krb5_use_machine_creds(struct clnt_info *clp, uid_t uid,
-+ 	pthread_t tid = pthread_self();
-+ 
-+ 	printerr(2, "krb5_use_machine_creds(0x%lx): uid %d tgtname %s\n", 
-+-		tid, uid, tgtname);
-++		(unsigned long)tid, uid, tgtname);
-+ 
-+ 	do {
-+ 		gssd_refresh_krb5_machine_credential(clp->servername,
-+@@ -976,7 +976,7 @@ start_upcall_thread(void (*func)(struct clnt_upcall_info *), struct clnt_upcall_
-+ 		return ret;
-+ 	}
-+ 	printerr(2, "start_upcall_thread(0x%lx): created thread id 0x%lx\n", 
-+-		tid, th);
-++		(unsigned long)tid, (unsigned long)th);
-+ 
-+ 	tinfo->tid = th;
-+ 	pthread_mutex_lock(&active_thread_list_lock);
-+@@ -1041,7 +1041,7 @@ handle_gssd_upcall(struct clnt_info *clp)
-+ 	}
-+ 	lbuf[lbuflen-1] = 0;
-+ 
-+-	printerr(2, "\n%s(0x%lx): '%s' (%s)\n", __func__, tid,
-++	printerr(2, "\n%s(0x%lx): '%s' (%s)\n", __func__, (unsigned long)tid,
-+ 		 lbuf, clp->relpath);
-+ 
-+ 	for (p = strtok(lbuf, " "); p; p = strtok(NULL, " ")) {
-+diff --git a/utils/gssd/krb5_util.c b/utils/gssd/krb5_util.c
-+index 7ad67131..0e8f889b 100644
-+--- a/utils/gssd/krb5_util.c
-++++ b/utils/gssd/krb5_util.c
-+@@ -435,7 +435,7 @@ gssd_get_single_krb5_cred(krb5_context context,
-+ 	pthread_mutex_lock(&ple_lock);
-+ 	if (ple->ccname && ple->endtime > now && !nocache && !force_renew) {
-+ 		printerr(3, "%s(0x%lx): Credentials in CC '%s' are good until %s",
-+-			 __func__, tid, ple->ccname, ctime((time_t *)&ple->endtime));
-++			 __func__, (unsigned long)tid, ple->ccname, ctime((time_t *)&ple->endtime));
-+ 		code = 0;
-+ 		pthread_mutex_unlock(&ple_lock);
-+ 		goto out;
-+@@ -495,7 +495,7 @@ gssd_get_single_krb5_cred(krb5_context context,
-+ 
-+ 	code = 0;
-+ 	printerr(2, "%s(0x%lx): principal '%s' ccache:'%s'\n",
-+-		__func__, tid, pname, ple->ccname);
-++		__func__, (unsigned long)tid, pname, ple->ccname);
-+   out:
-+ 	if (opts)
-+ 		krb5_get_init_creds_opt_free(context, opts);
-+@@ -631,7 +631,7 @@ get_full_hostname(const char *inhost, char *outhost, int outhostlen)
-+ 	retval = getaddrinfo(inhost, NULL, &hints, &addrs);
-+ 	if (retval) {
-+ 		printerr(1, "%s(0x%lx): getaddrinfo(%s) failed: %s\n",
-+-			 __func__, tid, inhost, gai_strerror(retval));
-++			 __func__, (unsigned long)tid, inhost, gai_strerror(retval));
-+ 		goto out;
-+ 	}
-+ 	strncpy(outhost, addrs->ai_canonname, outhostlen);
-+@@ -642,7 +642,7 @@ get_full_hostname(const char *inhost, char *outhost, int outhostlen)
-+ 
-+ 	if (get_verbosity() && strcmp(inhost, outhost))
-+ 		printerr(1, "%s(0x%0lx): inhost '%s' different than outhost '%s'\n", 
-+-			 __func__, tid, inhost, outhost);
-++			 __func__, (unsigned long)tid, inhost, outhost);
-+ 
-+ 	retval = 0;
-+ out:
-+@@ -990,7 +990,7 @@ find_keytab_entry(krb5_context context, krb5_keytab kt,
-+ 					tried_upper = 1;
-+ 				}
-+ 			} else {
-+-				printerr(2, "find_keytab_entry(0x%lx): Success getting keytab entry for '%s'\n",tid, spn);
-++				printerr(2, "find_keytab_entry(0x%lx): Success getting keytab entry for '%s'\n", (unsigned long)tid, spn);
-+ 				retval = 0;
-+ 				goto out;
-+ 			}
-+-- 
-+2.47.3
-+
+ package/mesa3d-headers/mesa3d-headers.mk      |   2 +-
+ ...floating-point-exception-flags-with.patch} |   0
+ ...c-do-not-use-arm-fpu-instructions-if.patch |  55 --------
+ ...do-not-compare-sys_path-against-NULL.patch | 129 ------------------
+ ...d_libclc-turn-sys_path-into-an-array.patch | 109 ---------------
+ ...load_libclc-add-llvm-23-libclc-paths.patch |  46 -------
+ package/mesa3d/mesa3d.hash                    |   6 +-
+ package/mesa3d/mesa3d.mk                      |   2 +-
+ 8 files changed, 5 insertions(+), 344 deletions(-)
+ rename package/mesa3d/{0008-nir-fix-build-of-floating-point-exception-flags-with.patch => 0004-nir-fix-build-of-floating-point-exception-flags-with.patch} (100%)
+ delete mode 100644 package/mesa3d/0004-src-util-u_math.c-do-not-use-arm-fpu-instructions-if.patch
+ delete mode 100644 package/mesa3d/0005-nir-load_libclc-do-not-compare-sys_path-against-NULL.patch
+ delete mode 100644 package/mesa3d/0006-nir-load_libclc-turn-sys_path-into-an-array.patch
+ delete mode 100644 package/mesa3d/0007-nir-load_libclc-add-llvm-23-libclc-paths.patch
+
+diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
+index d42e7c7a0a..8e7d3dfd6f 100644
+--- a/package/mesa3d-headers/mesa3d-headers.mk
++++ b/package/mesa3d-headers/mesa3d-headers.mk
+@@ -12,7 +12,7 @@ endif
+ 
+ # Not possible to directly refer to mesa3d variables, because of
+ # first/second expansion trickery...
+-MESA3D_HEADERS_VERSION = 26.2.5
++MESA3D_HEADERS_VERSION = 26.3.0
+ MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
+ MESA3D_HEADERS_SITE = https://archive.mesa3d.org
+ MESA3D_HEADERS_DL_SUBDIR = mesa3d
+diff --git a/package/mesa3d/0008-nir-fix-build-of-floating-point-exception-flags-with.patch b/package/mesa3d/0004-nir-fix-build-of-floating-point-exception-flags-with.patch
+similarity index 100%
+rename from package/mesa3d/0008-nir-fix-build-of-floating-point-exception-flags-with.patch
+rename to package/mesa3d/0004-nir-fix-build-of-floating-point-exception-flags-with.patch
+diff --git a/package/mesa3d/0004-src-util-u_math.c-do-not-use-arm-fpu-instructions-if.patch b/package/mesa3d/0004-src-util-u_math.c-do-not-use-arm-fpu-instructions-if.patch
+deleted file mode 100644
+index 96d1902061..0000000000
+--- a/package/mesa3d/0004-src-util-u_math.c-do-not-use-arm-fpu-instructions-if.patch
++++ /dev/null
+@@ -1,55 +0,0 @@
+-From 345b14a820a557b72f218637cb37ef39947b1f50 Mon Sep 17 00:00:00 2001
+-From: Alexander Kanavin <alex@linutronix.de>
+-Date: Wed, 1 Jul 2026 22:48:15 +0200
+-Subject: [PATCH] src/util/u_math.c: do not use arm fpu instructions if fpu is
+- not available
+-
+-Signed-off-by: Alexander Kanavin <alex@linutronix.de>
+-Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/42682>
+-
+-Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/42682
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- src/util/u_math.c | 4 ++++
+- 1 file changed, 4 insertions(+)
+-
+-diff --git a/src/util/u_math.c b/src/util/u_math.c
+-index 722eac7f733..5683766a417 100644
+---- a/src/util/u_math.c
+-+++ b/src/util/u_math.c
+-@@ -87,6 +87,7 @@ util_fpstate_get(void)
+-    }
+- #endif
+- #if DETECT_ARCH_ARM
+-+#if !defined(__SOFTFP__)
+-    if (util_get_cpu_caps()->has_neon) {
+- #ifdef HAVE___BUILTIN_ARM_GET_FPSCR
+-       fpstate = __builtin_arm_get_fpscr();
+-@@ -94,6 +95,7 @@ util_fpstate_get(void)
+-       __asm__ volatile("vmrs %0, fpscr" : "=r"(fpstate));
+- #endif
+-    }
+-+#endif
+- #elif DETECT_ARCH_AARCH64
+-    {
+- #ifdef HAVE___BUILTIN_AARCH64_GET_FPCR
+-@@ -154,6 +156,7 @@ util_fpstate_set(unsigned fpstate)
+-    }
+- #endif
+- #if DETECT_ARCH_ARM
+-+#if !defined(__SOFTFP__)
+-    if (util_get_cpu_caps()->has_neon) {
+- #ifdef HAVE___BUILTIN_ARM_SET_FPSCR
+-       __builtin_arm_set_fpscr(fpstate);
+-@@ -161,6 +164,7 @@ util_fpstate_set(unsigned fpstate)
+-       __asm__ volatile("vmsr fpscr, %0" :: "r"(fpstate));
+- #endif
+-    }
+-+#endif
+- #elif DETECT_ARCH_AARCH64
+-    {
+- #ifdef HAVE___BUILTIN_AARCH64_SET_FPCR
+--- 
+-2.47.3
+-
+diff --git a/package/mesa3d/0005-nir-load_libclc-do-not-compare-sys_path-against-NULL.patch b/package/mesa3d/0005-nir-load_libclc-do-not-compare-sys_path-against-NULL.patch
+deleted file mode 100644
+index 6883031951..0000000000
+--- a/package/mesa3d/0005-nir-load_libclc-do-not-compare-sys_path-against-NULL.patch
++++ /dev/null
+@@ -1,129 +0,0 @@
+-From 1219dc3f7fe83b1f7f200190bf02a86ab57b3d4f Mon Sep 17 00:00:00 2001
+-From: Karol Herbst <kherbst@redhat.com>
+-Date: Tue, 22 Sep 2026 13:53:43 +0200
+-Subject: [PATCH] nir/load_libclc: do not compare sys_path against NULL
+-
+-sys_path will become an array and the NULL checks were all a bit awkward
+-because all the code was already guarded with DYNAMIC_LIBCLC_PATH anyway
+-and most likely constant folded away.
+-
+-Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/44624>
+-
+-Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/commit/1219dc3f7fe83b1f7f200190bf02a86ab57b3d4f
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- src/compiler/clc/nir_load_libclc.c | 76 ++++++++++++++----------------
+- 1 file changed, 35 insertions(+), 41 deletions(-)
+-
+-diff --git a/src/compiler/clc/nir_load_libclc.c b/src/compiler/clc/nir_load_libclc.c
+-index edcd13b3b26..913dd8ff7a7 100644
+---- a/src/compiler/clc/nir_load_libclc.c
+-+++ b/src/compiler/clc/nir_load_libclc.c
+-@@ -145,20 +145,18 @@ map_clc_data(struct clc_data *clc)
+-    }
+- 
+- #ifdef DYNAMIC_LIBCLC_PATH
+--   if (clc->file->sys_path != NULL) {
+--      if (clc->size % SPIRV_WORD_SIZE != 0) {
+--         fprintf(stderr, "File length isn't a multiple of the word size\n");
+--         return false;
+--      }
+--
+--      clc->data = mmap(NULL, clc->size, PROT_READ, MAP_PRIVATE, clc->fd, 0);
+--      if (clc->data == MAP_FAILED) {
+--         fprintf(stderr, "Failed to mmap libclc SPIR-V: %m\n");
+--         return false;
+--      }
+-+   if (clc->size % SPIRV_WORD_SIZE != 0) {
+-+      fprintf(stderr, "File length isn't a multiple of the word size\n");
+-+      return false;
+-+   }
+- 
+--      return true;
+-+   clc->data = mmap(NULL, clc->size, PROT_READ, MAP_PRIVATE, clc->fd, 0);
+-+   if (clc->data == MAP_FAILED) {
+-+      fprintf(stderr, "Failed to mmap libclc SPIR-V: %m\n");
+-+      return false;
+-    }
+-+
+-+   return true;
+- #endif
+- 
+-    return true;
+-@@ -175,12 +173,10 @@ close_clc_data(struct clc_data *clc)
+-    }
+- 
+- #ifdef DYNAMIC_LIBCLC_PATH
+--   if (clc->file->sys_path != NULL) {
+--      if (clc->data)
+--         munmap((void *)clc->data, clc->size);
+--      clc->data = NULL;
+--      close(clc->fd);
+--   }
+-+   if (clc->data)
+-+      munmap((void *)clc->data, clc->size);
+-+   clc->data = NULL;
+-+   close(clc->fd);
+- #endif
+- }
+- 
+-@@ -198,34 +194,32 @@ open_clc_data(struct clc_data *clc, unsigned ptr_bit_size)
+-    }
+- 
+- #ifdef DYNAMIC_LIBCLC_PATH
+--   if (clc->file->sys_path != NULL) {
+--      int fd = open(clc->file->sys_path, O_RDONLY);
+--      if (fd < 0)
+--         return false;
+-+   int fd = open(clc->file->sys_path, O_RDONLY);
+-+   if (fd < 0)
+-+      return false;
+- 
+--      struct stat stat;
+--      int ret = fstat(fd, &stat);
+--      if (ret < 0) {
+--         fprintf(stderr, "fstat failed on %s: %m\n", clc->file->sys_path);
+--         close(fd);
+--         return false;
+--      }
+-+   struct stat stat;
+-+   int ret = fstat(fd, &stat);
+-+   if (ret < 0) {
+-+      fprintf(stderr, "fstat failed on %s: %m\n", clc->file->sys_path);
+-+      close(fd);
+-+      return false;
+-+   }
+- 
+--      clc->fd = fd;
+--      clc->size = stat.st_size;
+-+   clc->fd = fd;
+-+   clc->size = stat.st_size;
+- 
+--      if (!map_clc_data(clc)) {
+--         close_clc_data(clc);
+--         return false;
+--      }
+-+   if (!map_clc_data(clc)) {
+-+      close_clc_data(clc);
+-+      return false;
+-+   }
+- 
+--      blake3_hasher ctx;
+--      _mesa_blake3_init(&ctx);
+--      _mesa_blake3_update(&ctx, clc->data, clc->size);
+--      _mesa_blake3_final(&ctx, clc->cache_key);
+-+   blake3_hasher ctx;
+-+   _mesa_blake3_init(&ctx);
+-+   _mesa_blake3_update(&ctx, clc->data, clc->size);
+-+   _mesa_blake3_final(&ctx, clc->cache_key);
+- 
+--      return true;
+--   }
+-+   return true;
+- #endif
+- 
+-    return false;
+--- 
+-2.47.3
+-
+diff --git a/package/mesa3d/0006-nir-load_libclc-turn-sys_path-into-an-array.patch b/package/mesa3d/0006-nir-load_libclc-turn-sys_path-into-an-array.patch
+deleted file mode 100644
+index 916af6547d..0000000000
+--- a/package/mesa3d/0006-nir-load_libclc-turn-sys_path-into-an-array.patch
++++ /dev/null
+@@ -1,109 +0,0 @@
+-From 62ee563fd398169005906245831db680f813b19f Mon Sep 17 00:00:00 2001
+-From: Karol Herbst <kherbst@redhat.com>
+-Date: Tue, 22 Sep 2026 14:11:09 +0200
+-Subject: [PATCH] nir/load_libclc: turn sys_path into an array
+-
+-Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/44624>
+-
+-Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/commit/62ee563fd398169005906245831db680f813b19f
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- src/compiler/clc/nir_load_libclc.c | 55 +++++++++++++++++-------------
+- 1 file changed, 31 insertions(+), 24 deletions(-)
+-
+-diff --git a/src/compiler/clc/nir_load_libclc.c b/src/compiler/clc/nir_load_libclc.c
+-index 913dd8ff7a7..17b901db47c 100644
+---- a/src/compiler/clc/nir_load_libclc.c
+-+++ b/src/compiler/clc/nir_load_libclc.c
+-@@ -52,7 +52,7 @@ struct clc_file {
+-    unsigned bit_size;
+-    const char *static_data;
+-    size_t static_data_size;
+--   const char *sys_path;
+-+   const char *sys_paths[1];
+- };
+- 
+- static const struct clc_file libclc_files[] = {
+-@@ -63,7 +63,9 @@ static const struct clc_file libclc_files[] = {
+-       .static_data_size = sizeof(libclc_spirv_mesa3d_spv),
+- #endif
+- #ifdef DYNAMIC_LIBCLC_PATH
+--      .sys_path = DYNAMIC_LIBCLC_PATH "spirv-mesa3d-.spv",
+-+      .sys_paths = {
+-+         DYNAMIC_LIBCLC_PATH "spirv-mesa3d-.spv",
+-+      },
+- #endif
+-    },
+-    {
+-@@ -73,7 +75,9 @@ static const struct clc_file libclc_files[] = {
+-       .static_data_size = sizeof(libclc_spirv64_mesa3d_spv),
+- #endif
+- #ifdef DYNAMIC_LIBCLC_PATH
+--      .sys_path = DYNAMIC_LIBCLC_PATH "spirv64-mesa3d-.spv",
+-+      .sys_paths = {
+-+         DYNAMIC_LIBCLC_PATH "spirv64-mesa3d-.spv",
+-+      },
+- #endif
+-    },
+- };
+-@@ -194,32 +198,35 @@ open_clc_data(struct clc_data *clc, unsigned ptr_bit_size)
+-    }
+- 
+- #ifdef DYNAMIC_LIBCLC_PATH
+--   int fd = open(clc->file->sys_path, O_RDONLY);
+--   if (fd < 0)
+--      return false;
+-+   for (unsigned i = 0; i < ARRAY_SIZE(clc->file->sys_paths); i++) {
+-+      const char *sys_path = clc->file->sys_paths[i];
+-+      int fd = open(sys_path, O_RDONLY);
+-+      if (fd < 0)
+-+         continue;
+- 
+--   struct stat stat;
+--   int ret = fstat(fd, &stat);
+--   if (ret < 0) {
+--      fprintf(stderr, "fstat failed on %s: %m\n", clc->file->sys_path);
+--      close(fd);
+--      return false;
+--   }
+-+      struct stat stat;
+-+      int ret = fstat(fd, &stat);
+-+      if (ret < 0) {
+-+         fprintf(stderr, "fstat failed on %s: %m\n", sys_path);
+-+         close(fd);
+-+         continue;
+-+      }
+- 
+--   clc->fd = fd;
+--   clc->size = stat.st_size;
+-+      clc->fd = fd;
+-+      clc->size = stat.st_size;
+- 
+--   if (!map_clc_data(clc)) {
+--      close_clc_data(clc);
+--      return false;
+--   }
+-+      if (!map_clc_data(clc)) {
+-+         close_clc_data(clc);
+-+         continue;
+-+      }
+- 
+--   blake3_hasher ctx;
+--   _mesa_blake3_init(&ctx);
+--   _mesa_blake3_update(&ctx, clc->data, clc->size);
+--   _mesa_blake3_final(&ctx, clc->cache_key);
+-+      blake3_hasher ctx;
+-+      _mesa_blake3_init(&ctx);
+-+      _mesa_blake3_update(&ctx, clc->data, clc->size);
+-+      _mesa_blake3_final(&ctx, clc->cache_key);
+- 
+--   return true;
+-+      return true;
+-+   }
+- #endif
+- 
+-    return false;
+--- 
+-2.47.3
+-
+diff --git a/package/mesa3d/0007-nir-load_libclc-add-llvm-23-libclc-paths.patch b/package/mesa3d/0007-nir-load_libclc-add-llvm-23-libclc-paths.patch
+deleted file mode 100644
+index f43b7b7260..0000000000
+--- a/package/mesa3d/0007-nir-load_libclc-add-llvm-23-libclc-paths.patch
++++ /dev/null
+@@ -1,46 +0,0 @@
+-From 6b9cd5ab9cc3bfd0c79d9500a07a5e74351c72d1 Mon Sep 17 00:00:00 2001
+-From: Karol Herbst <kherbst@redhat.com>
+-Date: Tue, 22 Sep 2026 14:13:28 +0200
+-Subject: [PATCH] nir/load_libclc: add llvm-23 libclc paths
+-
+-Part-of: <https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/44624>
+-
+-Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/commit/6b9cd5ab9cc3bfd0c79d9500a07a5e74351c72d1
+-
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- src/compiler/clc/nir_load_libclc.c | 4 +++-
+- 1 file changed, 3 insertions(+), 1 deletion(-)
+-
+-diff --git a/src/compiler/clc/nir_load_libclc.c b/src/compiler/clc/nir_load_libclc.c
+-index 17b901db47c..889bde610a3 100644
+---- a/src/compiler/clc/nir_load_libclc.c
+-+++ b/src/compiler/clc/nir_load_libclc.c
+-@@ -52,7 +52,7 @@ struct clc_file {
+-    unsigned bit_size;
+-    const char *static_data;
+-    size_t static_data_size;
+--   const char *sys_paths[1];
+-+   const char *sys_paths[2];
+- };
+- 
+- static const struct clc_file libclc_files[] = {
+-@@ -65,6 +65,7 @@ static const struct clc_file libclc_files[] = {
+- #ifdef DYNAMIC_LIBCLC_PATH
+-       .sys_paths = {
+-          DYNAMIC_LIBCLC_PATH "spirv-mesa3d-.spv",
+-+         DYNAMIC_LIBCLC_PATH "spirv32-unknown-unknown/libclc.spv",
+-       },
+- #endif
+-    },
+-@@ -77,6 +78,7 @@ static const struct clc_file libclc_files[] = {
+- #ifdef DYNAMIC_LIBCLC_PATH
+-       .sys_paths = {
+-          DYNAMIC_LIBCLC_PATH "spirv64-mesa3d-.spv",
+-+         DYNAMIC_LIBCLC_PATH "spirv64-unknown-unknown/libclc.spv",
+-       },
+- #endif
+-    },
+--- 
+-2.47.3
+-
+diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
+index fdcc345896..58e5817ef4 100644
+--- a/package/mesa3d/mesa3d.hash
++++ b/package/mesa3d/mesa3d.hash
+@@ -1,6 +1,6 @@
+-# From https://lists.freedesktop.org/archives/mesa-announce/2026-October/000871.html
+-sha256  794b3d1729075dae7ebd47c7283b7ca0cdb5dec668f7f11cc0a5d82f6138a0a5  mesa-26.2.5.tar.xz
+-sha512  08c7d7ea426ddfb0f7bc51b06e18c363a4d31cf1a8b203828bb455eda0189e41d2215eb9f627585ed11e0d0f231a6a8c9f0c7176238760cd76b62e20c35ccd6a  mesa-26.2.5.tar.xz
++# From https://lists.freedesktop.org/archives/mesa-announce/2026-November/000875.html
++sha256  91d729aa68bb89e4ec857841300bbe922bcb3e52b1f97566ca83930d3b28343a  mesa-26.3.0.tar.xz
++sha512  b4abd266ecaf813ef078a0461bcdf7c03d2ecddeb5b6e1c51054fb0afe0d830c0f27fc78f0effe68df5ea7b48f76f4e6ca36ed9afe98513f0e4bf8e0bbbe96dd  mesa-26.3.0.tar.xz
+ # License
+ sha256  0d1a0472ecc81830e75c20d59b0ea02841e3db21255e0ebad97ab682c54d6615  docs/license.rst
+ sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  licenses/MIT
+diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
+index f20f02190a..fe62de1446 100644
+--- a/package/mesa3d/mesa3d.mk
++++ b/package/mesa3d/mesa3d.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # When updating the version, please also update mesa3d-headers
+-MESA3D_VERSION = 26.2.5
++MESA3D_VERSION = 26.3.0
+ MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
+ MESA3D_SITE = https://archive.mesa3d.org
+ MESA3D_LICENSE = MIT, SGI, Khronos
 -- 
 2.47.3
 
