@@ -2,108 +2,141 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B39EE606A334
-	for <buildroot@archiver.kernel.org>; Fri, 13 Nov 2026 19:36:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3C51606A327
+	for <buildroot@archiver.kernel.org>; Fri, 13 Nov 2026 20:29:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=ggd+7W/i;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256 header.s=purelymail1 header.b=JpwkDQ0H
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Aotr3ZDE;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=e25yNjli
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 09CB581395;
-	Fri, 13 Nov 2026 19:36:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8409D81871;
+	Fri, 13 Nov 2026 20:29:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bpx__Y64pES9; Fri, 13 Nov 2026 19:36:24 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 796AA812B9
+ id cOU343vlMlxl; Fri, 13 Nov 2026 20:29:19 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 944BC81801
 Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794598584;
-	b=QbTFYTAFuWU1bhjf2ApAiW6NuDh780+jKk+5H2c++oOBLx+wVXRSjNdABIefieZfc6ir
-	 hvVNb3Zi8mvRps8lxoISwwmHRxaWtNP821ia/QG+FRA6D9kwBv24v5Dn9wTR2AmguCLLX
-	 ner1cP5JC8/6qcP/yypdgZLOU19CjIpfAedH+zltktMks05/fwon42GfSoJx6RTzxCqvk
-	 OAFuen58fOZ+ZB4rSbJ448p4g0zGj+c39ojyEmUhzFC5rKQ/PV/rJ7fVtkBFvsNm4nF4o
-	 Ju2mAbxucrzCTDhK/VH0SwTBTpBhfgW10sI5VNFKjbkRYbN6u77de8lchfg7J84PJOQ==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794601759;
+	b=Q/1x55yK7dRRalnSbTxTjQaDPxp86vZn5HiyptrX4vA1FldYXOF5XO1C+U2jYgRHkd2M
+	 8wr7/OW3WRshrcfZItidtga39HqgyroTySiqQqmPvUrTtyzBPV3DL5dLcwxCPWjpJtxeH
+	 I3hPVe9jzp7U6cch+rFPBljY/IGhufRk3h7T/pu+skY5I4tUFReDR8WLt/rFhrUHJb+QQ
+	 wFLXpK2nIldia3SpaCGetciMqOabAutDa4VvzGdlC98kSZDqjRztigQ2cBn95rbu5Kopw
+	 GzwKq8Upst9h/eUfLfQ9c3O+qRNic5MT7/6m58z06/i1bHjV3NItYoaeOjn0eROzqeQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794598584;
+	c=relaxed/relaxed; t=1794601759;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:Received:From:To:
-	 Date:Message-ID:X-Mailer:MIME-Version:X-MIME-Autoconverted:Subject:
-	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=P8kEqRZeG5w/kcS5PqTrKkY7t8rWWvFH9GOuVFSYimI=;
-	b=HbTZOnrq5CMK5+zlGjDosWj8IAe1xtN6QBWJE/7b5INlhDsLW+VRPC3jqN4C7LC5zehO
-	 Wa1wru1DbhWrV6QWOxGxhK23rqBxZuX1KPaypiDSVGGPPZAqpgV5eH9ZirktK4vLRKXg2
-	 MBtLdqfFufW+8GXa+D29UcCNoN/5qSsoWW41xmd/rlQ2iOXZbdkWNmBIEhCrwtBpt/LWX
-	 zAZm8lK76sFBt/4pQgQgmVUyUxwGVp2hSKdRMj6WnCfwvskeeAGmuuc6dqL2VsVHvQHvU
-	 il/oNntwM5kIWJqxyw/n7+ANMGuGVBbvZStZeQlBNC7yobvoF5WS7G8HKGYNSOOHDZw==
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
+	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=tHgy14iBksm6tRLNwUKBeKbFK9X5DbtPJ/3CahhhPVc=;
+	b=OIb044Hl+xOCZiW0GQHBKgtx/kIiQGRn7bpcv4pnOg0tsW3OLtGNBaRJyfCOuX8+stGX
+	 GwbdT9BQK+aSsw/wdvbjNUWyD7Er2AO98WRdlR3ZjE5ErbRwI7YGUzdfDBTB54uvLM58H
+	 iOl+qGWoMwE9CQnggQQTYrqdVUU8D3wXoviaRZtRdyxVCUmRk6R380QeS9ND1D+EhnC8H
+	 DoXx821r4TE3jKRS9cdd0Rkr624O9FiLH+LxNaPv8Pap/X4robZiBxcSgRgya8erB+TJz
+	 wGA/gF2LzvYMtHM+F7CawteluxdxI7RfccaCf5oknaVIUl9gfifTqMDA4gCIhXSQu0g==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794598584;
-	bh=P8kEqRZeG5w/kcS5PqTrKkY7t8rWWvFH9GOuVFSYimI=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=ggd+7W/iuw3DMigbq0X99khZVyqandRVhvAB9R7Hrn6UjirPaRFN9o8XCd1uArWca
-	 C09jNCgTz8net1GBmM2RRbHntXAUO6s0ZM26CS82G6A73d8MCfmGLB2knAJDR7LTZX
-	 33nbr3ra4jmx4H+t4h0ci11uxXcjFQxVYZEMSHW+lHTqx6ebEBCWgdUXtEBjfwK3B9
-	 Uhm3HCDRUQx6zTus0GQBgXD+S/JChSCN/YCKQrzoGFQzfkRcvZ4gfzUeVXuHVpwsmk
-	 VEk+GKX6VFegGUzLUTZ8eqoD75yEjNGntfPd/Blyh/t+QSq7PcltPQIV/JFrFamy0S
-	 4Z7r0LhBjyNMw==
+	s=default; t=1794601759;
+	bh=tHgy14iBksm6tRLNwUKBeKbFK9X5DbtPJ/3CahhhPVc=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=Aotr3ZDEKSoFCPl+N/+vAqoh/D6beSw4wdvSRdFlCe/UTk7eDSQlUJARPmjBWyml9
+	 5D41ALt0fh+D0h3Fri7Z5SbZ6zLW6JXqN0nbaCs6HAsWnscvbLjw3tc0thOZO9E5dr
+	 x7ixgmH9NFmlq82r9i9kjwXZmIrCgianCDgA2gI3EVYbPE6a8ACnB1T2WSkdwHQqH3
+	 yjBqUeDFU/FC1ydmUn61jUKPrrggnLtUGcwcFT+EBstiIlEcvCUjeQ9Cw5S00t4Bd5
+	 AUQBdkGESIDNdQAuc/fbJtqotmKBbMtuz4473dxZYfT7rK7S9kMLQ5YfT4RGFIy9/c
+	 37LhMqe0IgbUQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 796AA812B9;
-	Fri, 13 Nov 2026 19:36:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9CAF6286
- for <buildroot@buildroot.org>; Fri, 13 Nov 2026 19:36:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 944BC81801;
+	Fri, 13 Nov 2026 20:29:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id B4B3B150
+ for <buildroot@buildroot.org>; Fri, 13 Nov 2026 20:29:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7AB64608B6
- for <buildroot@buildroot.org>; Fri, 13 Nov 2026 19:36:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9B42B4022B
+ for <buildroot@buildroot.org>; Fri, 13 Nov 2026 20:29:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8nnW1LWKB4aO for <buildroot@buildroot.org>;
- Fri, 13 Nov 2026 19:36:22 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org EB71B60669
-Authentication-Results: smtp3.osuosl.org;
- arc=none smtp.remote-ip=34.202.193.197
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
- receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none) header.from=korsgaard.com
-Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail1 header.b=JpwkDQ0H
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EB71B60669
- for <buildroot@buildroot.org>; Fri, 13 Nov 2026 19:36:20 +0000 (UTC)
-DKIM-Signature: a=rsa-sha256;
- b=JpwkDQ0HanLzkzZvcUwkvw34pnJYkh6x2YcCVXVui5RvbEPV48UKJ4LinVBn01Is65OZ9cf7wahooQvmg8V1Pw7WoVKN2NxRQbb1xHc6x/uoIRsFAfopyUvqsX/8TuIfkVexrO+kuvaKb3jYEHiEZ+ji3k1lysJH4mPag3IyHM5jnljzpJOnbIi5EImXpL+ONmXGOtZ4X2PxVx2EcpARsRiTgQalAHYa2dYXTw8TyfbmSiVajcA3GhqO6nreE+Odl1O0tsKDVFQVsne1v3ssWxFS2vsyGo6rytDt38nfgTlBvlIkZK+KT2iALHRw9HGWAtZYnNNQSS7QGAWpVQx4zA==;
- s=purelymail1; d=purelymail.com; v=1;
- bh=yfOP4YqAleq1AZk4nfMH/2kWocyldcPDgtCjZ+UmMWQ=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date:Message-ID; 
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Authentication-Results: purelymail.com; auth=pass
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1638611915; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Fri, 13 Nov 2026 19:36:15 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peko@dell.be.48ers.dk>) id 1xRx4I-000000059oE-0Nks;
- Fri, 13 Nov 2026 20:36:14 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id b3cjDpk0O03I for <buildroot@buildroot.org>;
+ Fri, 13 Nov 2026 20:29:17 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org B3C0C4021F
+Authentication-Results: smtp2.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::32e"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20260707 header.b=e25yNjli
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B3C0C4021F
+ for <buildroot@buildroot.org>; Fri, 13 Nov 2026 20:29:16 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-4a5177d78c7so19394945e9.2
+ for <buildroot@buildroot.org>; Fri, 13 Nov 2026 12:29:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20260707; t=1794601754; x=1795206554; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=dbE4ITYbRD5f0Z62ZnW9lBwD8sAY4rvsE8RMjQ+jDo0=;
+ b=e25yNjlinS+JNpyzRP+DghhBg/gor5X7XuR6J7j3+ecOAmapO8mmOx7ngPJM9kkYl1
+ /rQ1NzfoZQZhyEbfQJmv7obSuK9ROD6zJ+eT1oEypJv4VYqcydr13tkv6JcF7TItTKv8
+ fq7rbMj2TSP9qaglNmRCVqIKq/5PozaNCwXVHoa6YuWVx7Epm6H1uO8eqL96VvutdIwX
+ yvVC1j4HhDKmoL26rq9Tkux5o92MaJ2Mqu+W5PV2hM2efo+gvZ4zyUf4DgNN1JzAN527
+ JTBkBC7gQK2hQQCl071f4k8gGnkFABIZOixA0pqnV3p8njok5Xdy1jfSwT9bGCXWNyYO
+ 9P5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1794601754; x=1795206554;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=dbE4ITYbRD5f0Z62ZnW9lBwD8sAY4rvsE8RMjQ+jDo0=;
+ b=uxaOV1Gg6/yUN0xx6qzc2QahlHbJ5hBwvyem1xa1Fk1bCm1J1FxfzAQct2hWiNw675
+ EDCq9MWLpW1yHzTx/DGgknnSaLEpA3pEdCkFAwjB1VmGCWH8qXnVWbEyshYYldLj5Cxh
+ OAC1vnHz3jfIV8vFpTDq6G81ADOZ3u3G/nq8CLtiJOjX4dq5IZdb5nUt3hEH6HR7Uekz
+ IzXn/jLznb+K5c7QkmiKBde7InBEdeMtRw3+/icI2ryaLY2JKzyoQwks4YcxX5HcctDn
+ 9Pl9TQ2+wH25fhf5JCtd7RSgG2F8cS6/n0XGTn4292GTfy616g75Vz4WF5krJxSBo4TG
+ Jc1g==
+X-Gm-Message-State: APuU4Z/AhuWZAt+Z2bTGCrjf/B88XZ29BNX4v7qrDKNt5C7LlKlpieBV
+ /zHBYDEXqhOCVwh764KuAUBVs0E884ebyu/LlKDFATiKZe+lBKs8scOtFQG6Rg==
+X-Gm-Gg: AYBFou0u9x9TcfLhKGadibdzhFIeGiYEiUVIMndQtS9x8h9OQDA8IK9D7a75dZT0wTw
+ nn5P3EW3k71GQ3hrOqFlveIHAX9DwNDRm09x56kV7G9zuy2aIHiN8Ww6jc25eOjoJjcaiqeaEkk
+ zsbltd0DxuVqO6+6tIfj4YXUHhONCRi0qWsDCbPjnUMxlZkmpAq8Nciu/OmjC2NPcYIxJ5kMOQB
+ MJBlsVd+sQaGHMaiJkfeOLGroNCd7zEaHF4L2MIwTZUlVnWgWtDIBWfRuhXRuyyfEsye3BZSCDD
+ oYqRaqZb834BR2L789qavUpVMbGhuLHrZsUl6YeOqaujYdOeB7eeyNCh9Uq5lUPRuWKO+jkzdNo
+ tc43quwcHtM1jLE+HUKIBYwf1WSVKi+VqjvrdYt1c22+PEkdvcqqnWLu3mTYpI+OiRLYX3D1QW7
+ 2Po4NUnPO6h+rfw++MNm+8WYfPT5Cke3uoCj50j8rGPXukaqs/E75EVHVoMNTtZkFVJWYXP8Fi6
+ V5xaP9y9MydRDHGKH4G7cH97lA6GAs1MgeBvTdayizg9/EONLccllNf0XNPu27Rmg/75ZYtQuhC
+ pFyo7cHBKTJwKRaqaG4/Mlh/wP69Ei9WPNTZ8kFRdJLHNatC2P+1
+X-Received: by 2002:a05:600c:8483:b0:4bb:605d:8e92 with SMTP id
+ 5b1f17b1804b1-4bb605d90f1mr15442205e9.32.1794601754179; 
+ Fri, 13 Nov 2026 12:29:14 -0800 (PST)
+Received: from angelo-Precision-7550 ([94.154.175.53])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4bb55ae5299sm96098985e9.11.2026.11.13.12.29.13
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 13 Nov 2026 12:29:13 -0800 (PST)
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Nov 2026 20:36:10 +0100
-Message-ID: <20261113193612.1229303-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.47.3
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Fri, 13 Nov 2026 21:29:10 +0100
+Message-ID: <20261113202910.3402775-1-angelo.compagnucci@gmail.com>
+X-Mailer: git-send-email 2.53.0
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
-Subject: [Buildroot] [PATCH] package/drm-info: bump version to 2.10.0
+Subject: [Buildroot] [PATCH] package/pkg-generic: keep file lists on
+ reinstall
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -113,105 +146,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Kory Maincent <kory.maincent@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-16.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-And drop now upstreamed patch:
-https://gitlab.freedesktop.org/emersion/drm_info/-/commit/154d17ec47baa9f66528d81d73788ddbde5000e1
+Buildroot lists the files that each package installs, in
+.files-list*.txt in its build directory. These lists are used:
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+- by check-bin-arch, to check the architecture of the target files;
+- in packages-file-list*.txt, for graph-size.
+
+The .stamp_installed step makes the lists. It compares the target,
+staging, images and host directories with a snapshot taken by the
+configure step, then removes the snapshot.
+
+'make <pkg>-reinstall' and 'make <pkg>-rebuild' run .stamp_installed
+again, but not the configure step, so the snapshot is missing. comm
+then fails, the pipe hides its error, and the lists are emptied. After
+that, check-bin-arch checks nothing for the package, and graph-size
+does not know its files.
+
+Only make the lists when the snapshot exists. A reinstalled package
+installs the same files, so it keeps its lists.
+
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- ...-Revert-Find-drm_fourcc.h-in-sysroot.patch | 47 -------------------
- package/drm-info/drm-info.hash                |  2 +-
- package/drm-info/drm-info.mk                  |  2 +-
- 3 files changed, 2 insertions(+), 49 deletions(-)
- delete mode 100644 package/drm-info/0001-Revert-Find-drm_fourcc.h-in-sysroot.patch
+ package/pkg-generic.mk | 24 ++++++++++++++----------
+ 1 file changed, 14 insertions(+), 10 deletions(-)
 
-diff --git a/package/drm-info/0001-Revert-Find-drm_fourcc.h-in-sysroot.patch b/package/drm-info/0001-Revert-Find-drm_fourcc.h-in-sysroot.patch
-deleted file mode 100644
-index 3e70f3d1cf..0000000000
---- a/package/drm-info/0001-Revert-Find-drm_fourcc.h-in-sysroot.patch
-+++ /dev/null
-@@ -1,47 +0,0 @@
--From c94d00730d0c25a4a4c46abfcf27823919ac9854 Mon Sep 17 00:00:00 2001
--From: Kory Maincent <kory.maincent@bootlin.com>
--Date: Mon, 16 Mar 2026 18:50:09 +0100
--Subject: [PATCH] Revert "Find drm_fourcc.h in sysroot"
--
--This reverts commit cde94140f08775dc4df7eaac766556218d9e1321
--
--When cross-compiling, pkg-config's includedir variable already returns
--an absolute path that includes the sysroot prefix (e.g.
--/sysroot/usr/include). Prepending pc_sysrootdir to it duplicates the
--prefix and produces a broken path.
--
--The reverted commit introduced the double-prefix issue. Drop pc_sysrootdir
--and use includedir directly, which already carries the correct absolute
--path.
--
--The workaround was only needed for the legacy pkg-config 0.29 (2017)
--project, which did not apply PKG_CONFIG_SYSROOT_DIR to includedir.
--The actively maintained pkgconf project handles this correctly, and
--the legacy tool is no longer in widespread use.
--
--You can verify the behavior with:
--  $ PKG_CONFIG_SYSROOT_DIR="/bla" pkg-config --variable=includedir libdrm
--  /bla/usr/include
--
--Upstream: https://gitlab.freedesktop.org/emersion/drm_info/-/merge_requests/114
--Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
-----
-- meson.build | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/meson.build b/meson.build
--index 1f80024..e4ce03e 100644
----- a/meson.build
--+++ b/meson.build
--@@ -68,7 +68,7 @@ if libdrm.version().version_compare('<2.4.130')
-- elif libdrm.type_name() == 'internal'
--   fourcc_h = meson.current_source_dir() / 'subprojects/libdrm/include/drm/drm_fourcc.h'
-- else
---  fourcc_h = libdrm.get_variable(pkgconfig: 'pc_sysrootdir') + libdrm.get_variable(pkgconfig: 'includedir') / 'libdrm/drm_fourcc.h'
--+  fourcc_h = libdrm.get_variable(pkgconfig: 'includedir') / 'libdrm/drm_fourcc.h'
-- endif
-- 
-- # The DRM_BUS_FAUX bus and its information is included in libdrm v2.4.127
---- 
--2.43.0
--
-diff --git a/package/drm-info/drm-info.hash b/package/drm-info/drm-info.hash
-index de852cb5eb..e53a98d807 100644
---- a/package/drm-info/drm-info.hash
-+++ b/package/drm-info/drm-info.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  53ef974ac657a0b4b9d7424a65b7f92e6ca26c15e8356f4146ae8bb9cae2db44  drm_info-2.9.0.tar.gz
-+sha256  4841dad87b00d9760430c9537dab7ff8102828878d972ffc25f48f6b7a16173a  drm_info-2.10.0.tar.gz
- sha256  05a54b690d8851143a8b923cfe8ac48f49050f9d2166e7eb0c1d340242d7f46a  LICENSE
-diff --git a/package/drm-info/drm-info.mk b/package/drm-info/drm-info.mk
-index 25deb18f00..25e96445aa 100644
---- a/package/drm-info/drm-info.mk
-+++ b/package/drm-info/drm-info.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 4e2ce2e7a0..2af86905a1 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -128,17 +128,21 @@ endef
  
--DRM_INFO_VERSION = 2.9.0
-+DRM_INFO_VERSION = 2.10.0
- DRM_INFO_SITE = https://gitlab.freedesktop.org/emersion/drm_info/-/releases/v$(DRM_INFO_VERSION)/downloads
- DRM_INFO_SOURCE = drm_info-$(DRM_INFO_VERSION).tar.gz
- DRM_INFO_LICENSE = MIT
+ # $(1): base directory to search in
+ # $(2): suffix of file (optional)
++# Only after a configure step, that lists the files before
++# (.files-list*.before): a package reinstalled keeps its list.
+ define pkg_size_after
+-	cd $(1); \
+-	LC_ALL=C find . -not -path './$(STAGING_SUBDIR)/*' \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
+-		| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(2).after
+-	LC_ALL=C comm -13 \
+-		$($(PKG)_DIR)/.files-list$(2).before \
+-		$($(PKG)_DIR)/.files-list$(2).after \
+-		| sed -r -e 's/^[^,]+/$($(PKG)_NAME)/' \
+-		> $($(PKG)_DIR)/.files-list$(2).txt
+-	rm -f $($(PKG)_DIR)/.files-list$(2).before
+-	rm -f $($(PKG)_DIR)/.files-list$(2).after
++	if [ -e $($(PKG)_DIR)/.files-list$(2).before ]; then \
++		cd $(1); \
++		LC_ALL=C find . -not -path './$(STAGING_SUBDIR)/*' \( -type f -o -type l \) -printf '%T@:%i:%#m:%y:%s,%p\n' \
++			| LC_ALL=C sort > $($(PKG)_DIR)/.files-list$(2).after; \
++		LC_ALL=C comm -13 \
++			$($(PKG)_DIR)/.files-list$(2).before \
++			$($(PKG)_DIR)/.files-list$(2).after \
++			| sed -r -e 's/^[^,]+/$($(PKG)_NAME)/' \
++			> $($(PKG)_DIR)/.files-list$(2).txt; \
++		rm -f $($(PKG)_DIR)/.files-list$(2).before \
++			$($(PKG)_DIR)/.files-list$(2).after; \
++	fi
+ endef
+ 
+ define check_bin_arch
 -- 
-2.47.3
+2.53.0
 
 _______________________________________________
 buildroot mailing list
