@@ -1,120 +1,140 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91D4B606A883
-	for <buildroot@archiver.kernel.org>; Fri, 13 Nov 2026 11:47:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75029606A31C
+	for <buildroot@archiver.kernel.org>; Fri, 13 Nov 2026 12:12:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=DC/lPn+8
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=PCZ2yEnL;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=voEmmQa7
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2A21D40E59;
-	Fri, 13 Nov 2026 11:47:40 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pVcKrDDDpfS9; Fri, 13 Nov 2026 11:47:38 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org CF41740E2D
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794570458;
-	b=ilc08FII0MdcYkIN3LWMWuBITFNGjVPcn2QMnpQ+I9tlHmwfeirBz8yfHaU7KnoX7jLO
-	 CXDtlcFFqPvL9otD56ptssD5udxtSxt9mxKlPTdLM7+POYQQZc4Sd4/1Lb3YpPOZFW5Ps
-	 BXq1kYJlvfcLxapr6VAfm3bIBbBu63p0XFDrNo4CrFqev8BoAqHikeAmMYzu1SCCRDjKH
-	 mTu3oRuM+IjniZX6JPPgsO2q8BO5xh1bHFWmIuJ957gKog9Ku+fppjsOLW3FhU+HrDiVw
-	 q95sPVLHFhiSdH3LHA6IyfF46eVodcmDhUTxAQVdhB+F8I7buGhx+B8GaelSwlTihoQ==
-ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794570458;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 Received:To:Date:Message-Id:X-Mailer:MIME-Version:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=HGxYlcNxMh8trcRElGvby9qzbsmKmbYM0g1UVNJ/db4=;
-	b=b9H+X3qzFfTtw2SfaOB82iFjcF0qkVrqzF07GNU+s80lgSNYeBxrdXuywkbTRukhMfuu
-	 Ibcbq9mbC8KlYpdG+HrjcrgTCO8Ak4hGDOhLZaBuokFZHnmcd73drUDQebxh2AaV7tttO
-	 oOurGQ1CjMzJYCfLEcS5WHXOJnvRA5GLzE8Fs98RfsHUgYT5WebjF/DMkmKbCKhwAR1ZP
-	 1/r2EVTEPukgbXL5zTMTPn2MYtUfl0KmffMKkKlu7N0j0R2fsuWiKZP4bFTCjdr+UxHaa
-	 vR3LP9qIEoKCTwBq/7Jsyeqdy2/p/HRmFRvMbUamb3S/3P/ACU0Y+eYKWu7/Hd75yag==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
-	arc=none smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794570458;
-	bh=HGxYlcNxMh8trcRElGvby9qzbsmKmbYM0g1UVNJ/db4=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=DC/lPn+8HUq65eyOE+6dOQZEO74eTek2fuPbRvokp1mS3oGAG2Xl0Aali8jJEOGLI
-	 K4ToPM1J0VdmutYxy3pIQLDJwNZPkQsHHcUkRAyxD9t5lx/ru+yGbjWGuyhIa4kNtD
-	 gAZ00r+UlXTY19TpSw1SwsY37ZscO+FMcBPxdvtYSM8mJJL1hhxjMHkyPqp4cIt/aa
-	 MrVfAkWk2uQN4Fgy6XQEOPRAseGwoMrHk7xndcfB0i6n6muEVy/g/i16SGXFmV9gfh
-	 uNNskPMBWxvXMreBXgufQivfQG9qQQFtHMAqkfpiQT1pRiPB4TC3i9lj9fIb+dyvHL
-	 +3OUHyVK2NrGQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF41740E2D;
-	Fri, 13 Nov 2026 11:47:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 7890828C
- for <buildroot@buildroot.org>; Fri, 13 Nov 2026 11:47:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6A7388148D
- for <buildroot@buildroot.org>; Fri, 13 Nov 2026 11:47:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4CFD481770;
+	Fri, 13 Nov 2026 12:12:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9B9uZ2W3fLDM for <buildroot@buildroot.org>;
- Fri, 13 Nov 2026 11:47:35 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 487B6812C8
+ id xdNZqaK_a7h5; Fri, 13 Nov 2026 12:12:53 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 33E88818AC
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794571973;
+	b=MIu0GEXpIXYLwI0Zhi7jHkuPrRetpSTFMkTohoMtdvgJiQc73peZubjx7mIK/f9XyCzb
+	 1Ti5boi+8T7BFjsw1qetGfuQpoE8F//JJ50K8fvYpWaV14KjUqGXLQ/cBH8T45oZgOJpY
+	 sBgpxP2KmhxTCcg8gbMtJKMZnMv0WZyxpaY+c1hS13PDAdTFzKjqHlNitK7tPJWYJVX9A
+	 0cxbgEMmeVPrqSrHCbb+YzmEhwUB8TkBG2J7a4ZoUIUkE4HsEo2qWGGUJuuYKNoMPSPRI
+	 1UqAgUzfO/66sHGLw61Htu4pJbTRDkp8YGYTpwOtntSXXlNcT086DVA6Ol3EgHfChVA==
+ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1794571973;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
+	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=awrkA5Q1OL8k0F+On1nBPfS9Rqag8naS+BJZKotJYTs=;
+	b=VLRq6TVYru3cIUqHS6dczBFXoqd+Xq1dssqxULvWwjln4lUaxTQh+IuwLlGmvqumN7Ci
+	 +EhKBo7RCbGqDvdX+3J2x/5V//ELF8BVVXgPNO/d8TzeOWmsLweE+pi2ZG8RThWwqQBxR
+	 TmClC1T1ohXFK8hnCUPfCrG8lBsanU5dsmP6qYARNtQnXtnrN12VtRnX0GE+p9uRoZTv4
+	 GSP4xjhNHOIbrKLpFwUb4vuw/o/SumNDJqDy1e6cUuLW/QWKiv96LeDXl8S248QPFxVIs
+	 qUm1n73QfOpx6jUxs16vzE9RYKYSqaa6mfmGOxCwsF14qu7uR1j4by5ZVM0omoQAbKg==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+	arc=none smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1794571973;
+	bh=awrkA5Q1OL8k0F+On1nBPfS9Rqag8naS+BJZKotJYTs=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=PCZ2yEnLEDjk3a1AOeOaEl9WPehBcat87rziEodtUDeLod1Dm9bTsCJxQbP4B7cPN
+	 rI5fNScmtFHv95+CvAHMjemlnFWvBY/ljNozJJocR+aPLXmeHv9/GH9CotC23Saumr
+	 J6xAuqAE4JUXH0LkEh3vfQLty6oeedHA5TlYvxvkjVlhU4TGwp2fjFt2tb0IUYlzi/
+	 oBy2On+zdRIhYJyYYGjyxviCKVMl5m5Rw5uwB/9m/wS7S986TE4lImJopFOf0Q4i07
+	 lYN2yfbWX5MagLIlQDwUhX2zR1GaMdQTY/Mr5niAdLqYOKcvEtx3Wslxr+KN+NpzG9
+	 P+NvFRZP2e6Jw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 33E88818AC;
+	Fri, 13 Nov 2026 12:12:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8A3A2235
+ for <buildroot@buildroot.org>; Fri, 13 Nov 2026 12:12:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7BF69404EE
+ for <buildroot@buildroot.org>; Fri, 13 Nov 2026 12:12:51 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OUkeHIKuIvAR for <buildroot@buildroot.org>;
+ Fri, 13 Nov 2026 12:12:50 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 43D4D404EB
+Authentication-Results: smtp2.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::42b"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::629; helo=mail-ej1-x629.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 487B6812C8
- for <buildroot@buildroot.org>; Fri, 13 Nov 2026 11:47:34 +0000 (UTC)
-Received: by mail-ej1-x629.google.com with SMTP id
- a640c23a62f3a-c505b2e1cb9so151260766b.2
- for <buildroot@buildroot.org>; Fri, 13 Nov 2026 03:47:34 -0800 (PST)
+ client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
+ envelope-from=pieterjanca@gmail.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20260707 header.b=voEmmQa7
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 43D4D404EB
+ for <buildroot@buildroot.org>; Fri, 13 Nov 2026 12:12:49 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-48e09aa5264so369674f8f.2
+ for <buildroot@buildroot.org>; Fri, 13 Nov 2026 04:12:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20260707; t=1794571967; x=1795176767; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=wF0qTvbaCHjCqdr892malRi80YjmNPu2QhuyicGGBt0=;
+ b=voEmmQa7eBJfy1AOhlHB25I4ZIZbHhlGJeCAGaFadKPeZjNVe0UyMgaSIB72pRCeDT
+ XjUvuxEH1/NqZYKCVgnuwDi2RBHAYGzwrcIpufBELQcu0Dy65ndmfrDaRQVOHUXzUCoR
+ PiVM17kDj5In5OXPPOuwTz9h6A0De1QWrOj5l+PdiP1CdVdYAptCs6+xlz4SX68AdRu0
+ 76XkY7Y612JLVPZoWhXuMkoiw+xVpdLyQzBs6B548mirW3dWDf59n8n5SqfqkzrQH8mJ
+ hl/5MOaH9s5bLsvtNpZ/P7SzflaoiCVgfaN3iBpJr2kOiukddc8ZPdSQogUDoqsPXHyd
+ R4qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1794570453; x=1795175253;
+ d=1e100.net; s=20260707; t=1794571967; x=1795176767;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=E+LzxW7UywigKLu8BPnbGhPdY60S9mIYf5mvB4VqW7c=;
- b=byJq1t7Q3xasse35hBuxJBrQ5mKXivvhjGggOk5xTXj1XuKG2Y0ztcwfCqbkEaADBv
- 8NQsTEIELVQkZax4Bvhnou+lDdhJ1sB4RmuPAoc+eem/KNysjgxYTApoEwl308spRN0v
- PgkxrqWOpwoxvjlvh0sPTU8GLadTuErO45ubG1S1cd8erIF6OdFz4YEIgipaPQHgKa/S
- Ur5mResQCCr7q/MWpgnSD+Ei4dKmwnUqJ5AGnPRqjynUOqUwHfAryNgW+DOFWwQkCGcF
- Zff4ZFwyG06aUP3PQHzL8Hfg5NSEKzmW8kvxBUmHC8o0jW0XwPpDxiiq2tXnXRsEy/8q
- 6I3g==
-X-Gm-Message-State: APuU4Z95ibZu9yOV3JBEONvuMcbw4QAhi2oJI2J1V/dStQCsgnBh+5Th
- bJv40sKrYC0JA4NrwNnScmMPULqe55ODzLorMHXH2CAaC6Ibw5/resyASc3XPg==
-X-Gm-Gg: AYBFou3V8crKngT6gqnsAVBySc67ZjnK0VzKSSqmQ0PNHiEefqjP2ny7OJsXnkJUJch
- RnQIsJFKornIZFyW4+GpHcdCKqUNvvgSVxwwWlTT64xa6UxL5C5CfXRaHbyTx0uhmVcxIGycffL
- 22a2jgF3A++jQIcVfv4mqKx/TSPy1zwZuc7RZyBrsrdaWaPs62CXcF6iafA53PabY+lCHwx8++i
- sUsf/gnbarFLyCMK5+Dw0o1HeOhZAO93Sldxu6PFdi+77KNzQrnrAkUqpGSbqgjjerAjNnaHJ5v
- Pkmcx89cMh0cSzFrxX7u9K3csLlETASaf4vF3TWAQ6wXe/RPjxWiG52WPtLh6fuHwHQu52ljUCB
- Ypfs66C1QQOYpFafsoK1Oz6Lcn3Ci2zsm4fN90k+BMYK7xrhY4G1/VTUTMCm+RGcMT2pHL/9nfT
- JD6vQMNEZ0Ec5BSXST6naAdDCYtUuG9XTR89yxop/A+lPe9MhXhPWMZ9x0/kNnxvkf2GtExpR/i
- jVYEZeRNbUIvepCSjCeQaqdFwYdYSMcZFU+BLYWj3qNVVFr7QtcVSexUc6+ip8r1u/PO1cB2uy8
- 7utTPOFEQDpqbEBG5UWAW8fXNDXQV4ujSI6wX3TCd80uy2+j8Iy+fx8ge58soDgkpFvE3RJv7fK
- HVSuneF0u
-X-Received: by 2002:a17:907:6092:b0:c3f:55e6:83e6 with SMTP id
- a640c23a62f3a-c50963288famr181387266b.15.1794570452315; 
- Fri, 13 Nov 2026 03:47:32 -0800 (PST)
-Received: from development2.visionsystems.local (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c5095b245edsm82539666b.15.2026.11.13.03.47.31
+ bh=wF0qTvbaCHjCqdr892malRi80YjmNPu2QhuyicGGBt0=;
+ b=Xoo4iZzDkRxe3dfD1maCedzkyemchl2ySKXS23BKhcmJ2y3sShU9KJnxBQaLAhZe8Q
+ Rn2qalSJwSnOudIiG5zqXVcA7Ze8EuuZTUjuuC3nozebB+WjTWJoW9e46+7G3jy45PVA
+ AjL9F3prKKS3YqM/LMiZVTm8Cqb/bpihXaPf7eQIWkTpldZlDK+5Ty6b7zbA+CVPQLsD
+ bEB0zTMuiRWKvj44HcjgYHeiXUqK4L6u4HI9doUk2NeSdJqJWSt5XJPPoqAzhQM/+1MP
+ 7jFfWPux1KKDgqu6DmbbBGI4TAwdzBJDNZ+NWPo524dsBQYIkJDTLksasq7SSZMFxLlC
+ ZC8Q==
+X-Gm-Message-State: APuU4Z8qqLP4Gb2etFeT/sHm2f3OAidEcH0KEgyngsjdWyA/ywWk2TFw
+ +gJz9adXD5F/PQNvYini6UpMC1hM/fgcUrMfDQ4fIiWbVNRpuYSYb6PZ+S3K
+X-Gm-Gg: AYBFou127T3686YuEQjQgWDyU87/8MSKDLA/XcpNJ2N+ZElSp/P95aC/+1kXRrp6kLY
+ rzQG5Yispye/DvBdBuySvkWkz3Fl4s6zCfRdIEMlDF6DROBc2NZAZSYJohKF9NWfGorHA+pETji
+ NpPx2iqoz3NSplmEuqJwus3RM2N4ebsSX9jVhY+p4LFQGbrXWBNTMCwvN2ocXpibAKbEk1D81Ge
+ HLJNirg5cHCYQ2Z8tTziY4vq43nxnT7Mc3hay8hI2wt33o5QzKvwa67O6ybNLp4TTBy57mNpV3e
+ 8z1zcJaeiupRymPxkDCrk2PeB/Fi6f3Kd9r9TbaS3LXQCIJE3SFSbcvkO7lJpY4wFMHKHwkwJYF
+ OOk9xLpu9X8tw2fLnryEWJZPD/2PBJlrv+U0nrp5Pjxdm27xlAeWVPUC1u9GFZ4sWZX/q/wQzQ1
+ b8tFL4EweSoryySRmlc/3u1AcMlZ/p9fV/lCyWLojjUS/eRcdSiLcNRQcNX0m3jR2HeADmYHPPR
+ sP+WjKF+qfF27xYB4kpfmkbfUQQ4kFQbBuZptxjamiUqBGXlpwie33sdn3jLU9l5dKj+Gsm0osp
+ FruesUrOC7Sl79nxTD9J
+X-Received: by 2002:a05:6000:455c:b0:48f:bcf0:2026 with SMTP id
+ ffacd0b85a97d-49c73259e6bmr3452152f8f.13.1794571967280; 
+ Fri, 13 Nov 2026 04:12:47 -0800 (PST)
+Received: from case ([84.199.255.188]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-49c605e4a2asm5111493f8f.39.2026.11.13.04.12.46
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 13 Nov 2026 03:47:31 -0800 (PST)
+ Fri, 13 Nov 2026 04:12:46 -0800 (PST)
+From: Pieterjan Camerlynck <pieterjanca@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 13 Nov 2026 12:47:31 +0100
-Message-Id: <20261113114731.394941-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.34.1
+Cc: Pieterjan Camerlynck <p.camerlynck@televic.com>,
+ Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+Date: Fri, 13 Nov 2026 13:12:42 +0100
+Message-ID: <20261113121243.1249931-1-pieterjanca@gmail.com>
+X-Mailer: git-send-email 2.56.0
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/go: cgo linking needs NPTL
+Subject: [Buildroot] [PATCH] package/thermald: bump to version 2.5.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,68 +144,141 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
-Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: Christian Stewart <christian@aperture.us>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,USER_AGENT_GIT
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
 	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Since Go 1.21, runtime/cgo implements x_cgo_getstackbound() by calling
-pthread_getattr_np() whenever __GLIBC__ is defined. uClibc-ng defines
-__GLIBC__ for compatibility, but its linuxthreads implementation does
-not provide pthread_getattr_np() (its prototype is under #if 0 in
-pthread.h), so building any package with cgo enabled fails:
+From: Pieterjan Camerlynck <p.camerlynck@televic.com>
 
-  # runtime/cgo
-  pthread_unix.c: In function 'x_cgo_getstackbound':
-  pthread_unix.c:96:9: error: implicit declaration of function 'pthread_getattr_np'; did you mean 'pthread_attr_init'? [-Werror=implicit-function-declaration]
+- xz is not needed since version 2.5.7
+- dbus-glib is not needed since version 2.5.8, so add libglib2, which
+  is now used directly
 
-Make BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS depend on
-BR2_TOOLCHAIN_HAS_THREADS_NPTL instead of BR2_TOOLCHAIN_HAS_THREADS,
-so that packages requiring cgo are not available with linuxthreads,
-and the other Go packages are built with CGO_ENABLED=0.
+Add a backported upstream patch to fix the build on 32-bit with a
+64-bit time_t (e.g. i686 musl), where -Werror turns a printf format
+warning introduced after 2.5.6 into an error.
 
-This issue has been present since commit 06b2e496a0c4 ("package/go:
-bump to version 1.21.0"), as Go 1.21 introduced the call to
-pthread_getattr_np() in runtime/cgo/gcc_stack_unix.c (now
-pthread_unix.c). It therefore affects 2023.11 and later, including all
-currently maintained branches.
+https://github.com/intel/thermal_daemon/blob/v2.5.13/README.txt
 
-Fixes:
-https://autobuild.buildroot.org/results/e3a343ecfe4e2bed68f9de73b37e38f4087e8620
-
-Fixes: 06b2e496a0c47b1fef55b0daccac1e62b41d7aac ("package/go: bump to version 1.21.0")
 Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Pieterjan Camerlynck <p.camerlynck@televic.com>
 ---
- package/go/Config.in.host | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ ...ring-formatting-for-state_entry_time.patch | 34 +++++++++++++++++++
+ package/thermald/Config.in                    |  7 ++--
+ package/thermald/thermald.hash                |  2 +-
+ package/thermald/thermald.mk                  |  7 ++--
+ 4 files changed, 41 insertions(+), 9 deletions(-)
+ create mode 100644 package/thermald/0001-Fix-string-formatting-for-state_entry_time.patch
 
-diff --git a/package/go/Config.in.host b/package/go/Config.in.host
-index 47c7e5d075..9b9f7774fe 100644
---- a/package/go/Config.in.host
-+++ b/package/go/Config.in.host
-@@ -33,8 +33,9 @@ config BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
- 	depends on !BR2_mips64 && !BR2_mips64el
- 	# go uses dlfcn.h + cgo for its plugin module
- 	depends on !BR2_STATIC_LIBS
--	# cgo supports uses threads
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	# cgo supports uses threads, and needs pthread_getattr_np(),
-+	# which is not available with uClibc linuxthreads
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+diff --git a/package/thermald/0001-Fix-string-formatting-for-state_entry_time.patch b/package/thermald/0001-Fix-string-formatting-for-state_entry_time.patch
+new file mode 100644
+index 0000000000..1548d56210
+--- /dev/null
++++ b/package/thermald/0001-Fix-string-formatting-for-state_entry_time.patch
+@@ -0,0 +1,34 @@
++From 506dcaf8d5ca99b626ea7ddf35f4a5f0ff71ff4c Mon Sep 17 00:00:00 2001
++From: Lucas de Castro Borges <lucas@gnuabordo.com.br>
++Date: Tue, 22 Sep 2026 18:01:06 -0300
++Subject: [PATCH] Fix string formatting for state_entry_time
++
++state_entry_time is time_t data type, time_t has changed the
++data size to 64bits due to year 2038 problem, then to avoid string format
++issue the type had been casted to intmax_t and switch from long(l) to
++intmax_t(j) because long has the minimum size of 32bits and the mininum size
++for time_t is 64bits.
++
++Signed-off-by: Lucas de Castro Borges <lucas@gnuabordo.com.br>
++Upstream: https://github.com/intel/thermal_daemon/commit/506dcaf8d5ca99b626ea7ddf35f4a5f0ff71ff4c
++Signed-off-by: Pieterjan Camerlynck <p.camerlynck@televic.com>
++---
++ src/thd_gddv.cpp | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/src/thd_gddv.cpp b/src/thd_gddv.cpp
++index dc82eb3..303f786 100644
++--- a/src/thd_gddv.cpp
+++++ b/src/thd_gddv.cpp
++@@ -1738,7 +1738,7 @@ int cthd_gddv::evaluate_condition(struct condition& condition) {
++ 			return ret;
++ 
++ 		if (condition.time) {
++-			thd_log_debug("time condition matched %ld \n", condition.state_entry_time);
+++			thd_log_debug("time condition matched %jd\n", (intmax_t)condition.state_entry_time);
++ 			if (condition.state_entry_time == 0) {
++ 				condition.state_entry_time = time(nullptr);
++ 				return THD_ERROR;
++-- 
++2.56.0
++
+diff --git a/package/thermald/Config.in b/package/thermald/Config.in
+index 353ce31a7a..19cf7cde0d 100644
+--- a/package/thermald/Config.in
++++ b/package/thermald/Config.in
+@@ -4,15 +4,14 @@ config BR2_PACKAGE_THERMALD
+ 	depends on BR2_USE_MMU # uses fork()
+ 	depends on BR2_USE_WCHAR # upower -> libgudev
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus-glib -> glib2, dbus, upower
+-	depends on BR2_USE_WCHAR # dbus-glib -> glib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2, dbus, upower
++	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_PACKAGE_HAS_UDEV # upower
+ 	select BR2_PACKAGE_DBUS
+-	select BR2_PACKAGE_DBUS_GLIB
+ 	select BR2_PACKAGE_LIBEVDEV
++	select BR2_PACKAGE_LIBGLIB2
+ 	select BR2_PACKAGE_LIBXML2
+ 	select BR2_PACKAGE_UPOWER
+-	select BR2_PACKAGE_XZ
+ 	help
+ 	  Thermal Daemon is a Linux daemon for monitoring and
+ 	  controlling platform temperatures. Once the system temperature
+diff --git a/package/thermald/thermald.hash b/package/thermald/thermald.hash
+index fff5ae6284..a158cc8365 100644
+--- a/package/thermald/thermald.hash
++++ b/package/thermald/thermald.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  e5a452624f133d71f4aff0bd0c8f8258399a5ae1a7d5aea177fa6a6e33dad1fd  thermald-2.5.6.tar.gz
++sha256  5456f60aed52e9a14f88dde9b2e2875e5e3d0cc3d1e7bf742d7ea4b22ff6a995  thermald-2.5.13.tar.gz
+ sha256  e98be8bc482e038a14bfbc01caf800bbd0024fff275ef14cd999db6560254a8d  COPYING
+diff --git a/package/thermald/thermald.mk b/package/thermald/thermald.mk
+index 4e3d897bf3..f06271c850 100644
+--- a/package/thermald/thermald.mk
++++ b/package/thermald/thermald.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # CGO linking for the host. Since we use the same compiler for target
- # and host, if the target can't do CGO linking, then the host can't.
+-THERMALD_VERSION = 2.5.6
++THERMALD_VERSION = 2.5.13
+ THERMALD_SITE = $(call github,intel,thermal_daemon,v$(THERMALD_VERSION))
+ # fetched from Github, with no configure script
+ THERMALD_AUTORECONF = YES
+@@ -13,11 +13,10 @@ THERMALD_DEPENDENCIES = \
+ 	$(TARGET_NLS_DEPENDENCIES) \
+ 	host-autoconf-archive \
+ 	dbus \
+-	dbus-glib \
+ 	libevdev \
++	libglib2 \
+ 	libxml2 \
+-	upower \
+-	xz
++	upower
+ # tools are GPL-3.0+ but are not added to the target
+ THERMALD_LICENSE = GPL-2.0+
+ THERMALD_LICENSE_FILES = COPYING
 -- 
-2.34.1
+2.56.0
 
 _______________________________________________
 buildroot mailing list
