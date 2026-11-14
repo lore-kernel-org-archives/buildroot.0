@@ -2,28 +2,28 @@ Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2AD3606A335
-	for <buildroot@archiver.kernel.org>; Sat, 14 Nov 2026 10:42:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0B5C606A336
+	for <buildroot@archiver.kernel.org>; Sat, 14 Nov 2026 10:42:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=MPJ5x5h6;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=BB7RjUtU
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=M52fx2vX;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=jcKECKtj
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A1C44606F5;
-	Sat, 14 Nov 2026 10:42:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B752560737;
+	Sat, 14 Nov 2026 10:42:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7c6_r93sKlH8; Sat, 14 Nov 2026 10:42:42 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org A96E66068F
+ id 19ZUU4i6FSIR; Sat, 14 Nov 2026 10:42:45 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org AE380606BD
 Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794652962;
-	b=aUEtrbQicbgdXzhHbCTOqb5T0jN7TnmYrnIq8B4nPXKMVWiK8UmuEfWDRCOeoynE9lq6
-	 iENlXE8Jfl5Z+jShIik1p8gELxQy3Mo5wZsUOdz7QbbeIqQoiNhDyAFemOjZMGGzjvPyq
-	 mJL+wUXRa9H/yOi49eBvAZW/c1QDrKkNhtGr7zmrpikD0Jhr0KnmFh9ltIrV3YoQvOhzC
-	 kJTL9aQ6KCKJXAuDPy1V5WvUws7GR0200A4bsgQuV73XwSdpzvmU3QCeWvyc4zMrRalbD
-	 I2n4dxBLezHbxCoPfD0e4VVPeDS4RUFGRPgv4FnyV3zQg52wl6cd4Xm/bP3ujtEyZ4Q==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794652965;
+	b=mNx5gW33BvuRF9k53m52z6M0SDC+AoJ8Y2+xelBvvuq8nd7zeBnxS3TN26+okmI7X5tC
+	 WdCopL0nAanqkTRbJiu84VyX6z6EUBVTzCs3OnYWBdU832zHFLtC7DKA+sHpGL7p26lAm
+	 EY+caJQc///fASyehDCuCBKUNX4YpChKLLxK/WnRnsUilMVGS/l1GXmABsqbFODbcAQc+
+	 C0wNgjjN3S6hjR4m+9tQoM/eJ6g8kQ1Pz3izLgXYsJAg0JNxwYS54V9mOgowWgo7U/g+Y
+	 n0Z4PhK+MDNkK78tNY1LF0kxLv0VzHxke5h4Js0C0WtTr4ovwYxdPZTDIAfFloeUjqw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794652962;
+	c=relaxed/relaxed; t=1794652965;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -45,71 +45,72 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=Kir9WmNal9WSQa+0LQKVCXNrlx6EW+Rk50Xr2/K6n6Q=;
-	b=r4XLpmXesgq6WC4duRIflK5+KgNkhpakWgR7kKhyU5+kv60AaASSGGOeS/OLoMIIKMvs
-	 k0BM0zH8pWl5CEFZJOklURV9oKX7YMpkdwksmIa9WWttgg9kVAhd4ld0lvJRiyoZtTGsW
-	 lTqYnd2+uxW9L8GN7wF4DsePX9ej2Te7Pwp59BoZyYN14V9htp3KA+AY/cv1edRy+hsG9
-	 4na2xvf3Xn6+4pIzEocW2G8RJ6XhD9qJTnM18LwYrcc1rXNUosSSZma3+6k9es19svf/5
-	 oBjSZF6rYTZSVuubddxCSW/4eh+Bmfk0krRN/NIDLTKcDQaU+32R1SgHRXzg6eLiMCQ==
+	bh=Fdunmeky5yc0IuUePbc3iTSwo0yojK6kmLSD4Nsz9sI=;
+	b=Ay6zz/zu6DSAAjHgrIkA0MU1UHrIHHxVmUNH4tbdyzAxXnH8GBfrhRsdt92B4OZAkkSu
+	 6yKKvoOM7m3pbL/QNHjhPpRV0SFVkTTbOR9gagP8Z+kUzXzpSp6ktERAvFPYmeGFAYD7B
+	 E0ZtHDkdJwpFV0kpsDPSIlfxqPPjUw1edomLZF3GlCAgRizAvCnANkPW08kjXE3PfCV7c
+	 s+J75/Gjv0yuqeCDI0FgWl5gdx7plijB/UMACuskxTTLhJLI06ek2Ss8HKDHrhiQmtFvl
+	 +DBUdmGeS6xUqauvUvsPHlkuZJQV04stqS9cIUZ+Lcc78ZI2jKC2zLDRZ5wOt9R/FCw==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794652962;
-	bh=Kir9WmNal9WSQa+0LQKVCXNrlx6EW+Rk50Xr2/K6n6Q=;
+	s=default; t=1794652965;
+	bh=Fdunmeky5yc0IuUePbc3iTSwo0yojK6kmLSD4Nsz9sI=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=MPJ5x5h6iOd9tWbJLulY5Tmy2/zGXUqpHDnmzQa3rD/o0t39hrwYQHQkiGAJ5uQET
-	 ePJ9qnD9XHSI4jCDT2tKfjOSzRS3csEgq+/SoZtYeQcHdh30784koM/Ai9IT5GmgZP
-	 5+goUMb7U/Pdd/fXGFBKJ+sVxJdnIxiVlGXrAepeU4P/XZ23LVA0nChp2MwwUdgUHf
-	 hA0mYHC1+gfoAqj1VTZoWWcbjp/XBAgAAu0/4PcOpqhhXrxymtImAxDCvsO+k/O+UI
-	 MBUdTip2TWp0Bfja6+gtqfu50YjN4EvTNCRfmRpllZUzbIdX4rSw+Q620CBfMTfGLy
-	 9r8pkylsvdGsQ==
+	b=M52fx2vX31n6bC8+TFJey0xLaRUVIxb/JW4JwEG82XTb2y8Ze+duKmWDVEP5gt5yG
+	 gx1vLq7e65b66oZjW61mb9m9wxy7schKRd9s1YLQhya6Qh2L7rzo0ZQx+UXvCjR/My
+	 3HVyubhzSBXYIR30ghouIZoRHU6UQO6coHGDpHFHK+V3vfR5sBp2VuMKfOaoexrKVW
+	 lpWcGymRkLNKgYq+30QwsPhkoS/uEZ8+vrLiYM5Xat8Vg9ixRz7/dlEfgV6P4tkwiZ
+	 niBL1uN6wJ1uHd4zfYz/QPHpswRXIBHC6AbBgdl9F5QjB7d//c1yi7cXGb3d6LL5+a
+	 L2VdjG5DZRujQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A96E66068F;
-	Sat, 14 Nov 2026 10:42:42 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 3846B9B6
- for <buildroot@buildroot.org>; Sat, 14 Nov 2026 10:42:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AE380606BD;
+	Sat, 14 Nov 2026 10:42:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 820AD70B
+ for <buildroot@buildroot.org>; Sat, 14 Nov 2026 10:42:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2A0B381801
- for <buildroot@buildroot.org>; Sat, 14 Nov 2026 10:42:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7EF1481C38
+ for <buildroot@buildroot.org>; Sat, 14 Nov 2026 10:42:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ysLeGpNuMBdP for <buildroot@buildroot.org>;
- Sat, 14 Nov 2026 10:42:38 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org E1740819D5
+ id jzeyVOIhmVrb for <buildroot@buildroot.org>;
+ Sat, 14 Nov 2026 10:42:40 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 6B16281801
 Authentication-Results: smtp1.osuosl.org; arc=pass header.oldest-pass=0
- smtp.remote-ip="2a01:111:f403:d40e::"
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:111:f403:d40e::;
- helo=meupr01cu001.outbound.protection.outlook.com;
+ smtp.remote-ip="2a01:111:f403:d40d::2"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a01:111:f403:d40d::2;
+ helo=sy5pr01cu010.outbound.protection.outlook.com;
  envelope-from=tfx2001@outlook.com; receiver=<UNKNOWN> 
 Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=outlook.com
 Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
  unprotected) header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256
- header.s=selector1 header.b=BB7RjUtU
-Received: from MEUPR01CU001.outbound.protection.outlook.com
- (mail-australiasoutheastazolkn190100000.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:d40e::])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E1740819D5
- for <buildroot@buildroot.org>; Sat, 14 Nov 2026 10:42:37 +0000 (UTC)
+ header.s=selector1 header.b=jcKECKtj
+Received: from SY5PR01CU010.outbound.protection.outlook.com
+ (mail-australiaeastazolkn190120002.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:d40d::2])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6B16281801
+ for <buildroot@buildroot.org>; Sat, 14 Nov 2026 10:42:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WuvfzzM5T4ezp+JbmoRTmuSsiHDCY+4fhCnHA65sG1M=;
- b=BB7RjUtUxtAzbjVncgQnj1yX3GywWuwqaXIhO4TGZKivKuB9m9MAz3R1pxb+dH0Q5hfMk7bYSMbUcfh3Pw2X2ENExiAUY8DX/WTH5AN3hdy1Cct1MVn8UNZe044ZzXoq/K4s6ZOoC+osUfjQXGfNZgB4Vbn9hB8DuPxBjgmaATbGNhnTc6BwA2tko5OcwJ+pGizQlSCSYkWqecdaqizWnMMOCzcrnLX9KW7v/jsBdf4fwMyHNHu/Q+UaROpIVgizI1Jge8CDc1veR6M6WS5lQwYNR20Wni44jWav9d8n1YxQV458sMJ4ANFZxFUo+3uYX8hcyC+GBpDQuJG0nyiB3A==
+ bh=7vohJWorjPOK/qUej3F3rxVAjyLymEA6KgzJVAxZz/U=;
+ b=jcKECKtjGIfyamwJbVOe0TPrXdsqUaPJwXgOl0nyFGl8AFOHmFvgOaFD8TC5InQb6dT0a4QEJKYLorY147EtPKRYUJJyMs9Tafgfz0rfgXOBQRU73F+arBk3+GNBkYdp2Vj2HjD/SXsHoP2/SJvuHMZyc4KvFEhI3Bti2/Scy4YBVQFHKPKDxFqDnvAr+UFfal/MP7YihkAJmesQ3aO7qAzXgkfSzH8uJ/GxnoCf5OMBRwCfy6XVt57dlpUBpNLo9fpSh6dIxBFNczgv4BNt6ASLvuRa+AugQJM1ht7grXqjGjA23nvBZ9mLgRbXywmzzSYKWDxKuwLdQo2Py1ECjg==
 Received: from SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM (2603:10c6:10:261::8) by
  ME0P300MB0536.AUSP300.PROD.OUTLOOK.COM (2603:10c6:220:22f::20) with
  Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.615.13; Sat, 14 Nov 2026 10:42:33 +0000
+ 15.21.615.13; Sat, 14 Nov 2026 10:42:35 +0000
 Received: from SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
  ([fe80::338a:60df:663b:c222]) by SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
  ([fe80::338a:60df:663b:c222%3]) with mapi id 15.21.0615.009; Sat, 14 Nov 2026
- 10:42:32 +0000
+ 10:42:35 +0000
 From: Fengwei Tan <tfx2001@outlook.com>
 To: buildroot@buildroot.org
 Cc: Fabio Estevam <festevam@gmail.com>,
@@ -119,107 +120,107 @@ Cc: Fabio Estevam <festevam@gmail.com>,
  "Wojciech M . Zabolotny" <wzab01@gmail.com>,
  Woodrow Douglass <wdouglass@carnegierobotics.com>,
  Fengwei Tan <tfx2001@outlook.com>
-Date: Sat, 14 Nov 2026 18:39:23 +0800
-Message-ID: <SY8P300MB0041405C1BD95760D750ECE7B57E2@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
+Date: Sat, 14 Nov 2026 18:39:24 +0800
+Message-ID: <SY8P300MB0041542388570B734074A4D9B57E2@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
 X-Mailer: git-send-email 2.56.0
 In-Reply-To: <SY8P300MB00418DF86E94A561402DE73BB57E2@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
 References: <SY8P300MB00418DF86E94A561402DE73BB57E2@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3234; i=tfx2001@outlook.com;
- h=from:subject; bh=Sy4/MdLROrPgKm8g4Lu0UAEtpD9Q+JX82Mf/kHsBdIU=;
- b=owEBbQKS/ZANAwAKARwPraXT/AvaAcsmYgBq+DpZbbrNOPiNHIwVeTnYK6LqhCfLGw5IsSM9x
- yeeYml3u2qJAjMEAAEKAB0WIQTM77vWq2MBMkgGqAccD62l0/wL2gUCavg6WQAKCRAcD62l0/wL
- 2rYKD/4x7I0u4lWh+fspqSRw7e7sCD56wTHhuHFDfdWKrD5ZYbJRiuSom93/K7FDSpaaSKABwV/
- AWLRRg2xHMl361SYTc9RmEc02uWg4hMe2SsXJrlYnBx5m2sy0l8M1M6NfpE3/zuVyXUMENtr1jG
- tw9A9uaPbH18LXo6VhpUOs82QylM+Wip0biBafuz4FHkce8WdYN8yv3FH7fi+RqZuYfcro2i4om
- Yb9S4nH7OH/PskWs5m6uzYz7UOCmvDD46x6PnsgMyEJOOPtoT227husfu9dxuzk/V8S7E6C8g8z
- KuREKrKivTqK11CsTDCQDmRW/9SS7Zca3X7zSxpk5UVjML7Yn/ymZEsl3Ed7VkVPEAo80N0LO1R
- lFe4f4X5cjEm077l9/3Fu06bwIzNnL9kAjvwzaGeA7BLRLh583+4EroeH6keL/lnrjuw7nMxDWi
- n2/1zeGCi9p/nCYvV8+2WFPtwDlD5WWPk0EAwesFn3RoebgMwtjqhgBx4t9lS4zTK5CmamlJgXr
- KDrMm6I7Z8TwpTkdHmn5vNJLSUP6ZJ619kivyfvb73+03oHy7hOaJDiYryQMCoqsavhX+GZMI35
- 1gl48s36VcoUf1q8e8K9veYE1dVr85vfzPzH56WPCln4SEGV6nAa/wF/buYabRWReiwvhntxHBy
- u/4DxlsiaPoO/Yw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3836; i=tfx2001@outlook.com;
+ h=from:subject; bh=+dj2/Nxo7W3G8WEmuS7dt/RlqwGYTTqzl7P6iHjrDhE=;
+ b=owEBbQKS/ZANAwAKARwPraXT/AvaAcsmYgBq+DpZjqx3WqPUU/HXAs8RMMozZIh2WTmJJ2v3G
+ 9KCXuuRwWyJAjMEAAEKAB0WIQTM77vWq2MBMkgGqAccD62l0/wL2gUCavg6WQAKCRAcD62l0/wL
+ 2p5fEACScrjEnoMQb4L8+36eYtaiGH96RMaVQyYaNjlo4bvN3nz0ySnE0QivSisqwAtFaUfqKDo
+ 3XrjiURZUWTfes2lcPvEzAVss5eQhDVzBzFdblGtmkXXJfsygwA7u/BiFbkNKP46JxYPyfE7E+s
+ ri/wFoTbl0x06WTC/m0fPQtdj5aPw4+xFU5XCUfpm4p7zd1yRp/iSWfd7ytUelzbFJZFCPyAGLa
+ sP1OEojXTCmn1pOqdCH0NAlNUgbSTZlT69tCzH6VgC7u4leBl+e6Tr8FRDldrwlxgrBHyAGWe1l
+ 0zFcxVfph0iWQbo1e7DaqBBbrOAl87ExnhDOyMRS01YM3tolBgsD+dzFOGHws7dMHeleIVgnfQq
+ dKZKYvDcRCmb3G+D7unPEjZvYXA/fL3+JBfT1c46+3oR2LTpHHdMnkXWM+Rm6mA0rMf7CYDkLOv
+ b/kLLEQonG1LbyWjQk3eUsu5qgsOWLXVnLbahik8qwOcTmdPchbcyLLztXAlax9tmwIgvDE1+3X
+ x5P6COoyyLMK0yl4O/nIr5QYCBVpO5CbnI48ytE15ot0cBU+j7LvG0/0GlKMX7fHSTzbJfNEdC5
+ dP21hzPdEGHpLlT4zvafk2hJFU+jHCjX9Lw8y2J1zSAoz46eiGVe9f70/qVidLioVhdwjPPwbWg
+ cMFuhsIIWmcfdaQ==
 X-Developer-Key: i=tfx2001@outlook.com; a=openpgp;
  fpr=CC1554EDEAE6C2E309538CB2EEA89BD13554CA50
 X-ClientProxiedBy: TPYP295CA0029.TWNP295.PROD.OUTLOOK.COM (2603:1096:7d0:a::6)
  To SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
  (2603:10c6:10:261::8)
-X-Microsoft-Original-Message-ID: <20261114103917.2630100-21-tfx2001@outlook.com>
+X-Microsoft-Original-Message-ID: <20261114103917.2630100-22-tfx2001@outlook.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SY8P300MB0041:EE_|ME0P300MB0536:EE_
-X-MS-Office365-Filtering-Correlation-Id: e823aed5-927c-4b1d-b850-08df423bfd05
+X-MS-Office365-Filtering-Correlation-Id: 85696371-24a0-4818-c0b7-08df423bfeb5
 X-Microsoft-Antispam: BCL:0;
  ARA:14566002|41001999006|260925184616899003|8060799015|6090799003|51005399006|19110799012|15080799012|23021999003|24021099003|5072599009|25010399006|10035399007|1602099012|40105399003|440099028|4302099013|3412199025|26104999009|1710799026;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?M3d2MXBhendtU3MyaFpNVDlmUWJyM2w0RDBVNGdTRWdVU3BzNDQwL0RUeXVj?=
- =?utf-8?B?WWlsR0JuL0ZkQmtnZU1XTE5QRVRSL0RVV1J2YlI0T0xJenZSWG1aT1BWNk5M?=
- =?utf-8?B?UjBkQnRxYkIrdTE0YTRoUFdENEE3Q1dOOFhiOVZQQUp0TXR3VHV2Z1NucmdV?=
- =?utf-8?B?RUwwbXhRNVYxZDdka25wMlJLR2NSQ2N6WDhxN1YxVTk3SGFsdVZJYTk4a2ph?=
- =?utf-8?B?QWwrcDIzSVBTWlRWUWJCSmZrK0R4RVhaY25pamtBa3ZBNHE2b3A4Wm5RNm9F?=
- =?utf-8?B?SFQxRGNXQVM2L3NZZTZBeXloQWt5SWFzczlESjY1OHRjY21TUm1nbVJaWld5?=
- =?utf-8?B?YTZPaXhpaUsremVDUmVMTzJYMnhtM2s5bFRKS1JXTU9td2RxTEpvNW13Tm5k?=
- =?utf-8?B?M2ZUKzJtYkJ6L3U3cHFYV0tVNkpnYkVoOWZJTXVMWUN5MERwajF3cis5dmc5?=
- =?utf-8?B?azJqZ3VzZ3lpTW41K2xDejNJTm9zZkdqc09xWGNUa0kzZUdtRTVwY3J3ek45?=
- =?utf-8?B?NHpqL2VsR0Q4OTB0eVhEeVZkdFVoZmhJdThjSEtHaVVkWFRycEg2RGVJVDR5?=
- =?utf-8?B?dlJ4NTRvK1FzTXplVDE3bThRVGdQY2NYTHBHMG9vU3d6QWRCMTJrOWI5bnA5?=
- =?utf-8?B?QWNFWGRHN1d0YUdjRVpoUENlc2kwb3FFOXljMkswbTExckN1UVpBR1RUZXBS?=
- =?utf-8?B?Vlk0MURrR1UzaklLZzlVcm9jSE1RbTBobi9jcnpySUprOUthWWR6TXFuTkZU?=
- =?utf-8?B?WW5UOG55S3UvNEdEazVBdmNBZzBWWUxYWlRKWTFScVpCakg5dFNrOFY4N2ZB?=
- =?utf-8?B?ZzgxMXNaRWVVQVFzcVBUdCtTRGdmRkNPS29KR0p4UkxEcGNoUGw2TEJvY0xh?=
- =?utf-8?B?TTVMamRiVzNTTlo3Tk1lQXdtTml1TUYrYUxxS3huR1dma0cvOEQvNVI4d2dD?=
- =?utf-8?B?ZWhZZ01ZdERIWnhNQ29kNnhkSFpOWU9oNTF1ZjJxckRORmg0dEh4K3hIaVgx?=
- =?utf-8?B?QWZtVjV0eVEwRmVJMmVKamltMEZlUHljVmhNZFZCQ0pVc2NoYzFCMTF6anB0?=
- =?utf-8?B?K1dnRGxHVm1oT2xLdUZLT0M3dnoxUWZRWHIxTkZ3cFo5QlJMbWlyUmNqL3ds?=
- =?utf-8?B?bjNzdFp5emk1bENHa3JqZS9ObFdPY2RzaFNMUlZkUG9iNW9JUVB4czJXazh5?=
- =?utf-8?B?K29TUGNzd2NrNC8yU0VCYWNXbisydGVCaVNFUmVKdndISEppRlFOc2g0YjdR?=
- =?utf-8?B?WTZDVnNkQTRIcHVNNDlNYUpCOWVsUFlSR1hxOHZyZC8wWUNYVHppVk9NNzAw?=
- =?utf-8?B?cUFKd3VQbVlsRy9mTWpZRzJ6bkdNK29MNG94VHRnZUNQc0xaOGN6SjdvTUcy?=
- =?utf-8?B?MEppYklaN256clRjWTZiS3N2aEVPb0x3RWgvMHVmTStmYnpYVVoyMTVOMWs4?=
- =?utf-8?Q?+NDSXHvP?=
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?R210V1R0V2NBeXlBZDBjU3VqYmp6SzQzMnN4K0U1K3V6bysvcU80WnZsbTVD?=
+ =?utf-8?B?T0V5dFREdTZtSis1RDNHNkJVTFVBRGZjbnRlVXpYVWRKaWtucVV3eEVBNGdZ?=
+ =?utf-8?B?dHoyQTM5ZU5oakVlSkJiMGVlSkdtVVZLZ0hteXZ6ZzBFZ1hHUkRqZUJKS2FB?=
+ =?utf-8?B?azJsY09sTG9GN1l6MmQzT2JtaS9jUFFGWGdWMER3Z2t4Zm5hUk8zU0JwRklU?=
+ =?utf-8?B?Qlp3c3pWMmJvazdCQVMvaHZZVUFPVGNpYUxTOHNJMmVqekN6MFU0M00wdVpN?=
+ =?utf-8?B?NmJKSGtQSUtDSllVblAyZTNOTElDbDhONlR3cmo4QStpandnaHFMcTAyTkN0?=
+ =?utf-8?B?VlQ2RGZWSFRYWDNJS1V1QU9YaEZkRnozdXJwQkk5S1RuUElBWXM1VmNELzBG?=
+ =?utf-8?B?ajh2N2QwbkVwbVl2RHZjS3pSOGY0S0tVYXViN29KRzhzejUyMGs5cDNYZ01R?=
+ =?utf-8?B?TzNBUjlGeTBDRUNCWUZsczVaWTZCK0xVVWE2OVFHdkEyc2FiWEQ0VnZLMVdP?=
+ =?utf-8?B?aVo3WnJDTExFVkMzS0FBWU5jc1dza2Y1bmxnYWRQNlZ6NndmQ25reWNsSndB?=
+ =?utf-8?B?aGpqRENrT3pKM3VSaFg1UFlCM2RHT1p6ZURjbTk5amxTVWxhVmFzNGpjek4x?=
+ =?utf-8?B?c0twMUJUVlU4Y1lGZUhidGthZWxFcTRzbW91dlZkb3FIVTU4eWkxLzBkU3lS?=
+ =?utf-8?B?MGhzZ0NBOGxkV0U5WmpTSjVaQjA3NjdZWXRRMDlRb25wbU9NUDlBbnBjNzJ1?=
+ =?utf-8?B?RWJFc2Z2MWpmRzBobjlLSkw5NTYzWUozeVdYNmlRM0V1N2VxbXFSVjBoQXRT?=
+ =?utf-8?B?eVYrZld5elBRWFMwTUZSdlAwd1RHQTNseDJqTXgxM2wzamN3WmYyL2U3dGlL?=
+ =?utf-8?B?bFlMMjN5dklqS3BJYnR2SGl0ZDJ1Y3phd1JLRlpzZUpFOG9FbnhDMEtuSTFw?=
+ =?utf-8?B?TzRDK0JVelp5TlBQSFNaRVNRNGFwbFJ0b0FkSkRteVpzUTh1SUNhTDFvK1Jw?=
+ =?utf-8?B?cElzR2haYmVsRFh4ZHIxamwvbjlkc1l3U0dIY0FBRU1nMzNPWG1aV0R3UjBS?=
+ =?utf-8?B?UnRsRFBiRVl1RTlmUEFuakJ2ZTgvRENSS0lmSzRLUHhMaGtiZitvckJXaEt3?=
+ =?utf-8?B?bjBqV0Y3TWZ1MkFaREl1RG9ONjdFRWx4ODFIODBXVWhpVk1NOEh6S25MT3Nv?=
+ =?utf-8?B?dHUxVlRPdVN0bk0yWFAwWlNzOWl0dHJWU014TlBYRDE2ZmN4YTNhbXM5S21s?=
+ =?utf-8?B?a2w5dFNET0Y3Z2JYVjNCT2k3VFU0UGJhVEhUNzdVK3N6SStBdHJnNWQ2WnlF?=
+ =?utf-8?B?RHpNclQxN0ZtUVNSSmh3em5FMUp1eW9XVS9Kdit4WHBhNjRXYW5LbzVRcS9M?=
+ =?utf-8?B?YTgwdm9jQWx1K3B4TGR5eVo0YW5RaVdCY0hrMlpCUkduUWw2bU05dGcxWTU4?=
+ =?utf-8?Q?MrHSSoB6?=
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aXJVVTBtT0dnVDd4OW5OUmNWQ3JVNm12MlNlTDJneEc0cHljM3J4eU0xU3J3?=
- =?utf-8?B?c3pjNjIxdzJYZUJQOWFRQi90WU0xaEdQQjNtdHJ1Y2tKaGNkZTB5eXRQK2J3?=
- =?utf-8?B?dDVLNVNSekdneFg1Y0wzUWtHZE5KekM5ditKOUkwSlVqWVR2ZzNOSFJ2VzZK?=
- =?utf-8?B?NTF6aS8wLytCeVIvR1VaSG0wR2VmS2U1K0lLRSs5WFFDWGpQcXpHMzlzVG5v?=
- =?utf-8?B?NU1VaU5Ybnlua0FtWk5wRzBDQUI3ZHcrNjgxeDlHdk54SFR1d053OS9KVU9o?=
- =?utf-8?B?aFNlQ0lvYlNwWWlBQURsYWpOT2x5Tm9yMWRKYnQzM2lIN0pxVVF1MVZ3U0Mr?=
- =?utf-8?B?c2RYL2VQUlVPalpVMERLOEpVWFg2WEpOZW5nL0cvZDlCaWRsdGFHR3IzYVRB?=
- =?utf-8?B?ZE9kR2lYVzltS0lNRzl0cHNxSW0rdDJkSm5hamJKLzI5VS9EbTBtemVINk9Z?=
- =?utf-8?B?QmNIYWk1cWZpL3p5N0NxaUt6eEpaZUdKb0x2dW9VUW1LY0lDczlYRk81bHBm?=
- =?utf-8?B?WEZ1dnBYeVhNeU1Zd0tlQmlHUzh0TS9kTlZsOGxiZ0REcDRyVlVPNlVqdFNW?=
- =?utf-8?B?VjRMd1NSSTVCcStIZzRWWjFxM0JCbTErTkhydmFWdUFCVFhOSFI5M0xJdmls?=
- =?utf-8?B?dnplNTNUNWJxS0llcDEzRWlkR3JJeFNhVjhEMVZYOUEySGhWL1BQbUt2RmZN?=
- =?utf-8?B?VDJ0d1VWVXpyRndCL25ZbTdSeW9HVTJOSTFjdVpENUhqejJrVE5qck01RXNU?=
- =?utf-8?B?Q3FjVUtaQURPODNMZkJ3NFVyVjN0M3htZThhc3NucFd2SWZVY1poNXNWajhm?=
- =?utf-8?B?M1ljYkp2dm00VDJ0MjhBUmViOGZ3WnBYU3lrdXBxNEZVYzRCd1pDS0Q5c2dn?=
- =?utf-8?B?U2xTZmRyb0I3T0ZacHo2MXRRRmNscU1oR2NiWE9RRUdqOUsxcEg5ZmcxaFF5?=
- =?utf-8?B?YlpBNmhDM20zNGd3UTZLdTZhOE5yc1l5bTAwVTlsblpHM1h0TTVFUDRSNkJz?=
- =?utf-8?B?MGgwQWFXdDlrRXlqVERaTEpWUHN6UURwQlVRSjNnWU4rYTRrZWFQSFZ3eW4w?=
- =?utf-8?B?OUlLV0N1UVZkZWVSREIrKzVsTG5Pc3pkYVNkUGFuVCsxdEkvZm5EaU9wcmti?=
- =?utf-8?B?Y1dUUzQ0cVl4SGhwVyt4TlNqVmZ6M2J6WHR6a0NnVUxUWnBkQm9tNTlZeXQ1?=
- =?utf-8?B?VjlGamd4bGpoSS81dFlyY2M3WWtpaW1mR09UZU1EaXZ6TTJiMnR3TEV3TFM4?=
- =?utf-8?B?cHUwZ3d4cGxQSHlMZUNjUEVFRFlXT3VHZDVJYnNpRDhVR0M3bEYvUTJ3Vmk5?=
- =?utf-8?B?MFBVNEt3bmxxR1ZKbGVqeHp2M2lDdzNkdDJkRTlmZGtKTWxtM3Y4eU94V3Bx?=
- =?utf-8?B?eWorbFpEaGEwRE5aNmZQcnNpTW5LYncvVzFCd1h2SmJyNDN6bS9xa2hpUXZF?=
- =?utf-8?B?Q3dJQ3VzYVBYNG5VM04xTWpsdTh3NTVoMVBaUWZ5dGNjY0NRUkNnR0NKZ0FN?=
- =?utf-8?B?cmd3VzFWUFI1L0tDaWdDeXgvcFlISFBaUjlVbjZmUWwyUEZ4Tm1jVGw0R0RZ?=
- =?utf-8?B?V1NZNmN2NmhKWW0vS1lLRHdLRjF5MzNHSWg0eWQ0ZEppSUY2eWJabDAxQ2Fh?=
- =?utf-8?B?QkhZcjFhbDNLTUQ2ZDBGbUhzVUducnFLc2wvRExEb25RZjBNQTMraUFyRjk4?=
- =?utf-8?B?czRCQ1NrYjYvZTljNS9abnBaSk5GNzQzY3B4MnArNEpiSzF1b1d2VXNrSWFh?=
- =?utf-8?B?N1JPUTZpVGVuUXE5cFB0Mms2dnROcVVIa3pOdk8zUkVzdTlFUU84c2V6NzBr?=
- =?utf-8?B?YlByMy8wSWc4cWVsOHduYnZmQjhOWjVNQ3JsRWN6WVFxNWNkMzl3dnl3Njc4?=
- =?utf-8?Q?oopN/q0CHw02K?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d3NaTkw3SmlqSGVQRGxuNmtsMy9lS0NHWmw2Z3FnZUYzVG91Y3l0bTNIVC95?=
+ =?utf-8?B?Y0QzNnhOb3o1cDZRQ09aU05DQ1BWTGRMWmNadlhTeUZZckNiSk1qVW1GTlJB?=
+ =?utf-8?B?MUFzdEkxSU9SS2FCVmRqSTkrdEU3TWVVdUdUVDdYNFFCYzlYb0wvclBwWkZJ?=
+ =?utf-8?B?VXVnWnByVytTS2dZaHB6ZUNVbmhjak1YOHE2d2cwR1ZqYTV5eHBNcTNjeC9L?=
+ =?utf-8?B?NVhNaHVoOVF5LzVYZGRWdmtVQm9PZXd5VENKNUM2aHJVZ25UeUZYUHZVaFZp?=
+ =?utf-8?B?L0hCdlBDM0ovdTR0KzI3RGNoSnV1Yk5sSVhKRUFnZnkybzhLZnJNOCtlUHRC?=
+ =?utf-8?B?YWE1ZFNhdkpUNjNDWEF0d0p2WDlpSFFVdUYwWW5Wc1NvRjlHMUJ5WXRHYS9P?=
+ =?utf-8?B?NnlCbVREc3lPNnhha2NUMmJtQnRWeTc1a2s2azRaeUhCLzRTMDErZHZsdU5Y?=
+ =?utf-8?B?QzZsNXZoUHhMd1hEbExRVGd2TGNOd2xhbksveEhpYVcraE9YcEt1RUp3RzV2?=
+ =?utf-8?B?OEE3OVdaWHQ0Q1BwU0MxQ2Y2M3FjRzZMUTJHNXo4Y1JPdmwyTVMvMno0R3Yv?=
+ =?utf-8?B?TiswZ1Z0Wm4ydnFMdkFYMFREbGdWMDF1cjB6WTBGdFNsQ0s5Qnl4bk9WemZV?=
+ =?utf-8?B?RkpGYXBKelRaRmlnUTI1cGdPZVhkdU1vcVp2VFppelNFRzVpRnZTRWoxWlF0?=
+ =?utf-8?B?VkRQKzBKakFwWlJFQk9sR3d0S1VvbTQwbUkzUlZUc045aXVhMUlLRjR3L3Zr?=
+ =?utf-8?B?MTdObVFLSEdDY2toL25NdHJGcTUrOUFyM1BWSXRnOEtKano3anZibWtJY2pX?=
+ =?utf-8?B?eHErd29oVkU2Mnl0RnVCbjFYYUdOZVgxbzl4SGNmZWo3aGRRRjBpdjZ3Rlkz?=
+ =?utf-8?B?UlI3VWFybURZMG9wcHJ0UlA0VVpqdDZJMUJsc3pjNEV3K3NZazVVWjVsak9r?=
+ =?utf-8?B?ek9RUlFHd2YzYnd2UzRhMGdjU3haNzFXMXI2NGFicG5nZjFabSt2SjN1Wmsx?=
+ =?utf-8?B?OHlQUDNhR1QyTEVhcW1IVEtzc2xUOTVybDREbDU0dXZuckNYRGVMVjZBUGVo?=
+ =?utf-8?B?R2JqVVdlNVZGeHJoSHRDTUZycGRWZmQ3TlY5K0FhNzVkdmpZcEZiS1N6NmtZ?=
+ =?utf-8?B?SVNnZ0IybDAvL3JZWHUrdGptdEdjTDAwRlpwSWtlVnRWdndHZkNKYVRwb1JY?=
+ =?utf-8?B?eDYwS2ZTTFBuY09HMzdZd3dCWm51bkJ3L0xxaGdwKzM3ZWRZazBSSDRMZmxG?=
+ =?utf-8?B?RW9BSEpMUy9jOVFZNGNQbFRmTExQTUlEZW5IRWhKbWlPNXlHTzdUbTVhZERB?=
+ =?utf-8?B?ZlJDMWV1cFdTZXZzaHZaVjdiSUVHOFR1ZHBXT1VsUmtqREFEdWJvTUdUcW90?=
+ =?utf-8?B?cW02YmxHNDZJaWxObkhDaDdhSU13MTBwN2JFMWZZL2RVZHhScWRRQXFyZ3F3?=
+ =?utf-8?B?TlJpSWkyaXoyZEpxSnVjZ1pGRDA1alhpSzc4aW9nNWNzMCsrUzRBM29Zczh2?=
+ =?utf-8?B?YjJlZi9qYXd0OS8yV3A4d29rNUIwUXBZbWZEN2lBY3ozNEd1dkgwU1BqcTZq?=
+ =?utf-8?B?NVdKN1dsS3FiakFQb0YvS1UwcXBtMHVIQmZZUUJNdFpnZDl0ZzdoaVlyNitm?=
+ =?utf-8?B?M0FYaDVxQmx3cUF1SzJETUd1SysvZ3FKUzlMUHMvVnVFQWEyOWtRL2tnQnlq?=
+ =?utf-8?B?emJONG4weUNuTkdrU3dwZVNGU3lDUWtLRlBqdC9heDVsaldCNml0Y3EyYkRW?=
+ =?utf-8?B?bDVjMVhXWkcybHNRODBOd013N1FCUkFqbkVwWnhROElFRjk0Z2YvM3Y3cjZF?=
+ =?utf-8?B?RGNMOFYzTUE4TE82VU16SkFqM1pmc1dlM3NXUHFRNnVoalBqekZNZ1MyODZr?=
+ =?utf-8?Q?ER0GzKsd+X2oA?=
 X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e823aed5-927c-4b1d-b850-08df423bfd05
+X-MS-Exchange-CrossTenant-Network-Message-Id: 85696371-24a0-4818-c0b7-08df423bfeb5
 X-MS-Exchange-CrossTenant-AuthSource: SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2026 10:42:32.8435 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2026 10:42:35.6886 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: ME0P300MB0536
-Subject: [Buildroot] [PATCH 05/14] package/gstreamer1/gst1-plugins-base:
+Subject: [Buildroot] [PATCH 06/14] package/gstreamer1/gst1-plugins-good:
  bump to version 1.28.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -236,7 +237,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_PASS,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	MAILING_LIST_MULTI,SPF_HELO_PASS,USER_AGENT_GIT autolearn=ham
 	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
@@ -247,7 +248,8 @@ glib_checks [1].
 Drop the explicit -std=gnu99 flag and use upstream's default of GNU C11,
 with C11 as a fallback [2].
 
-Drop the obsolete configure --help comment.
+The y4m plugin now also contains the decoder moved from gst-plugins-bad.
+Update the Config.in help accordingly [3].
 
 For more details, see the release notes:
 https://gstreamer.freedesktop.org/releases/1.26/
@@ -255,42 +257,59 @@ https://gstreamer.freedesktop.org/releases/1.28/
 
 [1] https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/84b3a0950debc467ce25aebdddd0d827e658252e
 [2] https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/f022eba452dc04d1cfefe4860a5f89bc261e194f
+[3] https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/16d34468fbd46dee295e117d3c300c5259ad7070
 
 Signed-off-by: Fengwei Tan <tfx2001@outlook.com>
 ---
- package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash |  4 ++--
- package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk   | 12 ++++--------
- 2 files changed, 6 insertions(+), 10 deletions(-)
+ package/gstreamer1/gst1-plugins-good/Config.in              | 2 +-
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash | 4 ++--
+ package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk   | 9 ++++-----
+ 3 files changed, 7 insertions(+), 8 deletions(-)
 
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-index cbe3a00566..6689eec005 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.hash
+diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
+index c4eb4efb65..3d595edbf7 100644
+--- a/package/gstreamer1/gst1-plugins-good/Config.in
++++ b/package/gstreamer1/gst1-plugins-good/Config.in
+@@ -254,7 +254,7 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_XINGMUX
+ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_Y4M
+ 	bool "y4m"
+ 	help
+-	  Encodes a YUV frame into the yuv4mpeg format (mjpegtools)
++	  Encodes and demuxes/decodes YUV4MPEG streams (mjpegtools)
+ 
+ comment "plugins with external dependencies"
+ 
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
+index a8b17f3d0d..e19e379aad 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.hash
 @@ -1,3 +1,3 @@
--# From https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.24.13.tar.xz.sha256sum
--sha256  31a4a34e02df0471274fd0e8016495475b670320d20a3349faf0634340166c42  gst-plugins-base-1.24.13.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.28.9.tar.xz.sha256sum
-+sha256  c1fda668b520e6aef763c0eb962c032c9fe52bce322e8b00c69b4e9e847bddc1  gst-plugins-base-1.28.9.tar.xz
- sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING
-diff --git a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-index adfb407386..1c304ff25d 100644
---- a/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-+++ b/package/gstreamer1/gst1-plugins-base/gst1-plugins-base.mk
-@@ -4,21 +4,19 @@
+-# From https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.24.13.tar.xz.sha256sum
+-sha256  574ac6f9fd84b32eb04e80572391d6762df6f9802a47bc0386cd6cc48c14d08b  gst-plugins-good-1.24.13.tar.xz
++# From https://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.28.9.tar.xz.sha256sum
++sha256  e518cd97483706a252e95e60312a22d23dec6f5e7673af6f5bde719c3a9ca7f4  gst-plugins-good-1.28.9.tar.xz
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+index 1b48d83c8b..8428d82460 100644
+--- a/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
++++ b/package/gstreamer1/gst1-plugins-good/gst1-plugins-good.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GST1_PLUGINS_BASE_VERSION = 1.24.13
-+GST1_PLUGINS_BASE_VERSION = 1.28.9
- GST1_PLUGINS_BASE_SOURCE = gst-plugins-base-$(GST1_PLUGINS_BASE_VERSION).tar.xz
- GST1_PLUGINS_BASE_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-base
- GST1_PLUGINS_BASE_INSTALL_STAGING = YES
- GST1_PLUGINS_BASE_LICENSE_FILES = COPYING
- GST1_PLUGINS_BASE_LICENSE = LGPL-2.1+
+-GST1_PLUGINS_GOOD_VERSION = 1.24.13
++GST1_PLUGINS_GOOD_VERSION = 1.28.9
+ GST1_PLUGINS_GOOD_SOURCE = gst-plugins-good-$(GST1_PLUGINS_GOOD_VERSION).tar.xz
+ GST1_PLUGINS_GOOD_SITE = https://gstreamer.freedesktop.org/src/gst-plugins-good
+ GST1_PLUGINS_GOOD_LICENSE_FILES = COPYING
+@@ -12,15 +12,14 @@ GST1_PLUGINS_GOOD_LICENSE = LGPL-2.1+
+ GST1_PLUGINS_GOOD_CPE_ID_VENDOR = freedesktop
+ GST1_PLUGINS_GOOD_CPE_ID_PRODUCT = gst-plugins-good
  
--GST1_PLUGINS_BASE_CFLAGS = $(TARGET_CFLAGS) -std=gnu99
--
- GST1_PLUGINS_BASE_CONF_OPTS = \
+-GST1_PLUGINS_GOOD_CFLAGS = $(TARGET_CFLAGS) -std=gnu99
+ GST1_PLUGINS_GOOD_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
+ 
+ GST1_PLUGINS_GOOD_CONF_OPTS = \
  	-Dexamples=disabled \
  	-Dtests=disabled \
 -	-Dgobject-cast-checks=disabled \
@@ -299,18 +318,9 @@ index adfb407386..1c304ff25d 100644
 +	-Dglib_debug=disabled \
 +	-Dglib_assert=false \
 +	-Dglib_checks=false \
- 	-Dqt5=disabled \
- 	-Ddoc=disabled
- 
-@@ -38,8 +36,6 @@ GST1_PLUGINS_BASE_DEPENDENCIES = gstreamer1 $(TARGET_NLS_DEPENDENCIES)
- 
- GST1_PLUGINS_BASE_LDFLAGS = $(TARGET_LDFLAGS) $(TARGET_NLS_LIBS)
- 
--# These plugins are listed in the order from ./configure --help
--
- ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
- GST1_PLUGINS_BASE_CONF_OPTS += -Dintrospection=enabled
- GST1_PLUGINS_BASE_DEPENDENCIES += gobject-introspection
+ 	-Dasm=disabled \
+ 	-Ddirectsound=disabled \
+ 	-Dwaveform=disabled \
 
 -- 
 2.56.0
