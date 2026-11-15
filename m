@@ -2,90 +2,114 @@ Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5921E606A31D
-	for <buildroot@archiver.kernel.org>; Sun, 15 Nov 2026 18:50:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67026606A329
+	for <buildroot@archiver.kernel.org>; Sun, 15 Nov 2026 19:20:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=HrBLDdRo
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=FmAbjaEt;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256 header.s=purelymail1 header.b=rBlpigAS
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2AB6B6067A;
-	Sun, 15 Nov 2026 18:50:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3BD87606AE;
+	Sun, 15 Nov 2026 19:20:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JbnTx1WV07Yr; Sun, 15 Nov 2026 18:50:46 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org BA927605FF
+ id H7yhSWOre3nA; Sun, 15 Nov 2026 19:20:31 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 422996060A
 Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794768646;
-	b=QI05ks3xcs4AZY/5bBy5GSnQccNx1Vsx4fjGYDNq9ILshUVzsdKMti7EtaCetakzRFPe
-	 1hofOAdGNNM/NMPIU7X+UlDB0n57PKCBxtdhaCpJ5KqgeSVjv5AwWOoIphp8Nm03fIjRH
-	 gobXnp/02H5BSnwX/jXCX0IPnqA1SLLqltnvaKDWAQBZf7XSP/AynJbO31bFp3CDpVYg7
-	 ABSqcSvYiGqqia74CqGYH1owMyN/ij6EwXeN9hOVNRu9bYLVYGqIXGL2PQzwE6pcozg1Z
-	 4Fh8XraCOce71f+EL2fZH2nhYBtYeSff7vs3q7DoklB8wDyKev4qhUgiRR2dPuW3+VQ==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794770431;
+	b=AMc3VD+4xfDqqKTBrEHNYrCn7u06sDxoF3Zhn9Zrq1ENvrVhUmZF1ZT23+HkkbRPWUp+
+	 zJtu8yLjkW+wAwrFHP5HpNeM3Oc4f/2Iw5knZ9sBN3OgMDp2iJ6hAOVeTZFMSuRgntqZm
+	 Dqv8qcafTRs8RyOnkOoW70jjjdpvJ9VuIwstC7GVmtzvfUlJgnC2MtB8mU+Bt2xYxuqbZ
+	 HJ9zk/D2buVf5XqWHfo8fPVtHkYJVNqCDucGTmN2Z9cRKv32kuop0D0zka/7v4iP316Eb
+	 JOWhao2PTFsd6pRN7QCtUFepieX+NTMkSs02PgJr5s0IrQgCkQD0dF2h4nAPqswaYjg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794768646;
+	c=relaxed/relaxed; t=1794770431;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:To:
-	 Cc:In-Reply-To:References:User-Agent:Date:Message-ID:MIME-Version:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:Received:From:To:
+	 Cc:In-Reply-To:References:Date:Message-ID:User-Agent:MIME-Version:
 	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
-	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=Oof/98QiT+nz9uZAWw0Pzwf4g9Nkvske7971MH/xBV0=;
-	b=nbkqpEWRMzAdTOnwI902Vd6zX8GkfPTQJbXhqHThlE3FJVpo6cR7oD6ad5GHuUXxpOxS
-	 TEsm5iHhu7/72MQ1e6c1T3SwqadyU/WzdEZPwQGHjBrwcXQJSz9KuqIfk8E75SMQKDR26
-	 6lL2IbpyCXBmvBHWYzMSjBlphPjRdbybVCqh7UYwR0NXJTgXAGtcaAcWrxiMHKy7l9BTj
-	 ZRedfi7uVezys46NqldwcV4pjavBv+oI9KosUE/PMAUQDOVJJQbaeC5LufZhFJZ/blfrN
-	 d3HegohHhea0EzEnoNbuH3Cf5S8IduYJtV+t0LULXmBXQ6WGRUlOux42RXVFPeb8qwQ==
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=zSknEUVs17ez0QmVN3/szZs78n1Gj31zT9O53PocHNs=;
+	b=npu2DOdtiAB3R2bEaYr9fBtT1PKDQOhajHnUld8/44Uwfq4OtfrRowPJIxYis7wyCKEf
+	 XD9FIvZDioSgqVBdcMpAI9iIdrC8XaNzRs7faWyA/Y9+4s2LREMxhwYhNGjP1OPIZDlOj
+	 TyRdmFK1DP5RRJJrg8R/9NfNjRAOQcXj96MMmi/mE1RJP9A81PjNZKHF3im/y1QLqgMEo
+	 jJPaKkLGpE+0rLB3GBpraUOHCNtNpuX5OJ5L9SWDoqldPYzgT8AxYrdcvtHEWMOzKxJPN
+	 ZydrVsfOWjVdUkn/NdkuN/en3fp/KJ35VHpC6Vz+LEw3oOLW9FANNcDMBfzLISPkKiA==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794768646;
-	bh=Oof/98QiT+nz9uZAWw0Pzwf4g9Nkvske7971MH/xBV0=;
-	h=To:Cc:In-Reply-To:References:Date:Subject:List-Id:
+	s=default; t=1794770431;
+	bh=zSknEUVs17ez0QmVN3/szZs78n1Gj31zT9O53PocHNs=;
+	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=HrBLDdRoih1FPxlVq0fO3hgaEABMpa62oRXPjhteTTjoKBhNmW4m/cB9URTUF6+qq
-	 URrLcqrMfvaR9kWhdUDmrCMaGG1OGQQNDM6XFJOKyn8tdbzO9WjnhGGNcuJjrLmh6N
-	 Z4Z8BnzttgfWTqdNuCtAPDz2MjCs4RRLm8zpRp6obwPL5olUYbJwKWb+4k6nEl11Z+
-	 s1tbMCmRZ3HX8Oj/t7C5GxTY2d7qmpDcvaAvbPtxzC76LEd/Qhf2CYsRMgC2Qg7fsw
-	 34VU9yAxD95hqoA585201zx9bEVCuNopZQ56+nHmHb4xZjgXi+hPyrmfC6s3sd0wVl
-	 bl/FeJPEXdxeQ==
+	 From;
+	b=FmAbjaEte4tba7dRPn8HCoXNWNmZ0UxwkHXMzIEco5dVIZ0OfI+tUR31amn1Eqfdg
+	 z9Xfz+yaQXYW6y7YmJlzAvp2TdQ29DxSzGEWaNGgca5FKQQSRAmoEXK9eQphLB6Dtp
+	 kGbJZW9N9ekDF2mEGMCc4RsrFo7zu36s7wqhfinib85i45vb2Xgru2lYIOxBI9UzqR
+	 hY730HsQXC92ZaEw3KANQy8peFC8PpTWc1Zg6IjPSMtfJ3GVUK3h+ZwUxV+mekUDhq
+	 0sKLsqlqQvMkbOqUM1DyE3AXRc26VEpPP8YN/yfYlo9wA+NPlaWkwr5y8sgfhujStc
+	 KFo76X/vr0P4Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BA927605FF;
-	Sun, 15 Nov 2026 18:50:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 6A0ED1E7
- for <buildroot@buildroot.org>; Sun, 15 Nov 2026 18:50:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 422996060A;
+	Sun, 15 Nov 2026 19:20:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 5D4672FE
+ for <buildroot@buildroot.org>; Sun, 15 Nov 2026 19:20:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 58ECD40623
- for <buildroot@buildroot.org>; Sun, 15 Nov 2026 18:50:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4205F80D96
+ for <buildroot@buildroot.org>; Sun, 15 Nov 2026 19:20:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1-38BO_3lP0T for <buildroot@buildroot.org>;
- Sun, 15 Nov 2026 18:50:44 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 1234B405E8
-Received-SPF: Permerror (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
- helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
-Received: from mail.tkos.co.il (mail.tkos.co.il [84.110.109.230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1234B405E8
- for <buildroot@buildroot.org>; Sun, 15 Nov 2026 18:50:43 +0000 (UTC)
-Received: from localhost (unknown [10.0.8.3])
- by mail.tkos.co.il (Postfix) with ESMTP id 533164409B0;
- Sun, 15 Nov 2026 20:48:42 +0200 (IST)
-To: Bernd Kuhls <bernd@kuhls.net>
-Cc: buildroot@buildroot.org
-In-Reply-To: <20261115174621.3986836-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Sun, 15 Nov 2026 18:46:21 +0100")
-References: <20261115174621.3986836-1-bernd@kuhls.net>
-User-Agent: mu4e 1.14.2; emacs 30.2
-Date: Sun, 15 Nov 2026 20:50:39 +0200
-Message-ID: <877biedj40.fsf@tarshish>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SfmsWZaKVp7X for <buildroot@buildroot.org>;
+ Sun, 15 Nov 2026 19:20:28 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 4A61D80D85
+Authentication-Results: smtp1.osuosl.org;
+ arc=none smtp.remote-ip=34.202.193.197
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=korsgaard.com
+Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail1 header.b=rBlpigAS
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4A61D80D85
+ for <buildroot@buildroot.org>; Sun, 15 Nov 2026 19:20:26 +0000 (UTC)
+DKIM-Signature: a=rsa-sha256;
+ b=rBlpigASJam01HwW1XJF2wkZf/tRu4j4c+scO3wABngsnJiT+RUieqAXSdfR2pOtK8xOeCE74+abdf159XBYYWAxqPGtyYaCnNJP3PPKRTOJUy3M37W5n6aJuOdJxfkBfHffArbjMLhylEqC6dK20IcFIb4nkGwUUspfoaETsy/MbnOqrYTsRplZ0ZLpW1PIKuK9ZXBmwTkKyLWDT32BZWYWevQ8kjZEMQVzy0IBMQY7k/aqtqOBulKiW0Tj8Gtjk7b2k+0DvAt6Ym6CFjxlW4xonvEJe2tfPT/C3AJm/cTowLBKNioWCDl1z+IXiv0l7RAinLuS0CQmUq73fp2zxQ==;
+ s=purelymail1; d=purelymail.com; v=1;
+ bh=T2Fd4GttvbQtEObYwZDLxcJaHODZPxPbGC9Zk2JKljQ=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date:Message-ID; 
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Authentication-Results: purelymail.com; auth=pass
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -2037236092; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Sun, 15 Nov 2026 19:20:24 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peter@korsgaard.com>) id 1xSfm3-000000002ID-0Irj;
+ Sun, 15 Nov 2026 20:20:23 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Julien Olivain via buildroot <buildroot@buildroot.org>
+Cc: Julien Olivain <ju.o@free.fr>,  Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20261115120424.1235918-1-ju.o@free.fr> (Julien Olivain via
+ buildroot's message of "Sun, 15 Nov 2026 13:04:23 +0100")
+References: <20261115120424.1235918-1-ju.o@free.fr>
+Date: Sun, 15 Nov 2026 20:20:22 +0100
+Message-ID: <87jymd6gw9.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/strace: add optional dependency
- to ncurses
+Subject: Re: [Buildroot] [PATCH 1/2] support/testing: test_grub: fix test by
+ selecting BR2_i386=y
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -95,79 +119,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
-	autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-15.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,
+	SPF_HELO_PASS,SPF_PASS,USER_AGENT_SANE_1 autolearn=ham
+	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Hi Bernd,
+>>>>> "Julien" == Julien Olivain via buildroot <buildroot@buildroot.org> writes:
 
-Thanks for the patch.
+ > Buildroot commit [1] changed the default CPU architecture from i386
+ > to Arm AArch64. The test configurations which were relying on the
+ > default i386 architecture are now failing.
 
-One question below.
+ > This commit fixes the issue by adding BR2_i386=y to the test
+ > configuration.
 
-On Sun, Nov 15 2026, Bernd Kuhls wrote:
-> Buildroot commit aa5e3eec6384cb73d902a4de3fffc279683ea5a5 bumped the
-> package to 7.0 which includes upstream commit
-> https://github.com/strace/strace/commit/19642150d613312dc4bed27695a83320dcd5133e
-> that adds optional support for ncurses.
->
-> There is no configure option to disable ncurses support so we need to
-> use ac_cv_search_tgetnum=no.
->
-> Configure during runtime test finds ncurses:
-> checking for termcap.h... yes
-> checking for library containing tgetnum... -lncurses
+ > Fixes:
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/18033158060
 
-Do you have an idea how this symbol test found ncurses in CI test?
+ > [1] https://gitlab.com/buildroot.org/buildroot/-/commit/86240fa45d11e3388968520b4a35f0a40954c132
 
-baruch
+ > Signed-off-by: Julien Olivain <ju.o@free.fr>
 
-> Configure log with this patch:
-> checking for termcap.h... yes
-> checking for library containing tgetnum... (cached) no
->
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/18033158691
->
-> [BRTEST# strace --version
-> strace: error while loading shared libraries: libncurses.so.6: cannot
->  open shared object file: No such file or directory
->
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/strace/strace.mk | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-> index 8eadb7eba4..97f2ddb6e5 100644
-> --- a/package/strace/strace.mk
-> +++ b/package/strace/strace.mk
-> @@ -19,6 +19,12 @@ else
->  STRACE_CONF_OPTS += --without-libunwind
->  endif
->  
-> +ifeq ($(BR2_PACKAGE_NCURSES),y)
-> +STRACE_DEPENDENCIES += ncurses
-> +else
-> +STRACE_CONF_OPTS += ac_cv_search_tgetnum=no
-> +endif
-> +
->  # Demangling symbols in stack trace needs libunwind and libiberty.
->  ifeq ($(BR2_PACKAGE_BINUTILS)$(BR2_PACKAGE_LIBUNWIND),yy)
->  STRACE_DEPENDENCIES += binutils
+Committed, thanks.
 
 -- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
