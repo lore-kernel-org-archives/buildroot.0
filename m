@@ -1,28 +1,28 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9823606A322
-	for <buildroot@archiver.kernel.org>; Mon, 16 Nov 2026 15:40:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CA82606A32A
+	for <buildroot@archiver.kernel.org>; Mon, 16 Nov 2026 15:40:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=e3X01JBs
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Tt86CaEA
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A54C96081B;
-	Mon, 16 Nov 2026 15:40:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E4EF140829;
+	Mon, 16 Nov 2026 15:40:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hGqkRkv0_quE; Mon, 16 Nov 2026 15:40:21 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org A7C0F6081F
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794843621;
-	b=lC5Y94LD1gl6Wv1ZJIy8eiLpUxmspiOtLMCeDucAAgFLLspglbdpgrV063OCJT40H0LN
-	 vvYWLtDlGazgO1BJAccMdXSibr+YqtIjnjytp3D+94k2rk83N4k/9O4l9Wu+wbFgHp3dc
-	 iQA2n4njVVW9e+d2S9YQ1PSHZXCF6b7nImqo9o111Cus8QG8tXkuMMYwuZ2QBQecCVd8q
-	 WxFGo4lmkgpzmNeuoRNo2ql18WpgAI9Y1kL7pwSNdZQF7MfivY1AwnRzZGQm2C0BcD4kp
-	 +cp+ecr5GYgrB9UE+VaeG2sq5+ZftVxWKFC0UaKvqb/oTwooxjHFb5RT0ehndrpCX1g==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hVUskQUiVyHJ; Mon, 16 Nov 2026 15:40:25 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org DDE0540810
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794843625;
+	b=DwEiUgAx/Zromex/xyTREk67/H9FPQcuPNp8korVlf3nSnsnQMtRqRG8kyrWcMdTN+g7
+	 TaY4DeGxFb7oLmOY1tKqB1KVQ0E5O+gLvCon/Afi1MCFh23TMYKz9aK+PcHrME7U0hyyz
+	 2zxK/0kP6Outvl6xT4PAhn48E/OE2p5J932LYg1+D04T2SD5VGJSwQdeziuihs0Ch+mdC
+	 K02FICwdqaydGOgmQPwLM1c2MIHHCHQgAQAA98qU6QBCStJc/QoSsTzRHt4iNMYx8TWfV
+	 xLs27FgBH8O4TVeK8RE4tXyaA5NC73w2PeHh1TJeQNXLR584bvdA/eCA3MIk7xn617Q==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794843621;
+	c=relaxed/relaxed; t=1794843625;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,95 +31,95 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=Jb3BaoBlzJVGNbcKfsJbzekfUwQnsiUEKlFIAYAvApI=;
-	b=fARa0DtNsNH5GLiOijiVaQsL44YQrrkdaGuATCtWuLrHiZn5I8jbYY7QEECZ5fUaX3CL
-	 gdDbkhqGahVy4T/YAFnaSLzuJwkSDpmhtQ32TsqDDqA09qoPpZZwx3aC6qNHwmCk45SWs
-	 hRCqXFCNS3OzJW/+xNp+2JOE10WWRNZ5qHrDv2giD9Zgi19rwlgYHVoHArtJtUlfjLC7R
-	 jfXD5OTNw/yNDUxMlValS5WAlk2v3IUmn4+oW7+O5M2/XLA2hwEWdRRkfLqIbUCbT6TOS
-	 7Gn+gZ4pqVXYWm2/yypuj7JEE4EeP3KDH/hCe/Gop+vORzVJ3DKrR1qCdMXbOG7obEg==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+	bh=RPmU5nBCJ57dzN9j71/Bzum6tczomWsHp8wtrk3qro4=;
+	b=BmWcwBZO2WguR0qM/gNLMOkEb9CkmdQg7OW79WmAGMYoGKLpL6EwbSUs+ucsNxph/3KJ
+	 wvGi/LCj25CfMFDEwehZl4gntGm4KtmAVCy+hxc3lits2GrJcYV6uo58HsUYYLxz1EZMQ
+	 7ZjUdb+Fcsq8pvICVfy4NiatH7lnMe5i3Lidjf4dseAFw6EgjoRMSFTWa9nooRVVnpjlS
+	 2mPFPbXb1GrdnyrskeJ1YhcKBeEk6DBWjhtgD2wqQBqTGnk+jML8QOhlJJQxQCLtIyvh6
+	 wCqJL5a1z6qK/jlTP2UYJvH/Jz4D3fTv7lBJzzqj5Za/TwMcEOSyt7O+2nUsB7wJ1Mg==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794843621;
-	bh=Jb3BaoBlzJVGNbcKfsJbzekfUwQnsiUEKlFIAYAvApI=;
+	s=default; t=1794843625;
+	bh=RPmU5nBCJ57dzN9j71/Bzum6tczomWsHp8wtrk3qro4=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=e3X01JBsHsbgSDil7TdTpc3FAx9OB7NjR8ZdsdSgoBU8EFt7AwyJ32Vi6Kweyewj9
-	 ani6vb4naRlTBYPYAlsGRUzi4kA1ffBbF/ExQMU6abzC4VDTt13HXuh7Z5zwW8lf7J
-	 TZoKQogcb2p5KTOwyjpXWKdxCSRo6pNpQcGoRAZL5cj/XO/jJfT3hxuiQVemBHAE1H
-	 efQQBSce5adN28ZcJKA/lvEZfDOO3trq8qAoZAuVAx5FsybB84Owzqd5f/7SPtezWJ
-	 eGOe1LLcFpMgCl6Ki+3yk4YmnAKx9t/wzLTGCKc7HnD/QGpjwDNO7+AeLF0hBjEao+
-	 rQIe0xsfGDziw==
+	b=Tt86CaEAzaYJyCgwHHGs8vGm8lCooGVswBCP1RGMcWpYlYnas28RM7DfNAgD0ighs
+	 J5mNcNiajxcFrv2ZG9M06quXPs8aRQaI3SlbjiiKIUmaSC8ZL3hDe0QpUJgIdNilr6
+	 6276DJtlLwa8mZHY9pj6yNEutvOxcvq0i3kUODc8bpNgwBOpIYI3o3jFKAeoSdiVHh
+	 nt9soLU+qKlWaONRUog1gVneSTxMNEoBShVGbj3zIaSEBslvILUHj/lhcx6xg4R+I1
+	 IM2m5Uefd213jVLD+eflILmPiUWx+qB66HoeZ19ZNm6TevSaZ+y5XggvoAmA32K/Y+
+	 CxEDCqYWxw5UA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A7C0F6081F;
-	Mon, 16 Nov 2026 15:40:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 8C1062FE
- for <buildroot@buildroot.org>; Mon, 16 Nov 2026 15:40:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DDE0540810;
+	Mon, 16 Nov 2026 15:40:24 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 3F808109
+ for <buildroot@buildroot.org>; Mon, 16 Nov 2026 15:40:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 725A24009E
- for <buildroot@buildroot.org>; Mon, 16 Nov 2026 15:40:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2664340282
+ for <buildroot@buildroot.org>; Mon, 16 Nov 2026 15:40:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a3bP9oebU0uB for <buildroot@buildroot.org>;
- Mon, 16 Nov 2026 15:40:18 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org A62C740282
+ id f8R7ZTgy1HJZ for <buildroot@buildroot.org>;
+ Mon, 16 Nov 2026 15:40:21 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org BB5254009E
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A62C740282
- for <buildroot@buildroot.org>; Mon, 16 Nov 2026 15:40:17 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-4a214c5c4c0so36291705e9.3
- for <buildroot@buildroot.org>; Mon, 16 Nov 2026 07:40:17 -0800 (PST)
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BB5254009E
+ for <buildroot@buildroot.org>; Mon, 16 Nov 2026 15:40:20 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-4bb68c197c7so20150315e9.1
+ for <buildroot@buildroot.org>; Mon, 16 Nov 2026 07:40:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1794843615; x=1795448415;
+ d=1e100.net; s=20260707; t=1794843619; x=1795448419;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=K+PiLB3vL2MBOhqYFiG1ufL2ngm2kT8gn190co7UldE=;
- b=Pp02650NOmYRiAneFEyl34k6QSQBGTZck3zNVDNlLBNKj0e7OlCvPacFNk492NcUoZ
- PiCyvKlP8ncnBPFIyqbuZY5XtMELTkndEVmZft9ndi7CTYqVKP+dnFDm4+W57mJQ9SyP
- VOTm5DIeN+JZKVz1M+ZIutIrCSSAKa0KPBz1LnZJvJUka1ZbsKHcWHRRzuyG/+9D2xRQ
- dK9uAmkNWdnBQpJDQ697/3WgB+EG56bCOS1glLe7g9T0LPDisTeU7t0Trt28ejuaXJvM
- H7DBeK7GBFaJ6/jwBcKc5E/1tSCA+qcESXsOqqgLozBYkHlItitjYpiuSxWXceEPQ751
- 9lRQ==
-X-Gm-Message-State: APuU4Z9McKrcipgTJYtpqtT7805FfbMGG5uGUd10UbfI5VmxZwv2HeYz
- LsuDDWdBj1GTVy8VZriunOdUELiZPoGxAI4YUsbUOMvyrv9A0cO2d87Anh9ac/KsAu9deozEI1L
- QAGKBKIc=
-X-Gm-Gg: AYBFou0gYloUeUT3bHYndxtX4e/yayVc88b/PgyPJHEQR22uxWhCj5ep7Ro1/xHC+rp
- ugukrVzGxQz62SJozdeMjdw4li2bQIAGJrLcvmoDdH2N14i42zv2r02SR5JOG3jIyyS1Ba/cpSj
- cTUraQSk0Z8vws7Ns7aB8psWfo2+kYOFvfn2GArc17xXwzf/SL0+LS4hV5855Dt8wxzrWnsnD0V
- vBbK++iq+tCp58nmEzzF7zrcgJvbTCPozRMemffv6hlMRuXs8OwMBFsY4C2e0f2YJxFQb2GeNVk
- Ete3um+fJ2bS4WpGica4nXYz9X7t6X4SGsFKIrZ5x0q81M5foA6wtbkJDXitX0ChccL6SsF3Rkd
- HaxcnTVa9E+IXeXRC+htCHoTZJxDGCQz3HAoC290jL/wsEKu8gk+oNaxIhfEQw8lALdaa5OvvST
- dNV81I7ajkWtkXIZ4H6zHMvy3oCQndTIlF7ryAUd513pvLPksWXb3zrEjAsQQ1eWbADRrMcIpi5
- +sJXTiOb99AtoYmrotL04Uh/S4BIK/kOCY2LHVCpWkCMC4j7Gx3xNhgXycVcUbpzCfKnjx1wgtD
- P/efLyZwsNYqF9IR/uUGrPVixegYu1rmFshZ3LSDQkoXRrSqBcLy
-X-Received: by 2002:a05:600c:81c9:b0:4a1:83f0:7c91 with SMTP id
- 5b1f17b1804b1-4bb55a65b31mr222989155e9.18.1794843615543; 
- Mon, 16 Nov 2026 07:40:15 -0800 (PST)
+ bh=4a5cdBMzC+lR+ZtlViR6QAp6yeYbgRxWwv12s0aYFn0=;
+ b=iBEJpHZvm4ZBxDCPIPqr0xfNIoq9yMH1U6aarOBecqL7if+/ER1/DUiZZHVGsUI9k8
+ 8Ab9JCNzYiO7j9dIFAWr1JQYlC0/LRdPnIme0I2uQIuK1WO4UCjfnPAt0ZFLSiyBbvrn
+ A9A8aLjFkeazaV3LOnJcBUqOhrWSA5aQvNENerlNkkV4xtTCB/AOstRROTO8EvJBm/XH
+ /hh1xeG2gANVNSRBEr93h6gqqcpxfwdiCRNdkWStmklT/cVb+izbXOGc8T1wa+U8zb4U
+ MHjBLJsTWOu79Cj9LBcVdw4NnHWQwd4Zd8esyoIesbBN3hYtO1kFVHk8NcwJ/YQGsBRY
+ GKGQ==
+X-Gm-Message-State: APuU4Z99TCow7YNhI6dY0Td4BCSW/NSC193+td6r1T0oICV31Ug+M5wP
+ aqy0XqZAJs6TNRgnGaenHhQMP2YoO2bcDBZxXz1htax1Z4WDaw7XnDqrr2l9sC2eHpMf65N6IWo
+ 3OlN0Mbs=
+X-Gm-Gg: AYBFou1FBCA1iaxae1nBaqN02jPQVya4d4/VTaRzici/RUFEYYnYfHKzIcQw3uC8o1P
+ lSUa5FE1a0IaQRbjzdVk47poEkEcDMPnahFV/jDXlkL2wI3Q66sB3tkyJ1pEMRuZy/PTsgXVT+C
+ d61S3ojwRM00IRtNZj5PSv0wiMhMGNMDbx4pa5vr8LUq9WiaF9vdxbRojssWpb358dhY3r8R+9k
+ gOtxlWXzpJTV4Y3DC2fXfyozSGHxiS422KQFWKxrFB0NXTnVPl2eS93R+SWWLyfa2l5TtR5xajx
+ VRDihpj+wLw3Yu3DeHnowfUg+7cx7/wDi3Ls3SUIHAMc6iePQL7G3KvK17A6XSgXIijW0CNc+jN
+ jfbOBh5MNmZHaWoTVJd+j9cJ4chbd6RpsyyNl5eIZ+h3pVSdDLfDilA19nsoNwZEP2+21ClgcVa
+ PrA46KtqL8ei+ZfFj34HieAxFYsJAyrn8JXKvtfk7KnGmOAz0jbBwdtK+ZcvLEeCJiJM1ypmoUj
+ A38F98wYKouLSrO8OZEBNqhfZ4Xjo0hNy2XXLDjYtr72yLwwkgZSW7ssMQEbiWcp3Nb7QjC0iSn
+ CQQUPKZsnWa383K/rACh8vtiVwalBYQ=
+X-Received: by 2002:a05:600c:4f07:b0:4bb:6a5a:7834 with SMTP id
+ 5b1f17b1804b1-4bb6a5a7a48mr121213055e9.20.1794843618712; 
+ Mon, 16 Nov 2026 07:40:18 -0800 (PST)
 Received: from debian-hp-1 ([212.233.51.18]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4bb56f97257sm192821535e9.4.2026.11.16.07.40.14
+ 5b1f17b1804b1-4bb6caae30csm116375895e9.2.2026.11.16.07.40.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 16 Nov 2026 07:40:14 -0800 (PST)
+ Mon, 16 Nov 2026 07:40:18 -0800 (PST)
 To: buildroot@buildroot.org,
-	Yegor Yefremov <yegorslists@googlemail.com>
+	Fiona Klute <fiona.klute@gmx.de>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Mon, 16 Nov 2026 16:40:12 +0100
-Message-ID: <20261116154013.725841-1-raphael.melotte@mind.be>
+Date: Mon, 16 Nov 2026 16:40:15 +0100
+Message-ID: <20261116154017.725870-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261105072853.30950-1-yegorslists@googlemail.com>
+In-Reply-To: <20261105095044.3677933-1-fiona.klute@gmx.de>
 References: 
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/openssh: fix build with
- -fzero-call-used-regs on ARM Thumb-1
+Subject: Re: [Buildroot] [PATCH 1/1] package/openssh: security bump version
+ to 10.6p2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -137,66 +137,56 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
 In reply of:
-> Since OpenSSH 9.6p1, configure enables -fzero-call-used-regs=used with
-> GCC when the compiler accepts it. On ARM cores that only support
-> Thumb-1 (e.g. ARM926EJ-S) built in Thumb mode, GCC accepts the flag,
-> but fails on some functions:
+> Security fix listed in release notes:
 > 
-> xcrypt.c: In function 'shadow_pw':
-> xcrypt.c:156:1: sorry, unimplemented: argument 'used' is not supported for '-fzero-call-used-regs' on this target
+> > sshd(8): avoid password authentication bypass that is exploitable
+> > through sshd(8) that affects some Linux systems when built and run
+> > with PAM support disabled. We consider the root cause of this bug
+> > to be outside sshd, but it is exploitable via sshd and can be
+> > avoided there.
 > 
-> The ARM backend relies on GCC's generic register zeroing, which loads
-> zero into each register to clear. Thumb-1 cannot move an immediate
-> into a high register (ip, lr), so it falls back to copying from an
-> already zeroed low register. In functions where the only call-used
-> registers to clear are high registers, there is none to copy from and
-> GCC gives up. -fzero-call-used-regs=all, ARM mode and Thumb-2 all
-> work.
+> Plus a few bugfixes, full release notes:
+> https://www.openssh.org/txt/release-10.6p2
 > 
-> Disable the flag on Thumb-1 by presetting the configure cache
-> variable, as already done for powerpc64le and MIPS before R6.
-> 
-> This issue has been present since commit 3c047ea463e2 ("package/openssh:
-> security bump to version 9.6p1"), as OpenSSH 9.6p1 switched GCC builds
-> from -fzero-call-used-regs=all to -fzero-call-used-regs=used. It
-> therefore affects 2024.02 and later, including 2025.02.x.
-> 
-> Fixes:
-> https://autobuild.buildroot.org/results/6b064db6d713a6fef7f202c37daf041055e647ef
-> 
-> Fixes: 3c047ea463e27ceaafde76d64406862c3322daa0 ("package/openssh: security bump to version 9.6p1")
-> Assisted-by: Claude:claude-opus-5-5
-> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 
-Applied to 2025.02.x, 2026.08.x. Thanks
+Applied to 2026.08.x. Thanks
 
 > ---
->  package/openssh/openssh.mk | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  package/openssh/openssh.hash | 4 ++--
+>  package/openssh/openssh.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
+> diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+> index a53ae817a4..615223830d 100644
+> --- a/package/openssh/openssh.hash
+> +++ b/package/openssh/openssh.hash
+> @@ -1,4 +1,4 @@
+> -# From https://www.openssh.com/txt/release-10.6 (base64 encoded)
+> -sha256  a9dc9565dffe8640f64d863cd29a32bc4a3dbdec0566a7fc44c5d6ee767d5f39  openssh-10.6p1.tar.gz
+> +# From https://www.openssh.com/txt/release-10.6p2 (base64 encoded)
+> +sha256  9ae44872090cf2f06b3cf9ff147e7f16f309671340763ed2f99248398ae29d5b  openssh-10.6p2.tar.gz
+>  # Locally calculated
+>  sha256  5bb5b160726ef5756e4f32fe95b35249c294962419650f48d05134b486d27ccb  LICENCE
 > diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-> index a0cd3168e0..27cd5fb169 100644
+> index 27cd5fb169..3ffc2328aa 100644
 > --- a/package/openssh/openssh.mk
 > +++ b/package/openssh/openssh.mk
-> @@ -36,9 +36,9 @@ define OPENSSH_PERMISSIONS
->  	/var/empty d 755 root root - - - - -
->  endef
+> @@ -5,7 +5,7 @@
+>  ################################################################################
 >  
-> -# -fzero-call-used-regs=used is not supported on powerpc64le and makes
-> -# gcc ICE on MIPS before R6
-> -ifneq ($(BR2_powerpc64le)$(BR2_TOOLCHAIN_HAS_GCC_BUG_104820),)
-> +# -fzero-call-used-regs=used is not supported on powerpc64le and ARM
-> +# Thumb-1, and makes gcc ICE on MIPS before R6
-> +ifneq ($(BR2_powerpc64le)$(BR2_ARM_INSTRUCTIONS_THUMB)$(BR2_TOOLCHAIN_HAS_GCC_BUG_104820),)
->  OPENSSH_CONF_ENV += ossh_cv_cflag__fzero_call_used_regs_used=no
->  endif
->  
+>  OPENSSH_VERSION_MAJOR = 10.6
+> -OPENSSH_VERSION_MINOR = p1
+> +OPENSSH_VERSION_MINOR = p2
+>  OPENSSH_VERSION = $(OPENSSH_VERSION_MAJOR)$(OPENSSH_VERSION_MINOR)
+>  OPENSSH_CPE_ID_VERSION = $(OPENSSH_VERSION_MAJOR)
+>  OPENSSH_CPE_ID_UPDATE = $(OPENSSH_VERSION_MINOR)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
