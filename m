@@ -2,27 +2,27 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BE92606A322
-	for <buildroot@archiver.kernel.org>; Mon, 16 Nov 2026 15:39:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4CB3606A31C
+	for <buildroot@archiver.kernel.org>; Mon, 16 Nov 2026 15:39:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=ToqjnSx+
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=L46aHmlV
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CFA6B40522;
-	Mon, 16 Nov 2026 15:39:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8D1294073B;
+	Mon, 16 Nov 2026 15:39:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mTowqmnb7NaP; Mon, 16 Nov 2026 15:39:25 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org D329B4054A
+ id XxVLMyOuUBu6; Mon, 16 Nov 2026 15:39:27 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 6B11D40768
 Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794843565;
-	b=hZ6fsZPtTGZ8Y800UmGyiJZSbwUQ32+SDdwNbq/z2Zazw6vLqzJHqEvJnhuSVc65Hz+j
-	 k5U1S+FVpHSKKtqfIrl7Bvtm24BunbIf+3fm0/GfrmvorO38SHHlPQpswqMJ7RyKXaetk
-	 4ekcqyf0npefPwz+cpIXnF/k+9bV4MHd7rEUirfEy+DDuCY4PndPCQhiWlgvWanYsQi5+
-	 HEYIkYNSgbR9bS4zJ0GM95zW0pKUjdTRpyr7N5lYV7uqAISmOlBSH5Ce0cCrSVmRjQtDU
-	 4qCZK2gyosFc47Wmzt506jaFDmV/R2Vs4Wn5cRkqlWs2sufmcobrArBrD8ifM3IolDQ==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794843567;
+	b=iNYwbeqPYrwu0YFxn1oJfPsSmAmDnskhzIl4T8OABOtl9WPLCWQNvzjPDHMwzwAd0FFE
+	 WeDb3vnzjUFyxiZPYWro0fNRQozfnag5u+PUJHpv9Ebjrl606bmyUDKfRZOSiRelWan3l
+	 IYU+TbjP7ij0nF20uMYsPYt3t4i63Jg29MxY3eSpWcZk5EsOIT4yAHjY9+jZGCDW0NkRH
+	 40xOFcN9iCpJSng1jtPktcjLJo9sy61zGvLC5tTA1Kr5G67+c60+UjmQKF4njas8s/GBo
+	 46mfxO0s91ENw1XyJWCh8su4yLhBfDl9OawmAKITPWyaDWXylv180+y1UdAlsm8dKzA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794843565;
+	c=relaxed/relaxed; t=1794843567;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,94 +31,94 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=2/zBcP3wR+1c7aAfPvG0WH4PTaN+t6DrqJ1RTCWQVDY=;
-	b=FVTxumvb1DpZP7nTGS4i9ViM1+zhv96kMmNejwsf1ybtkq34sEw8dpRY4Q9Y7YUchBtJ
-	 N0/PnA+B3r0v9cIq4tnPvrrlcjZmeDbx6E18a6akBNqsJ30hrkPubuVLed+zUEUUFcJAS
-	 dbELi9hJQQFgC7re8kWijjwsHn7xmsI3YzczUuYBU5D2lF8lwyDI9bEE8IHolN/Lnu6TP
-	 c2cJ51m+rl1XDplFN/YH5kbsmp1cLySdUiUewHHDOmjHcYaaEVxglKHWOzkOZeoaU9lz7
-	 7qVqvUyAbtgIJe9yrZX5EvBQIB3lkWq7fwyogAjyCathwfAqplOhq3/zJ3bv+T3OoRw==
+	bh=xPn1kinPl1dAs8zv0lWjhk/P1fQb5deWCUNsj1O0I4g=;
+	b=ipRxG7MOBv/7zF8s0km/BV00Am2Pt84NblHurF4A1WWDdycWMDF896LgTeYCtm4Hluih
+	 Wr7qLJb1h+KDMKa1ZXX/EXvug+x5dZ8P+0mk9vXP0eHsv5uFWk3OoYB3XZmqjoqoDFvWv
+	 TQIfFJVku1UALHZ7a/PbHkIR4XWP2f63aNV2CI6OY6I4lc7HabKL7ZIT5PAuAzqH9GpWh
+	 sc5ODhb1ZQZnY7oRhhoAQWKz9SOjWTAbtbzLofoUkySwRGuXFkiYvDpYakPbT1k9kGf6w
+	 c6/3Hond2hN90t5C+q61o6NUlhFPRJQH5kd6wkXAr76qYHhBNYd6IrF9g0qepXU50NA==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794843564;
-	bh=2/zBcP3wR+1c7aAfPvG0WH4PTaN+t6DrqJ1RTCWQVDY=;
+	s=default; t=1794843567;
+	bh=xPn1kinPl1dAs8zv0lWjhk/P1fQb5deWCUNsj1O0I4g=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=ToqjnSx+0lVw92Cn3NeMD/JebNkDJQ2X5SHSN70ejdAYNvUzg0PERp9sPtBHl4K80
-	 0vJzUqgloaR810Fd/uokWvW3cuTWvzIdv7vMEPJlO3Ox+6bs3AGX2Mqm8Y/k7fiNwP
-	 C4+wUUim1kcT4aoSZsn34qI75e1Vjq1QN7spTKRuPUSmm2kfHuBdKtS1XpUdFIcm7O
-	 EmK6STsksKHGBJ+o2LcFtyZsZBaNxcfFXk0p+cMi6uu8pRnkITZVBOiGuwN/KfI1wL
-	 B6A8z2XyImdWq2BQwp4xS5FJe/YqlBSeSMXe+b9qXmweJjJ3Kq0ijfsx+1LCYhBsQN
-	 s5idihbbtqFnA==
+	b=L46aHmlVrvqtGtxBX8kjsrYxJiNujPNQ7JPEcv3Iarq2UfvRKhYDH45GXo9xZVkkd
+	 7mGQVI+Cyi+sIzGFBfQam/AYVDNO2g7Yz8uvty0mXEz6JOKYpAiJ97Ywjp7Ue6Z/9W
+	 aimAxsTFAVAmZEGS5hGi9hSu7tjOp037pG0qhFqNiWbdnE7tcr6gf91mOR8a9W+ijr
+	 2/6KoFFUQlh6/RCa2ofy/o2FWNhKErTOOvq6ar/xve2Engi1iprcNCUn3rVtPWsfDz
+	 MUKk5BCedgsxJpSwes8ktoc2JN7Z9bFySbQxqsEJPgr9xUfTjGu5oU7FQ44uUtXiLi
+	 NTlg8bhf7enIg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D329B4054A;
-	Mon, 16 Nov 2026 15:39:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6B11D40768;
+	Mon, 16 Nov 2026 15:39:27 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 0756A109
- for <buildroot@buildroot.org>; Mon, 16 Nov 2026 15:39:23 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id A4392109
+ for <buildroot@buildroot.org>; Mon, 16 Nov 2026 15:39:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id ECFE5607EB
- for <buildroot@buildroot.org>; Mon, 16 Nov 2026 15:39:22 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 94D9F60828
+ for <buildroot@buildroot.org>; Mon, 16 Nov 2026 15:39:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zWUlCK0i_3p6 for <buildroot@buildroot.org>;
- Mon, 16 Nov 2026 15:39:22 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 8BA4560816
+ id HcZznKT_XhRV for <buildroot@buildroot.org>;
+ Mon, 16 Nov 2026 15:39:25 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org A8EF76081C
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8BA4560816
- for <buildroot@buildroot.org>; Mon, 16 Nov 2026 15:39:21 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-4bb64ef5a14so17627565e9.1
- for <buildroot@buildroot.org>; Mon, 16 Nov 2026 07:39:20 -0800 (PST)
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A8EF76081C
+ for <buildroot@buildroot.org>; Mon, 16 Nov 2026 15:39:24 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-4a140e7405dso37828615e9.3
+ for <buildroot@buildroot.org>; Mon, 16 Nov 2026 07:39:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1794843559; x=1795448359;
+ d=1e100.net; s=20260707; t=1794843562; x=1795448362;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=+TTYFg/BZBopsetUH2hzQ+zmXhxTR8IGtOi7HlrzIVU=;
- b=v3vzbi1eDl434aCF/iDauKWCWa+EJPuv1o2TDkOA4JPE9+pZdgsA9Y67OAvwh6OaiH
- b3DxUYMACoLJmbIOs5hU7qh0v8As6j+X25t2tuUtT5cybXGUEKB2uLJ5eBQnM9HRVEbd
- LKjJnQE6N1NS3GnyCqyGgayvUJMd7M29rg4mpKN7HMdIyIi4cKzxJ3uD8wk172H5bFlj
- fhD5NzADXObQ1zQcgzp3Ny6aS3h2jcSCm2KpDTrq1ndW6uY1wCHItokG0y6cqfaZu7HJ
- OEIRta5UQkE86MqQMihP4fJUNQviK4IzKB7H5TNHP8aESAZmSTaSpYUdVED64sTwBQ3V
- uj6w==
-X-Gm-Message-State: APuU4Z/id1S5I4tD627wS08nfQyaPtXsrmPUcHWesmU4TxQqpVPQ9JD1
- ts8mgG0FDyOe1196lU1qWOyHX/6+LRkLEW+X7JTwyjdQQfpCZ0WqeZPfia5Tx+AoSRsZj1FU+0W
- tMyCKprg=
-X-Gm-Gg: AYBFou2MSMN/PrVWjaK14jRhp4MBbGX+1BzDRHyeveBTsBRslMOlFT8xj8vktv2V09s
- N8yCD2TRhBYs5U2DryaSLmT7tAvYoKBNRm/Eo5opVC7Y1dHZctoNCeTlaf1qhQz6kd42mrM7sdL
- HEf0iGexkEu27pdStOb4Cl0xKJETSiPvSB6ob1g4lF/T8tioOIzlzZp/AvoYKY9xHQhLAiEwxtO
- HHTyYVitMa5zBoR7RMKviKvmizPExKImEcWdTG5T9uW3KNTr8My2pIe21jzq5MY/G7pwjIY2lUB
- A3sKFdLNBLwiJP7reUUcKsHaXKjntciXYlMdzyMfv/inuzruwHBUxtGF46y7O3InCrDgnDlr44r
- XlM7cNrTezOQ44tN0vtgK6HDr3hNHcoOY8aSb1bjt+oToDPOIqUe7bfPmn9PpNdHotLoudP1Ofp
- I4P273pZoyWp0rCemPo329Gwi1rTAKwxEzeDh1j4anrH7CysY4/FWC2Gg3EeXVIurS7un1UaS6g
- w0MQ8dd42Ig+QfuzY8U/SsUUfZNK1LkEAyJWtd3JQICVvu6zTVQrn9VhF94D5tGNGX18esdL3wH
- QbRNjZ00Xxlet0lpYfvuh8nLrfXzUfM=
-X-Received: by 2002:a05:600c:4f90:b0:4a2:8c5:5e5 with SMTP id
- 5b1f17b1804b1-4bb55a47680mr230563055e9.7.1794843559409; 
- Mon, 16 Nov 2026 07:39:19 -0800 (PST)
+ bh=8M8hjBz/0mixEAcd4xnCtpoUWCCeziPsBtJrRmuKzmQ=;
+ b=aZaiykxeVrrQmPpUSVAdqrbIeB6J2IlIsF/0asNwllVS8BLMjeX69oX90xB4IiZ8dx
+ G/FiCY547TxcQZ32la04IxV9NB/BgtC2CRaUKVNAAETCa/Y7d3HEqUwYjJAAjIZXBAOb
+ CDRr+3i+WbfuDAIzGwYSQ4tpFZ9ZbUTCx5S4Sypy396bgCD85LgPwduF6PO4v1zkBSiP
+ A5HQquQp2Vra2t622fTPHd/Q70u6TFAEoFYQen22JcbKKtChkrCOen2a9gB1/v/YgDdP
+ BvQK9ZUpagMlLrEmwQZf7HfJQ0Xnh1b5ZpOIoR3mW3vXBAEAOZsc3UDz1D7JtYO/bcWK
+ KTAQ==
+X-Gm-Message-State: APuU4Z+MiAm4FpbpenZPxq9HDSiqsI5X1T3bzBPwzzQDIyG1QmzJUxm/
+ 57+mRH6yJQrocaz66vy9uhQy84KoifEr6/FLnuvSIxffKiD5C72mmnA6mTtYceBKfVeWXwN0joT
+ icjU8n3s=
+X-Gm-Gg: AYBFou36jdVh2sUZwGBRoOan/Ysx659pX9XwPvqLFPB9ENXdnV0iSc35odpD2Kbr8NA
+ QCJCl+uGHyq32cdzBp4Bxq97rFD2fI8viSipucLa0Y0TtrubxlheMY7ycw3tmst5OkmkDruhJPs
+ 9bmAWkpyD+rHCZtpfoKBmeMsxnfLr9zJ2nTQEczhb0Y/MJR6l+ZKAWpcU4hwiukG4qPRzjnL+G3
+ 8bAOQ5+9sSDL2picf3kXptfif7qPw5eLdMocoywYcGIWjmiYzaMUI377wngLxiYduIiC8C3Cdv5
+ QZsF4q1PgW6P2u8Pw2Cxsju4Pc9tV8lp/2teZfCN8N79JcdaNQnJdjMx4f4gjE9cIwkLxXU7fRL
+ I8mWHYlrcwl3K5VPYmtIvDIbTlxlh0/glfGbfO6/L+4eUzT97e3rHF4HJ6j9AZZCYJxfgPe6zA1
+ frT2DaJGbgarWUZCW4x5ysYRjTI43P1lSISj/fnQNslucfgp7sW6n74dwBtG1VoTV8SuLu5MDSn
+ aazseShBXyZq8uRSoqtPWNujdE/QV09rNciIehTVYPB6f9VZfNCXejchxn4h2dakRWVatbduHu4
+ gk+AwrDvC9GtOAMkfZxyHUmI9kr1UUI=
+X-Received: by 2002:a05:600c:83ca:b0:4a2:1612:637a with SMTP id
+ 5b1f17b1804b1-4bb55a4e680mr232521325e9.16.1794843562486; 
+ Mon, 16 Nov 2026 07:39:22 -0800 (PST)
 Received: from debian-hp-1 ([212.233.51.18]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4bb5faf05f8sm179078635e9.10.2026.11.16.07.39.18
+ 5b1f17b1804b1-4bb62d5ec30sm318733855e9.15.2026.11.16.07.39.21
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 16 Nov 2026 07:39:19 -0800 (PST)
+ Mon, 16 Nov 2026 07:39:22 -0800 (PST)
 To: buildroot@buildroot.org,
 	Bernd Kuhls <bernd@kuhls.net>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Mon, 16 Nov 2026 16:39:16 +0100
-Message-ID: <20261116153918.725332-1-raphael.melotte@mind.be>
+Date: Mon, 16 Nov 2026 16:39:19 +0100
+Message-ID: <20261116153921.725359-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261101191738.2091630-1-bernd@kuhls.net>
+In-Reply-To: <20261101191738.2091630-3-bernd@kuhls.net>
 References: 
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/4] package/ffmpeg: fix build on i386
+Subject: Re: [Buildroot] [PATCH 3/4] package/ffmpeg: remove patch 0004
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -134,67 +134,104 @@ Reply-To: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
 In reply of:
-> Fixes build error:
+> Buildroot commit f30bd1eb69c44793485e9f013249d020e3e19fc3 added patch
+> 0004 to "add -latomic to pkg-config files".
 > 
-> /home/thomas/autobuild/instance-0/output-1/host/lib/gcc/i686-buildroot-linux-musl/15.3.0/../../../../i686-buildroot-linux-musl/bin/ld:
->  libavutil/x86/tx_float.o: warning:
->  relocation in read-only section `.text'
-> /home/thomas/autobuild/instance-0/output-1/host/lib/gcc/i686-buildroot-linux-musl/15.3.0/../../../../i686-buildroot-linux-musl/bin/ld:
->  read-only segment has dynamic relocations
-> collect2: error: ld returned 1 exit status
+> A patch addressing the same problem was committed to ffmpeg 5.1 several
+> months later:
+> https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/2f0a214a6202516b4dda2bb22b6b3ac20e465d6d
 > 
-> For details see:
-> https://bugzilla.redhat.com/show_bug.cgi?id=2428281
-> https://src.fedoraproject.org/rpms/ffmpeg/c/786464f23944a2a6e082404b589d1ec7ac568d00?branch=rawhide
+> so we can remove patch 0004.
 > 
-> Fixes:
-> https://autobuild.buildroot.net/results/c3a/c3ae9a6e6f6c4060feaa1d62dbc2b08da2437f38/
-> 
-> The oldest build error of this kind dates back to 2024:
-> https://autobuild.buildroot.net/results/e66/e665577347857b548f34f9b4fc86f2c573f27282/
-> so a backport to LTS branches should be considered.
+> Buildroot commit fa36a6375dbeae131c596070570cec66c7bd2456 bumped the
+> package from 4.4.4 to 6.1.1.
 > 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
 Applied to 2025.02.x, 2026.08.x. Thanks
 
 > ---
->  package/ffmpeg/ffmpeg.mk | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
+> Series until this point passed Gitlab pipelines:
+> https://gitlab.com/bkuhls/buildroot/-/commits/499900ce5babc40628f021d0a39fe60c1221089f
 > 
-> diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-> index 4ce129132d..6eb3afe277 100644
-> --- a/package/ffmpeg/ffmpeg.mk
-> +++ b/package/ffmpeg/ffmpeg.mk
-> @@ -584,6 +584,7 @@ FFMPEG_CONF_OPTS += --cpu="$(GCC_TARGET_ARCH)"
->  endif
->  
->  FFMPEG_CFLAGS = $(TARGET_CFLAGS)
-> +FFMPEG_LDFLAGS = $(TARGET_LDFLAGS)
->  
->  ifeq ($(BR2_TOOLCHAIN_HAS_GCC_BUG_85180),y)
->  FFMPEG_CONF_OPTS += --disable-optimizations
-> @@ -599,7 +600,11 @@ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
->  FFMPEG_CFLAGS += -marm
->  endif
->  
-> -FFMPEG_CONF_ENV += CFLAGS="$(FFMPEG_CFLAGS)"
-> +ifeq ($(BR2_i386),y)
-> +FFMPEG_LDFLAGS += -Wl,-z,notext
-> +endif
-> +
-> +FFMPEG_CONF_ENV += CFLAGS="$(FFMPEG_CFLAGS)" LDFLAGS="$(FFMPEG_LDFLAGS)"
->  FFMPEG_CONF_OPTS += $(call qstrip,$(BR2_PACKAGE_FFMPEG_EXTRACONF))
->  
->  # Override FFMPEG_CONFIGURE_CMDS: FFmpeg does not support --target and others
+>  .checkpackageignore                           |  1 -
+>  ...igure-add-extralibs-to-extralibs_xxx.patch | 47 -------------------
+>  2 files changed, 48 deletions(-)
+>  delete mode 100644 package/ffmpeg/0004-configure-add-extralibs-to-extralibs_xxx.patch
+> 
+> diff --git a/.checkpackageignore b/.checkpackageignore
+> index a8c1baacbd..cd21cce1f8 100644
+> --- a/.checkpackageignore
+> +++ b/.checkpackageignore
+> @@ -322,7 +322,6 @@ package/fcgiwrap/0002-link-with-libsystemd-instead-of-libsystemd-daemon.patch li
+>  package/ffmpeg/0001-swscale-x86-yuv2rgb-Fix-build-without-SSSE3.patch lib_patch.Upstream
+>  package/ffmpeg/0002-avcodec-vaapi_h264-skip-decode-if-pic-has-no-slices.patch lib_patch.Upstream
+>  package/ffmpeg/0003-libavutil-Fix-mips-build.patch lib_patch.Upstream
+> -package/ffmpeg/0004-configure-add-extralibs-to-extralibs_xxx.patch lib_patch.Upstream
+>  package/flatbuffers/0001-include-flatbuffers-base.h-fix-build-on-musl.patch lib_patch.Upstream
+>  package/flex/0001-build-AC_USE_SYSTEM_EXTENSIONS-in-configure.ac.patch lib_patch.Upstream
+>  package/flex/0002-build-make-it-possible-to-disable-the-build-of-the-f.patch lib_patch.Upstream
+> diff --git a/package/ffmpeg/0004-configure-add-extralibs-to-extralibs_xxx.patch b/package/ffmpeg/0004-configure-add-extralibs-to-extralibs_xxx.patch
+> deleted file mode 100644
+> index 050b34fd89..0000000000
+> --- a/package/ffmpeg/0004-configure-add-extralibs-to-extralibs_xxx.patch
+> +++ /dev/null
+> @@ -1,47 +0,0 @@
+> -From 0c288853630b7b4e004774c39945d4a804afcfa8 Mon Sep 17 00:00:00 2001
+> -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> -Date: Fri, 6 Aug 2021 09:17:20 +0200
+> -Subject: [PATCH] configure: add extralibs to extralibs_xxx
+> -
+> -Add extralibs to extralibs_xxx (e.g. extralibs_avformat) to allow
+> -applications such as motion to retrieve ffmpeg dependencies such as
+> --latomic through pkg-config
+> -
+> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> -[Upstream status: not upstreamable]
+> -Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> -[rebased for 6.0]
+> ----
+> - configure | 18 +++++++++---------
+> - 1 file changed, 9 insertions(+), 9 deletions(-)
+> -
+> -diff --git a/configure b/configure
+> -index 0bb3a7cf2b..3bda99e415 100755
+> ---- a/configure
+> -+++ b/configure
+> -@@ -7986,14 +7986,14 @@
+> - source_path=${source_path}
+> - LIBPREF=${LIBPREF}
+> - LIBSUF=${LIBSUF}
+> --extralibs_avutil="$avutil_extralibs"
+> --extralibs_avcodec="$avcodec_extralibs"
+> --extralibs_avformat="$avformat_extralibs"
+> --extralibs_avdevice="$avdevice_extralibs"
+> --extralibs_avfilter="$avfilter_extralibs"
+> --extralibs_postproc="$postproc_extralibs"
+> --extralibs_swscale="$swscale_extralibs"
+> --extralibs_swresample="$swresample_extralibs"
+> -+extralibs_avutil="$avutil_extralibs $extralibs"
+> -+extralibs_avcodec="$avcodec_extralibs $extralibs"
+> -+extralibs_avformat="$avformat_extralibs $extralibs"
+> -+extralibs_avdevice="$avdevice_extralibs $extralibs"
+> -+extralibs_avfilter="$avfilter_extralibs $extralibs"
+> -+extralibs_postproc="$postproc_extralibs $extralibs"
+> -+extralibs_swscale="$swscale_extralibs $extralibs"
+> -+extralibs_swresample="$swresample_extralibs $extralibs"
+> - EOF
+> - 
+> - for lib in $LIBRARY_LIST; do
+> --- 
+> -2.30.2
+> -
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
