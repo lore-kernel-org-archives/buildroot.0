@@ -2,28 +2,28 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91AC8606A323
-	for <buildroot@archiver.kernel.org>; Mon, 16 Nov 2026 21:29:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D720A606A31C
+	for <buildroot@archiver.kernel.org>; Mon, 16 Nov 2026 21:29:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=bXvAAmRP;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=UiKO5SP6
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=OapqIgf8;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Y62wL5yb
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 377C980C43;
-	Mon, 16 Nov 2026 21:29:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 398448107F;
+	Mon, 16 Nov 2026 21:29:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cpeucsp9XUHI; Mon, 16 Nov 2026 21:29:25 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 4AEE180E17
+ id gq7a8vuQ6j5L; Mon, 16 Nov 2026 21:29:29 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org C92AA8108A
 Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794864565;
-	b=h5w+TTjxTfkY2Nw/vMBdr0BxSU3Hw2uGo0qYOMcBKKhcC+MNauire+SsYQtwo7XRbk11
-	 QKOEN9AIJ0HoznPs63+iyefzQqocHWO9oweiUmChQtqrhE4QhqXHehHDU2j9xiWlNXT2M
-	 KcyUO3oA9ZWx0mCyyq9mbCpHbgin3G5syCzo13cg5pusRxFQDq4NdFHTcZwMUg5RQ2IF5
-	 pktk/8YuvKq/lh04yAlUy6R+tJ/l8ljVM9XOlO6WoC5Ge7wblnwE1sl/sDayJJvr5AJoI
-	 jRO462Hn9mRtJsMGV+Kb35Oen2FkArRNwS7m639l63E6hR6GWc9nK/ePn8t+b7/bM5A==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794864569;
+	b=OS2mMWFiHtudJCYD1ry9kHeontvCtzxwjjS9e/oIRp0SY1JX6vzkRQ8L8Nauon2n8Xkm
+	 bWOD6DmJTUqJLWL/mesle9IUHjTqQwMwX8KRFaPLshmSVIoFXz5EGWfCJpO6uUdCbp/B2
+	 Ub+y9hpi1n0CSCc8IVBswflkrVB9E/qjV209C9Dxy6isg7E/2s+opFmYxgYZcip3B5MJe
+	 rdzemezf0gJir2uNXZ/P4p2d/cr1VYvepK0lGWZl4CQofes7rmG26Ddyiy/E/XmhKhw6b
+	 5AWRRGhUufn4R69aGYY8LdVYbL/DmdM8BBuio5vGUAehiPjNxg61bYrHUhAvAdg4bNw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794864565;
+	c=relaxed/relaxed; t=1794864569;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -33,113 +33,114 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:Cc:Content-Type:Content-Transfer-Encoding:Errors-To:
 	 Sender;
-	bh=BW7AhJ6g5L/bSES9d3syRekKV5aPM/YrdonKWFQBlOM=;
-	b=eKVDfxMbvBpFGFv5ViC5jA0zhW8Vyzh+ASz4KCkTZbQRDHWGEoWtDNXg8wAHqdhs+X4D
-	 WDCehGqGwsWXMaOO+1e8pWIVmBHIkwMrvAsxX/YzizMxoHPwYZUW8jR6vB6DfjymkmA5Z
-	 M6jxXWhLqg3VP+PaJOTAh1XDSoMOyHIqfcWCGNZOnB5BbTWJeMEh9hPaah5mYw1LBTSyJ
-	 mhWJRRELUe7Z9ym8XgfVY/29AQcOROY5lB4Kab2cFLg3g8BwOLdgw0rCqy571mhkf/cWz
-	 MwSPEKDqxxOjfomzA6EbjjaZMX/yoozAxpB+R0YEkGafH1mlF/7T2IvxmNvHv8x+WeA==
+	bh=X3vEZNQ0nMCRTQiTi9OraonkPCHGyor69UUsGDVsJvc=;
+	b=OjF63TVckRY/9Z5qSAAP+G0pDG/keblvrm/MzVXfustyYxLddYMzNbmbU0Pn8Og1LDhL
+	 IYlUQ3fix5/2MBhZnip9ge1VmTYOZ1wyzfTRaaTJNDwhAb9rqCK3zRl+PnPLRmar0iPN6
+	 jGJsZpEYJGWpum01CjCXtnpFbXuuqxUCefdKXtqa8K2Ps4+g8Nqqq0ZTjBXxo3+3Giraa
+	 f0zmmzY+ugiOjnGrgnd6aCchfc8e78nah9etw+Inreed9oh9d7YKWTWoTDYt5RTzqWRpT
+	 TXffC+X74V3oIXq37P4o7dDz0NTn1fY1JOlqyurjhWybmQ+5ublTJslo82ncza12nNg==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794864565;
-	bh=BW7AhJ6g5L/bSES9d3syRekKV5aPM/YrdonKWFQBlOM=;
+	s=default; t=1794864569;
+	bh=X3vEZNQ0nMCRTQiTi9OraonkPCHGyor69UUsGDVsJvc=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=bXvAAmRPD/WtbjEIsDz24ZTmnvQ4eH1bPXe6tmKTnlHY0LRKp8qSLJVwAFJPV+1Dz
-	 gcJz1SKz+AYwOSLpuZeI/5M8gNaXM3PGJi6riY/fK9TFWq0iqvLorEgGRYmfpOAwIm
-	 O4uN2We09KyHGpx+fmn2j3aWKMKUOplQ6LqfQ7RgbRVHSgDTVgYxh7ZofUc9/QToXx
-	 3Q0o7/qxtKW3cyfLslswhv9Gkf4QPbTVzJ8x4tr/6Z9t+Z+Gd7Ld+996keP7SU2ShE
-	 ZwqCfHEOWh0C9a7PsT6LYTED8SXyCLj4sg2v8EcC6//T4s5Lc01zxGqkkMyKgjpqbu
-	 NSYhSNDx1dupA==
+	b=OapqIgf8PPBdv7Xe8ZYGTEHJnLTEwentStMsmvrysYn44oyA9A+0bQQiJG1jJNFy2
+	 VBzxvWna1ffB2O/gwIPyvnFtWAcCibL3txfWEkqQp6aa/HUEvv3ITm5u3jBP66WDzl
+	 DakcIUZx95KFHu+/EmNypzJQjDIz2cBtUPMAXILdO/zIXls9QfBsNtPAKf98hyCyM7
+	 p1KGjz4Yn9q16+lNcgHKPHk5/yEzR3FhE+bOHJ+WkP1zjymVYIZseQu9rRdIQ22eHL
+	 txeyIo3mTK3MyGNSxf9Ue2Io6jnfHbltedMh+HDR+QGtNTApZ5ej0lCVB5fHDXrfcT
+	 CsY6ECHpLTViw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4AEE180E17;
-	Mon, 16 Nov 2026 21:29:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C92AA8108A;
+	Mon, 16 Nov 2026 21:29:28 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 95218109
- for <buildroot@buildroot.org>; Mon, 16 Nov 2026 21:29:24 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 82D621A6
+ for <buildroot@buildroot.org>; Mon, 16 Nov 2026 21:29:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7BCD5402EE
- for <buildroot@buildroot.org>; Mon, 16 Nov 2026 21:29:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 74128402CA
+ for <buildroot@buildroot.org>; Mon, 16 Nov 2026 21:29:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BDdojAoK2Dmr for <buildroot@buildroot.org>;
- Mon, 16 Nov 2026 21:29:23 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 09304402CA
+ id rGVN8ipC7bwr for <buildroot@buildroot.org>;
+ Mon, 16 Nov 2026 21:29:24 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 497B9402CD
 Authentication-Results: smtp2.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::32a"
+ arc=none smtp.remote-ip="2a00:1450:4864:20::32c"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
  envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
 Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20260707 header.b=UiKO5SP6
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
- [IPv6:2a00:1450:4864:20::32a])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 09304402CA
- for <buildroot@buildroot.org>; Mon, 16 Nov 2026 21:29:22 +0000 (UTC)
-Received: by mail-wm1-x32a.google.com with SMTP id
- 5b1f17b1804b1-4bb666304fdso2334375e9.0
- for <buildroot@buildroot.org>; Mon, 16 Nov 2026 13:29:22 -0800 (PST)
+ header.a=rsa-sha256 header.s=20260707 header.b=Y62wL5yb
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 497B9402CD
+ for <buildroot@buildroot.org>; Mon, 16 Nov 2026 21:29:23 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-4b79502c27aso32820655e9.1
+ for <buildroot@buildroot.org>; Mon, 16 Nov 2026 13:29:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20260707; t=1794864561; x=1795469361; darn=buildroot.org;
+ d=gmail.com; s=20260707; t=1794864562; x=1795469362; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=eQxpLC2kUaJfbFlpbJZNfb/P1aTtMCyfzoh1YAIkl7Q=;
- b=UiKO5SP61mFHGk1s6QJhrS6YJJt30OplJ5xxVC8kJ71UTYpKURnwdaAACF6SDTPNuj
- qibzusYrr9/xtJBzttnfgcgF1MNpZaGkkFyW6BBx8ywi2OxonxPhND8VT5tk3fj7/7dG
- g0h4BLZAmyTd0Zhl9uVx8s5jzyfnLJDHEsiVnDdiArAxmfn37agurCUkll+4V8yKytle
- jczIud5aQGuG/ArWQ4jGcODdQy9tjyQYKudV+buRrzQHrrd3R4aHuwneu8hGGAL08QTm
- RhAtuOPlu9erTPuVWEONcr5inGeay11VuGldnOR7FGy4YRzwwlUeVh0unk6jRpBzq1VM
- GYBw==
+ bh=KI3fZq70Vb5vvmPP9zBQACWD8Wsj2jSHhmAM5xxezv8=;
+ b=Y62wL5ybDkdS7z2V05qjfoxt7fgbmp9exnapmZgZU0+PUKOrJZouncQyR552OUDn/j
+ nY+qNaeGNw/3m60GhRXb/jBczlg35nVnJDF7bZ5Td0LwHsJ4tr23qi6Fh3IQDzICc35q
+ l+VkTdKd378TAjXWR5LRK7uc4xwKv8fT7wt0W4+/Ldz3PdeTy7vBZrs+c+qnJy7gLYXd
+ Gcvxz5EgP8j9eGMZTRaqUN5v7FvOLcCrCR7pDiQo9+c39CFE4Syu0qawaM4cVQB0o3aL
+ hsCESKIefzFcI8q8rled5UD78JLZ+M6ZErk3C+MJSc+luIvRPoD2OS7RsMZQaDRf+lgz
+ f7aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1794864561; x=1795469361;
+ d=1e100.net; s=20260707; t=1794864562; x=1795469362;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=eQxpLC2kUaJfbFlpbJZNfb/P1aTtMCyfzoh1YAIkl7Q=;
- b=uYjOWbeAhHRqHifFfj0qgfqdCWR+pNEqxqJjLSQXTZiOvagCTnhCeBlpEmMlFCuzDw
- QrxIyfL9J3MS34cVXx7SD2XTaTN+vhl06fgEBBXGg9bO9Ma6SSOCCofnYl9gJQmybEJg
- qZF6y/Cv8Yr3orUdTB0SmtWfxti4l3S5Skka5JtWCkZz/PgJoKFNJBK4Tn08ainpTArd
- YFmqtaT73s52qSaGdoMKpnjpd3DFMeSvl1WkItkqamsz/NeetKFaXlSFIPxgJBb27iQa
- eCF8qyq++rvVzqyypscYM3rY9cfCxVFFtUt4rMghJgtp2kT5AXMjHWbnl0B8T17O1B5X
- Bwdg==
-X-Gm-Message-State: APuU4Z/2hzdlRQ6XF5Fq/fS/bcBNbc8PbgVB5pdn7UX7luEO9/KxdUZR
- t14A+5u09gqBjmNC//ranN+SFJpdJw0E71qgyf/6DiHAU+aRwcovL8Nx216J7tCb
-X-Gm-Gg: AYBFou18xZDQnP208iKN86kS4BlRFdG+QYb/odRgI8SXmL/6DJ5tRmQmRLcupOZOctX
- 40VEQWJRtaOLO9kNbLw4yI05UnVGfQcl5D5stq7qbagCM3dFBKWBn4lQTwr8rE9ujJZJPNXf+IW
- DIam+glPfia9EiFuuWcdbdcSlgV3V2GgxFeDIY6uN/PHe9mIRtmMlJqGitcXHgGjW29X50Co5Cp
- niHDgQ5H711NDXSniCv1E357j1eLw/AqBC2CiTFzq/UVYHIszt6PIRP0i42LOjwzOWLiwqa0MAL
- Ax38yc/RY3eogqzKhZ6x2sshOdq5/ZTJ0JyyWt+8HAWGJ7YjlVtaBeZFdXPQ5sqRtdVEFp05sSj
- GDYI2lxOKk4WyhhOoFkmsKMUVigw/qaSZje7B6FNEX4w7W+3omXpXBJ5Ob6PXmomHneF9b49m2q
- 0b6iVEGPlGSOB0OL0lHOTlcYbUYd6hVPH4ToylxxLAnVBegf5xKGDLJyJnSPgdN0IPtcGD75cWX
- FBC8hUjPejws8lEpu/kN5M2b1GkkZIm/YnvNLjmifSoIAJxLCEx1ynOC4g/k/zjN3PROETE2Odo
- aEzIdIFrGIL6wp1PI1QHgrWYm+3TyDBc4nQxOPThRRPTqUJ0MDbY
-X-Received: by 2002:a05:600c:4793:b0:4a2:f58:9a82 with SMTP id
- 5b1f17b1804b1-4bb783f38eamr11114595e9.13.1794864560503; 
- Mon, 16 Nov 2026 13:29:20 -0800 (PST)
+ bh=KI3fZq70Vb5vvmPP9zBQACWD8Wsj2jSHhmAM5xxezv8=;
+ b=EI7cVDOuldSUmCudRzNmlum3jYW7kytosjSeV+G7MwRebNXO/BnJhmlDH61VF2D39W
+ ZMt57Ih8TF3HN4xYmkb3qlwxRzt20D9AmbLiWsZhmR33lLbM1QG09w+2HnUCwrBLLuMg
+ obwlWeWQkSz/0b4VvBKCmIw/pa7egRSowsGQiYv+d/vKttjlTUAt5kcZ0KyIoCwuuAbi
+ UM8NAn4MKaSu+xb3Ifd/NHeO+XH3d0iifCZ6HebdXwtbquw+9HeIVVqSm5gC0cdiVV7Y
+ r2NuQKak4lZn28bUsPpBOdTb9UWhDErlA4cuHVmMhVtvVj5kT9hdrxDIoDDtikhy2bjU
+ X/Xg==
+X-Gm-Message-State: APuU4Z9VkK+9GodyX8sH5mRJvgSy9lveqoVrhMmljHgCWEhTESJADhCC
+ CHrGncEMM4cesBTYLKMabB7rWuoELZ+JUFotC7IVwlvUUImWP5h4ag8W8PIxf53P
+X-Gm-Gg: AYBFou16VHQAScs+RuCC2JhgDsdoAVTB93QjPN/RN7LoA/N60ffZ3OykfD1cuBYMtPq
+ Fae8KL8w9A01fdCOZmpt7TGIVKf5zPn2L0tLxKB+nqblN66jhZDRg/8s+dOYY2ZxxpCq2pvAVEF
+ nahgR7RapVrnPZCyrMIkCZCpKInWQuPYq35wSmmz5uE0kjos75C7Xeas/HGDpNCj+DtUmV27Grf
+ LYMDTk5T3YiHFE90HcxWgFGr99aVS1JxbA8vv+Rio4CzdksDB2qXEcUg3gh7g16XJhqC7LnJ/Yh
+ 1kT66LLn3QAjqnLfpeR0IO5p9eDPi3k/FEUXYr8QY04opUu56MsJpOaT0vsumxP/EPjF6P2ZCOW
+ 3S28kTX5QctVRel7ByRP6pcyG9mRiSrO7Dshly8BfNvVcTF/JCeH+nd+tiYSv76X+zlLCPTAeB+
+ Qr8ShVQbPeaa6ESl5pbI0GsggJMOH6aongOyLKGH2UQT629MpU4/jYFWLkf47AYBQC4dP4+fG6w
+ nfmxDHNnnbeXwFabR5CDNc1gsRpFLChG9rVM5w/0K74O0X0GrfnZck58Tw/y/K6TxKw+ISgYS+W
+ CPOfRi93lTyltJewBieqHBet9nraqAZhr8S33zBsZVDP+0yGI/fE
+X-Received: by 2002:a05:600c:3b93:b0:4bb:6f67:ca0b with SMTP id
+ 5b1f17b1804b1-4bb6f67caf0mr135095655e9.29.1794864561773; 
+ Mon, 16 Nov 2026 13:29:21 -0800 (PST)
 Received: from angelo-Precision-7550 ([94.154.175.53])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-49c5d223a29sm24918708f8f.8.2026.11.16.13.29.18
+ ffacd0b85a97d-49c5d223a29sm24918708f8f.8.2026.11.16.13.29.20
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 16 Nov 2026 13:29:19 -0800 (PST)
+ Mon, 16 Nov 2026 13:29:21 -0800 (PST)
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 16 Nov 2026 22:29:10 +0100
-Message-ID: <20261116212913.863975-3-angelo.compagnucci@gmail.com>
+Date: Mon, 16 Nov 2026 22:29:11 +0100
+Message-ID: <20261116212913.863975-4-angelo.compagnucci@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20261116212913.863975-1-angelo.compagnucci@gmail.com>
 References: <20240812080307.553359-1-dylan.bespalko@gmail.com>
  <20261116212913.863975-1-angelo.compagnucci@gmail.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v4 2/5] package/python-pyside6: new package
+Subject: [Buildroot] [PATCH v4 3/5] support/testing: add python-pyside6
+ runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -167,215 +168,282 @@ X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 
 From: Dylan Bespalko <dylan.bespalko@gmail.com>
 
-PySide6 is the official Python binding of Qt6, from the Qt for Python
-project. It is built with the Shiboken6 generator, from the same
-release tarball.
+The test imports the PySide6 modules, and uses a class of each one.
 
-The bindings are built only for the Qt6 modules that are enabled in
-the configuration.
-
-A PySide6 program needs a Qt platform plugin. Select one with
-BR2_PACKAGE_QT6BASE_DEFAULT_QPA at build time, or with the
-QT_QPA_PLATFORM environment variable at run time.
-
-pyside-tools is not packaged. It holds pyside6-uic and pyside6-rcc,
-but the Qt host tools do the same job and write Python code:
-
-  $(HOST_DIR)/libexec/uic -g python
-  $(HOST_DIR)/libexec/rcc -g python
-
-Buildroot has Python bindings for Qt5 only, in python-pyqt5. This
-package adds the bindings for Qt6.
+It runs with the offscreen Qt platform plugin, so it needs no display.
 
 Signed-off-by: Dylan Bespalko <dylan.bespalko@gmail.com>
 Co-authored-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
 Changes v3 -> v4:
-  - Split from the python-shiboken6 patch
-  - Bump to 6.11.3. The package moves to package/qt6/, follows
-    QT6_VERSION and uses the tarball of python-shiboken6
-  - Depend on BR2_PACKAGE_QT6_GL_SUPPORTS instead of selecting it: it
-    is a blind option. Depend on BR2_PACKAGE_LLVM_ARCH_SUPPORTS too
-  - Drop --compiler-path=$(HOST_DIR)/bin/clang: shiboken already uses
-    the cross compiler in a cross build. Drop STANDALONE=ON: it is for
-    wheels that bundle Qt
-  - Fix the condition of OpenGLWidgets. Add the Quick modules only when
-    qt6declarative has Quick support
-  - Keep the upstream order of the modules in MODULES: they are built
-    in that order
-  - Help text: point to "uic -g python" and "rcc -g python" instead of
-    pyside-tools [Dylan Bespalko]
-  - DEVELOPERS: v3 added an entry for Dylan. v4 does not: the packages
-    are now in package/qt6/, which already has maintainers. Dylan, tell
-    me if you want to be listed
+  - Split from the package patch
+  - Use the current mesa3d options and an ext4 root filesystem
+  - Look up the QML files with QLibraryInfo
+  - Write the asserts as statements, for flake8
+  - DEVELOPERS: v3 had the test files in a new entry for Dylan. v4 has
+    them in my entry. Dylan, tell me if you want to be listed
 
- package/qt6/Config.in                         |  1 +
- package/qt6/python-pyside6/Config.in          | 32 +++++++
- .../qt6/python-pyside6/python-pyside6.hash    |  9 ++
- package/qt6/python-pyside6/python-pyside6.mk  | 86 +++++++++++++++++++
- 4 files changed, 128 insertions(+)
- create mode 100644 package/qt6/python-pyside6/Config.in
- create mode 100644 package/qt6/python-pyside6/python-pyside6.hash
- create mode 100644 package/qt6/python-pyside6/python-pyside6.mk
+ DEVELOPERS                                    |   2 +
+ .../tests/package/sample_python_pyside6.py    | 165 ++++++++++++++++++
+ .../tests/package/test_python_pyside6.py      |  63 +++++++
+ 3 files changed, 230 insertions(+)
+ create mode 100644 support/testing/tests/package/sample_python_pyside6.py
+ create mode 100644 support/testing/tests/package/test_python_pyside6.py
 
-diff --git a/package/qt6/Config.in b/package/qt6/Config.in
-index 42a24f0c0a..b6295ed295 100644
---- a/package/qt6/Config.in
-+++ b/package/qt6/Config.in
-@@ -43,6 +43,7 @@ menuconfig BR2_PACKAGE_QT6
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1d2960f9b3..14aac54303 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -265,6 +265,8 @@ F:	package/sshguard/
+ F:	package/sunwait/
+ F:	package/sysdig/
+ F:	package/uthash/
++F:	support/testing/tests/package/sample_python_pyside6.py
++F:	support/testing/tests/package/test_python_pyside6.py
  
- if BR2_PACKAGE_QT6
- 
-+source "package/qt6/python-pyside6/Config.in"
- source "package/qt6/python-shiboken6/Config.in"
- source "package/qt6/qt6base/Config.in"
- source "package/qt6/qt6charts/Config.in"
-diff --git a/package/qt6/python-pyside6/Config.in b/package/qt6/python-pyside6/Config.in
+ N:	Andy Shevchenko <andy.shevchenko@gmail.com>
+ F:	package/fb-test-app/
+diff --git a/support/testing/tests/package/sample_python_pyside6.py b/support/testing/tests/package/sample_python_pyside6.py
 new file mode 100644
-index 0000000000..1b1a2ecc04
+index 0000000000..f2677c6286
 --- /dev/null
-+++ b/package/qt6/python-pyside6/Config.in
-@@ -0,0 +1,32 @@
-+config BR2_PACKAGE_PYTHON_PYSIDE6
-+	bool "python-pyside6"
-+	depends on BR2_PACKAGE_PYTHON3
-+	depends on BR2_PACKAGE_QT6
-+	depends on BR2_PACKAGE_QT6_GL_SUPPORTS # QtGui OpenGL classes
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS # python-shiboken6
-+	select BR2_PACKAGE_PYTHON_SHIBOKEN6
-+	select BR2_PACKAGE_QT6BASE_GUI
-+	select BR2_PACKAGE_QT6BASE_OPENGL
-+	select BR2_PACKAGE_QT6BASE_WIDGETS
-+	select BR2_PACKAGE_OPENSSL if BR2_PACKAGE_QT6BASE_NETWORK # QtNetwork SSL classes
-+	help
-+	  Qt for Python: the official Python bindings of Qt6.
++++ b/support/testing/tests/package/sample_python_pyside6.py
+@@ -0,0 +1,165 @@
++import os
 +
-+	  The bindings cover the Qt6 modules that are enabled.
 +
-+	  A PySide6 program needs a Qt platform plugin. Select one
-+	  with BR2_PACKAGE_QT6BASE_DEFAULT_QPA at build time, or with
-+	  the QT_QPA_PLATFORM environment variable at run time.
++def qml_file(name):
++    from PySide6.QtCore import QLibraryInfo
++    qml_dir = QLibraryInfo.path(QLibraryInfo.LibraryPath.QmlImportsPath)
++    return os.path.join(qml_dir, name)
 +
-+	  pyside6-uic and pyside6-rcc are not installed. To convert
-+	  .ui and .qrc files to Python, use the Qt tools:
-+	  "$(HOST_DIR)/libexec/uic -g python" and
-+	  "$(HOST_DIR)/libexec/rcc -g python".
 +
-+	  https://doc.qt.io/qtforpython-6/
++# The essential modules: ALL_ESSENTIAL_MODULES in PySideHelpers.cmake
++def test_python_pyside6_qt():
++    from PySide6.QtCore import Qt
++    enum = Qt.white
++    assert str(enum) == 'GlobalColor.white'
 +
-+comment "python-pyside6 needs an OpenGL-capable backend"
-+	depends on BR2_PACKAGE_PYTHON3
-+	depends on BR2_PACKAGE_QT6
-+	depends on BR2_PACKAGE_LLVM_ARCH_SUPPORTS
-+	depends on !BR2_PACKAGE_QT6_GL_SUPPORTS
-diff --git a/package/qt6/python-pyside6/python-pyside6.hash b/package/qt6/python-pyside6/python-pyside6.hash
++
++def test_python_pyside6_qtcore():
++    from PySide6 import QtCore
++    obj = QtCore.QObject()
++    obj.setObjectName('MyObject')
++    assert obj.objectName() == 'MyObject'
++
++
++def test_python_pyside6_qtgui():
++    from PySide6 import QtGui
++    color = QtGui.QColor.fromRgb(255, 255, 255, 255)
++    assert color.name(QtGui.QColor.HexArgb) == "#ffffffff"
++
++
++def test_python_pyside6_qtwidgets():
++    from PySide6 import QtWidgets
++    app = QtWidgets.QApplication()
++    label = QtWidgets.QLabel('Hello World')
++    assert label.text() == 'Hello World'
++    QtWidgets.QApplication.shutdown(app)
++
++
++def test_python_pyside6_qtprintsupport():
++    from PySide6 import QtWidgets
++    from PySide6 import QtPrintSupport
++    app = QtWidgets.QApplication()
++    p = QtPrintSupport.QPrinter()
++    assert p.creator() == ''
++    QtWidgets.QApplication.shutdown(app)
++
++
++def test_python_pyside6_qtsql():
++    from PySide6 import QtSql
++    db = QtSql.QSqlDatabase()
++    assert db.hostName() == ''
++
++
++def test_python_pyside6_qtnetwork():
++    from PySide6 import QtNetwork
++    host_info = QtNetwork.QHostInfo()
++    assert host_info.localHostName() == 'buildroot'
++
++
++def test_python_pyside6_qttest():
++    from PySide6 import QtTest
++    text = QtTest.QTest.toPrettyCString('hello there', 5)
++    assert text == '"hello"'
++
++
++def test_python_pyside6_qtconcurrent():
++    from PySide6 import QtConcurrent
++    future = QtConcurrent.QFutureQString()
++    assert future.isRunning() is False
++
++
++# The optional modules: ALL_OPTIONAL_MODULES in PySideHelpers.cmake
++def test_python_pyside6_qtdbus():
++    from PySide6 import QtDBus
++    message = QtDBus.QDBusMessage()
++    assert message.errorMessage() == ''
++
++
++def test_python_pyside6_qtxml():
++    from PySide6 import QtXml
++    doc = QtXml.QDomDocument('temp.xml')
++    assert doc.toString() == ''
++
++
++def test_python_pyside6_qtopengl():
++    from PySide6 import QtOpenGL
++    log = QtOpenGL.QOpenGLDebugLogger()
++    assert log.isLogging() is False
++
++
++def test_python_pyside6_qtopenglwidgets():
++    from PySide6 import QtWidgets
++    from PySide6 import QtOpenGLWidgets
++    app = QtWidgets.QApplication()
++    _ = QtOpenGLWidgets.QOpenGLWidget()
++    # QOpenGLWidget is not supported on this platform: only create it.
++    QtWidgets.QApplication.shutdown(app)
++
++
++def test_python_pyside6_qtquickcontrols():
++    from PySide6 import QtWidgets
++    from PySide6 import QtQuick
++    app = QtWidgets.QApplication()
++    view = QtQuick.QQuickView()
++    assert str(view.status()) == 'Status.Null'
++    view.setSource(qml_file('QtQuick/Controls/Universal/Label.qml'))
++    assert str(view.status()) == 'Status.Ready'
++    view.close()
++    QtWidgets.QApplication.shutdown(app)
++
++
++def test_python_pyside6_qtquickwidgets():
++    from PySide6 import QtWidgets
++    from PySide6 import QtQuickWidgets
++    app = QtWidgets.QApplication()
++    view = QtQuickWidgets.QQuickWidget()
++    assert str(view.status()) == 'Status.Null'
++    view.setSource(qml_file('QtQuick/Controls/Universal/Label.qml'))
++    assert str(view.status()) == 'Status.Ready'
++    QtWidgets.QApplication.shutdown(app)
++
++
++def test_python_pyside6_qtserialport():
++    # The port does not need to exist: the test never opens it.
++    from PySide6 import QtSerialPort
++    ser = QtSerialPort.QSerialPort()
++    ser.setPortName('/dev/tty')
++    assert ser.portName() == 'tty'
++
++
++def test_python_pyside6_qtsvg():
++    from PySide6 import QtSvg
++    renderer = QtSvg.QSvgRenderer()
++    renderer.setFramesPerSecond(30)
++    assert renderer.framesPerSecond() == 30
++
++
++def test_python_pyside6_qtsvgwidgets():
++    from PySide6 import QtWidgets
++    from PySide6 import QtSvgWidgets
++    app = QtWidgets.QApplication()
++    widget = QtSvgWidgets.QSvgWidget()
++    widget.setObjectName('MyObject')
++    assert widget.objectName() == 'MyObject'
++    QtWidgets.QApplication.shutdown(app)
++
++
++if __name__ == "__main__":
++    test_python_pyside6_qt()
++    test_python_pyside6_qtcore()
++    test_python_pyside6_qtgui()
++    test_python_pyside6_qtwidgets()
++    test_python_pyside6_qtprintsupport()
++    test_python_pyside6_qtsql()
++    test_python_pyside6_qtnetwork()
++    test_python_pyside6_qttest()
++    test_python_pyside6_qtconcurrent()
++    test_python_pyside6_qtdbus()
++    test_python_pyside6_qtxml()
++    test_python_pyside6_qtopengl()
++    test_python_pyside6_qtopenglwidgets()
++    test_python_pyside6_qtquickcontrols()
++    test_python_pyside6_qtquickwidgets()
++    test_python_pyside6_qtserialport()
++    test_python_pyside6_qtsvg()
++    test_python_pyside6_qtsvgwidgets()
+diff --git a/support/testing/tests/package/test_python_pyside6.py b/support/testing/tests/package/test_python_pyside6.py
 new file mode 100644
-index 0000000000..739dc15ea9
+index 0000000000..d93be0bb26
 --- /dev/null
-+++ b/package/qt6/python-pyside6/python-pyside6.hash
-@@ -0,0 +1,9 @@
-+# From https://download.qt.io/official_releases/QtForPython/pyside6/PySide6-6.11.3-src/pyside-setup-everywhere-src-6.11.3.tar.xz.sha256
-+sha256  050819cb05e14d6689f42b56e4fa9c8ff63be2bb339e0c094c45b990b7cabde1  pyside-setup-everywhere-src-6.11.3.tar.xz
++++ b/support/testing/tests/package/test_python_pyside6.py
+@@ -0,0 +1,63 @@
++import os
 +
-+# Hash for license files
-+sha256  62803a6fcceef9091a129d7293d2469ea332b35d30f5e1bc4c628a9f35f3d29c  LICENSES/BSD-3-Clause.txt
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-only.txt
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
-+sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSES/LGPL-3.0-only.txt
-+sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
-diff --git a/package/qt6/python-pyside6/python-pyside6.mk b/package/qt6/python-pyside6/python-pyside6.mk
-new file mode 100644
-index 0000000000..28656d8f18
---- /dev/null
-+++ b/package/qt6/python-pyside6/python-pyside6.mk
-@@ -0,0 +1,86 @@
-+################################################################################
-+#
-+# python-pyside6
-+#
-+################################################################################
++from tests.package.test_python import TestPythonPackageBase
 +
-+# Qt for Python must have the same version as Qt6
-+PYTHON_PYSIDE6_VERSION = $(QT6_VERSION)
-+PYTHON_PYSIDE6_SITE = https://download.qt.io/official_releases/QtForPython/pyside6/PySide6-$(PYTHON_PYSIDE6_VERSION)-src
-+PYTHON_PYSIDE6_SOURCE = pyside-setup-everywhere-src-$(PYTHON_PYSIDE6_VERSION).tar.xz
-+PYTHON_PYSIDE6_DL_SUBDIR = python-shiboken6
-+PYTHON_PYSIDE6_SUBDIR = sources/pyside6
-+PYTHON_PYSIDE6_LICENSE = \
-+	LGPL-3.0 or GPL-2.0 or GPL-3.0 (bindings), \
-+	GPL-3.0 with Qt-GPL-exception-1.0 (tools), \
-+	BSD-3-Clause (examples, cmake)
-+PYTHON_PYSIDE6_LICENSE_FILES = \
-+	LICENSES/BSD-3-Clause.txt \
-+	LICENSES/GPL-2.0-only.txt \
-+	LICENSES/GPL-3.0-only.txt \
-+	LICENSES/LGPL-3.0-only.txt \
-+	LICENSES/Qt-GPL-exception-1.0.txt
-+PYTHON_PYSIDE6_CPE_ID_VENDOR = qt
-+PYTHON_PYSIDE6_CPE_ID_PRODUCT = pyside
-+PYTHON_PYSIDE6_SUPPORTS_IN_SOURCE_BUILD = NO
-+PYTHON_PYSIDE6_INSTALL_STAGING = YES
 +
-+PYTHON_PYSIDE6_DEPENDENCIES = \
-+	host-python-shiboken6 \
-+	python-shiboken6 \
-+	qt6base
++# gitlab-runner: 2xlarge
++class TestPythonPy3PySide6(TestPythonPackageBase):
++    __test__ = True
++    # This test needs its own configuration:
++    # - Aarch64, to have more than 256 MB of memory;
++    # - an ext4 root filesystem on a virtio disk, not a cpio initrd.
++    #   The image is big, and this saves memory.
++    config = \
++        """
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.81"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_PACKAGE_MESA3D=y
++        BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_SOFTPIPE=y
++        BR2_PACKAGE_MESA3D_OPENGL_EGL=y
++        BR2_PACKAGE_MESA3D_OPENGL_ES=y
++        BR2_PACKAGE_QT6=y
++        BR2_PACKAGE_QT6BASE_GUI=y
++        BR2_PACKAGE_QT6BASE_WIDGETS=y
++        BR2_PACKAGE_QT6BASE_PRINTSUPPORT=y
++        BR2_PACKAGE_QT6BASE_SQL=y
++        BR2_PACKAGE_QT6BASE_SQLITE=y
++        BR2_PACKAGE_QT6BASE_NETWORK=y
++        BR2_PACKAGE_QT6BASE_TEST=y
++        BR2_PACKAGE_QT6BASE_CONCURRENT=y
++        BR2_PACKAGE_QT6BASE_DBUS=y
++        BR2_PACKAGE_QT6BASE_XML=y
++        BR2_PACKAGE_QT6BASE_OPENGL=y
++        BR2_PACKAGE_QT6BASE_DEFAULT_QPA="offscreen"
++        BR2_PACKAGE_QT6DECLARATIVE=y
++        BR2_PACKAGE_QT6DECLARATIVE_QUICK=y
++        BR2_PACKAGE_QT6SERIALPORT=y
++        BR2_PACKAGE_QT6SERIALBUS=y
++        BR2_PACKAGE_QT6SVG=y
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_PYSIDE6=y
++        BR2_TARGET_ROOTFS_EXT2=y
++        BR2_TARGET_ROOTFS_EXT2_4=y
++        BR2_TARGET_ROOTFS_EXT2_SIZE="512M"
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    sample_scripts = ["tests/package/sample_python_pyside6.py"]
++    timeout = 60
 +
-+# The modules are built in the order of this list, and a module needs
-+# the ones before it. Keep the order of ALL_ESSENTIAL_MODULES and
-+# ALL_OPTIONAL_MODULES in sources/pyside6/cmake/PySideHelpers.cmake.
-+PYTHON_PYSIDE6_MODULES = \
-+	Core \
-+	Gui \
-+	Widgets \
-+	$(if $(BR2_PACKAGE_QT6BASE_PRINTSUPPORT),PrintSupport) \
-+	$(if $(BR2_PACKAGE_QT6BASE_SQL),Sql) \
-+	$(if $(BR2_PACKAGE_QT6BASE_NETWORK),Network) \
-+	$(if $(BR2_PACKAGE_QT6BASE_TEST),Test) \
-+	$(if $(BR2_PACKAGE_QT6BASE_CONCURRENT),Concurrent) \
-+	$(if $(BR2_PACKAGE_QT6BASE_DBUS),DBus) \
-+	$(if $(BR2_PACKAGE_QT6BASE_XML),Xml) \
-+	OpenGL \
-+	OpenGLWidgets
-+
-+ifeq ($(BR2_PACKAGE_QT6DECLARATIVE),y)
-+PYTHON_PYSIDE6_DEPENDENCIES += qt6declarative
-+PYTHON_PYSIDE6_MODULES += Qml
-+ifeq ($(BR2_PACKAGE_QT6DECLARATIVE_QUICK),y)
-+PYTHON_PYSIDE6_MODULES += \
-+	Quick \
-+	QuickControls2 \
-+	$(if $(BR2_PACKAGE_QT6BASE_TEST),QuickTest) \
-+	QuickWidgets
-+endif
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT6SERIALPORT),y)
-+PYTHON_PYSIDE6_DEPENDENCIES += qt6serialport
-+PYTHON_PYSIDE6_MODULES += SerialPort
-+ifeq ($(BR2_PACKAGE_QT6SERIALBUS),y)
-+PYTHON_PYSIDE6_DEPENDENCIES += qt6serialbus
-+PYTHON_PYSIDE6_MODULES += SerialBus
-+endif
-+endif
-+
-+ifeq ($(BR2_PACKAGE_QT6SVG),y)
-+PYTHON_PYSIDE6_DEPENDENCIES += qt6svg
-+PYTHON_PYSIDE6_MODULES += Svg SvgWidgets
-+endif
-+
-+# The Qt headers are in the sysroot, so shiboken takes them for system
-+# headers and skips them. PYSIDE_TREAT_QT_INCLUDE_DIRS_AS_NON_SYSTEM
-+# makes it process them.
-+PYTHON_PYSIDE6_CONF_OPTS = \
-+	-DBUILD_TESTS=OFF \
-+	-DMODULES="$(subst $(space),;,$(strip $(PYTHON_PYSIDE6_MODULES)))" \
-+	-DPYSIDE_TREAT_QT_INCLUDE_DIRS_AS_NON_SYSTEM=ON \
-+	-DQFP_SHIBOKEN_HOST_PATH=$(HOST_DIR) \
-+	-DQFP_PYTHON_HOST_PATH=$(HOST_DIR)/bin/python3
-+
-+$(eval $(cmake-package))
++    def login(self):
++        drive = os.path.join(self.builddir, "images", "rootfs.ext4")
++        kern = os.path.join(self.builddir, "images", "Image")
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=["root=/dev/vda console=ttyAMA0"],
++                           options=["-M", "virt", "-cpu", "cortex-a57", "-m", "512M",
++                                    "-drive", f"file={drive},if=virtio,format=raw"])
++        self.emulator.login()
 -- 
 2.53.0
 
