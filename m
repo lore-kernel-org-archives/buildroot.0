@@ -2,27 +2,27 @@ Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B710A606A31C
-	for <buildroot@archiver.kernel.org>; Tue, 17 Nov 2026 22:12:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CAC6606A31C
+	for <buildroot@archiver.kernel.org>; Tue, 17 Nov 2026 22:21:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=P+2jJ+AQ
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=qheoIiUs
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B64EC6083F;
-	Tue, 17 Nov 2026 22:12:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D567C60730;
+	Tue, 17 Nov 2026 22:21:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9za2WSxetjzN; Tue, 17 Nov 2026 22:12:14 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org A1CCB60730
+ id sXjeah7reL-3; Tue, 17 Nov 2026 22:21:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org EF7F460743
 Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794953534;
-	b=UNQ2Eu2HTWOQ1j2ER7/pZ1C5OCSaWKD22sI7Mnc7Jr1xLYKngMuLXbxKZfFq890itO8z
-	 EclPqq8Qq/BzAfQaBx+VIkwInfZa4iizDf5sStM6/VZiryePCIfVndK/vj96/dso7QcYm
-	 tH15y+dyQBv5NROX8nAQ2c3dx1mFAGgzzx3AsNjO2IyJwqxP1L5ij6NfNrnEN9FG8JWzx
-	 58hCfjlYRPPwv8DYdm3H+dHs2f2QiwTeoM+WP0mrOZou09INUwVWy51ghSpNbMtZrHn4c
-	 S1jwj5XbC8nKhGm1wBo+iBWiiBVU+kKZy5OOlBZa4bDrdZV631K5KWCJH33jfU19XXg==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794954076;
+	b=P0i4oHAV6M4i3NDPzAoaeggzKJqFjMwQwNvtmwcaEOkI6er6HDGDFjzIlDcDRmO9+FC0
+	 uv4akK70e67mW3yEyA0wzEAiJQrd9youOt8fvvUYbS75l69mxtD77EbO7UZH7AMqyJbXl
+	 YnqK9UthP/xfEKKUj75dt8vS0h3ZeY5u9+pdSFpiDjDcgtsoa+DADzWqSVMKXomkLPF1w
+	 D/x77y4hkITpOC2StX7MoOI4XiO+gk1jEjUMNqaK4A+/cGIZ03xeM7KUOTXfbOYVqhAbu
+	 4uBWsut/IqBNNLcgSOoFfAyjFD7tQ5nT4VYZcOSqG97CJVn/LEFoHz/5lwywvyXt03A==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794953534;
+	c=relaxed/relaxed; t=1794954076;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,91 +31,90 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=Jb7WU5a8x19VGDU1Hz8W1x05UUKOzbQ2m9/Z4yPf2mo=;
-	b=eCrICAYs2O2u9za8h68uP1gv1+VJluW+FJz/YwO5+SOEApdI5Y36U3BuQrKgy5SP6Xh3
-	 bsN85BP5Jn6X+tyGOSQcMj/QmT50/LsgXtUWCc7HRJOAH2OTqe8CR8irhL/mk9vmH7a9X
-	 LAFiUwsU6rDrHh0FJWhtk/NI8kR7c7y+7iejcr/sbti41vqB/l3w/Sv0LwKjVvAbSRtNZ
-	 aHWqHrGE93NzuXPh1RFLH6MsnOVavf3mjssv25uMs/zX6yDryRdc/re3t1fdqC+gbH7fO
-	 aRc5ecayAPPcASH3bbM//maaVQFHarYMYWNIX7kCUcuwsacSrkbNfEW8ClkyduTYjZQ==
+	bh=HPC7pgzyKUB81TLOnRRCvACRokcB8x4yiWz62sBaV4g=;
+	b=p+X7GMdb3ushLDhXCIjUa/87toTDdnkhHiBCTI0ox1QMwxiry3h5MAckZzQRJDo3hWr9
+	 fDetzWIOq+T4stWDS2AfMOGTX0EktedboMQMmTY7H/50R2C2h2Kkx/MuEzlTDVjBDMwrs
+	 0v+M37Lq9kUgqIsPyaY/e1E7oFdk8B4TNMpHdBE+88/8oiUXlkmbyp7iHBzn9eIAcrG3d
+	 UpHCGWuOrTjGcEyICSdvFkLicmCZaS2bvzEWDx3eM4MnX5F7iwuF38fFRRZcYGt0TpJv2
+	 G3cW+T4a0HQP1ztGP1MV38Z9C4f5Pm9Fmpa/umU4JdaIXMAgcpRJ50442zB6dcjwZoQ==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794953534;
-	bh=Jb7WU5a8x19VGDU1Hz8W1x05UUKOzbQ2m9/Z4yPf2mo=;
+	s=default; t=1794954076;
+	bh=HPC7pgzyKUB81TLOnRRCvACRokcB8x4yiWz62sBaV4g=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
 	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=P+2jJ+AQwe4U9rywgUbvtDTHqiFdeI2+1vsjsVDQ0FCN64VY5p9fil8z6aVjVg5Wy
-	 oCAIa0S36ELyirhIkl0+e/SAqKuEkPVfqSKxI9RgalS6I4HAcLmWiVoWBB8VwhiqD8
-	 mC88tZsqWGiOarNHBDx71hMFD5s4C6q86YnRmHOZZrwjclLaGWRPLLfcoL37uAIDUQ
-	 GgS+fxYh1gpaVK2AkP++BASHoKJyVlOrj46+/d7uXLKQjXUp0a5e3bisWxEQBP/8qg
-	 /Ue9O6jtdFuwNUJouI1hXTg9xUPbyf2nSC1zQSoDkGV0ZUYg2hjuNz4LnsvuMjbPkt
-	 KaOuNDvkFUlAA==
+	b=qheoIiUsQlVd1Cv/qkNDBw/tywDoUcZEdeqLP1gy1gCXJevAKN4s4JFq56JeJSU0Q
+	 tjcu7LM5KL+ZBfadO3c8ARbPWwJWAsM2B4hMzrvpOr1g4YI+XTT254WPqyTr0wEe+9
+	 Y0v1NzLPb6OMR5lve1T5GED8FoHSO7KaD6Y0SU5CGstg3T2XQWskrpTW3TPgOxXLv+
+	 mwCpOqpOa+uPerr394oo/y+d+3YlNNgcqull+JMaMCdXfFpgB0WaZSegJSkcpv5Vtm
+	 azgYFSYJ9+iSwG1hQlM0O6BJPr2SbxsP1anB2HLi8hoVMqWj4DZmp1oGVJjqmeIYVi
+	 uZvyPdLDbpClw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A1CCB60730;
-	Tue, 17 Nov 2026 22:12:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 96D061A6
- for <buildroot@buildroot.org>; Tue, 17 Nov 2026 22:12:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF7F460743;
+	Tue, 17 Nov 2026 22:21:15 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 45CED1A6
+ for <buildroot@buildroot.org>; Tue, 17 Nov 2026 22:21:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8889A406A5
- for <buildroot@buildroot.org>; Tue, 17 Nov 2026 22:12:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2B9F54035D
+ for <buildroot@buildroot.org>; Tue, 17 Nov 2026 22:21:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6MGIS5NYkC-n for <buildroot@buildroot.org>;
- Tue, 17 Nov 2026 22:12:12 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 74D2D40668
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cZ_46LzSM6D6 for <buildroot@buildroot.org>;
+ Tue, 17 Nov 2026 22:21:14 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org F39384005D
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62b; helo=mail-ej1-x62b.google.com;
+ client-ip=2a00:1450:4864:20::635; helo=mail-ej1-x635.google.com;
  envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
- [IPv6:2a00:1450:4864:20::62b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 74D2D40668
- for <buildroot@buildroot.org>; Tue, 17 Nov 2026 22:12:11 +0000 (UTC)
-Received: by mail-ej1-x62b.google.com with SMTP id
- a640c23a62f3a-c468bd799ecso31737566b.1
- for <buildroot@buildroot.org>; Tue, 17 Nov 2026 14:12:11 -0800 (PST)
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com
+ [IPv6:2a00:1450:4864:20::635])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F39384005D
+ for <buildroot@buildroot.org>; Tue, 17 Nov 2026 22:21:13 +0000 (UTC)
+Received: by mail-ej1-x635.google.com with SMTP id
+ a640c23a62f3a-c50ac25cdd4so24601866b.1
+ for <buildroot@buildroot.org>; Tue, 17 Nov 2026 14:21:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1794953530; x=1795558330;
+ d=1e100.net; s=20260707; t=1794954071; x=1795558871;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=hlq0OX8L+zOM8AdqyuekG3Q9zfIl1GohCPq3zCzMNns=;
- b=TZVKl/aGh4KyRQIuyzTXFHmnb9QcObKXayEPeTisULcSJrEUjmco+3FY6lXy7ir8cw
- IgiRqfrGUYVtFYrfLMUi6LR0IsRa3MilK4ePkdkeOzu5nI5drk3YISEqR5asKC4MyNUE
- Vu0U0Dc7jVd3XOfQtdkbB0RUm18Vp1+CBnmCD34/SEoP7PbL4RLIqzjQpdSgLKCglUvV
- 3GAhVntF8/stRkLnTWoEeigWKVhTEN8V2VdxAyZSfwjcFpiUYonrP325z/w/cF48bWOj
- UtwzGUwPijLu7rrOa0b9YluDfc4Pc3D4shZN1Xv+18JkUYkxHuyB5xjKqr3ouFA42Ro6
- yCnQ==
-X-Gm-Message-State: APuU4Z+CZe+mS9bcaxaYIz7uEqc/uqa/hmUYN64VW6MeoVRfjopmcOOF
- nUHzRYWv0AtT/WSsgPzB1hMqVy6MTfnmay+f3CGB9IzHO0INIBMZNtRUgPEcDA==
-X-Gm-Gg: AYBFou3h4KCxtva2Wi83EY0Z/BLaeLjK6jsD3ieQnyPJ+0+2VmMxTVEa3nYTKui0Xab
- bGlbX9UAzXocdwnwZEsZbZafw/azRTiB7kaewDXqalpb+Iha5eOdJkRiZQ9mcwE6ml4PYwUw2t+
- XlX79iYzz6s3MlX2LNKyh8me1u5uMO5DeGH8EE6/FRIQH1TP+V+l39MMvAmEcw7JrIm9E5kmQ2j
- eaLSYYYB+MpKcoU2l1V1jmvz0twN28X8eyVbr959tqTv1Z9qKXPqCLlusdutw/N6MjotKPqhncs
- HMnsULZJbok5Xu+1qpo/aWg1dvNVv9rqFPryw2JnPGi0ryJwivLDnoQK8H2tO3ji94Lr5uLgseP
- TIQBDnw0T9w4ej9HTVe5eulII34Gmyr2DHnKrz84I+wFGpF599bquyS6Lc6pdPU5eiw5Gu7D9dq
- YdtQmEu1fflukLApYzsytouLv7uDTB3tKjYSmdeFgZt/AWs1ET2BM2vIla6wLm/bkFrbGbExM/k
- i/WHwwohNjq+vCMxRBqVHpoWSRrE5xX+MePuCcJP4Uj3FlUxPlfrHT8v9rOW/3mVdoOaoEZWuaP
- uqi4utacL8CKzhjNZVhUQJMwuMvhfOBT7C4zLzNeJ2X7O0llME3AZfQd4ZMt29uhR4GSeILbybF
- H1QrE7ii7
-X-Received: by 2002:a17:907:ea8e:b0:c4d:22e2:1a2b with SMTP id
- a640c23a62f3a-c510debe78amr52562266b.1.1794953530015; 
- Tue, 17 Nov 2026 14:12:10 -0800 (PST)
+ bh=jS5+VKUDSPvSe0+eB6pp7HIJ04BsgIpNFFCEnY1SrR0=;
+ b=sxptD9nplpLskJKZeYkGaUBTZ3uiG3UuHZ4QQCnKX9Snmbq7ykXSxQXzBjzREofs4W
+ q7MKp6WLVemXol39GWNtXYF0psjZAy1MvSoQelB4QDKOfVW6DEw1ycLBfLrGhknHEGqK
+ AGJ7USUpYZ56/DGUDBE7WMP9huDb6eTeg+vZn+lJGNsHe65ehEx/RINEnk2ntjJUwsED
+ 3PiR973xuqt6LXcR2AWnJgprLG9zFnC7La2/g0UaojACFbAL22xfX3yj4cqa2x3NGMQB
+ nvGAhfTeakCCq1RM6fUIil/425imGIaiatl9b47gppDYuvfuonHNs49o8OUkX8dDUqn3
+ sL1A==
+X-Gm-Message-State: APuU4Z9GbW8zGHssoF/uDacNqeLOp2i4CLD3C8bn+Ku8b1h0B8oJdisl
+ eSbRX/hGyx3HNomB+TbyCQPCYsZwwExEheDqUw3jZkrnsFoeAIbnYW+BmwY4zQ==
+X-Gm-Gg: AYBFou0/98XB1V5JP5esfVhRyaHerNqLQznUE0V5zKd6cKZaMUdPROwKI9n+VdBagxm
+ JTGlXoUsIhmeOVVpsOEu0n1Ds9Hjh90v7jEJzM0ECcoX5r3/IlZZkGeUU9giNjdmYGY7ksB3SVL
+ v3JuS+LdBRLikv+Bi0hOLP7HZdzUAHnW24aPTMvf2DuXwjylfq25bMG2uifp7db4cZd/anCa8Lo
+ 8Ust+9pNrIKCiZmMXYWv5DzXudv683BgA7BAsFD4tJULZvupMQ3i6clTEBx22tKGMkX+bDoU05P
+ MFBbfQT2nhEpinsKdx51xvZQsBuakVSWwqM2zqjqYMMQjVJBCkpHJda+XQJvtuTLBKZ6aCa+TxU
+ 3NRdnbGW4jZmcEXeBhEX0cW0o7wiOUUaVKCflF9x17S5blUyY/vJ3+5ITaf/LlTBqQQr1lgV0O2
+ XvsnysJAjmjaLV89L5BEaBgb6rb4gFWv8MJBJX/b3Or0gpZMvDrR/81IRcbwV4pO5Wg8GL147gT
+ z/HRvZyy4qRxog/x4Z4d7SNkGaoEw1MhnfKPN+008Mt/k9wueLUpRkognErBMOQpOjfEsGJeSgF
+ QQ316EMal0ESdvnBBwgHqavjMXXmEHxJAEAXqgobuGyRvHLj+hp8QDihB6gb8FGaGq9TIT+NTc6
+ BYh0B+2SD
+X-Received: by 2002:a17:907:6d1b:b0:c51:691:c76e with SMTP id
+ a640c23a62f3a-c510e35c6camr47473266b.36.1794954071551; 
+ Tue, 17 Nov 2026 14:21:11 -0800 (PST)
 Received: from development2.visionsystems.local (mail.visionsystems.de.
  [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c510c8401a9sm27729566b.4.2026.11.17.14.12.09
+ a640c23a62f3a-c510ca62f92sm27403366b.41.2026.11.17.14.21.10
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 17 Nov 2026 14:12:09 -0800 (PST)
+ Tue, 17 Nov 2026 14:21:10 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Tue, 17 Nov 2026 23:12:09 +0100
-Message-Id: <20261117221209.3984234-1-yegorslists@googlemail.com>
+Date: Tue, 17 Nov 2026 23:21:10 +0100
+Message-Id: <20261117222110.4044258-1-yegorslists@googlemail.com>
 X-Mailer: git-send-email 2.34.1
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/balena-engine: security bump to version
- 20.10.44
+Subject: [Buildroot] [PATCH] package/fftw/fftw-quad: only available on x86
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -127,59 +126,61 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
 Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: Christian Stewart <christian@aperture.us>
+Cc: Romain Naour <romain.naour@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-The vendored runc is updated from v1.0.0-rc92 to a balena fork of
-v1.1.12, which fixes CVE-2024-21626 (container breakout through a
-leaked file descriptor to the host's /sys/fs/cgroup), and containerd
-from 1.5.0-dev to a fork of v1.6.6.
+Building fftw-quad for powerpc64le fails:
 
-Other changes include more resilient image pulls and delta handling,
-a libnetwork update fixing a port binding issue, and AppArmor no longer
-being enabled when apparmor_parser is missing.
+  ../kernel/ifftw.h:73:25: error: implicit declaration of function 'fftwq_stride_destroy'; did you mean 'fftw_stride_destroy'? [-Wimplicit-function-declaration]
+  ../kernel/ifftw.h:73:25: error: implicit declaration of function 'fftwq_mkstride'; did you mean 'fftwf_mkstride'? [-Wimplicit-function-declaration]
 
-https://github.com/balena-os/balena-engine/blob/v20.10.44/CHANGELOG.md
+The stride macros for quad precision are missing for non-x86
+architectures. Upstream fixed this in commit 40e620ec4441 ("Fix
+missing quad stride definition (#422)"), but with that fix applied,
+the build fails further:
 
-The LICENSE file is unchanged.
+  ../kernel/ifftw.h:73:25: error: unknown type name 'fftwq_iodim'; did you mean 'fftwl_iodim'?
 
+api/fftw3.h only declares the quad-precision API on i386, x86_64 and
+ia64, also on the upstream master branch. fftw thus doesn't support
+quad precision on other architectures, so make fftw-quad depend on
+BR2_i386 || BR2_x86_64.
+
+This issue has been present since commit a2380157f668 ("toolchain:
+enable libquadmath for PowerPC with VSX"), which made fftw-quad
+available on PowerPC with VSX. It therefore affects 2022.08 and later,
+including all maintained branches.
+
+Fixes:
+https://autobuild.buildroot.org/results/f46528b5a7a0579fdc7a3f4a6890c6e50a7799b7
+
+Fixes: a2380157f6688c5c065fa19060a2c33145bab95b ("toolchain: enable libquadmath for PowerPC with VSX")
 Assisted-by: Claude:claude-opus-5-5
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- package/balena-engine/balena-engine.hash | 2 +-
- package/balena-engine/balena-engine.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/fftw/fftw-quad/Config.in | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/balena-engine/balena-engine.hash b/package/balena-engine/balena-engine.hash
-index 076c72fd9a..9506c39c87 100644
---- a/package/balena-engine/balena-engine.hash
-+++ b/package/balena-engine/balena-engine.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  1482b64e35d5406be719e362647ed7d0599cf4eead7770247ebd972c4c85ede5  balena-engine-20.10.26-go2.tar.gz
-+sha256  6fff52e527072cc670286ca32d0805b6f73032e49fd7c6cbff82b46ca29dec3b  balena-engine-20.10.44-go2.tar.gz
- sha256  7c87873291f289713ac5df48b1f2010eb6963752bbd6b530416ab99fc37914a8  LICENSE
-diff --git a/package/balena-engine/balena-engine.mk b/package/balena-engine/balena-engine.mk
-index 49d526a465..a3695a5cca 100644
---- a/package/balena-engine/balena-engine.mk
-+++ b/package/balena-engine/balena-engine.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BALENA_ENGINE_VERSION = 20.10.26
-+BALENA_ENGINE_VERSION = 20.10.44
- BALENA_ENGINE_SITE = $(call github,balena-os,balena-engine,v$(BALENA_ENGINE_VERSION))
- 
- BALENA_ENGINE_LICENSE = Apache-2.0
+diff --git a/package/fftw/fftw-quad/Config.in b/package/fftw/fftw-quad/Config.in
+index 10d296df91..3d490a2c8e 100644
+--- a/package/fftw/fftw-quad/Config.in
++++ b/package/fftw/fftw-quad/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_FFTW_QUAD
+ 	bool "fftw-quad"
++	# fftw3.h only declares the quad-precision API on x86
++	depends on BR2_i386 || BR2_x86_64
+ 	# quad-precision needs to have a gcc with libquadmath
+ 	depends on BR2_TOOLCHAIN_HAS_LIBQUADMATH && BR2_USE_WCHAR
+ 	help
 -- 
 2.34.1
 
