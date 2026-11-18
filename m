@@ -1,120 +1,123 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3072606A31C
-	for <buildroot@archiver.kernel.org>; Wed, 18 Nov 2026 08:08:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B91B0606A31C
+	for <buildroot@archiver.kernel.org>; Wed, 18 Nov 2026 08:08:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=egwW4q0T
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=S28rapmm
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C96446087B;
-	Wed, 18 Nov 2026 08:08:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C0DF68096D;
+	Wed, 18 Nov 2026 08:08:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5pZG6VM5JwdE; Wed, 18 Nov 2026 08:08:30 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org ACB946085E
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794989310;
-	b=f9Qyy5nlc/mAHe/jnb6sNhR72O3evY+i0YxQ2I8IgXGkYUVGd7we/vJ0rFWT1eJROTQh
-	 OLnsuCQVSxOaqGIeR7F9mODuV7gB4fhnMNKDwJp1SxRbL0qWuQM/5Pz8eNadD8DxtIYIH
-	 Gf0VkdHvaa4LkprMIvfXX0wOZcl8tk5q6CipBL9Nn+n34t+lU3E0uuhd5skwGO8tgmPV1
-	 8uoHouT1u2ujcZn1DptMR8hWrSMs2rkTuj9UpV2T6DuSHdEwBR2XS8A7v9KA+zV4R8agN
-	 A63PthFPZC+wsLjeiQkVjr4hQzX7GHcj9SbtcPC381fXSPmIi8cM2ORHAR8lSFOhR9Q==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hdN_l4pTtpuH; Wed, 18 Nov 2026 08:08:33 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org E38DF808AF
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1794989313;
+	b=S0Sa859gmJ/MGF25S/WAxXAR2Mb+SKi4n8Cd6IJKzQLPnnN6cTMN84Umc0s5MvourD3S
+	 9U9fU0Y35UeHky7KqLXqOq5/JKdr63ANoz630f9YgQGZZfENZLSTJMtukSTlqQM9wuBbp
+	 kD82s0RLiwa8KH7/RG7aW3IA7h3LZmmSO9Mly/y9MNbaJvKLYgXjmczw563ZdqLEwYiKJ
+	 ylLORdZVQkiRsylm+3MRawPFbmI8RdiitiIAZTgML4CyeDG4NGka6K5l+m8uMl51fhhN+
+	 IfzgwgI//50zyqL8C9fR3IYzhc1J2LIUzdNbs6oYBpXAuZh5Vbz/Q6rciWTHbkvaWUg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1794989310;
+	c=relaxed/relaxed; t=1794989313;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
 	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 Received:To:Date:Message-Id:X-Mailer:MIME-Version:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=rpnvyC9xFIb1rhpPm67dvFg40/yVim0ktXVSy1mB0k8=;
-	b=UMbnPGuMg6nwdyDkxWubfDPNoNiQV+LkmiFaf75p46gSIW5SNMnJOvjz0nsiOAV49wdw
-	 ok+yXdujSoaIPOMQoi+jMK+dRQd/oyClpVkQIP8lan7mvJMDaCZz9iUmr9fcAl9zG28O5
-	 55DWUwVxfiQjGFw0muA+BjMJ60LppnWLBOVzy8jF+m90xT3wkh6Tlb21OU/G//hCjM2x4
-	 koiwymLeUcIlEfTwWxQB3MFHF/j4XRkJYJQPPX/eLq/F7Bc00s/NoMgcPqtS0+msTyzHj
-	 XHFt5dm4MtpQOcfZwwW/TI0oha2IDHSaKSyJmFUaaEO8hyPt9fwH7WqleALWtfvoUzA==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+	 Received:To:Date:Message-Id:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
+	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=fV+SNfTlhBPIyDbfjJ2+Az8O3a2S0OA6te0O5fm2ikE=;
+	b=pbGfl76qmpl0OmS+yu6KQMzbgzf2RhtC5btrjmTq7cnI7xmRXxvTSmNdh+PYiID1Rj98
+	 41IRI6PJLosWuhVYUkqmolAoDRdEPFr9A/BKZ3V2Sa6g3OxX3/2va7eqCQLzROQUN1p/F
+	 RB4C3v03t0rlEOZ+cxEenos+y80azPiv/1/co9arYPHz0IuNQqwzribHlJPbhQchSp/V7
+	 JPWKFvYy4qKMPUAt9JNaePgi3nySKhkviMx/25proDX3cdNOKFGuDTH28hkGE5CPwRLt2
+	 xP3jNBEoK6wxpuMXVqJO0LWlExwg3OnYmQLJFRIJIf16K1F/D/i9QdeisnHLYFkQuvA==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1794989310;
-	bh=rpnvyC9xFIb1rhpPm67dvFg40/yVim0ktXVSy1mB0k8=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=egwW4q0TsgrPMO5AQBhuCcJA34UTxPpWQxwYZaspk5fPSq3KQy4Kk3epJR6RNGH9O
-	 EyCQYcUQgEoqNsfB1KPoPXYS3vJ3eKMuTsoNCHOB82gJGbVEb07NKiEdenPX+bhxrl
-	 JwrT3FQI8j+TzDmNf32Q3E9jVRb1BcA5ee/BMSYsSspkK4UHx091F2wtnXq9rhBaiH
-	 v4XUnezxCgDg+WaV9CwDg07CjLk9ZZdUwYhPB9c48SLUfim8Jk7ez/P/mqm5SO9qtE
-	 7zQaNloePPf8el5N+ZIkJ1BNrraujHdMSq7kRXJo9HdiJxcWtMFiMRNobIRDdI14jZ
-	 xbac1M3oW9Ajw==
+	s=default; t=1794989313;
+	bh=fV+SNfTlhBPIyDbfjJ2+Az8O3a2S0OA6te0O5fm2ikE=;
+	h=To:Date:In-Reply-To:References:Subject:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 From;
+	b=S28rapmmFW8zFKokz2bF7jL8SVGoAH9jScdRqZWQt8by7RbVYn7gkbNajMhr3djLU
+	 m5kHapmeLcNuDk7x70+GfaQmKwkqJjySoqlpkPVTTz9cTyPSI+G5+b//WsgDRp8/5D
+	 Gve8JykiAModtvLCfIJTPup9yyNTkxh02IABMEElBuyL8oDcuDuLo4En4pECmyRwjZ
+	 yqzy1ha1VABb63l9ieFpl97sMweeQ8BKfs569A1yHzdKI0m7ViFbi557z0BfVP1x5a
+	 tu9Rb2iUT0qNaRN1jJ/Of7neZkxMhlNieZP0vzmnNcmbcETVONYF+Cnnk3wAubSi0M
+	 DtcMYtepxPtXA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ACB946085E;
-	Wed, 18 Nov 2026 08:08:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 8509361
- for <buildroot@buildroot.org>; Wed, 18 Nov 2026 08:08:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E38DF808AF;
+	Wed, 18 Nov 2026 08:08:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id D27069F8
+ for <buildroot@buildroot.org>; Wed, 18 Nov 2026 08:08:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 822546085E
- for <buildroot@buildroot.org>; Wed, 18 Nov 2026 08:08:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C4C9C808AF
+ for <buildroot@buildroot.org>; Wed, 18 Nov 2026 08:08:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pPY4Sw6PNaLf for <buildroot@buildroot.org>;
- Wed, 18 Nov 2026 08:08:28 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 2AA846085D
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SwoV4yAM8wXh for <buildroot@buildroot.org>;
+ Wed, 18 Nov 2026 08:08:30 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org CC61D808A6
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::633; helo=mail-ej1-x633.google.com;
+ client-ip=2a00:1450:4864:20::62f; helo=mail-ej1-x62f.google.com;
  envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
- [IPv6:2a00:1450:4864:20::633])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2AA846085D
- for <buildroot@buildroot.org>; Wed, 18 Nov 2026 08:08:27 +0000 (UTC)
-Received: by mail-ej1-x633.google.com with SMTP id
- a640c23a62f3a-c4d427836e9so77612466b.1
- for <buildroot@buildroot.org>; Wed, 18 Nov 2026 00:08:27 -0800 (PST)
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
+ [IPv6:2a00:1450:4864:20::62f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CC61D808A6
+ for <buildroot@buildroot.org>; Wed, 18 Nov 2026 08:08:29 +0000 (UTC)
+Received: by mail-ej1-x62f.google.com with SMTP id
+ a640c23a62f3a-c50cc8e0f84so87877166b.1
+ for <buildroot@buildroot.org>; Wed, 18 Nov 2026 00:08:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1794989306; x=1795594106;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=WdVct6ca69O31oAaxR8gmcIBJ0WHQokzJSL+Toqgc7I=;
- b=oWs7W0mY8bcjfMWgfuG8A3MDWPAn5Mjiq6Be0jP0tm+vVkaV1ISGULuS63LjN6enac
- rQ2O5WN6OgHaQjdTkL3In0E+GdrkNxHoO3yNLSeRuQVeIahwyRxdD8lvVogace5aLwnM
- U/xAFs/eUQK2mfqTrYRsUbSCgPCHo4pf/jV/7iZJsOjpAk4rnwSLuoovj3dpQ0ZzZECO
- aGSfPfOGTsUTosgz6u2vHkJAaFy6T8YDg0IKO1/yCAeGNL+QTkOPPiR9Bct8eSln51wp
- QWVyDV98n/pBlcFZ8WF/Ln0/FIy1JezNJ+edQ8qJ2J6JpyHi7WNXDGSrSdzljJ/UDwd8
- g1Gw==
-X-Gm-Message-State: APuU4Z+PEu7lA9CboAJF/Zz15hDuBhbeRRw3ImMa0ZoNuJcpxp8JJjXO
- K7PhrE3Snn4ZXVowMPOtuKv9/yjl/0QhAwRT7kFwuNZN/lC7B0x3lmoGmlJHdw==
-X-Gm-Gg: AYBFou3SsVoxzjC2s5s36pbfOwT9fb/P8dzrqf/lxaToWpfktBh+8Crr/92YuzJeR2q
- r6jfaj5GVq6gTU4J7nepArCes2RpDjamCEnreH4zs9WWYCQFH6ptIIPqHktWx6rRaRzqwsX9pyZ
- A5WGicGLgeypapVCoWEOD6cxEMu2np4+6U4jyiTzkxVxhgoQCbMFdZpxHlH8XwblcO8pXvoHvcT
- g1p8e62ChDPGgeQIvsYlkeuyZLjPEqWKdPBJ9GbE+g9nnEWL8I+hgWIVo+PLxcPjiXPWy3JkdSl
- salvVKmHvYPD51efibMonv/J6m2C87exWwtsJNSe7IjTFHihA81FvPK2W0Ies3l+oUOWUw4G/yf
- 32VzSKVpbTLnE7bfHScBpFyXwbMqZEEfXodyE3Go16NjXPdhkvGEpk428IdmWsfjMNplqsLWex5
- oZWek94CARzhTQqgoBVMkZvp4E56YPMMYIwR0jupNE1+p7qlXC3BuzWIAt9wPgYUZkG0NXw9/hs
- FBhScIwWrXovlIyCAYp6D1NyN80d04jfxVoMOVznOoQRz7s8vvO8BYMpoVlPxiULgdQ8OgFKtfN
- //EzPsPqWgzD8NaKU8tt8NrTH6cLbs4kQpY7egkzqfzo1NYTuTUuC4BjNrfdKRIdFCF+CI+5NLa
- LuQlxu5eE
-X-Received: by 2002:a17:907:1b1f:b0:c50:f0f9:ad74 with SMTP id
- a640c23a62f3a-c510e19968bmr156335066b.9.1794989305648; 
- Wed, 18 Nov 2026 00:08:25 -0800 (PST)
+ d=1e100.net; s=20260707; t=1794989308; x=1795594108;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to:content-type;
+ bh=QPzIFVH34FYf0cdAZziXELdt9R08vfCKvHkvSOniSvU=;
+ b=KU4zSL/fE1WlTOuBiiDQZn6LsePerl9a9tjmWR8C7HNlh5RLa4PwSFAL8ZhAp+zLHI
+ IIS38nuGiIjCtuKCSn9TKbCo6QeI/aewWkgL8Xq8FmirU1wPo158GgAsO2VQ3tjTs1br
+ B9dTp/YPkw3DTTtk7ZAAtrClwoE5V2Mwak9ro2JxuFwK6lNF+Y0LTdwEUPS3NUoLgpDl
+ +JclhsenNr8wpUCaRuvwcKZdAbH+bdG522SOr+sneyFG713X/+2PL6RjrZX0DPAZ1a7I
+ QuIUZt4EVzuQxK7ejBp2g2vA00hd466xNRWmU1cS+Xwc5aKg9lnX5O78OHRzTjMfsLJq
+ RA7w==
+X-Gm-Message-State: APuU4Z/Bam3rdMcmu43MFYsLPT/Na9mlqT+iI09WmK/r7wb6+Qo8O3s9
+ vrTB4L2LpqsQTVxAhcGOOBC8ZiS1p52CtHUPQF7subucyjaUbfPBVtuprHp9BQ==
+X-Gm-Gg: AYBFou2b3/BYT5SbDfgvrE3T9bmrqZpngmhbVl+ASIyBj39hbo/LHlGEnHghvnr1ES/
+ IaZ5qmRvEGIUUCMEY6oic0eoTHgP/ErhsUuu+kGFEa7PvHrCsYQK7TF+oiB7xq4OoLUVih11vKv
+ ta2sMee2+fwgnIXNYH6+Al+j2jJ9QfW8/kljXn2A/M2brhjtQTQ+tKu9zMpBjRsRP7kfC7NymDp
+ WYvZBLCKgQQU0jQWtS+O+8WwjqRCWKmgLqJdkxA6IkpMLGvdaicuunQEaPmfC1riN8IZZO5woiS
+ s51an216xIUUh8xI54SPjB8gQhXO14HV6+6RN5ACrU1wtR5oIXL22u9umsETDFS20ilP43MpydN
+ nHmawV3ynIHDWRRr2bjcJukIaJCcwE22T5WgQLhywSA4FN1s+ARy1b98QtEuXuyu3LUrcCfuajl
+ WDOFgBXATmvq5rnzTpcxDqnK9XflUX4X5LM0AJFPeOM5uhCNWnOQZuEuu7gI9hMVJmptop77KKC
+ DDQJBolVzCsYOohR3nLF/VtNK4bqqyrqAgIGwAMFf8NPq13+6cweSvHhcDKjkPSRvq+kSJJetEc
+ 4itvkE5n46mxjwGzCt6Nhz0/O41+BETt+2NJSAmUdgPi6nRHK7FvVikJsJ577g/jcoJCXjiMNGL
+ vgbJ032kI
+X-Received: by 2002:a17:907:2d13:b0:c38:ee33:2931 with SMTP id
+ a640c23a62f3a-c510e32eac6mr133463666b.37.1794989307543; 
+ Wed, 18 Nov 2026 00:08:27 -0800 (PST)
 Received: from development2.visionsystems.local (mail.visionsystems.de.
  [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c51199921basm19540866b.58.2026.11.18.00.08.23
+ a640c23a62f3a-c51199921basm19540866b.58.2026.11.18.00.08.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 18 Nov 2026 00:08:23 -0800 (PST)
+ Wed, 18 Nov 2026 00:08:26 -0800 (PST)
 To: buildroot@buildroot.org
-Date: Wed, 18 Nov 2026 09:08:22 +0100
-Message-Id: <20261118080823.387880-1-yegorslists@googlemail.com>
+Date: Wed, 18 Nov 2026 09:08:23 +0100
+Message-Id: <20261118080823.387880-2-yegorslists@googlemail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20261118080823.387880-1-yegorslists@googlemail.com>
+References: <20261118080823.387880-1-yegorslists@googlemail.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/2] package/uftrace: bump to version 0.20
+Subject: [Buildroot] [PATCH 2/2] package/uftrace: enable on riscv64
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -129,129 +132,37 @@ Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Version 0.14 fails to build with musl and GCC >= 14:
+uftrace supports riscv64 since version 0.15. Its arch/riscv64 code
+saves and restores the fa0-fa7 registers with fsd/fld and reads
+floating-point arguments from them, so it requires the lp64d ABI.
 
-  cmds/dump.c:1179:25: error: implicit declaration of function 'basename' [-Wimplicit-function-declaration]
-  cmds/dump.c:1179:25: error: initialization of 'char *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-
-musl 1.2.5 no longer declares basename() in <string.h>. Upstream
-replaced basename() with its own uftrace_basename() in version 0.16.
-
-Release notes:
-https://github.com/namhyung/uftrace/releases/tag/v0.15
-https://github.com/namhyung/uftrace/releases/tag/v0.16
-https://github.com/namhyung/uftrace/releases/tag/v0.17
-https://github.com/namhyung/uftrace/releases/tag/v0.18
-https://github.com/namhyung/uftrace/releases/tag/v0.19
-https://github.com/namhyung/uftrace/releases/tag/v0.20
-
-Drop the ADDR_NO_RANDOMIZE patch: the upstream pull request was
-closed, and uClibc-ng now defines ADDR_NO_RANDOMIZE in
-<sys/personality.h>.
-
-Disable the newly added optional libunwind, libtraceevent and liblzma
-support, which configure would otherwise detect automatically.
-
-This issue has been present since commit f7f03445cf32 ("package/musl:
-bump to version 1.2.5"), which removed the basename() declaration from
-<string.h>. GCC 14, which turns implicit function declarations into
-errors, was added in the same release. It therefore affects 2024.05
-and later, including all maintained branches.
-
-Fixes:
-https://autobuild.buildroot.org/results/791c3b45b9c6184c6fc6183c8040486792fa75a3
-
-Fixes: f7f03445cf320adbbc41270a806b38c911d3454a ("package/musl: bump to version 1.2.5")
 Assisted-by: Claude:claude-opus-5-5
 Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
 ---
- ...place-ADDR_NO_RANDOMIZE-by-its-value.patch | 34 -------------------
- package/uftrace/uftrace.hash                  |  2 +-
- package/uftrace/uftrace.mk                    |  7 ++--
- 3 files changed, 6 insertions(+), 37 deletions(-)
- delete mode 100644 package/uftrace/0001-cmds-records-replace-ADDR_NO_RANDOMIZE-by-its-value.patch
+ package/uftrace/Config.in | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/uftrace/0001-cmds-records-replace-ADDR_NO_RANDOMIZE-by-its-value.patch b/package/uftrace/0001-cmds-records-replace-ADDR_NO_RANDOMIZE-by-its-value.patch
-deleted file mode 100644
-index 2855be0d9e..0000000000
---- a/package/uftrace/0001-cmds-records-replace-ADDR_NO_RANDOMIZE-by-its-value.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From dc0a75b1679debbc3712b262e5127e90961f92db Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Fri, 23 Apr 2021 22:57:56 +0200
--Subject: [PATCH] cmds/records: replace ADDR_NO_RANDOMIZE by its value
--
--uClibc-ng lacks the definition of ADDR_NO_RANDOMIZE, causing a build
--failure. A patch was submitted to upstream uClibc-ng to address this
--issue, but in the mean time, use an hardcoded value.
--
--Using a #ifdef ... #endif test doesn't work as this value is defined
--through an enum in glibc.
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Upstream: https://github.com/namhyung/uftrace/pull/1389
-----
-- cmds/record.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/cmds/record.c b/cmds/record.c
--index e750f053..fc4eaed4 100644
----- a/cmds/record.c
--+++ b/cmds/record.c
--@@ -2110,7 +2110,7 @@ int do_child_exec(int ready, struct opts *opts,
-- 
-- 	if (opts->no_randomize_addr) {
-- 		/* disable ASLR (Address Space Layout Randomization) */
---		if (personality(ADDR_NO_RANDOMIZE) < 0)
--+		if (personality(0x0040000 /* ADDR_NO_RANDOMIZE */) < 0)
-- 			pr_dbg("disabling ASLR failed\n");
-- 	}
-- 
---- 
--2.30.2
--
-diff --git a/package/uftrace/uftrace.hash b/package/uftrace/uftrace.hash
-index c4aad39016..d23ef78853 100644
---- a/package/uftrace/uftrace.hash
-+++ b/package/uftrace/uftrace.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  b81255bc288e79e96a5b158d4875fa6425ad51c85f4c4c8523c1defb9366ad12  uftrace-0.14.tar.gz
-+sha256  03189061130693b274a4d0af47c4a3135d4a496ca111b78233593bfcb3d3720f  uftrace-0.20.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/uftrace/uftrace.mk b/package/uftrace/uftrace.mk
-index c005a32b76..7ee9381554 100644
---- a/package/uftrace/uftrace.mk
-+++ b/package/uftrace/uftrace.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/uftrace/Config.in b/package/uftrace/Config.in
+index 6ec2761fa8..2513a3f7d1 100644
+--- a/package/uftrace/Config.in
++++ b/package/uftrace/Config.in
+@@ -3,6 +3,9 @@ config BR2_PACKAGE_UFTRACE_ARCH_SUPPORTS
+ 	default y if BR2_ARM_CPU_ARMV6 || BR2_ARM_CPU_ARMV7A
+ 	default y if BR2_aarch64
+ 	default y if BR2_i386
++	# arch/riscv64 saves and restores fa0-fa7 and reads floating-point
++	# arguments from them, so it needs the lp64d ABI
++	default y if BR2_RISCV_64 && BR2_RISCV_ABI_LP64D
+ 	default y if BR2_x86_64
  
--UFTRACE_VERSION = 0.14
-+UFTRACE_VERSION = 0.20
- UFTRACE_SITE = $(call github,namhyung,uftrace,v$(UFTRACE_VERSION))
- UFTRACE_LICENSE = GPL-2.0
- UFTRACE_LICENSE_FILES = COPYING
-@@ -13,7 +13,10 @@ UFTRACE_CONFIGURE_OPTS = \
- 	--without-libpython \
- 	--without-libluajit \
- 	--without-libncurses \
--	--without-capstone
-+	--without-libunwind \
-+	--without-capstone \
-+	--without-libtraceevent \
-+	--without-liblzma
- 
- ifeq ($(BR2_i386),y)
- UFTRACE_ARCH = i386
+ config BR2_PACKAGE_UFTRACE
 -- 
 2.34.1
 
