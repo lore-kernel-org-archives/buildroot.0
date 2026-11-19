@@ -1,148 +1,126 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFDB8606A337
-	for <buildroot@archiver.kernel.org>; Thu, 19 Nov 2026 09:56:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B832606A320
+	for <buildroot@archiver.kernel.org>; Thu, 19 Nov 2026 10:24:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=PDJ2Y2vT;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=wA3KH6Tc
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=I7n+JpvJ
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9E4EA40A4B;
-	Thu, 19 Nov 2026 09:56:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2A05D60AE4;
+	Thu, 19 Nov 2026 10:24:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iqzsTVHyoc8Y; Thu, 19 Nov 2026 09:56:45 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 9D50140A1D
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795082205;
-	b=o4dBsukQCMa4CDBcrciQ5YFrh/8z2Gb8Cf72lpAi916geVDbRd/kYwJ2/fnDBElqwTii
-	 +pioSK3u5SWqIeMkDmlee1YuVm2nrISGiYGZa+e0jJrHKJXAZRmLrylReQyY0q18JjdHz
-	 oiAQi9J5OLPFr149aIjJECuOJjg/cjBx5nNPN04zGM0tqWZkDMS9xGWRDLgHWwEAGoYf2
-	 lJqkUjAbeh4kYjRawliIC3ttnMYcv1NqR7KGj/PqI7GFcL+I1S24H0vPZpLTVHEqGzPU1
-	 mb8q7FeIcjc6c+iDsFcTRvjhdAFt+SbeGsZt01zZLzpFFtoWLJJIXQEMn1p0AW2qxpA==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ufJuo9PrSsWq; Thu, 19 Nov 2026 10:24:45 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 25A16607F7
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795083885;
+	b=Hd7vhyr3uiEg019ysORkHJWGJKrZF/Zq+XBNHleiGS+jvJxZiANjtQY4n/99ClLZo1gw
+	 fCxPfiiFtUSde/fQgWTNpDUv8S9Kr7Yrok5FamTXfqydaD+FTypuCUhGcgDChbhc0UBnB
+	 u5hj5qETacC/WQFNgcu+0Y8lmdEiW+8Up4jk/jLWjYHGPMVng94rSAStvUUc+ciehhJL2
+	 vvn0Oqcccu3q1peciMVHoEHCwadcCyID6aPxeuIeb1FdCMQ3hi9Zv28vjjTirXywqsug1
+	 qmH5FRRVTp18siTsm6VsGHae3wIJY+gzvK+F9pwyp8v5GLvzSG+V0YEny5/wcvR0Qng==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795082205;
+	c=relaxed/relaxed; t=1795083885;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:From:To:Date:Message-ID:X-Mailer:In-Reply-To:
-	 References:MIME-Version:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:Cc:Content-Type:Content-Transfer-Encoding:Errors-To:
-	 Sender;
-	bh=kHCJqx7VSaHGomoP4sKmzm6eTF3zQhjjFKEgc1vMMls=;
-	b=G6c6b6/88QlDEuJq1BA7NqjCKOsCnHPf3nT0Q6592PNVW8htEqmGZ+uwTd0eL0a110M8
-	 1uFCvAFMCkAXarj1a7SXzZkF1ICrBRYALvr9X6oLvuxKBgLUiV+G6wNojF+DjWs26r94W
-	 +vdF1ycNalam6J6s0UjFpLwNayloAHEk4a4if6a5DKN/H8zlaJjbxjUtXirj69yMhx0fu
-	 zd5q12+Eu9V6P9NznhnMl3asi68tutSPCCQu7CLkbJEiwsk+MWsejDBous8LN4giFe23V
-	 ygllfxrhzy5SbxUoJtaRq8fVF4TVNqczQ/W9X4NQkxjVB5zW9TzQqTCtWme7lwQ7/6g==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 X-SONIC-DKIM-SIGN:X-YMail-OSG:X-Sonic-MF:X-Sonic-ID:Received:Date:To:
+	 Message-ID:References:MIME-Version:X-Mailer:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
+	 Errors-To:Sender;
+	bh=hBm0NL3WwN+CnMSJcjJ7fC2AHwxZ3z03ZeF99XBZqVM=;
+	b=q5Ca32UaOiJ8zP+1TpRwiXLHdMfsGHr3/70i+dTNHJHqVBUpkgHJJC/cZf1XY3Tff76u
+	 FcYAKEMzPumQ9JJaOUmFcL6jF04hQxiLn8RkUe468SwP4JBm1iYw6Ej5EqacN7fvGwdfF
+	 7hn1Bi7i4E5wOdYoYY2EKxH4bzz/cWhyyLc/+nkxeDDAkXqop/y1ptrqpNe6FfFuXaUuv
+	 y6d0LCii4V0/vuNavfo1eIuoswrU+fPFQlyAnj5RFcIkIx/7nOVVJxal5yMdvuTu16Svz
+	 Z4EbtNCWH5motjmXLGCjDJ6bTceSADOGjmDv9liPs5LX+LZt8YcBVPKxmlHNaH+vWuA==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795082205;
-	bh=kHCJqx7VSaHGomoP4sKmzm6eTF3zQhjjFKEgc1vMMls=;
-	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Cc:From;
-	b=PDJ2Y2vTyTOa5vU2MTBX6M5EbGvNd539MH6jyTz3PRObJu0tzPY8zinxuLlipT4Uq
-	 NcIP1ZG1fX9ZTfme2dJ2amhTWR3lScsGQIQdlt5cuVk9cG6ErQ7ovOeXrX9K0y2rlo
-	 nrfyh3nHynqYtyCETPDqHCFHROdrj1X0KkN1Wv1aJgXDId+3xVvTK4yC3uparCz2DB
-	 O45hpCqvjekr6YQkCfMbn9MvL4joEa9ZCvzxuD7tgzTT9wUBV4LyNlN94staVtYT5G
-	 ipTsKjBqlvQnrIhTZv/6vRbg08VzN8qXuqNC5sglY2rCK3Wa0W3kIuS1tvjtv4uFP1
-	 /htSOMuTZobeQ==
+	s=default; t=1795083885;
+	bh=hBm0NL3WwN+CnMSJcjJ7fC2AHwxZ3z03ZeF99XBZqVM=;
+	h=Date:To:References:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=I7n+JpvJOKnPispgEh/m47EQKXCjvTsF1poBsYcdBCd3OmbusN1wB+Hok+f7Crlp7
+	 1OHGGeiiII7hQ6E3jHuM/htEqcOg0ViFcw2qmCGD43tUuYOH9FHCyfWcKmtLB9XPdy
+	 t6jSmJIkxsuO4xRgNUW35CudLZYl5N5VSJ1S+oAH5czHoJelZLJaEHVoSmfBx34ZRn
+	 uiEi0N/twURQZvfQcfscK0QzptWpowFgQ7E3eVMzNmHGJk72dNyjKrFwWVuLfHcPZi
+	 Q1A+8YRYt5ARoQmijq3RBVVzVbFAL5VcLIn29FV5ImndjTR0BFWYzn1R4FErHOF5K4
+	 aY/j6dcNSkhTQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9D50140A1D;
-	Thu, 19 Nov 2026 09:56:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 16A0870B
- for <buildroot@buildroot.org>; Thu, 19 Nov 2026 09:56:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 25A16607F7;
+	Thu, 19 Nov 2026 10:24:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 34C5415D
+ for <buildroot@buildroot.org>; Thu, 19 Nov 2026 10:24:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 08D5D404E5
- for <buildroot@buildroot.org>; Thu, 19 Nov 2026 09:56:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2685680F2F
+ for <buildroot@buildroot.org>; Thu, 19 Nov 2026 10:24:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mnZ7wzHeqdAc for <buildroot@buildroot.org>;
- Thu, 19 Nov 2026 09:56:40 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org C5DAF404E2
-Authentication-Results: smtp2.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::332"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
- envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20260707 header.b=wA3KH6Tc
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C5DAF404E2
- for <buildroot@buildroot.org>; Thu, 19 Nov 2026 09:56:39 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-4bb6adaf0f1so18250935e9.0
- for <buildroot@buildroot.org>; Thu, 19 Nov 2026 01:56:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20260707; t=1795082197; x=1795686997; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=24Fm5aEAhFCR/6W1ST48+/FPCVrYH1Gop/9JErHwouA=;
- b=wA3KH6TcByo91drR03HhQswqZBHgc4GvFf3aD0WI/gocDFww5mqHmOKc3IwpbiApLa
- 94zrYrXmmT4GC0owccTJOdL/haYCymvlvr8SLB1abkWcq6QjsiV0Xklng/sXcqRf/jQA
- fAFxd7K2uq0lrsA8C7xn6GtpQv58KxrFGQb2swcuIvIaaCxt/SIouCHBkeUbMFJSbDUn
- DiDor3i2ClEE1NZPWkJe59NATG5WhEmEJ80q5meVgYWM66Cqt77z2xIHlMklc0D3M8Y4
- LvzuN1gb7XpwuOsViG+rcLttSNxZJylFd/D9csnIEV7uguWqtsf3YWX2SfUNJ6voiaxx
- pMzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1795082197; x=1795686997;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=24Fm5aEAhFCR/6W1ST48+/FPCVrYH1Gop/9JErHwouA=;
- b=Wa8lh3uTlGgzn5zH/p1V1x5gsDXsXxDFldDoQNNK7Z6+OLHetmZroj4VVb+bNAtHx7
- D80uMYr26NYi7WMSNl22/3m6MVzpd6uBMMjq5/vrdA5e00P/ulxKeWpvoG1oHsry736f
- MJZ8Jz9cUJZVZXUxfOAi8Ych2aQN/Rj4Hy3MxuCe8tKlh13RlIOM9pm9FpoVJzO4feQE
- VwaBo8DXZU+0niG+j+uNAONzfdejuypOii0yLktGzwuUl9UOovNvMNbVHuU3aDYGd/H/
- N5ZKrHcXS3+UlJChL4QcBG56HXFiFjdSugg0rOVyz8xL1Bv63XHXWoWugeVDhqtbjMaD
- EbBQ==
-X-Gm-Message-State: APuU4Z8BmeQZ0Bl+NCs6Zc6bAXs7aF3QX6kmcCGSIsDRS4hEzVkkXA+S
- lf/I7NM0bv7+No8bCNqJPEOuJ1Gjpihb6YcyiVr/h00vRYbAKT/0Bd3Ft21icA==
-X-Gm-Gg: AYBFou0c1xZ6wgfs/mqndfGjeAxcG8cqBBeq9+tFQAeY7IeoSr+sYmHYBdUKz9AYa48
- ZUnEI4mKNl/amJnhLhg2LKkVoMVfSd6KwyP/rVd/q03hoIITvhbK/lgtv+AS+AfdYPm1tiLHCeA
- MR4wJqPp9nMeLwrerEKm+9VeQs16zlH9+uQH/nLrg09rUi10RY+D9LVHsLRzhoScPfPRHWepnHa
- pDDHx2DOqUQJ5jm4HapEMPjwqf8udJzFXezAhUhOSxBcS6vm8dEtzUNFXuZM+A7B0sfsu7rvQ/C
- 1aQAdz0vMPltcF74bh+wJhyY+eqDzG5OEZ/SmM9vUAVqvyG95GieATBv0oakRVehD8wO9AbEjaC
- 7kVDev8zU19gLhHNmQE/8ziDxl6RbO7nZHn/DMpa2lvg8aOA7/pKWUJ0kuBveQW46EmQB2O3+ix
- ucy5huOHtAkPwImZTanJFo0GK/lNOgiSzuDZLbZCsw0CDkaYT9FMKgHyDnVK96e/lEoaNPRPEVl
- kj0SrPDK7T/ixrEErKlhurDF8SY8zEFa494PsPWHOP7KWMpr0gh6LGw06cBlRe5jV8ZIlbdaZku
- 7OszgX6EwqOR4QDaEh/+s/TUogQu9sTAv6TIrjJPUOD1YlFTVwIFMEd7CkFZeBCFMMZgcMlAw1M
- JiYxSPEI1lFiF9qSEZONjk3U9aA8cmNJMIMluc97u
-X-Received: by 2002:a05:600c:a07:b0:4a2:1a:a11d with SMTP id
- 5b1f17b1804b1-4bb7d57770fmr111536855e9.0.1795082197051; 
- Thu, 19 Nov 2026 01:56:37 -0800 (PST)
-Received: from angelo-Precision-7550.fritz.box
- (host-94-86-174-214.business.telecomitalia.it. [94.86.174.214])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4a65560bd46sm9439635f8f.31.2026.11.19.01.56.36
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 19 Nov 2026 01:56:36 -0800 (PST)
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu, 19 Nov 2026 10:56:29 +0100
-Message-ID: <20261119095629.1990220-6-angelo.compagnucci@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261119095629.1990220-1-angelo.compagnucci@gmail.com>
-References: <20261031143617.445438-1-angelo.compagnucci@gmail.com>
- <20261119095629.1990220-1-angelo.compagnucci@gmail.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ygyQhDQW2Q2x for <buildroot@buildroot.org>;
+ Thu, 19 Nov 2026 10:24:43 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 3E09580DC5
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=66.163.185.206;
+ helo=sonic321-25.consmr.mail.ne1.yahoo.com;
+ envelope-from=davidluca3000@yahoo.com; receiver=<UNKNOWN> 
+Received: from sonic321-25.consmr.mail.ne1.yahoo.com
+ (sonic321-25.consmr.mail.ne1.yahoo.com [66.163.185.206])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3E09580DC5
+ for <buildroot@buildroot.org>; Thu, 19 Nov 2026 10:24:42 +0000 (UTC)
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048;
+ t=1795083881; bh=9k7c0ZuqTJIVfPsfRgFL54UGc3elgbwD1M76Obayqhh=;
+ h=X-Sonic-MF:Date:From:To:Subject:From:Subject;
+ b=M1l4OTxjchie5yq5Ff1of5BSxfp+yGBYbxlOzJUJ/IcUTD7oddXOhdPu4YORyQyB6GgA0bRmja9cwtCZov0RiMeKnAuBvdMi8DKpPokELmIA0kMtR41kQZ4LvHo2OxilJjInTGLwZzhpoPx6QCrIfMJFzzd0PYNDQSuASOKV6pAgqjhuPIpzrr55K60h1ByXHsD7ZykMIpskbkXuPf83BaOBGbbmyrX4ePSJNzQXFVMjuqEsvIHwjPGJZkRZO5t1pavQVJF0iz5dfNgYTJOD/fVWuNtPlikGpJCM4mNLy1QiINBv7LuqZgT69VtrxQn4T0NkTUhItPoMqeijvFMqHA==
+X-YMail-OSG: G06O93EVM1mc2u22KzHpkhQuPobkJxVLCkIZn5To1ixklTS4CEf596zAUjVh_ua
+ RtuPVwSFxdUwVZEV_KOCX9BxNcaVxJxr5JOe8Q5gFY_p54JqWILG51VSXh6HWdVpqrEMXs4VvhTq
+ jnUqMz86wlySdJX701SC4nJha7g6geRF_PCzYSQTfnH8Y_anMpNszjEhPKprjWJ7lh2VeNQxSGey
+ wLRvdfV8iWRpFe7rTNVOovytiguFzlkgd74Uz0g3Zs9eIqOG9FR8Sp_ofzYFdOS8OzQ.aBaUb0vF
+ KXL1B8q0VeHhJicPUFEBGbbLY1hXFAs_upz5yLYomkZCD_6tii_34rnZo37vD9GBneIsAF6NeCRb
+ sVb.lf22T3iOSB_lgyAB70CdjfJO8T5CRDpi.Uv7xk8YcEnisOLAYHHqhLJ0uZ0sVlRwRDWDOmRU
+ HFNVYcmo0OrK1t.hlzmoYfr5_SDjQ5.H2eK9z3letrfYn76bMD446lRvR72Lo0upSOspVdRRIVQJ
+ FK_yYTYJQEPbYOIJc0HVUyacVl2KrUuVnWlLvft7IxvUwIAVhtdEbWsDrEKo5RIEWSzhwQTk2A0M
+ e_ndVgbRbR71YQfMRKdiRieKOmx7WSIXQnjaMMPbT_QsMkaJ9CXbjrprBIoXCvBVALYR.2nC_VYp
+ yFdR7w.IXM1gSxBVMKcTq1nntCgOPMF.U.bAf0MPlgpcsDb5ba7EFPAAYVC6xkVS9mEBL1x.Oc7g
+ HLRcJjkWDSyIog1l_dR2ECJgkVG0YEkz22k0QiqLvA82KGLnwKS32h64iJcMRkdF53Sr0J4qjiKT
+ f2QN0dHoQJl.OJe1iF109wNhv11qBv4ZYyb1SDHqhvuxOAGAaluS7EBPJWmHo5gk5TjY0d96mz7a
+ 98c6.WEHK8ntMUzYcSSSfUcdV9f9uGcNo3Cfoo1NVel_AifS8LucJ5yaH9MOhwoDn5iLEw6Zr4wG
+ dm6X8IWpzbYZz5gLUdJcKSWLQ0kI8HBXHVxvVNPhCz4R7JkwnGq7T4rAvbgz5sCNSQuGL.XVq9LL
+ zz_0AM.CT.NQcobt4p8gPFaT8Wy7GYg0QzC6DJiB8GM0.Tezbrhwkj.uLy12c9FSkk1mmJ0wiRKY
+ WPOO.sL9XKbWJYUccQo7xEvRJia5IAOO.rWACF4JHNSpnt35jX6tp516WX23Y7hckY5wszCEpiH6
+ mAeBv31DKmDUVsZSCO6DCD.S0TOQn6NX8N0eoH9rwj9s1c2JyMVAkHdxEUpG0ZVlWLNmO7zI7mJa
+ KCykoeePN2iSi9ZwkRZeRHTjYXGNiZz80FpBxVj9p8GR1jEeXeJcsxTh97NFd2SrTlL_mYTsMjta
+ 1d7yxVoN_2p_qYH06mWMXBLbbjdcZBDUCZEOxGsvT2cshmtAFr1TYec7ogUsRnJOFGdINZ6IS07A
+ zR0KyUhbaqokVZ0D3KT8k2p62QmiCQdAey_BvxGhPHpMu_mc6AuR5b12mcPBYBMXcwWzIkpYEz49
+ VJZF5DQo3p9kiuOmJaUOwZGBZPmD2_FXiPEzODd_qA8A_I_MzqzAY9os5KVn.fZVGI2N6jaJXL2V
+ dnYW6rW9RUU24qvfUc_4xsjb13ZdnA8gmO5DzWvicGnWVPijvdBPzmwA7jsCA1UXIoQnolrJMew7
+ 1qpiBrXTulNRwoNFpUbUY5.Nv6VhCPaDBj6QUjX__EF1Osuz.WiqiiG8T91p0q02eEviqOpA7oC2
+ pgth_WCzXuk3eBFEhK8AH_VoFr23oscoRGY19OES9hobpDV0pzyAy_4rZPoLuA8PZgXGcyiXDBut
+ t24LJeF77yoFW32EMhiwud4R0MBR.JxCiS92Gfzn27b3sLEwL4W5vkvpfWycCCnxTHR.KTFi0HDI
+ hdKzHKuOqeAyUEcIff36IPf3uB4o92ZTMvGwqPttd8ucJR1QAbEieSrmP_zMCPUpHT3VKwvpINuR
+ DVaUaCf0Va6wJ2K03BzkjZecTiLLiArBriAu0wwrVg.Ba35wkag33TbrQr2XcNyqcRKq6zTlrk92
+ s.OE.aCRQG.08eH.oVyynIy5HbcXBJfR7K_2yDQSzCEW7vUE1ErxEdOyTkYMBFSU2aMdSaRUGs65
+ pFEdpYsXg9Bx8aPjzUuPX8NHGDHpXbT8be0dLDF5ZWhl910J1ZJ4WMDfBfobSqGxOC6n5OrLdloe
+ nsVivvGcNo169XoByZunv.72QnNehJn4C9umIjzFSR8RSUSXNPMXI8uMEmyOnl1CffH7QKib.w3l
+ g0hgpKU3IUP4RVUW_hm07O4yPJA0iLI.lGKXVP44BN7Z4liU5J4Yix1g68V4MWgpzGPtMeJdcYIn
+ 5Kx.O8Ml.7sYRy_MKAz0Tvjmdr_WRAGX.s74bh1Nu_3xLyLkW1a6DVw2OTo3R
+X-Sonic-MF: <davidluca3000@yahoo.com>
+X-Sonic-ID: 7968ec69-45d9-4b24-bbe6-89bc6f631db6
+Received: from sonic.gate.mail.ne1.yahoo.com by
+ sonic321.consmr.mail.ne1.yahoo.com with HTTP; Thu, 19 Nov 2026 10:24:41 +0000
+Date: Thu, 19 Nov 2026 10:24:33 +0000 (UTC)
+To: <buildroot@buildroot.org>
+Message-ID: <519380524.50174.1795083873768@mail.yahoo.com>
+References: <519380524.50174.1795083873768.ref@mail.yahoo.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 6/6] support/testing: add python-web2py
- runtime test
+X-Mailer: WebService/1.1.27079 YahooMailAndroidMobile
+Subject: [Buildroot] Perl missing modules
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -152,126 +130,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Julien Olivain <ju.o@free.fr>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- James Hilliard <james.hilliard1@gmail.com>, Fiona Klute <fiona.klute@gmx.de>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: David Luca via buildroot <buildroot@buildroot.org>
+Reply-To: David Luca <davidluca3000@yahoo.com>
+Content-Type: multipart/mixed; boundary="===============2731046160402603272=="
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	NUMERIC_HTTP_ADDR,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT,WEIRD_PORT
-	autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-1.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_REPLYTO_END_DIGIT,
+	HTML_MESSAGE,MAILING_LIST_MULTI,SPF_HELO_PASS autolearn=no
+	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-The test boots a system where S51web2py starts web2py, then logs in to
-the admin application:
+--===============2731046160402603272==
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_50173_33201324.1795083873767"
 
-- with a wrong password, which must fail;
-- with the password set in the configuration, which must succeed: the
-  admin application then redirects to its site page.
+------=_Part_50173_33201324.1795083873767
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-This checks the admin password generated at build time.
+Hello,=C2=A0
+I have Buildroot 2026.08.1 successfully building a x86_64 image on my VM, b=
+ut on a different VM that was building 2024.02 without issues, currently fa=
+iling with following error:
+"14:04:35 Your Perl installation is not complete enough; at least the follo=
+wing
+14:04:35=C2=A0 modules are missing:
+14:04:35=C2=A0 =C2=A0 =C2=A0 =C2=A0open"
+The version reported for perl is: v5.26.3 on both VMs.=C2=A0
+I tried a small perl script to test 'open' function and works fine, any ide=
+a what I'm missing?=C2=A0
 
-Then it checks the init script: a second start must find the running
-server, and nothing must answer once the service is stopped.
+Best regards,=C2=A0
+David.=C2=A0
 
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
-Changes v2 -> v3:
-  - new patch
+Yahoo Mail: Search, organise, conquer
+------=_Part_50173_33201324.1795083873767
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
- DEVELOPERS                                    |  1 +
- .../tests/package/test_python_web2py.py       | 61 +++++++++++++++++++
- 2 files changed, 62 insertions(+)
- create mode 100644 support/testing/tests/package/test_python_web2py.py
+Hello,&nbsp;<br>I have Buildroot 2026.08.1 successfully building a x86_64 i=
+mage on my VM, but on a different VM that was building 2024.02 without issu=
+es, currently failing with following error:<br>"14:04:35 Your Perl installa=
+tion is not complete enough; at least the following<br>14:04:35&nbsp; modul=
+es are missing:<br>14:04:35&nbsp; &nbsp; &nbsp; &nbsp;open"<br>The version =
+reported for perl is: v5.26.3 on both VMs.&nbsp;<br>I tried a small perl sc=
+ript to test 'open' function and works fine, any idea what I'm missing?&nbs=
+p;<br><br>Best regards,&nbsp;<br>David.&nbsp;<br><br><div id=3D"ymail_andro=
+id_signature"><a id=3D"ymail_android_signature_link" href=3D"https://mail.o=
+nelink.me/107872968?pid=3Dnativeplacement&amp;c=3DUS_Acquisition_YMktg_315_=
+SearchOrgConquer_EmailSignature&amp;af_sub1=3DAcquisition&amp;af_sub2=3DUS_=
+YMktg&amp;af_sub3=3D&amp;af_sub4=3D100002039&amp;af_sub5=3DC01_Email_Static=
+_&amp;af_ios_store_cpp=3D0c38e4b0-a27e-40f9-a211-f4e2de32ab91&amp;af_androi=
+d_url=3Dhttps://play.google.com/store/apps/details?id=3Dcom.yahoo.mobile.cl=
+ient.android.mail&amp;listing=3Dsearch_organize_conquer">Yahoo Mail: Search=
+, organise, conquer</a></div>
+------=_Part_50173_33201324.1795083873767--
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e4c7e494cd..4e267125b1 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -266,6 +266,7 @@ F:	package/sshguard/
- F:	package/sunwait/
- F:	package/sysdig/
- F:	package/uthash/
-+F:	support/testing/tests/package/test_python_web2py.py
- 
- N:	Andy Shevchenko <andy.shevchenko@gmail.com>
- F:	package/fb-test-app/
-diff --git a/support/testing/tests/package/test_python_web2py.py b/support/testing/tests/package/test_python_web2py.py
-new file mode 100644
-index 0000000000..f6f65c8cf7
---- /dev/null
-+++ b/support/testing/tests/package/test_python_web2py.py
-@@ -0,0 +1,61 @@
-+import os
-+import time
-+
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy3Web2py(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_WEB2PY=y
-+        BR2_PACKAGE_PYTHON_WEB2PY_PASSWORD="buildroot"
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_SIZE="200M"
-+        """
-+    timeout = 120
-+
-+    # The root filesystem is too big for an initramfs
-+    def login(self):
-+        ext2_file = os.path.join(self.builddir, "images", "rootfs.ext2")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-drive", "file=%s,if=scsi,format=raw" % ext2_file],
-+                           kernel_cmdline=["rootwait", "root=/dev/sda"])
-+        self.emulator.login()
-+
-+    # The admin application redirects to its site page once logged in.
-+    def login_admin(self, password):
-+        cmd = "wget -S -O /dev/null --post-data 'password=%s' " % password
-+        cmd += "http://127.0.0.1:8000/admin/default/index 2>&1"
-+        output, _ = self.emulator.run(cmd, timeout=self.timeout)
-+        return any("Location: /admin/default/site" in line for line in output)
-+
-+    def test_run(self):
-+        self.login()
-+
-+        # S51web2py starts web2py at boot: wait for it to answer.
-+        for attempt in range(60):
-+            cmd = "wget -q -O /dev/null http://127.0.0.1:8000/admin/default/index"
-+            _, exit_code = self.emulator.run(cmd, timeout=self.timeout)
-+            if exit_code == 0:
-+                break
-+            time.sleep(2)
-+        else:
-+            self.fail("Timeout while waiting for web2py")
-+
-+        self.assertFalse(self.login_admin("wrong"))
-+        self.assertTrue(self.login_admin("buildroot"))
-+
-+        # A second start must find the running server.
-+        _, exit_code = self.emulator.run("/etc/init.d/S51web2py start")
-+        self.assertNotEqual(exit_code, 0)
-+
-+        # Stop the service: nothing answers anymore.
-+        _, exit_code = self.emulator.run("/etc/init.d/S51web2py stop",
-+                                         timeout=self.timeout)
-+        self.assertEqual(exit_code, 0)
-+        cmd = "wget -q -O /dev/null http://127.0.0.1:8000/admin/default/index"
-+        _, exit_code = self.emulator.run(cmd, timeout=self.timeout)
-+        self.assertNotEqual(exit_code, 0)
--- 
-2.53.0
+--===============2731046160402603272==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2731046160402603272==--
