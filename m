@@ -1,140 +1,109 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97DDD606A320
-	for <buildroot@archiver.kernel.org>; Thu, 19 Nov 2026 08:09:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E729606A32C
+	for <buildroot@archiver.kernel.org>; Thu, 19 Nov 2026 08:33:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=OhE1Hbdl;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=googlemail.com header.i=@googlemail.com header.a=rsa-sha256 header.s=20260707 header.b=zIsiZxGN
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=cHWpkBBm;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256 header.s=purelymail2 header.b=HUUus74W
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 666F640A08;
-	Thu, 19 Nov 2026 08:09:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 53BCC810A2;
+	Thu, 19 Nov 2026 08:33:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H8CvyKA07znQ; Thu, 19 Nov 2026 08:09:02 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 5C4C640A1D
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795075742;
-	b=IU/y/szW29oroHw0FEOf2veSr4gfR6XVzmWBk0/zKmSzfjnqGQEiSAzFo+fcYlbU0mvF
-	 8QB6wm7GSXRMP1Slw3oMC7I8ysyoxV7oruinkYNw+7sJ1hO/F2nGba3mhXQHAVsFwYY5c
-	 z2GF8RRP9ipI97k/1yFqdm6OOh+xYLW86JvX7Wo0pNNvKuuYWn/t3wuOT5OZLUcPm2csj
-	 0tt0+KK1P/hxzz+fqek0aE8RWs53K1tPlIFiy8UUs0obVasZgmjfvZqVZIKo7zH22nNAe
-	 3iPMkogc52XYVnn3mx19iHNOdgNz3NPEDGeBX9g7HB3nZ4V8QggFBUpsuFSLtevC0RQ==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2XlUBh0k6vdB; Thu, 19 Nov 2026 08:33:43 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org EF2B3810B8
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795077223;
+	b=U9LzsasotCGZJ5sBOOW0/GBFOsxuMU5AOtDugfAe+7ReSVqmwlc+HtoeVbJSk+rQouNO
+	 YblTF4pqcuBzrqpWLSXfRUr6OtCY+lJHZ6aVkHgTnM46xahNaX6GEFy/0taxU8wqzTXDg
+	 IeH+2ak6Ci7Awi1m1NRYu14YHnuUrZuHrvTdBRpUE5sEoJQkrEPbSZ6edMoD3oBrrvrav
+	 ja6f7G9JBPApGHjU/pa2QapdRvpWaI4WZkz+E1kR+8/iIxCy0F7ZfroslShM+wWxtXz0T
+	 pzZZTkNYL8+p28K6qkFe2Co/QucT7B0w/kkP3aaAarGZUr1w3iGw6AfH5cQrhn0INuQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795075742;
+	c=relaxed/relaxed; t=1795077223;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:From:To:Date:Message-Id:X-Mailer:MIME-Version:
-	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:Cc:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=lWmHCfzIgCEhoOvCr7C5OPI4yGDEUCE9cVh/LFqGZdI=;
-	b=MB2K9X1LG0cb10RwX6jHzo8rgYaZOgK2aNHDPve4aMM8EeWfiHIMulpTuqzu0hP8rwvI
-	 HcnlkDXMaX6HIeM71tQjiWCn4LRrhsLZrU42Xtmn3AfYi2KZF4clgakY4SVB1nmqe1PCq
-	 wDc3qvAD2K87TlsL/5zgVlQFCL/hiscViVtamP96rfh1EjipaSqVEZSel3D474fRuwkPA
-	 uA+TRypC6jiEG8m/HqGUzZCUonkYzpWdxnTrUadx1ZTKnxpDnbinuy5w2V5TggQL2iM9R
-	 iGy+xahMDPp7XegQJbeo/4Jfxp9yG6Pw38xBPwsuvyZjT57UbCtbWTR3fFkgRbJJQZQ==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:Received:From:To:
+	 Date:Message-ID:X-Mailer:MIME-Version:X-MIME-Autoconverted:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=KF0QIXRsd/nT+elghOliNziP9G77T7GmWqQJqH8B4go=;
+	b=ZDDq1AQSpBiZxlLXVGa1gY2JlOZUxogmEKKUUuOOV8g0MBBfhU05KS8X4Di6e5rfGy3k
+	 hxIxEovVizuPibiJWjGV9TaCyo4rxdsPXblN5oIjK3LhQP357CWrj1+Vb/2/iS+59J02D
+	 rKfaglY1OWN6W844zeDp+7gDA81tHQhsWuo/6MC9WrxxWaGpOkzNWFpn26BU99h99P9mM
+	 gR3bL0FLepWEOWBjrTstmheJARUWeX7JG6wN36Cw/b4B8fOO9JmLTITy3cfDWub6+6Ec7
+	 4v+VF67KRVbMG/fhnys6xdUvO2KoFNpSrAmS+UEnSOyGoz7kb5JvIXuPbA9pPmAJIpA==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795075742;
-	bh=lWmHCfzIgCEhoOvCr7C5OPI4yGDEUCE9cVh/LFqGZdI=;
+	s=default; t=1795077223;
+	bh=KF0QIXRsd/nT+elghOliNziP9G77T7GmWqQJqH8B4go=;
 	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=OhE1Hbdl6W5xrItcQXGmFTS3AmSN2q2c3rAalEXpi62bTZlGWyHcbyFsLtO+8xHKc
-	 AWXn+2mI2eZUZPSuA+gpPq4c54c8+/pdFybLSglhGZdOxTw1F5EawpN5VjiJEl8Q8f
-	 BT2FUiS7v0k38R5zppzb5lc94zTXR6fknhkXcjEEF5Uu000Lm1ZZDBPLBBelkP5JXq
-	 7hpVP8Fgd0WNiIktxLI9Ry2GbI58Bm4iOzgKJ6xewh6diUFwsEf6C1eUAphZXPMIQr
-	 EREdTVuXJY3XeM7q3Eu6HcOPSJ6eSjuskFZP9n4oUC8KIUEXb3T6O9fwHa94QVEpgK
-	 QKLksiBhRl4Fw==
+	b=cHWpkBBmMvwmCVDKjpGtQuW9aocpmiWv8xLPyaz0x2NCR2d562sp8QE6ZjuLkwLTl
+	 lzerSbYzzqQuOKvE0fcadVdFA2y7mzkVOyZ7L8mIeeOFW5nP7tbcuvpdywlZRSPpgL
+	 YB8GSng1PcqsSsV1Muu8Nr3Vp2q6rSLKNCT1GZ1z6c46B6qyCGcmBPoYFnwVccU2kO
+	 UmwaddwfDSbiThFAuCbjZjOz9CNl6s14tVFGQKZ1wdezzXFNjA78c51wzap/Qq89Om
+	 VMEvNah5uf/YmUC1AaLP8Z3uedOqirf/IF7kq/hZZRmgKmucpSSFlax8U87D6OEL9R
+	 sngElqAX1mysg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5C4C640A1D;
-	Thu, 19 Nov 2026 08:09:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EF2B3810B8;
+	Thu, 19 Nov 2026 08:33:42 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 103961C9
- for <buildroot@buildroot.org>; Thu, 19 Nov 2026 08:09:01 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 054A579D
+ for <buildroot@buildroot.org>; Thu, 19 Nov 2026 08:33:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA32240080
- for <buildroot@buildroot.org>; Thu, 19 Nov 2026 08:09:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EB321400AF
+ for <buildroot@buildroot.org>; Thu, 19 Nov 2026 08:33:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EvdRi59y3fPT for <buildroot@buildroot.org>;
- Thu, 19 Nov 2026 08:09:00 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org A405A40072
+ id k8JRXM4b0JuY for <buildroot@buildroot.org>;
+ Thu, 19 Nov 2026 08:33:40 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org A90BB40072
 Authentication-Results: smtp2.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::62b"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62b; helo=mail-ej1-x62b.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org; dmarc=pass (p=quarantine dis=none)
- header.from=googlemail.com
+ arc=none smtp.remote-ip=34.202.193.197
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=peko@korsgaard.com;
+ receiver=<UNKNOWN> 
 Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com
- header.a=rsa-sha256 header.s=20260707 header.b=zIsiZxGN
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
- [IPv6:2a00:1450:4864:20::62b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A405A40072
- for <buildroot@buildroot.org>; Thu, 19 Nov 2026 08:08:58 +0000 (UTC)
-Received: by mail-ej1-x62b.google.com with SMTP id
- a640c23a62f3a-c4395d31228so299653266b.1
- for <buildroot@buildroot.org>; Thu, 19 Nov 2026 00:08:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=googlemail.com; s=20260707; t=1795075737; x=1795680537; darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=855mZPoZeg4pDUB5c0v1/OR65Ddt0vhbWLa0XTCjiJc=;
- b=zIsiZxGNi64A3nPaDtBTrBJ7Gj1sQ8A2p/PYkb21ZaQaS4p5Uc2gdU8nHEfOBUmwGJ
- 0su0aMeyN3kDATeV0VfBAOltvhshCvQ/N00AyKvE0hUvgPadvwk8wGEQZhhgL1DzHXE1
- ddDNfKXSBdR3nIHcBOhRFRuHS1XytlnrPQMjx8szaIqbZ26TIjfSufFOwntWnMxC8UiV
- Z9qVHjtVEYZr+fCumWFLLoPSqegC8CVaXY2cYpUgzrhGvZE2pAWNV3kg967j8UYjjnbV
- e2Bbz5Jxsn/E0BwHMuWNr3AnotKaR5eCRE/Y7XRpvqJ2Cc8go10RvC+85Fy3HOO86UMn
- zHFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1795075737; x=1795680537;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=855mZPoZeg4pDUB5c0v1/OR65Ddt0vhbWLa0XTCjiJc=;
- b=0wKipPqPsjgbI2f89u3/cnfdOcf13LR2oXd+m49wNm8roCnNPuFxGL1MHkG9T7daLA
- 3aN03+2+S2WKVsVE05SiGc7yGtGacrHYnVULMU0fInSBHlI8cOj+7LmoUmwiwcaVTdKX
- HYvbYch5jcTVvukeBIqekb3Bp7yIif88J4wA3g0CqPe9NMuZBZFZi9Nw1XN5iTLa1fpk
- w3bBg2tsujxDwHB10YQ7hKY/2bjagUF06a3dZ5NgirJnzgebd0d6ukxYnbTdUybSEU4+
- ydnXnPRidlPn48VIxVDiKZAeIeBKZJwSeSHAUALw1hW+8Go7s3uRUWN2hLxkl6S+izfi
- YE6g==
-X-Gm-Message-State: APuU4Z/0OfGTf+s7EFsMz8kuCloPx5rn4Uvj//+WlNhUdQIokBO1EISr
- Yk79RsXgvNU2xlny2c8peZSH/dF1Re9nUTNcpMau+OHRkZSnAwMl3GPaAf6nqw==
-X-Gm-Gg: AYBFou0v+bUGyTvfwlWZ0a8ReismfU9IFc4oBZ45tfS37+oOfcE1LPD3EkOxy2W8aT/
- 2oFsP8BWUvgSOKKmZ9KItiexutkuH+GPSyCOlNEWCkx68oF+xX4KBg1CxSgcka9+oR0Obri+vkd
- 9/iRfTz2Mr6bb7+yzNdWlmFUY4U0Sf1sTCsKMezF0LR9REa/OL7WhfSX82BrXXa71Cx4L2cmvIj
- J80uc5VHCSxY49DecBQpT7lkZAK2TP511jbrFzHHNaX1esgryIE2j+helXwBUEIf/v0mW9WCQwP
- CtWHEiZTxuCi2VtJfyucfyoeVjkMhGwLPdPuh+n+rlvLAz/9Jk+hD1NHWguW9RXw6aNVRSPXEyB
- 6rnZhF+oIv/Zl2vwu6YH+g0gYqlUTvDHnrfG7ySOoOBrR3qzgBWc/wuQRRijj5FR0vQmOzUJigS
- L7TjfTcGNTNTUWRjVZDzy5A7ORC4DYsefzHLa5W4Xl9tS0f1LHZYvyEhB/jEyuckZ1y2m+FLP/j
- 3Fhod33cam7T9McD6oy3r6WVjyhwaIQf/+ExjOxRaAJkdAQMfIZXN4hM6s3V5an4vvkG/K8+VWm
- T8xONPpuk61l5XtOQFprg5nLMaBR/oGNJTGYVrLPiCR8dmuDUhtPCDp2MnAHP/x7msgEQdwlrXw
- Z/eL+7to5
-X-Received: by 2002:a17:907:7b9f:b0:c40:560a:462 with SMTP id
- a640c23a62f3a-c510e4e4e1dmr539239066b.32.1795075737005; 
- Thu, 19 Nov 2026 00:08:57 -0800 (PST)
-Received: from development2.visionsystems.local (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c51233c4d5dsm85478766b.15.2026.11.19.00.08.56
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 19 Nov 2026 00:08:56 -0800 (PST)
-From: Yegor Yefremov <yegorslists@googlemail.com>
+ dmarc=none (p=none dis=none) header.from=korsgaard.com
+Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=purelymail.com header.i=@purelymail.com
+ header.a=rsa-sha256 header.s=purelymail2 header.b=HUUus74W
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A90BB40072
+ for <buildroot@buildroot.org>; Thu, 19 Nov 2026 08:33:38 +0000 (UTC)
+DKIM-Signature: a=rsa-sha256;
+ b=HUUus74WyIpz2NN2jLryhjSXK2MIzsj9Eqyl2z8YpytYjTNoh87t1Eb84Le3SrOEr9JZCkUYnmGqrOB2aQjwxkChmdQldShxFPdFe9dvzCecA6ceJ1H5kit1WFQrUnDWi3Dce4rFPoNlFmVc8sJsMAU9xfNMccCPj/Lq6gS0FFGBounEUOH25Uv4Gz3oop6t6LDlspqnLgIegYRtkKD9Jz2btqRAQIQp7ympc2H5wz1tmUzWno5R9sVydhW3ezJ+OZzuyJZYxoLJw7Toe75701Fak9Pz6A/rGMRtj46iFXMpImT0dHZ1SndQmevCmABRpQDDNz0AFhwEI+PAjCDYJg==;
+ s=purelymail2; d=purelymail.com; v=1;
+ bh=y6OlLci75r4hMmcvehJtI1ThCW5rYPxAOMuwudpMxnU=;
+ h=Feedback-ID:Received:Received:From:To:Subject:Date:Message-ID; 
+Feedback-ID: 21632:4007:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Authentication-Results: purelymail.com; auth=pass
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -824664412; 
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Thu, 19 Nov 2026 08:33:33 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1xTxaG-00000000onc-28mb;
+ Thu, 19 Nov 2026 09:33:32 +0100
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Nov 2026 09:08:56 +0100
-Message-Id: <20261119080856.2471644-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Thu, 19 Nov 2026 09:33:29 +0100
+Message-ID: <20261119083331.195248-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.47.3
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/optee-client: needs glibc or musl
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
+Subject: [Buildroot] [PATCH] package/haproxy: security bump to version 3.4.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -144,129 +113,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Etienne Carriere <etienne.carriere@foss.st.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-18.9 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-16.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Since version 4.8.0 [1], tee-supplicant uses renameat2(), which
-uClibc-ng doesn't provide (glibc has it since 2.28, musl since 1.2.6):
+Fixes the following vulnerabilities:
 
-  tee_supp_fs.c:491:25: error: 'RENAME_NOREPLACE' undeclared (first use in this function)
-  tee_supp_fs.c:493:13: error: implicit declaration of function 'renameat2'; did you mean 'renameat'? [-Wimplicit-function-declaration]
+CVE-2026-110353: HAProxy 3.2 before 3.4.6 allows a remote unauthenticated
+attacker to cause a denial of service (worker-thread CPU exhaustion) via a
+truncated HTTP/2 PING frame
 
-This was reported upstream [2], where the maintainer proposed adding
-a dependency to the package, and the issue was later closed as stale.
-So make optee-client unavailable with uClibc-ng, and propagate the
-dependency to optee-examples and optee-test, which select it.
+CVE-2026-110354: HAProxy 3 before 3.4.6 allows a remote unauthenticated
+attacker to cause a denial of service (persistent worker-thread CPU
+exhaustion) via an HTTP/1.1 chunked request.
 
-This issue has been present since commit 6b7b895d10a8 ("{boot/optee-os,
-package/optee-*}: bump version to 4.9.0"), which brought optee-client
-from 4.6.0 to 4.9.0. It therefore affects 2026.02 and later, including
-the 2026.02.x LTS branch.
+In addition to a number of bugfixes. Release notes:
 
-[1] https://github.com/OP-TEE/optee_client/commit/e3148e3019f4eb0eeadac5ddceffc4d425b3570d
-[2] https://github.com/OP-TEE/optee_client/issues/418
+3.4.5: https://www.mail-archive.com/haproxy@formilux.org/msg47506.html
+3.4.6: https://www.mail-archive.com/haproxy@formilux.org/msg47531.html
+3.4.7: https://www.mail-archive.com/haproxy@formilux.org/msg47598.html
+3.4.8: https://www.mail-archive.com/haproxy@formilux.org/msg47800.html
 
-Fixes:
-https://autobuild.buildroot.org/results/a1776b9fb064aea72e37965e9c04d44ab1743b2c
-
-Fixes: 6b7b895d10a8156e96f17742c6b05eb6fd47ca40 ("{boot/optee-os, package/optee-*}: bump version to 4.9.0")
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/optee-client/Config.in   | 6 ++++--
- package/optee-examples/Config.in | 6 ++++--
- package/optee-test/Config.in     | 6 ++++--
- 3 files changed, 12 insertions(+), 6 deletions(-)
+ package/haproxy/haproxy.hash | 4 ++--
+ package/haproxy/haproxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/optee-client/Config.in b/package/optee-client/Config.in
-index 04849ffce4..fd9193b67b 100644
---- a/package/optee-client/Config.in
-+++ b/package/optee-client/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_OPTEE_CLIENT
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3 # MMC_IOC_MULTI_CMD
- 	depends on BR2_USE_MMU # fork()
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # renameat2()
- 	help
- 	  Enable the OP-TEE client package that brings non-secure
- 	  client application resources for OP-TEE support. OP-TEE
-@@ -94,7 +95,8 @@ config BR2_PACKAGE_OPTEE_CLIENT_TEEACL
+diff --git a/package/haproxy/haproxy.hash b/package/haproxy/haproxy.hash
+index 9f3a08c500..fd0c4ce4d3 100644
+--- a/package/haproxy/haproxy.hash
++++ b/package/haproxy/haproxy.hash
+@@ -1,5 +1,5 @@
+-# From: http://www.haproxy.org/download/3.4/src/haproxy-3.4.4.tar.gz.sha256
+-sha256  b0c5053c4d46840ecdee3925736fe9a3de6472559b43c69183d70e593d9133df  haproxy-3.4.4.tar.gz
++# From: http://www.haproxy.org/download/3.4/src/haproxy-3.4.8.tar.gz.sha256
++sha256  024bd521a6cbbe32b426853147e6bbd6a89b107c5a34144846193fee5b7c6ed1  haproxy-3.4.8.tar.gz
+ # Locally computed:
+ sha256  0717ca51fceaa25ac9e5ccc62e0c727dcf27796057201fb5fded56a25ff6ca28  LICENSE
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  doc/lgpl.txt
+diff --git a/package/haproxy/haproxy.mk b/package/haproxy/haproxy.mk
+index de2df549b1..fa24515740 100644
+--- a/package/haproxy/haproxy.mk
++++ b/package/haproxy/haproxy.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- endif
- 
--comment "optee-client needs a toolchain w/ threads, headers >= 4.3"
-+comment "optee-client needs a glibc or musl toolchain w/ threads, headers >= 4.3"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3 || \
-+		BR2_TOOLCHAIN_USES_UCLIBC
-diff --git a/package/optee-examples/Config.in b/package/optee-examples/Config.in
-index fca9aca07c..9a32263e74 100644
---- a/package/optee-examples/Config.in
-+++ b/package/optee-examples/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_OPTEE_EXAMPLES
- 	depends on !BR2_STATIC_LIBS # optee-client
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3 # optee-client
- 	depends on BR2_USE_MMU # optee-client
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # optee-client
- 	select BR2_PACKAGE_OPTEE_CLIENT
- 	select BR2_TARGET_OPTEE_OS_SDK
- 	help
-@@ -21,11 +22,12 @@ config BR2_PACKAGE_OPTEE_EXAMPLES
- 
- 	  https://github.com/linaro-swg/optee_examples
- 
--comment "optee-examples needs a toolchain w/ threads, dynamic library, headers >= 4.3"
-+comment "optee-examples needs a glibc or musl toolchain w/ threads, dynamic library, headers >= 4.3"
- 	depends on BR2_TARGET_OPTEE_OS
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
--		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3 || \
-+		BR2_TOOLCHAIN_USES_UCLIBC
- 
- if BR2_PACKAGE_OPTEE_EXAMPLES
- 
-diff --git a/package/optee-test/Config.in b/package/optee-test/Config.in
-index 8631d12cef..05ff86287a 100644
---- a/package/optee-test/Config.in
-+++ b/package/optee-test/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_OPTEE_TEST
- 	depends on !BR2_STATIC_LIBS # optee-client
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3 # optee-client
- 	depends on BR2_USE_MMU # optee-client
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC # optee-client
- 	select BR2_PACKAGE_OPTEE_CLIENT
- 	select BR2_TARGET_OPTEE_OS_SDK
- 	help
-@@ -26,11 +27,12 @@ config BR2_PACKAGE_OPTEE_TEST
- 
- 	  http://github.com/OP-TEE/optee_test
- 
--comment "optee-test needs a toolchain w/ threads, C++, dynamic library, headers >= 4.3"
-+comment "optee-test needs a glibc or musl toolchain w/ threads, C++, dynamic library, headers >= 4.3"
- 	depends on BR2_TARGET_OPTEE_OS
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP || \
--		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3
-+		BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_3 || \
-+		BR2_TOOLCHAIN_USES_UCLIBC
- 
- if BR2_PACKAGE_OPTEE_TEST
- 
+ HAPROXY_VERSION_MAJOR = 3.4
+-HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).4
++HAPROXY_VERSION = $(HAPROXY_VERSION_MAJOR).8
+ HAPROXY_SITE = http://www.haproxy.org/download/$(HAPROXY_VERSION_MAJOR)/src
+ HAPROXY_LICENSE = GPL-2.0+ and LGPL-2.1+ with exceptions
+ HAPROXY_LICENSE_FILES = LICENSE doc/lgpl.txt doc/gpl.txt
 -- 
-2.34.1
+2.47.3
 
 _______________________________________________
 buildroot mailing list
