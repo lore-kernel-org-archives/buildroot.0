@@ -1,120 +1,123 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1441C606A320
-	for <buildroot@archiver.kernel.org>; Thu, 19 Nov 2026 07:33:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91C3A606A320
+	for <buildroot@archiver.kernel.org>; Thu, 19 Nov 2026 07:59:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=QiZe+XgP
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=s6l/apJv;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=bSssWhHB
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0FD9340A1E;
-	Thu, 19 Nov 2026 07:33:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 681AD8127F;
+	Thu, 19 Nov 2026 07:59:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iQ-Q7MLKs8wv; Thu, 19 Nov 2026 07:33:21 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org EB251409D4
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795073601;
-	b=DXbxI0JOP8vX9eLyLqi9q1DMJkofGmua/BOJlaWlGqZL3msko/JGtCQVUqhahJDUypXS
-	 tPzuT5S7+muRnY9z3GxvfbWCx5+aogz/oEFtW0HI7ODDR52jjQnittMPJT5RDm6j7vwrz
-	 2HK4cQT29y3En0ZwKqkCmNB3DkUahVjOVIqrIr2MEd4UjQbEW4Y+iDFP6nslPK2bN2DUD
-	 7YPOMACCycDLr/nFkoSCmmi6DdaVCG55EnfH3G87fREQYH0MPA7pEN0gNSwAdo/FXs5pD
-	 +wjhKncu8e5GX25xUqhSAtrHkIZOMVc6LZuZ0Kx3Dm5tyzVgQ7RooXYlqoB8E/krk6w==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LTAfPmn-Xiut; Thu, 19 Nov 2026 07:59:56 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org CA5DC8108A
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795075195;
+	b=M3pR87uhkQZzqKARLKGRsBpnGaEP2eSr7n+96R8MTW46owqAXQPmxfZTAyR5pLzsn+ek
+	 pZY2K2X49LfBCwqsPJHuU34wxnQFAjnq+9wXIp8pL73xzEirgeHsI2t0oj0favSP07MBc
+	 UBWt1WjVdjW0uv/dGrZo986iG+0qgZIF5aVLMxgiGLmxGwACkv8IVU8RrpWen6PAnPFA4
+	 Ki2VsDDLAcnlfmuA64rBgxy+DojOPmu69Dn6AKc/8oS2iOj6RslB1mkayYyTNPaZnfY/X
+	 BMtPmvC1iy6XtCAKUUu5WrpI87Jex14wVPg+aPaeNEfe0FzjDw2ELfUM2tKKnCnB5rg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795073601;
+	c=relaxed/relaxed; t=1795075195;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 Received:To:Date:Message-Id:X-Mailer:MIME-Version:Subject:X-BeenThere:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Date:Message-ID:
+	 X-Mailer:MIME-Version:X-Spamd-Bar:Subject:X-BeenThere:
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:Content-Type:
+	 List-Post:List-Help:List-Subscribe:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=GJ9UXl65gVC9jwlGnocImdC/5w/mKUcIwH/S9fBdSOc=;
-	b=dP7pckgr82/JWJy4d+avGNlNSHejYpLUbwI7OfM55T3gooEDoz/XDaZxglI1bSyw+qXb
-	 H/1nqNJLpdHDiu7scmf9WzaIfJ0f3DtDVpYWkUd2QCJwEjQ1buZbcgX0HqzV0BD/kFuW6
-	 Lf5tqIKuVn8wyYzImJtQxQ6TGax/o5qYTxQdL2mFhomZcjx3Lg0dGk+lRr0NHxowKSRDC
-	 L5vsN+CXnp1q8lNCsfukkSymBtA59dvfcPOpmXOEnA9/7ckbQ6lTVKLNs/XeJPIpJrdM0
-	 Xt4C37gDqqth74Z7OKGnn57JC2vfqscop+y1j0/RTIDX1mE4dzX5rOojRrvCHrx+mOA==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+	bh=qXBlNIfQ5qBBYgdu8+KMrjTnWM6V+RqNPUDNiy8ZULo=;
+	b=Wh9p96b7JoUKHVnJMIy8UE3SZx9RAHXjAMNMdqULBBEpBA2w86htQeKuYhus+RAUAbd7
+	 Ii7tKqJ7+/LqLAmw/s6nHMTslG3lOy9+IhvqtIbBv2APFbVEJcKW8tFyFvMhbdX/k7vtR
+	 SdJ6NwKdk4Aw9cm0qVcZPHLa42cE9ce2K9Jm3AzEzAKf1ABIfzRgp6fWxXmBtzYNAu8p/
+	 oRFbRO5jqVaA0e0mcY/evXhAuZoZgQuMpcxg3Md9SVGnpUqYJg+3Pq1mJnJSEmgdUUvIT
+	 odCCdH1AMylBOx3BL/JPUwrNThCLT2wwTPFUgMCho+9sXUv6W8e2+Qh5D8z4MAqb/6Q==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795073601;
-	bh=GJ9UXl65gVC9jwlGnocImdC/5w/mKUcIwH/S9fBdSOc=;
-	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
-	b=QiZe+XgPbGe50JLKf9t6qMOSLTMSm+4qN+GhsURy98EUg3VT/gePXHApWBvs4uJIq
-	 MHof25BwVsvZTF4iBObhQ5PPqJ3H4kF7TaaotnGY0HXoYakSI19pwsevS2xgX3dFf4
-	 EVmakC64Ct6lbgAuvVv4iMXIGcogN0tkyxyL39XN6xixqf7EXN4ynKkcaWukOQ9XBT
-	 odCfSdgJzC7rPX/VbUTQxaeKw30Ip6NgNWlgikGrYGhhXUKEBL+mvlHP4iBDeoLRzL
-	 wXIJOoz4Rs4qMFy/P3/fj0v7u8X//yH9TSh6+XEwK3EwDIEbDx7D6L+9xfuad5yceQ
-	 kNVTPRVYMptEA==
+	s=default; t=1795075195;
+	bh=qXBlNIfQ5qBBYgdu8+KMrjTnWM6V+RqNPUDNiy8ZULo=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=s6l/apJvbFdbfQjbrxIxzo6BFYWpFFAPQqkRscipomlCkF63dbplAzgncL6IUWtq1
+	 dAxbIaoJhY7jUFu3ixVmadBiTNLTfvO/WswtrYvv4XdV1quwwKgL7/4/0NIm40fhjb
+	 f5bl3dwxDmOAcM0TAY/HSUY+HjX7dQYncLqLHsu70QbEv4skcbcAS6IUhiGB3QMUEn
+	 50jhYUfkilCUf6/4d+NWzkitZWZrXkpnBfUzkXJIME01Qsi8nEJICbTePHoWfrUYF5
+	 HgccNrQRgVvLLIRzYK/7zkpUumck2+wKCY1LPBSP8Pwbyx6FK+y8nwmRaQlh9LiKHR
+	 N/daf1mGmYJKg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EB251409D4;
-	Thu, 19 Nov 2026 07:33:20 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id 9CFCF79D
- for <buildroot@buildroot.org>; Thu, 19 Nov 2026 07:33:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CA5DC8108A;
+	Thu, 19 Nov 2026 07:59:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 48DE3E4D
+ for <buildroot@buildroot.org>; Thu, 19 Nov 2026 07:59:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 99CD360A94
- for <buildroot@buildroot.org>; Thu, 19 Nov 2026 07:33:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 39ECD60A94
+ for <buildroot@buildroot.org>; Thu, 19 Nov 2026 07:59:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K2xUxT_5qPwZ for <buildroot@buildroot.org>;
- Thu, 19 Nov 2026 07:33:18 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 5183E6064F
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62f; helo=mail-ej1-x62f.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com
- [IPv6:2a00:1450:4864:20::62f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5183E6064F
- for <buildroot@buildroot.org>; Thu, 19 Nov 2026 07:33:17 +0000 (UTC)
-Received: by mail-ej1-x62f.google.com with SMTP id
- a640c23a62f3a-c5133831027so3654466b.2
- for <buildroot@buildroot.org>; Wed, 18 Nov 2026 23:33:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1795073596; x=1795678396;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=d+cT3zgwF3eNOKL3y6HCqqW4l/r4Vixf3DngdARAa8M=;
- b=1KxbteZRmZY25ySZkt5wdFFmyHtNiLOjDa0t/PQYgDSifrK3RRAzzB1QApPTnMdRcf
- 3QOILD4cHOQjyC6hvEQCtb+MxPgGRqJUFnGfRhlO+sE9gOp3BPJs1NTdiaAMPoPQmKqn
- VXJX2XU0Lbjoxl1DaamV31PHyUNV8Kg3JjZDyJL+Y5Z/ACZ24k+ZGpDCH3AVh3qN4zOI
- cd7iysZd3QE3IAEnrqfHp1rCaKjXLLC10DKmnhOuF13D+GwPJHvjqRWAxdr6mktMIJYb
- M/tx4wK7ndGFM4E1mBrisTdrEJWY/VGYQXAYcLkvbESIZDaK1qHYaYbRM6QunB6pi+bI
- +6Yw==
-X-Gm-Message-State: APuU4Z8ixnEp0tICtehUDZSaTOFXyJYoMF0r2Sd0YjrD+3N98Bhip84K
- i+s/FJ6OwuivqkbEtASS4xRfESxJD6BYU/eAWiSVY6yQs740aHYUgwIRMCWWdQ==
-X-Gm-Gg: AYBFou3KiZZ1yfJyAiNcVo47HfyPzswmWRdycMQYhXNGmynEkPKd7WsL/mWXNXMloCN
- 74+EypUINJoS/3L1K+WQHjQaFDNMO7+dj+Dybc44Vg6Qrz5XneYBWdjbLr5+sCiQYESO/4lzM44
- fP3sBfmeIq4MytOCJXtwYgsAsqy2YN/ruDvE6Azxukp6yJoFLZTxqsVjROtZN6GLZucSnx6chjt
- NGbiKWLOPWx0jQtKrb4SQf+wbfVfBQ34257XUcCzh16sr4e6sAIvYgoRkC4s7Ap/vvaVR+OrzOd
- 60v/SfhF37ha88hc3qcoyawmacmporgsVWlnp2VSEXfuoEh7+0EqA93MYSpAib2uoU6m6Qm5j7n
- KYdiZ2LMKFW3sxsb1omdKAiRbV3aSd9TgvTcojnrd4qaSSCbDsGehGAzKN4JUrP8rLzpe4ZBvM2
- rDO5JNMRoLZ3BBsmabWBhMhgq/OWv693t58+LwcYGB13o5ivTBEb0kloJyQxrSerRop31pmq8ik
- CTCZCfIF85SDX58Uu3vLTgtpAAhIzfW+pG6B4tvT94fOodpfzl0E5bzPpruZJMZ8bf0JuxImmCP
- VBbtqmskR99rjxcj5a32iVNxJ5QSuC6MuRuskGdkwvp1FQY7pge0ktH7O9fiweDnukwQ44pbwmW
- 7pMEiEzA9
-X-Received: by 2002:a17:907:9403:b0:c50:564b:c63 with SMTP id
- a640c23a62f3a-c510deb862emr505736066b.6.1795073595883; 
- Wed, 18 Nov 2026 23:33:15 -0800 (PST)
-Received: from development2.visionsystems.local (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c512341984dsm80805266b.38.2026.11.18.23.33.15
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 18 Nov 2026 23:33:15 -0800 (PST)
+ id ZWbN4gG1Rl_0 for <buildroot@buildroot.org>;
+ Thu, 19 Nov 2026 07:59:53 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 5B3B86069B
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=kuhls.net
+Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202605290044 header.b=bSssWhHB
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5B3B86069B
+ for <buildroot@buildroot.org>; Thu, 19 Nov 2026 07:59:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
+ s=kas202605290044; t=1795075188;
+ bh=dyFl6hWjrR77BLCm+pPJ2vYzox/vbEpcwLATAVnUc4E=;
+ h=From:To:Cc:Subject:Date:From;
+ b=bSssWhHBQUri09u+82YWLT4XK8kOBDhQ8dsPzSTG4Jg3fOLiXdCLY/i/eA0W0+B6K
+ LKbzv/MhnPsMFK9fXRfbLuXwCZx2Xd+N8eiVD22OGHtQq8g4FmbxUjiG1c/2qiDwak
+ OiYpoWMP3/fcg5wfWhcc1MbsJaFZkQksS6tbcEUWdziA/cxqacUkSGyQuLEEZ/Q80M
+ 4i3MT1HRGTotgXNNgiuDucbCeFuNDDZ7UlxX0DjrAuh0vs1E69sOIlJ3kaShWws/zp
+ LmkGBBgz36etc6Sz0eW79yKb3Dc8AIvEUXlkeKzp3xuKS6Sj9fQ7tt/h8DvvyZW7hw
+ df3juZPM7xOiw==
+X-KAS-Sym: v3:f51bdf72230551df:h0k9u6v3FmTPHTQqPKkQgaYIoty98XJ4gX3t4z5g+0hNU
+ trNBsNRhIO6QSTu4xZqGE9tCzysnRnc5GQUKbhoVdlM9KDYKrn5/vh4CEYNBunsCNerGc/A8AAp
+ /KdxqXrYmwirQM45uqSVaQRJXCajZH77ULBIMgDfGQx1rTp+1lWUnumZk1ax1bjxiRQJ43IgcUe
+ Bnd7pmXOaKR87s/wat5lshYmBw+fCydGo6/JBRfuGVZy52C2g0/LRgGfQkRcpKGImqXr2lQsVa7
+ x/kaAMRqRUUO0L0IQZ8qqAs+5eB7CMI2cwHl2+V3FAr6tFdveyFaBLIKaVXvCGT9PoA2dgfg==:
+ Yp6XDg5GwEfLt3rL0Kg6Ao8UIxVuRWO9Bj4RBClf9Pa1oNptCukGWF9R6B93uiwJh+vBRZCxz4n
+ y148j59iIB0/WvkN27qrH4f4In0wGRf6pbLauSP94AjZDl1XU2lSWYbp+k+N4U9VIpXQDggg32I
+ KPv6+8pAxa+/wc/Pen22PVxCYKhv04DsutNel5HFWYVTcB/co3LFW57RUJBZL4p8VVeKe1T3HsR
+ Ey/AKQdRf5JzIjTC07TvXvcRNZ3kH6W/WLhw165DbVKRTRNxQpwR8jypA3Qm0rLWfiz3yc8xBe7
+ jUQJmefubhSo9hoLGi8CLnn/sdLOTml4hp757fNDMNAaudIE4Qri+U3m1SmVrOu0JJ7yh110TYL
+ WgYqmGV43FNeeJdHIFClWOrwIOrXhx3iELzgQI5Ml6t3BYS3esACgbD98mhwekgftZptbqRhTAC
+ Z8Xaskc02Pw0ywCoBmVlhFBZe6Ik17Xq/dWZE7I++CzIOsG2jn21CH4R7dyU0eJpj/09yfpo2/5
+ jekfZWMMWhElKFwp7g50Gywmsodw3jTjfBh53B92jIhJrjOKsMffjj54i+pe2Bsh+1CkRYbH6Bc
+ De00Wgy99CtC4fiCtVGvRDbdMXfog4TMfhQS0GsSqMUSyg==
+Received: from fli4l.lan.fli4l (p54a1b778.dip0.t-ipconnect.de [84.161.183.120])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id C8F5EA4C4E81;
+ Thu, 19 Nov 2026 08:59:48 +0100 (CET)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:34120)
+ by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
+ (envelope-from <bernd@kuhls.net>) id 1xTx3c-000000005Qr-367O;
+ Thu, 19 Nov 2026 07:59:48 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 19 Nov 2026 08:33:15 +0100
-Message-Id: <20261119073315.2434687-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Thu, 19 Nov 2026 08:59:48 +0100
+Message-ID: <20261119075948.672535-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.47.3
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/iotools: fix build with musl on PowerPC
+X-Spamd-Bar: /
+Subject: [Buildroot] [PATCH 1/1] package/nftables: does not need wchar
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -124,119 +127,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
-Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Joachim Wiberg <troglobit@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-The SCOM code, which is only compiled on PowerPC, fails to build with
-musl:
+Buildroot commit d01461f3365aff8bffae9ee537716b86394bfcf3 added the
+package with a dependency on wchar in 2014.
 
-  scom.c:38:8: error: unknown type name 'off64_t'; did you mean 'off_t'?
-  scom.c:68:13: error: implicit declaration of function 'lseek64'; did you mean 'lseek'? [-Wimplicit-function-declaration]
+Buildroot commit 5e3b150cc44d2fa6fee583af40118d44d3e2f52c added the
+dependency to nftables to the docker-engine package without adding the
+wchar dependency to docker-engine. This causes build errors:
 
-scom.c defines _FILE_OFFSET_BITS to 64 but uses the explicit 64-bit API
-(off64_t, lseek64()), which musl only declares with
-_LARGEFILE64_SOURCE.
+Makefile:586: *** libnftnl is in the dependency chain of nftables that
+ has added it to its _DEPENDENCIES variable without selecting it or
+ depending on it from Config.in.  Stop.
 
-Backport the upstream fix, which defines _LARGEFILE64_SOURCE instead.
-
-This issue has been present since commit aa7217276d0d ("package/iotools:
-new package"), as scom.c already used this API in version 1.7. It
-therefore affects 2024.11 and later, and all maintenance branches.
+As it turned out the wchar dependency is not needed so we remove it from
+nftables to fix the problem.
 
 Fixes:
-https://autobuild.buildroot.org/results/a20267e877a5365ff58a890b25ce591e6a9c0a93
+https://autobuild.buildroot.net/results/12e/12eb8e8e6f91d4b8498b1d22a5a50da751d8df72/
 
-Fixes: aa7217276d0da805229739b1ede8eb3a1fe365aa ("package/iotools: new package")
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+A backport to LTS branches should be considered.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .../0001-scom-Fix-access-to-lseek64.patch     | 65 +++++++++++++++++++
- 1 file changed, 65 insertions(+)
- create mode 100644 package/iotools/0001-scom-Fix-access-to-lseek64.patch
+Gitlab pipelines passed:
+https://gitlab.com/bkuhls/buildroot/-/commits/d446443f17807b82a88504dd2aa10a0b4e0356a7
 
-diff --git a/package/iotools/0001-scom-Fix-access-to-lseek64.patch b/package/iotools/0001-scom-Fix-access-to-lseek64.patch
-new file mode 100644
-index 0000000000..c41cd66698
---- /dev/null
-+++ b/package/iotools/0001-scom-Fix-access-to-lseek64.patch
-@@ -0,0 +1,65 @@
-+From 7dd70b0208a5a9856f1d80ab8097736f88f2452b Mon Sep 17 00:00:00 2001
-+From: Aaron Sierra <aaron@bubbl-tek.com>
-+Date: Tue, 4 Feb 2025 16:24:12 -0600
-+Subject: [PATCH] scom: Fix access to lseek64()
-+
-+A build error, included below, occurs when building for 64-bit PowerPC
-+with musl libc. Since we explicitly use the 64-bit lseek64() API, we can
-+simply replace the _FILE_OFFSET_BITS define (i.e. make off_t 64-bits)
-+with _LARGEFILE64_SOURCE (i.e. make 64-bit API available).
-+
-+scom.c:38:8: error: unknown type name 'off64_t'
-+   38 | static off64_t xscom_mangle_addr(off64_t addr)
-+      |        ^~~~~~~
-+scom.c:38:34: error: unknown type name 'off64_t'; did you mean 'off_t'?
-+   38 | static off64_t xscom_mangle_addr(off64_t addr)
-+      |                                  ^~~~~~~
-+      |                                  off_t
-+scom.c: In function 'open_and_seek':
-+scom.c:58:9: error: unknown type name 'off64_t'; did you mean 'off_t'?
-+   58 |         off64_t offset = xscom_mangle_addr(scom);
-+      |         ^~~~~~~
-+      |         off_t
-+scom.c:58:26: error: implicit declaration of function 'xscom_mangle_addr' [-Werror=implicit-function-declaration]
-+   58 |         off64_t offset = xscom_mangle_addr(scom);
-+      |                          ^~~~~~~~~~~~~~~~~
-+scom.c:68:13: error: implicit declaration of function 'lseek64'; did you mean 'lseek'? [-Werror=implicit-function-declaration]
-+   68 |         if (lseek64(*fd, offset, SEEK_SET) == (off_t)-1) {
-+      |             ^~~~~~~
-+      |             lseek
-+scom.c:69:42: error: format '%jd' expects argument of type 'intmax_t', but argument 3 has type 'int' [-Werror=format=]
-+   69 |                 fprintf(stderr, "lseek(%jd): %s\n", offset, strerror(errno));
-+      |                                        ~~^          ~~~~~~
-+      |                                          |          |
-+      |                                          long int   int
-+      |                                        %d
-+cc1: all warnings being treated as errors
-+
-+Upstream: https://github.com/andy-shev/iotools/commit/7dd70b0208a5a9856f1d80ab8097736f88f2452b
-+Signed-off-by: Aaron Sierra <aaron@bubbl-tek.com>
-+---
-+ scom.c | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/scom.c b/scom.c
-+index 0c9fbe1..a0f76c9 100644
-+--- a/scom.c
-++++ b/scom.c
-+@@ -21,7 +21,7 @@
-+ /*
-+  * Quick POWER CPU SCOM register access, requires linux SCOM debugfs support.
-+  */
-+-#define _FILE_OFFSET_BITS 64
-++#define _LARGEFILE64_SOURCE
-+ #include <stdio.h>
-+ #include <stdlib.h>
-+ #include <sys/types.h>
-+@@ -65,7 +65,7 @@ open_and_seek(int chip, uint64_t scom, int mode, int *fd)
-+ 		return -1;
-+ 	}
-+ 
-+-	if (lseek64(*fd, offset, SEEK_SET) == (off_t)-1) {
-++	if (lseek64(*fd, offset, SEEK_SET) == (off64_t)-1) {
-+ 		fprintf(stderr, "lseek(%jd): %s\n", offset, strerror(errno));
-+ 		close(*fd);
-+ 		return -1;
+Run-time tests passed:
+https://gitlab.com/bkuhls/buildroot/-/pipelines/3087719359
+
+Run-time tests by the Gitlab pipelines passed on the 2025.02.x branch:
+https://gitlab.com/bkuhls/buildroot/-/pipelines/3087796804
+
+No, I did not try to check 12 years of upstream development to find out
+whether the wchar dependency was ever needed or since when it is not
+needed anymore ;)
+
+ package/firewalld/Config.in | 2 +-
+ package/nftables/Config.in  | 5 ++---
+ 2 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/package/firewalld/Config.in b/package/firewalld/Config.in
+index 6e460910cf..40c1b79711 100644
+--- a/package/firewalld/Config.in
++++ b/package/firewalld/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_FIREWALLD
+ 	bool "firewalld"
+ 	depends on BR2_USE_MMU # gobject-introspection, python3, python-gobject
+ 	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
+-	depends on BR2_USE_WCHAR # glib2, dbus-python, nftables, python3
++	depends on BR2_USE_WCHAR # glib2, dbus-python, python3
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # gobject-introspection
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # dbus-python, python3
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+diff --git a/package/nftables/Config.in b/package/nftables/Config.in
+index 514682ec48..c1abb04fb3 100644
+--- a/package/nftables/Config.in
++++ b/package/nftables/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_NFTABLES
+ 	bool "nftables"
+-	depends on BR2_USE_WCHAR
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
+ 	select BR2_PACKAGE_LIBMNL
+ 	select BR2_PACKAGE_LIBNFTNL
+@@ -23,5 +22,5 @@ config BR2_PACKAGE_NFTABLES_JSON
+ 
+ endif
+ 
+-comment "nftables needs a toolchain w/ wchar, headers >= 3.12"
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
++comment "nftables needs a toolchain w/ headers >= 3.12"
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_12
 -- 
-2.34.1
+2.47.3
 
 _______________________________________________
 buildroot mailing list
