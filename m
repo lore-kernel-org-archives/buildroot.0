@@ -1,95 +1,120 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFD5F606A320
-	for <buildroot@archiver.kernel.org>; Thu, 19 Nov 2026 22:31:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 596F8606A320
+	for <buildroot@archiver.kernel.org>; Thu, 19 Nov 2026 23:07:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=IMXQYG4M
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=EEnKtcvT
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A6464815D2;
-	Thu, 19 Nov 2026 22:31:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 258A040E08;
+	Thu, 19 Nov 2026 23:07:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BPxKzqgv9Xni; Thu, 19 Nov 2026 22:31:43 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org B471E815CA
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795127503;
-	b=B7Iwagxv+04ach6p+bzGjRHRezL3mC03WAtAfj+/dhhB6viARCNdX0dd4/lE4hIC0EMt
-	 pWuezB/c2sz9Bs++O3nKqWLpxizXDxgeyrH4gBUnxpbpzsgX3JrwWLt0yxi1Xv7I8jv0g
-	 LNbdaL6i21OKx8OJijuVCrJleJY9bEuOVN0ySTZZPL4RuTIAIuRyS0LNgQMiLO/JPDbah
-	 /W0y6CwzGuUZL7txg6BaKULtbJJ+VIR0YnLXXpr2zpYsSWXtQtDn9jIJwh8SC5+ItxDHb
-	 kT9hi0PNBU386jJro4DABxEOn6ObLnOSGoXUgmIXfdMDC3f1I3sQtsjK+g1tmHQDfnQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LxO-hIcQPN0J; Thu, 19 Nov 2026 23:07:42 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 3DD0F40E01
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795129662;
+	b=hjzR8hyQm0Ex2zoCGVoEpKdF7y4vjhaeuzeMyIn6OsWOkHwy3Ricz42q2VM6XMKWPtzS
+	 qvYAnMjx4vwU37G5CAzWTg3qoUviIbLo2ZYG4CtP/AHDy/COHlhYAXqgGnI/cJaI706OE
+	 m1Q1EOaCnqvZkwsuObGgSXMaBpimJ5zQbQT24/yNkEq3mjVEKFd9Uve/DtlRozkOhBusA
+	 PZIUH6RD/sHK7MnDm5uXQLWkFOBl1S4F/mSNWIctMVQQf5h97w3EXhpEeTzmqlp+TP0U8
+	 KFFTd16kcV5qOLToKkzxTgxYT/zzWNJYsKATjPNLb7JFqYtrmk5pHwXCtsL7sjqoctQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795127503;
+	c=relaxed/relaxed; t=1795129662;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:To:References:
-	 Content-Language:In-Reply-To:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
-	 Errors-To:Sender;
-	bh=gRJ7j1fYVDKApOStZNCeAx/IbWIqy+xFXUiD65yJvnY=;
-	b=heXcG0mQrrf878WGzvR9ThEbtGTmXW8KJYy3/W0URbhvna+u8GlhI5Va5F9s9AhCtkmK
-	 0PQnZK9U4NimSAv/RHtALoPMDTggR7L7wAlJ7gEzSNd24abfvVt+39QgUBVBv+/Yx4qfV
-	 nd8jXPkSuxpw9VztjyK48opbLe2dDLdUiQmhIC45SdBdQV5+EYuNgAr8thMutSeihoESi
-	 9H2NmXGntje/x6kfd7+xKGxvpyX/EyD1eqHthNKFm4yV3vMppSrIdNn8+Jy3ybQe76NyW
-	 cbAHOYeqCaFBVLJlNUSAER/dT/6myKL7ET9MVF+ws9umVHPIHw5+aUJe+K+5pRCHN0w==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 Received:To:Date:Message-Id:X-Mailer:MIME-Version:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=ChZ9WZyyAQrbnmRPpa2ahNuWf4w6dVptOA4NxC4qs0k=;
+	b=CWvEwUm853tTGvDJKORId75Z5MAG23mpqcroI1YpK4faTJ25Fkay8uoXKQHbz7alnMhO
+	 pMH3EeNI0xLi+veGWTc0KrF3ow2ULqBwOss89kNfgTIPRbzdDm/kWiqKSLk//EJpMcCat
+	 xqLe4XROFm878XV955K3FKuMdtG6/Yw5OYkvNkSPEUxJJwsY9L2vOB+bCyT5a+xlqQSu8
+	 WhPsYPs4QBLO0wFST1d8CXt0gP4WuK30pccZoi0ZYKjfHhNfFwv1e0Mbvti1N+ToQmeWQ
+	 gEe/hGNBc+izC6XzDXfE0ejs6XbEzuDFJbSWD3mnMUsIb4y3EQ6oogITRCJmDgfvxIg==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795127503;
-	bh=gRJ7j1fYVDKApOStZNCeAx/IbWIqy+xFXUiD65yJvnY=;
-	h=Date:To:References:In-Reply-To:Subject:List-Id:List-Unsubscribe:
-	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
-	 From;
-	b=IMXQYG4Mf7e4V3JyWrg/skJaS/HrvtdmFBo2Krfn0gvV9CIF9h0mM4QkfnBnn4zqz
-	 XyMCyhFUGxY26K2Sh31UrNhxaVIXsYbZmGGGNmag69/AEDHKfq6vhfx2SIAq3vMbdF
-	 fcmanSiLMlodWmjDH038eSazsqKWAatvjRaXCsYcj1oKOHGR2qAmlfdg6gXI7PvKZW
-	 etaG5HQWtOLLlhIu8LRsiZjiJOObgREDuvtEq2kR6MB5iqYAASOaiflr7Lu1wLDnHD
-	 Wfpuh38c/nJpy2o+G+RWLCHBqQTMTy1sULxFR2L78w0dvDLrxiZjQV93lMZUZDnpTa
-	 pVpNaYvqryHog==
+	s=default; t=1795129662;
+	bh=ChZ9WZyyAQrbnmRPpa2ahNuWf4w6dVptOA4NxC4qs0k=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=EEnKtcvTVaXmS6m/tosHuj5Bm1O1zaXrmYlyElRh8QGEEYD7NUeR2jWjnqkpp1Gjo
+	 OMtDxuS2EPDkwFr8qj+X6gREyEO2k/TtdS1kwKUV6NAE3HuQudOIjJiY2ZTX59BTQ8
+	 hR7Odq3esJj14eYshhWe0XTZPBhWihkFay+nlPNX1MZ3RRqgNRUZpDcTklBwlP+vHs
+	 wGy+V6hOE12hjV+Bu/oA15xUBcyM8bUSFCugHkUNJhm+bVRYfsD092ndsHKM5NYG6K
+	 OrxeAC4fj5g1pI0C4YV+H0SW7kJhKTmjHjHK9in58jlQXPdzs97HHCbWbO1unjAglR
+	 GseGqjeeQCovw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B471E815CA;
-	Thu, 19 Nov 2026 22:31:43 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id A44211E7
- for <buildroot@buildroot.org>; Thu, 19 Nov 2026 22:31:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3DD0F40E01;
+	Thu, 19 Nov 2026 23:07:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 90D593A8
+ for <buildroot@buildroot.org>; Thu, 19 Nov 2026 23:07:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9643860E24
- for <buildroot@buildroot.org>; Thu, 19 Nov 2026 22:31:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8288640AAC
+ for <buildroot@buildroot.org>; Thu, 19 Nov 2026 23:07:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wnzWWLDc4JVT for <buildroot@buildroot.org>;
- Thu, 19 Nov 2026 22:31:40 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 60AD26072A
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 60AD26072A
- for <buildroot@buildroot.org>; Thu, 19 Nov 2026 22:31:39 +0000 (UTC)
-Received: from [192.168.178.20] (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest
- SHA256) (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id C4AE92C81CD8;
- Thu, 19 Nov 2026 23:31:37 +0100 (CET)
-Message-ID: <3ebcdfa3-6ae0-4e41-9a68-005eeaab9385@bubu1.eu>
-Date: Thu, 19 Nov 2026 23:31:36 +0100
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8G3llB9dWGy8 for <buildroot@buildroot.org>;
+ Thu, 19 Nov 2026 23:07:40 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 6F8C240E01
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::62c; helo=mail-ej1-x62c.google.com;
+ envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
+ [IPv6:2a00:1450:4864:20::62c])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6F8C240E01
+ for <buildroot@buildroot.org>; Thu, 19 Nov 2026 23:07:38 +0000 (UTC)
+Received: by mail-ej1-x62c.google.com with SMTP id
+ a640c23a62f3a-c5133831027so45697366b.2
+ for <buildroot@buildroot.org>; Thu, 19 Nov 2026 15:07:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1795129657; x=1795734457;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=sz6YwcEzur3MsYFinGxEddVA2EI/yl9uqCLYoT6fULg=;
+ b=xVNlaULXGB9U2CYYCVadUavCLloEsdh73cxikLLa58InNyRam7lA7b1TuH5YRj32k2
+ AbEP/gnHWtp8ht1t7rcoSF4Zomi48z+VPa5VJvMRVPl6Ct3FSg9KjClpRRlPWA/btll9
+ bD0lFtEZVNi04Fr1nIquPj8a2bMKU98IpaKqwYLk51jFYQtio0ZR3C56ggl86Bb2KPOs
+ f4Hc/YhZXLanUxahmaOoyUnrbPZ5uAugmtFzmfisND5AiaZwsWfj/s9SKp8zbTgviLp7
+ cVEyTVKAvrWbeY940RaP0Q6/HKBnuf2bUcVdYN8xMRZ2ErK2EgoLyOcxn3EDC8DuO769
+ m4qg==
+X-Gm-Message-State: APuU4Z8jcghkUCV5wxtFN1Ahr2+EMBfLFo0V1M6i8wDiJ+T6awSWm8qY
+ Sv81i101cc5ucfOADiEx4Sfpmg7lnVRTwjvgBzlmWZmLKUHNSp7LXArGbt13Fg==
+X-Gm-Gg: AYBFou3Tu6NekaR7oEDqu5ajPbwx9kD8w/pBcyhG5VvZLJ13coB3PZh1HJh69kZuCNI
+ ZkMwuThgvGPTZn8AghmScF90l9Vk3+1cdHyBWr5qQiJ8xW8uLUcmiPGZlw+c70yqkJnM564qNhT
+ O7dmYC7OGP+61j+GgoAC1CnQ2UF3KNeEhPQ0PjttsdkMSQor/lXAlh/u+Jil1EMyLUL1/os7e0g
+ d8bXaKLg60QrBureX17a4c41tvv4lAwiuDoPyM4vPCep/qcR2/8kF8tbzYTvSa37QMrJgV7R1Oo
+ Sq9YQ8GtdlVTLgVp/4djIvKIAi/XR5H1zWrbs4r0pyw0rAhRSBX2MkyrCTQ1jprFoenFQh8BrM2
+ 0Hc32ct5gbYFUOl3yse1VHjc65IhnrtbjR6NYHs6f3F3M4MOT8huZdS7FOoBi7HRd2t6D1OOk70
+ ILlC7w7ALgQPXZfkeBUH/VKcx1iMOWEDEg09JKo9GLhxvdzJprRmtscyr7HC2kMXOXwwUbf108N
+ qL2Gffp3inwsLkbyGM4kD/EjAhLokK9JjLdXxJmk6fylvVyHRdSDNvU7vvtjG0Fl7cOsdwF63Ea
+ Ndz51s8QueFmTMaceLtuLQhlq37rWad96Z+yv8c+Ji52peYJw/n1AvaUCzIXIH6XYyKak97TozG
+ ZWbo6h1JkbA==
+X-Received: by 2002:a17:906:9c84:b0:c40:80eb:c541 with SMTP id
+ a640c23a62f3a-c513a4347e4mr142675866b.2.1795129657146; 
+ Thu, 19 Nov 2026 15:07:37 -0800 (PST)
+Received: from development2.visionsystems.local (mail.visionsystems.de.
+ [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-c513aea6e29sm39226266b.43.2026.11.19.15.07.36
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 19 Nov 2026 15:07:36 -0800 (PST)
+To: buildroot@buildroot.org
+Date: Fri, 20 Nov 2026 00:07:36 +0100
+Message-Id: <20261119230736.2981576-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.34.1
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Peter Korsgaard <peter@korsgaard.com>, buildroot@buildroot.org,
- Julien Olivain <ju.o@free.fr>
-References: <20261119160005.628790-1-peter@korsgaard.com>
-Content-Language: en-US
-In-Reply-To: <20261119160005.628790-1-peter@korsgaard.com>
-Subject: Re: [Buildroot] [PATCH] package/ruby: security bump to version
- 4.0.10
+Subject: [Buildroot] [PATCH] package/zstd: fix libzstd.pc without threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,97 +124,70 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
+Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: Andrey Smirnov <andrew.smirnov@gmail.com>,
+ Shubham Chakraborty <chakrabortyshubham66@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-12.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_PASS,USER_AGENT_SANE_1 autolearn=ham
-	autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Hi Peter, Julien,
+Without thread support, zstd is built with the lib-nomt targets, but
+installed with install-pc, which regenerates libzstd.pc with the
+multi-threaded defaults, adding -pthread to Libs.private. Linking
+statically against libzstd then fails, as there is no libpthread, e.g.
+for gd through tiff:
 
-I'm a bit late here as Julien already applied this, but there's a few 
-inaccuracies in the commit message.
+  ld: cannot find -lpthread: No such file or directory
 
-On 11/19/26 17:00, Peter Korsgaard wrote:
-> Fixes the following security issues:
-> 
-> CVE-2026-89078: Double Free issue in Regular Expression Parser
-> CVE-2026-93577: Integer Overflow issue in Regular Expression Compiler
-> CVE-2026-97229: Integer Overflow issue in CI/CD Regular Expression Compiler
-> CVE-2026-110264: Integer Overflow issue in Regular Expression Compiler
+Use install-pc-nomt (or install-pc-mt with threads), like for the
+build, so that libzstd.pc matches the library. With threads, -pthread
+now goes into Libs and Cflags, as upstream intends for the
+multi-threaded library.
 
-I believe these are technically gitlab (the product) CVEs and do not 
-apply to ruby, even though the cause and fixes live in ruby.
+This issue has been present since commit a5cb0ff4c90a ("package/zstd:
+bump to version 1.5.1"), as zstd 1.5.1 added -pthread to the
+Libs.private of libzstd.pc. It therefore affects 2022.02 and later,
+and all maintenance branches.
 
-Ruby so far only seems to have GHSA's (I don't exactly know how the 
-github CNA works with CVEs and if there's CVE assignment pending or not 
-here.)
-So 4.0.8 fixed CVE-2026-93577 / CVE-2026-97229 via GHSA-22mf-ggw7-pxfx
-and 4.0.9 fixed CVE-2026-110264 via GHSA-qm4g-8pfh-6996
+Fixes:
+https://autobuild.buildroot.org/results/713077327702dc2b8bb127fa8ad5c8e62f23a58a
 
-CVE-2026-89078 is not applicable because the underlying problem for that 
-was fixed in ruby 4.0 already.
+Fixes: a5cb0ff4c90a9fcb068d41262946ef6a9aef9f7d ("package/zstd: bump to version 1.5.1")
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ package/zstd/zstd.mk | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-> 
-> https://www.ruby-lang.org/en/news/2026/10/23/regexp-fixes-for-gitlab-cves/
-> 
-> Heap buffer overflow in case conversion of strings
-> https://github.com/ruby/ruby/security/advisories/GHSA-34m4-m9fh-gqp5
-> 
-> Double free in regular expression compilation
-> https://github.com/ruby/ruby/security/advisories/GHSA-7x2q-68qv-6p8x
-> 
-> Integer overflow in case conversion of strings
-> https://github.com/ruby/ruby/security/advisories/GHSA-87fm-7w84-j2px
-> 
-> Out-of-bounds read in case-insensitive regular expression matching
-> https://github.com/ruby/ruby/security/advisories/GHSA-wpqw-5qxg-m68r
-> 
-> Heap buffer overflow in regular expression compilation
-> https://github.com/ruby/ruby/security/advisories/GHSA-7whj-cfh7-xgm4
+diff --git a/package/zstd/zstd.mk b/package/zstd/zstd.mk
+index b0fbf3a1a5..0c7ca13d21 100644
+--- a/package/zstd/zstd.mk
++++ b/package/zstd/zstd.mk
+@@ -100,10 +100,13 @@ define ZSTD_BUILD_CMDS
+ 	$(ZSTD_BUILD_PZSTD)
+ endef
+ 
++# install-pc regenerates libzstd.pc, so it needs the same thread suffix
++# as the build, otherwise -pthread ends up in it even without threads.
+ define ZSTD_INSTALL_STAGING_CMDS
+ 	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) $(ZSTD_OPTS) \
+ 		DESTDIR=$(STAGING_DIR) PREFIX=/usr -C $(@D)/lib \
+-		install-pc install-includes $(ZSTD_INSTALL_LIBS)
++		install-pc$(ZSTD_BUILD_LIBS_THREAD_SUFFIX) install-includes \
++		$(ZSTD_INSTALL_LIBS)
+ endef
+ 
+ define ZSTD_INSTALL_TARGET_CMDS
+-- 
+2.34.1
 
-Typo. Should be 
-https://github.com/ruby/ruby/security/advisories/GHSA-3p8q-wmhx-vm2w 
-instead here.
-
-> 
-> Heap buffer overflow in Regexp#to_s
-> https://github.com/ruby/ruby/security/advisories/GHSA-7whj-cfh7-xgm4
- > > Out-of-bounds read in case-insensitive backreference matching
-> https://github.com/ruby/ruby/security/advisories/GHSA-pvgc-g7gj-pv6h
-> 
-> https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string/
-> 
-> Release notes:
-> https://www.ruby-lang.org/en/news/2026/09/15/ruby-4-0-7-released/
-> https://www.ruby-lang.org/en/news/2026/10/22/ruby-4-0-8-released/
-> https://www.ruby-lang.org/en/news/2026/10/23/ruby-4-0-9-released/
-> https://www.ruby-lang.org/en/news/2026/11/18/ruby-4-0-10-released/
-
-Additionally the github release notes for 4.0.10 call out:
-
-   Update the default gem json from 2.18.0 to 2.18.3, which includes the 
-fix for CVE-2026-33210.
-
-And then (as far as I can tell) there's another CVE hidden in the ruby 
-4.0.7 release which bumps the embedded ERB gem from 6.0.1.1 to 6.0.7 
-(https://github.com/ruby/ruby/pull/18282) which fixes 
-https://github.com/ruby/erb/security/advisories/GHSA-q339-8rmv-2mhv / 
-CVE-2026-41316.
-
-For these last two we don't actually have any good way to track this in 
-buildroot in general I think. :-/
-
-[...]
-
-Best,
-Marcus
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
