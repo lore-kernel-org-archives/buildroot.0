@@ -1,126 +1,121 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B832606A320
-	for <buildroot@archiver.kernel.org>; Thu, 19 Nov 2026 10:24:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90F31606A326
+	for <buildroot@archiver.kernel.org>; Thu, 19 Nov 2026 10:31:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=I7n+JpvJ
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=G2uO/VDG
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2A05D60AE4;
-	Thu, 19 Nov 2026 10:24:46 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ufJuo9PrSsWq; Thu, 19 Nov 2026 10:24:45 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 25A16607F7
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795083885;
-	b=Hd7vhyr3uiEg019ysORkHJWGJKrZF/Zq+XBNHleiGS+jvJxZiANjtQY4n/99ClLZo1gw
-	 fCxPfiiFtUSde/fQgWTNpDUv8S9Kr7Yrok5FamTXfqydaD+FTypuCUhGcgDChbhc0UBnB
-	 u5hj5qETacC/WQFNgcu+0Y8lmdEiW+8Up4jk/jLWjYHGPMVng94rSAStvUUc+ciehhJL2
-	 vvn0Oqcccu3q1peciMVHoEHCwadcCyID6aPxeuIeb1FdCMQ3hi9Zv28vjjTirXywqsug1
-	 qmH5FRRVTp18siTsm6VsGHae3wIJY+gzvK+F9pwyp8v5GLvzSG+V0YEny5/wcvR0Qng==
-ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795083885;
-	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
-	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 X-SONIC-DKIM-SIGN:X-YMail-OSG:X-Sonic-MF:X-Sonic-ID:Received:Date:To:
-	 Message-ID:References:MIME-Version:X-Mailer:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
-	 Errors-To:Sender;
-	bh=hBm0NL3WwN+CnMSJcjJ7fC2AHwxZ3z03ZeF99XBZqVM=;
-	b=q5Ca32UaOiJ8zP+1TpRwiXLHdMfsGHr3/70i+dTNHJHqVBUpkgHJJC/cZf1XY3Tff76u
-	 FcYAKEMzPumQ9JJaOUmFcL6jF04hQxiLn8RkUe468SwP4JBm1iYw6Ej5EqacN7fvGwdfF
-	 7hn1Bi7i4E5wOdYoYY2EKxH4bzz/cWhyyLc/+nkxeDDAkXqop/y1ptrqpNe6FfFuXaUuv
-	 y6d0LCii4V0/vuNavfo1eIuoswrU+fPFQlyAnj5RFcIkIx/7nOVVJxal5yMdvuTu16Svz
-	 Z4EbtNCWH5motjmXLGCjDJ6bTceSADOGjmDv9liPs5LX+LZt8YcBVPKxmlHNaH+vWuA==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
-	arc=none smtp.remote-ip=140.211.166.142
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795083885;
-	bh=hBm0NL3WwN+CnMSJcjJ7fC2AHwxZ3z03ZeF99XBZqVM=;
-	h=Date:To:References:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=I7n+JpvJOKnPispgEh/m47EQKXCjvTsF1poBsYcdBCd3OmbusN1wB+Hok+f7Crlp7
-	 1OHGGeiiII7hQ6E3jHuM/htEqcOg0ViFcw2qmCGD43tUuYOH9FHCyfWcKmtLB9XPdy
-	 t6jSmJIkxsuO4xRgNUW35CudLZYl5N5VSJ1S+oAH5czHoJelZLJaEHVoSmfBx34ZRn
-	 uiEi0N/twURQZvfQcfscK0QzptWpowFgQ7E3eVMzNmHGJk72dNyjKrFwWVuLfHcPZi
-	 Q1A+8YRYt5ARoQmijq3RBVVzVbFAL5VcLIn29FV5ImndjTR0BFWYzn1R4FErHOF5K4
-	 aY/j6dcNSkhTQ==
-Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 25A16607F7;
-	Thu, 19 Nov 2026 10:24:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 34C5415D
- for <buildroot@buildroot.org>; Thu, 19 Nov 2026 10:24:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2685680F2F
- for <buildroot@buildroot.org>; Thu, 19 Nov 2026 10:24:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 54B53812BA;
+	Thu, 19 Nov 2026 10:31:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ygyQhDQW2Q2x for <buildroot@buildroot.org>;
- Thu, 19 Nov 2026 10:24:43 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 3E09580DC5
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=66.163.185.206;
- helo=sonic321-25.consmr.mail.ne1.yahoo.com;
- envelope-from=davidluca3000@yahoo.com; receiver=<UNKNOWN> 
-Received: from sonic321-25.consmr.mail.ne1.yahoo.com
- (sonic321-25.consmr.mail.ne1.yahoo.com [66.163.185.206])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3E09580DC5
- for <buildroot@buildroot.org>; Thu, 19 Nov 2026 10:24:42 +0000 (UTC)
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048;
- t=1795083881; bh=9k7c0ZuqTJIVfPsfRgFL54UGc3elgbwD1M76Obayqhh=;
- h=X-Sonic-MF:Date:From:To:Subject:From:Subject;
- b=M1l4OTxjchie5yq5Ff1of5BSxfp+yGBYbxlOzJUJ/IcUTD7oddXOhdPu4YORyQyB6GgA0bRmja9cwtCZov0RiMeKnAuBvdMi8DKpPokELmIA0kMtR41kQZ4LvHo2OxilJjInTGLwZzhpoPx6QCrIfMJFzzd0PYNDQSuASOKV6pAgqjhuPIpzrr55K60h1ByXHsD7ZykMIpskbkXuPf83BaOBGbbmyrX4ePSJNzQXFVMjuqEsvIHwjPGJZkRZO5t1pavQVJF0iz5dfNgYTJOD/fVWuNtPlikGpJCM4mNLy1QiINBv7LuqZgT69VtrxQn4T0NkTUhItPoMqeijvFMqHA==
-X-YMail-OSG: G06O93EVM1mc2u22KzHpkhQuPobkJxVLCkIZn5To1ixklTS4CEf596zAUjVh_ua
- RtuPVwSFxdUwVZEV_KOCX9BxNcaVxJxr5JOe8Q5gFY_p54JqWILG51VSXh6HWdVpqrEMXs4VvhTq
- jnUqMz86wlySdJX701SC4nJha7g6geRF_PCzYSQTfnH8Y_anMpNszjEhPKprjWJ7lh2VeNQxSGey
- wLRvdfV8iWRpFe7rTNVOovytiguFzlkgd74Uz0g3Zs9eIqOG9FR8Sp_ofzYFdOS8OzQ.aBaUb0vF
- KXL1B8q0VeHhJicPUFEBGbbLY1hXFAs_upz5yLYomkZCD_6tii_34rnZo37vD9GBneIsAF6NeCRb
- sVb.lf22T3iOSB_lgyAB70CdjfJO8T5CRDpi.Uv7xk8YcEnisOLAYHHqhLJ0uZ0sVlRwRDWDOmRU
- HFNVYcmo0OrK1t.hlzmoYfr5_SDjQ5.H2eK9z3letrfYn76bMD446lRvR72Lo0upSOspVdRRIVQJ
- FK_yYTYJQEPbYOIJc0HVUyacVl2KrUuVnWlLvft7IxvUwIAVhtdEbWsDrEKo5RIEWSzhwQTk2A0M
- e_ndVgbRbR71YQfMRKdiRieKOmx7WSIXQnjaMMPbT_QsMkaJ9CXbjrprBIoXCvBVALYR.2nC_VYp
- yFdR7w.IXM1gSxBVMKcTq1nntCgOPMF.U.bAf0MPlgpcsDb5ba7EFPAAYVC6xkVS9mEBL1x.Oc7g
- HLRcJjkWDSyIog1l_dR2ECJgkVG0YEkz22k0QiqLvA82KGLnwKS32h64iJcMRkdF53Sr0J4qjiKT
- f2QN0dHoQJl.OJe1iF109wNhv11qBv4ZYyb1SDHqhvuxOAGAaluS7EBPJWmHo5gk5TjY0d96mz7a
- 98c6.WEHK8ntMUzYcSSSfUcdV9f9uGcNo3Cfoo1NVel_AifS8LucJ5yaH9MOhwoDn5iLEw6Zr4wG
- dm6X8IWpzbYZz5gLUdJcKSWLQ0kI8HBXHVxvVNPhCz4R7JkwnGq7T4rAvbgz5sCNSQuGL.XVq9LL
- zz_0AM.CT.NQcobt4p8gPFaT8Wy7GYg0QzC6DJiB8GM0.Tezbrhwkj.uLy12c9FSkk1mmJ0wiRKY
- WPOO.sL9XKbWJYUccQo7xEvRJia5IAOO.rWACF4JHNSpnt35jX6tp516WX23Y7hckY5wszCEpiH6
- mAeBv31DKmDUVsZSCO6DCD.S0TOQn6NX8N0eoH9rwj9s1c2JyMVAkHdxEUpG0ZVlWLNmO7zI7mJa
- KCykoeePN2iSi9ZwkRZeRHTjYXGNiZz80FpBxVj9p8GR1jEeXeJcsxTh97NFd2SrTlL_mYTsMjta
- 1d7yxVoN_2p_qYH06mWMXBLbbjdcZBDUCZEOxGsvT2cshmtAFr1TYec7ogUsRnJOFGdINZ6IS07A
- zR0KyUhbaqokVZ0D3KT8k2p62QmiCQdAey_BvxGhPHpMu_mc6AuR5b12mcPBYBMXcwWzIkpYEz49
- VJZF5DQo3p9kiuOmJaUOwZGBZPmD2_FXiPEzODd_qA8A_I_MzqzAY9os5KVn.fZVGI2N6jaJXL2V
- dnYW6rW9RUU24qvfUc_4xsjb13ZdnA8gmO5DzWvicGnWVPijvdBPzmwA7jsCA1UXIoQnolrJMew7
- 1qpiBrXTulNRwoNFpUbUY5.Nv6VhCPaDBj6QUjX__EF1Osuz.WiqiiG8T91p0q02eEviqOpA7oC2
- pgth_WCzXuk3eBFEhK8AH_VoFr23oscoRGY19OES9hobpDV0pzyAy_4rZPoLuA8PZgXGcyiXDBut
- t24LJeF77yoFW32EMhiwud4R0MBR.JxCiS92Gfzn27b3sLEwL4W5vkvpfWycCCnxTHR.KTFi0HDI
- hdKzHKuOqeAyUEcIff36IPf3uB4o92ZTMvGwqPttd8ucJR1QAbEieSrmP_zMCPUpHT3VKwvpINuR
- DVaUaCf0Va6wJ2K03BzkjZecTiLLiArBriAu0wwrVg.Ba35wkag33TbrQr2XcNyqcRKq6zTlrk92
- s.OE.aCRQG.08eH.oVyynIy5HbcXBJfR7K_2yDQSzCEW7vUE1ErxEdOyTkYMBFSU2aMdSaRUGs65
- pFEdpYsXg9Bx8aPjzUuPX8NHGDHpXbT8be0dLDF5ZWhl910J1ZJ4WMDfBfobSqGxOC6n5OrLdloe
- nsVivvGcNo169XoByZunv.72QnNehJn4C9umIjzFSR8RSUSXNPMXI8uMEmyOnl1CffH7QKib.w3l
- g0hgpKU3IUP4RVUW_hm07O4yPJA0iLI.lGKXVP44BN7Z4liU5J4Yix1g68V4MWgpzGPtMeJdcYIn
- 5Kx.O8Ml.7sYRy_MKAz0Tvjmdr_WRAGX.s74bh1Nu_3xLyLkW1a6DVw2OTo3R
-X-Sonic-MF: <davidluca3000@yahoo.com>
-X-Sonic-ID: 7968ec69-45d9-4b24-bbe6-89bc6f631db6
-Received: from sonic.gate.mail.ne1.yahoo.com by
- sonic321.consmr.mail.ne1.yahoo.com with HTTP; Thu, 19 Nov 2026 10:24:41 +0000
-Date: Thu, 19 Nov 2026 10:24:33 +0000 (UTC)
-To: <buildroot@buildroot.org>
-Message-ID: <519380524.50174.1795083873768@mail.yahoo.com>
-References: <519380524.50174.1795083873768.ref@mail.yahoo.com>
+ id inD07djovMzt; Thu, 19 Nov 2026 10:31:09 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 4CEEB812D3
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795084269;
+	b=MbVPOZ/1U2+1lbx3PnLGRGFqBYtAeuW+Rqv4en/yEoP+FmENIbPd1ZR/7+4pWPbD+gZa
+	 KiWeDbsP7cXcH+sNCkIz4lqVAqOEHJkSEDnEAdfGWTolR7HggttobuXLxq1xTKgsbpu9y
+	 e9lGcxuaXug07AGMRJbn/ZCq86i/qe3R1ZpkdXknwFzm+g1ttbJ8UZnHBymZXfpcQsJW1
+	 YliFimyEsQVC/19qMRAOXeZoZfJCkjVk9VTIxXfbZyvKVc/lfHdbMbqvdSHG/m9tHAf7O
+	 ETXjIq5y7r6Egbz/arA/2B53uCIwuLZ6tbCIhnnMJebGlJPBkMeBKjjuN3889TJKkIQ==
+ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
+	c=relaxed/relaxed; t=1795084269;
+	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
+	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 Received:To:Date:Message-Id:X-Mailer:MIME-Version:Subject:X-BeenThere:
+	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:Content-Type:
+	 Content-Transfer-Encoding:Errors-To:Sender;
+	bh=UprdCklm1t/fkEnnsoISQU0oIaZmdO11UOxTzGzEdk8=;
+	b=g6Uh3jUAQBjPzG8OTUwQFdwfSfmwPZ2u9ae3OaMRaG7qWCBVNhhW2+YeGT0HAFSLyO4W
+	 PI0la5XLS1wyBkyCLuWgDjtCaq9+HqNbyYnnCXINbDXqrgvoWk9gzzzgURtcWGtnlwtxO
+	 Ctu1f7kpSsxoWc+y+FMIsIiLxuBxtRPvelEmNPVqo9XMK0649Fxq+x3evgvheidwHS/cP
+	 uP5xrTSpuSdm8bO37jyZIiv+SgOSz4snKGPxJMnKbakfv5Rn9hgRWBShIqGSSxZsEqeXj
+	 fCgmQvI+bvvH3bOjufO8y4B/wznJ3+hTFLxCpgdNPztAVWWueiiRswkqfVxEY94J8TQ==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+	arc=none smtp.remote-ip=140.211.166.142
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
+	s=default; t=1795084269;
+	bh=UprdCklm1t/fkEnnsoISQU0oIaZmdO11UOxTzGzEdk8=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=G2uO/VDG1SwKEQV00BP+oYvGI5CXkb6iR0QbGb1BPeL2A6ENCzSS0kGPUQcjU58e6
+	 911uVMNS4ovVNXf60DC8C2PzVfRzNz+G51J1p32XUak63tZYVzDCo79xk+z2NGyqzH
+	 tJge+esyrok6g6D+J9DInA6TdrUZuxaiSUjOTvw1Mr8YEW7Nk/FJAkdlp87wgSo2FN
+	 ifX2w6pmvUfSZCguib/XjJIfknYLKUjdPNE4ODZ5EPl5bGNwvz1RCKBPULNx+fQzpy
+	 x1skThbs+VFqkU8rMJ+GIid+B/JkFYmIDUZAPROfPIcL6ljRLgJH94rZ2YZ8VIQhaZ
+	 GfNsG740ztqNw==
+Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4CEEB812D3;
+	Thu, 19 Nov 2026 10:31:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 89AB070B
+ for <buildroot@buildroot.org>; Thu, 19 Nov 2026 10:31:08 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7B8DC40520
+ for <buildroot@buildroot.org>; Thu, 19 Nov 2026 10:31:08 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6m-qxEG5UV0u for <buildroot@buildroot.org>;
+ Thu, 19 Nov 2026 10:31:07 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 4A6A24051E
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::52f; helo=mail-ed1-x52f.google.com;
+ envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
+ [IPv6:2a00:1450:4864:20::52f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4A6A24051E
+ for <buildroot@buildroot.org>; Thu, 19 Nov 2026 10:31:06 +0000 (UTC)
+Received: by mail-ed1-x52f.google.com with SMTP id
+ 4fb4d7f45d1cf-6b6f42095bcso3191490a12.3
+ for <buildroot@buildroot.org>; Thu, 19 Nov 2026 02:31:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1795084265; x=1795689065;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=PyRwgyzF8M+y+X75TYSWRamEOZZMrGFDV1P0RBJA1Cc=;
+ b=RfkfiV+M8TD1zvEJefWXoS0ECJtw/QjSpJxM1NUKvLeKfot0VIgY+phecQ1pOsnQQk
+ 4J57SKejuQCw3Iyp17i/ywl0qqel05PnO88VK2nEAuTrK3jxBdBoA5jhVP8zJX0tM5JG
+ bBHSaaYLoxlv587A/HGfMsINE2/H2JJXTvACFmRJFtBrDqfu5c22ucDICS4QnvG6bAAF
+ +YgcVfzLDS+mtl4/sCbzwJ9UzAwRvgkpHS3xyfDi9j+Bq+SSwW28R5mNZ6fcETeIKVaD
+ fFnbmA0kY9PzI/lQSMFj0CUmjOXk5HVObv8P9F/DTaX5ZAPgNXSueNjR6XH/UNeN5JAn
+ g+UA==
+X-Gm-Message-State: APuU4Z/Nbwx2PmWks6oiYrMjsUh/KLm0tEN3/5fvmvkxCI4MLI60budV
+ nfriuphZ9h+IvFoUqRY+rMTEBN8ezErTDADcp9GVmuHbr+5Td0NJIeGxavtsQg==
+X-Gm-Gg: AYBFou3Lxps7Tchy9i6VMAOqyF8JBB7CICC7DYnMr24ldbCcRnY9qOm5KAPRMQ3zGpZ
+ oW3mgJBvTY6hugBKcEz7vtF+x9Yv2gqVH3UJr90UhCxY+0ZKCcUIVx55c+OR9dkvoJW4LgfwS0H
+ GJ6XrkmdyjEBRWyxdsdZ9YDwQeKs4mVGxjXqdO2VKianoD8XM1akGoRWAm3jZq7uOkTWRfirnlC
+ 6wblM7ioyS3eHxWAzUJagHSqunlvB+eh8fNNpO5r0EUsJINO+culkAQ6Bb3TH1sjDqQT94nOxMO
+ tDKH+M4y2yopZwTIAjwMr7xTsUg3DtKW8ThOpm/q8ROLUt5zB9k8PoufkBZuacYVqnHtXUt6fU9
+ JCz13KHzMAHCqKm32DSHVZPQ6nrDrtCIYPInNKcht7Gyjyijt74jqEj+nOKRl68GvQEO7dbGnsm
+ 4wtL45s53nA9LcIyWYwWT2zIergzmUsKjIHXj29MMfpe2IPOfh5QRH1GI3QLvsN84sqa8gs/oBW
+ TWrlevo4+VT7UdnX4BDxrIGVRXMt8mPaFd1M9PAuf0JWmp8zKLtMkZuDwSNREv9U1H5J7CxwRDQ
+ wYgqKe83cTNGPMwT5RX+EOrNz7yT5vy8L7jBKwRU8MtNQz/wDXw20jto1s3OY5LZOFGevHS0llp
+ 5Xyb6osBp
+X-Received: by 2002:a17:907:c8c8:b0:c49:cf3a:a324 with SMTP id
+ a640c23a62f3a-c510e148c36mr504168366b.22.1795084264664; 
+ Thu, 19 Nov 2026 02:31:04 -0800 (PST)
+Received: from development2.visionsystems.local (mail.visionsystems.de.
+ [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-c512346fabesm94299266b.62.2026.11.19.02.31.04
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 19 Nov 2026 02:31:04 -0800 (PST)
+To: buildroot@buildroot.org
+Date: Thu, 19 Nov 2026 11:31:03 +0100
+Message-Id: <20261119103103.2602430-1-yegorslists@googlemail.com>
+X-Mailer: git-send-email 2.34.1
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-X-Mailer: WebService/1.1.27079 YahooMailAndroidMobile
-Subject: [Buildroot] Perl missing modules
+Subject: [Buildroot] [PATCH] package/shellinabox: fix build with musl and
+ GCC >= 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -130,72 +125,109 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: David Luca via buildroot <buildroot@buildroot.org>
-Reply-To: David Luca <davidluca3000@yahoo.com>
-Content-Type: multipart/mixed; boundary="===============2731046160402603272=="
+From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
+Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
+Cc: Olivier Singla <olivier.singla@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-1.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_REPLYTO_END_DIGIT,
-	HTML_MESSAGE,MAILING_LIST_MULTI,SPF_HELO_PASS autolearn=no
-	autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
---===============2731046160402603272==
-Content-Type: multipart/alternative; 
-	boundary="----=_Part_50173_33201324.1795083873767"
+With musl, shellinabox is configured with --disable-utmp, as required
+upstream. Its configure then no longer checks for utmp.h, so the
+header is not included by launcher.c, although login_tty() is still
+found and used. musl, like glibc, declares login_tty() in utmp.h, and
+since GCC 14 made implicit function declarations an error, the build
+fails:
 
-------=_Part_50173_33201324.1795083873767
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+  shellinabox/launcher.c:899:5: error: implicit declaration of function 'login_tty' [-Wimplicit-function-declaration]
 
-Hello,=C2=A0
-I have Buildroot 2026.08.1 successfully building a x86_64 image on my VM, b=
-ut on a different VM that was building 2024.02 without issues, currently fa=
-iling with following error:
-"14:04:35 Your Perl installation is not complete enough; at least the follo=
-wing
-14:04:35=C2=A0 modules are missing:
-14:04:35=C2=A0 =C2=A0 =C2=A0 =C2=A0open"
-The version reported for perl is: v5.26.3 on both VMs.=C2=A0
-I tried a small perl script to test 'open' function and works fine, any ide=
-a what I'm missing?=C2=A0
+Add a patch to check for utmp.h even when utmp support is disabled.
+HAVE_UTMP_H only controls the inclusion of the header, while the login
+records depend on HAVE_UTMPX_H, which stays undefined.
 
-Best regards,=C2=A0
-David.=C2=A0
+Upstream has been dead since 2019, so the patch is not sent there.
 
-Yahoo Mail: Search, organise, conquer
-------=_Part_50173_33201324.1795083873767
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+This issue has been present since commit 5eb0203cb05c ("package/gcc:
+add version 14.x"), as GCC 14 turned the implicit declaration into an
+error. It therefore affects 2024.05 and later, and has occurred more
+often since GCC 14 became the default in 2025.08.
 
-Hello,&nbsp;<br>I have Buildroot 2026.08.1 successfully building a x86_64 i=
-mage on my VM, but on a different VM that was building 2024.02 without issu=
-es, currently failing with following error:<br>"14:04:35 Your Perl installa=
-tion is not complete enough; at least the following<br>14:04:35&nbsp; modul=
-es are missing:<br>14:04:35&nbsp; &nbsp; &nbsp; &nbsp;open"<br>The version =
-reported for perl is: v5.26.3 on both VMs.&nbsp;<br>I tried a small perl sc=
-ript to test 'open' function and works fine, any idea what I'm missing?&nbs=
-p;<br><br>Best regards,&nbsp;<br>David.&nbsp;<br><br><div id=3D"ymail_andro=
-id_signature"><a id=3D"ymail_android_signature_link" href=3D"https://mail.o=
-nelink.me/107872968?pid=3Dnativeplacement&amp;c=3DUS_Acquisition_YMktg_315_=
-SearchOrgConquer_EmailSignature&amp;af_sub1=3DAcquisition&amp;af_sub2=3DUS_=
-YMktg&amp;af_sub3=3D&amp;af_sub4=3D100002039&amp;af_sub5=3DC01_Email_Static=
-_&amp;af_ios_store_cpp=3D0c38e4b0-a27e-40f9-a211-f4e2de32ab91&amp;af_androi=
-d_url=3Dhttps://play.google.com/store/apps/details?id=3Dcom.yahoo.mobile.cl=
-ient.android.mail&amp;listing=3Dsearch_organize_conquer">Yahoo Mail: Search=
-, organise, conquer</a></div>
-------=_Part_50173_33201324.1795083873767--
+Fixes:
+https://autobuild.buildroot.org/results/5cba7080214ec7af98417db0fb61879d57e313a8
 
---===============2731046160402603272==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+Fixes: 5eb0203cb05c0a65bdb7f89a2644eef7cff2dd27 ("package/gcc: add version 14.x")
+Assisted-by: Claude:claude-opus-5-5
+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+---
+ ...ck-for-utmp.h-even-with-disable-utmp.patch | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+ create mode 100644 package/shellinabox/0003-configure.ac-check-for-utmp.h-even-with-disable-utmp.patch
+
+diff --git a/package/shellinabox/0003-configure.ac-check-for-utmp.h-even-with-disable-utmp.patch b/package/shellinabox/0003-configure.ac-check-for-utmp.h-even-with-disable-utmp.patch
+new file mode 100644
+index 0000000000..49012817e9
+--- /dev/null
++++ b/package/shellinabox/0003-configure.ac-check-for-utmp.h-even-with-disable-utmp.patch
+@@ -0,0 +1,49 @@
++From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
++From: Yegor Yefremov <yegorslists@googlemail.com>
++Date: Thu, 19 Nov 2026 10:43:49 +0100
++Subject: [PATCH] configure.ac: check for utmp.h even with --disable-utmp
++
++On Linux, login_tty() is declared in utmp.h. With --disable-utmp,
++which is required with musl, utmp.h is not checked for and thus not
++included, while login_tty() is still found and used by launcher.c. With
++GCC 14 and later, this breaks the build:
++
++  shellinabox/launcher.c:899:5: error: implicit declaration of function 'login_tty' [-Wimplicit-function-declaration]
++
++HAVE_UTMP_H only controls the inclusion of utmp.h, the login records
++depend on HAVE_UTMPX_H. So check for utmp.h unconditionally.
++
++Upstream: dead (last commit in 2019)
++Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++---
++ configure.ac | 7 ++++++-
++ 1 file changed, 6 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 05ab1bb..234ce32 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -34,6 +34,11 @@ dnl Check for header files that do not exist on all platforms
++ AC_CHECK_HEADERS([libutil.h pthread.h pty.h strings.h syslog.h sys/prctl.h \
++                   sys/uio.h util.h])
++ 
+++dnl On Linux, login_tty() is declared in utmp.h, so check for it even when
+++dnl utmp support is disabled. HAVE_UTMP_H only controls the inclusion of the
+++dnl header, the login records themselves depend on HAVE_UTMPX_H.
+++AC_CHECK_HEADERS([utmp.h])
+++
++ dnl Most systems require linking against libutil.so in order to get login_tty()
++ AC_CHECK_FUNCS(login_tty, [],
++                [AC_CHECK_LIB(util, login_tty,
++@@ -147,7 +152,7 @@ AC_ARG_ENABLE(utmp,
++                                            be disabled.])
++ 
++ if test "x$enable_utmp" != xno; then
++-  AC_CHECK_HEADERS([utmp.h utmpx.h])
+++  AC_CHECK_HEADERS([utmpx.h])
++ 
++   dnl Even if utmpx.h exists, not all systems have support for updwtmpx()
++   AC_TRY_LINK([#include <utmp.h>],
++-- 
++2.34.1
++
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2731046160402603272==--
