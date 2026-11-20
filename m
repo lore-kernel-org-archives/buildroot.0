@@ -1,28 +1,28 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 203F9606A320
-	for <buildroot@archiver.kernel.org>; Fri, 20 Nov 2026 10:01:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58751606A320
+	for <buildroot@archiver.kernel.org>; Fri, 20 Nov 2026 10:01:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=k/lrihdy
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=h/nEdLvV
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F134840ADC;
-	Fri, 20 Nov 2026 10:01:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 390AE60E49;
+	Fri, 20 Nov 2026 10:01:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eXav3rLzIpEQ; Fri, 20 Nov 2026 10:01:43 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org D0CEA40E1A
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795168902;
-	b=F/4LU2erJghUpiVrbqgOzKaiNYYgaJZno5iFpIChayWgHia6TsJ/lXbpDLhZeGBeWQ6X
-	 A87SZXw7tDaP6vKbUD2y0WTMEMg9+xvk1LJSpLFAYouqG9nzJjzByIM5vIlkNsNLyEmfB
-	 LTL/Jurk3zvnChukhwg7Nf8Ef9pfoF/dtfV/dirMhsPsrgzYX8gNnYDIz4NygsEgSYB71
-	 8vWEVBp5nfI9VtEKJGvz+5W48ar8kzNehA/1ADZeNvLOyzg6I9xVvgMVi4uH1Lr40kEvp
-	 QI71i1xp6uMyTQwpljgUepsKh9NQ5vLVpKyKKk3gtQvn9Ozq5717nqXAJ+6ZSMNue3g==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iks2_Q5RtR-0; Fri, 20 Nov 2026 10:01:46 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 38DDE60E43
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795168906;
+	b=hMO6wEtdF4sQWYk+SmjARFHwoUXt1Jd4i2K35jxT9h+KK6cGWk8pm5X4O2MZOmiQ61Ts
+	 Xe8pOQr83KpnYUQMnJ1Xvms2NYr+c+ACCkm+ftPyNdG06asyiUeeTLTZaJs/qohAQun4q
+	 NuU6mb1tUakb+OZquGCsTIWXq0eGQiV87MjW31Vi+PXJVFRL9TOGQ7gqEB7aRlYaIm843
+	 8A0VkdCzSuf6LpR9KJTVykphNcW1P0ZBmWZjOh69QE+gAGMrD1u4EDYhDEeK96Ej0Tj0y
+	 3S0eCO3WmlF3B95GmnMTPxW6TQRQwNzlspIWFCDtRJcw204wyyPRBODCvoiOFHH+9vA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795168902;
+	c=relaxed/relaxed; t=1795168906;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,96 +31,96 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=DZHqqgIKAGJR54y0Qj3FGq9M8wkYr2SmriaAfwg5tGI=;
-	b=gDdKV+mcSyEwKiStoqc4EOQmxKKSg8Xz/RLPtRUZfH1lAhEkbNqG8mOfU47xEdTj9voz
-	 7f257dk+ouUWc5yArulzmZ0U12YONUMSTFerRDN0melWekuEXf00FWGACgi71b6vltmHs
-	 PeuQGLweDwDWeGhcH82jchdrfC6LSEm3GL++7Z6YTfHIolTNpPqGw0WTMeqeSvLASIGK6
-	 G+9/Myrmo2VmE+HEkwEYN5KC49TsUvZZvyF3+Us+i3RkOJUHR7eNO1/n0Z4CHRI6wAwCm
-	 GjRU5qQl3n+JULdmx2mrFGlyaCpkSfdAKy6V5zUGbN1yEzn86UetvUoGs/2Zy+vbiaQ==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+	bh=lc0BPKjevniZisvwBzU+s0uYOOxOpTa7xHkKVohA5EU=;
+	b=HlhXaxEh/gAD3sS/1PzOZZrR3mo3LEtca+nmW6cz1yyaZ8jYLk9rGn+d93t6Npx1dlmf
+	 nG4r7NMpHXgxigL736ckXh2HnhkDBW3CWCttkUBzKRZjUxmzo9dvwYgzmOED+QF2XuE6L
+	 jrCFYZN71IoU/QJ+ETom6AWrNCSEdCS6K7HEC0nmC37Y9a9qZ/wQiuRJRqkUoVCyF1qIX
+	 my8KSQ0Dg5SsidtVjiZ2nSecflw+LVKFY45aQhoTlIgp5853okIu4Ua5HqCuz6Mfr5ZWG
+	 QUhQzyonsBnmfBKUCQ1MDHaj1ARAAj0W9Rc+9ol8SZRBtXp4nLCEVoMMgkE4fcOwXHw==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795168902;
-	bh=DZHqqgIKAGJR54y0Qj3FGq9M8wkYr2SmriaAfwg5tGI=;
+	s=default; t=1795168906;
+	bh=lc0BPKjevniZisvwBzU+s0uYOOxOpTa7xHkKVohA5EU=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=k/lrihdyDnB8Jrh6YTYY6NPAt1KZlF1hLeVpsiABr/qaoqF42lOL/82RI5zLdTMdg
-	 Ee8xjWFBglFODhOYdDAUYRuy63YUXrAfXfcenrh/DnLNGfTaXDdUKg4Yd6EApUfvzE
-	 LPSMCCNrQS0bZLrCvXnVSeSVe/JJ9v2pAmbr3ey9kN9qfxbVrVBr7cxCjh07EpWo1l
-	 t2Fa1l0xMF3Bk5YGnw5CE3/Ukh4FA2BpASaU6+vC4ybZLfBfKfk4pRAB+gp6V+54iT
-	 vr0SNHln5XvbqON9VFdzpHu0ETqx48wX47A7QvXK+Hj1qkAZJ6pB4GIsv9//plWCVQ
-	 G3jGQJf2UksYw==
+	b=h/nEdLvV/YzB4KiWdIEp1dA7/9vNf8uW5wMj58D9Z6MupAn1bmJmPmNkhxnYCYtEx
+	 V1scLs7QppIrdhe2vAxVxD7WFybHBl/7rjEGn7DCwTcemvLgKftxP3ou/1C8xJqdZ5
+	 QEOhHQfjeunRZF2DBlQBk9pxOhjbf3AOgX2Fw+vdzOM3yJAlVXzHxftPQTlZto8BU+
+	 bM8jPSGeXC5nch88ZylMGHTgz/ILyQPt4/aCtwg3HFEW/ov39ZHCV6GpOTwbwJmCGo
+	 kgwv/Sq8cqyNpXhheH12lCR3i/OUj2IWXQKva8XzBY/aU6Tt+yro5Wv7WkZecMPL0a
+	 oCArLvw35AL1g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D0CEA40E1A;
-	Fri, 20 Nov 2026 10:01:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 4DD5B169
- for <buildroot@buildroot.org>; Fri, 20 Nov 2026 10:01:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 38DDE60E43;
+	Fri, 20 Nov 2026 10:01:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4C7C3E22
+ for <buildroot@buildroot.org>; Fri, 20 Nov 2026 10:01:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 33C3A40E1E
- for <buildroot@buildroot.org>; Fri, 20 Nov 2026 10:01:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3E0BE4016D
+ for <buildroot@buildroot.org>; Fri, 20 Nov 2026 10:01:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0UJSsAebyv0T for <buildroot@buildroot.org>;
- Fri, 20 Nov 2026 10:01:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org CACA240ADC
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2c-EuLB4yC60 for <buildroot@buildroot.org>;
+ Fri, 20 Nov 2026 10:01:44 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org E2BFB400D6
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ client-ip=2a00:1450:4864:20::52b; helo=mail-ed1-x52b.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CACA240ADC
- for <buildroot@buildroot.org>; Fri, 20 Nov 2026 10:01:40 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-4a1fbd52ab6so4786155e9.0
- for <buildroot@buildroot.org>; Fri, 20 Nov 2026 02:01:40 -0800 (PST)
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E2BFB400D6
+ for <buildroot@buildroot.org>; Fri, 20 Nov 2026 10:01:43 +0000 (UTC)
+Received: by mail-ed1-x52b.google.com with SMTP id
+ 4fb4d7f45d1cf-6b8a1f59d5eso826196a12.3
+ for <buildroot@buildroot.org>; Fri, 20 Nov 2026 02:01:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1795168899; x=1795773699;
+ d=1e100.net; s=20260707; t=1795168902; x=1795773702;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=PBSUVJiVTeClh/qzm9Pttcm1KQkaQZULS+Fro0dFYLQ=;
- b=HCHiCmETcANW9/szroQgCNGfKPiz0cX278MSS3CqCn0Z9+tIVnzNbt612oWD+WqUTu
- yxDHr60yCrPWq1PKPjvdu7XjzGbI2lOS1VF46A+udgpgr6j2kmzM85hf+mFf3nTQ/uZM
- veSqPJ+D5EseevS0IAUPBOkvJKJ9gTlOvxRXN2bFpHX5RhUIL0/r316820b5r+Ag+dRB
- eHLwwAXV+I+gCkxcyR+hh0f2UNPPjSdTLjWrRYxHiSRQjPeDltQbBG/IFBbtQ/KBRiNm
- emDHVh9HFzJ+HYeBoheU/wngNgq0zET0YP3mhKjiTu+34TsEjm5m501q/15XYqsbhzP4
- mC9Q==
-X-Gm-Message-State: APuU4Z+Tw52pbfagfg7RRp739RDql22g9CpTZpCHUY7Ge81aFFNt2uBB
- E6nbKgcDbAE3RQUmF7XgXsP0Pbx+BHWfbe358qkWWC/pH9tR+RiiOVq/UYFMxzzHr1ZutqkVq4S
- fs3+3/1C79g==
-X-Gm-Gg: AYBFou3IY+50ZC/YCi0fcNbm1FOqNkvNjs48xHo11LOFzEXX/a0cE8E3aTsaOG7gS9E
- sbaPWiSSk8Fqp2X1KlQZSzI/Y57PEnkeXTnIb9j8kQjBKSpAkMsK9ZNvLGmKXKRUCon90OC0rBB
- FH+g40ZUC+6NemNNpl81FatHRhK4RJtk9ulhe9V7PA+ZLT+2F0c+Z7RB0K4xVyu0O6IRgF2LpPM
- 32Oe8dQdKXMOZqewD/YB+P084JPbXDzGPSdAJcafbr36Jg6MtinLlv0vrSN7gCnMoeLXEQI/I6z
- 7nExRPx2T7oVEILEFRy/zNN7c8eE38hwaO1cnsP0K0Ufmx3lQVKMjG2OjxmnvszJUAeobTTeH7e
- XFoyq2t741/U5FhxWgNbG5sNZmUXou+GNj4mOTE1tVKzWJKOZskaV7PxANFMvPQI57UJ+kwtB3E
- XzvkFCv4wjseNuUoYV0v4bNvuFNCGSR8K0al0bl+/eoSTgjCRxJHlu08MVW8oTZXxTv/tp14ejS
- 5SEjrglWWOZHnVMU3VaOTY7OiV+1sjSMU0M1+2PTelKpCwEQNGx6hB/5jUtamCpFMw3zfhnLleu
- qlOCdIjdulBNVpZ+XkQZg7JAmzx4SowjbnxJmXfVobsC
-X-Received: by 2002:a05:600c:a08e:b0:4a1:fae5:f2e2 with SMTP id
- 5b1f17b1804b1-4bb887e0682mr57839995e9.4.1795168898134; 
- Fri, 20 Nov 2026 02:01:38 -0800 (PST)
+ bh=Xz2rwR8ZK9/mzOrQXKOu8FvzrjCoQ78Fa2aDwLBHdeQ=;
+ b=GU3K1eHVLi20B8QYdITDIJqmwYsAzowA5kQCOSycG7sl9lNke4b/fNzrw974TsIdGU
+ 1eWzer+6weZk7edrzKpYpngCXdLuOcdR37uF3JZZHIrcjsuEB69Vy+1bVEoLFuN29QUW
+ IH+6mWQGL9W8LHfAHPR01bYRsVHlIfIQn3kEtgXyz2X5QOJhsXhqYVRz/6o5GjXMnT2I
+ pt05Us8FN1GhQLf+9ze4I9wBgE0IWkVaU/s9KzB7SwjCSIhkHLXD753DUUx3Q/0L9xZm
+ pyQZHdh+uurMYNbCxSFDvWd/hhVefJyRhkqwYNRUuIG4Ep3uFsxfAEhSgwqiwDG14Clo
+ fu/Q==
+X-Gm-Message-State: APuU4Z81MvhCRLxmaWfqd7rqrElZdN+lJ1ReUxg57aNsBYV34eJvzOgb
+ jr7HFUN3wMKhwQD+tXUoUic7LDL6Ot3c9BYo4O65wBpschVo1yLfPDqXigj1X02i9NMu+7PULoa
+ mUNXsUt5qRw==
+X-Gm-Gg: AZFdTZfTU9iPdblZd3EzAwBqbVR1W49JrlHL3TBMhU+J/aQoWaqgISGYaw4YEiXa0WT
+ Br/osxUYHefKDBuzOJOGz3WRfJ/c0ZHW8X1q0sGCfyyOwsKDKX5kPWEcy4pYR+gGs1un8mbzTaD
+ /+tpLfDcj0MpjfPZjDp2XEU96s7t7Zi4ThdBR8DUyTj380X2Vp1ZzVgNhs0bIgrDrsrlfdKZFEa
+ GFoV+Yiga/pQN1gGNozNa5L56ydbtLlaVy2W4YTqfCdLnfkMovSxI/z907r6gebP/kumWLXx2Xm
+ kQRVMs+0Fi3Fc6g0MsD8Gq4gYvRgYMilpWDfHof1lo+77ZIBorfnM42ahdkm2g76MTpi+DRy2v2
+ 0uc8MNb2rfVvJYATxriIKtBrsFMhUZxGr+nJh5kkEdHQfdD1xTV6a/QaM2SjXV5JzoJgVS0lYap
+ IF5M9W2oxgTPUN9NvZIQE9mPtXZsTkXTXFyKGzl1kWlxRuUAbkpo8SirOTuKFdvxJ9MpYXUdHFe
+ 4eUixjSz1EqOPf/ep4dNxVABp5CdwiSwRKO9yITJ5erlnynooglrKwlyc8BN4VN1hBzl2I8Nx5I
+ G7YskXwcXbaGYSQp7zrTnSnXQziLNw==
+X-Received: by 2002:a05:6000:4b1e:b0:4a9:760f:1832 with SMTP id
+ ffacd0b85a97d-4abb46bc41fmr4476698f8f.45.1795168886489; 
+ Fri, 20 Nov 2026 02:01:26 -0800 (PST)
 Received: from debian-hp-1.fritz.box ([212.233.51.18])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4bb895faa2csm41420575e9.1.2026.11.20.02.01.37
+ ffacd0b85a97d-4abbd84e661sm3599867f8f.18.2026.11.20.02.01.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 20 Nov 2026 02:01:37 -0800 (PST)
+ Fri, 20 Nov 2026 02:01:26 -0800 (PST)
 To: buildroot@buildroot.org,
 	Thomas Perale <thomas.perale@mind.be>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 20 Nov 2026 11:01:33 +0100
-Message-ID: <20261120100136.543170-1-raphael.melotte@mind.be>
+Date: Fri, 20 Nov 2026 11:01:23 +0100
+Message-ID: <20261120100125.542985-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261116175316.1131644-1-thomas.perale@mind.be>
+In-Reply-To: <20261116143131.967376-1-thomas.perale@mind.be>
 References: 
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2025.02.x 1/1] package/libblockdev: patch
- CVE-2026-111581
+Subject: Re: [Buildroot] [PATCH 2025.02.x] package/postgresql: security bump
+ to v17.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -136,199 +136,107 @@ Reply-To: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
 In reply of:
-> This fixes the following vulnerability:
+> See the release note:
+>  - https://www.postgresql.org/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/
+>  - https://www.postgresql.org/docs/release/17.12/
 > 
-> - CVE-2026-111581:
->     A flaw was found in libblockdev. The bd_fs_ntfs_set_label() and
->     bd_fs_vfat_set_label() functions pass caller-supplied label values as
->     bare positional arguments to the ntfslabel and fatlabel utilities
->     without end-of-options separators or input validation for values
->     beginning with a dash. This allows a label starting with '-' to be
->     interpreted as a command-line flag by the spawned tool, potentially
->     bypassing safety checks or causing unintended operations. This is
->     reachable by unprivileged local users through the udisks2
->     Filesystem.SetLabel() D-Bus method without administrator
->     authentication.
+> Fixes the following CVEs:
 > 
-> For more information, see:
->  - https://www.cve.org/CVERecord?id=CVE-2026-111581
->  - https://github.com/storaged-project/libblockdev/commit/4ef6b2b4798a46566fe8815eaabd163205be20bd
->  - https://github.com/storaged-project/libblockdev/commit/bf990ef6d720b4a0d3cb22c572f473fc5dc7f83c
+> CVE-2026-6460: Type confusion after ALTER ... SET DATA TYPE executes arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-6467: Extension script schema mishandling executes arbitrary SQL (CVSS v3.1: 7.2)
+> CVE-2026-14661: dblink and subscriptions can append to arbitrary files (CVSS v3.1: 8.1)
+> CVE-2026-16237: INSERT ... ON CONFLICT can read or modify rows despite auto-updatable view WHERE condition (CVSS v3.1: 5.4)
+> CVE-2026-16240: pg_basebackup can use backup manifest content as a format string (CVSS v3.1: 3.7)
+> CVE-2026-18447: Output parameter type confusion executes arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-116303: Foreign key and JSON conversions bypass EXECUTE privilege on cast functions (CVSS v3.1: 3.1)
+> CVE-2026-116304: Parallel RECORD typmod use-after-free executes arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-116306: Composite-type change during field assignment executes arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-116307: plperl prepared-query use-after-free executes arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-116308: dict_int reads beyond zero-length tokens (CVSS v3.1: 4.3)
+> CVE-2026-116309: plperl blessed-reference type confusion may execute arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-116310: COPY error context uses freed field storage (CVSS v3.1: 4.3)
+> CVE-2026-116311: DROP OWNED can remove restrictive row security policies from non-owned tables (CVSS v3.1: 5.4)
+> CVE-2026-116312: MERGE can place the wrong row in a trigger transition table (CVSS v3.1: 5.4)
+> CVE-2026-116313: vacuumdb --missing-stats-only lets a database owner execute code as the vacuumdb user (CVSS v3.1: 7.2)
+> CVE-2026-116314: pg_restore executes arbitrary code due to missing non-plain archive validation (CVSS v3.1: 8.8)
+> CVE-2026-116315: tsvector_delete() heap buffer overflow executes arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-116316: Security-restricted operations can create types in pg_temp, which later queries of the session find (CVSS v3.1: 8.8)
+> CVE-2026-116317: ts_rank_cd() heap buffer overflow may execute arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-116318: pg_dump not-null constraint name allows SQL injection (CVSS v3.1: 8.8)
+> CVE-2026-116319: plperl reentrant return_next() use-after-free executes arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-116320: plperl array and hash conversion use-after-free executes arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-116321: Unterminated name value discloses server memory (CVSS v3.1: 4.3)
+> CVE-2026-116322: Pre-authentication cancel request can leak a spinlock (CVSS v3.1: 5.3)
+> CVE-2026-116323: pltcl reentrant result conversion use-after-free executes arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-116325: reindexdb index name quoting allows SQL injection (CVSS v3.1: 8)
+> CVE-2026-116326: plperl tied-object exceptions follow stale sigjmp_buf (CVSS v3.1: 8.8)
+> CVE-2026-116327: security_barrier analysis can expose hidden values through indirect expressions (CVSS v3.1: 4.3)
+> CVE-2026-116328: Generation memory context integer wraparound executes arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-116329: Statistics import type confusion executes arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-116330: pg_dump tar restore.sql fails to block psql command injection (CVSS v3.1: 8.8)
+> CVE-2026-116331: Min/max aggregate type confusion executes arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-116332: Portal setup use-after-free executes arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-116333: Parallel B-tree array scan reads beyond array bounds (CVSS v3.1: 6.5)
+> CVE-2026-116335: Commutator or negator result-type confusion executes arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-116336: REINDEX CONCURRENTLY does not block DROP INDEX during index functions (CVSS v3.1: 8.8)
+> CVE-2026-120139: Tuple-size integer wraparound executes arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-120141: Materialized set-returning function type confusion executes arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-120142: Dropped-column type confusion executes arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-120143: Transition-table cursor use-after-free executes arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-120144: Type-cache invalidation gap executes arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-120145: Logical replication can write to subscriber system catalogs, executing arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-120146: REASSIGN OWNED bypasses role SET and CREATEDB checks (CVSS v3.1: 4.3)
+> CVE-2026-120147: dblink reentrant disconnect use-after-free executes arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-120148: Extended-statistics pseudo-type confusion executes arbitrary code (CVSS v3.1: 8.1)
+> CVE-2026-120149: FDW batch-insert mismatch executes arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-120150: Expanded-record domain-check use-after-free executes arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-120151: plpgsql record-field type confusion executes arbitrary code (CVSS v3.1: 8.8)
+> CVE-2026-120152: pg_show_all_settings() use-after-free discloses memory (CVSS v3.1: 4.3)
+> CVE-2026-120153: Extension-script substitutions allow SQL injection through object names (CVSS v3.1: 7.2)
+> CVE-2026-120154: INSERT ... ON CONFLICT can read rows despite row security policies (CVSS v3.1: 4.3)
 > 
 > Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> Reviewed-by: Maxim Kochetkov <fido_max@inbox.ru>
 
 Applied to 2025.02.x. Thanks
 
 > ---
->  ...ect-NTFS-labels-starting-with-a-dash.patch | 49 ++++++++++++
->  ...ls-from-being-interpreted-as-options.patch | 78 +++++++++++++++++++
->  package/libblockdev/libblockdev.mk            |  4 +
->  3 files changed, 131 insertions(+)
->  create mode 100644 package/libblockdev/0002-fs-Reject-NTFS-labels-starting-with-a-dash.patch
->  create mode 100644 package/libblockdev/0003-fs-Prevent-VFAT-labels-from-being-interpreted-as-options.patch
+>  package/postgresql/postgresql.hash | 4 ++--
+>  package/postgresql/postgresql.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/libblockdev/0002-fs-Reject-NTFS-labels-starting-with-a-dash.patch b/package/libblockdev/0002-fs-Reject-NTFS-labels-starting-with-a-dash.patch
-> new file mode 100644
-> index 0000000000..9a4613f421
-> --- /dev/null
-> +++ b/package/libblockdev/0002-fs-Reject-NTFS-labels-starting-with-a-dash.patch
-> @@ -0,0 +1,49 @@
-> +From 4ef6b2b4798a46566fe8815eaabd163205be20bd Mon Sep 17 00:00:00 2001
-> +From: Vojtech Trefny <vtrefny@redhat.com>
-> +Date: Tue, 3 Nov 2026 15:39:58 +0100
-> +Subject: [PATCH] fs: Reject NTFS labels starting with a dash
-> +
-> +Fixes CVE-2026-111581.
-> +
-> +CVE: CVE-2026-111581
-> +Upstream: https://github.com/storaged-project/libblockdev/commit/4ef6b2b4798a46566fe8815eaabd163205be20bd
-> +[thomas: drop tests and backport context]
-> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> +---
-> + src/plugins/fs/ntfs.c | 16 ++++++++++++++++
-> + 1 file changed, 16 insertions(+)
-> +
-> +diff --git a/src/plugins/fs/ntfs.c b/src/plugins/fs/ntfs.c
-> +index 424f606..78b56d0 100644
-> +--- a/src/plugins/fs/ntfs.c
-> ++++ b/src/plugins/fs/ntfs.c
-> +@@ -221,6 +221,9 @@ gboolean bd_fs_ntfs_set_label (const gchar *device, const gchar *label, GError *
-> +     if (!check_deps (&avail_deps, DEPS_NTFSLABEL_MASK, deps, DEPS_LAST, &deps_check_lock, error))
-> +         return FALSE;
-> + 
-> ++    if (!bd_fs_ntfs_check_label (label, error))
-> ++        return FALSE;
-> ++
-> +     return bd_utils_exec_and_report_error (args, NULL, error);
-> + }
-> + 
-> +@@ -235,6 +238,19 @@ gboolean bd_fs_ntfs_set_label (const gchar *device, const gchar *label, GError *
-> +  * Tech category: always available
-> +  */
-> + gboolean bd_fs_ntfs_check_label (const gchar *label, GError **error) {
-> ++    if (!label) {
-> ++        g_set_error_literal (error, BD_FS_ERROR, BD_FS_ERROR_LABEL_INVALID,
-> ++                             "Label cannot be NULL.");
-> ++        return FALSE;
-> ++    }
-> ++
-> ++    /* ntfslabel does not reliably support '--' to terminate option parsing. */
-> ++    if (label[0] == '-') {
-> ++        g_set_error_literal (error, BD_FS_ERROR, BD_FS_ERROR_LABEL_INVALID,
-> ++                             "Label for NTFS filesystem cannot start with '-'.");
-> ++        return FALSE;
-> ++    }
-> ++
-> +     if (strlen (label) > 128) {
-> +         g_set_error (error, BD_FS_ERROR, BD_FS_ERROR_LABEL_INVALID,
-> +                      "Label for NTFS filesystem must be at most 128 characters long.");
-> diff --git a/package/libblockdev/0003-fs-Prevent-VFAT-labels-from-being-interpreted-as-options.patch b/package/libblockdev/0003-fs-Prevent-VFAT-labels-from-being-interpreted-as-options.patch
-> new file mode 100644
-> index 0000000000..9594d16ad3
-> --- /dev/null
-> +++ b/package/libblockdev/0003-fs-Prevent-VFAT-labels-from-being-interpreted-as-options.patch
-> @@ -0,0 +1,78 @@
-> +From bf990ef6d720b4a0d3cb22c572f473fc5dc7f83c Mon Sep 17 00:00:00 2001
-> +From: Vojtech Trefny <vtrefny@redhat.com>
-> +Date: Tue, 3 Nov 2026 16:07:59 +0100
-> +Subject: [PATCH] fs: Prevent VFAT labels from being interpreted as options
-> +
-> +Fixes CVE-2026-111581.
-> +
-> +This also requires dosfstools >= 4.2 for setting label from now
-> +because the "--" option doesn't work with older versions. 4.2 was
-> +released in 2021 and is now available in all major distributions
-> +including Debian 11 (oldoldstable) and CentOS/RHEL 9 so it's not
-> +a problem.
-> +
-> +CVE: CVE-2026-111581
-> +Upstream: https://github.com/storaged-project/libblockdev/commit/bf990ef6d720b4a0d3cb22c572f473fc5dc7f83c
-> +[thomas: drop tests]
-> +Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> +---
-> + src/plugins/fs/vfat.c | 31 +++++++++---------------
-> + 1 file changed, 11 insertions(+), 20 deletions(-)
-> +
-> +diff --git a/src/plugins/fs/vfat.c b/src/plugins/fs/vfat.c
-> +index 744bc9f..7866964 100644
-> +--- a/src/plugins/fs/vfat.c
-> ++++ b/src/plugins/fs/vfat.c
-> +@@ -46,7 +46,7 @@ static GMutex deps_check_lock;
-> + 
-> + static const UtilDep deps[DEPS_LAST] = {
-> +     {"mkfs.vfat", NULL, NULL, NULL},
-> +-    {"fatlabel", NULL, NULL, NULL},
-> ++    {"fatlabel", "4.2", "--version", "fatlabel\\s+([\\d\\.]+).+"},
-> +     {"fsck.vfat", NULL, NULL, NULL},
-> +     {"vfat-resize", NULL, NULL, NULL},
-> +     {"fatlabel", "4.2", "--version", "fatlabel\\s+([\\d\\.]+).+"},
-> +@@ -281,33 +281,24 @@ gboolean bd_fs_vfat_repair (const gchar *device, const BDExtraArg **extra, GErro
-> +  * Tech category: %BD_FS_TECH_VFAT-%BD_FS_TECH_MODE_SET_LABEL
-> +  */
-> + gboolean bd_fs_vfat_set_label (const gchar *device, const gchar *label, GError **error) {
-> +-    const gchar *args[4] = {"fatlabel", device, NULL, NULL};
-> +-    UtilDep dep = {"fatlabel", "4.2", "--version", "fatlabel\\s+([\\d\\.]+).+"};
-> +-    gchar *label_up = NULL;
-> +-    gboolean new_vfat = FALSE;
-> +-    gboolean ret;
-> ++    const gchar *args[5] = {"fatlabel", "--", device, label, NULL};
-> ++    g_autofree gchar *label_up = NULL;
-> + 
-> +     if (!check_deps (&avail_deps, DEPS_FATLABEL_MASK, deps, DEPS_LAST, &deps_check_lock, error))
-> +         return FALSE;
-> + 
-> +     if (!label || g_strcmp0 (label, "") == 0) {
-> +-        /* fatlabel >= 4.2 refuses to set empty label */
-> +-        new_vfat = bd_utils_check_util_version (dep.name, dep.version,
-> +-                                                dep.ver_arg, dep.ver_regexp,
-> +-                                                NULL);
-> +-        if (new_vfat)
-> +-            args[2] = "--reset";
-> +-    }
-> +-
-> +-    /* forcefully convert the label uppercase in case no reset was requested */
-> +-    if (label && args[2] == NULL) {
-> ++        /* fatlabel >= 4.2 refuses to set an empty label, use --reset instead */
-> ++        args[1] = "--reset";
-> ++        args[2] = "--";
-> ++        args[3] = device;
-> ++    } else {
-> ++        /* forcefully convert a non-empty label uppercase */
-> +         label_up = g_ascii_strup (label, -1);
-> +-        args[2] = label_up;
-> ++        args[3] = label_up;
-> +     }
-> +-    ret = bd_utils_exec_and_report_error (args, NULL, error);
-> +-    g_free (label_up);
-> + 
-> +-    return ret;
-> ++    return bd_utils_exec_and_report_error (args, NULL, error);
-> + }
-> + 
-> + /**
-> diff --git a/package/libblockdev/libblockdev.mk b/package/libblockdev/libblockdev.mk
-> index ecee8dee24..d1bd9a0f08 100644
-> --- a/package/libblockdev/libblockdev.mk
-> +++ b/package/libblockdev/libblockdev.mk
-> @@ -13,6 +13,10 @@ LIBBLOCKDEV_DEPENDENCIES = host-pkgconf libglib2 kmod udev
->  # 0001-Provide-replacement-function-for-strerror_l.patch
->  LIBBLOCKDEV_AUTORECONF = YES
+> diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+> index ca0d350708..984f9b9a86 100644
+> --- a/package/postgresql/postgresql.hash
+> +++ b/package/postgresql/postgresql.hash
+> @@ -1,4 +1,4 @@
+> -# From https://ftp.postgresql.org/pub/source/v17.11/postgresql-17.11.tar.bz2.sha256
+> -sha256  dd27f2b3c59e73ed14aa3324901242bf69a032a6347805f274e6260322d42979  postgresql-17.11.tar.bz2
+> +# From https://ftp.postgresql.org/pub/source/v17.12/postgresql-17.12.tar.bz2.sha256
+> +sha256  9cf136a703d8ee2f83465c43be4e9e8e7930c82b0bfba13be7e2537be769ac55  postgresql-17.12.tar.bz2
+>  # License file, Locally calculated
+>  sha256  3d6af92ff8a4c2cdf69afb1cf44edea727922f5cd0cf8b5f72b11cdecac8fdfd  COPYRIGHT
+> diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+> index d7fad7c5a1..0d0b287ebf 100644
+> --- a/package/postgresql/postgresql.mk
+> +++ b/package/postgresql/postgresql.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
-> +# 0002-fs-Reject-NTFS-labels-starting-with-a-dash.patch
-> +# 0003-fs-Prevent-VFAT-labels-from-being-interpreted-as-options.patch
-> +LIBBLOCKDEV_IGNORE_CVES += CVE-2026-111581
-> +
->  LIBBLOCKDEV_CONF_OPTS = \
->  	--disable-introspection \
->  	--with-loop \
+> -POSTGRESQL_VERSION = 17.11
+> +POSTGRESQL_VERSION = 17.12
+>  POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+>  POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+>  POSTGRESQL_LICENSE = PostgreSQL
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
