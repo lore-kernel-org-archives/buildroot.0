@@ -2,138 +2,211 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4877E60A2609
-	for <buildroot@archiver.kernel.org>; Fri, 20 Nov 2026 10:11:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EE7D606A325
+	for <buildroot@archiver.kernel.org>; Fri, 20 Nov 2026 10:25:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=o55fFUpt;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=J4xj1B1l
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=OGtppg+/
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 195D681668;
-	Fri, 20 Nov 2026 10:11:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9E47C8167E;
+	Fri, 20 Nov 2026 10:25:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OBSq8fYY2eOa; Fri, 20 Nov 2026 10:11:03 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 6B52D81669
+ id 2d6aYsF_sCbd; Fri, 20 Nov 2026 10:25:49 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 920F2815FD
 Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795169463;
-	b=LhlqpB62fQEKwipc1QgY5tATAeWDpa+Bk+GR78Av7ZTPY68hM1oNwKz7ndoxWnoPc0aR
-	 fKWCQZQxG0jQV5Cqe4nUnOV/cptvqhWoVR9h7dZU7YieRTct4EGV7aLC3OrIYe3UCe8Fy
-	 FHwWfUuZZNeIXpTO/uMzaYBroX7iwX8m9P4nSexJNGEEa4nNXFw8R41Fu5Vng0W3+fTMm
-	 7HD3aoKn1n+MQoHwR1iFyZvtgO3tmCgi+vWBriVKy/vWBnrxDnE8/ZLKi1DY7r5ILQhUS
-	 cLbeNzOsKpNmv7OTtZWPtJDaHXj0zzeCjm6+GONNpvuM2GPwIEbhk9tmyiUz6BzgOsg==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795170349;
+	b=Re+SK2mGO7oPifZlFZlTr9+Cdm/FH/Aza0Gq9LDnsTsmq6lcUDvuOFZSgoC3o27BYfAv
+	 aochQ75HZm1GaeQrL70d6Ao69FWZe82P20xe9568O3aJvD+QNeB9Kvuq79Xn/7SDDfcKo
+	 PfcEqdh4mEIjq3XLJaClrAS/JZwKYuB78oXCXZH/qI/A7Wi2Zt+MXe9OzwXqQy6TbSe0m
+	 r2IuiERp12doIW+QxJjadl7nt2GSaKM+W5g9nQ37qPu9VEQvocI9RJ6F5FWb2XyZRfey/
+	 eIVubxtcbqxK9IHQxD/kJe3gaLMmU8tX+G/sflGrviz6TQ+fEtTz8EPU7GVLoGyBuew==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795169463;
+	c=relaxed/relaxed; t=1795170349;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:From:To:Date:Message-ID:X-Mailer:MIME-Version:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 DKIM2-Signature:Message-Instance:X-UI-Sender-Class:Received:To:Cc:
+	 Date:Message-ID:X-Mailer:MIME-Version:X-Provags-ID:UI-OutboundReport:
 	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=sxCsrUrDFdz7XvQDbziu/7JaEkUoROz236zApVyDZnA=;
-	b=GUVB5608a7bAUjoaNNeCfGpXL0NjkeYwA4GKEZRBg11a4WbpNI21C6Dooq/VFJZ0xrcK
-	 XQ4pkYM9RWbSTsNQY5viVrmX/oqRKXIFfXIWEKGqiBi0uavSCgS1YF2s8MNe08EVhslbw
-	 tM3Io8vXs08131DRL22BQvui2Sd3Nl4MKRllBFce4X9/wI4J893HJsgGmAFFOC2Ady1Ih
-	 AO/2Fb0p5PIYSthmbatqbCmet7Wqzam6rmOba6bQBnZyPrI4yWS+n8xC69GYqjQgd3Gua
-	 6KyUWgsBCClesNt9fWiZfL6k7zphaxiPJ0kH2oDDCZfgnKeD2NlKqZ1PvUFZwxCl/Pw==
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
+	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=BRzNj2NA9vmbxVB4tX4prdy1pwsHDLJrpEOW8CF68oA=;
+	b=LGyIxmQDNvwHCdsPOd4GzL4s5Xa77VBw7UEkrxBPjZX2dHCIKjcR0BkIj9TPaRE7OnBB
+	 FqMnMf5seNy8rW5ftWIXqgzKF5PgyaK1Q8u+Xhx5tbr44207bkbT54MDsVHuHdxr/YIoW
+	 pP7DsnTtUeN/+e4TazdNs+7eJdD4CP8BYj/YlKz9kGHGvbcU6RgRhSRQukaX77y0XB9NN
+	 YIUWbC+s9OLepe1m5DNsDK74C+b7M0xsJW48gqKQttnlo7SyC9SeUuHHeSjXUAXj1r/73
+	 bUHgjAMfBK+D8GVcnKUptEglH3rLT9CaA6rtxGTaHjjEQ7jUCLs44PCaebTK2TPSyIw==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795169463;
-	bh=sxCsrUrDFdz7XvQDbziu/7JaEkUoROz236zApVyDZnA=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=o55fFUptnhF8krNMrRKRZK2PpwCGbd6/X+DQP9mfkQB+EmulvfbVKHPaIKHCoIBoP
-	 zOP1QDST/gSO96qS0Ln8uKTM8hCDx44i0aN3YcrPPaSMjkt+kb4IpBAoavBZO+2QMe
-	 hzUYwoPz9pantPzfZIO/ZYCrAv/L0nriO0riHtwAqM9c1YUBqdQPnsGGsRoC1Oo3Ts
-	 rv57g49AWQ3E5NSWfCfq/VYKvpUYp9qhqDQmx3pcEOsJ6TW2jpQytP7XomQ1ogN0mb
-	 xoBycs/KpMleyL5EsPxXrO8CZo7SplnBay2sYtdQAgzjHiqm5FSuTRIU2qcaF5hAxA
-	 3VNCv/jD8g99A==
+	s=default; t=1795170349;
+	bh=BRzNj2NA9vmbxVB4tX4prdy1pwsHDLJrpEOW8CF68oA=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=OGtppg+/Kk77brCBymGybOKEVAsMK65CnQx2QWwj2URkS3W/l3V/muCi5Psn416O8
+	 S3HNGG3vJ31eC6t8sL9FevNlSngpUO+/5iV4Kkz7v4L0c8VTmZV0So56wa6ggCJ9vv
+	 /bpLeMR0ROdGJq1SNfMEvNEKOcPW0aXFHFvZPpeL9bvS7KtlSOAH4HNCaEglgJoe6U
+	 er0aLEDpX7xY5lsjxMC1JccfymXNou2IBZy/MMFHUtB3YfrvURoipI1/6tBg/YN9lP
+	 KHTIgA0E1xPby2f1CC5qsjCi/PXruoV5/spUDUTe9IMkMISM3RcpLyt9V4PwEVBlqO
+	 OdChDKnsyv6sQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B52D81669;
-	Fri, 20 Nov 2026 10:11:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id AFC10169
- for <buildroot@buildroot.org>; Fri, 20 Nov 2026 10:11:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 920F2815FD;
+	Fri, 20 Nov 2026 10:25:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by lists1.osuosl.org (Postfix) with ESMTP id 258C21C9
+ for <buildroot@buildroot.org>; Fri, 20 Nov 2026 10:25:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A15E060E36
- for <buildroot@buildroot.org>; Fri, 20 Nov 2026 10:11:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1739C40CE8
+ for <buildroot@buildroot.org>; Fri, 20 Nov 2026 10:25:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9ZvbbcxN1Jxz for <buildroot@buildroot.org>;
- Fri, 20 Nov 2026 10:11:00 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 5E58D6064A
-Authentication-Results: smtp3.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::336"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
- envelope-from=pieterjanca@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20260707 header.b=J4xj1B1l
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5E58D6064A
- for <buildroot@buildroot.org>; Fri, 20 Nov 2026 10:10:59 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-4bb70074ab2so6559605e9.0
- for <buildroot@buildroot.org>; Fri, 20 Nov 2026 02:10:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20260707; t=1795169458; x=1795774258; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=KT3BiCIYzLJDPn/Uzo9pHfgUqGfFYDjBACdlTgyksiA=;
- b=J4xj1B1lzWGDE3Vdl4D/ElRWrl0If/7n9kcOqpb+i+xSGDByabAObwcpYbGMFINRO9
- G1OVheg5f6dJmpmSaqfnMZ33UGMN4ygMXADfJrYnS9vi7saPIMXHjfVhfBffJTVV8rrw
- ajJN2naRA1VSPpvNfZq+ONV3MoYaX3o0q4qsPx0tq7ZkXhsqn5ZeVDJXOOk8iJMQtyLm
- 3DDm0El8GOOTbjYaAWUxdk+QNuWiBNpDKLNakjTzYUdEwOy8uLP9FHjzfYjj/bOTGBMN
- UCO50e1BE2ejeEmgHFggqcKMoSVHtLiZEKXMBQeZJaKE/7clLtc6SvX88kvsjSsgFK52
- wUlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1795169458; x=1795774258;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to:content-type;
- bh=KT3BiCIYzLJDPn/Uzo9pHfgUqGfFYDjBACdlTgyksiA=;
- b=If8t11PnQQ1FPYcEEpk3+wnd5bB2Agmz/19rq2QIhkou8d1tP3vFBVALP4j0zRwTIM
- BXzBDpPT0fb1PJnmDB588kvAvghe1VNouocEM4i0llL2LXdymz1E4bRn5VXqC1FbGvDe
- QlGuXRQ993g8LReGhqsEQ2ipNdAoDYRHv+T5lBqeM/iEiMXmKPGlUgQJRtWrjmcJ5kM1
- pchUuNi3Wp+YSrc9KzMDARJrdOfc+R/kTL/HYBJlrf2hqt2IC6dJ59NqQjnp9FSVHQwN
- 2AGj53I0f/vLEK2/IsUBvbomskhg1oA73NI/c1htxj1DE4ltoTLX/nQ/cBpM+20BsyNT
- VSzg==
-X-Gm-Message-State: APuU4Z+4rvf+kR4VPF8XSZIiFHpKuHtBPI5zyCi5PH8L9vVyQOVPz9we
- gkSYhisQhtVTbzwSibch8O97WZbfT79NeARaQ7N3hSB+uUEpMm54pSb5d8+F
-X-Gm-Gg: AYBFou3zwdLT+2EDeoE+K3+XkWFVzC6g3xULwxOCIV/PICxsW5P/agT2DT95C0dd32z
- P+TXatm5EiXywFAltEM3DRxvhpGH37p0x75rebPaW11LqHrs8FApvXY4L/smGh9o9ZXPlx4hYTZ
- pySzXgbrCOLTmRJ3gvPGRxFUzqsw3QEJCGuBWaJZDaOKadNtovi7q1Bc6VsZbH70NZr34TGRhwm
- 6XChEJldYst/9j8iNyoBfWdaQmvJlCA2ulHRP0LgM2XW2Eo3Cy99H3wdT3pkthvvzXqr0PUERve
- 6oNh/QQh2sH9EPMI4GyQNF5AX+bpzfZWMMl+t9YXZmAKmv9ZasZowHGcizTbNnOsUT4gJzYCvp8
- PT+xt4Ek5+epBK8NXl52gTGp3AgbevZUpAlPhpr+yddabuuzGbHIr1OYqkuiFzbqEcNOrbl7OK3
- c70XFjbRen0EZNVGjdiVn1SesPcPazHWf/AMiBCGWZylJKC/SCJqtSAz6htx6SvFWmvahHHC2L7
- 13FetzakdruETcX5BrimhkW5N2bVoQFhzvuKEyp7JdBA/Gpv1IJySmLo5xUsqr3RnKjaSYsevaE
- 4b1v65GlqSwSVetWzkm4
-X-Received: by 2002:a05:600c:5395:b0:4a3:5a98:c279 with SMTP id
- 5b1f17b1804b1-4bb8880e599mr53188385e9.8.1795169458051; 
- Fri, 20 Nov 2026 02:10:58 -0800 (PST)
-Received: from case ([84.199.255.188]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4bb884a3a3dsm64614995e9.10.2026.11.20.02.10.57
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 20 Nov 2026 02:10:57 -0800 (PST)
-From: Pieterjan Camerlynck <pieterjanca@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mV8xAZmMfzuo for <buildroot@buildroot.org>;
+ Fri, 20 Nov 2026 10:25:47 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org D2BCF40A4B
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D2BCF40A4B
+ for <buildroot@buildroot.org>; Fri, 20 Nov 2026 10:25:46 +0000 (UTC)
+DKIM2-Signature: i=1; m=1; t=1795170344; mf=PGZpb25hLmtsdXRlQGdteC5kZT4=;
+ rt=PGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnPg==; d=gmx.de;
+ s=s31663417:rsa-sha256:Bm9SCvJxS6Mxv7FyQGfKgwxQ5rMh
+ ATywyOqXds/+H041AO2o6mh5ezEBGBm6JYa70jnk7/aFsXL6lyQn2LC1ExUTUUsWG4stZmsNnEC
+ NB00YBgleib5nGhC+YwQ6JeyevKaP/BIqaAsyFHt0eCt696lP/PKTgrSb0idy9KtyjVkqDYn8tq
+ jfU/qPG1mk5S6xjvZzCHOeZC36nfSjzV72wzTji0oJrFxq/99eU26JQWJSDA3eUMmJOoqiOmVPe
+ +EZDhbPcCOiS+hEJuNDEpjVMS5pF/A3CP5LTEFnMAYgwWFJjt5pPYhUOwBneFtZ2uYvVF0XhZoT
+ +N3FHNcyvkyNoQ==;
+Message-Instance: m=1; h=sha256: P+rLMdWO1wtcCfmNaaqsmmmEBLMOHlWn2xIdzXAKq2o=:
+ uB0mZiDwKBTOhYex8kMyiJNE6z4RI/qf11HMRpbJ0Us=, sha512:
+ xwK51ZiF9BU51Edf/t7HFNDrMULMMxNLwn3WNUDK039zzv3vU58rCELTEJl46HX6jpWAHP3WbiMzW2Kw9fAhNg==:
+ Zn1P2Ho1e2ADEWTJ1wVl47GdyeYR8QBmuBNysTkpHtMi9jsgaNhQCHcuT/NV1u2pOmJaCnkTAmbkxXvqbYK6Tg==;
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MAONX-1xg9Va3guB-006AMf; Fri, 20
+ Nov 2026 11:25:38 +0100
 To: buildroot@buildroot.org
-Date: Fri, 20 Nov 2026 11:10:38 +0100
-Message-ID: <20261120101039.3397958-1-pieterjanca@gmail.com>
-X-Mailer: git-send-email 2.56.1
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Fiona Klute <fiona.klute@gmx.de>
+Date: Fri, 20 Nov 2026 11:25:23 +0100
+Message-ID: <20261120102523.543165-1-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.55.0
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH next] package/synergy: remove package
+X-Provags-ID: V03:K1:3ybBRK1xzMLbW8JU10fN2EJQSlwET6qEORSBcqWj9035WA86Jl0
+ zdDPInqQWumaPCWpWHE04B5wZLeBOuQnH65BVp5nY7ywxbuPE2qY/ybfsU8gsS1AHWWBXLw
+ N/uFSZGeYCR8GNpzbXRFfOLKnt/CIqlLL1F32Rv0D72ew/eJ2Rx/7DdOjtLdqzwnUK4zECd
+ TPBwUat71Jg8I+g7kYVww==
+UI-OutboundReport: notjunk:1;M01:P0:xaQLnA5eXI8=;rLjrgdebT057ViDQSXu8yjndYdl
+ 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
+Subject: [Buildroot] [PATCH 1/1] package/pkg-generic.mk: fix
+ <pkg>_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS for host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -143,171 +216,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Buildroot packages synergy 2.0.12-beta, a beta of Synergy 2, which was
-discontinued upstream [1]. Its symless/synergy-core repository is gone
-from GitHub, so the package only builds from the sources.buildroot.net
-backup.
+Host packages already default to using <pkg>_OVERRIDE_SRCDIR from the
+matching target package. However, this did not apply to
+<pkg>_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS. This meant the host package
+might rsync files that should be excluded (typically build artifacts)
+to the build directory, and users need to define both
+<pkg>_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS and
+HOST_<pkg>_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS to avoid that.
 
-The synergy codebase lives on as Deskflow [2], but switching to it is
-not a simple bump: it requires Qt6, libei and libportal, the latter two
-not being packaged in Buildroot. The legacy option therefore does not
-select a replacement.
+Fix that, so both <pkg>_OVERRIDE_SRCDIR and
+<pkg>_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS are the same for target and
+host package, unless different values are explicitly set for the host
+package.
 
-[1] https://symless.com/synergy/news/synergy-3-beta-launch
-[2] https://github.com/symless/synergy
-
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Pieterjan Camerlynck <pieterjanca@gmail.com>
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 ---
- Config.in.legacy             |  7 +++++++
- DEVELOPERS                   |  1 -
- package/Config.in            |  1 -
- package/synergy/Config.in    | 22 --------------------
- package/synergy/synergy.hash |  3 ---
- package/synergy/synergy.mk   | 39 ------------------------------------
- 6 files changed, 7 insertions(+), 66 deletions(-)
- delete mode 100644 package/synergy/Config.in
- delete mode 100644 package/synergy/synergy.hash
- delete mode 100644 package/synergy/synergy.mk
+ package/pkg-generic.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 4c03b41df9..b2a6ba2908 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 4e2ce2e7a0..c11afe1068 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -512,6 +512,9 @@ $(2)_HASH_FILES = \
+ ifdef $(3)_OVERRIDE_SRCDIR
+   $(2)_OVERRIDE_SRCDIR ?= $$($(3)_OVERRIDE_SRCDIR)
+ endif
++ifdef $(3)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS
++  $(2)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS ?= $$($(3)_OVERRIDE_SRCDIR_RSYNC_EXCLUSIONS)
++endif
  
- comment "Legacy options removed in 2027.02"
- 
-+config BR2_PACKAGE_SYNERGY
-+	bool "synergy has been removed"
-+	select BR2_LEGACY
-+	help
-+	  Synergy 2 was discontinued upstream. The codebase lives on
-+	  as Deskflow.
-+
- config BR2_PACKAGE_PYTHON_DBUS_NEXT
- 	bool "python-dbus-next has been removed"
- 	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e0a08ac155..54ff506400 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2850,7 +2850,6 @@ F:	package/libvips/
- N:	Pieterjan Camerlynck <pieterjanca@gmail.com>
- F:	package/libdvbpsi/
- F:	package/mraa/
--F:	package/synergy/
- 
- N:	Qais Yousef <qais.yousef@arm.com>
- F:	package/bpftrace/
-diff --git a/package/Config.in b/package/Config.in
-index 3d7c601df2..4baf82e746 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -410,7 +410,6 @@ comment "X applications"
- 	source "package/pcmanfm/Config.in"
- 	source "package/qt-webkit-kiosk/Config.in"
- 	source "package/rdesktop/Config.in"
--	source "package/synergy/Config.in"
- 	source "package/vte/Config.in"
- 	source "package/wmctrl/Config.in"
- 	source "package/x11vnc/Config.in"
-diff --git a/package/synergy/Config.in b/package/synergy/Config.in
-deleted file mode 100644
-index c1216c4ba9..0000000000
---- a/package/synergy/Config.in
-+++ /dev/null
-@@ -1,22 +0,0 @@
--config BR2_PACKAGE_SYNERGY
--	bool "synergy"
--	depends on BR2_PACKAGE_XORG7
--	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_USE_WCHAR
--	depends on BR2_USE_MMU # fork()
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
--	select BR2_PACKAGE_XLIB_LIBX11
--	select BR2_PACKAGE_XLIB_LIBXTST
--	help
--	  Synergy lets you easily share a single mouse and
--	  keyboard between multiple computers with different
--	  operating systems, each with its own display,
--	  without special hardware.
--
--	  https://github.com/symless/synergy-core/
--
--comment "synergy needs a toolchain w/ C++, wchar, gcc >= 4.9"
--	depends on BR2_PACKAGE_XORG7
--	depends on BR2_USE_MMU
--	depends on !(BR2_INSTALL_LIBSTDCPP && BR2_USE_WCHAR && \
--		BR2_TOOLCHAIN_GCC_AT_LEAST_4_9)
-diff --git a/package/synergy/synergy.hash b/package/synergy/synergy.hash
-deleted file mode 100644
-index 248fd9dce7..0000000000
---- a/package/synergy/synergy.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally computed:
--sha256  06d1cb1d43251b0b624212652e9c0ab2657d124ac4f7e7d0c7f3e448c953c2a8  synergy-2.0.12-beta.tar.gz
--sha256  4921009cd76e7d38a8e873c362b25dbaf032c320bbb36a40dec775ddbdcbe1d8  LICENSE
-diff --git a/package/synergy/synergy.mk b/package/synergy/synergy.mk
-deleted file mode 100644
-index bc7ebea070..0000000000
---- a/package/synergy/synergy.mk
-+++ /dev/null
-@@ -1,39 +0,0 @@
--################################################################################
--#
--# synergy
--#
--################################################################################
--
--SYNERGY_VERSION = 2.0.12-beta
--SYNERGY_SITE = $(call github,symless,synergy-core,v$(SYNERGY_VERSION))
--SYNERGY_LICENSE = GPL-2.0
--SYNERGY_LICENSE_FILES = LICENSE
--SYNERGY_CPE_ID_VENDOR = symless
--SYNERGY_DEPENDENCIES = xlib_libX11 xlib_libXtst
--
--# Avoid using buildroot commit hash inside cmake/Version.cmake
--# by setting SYNERGY_VERSION_STAGE != snapshot
--SYNERGY_CONF_ENV += SYNERGY_VERSION_STAGE="beta"
--
--ifeq ($(BR2_PACKAGE_XLIB_LIBXEXT),y)
--SYNERGY_DEPENDENCIES += xlib_libXext
--endif
--
--ifeq ($(BR2_PACKAGE_XLIB_LIBXI),y)
--SYNERGY_DEPENDENCIES += xlib_libXi
--endif
--
--ifeq ($(BR2_PACKAGE_XLIB_LIBXINERAMA),y)
--SYNERGY_DEPENDENCIES += xlib_libXinerama
--endif
--
--ifeq ($(BR2_PACKAGE_XLIB_LIBXRANDR),y)
--SYNERGY_DEPENDENCIES += xlib_libXrandr
--endif
--
--define SYNERGY_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/bin/synergyc $(TARGET_DIR)/usr/bin/synergyc
--	$(INSTALL) -D -m 0755 $(@D)/bin/synergys $(TARGET_DIR)/usr/bin/synergys
--endef
--
--$(eval $(cmake-package))
+ $(2)_BASENAME	= $$(if $$($(2)_VERSION),$(1)-$$($(2)_VERSION),$(1))
+ $(2)_BASENAME_RAW = $$(if $$($(2)_VERSION),$$($(2)_RAWNAME)-$$($(2)_VERSION),$$($(2)_RAWNAME))
 -- 
-2.56.1
+2.55.0
 
 _______________________________________________
 buildroot mailing list
