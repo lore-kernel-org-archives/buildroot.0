@@ -2,98 +2,93 @@ Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A8E606A326
-	for <buildroot@archiver.kernel.org>; Fri, 20 Nov 2026 01:51:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B054606A320
+	for <buildroot@archiver.kernel.org>; Fri, 20 Nov 2026 02:40:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=r+KLmskd
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=IcNip2Hc
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B12F860E1C;
-	Fri, 20 Nov 2026 01:51:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5D84B606E2;
+	Fri, 20 Nov 2026 02:40:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9Po3DVeHNZLy; Fri, 20 Nov 2026 01:51:55 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org B930F60D98
+ id kWLkjc5Ky3Up; Fri, 20 Nov 2026 02:40:27 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 5704D606F0
 Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795139515;
-	b=GHIzwCUATmBrZs9rzLCN1SGUhXSLsWt7IvftpoJ4WCu7JWiIAWAstaGwexzSsFpkqBfE
-	 IFpN5Hk9222+8CPiD9bO0pgQPRhNalUdyCzTWRUQiSsG1NXx2ABOfDGCUeNh1TVbHGOKb
-	 xQcZXDRScvtlJnT28nyS2l0i83PxHNRZJT5SG0RVkfGG7jz9D3d5AvfnpzpJgL4l4ccmt
-	 murFSbUqT01VXNsBm2E4gvcnMjRr/8QZ4TmnTlBJb79xeNiJ8/+5J57yp5B+7dwKqfTP7
-	 Emr+pLyxy8CCmcvBthrmQCaLoHgS2NdbQSxu6nSxoX7jMW5/f8CAU9VC6tuMFt+8y9A==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795142427;
+	b=kdndn2V29mTng+SskN5vc2VedGArGO9GrpIO4R/aixQ9bap47dbr1KhMxjsajTBTfT/F
+	 WOamQFTXncngNfDtb/EK3gIcr15FqgUEa7SG6kQKGB92YT+iGeZ7sMl7PI+hF1DK7C/BP
+	 R6NbUeomozEUjWl4w/WEVa2FLiCl4Rt9+Fcghg8FFpCZEy7SKVh8Wa7vxdtt8tNyyTNq1
+	 RKc8b2aQQxbDfReat2OuHT10Zd1YD2CDeWhHwGuQR12yX5xpZD/U5LXMl/2woaQgP5oYP
+	 Whhc4YSMcPS8qVz5dus8fNKqCGnyT6BXBV9txTCDHTWPtUI9A6fjepxpqnykZIaxi0Q==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795139515;
+	c=relaxed/relaxed; t=1795142427;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:To:References:
-	 Content-Language:Cc:In-Reply-To:Subject:X-BeenThere:X-Mailman-Version:
+	 Message-ID:Date:MIME-Version:User-Agent:To:Cc:References:
+	 Content-Language:In-Reply-To:Subject:X-BeenThere:X-Mailman-Version:
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
 	 Errors-To:Sender;
-	bh=971M9dXUcEXszXidvM5p5ChgFbj1s3SzQ2yE3iW6hpw=;
-	b=oAQYQGXWtaPs4Ixl51ZrDd6bUQJPCKemol78mGg09ztSHg+DtcggBJtVwzlnRlKMMRjP
-	 1FBCIBOCB+OT7zpjHeC/15MGoWBkvvfH7bC5jIWHbnpTfiSrSr6v9iZtbAmB2mko3rUg4
-	 ldjSfTr/+NWrlwzfEiCXi3BmcjnFkpmwLO/F+wFb7tVn+cC2TEBI6oo3DLxXBEuZSsvng
-	 xEOs3Hh+qEWMl+AeqvDvWpSN1Jg10TbwolcqyMQZFl+N1vOcPYzrIzGrjtUYtgs4D8tfg
-	 AaEqtp7wjtzZJTfQsI1tVv1qyzFS+CWARnvlZmPmV94u1vtRdrIC/3Rbv1Tfs8qakzg==
+	bh=wUhT5jaCinXg27UyLiAOGgZMEsjccxsAIvrmPftftIc=;
+	b=M0LrGLquJSYpbJdNmiSyHgIDNOnaIvzAk4VmBMxVUfZNqWm8BsFc7fm0OultHuLTRqtg
+	 lMomF23NQkWJ4BtaEuY0PTk2vpjPIg4idLDl7ZGzv3tuazgBimhtH61ENWK7azwjM1w2+
+	 pEW4TuG7zwkDqsoANjcPfhsborhKtLStSqP/VnsakKSDTw6tJRZeMgzmaOhbvEh3hRkEM
+	 kLmKEH8KK4WiFFEHPBim0V70q1yhhoPQ4urAsjnIuxsjwxyiuZzeDRa+a6Xx+BFuM1uWG
+	 jqgrX4H8l1Aa2YoOnfgq9tcOcY/7AHYoFzOzweDR7ezDeIm+8jZGIYSb9m0F9dAzF4g==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795139515;
-	bh=971M9dXUcEXszXidvM5p5ChgFbj1s3SzQ2yE3iW6hpw=;
-	h=Date:To:References:Cc:In-Reply-To:Subject:List-Id:
+	s=default; t=1795142427;
+	bh=wUhT5jaCinXg27UyLiAOGgZMEsjccxsAIvrmPftftIc=;
+	h=Date:To:Cc:References:In-Reply-To:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=r+KLmskdwJ8rpIPn1kbeFvhZE/d7eubPXDPLaTgmMCmAsgBJhZNgQLyZippvlShtn
-	 iwAOVM89hf9ySfxnhN5Md9G2lb3kIgGQAQDTjCtMLtkAdrzRQyrf1Rmnra4Jn0X0Lx
-	 VLMoptepZq4w+DhvdYoRkNMphuZL0E26NNgILKlhjo5F3EaPlXdkMsN1G0HyVshH8X
-	 n6n7txJJjPFWMQdb7WLPN8pEb18H1MIN3u2TCiIRYnsUerajn4J6CmeWeTRpTfR+3V
-	 WdoHjVY5XrOs/b+upHVDGw9fmR4+GwnoLkyWBG0qzxhM9HM4ML6rkTDUECsxpisay9
-	 tza//LRHgxCiw==
+	b=IcNip2HcWl+4l0mo+YRaI32vVk4WwjsK7/hIU3g3cojc/aVw1xMj3g8mpUwOWyQ5H
+	 BctYlDrzpfAS9AmEVavC1i2j1oQHU1pAsDW1D8xx109fUFVDkr9JAa8NMDGZn1RXDT
+	 bY99Yzgu/qndyHznhx16EfRnmORwJCs3aFE+luOCYaJPPK13RpdUfIYgiJjazS4AAz
+	 Jt0L4CA30e4Bi7hw0/4pC2XNTD7YkYG7UINoLTiXEYRWmphg6agGVFS31iwU3tZhqM
+	 G8RgsSBgu+UaUeUQS8EOsV3ZrkuqEcaBENusv5vPHs9iXLAoViMKcZp4hdQMDHziRR
+	 x1jIbsVvYtI0A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B930F60D98;
-	Fri, 20 Nov 2026 01:51:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 1A609169
- for <buildroot@buildroot.org>; Fri, 20 Nov 2026 01:51:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5704D606F0;
+	Fri, 20 Nov 2026 02:40:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 54AFD169
+ for <buildroot@buildroot.org>; Fri, 20 Nov 2026 02:40:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 00A4A401AE
- for <buildroot@buildroot.org>; Fri, 20 Nov 2026 01:51:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4615F815CC
+ for <buildroot@buildroot.org>; Fri, 20 Nov 2026 02:40:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Who39fgKpxti for <buildroot@buildroot.org>;
- Fri, 20 Nov 2026 01:51:53 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 31C9A40087
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m-sV90i6PZw9 for <buildroot@buildroot.org>;
+ Fri, 20 Nov 2026 02:40:25 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 4F1298156B
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
  helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
 Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 31C9A40087
- for <buildroot@buildroot.org>; Fri, 20 Nov 2026 01:51:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4F1298156B
+ for <buildroot@buildroot.org>; Fri, 20 Nov 2026 02:40:24 +0000 (UTC)
 Received: from [192.168.178.20] (unknown [212.37.174.96])
  (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
  key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest
  SHA256) (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id A95B02C81EFA;
- Fri, 20 Nov 2026 02:51:50 +0100 (CET)
-Message-ID: <d64fedc4-41a2-4924-ac16-d391422e1590@bubu1.eu>
-Date: Fri, 20 Nov 2026 02:51:49 +0100
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id D323E2C84AD2;
+ Fri, 20 Nov 2026 03:40:22 +0100 (CET)
+Message-ID: <f9dd7769-bf02-410c-80fc-d29e91382213@bubu1.eu>
+Date: Fri, 20 Nov 2026 03:40:22 +0100
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Fiona Klute <fiona.klute@gmx.de>
-References: <20261114140316.956334-1-fiona.klute@gmx.de>
- <47f92296-e71d-459c-adff-6f1bfe9e863d@bubu1.eu>
- <630c8dd9-a8fe-40dd-b4c6-7cdafb5d5ddb@gmx.de>
- <dd3904e2-b2db-4aa3-afba-9952ded1cde3@bubu1.eu>
- <f22d6e61-cfd2-4625-a75d-c455d3f93a3f@gmx.de>
+To: Yegor Yefremov <yegorslists@googlemail.com>, buildroot@buildroot.org
+Cc: Olivier Singla <olivier.singla@gmail.com>
+References: <20261119215005.2674763-1-yegorslists@googlemail.com>
 Content-Language: en-US
-Cc: Buildroot List <buildroot@buildroot.org>
-In-Reply-To: <f22d6e61-cfd2-4625-a75d-c455d3f93a3f@gmx.de>
-Subject: Re: [Buildroot] [PATCH 1/1] package/cgroupfs-v2-mount: allow
- setting mount options
+In-Reply-To: <20261119215005.2674763-1-yegorslists@googlemail.com>
+Subject: Re: [Buildroot] [PATCH] package/shellinabox: remove package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -108,71 +103,68 @@ Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-7.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MAILING_LIST_MULTI,
-	SPF_HELO_PASS,USER_AGENT_SANE_1 autolearn=no autolearn_force=no
-	version=4.0.1
+X-Spam-Status: No, score=-17.6 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,SPF_PASS,
+	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Hi Fiona,
+Hi Yegor,
 
-I do have more things to say here, though it feels a bit like spamming 
-the list, because it's not really relevant to this specific patch 
-anymore. But I also didn't want to just drop it, because I think that 
-having this discussion in general is worthwhile :-).
-So, read on for some ~~bikeshedding~~ thoughts about testing.
+let's give Olivier a bit of time to reply. But I also have a few 
+comments. :)
 
-On 11/20/26 01:22, Fiona Klute via buildroot wrote:
-> Am 19.11.26 um 16:41 schrieb Marcus Hoffmann:
->> On 11/19/26 16:23, Fiona Klute wrote:
->>> Am 19.11.26 um 15:32 schrieb Marcus Hoffmann:
->>>> Hi Fiona,
->>>>
->>>> On 11/14/26 15:03, Fiona Klute via buildroot wrote:
->> [...]
->>
->>>
->>> We don't test config via /etc/default/$DAEMON for other scripts 
->>> either, and I don't think it makes sense to: The only thing we could 
->>> really test is if the config snippet is actually sourced. That 
->>> doesn't seem worth the CI time. Testing all possible options and 
->>> other fun things someone might do in a script snippet (related: I've 
->>> recently used it to put services into cgroups) isn't really possible.
->>
->> It would test a bit more i.e. that the variable expansion works 
->> correctly in whatever shell the test uses.
->> But I agree that it is a bit marginal... :)
-> The syntax is standard POSIX [1, "Use Alternative Value"], if it doesn't 
-> work that's a bug in the shell.
+On 11/19/26 22:50, Yegor Yefremov wrote:
+> shellinabox is dead upstream: its last release, 2.20, dates from 2016
+> and its last commit from January 2019.
 
-Well, when reviewing a patch that isn't always immediately obvious (at 
-least to me) without actually running the code and seeing what happens. 
-A test does automate exactly that. And given that (hopefully) the test 
-assertion is easier to read than the shell script it tests, I can be a 
-lot more sure that what I'm merging does the correct thing without 
-manually running shell snippets in my terminal. (It's not that bad for 
-this patch, it's fairly easy to read still... but something in my brain 
-still keeps telling me: "Are you sure it's actually correct though, 
-without having run it?")
+It's a bit more complicated and confusing than that. 
+https://github.com/shellinabox/shellinabox/releases/tag/v2.21 was 
+published Sep 2025. But it's actually tagging a commit from 2019 that 
+also just pushed code that got released in debian in 2018 already. 
+*sigh* (some context here: 
+https://github.com/shellinabox/shellinabox/commit/4f0ecc31ac6f985e0dd3f5a52cbfc0e9251f6361#commitcomment-32295280)
 
-And the second reason I prefer having a test over not having one is that 
-even if the current solution is obviously correct, it prevents someone 
-in the future turning that into a "still looks correct, but is actually 
-subtly wrong because shell syntax". Or renaming the variable and not 
-realizing that this is (essentially) public API now.
+Buildroot carries the 2.20 release + the CVE fix. (but missing the 
+selinux policy additions... but those wouldn't be usable in buildroot 
+as-is anyway).
 
-Like I said: this is marginal here, we'll be fine without it, especially 
-after this discussion. But I also wanted to elaborate on why I proposed 
-a test in the first place.
+And also debian apparently carries a new security fix for this that got 
+never merged upstream: https://github.com/shellinabox/shellinabox/pull/540
 
+> It only keeps building in Buildroot thanks to local fixes,
 
-> Which admittedly would be relevant, but 
-> maybe a test for a different package. :D
+> and as a web server exposing a
+> terminal, it is not something to keep shipping unmaintained.
+
+This part here is not really relevant and as it stand also 
+unsubstantiated. (It also reads like the typical LLM text output, it 
+sounds helpful but doesn't actually say anything useful.) So either 
+specifically mention the open security issue or drop this part.
+
 > 
-> Best regards,
-> Fiona
+> Remove the package, as suggested by Peter [1], and add a legacy option
+> for it.
+
+This removal (if it happens, let's give Olivier a bit of time to 
+respond) will be applied to next (or master after the next -> master 
+merge). So the legacy handling needs to be for "removed in 2027.02".
+
+We should probably also pick up the security fix for 2026.11 and older.
+
+If you resend this, can you base it on next and clarify the confusing 
+release history? I've marked it as "Changes requested" for now.
+
 > 
+> [1] https://patchwork.buildroot.org/project/buildroot/patch/20261119103103.2602430-1-yegorslists@googlemail.com/
+> 
+> Suggested-by: Peter Korsgaard <peter@korsgaard.com>
+> Assisted-by: Claude:claude-opus-5-5
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> ---
+
+[...]
 
 Best,
 Marcus
