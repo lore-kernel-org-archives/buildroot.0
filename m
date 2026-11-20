@@ -1,28 +1,28 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CB66606A320
-	for <buildroot@archiver.kernel.org>; Fri, 20 Nov 2026 10:01:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5037E606A320
+	for <buildroot@archiver.kernel.org>; Fri, 20 Nov 2026 10:01:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=YeUdkvIm
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=HYsY16qB
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1C0C040E0A;
-	Fri, 20 Nov 2026 10:01:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 28C22606A8;
+	Fri, 20 Nov 2026 10:01:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Wu6m3reQk1Q2; Fri, 20 Nov 2026 10:01:25 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org D51FF40E0E
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795168885;
-	b=rT2YVOJmzfsI5Y98XGRcfsbtc6y1SUVIaqzhuKEW+fGUOv9TBrkgvad++atTMesfRAVp
-	 Uzs+f766RxeaN4tdyS5eJcGxu3H8yPO18i2yI7Uon4tpYoIPmGaGz0Czh6YMXKB+u1twR
-	 buBuWkcClC44cimYvdRdlwnl+YuI4VOk51okSLb28yTSp3KYTa7SEYr9W4XX2i3KGooDX
-	 B3rGzkhQIzIp+6hkfMDicBGThDdN3TovYzQprI/WhpN5FTH8/OwEht/7E8MP1qycze6IY
-	 h5fZYDWsz/MIO5Mzc/F3wFf80SLO5akEj32nRAvN/Kodmw7tXT0okB3sB89DeIFHhUw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2SuXwmEixXnD; Fri, 20 Nov 2026 10:01:28 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 25C3660D8E
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795168888;
+	b=BW23wohtxLhFcG7BRz2lWmhEBkFFfKf5/tUP4CdTjIw4Pu6AFyrnld/egtd6AeDsZqMg
+	 MDC5lf8hppWsBUIatwa/g6osmHJLkAT3Lx7mMPnWsr6WLhep2bMA/+FpdRAKDAxxaNXLH
+	 BSDJAh6hsbDx+OuGKEGGJxq486+GJjBCNRpyCLJ0RzahCYEPTMwE3NzSju5FByzoZmI8g
+	 H/066yepGgwfR3KNQysw55DcHL27PUbsmj0V1Pn8j+lNdsrEctEUIY8YvE9IXCw9hapKB
+	 pV3FwZ4sttUgmF4UHbqv5CgxAG0CJNAYmvoLNoIz3JSQc7xPGOqLgfanfnKXbGCEI0A==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795168885;
+	c=relaxed/relaxed; t=1795168888;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,96 +31,96 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
 	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=cNNQrp8UmmCtGDFZCmFjLinv13oB8rh1uoZzlUmWIdc=;
-	b=s+gAwwHmooKenfJdWhowqXtjmnlyM1NWl6XV5MlkQgDmP6uLwVyWSyS29HMNOHjszzOl
-	 XIxSO1teONloAk4xF2Ffksd/U0VIMz6ot5K/w9rqh9MHfZLz/vNoGEcAZKswOkbByrxds
-	 rFdMDX5qtYKrEMuCPaUvSnsFz6q/cpJ6E2/+p+oYU2YWHYAMij9Pkqfj0ss5iBLZTa2TT
-	 3w2gpvtIlszCJjKxR0N0MWg1SLgOdlWxohNDyQmgwZkjoLcYxR7dd9B6cFSEuV8P0DQva
-	 Vk8NX58ngk18g+8TKJ0O7xGoC+QI2oqAAv6rJD6G3piSoJt7iTMLcUFSPnuochNhERA==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+	bh=3AXf7n2AxEhIUzsNSeQWzslHf8qgvmcSAC1t8kmgvq4=;
+	b=tc2HO9JD2WBSgJXUcxWOeINb0Rk4m4bsLnFu7pAVRxa+ANbGqaBZDZ/XMNwUGSo66RyV
+	 iv/+5wks3jUDblIJOPKJjP19SXIjKLzLxZXnMXcSodx+14CvFRdkeXksusFoUeZtyq7bI
+	 KoU261x19es+ftUBEEQ/LtkQ3G3B1Ayf8C3EAX8F9rn6SXQ+8tabAn4Ecxd0b85INXE/S
+	 eSsZdvshkRcxpgCtphm/z9l+xK1LLVpArIhqSVBvRsQozyJlF2vE+ZoBe5qmZsmj+GCMZ
+	 AiXJLjFLdr9lqXHQKs/05d30CNtpLudjM+OZX8MDcA7aQBNsXZLyAAelahHQnc7CWtw==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795168884;
-	bh=cNNQrp8UmmCtGDFZCmFjLinv13oB8rh1uoZzlUmWIdc=;
+	s=default; t=1795168888;
+	bh=3AXf7n2AxEhIUzsNSeQWzslHf8qgvmcSAC1t8kmgvq4=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=YeUdkvImZGpWc44mlBTJa0RSy/m2qL5nYgkVf9WPNC7vkVUL/ufLlPn82uQL98HXq
-	 9ZbcA+BxUAR9foWuK/24z16Mrnya2JGN0KLEDYnfNX7Ap8ECgbv/eL+ylskwXws0YH
-	 uSpF17y5ehxpwggcF6yXNT39pdPpEF57Rua55zY143KrYfjmShYZzo9ZVmJX+ukBb8
-	 s2Zkni2QAey9W9pqdGtXrcDU5ZUnJItyZPCg6ZS0mNayYJUgk8rDYpdGr7Ow+nhw0Z
-	 R63M4meX24SQky4skZxPvjWfQdwrQuEB3CAVX5Aeb2JHh77OZqxoT5LciA64EG8MJ5
-	 oVcf7HUXZQxDw==
+	b=HYsY16qBFL653CSol3a4NNbe9IVaCkTymBPNA5y8SlKu9J0X06ZhRbFXb9COeH2a4
+	 C/RdNjydqKiKwsYNpLwBKo7GlkY55BDODMf2R0LBK8JVCBaeYwkaCgzXRiJgkmr7Bh
+	 R5mQHUgxnEdmTkinlTcDoBtJv+WVRb1uPVbJbqrUhsoAOdj5K0PFC7dHV60ZbdJ7oM
+	 zTWxu2URNGE3VPLtDOO+K1T7GilBs8EjW+QSzctvFJaRLftlerRH0kLaL/3ykOsYkN
+	 +7cTOnoBkznX/F/xshbZXrNhXR6lcQxeNzha21d3aCI2badUO6n1rCz7CbYwl7g8sL
+	 jBMao3XOmayKA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D51FF40E0E;
-	Fri, 20 Nov 2026 10:01:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by lists1.osuosl.org (Postfix) with ESMTP id BE4D4E22
- for <buildroot@buildroot.org>; Fri, 20 Nov 2026 10:01:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 25C3660D8E;
+	Fri, 20 Nov 2026 10:01:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A0BD6E22
+ for <buildroot@buildroot.org>; Fri, 20 Nov 2026 10:01:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A4A6260E3E
- for <buildroot@buildroot.org>; Fri, 20 Nov 2026 10:01:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 928CB60D8E
+ for <buildroot@buildroot.org>; Fri, 20 Nov 2026 10:01:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qmOnn_EC1PUp for <buildroot@buildroot.org>;
- Fri, 20 Nov 2026 10:01:22 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 3A61C606A8
+ id ZNMM92wFb_mN for <buildroot@buildroot.org>;
+ Fri, 20 Nov 2026 10:01:25 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 5455B606A8
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
  envelope-from=raphael.melotte@essensium.com; receiver=<UNKNOWN> 
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3A61C606A8
- for <buildroot@buildroot.org>; Fri, 20 Nov 2026 10:01:21 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id
- ffacd0b85a97d-4aa5833c263so556978f8f.2
- for <buildroot@buildroot.org>; Fri, 20 Nov 2026 02:01:21 -0800 (PST)
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5455B606A8
+ for <buildroot@buildroot.org>; Fri, 20 Nov 2026 10:01:24 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-4bb606491faso3346765e9.3
+ for <buildroot@buildroot.org>; Fri, 20 Nov 2026 02:01:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1795168880; x=1795773680;
+ d=1e100.net; s=20260707; t=1795168883; x=1795773683;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=idF7NYnq+HSaE3uehs46/7LAphJsupuIimPWgbgTixQ=;
- b=dXNi/3qGt+9NgAuPvXpXsVehCBSYrVY594pq/e//L0giFZF7GJnV43BXVVdQQwHLmE
- zaDk8lJJ4kzK6WOS3wg2ObIs1vz798I8sgGKaA5k/RHUdpq0MKfkxQLnyqcuS7QWPzb5
- /FhjC+erNjORbcBW1ynzJhOBQGjQDTRe/3WGmR1GvNY8Xn7y9m3LZYqgti9TYOmuzZmx
- wMUQUal/ycF7zciT97tOJ6hoEvS/TYRgqheabH7rBj/HBXR5VniQZEOl8ehtljDD03ZY
- Uxh6F84X8HU3P5mH35N4aSlYSxSWoIWymkGaZ7JseHhKO9iJ0OJIF8YOAKDflZQaHLRZ
- JQvA==
-X-Gm-Message-State: APuU4Z/kzb5HGOrrmQ7b+AgpdDE6OT+r32XPxHJ0dO3Psrr4pXlJgqC4
- X2xEgIHqBIXZKt60pvqpsO61NvSTav0XZj+2ViiCT0fQY8j0xfsHxcOcBVjYHL+XJZLBk7cXqUb
- RUvs3D9T59w==
-X-Gm-Gg: AZFdTZc87IlE5+KVZ4HJx/4H6GLlqA0kUZKby/jJUJ3BcRX1MMt//mussxILpEr/iId
- gE+Lv3R5K7uc1jtESDC6/IIpfdzR4cHI7hrdYhZKOlWwJAE1N9sfBcDbsMWXNXtxIk8zooZVTzA
- diUcvQHE9NU2zBKlUGXdh4ZpSLnrgoDnC7ZxE3haPNgqsd45Fh29SD4uatC3RlYAPhkRoY+iz0a
- I5KDLC5yHVUlJ60p683ybAshGaYUHdR/MEyaVJPLqK6rYbrAOSaLzQO1fF7EkCmY075DnUapDN0
- Teuorl2R4zhi4rB+XusVaIKbz+FvLXD7BG3aDBUC4Rd0UUshKY2Hip6YvJSl3NytqK0QUwBOP1Z
- iG4NYW34kIV/L3c0lNIrRad439P6nNmpCRDZovpdbGFIPi4oadTnynEg1p4GioQZaldhmBk+wzf
- n4FYD9yp5X5hzkyNC3r97XusbZDc28IqBuJxuZ1hPlyLNXOqNf29vqyT3RYkX7DN3/ZWvMONx/U
- Q2U6joZDLGv70uEP6n9oYsUMe8m5+s1Q/s3QsMBqWWIPtJB9FzzJjQ1uzImHGojhPiH1MVYxqK6
- ExQMNGzhHVRF5i23RXo0tT+prUVBfdxJ7fW3rwK5L8aB0A==
-X-Received: by 2002:a05:6000:4617:b0:48b:9d2:1a6a with SMTP id
- ffacd0b85a97d-4abab5ea335mr4869294f8f.1.1795168879827; 
- Fri, 20 Nov 2026 02:01:19 -0800 (PST)
+ bh=//LYcheSY60Q7tX9CoflS3wW1le3RQ5IIggVCN+fvdE=;
+ b=UAJxM6mOD3GbgoNz6EiUt+2SOwf1oK+RglTLjxDBaAkSbKy4ovR0p6OKpzgEg3xl4w
+ t09LuVkH2783ymdaImsbIOe+0cfJ/2xEWprQvwi61grjHhLQZ698t7jwdUp8eEZD/8sx
+ AlM4tVAxOX/DD1tGpJ9n1xWKkAczPDWI0cK20RbEdqLJRaI2ljVixL5jb3pjc6vhll3O
+ XpemrcWNcEmCEz+tOmr/KopaWvYzL4s+CW4nyiTMx9Kbw2OWc2U+SkVhFvio/ChqZHdW
+ TskqTnmeBTghAq3WeiplzCjsiWw5w9yb5VJWk3KUDFmpdd7p2dNwB5Oy14mYSnlQUTTM
+ fxNw==
+X-Gm-Message-State: APuU4Z/PaGUS5aV17KdoHBldlEE5sxAR33MkWyP4mxXkhNmGpTqTWLti
+ whTw3Nlli3qbO9dWRVI3gn7aMoVRbrw1/CRWSEd6ojuSHNdkqJMMZ6kAmYYWpb6RmHwjUehyi91
+ LgwA7JkEizg==
+X-Gm-Gg: AYBFou0ZQaOYQn2SLvv21zspLO/H2kGsW9CkVOopn8qxfRwJqun2bYuKgNCJdZ5IzBW
+ jVEpY9eHOBjv2m6XNlIraMmRAT978zu1qMpX42H4sZB495MgZg/Dgk+3ef3ywMfQoDEQrDmu02X
+ REv+HTPEkpfOxpAjmrCQlEht52ogJRViUmQE9oU8FEQUEdAZFMpvE9v6ANYC5Q5tKSKebhW+Y4A
+ OEnwCb1SgDcjmWOPiicvcmOXge0W0hUEGUilW/M+N8eIse+72xHVecdVLWH0bhm9Pr2BJb+eyVm
+ tv6gGsM54dhwd+v4dNICa7sjNhu6nA+odD5uQhMXl78Ndy/L+Hm/xY0Bnmv47se9FaXjI0oDDv3
+ bu9XNohthwZTe8RbSm75HkweQ7Uf5RmWhnHKOgBTMGZF1HH1tEY21vGOn6toOE8StqAoGGIESaw
+ Ps6wLTnh2wp3lKGFZrGxsc2HZ064/4cjXFNK9uROCd/iyheECp50sMHzpLeEQrkiraB2o0U4R+r
+ n1Sp4GJyVoxrvQJExgGM6sowhbdURid/kJeBerU6yiW4oIlu2GGtTKvMEl3dhBA0wKPlSFcmAq+
+ ft2jqay4jgvLhMd6BLV4EIs178OwWV1FDIFoPotBMYa2
+X-Received: by 2002:a05:600c:1d08:b0:4a2:392:9de2 with SMTP id
+ 5b1f17b1804b1-4bb8882bd7bmr52341305e9.28.1795168883235; 
+ Fri, 20 Nov 2026 02:01:23 -0800 (PST)
 Received: from debian-hp-1.fritz.box ([212.233.51.18])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4ab6bb989e3sm4836538f8f.52.2026.11.20.02.01.19
+ 5b1f17b1804b1-4bb884911e3sm83861695e9.6.2026.11.20.02.01.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 20 Nov 2026 02:01:19 -0800 (PST)
+ Fri, 20 Nov 2026 02:01:22 -0800 (PST)
 To: buildroot@buildroot.org,
-	Fred Lefranc <fred.lefranc.evs@gmail.com>
+	Thomas Perale <thomas.perale@mind.be>
 Cc: =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>
-Date: Fri, 20 Nov 2026 11:01:16 +0100
-Message-ID: <20261120100118.542895-1-raphael.melotte@mind.be>
+Date: Fri, 20 Nov 2026 11:01:20 +0100
+Message-ID: <20261120100122.542931-1-raphael.melotte@mind.be>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20261116142934.204607-1-fred.lefranc.evs@gmail.com>
+In-Reply-To: <20261116143116.967132-1-thomas.perale@mind.be>
 References: 
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 2025.02.x 1/1] package/openssh: fix
- CVE-2026-73281, CVE-2026-73282 and CVE-2026-73283
+Subject: Re: [Buildroot] [PATCH 2025.02.x] package/dpdk: security bump to
+ version 24.11.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -138,260 +138,79 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
 In reply of:
-> Backport three upstream security fixes to OpenSSH 9.9p2:
+> This is an LTS release for DPDK.
 > 
-> - CVE-2026-73281: allow session-bind@openssh.com requests while
->   ssh-agent is locked so forwarded connections are correctly tracked
->   as remote, while continuing to reject other locked-agent operations.
+> See the release note of the new versions:
+>  - 24.11.8 https://doc.dpdk.org/guides-24.11/rel_notes/release_24_11.html#id24
+>  - 24.11.7 https://doc.dpdk.org/guides-24.11/rel_notes/release_24_11.html#id20
+>  - 24.11.6 https://doc.dpdk.org/guides-24.11/rel_notes/release_24_11.html#id17
+>  - 24.11.5 https://doc.dpdk.org/guides-24.11/rel_notes/release_24_11.html#id14
+>  - 24.11.4 https://doc.dpdk.org/guides-24.11/rel_notes/release_24_11.html#id9
+>  - 24.11.3 https://doc.dpdk.org/guides-24.11/rel_notes/release_24_11.html#id5
+>  - 24.11.2 https://doc.dpdk.org/guides-24.11/rel_notes/release_24_11.html#id1
 > 
-> - CVE-2026-73282: avoid a use-after-free when adding a remote forward
->   through the multiplexing socket reallocates the forwarding list.
->   Store a forwarding index rather than a pointer in the confirmation
->   callback context.
+> Fixes the following CVEs:
+>  - gso: fix overflow when writing to very small buffers (CVE-2026-100236)
+>  - vhost: check number of queues for VDPA (CVE-2026-86856)
+>  - vhost/crypto: catch incorrect request length (CVE-2026-86849)
+>  - vhost/crypto: drop crypto session cache (CVE-2026-86845)
+>  - vhost/crypto: fix TOCTOU OOB write in finalize path (CVE-2026-86846, CVE-2026-86848)
+>  - vhost/crypto: fix write back chains termination (CVE-2026-86847)
+>  - vhost: fix double-fetch vulnerability in control queue (CVE-2026-86562)
+>  - vhost: fix header copy to multiple descriptors (CVE-2026-86566)
+>  - vhost: fix indirect descriptor table double fetch (CVE-2026-93683)
+>  - vhost: fix inflight descriptor table overflow (CVE-2026-86565)
+>  - vhost: fix log base address mapping offset (CVE-2026-86563)
+>  - vhost: fix missing memory size validation before mmap (CVE-2026-86561)
+>  - vhost: fix out-of-bounds read in control virtqueue handler (CVE-2026-86562)
+>  - vhost: fix VDUSE stale vring pointers after IOTLB invalidation (CVE-2026-86567)
 > 
-> - CVE-2026-73283: make the authorized_keys restrict option block tunnel
->   forwarding, preserving the existing CVE-2026-59999 DisableForwarding
->   check.
+> The license was updated with upstream commit [1].
 > 
-> Keep each fix in a separate package patch, adapt the changes to the
-> 9.9p2 sources and mark the three CVEs as fixed in OPENSSH_IGNORE_CVES.
+> [1] https://github.com/DPDK/dpdk/commit/a048f51065d0db7aaf54f151f40796ede18195e0
 > 
-> Upstream:
-> https://github.com/openssh/openssh-portable/commit/6a57081dc35acf3ee298108d4bc3580489608d5f
-> https://github.com/openssh/openssh-portable/commit/9910d5ef53124ce1157d57bc11e222658aa41299
-> https://github.com/openssh/openssh-portable/commit/d322f2ccf7da095ce94d1d99cb563246f61487b0
-> Signed-off-by: Fred Lefranc <fred.lefranc.evs@gmail.com>
+> (alternative to commit 3c1cb086df0e0a174b6e140f586262a93a0fe7a4)
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
 
 Applied to 2025.02.x. Thanks
 
 > ---
->  package/openssh/0022-CVE-2026-73281.patch | 70 ++++++++++++++++++++++
->  package/openssh/0023-CVE-2026-73282.patch | 72 +++++++++++++++++++++++
->  package/openssh/0024-CVE-2026-73283.patch | 35 +++++++++++
->  package/openssh/openssh.mk                |  6 ++
->  4 files changed, 183 insertions(+)
->  create mode 100644 package/openssh/0022-CVE-2026-73281.patch
->  create mode 100644 package/openssh/0023-CVE-2026-73282.patch
->  create mode 100644 package/openssh/0024-CVE-2026-73283.patch
+>  package/dpdk/dpdk.hash | 4 ++--
+>  package/dpdk/dpdk.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/openssh/0022-CVE-2026-73281.patch b/package/openssh/0022-CVE-2026-73281.patch
-> new file mode 100644
-> index 0000000000..91efd11442
-> --- /dev/null
-> +++ b/package/openssh/0022-CVE-2026-73281.patch
-> @@ -0,0 +1,70 @@
-> +From 6a57081dc35acf3ee298108d4bc3580489608d5f Mon Sep 17 00:00:00 2001
-> +From: "djm@openbsd.org" <djm@openbsd.org>
-> +Date: Fri, 7 Aug 2026 05:18:05 +0000
-> +Subject: [PATCH] upstream: Allow session-bind@openssh.com requests when the
-> + agent is locked
-> +
-> +Otherwise forwarding sessions established while an agent was locked
-> +will be treated as local, rather than remote.
-> +
-> +Reported by sn0x-sharma
-> +
-> +Backport to OpenSSH 9.9p2: omit the OpenBSD revision update and adapt
-> +to the existing extension dispatcher, which has no query extension or
-> +replied/generic_fail handling. Keep its failure reply for all extensions
-> +other than session-bind while locked.
-> +
-> +OpenBSD-Commit-ID: 524f210c6f2b3a06e0a2f6d0af5188a9a75fa2c7
-> +CVE: CVE-2026-73281
-> +Upstream: https://github.com/openssh/openssh-portable/commit/6a57081dc35acf3ee298108d4bc3580489608d5f
-> +Signed-off-by: Fred Lefranc <fred.lefranc.evs@gmail.com>
-> +---
-> + ssh-agent.c | 18 +++++++++++++++---
-> + 1 file changed, 15 insertions(+), 3 deletions(-)
-> +
-> +diff --git a/ssh-agent.c b/ssh-agent.c
-> +--- a/ssh-agent.c
-> ++++ b/ssh-agent.c
-> +@@ -1782,10 +1782,19 @@ process_extension(SocketEntry *e)
-> + 		error_fr(r, "parse");
-> + 		goto send;
-> + 	}
-> +-	if (strcmp(name, "session-bind@openssh.com") == 0)
-> ++	/*
-> ++	 * This function can be called while the agent is locked to allow
-> ++	 * session binds to be processed for new channels.
-> ++	 * Other operations should be refused when locked.
-> ++	 */
-> ++
-> ++	if (strcmp(name, "session-bind@openssh.com") == 0) {
-> + 		success = process_ext_session_bind(e);
-> +-	else
-> ++	} else if (locked) {
-> ++		debug_f("attempt to use extension \"%s\" while locked", name);
-> ++	} else {
-> + 		debug_f("unsupported extension \"%s\"", name);
-> ++	}
-> + 	free(name);
-> + send:
-> + 	send_status(e, success);
-> +@@ -1835,16 +1844,19 @@ process_message(u_int socknum)
-> + 
-> + 	/* check whether agent is locked */
-> + 	if (locked && type != SSH_AGENTC_UNLOCK) {
-> +-		sshbuf_reset(e->request);
-> + 		switch (type) {
-> + 		case SSH2_AGENTC_REQUEST_IDENTITIES:
-> + 			/* send empty lists */
-> + 			no_identities(e);
-> + 			break;
-> ++		case SSH_AGENTC_EXTENSION:
-> ++			process_extension(e);
-> ++			break;
-> + 		default:
-> + 			/* send a fail message for all other request types */
-> + 			send_status(e, 0);
-> + 		}
-> ++		sshbuf_reset(e->request);
-> + 		return 1;
-> + 	}
-> + 
-> diff --git a/package/openssh/0023-CVE-2026-73282.patch b/package/openssh/0023-CVE-2026-73282.patch
-> new file mode 100644
-> index 0000000000..00babb6c58
-> --- /dev/null
-> +++ b/package/openssh/0023-CVE-2026-73282.patch
-> @@ -0,0 +1,72 @@
-> +From 9910d5ef53124ce1157d57bc11e222658aa41299 Mon Sep 17 00:00:00 2001
-> +From: "djm@openbsd.org" <djm@openbsd.org>
-> +Date: Fri, 7 Aug 2026 05:03:56 +0000
-> +Subject: [PATCH] upstream: avoid potential realloc use-after-free in the client
-> +
-> +A remote forwarding may be added via the local session multiplexing socket
-> +while a remote forwarding open request is pending with the server.
-> +
-> +Report and fix from Brian Mingus of Cognatory
-> +
-> +Backport to OpenSSH 9.9p2: omit the OpenBSD revision update, rebase the
-> +functional hunks and retain the u_int32_t callback argument type.
-> +
-> +OpenBSD-Commit-ID: c7888d566576386d0e96859f9ec7310a1e2d3609
-> +CVE: CVE-2026-73282
-> +Upstream: https://github.com/openssh/openssh-portable/commit/9910d5ef53124ce1157d57bc11e222658aa41299
-> +Signed-off-by: Fred Lefranc <fred.lefranc.evs@gmail.com>
-> +---
-> + ssh.c | 19 ++++++++++++++++---
-> + 1 file changed, 16 insertions(+), 3 deletions(-)
-> +
-> +diff --git a/ssh.c b/ssh.c
-> +--- a/ssh.c
-> ++++ b/ssh.c
-> +@@ -1840,14 +1840,24 @@ forwarding_success(void)
-> + 	}
-> + }
-> + 
-> ++struct rfwd_confirm_ctx {
-> ++	int fid;
-> ++};
-> ++
-> + /* Callback for remote forward global requests */
-> + static void
-> + ssh_confirm_remote_forward(struct ssh *ssh, int type, u_int32_t seq, void *ctxt)
-> + {
-> +-	struct Forward *rfwd = (struct Forward *)ctxt;
-> ++	struct rfwd_confirm_ctx *rctx = (struct rfwd_confirm_ctx *)ctxt;
-> ++	struct Forward *rfwd;
-> + 	u_int port;
-> + 	int r;
-> + 
-> ++	if (rctx->fid < 0 || rctx->fid >= options.num_remote_forwards)
-> ++		fatal_f("invalid forwarding ID %d", rctx->fid);
-> ++	rfwd = &options.remote_forwards[rctx->fid];
-> ++	freezero(rctx, sizeof(*rctx));
-> ++
-> + 	/* XXX verbose() on failure? */
-> + 	debug("remote forward %s for: listen %s%s%d, connect %s:%d",
-> + 	    type == SSH2_MSG_REQUEST_SUCCESS ? "success" : "failure",
-> +@@ -2025,6 +2035,8 @@ ssh_init_forwarding(struct ssh *ssh, char **ifname)
-> + 
-> + 	/* Initiate remote TCP/IP port forwardings. */
-> + 	for (i = 0; i < options.num_remote_forwards; i++) {
-> ++		struct rfwd_confirm_ctx *rctx;
-> ++
-> + 		debug("Remote connections from %.200s:%d forwarded to "
-> + 		    "local address %.200s:%d",
-> + 		    (options.remote_forwards[i].listen_path != NULL) ?
-> +@@ -2039,9 +2051,10 @@ ssh_init_forwarding(struct ssh *ssh, char **ifname)
-> + 		if ((options.remote_forwards[i].handle =
-> + 		    channel_request_remote_forwarding(ssh,
-> + 		    &options.remote_forwards[i])) >= 0) {
-> ++			rctx = xcalloc(1, sizeof(*rctx));
-> ++			rctx->fid = i;
-> + 			client_register_global_confirm(
-> +-			    ssh_confirm_remote_forward,
-> +-			    &options.remote_forwards[i]);
-> ++			    ssh_confirm_remote_forward, rctx);
-> + 			forward_confirms_pending++;
-> + 		} else if (options.exit_on_forward_failure)
-> + 			fatal("Could not request remote forwarding.");
-> diff --git a/package/openssh/0024-CVE-2026-73283.patch b/package/openssh/0024-CVE-2026-73283.patch
-> new file mode 100644
-> index 0000000000..9938435547
-> --- /dev/null
-> +++ b/package/openssh/0024-CVE-2026-73283.patch
-> @@ -0,0 +1,35 @@
-> +From d322f2ccf7da095ce94d1d99cb563246f61487b0 Mon Sep 17 00:00:00 2001
-> +From: "djm@openbsd.org" <djm@openbsd.org>
-> +Date: Tue, 14 Jul 2026 01:05:05 +0000
-> +Subject: [PATCH] upstream: make authorized_keys "restrict" keyword apply
-> + correctly to tunnel forwarding
-> +
-> +Tunnel forwarding is administratively disabled by default.
-> +
-> +Reported by Erichen, Institute of Computing Technology,
-> +Chinese Academy of Sciences
-> +
-> +Backport to OpenSSH 9.9p2: omit the OpenBSD revision update and rebase
-> +on 0015-CVE-2026-59999.patch, preserving its DisableForwarding check.
-> +
-> +OpenBSD-Commit-ID: 5b3cc987a64749c94b20e12755db32a83f8f01e6
-> +CVE: CVE-2026-73283
-> +Upstream: https://github.com/openssh/openssh-portable/commit/d322f2ccf7da095ce94d1d99cb563246f61487b0
-> +Signed-off-by: Fred Lefranc <fred.lefranc.evs@gmail.com>
-> +---
-> + serverloop.c | 3 ++-
-> + 1 file changed, 2 insertions(+), 1 deletion(-)
-> +
-> +diff --git a/serverloop.c b/serverloop.c
-> +--- a/serverloop.c
-> ++++ b/serverloop.c
-> +@@ -498,7 +498,8 @@ server_request_tun(struct ssh *ssh)
-> + 		ssh_packet_send_debug(ssh, "Unsupported tunnel device mode.");
-> + 		return NULL;
-> + 	}
-> +-	if ((options.permit_tun & mode) == 0 || options.disable_forwarding) {
-> ++	if ((options.permit_tun & mode) == 0 || options.disable_forwarding ||
-> ++	    auth_opts->restricted) {
-> + 		ssh_packet_send_debug(ssh, "Server has rejected tunnel device "
-> + 		    "forwarding");
-> + 		return NULL;
-> diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
-> index 39b67f9d98..d887c36581 100644
-> --- a/package/openssh/openssh.mk
-> +++ b/package/openssh/openssh.mk
-> @@ -53,6 +53,12 @@ OPENSSH_IGNORE_CVES += CVE-2026-106583
+> diff --git a/package/dpdk/dpdk.hash b/package/dpdk/dpdk.hash
+> index e9a22736b0..1201ba45d2 100644
+> --- a/package/dpdk/dpdk.hash
+> +++ b/package/dpdk/dpdk.hash
+> @@ -1,6 +1,6 @@
+>  # Locally computed
+> -sha256  bcae7d42c449fc456dfb279feabcbe0599a29bebb2fe2905761e187339d96b8e  dpdk-24.11.1.tar.xz
+> +sha256  f3dbfac841b2db8e53a97d68a5e14ebc943327a955f0afb97f8c14f544fbc4aa  dpdk-24.11.8.tar.xz
+>  sha256  9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  license/bsd-3-clause.txt
+> -sha256  e19808bccd90c238fac06da2fc3683e094c64f7ba647e9d86f03a98cf5f2ce05  license/exceptions.txt
+> +sha256  6be99eb90a152a920c0dd9fe6b8dfb5bfd55fdd0a5fe554ed4adb78cdeaef0b7  license/exceptions.txt
+>  sha256  6c54c4d44faf3cba829b3d0c21c6955953e758767018fd7244f809b01d4f4845  license/mit.txt
+>  sha256  cae178052c96959741acb7f00634a09a8294e6cafb5ad53e158d63e3510875ab  license/README
+> diff --git a/package/dpdk/dpdk.mk b/package/dpdk/dpdk.mk
+> index a422cdde06..bca3a2ff39 100644
+> --- a/package/dpdk/dpdk.mk
+> +++ b/package/dpdk/dpdk.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
 >  
->  # 0021-avoid-password-authn-bypass.patch
->  OPENSSH_IGNORE_CVES += CVE-2026-123158
-> +# 0022-CVE-2026-73281.patch
-> +OPENSSH_IGNORE_CVES += CVE-2026-73281
-> +# 0023-CVE-2026-73282.patch
-> +OPENSSH_IGNORE_CVES += CVE-2026-73282
-> +# 0024-CVE-2026-73283.patch
-> +OPENSSH_IGNORE_CVES += CVE-2026-73283
->  
->  OPENSSH_CONF_ENV = \
->  	LD="$(TARGET_CC)" \
+> -DPDK_VERSION = 24.11.1
+> +DPDK_VERSION = 24.11.8
+>  DPDK_SOURCE = dpdk-$(DPDK_VERSION).tar.xz
+>  DPDK_SITE = https://fast.dpdk.org/rel
+>  DPDK_LICENSE = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
