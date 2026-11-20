@@ -2,114 +2,96 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A70F6606A320
-	for <buildroot@archiver.kernel.org>; Fri, 20 Nov 2026 06:37:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DA78606A320
+	for <buildroot@archiver.kernel.org>; Fri, 20 Nov 2026 06:38:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Z653tDwo;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256 header.s=purelymail2 header.b=DMjoqFor
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=kupTTHZS
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7D8AA40DD8;
-	Fri, 20 Nov 2026 06:37:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1F6E440DF2;
+	Fri, 20 Nov 2026 06:38:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qBOzVRr29__f; Fri, 20 Nov 2026 06:37:41 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 5AE2C40DC1
+ id 8sBuHjmOfsj0; Fri, 20 Nov 2026 06:38:18 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org A82EC40DC1
 Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795156661;
-	b=HmSsW1i39gMl4hfvxf2gevzwu9N4goA4K/Y3t/n6ZQ9cDzHn0I+vdZk/6cx3yuoYmZmj
-	 M0oZEaaCEmfUGGHUuh5FnH9KWNpiDJGIwltMVkkprbjWrOGFe753xfZPccJ9dj4V2LPQc
-	 n21QZNMkk7XxiwRuuQ4xPMR/GMqHg3cCh3k2KFiYJGrHO0vPPY6WrJmcf8oz7X1gTyYKb
-	 XqwhvHy6MnABUtZ1eyCuhYX1hbSjxYKq/I3rZYet/suLa7GgnyDTKLI9TwKx5pvZqz18Z
-	 8pK4It6lsdqOnctFq+/tgDuAq89A+94WlrvPA8Z1ZrehlQWBW25xwqesV2adpk2jL7A==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795156698;
+	b=idMtAkBlaQX22ko1wRdEhvriTFtCu9fZsGpvfu57IbPYuIZthbSf0N8ycM/8cW1xxNv4
+	 jJgPIFDyQWleI+uSeOODZ6IRYCwxKrunv/1daYn6DjZlH60iihhA5usCFOvyOFggiaOWF
+	 1Y5Elko9X+S6WrdtqnX9CqrltvI5dbx9HZ+xZntRnPwX03rWqvMRlPaoNcIWWT3/N+GRK
+	 vrnAo9BFP9l0DJI56yMfmu0pJ3VtLWsrJYdFP2XXaTtsu92dQvA+7obChhFsQFzCznNPU
+	 7F1BOL5EHdZd+KGipcn+rDyZ0d5dwbOm4tLEVbHysx/Th8twugaIoKfePEyg8aw9HCw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795156661;
+	c=relaxed/relaxed; t=1795156698;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:Received:From:To:
-	 Cc:In-Reply-To:References:Date:Message-ID:User-Agent:MIME-Version:
-	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=fEz9zrGLupRQomsKWog1FBAsxiM2XtJa6Tvmb9azCvI=;
-	b=VmqIYK1uQp9QVnYcWD/35tJ+xbhg7opFinefz+Cv43vJQWEF4j8UFhmDh6erDpIk1O1n
-	 18PZSNdkjy7TUID9V+jYngDEH6pmNVR1jN8Di8A464Dx20tHOidWjy1dcfqY5rIErjrGL
-	 3tXjwHfuWMh3Ff43/8otXQpzcCtDfJtq9D6LeovSuxy1cdsXf5jhdbqJQF971Yvp8LjA+
-	 ObjI3zFEwWO6VfSA6i5UyI+0DZQ4gDCrHwXQ370PHxGK6ggSskNynop+ZVpbuLKC6FEcJ
-	 EHnZObhv8mnA3A/v+jcnDIn4Ac9nMkmCjab902dZnuisv1bwnEoXnTl93SQvs2wGZDg==
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:To:
+	 Cc:Date:Message-ID:X-Mailer:MIME-Version:X-Mailru-Src:X-7564579A:
+	 X-77F55803:X-7FA49CB5:X-C1DE0DAB:X-C8649E89:X-D57D3AED:
+	 X-Mailru-Sender:X-Mras:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:Content-Type:Content-Transfer-Encoding:
+	 Errors-To:Sender;
+	bh=FREHpJ8eMLcC/WBmQhVwbMMnZneBXLYgFuUiCSWFc5E=;
+	b=QCaOVeLnZN5sTCyh7wLeSK1DiQ6LFzSgajOxHwvUA4PmCpFm4P8Vn8OIGKoFeylEhojw
+	 mctxesyFoek5JcEDRQcEgFcVLwQHA31VcTS12CE5GGTDoiARDVQ6dJcXXB0mflHIhbcOK
+	 2EYekGpN7hygJ+Dse0bUteYaY018KiAlIwy1alOmDEirYBo3wKOM2YVFVv+ECxM4KyjIZ
+	 6qTOODNechGEoS3hIuCSChfQw0lkeIXlrIkefQsWFBfwyg3oDZM3/7+hSkFcfvjz5a2be
+	 qgVP4LtA6jn6lADlIO8VI2ras1R+KkwGeUE9lbAQBEhIH3vADqQkRCj2qw9AD3nuhzg==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795156661;
-	bh=fEz9zrGLupRQomsKWog1FBAsxiM2XtJa6Tvmb9azCvI=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=Z653tDwoT8pLpNn82LgUfXLdgB10X/Zh+1Au2xPf67qGAr6DOjjhcU8ZE/2T1IF0o
-	 mtAscOyBHcm7icUvEVU37cxkulVNiBn++/Za+3ccH6cFBNVpMIC7BIvw52u17RTsIm
-	 eZNLPw6JrsOq2u5IuITPb2Ax3WCaryqa9yXc/K8vUNnkNEzCty9AcE48DaGQVqxIVh
-	 0PkY1232VMlPVIxQXU4XiVSULnNoFDrgup3CKQKnj4UrwbMe0cD00t/vESiOP8qZ08
-	 VSsvX33mItkGyuNTwwoXujnsrkwPkRCaSC5vOet31t12Vn1Ezt/9m3KvOH4/1bmMmW
-	 udSH/SdQtN3kw==
+	s=default; t=1795156698;
+	bh=FREHpJ8eMLcC/WBmQhVwbMMnZneBXLYgFuUiCSWFc5E=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=kupTTHZSspSEGRI9PWVNGB9rZEQkVnbDkm6N2H3PSN9+OxfuA7fAbZ9WxiKaZ79jE
+	 GwF87Oo0JVnxSMs4nuKXZOUoV/F9KSkp6BGmbbWlR9hkZYQun+tgzGssee+roix2sn
+	 vQpM044rekFSga5O/PNSTtlQEPDyvJjuz/r5bToEvjuEZmepBwoSw/XaUzmMwDn9wr
+	 wzyh0BNfz70TEeTNyggh2w8Vb6o7e/JROOCMhmOK/IO1VxxVaY0hC7HR1bnpjln09T
+	 pbr02Qhb4RO0M8MIg9pKCHb8jJAnvB4Ahgu9UVR11HODH7BG7SlEiLHzUOaRSFQtpC
+	 9kJ+IAi/7sz7g==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5AE2C40DC1;
-	Fri, 20 Nov 2026 06:37:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A82EC40DC1;
+	Fri, 20 Nov 2026 06:38:18 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id A8D3F1C9
- for <buildroot@buildroot.org>; Fri, 20 Nov 2026 06:37:40 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id C241A1C9
+ for <buildroot@buildroot.org>; Fri, 20 Nov 2026 06:38:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9A6D26072A
- for <buildroot@buildroot.org>; Fri, 20 Nov 2026 06:37:40 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B3AFB606D0
+ for <buildroot@buildroot.org>; Fri, 20 Nov 2026 06:38:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yxcEvJNXTfX0 for <buildroot@buildroot.org>;
- Fri, 20 Nov 2026 06:37:39 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 8C0B1606E2
-Authentication-Results: smtp3.osuosl.org;
- arc=none smtp.remote-ip=34.202.193.197
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none) header.from=korsgaard.com
-Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=DMjoqFor
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8C0B1606E2
- for <buildroot@buildroot.org>; Fri, 20 Nov 2026 06:37:37 +0000 (UTC)
-DKIM-Signature: a=rsa-sha256;
- b=DMjoqForsyQHVTvA+R/I/twOVRtdiSePPdaxEcDoev4gGxOP1Y8K6OP+UKOaNPRNZju87S14g4LzwJH/0gi14W0njKrZ1wa1YTQlsnEbkMISfRzHbmyzKMRJ4i7y5SKgDab8b8XGyJJtRIK9ynT2zVMg4mmir75Aw+JoV6WBvjLqsrBMGj7/jAkwlLb22Pk6APxnYrlWWcJkST/GwhREkK0h/c2y8l9TUkBPHM24Q5skrVJNMqIvQUvv55ijNtaB5sydHHAtd0I2bA14WJT5KpMDJQTN072MEefSmuMFjFh/72PopaO8DXWZRO0KJa2pteLppGhYCp5ywPWKxxo1uQ==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=7OVDrlvLe29ju14mglcnz6Fo7wTXDTw7kTShEc4DlGc=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date:Message-ID; 
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Authentication-Results: purelymail.com; auth=pass
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1272063901; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Fri, 20 Nov 2026 06:37:32 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1xUIFX-00000003Qa9-3Sks;
- Fri, 20 Nov 2026 07:37:31 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: buildroot@buildroot.org,  Julien Olivain <ju.o@free.fr>
-In-Reply-To: <3ebcdfa3-6ae0-4e41-9a68-005eeaab9385@bubu1.eu> (Marcus
- Hoffmann's message of "Thu, 19 Nov 2026 23:31:36 +0100")
-References: <20261119160005.628790-1-peter@korsgaard.com>
- <3ebcdfa3-6ae0-4e41-9a68-005eeaab9385@bubu1.eu>
-Date: Fri, 20 Nov 2026 07:37:31 +0100
-Message-ID: <878q2ouhxw.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+ id RwWoAUQ23hLo for <buildroot@buildroot.org>;
+ Fri, 20 Nov 2026 06:38:16 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 01175606A8
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=95.163.59.81;
+ helo=send242.i.mail.ru; envelope-from=fido_max@inbox.ru; receiver=<UNKNOWN> 
+Received: from send242.i.mail.ru (send242.i.mail.ru [95.163.59.81])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 01175606A8
+ for <buildroot@buildroot.org>; Fri, 20 Nov 2026 06:38:14 +0000 (UTC)
+Received: by exim-smtp-56bb8ff957-2htg9 with esmtpa (envelope-from
+ <fido_max@inbox.ru>)
+ id 1xUIGB-000000006Nb-2H6H; Fri, 20 Nov 2026 09:38:11 +0300
+To: buildroot@buildroot.org
+Cc: Maxim Kochetkov <fido_max@inbox.ru>
+Date: Fri, 20 Nov 2026 09:38:09 +0300
+Message-ID: <20261120063809.299110-1-fido_max@inbox.ru>
+X-Mailer: git-send-email 2.55.0
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH] package/ruby: security bump to version
- 4.0.10
+X-Mailru-Src: smtp
+X-7564579A: B8F34718100C35BD
+X-77F55803: 4F1203BC0FB41BD9749DDC91F62168F92C5CC3D78C1F4129358BF2273B6E1791182A05F538085040C9F8E4BBDC298C9F3DE06ABAFEAF6705CD8454DBE311382E7504E3462A05402721E68012AEC8BD2D
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE776FF0B15B6DDC389C2099A533E45F2D0395957E7521B51C2CFCAF695D4D8E9FCEA1F7E6F0F101C6778DA827A17800CE7811C3E343B302E2EEA1F7E6F0F101C67CDEEF6D7F21E0D1D9295C2E9FA3191EE1B59CA4C82EFA6588782DE0093C6E76CF42B8CCC81FE6DEF95650897364E6BF06F9789CCF6C18C3F8528715B7D10C86859CC434672EE6371117882F44604297287769387670735200AC5B80A05675ACDC26CFBAC0749D213D2E47CDBA5A96583BA9C0B312567BB231DD303D21008E29813377AFFFEAFD269A417C69337E82CC2E827F84554CEF50127C277FBC8AE2E8BA83251EDC214901ED5E8D9A59859A8B6300D3B61E77C8D3B089D37D7C0E48F6C5571747095F342E88FB05168BE4CE3AF
+X-C1DE0DAB: 0D63561A33F958A5E63EF8FDD0AFB9125002B1117B3ED6960125997274784DCFC638DF663A625AFA823CB91A9FED034534781492E4B8EEAD5B606B10FC07407CC79554A2A72441328621D336A7BC284946AD531847A6065A17B107DEF921CE79BDAD6C7F3747799A
+X-C8649E89: 1C3962B70DF3F0AD73CAD6646DEDE191716CD42B3DD1D34C77DD89D51EBB774225B6776AC983F447FC0B9F89525902EE6F57B2FD27647F25E66C117BDB76D659534362366E94768C83DA3C96AF9E05379254EB80696F1D483D7E9248457BACDCF8CA45E2DA1109E5B8341EE9D5BE9A0A504F1C05B92CF48E7B70A83C803BD96175EE812D3A65977D8CD93680B12512CF4C41F94D744909CEE921556F0E976A29E6EC0772259F8F8F8815B87D7EC76CB9
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu53w8ahmwBjZKM/YPHZyZHvz5uv+WouB9+ObcCpyrx6l7KImUglyhkEat/+ysWwi0gdhEs0JGjl6ggRWTy1haxBpVdbIX1nthFXOcIETfglQORZ0zpDET4Zrk3igikrdHlWPXDj5pM7PWHe+eya20PhEY=
+X-Mailru-Sender: 689FA8AB762F73937C9FA53A4753B31309645B63AD6D183254D7CE9C69059F37BE4CB31467873FF490DE4A6105A3658D481B2AED7BCCC0A49AE3A01A4DD0D55C6C99E19F044156F45FEEDEB644C299C0ED14614B50AE0675
+X-Mras: Ok
+Subject: [Buildroot] [PATCH 1/1] package/timescaledb: bump version to 2.32.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -119,65 +101,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
+Reply-To: Maxim Kochetkov <fido_max@inbox.ru>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-10.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,
-	USER_AGENT_SANE_1 autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
->>>>> "Marcus" == Marcus Hoffmann <buildroot@bubu1.eu> writes:
+Changelog: https://github.com/timescale/timescaledb/blob/2.32.1/CHANGELOG.md
 
- > Hi Peter, Julien,
- > I'm a bit late here as Julien already applied this, but there's a few
- > inaccuracies in the commit message.
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+---
+ package/timescaledb/timescaledb.hash | 2 +-
+ package/timescaledb/timescaledb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- > On 11/19/26 17:00, Peter Korsgaard wrote:
- >> Fixes the following security issues:
- >> CVE-2026-89078: Double Free issue in Regular Expression Parser
- >> CVE-2026-93577: Integer Overflow issue in Regular Expression Compiler
- >> CVE-2026-97229: Integer Overflow issue in CI/CD Regular Expression Compiler
- >> CVE-2026-110264: Integer Overflow issue in Regular Expression Compiler
-
- > I believe these are technically gitlab (the product) CVEs and do not
- > apply to ruby, even though the cause and fixes live in ruby.
-
-True.
-
-
- >> Heap buffer overflow in regular expression compilation
- >> https://github.com/ruby/ruby/security/advisories/GHSA-7whj-cfh7-xgm4
-
- > Typo. Should be
- > https://github.com/ruby/ruby/security/advisories/GHSA-3p8q-wmhx-vm2w
- > instead here.
-
-Ups, I must have cut'n'pasted the wrong link.
-
-
- > Additionally the github release notes for 4.0.10 call out:
-
- >   Update the default gem json from 2.18.0 to 2.18.3, which includes
- >   the fix for CVE-2026-33210.
-
- > And then (as far as I can tell) there's another CVE hidden in the ruby
- > 4.0.7 release which bumps the embedded ERB gem from 6.0.1.1 to 6.0.7
- > (https://github.com/ruby/ruby/pull/18282) which fixes
- > https://github.com/ruby/erb/security/advisories/GHSA-q339-8rmv-2mhv /
- > CVE-2026-41316.
-
- > For these last two we don't actually have any good way to track this
- > in buildroot in general I think. :-/
-
-No, indeed.
-
-Thanks for the review!
-
+diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
+index 75f9b542de..e4cd234de6 100644
+--- a/package/timescaledb/timescaledb.hash
++++ b/package/timescaledb/timescaledb.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  c9f95c8865f71244cdd333076284377e83dad62f85679fbf1c94ba48a7d67334  timescaledb-2.28.3.tar.gz
++sha256  c49c9615b2b6623f1c3ad2813b850d4c577d6c65c43bb8eee4b255e1e1af4a9f  timescaledb-2.32.1.tar.gz
+ sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
+diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
+index 9bbe502941..ecf59bdea1 100644
+--- a/package/timescaledb/timescaledb.mk
++++ b/package/timescaledb/timescaledb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TIMESCALEDB_VERSION = 2.28.3
++TIMESCALEDB_VERSION = 2.32.1
+ TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
+ TIMESCALEDB_LICENSE = Apache-2.0
+ TIMESCALEDB_LICENSE_FILES = LICENSE
 -- 
-Bye, Peter Korsgaard
+2.55.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
