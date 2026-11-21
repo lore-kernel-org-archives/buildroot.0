@@ -2,28 +2,28 @@ Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB8E606A33C
-	for <buildroot@archiver.kernel.org>; Sat, 21 Nov 2026 22:23:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAC8A60A260E
+	for <buildroot@archiver.kernel.org>; Sat, 21 Nov 2026 22:38:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=TiAgk5Tl;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=BH/o49GF
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=CREBbOJj;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=f7NBUQDY
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6D0DE60621;
-	Sat, 21 Nov 2026 22:23:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B01F160616;
+	Sat, 21 Nov 2026 22:38:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Za3IG_b_55CE; Sat, 21 Nov 2026 22:23:19 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 71F4760628
+ id afUn6bUQkt-x; Sat, 21 Nov 2026 22:38:31 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org B5C7A6061F
 Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795299799;
-	b=Y9xPp4QaBwoFoqpbp2bsa1UfJPQ7iv8sTrPkwFxbzyY9MSeNy9tJijcY5sBowj7pdxDx
-	 GxReLpEA6CaG3G7sv7EIc3i3s7Y1G4/Isy/EQoR9gclEZvxv1xp12FtiXECUrNCI2fd5U
-	 lUsglHtfXU7otDRBpVvKiPBdC6LRW2Xp6+s/UzARWO/0Lpjgo2bIYsozc5KoT3ywNk8kN
-	 iRvvkawbKHFSRBFXkT/RZ/gmeeMDGlkfQ4RA99FKOi6k9PqII/RO8kB45mzOU1HOCEAur
-	 SV9qcqDGekyhe6IwMI4j9v+k1e7CNa0q7rvn4YcdvX3hZHFF9+Jpyzn6RnR5y/4AEMQ==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795300711;
+	b=A9g7vGkjGuQaBnCaZslgcchHqpCN65KYod8RPNQ6wTTkFPTw4MVfiLonODRO9JYCVI1Q
+	 o1G/zusK60O7enbTy4/YxU7SJFCbVu3eZPWijfIIRDxP5stCpivoJxaG3soM8cG9YAtP5
+	 DbB0JbjpRvJD6pXHBaYSJM2WOpdrjp/BM/ftJIfvf3cYubunL5KSlx4ttf6pQU6uvDqIm
+	 J0EN+OqU/Hr6DjiJJwIB7SEvtNVrOx3KwFCS7dJclUiaQjUK3ZyqrPpqFtXFe1hb0x4uM
+	 QP1Z5rUV8eusnoTlbMSV2QU7wbayc7mCDpoTgwUvAcoWxQO/GfYUU5eiU+dEY4nqF1Q==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795299799;
+	c=relaxed/relaxed; t=1795300711;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -33,117 +33,116 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
 	 Sender;
-	bh=JtJEiuDaupYn0x1KFF8DerhO42nCC/tUtvMwzjcXsL8=;
-	b=gVKpWcDu+K+IfzCQdvYM889leWvkmJbMgBvo/mzhM847c5wPWaHNadIsmo2hrELi6cRU
-	 HEngLzamArDMsvr4R/S92p6JducUwoCpgfR+FIBf3qWBPVrAlDZTFgjE0eJwvmeyrTu/V
-	 jVYQ7TrG3lVGkF2sLmLZKOYZJHz+gcQgP5lINQ1Y9SBvCBdMLrhjm7V4BPI0Sf8y8knhL
-	 FSzPBxs3Va4ZEquHBr2oRYrxqTCf91MYTrwTOGZv0lum8gw2UreQKmbGiVtemJ2p52pHv
-	 zDDKMATxKTkyX1QT+f8TRbWK2RlU06qxouplcXJ8WDWUJkgegR89bcpAEaytFeBssGw==
+	bh=SqkyNVZbiitnlGGr658U6RCinoX66wHkPnQ5j1O1pNE=;
+	b=FpDAKHzPdptdYii4RYxZMC5OpDZCZ5876nDkvmQOf1Bm6/vcQgzo4srUCLpbdcUBg2qL
+	 5849gF5mmoxRao2mqiGOnD3LS44KfewcVfPNRxED4gF1Y6qK78BBKOqzvhPlhYFWnzsam
+	 D/Dh2jrx+oXi+clWCQE64HKlggBIlujgFTSXwyZh5ZbgXoiYL48pLv+01RE/bipDBa7ag
+	 0YvuZPNSkJAiPr9RCNhQQMs//R0ACqiXQ26tDa+vHQSaF53rC2tfxSStooVEF5Y5P7yRk
+	 7cxdo+7cwgUtABZI21tS8cbwKg9r8OM2ElE+wmOc3v7AryjKvTKQsb12DqDqVXjOcAg==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
-	dmarc=pass header.from=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b="BH/o49GF";
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795299799;
-	bh=JtJEiuDaupYn0x1KFF8DerhO42nCC/tUtvMwzjcXsL8=;
+	s=default; t=1795300711;
+	bh=SqkyNVZbiitnlGGr658U6RCinoX66wHkPnQ5j1O1pNE=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=TiAgk5TlKGELoDJRiQUjbo0COKA4uRLO17UVCjtkcVrvb9eQp1vRLZIy+oLhbpu1r
-	 OYae057Bn2HNInGEHT2QdkIshCVIOps477VseiP2y4FXsXhXrPr2AQrSavTkvXTGhp
-	 vLMAP13s2fpV3z45aCBS9yZJJ0TMw7C7782lygiSVDovA6SgFQYAyc6MWA4VHLPhL9
-	 ZCNAcqbM1GSvhjZUgIuqmMDZSlJ7NtE6ER3FjFsZMqovQksjKQzpr1/NqO7He+QLjZ
-	 KwylYbA0oOCN4H0BFa1S3t3Ch3kghTP3qwIWqa4ctNnJFHyJ2I2WIhS3rIrbysbP9U
-	 rJAYffszvOB/g==
+	b=CREBbOJjdu4UXIKppizqVYhDsyCmhkKbIG08ja1Pi77v+mMdFv8nXWZkvTIlV+BDY
+	 IVwyaRO8LMoQ8oY+B72JymXH05PBtavTjOVlUFiYZLm5YBy8J9IHv1ejsh2y4zuHN/
+	 BEX1EoZ4E/ERAB5g3boSnj9SXNro4Iy9x5UpILcxfXYsrYVP1fwRrQQ5Tt/cPfIKTL
+	 SuRaOww14HFQppcvRR1oDmQI1MyjUKDbvxk+rg6JqF0+OgA2pyIp2kXgRqROpC6Vmz
+	 o49AQreXQ6cnhul/sy4EM5WhjdrUguujAhCBt6/ujxACd5f6GJK8rczJF0Jz9cm4c8
+	 XnNsWBvLb2q+w==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 71F4760628;
-	Sat, 21 Nov 2026 22:23:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id B9FE6310
- for <buildroot@buildroot.org>; Sat, 21 Nov 2026 22:23:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B5C7A6061F;
+	Sat, 21 Nov 2026 22:38:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
+ by lists1.osuosl.org (Postfix) with ESMTP id DC65179D
+ for <buildroot@buildroot.org>; Sat, 21 Nov 2026 22:38:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9F74360628
- for <buildroot@buildroot.org>; Sat, 21 Nov 2026 22:23:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C228440654
+ for <buildroot@buildroot.org>; Sat, 21 Nov 2026 22:38:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RTtM-uDpskRW for <buildroot@buildroot.org>;
- Sat, 21 Nov 2026 22:23:15 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 3957D60621
-Authentication-Results: smtp3.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::333"
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CEcnbQC80YOb for <buildroot@buildroot.org>;
+ Sat, 21 Nov 2026 22:38:30 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 9273A405B3
+Authentication-Results: smtp4.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::434"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
  envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
+Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20260707 header.b=BH/o49GF
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3957D60621
- for <buildroot@buildroot.org>; Sat, 21 Nov 2026 22:23:14 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-4ac95761c85so15367625e9.2
- for <buildroot@buildroot.org>; Sat, 21 Nov 2026 14:23:14 -0800 (PST)
+Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20260707 header.b=f7NBUQDY
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9273A405B3
+ for <buildroot@buildroot.org>; Sat, 21 Nov 2026 22:38:29 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id
+ ffacd0b85a97d-491846221ffso1667385f8f.3
+ for <buildroot@buildroot.org>; Sat, 21 Nov 2026 14:38:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20260707; t=1795299793; x=1795904593; darn=buildroot.org;
+ d=gmail.com; s=20260707; t=1795300707; x=1795905507; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=DGBYGSwH5dlIgNdBZ8BaX+Ar8TEjDYNVc9gwUSI8nuU=;
- b=BH/o49GFpYBAOCeOaQsyL/paRgLKOHPcAdx9fBd0gEWtHbbXqg5zjA5yFonwafNnzg
- ++KvwnKO7LlJWr2GNQOMLj8euSfarUm8zLqQe/VB/3Ku7qvK3RuTxayRO7VJ211O+/wO
- uBpHGRM+wNX5RdQyErDUCWiVbQnhar/+RL3MPylc4BdGLlRb/XCpUKoC3mjEo+fhIyke
- pP4arOQLZnnysCI3PjjLPqe3DWBDSX0KCs+AbbgwZPgL009zfxmlEwzPqCAiThCQd1Y2
- cUzlddTckVSX0vsSQsAoOLCfYEoJDnlta8iEi+eT2zdPYLmZ7WF7agaXq2T3ht+XiLIV
- VtNA==
+ bh=pI1JNPlVZ7oeAMfyF6buRdnJPjiSS+3SCzqttFvsrDE=;
+ b=f7NBUQDYzPAzeTyENVtnw8JzhvcI5cFnkSzpyqoErXkalzmw5i6vMGIr7s+X3EZOaJ
+ /uiBp3L/ltGNiMkW3/dj37bc+MTgo8FEoKOZ8KMDjS244A7gIl/PGY/V4oqEw3J7fOY7
+ IsEMlViq2vCzeHMngDobFZzXNG6WHcRXhHiz4AxOeyeCo1X5u+DoCCIcWiADF/07cLmO
+ CoK5ZvXhFB1R2DvSQkjizaHv404uhCn9t0uTSYuo2yDCGcy3IiMRivg8FFNWfmcjgA7j
+ IyAg2r2YvHLfCKhinSpg1/KFQKHC6PhP8RFckNv7CzkLLctIIBjzRmhXombItpYIRo6M
+ ACNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1795299793; x=1795904593;
+ d=1e100.net; s=20260707; t=1795300707; x=1795905507;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=DGBYGSwH5dlIgNdBZ8BaX+Ar8TEjDYNVc9gwUSI8nuU=;
- b=e3E96wbtVumPsPm6nd0OH5+yRnbgZHMDE1vDcyK3is430P5YxgErt3J6yKYBepvjWu
- 0RcjXniF48aO8lkP+bztiQ5PoCEu3sxJp7yP9v6cX3MOE2oU6dBJqkkgxZ2TCvVdiy+d
- XuqXmPsXpMDtbzXkbD3z04VMXS3YTtyCXas/XRemHhPJfQ63HokwCIlWKq8t34t0XGj3
- XHazmWiOnFOcoSTcPrQ8t7YkY62EBduiwTzW0F5zw0nPySe1CfYTH0f9wCaLpUWbAJcF
- qSKWTCae76Acd26xRxlrJdyEDbDRCs2j7Fdf74qc/cg0/EhDYiBPyLnMpp9zv64uH8pw
- I/Qg==
-X-Gm-Message-State: APuU4Z/7Nwe2NON1FKdhGsr0eyPBp57WGbKRbesAs7+/+/ojE78tyvq3
- Kt4M9vuzHDjbeg8RxAvxdDgZZ0VWkA2Z3NzDEUmzFxZN/Msv/tJSIsRFA2GZeOHk
-X-Gm-Gg: AZFdTZdbDE9bAD2sYx5U3JHV/RzAw4mYt8HYfHXnWXWR8114W21NmRmNJHKLx3kwqj7
- B+MM4T0GOqpnjebXFm4e3AjXslazuaVXMPIkuS99zfNvj7/MIipq68LtxGL2wKNj1If/076pbA8
- j4KnJOdY/rzHpyxoHh7P1VwNHRbwHzmH/Ooqa7kN5J12ne7StHecQ8bJu26V/MjVA/ObdALx1Zu
- UIa5VWhvN4JU7QpTznlBZvP3IKwc1wchs/Mwr+1Ua06PIe9G8FYPILdLvRrOvCH/c9NbdZIdcWT
- mTLSxZRmiYhwhQq5aYPWRRyrdkpG+MtqxrB8k7ZWemlHmLYMJ7c5xCnoDtQcg49I/1w4YgGYi1F
- MNwW3j0spePzz//84qK3RtFE3Z2nwxqOZVll2hXPCx+fxdfNXccRZMZKU4hRsdGT8ND2sUr2/XV
- 79ro5FFGjrPmL0+ECyn3g2PaMjQRF/MsE0YMSVNJ1w+kppmO4GtSo2i/mmAhFOTzLtJx8eorf1i
- LnK1iXKI0H1/IQDtoMgKYpY1aDO2jfcJ3FagdLqSujuubzb8XZJ+x7Zi8SofxUWIiPzbhTFN28/
- GDpavX60pIyuzkJR3YcDaqbsPo4qIlE7XuK+s383GPx2hiijg0g=
-X-Received: by 2002:a05:600c:4f10:b0:4a1:88de:9e8b with SMTP id
- 5b1f17b1804b1-4bb88807909mr165445175e9.5.1795299792864; 
- Sat, 21 Nov 2026 14:23:12 -0800 (PST)
+ bh=pI1JNPlVZ7oeAMfyF6buRdnJPjiSS+3SCzqttFvsrDE=;
+ b=CkOeCY3ZHL1uRtcUi7s2TVvOR3YjoeXOQMrHJ+4v9goPYsWLCfE5ulYgRUbUAtOiAT
+ EfOXnnWjSqETSIMKNTkRLqdy4gG6+W3gohdh1SrN4+rILDXVFVfTZ+kUdKwnDf423GZ3
+ TGslT3JgJIz/gJRa9V8gI01oReSCLUy5mkkCBvyv/AAIpTw/memFNIk44OKnpvbMABIQ
+ CdgNInZvH2Z9986jeMhitm2DwhQ+eU/DM13y+MbjjPt19BaUmh+YLeJ++beHdfetgtdL
+ V87nzB8HpHtq6RifsnmKv49/nb3j7nX4ZQpAM0iH2Wlr98z2wa2CzDpZ0c/atPmd2790
+ ek8Q==
+X-Gm-Message-State: APuU4Z/KxqAfNGwr9HGcMG37l3vmfIsGuUk3r+coqu1rZpVm7SLDvwQc
+ ZbBPDivmd0iQKTP3EZTz4+irQxzlumB/ImCfrw/HZqrGnfPnGmUXuoWY+Y8g9dOf
+X-Gm-Gg: AZFdTZe1OGdEvE/x4hUNn7DJWqChO9KhD8hdPEEFH2GKlhyv38rcVap+mVLfiXi/jdA
+ pfLAI9iKPlYAhm9HctsXwBRMDkD6LXGnpUiUz5pmXwYGNfysT5p5auTfyM9apy34z5gRH47IXue
+ 2Py9P5zWEw+kL9icMyqGXljFEt8QbyhRTEq08Z3ZmFyrPUvPxbXmDYQEpzZYFpncUA1GcGvOdBS
+ uk6PW3mhjWbFIV61jqlAV3rA8wC5vOO5Yz4WEoUBjVrn8Lkw3ekpoezUjy3bk/bxZso9tETEOOK
+ XpmtKs/7o7yBFddgXYQ1W/G6jl7jfLwz2jbx6wMudMSuu4uVDuulbRtBezi6EkzOb77hKo3bu++
+ eCPwYGqHllDGrUG6iHxOs9ZSs8QexDRL7CWGlGK02KCImrt45Da3FYSLOOgI0C/Ci4qZ6CKqnIs
+ AqahMfHjkl921mZCcn+AfO4cqyFIA723LWeAsAYkthI0vat+ryu52yviPwz1o9Rm/dRl1uW2ykL
+ rxYUnPdgjjsO0AiHB4S+wc/4ppXtap07vS7S4RONpE9XAZz6DOTPZwCxEZH6IxQSGs9BYYBLITd
+ AJsqKZIDGw4uS7FiEH3Q7xl/fOpZeYxaAahYFsCjb9PgtsGIIOI=
+X-Received: by 2002:a05:6000:4558:b0:4a6:4ac6:d952 with SMTP id
+ ffacd0b85a97d-4abb3a4d510mr9372142f8f.31.1795300707286; 
+ Sat, 21 Nov 2026 14:38:27 -0800 (PST)
 Received: from angelo-Precision-7550 ([2.58.136.216])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4bb884b8429sm325310145e9.14.2026.11.21.14.23.12
+ ffacd0b85a97d-4ab69bf61ddsm12319634f8f.12.2026.11.21.14.38.25
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 21 Nov 2026 14:23:12 -0800 (PST)
+ Sat, 21 Nov 2026 14:38:25 -0800 (PST)
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 To: buildroot@buildroot.org
-Cc: Laurent Badel <laurentbadel@eaton.com>
-Date: Sat, 21 Nov 2026 23:23:10 +0100
-Message-ID: <20261121222310.213127-2-angelo.compagnucci@gmail.com>
+Cc: Chris Packham <judge.packham@gmail.com>, Julien Olivain <ju.o@free.fr>,
+ Abilio Marques <abiliojr@gmail.com>,
+ "Yann E . MORIN" <yann.morin@orange.com>
+Date: Sat, 21 Nov 2026 23:38:23 +0100
+Message-ID: <20261121223824.420727-1-angelo.compagnucci@gmail.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261121222310.213127-1-angelo.compagnucci@gmail.com>
-References: <20240206125833.10103-1-laurentbadel@eaton.com>
- <20261121222310.213127-1-angelo.compagnucci@gmail.com>
+In-Reply-To: <20240212021255.246556-1-abiliojr@gmail.com>
+References: <20240212021255.246556-1-abiliojr@gmail.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 2/2] boot/mxs-bootlets: add support for
- zImage with appended DTB
+Subject: [Buildroot] [PATCH v3 1/2] package/micropython: add support for
+ manifest.py in the configuration
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -164,118 +163,84 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-From: Laurent Badel <laurentbadel@eaton.com>
+From: Abilio Marques <abiliojr@gmail.com>
 
-When building a zImage with appended DTBs, buildroot creates copies of
-the zImage named zImage.$(LINUX_DTS_NAME). mxs-bootlets.mk does not
-take this into consideration and passes only the original zImage
-(without DTB appended) to elftosb to generate the SB file. Thus,
-make sure that the correct zImage files are used in this process.
+Micropython can embed packages an modules as frozen bytecode. What code
+gets built this way can be defined by means of a "manifest.py" file.
 
-Signed-off-by: Laurent Badel <laurentbadel@eaton.com>
+This commit exposes the variable FROZEN_MANIFEST to Buildroot users
+through a new variable called BR2_PACKAGE_MICROPYTHON_MANIFEST.
+
+Please check Micropython's documentation for more information:
+https://docs.micropython.org/en/latest/reference/manifest.html
+
+The build runs in ports/unix, so the path is made absolute. Paths in
+the manifest are relative to its own directory: modules next to it can
+be frozen too, not only the micropython-lib ones.
+
+Signed-off-by: Abilio Marques <abiliojr@gmail.com>
 Co-authored-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Tested-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
 Changes v2 -> v3:
-  - rebase on the new patch 1/2
-  - use the DTS name without its directory, as linux.mk does for the
-    zImage.<dts> copies: in-tree DTS names now have a vendor directory
-    (e.g. nxp/mxs/imx28-evk), so v2 looked for a missing file
-  - set MXS_BOOTLETS_BOOTSTREAM_EXTS in a single ifeq/else, to fix the
-    check-package "conditional override" warning
-  - drop the indent and trailing whitespace reported by check-package
-  - strip only the trailing .sb, with patsubst
+  - rebase on master
+  - make the manifest path absolute, as the build runs in ports/unix:
+    a path relative to the Buildroot directory didn't work
+  - drop the note that only micropython-lib modules can be frozen:
+    with an absolute path, modules next to the manifest work too
+  - say in the help text that the manifest replaces the default one,
+    and how to keep the default frozen modules
+  - use qstrip to test the option, and fix the help text indent,
+    trailing whitespace and quotes
 
-Supersedes v2: https://patchwork.buildroot.org/project/buildroot/patch/20240206125833.10103-1-laurentbadel@eaton.com/
+Supersedes v2: https://patchwork.buildroot.org/project/buildroot/patch/20240212021255.246556-1-abiliojr@gmail.com/
 
- boot/mxs-bootlets/mxs-bootlets.mk | 36 ++++++++++++++++++++++++-------
- 1 file changed, 28 insertions(+), 8 deletions(-)
+ package/micropython/Config.in      | 13 +++++++++++++
+ package/micropython/micropython.mk |  6 ++++++
+ 2 files changed, 19 insertions(+)
 
-diff --git a/boot/mxs-bootlets/mxs-bootlets.mk b/boot/mxs-bootlets/mxs-bootlets.mk
-index eb396da723..3c481c3595 100644
---- a/boot/mxs-bootlets/mxs-bootlets.mk
-+++ b/boot/mxs-bootlets/mxs-bootlets.mk
-@@ -45,20 +45,27 @@ MXS_BOOTLETS_MAKE_OPTS = \
- 	CROSS_COMPILE="$(TARGET_CROSS)" \
- 	CC="$(TARGET_CC) -std=gnu89 -fno-stack-protector"
+diff --git a/package/micropython/Config.in b/package/micropython/Config.in
+index 6109e95109..290802b307 100644
+--- a/package/micropython/Config.in
++++ b/package/micropython/Config.in
+@@ -36,6 +36,19 @@ config BR2_PACKAGE_MICROPYTHON_LIB_UNIXFFI
  
-+# With an appended DTB, build one bootstream per zImage.<dts> copy
-+ifeq ($(BR2_TARGET_MXS_BOOTLETS_LINUX)$(BR2_LINUX_KERNEL_APPENDED_DTB),yy)
-+MXS_BOOTLETS_BOOTSTREAM_EXTS = $(foreach dts_name,$(LINUX_DTS_NAME),.$(notdir $(dts_name)).sb)
-+else
-+MXS_BOOTLETS_BOOTSTREAM_EXTS = .sb
+ endif # BR2_PACKAGE_MICROPYTHON_LIB
+ 
++config BR2_PACKAGE_MICROPYTHON_MANIFEST
++	string "Path to a manifest.py file"
++	help
++	  Path to a manifest.py file, listing the Python modules to
++	  freeze as bytecode into the micropython binary. Modules next
++	  to the manifest and micropython-lib modules can be frozen.
++
++	  It replaces the default manifest of the unix port. To keep
++	  the default frozen modules, add this line to it:
++	  include("$(PORT_DIR)/variants/standard/manifest.py")
++
++	  https://docs.micropython.org/en/latest/reference/manifest.html
++
+ endif # BR2_PACKAGE_MICROPYTHON
+ 
+ comment "micropython needs a toolchain w/ threads, dynamic library"
+diff --git a/package/micropython/micropython.mk b/package/micropython/micropython.mk
+index e260b9fde8..553765165a 100644
+--- a/package/micropython/micropython.mk
++++ b/package/micropython/micropython.mk
+@@ -44,6 +44,12 @@ else
+ MICROPYTHON_MAKE_OPTS += MICROPY_PY_FFI=0
+ endif
+ 
++# The build runs in ports/unix: pass an absolute path to the manifest
++MICROPYTHON_MANIFEST = $(call qstrip,$(BR2_PACKAGE_MICROPYTHON_MANIFEST))
++ifneq ($(MICROPYTHON_MANIFEST),)
++MICROPYTHON_MAKE_OPTS += FROZEN_MANIFEST=$(abspath $(MICROPYTHON_MANIFEST))
 +endif
 +
- ifeq ($(BR2_TARGET_MXS_BOOTLETS_BAREBOX),y)
- MXS_BOOTLETS_DEPENDENCIES += barebox
- MXS_BOOTLETS_BOOTDESC = barebox$(MXS_BOOTLETS_IVT_SUFFIX).bd
--MXS_BOOTLETS_BOOTSTREAM = $(MXS_BOOTLETS_BOARD)_barebox$(MXS_BOOTLETS_IVT_SUFFIX).sb
-+MXS_BOOTLETS_BOOTSTREAM_BASENAME = $(MXS_BOOTLETS_BOARD)_barebox$(MXS_BOOTLETS_IVT_SUFFIX)
- 
- else ifeq ($(BR2_TARGET_MXS_BOOTLETS_LINUX),y)
- MXS_BOOTLETS_DEPENDENCIES += linux
- MXS_BOOTLETS_BOOTDESC = linux$(MXS_BOOTLETS_IVT_SUFFIX).bd
--MXS_BOOTLETS_BOOTSTREAM = $(MXS_BOOTLETS_BOARD)_linux$(MXS_BOOTLETS_IVT_SUFFIX).sb
-+MXS_BOOTLETS_BOOTSTREAM_BASENAME = $(MXS_BOOTLETS_BOARD)_linux$(MXS_BOOTLETS_IVT_SUFFIX)
- 
- else ifeq ($(BR2_TARGET_MXS_BOOTLETS_UBOOT),y)
- MXS_BOOTLETS_DEPENDENCIES += uboot
- MXS_BOOTLETS_BOOTDESC = uboot$(MXS_BOOTLETS_IVT_SUFFIX).bd
--MXS_BOOTLETS_BOOTSTREAM = $(MXS_BOOTLETS_BOARD)_uboot$(MXS_BOOTLETS_IVT_SUFFIX).sb
-+MXS_BOOTLETS_BOOTSTREAM_BASENAME = $(MXS_BOOTLETS_BOARD)_uboot$(MXS_BOOTLETS_IVT_SUFFIX)
- endif
- 
- ifeq ($(BR2_TARGET_MXS_BOOTLETS_BAREBOX),y)
-@@ -71,9 +78,13 @@ ifeq ($(BR2_TARGET_MXS_BOOTLETS_LINUX),y)
- define MXS_BOOTLETS_BUILD_LINUX_PREP
- 	$(MAKE1) $(MXS_BOOTLETS_MAKE_OPTS) -C $(@D) linux_prep
- endef
-+
- define MXS_BOOTLETS_SED_LINUX
- 	sed -i 's,[^ *]linux_prep.*;,\tlinux_prep="$(@D)/linux_prep/output-target/linux_prep";,' $(@D)/$(MXS_BOOTLETS_BOOTDESC)
--	sed -i 's,[^ *]zImage.*;,\tzImage="$(LINUX_DIR)/arch/arm/boot/zImage";,' $(@D)/$(MXS_BOOTLETS_BOOTDESC)
-+endef
-+
-+define MXS_BOOTLETS_SED_ZIMAGE
-+	sed -i 's,[^ *]zImage.*;,\tzImage="$(LINUX_DIR)/arch/arm/boot/zImage$(1)";,' $(@D)/$(MXS_BOOTLETS_BOOTDESC)
- endef
- endif
- 
-@@ -89,6 +100,12 @@ endef
- 
- MXS_BOOTLETS_POST_EXTRACT_HOOKS += MXS_BOOTLETS_INSTALL_BAREBOX_BOOTDESC
- 
-+define MXS_BOOTLETS_ELFTOSB_CMD
-+	$(HOST_DIR)/bin/elftosb $(MXS_BOOTLETS_ELFTOSB_OPTIONS) \
-+	-z -c $(@D)/$(MXS_BOOTLETS_BOOTDESC) \
-+	-o $(@D)/$(MXS_BOOTLETS_BOOTSTREAM_BASENAME)$(1)
-+endef
-+
- define MXS_BOOTLETS_BUILD_CMDS
- 	$(MAKE1) $(MXS_BOOTLETS_MAKE_OPTS) -C $(@D) power_prep
- 	$(MAKE1) $(MXS_BOOTLETS_MAKE_OPTS) -C $(@D) boot_prep
-@@ -98,13 +115,16 @@ define MXS_BOOTLETS_BUILD_CMDS
- 	$(MXS_BOOTLETS_SED_BAREBOX)
- 	$(MXS_BOOTLETS_SED_LINUX)
- 	$(MXS_BOOTLETS_SED_UBOOT)
--	$(HOST_DIR)/bin/elftosb $(MXS_BOOTLETS_ELFTOSB_OPTIONS) \
--		-z -c $(@D)/$(MXS_BOOTLETS_BOOTDESC) \
--		-o $(@D)/$(MXS_BOOTLETS_BOOTSTREAM)
-+	$(foreach ext, $(MXS_BOOTLETS_BOOTSTREAM_EXTS),
-+		$(call MXS_BOOTLETS_SED_ZIMAGE,$(patsubst %.sb,%,$(ext)))
-+		$(call MXS_BOOTLETS_ELFTOSB_CMD,$(ext))
-+	)
- endef
- 
- define MXS_BOOTLETS_INSTALL_TARGET_CMDS
--	cp $(@D)/$(MXS_BOOTLETS_BOOTSTREAM) $(BINARIES_DIR)/
-+	$(foreach ext, $(MXS_BOOTLETS_BOOTSTREAM_EXTS),
-+		cp $(@D)/$(MXS_BOOTLETS_BOOTSTREAM_BASENAME)$(ext) $(BINARIES_DIR)/
-+	)
- endef
- 
- $(eval $(generic-package))
+ define MICROPYTHON_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/mpy-cross
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/ports/unix \
 -- 
 2.53.0
 
