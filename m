@@ -1,149 +1,141 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46C4E60A261B
-	for <buildroot@archiver.kernel.org>; Sat, 21 Nov 2026 22:38:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E0C0606A320
+	for <buildroot@archiver.kernel.org>; Sat, 21 Nov 2026 22:50:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=LYuy7rAJ;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=pnJ5hs7m
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=U52eg/iO;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=E9jCE85I
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 138E2406CF;
-	Sat, 21 Nov 2026 22:38:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DC9F860622;
+	Sat, 21 Nov 2026 22:50:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sBw7pMQqgINJ; Sat, 21 Nov 2026 22:38:34 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 07EAA40654
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795300714;
-	b=PM0rcaOLldITt1s72Jyibo3ZEDSDdHgFqzLL67YBxPjT0uTowzo11wUHWBASDQumUCT8
-	 8pq7GJ1vi4GpW55kca6KMbKw799tav1MYfpE2EmRNCUAOMQieNcUZIdbrf3meVDOMdyTh
-	 /dUVf0lca4iSz7BEVxzpEwMnDF0MI4usjeQpE1eBuLoD/RAw4GrIlAWZZCyAwrrf/Q5Q2
-	 IxkwDWaqFwKZbol346vIzLbZ6BsjdgqbtKmdoaGTHBpInmZlKosDyn/QZik8EL7UGmk0a
-	 yG743xutupg6/ak1+3YxKUF+Z5gGxCE6KXMbzD6M7R4qB6510V0yZY3IyrOTJbtvW9Q==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tQ5TlsBGBDNM; Sat, 21 Nov 2026 22:50:53 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org E8D6360628
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795301453;
+	b=X2ttxK87sC2NMXqd5rgsIgfU9/bJx3Yyaky3dw4/ZEcpYZb1KiWebhgM5iuaCBzPPFhq
+	 2I/fDFJnTQ8Yq0jw+3EQAHZkFEW7xkTbtINq5zK389bqsJHqOQbxZQHPBzfgXQguKAEth
+	 7DFibpWb78xTchTQ2nYDPLGEBaYpoDQbXF+pT7Rsj1uk+32L621CV6fxQ+c33PUTdHU6W
+	 zUfgB+ylnE76csGkSgJbTtxDCv1gwZS3zqHWSthLT0IkIJ9nEJxYcQLcdIKMlc4rJ41go
+	 VpfGt5ksCwZd9Rm/5N8+gwRKGwNBOAOxHLZL60JNeIFM06mYQSdKsHpfc28ZnPfqr/A==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795300714;
+	c=relaxed/relaxed; t=1795301453;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
 	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:In-Reply-To:
-	 References:MIME-Version:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
-	 Sender;
-	bh=ijIsKeLOvm9Rr8fiWvY0xgwkaC+r3g0VyHpR5wtti9A=;
-	b=h2ud1tdHOboZXLbED1wrXc1KzEQtWJwB3hLffJPq8dpu3S57jqRIZG1NYmnLUVtHsMhg
-	 r1ACCSRLJzaTBHUcg4/OQd9eimd4nMePLhKkq/Wwt45hwglZjJm26neb1J9jJw3LjsaoH
-	 eOc2bQpLC5b+1c+eUhAZ+lTmYswwGjIuNKsGfhaEWihCfM8x0bzXmFqZSdKlY0qEOO9NZ
-	 L07Mj5WQTnI5oLfqXEZEqz26L0RUwYIyOT6lpC4JNW9BBr8G2pcF+pCYlCQuSs2LOB1TC
-	 xJSrhYjljlyu+gfXkBBMmwHTpzXmdvKq861dAU3GKWoAVm3nnt+6yZYYKSbpZx6Poqg==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+	 X-Received:Received:From:To:Date:Message-ID:X-Mailer:MIME-Version:
+	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=xKPzWewsxvQObfcWoliPHlx2GksXZ/fO4kSSE9F55U4=;
+	b=cbci5NcGehdqoFuthwGKFYuzdYNa3uX1n9q7SypMrpUPVqJwTpOWPrVc7HfZ3Pi+UPPJ
+	 AivWaTMIBq/18v8dq5KnO9m1uEQY/79PhLhO9N/G4DlxpMprxLALNQYrSSMx3ItSh8yy9
+	 QGviUNDX76IKpy1SITuN2mPYvxtKDtVO1+jIhLCoSEf4EtY8nZhIApygWDF36UR0KSjRv
+	 VRi5RoNyVobKy5IfGVpHBDGi/5y3LvS3BgiR+YHYAo2WFaN9CRfs8rCEuhYe1lty9pukn
+	 R4JLBMDYNFH5qgLY+jp6fJTNM/GGIWWvKQ8U9tubCzSc0+iJC/vveItQBWTlBtKJFkw==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795300714;
-	bh=ijIsKeLOvm9Rr8fiWvY0xgwkaC+r3g0VyHpR5wtti9A=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=LYuy7rAJXfrK+pMuypYwdPCic9ntVhxw69L70QbqjT59GZb/DekVvdp/gN2zfzRwP
-	 +HqkAXxgoMplSQp/jr3oyltSq87zg+pugDM6hBZmjZzVE4MLikJZngndwqFTRF2i+J
-	 VLynoGlQVouiJoKn8TEi+HNJRNZk7JvmMgrZVv/NdpgFqlveIomOoqF7FfhE5zXS80
-	 IqSCqCq+zByegtVlhyZ3YIIi6vi+xbX2iRfta/TnlcN3Y27SPKpHqpaphtirLPsA7r
-	 nGEO/x9cZTfZIsFSjiSZ0dWuu5F5WQwZPfxaAsr9/vTloMHhFavFXUH3mZzA7Iv1RM
-	 jkv/QMbZmb2FA==
+	s=default; t=1795301453;
+	bh=xKPzWewsxvQObfcWoliPHlx2GksXZ/fO4kSSE9F55U4=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=U52eg/iOUtrO+HaM/5YcQuf8a2xE5FWIiIFLAoxzHytEDtQQVH2TaGeBlKcfAE8oZ
+	 WdrphPNeZNL647kc41m1A2e+n44Sq/0IOOENGUbfbwEm5wZjr//MmKZ+nzJpMRBJIg
+	 5E4nqJHxTJWLP3O+/q03UTN2PtFG9LljkZbiAk2fz1OOHKl2RcWa2MuzXOG7ZYNOWP
+	 r+c7uG9odKXmKFfKvtIHptholx362iqUSAKWjmn5SeTHwTfR18v+0FwN0MQsICkedD
+	 qKzwMyIVR2YuIrCBpVTxFOwLH1fruZYWdTBoaBsk/zkkWEJHeXxNGmCPcRyjjODA2O
+	 hgFPC1efWZXbQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 07EAA40654;
-	Sat, 21 Nov 2026 22:38:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 81DB979D
- for <buildroot@buildroot.org>; Sat, 21 Nov 2026 22:38:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E8D6360628;
+	Sat, 21 Nov 2026 22:50:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4BE7E310
+ for <buildroot@buildroot.org>; Sat, 21 Nov 2026 22:50:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6BF014007B
- for <buildroot@buildroot.org>; Sat, 21 Nov 2026 22:38:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3DFC080E16
+ for <buildroot@buildroot.org>; Sat, 21 Nov 2026 22:50:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yZwoet58rAOF for <buildroot@buildroot.org>;
- Sat, 21 Nov 2026 22:38:31 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 5F4504010C
-Authentication-Results: smtp2.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::433"
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aEf4Y8bmBoH7 for <buildroot@buildroot.org>;
+ Sat, 21 Nov 2026 22:50:50 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 1CBE380DF5
+Authentication-Results: smtp1.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::435"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
+ client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
  envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
+Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20260707 header.b=pnJ5hs7m
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5F4504010C
- for <buildroot@buildroot.org>; Sat, 21 Nov 2026 22:38:30 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id
- ffacd0b85a97d-498f5fa4f70so1646203f8f.0
- for <buildroot@buildroot.org>; Sat, 21 Nov 2026 14:38:30 -0800 (PST)
+Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20260707 header.b=E9jCE85I
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1CBE380DF5
+ for <buildroot@buildroot.org>; Sat, 21 Nov 2026 22:50:49 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-4ac109a8a12so1112716f8f.3
+ for <buildroot@buildroot.org>; Sat, 21 Nov 2026 14:50:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20260707; t=1795300709; x=1795905509; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=Fp/lWfmydUBm0mz6vqVgYJ2+nUbQGDskGCfbuGiSZ8Q=;
- b=pnJ5hs7mcrsf3Ft+2lwfmaL13WAQevBRO4nCD8G/duVu038eJVKrrjtqfge3dXZPxq
- XOZES26svFzp+2GF6Pkydml9hgcBd39JoNqqrND1KwOwPNWOMkvKOLN71caD/DrQ0+eW
- Q8c+8OOL1YebqeaymMoTMMCQPtc/5zp1VBTWlQczbqA3O2tybvL/I0ftSWs+ufxoGeG+
- VxdcHGrRGN++ULubbp9r8ddw9JooOh2NDnx1L0DQRwyyGajn9HDO/HdjlMd+p0Mzb2B+
- sGSAqDmtQ+Lq62XG7iHSftEahwmHhUuM7gTyYXvjqSfg6Af8U0lpPSTMVXw/ZvapBF+b
- cXwQ==
+ d=gmail.com; s=20260707; t=1795301448; x=1795906248; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=jdk5z2+Tv5RkVSNBS43gM2iOVrvozfs88kvOZe99vFI=;
+ b=E9jCE85IOquZTMvVuRbVtaML7O/E3dnwlhptPbK3QNMIDpnzQlwdhfI5FI965g+x3R
+ XdhZRFa75LOibsZV3rGdxRc+JZX34ObKRm33PdCgaMWWUalzT+uf8Li5TSFNnY+J58gF
+ 4TJ3DFMVjnE1Jjrnze6E8kNA6pVkEypFPG4hL5OPngbEmplFQ5dj7ZgfnAdDpcB3zwRN
+ j+jLm56aF7mplGP9OqK3aL22V1Zy3r5vmwMMzR5iBcRnm3/lm3uFMWpSRuMYF7AzPhg2
+ VR5/wZOm/psItznb22p4y5klJc4b7SS5mSqLpcbqBZQVzfSqng0d/ybaH6yDigd/MCXj
+ RWDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1795300709; x=1795905509;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=Fp/lWfmydUBm0mz6vqVgYJ2+nUbQGDskGCfbuGiSZ8Q=;
- b=khlUT7w9fWKPZwsn2lOmNrNik6E4ogGDNZUD6p0NeHOLf/j8uRBtV2Duanj5ZaRaaw
- K/4LyWy79ClRU3ahlyRsFkfiN8lqMRHY1Z9YE6TT6vuJfZxFRrbOhEkrKFaHRZPbvBMk
- mheMz9fUJ/sBIJ4hOck5R4uKU6bBXG+XRTxQQnT6ijUAZNI63pm34a2DTzgF4eJjAiwr
- wMpZ6bVbnXQy9IX6f+3Vnc9HKO1zYKcGuk8RdkuzNAQ13kfGdDIv02NEMEn1eMjgaJzm
- RToEYmvTQvQ5c/GWohpkz5egOZcfbIvbgRr7dXouh1tdt/TrWQgjpBYdAhbyrIUU0clh
- q3Pg==
-X-Gm-Message-State: APuU4Z+9fnSHtM/JHyJYTmcD63Z62FK8HZTFTxb0YgEGbXA0lAEk4jRV
- rsjzkFoPeqSIVO8lik5EeCM4htTtuhFxIdoWF7YgT7pXXxLICZjzSYUkoUmnw6RE
-X-Gm-Gg: AZFdTZdAFMPyNM0xXFBgrsGsvRkIwKvs027ldTAhdL/OzFBjL4mCmvfKY3X1p6fyyLf
- yWELyC8btJPRTvVPxUJGYyjYOOW6CwvzrGUidWi1aERzAt5illhqDNVaNEcHZ0ODZwMdZKNWTfj
- P0WVajH8tjH+cwv5ld+NZTXeiX8/w3thRysRm1v40K8XpgB3YJwfNTNAz1BA7/+0oQJx45Irfb5
- WKTorW5hUY+nX8sTr8IN56IxTOgPVkFknAcP5/7+hn+nhy0WdtPxib7HVwRDRluOuqlvYfLpHxW
- 9Eb7gig7O0xkjDF/5GDiRdQnqOo1jo/CivaTK38zO4YyfRZ2PBCJQnB7OCvqOwXf+KuBQfIXLt7
- diQjzuNbRTBgo1z++swqIbk5ETXt/+kug8HJzWAetS5qNCUiSMoCSSwZpr5O3i9jvhcb695l7eU
- 8WjnihZM+aGAl355zpy9ij3pCWOkEEdnztv3vZnZXecV+V2N64VqSMRKO35tGbE49+mKwnfsQTk
- 1SJh+rspmpVHLe3oo7EExHGKbVWBBcu6mYkOmYT+oGo0cWx8cvgrxXiRHensoTjYmf76T+gEi6r
- V2U3iTYGrRNK5bTKuij8/+fwoXKPu9LvOtf4xagMr05F9BAugrw=
-X-Received: by 2002:a5d:64c8:0:b0:4a6:c5f4:cdf7 with SMTP id
- ffacd0b85a97d-4abaa976b7fmr13316696f8f.5.1795300709036; 
- Sat, 21 Nov 2026 14:38:29 -0800 (PST)
+ d=1e100.net; s=20260707; t=1795301448; x=1795906248;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:to
+ :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to:content-type;
+ bh=jdk5z2+Tv5RkVSNBS43gM2iOVrvozfs88kvOZe99vFI=;
+ b=Qu9/G2v7kwwIUGSf/CU81KZQKYyb+JN+o+/X72Nk8ukOap1icRzxxG2YZ9nLvk+AgT
+ a+6K1D64XVjPfWRW+WxiPMl1NHDxgkkZdf7h8XWglMIzC8r5prqc5CGkdAfKRvlMs/Bx
+ 3Qzb+xwve2BK/mE+6N/tO+b4G8l2ekkEg0iKev4CNgSlKVWwRpwY8lM3VZDZkOETbXMD
+ 4XX6hKbkaVIdtAmlR/VyJnYdjf9I+2RBg5kRhTKMX2SoU/CrDlKMEYgrJ8kqxPyep4ho
+ MSZ6PEM9eyG0tzeYJIKuNm8jHYb1pQ2RT0wbuxtiSbHlfumsCIdQTFv2swpAyHw8DUQ8
+ QdUA==
+X-Gm-Message-State: APuU4Z/Ni0r+qcc/rRKaru3RfWqov9m6qROKixrWT0anRG5w8GQQWHoG
+ 8OfLyRTfTB6L3NZQ0i+5GCXzMrRQHxPavK5tGDQ3yMQUDuSuMWKZLv01Ls544ZKJ
+X-Gm-Gg: AZFdTZeoap0vZEDklopNBkuYV2SPXdiT6ZtBzsjMfiwRuuRltzClZ0n9Fg3+TNHCnGb
+ GVvlVjScozA2h03P7SFNT4b0JytiXmhw8cDWD7+5tOmvqg/TMy4Om78LZopaCzPRncAXzPqrAwD
+ LTdevJqlqGEwC73zTG2uDWkHmrApg7RNtDVd+tHE4Mpfrci1ZPksc8GbUFI4dMjZyPaIoLIRkcr
+ Lzy/ufLLKrDD0fnfxHGL53jbAp/vMZrYwAemcpxEaV8ob1UsefEjIx0Z/pcLASUpNkTTYDhnlqo
+ Jr9jdJt9EeVvb1bMnoaaUE45jCMIKMi1c5vrOd54XFCSHKSYrve29pNd4wsQklnPMOnvM6bxi21
+ 23w2SpEdH90RFe1qLXiWCt7AmZ7OpRJY92hRNg3ACBL2k/vX2G+yHQCOUbdvLU12Rmuq9QLJzDR
+ 2iNgzyIJC/G3BirkEB8MvIauJKB3DyV2MMee+8l4+zKbB7rWXW2Q4w26r9jUbdnlt0+Xivyl6I9
+ WQ9T1V7Qv6U0VIcNQB2Mmu5h6t/3tVtfPT8TOy0YkfNzCsGApYvr+dixt1jw29vDjTtGr4asi5n
+ cux8HYGsupljRTY5tzS84/2KQkQ1UqRfaGZWVM939Y5iHnKujy4=
+X-Received: by 2002:a05:600c:3b8a:b0:4bb:76d9:f81a with SMTP id
+ 5b1f17b1804b1-4bb88824fc8mr169418195e9.34.1795301447932; 
+ Sat, 21 Nov 2026 14:50:47 -0800 (PST)
 Received: from angelo-Precision-7550 ([2.58.136.216])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4ab69bf61ddsm12319634f8f.12.2026.11.21.14.38.27
+ ffacd0b85a97d-4ab5ffcad11sm13225220f8f.0.2026.11.21.14.50.47
+ for <buildroot@buildroot.org>
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 21 Nov 2026 14:38:27 -0800 (PST)
+ Sat, 21 Nov 2026 14:50:47 -0800 (PST)
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 To: buildroot@buildroot.org
-Cc: Chris Packham <judge.packham@gmail.com>, Julien Olivain <ju.o@free.fr>,
- Abilio Marques <abiliojr@gmail.com>,
- "Yann E . MORIN" <yann.morin@orange.com>
-Date: Sat, 21 Nov 2026 23:38:24 +0100
-Message-ID: <20261121223824.420727-2-angelo.compagnucci@gmail.com>
+Date: Sat, 21 Nov 2026 23:50:46 +0100
+Message-ID: <20261121225046.447546-1-angelo.compagnucci@gmail.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261121223824.420727-1-angelo.compagnucci@gmail.com>
-References: <20240212021255.246556-1-abiliojr@gmail.com>
- <20261121223824.420727-1-angelo.compagnucci@gmail.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 2/2] support/testing: add micropython
- manifest test
+Subject: [Buildroot] [PATCH] package/imagemagick: security bump to version
+ 7.1.2-36
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -156,96 +148,89 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-12.8 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
-	FORGED_GMAIL_RCVD,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=4.0.1
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Test BR2_PACKAGE_MICROPYTHON_MANIFEST with a manifest that freezes:
+Fixes the following security issues:
 
-- a module next to the manifest;
-- a micropython-lib module (base64);
-- the default modules of the unix port, kept with include().
+- GHSA-qw9c-mq27-w844: Heap Buffer Over-Write when exporting pixel data
+- GHSA-5545-xpgp-wj32: Use After Free in ASHLAR encoder due to multi
+  threading.
+- GHSA-wp55-fj9p-xx9q: Heap Buffer Over-Read in WandView with specific
+  thread settings
+- GHSA-cvrx-j29f-c5q9: Use After Free in splay tree when using it
+  concurrently
+- GHSA-f3r8-89f9-mx43: Use After Free in DOT decoder in multithreaded
+  environment
+- GHSA-4cmr-g39q-mh38: Heap Buffer Over-Read in specific stream
+  operation
+- GHSA-4jg2-g974-7w79: Heap Buffer Over-Read when decoding a PICT image
+  and encoding it with the DPX encoder
+- GHSA-6rm4-qg7h-vvc4: Heap Buffer Over-Read and Null Pointer
+  Dereference in draw operation
+- GHSA-8xm2-q8hq-m68q: Heap Buffer Over-Write when providing a specific
+  argument to the ShearRotateImage method
+- GHSA-5c63-85hh-8vpj: Policy Bypass when doing a sub image search
+- GHSA-7pvc-jpr7-9wxq: Heap Buffer Over-Write in EXR decoder
+- GHSA-58v3-cmwm-hj3w: Policy Bypass with -splice operation
+- GHSA-h5qr-j3rh-p38h: Infinite Loop when providing invalid argument to
+  the -rotational-blur option
+- GHSA-rqg8-7wq4-54hj: Heap Buffer Over-Write in ICON decoder
+- GHSA-6r6f-x5h8-fw8h: New security policy to prevent formatting
+  placeholders has been added
+- GHSA-j4x4-q2rm-qxjf: Heap Buffer Over-Write in the C++ readImages and
+  montage api
+- GHSA-rm4h-gcc3-55wx: Information Disclosure in PGX and FITS decoder
+- GHSA-cf7p-m88c-h9jh: Heap Buffer Over-Write when encoding 12 bit
+  images
+- GHSA-p5vf-jpj8-mmhm: Information Disclosure in MIFF decoder
+- GHSA-8c8r-vjh3-j578: Heap Buffer Over-Write in MAC decoder
+- GHSA-949m-6h6h-4gj2: Information Disclosure in DJVU decoder
+- GHSA-g3c3-wcx5-7qrw: Heap Buffer Over-Read in HEIC decoder
+- GHSA-mqmh-65w8-fgjp: Heap Buffer Over-Write in Postscript decoders
+- GHSA-c8x7-2x5c-m4gv: Denial of service in MSVG decoder
+- GHSA-vf87-6hhw-9hcj: Denial of service in FITS decoder
+- GHSA-v56x-r6p7-8v88: Use After Free in MPC decoder
+- GHSA-w85x-jcrh-64rr: Use After Free in image registry when using it
+  concurrently
+- GHSA-8gpx-685q-62m9: Uninitialized Pointer Dereference in MSL decoder
 
-micropython-lib is not installed in the image, so the modules can only
-be imported from the frozen bytecode.
+Release notes:
+https://imagemagick.org/changelog/
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
-Changes v2 -> v3:
-  - new patch
+ package/imagemagick/imagemagick.hash | 2 +-
+ package/imagemagick/imagemagick.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- .../testing/tests/package/test_micropython.py | 33 +++++++++++++++++++
- .../test_micropython/manifest/frozen_hello.py |  1 +
- .../test_micropython/manifest/manifest.py     |  6 ++++
- 3 files changed, 40 insertions(+)
- create mode 100644 support/testing/tests/package/test_micropython/manifest/frozen_hello.py
- create mode 100644 support/testing/tests/package/test_micropython/manifest/manifest.py
-
-diff --git a/support/testing/tests/package/test_micropython.py b/support/testing/tests/package/test_micropython.py
-index cc0e5854c8..fc061345f3 100644
---- a/support/testing/tests/package/test_micropython.py
-+++ b/support/testing/tests/package/test_micropython.py
-@@ -77,3 +77,36 @@ class TestMicroPython(infra.basetest.BRTest):
-         out, ret = self.emulator.run(f"/root/zcat.py {gz_filename}")
-         self.assertEqual(ret, 0)
-         self.assertEqual(out[0], msg)
-+
-+
-+class TestMicroPythonManifest(infra.basetest.BRTest):
-+    # micropython-lib is not installed: the modules can only be frozen
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        f"""
-+        BR2_PACKAGE_MICROPYTHON=y
-+        BR2_PACKAGE_MICROPYTHON_MANIFEST="{infra.filepath("tests/package/test_micropython/manifest/manifest.py")}"
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # A module next to the manifest
-+        out, ret = self.emulator.run(
-+            'micropython -c "import frozen_hello; print(frozen_hello.MSG)"')
-+        self.assertEqual(ret, 0)
-+        self.assertEqual(out[0], "Hello from a frozen module")
-+
-+        # A micropython-lib module
-+        out, ret = self.emulator.run(
-+            'micropython -c "import base64; print(base64.b64encode(b\'br\'))"')
-+        self.assertEqual(ret, 0)
-+        self.assertEqual(out[0], "b'YnI='")
-+
-+        # A module of the default manifest, kept by include()
-+        self.assertRunOk('micropython -c "import asyncio"')
-diff --git a/support/testing/tests/package/test_micropython/manifest/frozen_hello.py b/support/testing/tests/package/test_micropython/manifest/frozen_hello.py
-new file mode 100644
-index 0000000000..3f6516857a
---- /dev/null
-+++ b/support/testing/tests/package/test_micropython/manifest/frozen_hello.py
-@@ -0,0 +1 @@
-+MSG = "Hello from a frozen module"
-diff --git a/support/testing/tests/package/test_micropython/manifest/manifest.py b/support/testing/tests/package/test_micropython/manifest/manifest.py
-new file mode 100644
-index 0000000000..0bd5911fe5
---- /dev/null
-+++ b/support/testing/tests/package/test_micropython/manifest/manifest.py
-@@ -0,0 +1,6 @@
-+# Keep the frozen modules of the default unix manifest
-+include("$(PORT_DIR)/variants/standard/manifest.py")
-+# A module next to this manifest
-+module("frozen_hello.py")
-+# A micropython-lib module
-+require("base64")
+diff --git a/package/imagemagick/imagemagick.hash b/package/imagemagick/imagemagick.hash
+index 8064895322..36fd00dd7d 100644
+--- a/package/imagemagick/imagemagick.hash
++++ b/package/imagemagick/imagemagick.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  40b6fefa88fe16ca5a4b3d3db5133eaebfb0157f21f98530bde8aec5dd5b0776  imagemagick-7.1.2-35.tar.gz
++sha256  5ba807e38a6bcb7c3c96a166485e270c5017aaa6b166f0440dc4b2badf6e6167  imagemagick-7.1.2-36.tar.gz
+ sha256  131447ad0099069beaa32acf1700716eea294a5bdf936d8211d7026b1849e5d4  LICENSE
+diff --git a/package/imagemagick/imagemagick.mk b/package/imagemagick/imagemagick.mk
+index a9d908d507..96ce3a9ad0 100644
+--- a/package/imagemagick/imagemagick.mk
++++ b/package/imagemagick/imagemagick.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IMAGEMAGICK_VERSION = 7.1.2-35
++IMAGEMAGICK_VERSION = 7.1.2-36
+ IMAGEMAGICK_SITE = $(call github,ImageMagick,ImageMagick,$(IMAGEMAGICK_VERSION))
+ IMAGEMAGICK_LICENSE = Apache-2.0
+ IMAGEMAGICK_LICENSE_FILES = LICENSE
 -- 
 2.53.0
 
