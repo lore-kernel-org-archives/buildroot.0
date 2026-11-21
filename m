@@ -2,150 +2,129 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AD48606A320
-	for <buildroot@archiver.kernel.org>; Sat, 21 Nov 2026 18:09:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2D6B606A320
+	for <buildroot@archiver.kernel.org>; Sat, 21 Nov 2026 20:07:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=bjB9gOPS;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Gsrve9px
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=kWfdsLYc
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2FC1C80E0A;
-	Sat, 21 Nov 2026 18:09:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A21A780F39;
+	Sat, 21 Nov 2026 20:07:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3lEzb_NSJKoN; Sat, 21 Nov 2026 18:09:03 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 6583D80E0B
+ id 5S3CZLNbVLdy; Sat, 21 Nov 2026 20:07:08 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 916AA80F35
 Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795284543;
-	b=sQ9J+a8v2WZ/FP1kYtFzL2+rciVdysZ5/bd/bJTxQzAOQxM3mNWXqvKO6BoZ58ltrGks
-	 6Y752tTiUQw/nGflsHHxHrn1gqajgvcX/nak3sc7ILV6SIyHlSWFTwI4WdaIcoW60A8ID
-	 Hb657H8YB805o6yl1SFISJTHTXx2NOnDW6ug+PnUqlSCyndbzFMqOAJ/Yf49r0vnTx31i
-	 2d8GKLIRJQDnT+KbSpZN+mTWgpIyofLIcpU6eX66qRohdru4GjcpGVbSL6bqZNOgDlvov
-	 SdnDMxEYfjyKFrK6EJd31gTivm0s2BaoM4xO1Uk/x3Ut8y5IA7Kg6ZLsLmO/tpaDJQg==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795291628;
+	b=cS1opNSUa0jCUEBvwr01geXio0MbipFnEABqEG+78xMxPmpo+g7SJNOpc8ViO+jKJWng
+	 1c/U2wh2L7gcrefTy2kh+pZwXAU5zhK81t+nmN5Qj/lBO1/h97fRBR8yHgh7LcuhJl6eV
+	 jhvs6nrQeGtrsiMT3oBBmnre3gJ7xybBXEq00NNw0IW2W9MO8Qkt8CJYDMi6BHvSrw02S
+	 4TE9TbJDIIJD71HXg8NbPvjwsPrfIZGs5IBadd/bVgfI5Au+J0IkD5YZX6EksFXuNTu4G
+	 X/WafXvDHRj6iYDkmS4oig8DtkzhE8wQdTXC0vqBy7Gqj2j6tKOnyIraLmpilZ+JWCQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795284543;
+	c=relaxed/relaxed; t=1795291628;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:In-Reply-To:
-	 References:MIME-Version:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
-	 Sender;
-	bh=xHohXoS0gVJ2m/8L0N5VtRWXOW1KWHCO3gkV7UUcs2A=;
-	b=byefQ6BMi9L/oBqTys23R3cjVO0zD4Ba2V0FBQGTrvWGg7Xk221w+NDx7sx0c24D2K0y
-	 QiG4O5fKcdXg6ylxJWe3NwjNudMsPmz7pRcFLTdoL82BRwdp6w0N8zd0/LqA16p7pHIKe
-	 yFSMgPYbIpCxNscCw6LF7XC51EnHEhisqyrczwMNU8JClLwjJfr82Woiun75u0i1SdF8P
-	 7k0f1ghDhVGVdsevmauazoJMnxi36A356Ppu6yjWGDUdY7n33Qccs+UWukOjYkQMPeRRw
-	 FtqjvH9FuBR6pOz+FgUOQ6JNiX5D8D7rR4UB7Q9+DVNs9LqR2bJOU6p9a6K/9SkxoRg==
+	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 Received:From:To:Cc:Date:Message-ID:X-Mailer:In-Reply-To:References:
+	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=oIKIDoIlcMG34hYZVi/6LPvLOIYthsYZ/q5zdTHOXTM=;
+	b=WRXWYPQs/INE+3dVnisx12N5Dy8Of5Lauw7xU9bHt4IlvH9up84Rh2OJNVoYcMT6QnKh
+	 CemGbWBBbbp4dkzqxzmiJA+NBPFPD3NU80gIbwokAOdK8yb3UkbaF1qb/BQxAIc6QZUjL
+	 3FiY4IZHklhIFXO6g+V7FpgoXJCpJUbxBInYmTc28ps5sbvvZbLvNjyJfXC6OZ0OZGzG3
+	 TpVXlVxBX5O8+Yf+81BJkpFrxpvf2o85xKwHBkwSYSt+SxtSsJEmIFlbDcNLaqT55ZYL6
+	 V64lYj6YCS0/fK7PTIlMPxNNwLbDkkkpsnSs63bA/1hmkQEJsQPtIQck1Bt41BQgiaQ==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
-	dmarc=pass header.from=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Gsrve9px;
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795284543;
-	bh=xHohXoS0gVJ2m/8L0N5VtRWXOW1KWHCO3gkV7UUcs2A=;
+	s=default; t=1795291628;
+	bh=oIKIDoIlcMG34hYZVi/6LPvLOIYthsYZ/q5zdTHOXTM=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=bjB9gOPSjXLs1eVSEICCncvfPA3h3EJdkur7skvzsjjwFORU8uXJdcLSMTfWsfUkU
-	 4o2UpOstUfVnJfkpkLBWiXP1CWgqI9S0r7xX88FchIm4wBFMgmQ/OEq+vKDii/iMry
-	 PBxwM5YxBW7MpJ0xHJpAsbW+MkaNvR9yi2e4ufI5D3SFbLc8U5m3JHqzERFxo9itzY
-	 PXujgoZV2SNRYK1BAnXUNd0+b58xIJg1+ACFPCEjM1CnhDNlIry9ydu/SDXhkGoBIb
-	 G0kObF00PcMhPZKbFo01A0fuUkM5M22YZ818XwfAeQSFQQxtkGp71f6VEWtpnTsUt+
-	 NKrz/gYItMLcg==
+	b=kWfdsLYcnf6bgbotjiaDakN0rAh2Wou+LrSi7Ye6mirf+tjCA7rBhGp782ahBhEiC
+	 egjL8co6M9i4eVnPf7u7tdb1mWqVzYd+arwE6niDGssPWvmrVuTO2uBrABQOanxHU1
+	 qJ2Yt4LmTTgJfcnHn6hNXeJVUiil/ojUVYmm1zlYWE1BOhQBMe/Mbuwp6sYCaEU9Bw
+	 qgjGFvVdyVQaLetiGq4TZTkhNK32+8NjuNTA4ucK+h6UefCTw1Pp6x5Q/xuPrOdb5P
+	 TN52tGtJ7m4/LqUXpOLotOLyMNd8h9luSDvzHOTlwEs09vJJvKV/gtSFyfj04LmtGf
+	 rcp61OU/bCn4A==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6583D80E0B;
-	Sat, 21 Nov 2026 18:09:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 4CCFE759
- for <buildroot@buildroot.org>; Sat, 21 Nov 2026 18:09:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 916AA80F35;
+	Sat, 21 Nov 2026 20:07:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7A431465
+ for <buildroot@buildroot.org>; Sat, 21 Nov 2026 20:07:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 32B4E80E0B
- for <buildroot@buildroot.org>; Sat, 21 Nov 2026 18:09:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6C83E6061F
+ for <buildroot@buildroot.org>; Sat, 21 Nov 2026 20:07:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qRqJ5odr8Qyu for <buildroot@buildroot.org>;
- Sat, 21 Nov 2026 18:09:01 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 1DCB680E0A
-Authentication-Results: smtp1.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::434"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
- envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20260707 header.b=Gsrve9px
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
- [IPv6:2a00:1450:4864:20::434])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1DCB680E0A
- for <buildroot@buildroot.org>; Sat, 21 Nov 2026 18:09:00 +0000 (UTC)
-Received: by mail-wr1-x434.google.com with SMTP id
- ffacd0b85a97d-492f0a1b685so1359296f8f.0
- for <buildroot@buildroot.org>; Sat, 21 Nov 2026 10:09:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20260707; t=1795284538; x=1795889338; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=YtHcDyhla22U4Ki79G0PeUHLdBoRxMPE1vYbS7LAx3I=;
- b=Gsrve9pxvtmx9ZOPZ3AkJ2UPUN+7d22VZJYVv7qQtPD48t7bT7829AuGCxoxjCGx1L
- YCNCt/zaBVf8J2EOpDrWrwjqRFb4iEUOJSPxv2f0658ahausXjYc74Gxfzjjqufijcsw
- 5hP2oZPWidSbkRGiFuu2pITytPXCvW5S6vqhYBN/klglsMtxCvN1zTJv6XoSbTZV9Md7
- r+jLsOlsjGGjQEkJkVkEf+04z7h1O+u0FQYz22/7tyMv2IX47LsrKvuxxoK0cw4slpIL
- X+n3IzHxRuhEdpufabGDrgvISuwa7njVQ+hkrWMcYeqEI10u8KZ9NMKyJk8yshSd7GLq
- bB1A==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CrjKQa1uqPOh for <buildroot@buildroot.org>;
+ Sat, 21 Nov 2026 20:07:06 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 03C4B60619
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=209.85.128.49
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.49;
+ helo=mail-wm1-f49.google.com; envelope-from=thomas.devoogdt@gmail.com;
+ receiver=<UNKNOWN> 
+Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none) header.from=devoogdt.com
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com
+ [209.85.128.49])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 03C4B60619
+ for <buildroot@buildroot.org>; Sat, 21 Nov 2026 20:07:05 +0000 (UTC)
+Received: by mail-wm1-f49.google.com with SMTP id
+ 5b1f17b1804b1-4ba013938d7so18071505e9.2
+ for <buildroot@buildroot.org>; Sat, 21 Nov 2026 12:07:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1795284538; x=1795889338;
+ d=1e100.net; s=20260707; t=1795291624; x=1795896424;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=YtHcDyhla22U4Ki79G0PeUHLdBoRxMPE1vYbS7LAx3I=;
- b=efR98M9jsI+G2RiUI4k/WS/umDmhYqbEyQKF3WKn7ElCbQnDOEYOsUYrk3TWM0DyJq
- tc2/CgeM0mD1Y6K66ZmfLr/tAvx4i2n8oSk1IjjW9L6upzk++B55TUvEJPQy9gVVKGzJ
- QdYwHwoJHwhESXd5ljDIPxLyyVISbLL34deC4HJU2memhWmH5+15I80BTus7SKGJs/DT
- Ekkzgk8V2nElK9Bk4r9RyXZfKykC+Wm1pttpt5lq2hNQDoKEZdi0OeRjJQRqadjroscD
- rF6KPgTaTP5TXczc001DRAOb647NYAkQi7QVmPBzBTa+AoYjvb64Q1FfFG4fhrvJam8P
- 6xDw==
-X-Gm-Message-State: APuU4Z80968YcAVxBs5jxVh+cDxoGZdWY496YFY7y32VC/s6HoZi1Hut
- AB5aq4tfyGqbdeGugZKmGGPPAC8TbsF263AkykbTZRmQs5vBxwm4+YS1UZIUfT2g
-X-Gm-Gg: AZFdTZcht1ipnr3pkWY+C2/ujdnR3sTMcXWdAWvuTIB6MveMwWgoUS2f6/dTTx4crAK
- 2j/yx9vZQNwt7ZtVz8oRIN+x9EEPl2H7B8j8Om798nUOvDHXUmE/OtAW9CobV5VXydV2prQELiR
- my1/wcsNcrDsG/bg6n/w3ZPXRTTOftkfA2r/WP5or9Hak2ft/R5Ez7s5XAJAwLNjsGy2cvtdCdG
- 1SjNR4qZrspfBTVSFfIdDwKalAXGD4pIBaBxhkDyVpq+qYagfdQue3wa/LCQJXvHdQm2F6+sH2e
- gwE0PSTGmUnfpZ9Y7HQkHeXq3/9SaqbnEAsqK/y3T1UJ3GFeMxq0PwKd3/f1AnZG9ZnD5O7fH7M
- FT70cUGgzDB9JO1yKkFmHXCAQXOnN0NYq9hB3u7acc6gxg8XGZ5LmDXTTnZ6WQ2bSijEg/76ERO
- 7aLupTKVgQmezOqkBXtG+2KUxvX3qRLxwZdS3r2zNGvbTT9ebbfW9qNK+aBnk7S4qsDnj9fh437
- QDF+iFjnpaZs7jZVSBH8Tec8EkgXBZt5RZnKHmy1ICirMkVfgQo3XyRhj1gqRPOMmnccmUuwaot
- IvfzP3vkPrQlUSvODm8kDxucNHEIGy7BV1/yy0zPdytK5ygwdlg=
-X-Received: by 2002:a05:6000:4304:b0:4a3:1e75:16c9 with SMTP id
- ffacd0b85a97d-4abb4c7bb49mr13488760f8f.40.1795284538319; 
- Sat, 21 Nov 2026 10:08:58 -0800 (PST)
-Received: from angelo-Precision-7550 ([2.58.136.216])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4ab6c61f558sm12694857f8f.58.2026.11.21.10.08.56
+ bh=KW01SQYyO8bYXLVfcJJrKCTzwlFKshCT12HP9QGchf8=;
+ b=Am43zP3xdbS6pO52RzGH74Rl2UFh989ll7HoHqs5tgpj3sRAr5cNvouktvsjs4oXWt
+ T2aLyrQK/7tnUpOXItSKv3eqC9nvuzyCn6/4vM/Ws/KMYHs9B+XiGn+v/9PfenlnlVQ0
+ G4EnR2QmsuTtwV89Aad3tUTBK1sLQZHur4Pve/fbcSQErxfMUZUzNZUFyC8FQsMSrVNM
+ E/lY4u/kQWwmrRAe8e2ywqKgw/dPodoYJs4akU1Pe1qsOaxVZHc8Q4WO5jRQmqhlR7/O
+ 1hBlHQMw9iCEQam331q5WjFu/gJbqCyX1K2TYs9/rumOc87y5oQvnxKqcWThVIUQvpSL
+ bKOg==
+X-Gm-Message-State: APuU4Z8oqHLyb1NHvaex1rHOhKQ3JIUJNw5dAUTHn2XxG+vMHfg5SrSi
+ pwD29ZURSsy5yvmE01AZOixG39VdzYBvb/afHpq5/a4MxTGtxoTi69mRsbvYvg3B
+X-Gm-Gg: AZFdTZfnBAFnnUaxQr2+bLhm7sKc/FAByuTin42AOw4ts8WizUzaOx+SyJLNrLuGBK6
+ anMBBe6lxRLU/9Oke7ACe9atiDvdFeYl4Te5zBdR+NQtttq7zcpgw50mwJxhyTqNgcx2W7mFTZJ
+ iwDjytmiK6r9qXZ+QDQoE9I67D7X8HoXwnueW6A54eH2smcl1yNm2sGtlhPDinb1VNmBAMvVIHy
+ XAwiI64zFCfg/F+wLLIaldTNh0Il3tJ+8Trl9j+tn11AVn/q5Od1WV71TF89Wi1fnBjTvrlRNPk
+ XrhyIgZ3mjOfRF/3DnXLNVSQRHrP0//kei4SwAjO2/lVS/Vi9VZ6zaAfx0JoGr5Oo9TX1++C3eu
+ KXc3dnidyeOt0Yuq1qwpnvKYDhEecqkMmNINfIpkQn5myhJS74rssZnjZOwIbnivp/rtaUvIDed
+ H9SgpZ8zIutDb1JwHVSPEAiG6tkdwoUNEUYpBupsb+KZ2Qatu/xgVM37AKAIp3A+pxVjop/EDQA
+ FRlu5zD5W1D34mO5Fs+6aNG0NqkERawep2Y5nwcMLXE/pV3FJ7u8uvQnTih4O2DR6fBAILyy8k8
+ xR/yXxl3ZA1qCebBCXN/8THThCZrUO2VCz6YoJ/XNMA4+alDl4KqyVNIcWLu1+NdVZPWfGhoPfH
+ eSxWzO0A+rdNWx/gUlM5H+KHDe9Hs1xy6JAKC34PBnRZgG12O8Xi98/j5UKFdV/Lt
+X-Received: by 2002:a05:600c:4f42:b0:4bb:5c5c:8130 with SMTP id
+ 5b1f17b1804b1-4bb8881c726mr185053795e9.5.1795291623566; 
+ Sat, 21 Nov 2026 12:07:03 -0800 (PST)
+Received: from KORLIN44614.barco.com
+ ([2a02:a03f:eb5f:fa00:bd15:7649:1768:4d97])
+ by smtp.googlemail.com with ESMTPSA id
+ 5b1f17b1804b1-4bb8d4f9aa8sm151944255e9.4.2026.11.21.12.07.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 21 Nov 2026 10:08:56 -0800 (PST)
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Joseph Kogut <joseph.kogut@gmail.com>,
- Romain Naour <romain.naour@gmail.com>, Daniel Lang <dalang@gmx.at>,
- Valentin Korenblit <valentinkorenblit@gmail.com>
-Date: Sat, 21 Nov 2026 19:08:55 +0100
-Message-ID: <20261121180855.3595157-1-angelo.compagnucci@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20231208231413.656734-1-fontaine.fabrice@gmail.com>
-References: <20231208231413.656734-1-fontaine.fabrice@gmail.com>
+ Sat, 21 Nov 2026 12:07:03 -0800 (PST)
+From: Thomas Devoogdt <thomas@devoogdt.com>
+To: thomas@devoogdt.com
+Cc: buildroot@buildroot.org, buildroot@tudorholton.com, thomas.perale@mind.be
+Date: Sat, 21 Nov 2026 21:06:51 +0100
+Message-ID: <20261121200654.28019-1-thomas@devoogdt.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261119140223.1968045-3-thomas@devoogdt.com>
+References: <20261119140223.1968045-3-thomas@devoogdt.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/1] package/llvm-project/clang: link with
- -latomic if needed
+Subject: [Buildroot] [PATCH v3 1/3] package/openjdk{-bin}: security bump
+ 17.x to version 17.0.21.1+2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -158,30 +137,153 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,
-	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
-	SPF_HELO_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
-	version=4.0.1
+X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Hi Fabrice,
+Fix CVE-2026-114938, a heap-based buffer overflow in the HotSpot
+compiler which may result in takeover of affected Java runtimes.
 
-On 09/12/23 00:14, Fabrice Fontaine wrote:
-> FileManager.cpp:(.text._ZN4llvm17TrackingStatisticppEv[_ZN4llvm17TrackingStatisticppEv]+0x20): undefined reference to `__atomic_fetch_add_8
+This also includes security fixes from the OpenJDK advisories published
+on 2026-04-21, 2026-07-21, 2026-08-18, 2026-10-20, 2026-10-21,
+2026-10-24, and 2026-11-17.
 
-I think this patch can be dropped: the problem is fixed upstream.
+Other relevant changes include certificate and cryptographic hardening,
+updates to libpng 1.6.59, FreeType 2.15.0 and tzdata2026f, and fixes
+for TLS, HTTP, Kerberos, JMX, JFR, and HotSpot.
 
-LLVM commit 20132d8eaa68 ("Link libclangBasic against libatomic when
-necessary.") links libclangBasic, where FileManager.cpp is, with
-libatomic when the target needs it. It is in LLVM 16.0.0 and later.
+For details, see:
+https://openjdk.org/groups/vulnerability/advisories/2026-11-17
 
-Buildroot has it since commit e29dae109a21 ("package/llvm-project: bump
-to version 20.1.5"), and the autobuilder shows no clang failure after
-it.
+Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+---
+v2:
+- Restore AArch64 host support with the matching Corretto archive because
+  Temurin does not provide a glibc AArch64 JDK for this release:
+  https://corretto.aws/downloads/resources/17.0.21.1.2/amazon-corretto-17.0.21.1.2-linux-aarch64.tar.gz
+- Cite the Corretto GitHub release page in the hash file:
+  https://github.com/corretto/corretto-17/releases/tag/17.0.21.1.2
+- Cite the exact Temurin JDK checksum sidecar:
+  https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.21.1%2B2/OpenJDK17U-jdk_x64_linux_hotspot_17.0.21.1_2.tar.gz.sha256.txt
+- Successfully cross-built OpenJDK 17 with the matching Corretto x64
+  boot JDK to verify archive layout and toolchain compatibility.
 
-Not Applicable: https://patchwork.buildroot.org/project/buildroot/patch/20231208231413.656734-1-fontaine.fabrice@gmail.com/
+v3:
+- Use the now-available Temurin AArch64 JDK; the asset was published in
+  the meantime, so the Corretto fallback is no longer needed:
+  https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.21.1%2B2/OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.21.1_2.tar.gz
+
+ .checkpackageignore                                      | 2 +-
+ package/openjdk-bin/17.0.18_8/openjdk-bin.hash           | 7 -------
+ package/openjdk-bin/17.0.21.1_2/openjdk-bin.hash         | 9 +++++++++
+ package/openjdk-bin/openjdk-bin.mk                       | 4 ++--
+ .../0001-Add-ARCv2-ISA-processors-support-to-Zero.patch  | 0
+ .../0002-awt-fix-HEADLESS-compilation-without-X11.patch  | 0
+ package/openjdk/openjdk.hash                             | 2 +-
+ package/openjdk/openjdk.mk                               | 4 ++--
+ 8 files changed, 15 insertions(+), 13 deletions(-)
+ delete mode 100644 package/openjdk-bin/17.0.18_8/openjdk-bin.hash
+ create mode 100644 package/openjdk-bin/17.0.21.1_2/openjdk-bin.hash
+ rename package/openjdk/{17.0.18+8 => 17.0.21.1+2}/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch (100%)
+ rename package/openjdk/{17.0.18+8 => 17.0.21.1+2}/0002-awt-fix-HEADLESS-compilation-without-X11.patch (100%)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 25c668db542..b5ad45705a0 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -657,7 +657,7 @@ package/olsr/0006-build-patch-for-gpsd-3-25.patch lib_patch.Upstream
+ package/olsr/S50olsr Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/open-plc-utils/0001-Remove-OWNER-and-GROUPS-parameters-to-install.patch lib_patch.Upstream
+ package/open2300/0001-fix-makefile.patch lib_patch.Upstream
+-package/openjdk/17.0.18+8/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch lib_patch.Upstream
++package/openjdk/17.0.21.1+2/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch lib_patch.Upstream
+ package/openjdk/21.0.10+7/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch lib_patch.Upstream
+ package/openjdk/25.0.2+10/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch lib_patch.Upstream
+ package/openldap/0001-fix-bignum.patch lib_patch.Upstream
+diff --git a/package/openjdk-bin/17.0.18_8/openjdk-bin.hash b/package/openjdk-bin/17.0.18_8/openjdk-bin.hash
+deleted file mode 100644
+index c2169350c17..00000000000
+--- a/package/openjdk-bin/17.0.18_8/openjdk-bin.hash
++++ /dev/null
+@@ -1,7 +0,0 @@
+-# https://github.com/adoptium/temurin17-binaries/releases
+-sha256  0c94cbb54325c40dcf026143eb621562017db5525727f2d9131a11250f72c450  OpenJDK17U-jdk_x64_linux_hotspot_17.0.18_8.tar.gz
+-sha256  592a6702b3a07a0e0b82cb38aaab149bfce1b0c24d6b57ddb410bd9009333095  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.18_8.tar.gz
+-
+-# Locally calculated
+-sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
+-sha256  a44eb7b5caf5534c6ef536b21edb40b4d6babf91bf97d9d45596868618b2c6fb  legal/java.prefs/ASSEMBLY_EXCEPTION
+diff --git a/package/openjdk-bin/17.0.21.1_2/openjdk-bin.hash b/package/openjdk-bin/17.0.21.1_2/openjdk-bin.hash
+new file mode 100644
+index 00000000000..6c6e4250a00
+--- /dev/null
++++ b/package/openjdk-bin/17.0.21.1_2/openjdk-bin.hash
+@@ -0,0 +1,9 @@
++# From https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.21.1%2B2/OpenJDK17U-jdk_x64_linux_hotspot_17.0.21.1_2.tar.gz.sha256.txt
++sha256  0b0ac5eab6db6abaec68c9913bcddb31321e5da411c45073d520d9c125e6f7b4  OpenJDK17U-jdk_x64_linux_hotspot_17.0.21.1_2.tar.gz
++
++# From https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.21.1%2B2/OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.21.1_2.tar.gz.sha256.txt
++sha256  1d808f4b558e9de63d8ba3ead21ffc8b9de204894eff3c19d52c1480aa17cc58  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.21.1_2.tar.gz
++
++# Locally calculated
++sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
++sha256  a44eb7b5caf5534c6ef536b21edb40b4d6babf91bf97d9d45596868618b2c6fb  legal/java.prefs/ASSEMBLY_EXCEPTION
+diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
+index 4a21cbb4601..e2f771bdb22 100644
+--- a/package/openjdk-bin/openjdk-bin.mk
++++ b/package/openjdk-bin/openjdk-bin.mk
+@@ -14,8 +14,8 @@ HOST_OPENJDK_BIN_VERSION_MINOR = 0.10
+ HOST_OPENJDK_BIN_VERSION_BUILD = 7
+ else
+ HOST_OPENJDK_BIN_VERSION_MAJOR = 17
+-HOST_OPENJDK_BIN_VERSION_MINOR = 0.18
+-HOST_OPENJDK_BIN_VERSION_BUILD = 8
++HOST_OPENJDK_BIN_VERSION_MINOR = 0.21.1
++HOST_OPENJDK_BIN_VERSION_BUILD = 2
+ endif
+ 
+ ifeq ($(HOSTARCH),x86_64)
+diff --git a/package/openjdk/17.0.18+8/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch b/package/openjdk/17.0.21.1+2/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
+similarity index 100%
+rename from package/openjdk/17.0.18+8/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
+rename to package/openjdk/17.0.21.1+2/0001-Add-ARCv2-ISA-processors-support-to-Zero.patch
+diff --git a/package/openjdk/17.0.18+8/0002-awt-fix-HEADLESS-compilation-without-X11.patch b/package/openjdk/17.0.21.1+2/0002-awt-fix-HEADLESS-compilation-without-X11.patch
+similarity index 100%
+rename from package/openjdk/17.0.18+8/0002-awt-fix-HEADLESS-compilation-without-X11.patch
+rename to package/openjdk/17.0.21.1+2/0002-awt-fix-HEADLESS-compilation-without-X11.patch
+diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
+index 3f83ab48f89..40879824ad7 100644
+--- a/package/openjdk/openjdk.hash
++++ b/package/openjdk/openjdk.hash
+@@ -1,5 +1,5 @@
+ # Locally computed
+ sha256  9b3164cedf78d7a76a59499d7a6833145c7e0269ec7b664bfe5ee03ced2f449e  openjdk-25.0.2+10.tar.gz
+ sha256  6500906cb7cc49268ce4ca368db3ddf3541b40afd25eecb378e13d5a72f43214  openjdk-21.0.10+7.tar.gz
+-sha256  7ebfcc2aafd514c23df3fe5280e1a34630b9b1d429c65a80dd5a4b6e7f177bc3  openjdk-17.0.18+8.tar.gz
++sha256  1358a7fbe258370744a11a4be8017bd9d30a00a5fc5b784f9221815bb7444a4d  openjdk-17.0.21.1+2.tar.gz
+ sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
+diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
+index e1d68e9a458..25fa001d840 100644
+--- a/package/openjdk/openjdk.mk
++++ b/package/openjdk/openjdk.mk
+@@ -14,8 +14,8 @@ OPENJDK_VERSION_MINOR = 0.10
+ OPENJDK_VERSION_BUILD = 7
+ else
+ OPENJDK_VERSION_MAJOR = 17
+-OPENJDK_VERSION_MINOR = 0.18
+-OPENJDK_VERSION_BUILD = 8
++OPENJDK_VERSION_MINOR = 0.21.1
++OPENJDK_VERSION_BUILD = 2
+ endif
+ 
+ OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)+$(OPENJDK_VERSION_BUILD)
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
