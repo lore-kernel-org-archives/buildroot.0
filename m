@@ -2,28 +2,28 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B239606A320
-	for <buildroot@archiver.kernel.org>; Sat, 21 Nov 2026 18:02:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AD48606A320
+	for <buildroot@archiver.kernel.org>; Sat, 21 Nov 2026 18:09:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=W6g8boGR;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KDOupl7J
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=bjB9gOPS;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Gsrve9px
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 949CE80D85;
-	Sat, 21 Nov 2026 18:02:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2FC1C80E0A;
+	Sat, 21 Nov 2026 18:09:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fzXhXsfNJ-BI; Sat, 21 Nov 2026 18:02:30 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org A35BC80D74
+ id 3lEzb_NSJKoN; Sat, 21 Nov 2026 18:09:03 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 6583D80E0B
 Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795284150;
-	b=rtaGQfTTrFTGcKMcOcvJUyS+pxAtkxcYFJGs8YMdVWN1G7DODRB8xQFlR+84qmmExqO6
-	 r0ccVKHfVMccrC2lNKUKSCRauDZAAxyTzM2Sja4EcPgmRVTMWwPBp5nciptObfhF3jysS
-	 0TnIuVBe+DivxvzmleHUjOJoYfREkyUTeElkno9P3CKFOXKBuybw0J+h79AndcIqYnlX+
-	 rQyp7lQsyLqMbgpHA3PFgBh1yYeN9cB+Nx3kD0449VoiW48hZPbMzSWi9OBvpDbxLohsA
-	 FLHCfMzkCTBXw2GpQXjZ3Y2SJtQYOeAlfwySB5BERqTcgd0CTdGMxBpE2Ga8dIzcVzw==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795284543;
+	b=sQ9J+a8v2WZ/FP1kYtFzL2+rciVdysZ5/bd/bJTxQzAOQxM3mNWXqvKO6BoZ58ltrGks
+	 6Y752tTiUQw/nGflsHHxHrn1gqajgvcX/nak3sc7ILV6SIyHlSWFTwI4WdaIcoW60A8ID
+	 Hb657H8YB805o6yl1SFISJTHTXx2NOnDW6ug+PnUqlSCyndbzFMqOAJ/Yf49r0vnTx31i
+	 2d8GKLIRJQDnT+KbSpZN+mTWgpIyofLIcpU6eX66qRohdru4GjcpGVbSL6bqZNOgDlvov
+	 SdnDMxEYfjyKFrK6EJd31gTivm0s2BaoM4xO1Uk/x3Ut8y5IA7Kg6ZLsLmO/tpaDJQg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795284150;
+	c=relaxed/relaxed; t=1795284543;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -33,119 +33,119 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
 	 Sender;
-	bh=xp9ITJu4Yuu9+MXSPC7otnKq0bojLhoKQFRGY3HRrxI=;
-	b=N3ThhXy+WakJsPVt8apOPlMKYXitYnCtlVnCxycLp+0gq66b2lOXLWarkG4d/sLTheOf
-	 4pvFkwShmUtl+IV+XxUbD7y62g3/De+On7XAbtdHMVnRbuaHMp42nuPYLsyYo68x+pBb0
-	 2e1XDIKMXIkJfdpWOQPXW0XJLE0LAfXglqv4WOimikoSmRA0FN98lbPxWVt1dKjaSsuRk
-	 AAU2aaWIPDa9oCLPogQgw2TBrQYd0J1BVPYu9Av9GlmDCxAKGkTW8M68G+7aWa04rbNWm
-	 Vfoso3cPj40EbZRr42O5Qvr5ZKRA9wuh/VzmVAsaU8p8egB5qjPzumLl+3lm2auQyvA==
+	bh=xHohXoS0gVJ2m/8L0N5VtRWXOW1KWHCO3gkV7UUcs2A=;
+	b=byefQ6BMi9L/oBqTys23R3cjVO0zD4Ba2V0FBQGTrvWGg7Xk221w+NDx7sx0c24D2K0y
+	 QiG4O5fKcdXg6ylxJWe3NwjNudMsPmz7pRcFLTdoL82BRwdp6w0N8zd0/LqA16p7pHIKe
+	 yFSMgPYbIpCxNscCw6LF7XC51EnHEhisqyrczwMNU8JClLwjJfr82Woiun75u0i1SdF8P
+	 7k0f1ghDhVGVdsevmauazoJMnxi36A356Ppu6yjWGDUdY7n33Qccs+UWukOjYkQMPeRRw
+	 FtqjvH9FuBR6pOz+FgUOQ6JNiX5D8D7rR4UB7Q9+DVNs9LqR2bJOU6p9a6K/9SkxoRg==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	dmarc=pass header.from=gmail.com;
-	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=KDOupl7J;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Gsrve9px;
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795284149;
-	bh=xp9ITJu4Yuu9+MXSPC7otnKq0bojLhoKQFRGY3HRrxI=;
+	s=default; t=1795284543;
+	bh=xHohXoS0gVJ2m/8L0N5VtRWXOW1KWHCO3gkV7UUcs2A=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=W6g8boGRc47cmp0Fhw3aVh8IRjW+4U31hR50Wlya6HWSNA26Vy7Wx7SxUnl8ESTlm
-	 ft2eu+6uXYJqGUAiZUJ0+K5IZHQcRLddnEA/GCTTYmCxNKW+JaLcghyVd83wdG3XiQ
-	 5RV9C6/fJytatG+qqn2Qtah4QsvJ8M0Wj2UxwOUg1AUYUFXtVrI1sBtRCCr5V3DhY2
-	 1W7wUlLB3uUL0jwJ0gLccmRSQa7wLJ90m1Ng81VNUEs/CLX2Jt9/avjAsPsPZjMByz
-	 WjZGB8QtjA7BKbzN2HIsydung5d9DKmoh54NkJ8hkBu959CPNZ44yKFx/Z9R5t3bX5
-	 Y87cSL+LoVwDg==
+	b=bjB9gOPSjXLs1eVSEICCncvfPA3h3EJdkur7skvzsjjwFORU8uXJdcLSMTfWsfUkU
+	 4o2UpOstUfVnJfkpkLBWiXP1CWgqI9S0r7xX88FchIm4wBFMgmQ/OEq+vKDii/iMry
+	 PBxwM5YxBW7MpJ0xHJpAsbW+MkaNvR9yi2e4ufI5D3SFbLc8U5m3JHqzERFxo9itzY
+	 PXujgoZV2SNRYK1BAnXUNd0+b58xIJg1+ACFPCEjM1CnhDNlIry9ydu/SDXhkGoBIb
+	 G0kObF00PcMhPZKbFo01A0fuUkM5M22YZ818XwfAeQSFQQxtkGp71f6VEWtpnTsUt+
+	 NKrz/gYItMLcg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A35BC80D74;
-	Sat, 21 Nov 2026 18:02:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6583D80E0B;
+	Sat, 21 Nov 2026 18:09:03 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 6A19E759
- for <buildroot@buildroot.org>; Sat, 21 Nov 2026 18:02:28 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 4CCFE759
+ for <buildroot@buildroot.org>; Sat, 21 Nov 2026 18:09:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5B98380D85
- for <buildroot@buildroot.org>; Sat, 21 Nov 2026 18:02:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 32B4E80E0B
+ for <buildroot@buildroot.org>; Sat, 21 Nov 2026 18:09:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PDmvsYKcyKLW for <buildroot@buildroot.org>;
- Sat, 21 Nov 2026 18:02:27 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org F0D8080D39
+ id qRqJ5odr8Qyu for <buildroot@buildroot.org>;
+ Sat, 21 Nov 2026 18:09:01 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 1DCB680E0A
 Authentication-Results: smtp1.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::333"
+ arc=none smtp.remote-ip="2a00:1450:4864:20::434"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
+ client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
  envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
 Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20260707 header.b=KDOupl7J
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F0D8080D39
- for <buildroot@buildroot.org>; Sat, 21 Nov 2026 18:02:25 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-4bb69f5b161so12331535e9.0
- for <buildroot@buildroot.org>; Sat, 21 Nov 2026 10:02:25 -0800 (PST)
+Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20260707 header.b=Gsrve9px
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1DCB680E0A
+ for <buildroot@buildroot.org>; Sat, 21 Nov 2026 18:09:00 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id
+ ffacd0b85a97d-492f0a1b685so1359296f8f.0
+ for <buildroot@buildroot.org>; Sat, 21 Nov 2026 10:09:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20260707; t=1795284144; x=1795888944; darn=buildroot.org;
+ d=gmail.com; s=20260707; t=1795284538; x=1795889338; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=y/nh75eVfRe5BlxchutlDMBYOvUCtechSit3UpiJLIQ=;
- b=KDOupl7Jzl7VSruAcO9yqzeiSbdTsj2qqCZedMpPskVUBvci6wJgUEhxfXtBZ7e26v
- teB0qb6ZfhH9UTZES7v3wu6cKUsu44OwRV69hVq6lcP8fmJZTu2Kul1bvVG5gKSz1ac3
- eCUv7bbVeSQh1qNmULhZCDC9ANQj1oPEWLFNMgLU0HKcA+lebWVc112lT9BZCPnjAzHQ
- XboGkSuE7i7JQ52wQuQp8tJe+LsV/5vZIHeK14jsGbgedf2SjRWrqd3JjooikBnmGSZl
- /7iIDqzKmYNo9985974cLVyo2uen4aswlmGHqfk3xMHdvLKTjEfE1MHSWR7UpiDGRFSk
- wSwg==
+ bh=YtHcDyhla22U4Ki79G0PeUHLdBoRxMPE1vYbS7LAx3I=;
+ b=Gsrve9pxvtmx9ZOPZ3AkJ2UPUN+7d22VZJYVv7qQtPD48t7bT7829AuGCxoxjCGx1L
+ YCNCt/zaBVf8J2EOpDrWrwjqRFb4iEUOJSPxv2f0658ahausXjYc74Gxfzjjqufijcsw
+ 5hP2oZPWidSbkRGiFuu2pITytPXCvW5S6vqhYBN/klglsMtxCvN1zTJv6XoSbTZV9Md7
+ r+jLsOlsjGGjQEkJkVkEf+04z7h1O+u0FQYz22/7tyMv2IX47LsrKvuxxoK0cw4slpIL
+ X+n3IzHxRuhEdpufabGDrgvISuwa7njVQ+hkrWMcYeqEI10u8KZ9NMKyJk8yshSd7GLq
+ bB1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1795284144; x=1795888944;
+ d=1e100.net; s=20260707; t=1795284538; x=1795889338;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=y/nh75eVfRe5BlxchutlDMBYOvUCtechSit3UpiJLIQ=;
- b=V33DFk/wEIi3P2lifXuJNEZuKiGVIC3dxgGPP1BBRKH/cgVK8yKrpCVbM1gw3H9Mvh
- wgGW6+aOID644LVtNr3qcKjmQpmJukndz0g+cpcudpa6+ZhkNkLdCv2xumv3LtV3csaW
- mjoNlD82VdXuSSTNejz1QkCIFKjwr+owz1OjqlMWZaH6G0rTMNrSkzXCKMIUfNQP2N8w
- c0cHkexdrCFUUYn5jNw/oASCFL7IEiTAnreYXouOpWvsqIdBtkCNbAJ1xVkUN5y7wxT0
- LbYLUde2+Zkkqt1DrpByMzwuKzv1M9oXfcc4MUsHKo0WkgiZ7VbRCIZtoMNXEKF8CBI3
- hPPg==
-X-Gm-Message-State: APuU4Z/oGgEL7zZ+wBecxbexgWWCc18nHi9fV3cAps4g/p+Lk2ssm7fp
- ieLu1HbTSzcGYbHH6Ucvu9wXrvHHGnY5PUiueIJ5P/+xsz7Ei0L1a26UR2jQRqFX
-X-Gm-Gg: AZFdTZf66kR3R1p6pLM0ZdbNHf5NjkdjQFzroE8Mm6mxpLmCFgvigOSaNIxAjzru9oi
- jk/64a/phvgaztgsnV7XO1RclA3k/CqoRg9E7mEmPXDUrk87Fnd+7+dTW56W8EBIM2ZFYVTwSzr
- Fp5j/Vwp+viFlxr0mRfHPvaZte7Zp+nFTPtqIHoUZRll9a5bareotQP1rgLCzyfwE/tQqND3ADq
- Xo5Pt17ZfedHycnWmlfXp8iceDYfxgYYOkvLaV82goQyvAFDS3O8yRpc+R+VEtov33JuRRJ/P2G
- b7b3Y04hUsHh00YMRSL4SPKwHM9iV++6I9NEC30SyClgL6wBFxlPHY0+zcK+i9Z70zPmZpf+fhs
- O1fv4vyjzHGSAW4j3fkAI7TTRKBpH0yJjSULFIyuaSNY2lKN2DjVzLWFSGZlrC+I1T983jctdDX
- UBGBjGpzwwVHl1jRJmInhN/csh3l+I67hO9hWGUquw8JC53kRg795rI0JVYJyXt87MjLYsYt7Pw
- rdwLDRkM64OO4OBUr0JfPM6Vj4akb0nFC+sFS/CP7NOVWdiHrPcJcuU7dXHkKsYMDADfbh7lqzR
- 6WT3BTIoO9fbic4hdtdXtoD52iYEOWaYCU/4jE2czEYd5thfhC4=
-X-Received: by 2002:a05:600c:3b84:b0:4bb:6f45:2a6d with SMTP id
- 5b1f17b1804b1-4bb888074bbmr174873055e9.12.1795284143642; 
- Sat, 21 Nov 2026 10:02:23 -0800 (PST)
+ bh=YtHcDyhla22U4Ki79G0PeUHLdBoRxMPE1vYbS7LAx3I=;
+ b=efR98M9jsI+G2RiUI4k/WS/umDmhYqbEyQKF3WKn7ElCbQnDOEYOsUYrk3TWM0DyJq
+ tc2/CgeM0mD1Y6K66ZmfLr/tAvx4i2n8oSk1IjjW9L6upzk++B55TUvEJPQy9gVVKGzJ
+ QdYwHwoJHwhESXd5ljDIPxLyyVISbLL34deC4HJU2memhWmH5+15I80BTus7SKGJs/DT
+ Ekkzgk8V2nElK9Bk4r9RyXZfKykC+Wm1pttpt5lq2hNQDoKEZdi0OeRjJQRqadjroscD
+ rF6KPgTaTP5TXczc001DRAOb647NYAkQi7QVmPBzBTa+AoYjvb64Q1FfFG4fhrvJam8P
+ 6xDw==
+X-Gm-Message-State: APuU4Z80968YcAVxBs5jxVh+cDxoGZdWY496YFY7y32VC/s6HoZi1Hut
+ AB5aq4tfyGqbdeGugZKmGGPPAC8TbsF263AkykbTZRmQs5vBxwm4+YS1UZIUfT2g
+X-Gm-Gg: AZFdTZcht1ipnr3pkWY+C2/ujdnR3sTMcXWdAWvuTIB6MveMwWgoUS2f6/dTTx4crAK
+ 2j/yx9vZQNwt7ZtVz8oRIN+x9EEPl2H7B8j8Om798nUOvDHXUmE/OtAW9CobV5VXydV2prQELiR
+ my1/wcsNcrDsG/bg6n/w3ZPXRTTOftkfA2r/WP5or9Hak2ft/R5Ez7s5XAJAwLNjsGy2cvtdCdG
+ 1SjNR4qZrspfBTVSFfIdDwKalAXGD4pIBaBxhkDyVpq+qYagfdQue3wa/LCQJXvHdQm2F6+sH2e
+ gwE0PSTGmUnfpZ9Y7HQkHeXq3/9SaqbnEAsqK/y3T1UJ3GFeMxq0PwKd3/f1AnZG9ZnD5O7fH7M
+ FT70cUGgzDB9JO1yKkFmHXCAQXOnN0NYq9hB3u7acc6gxg8XGZ5LmDXTTnZ6WQ2bSijEg/76ERO
+ 7aLupTKVgQmezOqkBXtG+2KUxvX3qRLxwZdS3r2zNGvbTT9ebbfW9qNK+aBnk7S4qsDnj9fh437
+ QDF+iFjnpaZs7jZVSBH8Tec8EkgXBZt5RZnKHmy1ICirMkVfgQo3XyRhj1gqRPOMmnccmUuwaot
+ IvfzP3vkPrQlUSvODm8kDxucNHEIGy7BV1/yy0zPdytK5ygwdlg=
+X-Received: by 2002:a05:6000:4304:b0:4a3:1e75:16c9 with SMTP id
+ ffacd0b85a97d-4abb4c7bb49mr13488760f8f.40.1795284538319; 
+ Sat, 21 Nov 2026 10:08:58 -0800 (PST)
 Received: from angelo-Precision-7550 ([2.58.136.216])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4ab65cb41f4sm12364707f8f.7.2026.11.21.10.02.21
+ ffacd0b85a97d-4ab6c61f558sm12694857f8f.58.2026.11.21.10.08.56
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 21 Nov 2026 10:02:22 -0800 (PST)
+ Sat, 21 Nov 2026 10:08:56 -0800 (PST)
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 To: buildroot@buildroot.org
-Cc: Sergey Romanov <svromanov@salutedevices.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Sergey Romanov <svromanov@sberdevices.ru>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sat, 21 Nov 2026 19:02:19 +0100
-Message-ID: <20261121180219.3583305-2-angelo.compagnucci@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Joseph Kogut <joseph.kogut@gmail.com>,
+ Romain Naour <romain.naour@gmail.com>, Daniel Lang <dalang@gmx.at>,
+ Valentin Korenblit <valentinkorenblit@gmail.com>
+Date: Sat, 21 Nov 2026 19:08:55 +0100
+Message-ID: <20261121180855.3595157-1-angelo.compagnucci@gmail.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20261121180219.3583305-1-angelo.compagnucci@gmail.com>
-References: <20231117094429.30820-1-svromanov@salutedevices.com>
- <20261121180219.3583305-1-angelo.compagnucci@gmail.com>
+In-Reply-To: <20231208231413.656734-1-fontaine.fabrice@gmail.com>
+References: <20231208231413.656734-1-fontaine.fabrice@gmail.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3 2/2] package/sysbench: new package
+Subject: Re: [Buildroot] [PATCH 1/1] package/llvm-project/clang: link with
+ -latomic if needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -158,223 +158,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-18.9 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-3.9 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,MAILING_LIST_MULTI,
+	SPF_HELO_PASS,USER_AGENT_GIT autolearn=no autolearn_force=no
+	version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-From: Sergey Romanov <svromanov@sberdevices.ru>
+Hi Fabrice,
 
-This benchmark was designed for identifying basic
-system parameters, as they are important for system
-using MySQL (w Innodb) under intensive load.
-Handling of IO in case of many parallel requests,
-checked as well as memory allocation/transfer
-speed and scheduler performance.
-CPU is benchmarked by using 64bit integer manipulation
-using Euklid algorithms for prime number computation.
-Benchmarks are designed to show benefit of multiple
-CPUs as well as of multiple hard drives,
-battery backed up write cache.
+On 09/12/23 00:14, Fabrice Fontaine wrote:
+> FileManager.cpp:(.text._ZN4llvm17TrackingStatisticppEv[_ZN4llvm17TrackingStatisticppEv]+0x20): undefined reference to `__atomic_fetch_add_8
 
-https://github.com/akopytov/sysbench.git
+I think this patch can be dropped: the problem is fixed upstream.
 
-Signed-off-by: Sergey Romanov <svromanov@salutedevices.com>
-Co-authored-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
----
-Changes v2 -> v3:
-  - do not select the target pkgconf and libtool packages: host-pkgconf
-    is already a build dependency, and autoreconf brings host-libtool
-  - add the comment for the toolchain dependencies
-  - add a runtime test, on ARMv7: it runs short cpu (two threads) and
-    memory tests, under a second each
-  - .mk file: header in lower case, fix the ifeq spacing
-  - help text: link to the project page, not the git URL
-  - DEVELOPERS: add Angelo Compagnucci too
-  - rebase on master
+LLVM commit 20132d8eaa68 ("Link libclangBasic against libatomic when
+necessary.") links libclangBasic, where FileManager.cpp is, with
+libatomic when the target needs it. It is in LLVM 16.0.0 and later.
 
-Supersedes v2: https://patchwork.buildroot.org/project/buildroot/patch/20231117094429.30820-3-svromanov@salutedevices.com/
+Buildroot has it since commit e29dae109a21 ("package/llvm-project: bump
+to version 20.1.5"), and the autobuilder shows no clang failure after
+it.
 
- DEVELOPERS                                    |  4 +++
- package/Config.in                             |  1 +
- package/sysbench/Config.in                    | 32 +++++++++++++++++
- package/sysbench/sysbench.hash                |  3 ++
- package/sysbench/sysbench.mk                  | 31 +++++++++++++++++
- .../testing/tests/package/test_sysbench.py    | 34 +++++++++++++++++++
- 6 files changed, 105 insertions(+)
- create mode 100644 package/sysbench/Config.in
- create mode 100644 package/sysbench/sysbench.hash
- create mode 100644 package/sysbench/sysbench.mk
- create mode 100644 support/testing/tests/package/test_sysbench.py
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5812ce6484..d2175d4f6f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -264,8 +264,10 @@ F:	package/rtl8723ds-bt/
- F:	package/sam-ba/
- F:	package/sshguard/
- F:	package/sunwait/
-+F:	package/sysbench/
- F:	package/sysdig/
- F:	package/uthash/
-+F:	support/testing/tests/package/test_sysbench.py
- 
- N:	Andy Shevchenko <andy.shevchenko@gmail.com>
- F:	package/fb-test-app/
-@@ -3103,6 +3105,8 @@ F:	package/xr819-xradio/
- 
- N:	Sergey Romanov <svromanov@salutedevices.com>
- F:	package/ck/
-+F:	package/sysbench/
-+F:	support/testing/tests/package/test_sysbench.py
- 
- N:	Sergio Prado <sergio.prado@e-labworks.com>
- F:	package/aoetools/
-diff --git a/package/Config.in b/package/Config.in
-index 199f8b0bc7..a72ad20b54 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -149,6 +149,7 @@ menu "Debugging, profiling and benchmark"
- 	source "package/strace/Config.in"
- 	source "package/stress/Config.in"
- 	source "package/stress-ng/Config.in"
-+	source "package/sysbench/Config.in"
- 	source "package/sysdig/Config.in"
- 	source "package/sysprof/Config.in"
- 	source "package/tbtools/Config.in"
-diff --git a/package/sysbench/Config.in b/package/sysbench/Config.in
-new file mode 100644
-index 0000000000..e30f691081
---- /dev/null
-+++ b/package/sysbench/Config.in
-@@ -0,0 +1,32 @@
-+config BR2_PACKAGE_SYSBENCH_ARCH_SUPPORTS
-+	bool
-+	default y if !BR2_powerpc
-+
-+config BR2_PACKAGE_SYSBENCH
-+	bool "sysbench"
-+	depends on BR2_PACKAGE_SYSBENCH_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_CK_ARCH_SUPPORTS
-+	depends on !BR2_STATIC_LIBS # luajit
-+	depends on !BR2_PACKAGE_LUA # luajit
-+	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS # luajit
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_LUAJIT
-+	select BR2_PACKAGE_CK
-+	help
-+	  This benchmark was designed for identifying basic system
-+	  parameters, as they are important for system using MySQL (w
-+	  Innodb) under intensive load. Handling of IO in case of many
-+	  parallel requests, checked as well as memory allocation
-+	  /transfer speed and scheduler performance. CPU is benchmarked
-+	  by using 64bit integer manipulation using Euklid algorithms
-+	  for prime number computation. Benchmarks are designed to show
-+	  benefit of multiple CPUs as well as of multiple hard drives,
-+	  battery backed up write cache.
-+
-+	  https://github.com/akopytov/sysbench
-+
-+comment "sysbench needs a toolchain w/ threads, dynamic library"
-+	depends on BR2_PACKAGE_SYSBENCH_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_CK_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_LUAJIT_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/sysbench/sysbench.hash b/package/sysbench/sysbench.hash
-new file mode 100644
-index 0000000000..a31fdb1178
---- /dev/null
-+++ b/package/sysbench/sysbench.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  e8ee79b1f399b2d167e6a90de52ccc90e52408f7ade1b9b7135727efe181347f  sysbench-1.0.20.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/sysbench/sysbench.mk b/package/sysbench/sysbench.mk
-new file mode 100644
-index 0000000000..771745329a
---- /dev/null
-+++ b/package/sysbench/sysbench.mk
-@@ -0,0 +1,31 @@
-+################################################################################
-+#
-+# sysbench
-+#
-+################################################################################
-+
-+SYSBENCH_VERSION = 1.0.20
-+SYSBENCH_SITE = $(call github,akopytov,sysbench,$(SYSBENCH_VERSION))
-+SYSBENCH_LICENSE = GPL-2.0+
-+SYSBENCH_LICENSE_FILES = COPYING
-+
-+SYSBENCH_AUTORECONF = YES
-+
-+SYSBENCH_DEPENDENCIES = host-pkgconf ck luajit
-+
-+SYSBENCH_CONF_OPTS = \
-+	--without-lib-prefix \
-+	--with-system-luajit \
-+	--with-system-ck
-+
-+ifeq ($(BR2_PACKAGE_MYSQL),y)
-+SYSBENCH_DEPENDENCIES += mysql
-+SYSBENCH_CONF_OPTS += \
-+	--with-mysql \
-+	--with-mysql-includes=$(STAGING_DIR)/usr/include/mysql \
-+	--with-mysql-libs=$(STAGING_DIR)/usr/lib
-+else
-+SYSBENCH_CONF_OPTS += --without-mysql
-+endif
-+
-+$(eval $(autotools-package))
-diff --git a/support/testing/tests/package/test_sysbench.py b/support/testing/tests/package/test_sysbench.py
-new file mode 100644
-index 0000000000..45679bdd0e
---- /dev/null
-+++ b/support/testing/tests/package/test_sysbench.py
-@@ -0,0 +1,34 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestSysbench(infra.basetest.BRTest):
-+    # ck does not support ARMv5, so use an ARMv7 toolchain
-+    config = \
-+        """
-+        BR2_arm=y
-+        BR2_cortex_a9=y
-+        BR2_ARM_ENABLE_VFP=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_PACKAGE_SYSBENCH=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv7",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        self.assertRunOk("sysbench --version")
-+        # Short runs, under a second each: the cpu test runs Lua code
-+        # through luajit, and two threads use the ck primitives of the
-+        # sysbench core
-+        self.assertRunOk("sysbench cpu --threads=2 --cpu-max-prime=1000 --events=100 --time=0 run",
-+                         timeout=30)
-+        self.assertRunOk("sysbench memory --memory-total-size=1M run",
-+                         timeout=30)
--- 
-2.53.0
-
+Not Applicable: https://patchwork.buildroot.org/project/buildroot/patch/20231208231413.656734-1-fontaine.fabrice@gmail.com/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
