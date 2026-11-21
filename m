@@ -1,148 +1,207 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA3CC606A333
-	for <buildroot@archiver.kernel.org>; Sat, 21 Nov 2026 16:50:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 340DA606A320
+	for <buildroot@archiver.kernel.org>; Sat, 21 Nov 2026 16:51:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Wp3e9kta;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=GwECU7Pg
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=AetB5lnX
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AB8EB80EE0;
-	Sat, 21 Nov 2026 16:50:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0DF196065A;
+	Sat, 21 Nov 2026 16:51:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bR9wPQoZa9pj; Sat, 21 Nov 2026 16:50:46 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org AEBB180EBE
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795279846;
-	b=HGByb63RLTjwpD4+F3fd0aR5mTnhwc++gdPl3hnOmN/i3k8N1h2aaXmrHcvOOpMCK/bi
-	 rOhV8dS/EqyITmSJiKkvxNp4uk2Wc/Yng+A/XncbMqp6E5saK82lRvl7v17/8mh7l60zF
-	 Pxlm7qBVMyssXG3HLanJ/LHR9r9puwafQ1oYAeVondUVM8ALf0Lrb2YJp1WQcniroZxhm
-	 a21uxtPLI4uedXoAepdmQZJejWHrBgM4LEV55X/dEPbjkwCdwCnnhc4fISu7CctjRjPC3
-	 TO8+GUW56qOZKu1qMAmrsHyQY5HUVJm9f8tZhMov5xgSeOI7VUr8bg8Xm/xkhDfhYmw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7CHgemFFaga8; Sat, 21 Nov 2026 16:51:31 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 1DD8C60642
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795279891;
+	b=pvt3ofQCTqubzvvPFktlc6ksLHOqcugRpnVMw7NbUHAQxD9774yjPXo0CCKm7cBEjSZF
+	 F1r1Di5ef/KYNxF8abxbmm2ZAu37rKxgFTihPY8WZqFeymKd1NQXgMZx3RH5l8nPQwTnH
+	 sXlQq888+GENcZaE4jgjrpIJxE1aGboWmsZnT6FCT+69rrSsTxf258wA+GOe7YqIF/tzn
+	 Uuuv88eqnCfpY/wGNZLe3VdRzyie1+62TfS/BjGXbCzxjTqPcooOpX66u/r4RZdmez6YM
+	 hb69ngP8oauslA5DkERGq/kcc0DIKfVY0ipNftjpN3rPqYaCvA251oEwiyJZJB/1lDg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795279846;
+	c=relaxed/relaxed; t=1795279891;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:In-Reply-To:
-	 References:MIME-Version:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
-	 Sender;
-	bh=VbTNWu18z7hIyfkmnbzBOvOLkn1xkMxh4gxeTR+4dDo=;
-	b=aZurb6bSl5q1Gqc3NNVaYw0mWUe3ODEChbXjccfOr0UUI4aCRfvQc2782S5vAZg3+3bf
-	 XS4gVm6Tlchj8BNHxUKSKlsV9jyCgX3/b9lVrpV+gJm20dF8HY49v3GTkgODHgKxTQb9l
-	 bFs5gmsjAe4xoXKX51qjSQLrMLBa2r4uxmMXrRPEq15vs3JncO77flfb7KDcMXHZn+lo6
-	 vsgmpx8zARMyO9ezWKv6Y1wwYLTqSIRk83y1YhzVgx2fz1BKw9+68LOgrJlNjsq/e3uy0
-	 iNpAJxd5CFH6+c5qnPOGJyAmi6fEhP9gKQS5GWKz8m43Ucz1eSNGthkplcbI7bnV3iA==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
+	 DKIM2-Signature:Message-Instance:X-UI-Sender-Class:Received:To:Date:
+	 Message-ID:X-Mailer:MIME-Version:X-Provags-ID:UI-OutboundReport:
+	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
+	 Reply-To:Cc:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=XnvT2TmhmFKCvMhALSyjOOYxTuWvtH4l83hE0ZwpKbw=;
+	b=CIhFHUJGpXm9926R3Me1ovmaAxsOO4pJ2e4UU+FazyMy5FHfE3/gzsbMgqVl6exgHzeM
+	 4zhqQ0pZpVUw+7idPv+ITDanbak/+pyZqUTGByZwuExGRJEwNXWnZ5hMuntGEeOfuBZMN
+	 iqAY6jKhir1PwUaWcpApfVkN+QZm+T2bTg5AwvK6U9INhG0BiNNPTwSqbnnxg3T/y7ob5
+	 t5sKg9HngIa54Px387JC9x+/9IZ9rGXXVRcXN7pTgewlMBVuvrr9oT+I5xBsO5Fn02kKx
+	 ok7kpczlzfKDk8snPlPQpit//gIFWmREehvI9N7msDrlj9DwyGYGQDGJS+oEQBL6n8Q==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795279846;
-	bh=VbTNWu18z7hIyfkmnbzBOvOLkn1xkMxh4gxeTR+4dDo=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=Wp3e9ktaVr2aNFcX5Fb58lXs75V3iwzErV3gNor02pX8M6ldXGU2+zKu++4elSodn
-	 VMnhsainQKuELJxxiuTI0dYoVhZRmIp/CIDmiPPcUOrI6PUEnZVzbqwkp2HlkO9ncm
-	 KpiTbMR7NwgvHCFQZ16NIVhVZfEVO4SMRlKgjRZQO8EgWfpdflRJR8gjXPeBKNFdxR
-	 Jo6PLgwlyawBz5FvQ/KbxFG+Hbm3URQkkoM7dtXa+Ol6Wrv8HrqVEOfSJp5ZrHUMiy
-	 R6oseFps0z0QrMLh7hWV6dZ9E3xI4iF6AqhyVly2rX8cp+sAkTSZc1vRtNUa56phtk
-	 RKWLZdLh8heWw==
+	s=default; t=1795279891;
+	bh=XnvT2TmhmFKCvMhALSyjOOYxTuWvtH4l83hE0ZwpKbw=;
+	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=AetB5lnXtOAcu/fwQdpbV8pyEIAuQtijj5FFExPri9sWCfeVb605bNf+i8WlXtuDn
+	 FULUfnu8mfvR7RMbCl1HYs5u9s7XynCc0kEPC1G83T2hSc4ofrkB27aUDWAGrdelQF
+	 w1cr+5brlWimLKj1lYrlGq33HcI17PUR7xNEQ2AN0spptzRwUb9krGAbBCqdxUs16s
+	 NmAZW3ZK7C5yBuPrmPxurm87LAgocnnasE3poDGxLoNGRDfIfvgI9gCAs6G9MnfzD/
+	 QZxc8pas2Va/3vPiyqdeuDW2juvdm1+dAkKK96HGy102IRA5R8OPZQOma4Yh8m1t3z
+	 ncD7rgT96WCzg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AEBB180EBE;
-	Sat, 21 Nov 2026 16:50:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id 0B20715D
- for <buildroot@buildroot.org>; Sat, 21 Nov 2026 16:50:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1DD8C60642;
+	Sat, 21 Nov 2026 16:51:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 255D415D
+ for <buildroot@buildroot.org>; Sat, 21 Nov 2026 16:51:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E584D4009D
- for <buildroot@buildroot.org>; Sat, 21 Nov 2026 16:50:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 231EE4009D
+ for <buildroot@buildroot.org>; Sat, 21 Nov 2026 16:51:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NqCtCT0dBtxR for <buildroot@buildroot.org>;
- Sat, 21 Nov 2026 16:50:43 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org B01FA40012
-Authentication-Results: smtp2.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::432"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
- envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20260707 header.b=GwECU7Pg
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B01FA40012
- for <buildroot@buildroot.org>; Sat, 21 Nov 2026 16:50:42 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id
- ffacd0b85a97d-48dfc0421d9so1852247f8f.1
- for <buildroot@buildroot.org>; Sat, 21 Nov 2026 08:50:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20260707; t=1795279840; x=1795884640; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=VqlYmN7EiXaIZjTI+9BlgqWHBOnBUfycHSx5vA/rFq4=;
- b=GwECU7PgMcqNp+uyuJIXxE0+14dGrGcXqAgjkIDI4Jd9m4PjTnOfs4Je3ULck5cuig
- Qoo6GEURrtiptZEfYiB4p3jCEifQwJa1bPJlUzXHzdAqM2lUq0zBzLAQBD2vOHT4u/Xh
- 02EN+f/+JtlFOxkr/KsUEJ84MfZMobMQZXp887TRuuXiBjY6DVMS3NYOKrFYIVj1x1b7
- 5M27cx+sP/JDNCpG2/ApFzhk2QrfmqNj1QKDRHRkUEuqq2CgAHqlMB3OkupOW/5h7n8C
- F7eujAzy0gQFtCtITOmnEFWHGZBZ5fk7V2L+KPB7WuR4UoGVRLJkzPvzfgrE1B1aUl2e
- WVdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1795279840; x=1795884640;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
- :to:cc:subject:date:message-id:reply-to:content-type;
- bh=VqlYmN7EiXaIZjTI+9BlgqWHBOnBUfycHSx5vA/rFq4=;
- b=RwlXU1K7exYPGA3HRXiiVHNB7AKTQGVelYaBnAvvJYoUz9Ndn/ScfRq76uFZWKZ77j
- OB7X6vyWWHRMb1AgQc4RE6MR9I0l1KNazu1GB6PTaVMcFzl3bDKF8O7U2pw2/huxvBAO
- cSsL6rD0hvCoiaSNlaCvsBrVaMZ2UTURG6lSN7VBtzrTee6mwSVxvL7P8A/8cNX0zb1h
- 8bX88m0vxHnxPgeg+J/05nRCyiVqrWkleO5K3DgoSW7VhHdN2DDBQw7VjUw8Wby6IeJI
- JXb2kd/BMPQixN6h+TI9G1vswiaJH8cC7cOwpV+hslJHgMa6bLvgY8dZJR3M+d3LCPj7
- 0jVg==
-X-Gm-Message-State: APuU4Z8uARQz7SvTpkuZg7e3IHCaM6QTSOUz7k6AMkQO/G34iY6M1MAn
- jd6DWXfrsww2J/Ao8xtSicOMHdkKQzMz5/lSAh71fbgJroR33wj3Z8dYDjmB6Q==
-X-Gm-Gg: AZFdTZePhFYxFu6XsbHdJWztBQW/xSWeC+TrwR7Ir6/lk/1jsd+FqsPxmiWcYkKCTX1
- sX3o+xSeJec4YDMOvv96Z6RDdpeosWkZYnEeJqxod6ZMQbZ3/J98c1WV/RAC2Roxx7q7Ise37Q+
- bogf6IBKGVCWJr615mnp618BpCBo/sV5bLwwuzNmRYgwCaKqWZFO+Z78V6RSVfgTRNIWPyQqbVY
- su9w3ZlfkZdlTF15HAvDLNba8JZpAj/+/ZbChIAZLLfADlq182bBku0fc8dBcYYX6Oc/GnZZkTV
- lMU2RECtAMwVPmdDoYa642VBvpEsdkCWNOvHShyQL7l9NKn4kSuN+plww8CM48SABPWoPWaDE/g
- HYANgad4YgWiAVa7eRc2zCOlWxpjXxCHQUG4QPUX3wj+rbMsyPnU2ccKtbjr3AcYAbzQeF2EaMD
- izTpYIB+yhPwuUQwnNOBIgS7EojR7SJbiEtVmfsrCscO4HR1lNpP/CmsXV864+dchtWTnGv/uta
- KO8BdXDgR5xOtODotISK5DitpVzf4urWKVcIcSuoX8eD0ZYVr+8UmN1DULrWNxcXA2Axv2RfZHm
- JGYR13o92c9KoTLZm68XqtC7Zss88DXCv3A+TyG64iTa3ryhoBg=
-X-Received: by 2002:a05:600c:5493:b0:4a2:8c5:5e5 with SMTP id
- 5b1f17b1804b1-4bb8881c734mr151561095e9.7.1795279840003; 
- Sat, 21 Nov 2026 08:50:40 -0800 (PST)
-Received: from angelo-Precision-7550 ([2.58.136.216])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4bb8d4f9aa8sm140806655e9.4.2026.11.21.08.50.38
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 21 Nov 2026 08:50:39 -0800 (PST)
-From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+ id egcuhJ4__v0O for <buildroot@buildroot.org>;
+ Sat, 21 Nov 2026 16:51:29 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 9C10340012
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9C10340012
+ for <buildroot@buildroot.org>; Sat, 21 Nov 2026 16:51:27 +0000 (UTC)
+DKIM2-Signature: i=1; m=1; t=1795279885; mf=PGZpb25hLmtsdXRlQGdteC5kZT4=;
+ rt=PGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnPg==; d=gmx.de;
+ s=s31663417:rsa-sha256:IME9q5iPhk7SR4VCl3svPGNobLax
+ yZF1kKvH6IgjAk1BtVM4qUcfxsc1djU+Xet6c21Yy4hA1LCNw5ZM7Y72pmDcRmyguDCeJNOGONB
+ 9ea57C//rceBu6n/9zCnNlp0FyoaHNE/u/UAHzVfkAegcrnORW/Wa38gCRYdUor6fPrLXlIBEPw
+ NLuh8AoOU7r+2qjN3vQAWuxiWTLSN4GI1aBxqwmu1qgVuTIST5KWcCc/DYm8zhfaXEn95Y6WosA
+ kRlgeg+OVylqqeY5i3wnG02nX3gXU2YwrEAyLaZlJTeXoy4UAzs3pzcrIlPY7bZW/lkVAHa1iIL
+ /K16zwQ3HQkr8A==;
+Message-Instance: m=1; h=sha256: yeWTKFYoefDZmHgOv5ylGr6efh8gn4ZJrgTJD06b1kU=:
+ 5wnvc/vX52zOBBPvwb2t884rAcX121yzYu8uQx7hlok=, sha512:
+ nxpcMDjVRGwMJDscwAVyuA+zNdt99foRM14lduGpqijF798GZkIc6yNQ/s9ke6hmzbZp5cvCIRZoxID8Fn6QoA==:
+ LNFPDLplfqrQNb4ubM4HS6aADMfhCweWcHX7LcRhpPww/EuwcKyYJlxABIVPC9tQ/yksY+mdaOHCzY26ICJbAQ==;
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from client.hidden.invalid by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MRCKC-1xrqyV2WvM-00Su39; Sat, 21
+ Nov 2026 17:51:23 +0100
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Date: Sat, 21 Nov 2026 17:50:37 +0100
-Message-ID: <20261121165037.2913283-1-angelo.compagnucci@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20230919042236.557974-1-james.hilliard1@gmail.com>
-References: <20230919042236.557974-1-james.hilliard1@gmail.com>
+Date: Sat, 21 Nov 2026 17:51:14 +0100
+Message-ID: <20261121165114.964464-1-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.55.0
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v3] package/swupdate: add embedded lua handler
- config option
+X-Provags-ID: V03:K1:PagFDfwTzuhChmhqZc2wDDC48K3G1ZDcaHBwTbKDlW7JOwkqtqn
+ hTZz7MXteJRXe3oWHVaURnRCoAxoSntNLB+KYfPxo37X+zAqlBc6dDGHRd7a/TRCKs6gGL/
+ CpmfsPvbIdwCQsGtNfiE6QPpOzEy3ixd/2J2ja8yg5CMmL9gDPqcmi1wC/FpbarIpot99pd
+ GkovmWPL/uf/cc3emBsHQ==
+UI-OutboundReport: notjunk:1;M01:P0:NgsF0enZVj4=;UqTf8dw4PwHugNILcvZ+xW2zNr1
+ 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
+Subject: [Buildroot] [PATCH 1/1] package/uboot-tools: fix documentation URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -152,128 +211,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Cc: Fiona Klute <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
-	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
-	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-From: James Hilliard <james.hilliard1@gmail.com>
+The official documentation domain is docs.u-boot-project.org, see
+upstream commit 7c419d4b578492e9781d4d7e755809c78c2c3661 "global:
+Update URL for U-Boot project" [1].
 
-We are able to configure most swupdate options using a swupdate
-config file, however the embedded lua source option may need to point
-to a buildroot generated source path.
+[1] https://git.u-boot-project.org/u-boot/u-boot/-/commit/7c419d4b578492e9781d4d7e755809c78c2c3661
 
-To simplify configuration of this swupdate option add a buildroot
-config option which will pass a source file path to swupdate when
-enabled in buildroot. We also need a config option to enable this
-feature in swupdate which the source file path config option will
-depend on.
+Fixes: 5ada3a14425e5c5b8ecf120924b7014f80fa9ef1 "package/uboot-tools: fix download URL"
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Co-authored-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
-Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
 ---
-Changes v2 -> v3:
-  - do not enable CONFIG_HANDLER_IN_LUA: swupdate removed it, and the
-    embedded handler now only needs CONFIG_LUA
-  - do not enable CONFIG_LUASCRIPTHANDLER: the Lua script handler is
-    another feature, not needed by the embedded handler
-  - strip the quotes of the source path with qstrip
-  - help text: say to use an absolute path, as swupdate looks for a
-    relative path in its own source tree
-  - rebase on master (swupdate 2026.05.1)
+There was some quarrel over u-boot.org, but I can't find details
+publicly. There is a disclaimer on https://u-boot.org/ that it is
+*not* the official domain, though.
 
-Changes v1 -> v2:
-  - pass path via make opts instead of kconfig
+ package/uboot-tools/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Supersedes v2: https://patchwork.buildroot.org/project/buildroot/patch/20230919042236.557974-1-james.hilliard1@gmail.com/
-
- package/swupdate/Config.in   | 15 +++++++++++++++
- package/swupdate/swupdate.mk | 21 +++++++++++++++------
- 2 files changed, 30 insertions(+), 6 deletions(-)
-
-diff --git a/package/swupdate/Config.in b/package/swupdate/Config.in
-index 112e53a127..0ad32950ed 100644
---- a/package/swupdate/Config.in
-+++ b/package/swupdate/Config.in
-@@ -60,6 +60,21 @@ config BR2_PACKAGE_SWUPDATE_CONFIG
- 	  I you wish to use your own modified swupdate configuration
- 	  file specify the config file location with this option.
+diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
+index c765cb6ff7..c99ab9825e 100644
+--- a/package/uboot-tools/Config.in
++++ b/package/uboot-tools/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_UBOOT_TOOLS
+ 	help
+ 	  Companion tools for Das U-Boot bootloader.
  
-+config BR2_PACKAGE_SWUPDATE_EMBEDDED_LUA_HANDLER
-+	bool "swupdate embedded lua handler"
-+	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
-+	help
-+	  Enable the embedded lua handler.
-+
-+config BR2_PACKAGE_SWUPDATE_EMBEDDED_LUA_HANDLER_SOURCE
-+	string "swupdate embedded lua handler source"
-+	depends on BR2_PACKAGE_SWUPDATE_EMBEDDED_LUA_HANDLER
-+	help
-+	  Path to the Lua handler source file to embed in the
-+	  swupdate binary. Use an absolute path, for example in a
-+	  br2-external:
-+	  $(BR2_EXTERNAL_<NAME>_PATH)/swupdate_handlers.lua
-+
- config BR2_PACKAGE_SWUPDATE_USB
- 	bool "swupdate usb"
- 	depends on BR2_PACKAGE_SYSTEMD
-diff --git a/package/swupdate/swupdate.mk b/package/swupdate/swupdate.mk
-index 2384dea33a..def4248fbd 100644
---- a/package/swupdate/swupdate.mk
-+++ b/package/swupdate/swupdate.mk
-@@ -28,6 +28,12 @@ SWUPDATE_MAKE_ENV = CC="$(TARGET_CC)" LD="$(TARGET_CC)" SKIP_STRIP=y
- # we don't package EFI Boot Guard/libebgenv
- SWUPDATE_MAKE_ENV += HAVE_LIBEBGENV=n
+-	  https://docs.u-boot.org/en/latest/
++	  https://docs.u-boot-project.org/en/latest/
  
-+SWUPDATE_MAKE_OPTS = \
-+	SWU_VER="$(SWUPDATE_VERSION) (Buildroot $(BR2_VERSION_FULL))" \
-+	CROSS_COMPILE="$(TARGET_CROSS)" \
-+	CONFIG_EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
-+	CONFIG_EXTRA_LDFLAGS="$(TARGET_LDFLAGS)"
-+
- # swupdate bundles its own version of mongoose (version 6.16)
+ if BR2_PACKAGE_UBOOT_TOOLS
  
- ifeq ($(BR2_PACKAGE_E2FSPROGS),y)
-@@ -103,6 +109,14 @@ define SWUPDATE_SET_LUA_VERSION
- 	$(call KCONFIG_SET_OPT,CONFIG_LUAPKG,$(BR2_PACKAGE_PROVIDES_LUAINTERPRETER))
- endef
- SWUPDATE_MAKE_ENV += HAVE_LUA=y
-+ifeq ($(BR2_PACKAGE_SWUPDATE_EMBEDDED_LUA_HANDLER),y)
-+define SWUPDATE_SET_EMBEDDED_LUA
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_LUA)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_EMBEDDED_LUA_HANDLER)
-+endef
-+SWUPDATE_MAKE_OPTS += \
-+	CONFIG_EMBEDDED_LUA_HANDLER_SOURCE="$(call qstrip,$(BR2_PACKAGE_SWUPDATE_EMBEDDED_LUA_HANDLER_SOURCE))"
-+endif
- else
- SWUPDATE_MAKE_ENV += HAVE_LUA=n
- endif
-@@ -205,14 +219,9 @@ endif
- SWUPDATE_KCONFIG_FILE = $(call qstrip,$(BR2_PACKAGE_SWUPDATE_CONFIG))
- SWUPDATE_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
- 
--SWUPDATE_MAKE_OPTS = \
--	SWU_VER="$(SWUPDATE_VERSION) (Buildroot $(BR2_VERSION_FULL))" \
--	CROSS_COMPILE="$(TARGET_CROSS)" \
--	CONFIG_EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
--	CONFIG_EXTRA_LDFLAGS="$(TARGET_LDFLAGS)"
--
- define SWUPDATE_KCONFIG_FIXUP_CMDS
- 	$(SWUPDATE_SET_LUA_VERSION)
-+	$(SWUPDATE_SET_EMBEDDED_LUA)
- 	$(SWUPDATE_SET_SYSTEMD)
- 	$(SWUPDATE_SET_WEBSERVER)
- endef
 -- 
-2.53.0
+2.55.0
 
 _______________________________________________
 buildroot mailing list
