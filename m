@@ -1,126 +1,131 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34120606A31D
-	for <buildroot@archiver.kernel.org>; Sun, 22 Nov 2026 21:06:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3514606A31E
+	for <buildroot@archiver.kernel.org>; Sun, 22 Nov 2026 21:30:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=HaBxTZ9K;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=CQ8owWPA
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=nnsRZL0M
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0231B405EF;
-	Sun, 22 Nov 2026 21:06:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B840260635;
+	Sun, 22 Nov 2026 21:30:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MbvnYBFvle7d; Sun, 22 Nov 2026 21:06:50 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 43995405D1
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795381610;
-	b=Dz3Ke8vLA4AS5vRyyaXBGts7rrJ7k2+bf+SbH/OudqxzOkLmeKCfhDp7uaKU/55QegHU
-	 DMGX7S1emI5nTBn8iNm2292Fbw6ZzVB68ViaeuZ9JOTi2Vvu4syOe+QjB94vjjHc1HbSA
-	 LCccVZV1j+leZvbu5CTTkKjv/XjvmUy9C2epIgprgpaON8ltaPHkVcjdOrMTVkD8ATc7B
-	 /DJ39CiBmKOmXd1AEXfyIfTyoGuXnhBQRaffaz2etKEIGiY2Xcbu/ey41fosRvMAK4J9X
-	 DWxneGTKv6fEvXeC5t0oX2kLEeatXLOuh3Q2vmJFn0mZMmbKCu10sgTH/xTyvyk/axw==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6SKluazNyNtg; Sun, 22 Nov 2026 21:30:02 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 8942E6061B
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795383002;
+	b=VmHdC+aq48BUoSAkSnjpN84kEC1fsTjwZvniKTMdsv0qYFmPislQt3IpcbdtyfepbscL
+	 qhNKfxnd+36V9QVMpC7ooqZYTs5ITVeyFnqh8ZfAP2PhsG1gMm4gpNsz+LHLftrNzUYfM
+	 NuD4jfavRi/lknqfQo7jgCFkBTOhWhVWBjFQvL91r0JLJH7S309u4Wgb8WhZaNQoMwncu
+	 Bh4T8F7kYapdAX1VPTeZwXbhF6a22XUpfksWJrqfKGk6mFVMOnTmIQ6JDmrv1f7I37lvL
+	 Ft+yvf7/d6pi8JpmjWSafKjNvO21x/YrNdHIcv7VJF2BUXRRsdlKcuiVnAj1lxCE8Rg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795381610;
+	c=relaxed/relaxed; t=1795383002;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Date:Message-ID:
-	 X-Mailer:MIME-Version:X-Spamd-Bar:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=W9koEf5UytMa4RVIH9alhb/N+6GH+4/MZHQl6JZ5iPU=;
-	b=fB0lmq0QtfPkajGF9qYrevDIbytvrWr4P2R5M31lIsQg/gJVQeZ5jmhXHmUV9x1LwB70
-	 pZRxV0KnXXo0+ugD8GVlyELQU64ItH0QYxRqAcr445PSqzYRuyb+7gNN0YDmUCRUKxXde
-	 v/SINDKBP6Y4jG9peLi/u/lFQ5iOaquX/gF2YIN3BZ8aZEyRceXMmbVdcsCBYYldgUx6q
-	 cc3ndPSmxsQ1YKP7g/0/FPOQVdqb2G320jtx+c35Yq9x5J3aNQRGklAnSdFQyOqcBI8qw
-	 BplWpSMjcGParTP392osVlJ1AY6ITF0OXcYwuq6v3V0T9w0gZYq/8BE5xscqxxDWi8Q==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
-	dmarc=pass header.from=kuhls.net;
-	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=CQ8owWPA;
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
+	 MIME-Version:References:In-Reply-To:Date:X-Gm-Features:Message-ID:To:
+	 Cc:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
+	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=0JlGV00ALXq3F6fNQMyDIlCsxt1uK9Ax5tzoL/3hdUw=;
+	b=igTCZo22PlN4mDZx8cGS6lQa2z74c7OzKrgxUfSvhc2fZo+CSV2ti15xxFih/KfGP/Lj
+	 3KnEVjrVHZ9jffInFJznnvJc9okZWFD8Y3DGj0t1i5VsCQskOSjcirEcWQriEYKZ3nBl9
+	 Y7mRoN7ZJGWAx6+AI1EP2tLcMKW7w9gYbVJuqSYU+7D1wUwNcXRgQpeO3f2MvN7tItPBj
+	 eVWaRpg06pRYYA94KbmQODVrZfJWmbsJt+Ws7bToOy7YczELmUSGsbXlMK97L+3TTqq23
+	 ePbOqXc3mA6EIZBto1ud+iPNMKjImclbrOIyRpFsZ0gvVv1FXFqj6ylUqroQyNXGspw==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795381610;
-	bh=W9koEf5UytMa4RVIH9alhb/N+6GH+4/MZHQl6JZ5iPU=;
-	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Cc:From;
-	b=HaBxTZ9K7ZYJWPJikX1sfG6DDKdaTHbEAjKbHqbbfjPPsE274hMirDM+SN+ZxBTJt
-	 A30/BRR/QhncjTvd8FYUG3OKMB25bhNpxOysmif/IbZQ6fLqTrabCZF9DGyytU+ttX
-	 T8KvK9KdSnxVYuPkvh6I1JLVoD3VUQBKwo5Vaqv6Q6UTS0/G7WCcpQJEeA4U6vMuPS
-	 875yr+95YhxONPCRYku9t65GnVZeQCm+D0Rk1wksXL8rnAi4o7OqtuvYZ7S1SoTvcZ
-	 +LFy8dVwXvgWqG9dYq63t1IZEo/bB0TZamiR7kXjlQx0xWfRgwOkdq9fbWsbuUbr8R
-	 Yk1bctUaGoONg==
+	s=default; t=1795383002;
+	bh=0JlGV00ALXq3F6fNQMyDIlCsxt1uK9Ax5tzoL/3hdUw=;
+	h=References:In-Reply-To:Date:To:Cc:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=nnsRZL0MNtmpZKtI71yiM9gAqOQtYbhZBAsU0fhWZIE6mGY4gRhvk917oxcd2VU8r
+	 IwzOHnTxnwaXGfj20xXGVd737WSalH3JPr+4dEpKHqVrttre0qGzcJWJABQJaJKr/s
+	 mXZwtmYhjAjokI8lpHaAkN2kq1cZcnXAoTjvLKrk+JywwC1HGwx2DFoDs7cBw6jVUl
+	 ugce7V4SKdunkwN0q9qhnTdCr7XL+HRcYeowVLv/2Pgc9s8COrfug3BVlU7eajqVXl
+	 Ukz1+g31+lgwoY8pqeZdyCdnZVvnLKTxzs+EhHoa1SfFMPsYVv2OqreDo/hOyNlxSV
+	 T4pP41N16NbaQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 43995405D1;
-	Sun, 22 Nov 2026 21:06:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 16D84260
- for <buildroot@buildroot.org>; Sun, 22 Nov 2026 21:06:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8942E6061B;
+	Sun, 22 Nov 2026 21:30:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 9978F310
+ for <buildroot@buildroot.org>; Sun, 22 Nov 2026 21:30:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F0BA9405BD
- for <buildroot@buildroot.org>; Sun, 22 Nov 2026 21:06:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 812144008B
+ for <buildroot@buildroot.org>; Sun, 22 Nov 2026 21:30:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9pQAUKJtwGoi for <buildroot@buildroot.org>;
- Sun, 22 Nov 2026 21:06:46 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 43919405B8
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp4.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=CQ8owWPA
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 43919405B8
- for <buildroot@buildroot.org>; Sun, 22 Nov 2026 21:06:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1795381600;
- bh=fJP0mS8mRCvSzp9xod4atbEnll400RJjdgC/f6cG1aI=;
- h=From:To:Cc:Subject:Date:From;
- b=CQ8owWPAKh0jXu9F6fR3wq8ohEHC03eiqfB45RvlnP2a54Lz7AlrLi/+qqbVAjKue
- 9Q5x9nxL1rVy9cOaTT/iu8js8dhi0ldOChUw913AwuLuVRqw5NR0ezJ9TvIlhxezSS
- RRyvCCdhn7JHGAqhvcCZ382F0xlECCYn81e5/aBHDmnoBgmWCdQBqfEyju/6m+cjeQ
- WZLylKSTvnnDR5ge6IxS3mZdXjgnK2L2CqDFRD0JsMlT4udZysdC7gs+R1JH9u8WgF
- HepIjkjWQnESl1OUPbGU9N2Xt+34dAiMJoi628dj/so+ENxZ7kRhVkL/qY8/qHsHnj
- YQk+NPXkH2RbQ==
-X-KAS-Sym: v3:f51bdf72230551df:Ws5d5udab63wMnWJ8Z+cpHb4sK7C5gP9y0BPreXILtkFb
- Zkb1P0v4EIMlg1fEN6dB2Cfcc8Ba8P2RIL1d2LYroOI7mhrkLQtTrHarjdYsjSxnjFjtibnzcrR
- dzhTE7xlDRy9Dhuy5BikuqankrrCpeYk7LEF+AkANh1g3qFY2Kar9gVcQudZw9X8jL4qGsEokAq
- rmwMeL+BTROw9sQkZBCYmI/I8nXk7dGdY5kuY9bQoRKsBF01Y9+EyrEtFe+AZ4JEIh0dLvgSu3D
- DM7KX2LRklT/k8pYxnL5XgdEhH+NLL7+bQEcJ/Y1x58g43TEJYjhIRlSoQbEiJhBnjDNd13w==:
- 275EoCz91dy9VWc/BxUNBLaKeZEAoeaWnhdiT7GTWbNKOwzXr9mOLIgHkn8AsuNEYvncTXq50sk
- eDQ2N9Trn0i0/YE1ChDOqPW/WnvhykRARSOZkcajqWnPP4sslTzEe8Rx/I9gcJ1KyVeAoRaOdIP
- lM4M4xWSPZm5blJ6pMBqFUmY9tl5VeUGY4Pdj4vaZ1HnP2SnnDEzNehh1jXsmYnOvJwGVtatvsH
- 9BBDDhEW34TQX+GBMjVd3rw39Rt1NCteXqhoKkgCBgCOYdRHLD2CVLzTgPyfQu6ukHV87wokq99
- xMuFKYnNiMNOZr6MPe5Naj2b3xdoejZdUpUFGULc7Ga1hVA78AzhacQSDKh7RkAji9Hze/1rq4d
- Csv+AznciLubsbUrSdZZhs5nDcR0AhjN/QxvjTP9QbFkyVb2j9sm9fZwvpLlX3HW+BqGGhQaCx9
- YLH6Npx2jmyv0x/YnQECNKhAabodYCVFVGmOBsmRlIRURywwXLp5sCFvLIIz20wQ3/S+hukRMx2
- XowrUsAyUAhWVlobfKt/a2DBhVTZpxnf6pqHsBgiMwbCrSwwr+YkdWGrroYzRz6+gfuGzaaTAU/
- yOgBYY/hdGjZMMmDczlCDG3cdMZTTwuAxQ4ChM2UNfe3ScBXdxzd4DPhMGNEh6AkPciEcGABxHd
- mQTuklGFKxT6lxQ1yT+vo3oGsIF0nYrFMhvSYkcj2RhVHOGNeoLCvuI+VNuxbZA==
-Received: from fli4l.lan.fli4l (p5b3a0d5e.dip0.t-ipconnect.de [91.58.13.94])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 7AB33A4C4B60;
- Sun, 22 Nov 2026 22:06:40 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:56726)
- by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xVElj-000000006Y2-2Vt6;
- Sun, 22 Nov 2026 21:06:40 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
-To: buildroot@buildroot.org
-Date: Sun, 22 Nov 2026 22:06:39 +0100
-Message-ID: <20261122210639.3933410-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tMyik_2X8Wbw for <buildroot@buildroot.org>;
+ Sun, 22 Nov 2026 21:29:59 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 3A68F40081
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::533; helo=mail-ed1-x533.google.com;
+ envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3A68F40081
+ for <buildroot@buildroot.org>; Sun, 22 Nov 2026 21:29:57 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id
+ 4fb4d7f45d1cf-6b894d9a075so2809899a12.2
+ for <buildroot@buildroot.org>; Sun, 22 Nov 2026 13:29:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1795382996; x=1795987796;
+ h=content-transfer-encoding:content-type:cc:to:subject:message-id
+ :date:from:in-reply-to:references:mime-version:x-gm-gg
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+ :content-type;
+ bh=FmXjX2rG4mjYcwp+9Q9CwB8FrtXvod+83HiQQoS4HRI=;
+ b=FcA3Lcrh331KUH776agcER7CcF20oa7hrGc8JZMsZa8lydeLX3VEiXGeE+5xo9UXIo
+ BtkxNpxf0Two0eAPbTlc5iQ5F7fyEOgZ5weotSrgo60S61DEe1E9h61syMWK6mbDXSVa
+ /xazdLtqLHPF3+1ZNpUvwbsZDLatuqQVonuyii+eiL291ufdu8y+xli9S0+I1wqVBCu4
+ Nz9LF3PD9CWqc3e9XfZrwyNuoO/Z4TzPUPGZlCBSM9u1+mwpNfUmXmKdqy734fkKzUTM
+ MnX5rtwBINeX5ZFehiazDkUiaEBcDohUIq8s599V6imQhY4RHwZ/zoMficVZb/vKyTfL
+ pJVg==
+X-Gm-Message-State: APuU4Z/MHLUgqvXXpMSnyd7ygWVkTInSQliyNod5xwsvvrTOsvnB1Eh2
+ /tpegOUdbj7T+QsMxX5yNyQq+07VQh0HOt07nZCY8F5ZVI3lljKrCZ0YHWfjIRzgOGGgzz1i6If
+ sd8nt0E+mRyBhcblZ5k4pa4kS/UJkYfc=
+X-Gm-Gg: AZFdTZcN41F7RVzvPiTGUICCfmIrm51VKujIKvARiN20ru4oMiGnG75npDGVDXTUPE4
+ DB/Bt2js4KfhMdsuUdQyD6Mb9/4o/l8JZDI6iWYMRHeXP05xnJJg4qQh5/zoeV/dCW8NfHqK7Ad
+ GFkT8YZSJfRHe0rG6unjD8pq0o3jIq/SHoN2VPqv3zDYJOPqNwaEizjnNeddaawY14L95iGd6ql
+ kBr/MxTVsVSZbq4cpTpN0LC6G+F+UEtITgV5VgaeikODLDr8fZUeCQ4hsOqTDufgHezLY8K88E0
+ QycbWwGJVEgYO1wXpETbBA93QtZGiY2lqYGQQGvYZ2IXXZiiq3AJxqH6EweiNLk7jRVpR54x/g2
+ K3BA2NUIaPN1UOQxnTSOUuyaU7mhG8c57S8E=
+X-Received: by 2002:a05:6402:13cc:b0:6ba:88b9:71e6 with SMTP id
+ 4fb4d7f45d1cf-6ba88b97656mr2175774a12.14.1795382995317; Sun, 22 Nov 2026
+ 13:29:55 -0800 (PST)
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-X-Spamd-Bar: -
-Subject: [Buildroot] [PATCH v5 1/1] package/fontconfig: security bump
+References: <20261122210639.3933410-1-bernd@kuhls.net>
+In-Reply-To: <20261122210639.3933410-1-bernd@kuhls.net>
+Date: Sun, 22 Nov 2026 22:29:40 +0100
+X-Gm-Features: Aa3M54oCApSOEfsGPI1HkHBLEQzkJi5Hi9w0C50qHY_wQL1Yd-ZCPIMj6Eu4M94
+Message-ID: <CAGm1_kuT1JMDTiAD+Ns+x9Cd0a6bqGtHHx7px3FPBhcFHY4_Mg@mail.gmail.com>
+To: Bernd Kuhls <bernd@kuhls.net>
+Cc: buildroot@buildroot.org, Adrian Perez de Castro <aperez@igalia.com>, 
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>, Daniel Lang <dalang@gmx.at>,
+ Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>, 
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>, 
+ Giulio Benetti <giulio.benetti@benettiengineering.com>, 
+ James Hilliard <james.hilliard1@gmail.com>,
+ James Knight <james.knight@collins.com>, 
+ Mario Rugiero <mrugiero@gmail.com>,
+ Olivier Schonken <olivier.schonken@gmail.com>, 
+ Raphael Pavlidis <raphael.pavlidis@gmail.com>,
+ Romain Naour <romain.naour@gmail.com>, 
+ Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
+ Sergio Prado <sergio.prado@e-labworks.com>, 
+ Simon Dawson <spdawson@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [Buildroot] [PATCH v5 1/1] package/fontconfig: security bump
  version to 2.18.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
@@ -131,1234 +136,999 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Daniel Lang <dalang@gmx.at>, Sergio Prado <sergio.prado@e-labworks.com>,
- Raphael Pavlidis <raphael.pavlidis@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Romain Naour <romain.naour@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
- Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Olivier Schonken <olivier.schonken@gmail.com>,
- Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
- James Knight <james.knight@collins.com>, Mario Rugiero <mrugiero@gmail.com>,
- Adrian Perez de Castro <aperez@igalia.com>, Simon Dawson <spdawson@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
+Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+X-Spam-Status: No, score=-21.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS
 	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-https://lists.freedesktop.org/archives/fontconfig/2026-May/007334.html
-https://lists.freedesktop.org/archives/fontconfig/2026-June/007345.html
-https://lists.freedesktop.org/archives/fontconfig/2026-July/007371.html
-https://lists.freedesktop.org/archives/fontconfig/2026-August/007385.html
-
-Version 2.18.4 contains a security fix:
-https://lists.freedesktop.org/archives/fontconfig/2026-November/007425.html
-https://seclists.org/oss-sec/2026/q4/779
-
-Due to upstream commit
-https://gitlab.freedesktop.org/fontconfig/fontconfig/-/commit/7643efb77552076b035d3eb506ca836ed4764ca5
-added in version 2.18.0 fontconfig now uses locale_t which adds a
-dependency to BR2_ENABLE_LOCALE and wchar that needs to be propagated
-to its reverse dependencies.
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
----
-Gitlab pipelines passed:
-https://gitlab.com/bkuhls/buildroot/-/commits/d2ec2e24bd269301262b0bebff442be1819ba7db
-
-v5: updated dependencies (Yegor)
-v4: bumped to 2.18.4, rebased
-v3: updated dependencies (Thomas)
-v2: updated dependencies (Thomas)
-
- package/cairo/Config.in                        | 4 ++++
- package/cairomm/Config.in                      | 4 +++-
- package/cairomm1_14/Config.in                  | 4 +++-
- package/cups-filters/Config.in                 | 4 +++-
- package/efl/Config.in                          | 8 +++++++-
- package/fontconfig/Config.in                   | 5 +++++
- package/fontconfig/fontconfig.hash             | 4 ++--
- package/fontconfig/fontconfig.mk               | 2 +-
- package/foot/Config.in                         | 6 ++++--
- package/ghostscript/Config.in                  | 4 ++++
- package/gstreamer1/gst1-plugins-bad/Config.in  | 8 ++++++--
- package/gstreamer1/gst1-plugins-base/Config.in | 4 +++-
- package/gstreamer1/gst1-plugins-good/Config.in | 4 ++++
- package/gtkmm3/Config.in                       | 4 +++-
- package/kodi/Config.in                         | 9 +++++----
- package/kodi/kodi.mk                           | 5 -----
- package/libdecor/Config.in                     | 4 +++-
- package/libfm/Config.in                        | 4 +++-
- package/libgdiplus/Config.in                   | 4 +++-
- package/libgtk3/Config.in                      | 8 ++++++--
- package/libgtk4/Config.in                      | 4 +++-
- package/librsvg/Config.in                      | 4 +++-
- package/matchbox/Config.in                     | 4 ++++
- package/openbox/Config.in                      | 4 +++-
- package/pango/Config.in                        | 4 +++-
- package/pangomm/Config.in                      | 4 +++-
- package/pangomm2_46/Config.in                  | 4 +++-
- package/pcmanfm/Config.in                      | 4 +++-
- package/poppler/Config.in                      | 4 +++-
- package/python-pycairo/Config.in               | 4 ++++
- package/qt5/qt5base/Config.in                  | 4 ++++
- package/qt6/qt6base/Config.in                  | 4 ++++
- package/ratpoison/Config.in                    | 4 ++++
- package/rrdtool/Config.in                      | 4 +++-
- package/sway/Config.in                         | 4 +++-
- package/swaybg/Config.in                       | 4 ++++
- package/tk/Config.in                           | 6 ++++--
- package/vdr/Config.in                          | 4 +++-
- package/vte/Config.in                          | 4 +++-
- package/webkitgtk/Config.in                    | 4 +++-
- package/weston/Config.in                       | 1 +
- package/wireshark/Config.in                    | 4 +++-
- package/wmenu/Config.in                        | 4 +++-
- package/wpewebkit/Config.in                    | 4 +++-
- package/x11r7/xapp_x11perf/Config.in           | 4 ++++
- package/x11r7/xapp_xclock/Config.in            | 4 ++++
- package/x11r7/xapp_xfd/Config.in               | 4 ++++
- package/x11r7/xapp_xlogo/Config.in             | 4 ++++
- package/x11r7/xlib_libXft/Config.in            | 4 ++++
- package/x11r7/xserver_xorg-server/Config.in    | 4 ++++
- package/xscreensaver/Config.in                 | 4 +++-
- 51 files changed, 176 insertions(+), 46 deletions(-)
-
-diff --git a/package/cairo/Config.in b/package/cairo/Config.in
-index c41a12fe81..f1b58973d7 100644
---- a/package/cairo/Config.in
-+++ b/package/cairo/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_CAIRO
- 	bool "cairo"
-+	depends on BR2_ENABLE_LOCALE # fontconfig
- 	select BR2_PACKAGE_PIXMAN
- 	select BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
-@@ -28,3 +29,6 @@ config BR2_PACKAGE_CAIRO_ZLIB
- 	select BR2_PACKAGE_ZLIB
- 
- endif
-+
-+comment "cairo needs a toolchain w/ locale"
-+	depends on !BR2_ENABLE_LOCALE
-diff --git a/package/cairomm/Config.in b/package/cairomm/Config.in
-index 174f3967ab..33d2bfe98f 100644
---- a/package/cairomm/Config.in
-+++ b/package/cairomm/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_CAIROMM
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # libsigc
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_ENABLE_LOCALE # cairo -> fontconfig
- 	depends on BR2_USE_MMU # libglib2
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_CAIRO
-@@ -13,7 +14,8 @@ config BR2_PACKAGE_CAIROMM
- 
- 	  https://www.cairographics.org/cairomm/
- 
--comment "cairomm needs a toolchain w/ C++, wchar, threads, gcc >= 7"
-+comment "cairomm needs a toolchain w/ C++, wchar, locale, threads, gcc >= 7"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || !BR2_USE_WCHAR \
-+		|| !BR2_ENABLE_LOCALE \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/cairomm1_14/Config.in b/package/cairomm1_14/Config.in
-index e369aa6f4a..c9aa593d6f 100644
---- a/package/cairomm1_14/Config.in
-+++ b/package/cairomm1_14/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_CAIROMM1_14
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_ENABLE_LOCALE # cairo -> fontconfig
- 	depends on BR2_USE_MMU # libglib2
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_CAIRO
-@@ -16,7 +17,8 @@ config BR2_PACKAGE_CAIROMM1_14
- 
- 	  https://www.cairographics.org/cairomm/
- 
--comment "cairomm (1.14.x) needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
-+comment "cairomm (1.14.x) needs a toolchain w/ C++, wchar, locale, threads, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_USE_WCHAR \
-+		|| !BR2_ENABLE_LOCALE \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/cups-filters/Config.in b/package/cups-filters/Config.in
-index b5b9e04a28..8c8cecd516 100644
---- a/package/cups-filters/Config.in
-+++ b/package/cups-filters/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_CUPS_FILTERS
- 	depends on BR2_USE_MMU
- 	depends on BR2_INSTALL_LIBSTDCPP # qpdf
- 	depends on !BR2_STATIC_LIBS
-+	depends on BR2_ENABLE_LOCALE # fontconfig
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_PACKAGE_CUPS
-@@ -32,9 +33,10 @@ config BR2_PACKAGE_CUPS_FILTERS
- 
- 	  http://www.linuxfoundation.org/collaborate/workgroups/openprinting/cups-filters
- 
--comment "cups-filters needs a toolchain w/ wchar, C++, threads and dynamic library, gcc >= 10"
-+comment "cups-filters needs a toolchain w/ wchar, locale, C++, threads and dynamic library, gcc >= 10"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_USE_WCHAR || BR2_STATIC_LIBS || \
-+		!BR2_ENABLE_LOCALE || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_10
-diff --git a/package/efl/Config.in b/package/efl/Config.in
-index c4f82b92e3..f824a212ca 100644
---- a/package/efl/Config.in
-+++ b/package/efl/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_EFL
- 	bool "efl"
-+	depends on BR2_ENABLE_LOCALE # fontconfig
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++11
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # host-efl
- 	depends on BR2_INSTALL_LIBSTDCPP
-@@ -280,16 +281,21 @@ config BR2_PACKAGE_EFL_SVG
- 	bool "SVG loader"
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # librsvg
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # librsvg -> pango -> harfbuzz
-+	depends on BR2_ENABLE_LOCALE # librsvg -> cairo -> fontconfig
- 	select BR2_PACKAGE_LIBRSVG
- 	select BR2_PACKAGE_CAIRO
- 	help
- 	  This option enables the Evas generic SVG loader
- 
-+comment "SVG loader needs a toolchain w/ locale"
-+	depends on !BR2_ENABLE_LOCALE
-+
- endif # BR2_PACKAGE_EFL
- 
--comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.9, host gcc >= 4.9, threads, wchar"
-+comment "efl needs a toolchain w/ C++, dynamic library, gcc >= 4.9, host gcc >= 4.9, threads, wchar, locale"
- 	depends on !BR2_INSTALL_LIBSTDCPP \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 \
- 		|| !BR2_HOST_GCC_AT_LEAST_4_9 || BR2_STATIC_LIBS \
-+		|| !BR2_ENABLE_LOCALE \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
- 	depends on BR2_USE_MMU
-diff --git a/package/fontconfig/Config.in b/package/fontconfig/Config.in
-index 218fdb2e7a..e4c6e3da59 100644
---- a/package/fontconfig/Config.in
-+++ b/package/fontconfig/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_FONTCONFIG
- 	bool "fontconfig"
-+	depends on BR2_USE_WCHAR
-+	depends on BR2_ENABLE_LOCALE # locale_t
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_EXPAT
- 	help
-@@ -7,3 +9,6 @@ config BR2_PACKAGE_FONTCONFIG
- 	  access.
- 
- 	  http://www.fontconfig.org/
-+
-+comment "fontconfig needs a toolchain w/ wchar, locale"
-+	depends on !BR2_USE_WCHAR || !BR2_ENABLE_LOCALE
-diff --git a/package/fontconfig/fontconfig.hash b/package/fontconfig/fontconfig.hash
-index e6f2e0771c..6b8daa818e 100644
---- a/package/fontconfig/fontconfig.hash
-+++ b/package/fontconfig/fontconfig.hash
-@@ -1,5 +1,5 @@
--# From https://gitlab.freedesktop.org/api/v4/projects/890/packages/generic/fontconfig/2.17.1/fontconfig-2.17.1.tar.xz.sha256sum
--sha256  9f5cae93f4fffc1fbc05ae99cdfc708cd60dfd6612ffc0512827025c026fa541  fontconfig-2.17.1.tar.xz
-+# From https://gitlab.freedesktop.org/api/v4/projects/890/packages/generic/fontconfig/2.18.4/fontconfig-2.18.4.tar.xz.sha256sum
-+sha256  95013637eff5f81d4871dd16cd098c273264c16d0f9f0b27cc43b81b2794bee3  fontconfig-2.18.4.tar.xz
- 
- # Locally calculated
- sha256  51a51aa9823704fd90bccc616cdd17ebabb5b2b3e9cbde886ca02c7002288067  COPYING
-diff --git a/package/fontconfig/fontconfig.mk b/package/fontconfig/fontconfig.mk
-index 639f6ed51d..c44e8c1a8e 100644
---- a/package/fontconfig/fontconfig.mk
-+++ b/package/fontconfig/fontconfig.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FONTCONFIG_VERSION = 2.17.1
-+FONTCONFIG_VERSION = 2.18.4
- FONTCONFIG_SITE = https://gitlab.freedesktop.org/api/v4/projects/890/packages/generic/fontconfig/$(FONTCONFIG_VERSION)
- FONTCONFIG_SOURCE = fontconfig-$(FONTCONFIG_VERSION).tar.xz
- FONTCONFIG_INSTALL_STAGING = YES
-diff --git a/package/foot/Config.in b/package/foot/Config.in
-index b0ec2e3926..5a3ce7a773 100644
---- a/package/foot/Config.in
-+++ b/package/foot/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_FOOT
- 	bool "foot"
-+	depends on BR2_ENABLE_LOCALE # fontconfig
- 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # fcft
- 	depends on !BR2_STATIC_LIBS # wayland
- 	select BR2_PACKAGE_FCFT
-@@ -32,6 +33,7 @@ config BR2_PACKAGE_FOOT_THEMES
- 
- endif # BR2_PACKAGE_FOOT
- 
--comment "foot needs a glibc or musl toolchain w/ dynamic library"
-+comment "foot needs a glibc or musl toolchain w/ dynamic library, locale"
- 	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL) || \
--		BR2_STATIC_LIBS
-+		BR2_STATIC_LIBS || \
-+		!BR2_ENABLE_LOCALE
-diff --git a/package/ghostscript/Config.in b/package/ghostscript/Config.in
-index 023ef5f2ba..f037d764bf 100644
---- a/package/ghostscript/Config.in
-+++ b/package/ghostscript/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_GHOSTSCRIPT
- 	bool "ghostscript"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_ENABLE_LOCALE # fontconfig
- 	select BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_GHOSTSCRIPT_FONTS
- 	select BR2_PACKAGE_JPEG
-@@ -12,3 +13,6 @@ config BR2_PACKAGE_GHOSTSCRIPT
- 	  Document Format (PDF) files.
- 
- 	  http://ghostscript.com
-+
-+comment "ghostscript needs a toolchain w/ locale"
-+	depends on !BR2_ENABLE_LOCALE
-diff --git a/package/gstreamer1/gst1-plugins-bad/Config.in b/package/gstreamer1/gst1-plugins-bad/Config.in
-index fd518c228d..1917dd06f9 100644
---- a/package/gstreamer1/gst1-plugins-bad/Config.in
-+++ b/package/gstreamer1/gst1-plugins-bad/Config.in
-@@ -475,6 +475,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_DTLS
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_TTML
- 	bool "ttml"
- 	depends on BR2_USE_WCHAR # pango -> glib2
-+	depends on BR2_ENABLE_LOCALE # cairo -> fontconfig
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pango -> glib2
- 	depends on BR2_USE_MMU # pango -> glib2
- 	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype
-@@ -486,10 +487,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_TTML
- 	help
- 	  Timed Text Markup Language (TTML) subtitle plugin
- 
--comment "ttml needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
-+comment "ttml needs a toolchain w/ wchar, locale, threads, C++, gcc >= 4.9"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_USE_MMU
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_ENABLE_LOCALE || \
- 		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_MPEG2ENC
-@@ -568,13 +570,15 @@ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_RSVG
- 	depends on BR2_INSTALL_LIBSTDCPP # librsvg -> pango
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # librsvg -> pango -> harfbuzz
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # librsvg -> pango -> harfbuzz
-+	depends on BR2_ENABLE_LOCALE # librsvg -> cairo -> fontconfig
- 	select BR2_PACKAGE_LIBRSVG
- 	help
- 	  RSVG plugin library
- 
--comment "rsvg plugin needs a toolchain w/ C++, gcc >= 4.9"
-+comment "rsvg plugin needs a toolchain w/ locale, C++, gcc >= 4.9"
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_ENABLE_LOCALE || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 
-diff --git a/package/gstreamer1/gst1-plugins-base/Config.in b/package/gstreamer1/gst1-plugins-base/Config.in
-index 6eff685c2f..2da9e9da22 100644
---- a/package/gstreamer1/gst1-plugins-base/Config.in
-+++ b/package/gstreamer1/gst1-plugins-base/Config.in
-@@ -265,6 +265,7 @@ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_OPUS
- config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PANGO
- 	bool "pango font renderer"
- 	depends on BR2_USE_WCHAR # pango -> glib2
-+	depends on BR2_ENABLE_LOCALE # pango -> cairo -> fontconfig
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # pango -> glib2
- 	depends on BR2_USE_MMU # pango -> glib2
- 	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype
-@@ -274,10 +275,11 @@ config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_PANGO
- 	help
- 	  Pango-based text rendering and overlay
- 
--comment "pango plugin needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
-+comment "pango plugin needs a toolchain w/ C++, wchar, locale, threads, gcc >= 4.9"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-+		!BR2_ENABLE_LOCALE || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
- 
- config BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_THEORA
-diff --git a/package/gstreamer1/gst1-plugins-good/Config.in b/package/gstreamer1/gst1-plugins-good/Config.in
-index c4eb4efb65..8e45dcb759 100644
---- a/package/gstreamer1/gst1-plugins-good/Config.in
-+++ b/package/gstreamer1/gst1-plugins-good/Config.in
-@@ -328,11 +328,15 @@ config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_V4L2_PROBE
- 
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_CAIRO
- 	bool "cairo"
-+	depends on BR2_ENABLE_LOCALE # cairo -> fontconfig
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PNG
- 	help
- 	  Cairo-based elements
- 
-+comment "cairo needs a toolchain w/ locale"
-+	depends on !BR2_ENABLE_LOCALE
-+
- config BR2_PACKAGE_GST1_PLUGINS_GOOD_PLUGIN_FLAC
- 	bool "flac (libFLAC)"
- 	depends on BR2_USE_WCHAR # flac
-diff --git a/package/gtkmm3/Config.in b/package/gtkmm3/Config.in
-index ac38ba06fc..d6f59efef6 100644
---- a/package/gtkmm3/Config.in
-+++ b/package/gtkmm3/Config.in
-@@ -1,7 +1,8 @@
--comment "gtkmm3 needs libgtk3 and a toolchain w/ C++, wchar, threads, gcc >= 4.9, dynamic library"
-+comment "gtkmm3 needs libgtk3 and a toolchain w/ C++, wchar, locale, threads, gcc >= 4.9, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_USE_WCHAR \
-+		|| !BR2_ENABLE_LOCALE \
- 		|| !BR2_INSTALL_LIBSTDCPP || !BR2_PACKAGE_LIBGTK3 \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS || \
- 		BR2_STATIC_LIBS
-@@ -14,6 +15,7 @@ config BR2_PACKAGE_GTKMM3
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # *mm/libgtk3 -> libglib2
- 	depends on BR2_USE_MMU # *mm/libgtk3 -> libglib2
- 	depends on BR2_USE_WCHAR # *mm/libgtk3 -> libglib2
-+	depends on BR2_ENABLE_LOCALE # cairomm -> cairo -> fontconfig
- 	depends on BR2_PACKAGE_LIBGTK3
- 	depends on !BR2_STATIC_LIBS # atkmm
- 	select BR2_PACKAGE_ATKMM2_28
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 110aa91a49..3676b4a0d0 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -8,11 +8,13 @@ config BR2_PACKAGE_KODI_ARCH_SUPPORTS
- 	depends on !BR2_m68k
- 	depends on BR2_USE_MMU # libcdio, and others
- 
--comment "kodi needs python3 w/ .py modules, a uClibc or glibc toolchain w/ C++, threads, wchar, dynamic library, gcc >= 9.x, host gcc >= 9.x"
-+comment "kodi needs python3 w/ .py modules, a uClibc or glibc toolchain w/ C++, threads, wchar, locale, dynamic library, gcc >= 9.x, host gcc >= 9.x"
- 	depends on BR2_PACKAGE_KODI_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
--		|| !BR2_USE_WCHAR || BR2_STATIC_LIBS \
-+		|| !BR2_ENABLE_LOCALE \
-+		|| !BR2_USE_WCHAR \
-+		|| BR2_STATIC_LIBS \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_9 \
- 		|| !BR2_HOST_GCC_AT_LEAST_9 \
- 		|| BR2_TOOLCHAIN_USES_MUSL \
-@@ -62,6 +64,7 @@ menuconfig BR2_PACKAGE_KODI
- 	depends on BR2_HOST_GCC_AT_LEAST_9 # C++17
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on !BR2_TOOLCHAIN_USES_MUSL
-+	depends on BR2_ENABLE_LOCALE # fontconfig
- 	depends on BR2_USE_WCHAR
- 	depends on !BR2_STATIC_LIBS # gnutls, python3 and others
- 	depends on BR2_PACKAGE_HAS_LIBEGL
-@@ -88,8 +91,6 @@ menuconfig BR2_PACKAGE_KODI
- 	select BR2_PACKAGE_LIBCURL
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_LIBFRIBIDI
--	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
--	select BR2_PACKAGE_LIBICONV_EXTRA_ENCODINGS if !BR2_ENABLE_LOCALE
- 	select BR2_PACKAGE_LIBPLIST
- 	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_LZO
-diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
-index fd4659da99..f30be73e05 100644
---- a/package/kodi/kodi.mk
-+++ b/package/kodi/kodi.mk
-@@ -123,11 +123,6 @@ endif
- 
- KODI_CONF_OPTS += -DCORE_PLATFORM_NAME="$(KODI_CORE_PLATFORM_NAME)"
- 
--ifeq ($(BR2_ENABLE_LOCALE),)
--KODI_DEPENDENCIES += libiconv
--KODI_EXTRA_LIBS += -liconv
--endif
--
- ifeq ($(BR2_arcle),y)
- KODI_CONF_OPTS += -DWITH_ARCH=arc -DWITH_CPU=arc
- else ifeq ($(BR2_armeb),y)
-diff --git a/package/libdecor/Config.in b/package/libdecor/Config.in
-index 782fe855b4..113f154c1e 100644
---- a/package/libdecor/Config.in
-+++ b/package/libdecor/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_LIBDECOR
- 	depends on !BR2_STATIC_LIBS # wayland
- 	depends on BR2_USE_MMU # pango
- 	depends on BR2_USE_WCHAR # pango
-+	depends on BR2_ENABLE_LOCALE # cairo -> fontconfig
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango
- 	depends on BR2_INSTALL_LIBSTDCPP # pango
-@@ -18,8 +19,9 @@ config BR2_PACKAGE_LIBDECOR
- 
- 	  https://gitlab.freedesktop.org/libdecor/libdecor
- 
--comment "libdecor needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
-+comment "libdecor needs a toolchain w/ wchar, locale, threads, C++, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_ENABLE_LOCALE || \
- 		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
-diff --git a/package/libfm/Config.in b/package/libfm/Config.in
-index abb35ca3dd..6a64d1fb50 100644
---- a/package/libfm/Config.in
-+++ b/package/libfm/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBFM
- 	bool "libfm"
- 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS # libgtk3
- 	depends on BR2_USE_WCHAR # libgtk3, libglib2
-+	depends on BR2_ENABLE_LOCALE # cairo -> fontconfig
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libepoxy, libgtk3, libglib2
- 	depends on BR2_USE_MMU # libgtk3, libglib2
- 	depends on BR2_INSTALL_LIBSTDCPP # libgtk3
-@@ -27,11 +28,12 @@ config BR2_PACKAGE_LIBFM
- 
- 	  http://wiki.lxde.org/en/Libfm
- 
--comment "libfm a toolchain w/ dynamic library, wchar, threads, C++, gcc >= 4.9"
-+comment "libfm a toolchain w/ dynamic library, wchar, locale, threads, C++, gcc >= 4.9"
- 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_ENABLE_LOCALE || \
- 		BR2_STATIC_LIBS || \
- 		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
-diff --git a/package/libgdiplus/Config.in b/package/libgdiplus/Config.in
-index d26a997d46..c53abe78de 100644
---- a/package/libgdiplus/Config.in
-+++ b/package/libgdiplus/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBGDIPLUS
- 	bool "libgdiplus"
- 	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_USE_WCHAR # libglib2 -> gettext
-+	depends on BR2_ENABLE_LOCALE # cairo -> fontconfig
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_MMU # libglib2
- 	depends on BR2_INSTALL_LIBSTDCPP
-@@ -14,8 +15,9 @@ config BR2_PACKAGE_LIBGDIPLUS
- 
- 	  https://github.com/mono/libgdiplus
- 
--comment "libgdiplus needs a toolchain w/ wchar, threads, C++"
-+comment "libgdiplus needs a toolchain w/ wchar, locale, threads, C++"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_XORG7
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_ENABLE_LOCALE || \
- 		!BR2_INSTALL_LIBSTDCPP
-diff --git a/package/libgtk3/Config.in b/package/libgtk3/Config.in
-index dac2d17974..08dfbc9178 100644
---- a/package/libgtk3/Config.in
-+++ b/package/libgtk3/Config.in
-@@ -1,8 +1,11 @@
--comment "libgtk3 needs a toolchain w/ wchar, threads, C++, gcc >= 4.9, dynamic library"
-+comment "libgtk3 needs a toolchain w/ wchar, locale, threads, C++, gcc >= 4.9, dynamic library"
- 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
--	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
-+	depends on \
-+		!BR2_USE_WCHAR || \
-+		!BR2_ENABLE_LOCALE || \
-+		!BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
- 		BR2_STATIC_LIBS
-@@ -16,6 +19,7 @@ comment "libgtk3 needs an OpenGL or an OpenGL-EGL backend"
- config BR2_PACKAGE_LIBGTK3
- 	bool "libgtk3"
- 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS # host-libgtk3 -> host-librsvg
-+	depends on BR2_ENABLE_LOCALE # fontconfig
- 	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2, libepoxy
- 	depends on BR2_USE_MMU # glib2
-diff --git a/package/libgtk4/Config.in b/package/libgtk4/Config.in
-index e06df5b487..be69a31601 100644
---- a/package/libgtk4/Config.in
-+++ b/package/libgtk4/Config.in
-@@ -1,7 +1,8 @@
--comment "libgtk4 needs a toolchain w/ dynamic library, wchar, threads, C++, gcc >= 4.9"
-+comment "libgtk4 needs a toolchain w/ dynamic library, wchar, locale, threads, C++, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_ENABLE_LOCALE || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		BR2_STATIC_LIBS || \
- 		!BR2_TOOLCHAIN_HAS_THREADS
-@@ -14,6 +15,7 @@ comment "libgtk4 needs an OpenGL(ES) EGL backend"
- config BR2_PACKAGE_LIBGTK4
- 	bool "libgtk4"
- 	depends on BR2_USE_WCHAR # glib2
-+	depends on BR2_ENABLE_LOCALE # cairo/pango -> fontconfig
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2, graphene, libepoxy
- 	depends on BR2_USE_MMU # glib2
- 	depends on BR2_INSTALL_LIBSTDCPP # pango
-diff --git a/package/librsvg/Config.in b/package/librsvg/Config.in
-index 9f5c2f388e..46e431f700 100644
---- a/package/librsvg/Config.in
-+++ b/package/librsvg/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBRSVG
- 	bool "librsvg"
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
- 	depends on BR2_USE_WCHAR # glib2
-+	depends on BR2_ENABLE_LOCALE # cairo -> fontconfig
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	depends on BR2_USE_MMU # glib2
- 	depends on BR2_INSTALL_LIBSTDCPP # pango
-@@ -21,10 +22,11 @@ config BR2_PACKAGE_LIBRSVG
- 
- 	  https://gitlab.gnome.org/GNOME/librsvg
- 
--comment "librsvg needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
-+comment "librsvg needs a toolchain w/ wchar, locale, threads, C++, gcc >= 4.9"
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_ENABLE_LOCALE || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_INSTALL_LIBSTDCPP
-diff --git a/package/matchbox/Config.in b/package/matchbox/Config.in
-index 9d212902a0..7eb9990160 100644
---- a/package/matchbox/Config.in
-+++ b/package/matchbox/Config.in
-@@ -1,5 +1,6 @@
- menuconfig BR2_PACKAGE_MATCHBOX
- 	bool "matchbox"
-+	depends on BR2_ENABLE_LOCALE # fontconfig
- 	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_USE_MMU # fork()
- 	select BR2_PACKAGE_FONTCONFIG
-@@ -33,3 +34,6 @@ source "package/matchbox-panel/Config.in"
- source "package/matchbox-startup-monitor/Config.in"
- 
- endif
-+
-+comment "matchbox needs a toolchain w/ locale"
-+	depends on !BR2_ENABLE_LOCALE
-diff --git a/package/openbox/Config.in b/package/openbox/Config.in
-index e042ed2b48..ca2adead88 100644
---- a/package/openbox/Config.in
-+++ b/package/openbox/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_OPENBOX
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	depends on BR2_USE_MMU # glib2
- 	depends on BR2_USE_WCHAR # glib2
-+	depends on BR2_ENABLE_LOCALE # xlib_libXft -> fontconfig
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
- 	depends on BR2_INSTALL_LIBSTDCPP # pango -> freetype
-@@ -20,10 +21,11 @@ config BR2_PACKAGE_OPENBOX
- 
- 	  http://openbox.org
- 
--comment "openbox needs a toolchain w/ C++, threads, wchar, gcc >= 4.9"
-+comment "openbox needs a toolchain w/ C++, threads, wchar, locale, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR || \
-+		!BR2_ENABLE_LOCALE || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_PACKAGE_XORG7
-diff --git a/package/pango/Config.in b/package/pango/Config.in
-index e2b2e7fe2b..d6d48efa20 100644
---- a/package/pango/Config.in
-+++ b/package/pango/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PANGO
- 	bool "pango"
-+	depends on BR2_ENABLE_LOCALE # fontconfig
- 	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	depends on BR2_USE_MMU # glib2
-@@ -24,9 +25,10 @@ config BR2_PACKAGE_PANGO
- 
- 	  https://pango.gnome.org/
- 
--comment "pango needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
-+comment "pango needs a toolchain w/ wchar, locale, threads, C++, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_ENABLE_LOCALE || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_INSTALL_LIBSTDCPP
-diff --git a/package/pangomm/Config.in b/package/pangomm/Config.in
-index 6ddad9e6ef..b8b70cfd28 100644
---- a/package/pangomm/Config.in
-+++ b/package/pangomm/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_PANGOMM
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # *mm/pango -> libglib2
- 	depends on BR2_USE_MMU # *mm/pango -> libglib2
- 	depends on BR2_USE_WCHAR # *mm/pango -> libglib2
-+	depends on BR2_ENABLE_LOCALE # pango -> cairo -> fontconfig
- 	select BR2_PACKAGE_CAIROMM
- 	select BR2_PACKAGE_GLIBMM
- 	select BR2_PACKAGE_PANGO
-@@ -15,8 +16,9 @@ config BR2_PACKAGE_PANGOMM
- 
- 	  http://www.gtkmm.org/
- 
--comment "pangomm needs a toolchain w/ C++, wchar, threads, gcc >= 7"
-+comment "pangomm needs a toolchain w/ C++, wchar, locale, threads, gcc >= 7"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || !BR2_USE_WCHAR \
-+		|| !BR2_ENABLE_LOCALE \
- 		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/pangomm2_46/Config.in b/package/pangomm2_46/Config.in
-index 772b523c83..95d069d823 100644
---- a/package/pangomm2_46/Config.in
-+++ b/package/pangomm2_46/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_PANGOMM2_46
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # *mm/pango -> libglib2
- 	depends on BR2_USE_MMU # *mm/pango -> libglib2
- 	depends on BR2_USE_WCHAR # *mm/pango -> libglib2
-+	depends on BR2_ENABLE_LOCALE # cairomm -> cairo -> fontconfig
- 	select BR2_PACKAGE_CAIROMM1_14
- 	select BR2_PACKAGE_GLIBMM2_66
- 	select BR2_PACKAGE_PANGO
-@@ -18,8 +19,9 @@ config BR2_PACKAGE_PANGOMM2_46
- 
- 	  http://www.gtkmm.org/
- 
--comment "pangomm (2.46.x) needs a toolchain w/ C++, wchar, threads, gcc >= 4.9"
-+comment "pangomm (2.46.x) needs a toolchain w/ C++, wchar, locale, threads, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || !BR2_USE_WCHAR \
-+		|| !BR2_ENABLE_LOCALE \
- 		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/pcmanfm/Config.in b/package/pcmanfm/Config.in
-index 5250176c1f..2e7203ad8b 100644
---- a/package/pcmanfm/Config.in
-+++ b/package/pcmanfm/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_PCMANFM
- 	bool "pcmanfm"
- 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS # libfm
- 	depends on BR2_USE_WCHAR # libfm
-+	depends on BR2_ENABLE_LOCALE # libfm -> cairo -> fontconfig
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libepoxy, libfm
- 	depends on BR2_USE_MMU # libfm
- 	depends on BR2_INSTALL_LIBSTDCPP # libfm
-@@ -23,11 +24,12 @@ config BR2_PACKAGE_PCMANFM
- 
- 	  http://wiki.lxde.org/en/PCManFM
- 
--comment "pcmanfm a toolchain w/ dynamic library, wchar, threads, C++, gcc >= 4.9"
-+comment "pcmanfm a toolchain w/ dynamic library, wchar, locale, threads, C++, gcc >= 4.9"
- 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_ENABLE_LOCALE || \
- 		BR2_STATIC_LIBS || \
- 		!BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
-diff --git a/package/poppler/Config.in b/package/poppler/Config.in
-index 208126a327..52e8c4e2d8 100644
---- a/package/poppler/Config.in
-+++ b/package/poppler/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_POPPLER
- 	bool "poppler"
-+	depends on BR2_ENABLE_LOCALE # fontconfig
- 	depends on BR2_USE_WCHAR
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-@@ -31,7 +32,8 @@ config BR2_PACKAGE_POPPLER_UTILS
- 
- endif
- 
--comment "poppler needs a toolchain w/ wchar, C++, threads, dynamic library, gcc >= 7"
-+comment "poppler needs a toolchain w/ wchar, locale, C++, threads, dynamic library, gcc >= 7"
- 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
-+		!BR2_ENABLE_LOCALE || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
-diff --git a/package/python-pycairo/Config.in b/package/python-pycairo/Config.in
-index 0d8de977e1..70d19acd80 100644
---- a/package/python-pycairo/Config.in
-+++ b/package/python-pycairo/Config.in
-@@ -1,7 +1,11 @@
- config BR2_PACKAGE_PYTHON_PYCAIRO
- 	bool "python-pycairo"
-+	depends on BR2_ENABLE_LOCALE # cairo -> fontconfig
- 	select BR2_PACKAGE_CAIRO
- 	help
- 	  Python interface for cairo.
- 
- 	  https://pycairo.readthedocs.io
-+
-+comment "python-pycairo needs a toolchain w/ locale"
-+	depends on !BR2_ENABLE_LOCALE
-diff --git a/package/qt5/qt5base/Config.in b/package/qt5/qt5base/Config.in
-index dfaa798bd4..2068ffa6d1 100644
---- a/package/qt5/qt5base/Config.in
-+++ b/package/qt5/qt5base/Config.in
-@@ -238,11 +238,15 @@ config BR2_PACKAGE_QT5BASE_PRINTSUPPORT
- 
- config BR2_PACKAGE_QT5BASE_FONTCONFIG
- 	bool "fontconfig support"
-+	depends on BR2_ENABLE_LOCALE # fontconfig
- 	select BR2_PACKAGE_FONTCONFIG
- 	help
- 	  This option enables Fontconfig and Freetype support using
- 	  the system fontconfig and freetype2 libraries.
- 
-+comment "fontconfig support needs a toolchain w/ locale"
-+	depends on !BR2_ENABLE_LOCALE
-+
- config BR2_PACKAGE_QT5BASE_HARFBUZZ
- 	bool "harfbuzz support"
- 	select BR2_PACKAGE_HARFBUZZ if \
-diff --git a/package/qt6/qt6base/Config.in b/package/qt6/qt6base/Config.in
-index e6bb99de28..2d8c5ceeac 100644
---- a/package/qt6/qt6base/Config.in
-+++ b/package/qt6/qt6base/Config.in
-@@ -125,11 +125,15 @@ endif
- 
- config BR2_PACKAGE_QT6BASE_FONTCONFIG
- 	bool "fontconfig support"
-+	depends on BR2_ENABLE_LOCALE # fontconfig
- 	select BR2_PACKAGE_FONTCONFIG
- 	help
- 	  This option enables Fontconfig support using the system
- 	  fontconfig library.
- 
-+comment "fontconfig support needs a toolchain w/ locale"
-+	depends on !BR2_ENABLE_LOCALE
-+
- config BR2_PACKAGE_QT6BASE_HARFBUZZ
- 	bool "harfbuzz support"
- 	select BR2_PACKAGE_HARFBUZZ if \
-diff --git a/package/ratpoison/Config.in b/package/ratpoison/Config.in
-index 7b724290c3..81a1f8c334 100644
---- a/package/ratpoison/Config.in
-+++ b/package/ratpoison/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_RATPOISON
- 	bool "ratpoison"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_ENABLE_LOCALE # fontconfig
- 	select BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_LIBERATION
- 	select BR2_PACKAGE_XLIB_LIBX11
-@@ -15,3 +16,6 @@ config BR2_PACKAGE_RATPOISON
- 	  advantage of your precious screen real estate.
- 
- 	  http://www.nongnu.org/ratpoison/
-+
-+comment "ratpoison needs a toolchain w/ locale"
-+	depends on !BR2_ENABLE_LOCALE
-diff --git a/package/rrdtool/Config.in b/package/rrdtool/Config.in
-index d954fd1214..b36202e466 100644
---- a/package/rrdtool/Config.in
-+++ b/package/rrdtool/Config.in
-@@ -18,6 +18,7 @@ config BR2_PACKAGE_RRDTOOL_RRDGRAPH
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
- 	depends on BR2_INSTALL_LIBSTDCPP # freetype support from pango
-+	depends on BR2_ENABLE_LOCALE # cairo -> fontconfig
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PNG
- 	select BR2_PACKAGE_CAIRO_ZLIB
-@@ -26,8 +27,9 @@ config BR2_PACKAGE_RRDTOOL_RRDGRAPH
- 	  This enables the graphing capabilities ('rrdgraph').
- 	  Without this it will only act as a database backend.
- 
--comment "rrd_graph support needs a toolchain w/ C++, gcc >= 4.9"
-+comment "rrd_graph support needs a toolchain w/ locale, C++, gcc >= 4.9"
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_ENABLE_LOCALE || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 
-diff --git a/package/sway/Config.in b/package/sway/Config.in
-index c89c0607d3..f80f73031a 100644
---- a/package/sway/Config.in
-+++ b/package/sway/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_SWAY
- 	depends on BR2_PACKAGE_HAS_UDEV # wlroots
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # json-c, pango
- 	depends on BR2_USE_WCHAR # pango
-+	depends on BR2_ENABLE_LOCALE # cairo -> fontconfig
- 	depends on BR2_USE_MMU # pango
- 	depends on BR2_INSTALL_LIBSTDCPP # pango
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango
-@@ -61,10 +62,11 @@ comment "sway needs systemd, udev, EGL, OpenGL ES and GBM support"
- 		!BR2_PACKAGE_HAS_LIBGLES || \
- 		!BR2_PACKAGE_HAS_LIBGBM
- 
--comment "sway needs a toolchain w/ wchar, threads, C++, dynamic library, gcc >= 4.9"
-+comment "sway needs a toolchain w/ wchar, locale, threads, C++, dynamic library, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || \
-+		!BR2_ENABLE_LOCALE || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		!BR2_INSTALL_LIBSTDCPP || \
-diff --git a/package/swaybg/Config.in b/package/swaybg/Config.in
-index 63aa8cdb6a..bb73c35cca 100644
---- a/package/swaybg/Config.in
-+++ b/package/swaybg/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_SWAYBG
- 	default y if BR2_PACKAGE_SWAY
- 	depends on !BR2_STATIC_LIBS # wayland -> dlfcn.h
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
-+	depends on BR2_ENABLE_LOCALE # cairo -> fontconfig
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PNG
- 	select BR2_PACKAGE_WAYLAND
-@@ -11,3 +12,6 @@ config BR2_PACKAGE_SWAYBG
- 	  Wallpaper tool for Wayland compositors.
- 
- 	  https://github.com/swaywm/swaybg
-+
-+comment "swaybg needs a toolchain w/ locale"
-+	depends on !BR2_ENABLE_LOCALE
-diff --git a/package/tk/Config.in b/package/tk/Config.in
-index 507b0bf979..7c958fe8e1 100644
---- a/package/tk/Config.in
-+++ b/package/tk/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_TK
- 	depends on BR2_USE_MMU # tcl
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # tcl
- 	depends on !BR2_STATIC_LIBS # tcl
-+	depends on BR2_ENABLE_LOCALE # xlib_libXft -> fontconfig
- 	depends on BR2_PACKAGE_XORG7
- 	select BR2_PACKAGE_TCL
- 	select BR2_PACKAGE_XLIB_LIBX11
-@@ -12,7 +13,8 @@ config BR2_PACKAGE_TK
- 
- 	  http://www.tcl.tk
- 
--comment "tk needs a toolchain w/ threads, dynamic library"
-+comment "tk needs a toolchain w/ locale, threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_XORG7
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
-+		|| !BR2_ENABLE_LOCALE
-diff --git a/package/vdr/Config.in b/package/vdr/Config.in
-index 38502729a7..c7b22e6fa2 100644
---- a/package/vdr/Config.in
-+++ b/package/vdr/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_VDR
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_ENABLE_LOCALE # fontconfig
- 	depends on BR2_USE_WCHAR
- 	select BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_FREETYPE
-@@ -17,9 +18,10 @@ config BR2_PACKAGE_VDR
- 
- 	  http://www.tvdr.de
- 
--comment "vdr needs a toolchain w/ C++, dynamic library, NPTL, wchar, headers >= 3.9"
-+comment "vdr needs a toolchain w/ C++, dynamic library, NPTL, wchar, locale, headers >= 3.9"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_INSTALL_LIBSTDCPP || BR2_STATIC_LIBS || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
- 		!BR2_USE_WCHAR || \
-+		!BR2_ENABLE_LOCALE || \
- 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
-diff --git a/package/vte/Config.in b/package/vte/Config.in
-index af6bfae890..38ae3f8c44 100644
---- a/package/vte/Config.in
-+++ b/package/vte/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_VTE
- 	bool "vte"
- 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS # libgtk3 -> host-libgtk3 -> host-librsvg
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_ENABLE_LOCALE # libgtk3 -> fontconfig
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	depends on BR2_USE_MMU
- 	depends on BR2_INSTALL_LIBSTDCPP
-@@ -23,11 +24,12 @@ config BR2_PACKAGE_VTE
- 
- 	  http://github.com/GNOME/vte
- 
--comment "vte needs a uClibc or glibc toolchain w/ dynamic library, wchar, threads, C++, gcc >= 10"
-+comment "vte needs a uClibc or glibc toolchain w/ dynamic library, wchar, locale, threads, C++, gcc >= 10"
- 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_ENABLE_LOCALE || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || \
- 		BR2_STATIC_LIBS || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_10 || \
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index 6600ac17cd..f5c05349f5 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -16,11 +16,12 @@ config BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
- 
--comment "webkitgtk needs libgtk3 or libgtk4 and a toolchain w/ C++, wchar, NPTL, dynamic library, gcc >= 11, host gcc >= 7"
-+comment "webkitgtk needs libgtk3 or libgtk4 and a toolchain w/ C++, wchar, locale, NPTL, dynamic library, gcc >= 11, host gcc >= 7"
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	depends on !BR2_BINFMT_FLAT
- 	depends on (!BR2_PACKAGE_LIBGTK3 && !BR2_PACKAGE_LIBGTK4) || \
- 		!BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
-+		!BR2_ENABLE_LOCALE || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_11 || \
- 		!BR2_HOST_GCC_AT_LEAST_7
-@@ -36,6 +37,7 @@ config BR2_PACKAGE_WEBKITGTK
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_11
- 	depends on BR2_USE_WCHAR # icu, libsoup3
-+	depends on BR2_ENABLE_LOCALE # cairo -> fontconfig
- 	depends on BR2_PACKAGE_LIBGTK3 || BR2_PACKAGE_LIBGTK4
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	select BR2_PACKAGE_CAIRO
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index dcb5c7544e..1f4d9a84e2 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -10,6 +10,7 @@ config BR2_PACKAGE_WESTON
- 	depends on !BR2_STATIC_LIBS # wayland
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0
-+	depends on BR2_ENABLE_LOCALE # cairo -> fontconfig
- 	select BR2_PACKAGE_WAYLAND
- 	select BR2_PACKAGE_WAYLAND_PROTOCOLS
- 	select BR2_PACKAGE_LIBXKBCOMMON
-diff --git a/package/wireshark/Config.in b/package/wireshark/Config.in
-index 894e629b1a..4145a03d3f 100644
---- a/package/wireshark/Config.in
-+++ b/package/wireshark/Config.in
-@@ -23,6 +23,7 @@ if BR2_PACKAGE_WIRESHARK
- config BR2_PACKAGE_WIRESHARK_GUI
- 	bool "Qt5 GUI"
- 	default y
-+	depends on BR2_ENABLE_LOCALE # qt5base-fontconfig
- 	depends on BR2_INSTALL_LIBSTDCPP # qt5
- 	depends on BR2_HOST_GCC_AT_LEAST_5 # qt5
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # qt5
-@@ -39,8 +40,9 @@ config BR2_PACKAGE_WIRESHARK_GUI
- 	help
- 	  Enable Qt5 GUI
- 
--comment "Qt5 GUI needs a udev /dev management and a toolchain w/ C++, NPTL, host gcc >= 5.0, gcc >= 5.0"
-+comment "Qt5 GUI needs a udev /dev management and a toolchain w/ C++, NPTL, locale, host gcc >= 5.0, gcc >= 5.0"
- 	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_ENABLE_LOCALE || \
- 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || !BR2_TOOLCHAIN_GCC_AT_LEAST_5 || \
- 		!BR2_HOST_GCC_AT_LEAST_5
- 
-diff --git a/package/wmenu/Config.in b/package/wmenu/Config.in
-index ce9e70f9f8..a8e0a33d58 100644
---- a/package/wmenu/Config.in
-+++ b/package/wmenu/Config.in
-@@ -7,6 +7,7 @@ config BR2_PACKAGE_WMENU
- 	depends on !BR2_STATIC_LIBS # wayland
- 	depends on BR2_INSTALL_LIBSTDCPP # pango
- 	depends on BR2_USE_WCHAR # libglib2, pango
-+	depends on BR2_ENABLE_LOCALE # cairo -> fontconfig
- 	select BR2_PACKAGE_CAIRO
- 	select BR2_PACKAGE_CAIRO_PNG
- 	select BR2_PACKAGE_LIBGLIB2
-@@ -21,9 +22,10 @@ config BR2_PACKAGE_WMENU
- 
- 	  https://codeberg.org/adnano/wmenu
- 
--comment "wmenu needs a toolchain w/ wchar, threads, C++, dynamic library, gcc >= 4.9"
-+comment "wmenu needs a toolchain w/ wchar, locale, threads, C++, dynamic library, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_ENABLE_LOCALE || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || BR2_STATIC_LIBS || \
- 		!BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR
-diff --git a/package/wpewebkit/Config.in b/package/wpewebkit/Config.in
-index 91de3868bb..0cc6c55efa 100644
---- a/package/wpewebkit/Config.in
-+++ b/package/wpewebkit/Config.in
-@@ -16,10 +16,11 @@ config BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
- 
--comment "wpewebkit needs a toolchain w/ C++, wchar, NPTL, dynamic library, gcc >= 11, host gcc >= 7"
-+comment "wpewebkit needs a toolchain w/ C++, wchar, locale, NPTL, dynamic library, gcc >= 11, host gcc >= 7"
- 	depends on BR2_PACKAGE_WPEWEBKIT_ARCH_SUPPORTS
- 	depends on !BR2_BINFMT_FLAT
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
-+		|| !BR2_ENABLE_LOCALE \
- 		|| !BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_11 \
- 		|| !BR2_HOST_GCC_AT_LEAST_7
-@@ -37,6 +38,7 @@ config BR2_PACKAGE_WPEWEBKIT
- 	depends on BR2_INSTALL_LIBSTDCPP # harfbuzz, icu
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_11
-+	depends on BR2_ENABLE_LOCALE # fontconfig
- 	depends on BR2_USE_WCHAR # icu, libsoup3
- 	depends on BR2_PACKAGE_HAS_LIBGLES
- 	depends on BR2_PACKAGE_HAS_LIBEGL # wpebackend-fdo
-diff --git a/package/x11r7/xapp_x11perf/Config.in b/package/x11r7/xapp_x11perf/Config.in
-index 0f1eca8938..eb02375fe8 100644
---- a/package/x11r7/xapp_x11perf/Config.in
-+++ b/package/x11r7/xapp_x11perf/Config.in
-@@ -1,7 +1,11 @@
- config BR2_PACKAGE_XAPP_X11PERF
- 	bool "x11perf"
-+	depends on BR2_ENABLE_LOCALE # fontconfig
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XLIB_LIBXMU
- 	select BR2_PACKAGE_XLIB_LIBXFT
- 	help
- 	  summarize x11perf results
-+
-+comment "x11perf needs a toolchain w/ locale"
-+	depends on !BR2_ENABLE_LOCALE
-diff --git a/package/x11r7/xapp_xclock/Config.in b/package/x11r7/xapp_xclock/Config.in
-index 083a6d1e40..36113049a0 100644
---- a/package/x11r7/xapp_xclock/Config.in
-+++ b/package/x11r7/xapp_xclock/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_XAPP_XCLOCK
- 	bool "xclock"
-+	depends on BR2_ENABLE_LOCALE # fontconfig
- 	select BR2_PACKAGE_XLIB_LIBX11
- 	select BR2_PACKAGE_XLIB_LIBXAW
- 	select BR2_PACKAGE_XLIB_LIBXFT
-@@ -7,3 +8,6 @@ config BR2_PACKAGE_XAPP_XCLOCK
- 	select BR2_PACKAGE_XLIB_LIBXKBFILE
- 	help
- 	  analog / digital clock for X
-+
-+comment "xclock needs a toolchain w/ locale"
-+	depends on !BR2_ENABLE_LOCALE
-diff --git a/package/x11r7/xapp_xfd/Config.in b/package/x11r7/xapp_xfd/Config.in
-index f006b1e488..1312501bde 100644
---- a/package/x11r7/xapp_xfd/Config.in
-+++ b/package/x11r7/xapp_xfd/Config.in
-@@ -1,8 +1,12 @@
- config BR2_PACKAGE_XAPP_XFD
- 	bool "xfd"
-+	depends on BR2_ENABLE_LOCALE # fontconfig
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_XLIB_LIBXAW
- 	select BR2_PACKAGE_XLIB_LIBXFT
- 	help
- 	  X.Org xfd application
-+
-+comment "xfd needs a toolchain w/ locale"
-+	depends on !BR2_ENABLE_LOCALE
-diff --git a/package/x11r7/xapp_xlogo/Config.in b/package/x11r7/xapp_xlogo/Config.in
-index aacb75ffb0..dc7a20ccf0 100644
---- a/package/x11r7/xapp_xlogo/Config.in
-+++ b/package/x11r7/xapp_xlogo/Config.in
-@@ -1,7 +1,11 @@
- config BR2_PACKAGE_XAPP_XLOGO
- 	bool "xlogo"
-+	depends on BR2_ENABLE_LOCALE # fontconfig
- 	select BR2_PACKAGE_XLIB_LIBXAW
- 	select BR2_PACKAGE_XLIB_LIBXRENDER
- 	select BR2_PACKAGE_XLIB_LIBXFT
- 	help
- 	  X Window System logo
-+
-+comment "xlogo needs a toolchain w/ locale"
-+	depends on !BR2_ENABLE_LOCALE
-diff --git a/package/x11r7/xlib_libXft/Config.in b/package/x11r7/xlib_libXft/Config.in
-index 84967a55e3..16261b485b 100644
---- a/package/x11r7/xlib_libXft/Config.in
-+++ b/package/x11r7/xlib_libXft/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_XLIB_LIBXFT
- 	bool "libXft"
-+	depends on BR2_ENABLE_LOCALE # fontconfig
- 	select BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_XLIB_LIBX11
-@@ -8,3 +9,6 @@ config BR2_PACKAGE_XLIB_LIBXFT
- 	select BR2_PACKAGE_XORGPROTO
- 	help
- 	  X.Org Xft library
-+
-+comment "libXft needs a toolchain w/ locale"
-+	depends on !BR2_ENABLE_LOCALE
-diff --git a/package/x11r7/xserver_xorg-server/Config.in b/package/x11r7/xserver_xorg-server/Config.in
-index 89410f22bb..23f49ea7dd 100644
---- a/package/x11r7/xserver_xorg-server/Config.in
-+++ b/package/x11r7/xserver_xorg-server/Config.in
-@@ -1,6 +1,10 @@
-+comment "xorg-server needs a toolchain w/ locale"
-+	depends on !BR2_ENABLE_LOCALE
-+
- config BR2_PACKAGE_XSERVER_XORG_SERVER
- 	bool "xorg-server"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_ENABLE_LOCALE # fontconfig
- 	# We need a SHA1 implementation. If either openssl or
- 	# libgcrypt are already part of the build, we'll use one of
- 	# them, otherwise, use the small libsha1 library.
-diff --git a/package/xscreensaver/Config.in b/package/xscreensaver/Config.in
-index 5763f12601..d4f59ed945 100644
---- a/package/xscreensaver/Config.in
-+++ b/package/xscreensaver/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_XSCREENSAVER
- 	depends on BR2_PACKAGE_HAS_LIBGL # libglu
- 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS # libgtk3
- 	depends on BR2_USE_WCHAR # libgtk3, libglib2
-+	depends on BR2_ENABLE_LOCALE # libgtk3 -> fontconfig
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libepoxy, libgtk3, libglib2
- 	depends on BR2_USE_MMU # libgtk3, libglib2
- 	depends on BR2_INSTALL_LIBSTDCPP # libgtk3
-@@ -31,7 +32,7 @@ config BR2_PACKAGE_XSCREENSAVER
- 
- 	  http://www.jwz.org/xscreensaver/
- 
--comment "xscreensaver needs a toolchain w/ dynamic library, wchar, C++, threads, gcc >= 4.9, OpenGL backend"
-+comment "xscreensaver needs a toolchain w/ dynamic library, wchar, locale, C++, threads, gcc >= 4.9, OpenGL backend"
- 	depends on BR2_PACKAGE_XORG7
- 	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
- 	depends on BR2_USE_MMU
-@@ -39,4 +40,5 @@ comment "xscreensaver needs a toolchain w/ dynamic library, wchar, C++, threads,
- 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
- 		BR2_STATIC_LIBS || \
-+		!BR2_ENABLE_LOCALE || \
- 		!BR2_USE_WCHAR || !BR2_PACKAGE_HAS_LIBGL
--- 
-2.47.3
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gU3VuLCBOb3YgMjIsIDIwMjYgYXQgMTA6MDbigK9QTSBCZXJuZCBLdWhscyA8YmVybmRAa3Vo
+bHMubmV0PiB3cm90ZToKPgo+IGh0dHBzOi8vbGlzdHMuZnJlZWRlc2t0b3Aub3JnL2FyY2hpdmVz
+L2ZvbnRjb25maWcvMjAyNi1NYXkvMDA3MzM0Lmh0bWwKPiBodHRwczovL2xpc3RzLmZyZWVkZXNr
+dG9wLm9yZy9hcmNoaXZlcy9mb250Y29uZmlnLzIwMjYtSnVuZS8wMDczNDUuaHRtbAo+IGh0dHBz
+Oi8vbGlzdHMuZnJlZWRlc2t0b3Aub3JnL2FyY2hpdmVzL2ZvbnRjb25maWcvMjAyNi1KdWx5LzAw
+NzM3MS5odG1sCj4gaHR0cHM6Ly9saXN0cy5mcmVlZGVza3RvcC5vcmcvYXJjaGl2ZXMvZm9udGNv
+bmZpZy8yMDI2LUF1Z3VzdC8wMDczODUuaHRtbAo+Cj4gVmVyc2lvbiAyLjE4LjQgY29udGFpbnMg
+YSBzZWN1cml0eSBmaXg6Cj4gaHR0cHM6Ly9saXN0cy5mcmVlZGVza3RvcC5vcmcvYXJjaGl2ZXMv
+Zm9udGNvbmZpZy8yMDI2LU5vdmVtYmVyLzAwNzQyNS5odG1sCj4gaHR0cHM6Ly9zZWNsaXN0cy5v
+cmcvb3NzLXNlYy8yMDI2L3E0Lzc3OQo+Cj4gRHVlIHRvIHVwc3RyZWFtIGNvbW1pdAo+IGh0dHBz
+Oi8vZ2l0bGFiLmZyZWVkZXNrdG9wLm9yZy9mb250Y29uZmlnL2ZvbnRjb25maWcvLS9jb21taXQv
+NzY0M2VmYjc3NTUyMDc2YjAzNWQzZWI1MDZjYTgzNmVkNDc2NGNhNQo+IGFkZGVkIGluIHZlcnNp
+b24gMi4xOC4wIGZvbnRjb25maWcgbm93IHVzZXMgbG9jYWxlX3Qgd2hpY2ggYWRkcyBhCj4gZGVw
+ZW5kZW5jeSB0byBCUjJfRU5BQkxFX0xPQ0FMRSBhbmQgd2NoYXIgdGhhdCBuZWVkcyB0byBiZSBw
+cm9wYWdhdGVkCj4gdG8gaXRzIHJldmVyc2UgZGVwZW5kZW5jaWVzLgo+Cj4gU2lnbmVkLW9mZi1i
+eTogQmVybmQgS3VobHMgPGJlcm5kQGt1aGxzLm5ldD4KClJldmlld2VkLWJ5OiBZZWdvciBZZWZy
+ZW1vdiA8eWVnb3JzbGlzdHNAZ29vZ2xlbWFpbC5jb20+Cgo+IC0tLQo+IEdpdGxhYiBwaXBlbGlu
+ZXMgcGFzc2VkOgo+IGh0dHBzOi8vZ2l0bGFiLmNvbS9ia3VobHMvYnVpbGRyb290Ly0vY29tbWl0
+cy9kMmVjMmUyNGJkMjY5MzAxMjYyYjBiZWJmZjQ0MmJlMTgxOWJhN2RiCj4KPiB2NTogdXBkYXRl
+ZCBkZXBlbmRlbmNpZXMgKFllZ29yKQo+IHY0OiBidW1wZWQgdG8gMi4xOC40LCByZWJhc2VkCj4g
+djM6IHVwZGF0ZWQgZGVwZW5kZW5jaWVzIChUaG9tYXMpCj4gdjI6IHVwZGF0ZWQgZGVwZW5kZW5j
+aWVzIChUaG9tYXMpCj4KPiAgcGFja2FnZS9jYWlyby9Db25maWcuaW4gICAgICAgICAgICAgICAg
+ICAgICAgICB8IDQgKysrKwo+ICBwYWNrYWdlL2NhaXJvbW0vQ29uZmlnLmluICAgICAgICAgICAg
+ICAgICAgICAgIHwgNCArKystCj4gIHBhY2thZ2UvY2Fpcm9tbTFfMTQvQ29uZmlnLmluICAgICAg
+ICAgICAgICAgICAgfCA0ICsrKy0KPiAgcGFja2FnZS9jdXBzLWZpbHRlcnMvQ29uZmlnLmluICAg
+ICAgICAgICAgICAgICB8IDQgKysrLQo+ICBwYWNrYWdlL2VmbC9Db25maWcuaW4gICAgICAgICAg
+ICAgICAgICAgICAgICAgIHwgOCArKysrKysrLQo+ICBwYWNrYWdlL2ZvbnRjb25maWcvQ29uZmln
+LmluICAgICAgICAgICAgICAgICAgIHwgNSArKysrKwo+ICBwYWNrYWdlL2ZvbnRjb25maWcvZm9u
+dGNvbmZpZy5oYXNoICAgICAgICAgICAgIHwgNCArKy0tCj4gIHBhY2thZ2UvZm9udGNvbmZpZy9m
+b250Y29uZmlnLm1rICAgICAgICAgICAgICAgfCAyICstCj4gIHBhY2thZ2UvZm9vdC9Db25maWcu
+aW4gICAgICAgICAgICAgICAgICAgICAgICAgfCA2ICsrKystLQo+ICBwYWNrYWdlL2dob3N0c2Ny
+aXB0L0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgIHwgNCArKysrCj4gIHBhY2thZ2UvZ3N0cmVh
+bWVyMS9nc3QxLXBsdWdpbnMtYmFkL0NvbmZpZy5pbiAgfCA4ICsrKysrKy0tCj4gIHBhY2thZ2Uv
+Z3N0cmVhbWVyMS9nc3QxLXBsdWdpbnMtYmFzZS9Db25maWcuaW4gfCA0ICsrKy0KPiAgcGFja2Fn
+ZS9nc3RyZWFtZXIxL2dzdDEtcGx1Z2lucy1nb29kL0NvbmZpZy5pbiB8IDQgKysrKwo+ICBwYWNr
+YWdlL2d0a21tMy9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgICAgIHwgNCArKystCj4gIHBh
+Y2thZ2Uva29kaS9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgICAgICAgfCA5ICsrKysrLS0t
+LQo+ICBwYWNrYWdlL2tvZGkva29kaS5tayAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgNSAt
+LS0tLQo+ICBwYWNrYWdlL2xpYmRlY29yL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICAgIHwg
+NCArKystCj4gIHBhY2thZ2UvbGliZm0vQ29uZmlnLmluICAgICAgICAgICAgICAgICAgICAgICAg
+fCA0ICsrKy0KPiAgcGFja2FnZS9saWJnZGlwbHVzL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAg
+ICB8IDQgKysrLQo+ICBwYWNrYWdlL2xpYmd0azMvQ29uZmlnLmluICAgICAgICAgICAgICAgICAg
+ICAgIHwgOCArKysrKystLQo+ICBwYWNrYWdlL2xpYmd0azQvQ29uZmlnLmluICAgICAgICAgICAg
+ICAgICAgICAgIHwgNCArKystCj4gIHBhY2thZ2UvbGlicnN2Zy9Db25maWcuaW4gICAgICAgICAg
+ICAgICAgICAgICAgfCA0ICsrKy0KPiAgcGFja2FnZS9tYXRjaGJveC9Db25maWcuaW4gICAgICAg
+ICAgICAgICAgICAgICB8IDQgKysrKwo+ICBwYWNrYWdlL29wZW5ib3gvQ29uZmlnLmluICAgICAg
+ICAgICAgICAgICAgICAgIHwgNCArKystCj4gIHBhY2thZ2UvcGFuZ28vQ29uZmlnLmluICAgICAg
+ICAgICAgICAgICAgICAgICAgfCA0ICsrKy0KPiAgcGFja2FnZS9wYW5nb21tL0NvbmZpZy5pbiAg
+ICAgICAgICAgICAgICAgICAgICB8IDQgKysrLQo+ICBwYWNrYWdlL3BhbmdvbW0yXzQ2L0NvbmZp
+Zy5pbiAgICAgICAgICAgICAgICAgIHwgNCArKystCj4gIHBhY2thZ2UvcGNtYW5mbS9Db25maWcu
+aW4gICAgICAgICAgICAgICAgICAgICAgfCA0ICsrKy0KPiAgcGFja2FnZS9wb3BwbGVyL0NvbmZp
+Zy5pbiAgICAgICAgICAgICAgICAgICAgICB8IDQgKysrLQo+ICBwYWNrYWdlL3B5dGhvbi1weWNh
+aXJvL0NvbmZpZy5pbiAgICAgICAgICAgICAgIHwgNCArKysrCj4gIHBhY2thZ2UvcXQ1L3F0NWJh
+c2UvQ29uZmlnLmluICAgICAgICAgICAgICAgICAgfCA0ICsrKysKPiAgcGFja2FnZS9xdDYvcXQ2
+YmFzZS9Db25maWcuaW4gICAgICAgICAgICAgICAgICB8IDQgKysrKwo+ICBwYWNrYWdlL3JhdHBv
+aXNvbi9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgIHwgNCArKysrCj4gIHBhY2thZ2UvcnJk
+dG9vbC9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgICAgfCA0ICsrKy0KPiAgcGFja2FnZS9z
+d2F5L0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICAgICAgICB8IDQgKysrLQo+ICBwYWNrYWdl
+L3N3YXliZy9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgICAgIHwgNCArKysrCj4gIHBhY2th
+Z2UvdGsvQ29uZmlnLmluICAgICAgICAgICAgICAgICAgICAgICAgICAgfCA2ICsrKystLQo+ICBw
+YWNrYWdlL3Zkci9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgICAgICAgIHwgNCArKystCj4g
+IHBhY2thZ2UvdnRlL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICAgICAgICAgfCA0ICsrKy0K
+PiAgcGFja2FnZS93ZWJraXRndGsvQ29uZmlnLmluICAgICAgICAgICAgICAgICAgICB8IDQgKysr
+LQo+ICBwYWNrYWdlL3dlc3Rvbi9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgICAgIHwgMSAr
+Cj4gIHBhY2thZ2Uvd2lyZXNoYXJrL0NvbmZpZy5pbiAgICAgICAgICAgICAgICAgICAgfCA0ICsr
+Ky0KPiAgcGFja2FnZS93bWVudS9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgICAgICB8IDQg
+KysrLQo+ICBwYWNrYWdlL3dwZXdlYmtpdC9Db25maWcuaW4gICAgICAgICAgICAgICAgICAgIHwg
+NCArKystCj4gIHBhY2thZ2UveDExcjcveGFwcF94MTFwZXJmL0NvbmZpZy5pbiAgICAgICAgICAg
+fCA0ICsrKysKPiAgcGFja2FnZS94MTFyNy94YXBwX3hjbG9jay9Db25maWcuaW4gICAgICAgICAg
+ICB8IDQgKysrKwo+ICBwYWNrYWdlL3gxMXI3L3hhcHBfeGZkL0NvbmZpZy5pbiAgICAgICAgICAg
+ICAgIHwgNCArKysrCj4gIHBhY2thZ2UveDExcjcveGFwcF94bG9nby9Db25maWcuaW4gICAgICAg
+ICAgICAgfCA0ICsrKysKPiAgcGFja2FnZS94MTFyNy94bGliX2xpYlhmdC9Db25maWcuaW4gICAg
+ICAgICAgICB8IDQgKysrKwo+ICBwYWNrYWdlL3gxMXI3L3hzZXJ2ZXJfeG9yZy1zZXJ2ZXIvQ29u
+ZmlnLmluICAgIHwgNCArKysrCj4gIHBhY2thZ2UveHNjcmVlbnNhdmVyL0NvbmZpZy5pbiAgICAg
+ICAgICAgICAgICAgfCA0ICsrKy0KPiAgNTEgZmlsZXMgY2hhbmdlZCwgMTc2IGluc2VydGlvbnMo
+KyksIDQ2IGRlbGV0aW9ucygtKQo+Cj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvY2Fpcm8vQ29uZmln
+LmluIGIvcGFja2FnZS9jYWlyby9Db25maWcuaW4KPiBpbmRleCBjNDFhMTJmZTgxLi5mMWI1ODk3
+M2Q3IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvY2Fpcm8vQ29uZmlnLmluCj4gKysrIGIvcGFja2Fn
+ZS9jYWlyby9Db25maWcuaW4KPiBAQCAtMSw1ICsxLDYgQEAKPiAgY29uZmlnIEJSMl9QQUNLQUdF
+X0NBSVJPCj4gICAgICAgICBib29sICJjYWlybyIKPiArICAgICAgIGRlcGVuZHMgb24gQlIyX0VO
+QUJMRV9MT0NBTEUgIyBmb250Y29uZmlnCj4gICAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfUElY
+TUFOCj4gICAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfRk9OVENPTkZJRwo+ICAgICAgICAgc2Vs
+ZWN0IEJSMl9QQUNLQUdFX1hMSUJfTElCWDExIGlmIEJSMl9QQUNLQUdFX1hPUkc3Cj4gQEAgLTI4
+LDMgKzI5LDYgQEAgY29uZmlnIEJSMl9QQUNLQUdFX0NBSVJPX1pMSUIKPiAgICAgICAgIHNlbGVj
+dCBCUjJfUEFDS0FHRV9aTElCCj4KPiAgZW5kaWYKPiArCj4gK2NvbW1lbnQgImNhaXJvIG5lZWRz
+IGEgdG9vbGNoYWluIHcvIGxvY2FsZSIKPiArICAgICAgIGRlcGVuZHMgb24gIUJSMl9FTkFCTEVf
+TE9DQUxFCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvY2Fpcm9tbS9Db25maWcuaW4gYi9wYWNrYWdl
+L2NhaXJvbW0vQ29uZmlnLmluCj4gaW5kZXggMTc0ZjM5NjdhYi4uMzNkMmJmZTk4ZiAxMDA2NDQK
+PiAtLS0gYS9wYWNrYWdlL2NhaXJvbW0vQ29uZmlnLmluCj4gKysrIGIvcGFja2FnZS9jYWlyb21t
+L0NvbmZpZy5pbgo+IEBAIC0zLDYgKzMsNyBAQCBjb25maWcgQlIyX1BBQ0tBR0VfQ0FJUk9NTQo+
+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0dDQ19BVF9MRUFTVF83ICMgbGlic2ln
+Ywo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hBU19USFJFQURTICMgbGliZ2xp
+YjIKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1VTRV9XQ0hBUiAjIGxpYmdsaWIyCj4gKyAgICAg
+ICBkZXBlbmRzIG9uIEJSMl9FTkFCTEVfTE9DQUxFICMgY2Fpcm8gLT4gZm9udGNvbmZpZwo+ICAg
+ICAgICAgZGVwZW5kcyBvbiBCUjJfVVNFX01NVSAjIGxpYmdsaWIyCj4gICAgICAgICBkZXBlbmRz
+IG9uIEJSMl9JTlNUQUxMX0xJQlNURENQUAo+ICAgICAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX0NB
+SVJPCj4gQEAgLTEzLDcgKzE0LDggQEAgY29uZmlnIEJSMl9QQUNLQUdFX0NBSVJPTU0KPgo+ICAg
+ICAgICAgICBodHRwczovL3d3dy5jYWlyb2dyYXBoaWNzLm9yZy9jYWlyb21tLwo+Cj4gLWNvbW1l
+bnQgImNhaXJvbW0gbmVlZHMgYSB0b29sY2hhaW4gdy8gQysrLCB3Y2hhciwgdGhyZWFkcywgZ2Nj
+ID49IDciCj4gK2NvbW1lbnQgImNhaXJvbW0gbmVlZHMgYSB0b29sY2hhaW4gdy8gQysrLCB3Y2hh
+ciwgbG9jYWxlLCB0aHJlYWRzLCBnY2MgPj0gNyIKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1VT
+RV9NTVUKPiAgICAgICAgIGRlcGVuZHMgb24gIUJSMl9UT09MQ0hBSU5fR0NDX0FUX0xFQVNUXzcg
+fHwgIUJSMl9VU0VfV0NIQVIgXAo+ICsgICAgICAgICAgICAgICB8fCAhQlIyX0VOQUJMRV9MT0NB
+TEUgXAo+ICAgICAgICAgICAgICAgICB8fCAhQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUyB8fCAh
+QlIyX0lOU1RBTExfTElCU1REQ1BQCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvY2Fpcm9tbTFfMTQv
+Q29uZmlnLmluIGIvcGFja2FnZS9jYWlyb21tMV8xNC9Db25maWcuaW4KPiBpbmRleCBlMzY5YWE2
+ZjRhLi5jOWFhNTkzZDZmIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvY2Fpcm9tbTFfMTQvQ29uZmln
+LmluCj4gKysrIGIvcGFja2FnZS9jYWlyb21tMV8xNC9Db25maWcuaW4KPiBAQCAtMyw2ICszLDcg
+QEAgY29uZmlnIEJSMl9QQUNLQUdFX0NBSVJPTU0xXzE0Cj4gICAgICAgICBkZXBlbmRzIG9uIEJS
+Ml9UT09MQ0hBSU5fR0NDX0FUX0xFQVNUXzRfOSAjIEMrKzExCj4gICAgICAgICBkZXBlbmRzIG9u
+IEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMgIyBsaWJnbGliMgo+ICAgICAgICAgZGVwZW5kcyBv
+biBCUjJfVVNFX1dDSEFSICMgbGliZ2xpYjIKPiArICAgICAgIGRlcGVuZHMgb24gQlIyX0VOQUJM
+RV9MT0NBTEUgIyBjYWlybyAtPiBmb250Y29uZmlnCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9V
+U0VfTU1VICMgbGliZ2xpYjIKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX0lOU1RBTExfTElCU1RE
+Q1BQCj4gICAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfQ0FJUk8KPiBAQCAtMTYsNyArMTcsOCBA
+QCBjb25maWcgQlIyX1BBQ0tBR0VfQ0FJUk9NTTFfMTQKPgo+ICAgICAgICAgICBodHRwczovL3d3
+dy5jYWlyb2dyYXBoaWNzLm9yZy9jYWlyb21tLwo+Cj4gLWNvbW1lbnQgImNhaXJvbW0gKDEuMTQu
+eCkgbmVlZHMgYSB0b29sY2hhaW4gdy8gQysrLCB3Y2hhciwgdGhyZWFkcywgZ2NjID49IDQuOSIK
+PiArY29tbWVudCAiY2Fpcm9tbSAoMS4xNC54KSBuZWVkcyBhIHRvb2xjaGFpbiB3LyBDKyssIHdj
+aGFyLCBsb2NhbGUsIHRocmVhZHMsIGdjYyA+PSA0LjkiCj4gICAgICAgICBkZXBlbmRzIG9uIEJS
+Ml9VU0VfTU1VCj4gICAgICAgICBkZXBlbmRzIG9uICFCUjJfVE9PTENIQUlOX0dDQ19BVF9MRUFT
+VF80XzkgfHwgIUJSMl9VU0VfV0NIQVIgXAo+ICsgICAgICAgICAgICAgICB8fCAhQlIyX0VOQUJM
+RV9MT0NBTEUgXAo+ICAgICAgICAgICAgICAgICB8fCAhQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFE
+UyB8fCAhQlIyX0lOU1RBTExfTElCU1REQ1BQCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvY3Vwcy1m
+aWx0ZXJzL0NvbmZpZy5pbiBiL3BhY2thZ2UvY3Vwcy1maWx0ZXJzL0NvbmZpZy5pbgo+IGluZGV4
+IGI1YjllMDRhMjguLjhjOGNlY2Q1MTYgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9jdXBzLWZpbHRl
+cnMvQ29uZmlnLmluCj4gKysrIGIvcGFja2FnZS9jdXBzLWZpbHRlcnMvQ29uZmlnLmluCj4gQEAg
+LTQsNiArNCw3IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9DVVBTX0ZJTFRFUlMKPiAgICAgICAgIGRl
+cGVuZHMgb24gQlIyX1VTRV9NTVUKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX0lOU1RBTExfTElC
+U1REQ1BQICMgcXBkZgo+ICAgICAgICAgZGVwZW5kcyBvbiAhQlIyX1NUQVRJQ19MSUJTCj4gKyAg
+ICAgICBkZXBlbmRzIG9uIEJSMl9FTkFCTEVfTE9DQUxFICMgZm9udGNvbmZpZwo+ICAgICAgICAg
+ZGVwZW5kcyBvbiBCUjJfVVNFX1dDSEFSICMgbGliZ2xpYjIKPiAgICAgICAgIGRlcGVuZHMgb24g
+QlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUyAjIGxpYmdsaWIyCj4gICAgICAgICBkZXBlbmRzIG9u
+IEJSMl9QQUNLQUdFX0NVUFMKPiBAQCAtMzIsOSArMzMsMTAgQEAgY29uZmlnIEJSMl9QQUNLQUdF
+X0NVUFNfRklMVEVSUwo+Cj4gICAgICAgICAgIGh0dHA6Ly93d3cubGludXhmb3VuZGF0aW9uLm9y
+Zy9jb2xsYWJvcmF0ZS93b3JrZ3JvdXBzL29wZW5wcmludGluZy9jdXBzLWZpbHRlcnMKPgo+IC1j
+b21tZW50ICJjdXBzLWZpbHRlcnMgbmVlZHMgYSB0b29sY2hhaW4gdy8gd2NoYXIsIEMrKywgdGhy
+ZWFkcyBhbmQgZHluYW1pYyBsaWJyYXJ5LCBnY2MgPj0gMTAiCj4gK2NvbW1lbnQgImN1cHMtZmls
+dGVycyBuZWVkcyBhIHRvb2xjaGFpbiB3LyB3Y2hhciwgbG9jYWxlLCBDKyssIHRocmVhZHMgYW5k
+IGR5bmFtaWMgbGlicmFyeSwgZ2NjID49IDEwIgo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVVNF
+X01NVQo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hBU19BVE9NSUMKPiAgICAg
+ICAgIGRlcGVuZHMgb24gIUJSMl9JTlNUQUxMX0xJQlNURENQUCB8fCAhQlIyX1RPT0xDSEFJTl9I
+QVNfVEhSRUFEUyB8fCBcCj4gICAgICAgICAgICAgICAgICFCUjJfVVNFX1dDSEFSIHx8IEJSMl9T
+VEFUSUNfTElCUyB8fCBcCj4gKyAgICAgICAgICAgICAgICFCUjJfRU5BQkxFX0xPQ0FMRSB8fCBc
+Cj4gICAgICAgICAgICAgICAgICFCUjJfVE9PTENIQUlOX0dDQ19BVF9MRUFTVF8xMAo+IGRpZmYg
+LS1naXQgYS9wYWNrYWdlL2VmbC9Db25maWcuaW4gYi9wYWNrYWdlL2VmbC9Db25maWcuaW4KPiBp
+bmRleCBjNGY4MmI5MmUzLi5mODI0YTIxMmNhIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvZWZsL0Nv
+bmZpZy5pbgo+ICsrKyBiL3BhY2thZ2UvZWZsL0NvbmZpZy5pbgo+IEBAIC0xLDUgKzEsNiBAQAo+
+ICBjb25maWcgQlIyX1BBQ0tBR0VfRUZMCj4gICAgICAgICBib29sICJlZmwiCj4gKyAgICAgICBk
+ZXBlbmRzIG9uIEJSMl9FTkFCTEVfTE9DQUxFICMgZm9udGNvbmZpZwo+ICAgICAgICAgZGVwZW5k
+cyBvbiBCUjJfVE9PTENIQUlOX0dDQ19BVF9MRUFTVF80XzkgIyBDKysxMQo+ICAgICAgICAgZGVw
+ZW5kcyBvbiBCUjJfSE9TVF9HQ0NfQVRfTEVBU1RfNF85ICMgaG9zdC1lZmwKPiAgICAgICAgIGRl
+cGVuZHMgb24gQlIyX0lOU1RBTExfTElCU1REQ1BQCj4gQEAgLTI4MCwxNiArMjgxLDIxIEBAIGNv
+bmZpZyBCUjJfUEFDS0FHRV9FRkxfU1ZHCj4gICAgICAgICBib29sICJTVkcgbG9hZGVyIgo+ICAg
+ICAgICAgZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9IT1NUX1JVU1RDX1RBUkdFVF9BUkNIX1NVUFBP
+UlRTICMgbGlicnN2Zwo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hBU19TWU5D
+XzQgIyBsaWJyc3ZnIC0+IHBhbmdvIC0+IGhhcmZidXp6Cj4gKyAgICAgICBkZXBlbmRzIG9uIEJS
+Ml9FTkFCTEVfTE9DQUxFICMgbGlicnN2ZyAtPiBjYWlybyAtPiBmb250Y29uZmlnCj4gICAgICAg
+ICBzZWxlY3QgQlIyX1BBQ0tBR0VfTElCUlNWRwo+ICAgICAgICAgc2VsZWN0IEJSMl9QQUNLQUdF
+X0NBSVJPCj4gICAgICAgICBoZWxwCj4gICAgICAgICAgIFRoaXMgb3B0aW9uIGVuYWJsZXMgdGhl
+IEV2YXMgZ2VuZXJpYyBTVkcgbG9hZGVyCj4KPiArY29tbWVudCAiU1ZHIGxvYWRlciBuZWVkcyBh
+IHRvb2xjaGFpbiB3LyBsb2NhbGUiCj4gKyAgICAgICBkZXBlbmRzIG9uICFCUjJfRU5BQkxFX0xP
+Q0FMRQo+ICsKPiAgZW5kaWYgIyBCUjJfUEFDS0FHRV9FRkwKPgo+IC1jb21tZW50ICJlZmwgbmVl
+ZHMgYSB0b29sY2hhaW4gdy8gQysrLCBkeW5hbWljIGxpYnJhcnksIGdjYyA+PSA0LjksIGhvc3Qg
+Z2NjID49IDQuOSwgdGhyZWFkcywgd2NoYXIiCj4gK2NvbW1lbnQgImVmbCBuZWVkcyBhIHRvb2xj
+aGFpbiB3LyBDKyssIGR5bmFtaWMgbGlicmFyeSwgZ2NjID49IDQuOSwgaG9zdCBnY2MgPj0gNC45
+LCB0aHJlYWRzLCB3Y2hhciwgbG9jYWxlIgo+ICAgICAgICAgZGVwZW5kcyBvbiAhQlIyX0lOU1RB
+TExfTElCU1REQ1BQIFwKPiAgICAgICAgICAgICAgICAgfHwgIUJSMl9UT09MQ0hBSU5fR0NDX0FU
+X0xFQVNUXzRfOSBcCj4gICAgICAgICAgICAgICAgIHx8ICFCUjJfSE9TVF9HQ0NfQVRfTEVBU1Rf
+NF85IHx8IEJSMl9TVEFUSUNfTElCUyBcCj4gKyAgICAgICAgICAgICAgIHx8ICFCUjJfRU5BQkxF
+X0xPQ0FMRSBcCj4gICAgICAgICAgICAgICAgIHx8ICFCUjJfVE9PTENIQUlOX0hBU19USFJFQURT
+IHx8ICFCUjJfVVNFX1dDSEFSCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9VU0VfTU1VCj4gZGlm
+ZiAtLWdpdCBhL3BhY2thZ2UvZm9udGNvbmZpZy9Db25maWcuaW4gYi9wYWNrYWdlL2ZvbnRjb25m
+aWcvQ29uZmlnLmluCj4gaW5kZXggMjE4ZmRiMmU3YS4uZTRjNmUzZGE1OSAxMDA2NDQKPiAtLS0g
+YS9wYWNrYWdlL2ZvbnRjb25maWcvQ29uZmlnLmluCj4gKysrIGIvcGFja2FnZS9mb250Y29uZmln
+L0NvbmZpZy5pbgo+IEBAIC0xLDUgKzEsNyBAQAo+ICBjb25maWcgQlIyX1BBQ0tBR0VfRk9OVENP
+TkZJRwo+ICAgICAgICAgYm9vbCAiZm9udGNvbmZpZyIKPiArICAgICAgIGRlcGVuZHMgb24gQlIy
+X1VTRV9XQ0hBUgo+ICsgICAgICAgZGVwZW5kcyBvbiBCUjJfRU5BQkxFX0xPQ0FMRSAjIGxvY2Fs
+ZV90Cj4gICAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfRlJFRVRZUEUKPiAgICAgICAgIHNlbGVj
+dCBCUjJfUEFDS0FHRV9FWFBBVAo+ICAgICAgICAgaGVscAo+IEBAIC03LDMgKzksNiBAQCBjb25m
+aWcgQlIyX1BBQ0tBR0VfRk9OVENPTkZJRwo+ICAgICAgICAgICBhY2Nlc3MuCj4KPiAgICAgICAg
+ICAgaHR0cDovL3d3dy5mb250Y29uZmlnLm9yZy8KPiArCj4gK2NvbW1lbnQgImZvbnRjb25maWcg
+bmVlZHMgYSB0b29sY2hhaW4gdy8gd2NoYXIsIGxvY2FsZSIKPiArICAgICAgIGRlcGVuZHMgb24g
+IUJSMl9VU0VfV0NIQVIgfHwgIUJSMl9FTkFCTEVfTE9DQUxFCj4gZGlmZiAtLWdpdCBhL3BhY2th
+Z2UvZm9udGNvbmZpZy9mb250Y29uZmlnLmhhc2ggYi9wYWNrYWdlL2ZvbnRjb25maWcvZm9udGNv
+bmZpZy5oYXNoCj4gaW5kZXggZTZmMmUwNzcxYy4uNmI4ZGFhODE4ZSAxMDA2NDQKPiAtLS0gYS9w
+YWNrYWdlL2ZvbnRjb25maWcvZm9udGNvbmZpZy5oYXNoCj4gKysrIGIvcGFja2FnZS9mb250Y29u
+ZmlnL2ZvbnRjb25maWcuaGFzaAo+IEBAIC0xLDUgKzEsNSBAQAo+IC0jIEZyb20gaHR0cHM6Ly9n
+aXRsYWIuZnJlZWRlc2t0b3Aub3JnL2FwaS92NC9wcm9qZWN0cy84OTAvcGFja2FnZXMvZ2VuZXJp
+Yy9mb250Y29uZmlnLzIuMTcuMS9mb250Y29uZmlnLTIuMTcuMS50YXIueHouc2hhMjU2c3VtCj4g
+LXNoYTI1NiAgOWY1Y2FlOTNmNGZmZmMxZmJjMDVhZTk5Y2RmYzcwOGNkNjBkZmQ2NjEyZmZjMDUx
+MjgyNzAyNWMwMjZmYTU0MSAgZm9udGNvbmZpZy0yLjE3LjEudGFyLnh6Cj4gKyMgRnJvbSBodHRw
+czovL2dpdGxhYi5mcmVlZGVza3RvcC5vcmcvYXBpL3Y0L3Byb2plY3RzLzg5MC9wYWNrYWdlcy9n
+ZW5lcmljL2ZvbnRjb25maWcvMi4xOC40L2ZvbnRjb25maWctMi4xOC40LnRhci54ei5zaGEyNTZz
+dW0KPiArc2hhMjU2ICA5NTAxMzYzN2VmZjVmODFkNDg3MWRkMTZjZDA5OGMyNzMyNjRjMTZkMGY5
+ZjBiMjdjYzQzYjgxYjI3OTRiZWUzICBmb250Y29uZmlnLTIuMTguNC50YXIueHoKPgo+ICAjIExv
+Y2FsbHkgY2FsY3VsYXRlZAo+ICBzaGEyNTYgIDUxYTUxYWE5ODIzNzA0ZmQ5MGJjY2M2MTZjZGQx
+N2ViYWJiNWIyYjNlOWNiZGU4ODZjYTAyYzcwMDIyODgwNjcgIENPUFlJTkcKPiBkaWZmIC0tZ2l0
+IGEvcGFja2FnZS9mb250Y29uZmlnL2ZvbnRjb25maWcubWsgYi9wYWNrYWdlL2ZvbnRjb25maWcv
+Zm9udGNvbmZpZy5tawo+IGluZGV4IDYzOWY2ZWQ1MWQuLmM0NGU4YzFhOGUgMTAwNjQ0Cj4gLS0t
+IGEvcGFja2FnZS9mb250Y29uZmlnL2ZvbnRjb25maWcubWsKPiArKysgYi9wYWNrYWdlL2ZvbnRj
+b25maWcvZm9udGNvbmZpZy5tawo+IEBAIC00LDcgKzQsNyBAQAo+ICAjCj4gICMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjCj4KPiAtRk9OVENPTkZJR19WRVJTSU9OID0gMi4xNy4xCj4gK0ZPTlRDT05G
+SUdfVkVSU0lPTiA9IDIuMTguNAo+ICBGT05UQ09ORklHX1NJVEUgPSBodHRwczovL2dpdGxhYi5m
+cmVlZGVza3RvcC5vcmcvYXBpL3Y0L3Byb2plY3RzLzg5MC9wYWNrYWdlcy9nZW5lcmljL2ZvbnRj
+b25maWcvJChGT05UQ09ORklHX1ZFUlNJT04pCj4gIEZPTlRDT05GSUdfU09VUkNFID0gZm9udGNv
+bmZpZy0kKEZPTlRDT05GSUdfVkVSU0lPTikudGFyLnh6Cj4gIEZPTlRDT05GSUdfSU5TVEFMTF9T
+VEFHSU5HID0gWUVTCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvZm9vdC9Db25maWcuaW4gYi9wYWNr
+YWdlL2Zvb3QvQ29uZmlnLmluCj4gaW5kZXggYjBlYzJlMzkyNi4uNWEzY2U3YTc3MyAxMDA2NDQK
+PiAtLS0gYS9wYWNrYWdlL2Zvb3QvQ29uZmlnLmluCj4gKysrIGIvcGFja2FnZS9mb290L0NvbmZp
+Zy5pbgo+IEBAIC0xLDUgKzEsNiBAQAo+ICBjb25maWcgQlIyX1BBQ0tBR0VfRk9PVAo+ICAgICAg
+ICAgYm9vbCAiZm9vdCIKPiArICAgICAgIGRlcGVuZHMgb24gQlIyX0VOQUJMRV9MT0NBTEUgIyBm
+b250Y29uZmlnCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fVVNFU19HTElCQyB8
+fCBCUjJfVE9PTENIQUlOX1VTRVNfTVVTTCAjIGZjZnQKPiAgICAgICAgIGRlcGVuZHMgb24gIUJS
+Ml9TVEFUSUNfTElCUyAjIHdheWxhbmQKPiAgICAgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9GQ0ZU
+Cj4gQEAgLTMyLDYgKzMzLDcgQEAgY29uZmlnIEJSMl9QQUNLQUdFX0ZPT1RfVEhFTUVTCj4KPiAg
+ZW5kaWYgIyBCUjJfUEFDS0FHRV9GT09UCj4KPiAtY29tbWVudCAiZm9vdCBuZWVkcyBhIGdsaWJj
+IG9yIG11c2wgdG9vbGNoYWluIHcvIGR5bmFtaWMgbGlicmFyeSIKPiArY29tbWVudCAiZm9vdCBu
+ZWVkcyBhIGdsaWJjIG9yIG11c2wgdG9vbGNoYWluIHcvIGR5bmFtaWMgbGlicmFyeSwgbG9jYWxl
+Igo+ICAgICAgICAgZGVwZW5kcyBvbiAhKEJSMl9UT09MQ0hBSU5fVVNFU19HTElCQyB8fCBCUjJf
+VE9PTENIQUlOX1VTRVNfTVVTTCkgfHwgXAo+IC0gICAgICAgICAgICAgICBCUjJfU1RBVElDX0xJ
+QlMKPiArICAgICAgICAgICAgICAgQlIyX1NUQVRJQ19MSUJTIHx8IFwKPiArICAgICAgICAgICAg
+ICAgIUJSMl9FTkFCTEVfTE9DQUxFCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvZ2hvc3RzY3JpcHQv
+Q29uZmlnLmluIGIvcGFja2FnZS9naG9zdHNjcmlwdC9Db25maWcuaW4KPiBpbmRleCAwMjNlZjVm
+MmJhLi5mMDM3ZDc2NGJmIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvZ2hvc3RzY3JpcHQvQ29uZmln
+LmluCj4gKysrIGIvcGFja2FnZS9naG9zdHNjcmlwdC9Db25maWcuaW4KPiBAQCAtMSw2ICsxLDcg
+QEAKPiAgY29uZmlnIEJSMl9QQUNLQUdFX0dIT1NUU0NSSVBUCj4gICAgICAgICBib29sICJnaG9z
+dHNjcmlwdCIKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1VTRV9NTVUgIyBmb3JrKCkKPiArICAg
+ICAgIGRlcGVuZHMgb24gQlIyX0VOQUJMRV9MT0NBTEUgIyBmb250Y29uZmlnCj4gICAgICAgICBz
+ZWxlY3QgQlIyX1BBQ0tBR0VfRk9OVENPTkZJRwo+ICAgICAgICAgc2VsZWN0IEJSMl9QQUNLQUdF
+X0dIT1NUU0NSSVBUX0ZPTlRTCj4gICAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfSlBFRwo+IEBA
+IC0xMiwzICsxMyw2IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9HSE9TVFNDUklQVAo+ICAgICAgICAg
+ICBEb2N1bWVudCBGb3JtYXQgKFBERikgZmlsZXMuCj4KPiAgICAgICAgICAgaHR0cDovL2dob3N0
+c2NyaXB0LmNvbQo+ICsKPiArY29tbWVudCAiZ2hvc3RzY3JpcHQgbmVlZHMgYSB0b29sY2hhaW4g
+dy8gbG9jYWxlIgo+ICsgICAgICAgZGVwZW5kcyBvbiAhQlIyX0VOQUJMRV9MT0NBTEUKPiBkaWZm
+IC0tZ2l0IGEvcGFja2FnZS9nc3RyZWFtZXIxL2dzdDEtcGx1Z2lucy1iYWQvQ29uZmlnLmluIGIv
+cGFja2FnZS9nc3RyZWFtZXIxL2dzdDEtcGx1Z2lucy1iYWQvQ29uZmlnLmluCj4gaW5kZXggZmQ1
+MThjMjI4ZC4uMTkxN2RkMDZmOSAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL2dzdHJlYW1lcjEvZ3N0
+MS1wbHVnaW5zLWJhZC9Db25maWcuaW4KPiArKysgYi9wYWNrYWdlL2dzdHJlYW1lcjEvZ3N0MS1w
+bHVnaW5zLWJhZC9Db25maWcuaW4KPiBAQCAtNDc1LDYgKzQ3NSw3IEBAIGNvbmZpZyBCUjJfUEFD
+S0FHRV9HU1QxX1BMVUdJTlNfQkFEX1BMVUdJTl9EVExTCj4gIGNvbmZpZyBCUjJfUEFDS0FHRV9H
+U1QxX1BMVUdJTlNfQkFEX1BMVUdJTl9UVE1MCj4gICAgICAgICBib29sICJ0dG1sIgo+ICAgICAg
+ICAgZGVwZW5kcyBvbiBCUjJfVVNFX1dDSEFSICMgcGFuZ28gLT4gZ2xpYjIKPiArICAgICAgIGRl
+cGVuZHMgb24gQlIyX0VOQUJMRV9MT0NBTEUgIyBjYWlybyAtPiBmb250Y29uZmlnCj4gICAgICAg
+ICBkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMgIyBwYW5nbyAtPiBnbGliMgo+
+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVVNFX01NVSAjIHBhbmdvIC0+IGdsaWIyCj4gICAgICAg
+ICBkZXBlbmRzIG9uIEJSMl9JTlNUQUxMX0xJQlNURENQUCAjIHBhbmdvIC0+IGZyZWV0eXBlCj4g
+QEAgLTQ4NiwxMCArNDg3LDExIEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9HU1QxX1BMVUdJTlNfQkFE
+X1BMVUdJTl9UVE1MCj4gICAgICAgICBoZWxwCj4gICAgICAgICAgIFRpbWVkIFRleHQgTWFya3Vw
+IExhbmd1YWdlIChUVE1MKSBzdWJ0aXRsZSBwbHVnaW4KPgo+IC1jb21tZW50ICJ0dG1sIG5lZWRz
+IGEgdG9vbGNoYWluIHcvIHdjaGFyLCB0aHJlYWRzLCBDKyssIGdjYyA+PSA0LjkiCj4gK2NvbW1l
+bnQgInR0bWwgbmVlZHMgYSB0b29sY2hhaW4gdy8gd2NoYXIsIGxvY2FsZSwgdGhyZWFkcywgQysr
+LCBnY2MgPj0gNC45Igo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hBU19TWU5D
+XzQKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1VTRV9NTVUKPiAgICAgICAgIGRlcGVuZHMgb24g
+IUJSMl9VU0VfV0NIQVIgfHwgIUJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMgfHwgXAo+ICsgICAg
+ICAgICAgICAgICAhQlIyX0VOQUJMRV9MT0NBTEUgfHwgXAo+ICAgICAgICAgICAgICAgICAhQlIy
+X0lOU1RBTExfTElCU1REQ1BQIHx8ICFCUjJfVE9PTENIQUlOX0dDQ19BVF9MRUFTVF80XzkKPgo+
+ICBjb25maWcgQlIyX1BBQ0tBR0VfR1NUMV9QTFVHSU5TX0JBRF9QTFVHSU5fTVBFRzJFTkMKPiBA
+QCAtNTY4LDEzICs1NzAsMTUgQEAgY29uZmlnIEJSMl9QQUNLQUdFX0dTVDFfUExVR0lOU19CQURf
+UExVR0lOX1JTVkcKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX0lOU1RBTExfTElCU1REQ1BQICMg
+bGlicnN2ZyAtPiBwYW5nbwo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hBU19T
+WU5DXzQgIyBsaWJyc3ZnIC0+IHBhbmdvIC0+IGhhcmZidXp6Cj4gICAgICAgICBkZXBlbmRzIG9u
+IEJSMl9UT09MQ0hBSU5fR0NDX0FUX0xFQVNUXzRfOSAjIGxpYnJzdmcgLT4gcGFuZ28gLT4gaGFy
+ZmJ1enoKPiArICAgICAgIGRlcGVuZHMgb24gQlIyX0VOQUJMRV9MT0NBTEUgIyBsaWJyc3ZnIC0+
+IGNhaXJvIC0+IGZvbnRjb25maWcKPiAgICAgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9MSUJSU1ZH
+Cj4gICAgICAgICBoZWxwCj4gICAgICAgICAgIFJTVkcgcGx1Z2luIGxpYnJhcnkKPgo+IC1jb21t
+ZW50ICJyc3ZnIHBsdWdpbiBuZWVkcyBhIHRvb2xjaGFpbiB3LyBDKyssIGdjYyA+PSA0LjkiCj4g
+K2NvbW1lbnQgInJzdmcgcGx1Z2luIG5lZWRzIGEgdG9vbGNoYWluIHcvIGxvY2FsZSwgQysrLCBn
+Y2MgPj0gNC45Igo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9IT1NUX1JVU1RDX1RB
+UkdFVF9BUkNIX1NVUFBPUlRTCj4gICAgICAgICBkZXBlbmRzIG9uICFCUjJfSU5TVEFMTF9MSUJT
+VERDUFAgfHwgXAo+ICsgICAgICAgICAgICAgICAhQlIyX0VOQUJMRV9MT0NBTEUgfHwgXAo+ICAg
+ICAgICAgICAgICAgICAhQlIyX1RPT0xDSEFJTl9HQ0NfQVRfTEVBU1RfNF85Cj4gICAgICAgICBk
+ZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1NZTkNfNAo+Cj4gZGlmZiAtLWdpdCBhL3BhY2th
+Z2UvZ3N0cmVhbWVyMS9nc3QxLXBsdWdpbnMtYmFzZS9Db25maWcuaW4gYi9wYWNrYWdlL2dzdHJl
+YW1lcjEvZ3N0MS1wbHVnaW5zLWJhc2UvQ29uZmlnLmluCj4gaW5kZXggNmVmZjY4NWMyZi4uMmRh
+OWU5ZGEyMiAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL2dzdHJlYW1lcjEvZ3N0MS1wbHVnaW5zLWJh
+c2UvQ29uZmlnLmluCj4gKysrIGIvcGFja2FnZS9nc3RyZWFtZXIxL2dzdDEtcGx1Z2lucy1iYXNl
+L0NvbmZpZy5pbgo+IEBAIC0yNjUsNiArMjY1LDcgQEAgY29uZmlnIEJSMl9QQUNLQUdFX0dTVDFf
+UExVR0lOU19CQVNFX1BMVUdJTl9PUFVTCj4gIGNvbmZpZyBCUjJfUEFDS0FHRV9HU1QxX1BMVUdJ
+TlNfQkFTRV9QTFVHSU5fUEFOR08KPiAgICAgICAgIGJvb2wgInBhbmdvIGZvbnQgcmVuZGVyZXIi
+Cj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9VU0VfV0NIQVIgIyBwYW5nbyAtPiBnbGliMgo+ICsg
+ICAgICAgZGVwZW5kcyBvbiBCUjJfRU5BQkxFX0xPQ0FMRSAjIHBhbmdvIC0+IGNhaXJvIC0+IGZv
+bnRjb25maWcKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUyAj
+IHBhbmdvIC0+IGdsaWIyCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9VU0VfTU1VICMgcGFuZ28g
+LT4gZ2xpYjIKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX0lOU1RBTExfTElCU1REQ1BQICMgcGFu
+Z28gLT4gZnJlZXR5cGUKPiBAQCAtMjc0LDEwICsyNzUsMTEgQEAgY29uZmlnIEJSMl9QQUNLQUdF
+X0dTVDFfUExVR0lOU19CQVNFX1BMVUdJTl9QQU5HTwo+ICAgICAgICAgaGVscAo+ICAgICAgICAg
+ICBQYW5nby1iYXNlZCB0ZXh0IHJlbmRlcmluZyBhbmQgb3ZlcmxheQo+Cj4gLWNvbW1lbnQgInBh
+bmdvIHBsdWdpbiBuZWVkcyBhIHRvb2xjaGFpbiB3LyBDKyssIHdjaGFyLCB0aHJlYWRzLCBnY2Mg
+Pj0gNC45Igo+ICtjb21tZW50ICJwYW5nbyBwbHVnaW4gbmVlZHMgYSB0b29sY2hhaW4gdy8gQysr
+LCB3Y2hhciwgbG9jYWxlLCB0aHJlYWRzLCBnY2MgPj0gNC45Igo+ICAgICAgICAgZGVwZW5kcyBv
+biBCUjJfVE9PTENIQUlOX0hBU19TWU5DXzQKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1VTRV9N
+TVUKPiAgICAgICAgIGRlcGVuZHMgb24gIUJSMl9JTlNUQUxMX0xJQlNURENQUCB8fCAhQlIyX1RP
+T0xDSEFJTl9HQ0NfQVRfTEVBU1RfNF85IHx8IFwKPiArICAgICAgICAgICAgICAgIUJSMl9FTkFC
+TEVfTE9DQUxFIHx8IFwKPiAgICAgICAgICAgICAgICAgIUJSMl9UT09MQ0hBSU5fSEFTX1RIUkVB
+RFMgfHwgIUJSMl9VU0VfV0NIQVIKPgo+ICBjb25maWcgQlIyX1BBQ0tBR0VfR1NUMV9QTFVHSU5T
+X0JBU0VfUExVR0lOX1RIRU9SQQo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2dzdHJlYW1lcjEvZ3N0
+MS1wbHVnaW5zLWdvb2QvQ29uZmlnLmluIGIvcGFja2FnZS9nc3RyZWFtZXIxL2dzdDEtcGx1Z2lu
+cy1nb29kL0NvbmZpZy5pbgo+IGluZGV4IGM0ZWI0ZWZiNjUuLjhlNDVkY2I3NTkgMTAwNjQ0Cj4g
+LS0tIGEvcGFja2FnZS9nc3RyZWFtZXIxL2dzdDEtcGx1Z2lucy1nb29kL0NvbmZpZy5pbgo+ICsr
+KyBiL3BhY2thZ2UvZ3N0cmVhbWVyMS9nc3QxLXBsdWdpbnMtZ29vZC9Db25maWcuaW4KPiBAQCAt
+MzI4LDExICszMjgsMTUgQEAgY29uZmlnIEJSMl9QQUNLQUdFX0dTVDFfUExVR0lOU19HT09EX1BM
+VUdJTl9WNEwyX1BST0JFCj4KPiAgY29uZmlnIEJSMl9QQUNLQUdFX0dTVDFfUExVR0lOU19HT09E
+X1BMVUdJTl9DQUlSTwo+ICAgICAgICAgYm9vbCAiY2Fpcm8iCj4gKyAgICAgICBkZXBlbmRzIG9u
+IEJSMl9FTkFCTEVfTE9DQUxFICMgY2Fpcm8gLT4gZm9udGNvbmZpZwo+ICAgICAgICAgc2VsZWN0
+IEJSMl9QQUNLQUdFX0NBSVJPCj4gICAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfQ0FJUk9fUE5H
+Cj4gICAgICAgICBoZWxwCj4gICAgICAgICAgIENhaXJvLWJhc2VkIGVsZW1lbnRzCj4KPiArY29t
+bWVudCAiY2Fpcm8gbmVlZHMgYSB0b29sY2hhaW4gdy8gbG9jYWxlIgo+ICsgICAgICAgZGVwZW5k
+cyBvbiAhQlIyX0VOQUJMRV9MT0NBTEUKPiArCj4gIGNvbmZpZyBCUjJfUEFDS0FHRV9HU1QxX1BM
+VUdJTlNfR09PRF9QTFVHSU5fRkxBQwo+ICAgICAgICAgYm9vbCAiZmxhYyAobGliRkxBQykiCj4g
+ICAgICAgICBkZXBlbmRzIG9uIEJSMl9VU0VfV0NIQVIgIyBmbGFjCj4gZGlmZiAtLWdpdCBhL3Bh
+Y2thZ2UvZ3RrbW0zL0NvbmZpZy5pbiBiL3BhY2thZ2UvZ3RrbW0zL0NvbmZpZy5pbgo+IGluZGV4
+IGFjMzhiYTA2ZmMuLmQ2ZjU5ZWZlZjYgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9ndGttbTMvQ29u
+ZmlnLmluCj4gKysrIGIvcGFja2FnZS9ndGttbTMvQ29uZmlnLmluCj4gQEAgLTEsNyArMSw4IEBA
+Cj4gLWNvbW1lbnQgImd0a21tMyBuZWVkcyBsaWJndGszIGFuZCBhIHRvb2xjaGFpbiB3LyBDKyss
+IHdjaGFyLCB0aHJlYWRzLCBnY2MgPj0gNC45LCBkeW5hbWljIGxpYnJhcnkiCj4gK2NvbW1lbnQg
+Imd0a21tMyBuZWVkcyBsaWJndGszIGFuZCBhIHRvb2xjaGFpbiB3LyBDKyssIHdjaGFyLCBsb2Nh
+bGUsIHRocmVhZHMsIGdjYyA+PSA0LjksIGR5bmFtaWMgbGlicmFyeSIKPiAgICAgICAgIGRlcGVu
+ZHMgb24gQlIyX1VTRV9NTVUKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNf
+U1lOQ180Cj4gICAgICAgICBkZXBlbmRzIG9uICFCUjJfVE9PTENIQUlOX0dDQ19BVF9MRUFTVF80
+XzkgfHwgIUJSMl9VU0VfV0NIQVIgXAo+ICsgICAgICAgICAgICAgICB8fCAhQlIyX0VOQUJMRV9M
+T0NBTEUgXAo+ICAgICAgICAgICAgICAgICB8fCAhQlIyX0lOU1RBTExfTElCU1REQ1BQIHx8ICFC
+UjJfUEFDS0FHRV9MSUJHVEszIFwKPiAgICAgICAgICAgICAgICAgfHwgIUJSMl9UT09MQ0hBSU5f
+SEFTX1RIUkVBRFMgfHwgXAo+ICAgICAgICAgICAgICAgICBCUjJfU1RBVElDX0xJQlMKPiBAQCAt
+MTQsNiArMTUsNyBAQCBjb25maWcgQlIyX1BBQ0tBR0VfR1RLTU0zCj4gICAgICAgICBkZXBlbmRz
+IG9uIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMgIyAqbW0vbGliZ3RrMyAtPiBsaWJnbGliMgo+
+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVVNFX01NVSAjICptbS9saWJndGszIC0+IGxpYmdsaWIy
+Cj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9VU0VfV0NIQVIgIyAqbW0vbGliZ3RrMyAtPiBsaWJn
+bGliMgo+ICsgICAgICAgZGVwZW5kcyBvbiBCUjJfRU5BQkxFX0xPQ0FMRSAjIGNhaXJvbW0gLT4g
+Y2Fpcm8gLT4gZm9udGNvbmZpZwo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9MSUJH
+VEszCj4gICAgICAgICBkZXBlbmRzIG9uICFCUjJfU1RBVElDX0xJQlMgIyBhdGttbQo+ICAgICAg
+ICAgc2VsZWN0IEJSMl9QQUNLQUdFX0FUS01NMl8yOAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2tv
+ZGkvQ29uZmlnLmluIGIvcGFja2FnZS9rb2RpL0NvbmZpZy5pbgo+IGluZGV4IDExMGFhOTFhNDku
+LjM2NzZiNGEwZDAgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9rb2RpL0NvbmZpZy5pbgo+ICsrKyBi
+L3BhY2thZ2Uva29kaS9Db25maWcuaW4KPiBAQCAtOCwxMSArOCwxMyBAQCBjb25maWcgQlIyX1BB
+Q0tBR0VfS09ESV9BUkNIX1NVUFBPUlRTCj4gICAgICAgICBkZXBlbmRzIG9uICFCUjJfbTY4awo+
+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVVNFX01NVSAjIGxpYmNkaW8sIGFuZCBvdGhlcnMKPgo+
+IC1jb21tZW50ICJrb2RpIG5lZWRzIHB5dGhvbjMgdy8gLnB5IG1vZHVsZXMsIGEgdUNsaWJjIG9y
+IGdsaWJjIHRvb2xjaGFpbiB3LyBDKyssIHRocmVhZHMsIHdjaGFyLCBkeW5hbWljIGxpYnJhcnks
+IGdjYyA+PSA5LngsIGhvc3QgZ2NjID49IDkueCIKPiArY29tbWVudCAia29kaSBuZWVkcyBweXRo
+b24zIHcvIC5weSBtb2R1bGVzLCBhIHVDbGliYyBvciBnbGliYyB0b29sY2hhaW4gdy8gQysrLCB0
+aHJlYWRzLCB3Y2hhciwgbG9jYWxlLCBkeW5hbWljIGxpYnJhcnksIGdjYyA+PSA5LngsIGhvc3Qg
+Z2NjID49IDkueCIKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfS09ESV9BUkNIX1NV
+UFBPUlRTCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1NZTkNfNAo+ICAg
+ICAgICAgZGVwZW5kcyBvbiAhQlIyX0lOU1RBTExfTElCU1REQ1BQIHx8ICFCUjJfVE9PTENIQUlO
+X0hBU19USFJFQURTIFwKPiAtICAgICAgICAgICAgICAgfHwgIUJSMl9VU0VfV0NIQVIgfHwgQlIy
+X1NUQVRJQ19MSUJTIFwKPiArICAgICAgICAgICAgICAgfHwgIUJSMl9FTkFCTEVfTE9DQUxFIFwK
+PiArICAgICAgICAgICAgICAgfHwgIUJSMl9VU0VfV0NIQVIgXAo+ICsgICAgICAgICAgICAgICB8
+fCBCUjJfU1RBVElDX0xJQlMgXAo+ICAgICAgICAgICAgICAgICB8fCAhQlIyX1RPT0xDSEFJTl9H
+Q0NfQVRfTEVBU1RfOSBcCj4gICAgICAgICAgICAgICAgIHx8ICFCUjJfSE9TVF9HQ0NfQVRfTEVB
+U1RfOSBcCj4gICAgICAgICAgICAgICAgIHx8IEJSMl9UT09MQ0hBSU5fVVNFU19NVVNMIFwKPiBA
+QCAtNjIsNiArNjQsNyBAQCBtZW51Y29uZmlnIEJSMl9QQUNLQUdFX0tPREkKPiAgICAgICAgIGRl
+cGVuZHMgb24gQlIyX0hPU1RfR0NDX0FUX0xFQVNUXzkgIyBDKysxNwo+ICAgICAgICAgZGVwZW5k
+cyBvbiBCUjJfVE9PTENIQUlOX0hBU19USFJFQURTCj4gICAgICAgICBkZXBlbmRzIG9uICFCUjJf
+VE9PTENIQUlOX1VTRVNfTVVTTAo+ICsgICAgICAgZGVwZW5kcyBvbiBCUjJfRU5BQkxFX0xPQ0FM
+RSAjIGZvbnRjb25maWcKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1VTRV9XQ0hBUgo+ICAgICAg
+ICAgZGVwZW5kcyBvbiAhQlIyX1NUQVRJQ19MSUJTICMgZ251dGxzLCBweXRob24zIGFuZCBvdGhl
+cnMKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfSEFTX0xJQkVHTAo+IEBAIC04OCw4
+ICs5MSw2IEBAIG1lbnVjb25maWcgQlIyX1BBQ0tBR0VfS09ESQo+ICAgICAgICAgc2VsZWN0IEJS
+Ml9QQUNLQUdFX0xJQkNVUkwKPiAgICAgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9MSUJEUk0KPiAg
+ICAgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9MSUJGUklCSURJCj4gLSAgICAgICBzZWxlY3QgQlIy
+X1BBQ0tBR0VfTElCSUNPTlYgaWYgIUJSMl9FTkFCTEVfTE9DQUxFCj4gLSAgICAgICBzZWxlY3Qg
+QlIyX1BBQ0tBR0VfTElCSUNPTlZfRVhUUkFfRU5DT0RJTkdTIGlmICFCUjJfRU5BQkxFX0xPQ0FM
+RQo+ICAgICAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX0xJQlBMSVNUCj4gICAgICAgICBzZWxlY3Qg
+QlIyX1BBQ0tBR0VfTElCUE5HCj4gICAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfTFpPCj4gZGlm
+ZiAtLWdpdCBhL3BhY2thZ2Uva29kaS9rb2RpLm1rIGIvcGFja2FnZS9rb2RpL2tvZGkubWsKPiBp
+bmRleCBmZDQ2NTlkYTk5Li5mMzBiZTczZTA1IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2Uva29kaS9r
+b2RpLm1rCj4gKysrIGIvcGFja2FnZS9rb2RpL2tvZGkubWsKPiBAQCAtMTIzLDExICsxMjMsNiBA
+QCBlbmRpZgo+Cj4gIEtPRElfQ09ORl9PUFRTICs9IC1EQ09SRV9QTEFURk9STV9OQU1FPSIkKEtP
+RElfQ09SRV9QTEFURk9STV9OQU1FKSIKPgo+IC1pZmVxICgkKEJSMl9FTkFCTEVfTE9DQUxFKSwp
+Cj4gLUtPRElfREVQRU5ERU5DSUVTICs9IGxpYmljb252Cj4gLUtPRElfRVhUUkFfTElCUyArPSAt
+bGljb252Cj4gLWVuZGlmCj4gLQo+ICBpZmVxICgkKEJSMl9hcmNsZSkseSkKPiAgS09ESV9DT05G
+X09QVFMgKz0gLURXSVRIX0FSQ0g9YXJjIC1EV0lUSF9DUFU9YXJjCj4gIGVsc2UgaWZlcSAoJChC
+UjJfYXJtZWIpLHkpCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGliZGVjb3IvQ29uZmlnLmluIGIv
+cGFja2FnZS9saWJkZWNvci9Db25maWcuaW4KPiBpbmRleCA3ODJmZTg1NWI0Li4xMTNmMTU0YzFl
+IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvbGliZGVjb3IvQ29uZmlnLmluCj4gKysrIGIvcGFja2Fn
+ZS9saWJkZWNvci9Db25maWcuaW4KPiBAQCAtMyw2ICszLDcgQEAgY29uZmlnIEJSMl9QQUNLQUdF
+X0xJQkRFQ09SCj4gICAgICAgICBkZXBlbmRzIG9uICFCUjJfU1RBVElDX0xJQlMgIyB3YXlsYW5k
+Cj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9VU0VfTU1VICMgcGFuZ28KPiAgICAgICAgIGRlcGVu
+ZHMgb24gQlIyX1VTRV9XQ0hBUiAjIHBhbmdvCj4gKyAgICAgICBkZXBlbmRzIG9uIEJSMl9FTkFC
+TEVfTE9DQUxFICMgY2Fpcm8gLT4gZm9udGNvbmZpZwo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJf
+VE9PTENIQUlOX0hBU19TWU5DXzQgIyBwYW5nbwo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVE9P
+TENIQUlOX0dDQ19BVF9MRUFTVF80XzkgIyBwYW5nbwo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJf
+SU5TVEFMTF9MSUJTVERDUFAgIyBwYW5nbwo+IEBAIC0xOCw4ICsxOSw5IEBAIGNvbmZpZyBCUjJf
+UEFDS0FHRV9MSUJERUNPUgo+Cj4gICAgICAgICAgIGh0dHBzOi8vZ2l0bGFiLmZyZWVkZXNrdG9w
+Lm9yZy9saWJkZWNvci9saWJkZWNvcgo+Cj4gLWNvbW1lbnQgImxpYmRlY29yIG5lZWRzIGEgdG9v
+bGNoYWluIHcvIHdjaGFyLCB0aHJlYWRzLCBDKyssIGdjYyA+PSA0LjkiCj4gK2NvbW1lbnQgImxp
+YmRlY29yIG5lZWRzIGEgdG9vbGNoYWluIHcvIHdjaGFyLCBsb2NhbGUsIHRocmVhZHMsIEMrKywg
+Z2NjID49IDQuOSIKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1VTRV9NTVUKPiAgICAgICAgIGRl
+cGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNfU1lOQ180Cj4gICAgICAgICBkZXBlbmRzIG9uICFC
+UjJfSU5TVEFMTF9MSUJTVERDUFAgfHwgIUJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMgfHwgXAo+
+ICsgICAgICAgICAgICAgICAhQlIyX0VOQUJMRV9MT0NBTEUgfHwgXAo+ICAgICAgICAgICAgICAg
+ICAhQlIyX1VTRV9XQ0hBUiB8fCAhQlIyX1RPT0xDSEFJTl9HQ0NfQVRfTEVBU1RfNF85Cj4gZGlm
+ZiAtLWdpdCBhL3BhY2thZ2UvbGliZm0vQ29uZmlnLmluIGIvcGFja2FnZS9saWJmbS9Db25maWcu
+aW4KPiBpbmRleCBhYmIzNWNhM2RkLi42YTY0ZDFmYjUwIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2Uv
+bGliZm0vQ29uZmlnLmluCj4gKysrIGIvcGFja2FnZS9saWJmbS9Db25maWcuaW4KPiBAQCAtMiw2
+ICsyLDcgQEAgY29uZmlnIEJSMl9QQUNLQUdFX0xJQkZNCj4gICAgICAgICBib29sICJsaWJmbSIK
+PiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfSE9TVF9SVVNUQ19BUkNIX1NVUFBPUlRT
+ICMgbGliZ3RrMwo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVVNFX1dDSEFSICMgbGliZ3RrMywg
+bGliZ2xpYjIKPiArICAgICAgIGRlcGVuZHMgb24gQlIyX0VOQUJMRV9MT0NBTEUgIyBjYWlybyAt
+PiBmb250Y29uZmlnCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVB
+RFMgIyBsaWJlcG94eSwgbGliZ3RrMywgbGliZ2xpYjIKPiAgICAgICAgIGRlcGVuZHMgb24gQlIy
+X1VTRV9NTVUgIyBsaWJndGszLCBsaWJnbGliMgo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfSU5T
+VEFMTF9MSUJTVERDUFAgIyBsaWJndGszCj4gQEAgLTI3LDExICsyOCwxMiBAQCBjb25maWcgQlIy
+X1BBQ0tBR0VfTElCRk0KPgo+ICAgICAgICAgICBodHRwOi8vd2lraS5seGRlLm9yZy9lbi9MaWJm
+bQo+Cj4gLWNvbW1lbnQgImxpYmZtIGEgdG9vbGNoYWluIHcvIGR5bmFtaWMgbGlicmFyeSwgd2No
+YXIsIHRocmVhZHMsIEMrKywgZ2NjID49IDQuOSIKPiArY29tbWVudCAibGliZm0gYSB0b29sY2hh
+aW4gdy8gZHluYW1pYyBsaWJyYXJ5LCB3Y2hhciwgbG9jYWxlLCB0aHJlYWRzLCBDKyssIGdjYyA+
+PSA0LjkiCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0hPU1RfUlVTVENfQVJDSF9T
+VVBQT1JUUwo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVVNFX01NVQo+ICAgICAgICAgZGVwZW5k
+cyBvbiBCUjJfVE9PTENIQUlOX0hBU19TWU5DXzQKPiAgICAgICAgIGRlcGVuZHMgb24gIUJSMl9V
+U0VfV0NIQVIgfHwgIUJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMgfHwgXAo+ICsgICAgICAgICAg
+ICAgICAhQlIyX0VOQUJMRV9MT0NBTEUgfHwgXAo+ICAgICAgICAgICAgICAgICBCUjJfU1RBVElD
+X0xJQlMgfHwgXAo+ICAgICAgICAgICAgICAgICAhQlIyX0lOU1RBTExfTElCU1REQ1BQIHx8ICFC
+UjJfVE9PTENIQUlOX0dDQ19BVF9MRUFTVF80XzkKPgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL2xp
+YmdkaXBsdXMvQ29uZmlnLmluIGIvcGFja2FnZS9saWJnZGlwbHVzL0NvbmZpZy5pbgo+IGluZGV4
+IGQyNmE5OTdkNDYuLmM1M2FiZTc4ZGUgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9saWJnZGlwbHVz
+L0NvbmZpZy5pbgo+ICsrKyBiL3BhY2thZ2UvbGliZ2RpcGx1cy9Db25maWcuaW4KPiBAQCAtMiw2
+ICsyLDcgQEAgY29uZmlnIEJSMl9QQUNLQUdFX0xJQkdESVBMVVMKPiAgICAgICAgIGJvb2wgImxp
+YmdkaXBsdXMiCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX1hPUkc3Cj4gICAgICAg
+ICBkZXBlbmRzIG9uIEJSMl9VU0VfV0NIQVIgIyBsaWJnbGliMiAtPiBnZXR0ZXh0Cj4gKyAgICAg
+ICBkZXBlbmRzIG9uIEJSMl9FTkFCTEVfTE9DQUxFICMgY2Fpcm8gLT4gZm9udGNvbmZpZwo+ICAg
+ICAgICAgZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hBU19USFJFQURTICMgbGliZ2xpYjIKPiAg
+ICAgICAgIGRlcGVuZHMgb24gQlIyX1VTRV9NTVUgIyBsaWJnbGliMgo+ICAgICAgICAgZGVwZW5k
+cyBvbiBCUjJfSU5TVEFMTF9MSUJTVERDUFAKPiBAQCAtMTQsOCArMTUsOSBAQCBjb25maWcgQlIy
+X1BBQ0tBR0VfTElCR0RJUExVUwo+Cj4gICAgICAgICAgIGh0dHBzOi8vZ2l0aHViLmNvbS9tb25v
+L2xpYmdkaXBsdXMKPgo+IC1jb21tZW50ICJsaWJnZGlwbHVzIG5lZWRzIGEgdG9vbGNoYWluIHcv
+IHdjaGFyLCB0aHJlYWRzLCBDKysiCj4gK2NvbW1lbnQgImxpYmdkaXBsdXMgbmVlZHMgYSB0b29s
+Y2hhaW4gdy8gd2NoYXIsIGxvY2FsZSwgdGhyZWFkcywgQysrIgo+ICAgICAgICAgZGVwZW5kcyBv
+biBCUjJfVVNFX01NVQo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9YT1JHNwo+ICAg
+ICAgICAgZGVwZW5kcyBvbiAhQlIyX1VTRV9XQ0hBUiB8fCAhQlIyX1RPT0xDSEFJTl9IQVNfVEhS
+RUFEUyB8fCBcCj4gKyAgICAgICAgICAgICAgICFCUjJfRU5BQkxFX0xPQ0FMRSB8fCBcCj4gICAg
+ICAgICAgICAgICAgICFCUjJfSU5TVEFMTF9MSUJTVERDUFAKPiBkaWZmIC0tZ2l0IGEvcGFja2Fn
+ZS9saWJndGszL0NvbmZpZy5pbiBiL3BhY2thZ2UvbGliZ3RrMy9Db25maWcuaW4KPiBpbmRleCBk
+YWMyZDE3OTc0Li4wOGRmYmM5MTc4IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvbGliZ3RrMy9Db25m
+aWcuaW4KPiArKysgYi9wYWNrYWdlL2xpYmd0azMvQ29uZmlnLmluCj4gQEAgLTEsOCArMSwxMSBA
+QAo+IC1jb21tZW50ICJsaWJndGszIG5lZWRzIGEgdG9vbGNoYWluIHcvIHdjaGFyLCB0aHJlYWRz
+LCBDKyssIGdjYyA+PSA0LjksIGR5bmFtaWMgbGlicmFyeSIKPiArY29tbWVudCAibGliZ3RrMyBu
+ZWVkcyBhIHRvb2xjaGFpbiB3LyB3Y2hhciwgbG9jYWxlLCB0aHJlYWRzLCBDKyssIGdjYyA+PSA0
+LjksIGR5bmFtaWMgbGlicmFyeSIKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfSE9T
+VF9SVVNUQ19BUkNIX1NVUFBPUlRTCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9VU0VfTU1VCj4g
+ICAgICAgICBkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1NZTkNfNAo+IC0gICAgICAgZGVw
+ZW5kcyBvbiAhQlIyX1VTRV9XQ0hBUiB8fCAhQlIyX0lOU1RBTExfTElCU1REQ1BQIHx8IFwKPiAr
+ICAgICAgIGRlcGVuZHMgb24gXAo+ICsgICAgICAgICAgICAgICAhQlIyX1VTRV9XQ0hBUiB8fCBc
+Cj4gKyAgICAgICAgICAgICAgICFCUjJfRU5BQkxFX0xPQ0FMRSB8fCBcCj4gKyAgICAgICAgICAg
+ICAgICFCUjJfSU5TVEFMTF9MSUJTVERDUFAgfHwgXAo+ICAgICAgICAgICAgICAgICAhQlIyX1RP
+T0xDSEFJTl9HQ0NfQVRfTEVBU1RfNF85IHx8IFwKPiAgICAgICAgICAgICAgICAgIUJSMl9UT09M
+Q0hBSU5fSEFTX1RIUkVBRFMgfHwgXAo+ICAgICAgICAgICAgICAgICBCUjJfU1RBVElDX0xJQlMK
+PiBAQCAtMTYsNiArMTksNyBAQCBjb21tZW50ICJsaWJndGszIG5lZWRzIGFuIE9wZW5HTCBvciBh
+biBPcGVuR0wtRUdMIGJhY2tlbmQiCj4gIGNvbmZpZyBCUjJfUEFDS0FHRV9MSUJHVEszCj4gICAg
+ICAgICBib29sICJsaWJndGszIgo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9IT1NU
+X1JVU1RDX0FSQ0hfU1VQUE9SVFMgIyBob3N0LWxpYmd0azMgLT4gaG9zdC1saWJyc3ZnCj4gKyAg
+ICAgICBkZXBlbmRzIG9uIEJSMl9FTkFCTEVfTE9DQUxFICMgZm9udGNvbmZpZwo+ICAgICAgICAg
+ZGVwZW5kcyBvbiBCUjJfVVNFX1dDSEFSICMgZ2xpYjIKPiAgICAgICAgIGRlcGVuZHMgb24gQlIy
+X1RPT0xDSEFJTl9IQVNfVEhSRUFEUyAjIGdsaWIyLCBsaWJlcG94eQo+ICAgICAgICAgZGVwZW5k
+cyBvbiBCUjJfVVNFX01NVSAjIGdsaWIyCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbGliZ3RrNC9D
+b25maWcuaW4gYi9wYWNrYWdlL2xpYmd0azQvQ29uZmlnLmluCj4gaW5kZXggZTA2ZGY1YjQ4Ny4u
+YmU2OWEzMTYwMSAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL2xpYmd0azQvQ29uZmlnLmluCj4gKysr
+IGIvcGFja2FnZS9saWJndGs0L0NvbmZpZy5pbgo+IEBAIC0xLDcgKzEsOCBAQAo+IC1jb21tZW50
+ICJsaWJndGs0IG5lZWRzIGEgdG9vbGNoYWluIHcvIGR5bmFtaWMgbGlicmFyeSwgd2NoYXIsIHRo
+cmVhZHMsIEMrKywgZ2NjID49IDQuOSIKPiArY29tbWVudCAibGliZ3RrNCBuZWVkcyBhIHRvb2xj
+aGFpbiB3LyBkeW5hbWljIGxpYnJhcnksIHdjaGFyLCBsb2NhbGUsIHRocmVhZHMsIEMrKywgZ2Nj
+ID49IDQuOSIKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1VTRV9NTVUKPiAgICAgICAgIGRlcGVu
+ZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNfU1lOQ180Cj4gICAgICAgICBkZXBlbmRzIG9uICFCUjJf
+VVNFX1dDSEFSIHx8ICFCUjJfSU5TVEFMTF9MSUJTVERDUFAgfHwgXAo+ICsgICAgICAgICAgICAg
+ICAhQlIyX0VOQUJMRV9MT0NBTEUgfHwgXAo+ICAgICAgICAgICAgICAgICAhQlIyX1RPT0xDSEFJ
+Tl9HQ0NfQVRfTEVBU1RfNF85IHx8IFwKPiAgICAgICAgICAgICAgICAgQlIyX1NUQVRJQ19MSUJT
+IHx8IFwKPiAgICAgICAgICAgICAgICAgIUJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMKPiBAQCAt
+MTQsNiArMTUsNyBAQCBjb21tZW50ICJsaWJndGs0IG5lZWRzIGFuIE9wZW5HTChFUykgRUdMIGJh
+Y2tlbmQiCj4gIGNvbmZpZyBCUjJfUEFDS0FHRV9MSUJHVEs0Cj4gICAgICAgICBib29sICJsaWJn
+dGs0Igo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVVNFX1dDSEFSICMgZ2xpYjIKPiArICAgICAg
+IGRlcGVuZHMgb24gQlIyX0VOQUJMRV9MT0NBTEUgIyBjYWlyby9wYW5nbyAtPiBmb250Y29uZmln
+Cj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMgIyBnbGliMiwg
+Z3JhcGhlbmUsIGxpYmVwb3h5Cj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9VU0VfTU1VICMgZ2xp
+YjIKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX0lOU1RBTExfTElCU1REQ1BQICMgcGFuZ28KPiBk
+aWZmIC0tZ2l0IGEvcGFja2FnZS9saWJyc3ZnL0NvbmZpZy5pbiBiL3BhY2thZ2UvbGlicnN2Zy9D
+b25maWcuaW4KPiBpbmRleCA5ZjVjMmYzODhlLi40NmU0MzFmNzAwIDEwMDY0NAo+IC0tLSBhL3Bh
+Y2thZ2UvbGlicnN2Zy9Db25maWcuaW4KPiArKysgYi9wYWNrYWdlL2xpYnJzdmcvQ29uZmlnLmlu
+Cj4gQEAgLTIsNiArMiw3IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9MSUJSU1ZHCj4gICAgICAgICBi
+b29sICJsaWJyc3ZnIgo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9IT1NUX1JVU1RD
+X1RBUkdFVF9BUkNIX1NVUFBPUlRTCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9VU0VfV0NIQVIg
+IyBnbGliMgo+ICsgICAgICAgZGVwZW5kcyBvbiBCUjJfRU5BQkxFX0xPQ0FMRSAjIGNhaXJvIC0+
+IGZvbnRjb25maWcKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFE
+UyAjIGdsaWIyCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9VU0VfTU1VICMgZ2xpYjIKPiAgICAg
+ICAgIGRlcGVuZHMgb24gQlIyX0lOU1RBTExfTElCU1REQ1BQICMgcGFuZ28KPiBAQCAtMjEsMTAg
+KzIyLDExIEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9MSUJSU1ZHCj4KPiAgICAgICAgICAgaHR0cHM6
+Ly9naXRsYWIuZ25vbWUub3JnL0dOT01FL2xpYnJzdmcKPgo+IC1jb21tZW50ICJsaWJyc3ZnIG5l
+ZWRzIGEgdG9vbGNoYWluIHcvIHdjaGFyLCB0aHJlYWRzLCBDKyssIGdjYyA+PSA0LjkiCj4gK2Nv
+bW1lbnQgImxpYnJzdmcgbmVlZHMgYSB0b29sY2hhaW4gdy8gd2NoYXIsIGxvY2FsZSwgdGhyZWFk
+cywgQysrLCBnY2MgPj0gNC45Igo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9IT1NU
+X1JVU1RDX1RBUkdFVF9BUkNIX1NVUFBPUlRTCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9VU0Vf
+TU1VCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1NZTkNfNAo+ICAgICAg
+ICAgZGVwZW5kcyBvbiAhQlIyX1VTRV9XQ0hBUiB8fCAhQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFE
+UyB8fCBcCj4gKyAgICAgICAgICAgICAgICFCUjJfRU5BQkxFX0xPQ0FMRSB8fCBcCj4gICAgICAg
+ICAgICAgICAgICFCUjJfVE9PTENIQUlOX0dDQ19BVF9MRUFTVF80XzkgfHwgXAo+ICAgICAgICAg
+ICAgICAgICAhQlIyX0lOU1RBTExfTElCU1REQ1BQCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvbWF0
+Y2hib3gvQ29uZmlnLmluIGIvcGFja2FnZS9tYXRjaGJveC9Db25maWcuaW4KPiBpbmRleCA5ZDIx
+MjkwMmEwLi43ZWI5OTkwMTYwIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvbWF0Y2hib3gvQ29uZmln
+LmluCj4gKysrIGIvcGFja2FnZS9tYXRjaGJveC9Db25maWcuaW4KPiBAQCAtMSw1ICsxLDYgQEAK
+PiAgbWVudWNvbmZpZyBCUjJfUEFDS0FHRV9NQVRDSEJPWAo+ICAgICAgICAgYm9vbCAibWF0Y2hi
+b3giCj4gKyAgICAgICBkZXBlbmRzIG9uIEJSMl9FTkFCTEVfTE9DQUxFICMgZm9udGNvbmZpZwo+
+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9YT1JHNwo+ICAgICAgICAgZGVwZW5kcyBv
+biBCUjJfVVNFX01NVSAjIGZvcmsoKQo+ICAgICAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX0ZPTlRD
+T05GSUcKPiBAQCAtMzMsMyArMzQsNiBAQCBzb3VyY2UgInBhY2thZ2UvbWF0Y2hib3gtcGFuZWwv
+Q29uZmlnLmluIgo+ICBzb3VyY2UgInBhY2thZ2UvbWF0Y2hib3gtc3RhcnR1cC1tb25pdG9yL0Nv
+bmZpZy5pbiIKPgo+ICBlbmRpZgo+ICsKPiArY29tbWVudCAibWF0Y2hib3ggbmVlZHMgYSB0b29s
+Y2hhaW4gdy8gbG9jYWxlIgo+ICsgICAgICAgZGVwZW5kcyBvbiAhQlIyX0VOQUJMRV9MT0NBTEUK
+PiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9vcGVuYm94L0NvbmZpZy5pbiBiL3BhY2thZ2Uvb3BlbmJv
+eC9Db25maWcuaW4KPiBpbmRleCBlMDQyZWQyYjQ4Li5jYTJhZGVhZDg4IDEwMDY0NAo+IC0tLSBh
+L3BhY2thZ2Uvb3BlbmJveC9Db25maWcuaW4KPiArKysgYi9wYWNrYWdlL29wZW5ib3gvQ29uZmln
+LmluCj4gQEAgLTQsNiArNCw3IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9PUEVOQk9YCj4gICAgICAg
+ICBkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMgIyBnbGliMgo+ICAgICAgICAg
+ZGVwZW5kcyBvbiBCUjJfVVNFX01NVSAjIGdsaWIyCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9V
+U0VfV0NIQVIgIyBnbGliMgo+ICsgICAgICAgZGVwZW5kcyBvbiBCUjJfRU5BQkxFX0xPQ0FMRSAj
+IHhsaWJfbGliWGZ0IC0+IGZvbnRjb25maWcKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1RPT0xD
+SEFJTl9IQVNfU1lOQ180ICMgcGFuZ28gLT4gaGFyZmJ1enoKPiAgICAgICAgIGRlcGVuZHMgb24g
+QlIyX1RPT0xDSEFJTl9HQ0NfQVRfTEVBU1RfNF85ICMgcGFuZ28gLT4gaGFyZmJ1enoKPiAgICAg
+ICAgIGRlcGVuZHMgb24gQlIyX0lOU1RBTExfTElCU1REQ1BQICMgcGFuZ28gLT4gZnJlZXR5cGUK
+PiBAQCAtMjAsMTAgKzIxLDExIEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9PUEVOQk9YCj4KPiAgICAg
+ICAgICAgaHR0cDovL29wZW5ib3gub3JnCj4KPiAtY29tbWVudCAib3BlbmJveCBuZWVkcyBhIHRv
+b2xjaGFpbiB3LyBDKyssIHRocmVhZHMsIHdjaGFyLCBnY2MgPj0gNC45Igo+ICtjb21tZW50ICJv
+cGVuYm94IG5lZWRzIGEgdG9vbGNoYWluIHcvIEMrKywgdGhyZWFkcywgd2NoYXIsIGxvY2FsZSwg
+Z2NjID49IDQuOSIKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1VTRV9NTVUKPiAgICAgICAgIGRl
+cGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNfU1lOQ180Cj4gICAgICAgICBkZXBlbmRzIG9uICFC
+UjJfVE9PTENIQUlOX0hBU19USFJFQURTIHx8ICFCUjJfVVNFX1dDSEFSIHx8IFwKPiArICAgICAg
+ICAgICAgICAgIUJSMl9FTkFCTEVfTE9DQUxFIHx8IFwKPiAgICAgICAgICAgICAgICAgIUJSMl9U
+T09MQ0hBSU5fR0NDX0FUX0xFQVNUXzRfOSB8fCBcCj4gICAgICAgICAgICAgICAgICFCUjJfSU5T
+VEFMTF9MSUJTVERDUFAKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfWE9SRzcKPiBk
+aWZmIC0tZ2l0IGEvcGFja2FnZS9wYW5nby9Db25maWcuaW4gYi9wYWNrYWdlL3BhbmdvL0NvbmZp
+Zy5pbgo+IGluZGV4IGUyYjJlN2ZlMmIuLmQ2ZDQ4ZWZhMjAgMTAwNjQ0Cj4gLS0tIGEvcGFja2Fn
+ZS9wYW5nby9Db25maWcuaW4KPiArKysgYi9wYWNrYWdlL3BhbmdvL0NvbmZpZy5pbgo+IEBAIC0x
+LDUgKzEsNiBAQAo+ICBjb25maWcgQlIyX1BBQ0tBR0VfUEFOR08KPiAgICAgICAgIGJvb2wgInBh
+bmdvIgo+ICsgICAgICAgZGVwZW5kcyBvbiBCUjJfRU5BQkxFX0xPQ0FMRSAjIGZvbnRjb25maWcK
+PiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1VTRV9XQ0hBUiAjIGdsaWIyCj4gICAgICAgICBkZXBl
+bmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMgIyBnbGliMgo+ICAgICAgICAgZGVwZW5k
+cyBvbiBCUjJfVVNFX01NVSAjIGdsaWIyCj4gQEAgLTI0LDkgKzI1LDEwIEBAIGNvbmZpZyBCUjJf
+UEFDS0FHRV9QQU5HTwo+Cj4gICAgICAgICAgIGh0dHBzOi8vcGFuZ28uZ25vbWUub3JnLwo+Cj4g
+LWNvbW1lbnQgInBhbmdvIG5lZWRzIGEgdG9vbGNoYWluIHcvIHdjaGFyLCB0aHJlYWRzLCBDKyss
+IGdjYyA+PSA0LjkiCj4gK2NvbW1lbnQgInBhbmdvIG5lZWRzIGEgdG9vbGNoYWluIHcvIHdjaGFy
+LCBsb2NhbGUsIHRocmVhZHMsIEMrKywgZ2NjID49IDQuOSIKPiAgICAgICAgIGRlcGVuZHMgb24g
+QlIyX1VTRV9NTVUKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNfU1lOQ180
+Cj4gICAgICAgICBkZXBlbmRzIG9uICFCUjJfVVNFX1dDSEFSIHx8ICFCUjJfVE9PTENIQUlOX0hB
+U19USFJFQURTIHx8IFwKPiArICAgICAgICAgICAgICAgIUJSMl9FTkFCTEVfTE9DQUxFIHx8IFwK
+PiAgICAgICAgICAgICAgICAgIUJSMl9UT09MQ0hBSU5fR0NDX0FUX0xFQVNUXzRfOSB8fCBcCj4g
+ICAgICAgICAgICAgICAgICFCUjJfSU5TVEFMTF9MSUJTVERDUFAKPiBkaWZmIC0tZ2l0IGEvcGFj
+a2FnZS9wYW5nb21tL0NvbmZpZy5pbiBiL3BhY2thZ2UvcGFuZ29tbS9Db25maWcuaW4KPiBpbmRl
+eCA2ZGRhZDllNmVmLi5iOGI3MGNmZDI4IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvcGFuZ29tbS9D
+b25maWcuaW4KPiArKysgYi9wYWNrYWdlL3BhbmdvbW0vQ29uZmlnLmluCj4gQEAgLTYsNiArNiw3
+IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9QQU5HT01NCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9U
+T09MQ0hBSU5fSEFTX1RIUkVBRFMgIyAqbW0vcGFuZ28gLT4gbGliZ2xpYjIKPiAgICAgICAgIGRl
+cGVuZHMgb24gQlIyX1VTRV9NTVUgIyAqbW0vcGFuZ28gLT4gbGliZ2xpYjIKPiAgICAgICAgIGRl
+cGVuZHMgb24gQlIyX1VTRV9XQ0hBUiAjICptbS9wYW5nbyAtPiBsaWJnbGliMgo+ICsgICAgICAg
+ZGVwZW5kcyBvbiBCUjJfRU5BQkxFX0xPQ0FMRSAjIHBhbmdvIC0+IGNhaXJvIC0+IGZvbnRjb25m
+aWcKPiAgICAgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9DQUlST01NCj4gICAgICAgICBzZWxlY3Qg
+QlIyX1BBQ0tBR0VfR0xJQk1NCj4gICAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfUEFOR08KPiBA
+QCAtMTUsOCArMTYsOSBAQCBjb25maWcgQlIyX1BBQ0tBR0VfUEFOR09NTQo+Cj4gICAgICAgICAg
+IGh0dHA6Ly93d3cuZ3RrbW0ub3JnLwo+Cj4gLWNvbW1lbnQgInBhbmdvbW0gbmVlZHMgYSB0b29s
+Y2hhaW4gdy8gQysrLCB3Y2hhciwgdGhyZWFkcywgZ2NjID49IDciCj4gK2NvbW1lbnQgInBhbmdv
+bW0gbmVlZHMgYSB0b29sY2hhaW4gdy8gQysrLCB3Y2hhciwgbG9jYWxlLCB0aHJlYWRzLCBnY2Mg
+Pj0gNyIKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1VTRV9NTVUKPiAgICAgICAgIGRlcGVuZHMg
+b24gQlIyX1RPT0xDSEFJTl9IQVNfU1lOQ180Cj4gICAgICAgICBkZXBlbmRzIG9uICFCUjJfVE9P
+TENIQUlOX0dDQ19BVF9MRUFTVF83IHx8ICFCUjJfVVNFX1dDSEFSIFwKPiArICAgICAgICAgICAg
+ICAgfHwgIUJSMl9FTkFCTEVfTE9DQUxFIFwKPiAgICAgICAgICAgICAgICAgfHwgIUJSMl9JTlNU
+QUxMX0xJQlNURENQUCB8fCAhQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUwo+IGRpZmYgLS1naXQg
+YS9wYWNrYWdlL3BhbmdvbW0yXzQ2L0NvbmZpZy5pbiBiL3BhY2thZ2UvcGFuZ29tbTJfNDYvQ29u
+ZmlnLmluCj4gaW5kZXggNzcyYjUyM2M4My4uOTVkMDY5ZDgyMyAxMDA2NDQKPiAtLS0gYS9wYWNr
+YWdlL3BhbmdvbW0yXzQ2L0NvbmZpZy5pbgo+ICsrKyBiL3BhY2thZ2UvcGFuZ29tbTJfNDYvQ29u
+ZmlnLmluCj4gQEAgLTYsNiArNiw3IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9QQU5HT01NMl80Ngo+
+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hBU19USFJFQURTICMgKm1tL3Bhbmdv
+IC0+IGxpYmdsaWIyCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9VU0VfTU1VICMgKm1tL3Bhbmdv
+IC0+IGxpYmdsaWIyCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9VU0VfV0NIQVIgIyAqbW0vcGFu
+Z28gLT4gbGliZ2xpYjIKPiArICAgICAgIGRlcGVuZHMgb24gQlIyX0VOQUJMRV9MT0NBTEUgIyBj
+YWlyb21tIC0+IGNhaXJvIC0+IGZvbnRjb25maWcKPiAgICAgICAgIHNlbGVjdCBCUjJfUEFDS0FH
+RV9DQUlST01NMV8xNAo+ICAgICAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX0dMSUJNTTJfNjYKPiAg
+ICAgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9QQU5HTwo+IEBAIC0xOCw4ICsxOSw5IEBAIGNvbmZp
+ZyBCUjJfUEFDS0FHRV9QQU5HT01NMl80Ngo+Cj4gICAgICAgICAgIGh0dHA6Ly93d3cuZ3RrbW0u
+b3JnLwo+Cj4gLWNvbW1lbnQgInBhbmdvbW0gKDIuNDYueCkgbmVlZHMgYSB0b29sY2hhaW4gdy8g
+QysrLCB3Y2hhciwgdGhyZWFkcywgZ2NjID49IDQuOSIKPiArY29tbWVudCAicGFuZ29tbSAoMi40
+Ni54KSBuZWVkcyBhIHRvb2xjaGFpbiB3LyBDKyssIHdjaGFyLCBsb2NhbGUsIHRocmVhZHMsIGdj
+YyA+PSA0LjkiCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9VU0VfTU1VCj4gICAgICAgICBkZXBl
+bmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1NZTkNfNAo+ICAgICAgICAgZGVwZW5kcyBvbiAhQlIy
+X1RPT0xDSEFJTl9HQ0NfQVRfTEVBU1RfNF85IHx8ICFCUjJfVVNFX1dDSEFSIFwKPiArICAgICAg
+ICAgICAgICAgfHwgIUJSMl9FTkFCTEVfTE9DQUxFIFwKPiAgICAgICAgICAgICAgICAgfHwgIUJS
+Ml9JTlNUQUxMX0xJQlNURENQUCB8fCAhQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUwo+IGRpZmYg
+LS1naXQgYS9wYWNrYWdlL3BjbWFuZm0vQ29uZmlnLmluIGIvcGFja2FnZS9wY21hbmZtL0NvbmZp
+Zy5pbgo+IGluZGV4IDUyNTAxNzZjMWYuLjJlNzIwM2FkOGIgMTAwNjQ0Cj4gLS0tIGEvcGFja2Fn
+ZS9wY21hbmZtL0NvbmZpZy5pbgo+ICsrKyBiL3BhY2thZ2UvcGNtYW5mbS9Db25maWcuaW4KPiBA
+QCAtMiw2ICsyLDcgQEAgY29uZmlnIEJSMl9QQUNLQUdFX1BDTUFORk0KPiAgICAgICAgIGJvb2wg
+InBjbWFuZm0iCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0hPU1RfUlVTVENfQVJD
+SF9TVVBQT1JUUyAjIGxpYmZtCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9VU0VfV0NIQVIgIyBs
+aWJmbQo+ICsgICAgICAgZGVwZW5kcyBvbiBCUjJfRU5BQkxFX0xPQ0FMRSAjIGxpYmZtIC0+IGNh
+aXJvIC0+IGZvbnRjb25maWcKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9IQVNf
+VEhSRUFEUyAjIGxpYmVwb3h5LCBsaWJmbQo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVVNFX01N
+VSAjIGxpYmZtCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9JTlNUQUxMX0xJQlNURENQUCAjIGxp
+YmZtCj4gQEAgLTIzLDExICsyNCwxMiBAQCBjb25maWcgQlIyX1BBQ0tBR0VfUENNQU5GTQo+Cj4g
+ICAgICAgICAgIGh0dHA6Ly93aWtpLmx4ZGUub3JnL2VuL1BDTWFuRk0KPgo+IC1jb21tZW50ICJw
+Y21hbmZtIGEgdG9vbGNoYWluIHcvIGR5bmFtaWMgbGlicmFyeSwgd2NoYXIsIHRocmVhZHMsIEMr
+KywgZ2NjID49IDQuOSIKPiArY29tbWVudCAicGNtYW5mbSBhIHRvb2xjaGFpbiB3LyBkeW5hbWlj
+IGxpYnJhcnksIHdjaGFyLCBsb2NhbGUsIHRocmVhZHMsIEMrKywgZ2NjID49IDQuOSIKPiAgICAg
+ICAgIGRlcGVuZHMgb24gQlIyX1BBQ0tBR0VfSE9TVF9SVVNUQ19BUkNIX1NVUFBPUlRTCj4gICAg
+ICAgICBkZXBlbmRzIG9uIEJSMl9VU0VfTU1VCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9UT09M
+Q0hBSU5fSEFTX1NZTkNfNAo+ICAgICAgICAgZGVwZW5kcyBvbiAhQlIyX1VTRV9XQ0hBUiB8fCAh
+QlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUyB8fCBcCj4gKyAgICAgICAgICAgICAgICFCUjJfRU5B
+QkxFX0xPQ0FMRSB8fCBcCj4gICAgICAgICAgICAgICAgIEJSMl9TVEFUSUNfTElCUyB8fCBcCj4g
+ICAgICAgICAgICAgICAgICFCUjJfSU5TVEFMTF9MSUJTVERDUFAgfHwgIUJSMl9UT09MQ0hBSU5f
+R0NDX0FUX0xFQVNUXzRfOQo+Cj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcG9wcGxlci9Db25maWcu
+aW4gYi9wYWNrYWdlL3BvcHBsZXIvQ29uZmlnLmluCj4gaW5kZXggMjA4MTI2YTMyNy4uNTJlOGM0
+ZTJkOCAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3BvcHBsZXIvQ29uZmlnLmluCj4gKysrIGIvcGFj
+a2FnZS9wb3BwbGVyL0NvbmZpZy5pbgo+IEBAIC0xLDUgKzEsNiBAQAo+ICBjb25maWcgQlIyX1BB
+Q0tBR0VfUE9QUExFUgo+ICAgICAgICAgYm9vbCAicG9wcGxlciIKPiArICAgICAgIGRlcGVuZHMg
+b24gQlIyX0VOQUJMRV9MT0NBTEUgIyBmb250Y29uZmlnCj4gICAgICAgICBkZXBlbmRzIG9uIEJS
+Ml9VU0VfV0NIQVIKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX0lOU1RBTExfTElCU1REQ1BQCj4g
+ICAgICAgICBkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMKPiBAQCAtMzEsNyAr
+MzIsOCBAQCBjb25maWcgQlIyX1BBQ0tBR0VfUE9QUExFUl9VVElMUwo+Cj4gIGVuZGlmCj4KPiAt
+Y29tbWVudCAicG9wcGxlciBuZWVkcyBhIHRvb2xjaGFpbiB3LyB3Y2hhciwgQysrLCB0aHJlYWRz
+LCBkeW5hbWljIGxpYnJhcnksIGdjYyA+PSA3Igo+ICtjb21tZW50ICJwb3BwbGVyIG5lZWRzIGEg
+dG9vbGNoYWluIHcvIHdjaGFyLCBsb2NhbGUsIEMrKywgdGhyZWFkcywgZHluYW1pYyBsaWJyYXJ5
+LCBnY2MgPj0gNyIKPiAgICAgICAgIGRlcGVuZHMgb24gIUJSMl9VU0VfV0NIQVIgfHwgIUJSMl9J
+TlNUQUxMX0xJQlNURENQUCB8fCBcCj4gICAgICAgICAgICAgICAgICFCUjJfVE9PTENIQUlOX0hB
+U19USFJFQURTIHx8IEJSMl9TVEFUSUNfTElCUyB8fCBcCj4gKyAgICAgICAgICAgICAgICFCUjJf
+RU5BQkxFX0xPQ0FMRSB8fCBcCj4gICAgICAgICAgICAgICAgICFCUjJfVE9PTENIQUlOX0dDQ19B
+VF9MRUFTVF81Cj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uLXB5Y2Fpcm8vQ29uZmlnLmlu
+IGIvcGFja2FnZS9weXRob24tcHljYWlyby9Db25maWcuaW4KPiBpbmRleCAwZDhkZTk3N2UxLi43
+MGQxOWFjZDgwIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UvcHl0aG9uLXB5Y2Fpcm8vQ29uZmlnLmlu
+Cj4gKysrIGIvcGFja2FnZS9weXRob24tcHljYWlyby9Db25maWcuaW4KPiBAQCAtMSw3ICsxLDEx
+IEBACj4gIGNvbmZpZyBCUjJfUEFDS0FHRV9QWVRIT05fUFlDQUlSTwo+ICAgICAgICAgYm9vbCAi
+cHl0aG9uLXB5Y2Fpcm8iCj4gKyAgICAgICBkZXBlbmRzIG9uIEJSMl9FTkFCTEVfTE9DQUxFICMg
+Y2Fpcm8gLT4gZm9udGNvbmZpZwo+ICAgICAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX0NBSVJPCj4g
+ICAgICAgICBoZWxwCj4gICAgICAgICAgIFB5dGhvbiBpbnRlcmZhY2UgZm9yIGNhaXJvLgo+Cj4g
+ICAgICAgICAgIGh0dHBzOi8vcHljYWlyby5yZWFkdGhlZG9jcy5pbwo+ICsKPiArY29tbWVudCAi
+cHl0aG9uLXB5Y2Fpcm8gbmVlZHMgYSB0b29sY2hhaW4gdy8gbG9jYWxlIgo+ICsgICAgICAgZGVw
+ZW5kcyBvbiAhQlIyX0VOQUJMRV9MT0NBTEUKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9xdDUvcXQ1
+YmFzZS9Db25maWcuaW4gYi9wYWNrYWdlL3F0NS9xdDViYXNlL0NvbmZpZy5pbgo+IGluZGV4IGRm
+YWE3OThiZDQuLjIwNjhmZmE2ZDEgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9xdDUvcXQ1YmFzZS9D
+b25maWcuaW4KPiArKysgYi9wYWNrYWdlL3F0NS9xdDViYXNlL0NvbmZpZy5pbgo+IEBAIC0yMzgs
+MTEgKzIzOCwxNSBAQCBjb25maWcgQlIyX1BBQ0tBR0VfUVQ1QkFTRV9QUklOVFNVUFBPUlQKPgo+
+ICBjb25maWcgQlIyX1BBQ0tBR0VfUVQ1QkFTRV9GT05UQ09ORklHCj4gICAgICAgICBib29sICJm
+b250Y29uZmlnIHN1cHBvcnQiCj4gKyAgICAgICBkZXBlbmRzIG9uIEJSMl9FTkFCTEVfTE9DQUxF
+ICMgZm9udGNvbmZpZwo+ICAgICAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX0ZPTlRDT05GSUcKPiAg
+ICAgICAgIGhlbHAKPiAgICAgICAgICAgVGhpcyBvcHRpb24gZW5hYmxlcyBGb250Y29uZmlnIGFu
+ZCBGcmVldHlwZSBzdXBwb3J0IHVzaW5nCj4gICAgICAgICAgIHRoZSBzeXN0ZW0gZm9udGNvbmZp
+ZyBhbmQgZnJlZXR5cGUyIGxpYnJhcmllcy4KPgo+ICtjb21tZW50ICJmb250Y29uZmlnIHN1cHBv
+cnQgbmVlZHMgYSB0b29sY2hhaW4gdy8gbG9jYWxlIgo+ICsgICAgICAgZGVwZW5kcyBvbiAhQlIy
+X0VOQUJMRV9MT0NBTEUKPiArCj4gIGNvbmZpZyBCUjJfUEFDS0FHRV9RVDVCQVNFX0hBUkZCVVpa
+Cj4gICAgICAgICBib29sICJoYXJmYnV6eiBzdXBwb3J0Igo+ICAgICAgICAgc2VsZWN0IEJSMl9Q
+QUNLQUdFX0hBUkZCVVpaIGlmIFwKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9xdDYvcXQ2YmFzZS9D
+b25maWcuaW4gYi9wYWNrYWdlL3F0Ni9xdDZiYXNlL0NvbmZpZy5pbgo+IGluZGV4IGU2YmI5OWRl
+MjguLjJkOGM1Y2VlYWMgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9xdDYvcXQ2YmFzZS9Db25maWcu
+aW4KPiArKysgYi9wYWNrYWdlL3F0Ni9xdDZiYXNlL0NvbmZpZy5pbgo+IEBAIC0xMjUsMTEgKzEy
+NSwxNSBAQCBlbmRpZgo+Cj4gIGNvbmZpZyBCUjJfUEFDS0FHRV9RVDZCQVNFX0ZPTlRDT05GSUcK
+PiAgICAgICAgIGJvb2wgImZvbnRjb25maWcgc3VwcG9ydCIKPiArICAgICAgIGRlcGVuZHMgb24g
+QlIyX0VOQUJMRV9MT0NBTEUgIyBmb250Y29uZmlnCj4gICAgICAgICBzZWxlY3QgQlIyX1BBQ0tB
+R0VfRk9OVENPTkZJRwo+ICAgICAgICAgaGVscAo+ICAgICAgICAgICBUaGlzIG9wdGlvbiBlbmFi
+bGVzIEZvbnRjb25maWcgc3VwcG9ydCB1c2luZyB0aGUgc3lzdGVtCj4gICAgICAgICAgIGZvbnRj
+b25maWcgbGlicmFyeS4KPgo+ICtjb21tZW50ICJmb250Y29uZmlnIHN1cHBvcnQgbmVlZHMgYSB0
+b29sY2hhaW4gdy8gbG9jYWxlIgo+ICsgICAgICAgZGVwZW5kcyBvbiAhQlIyX0VOQUJMRV9MT0NB
+TEUKPiArCj4gIGNvbmZpZyBCUjJfUEFDS0FHRV9RVDZCQVNFX0hBUkZCVVpaCj4gICAgICAgICBi
+b29sICJoYXJmYnV6eiBzdXBwb3J0Igo+ICAgICAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX0hBUkZC
+VVpaIGlmIFwKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9yYXRwb2lzb24vQ29uZmlnLmluIGIvcGFj
+a2FnZS9yYXRwb2lzb24vQ29uZmlnLmluCj4gaW5kZXggN2I3MjQyOTBjMy4uODFhMWY4YzMzNCAx
+MDA2NDQKPiAtLS0gYS9wYWNrYWdlL3JhdHBvaXNvbi9Db25maWcuaW4KPiArKysgYi9wYWNrYWdl
+L3JhdHBvaXNvbi9Db25maWcuaW4KPiBAQCAtMiw2ICsyLDcgQEAgY29uZmlnIEJSMl9QQUNLQUdF
+X1JBVFBPSVNPTgo+ICAgICAgICAgYm9vbCAicmF0cG9pc29uIgo+ICAgICAgICAgZGVwZW5kcyBv
+biBCUjJfVVNFX01NVQo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9YT1JHNwo+ICsg
+ICAgICAgZGVwZW5kcyBvbiBCUjJfRU5BQkxFX0xPQ0FMRSAjIGZvbnRjb25maWcKPiAgICAgICAg
+IHNlbGVjdCBCUjJfUEFDS0FHRV9GT05UQ09ORklHCj4gICAgICAgICBzZWxlY3QgQlIyX1BBQ0tB
+R0VfTElCRVJBVElPTgo+ICAgICAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX1hMSUJfTElCWDExCj4g
+QEAgLTE1LDMgKzE2LDYgQEAgY29uZmlnIEJSMl9QQUNLQUdFX1JBVFBPSVNPTgo+ICAgICAgICAg
+ICBhZHZhbnRhZ2Ugb2YgeW91ciBwcmVjaW91cyBzY3JlZW4gcmVhbCBlc3RhdGUuCj4KPiAgICAg
+ICAgICAgaHR0cDovL3d3dy5ub25nbnUub3JnL3JhdHBvaXNvbi8KPiArCj4gK2NvbW1lbnQgInJh
+dHBvaXNvbiBuZWVkcyBhIHRvb2xjaGFpbiB3LyBsb2NhbGUiCj4gKyAgICAgICBkZXBlbmRzIG9u
+ICFCUjJfRU5BQkxFX0xPQ0FMRQo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3JyZHRvb2wvQ29uZmln
+LmluIGIvcGFja2FnZS9ycmR0b29sL0NvbmZpZy5pbgo+IGluZGV4IGQ5NTRmZDEyMTQuLmIzNjIw
+MmU0NjYgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9ycmR0b29sL0NvbmZpZy5pbgo+ICsrKyBiL3Bh
+Y2thZ2UvcnJkdG9vbC9Db25maWcuaW4KPiBAQCAtMTgsNiArMTgsNyBAQCBjb25maWcgQlIyX1BB
+Q0tBR0VfUlJEVE9PTF9SUkRHUkFQSAo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlO
+X0hBU19TWU5DXzQgIyBwYW5nbyAtPiBoYXJmYnV6ego+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJf
+VE9PTENIQUlOX0dDQ19BVF9MRUFTVF80XzkgIyBwYW5nbyAtPiBoYXJmYnV6ego+ICAgICAgICAg
+ZGVwZW5kcyBvbiBCUjJfSU5TVEFMTF9MSUJTVERDUFAgIyBmcmVldHlwZSBzdXBwb3J0IGZyb20g
+cGFuZ28KPiArICAgICAgIGRlcGVuZHMgb24gQlIyX0VOQUJMRV9MT0NBTEUgIyBjYWlybyAtPiBm
+b250Y29uZmlnCj4gICAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfQ0FJUk8KPiAgICAgICAgIHNl
+bGVjdCBCUjJfUEFDS0FHRV9DQUlST19QTkcKPiAgICAgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9D
+QUlST19aTElCCj4gQEAgLTI2LDggKzI3LDkgQEAgY29uZmlnIEJSMl9QQUNLQUdFX1JSRFRPT0xf
+UlJER1JBUEgKPiAgICAgICAgICAgVGhpcyBlbmFibGVzIHRoZSBncmFwaGluZyBjYXBhYmlsaXRp
+ZXMgKCdycmRncmFwaCcpLgo+ICAgICAgICAgICBXaXRob3V0IHRoaXMgaXQgd2lsbCBvbmx5IGFj
+dCBhcyBhIGRhdGFiYXNlIGJhY2tlbmQuCj4KPiAtY29tbWVudCAicnJkX2dyYXBoIHN1cHBvcnQg
+bmVlZHMgYSB0b29sY2hhaW4gdy8gQysrLCBnY2MgPj0gNC45Igo+ICtjb21tZW50ICJycmRfZ3Jh
+cGggc3VwcG9ydCBuZWVkcyBhIHRvb2xjaGFpbiB3LyBsb2NhbGUsIEMrKywgZ2NjID49IDQuOSIK
+PiAgICAgICAgIGRlcGVuZHMgb24gIUJSMl9JTlNUQUxMX0xJQlNURENQUCB8fCBcCj4gKyAgICAg
+ICAgICAgICAgICFCUjJfRU5BQkxFX0xPQ0FMRSB8fCBcCj4gICAgICAgICAgICAgICAgICFCUjJf
+VE9PTENIQUlOX0dDQ19BVF9MRUFTVF80XzkKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1RPT0xD
+SEFJTl9IQVNfU1lOQ180Cj4KPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9zd2F5L0NvbmZpZy5pbiBi
+L3BhY2thZ2Uvc3dheS9Db25maWcuaW4KPiBpbmRleCBjODljMDYwN2QzLi5mODBmNzMwMzFhIDEw
+MDY0NAo+IC0tLSBhL3BhY2thZ2Uvc3dheS9Db25maWcuaW4KPiArKysgYi9wYWNrYWdlL3N3YXkv
+Q29uZmlnLmluCj4gQEAgLTksNiArOSw3IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9TV0FZCj4gICAg
+ICAgICBkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX0hBU19VREVWICMgd2xyb290cwo+ICAgICAgICAg
+ZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hBU19TWU5DXzQgIyBqc29uLWMsIHBhbmdvCj4gICAg
+ICAgICBkZXBlbmRzIG9uIEJSMl9VU0VfV0NIQVIgIyBwYW5nbwo+ICsgICAgICAgZGVwZW5kcyBv
+biBCUjJfRU5BQkxFX0xPQ0FMRSAjIGNhaXJvIC0+IGZvbnRjb25maWcKPiAgICAgICAgIGRlcGVu
+ZHMgb24gQlIyX1VTRV9NTVUgIyBwYW5nbwo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfSU5TVEFM
+TF9MSUJTVERDUFAgIyBwYW5nbwo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0dD
+Q19BVF9MRUFTVF80XzkgIyBwYW5nbwo+IEBAIC02MSwxMCArNjIsMTEgQEAgY29tbWVudCAic3dh
+eSBuZWVkcyBzeXN0ZW1kLCB1ZGV2LCBFR0wsIE9wZW5HTCBFUyBhbmQgR0JNIHN1cHBvcnQiCj4g
+ICAgICAgICAgICAgICAgICFCUjJfUEFDS0FHRV9IQVNfTElCR0xFUyB8fCBcCj4gICAgICAgICAg
+ICAgICAgICFCUjJfUEFDS0FHRV9IQVNfTElCR0JNCj4KPiAtY29tbWVudCAic3dheSBuZWVkcyBh
+IHRvb2xjaGFpbiB3LyB3Y2hhciwgdGhyZWFkcywgQysrLCBkeW5hbWljIGxpYnJhcnksIGdjYyA+
+PSA0LjkiCj4gK2NvbW1lbnQgInN3YXkgbmVlZHMgYSB0b29sY2hhaW4gdy8gd2NoYXIsIGxvY2Fs
+ZSwgdGhyZWFkcywgQysrLCBkeW5hbWljIGxpYnJhcnksIGdjYyA+PSA0LjkiCj4gICAgICAgICBk
+ZXBlbmRzIG9uIEJSMl9VU0VfTU1VCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5f
+SEFTX1NZTkNfNAo+ICAgICAgICAgZGVwZW5kcyBvbiAhQlIyX1VTRV9XQ0hBUiB8fCBcCj4gKyAg
+ICAgICAgICAgICAgICFCUjJfRU5BQkxFX0xPQ0FMRSB8fCBcCj4gICAgICAgICAgICAgICAgICFC
+UjJfVE9PTENIQUlOX0hBU19USFJFQURTIHx8IFwKPiAgICAgICAgICAgICAgICAgIUJSMl9UT09M
+Q0hBSU5fR0NDX0FUX0xFQVNUXzRfOSB8fCBcCj4gICAgICAgICAgICAgICAgICFCUjJfSU5TVEFM
+TF9MSUJTVERDUFAgfHwgXAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3N3YXliZy9Db25maWcuaW4g
+Yi9wYWNrYWdlL3N3YXliZy9Db25maWcuaW4KPiBpbmRleCA2M2FhOGNkYjZhLi5iYjczYzM1Y2Nh
+IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2Uvc3dheWJnL0NvbmZpZy5pbgo+ICsrKyBiL3BhY2thZ2Uv
+c3dheWJnL0NvbmZpZy5pbgo+IEBAIC0zLDYgKzMsNyBAQCBjb25maWcgQlIyX1BBQ0tBR0VfU1dB
+WUJHCj4gICAgICAgICBkZWZhdWx0IHkgaWYgQlIyX1BBQ0tBR0VfU1dBWQo+ICAgICAgICAgZGVw
+ZW5kcyBvbiAhQlIyX1NUQVRJQ19MSUJTICMgd2F5bGFuZCAtPiBkbGZjbi5oCj4gICAgICAgICBk
+ZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMgIyB3YXlsYW5kCj4gKyAgICAgICBk
+ZXBlbmRzIG9uIEJSMl9FTkFCTEVfTE9DQUxFICMgY2Fpcm8gLT4gZm9udGNvbmZpZwo+ICAgICAg
+ICAgc2VsZWN0IEJSMl9QQUNLQUdFX0NBSVJPCj4gICAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0Vf
+Q0FJUk9fUE5HCj4gICAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfV0FZTEFORAo+IEBAIC0xMSwz
+ICsxMiw2IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9TV0FZQkcKPiAgICAgICAgICAgV2FsbHBhcGVy
+IHRvb2wgZm9yIFdheWxhbmQgY29tcG9zaXRvcnMuCj4KPiAgICAgICAgICAgaHR0cHM6Ly9naXRo
+dWIuY29tL3N3YXl3bS9zd2F5YmcKPiArCj4gK2NvbW1lbnQgInN3YXliZyBuZWVkcyBhIHRvb2xj
+aGFpbiB3LyBsb2NhbGUiCj4gKyAgICAgICBkZXBlbmRzIG9uICFCUjJfRU5BQkxFX0xPQ0FMRQo+
+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3RrL0NvbmZpZy5pbiBiL3BhY2thZ2UvdGsvQ29uZmlnLmlu
+Cj4gaW5kZXggNTA3YjBiZjk3OS4uN2M5NThmZThlMSAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3Rr
+L0NvbmZpZy5pbgo+ICsrKyBiL3BhY2thZ2UvdGsvQ29uZmlnLmluCj4gQEAgLTMsNiArMyw3IEBA
+IGNvbmZpZyBCUjJfUEFDS0FHRV9USwo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVVNFX01NVSAj
+IHRjbAo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hBU19USFJFQURTICMgdGNs
+Cj4gICAgICAgICBkZXBlbmRzIG9uICFCUjJfU1RBVElDX0xJQlMgIyB0Y2wKPiArICAgICAgIGRl
+cGVuZHMgb24gQlIyX0VOQUJMRV9MT0NBTEUgIyB4bGliX2xpYlhmdCAtPiBmb250Y29uZmlnCj4g
+ICAgICAgICBkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX1hPUkc3Cj4gICAgICAgICBzZWxlY3QgQlIy
+X1BBQ0tBR0VfVENMCj4gICAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfWExJQl9MSUJYMTEKPiBA
+QCAtMTIsNyArMTMsOCBAQCBjb25maWcgQlIyX1BBQ0tBR0VfVEsKPgo+ICAgICAgICAgICBodHRw
+Oi8vd3d3LnRjbC50awo+Cj4gLWNvbW1lbnQgInRrIG5lZWRzIGEgdG9vbGNoYWluIHcvIHRocmVh
+ZHMsIGR5bmFtaWMgbGlicmFyeSIKPiArY29tbWVudCAidGsgbmVlZHMgYSB0b29sY2hhaW4gdy8g
+bG9jYWxlLCB0aHJlYWRzLCBkeW5hbWljIGxpYnJhcnkiCj4gICAgICAgICBkZXBlbmRzIG9uIEJS
+Ml9VU0VfTU1VCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX1hPUkc3Cj4gLSAgICAg
+ICBkZXBlbmRzIG9uICFCUjJfVE9PTENIQUlOX0hBU19USFJFQURTIHx8IEJSMl9TVEFUSUNfTElC
+Uwo+ICsgICAgICAgZGVwZW5kcyBvbiAhQlIyX1RPT0xDSEFJTl9IQVNfVEhSRUFEUyB8fCBCUjJf
+U1RBVElDX0xJQlMgXAo+ICsgICAgICAgICAgICAgICB8fCAhQlIyX0VOQUJMRV9MT0NBTEUKPiBk
+aWZmIC0tZ2l0IGEvcGFja2FnZS92ZHIvQ29uZmlnLmluIGIvcGFja2FnZS92ZHIvQ29uZmlnLmlu
+Cj4gaW5kZXggMzg1MDI3MjlhNy4uYzdiMjJlNmZhMiAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3Zk
+ci9Db25maWcuaW4KPiArKysgYi9wYWNrYWdlL3Zkci9Db25maWcuaW4KPiBAQCAtNSw2ICs1LDcg
+QEAgY29uZmlnIEJSMl9QQUNLQUdFX1ZEUgo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVE9PTENI
+QUlOX0hBU19USFJFQURTX05QVEwKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1RPT0xDSEFJTl9I
+RUFERVJTX0FUX0xFQVNUXzNfOQo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVVNFX01NVSAjIGZv
+cmsoKQo+ICsgICAgICAgZGVwZW5kcyBvbiBCUjJfRU5BQkxFX0xPQ0FMRSAjIGZvbnRjb25maWcK
+PiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1VTRV9XQ0hBUgo+ICAgICAgICAgc2VsZWN0IEJSMl9Q
+QUNLQUdFX0ZPTlRDT05GSUcKPiAgICAgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9GUkVFVFlQRQo+
+IEBAIC0xNyw5ICsxOCwxMCBAQCBjb25maWcgQlIyX1BBQ0tBR0VfVkRSCj4KPiAgICAgICAgICAg
+aHR0cDovL3d3dy50dmRyLmRlCj4KPiAtY29tbWVudCAidmRyIG5lZWRzIGEgdG9vbGNoYWluIHcv
+IEMrKywgZHluYW1pYyBsaWJyYXJ5LCBOUFRMLCB3Y2hhciwgaGVhZGVycyA+PSAzLjkiCj4gK2Nv
+bW1lbnQgInZkciBuZWVkcyBhIHRvb2xjaGFpbiB3LyBDKyssIGR5bmFtaWMgbGlicmFyeSwgTlBU
+TCwgd2NoYXIsIGxvY2FsZSwgaGVhZGVycyA+PSAzLjkiCj4gICAgICAgICBkZXBlbmRzIG9uIEJS
+Ml9VU0VfTU1VCj4gICAgICAgICBkZXBlbmRzIG9uICFCUjJfSU5TVEFMTF9MSUJTVERDUFAgfHwg
+QlIyX1NUQVRJQ19MSUJTIHx8IFwKPiAgICAgICAgICAgICAgICAgIUJSMl9UT09MQ0hBSU5fSEFT
+X1RIUkVBRFNfTlBUTCB8fCBcCj4gICAgICAgICAgICAgICAgICFCUjJfVVNFX1dDSEFSIHx8IFwK
+PiArICAgICAgICAgICAgICAgIUJSMl9FTkFCTEVfTE9DQUxFIHx8IFwKPiAgICAgICAgICAgICAg
+ICAgIUJSMl9UT09MQ0hBSU5fSEVBREVSU19BVF9MRUFTVF8zXzkKPiBkaWZmIC0tZ2l0IGEvcGFj
+a2FnZS92dGUvQ29uZmlnLmluIGIvcGFja2FnZS92dGUvQ29uZmlnLmluCj4gaW5kZXggYWY2YmZh
+ZTg5MC4uMzhhZTNmOGM0NCAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3Z0ZS9Db25maWcuaW4KPiAr
+KysgYi9wYWNrYWdlL3Z0ZS9Db25maWcuaW4KPiBAQCAtMiw2ICsyLDcgQEAgY29uZmlnIEJSMl9Q
+QUNLQUdFX1ZURQo+ICAgICAgICAgYm9vbCAidnRlIgo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJf
+UEFDS0FHRV9IT1NUX1JVU1RDX0FSQ0hfU1VQUE9SVFMgIyBsaWJndGszIC0+IGhvc3QtbGliZ3Rr
+MyAtPiBob3N0LWxpYnJzdmcKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1VTRV9XQ0hBUgo+ICsg
+ICAgICAgZGVwZW5kcyBvbiBCUjJfRU5BQkxFX0xPQ0FMRSAjIGxpYmd0azMgLT4gZm9udGNvbmZp
+Zwo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0hBU19USFJFQURTCj4gICAgICAg
+ICBkZXBlbmRzIG9uIEJSMl9VU0VfTU1VCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9JTlNUQUxM
+X0xJQlNURENQUAo+IEBAIC0yMywxMSArMjQsMTIgQEAgY29uZmlnIEJSMl9QQUNLQUdFX1ZURQo+
+Cj4gICAgICAgICAgIGh0dHA6Ly9naXRodWIuY29tL0dOT01FL3Z0ZQo+Cj4gLWNvbW1lbnQgInZ0
+ZSBuZWVkcyBhIHVDbGliYyBvciBnbGliYyB0b29sY2hhaW4gdy8gZHluYW1pYyBsaWJyYXJ5LCB3
+Y2hhciwgdGhyZWFkcywgQysrLCBnY2MgPj0gMTAiCj4gK2NvbW1lbnQgInZ0ZSBuZWVkcyBhIHVD
+bGliYyBvciBnbGliYyB0b29sY2hhaW4gdy8gZHluYW1pYyBsaWJyYXJ5LCB3Y2hhciwgbG9jYWxl
+LCB0aHJlYWRzLCBDKyssIGdjYyA+PSAxMCIKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1BBQ0tB
+R0VfSE9TVF9SVVNUQ19BUkNIX1NVUFBPUlRTCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9VU0Vf
+TU1VCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1NZTkNfNAo+ICAgICAg
+ICAgZGVwZW5kcyBvbiAhQlIyX1VTRV9XQ0hBUiB8fCAhQlIyX0lOU1RBTExfTElCU1REQ1BQIHx8
+IFwKPiArICAgICAgICAgICAgICAgIUJSMl9FTkFCTEVfTE9DQUxFIHx8IFwKPiAgICAgICAgICAg
+ICAgICAgIUJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMgfHwgXAo+ICAgICAgICAgICAgICAgICBC
+UjJfU1RBVElDX0xJQlMgfHwgXAo+ICAgICAgICAgICAgICAgICAhQlIyX1RPT0xDSEFJTl9HQ0Nf
+QVRfTEVBU1RfMTAgfHwgXAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3dlYmtpdGd0ay9Db25maWcu
+aW4gYi9wYWNrYWdlL3dlYmtpdGd0ay9Db25maWcuaW4KPiBpbmRleCA2NjAwYWMxN2NkLi5mNWMw
+NTM0OWY1IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2Uvd2Via2l0Z3RrL0NvbmZpZy5pbgo+ICsrKyBi
+L3BhY2thZ2Uvd2Via2l0Z3RrL0NvbmZpZy5pbgo+IEBAIC0xNiwxMSArMTYsMTIgQEAgY29uZmln
+IEJSMl9QQUNLQUdFX1dFQktJVEdUS19BUkNIX1NVUFBPUlRTCj4gICAgICAgICBkZXBlbmRzIG9u
+IEJSMl9UT09MQ0hBSU5fSEFTX1NZTkNfNAo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfUEFDS0FH
+RV9MSUJHUEdfRVJST1JfQVJDSF9TVVBQT1JUUyAjIGxpYmdjcnlwdAo+Cj4gLWNvbW1lbnQgIndl
+YmtpdGd0ayBuZWVkcyBsaWJndGszIG9yIGxpYmd0azQgYW5kIGEgdG9vbGNoYWluIHcvIEMrKywg
+d2NoYXIsIE5QVEwsIGR5bmFtaWMgbGlicmFyeSwgZ2NjID49IDExLCBob3N0IGdjYyA+PSA3Igo+
+ICtjb21tZW50ICJ3ZWJraXRndGsgbmVlZHMgbGliZ3RrMyBvciBsaWJndGs0IGFuZCBhIHRvb2xj
+aGFpbiB3LyBDKyssIHdjaGFyLCBsb2NhbGUsIE5QVEwsIGR5bmFtaWMgbGlicmFyeSwgZ2NjID49
+IDExLCBob3N0IGdjYyA+PSA3Igo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9XRUJL
+SVRHVEtfQVJDSF9TVVBQT1JUUwo+ICAgICAgICAgZGVwZW5kcyBvbiAhQlIyX0JJTkZNVF9GTEFU
+Cj4gICAgICAgICBkZXBlbmRzIG9uICghQlIyX1BBQ0tBR0VfTElCR1RLMyAmJiAhQlIyX1BBQ0tB
+R0VfTElCR1RLNCkgfHwgXAo+ICAgICAgICAgICAgICAgICAhQlIyX0lOU1RBTExfTElCU1REQ1BQ
+IHx8ICFCUjJfVVNFX1dDSEFSIHx8IFwKPiArICAgICAgICAgICAgICAgIUJSMl9FTkFCTEVfTE9D
+QUxFIHx8IFwKPiAgICAgICAgICAgICAgICAgIUJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFNfTlBU
+TCB8fCBCUjJfU1RBVElDX0xJQlMgfHwgXAo+ICAgICAgICAgICAgICAgICAhQlIyX1RPT0xDSEFJ
+Tl9HQ0NfQVRfTEVBU1RfMTEgfHwgXAo+ICAgICAgICAgICAgICAgICAhQlIyX0hPU1RfR0NDX0FU
+X0xFQVNUXzcKPiBAQCAtMzYsNiArMzcsNyBAQCBjb25maWcgQlIyX1BBQ0tBR0VfV0VCS0lUR1RL
+Cj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFNfTlBUTAo+ICAg
+ICAgICAgZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0dDQ19BVF9MRUFTVF8xMQo+ICAgICAgICAg
+ZGVwZW5kcyBvbiBCUjJfVVNFX1dDSEFSICMgaWN1LCBsaWJzb3VwMwo+ICsgICAgICAgZGVwZW5k
+cyBvbiBCUjJfRU5BQkxFX0xPQ0FMRSAjIGNhaXJvIC0+IGZvbnRjb25maWcKPiAgICAgICAgIGRl
+cGVuZHMgb24gQlIyX1BBQ0tBR0VfTElCR1RLMyB8fCBCUjJfUEFDS0FHRV9MSUJHVEs0Cj4gICAg
+ICAgICBkZXBlbmRzIG9uIEJSMl9QQUNLQUdFX1dFQktJVEdUS19BUkNIX1NVUFBPUlRTCj4gICAg
+ICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfQ0FJUk8KPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS93ZXN0
+b24vQ29uZmlnLmluIGIvcGFja2FnZS93ZXN0b24vQ29uZmlnLmluCj4gaW5kZXggZGNiNWM3NTQ0
+ZS4uMWY0ZDlhODRlMiAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3dlc3Rvbi9Db25maWcuaW4KPiAr
+KysgYi9wYWNrYWdlL3dlc3Rvbi9Db25maWcuaW4KPiBAQCAtMTAsNiArMTAsNyBAQCBjb25maWcg
+QlIyX1BBQ0tBR0VfV0VTVE9OCj4gICAgICAgICBkZXBlbmRzIG9uICFCUjJfU1RBVElDX0xJQlMg
+IyB3YXlsYW5kCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMg
+IyB3YXlsYW5kCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEVBREVSU19BVF9M
+RUFTVF8zXzAKPiArICAgICAgIGRlcGVuZHMgb24gQlIyX0VOQUJMRV9MT0NBTEUgIyBjYWlybyAt
+PiBmb250Y29uZmlnCj4gICAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfV0FZTEFORAo+ICAgICAg
+ICAgc2VsZWN0IEJSMl9QQUNLQUdFX1dBWUxBTkRfUFJPVE9DT0xTCj4gICAgICAgICBzZWxlY3Qg
+QlIyX1BBQ0tBR0VfTElCWEtCQ09NTU9OCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvd2lyZXNoYXJr
+L0NvbmZpZy5pbiBiL3BhY2thZ2Uvd2lyZXNoYXJrL0NvbmZpZy5pbgo+IGluZGV4IDg5NGU2Mjli
+MWEuLjQxNDVhMDNkM2YgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS93aXJlc2hhcmsvQ29uZmlnLmlu
+Cj4gKysrIGIvcGFja2FnZS93aXJlc2hhcmsvQ29uZmlnLmluCj4gQEAgLTIzLDYgKzIzLDcgQEAg
+aWYgQlIyX1BBQ0tBR0VfV0lSRVNIQVJLCj4gIGNvbmZpZyBCUjJfUEFDS0FHRV9XSVJFU0hBUktf
+R1VJCj4gICAgICAgICBib29sICJRdDUgR1VJIgo+ICAgICAgICAgZGVmYXVsdCB5Cj4gKyAgICAg
+ICBkZXBlbmRzIG9uIEJSMl9FTkFCTEVfTE9DQUxFICMgcXQ1YmFzZS1mb250Y29uZmlnCj4gICAg
+ICAgICBkZXBlbmRzIG9uIEJSMl9JTlNUQUxMX0xJQlNURENQUCAjIHF0NQo+ICAgICAgICAgZGVw
+ZW5kcyBvbiBCUjJfSE9TVF9HQ0NfQVRfTEVBU1RfNSAjIHF0NQo+ICAgICAgICAgZGVwZW5kcyBv
+biBCUjJfVE9PTENIQUlOX0hBU19USFJFQURTX05QVEwgIyBxdDUKPiBAQCAtMzksOCArNDAsOSBA
+QCBjb25maWcgQlIyX1BBQ0tBR0VfV0lSRVNIQVJLX0dVSQo+ICAgICAgICAgaGVscAo+ICAgICAg
+ICAgICBFbmFibGUgUXQ1IEdVSQo+Cj4gLWNvbW1lbnQgIlF0NSBHVUkgbmVlZHMgYSB1ZGV2IC9k
+ZXYgbWFuYWdlbWVudCBhbmQgYSB0b29sY2hhaW4gdy8gQysrLCBOUFRMLCBob3N0IGdjYyA+PSA1
+LjAsIGdjYyA+PSA1LjAiCj4gK2NvbW1lbnQgIlF0NSBHVUkgbmVlZHMgYSB1ZGV2IC9kZXYgbWFu
+YWdlbWVudCBhbmQgYSB0b29sY2hhaW4gdy8gQysrLCBOUFRMLCBsb2NhbGUsIGhvc3QgZ2NjID49
+IDUuMCwgZ2NjID49IDUuMCIKPiAgICAgICAgIGRlcGVuZHMgb24gIUJSMl9QQUNLQUdFX0hBU19V
+REVWIHx8ICFCUjJfSU5TVEFMTF9MSUJTVERDUFAgfHwgXAo+ICsgICAgICAgICAgICAgICAhQlIy
+X0VOQUJMRV9MT0NBTEUgfHwgXAo+ICAgICAgICAgICAgICAgICAhQlIyX1RPT0xDSEFJTl9IQVNf
+VEhSRUFEU19OUFRMIHx8ICFCUjJfVE9PTENIQUlOX0dDQ19BVF9MRUFTVF81IHx8IFwKPiAgICAg
+ICAgICAgICAgICAgIUJSMl9IT1NUX0dDQ19BVF9MRUFTVF81Cj4KPiBkaWZmIC0tZ2l0IGEvcGFj
+a2FnZS93bWVudS9Db25maWcuaW4gYi9wYWNrYWdlL3dtZW51L0NvbmZpZy5pbgo+IGluZGV4IGNl
+OWU3MGY5ZjguLmE4ZTBhMzNkNTggMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS93bWVudS9Db25maWcu
+aW4KPiArKysgYi9wYWNrYWdlL3dtZW51L0NvbmZpZy5pbgo+IEBAIC03LDYgKzcsNyBAQCBjb25m
+aWcgQlIyX1BBQ0tBR0VfV01FTlUKPiAgICAgICAgIGRlcGVuZHMgb24gIUJSMl9TVEFUSUNfTElC
+UyAjIHdheWxhbmQKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX0lOU1RBTExfTElCU1REQ1BQICMg
+cGFuZ28KPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1VTRV9XQ0hBUiAjIGxpYmdsaWIyLCBwYW5n
+bwo+ICsgICAgICAgZGVwZW5kcyBvbiBCUjJfRU5BQkxFX0xPQ0FMRSAjIGNhaXJvIC0+IGZvbnRj
+b25maWcKPiAgICAgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9DQUlSTwo+ICAgICAgICAgc2VsZWN0
+IEJSMl9QQUNLQUdFX0NBSVJPX1BORwo+ICAgICAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX0xJQkdM
+SUIyCj4gQEAgLTIxLDkgKzIyLDEwIEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9XTUVOVQo+Cj4gICAg
+ICAgICAgIGh0dHBzOi8vY29kZWJlcmcub3JnL2FkbmFuby93bWVudQo+Cj4gLWNvbW1lbnQgIndt
+ZW51IG5lZWRzIGEgdG9vbGNoYWluIHcvIHdjaGFyLCB0aHJlYWRzLCBDKyssIGR5bmFtaWMgbGli
+cmFyeSwgZ2NjID49IDQuOSIKPiArY29tbWVudCAid21lbnUgbmVlZHMgYSB0b29sY2hhaW4gdy8g
+d2NoYXIsIGxvY2FsZSwgdGhyZWFkcywgQysrLCBkeW5hbWljIGxpYnJhcnksIGdjYyA+PSA0Ljki
+Cj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9VU0VfTU1VCj4gICAgICAgICBkZXBlbmRzIG9uIEJS
+Ml9UT09MQ0hBSU5fSEFTX1NZTkNfNAo+ICAgICAgICAgZGVwZW5kcyBvbiAhQlIyX1RPT0xDSEFJ
+Tl9IQVNfVEhSRUFEUyB8fCBcCj4gKyAgICAgICAgICAgICAgICFCUjJfRU5BQkxFX0xPQ0FMRSB8
+fCBcCj4gICAgICAgICAgICAgICAgICFCUjJfVE9PTENIQUlOX0dDQ19BVF9MRUFTVF80XzkgfHwg
+QlIyX1NUQVRJQ19MSUJTIHx8IFwKPiAgICAgICAgICAgICAgICAgIUJSMl9JTlNUQUxMX0xJQlNU
+RENQUCB8fCAhQlIyX1VTRV9XQ0hBUgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3dwZXdlYmtpdC9D
+b25maWcuaW4gYi9wYWNrYWdlL3dwZXdlYmtpdC9Db25maWcuaW4KPiBpbmRleCA5MWRlMzg2OGJi
+Li4wY2M2YzU1ZWZhIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2Uvd3Bld2Via2l0L0NvbmZpZy5pbgo+
+ICsrKyBiL3BhY2thZ2Uvd3Bld2Via2l0L0NvbmZpZy5pbgo+IEBAIC0xNiwxMCArMTYsMTEgQEAg
+Y29uZmlnIEJSMl9QQUNLQUdFX1dQRVdFQktJVF9BUkNIX1NVUFBPUlRTCj4gICAgICAgICBkZXBl
+bmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1NZTkNfNAo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJf
+UEFDS0FHRV9MSUJHUEdfRVJST1JfQVJDSF9TVVBQT1JUUyAjIGxpYmdjcnlwdAo+Cj4gLWNvbW1l
+bnQgIndwZXdlYmtpdCBuZWVkcyBhIHRvb2xjaGFpbiB3LyBDKyssIHdjaGFyLCBOUFRMLCBkeW5h
+bWljIGxpYnJhcnksIGdjYyA+PSAxMSwgaG9zdCBnY2MgPj0gNyIKPiArY29tbWVudCAid3Bld2Vi
+a2l0IG5lZWRzIGEgdG9vbGNoYWluIHcvIEMrKywgd2NoYXIsIGxvY2FsZSwgTlBUTCwgZHluYW1p
+YyBsaWJyYXJ5LCBnY2MgPj0gMTEsIGhvc3QgZ2NjID49IDciCj4gICAgICAgICBkZXBlbmRzIG9u
+IEJSMl9QQUNLQUdFX1dQRVdFQktJVF9BUkNIX1NVUFBPUlRTCj4gICAgICAgICBkZXBlbmRzIG9u
+ICFCUjJfQklORk1UX0ZMQVQKPiAgICAgICAgIGRlcGVuZHMgb24gIUJSMl9JTlNUQUxMX0xJQlNU
+RENQUCB8fCAhQlIyX1VTRV9XQ0hBUiBcCj4gKyAgICAgICAgICAgICAgIHx8ICFCUjJfRU5BQkxF
+X0xPQ0FMRSBcCj4gICAgICAgICAgICAgICAgIHx8ICFCUjJfVE9PTENIQUlOX0hBU19USFJFQURT
+X05QVEwgfHwgQlIyX1NUQVRJQ19MSUJTIFwKPiAgICAgICAgICAgICAgICAgfHwgIUJSMl9UT09M
+Q0hBSU5fR0NDX0FUX0xFQVNUXzExIFwKPiAgICAgICAgICAgICAgICAgfHwgIUJSMl9IT1NUX0dD
+Q19BVF9MRUFTVF83Cj4gQEAgLTM3LDYgKzM4LDcgQEAgY29uZmlnIEJSMl9QQUNLQUdFX1dQRVdF
+QktJVAo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfSU5TVEFMTF9MSUJTVERDUFAgIyBoYXJmYnV6
+eiwgaWN1Cj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFNfTlBU
+TAo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVE9PTENIQUlOX0dDQ19BVF9MRUFTVF8xMQo+ICsg
+ICAgICAgZGVwZW5kcyBvbiBCUjJfRU5BQkxFX0xPQ0FMRSAjIGZvbnRjb25maWcKPiAgICAgICAg
+IGRlcGVuZHMgb24gQlIyX1VTRV9XQ0hBUiAjIGljdSwgbGlic291cDMKPiAgICAgICAgIGRlcGVu
+ZHMgb24gQlIyX1BBQ0tBR0VfSEFTX0xJQkdMRVMKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1BB
+Q0tBR0VfSEFTX0xJQkVHTCAjIHdwZWJhY2tlbmQtZmRvCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uv
+eDExcjcveGFwcF94MTFwZXJmL0NvbmZpZy5pbiBiL3BhY2thZ2UveDExcjcveGFwcF94MTFwZXJm
+L0NvbmZpZy5pbgo+IGluZGV4IDBmMWVjYTg5MzguLmViMDIzNzVmZTggMTAwNjQ0Cj4gLS0tIGEv
+cGFja2FnZS94MTFyNy94YXBwX3gxMXBlcmYvQ29uZmlnLmluCj4gKysrIGIvcGFja2FnZS94MTFy
+Ny94YXBwX3gxMXBlcmYvQ29uZmlnLmluCj4gQEAgLTEsNyArMSwxMSBAQAo+ICBjb25maWcgQlIy
+X1BBQ0tBR0VfWEFQUF9YMTFQRVJGCj4gICAgICAgICBib29sICJ4MTFwZXJmIgo+ICsgICAgICAg
+ZGVwZW5kcyBvbiBCUjJfRU5BQkxFX0xPQ0FMRSAjIGZvbnRjb25maWcKPiAgICAgICAgIHNlbGVj
+dCBCUjJfUEFDS0FHRV9YTElCX0xJQlgxMQo+ICAgICAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX1hM
+SUJfTElCWE1VCj4gICAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfWExJQl9MSUJYRlQKPiAgICAg
+ICAgIGhlbHAKPiAgICAgICAgICAgc3VtbWFyaXplIHgxMXBlcmYgcmVzdWx0cwo+ICsKPiArY29t
+bWVudCAieDExcGVyZiBuZWVkcyBhIHRvb2xjaGFpbiB3LyBsb2NhbGUiCj4gKyAgICAgICBkZXBl
+bmRzIG9uICFCUjJfRU5BQkxFX0xPQ0FMRQo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3gxMXI3L3hh
+cHBfeGNsb2NrL0NvbmZpZy5pbiBiL3BhY2thZ2UveDExcjcveGFwcF94Y2xvY2svQ29uZmlnLmlu
+Cj4gaW5kZXggMDgzYTZkMWU0MC4uMzYxMTMwNDlhMCAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3gx
+MXI3L3hhcHBfeGNsb2NrL0NvbmZpZy5pbgo+ICsrKyBiL3BhY2thZ2UveDExcjcveGFwcF94Y2xv
+Y2svQ29uZmlnLmluCj4gQEAgLTEsNSArMSw2IEBACj4gIGNvbmZpZyBCUjJfUEFDS0FHRV9YQVBQ
+X1hDTE9DSwo+ICAgICAgICAgYm9vbCAieGNsb2NrIgo+ICsgICAgICAgZGVwZW5kcyBvbiBCUjJf
+RU5BQkxFX0xPQ0FMRSAjIGZvbnRjb25maWcKPiAgICAgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9Y
+TElCX0xJQlgxMQo+ICAgICAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX1hMSUJfTElCWEFXCj4gICAg
+ICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfWExJQl9MSUJYRlQKPiBAQCAtNywzICs4LDYgQEAgY29u
+ZmlnIEJSMl9QQUNLQUdFX1hBUFBfWENMT0NLCj4gICAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0Vf
+WExJQl9MSUJYS0JGSUxFCj4gICAgICAgICBoZWxwCj4gICAgICAgICAgIGFuYWxvZyAvIGRpZ2l0
+YWwgY2xvY2sgZm9yIFgKPiArCj4gK2NvbW1lbnQgInhjbG9jayBuZWVkcyBhIHRvb2xjaGFpbiB3
+LyBsb2NhbGUiCj4gKyAgICAgICBkZXBlbmRzIG9uICFCUjJfRU5BQkxFX0xPQ0FMRQo+IGRpZmYg
+LS1naXQgYS9wYWNrYWdlL3gxMXI3L3hhcHBfeGZkL0NvbmZpZy5pbiBiL3BhY2thZ2UveDExcjcv
+eGFwcF94ZmQvQ29uZmlnLmluCj4gaW5kZXggZjAwNmIxZTQ4OC4uMTMxMjUwMWJkZSAxMDA2NDQK
+PiAtLS0gYS9wYWNrYWdlL3gxMXI3L3hhcHBfeGZkL0NvbmZpZy5pbgo+ICsrKyBiL3BhY2thZ2Uv
+eDExcjcveGFwcF94ZmQvQ29uZmlnLmluCj4gQEAgLTEsOCArMSwxMiBAQAo+ICBjb25maWcgQlIy
+X1BBQ0tBR0VfWEFQUF9YRkQKPiAgICAgICAgIGJvb2wgInhmZCIKPiArICAgICAgIGRlcGVuZHMg
+b24gQlIyX0VOQUJMRV9MT0NBTEUgIyBmb250Y29uZmlnCj4gICAgICAgICBzZWxlY3QgQlIyX1BB
+Q0tBR0VfRlJFRVRZUEUKPiAgICAgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9GT05UQ09ORklHCj4g
+ICAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfWExJQl9MSUJYQVcKPiAgICAgICAgIHNlbGVjdCBC
+UjJfUEFDS0FHRV9YTElCX0xJQlhGVAo+ICAgICAgICAgaGVscAo+ICAgICAgICAgICBYLk9yZyB4
+ZmQgYXBwbGljYXRpb24KPiArCj4gK2NvbW1lbnQgInhmZCBuZWVkcyBhIHRvb2xjaGFpbiB3LyBs
+b2NhbGUiCj4gKyAgICAgICBkZXBlbmRzIG9uICFCUjJfRU5BQkxFX0xPQ0FMRQo+IGRpZmYgLS1n
+aXQgYS9wYWNrYWdlL3gxMXI3L3hhcHBfeGxvZ28vQ29uZmlnLmluIGIvcGFja2FnZS94MTFyNy94
+YXBwX3hsb2dvL0NvbmZpZy5pbgo+IGluZGV4IGFhY2I3NWZmYjAuLmRjN2EyMGNjZjAgMTAwNjQ0
+Cj4gLS0tIGEvcGFja2FnZS94MTFyNy94YXBwX3hsb2dvL0NvbmZpZy5pbgo+ICsrKyBiL3BhY2th
+Z2UveDExcjcveGFwcF94bG9nby9Db25maWcuaW4KPiBAQCAtMSw3ICsxLDExIEBACj4gIGNvbmZp
+ZyBCUjJfUEFDS0FHRV9YQVBQX1hMT0dPCj4gICAgICAgICBib29sICJ4bG9nbyIKPiArICAgICAg
+IGRlcGVuZHMgb24gQlIyX0VOQUJMRV9MT0NBTEUgIyBmb250Y29uZmlnCj4gICAgICAgICBzZWxl
+Y3QgQlIyX1BBQ0tBR0VfWExJQl9MSUJYQVcKPiAgICAgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9Y
+TElCX0xJQlhSRU5ERVIKPiAgICAgICAgIHNlbGVjdCBCUjJfUEFDS0FHRV9YTElCX0xJQlhGVAo+
+ICAgICAgICAgaGVscAo+ICAgICAgICAgICBYIFdpbmRvdyBTeXN0ZW0gbG9nbwo+ICsKPiArY29t
+bWVudCAieGxvZ28gbmVlZHMgYSB0b29sY2hhaW4gdy8gbG9jYWxlIgo+ICsgICAgICAgZGVwZW5k
+cyBvbiAhQlIyX0VOQUJMRV9MT0NBTEUKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS94MTFyNy94bGli
+X2xpYlhmdC9Db25maWcuaW4gYi9wYWNrYWdlL3gxMXI3L3hsaWJfbGliWGZ0L0NvbmZpZy5pbgo+
+IGluZGV4IDg0OTY3YTU1ZTMuLjE2MjYxYjQ4NWIgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS94MTFy
+Ny94bGliX2xpYlhmdC9Db25maWcuaW4KPiArKysgYi9wYWNrYWdlL3gxMXI3L3hsaWJfbGliWGZ0
+L0NvbmZpZy5pbgo+IEBAIC0xLDUgKzEsNiBAQAo+ICBjb25maWcgQlIyX1BBQ0tBR0VfWExJQl9M
+SUJYRlQKPiAgICAgICAgIGJvb2wgImxpYlhmdCIKPiArICAgICAgIGRlcGVuZHMgb24gQlIyX0VO
+QUJMRV9MT0NBTEUgIyBmb250Y29uZmlnCj4gICAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfRk9O
+VENPTkZJRwo+ICAgICAgICAgc2VsZWN0IEJSMl9QQUNLQUdFX0ZSRUVUWVBFCj4gICAgICAgICBz
+ZWxlY3QgQlIyX1BBQ0tBR0VfWExJQl9MSUJYMTEKPiBAQCAtOCwzICs5LDYgQEAgY29uZmlnIEJS
+Ml9QQUNLQUdFX1hMSUJfTElCWEZUCj4gICAgICAgICBzZWxlY3QgQlIyX1BBQ0tBR0VfWE9SR1BS
+T1RPCj4gICAgICAgICBoZWxwCj4gICAgICAgICAgIFguT3JnIFhmdCBsaWJyYXJ5Cj4gKwo+ICtj
+b21tZW50ICJsaWJYZnQgbmVlZHMgYSB0b29sY2hhaW4gdy8gbG9jYWxlIgo+ICsgICAgICAgZGVw
+ZW5kcyBvbiAhQlIyX0VOQUJMRV9MT0NBTEUKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS94MTFyNy94
+c2VydmVyX3hvcmctc2VydmVyL0NvbmZpZy5pbiBiL3BhY2thZ2UveDExcjcveHNlcnZlcl94b3Jn
+LXNlcnZlci9Db25maWcuaW4KPiBpbmRleCA4OTQxMGYyMmJiLi4yM2Y0OWVhN2RkIDEwMDY0NAo+
+IC0tLSBhL3BhY2thZ2UveDExcjcveHNlcnZlcl94b3JnLXNlcnZlci9Db25maWcuaW4KPiArKysg
+Yi9wYWNrYWdlL3gxMXI3L3hzZXJ2ZXJfeG9yZy1zZXJ2ZXIvQ29uZmlnLmluCj4gQEAgLTEsNiAr
+MSwxMCBAQAo+ICtjb21tZW50ICJ4b3JnLXNlcnZlciBuZWVkcyBhIHRvb2xjaGFpbiB3LyBsb2Nh
+bGUiCj4gKyAgICAgICBkZXBlbmRzIG9uICFCUjJfRU5BQkxFX0xPQ0FMRQo+ICsKPiAgY29uZmln
+IEJSMl9QQUNLQUdFX1hTRVJWRVJfWE9SR19TRVJWRVIKPiAgICAgICAgIGJvb2wgInhvcmctc2Vy
+dmVyIgo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVVNFX01NVSAjIGZvcmsoKQo+ICsgICAgICAg
+ZGVwZW5kcyBvbiBCUjJfRU5BQkxFX0xPQ0FMRSAjIGZvbnRjb25maWcKPiAgICAgICAgICMgV2Ug
+bmVlZCBhIFNIQTEgaW1wbGVtZW50YXRpb24uIElmIGVpdGhlciBvcGVuc3NsIG9yCj4gICAgICAg
+ICAjIGxpYmdjcnlwdCBhcmUgYWxyZWFkeSBwYXJ0IG9mIHRoZSBidWlsZCwgd2UnbGwgdXNlIG9u
+ZSBvZgo+ICAgICAgICAgIyB0aGVtLCBvdGhlcndpc2UsIHVzZSB0aGUgc21hbGwgbGlic2hhMSBs
+aWJyYXJ5Lgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3hzY3JlZW5zYXZlci9Db25maWcuaW4gYi9w
+YWNrYWdlL3hzY3JlZW5zYXZlci9Db25maWcuaW4KPiBpbmRleCA1NzYzZjEyNjAxLi5kNGY1OWVk
+OTQ1IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2UveHNjcmVlbnNhdmVyL0NvbmZpZy5pbgo+ICsrKyBi
+L3BhY2thZ2UveHNjcmVlbnNhdmVyL0NvbmZpZy5pbgo+IEBAIC00LDYgKzQsNyBAQCBjb25maWcg
+QlIyX1BBQ0tBR0VfWFNDUkVFTlNBVkVSCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9QQUNLQUdF
+X0hBU19MSUJHTCAjIGxpYmdsdQo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9IT1NU
+X1JVU1RDX0FSQ0hfU1VQUE9SVFMgIyBsaWJndGszCj4gICAgICAgICBkZXBlbmRzIG9uIEJSMl9V
+U0VfV0NIQVIgIyBsaWJndGszLCBsaWJnbGliMgo+ICsgICAgICAgZGVwZW5kcyBvbiBCUjJfRU5B
+QkxFX0xPQ0FMRSAjIGxpYmd0azMgLT4gZm9udGNvbmZpZwo+ICAgICAgICAgZGVwZW5kcyBvbiBC
+UjJfVE9PTENIQUlOX0hBU19USFJFQURTICMgbGliZXBveHksIGxpYmd0azMsIGxpYmdsaWIyCj4g
+ICAgICAgICBkZXBlbmRzIG9uIEJSMl9VU0VfTU1VICMgbGliZ3RrMywgbGliZ2xpYjIKPiAgICAg
+ICAgIGRlcGVuZHMgb24gQlIyX0lOU1RBTExfTElCU1REQ1BQICMgbGliZ3RrMwo+IEBAIC0zMSw3
+ICszMiw3IEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9YU0NSRUVOU0FWRVIKPgo+ICAgICAgICAgICBo
+dHRwOi8vd3d3Lmp3ei5vcmcveHNjcmVlbnNhdmVyLwo+Cj4gLWNvbW1lbnQgInhzY3JlZW5zYXZl
+ciBuZWVkcyBhIHRvb2xjaGFpbiB3LyBkeW5hbWljIGxpYnJhcnksIHdjaGFyLCBDKyssIHRocmVh
+ZHMsIGdjYyA+PSA0LjksIE9wZW5HTCBiYWNrZW5kIgo+ICtjb21tZW50ICJ4c2NyZWVuc2F2ZXIg
+bmVlZHMgYSB0b29sY2hhaW4gdy8gZHluYW1pYyBsaWJyYXJ5LCB3Y2hhciwgbG9jYWxlLCBDKyss
+IHRocmVhZHMsIGdjYyA+PSA0LjksIE9wZW5HTCBiYWNrZW5kIgo+ICAgICAgICAgZGVwZW5kcyBv
+biBCUjJfUEFDS0FHRV9YT1JHNwo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfUEFDS0FHRV9IT1NU
+X1JVU1RDX0FSQ0hfU1VQUE9SVFMKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1VTRV9NTVUKPiBA
+QCAtMzksNCArNDAsNSBAQCBjb21tZW50ICJ4c2NyZWVuc2F2ZXIgbmVlZHMgYSB0b29sY2hhaW4g
+dy8gZHluYW1pYyBsaWJyYXJ5LCB3Y2hhciwgQysrLCB0aHJlYWRzLAo+ICAgICAgICAgZGVwZW5k
+cyBvbiAhQlIyX0lOU1RBTExfTElCU1REQ1BQIHx8ICFCUjJfVE9PTENIQUlOX0hBU19USFJFQURT
+IHx8IFwKPiAgICAgICAgICAgICAgICAgIUJSMl9UT09MQ0hBSU5fR0NDX0FUX0xFQVNUXzRfOSB8
+fCBcCj4gICAgICAgICAgICAgICAgIEJSMl9TVEFUSUNfTElCUyB8fCBcCj4gKyAgICAgICAgICAg
+ICAgICFCUjJfRU5BQkxFX0xPQ0FMRSB8fCBcCj4gICAgICAgICAgICAgICAgICFCUjJfVVNFX1dD
+SEFSIHx8ICFCUjJfUEFDS0FHRV9IQVNfTElCR0wKPiAtLQo+IDIuNDcuMwo+Cl9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
+c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
+aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
