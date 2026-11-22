@@ -1,29 +1,29 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FD82606A31E
-	for <buildroot@archiver.kernel.org>; Sun, 22 Nov 2026 22:10:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC1B5606A31E
+	for <buildroot@archiver.kernel.org>; Sun, 22 Nov 2026 22:11:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=K3YL/QIj;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=a+egJxgV
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Plmlvxpm;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=L6qwG0Hr
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 06CED6060B;
-	Sun, 22 Nov 2026 22:10:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 760D9405E6;
+	Sun, 22 Nov 2026 22:11:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GybHfs4_gMlp; Sun, 22 Nov 2026 22:10:50 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 1EFDA6063F
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795385450;
-	b=m5mskJZtbSAzZ/Y2Kbpo7AMaZzfBosBbCxxhMpJzq+vHyyW1u+nDFb10FoEAER7kqNlW
-	 S5g76utXY3/E+Ljl/GfFLBdNJ+9OAvasE1HiCjI1VYqhS4BmERjEWoMBQa0KcDP39QCgJ
-	 U6m2+MdvI5A1mYu36y195BIbxiViomzFDa2mmSVgmmrvvip+rxY8tE4rW62kfp2OYg4dA
-	 BCR/Wxb9oOPqXHSweuLARIcfk3n7ERRy5XTjojW7K1MvgswD1K1K5j8YuOvNZiLQSHXzn
-	 UnBpGCHJZ4hkk+nNRv+4M+OZXRHGMGieW8ErnET0YqmKbubvKKRgFhedT17itDDHDxQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UcvILykiBHOV; Sun, 22 Nov 2026 22:11:06 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 78617405ED
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795385466;
+	b=CDNQyLFFu6FHY15G8gjtivkVYr4Z8c818kpQD6o9GglqecIIS8+sKxddE0lgO1Fh6jaz
+	 zgF6nCt3AcHySsvokBBCJeyp4Su66XFeF9zUsxhfvPIHizrsWdO7u9RFZvtwXBuTC1sSL
+	 uLgUvTpitLTNAFa2G6WSD7EwhFW7pM3QOMT51WIOrnQ04UajKrZ9MLzH5pJbn4OwlbDGf
+	 vKDHC+VIkrraxRe75fiBJykpD8b939ywIpTpH1DZqdknNaxFXPNIsr35mmVrpXSBdxQbN
+	 Cl95f8ZZYmVkTR4lYCSqA/sfdMgAMIzMug5fx8PCAgLtiQ7lf99B1BiJLSASQwAR89A==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795385450;
+	c=relaxed/relaxed; t=1795385466;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -32,96 +32,95 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
 	 List-Archive:List-Post:List-Help:List-Subscribe:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=RMfKvCQ1YV6XjRcoa1vhCC5gU0rR/bklIVKDxTbSAsk=;
-	b=FUjpPy2vsIZW4bSMPtO2SFR3EApVEwG90V5KYV+5/kQtLEKIX2eblZjnEw3WpQ7wrABO
-	 j8tkUpDcG+waGnROd19W5TozmEWzddagAcijznV5ESNKL3wMAQeDav8/IineaiX58SwLO
-	 bQeo6BHCM/H/wc7H5C1uVeZPFHjfzpssNFqJ3zw/OEWj0QC8IZvMhmvicwj+WLIJ1TyZz
-	 MhcvAmI8cADlmuLZ8dSJG38ZHnPNAwnKU/q/SlqFjK8nKhbhx6Ck7VxJkIHYiZ/Zq37PX
-	 4QiSV7OwbDr3hf4Y25xw0SHNpkZKIO1EVbI8ZiZBRDBxOc3lWv8t0nyviy2ImUDRKWA==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+	bh=LLTgq0vPp+3uRvtDHkJz0FqkWDWbRFZSCeQK7EO4fxE=;
+	b=rnuoG/tFoY0CK3KWHraumvXQIhYv2z9jRIgP/0K6xvhGzdinp87dt6VgNQYK4HpVAy5K
+	 Qo41TmQd/Pj25Bjlhpw23okLg2UDL0Dds3Cs3Byf9PV9GttpQsHoSRrnQgMDNdVgNzsIi
+	 ehvDK2IcLJ2PjDyYxOR7oz+u/H53qI/JWb2OhvDOwSM7TDvC2eRC4iwTUolpxp7po3EDj
+	 UK6hcwNklpvdLZuc2z1Sr2wt/xn68ZaqxFQe/nV97bvg9whrQHIf3HoORXFrNvP52JspW
+	 37Gk3oARBIKu9N1HMb0m1Jfu7rjRvxYbMis6Aw7mmtDw4Al3vMZQhJJZilbD1Wi4vCA==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795385450;
-	bh=RMfKvCQ1YV6XjRcoa1vhCC5gU0rR/bklIVKDxTbSAsk=;
+	s=default; t=1795385466;
+	bh=LLTgq0vPp+3uRvtDHkJz0FqkWDWbRFZSCeQK7EO4fxE=;
 	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Cc:From;
-	b=K3YL/QIjL1c1qhWV7qwOIUqUoPjI4/PJjQJTmw3PKiYhjQLfGkchHhUi7wP1l5rSc
-	 fHSir0NvMKAJ2ZUzM4yHf7ORS3pt1Tnmrt9q77od3KsxmXfrCCo3/fhPtJyyPm4TTl
-	 BqFjae8THQVFT+g7kNnWceJ/VeURBjKXHgHO+PISSD1KruuX5S8t50VmWhlntx9RTV
-	 Z6qWdUTEgx8OZttv3sCxzwxKi8vPuZAB8YnGFP/nQkgkH9Ut16vofJGxrIPk8XMr+8
-	 +3LP7zEvOjyq8Cn/f2ybzwakEh4CoAq3qtwfQqlA4zzlF4gwz5dVY25rb5dpB0u3SU
-	 cJJW6Y4+4SKqg==
+	b=PlmlvxpmdGLebobJqak7XFZ1IwvhgIVMAZOcbzajpu5c2xIdpYShS4zt5wisS8n7v
+	 2kbirJY2NUTpEBglxQ3LjVDi1uGopbzB9Fwa49BCaMvSPXHH3jzMx9I8Ml3CzpMTyr
+	 2vPihA7tKdijvliNy2CKeD+hgL7BqGSGdOejHXU14gQdBpfoTxBWDTpK41M1bE6GfQ
+	 +qsFxZIqYgiasMgAAgYJ1s46IK9oWXFXmBeSXGaw6DiI2lnq0VDev8hSZrK5Q0xQeV
+	 o+Z5lVPp6q11trs418mHAbTOxs9FGae0IEdujnkYaaG20zf9N57yyIb5zPm9bpPy/X
+	 iEaORqRTzvwcg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1EFDA6063F;
-	Sun, 22 Nov 2026 22:10:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 2B1AE22B
- for <buildroot@buildroot.org>; Sun, 22 Nov 2026 22:10:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 78617405ED;
+	Sun, 22 Nov 2026 22:11:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 843EE371
+ for <buildroot@buildroot.org>; Sun, 22 Nov 2026 22:11:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 11DA540081
- for <buildroot@buildroot.org>; Sun, 22 Nov 2026 22:10:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 75F0D80D09
+ for <buildroot@buildroot.org>; Sun, 22 Nov 2026 22:11:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v8cjOq8-9NW9 for <buildroot@buildroot.org>;
- Sun, 22 Nov 2026 22:10:47 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org BFFD94006F
-Authentication-Results: smtp2.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gaJeCrS-C-Yw for <buildroot@buildroot.org>;
+ Sun, 22 Nov 2026 22:11:05 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org C1DCE80C6F
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp2.osuosl.org;
+Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
+Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=a+egJxgV
+ header.s=kas202605290044 header.b=L6qwG0Hr
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BFFD94006F
- for <buildroot@buildroot.org>; Sun, 22 Nov 2026 22:10:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C1DCE80C6F
+ for <buildroot@buildroot.org>; Sun, 22 Nov 2026 22:11:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1795385417;
- bh=GZnuq5ioDh6aDLy4ahSzFJDRhDSuZwDv7fiztImho0g=;
+ s=kas202605290044; t=1795385462;
+ bh=SCMa3jsYLRVPmHH8i592zjz4qMb8YD8h40yBP39mHpM=;
  h=From:To:Cc:Subject:Date:In-Reply-To:From;
- b=a+egJxgVnkNpBcM0i8scBGA1bqHevT+tcMy09Q2yQoBedGCsqRJywFqBCWRlYX6X4
- 5eIrhtLZ2CstUkcSeJ8a1XmvuMrHYygj1s8DxU1vNFSL+VE1uWRSl1w8N2VlrkXoUF
- AlkUQHS2npdpLWAUckLQUZwwavqN2jBd28wPbjnBrTujDhm8i13cyuNf/vcNCtT7Mr
- Le5CHCWso6gJ+jghIFFdt6LMsaJLThwT3qYCT5VUt41Q8W+OIx/6nOig9qVMzgshlm
- z1ehzPnaaKBbNioIsz6vtejGeOgGZ83ongTlCKHkr4zCOTlHy9YHdM7s/2omiBRY54
- lWLtiKt2bg6mQ==
+ b=L6qwG0HrKZO+ISpjeeSGYlG+GzOcSFsKumcOnvzE5SKOuDArng+M4FqBoEA+4dlX2
+ F6cZia7jVNXKr+kXafgPDTGQCqO6dkz33v9NQ11wXMNk9NtuftlgDzxUpuWd4+e2oe
+ kGDT1qLjve+Yx6h6JNBV7+FCEM7SSELn4h0YoRjTWveGNmQ03IuT8VnLFpEucRVZB7
+ jM5IBX5GJ0Nicw+q75IDRxQQW4ErWsNJuOS4QtZmD0N5F+HdCvRZeqZIrVB/J0NpS6
+ Ue9bdA9YdyBB86LKw6urn+PnUPr97H8oaq69DjU0jEHlLqWREB080N9h1qEEoBSjhp
+ uITy+eFBOCHfA==
 X-KAS-Sym: v3:f51bdf72230551df:EH4wQjPla4QHGqFqRN4iUyyvNbNI1uLzAwAhvs7phaINU
  rex5rdM+zlO7tcEyEJVVuXFASyqa0yu9EV27HzaWW0gbLeHZeTleizWs0WVyvysSpCChJmV90YW
  spsK2ByWhUh6ptuQ0VP6hR6UB0AU17e9QMFD+oQf+HHL1eTxZwqzDEZx2D1tqC6Z4qwIkCED6lF
  O6GfkRoI//qwytN/DRQjT5bd/iBDLCeDnp8QfQa+YLpJ8ofHBJYF4kEbFo9JUKrnTjPKvDqpq/v
  GUPuEcPySW0OlB7UJ2Yq9S3cXREzMYsTtUUEeBq/sRXjt7Sh0jPTDam+N9EXEZ240+rFwWDA==:
- OkN4Va3lIL7shdynFFygCrj+aQ22yN4jJurYni8SpPMIbtpNAac6VEMLviFGjkaP+alIT2FiEKI
- E9Xj8C1zuwVf9HZhcgrcNVP+ebgVa8BTGq1KEgYjTW1w0ZP92RyeaFvNdBf38bZjKgWiaU3FXbO
- mxjydFLoppbslrPcm2GLNZ4o+w2Sr00FAjZcejSmY/WafRXdKbmPeK9gt1qAYXnCDH6qAoJ93ZB
- LCNZTmw6BiVGHphvK8Mua78ImbdaAnPpd3IjDVTcBLCeVhhsGNA85bWSrhKzfufjs3F9TzKivp8
- 54DC4cHmDlQuWmd3rlteIYfzFQpNtqw9ObUSPSRDXMa+sIJV1bo3s/YZzQeg6ie1KUOYMGw76KM
- WRIHGSu7v/Z+ij2mB7i26CXfFn0vlFmMCkwRXW4F6+AjaTPK14hwPS7s+r0x0annKSNEFL4CXd9
- 2EVFfjgv8YmIS0Myjy8Ml+qGGOJcQlsDOfBsYENPZZjAIAYssbHswZffNNb7sLrSD8heNRW8fPe
- wIgKVOLsL38u40Es61Cju2shq9p6fESjrTx9ZqLjRfFs07iPitNT+lYQY2YkJa2Yl14q0Ai3Qdy
- XM+Rb1jFflPrfYoaObGpQwWg/+WvzIh7T+srPkS2SGzNzA==
+ i8JL3Jg09kVVw3qmwgUSLT9HytRqahj0pur2V6u+HS1zvJSxZYr2E29ZhU3+9F8hw59jtuTLBBp
+ 5dbgFLzhnYNcEYkqALUufS/nepolMtWEXnerSVAfk6nSRMsncIlws1R2UrlNOtjANj/sDEm3K8e
+ zcQbqMSw3Srkz9ixHgx/619NKec/Hp8BGieER/b9BYSH3+dbqoFZa811pldXMYiMGeNKmIP4gCy
+ gjUv8Fj/pxx3kZQbx4qR7byRF7R63igny1yw6tp/8/F0UkLC3fyefZr05JGrRRgaBtPch5qF2Jc
+ uQYpcqVQx+agpJHov9LDvyyn9srsT6PzDY/4AsPEN9AUCgRc56iEjaHZnlGOT0YnPgHTyZdGOSD
+ 2CmaXf897NI2zkYtia0IDPch3yv27daZLC7LkKoG4DUZM/hpn0jNEHU78TV2oEbqh3sMHIhU2at
+ fb8HC84vxMHkmntdYnRewjx6R4L/sAbs+jOvF1DXHF3SPl9/3JLAQY5YWPLM5bD4vsxHK1nRQFw
+ qU1vV24jyCWWkhw7cMdG+zvFAjZiMI3xvotOdSnES+t65JOYWDYtYH6jm1mbs3GOpyi0RYCl555
+ NsG5zyt18lJAB+vJTP/NGV1+st5AMIGQOBIcXw==
 Received: from fli4l.lan.fli4l (p5b3a0d5e.dip0.t-ipconnect.de [91.58.13.94])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 4DC32A4C4E5A;
- Sun, 22 Nov 2026 23:10:17 +0100 (CET)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 18EEDA4C4E5A;
+ Sun, 22 Nov 2026 23:11:02 +0100 (CET)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:41694)
  by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xVFlJ-0000000014Y-0wS4;
+ (envelope-from <bernd@kuhls.net>) id 1xVFlJ-0000000014Y-1qhH;
  Sun, 22 Nov 2026 22:10:17 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 22 Nov 2026 23:09:56 +0100
-Message-ID: <20261122221014.3945599-4-bernd@kuhls.net>
+Date: Sun, 22 Nov 2026 23:09:59 +0100
+Message-ID: <20261122221014.3945599-7-bernd@kuhls.net>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261122221014.3945599-1-bernd@kuhls.net>
 References: <20261122221014.3945599-1-bernd@kuhls.net>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-X-Spamd-Bar: /
-Subject: [Buildroot] [PATCH 03/20] package/boost: properly propagate
- architecture dependencies to Config.in comments
+X-Spamd-Bar: +
+Subject: [Buildroot] [PATCH 06/20] package/boost: contract needs thread
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -137,98 +136,40 @@ Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 X-Spam-Status: No, score=-16.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Michael Nosthoff <buildroot@heine.tech>
 
-A significant number of Config.in comments in package/boost/Config.in
-were missing the architecture dependencies of the option they
-correspond to, which would cause these comments to be visible even if
-the selected architecture doesn't actually allow enabling the option
-itself.
-
-This commit was done after reviewing all comments, and ensuring they
-have all architecture dependencies needed.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/boost/Config.in | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ package/boost/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 92a6bc4ec5..502a68ad44 100644
+index 8df2a0f577..d98dbad5aa 100644
 --- a/package/boost/Config.in
 +++ b/package/boost/Config.in
-@@ -55,6 +55,7 @@ config BR2_PACKAGE_BOOST_CONTEXT
- 	  C++11 context switching library.
- 
- comment "boost-context needs a toolchain w/ gcc >= 4.8"
-+	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
- 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+@@ -64,12 +64,14 @@ comment "boost-context needs a toolchain not affected by GCC bug 64735"
  
  config BR2_PACKAGE_BOOST_CONTRACT
-@@ -82,6 +83,8 @@ config BR2_PACKAGE_BOOST_COROUTINE
- 	  selected.
+ 	bool "boost-contract"
+-	# pthread_condattr_setclock
+-	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL # pthread_condattr_setclock
++	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
++	select BR2_PACKAGE_BOOST_THREAD
+ 	help
+ 	  Contract programming for C++.
  
- comment "boost-coroutine needs a toolchain w/ gcc >= 4.8"
-+	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
+ comment "boost-contract needs a toolchain w/ NPTL"
 +	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 
- comment "boost-coroutine needs a toolchain not affected by GCC bug 64735"
-@@ -122,11 +125,15 @@ config BR2_PACKAGE_BOOST_FIBER
- 
- comment "boost-fiber needs a toolchain w/ NPTL, gcc >= 4.8"
- 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
-+	depends on !BR2_MIPS_CPU_MIPS32 && !BR2_MIPS_CPU_MIPS64
-+	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
- 		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 
- comment "boost-fiber needs a toolchain not affected by GCC bug 64735"
- 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
-+	depends on !BR2_MIPS_CPU_MIPS32 && !BR2_MIPS_CPU_MIPS64
-+	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
- 
- config BR2_PACKAGE_BOOST_FILESYSTEM
-@@ -214,6 +221,7 @@ comment "boost-log needs a toolchain w/ NPTL"
  	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
  
- comment "boost-log needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
- 
- config BR2_PACKAGE_BOOST_MATH
-@@ -323,6 +331,7 @@ config BR2_PACKAGE_BOOST_THREAD
- 	  Portable C++ multi-threading. C++11, C++14.
- 
- comment "boost-thread needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
- 
- config BR2_PACKAGE_BOOST_TIMER
-@@ -340,6 +349,7 @@ config BR2_PACKAGE_BOOST_TYPE_ERASURE
- 	  Runtime polymorphism based on concepts.
- 
- comment "boost-type_erasure needs a toolchain not affected by GCC bug 64735"
-+	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
- 
- config BR2_PACKAGE_BOOST_URL
-@@ -371,6 +381,8 @@ config BR2_PACKAGE_BOOST_WAVE
- 	  iterator interface.
- 
- comment "boost-wave needs a toolchain not affected by GCC bug 64735"
-+	depends on !BR2_m68k_cf
-+	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
- 
- endif
+ config BR2_PACKAGE_BOOST_COROUTINE
 -- 
 2.47.3
 
