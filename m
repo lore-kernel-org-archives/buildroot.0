@@ -1,119 +1,140 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F218C606A31A
-	for <buildroot@archiver.kernel.org>; Sun, 22 Nov 2026 19:44:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FAB0606A31D
+	for <buildroot@archiver.kernel.org>; Sun, 22 Nov 2026 20:22:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=QXB/yybD;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=purelymail.com header.i=@purelymail.com header.a=rsa-sha256 header.s=purelymail2 header.b=D38PodL2
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=FuTUxOMX;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=ztCYa7gV
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BD23B80BB7;
-	Sun, 22 Nov 2026 19:44:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 47B7240612;
+	Sun, 22 Nov 2026 20:22:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tvMXDTx2T7LF; Sun, 22 Nov 2026 19:44:50 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 5633C80BB9
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795376690;
-	b=bLxoAgV3JL45eq8fTVNoCi0+WTwjQue/ajmt8TIqfPLr1yfkxvhEhtm2Xkj90NWyvl8E
-	 OpVsEYVvaGqGr80Bzd1WCv4HlJ1Xv3oiF7YYOhxZ6aHho1hbpcEg+CTjtJLYNXyxW+cBS
-	 +Y0UHDxmC3XxP9ETP4O4erAdpp2QD2wHiAdIBsWLhgLu8lY0qYY2H3nApg0dA0FaPflUo
-	 z1nULRiYM8NGvURnSVJ0rhsWCE+GIDusDu5vwqa37/TeelLk3uODu8x9wF5iQl75BzFna
-	 trNbuf+M3SzthRDSm/VdcTwV/xBxvgUqv/xQVocfSScHsl7VTsQa41K5UoJUqmwx4zg==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0UVjmIyHd_29; Sun, 22 Nov 2026 20:22:01 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 6583640604
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795378921;
+	b=GMAKYqZY8J98cJeujJqLtfgmkzz7A0nP0CID8Ja9g6Pt4mTE3CYtoeiQdN+5koSrm+8c
+	 s9rTKwjLKoeO5K0CHiH/qTEShzpkjDuLrvIbk6n2AgpLxz3Usa9Tand21SaWhQZnsOK7a
+	 7X3wkdMILQHzO0ueZ9UdE0BWGqacDGiFkWDYvXbWu7QU0Rr2Y1zjDJsC5x7om4+D9vNdb
+	 KrC4UVWWvfkF0QpgqOKu5D1rsEGFYYZtcHuxbqCqlYpTr3JV5lAvlzNitmBqWZ74zsNmY
+	 TES7IJoQWF8ffbZo2uaw9VpbmNYRx4KijmBScTIZ23lmy7AyDwTtTVabviB5occ8fQg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795376690;
+	c=relaxed/relaxed; t=1795378921;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:Feedback-ID:X-Pm-Original-To:Received:Received:From:To:
-	 Cc:In-Reply-To:References:Date:Message-ID:User-Agent:MIME-Version:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:Received:From:To:Date:Message-ID:X-Mailer:MIME-Version:
 	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:Cc:
 	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=D/deIcjbfbMCms9CdfaA+7Zaov+1UA6wP7IM0xUXelI=;
-	b=pYhA1P6rTfrJCF4DuYzXG8T6X6nr7vRg1LCPETDGwDO37Fv0V0OK4Tl3IzGULdfLMAcq
-	 C5BwA2CaTjf8t3LLHkYdAdEpVopUoSI5ll3UfvbY0pfYR4esEWNEUNPX/tq4GPgFG5qu5
-	 pNcH67pMVS9ouLpIUjTsnv5EfynejxvDJBL7gaEM8G0pNERoo2xt0dchc+fclYic9bIfP
-	 cSrw/q9oHI1ZY84XQlUz6rcv3+r8Z7CHaG4I0/X43JQOh1qGnGh+y+pmWVJR7PNS6CcFL
-	 3bx/YSXEjnn49+SP+twRgT4NX4ZiXtQ9/4uDcgc2sWP7BPDQ9hd18jCKASlQOCIt/+Q==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+	bh=9H3X33RxVKOTpjGDvp2r/eu2T9d6JbCouY+M8EN2f9E=;
+	b=I7uTn+gkGBqUbuvCJp1FSNiXCb0KJn2M4COtv66F17J11CF4pv/7cLs/6WXupKqtt8cU
+	 WTJHw/gbjQp5Ul+MHiypAMOC7tJ7YE3fApFN/g5G0TmHDKu5h8+h3ZiG5QxvuitCW66dK
+	 uS9DvWvnbFyvJdUK86GzDHMPIh1zRuciCGIZ3tL0FhjJO30FyI+F06ZQDwMSHRxYhUYYZ
+	 WxEv7iEFRR5OXspmrOS3QeCJL9lUxeWYj11NGU0M5hH0LewZRpxK7AK2LyEt+hPofX+CD
+	 fKwGDO04Xew/mZpi4YWev6HVFeD4NaN8EBTqJcNYyqJi4sPNTy1xmkGHwd/YIK6ffjw==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795376690;
-	bh=D/deIcjbfbMCms9CdfaA+7Zaov+1UA6wP7IM0xUXelI=;
-	h=From:To:Cc:In-Reply-To:References:Date:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=QXB/yybDfFaDlpA4FY8QAVPCSwmfaz316KZfZ4+tyNjBzyzFTEMU+g5/s+17TONHC
-	 E1TkV7gC1Vo7+S9sZPV3sSEVltSwj+BbqrwR2euARktNCqESe0im0vQLaWAlPab1gX
-	 DfwBtdNtX2UNZ6Qc2lNygpL2/0nJF3Wov71i0Lf1ZMnMHyWLWs28dKcN5Rk7UvErLJ
-	 i6SsQWbaKHswWZjd+n+PR31ZiBd2MyAD+MSQSweDF8Hzn2T5It+RZyFCa/7Ckde8lq
-	 3GQvm4QlTINYCJ4amr4V3aLD58piB1Y3EWIjga5ilMwWafRMpZk16mpw1RbIwy+2Ev
-	 DlHQ+cMzz1hsw==
+	s=default; t=1795378921;
+	bh=9H3X33RxVKOTpjGDvp2r/eu2T9d6JbCouY+M8EN2f9E=;
+	h=From:To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:Cc:From;
+	b=FuTUxOMX+IOX0Me+aUEdjM7kin0l3dOX7IxePdeJ739/TR76sfzj4kEAdgGzU0/4A
+	 1oVgjRAD9CqSHhMVB7F4thT3sAo1NTXYy8mW1NAW847Hi7bmbzFfHb9K7VnFKp0l52
+	 w4kCV6zSTyuzKOZ5pffxXPonQcdE6RO7ichO/D9xdkHicoF3YM9sc8x5HNL5JxXtXW
+	 4NN8ZyZaEikfkAVkeoUsKzRIqGMixywLx/IkkyTG3A6gzMiilU9d1Atnol0uuFdqAc
+	 S6sLlHgpaNh+M9AeIMprzj3DeEfGtvPFoqd0OkU2Kvg2J1z702q9Psm4LnTNd36Jr1
+	 T8gEmwnfs9nBA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5633C80BB9;
-	Sun, 22 Nov 2026 19:44:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6583640604;
+	Sun, 22 Nov 2026 20:22:01 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5A4A4371
- for <buildroot@buildroot.org>; Sun, 22 Nov 2026 19:44:49 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id A16FF499
+ for <buildroot@buildroot.org>; Sun, 22 Nov 2026 20:22:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 408654008C
- for <buildroot@buildroot.org>; Sun, 22 Nov 2026 19:44:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 931E2400FB
+ for <buildroot@buildroot.org>; Sun, 22 Nov 2026 20:22:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lQWWu8_sAxz4 for <buildroot@buildroot.org>;
- Sun, 22 Nov 2026 19:44:48 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 689AB4008B
+ id z0rd1KMeGIFF for <buildroot@buildroot.org>;
+ Sun, 22 Nov 2026 20:22:00 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 7E5E44008B
 Authentication-Results: smtp2.osuosl.org;
- arc=none smtp.remote-ip=34.202.193.197
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::331"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
 Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none) header.from=korsgaard.com
+ dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=purelymail.com header.i=@purelymail.com
- header.a=rsa-sha256 header.s=purelymail2 header.b=D38PodL2
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 689AB4008B
- for <buildroot@buildroot.org>; Sun, 22 Nov 2026 19:44:46 +0000 (UTC)
-DKIM-Signature: a=rsa-sha256;
- b=D38PodL2LV1EMd1TAuiGMVOjqapl+n/XCb+yALZFdhUoRR6/LSFeZZjdC+V1sxQgHRu09kwSzJ6IRUMmDdFTBpFiKcue0lJ50++aBU3nPvCZn8/DT6VFXhkakjQqp09DCyUzSOh12a5ESE74GFXsF1k7VEbsLHvp5dTBtubRKTmMBgYsAGBo6OHzlr9oTBBiu3M1YD3rmqROugvdRF8vjZxHaw3DKIXS0OcxiH5vx61IKidIdffWg0iacXTr6j5WZY3pUeg9wYgQOqIeIPTco60ZBJfQS0LSUtM2znlUTGpHdC6oYpiz4LZlW9rAqRS6ggc/94kBd9zpRhItxdpDUw==;
- s=purelymail2; d=purelymail.com; v=1;
- bh=F49MakMmWHc4WwIkI5BG7xq2bAQxZp5PQlYuPFhzLeU=;
- h=Feedback-ID:Received:Received:From:To:Subject:Date:Message-ID; 
-Feedback-ID: 21632:4007:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Authentication-Results: purelymail.com; auth=pass
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1979931685; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Sun, 22 Nov 2026 19:44:44 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.98.2)
- (envelope-from <peter@korsgaard.com>) id 1xVDUQ-00000006J0S-3H7P;
- Sun, 22 Nov 2026 20:44:42 +0100
-From: Peter Korsgaard <peter@korsgaard.com>
-To: =?utf-8?Q?Rapha=C3=ABl_M=C3=A9lotte?= <raphael.melotte@mind.be>
-Cc: =?utf-8?Q?Rapha=C3=ABl_M=C3=A9lotte?= via buildroot
- <buildroot@buildroot.org>,  Julien Olivain
- <ju.o@free.fr>,  Thomas Perale <thomas.perale@mind.be>
-In-Reply-To: <8dae3bc9-d241-4a32-bb43-46339dc5889a@mind.be> (=?utf-8?Q?=22?=
- =?utf-8?Q?Rapha=C3=ABl=09M=C3=A9lotte=22's?= message of "Sun, 22 Nov 2026
- 19:49:28 +0100")
-References: <20261120100106.542645-1-raphael.melotte@mind.be>
- <8733svvd2w.fsf@dell.be.48ers.dk>
- <8dae3bc9-d241-4a32-bb43-46339dc5889a@mind.be>
-Date: Sun, 22 Nov 2026 20:44:42 +0100
-Message-ID: <87tsl8mz11.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20260707 header.b=ztCYa7gV
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7E5E44008B
+ for <buildroot@buildroot.org>; Sun, 22 Nov 2026 20:21:58 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-4a5b2be99a8so22146925e9.2
+ for <buildroot@buildroot.org>; Sun, 22 Nov 2026 12:21:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20260707; t=1795378917; x=1795983717; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=yw5sG9sqw2Mquzz1cEKSfZ698zItNvuMMjEXsz0gz5Y=;
+ b=ztCYa7gVrhSlt4psr5jxe9u2iblByhE8qgHHCZQ6g3UrQGC4ElOc3/I1SbisyEGoTb
+ ++3D80cKtLoDtm6T8ZJuWFnR3JvCbk61H5mU2cATA4SFXhJ71SbJBe3yY2+vMZ5QOWUb
+ 0yP6Rpz5fhePtuGfASH8HyhHRqzxuwemWzQoth4DUnDQagNHXPoo9eDKKlfqUP/YhX7m
+ 2H6BdpepTbh722UqJCvbsGYdOt42X3vCND7o9oqDi4x8jiNDu1U5zAnHJfxO/mQ6wB+p
+ v39Zmy+XXuofBHaqIDITRGX79C14Xm7IE717T4+/hnqlncF8pC9dK9VOMdCWG4q5fzKX
+ iOzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1795378917; x=1795983717;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=yw5sG9sqw2Mquzz1cEKSfZ698zItNvuMMjEXsz0gz5Y=;
+ b=pImxDHma/lNvFy2WtXeb/bm7aW2BQy6fzoD0YTB7vmLlzAbuld7JziGMtmWfmiwVWC
+ y4QtxlxlNFRGjHg3kDAFd57iIbHIyWtcQNKLsiUOLmKVK7x0PVyAqZCLJsCpOoaVV83x
+ KxaqJPQFrqTkYViTzG3o6kzfSYSqErqUUt/yn9jP1u+zR+7n94jIdjhf3HDhvh/dyeXP
+ vezsoMNQs8Zn0QQRwjkLaBoRl3FpgHz4niDdA1xJ8jEyElpY+s3SO1gQI/Y8khlV8Wok
+ sSXvvmekpFGQS4YLyv5mPA6EmWjOKmp6zn2d0jGb/DQEdxijsjvPqhCnQKhg9YCurr4g
+ zobQ==
+X-Gm-Message-State: APuU4Z+cPyUU7ek4BasekM24oyHf4bekT0i74we/jSawrEG64M3fhibs
+ zoIkmFo1TVuTykGvzPOFnrC/g6KA0HBNIUd0qNAP58FpP63/iFAAqaZgNn1JniJQ
+X-Gm-Gg: AZFdTZei7VBZejqwFIzUi4xYQpQ5tP9GPhIBIQGRe6nK+mVe6lyuV2/6QgG7JmJ/rx2
+ 6PCWJqlsH/r9RQlpyEaUbi8v2UTMpzNhEefRBjINwYggJNubfCiABDeIJzc4tlVjvrNrF1e+ndI
+ CbTvXFfuegJ/QZKAxOJjXlaXzNKfnjmajEFZ2edO+aLtw94K3L6YGbP4sudRam6DaCssufiJxZO
+ mcPLMBfUAf8LWRnepYhiWHBpAqj6jOerJQFLAetZaJ08xwnSZoBM3nCQQBrpTndoUBsAkvHJHIF
+ KmulvKZFu8AVzeVHCTZDMc5geR9SBMAhRjFHg2COmpLiVUJij7NwjFOlcCzPsZce/oCgB0ELly8
+ Ty/JkuNPyUzQdNVmPljcpVsixEhM1FODTwxBW1hDNBSlBFMC6JBQxUHpb5p+FjxINjCEpwAa90H
+ 3TrxZPo7fqoXuN2NUzlZO3xkTZNGSLJtePPERLLj/xFbFRrzIuP/SAuTj7tSWsi1/rDht2NMkGt
+ NxrNufpaLp9P1eM3IUQ/wBzoKnd8afslHB6x9t+JmWiofkOKb6tE1cSJWNVsvuZDHARXxjAgZMH
+ TpQid7esSE540HhuVKduIDVXvolgbnIhQLDQlxXpYKwvMmKg1HE=
+X-Received: by 2002:a05:600c:a088:b0:4bb:6473:cde9 with SMTP id
+ 5b1f17b1804b1-4bb8880f2d8mr169883685e9.6.1795378917064; 
+ Sun, 22 Nov 2026 12:21:57 -0800 (PST)
+Received: from angelo-Precision-7550 ([2.58.136.216])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4bb853a12acsm319409495e9.8.2026.11.22.12.21.55
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 22 Nov 2026 12:21:56 -0800 (PST)
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 22 Nov 2026 21:21:50 +0100
+Message-ID: <20261122202154.3606582-1-angelo.compagnucci@gmail.com>
+X-Mailer: git-send-email 2.53.0
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [Buildroot] [PATCH 1/2] support/testing: test_grub: fix test by
- selecting BR2_i386=y
+Subject: [Buildroot] [PATCH 0/4] package/qt6: security bump to 6.12.0,
+ with a runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -123,40 +144,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Zoltan Gyarmati <mr.zoltan.gyarmati@gmail.com>,
+ Christian Hitz <christian@klarinett.li>, Bernd Kuhls <bernd@kuhls.net>,
+ Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Baxiche Su <baxiche@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-5.4 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	MAILING_LIST_MULTI,SPF_HELO_PASS,SPF_PASS,USER_AGENT_SANE_1
-	autolearn=no autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-8.8 required=3.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+	DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,
+	FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Pj4+Pj4gIlJhcGhhw6tsIiA9PSBSYXBoYcOrbCBNw6lsb3R0ZSA8cmFwaGFlbC5tZWxvdHRlQG1p
-bmQuYmU+IHdyaXRlczoKCkhpLAoKID4+IFdoeT8gVGhvc2UgYnJhbmNoZXMgZG8gbm90IChhbmQg
-c2hvdWxkIG5vdCkgaW5jbHVkZSB0aGUgY2hhbmdlIHRvCiA+PiB0aGUgZGVmYXVsdCBhcmNoaXRl
-Y3R1cmUuCgogPiBJbmRlZWQsIHRoZSBjb21taXQgdGhhdCBjaGFuZ2VzIHRoZSBkZWZhdWx0IGFy
-Y2hpdGVjdHVyZSBpcyBub3QKID4gaW5jbHVkZWQgaW4gdGhlIExUUyBicmFuY2hlcy4KCiA+IElu
-IHRoaXMgY2FzZSB0aGVyZSB3YXMgbm8gc2luZ2xlIHN0cm9uZyByZWFzb24gdG8gY2hlcnJ5LXBp
-Y2sgdGhlCiA+IGNoYW5nZSBidXQgSSBzYXcgdGhlIGZvbGxvd2luZyBzbWFsbCBvbmVzOgoKID4g
-LSBUaGUgdGVzdCBub3cgc3RhdGVzIGl0cyBhcmNoaXRlY3R1cmUgZXhwbGljaXRseSwgc28gYSBy
-ZWFkZXIgZG9lcwogPiAgIG5vdCBoYXZlIHRvIGtub3cgdGhlIGRlZmF1bHQgdG8gc2VlIHdoaWNo
-IGFyY2hpdGVjdHVyZSBpdCB1c2VzLgogPiAtIEl0IHJlZHVjZXMgdGhlIGNoYW5jZSBvZiBjb25m
-bGljdHMgaWYgd2UgYmFja3BvcnQgb3RoZXIgY2hhbmdlcyB0bwogPiAgIHRoZXNlIHRlc3RzIGxh
-dGVyLCBhbmQga2VlcHMgc3VwcG9ydC90ZXN0aW5nIGNsb3NlciB0byBtYXN0ZXIuCiA+IC0gQXBh
-cnQgZnJvbSB0aGUgY29tbWl0IG1lc3NhZ2UsIHdoaWNoIGlzIGNvbmZ1c2luZyBpbiB0aGUgTFRT
-CiA+ICAgY29udGV4dCwgaXQgZG9lcyBub3QgY2hhbmdlIHRoZSB0ZXN0IGFzIEJSMl9pMzg2PXkg
-aXMgYWxyZWFkeSB0aGUKID4gIGRlZmF1bHQgdGhlcmUuCiA+IC0gT24gbWFzdGVyLCBBRkFJQ1Qg
-ZXZlcnkgcnVudGltZSB0ZXN0IG5vdyBzZXRzIGl0cyBhcmNoaXRlY3R1cmUKID4gICBleHBsaWNp
-dGx5LiBDaGVycnktcGlja2luZyB0aGlzIG9uZSAoYW5kIHRoZSBvdGhlciBzaW1pbGFyIG9uZXMp
-CiA+ICAga2VlcHMgdGhlIExUUyB0ZXN0cyBjb25zaXN0ZW50IHdpdGggdGhhdC4KCiA+IE5vbmUg
-b2YgdGhvc2UgcmVhc29ucyByZWFsbHkgcmVxdWlyZSBpdCB0byBiZSBjaGVycnktcGlja2VkIGJ1
-dAogPiBjb25zaWRlcmVkIHRvZ2V0aGVyIEkgYWdyZWVkIHdpdGggVGhvbWFzIFBlcmFsZSdzIGNv
-bW1pdCBhbm5vdGF0aW9uCiA+ICgiTm90IG5lZWRlZCBidXQgZ29vZCB0byBoYXZlIikgdGhhdCBp
-dCB3b3VsZCBiZSBiZXR0ZXIgdG8gaW5jbHVkZSBpdC4KCk9LLiBNYXliZSB5b3UgY291bGQgbWVu
-dGlvbiBzb21ldGhpbmcgYWJvdXQgdGhpcyB3aGVuIHNlbmRpbmcgdGhlCm5vdGlmaWNhdGlvbiBt
-YWlsIG5leHQgdGltZSB0byBtYWtlIHN1Y2ggdGhpbmdzIGNsZWFyPwoKLS0gCkJ5ZSwgUGV0ZXIg
-S29yc2dhYXJkCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
-aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+This series bumps Qt6 to version 6.12.0, and adds a runtime test for
+Qt6.
+
+- Patch 1 fixes the build of qt6positioning with the Quick module and
+  without network support in qt6base. The runtime test found it.
+- Patch 2 adds an option to install the qml tool on the target.
+  qt6declarative always builds it. The option is disabled by default,
+  so the tool is removed unless it is selected.
+- Patch 3 adds a runtime test. It runs a QML file with the qml tool,
+  and checks qt6base, qt6declarative, qt6positioning, qt6quicktimeline,
+  qt6scxml, qt6svg and qt6websockets. It needs no Python, no OpenGL
+  and no kernel build.
+- Patch 4 bumps Qt6 to 6.12.0, which fixes five CVEs.
+
+Patches 1 to 3 don't depend on the bump: they can also be applied on
+the older Qt6 package.
+
+- master (Qt 6.11.3): patches 1 to 3 apply.
+- 2026.08.x (Qt 6.11.3): patches 1 to 3 apply, except for the
+  DEVELOPERS hunk of patch 3.
+- 2025.02.x and 2026.05.x: qt6positioning is not there, so patch 1 is
+  not needed. Patch 2 applies. Patch 3 applies, except for its
+  DEVELOPERS hunk, but its qt6positioning line and check must be
+  dropped.
+- 2025.11.x and 2026.02.x: patch 2 doesn't apply as is.
+
+Angelo Compagnucci (4):
+  package/qt6/qt6positioning: select network for QML
+  package/qt6/qt6declarative: add an option for the qml tool
+  support/testing: add qt6 runtime test
+  package/qt6: security bump version to 6.12.0
+
+ DEVELOPERS                                    |   2 +
+ package/qt6/Config.in                         |   1 +
+ package/qt6/qt6.mk                            |   4 +-
+ package/qt6/qt6base/qt6base.hash              |   4 +-
+ package/qt6/qt6charts/qt6charts.hash          |   4 +-
+ package/qt6/qt6coap/qt6coap.hash              |   2 +-
+ .../qt6/qt6core5compat/qt6core5compat.hash    |   4 +-
+ package/qt6/qt6declarative/Config.in          |   6 +
+ .../qt6/qt6declarative/qt6declarative.hash    |   4 +-
+ package/qt6/qt6declarative/qt6declarative.mk  |   8 +
+ package/qt6/qt6graphs/qt6graphs.hash          |   4 +-
+ package/qt6/qt6grpc/qt6grpc.hash              |   4 +-
+ .../qt6languageserver/qt6languageserver.hash  |   4 +-
+ package/qt6/qt6mqtt/qt6mqtt.hash              |   2 +-
+ package/qt6/qt6multimedia/qt6multimedia.hash  |   4 +-
+ package/qt6/qt6opcua/qt6opcua.hash            |   2 +-
+ package/qt6/qt6positioning/Config.in          |   2 +
+ .../qt6/qt6positioning/qt6positioning.hash    |   4 +-
+ package/qt6/qt6quick3d/qt6quick3d.hash        |   6 +-
+ .../qt6quicktimeline/qt6quicktimeline.hash    |   4 +-
+ package/qt6/qt6scxml/qt6scxml.hash            |   4 +-
+ package/qt6/qt6serialbus/qt6serialbus.hash    |   4 +-
+ package/qt6/qt6serialport/qt6serialport.hash  |   4 +-
+ .../qt6/qt6shadertools/qt6shadertools.hash    |   4 +-
+ package/qt6/qt6svg/qt6svg.hash                |   4 +-
+ package/qt6/qt6tools/qt6tools.hash            |   4 +-
+ .../qt6virtualkeyboard.hash                   |   4 +-
+ package/qt6/qt6wayland/qt6wayland.hash        |   4 +-
+ package/qt6/qt6websockets/qt6websockets.hash  |   4 +-
+ support/testing/tests/package/test_qt6.py     |  43 +++++
+ .../test_qt6/rootfs-overlay/root/test_qt6.qml | 166 ++++++++++++++++++
+ .../rootfs-overlay/root/test_qt6.scxml        |   9 +
+ .../test_qt6/rootfs-overlay/root/test_qt6.svg |   3 +
+ .../test_qt6/rootfs-overlay/root/test_qt6.xml |   5 +
+ 34 files changed, 291 insertions(+), 46 deletions(-)
+ create mode 100644 support/testing/tests/package/test_qt6.py
+ create mode 100644 support/testing/tests/package/test_qt6/rootfs-overlay/root/test_qt6.qml
+ create mode 100644 support/testing/tests/package/test_qt6/rootfs-overlay/root/test_qt6.scxml
+ create mode 100644 support/testing/tests/package/test_qt6/rootfs-overlay/root/test_qt6.svg
+ create mode 100644 support/testing/tests/package/test_qt6/rootfs-overlay/root/test_qt6.xml
+
+-- 
+2.53.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
