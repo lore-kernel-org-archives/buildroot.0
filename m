@@ -1,140 +1,145 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E678F606A334
-	for <buildroot@archiver.kernel.org>; Mon, 23 Nov 2026 20:55:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BE94606A31E
+	for <buildroot@archiver.kernel.org>; Mon, 23 Nov 2026 20:55:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=sCwGq4BF;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=FHc2wub7
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=n6HD1tAI;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=azBwjaQk
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9A8706069E;
-	Mon, 23 Nov 2026 20:55:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 32F8F405EE;
+	Mon, 23 Nov 2026 20:55:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jdIfBeH7-q3c; Mon, 23 Nov 2026 20:55:27 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org C420D6067E
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795467327;
-	b=qhFvN9zQ/34vQHRcpA9XdexjEgwjjwtiVCh3Qpprxb7tRnMfqF+HiQ6j6VeWIh9tZHQc
-	 qvXrHRzltJVcMNeUyzOrBQbVaCYPYZ2GqrDezgS7j63FTVLe9CmaAZVNwYesUl0no+GnT
-	 +BwniUpONz0KRWXXWTZX76+eMkw8DicG0KUHRGNpGDLsh1gTt9+KWNpTIdjKnRtsQui8/
-	 7HaPon7DB0/XYTMyN5DWBUsLzixS9G2r6U5f4BRkquXN0r9KxYZK1OA8qsgZr1+Iadj45
-	 rULuYreJJuUz54wCS5LIVRJfg8SjHrSni60jAFPpPJlqMP4fObSnktOPRXAa0PzyFmQ==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TKA4M37XcDuK; Mon, 23 Nov 2026 20:55:29 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 306AB4061F
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795467329;
+	b=BBGa4xc2tKdgZ+tROTSQ6+6xaBKOtIWJGM+6WAx8lzcpmGnO4FQtOOMLMWNAXzPNRU1G
+	 IIBnM0Gbh2xcPPHs/7PscQy9KRmII4MyF59s18g3IiwzUFluOtCcRx2fZztHA0ZU0sFUg
+	 h6bHFN4LCtzL1n/o6SRw5jRXuLXlpnB2XqkgNpnGpOW3PjPYuPI+LyZp94oaE1FGhC4ox
+	 fbqruinSAWKwdXAytYkINSgPdW1dqc/A93rRJDtKGR+SQyxRZx2PJmOEywDqf2ry9SN6M
+	 UhX273MeRsb7wLUDCbRTM3XY3aSJYTEMBOpDvXwPMelljgbAPCCTv7F5UjrjVyVcO6g==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795467327;
+	c=relaxed/relaxed; t=1795467329;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
 	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
-	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=IbgQY+6Om9A9X373q9iSCGidpmvWeBgE+X7d/bbdSfs=;
-	b=XMuyty/Kg4Otp7Dn/nMzi3+y7q57ULzOBkRNJ6YoWOdkvmerH6lkJxaUm86Vh1+JwySB
-	 rykYTFaYj38K2v05KlUrMuhOwxSxUof6KkF1YLgfXsb85dZ2hSvX39XNXPQzkk1+g8Oel
-	 p1NJf7z3WxUV5e3FUVCZBuJdLRRqaviT5At5JV8MFPOEMoGsp5zvnGf/Zvs0jMPS6H7KZ
-	 ph3bLD3uPWfU+rWKeYwb566OY9hqGA1/AhlSHRRbb0IHp74h7lcN/Ld/t07cv8UoMECEO
-	 8xb0TDiEXe9BDWmyDFU83QbhfCOkhubGhyhxgvZIgOeui+8FHMOpOwxdsd3vrZia6vQ==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:In-Reply-To:
+	 References:MIME-Version:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
+	 Sender;
+	bh=iVVjMUhgVr5YG6PGhA+JOfJaZ38lQztCnRdy2Wvfsvc=;
+	b=B9nyppMaAeRQz1BrzCK2GDD0TmWOBEGxNv3IOcVYLSG3HAY0hR4ya06PDLoQ316ZMOiD
+	 eA9nFJtJdFIDP8UGYGqbeCAYF+RjspL8yqO3blqx2yv5KdilW3RqLN/chZpDcWFDL2s8Y
+	 GeORt07Nd/T4tH11TGGwU7mEFnqndwFQ4bUqyUZ/C3Or6B3bA9GDxIaM8D1PsSx62B0o4
+	 TvMecbnH4+3r8g/Al4pC7pTpHIyMrj37CPjGefq2UAXtVVCqD4rOcatDydH1fS68Ox2Om
+	 PHYabOObR88FDlk+wUgBkVjbFtPWlvZnEUwlJ2OMoZEOa5ExCG7VFN4AhpYoh5f02MQ==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795467327;
-	bh=IbgQY+6Om9A9X373q9iSCGidpmvWeBgE+X7d/bbdSfs=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=sCwGq4BFrQUgbzWzsMm03BG/v1niLRFTbjpZCGPOMGnSjoTBa8LayPe5cS2rCkckA
-	 xwIUepyJPM2RWq8or6/S4wJtQYzW2VtCZhgPy7mhqIYRFfftBQoO/dv2Lc9+CNwG6n
-	 2m4x2yAUrPAMHE8VUb7rgyem5NUnOZ6S3WG2M/7zlaulKvikJynsBzl2RRcsEe83h6
-	 zY7/GrbOdEv+1TrGWfOoaPuFa/8SnAgc49zkteo9KtRhe9kHI73Fz1ucsSF1dEC6Tb
-	 NMrU6Um7xzzusLSDl8wmn3ArgjkkNGPUZdsdNRi470iIuFCij0WpK9zivzywQCxcWi
-	 ve93A+cvu1mcg==
+	s=default; t=1795467329;
+	bh=iVVjMUhgVr5YG6PGhA+JOfJaZ38lQztCnRdy2Wvfsvc=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=n6HD1tAIoKcmqJaUXhwIEmM+htJaQ/JnmQKo68Kit1lSJn8WZ+ay9Lxq2RfZkInm9
+	 fd61hb8rVD5nZyW1Euq7wB2aQniecRLMm2D8U9x45mJsyktStXvtHYihui+HOx4i/9
+	 hk7VMOgZj6jJ29UHDulTcmNcdeVLNDpfn5LxkAWNh2qGoEg1zaV2YBP04yYuREUAJI
+	 RwiCp7q82T6d7bqS2gH2SlUIJzEzQBDx+oh8LOdZ9NuwNZRd6zYKtL5q2xGcaYlzCT
+	 G6XhFOxTDfKipFa9IMW7v47r1fEB1R6tQsDJjkj8F77p88o4nrWyIev02NWSJcVKvF
+	 /wggkoOqoNMIw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C420D6067E;
-	Mon, 23 Nov 2026 20:55:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 50791260
- for <buildroot@buildroot.org>; Mon, 23 Nov 2026 20:55:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 306AB4061F;
+	Mon, 23 Nov 2026 20:55:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 38DF9311
+ for <buildroot@buildroot.org>; Mon, 23 Nov 2026 20:55:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3D0F280DCB
- for <buildroot@buildroot.org>; Mon, 23 Nov 2026 20:55:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 29D6380DCB
+ for <buildroot@buildroot.org>; Mon, 23 Nov 2026 20:55:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1gXw8eSld-tW for <buildroot@buildroot.org>;
- Mon, 23 Nov 2026 20:55:25 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 1D29980D8A
+ id NNf0HkwpqGFn for <buildroot@buildroot.org>;
+ Mon, 23 Nov 2026 20:55:26 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org F149180DC5
 Authentication-Results: smtp1.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::433"
+ arc=none smtp.remote-ip="2a00:1450:4864:20::329"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
  envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
 Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20260707 header.b=FHc2wub7
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1D29980D8A
- for <buildroot@buildroot.org>; Mon, 23 Nov 2026 20:55:24 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id
- ffacd0b85a97d-48e20ed3b9dso3395661f8f.2
- for <buildroot@buildroot.org>; Mon, 23 Nov 2026 12:55:24 -0800 (PST)
+Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20260707 header.b=azBwjaQk
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F149180DC5
+ for <buildroot@buildroot.org>; Mon, 23 Nov 2026 20:55:25 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-4a35ac4475dso28152025e9.2
+ for <buildroot@buildroot.org>; Mon, 23 Nov 2026 12:55:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20260707; t=1795467323; x=1796072123; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=3m9HZYNI5TxBZKUZFg5ULB4Cn+bfiAcXL1q71E3W2Ww=;
- b=FHc2wub7VbAt5LL5BsWUwdtCm80kaxShH9Si00b/G6Tvzigz4voRWJcPe8i2g43slI
- TPzdQpvdCF0+xfwYE+2haANYoIu6xfGy2eE6NiR/HSCc6VcyWqO/zMJgsobCl4NF5XVq
- 9oBTOf8W2F2WE8RAoj1dmmp0au/vK3DO/3WDsak9ZbSk84Q/hnyqfVk3yGHU1qAcFD5r
- rnMy8bnJGvWRvEtXf29DxEjd/qlVZOYfu2XhII9QXNBfOMlKLbVPsQSf/fARk4QsiSU1
- T98blACfUl1FKTMdt7CR5P0JuShvMt6W4qzXmc2XPiVNU6ZyWRIo0ZfgL8t+OaxPXSg6
- hsow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1795467323; x=1796072123;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ d=gmail.com; s=20260707; t=1795467324; x=1796072124; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=3m9HZYNI5TxBZKUZFg5ULB4Cn+bfiAcXL1q71E3W2Ww=;
- b=bRFUu2LAFP45Mt57ACUy4HeJkS7ZvJVgXLyl5bZKhmrRPyHgs20PufJ9iSzngaIj6Q
- JM4bzRNFb19WF2nfhGhgZ33kR9y567wgQhlMGXsDLbY0/Mwi6aA1LlGGFCS9m2/pE0JB
- tfKMwo5ahxHcHtSEk9Tedd9szdDZ12qwCkwspZnVvCXPSsLClKkbNqC2UykmjGRPfZqq
- MUlg522g5YzAbm/XNVF3ZPjVPJ1azi0ld6Ec29qPzmY/oJVeVbfKlhrivho1eKWXtlTv
- 3yak8en/y5NeS3aU9myzoIBqRRjf+Tb9skzBv1hZkQEbCEa4E264MUMy1BYa0S1A/NU/
- 96gg==
-X-Gm-Message-State: APuU4Z8KkM9wN2zzKlWdkmlkzii8yYWiarfz+M6CLMDmwSrLFkapehzU
- XXOvv5IsOGmic9e5WkiphRlx3/q+SfgcL1560PVT+7XEFtp78hS13JxpVzuBTse8
-X-Gm-Gg: AZFdTZd99m50Vb3CCmuwrPn3W6HYbLgpKWiyUHE+CAH8C7lEzEVRiu4f5c2CUulhCun
- 3sXFDEO+ld1XpekfeivUIXhmTWewxwOr3rCPZ8HixgV4RhhRaZIha8qU0tq5cJ/DMrp7hmAbpg6
- AxnNeXLf1uMi6K+HlK/aauz1bK4T4GARNu/k/gBiekjpyrVMJ6FVLQJuKcg1k0Wj1ib53y7kS/4
- iQc/b3C1iL7vzhZWvEDkHxviFiHIIXP6sKSw3h1WPNxBVWmzQ6SgUrBAASGKfzWXOtGiwy5A/od
- rJzjGe8+kqqBkn0Nd+kdy3iBk8EhSiJFMD/mGfpcxJzvU3A0FudriFyUiXmHHkwRe9186K7GYJd
- H8OOEeY3Y9UeUpJmbDwTcJQJwIt3rPW/bdObcwDlQduqVveqTTEr6gxpjMhNu1yGg5hZqVP9/nx
- FldYn+WHXf0Wzgos7lhXeNi8zl6pL1MVENwIMbsk+LSox2FVCXTu942aNpD5/Xwg+DAEAVAJlVy
- 4VI/tDxjEx9nVZvYf3n4t0716bQRcGf60rYA/LR4Bm2Wk/3DmiEB2L1QoxwP9yDS7bhrJYjZIBQ
- peaEaIV9uC5iXp6B3pUfvvehc/2nzIxCAWBXGuBwCSTE3jzGGZs=
-X-Received: by 2002:a05:6000:4009:b0:4ab:7c3:101 with SMTP id
- ffacd0b85a97d-4abb514617emr26344038f8f.22.1795467322371; 
- Mon, 23 Nov 2026 12:55:22 -0800 (PST)
+ bh=9nT+QunmTlnby5iJgmtvkT+EFoEZrvYtHzx4TI8rJTs=;
+ b=azBwjaQkvGDmPoKJvRFY0IwcSyVIMNaYA8OMInsH6vgFA2W/gX9JGIB01TWeDDPFjP
+ HTSBHR23IDBljmyqdtRmJPfmZ8enm2E+CTdBRFaGJC8Wad8WiVmvecKbU3pT/VWVcHra
+ obTkVjf9VPlGxV3Up7kVwzyY7Et6XZ5ElTv2PljCC1HGdjLQ0AqCxTdkq0KuEDfNBu4R
+ CZ/CXi2U33O9r5bCGpDvE/hhymDe9S+d5CrbNEGLiObHyiaEF44oErRQEu7Vdv4U049g
+ 1v7DuJYlz9RMnl585ndKhsdSa3PagS0aeRDP4mfyq5KaLUxZhk7uoMWB0cShrLL7zDZv
+ EtNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1795467324; x=1796072124;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to:content-type;
+ bh=9nT+QunmTlnby5iJgmtvkT+EFoEZrvYtHzx4TI8rJTs=;
+ b=lY5I9CJ0jxpQ4BgUmm0QWnbbMLgnnRFHR/xpZ28UawtNQ3vJpJgdArf8aeQJ09opsu
+ 7cOKKpSDzDEFeZVJuNWRnrI/zYrXMA8Cq19dkba4dpLj3FW/umeigZNcI0xE7su8gpDe
+ dt99aAbiYnDwMQB39dFMOJOeJqeUyMZMRt3eLkgOO9Lb6pY6FOfzOCt8Kijp9vXohptZ
+ /TJf2tjNbd7RVn8l7H1uej2d5EIvV9SjDqKx9YE00pUJvV5Jfh4NoBazJ+yecdbRfnSl
+ XUslPSqz7cauFdzmRZxPOO1sNTTC3qJ0f1XIobaPKMLoCjvpSy9bXexLd7uFhkQ5dhxn
+ PrWw==
+X-Gm-Message-State: APuU4Z97EwDzMEaob9C85kjhm+luxoVOjGncHJMdD+cL5B1It8qHXSSN
+ T81N+JsP1lem4b3goGdxT/hVrG1BARPb0QGA+qJ89jKE32kDHOSer1QsBY89z7Ai
+X-Gm-Gg: AZFdTZfjFoJUuuTY5nnuV6GCmZH7R+LTnmy9o96dimGw/sFDcWl569xTEN5BYGgCOhN
+ PKqOCjWYNOPI/DXA6/0K192FlVZIc3tMsZnvuuYDtcfHHhu4IK2MrMvj4QNHUq5xzvxqtgfIEop
+ k4sPwRg0+jJ7ypBK7WNfSE2whMnVqH2QQSgbMZI6WxDBSbmmWIctcjuYIvOgW1WXCNlzX6vYjb6
+ EnPmYU5tg4d1wZKOSPEAEUqACI0TYYcsyYZF1wTqbnc1YqdKaiwVCWk3zz9gH3gYFWaiTvT8gJJ
+ lBc+s9kiIe4oRe91Ybx38PMU3loPC6w4hV+4ZA9aCyvg2XvcF2vCLeJrs3AqdxyWAeSRuwxuOjL
+ UcubficQX9JGC46YtyXR1bQdYmul5B8pvNKDKCUqYw4EysMs+bI4GMfLRD/bVYoie41dd21C+u0
+ 9zqUxyapOncFYhFmVEYqtBl8vOT6CLPOSLkZPjbW80JR1jDGUXizvwpFILWD4QcaAeDmT/j/Bma
+ r0zq0rn0FdgGZwMbNm2yBjDIcj6DPl/cmSEo3BijWwLAXEGyZDwDoBFqqFVQjAZ+v8x2RyT49uy
+ 9cV9UlG6o3e5qh7jzITYs8elJAzn/QDRMyuz4G/zIKTPtkiUp0uuMlEmo5buKRw5UAy27TqP
+X-Received: by 2002:a05:600c:1d04:b0:4bb:685e:cc42 with SMTP id
+ 5b1f17b1804b1-4bb88817e4emr268676895e9.18.1795467323608; 
+ Mon, 23 Nov 2026 12:55:23 -0800 (PST)
 Received: from angelo-Precision-7550 ([2.58.136.216])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-4ab69bf685asm23611512f8f.20.2026.11.23.12.55.21
+ ffacd0b85a97d-4ab69bf685asm23611512f8f.20.2026.11.23.12.55.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Mon, 23 Nov 2026 12:55:22 -0800 (PST)
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 To: buildroot@buildroot.org
 Cc: Fiona Klute <fiona.klute@gmx.de>
-Date: Mon, 23 Nov 2026 21:55:18 +0100
-Message-ID: <20261123205520.3702760-1-angelo.compagnucci@gmail.com>
+Date: Mon, 23 Nov 2026 21:55:19 +0100
+Message-ID: <20261123205520.3702760-2-angelo.compagnucci@gmail.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261123205520.3702760-1-angelo.compagnucci@gmail.com>
+References: <20261123205520.3702760-1-angelo.compagnucci@gmail.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH 1/3] package/libp11: bump to version 0.4.21
+Subject: [Buildroot] [PATCH 2/3] package/p11-kit: bump to version 0.26.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -147,48 +152,120 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-18.9 required=3.0 tests=BAYES_00,
+X-Spam-Status: No, score=-18.8 required=3.0 tests=BAYES_00,
 	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
 	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
 	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=4.0.1
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
+Drop patch 0001, merged upstream in b4bc169c8320 ("meson: allow
+setting systemduserunitdir to break dependency loop").
+
 Release notes:
-https://github.com/OpenSC/libp11/releases/tag/libp11-0.4.21
+https://github.com/p11-glue/p11-kit/releases/tag/0.26.6
 
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
- package/libp11/libp11.hash | 4 ++--
- package/libp11/libp11.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...ing-systemduserunitdir-to-break-depe.patch | 61 -------------------
+ package/p11-kit/p11-kit.hash                  |  4 +-
+ package/p11-kit/p11-kit.mk                    |  2 +-
+ 3 files changed, 3 insertions(+), 64 deletions(-)
+ delete mode 100644 package/p11-kit/0001-meson-allow-setting-systemduserunitdir-to-break-depe.patch
 
-diff --git a/package/libp11/libp11.hash b/package/libp11/libp11.hash
-index 10ab7388ad..034e88c740 100644
---- a/package/libp11/libp11.hash
-+++ b/package/libp11/libp11.hash
+diff --git a/package/p11-kit/0001-meson-allow-setting-systemduserunitdir-to-break-depe.patch b/package/p11-kit/0001-meson-allow-setting-systemduserunitdir-to-break-depe.patch
+deleted file mode 100644
+index 050bc3533b..0000000000
+--- a/package/p11-kit/0001-meson-allow-setting-systemduserunitdir-to-break-depe.patch
++++ /dev/null
+@@ -1,61 +0,0 @@
+-From 709e37f781e50ef981d337249c574a9255691665 Mon Sep 17 00:00:00 2001
+-From: Fiona Klute <fiona.klute@gmx.de>
+-Date: Sat, 17 Oct 2026 14:33:02 +0200
+-Subject: [PATCH] meson: allow setting systemduserunitdir to break dependency
+- loop
+-
+-The dependency on systemd is only used to retrieve systemduserunitdir,
+-not otherwise needed during build. However, p11-kit is also an
+-(optional) dependency of systemd, creating a dependency loop.
+-
+-This patch allows setting systemduserunitdir directly to break the
+-dependency loop. If set, the given value is used unconditionally
+-without checking for systemd, otherwise systemd is detected as before.
+-
+-Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
+-Upstream: https://github.com/p11-glue/p11-kit/pull/788
+----
+- meson.build       | 11 ++++++++---
+- meson_options.txt |  4 ++++
+- 2 files changed, 12 insertions(+), 3 deletions(-)
+-
+-diff --git a/meson.build b/meson.build
+-index 38cf81b..9e76d62 100644
+---- a/meson.build
+-+++ b/meson.build
+-@@ -456,9 +456,14 @@ conf.set_quoted('TRUST_PATHS', trust_paths)
+- # systemd
+- 
+- with_systemd = false
+--systemd = dependency('systemd', required: get_option('systemd'))
+--if systemd.found()
+--  systemduserunitdir = systemd.get_variable(pkgconfig : 'systemduserunitdir')
+-+systemduserunitdir = get_option('systemduserunitdir')
+-+if systemduserunitdir == ''
+-+  systemd = dependency('systemd', required: get_option('systemd'))
+-+  if systemd.found()
+-+    systemduserunitdir = systemd.get_variable(pkgconfig : 'systemduserunitdir')
+-+    with_systemd = true
+-+  endif
+-+else
+-   with_systemd = true
+- endif
+- 
+-diff --git a/meson_options.txt b/meson_options.txt
+-index c1f2362..a7c0553 100644
+---- a/meson_options.txt
+-+++ b/meson_options.txt
+-@@ -46,6 +46,10 @@ option('systemd', type : 'feature',
+-        value : 'auto',
+-        description : 'Use systemd socket activation')
+- 
+-+option('systemduserunitdir', type : 'string',
+-+       value : '',
+-+       description : 'Override default location for systemd user units')
+-+
+- option('bashcompdir', type : 'string',
+-        value : '',
+-        description : 'Override default location for bash completion files')
+--- 
+-2.55.0
+-
+diff --git a/package/p11-kit/p11-kit.hash b/package/p11-kit/p11-kit.hash
+index ca76eddae6..bc4f1363f4 100644
+--- a/package/p11-kit/p11-kit.hash
++++ b/package/p11-kit/p11-kit.hash
 @@ -1,4 +1,4 @@
--# From https://github.com/OpenSC/libp11/releases/tag/libp11-0.4.20
--sha256  a125e0310ff10c189fc1b32a9652101486ea94a6b07c677a30e90e3638d2db48  libp11-0.4.20.tar.gz
-+# From https://github.com/OpenSC/libp11/releases/tag/libp11-0.4.21
-+sha256  efdb523aef8613d447e6a2d38227d4b389866f4bcf4b503130acd7f759490847  libp11-0.4.21.tar.gz
- # Locally computed:
- sha256  d80c9d084ebfb50ea1ed91bfbc2410d6ce542097a32c43b00781b83adcb8c77f  COPYING
-diff --git a/package/libp11/libp11.mk b/package/libp11/libp11.mk
-index 38cc1c2e6d..3ad475d43a 100644
---- a/package/libp11/libp11.mk
-+++ b/package/libp11/libp11.mk
+-# From https://github.com/p11-glue/p11-kit/releases/tag/0.26.2
+-sha256  f2cc09111e44bf3fea58f023180b33acea90aa82d042d6fbb623fbc5ba033bb7  p11-kit-0.26.5.tar.xz
++# From https://github.com/p11-glue/p11-kit/releases/tag/0.26.6
++sha256  5fda95dc89964af32dbd8e01b139c166717cf96c4fee3d601bcd60bdb23d23c6  p11-kit-0.26.6.tar.xz
+ # Locally computed
+ sha256  2e1ba993904df807a10c3eda1e5c272338edc35674b679773a8b3ad460731054  COPYING
+diff --git a/package/p11-kit/p11-kit.mk b/package/p11-kit/p11-kit.mk
+index 17efff7b16..ca6ae54963 100644
+--- a/package/p11-kit/p11-kit.mk
++++ b/package/p11-kit/p11-kit.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBP11_VERSION = 0.4.20
-+LIBP11_VERSION = 0.4.21
- LIBP11_SITE = https://github.com/OpenSC/libp11/releases/download/libp11-$(LIBP11_VERSION)
- LIBP11_DEPENDENCIES = openssl host-pkgconf
- LIBP11_INSTALL_STAGING = YES
+-P11_KIT_VERSION = 0.26.5
++P11_KIT_VERSION = 0.26.6
+ P11_KIT_SOURCE = p11-kit-$(P11_KIT_VERSION).tar.xz
+ P11_KIT_SITE = https://github.com/p11-glue/p11-kit/releases/download/$(P11_KIT_VERSION)
+ P11_KIT_DEPENDENCIES = host-pkgconf
 -- 
 2.53.0
 
