@@ -2,127 +2,144 @@ Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70527606A327
-	for <buildroot@archiver.kernel.org>; Mon, 23 Nov 2026 21:53:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A968606A326
+	for <buildroot@archiver.kernel.org>; Mon, 23 Nov 2026 22:00:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=oDANUTNA;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=twjvH3DQ
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=EychqxMx;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=WvoaucHX
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 46CE1605EE;
-	Mon, 23 Nov 2026 21:53:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 457E66070A;
+	Mon, 23 Nov 2026 22:00:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2188_Ga5Uogb; Mon, 23 Nov 2026 21:53:27 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 2CEBD606A5
+ id uXHKbKyYlKvB; Mon, 23 Nov 2026 22:00:26 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 5F11A606A5
 Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795470807;
-	b=MvQOeAXaW4+dY+uqh47T6ZzQfw7jNF//Qnu3a+MKlKvRmzrDhHHQRYby6soDCj8c8RKO
-	 jS4ENekFsTq0RiIObcPxI49aNCLMwa43W861wKTmDru2ov5Nv242MnMWL2OKQJWEhQ21S
-	 f+Vx9h5D1Q3coX4qmQFS6kAaVXkmVU+FbpQ9oTADSEQDIQLMrjnAYkcFNdS5XzTwvilxg
-	 6xjdbS8GV7DexqLgVPLknvBMSw1svkdBPXKXtfVlcRUeAS8QXNdnVOE9IQticebf0oW11
-	 hQ2yUvWRItg3CtJpSqHzXF0wj9lnjv2C7WGGzfhcKivCyddX+d0J/t+uyQYcu+xN9kA==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795471226;
+	b=OPRtfIUkNR8FtWS9wvwxFm2gJixivv5vWL1uvKKsy4n8JFTG5We5Ue4Fcsf0VlU6aGOc
+	 uQYKyCoHM/Q7STFfxumdhCIOQoFTQZuyhor5wdZx9atQcYoWGJBwPpD9kk1oJJoWi6wjM
+	 mm5Pgmpdal+XqM+ZjshPB/09CmvNqg56I3OZR5rUY5M4s+HzCdymbxqWPd4UhHxmoe0ID
+	 2i8N1Zyv1G2E+uT6KeYmT5ZUn6J3T54YE+lqjiy66vAgGq3kgPfLf2/ya6lVaGFfrQc8y
+	 RlaOGlJ8JxnrOyUqsRt5NWn1cklB3eekQl3177XqBcUnVA7Dei7urAxUJfQLC55oz0w==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795470807;
+	c=relaxed/relaxed; t=1795471226;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:X-KAS-Sym:Received:Received:From:To:Cc:Date:Message-ID:
-	 X-Mailer:MIME-Version:X-Spamd-Bar:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=Mo4mVI2TOaTT/YYrUOK/sZW/IkWybwhHQ6lApqMNkyA=;
-	b=I87OzIhbLPGPH4tnqRX9+HMpzO1eX81yk+bLE74nT2zBguqVMM0AaOFQnfJl4bbDaSBw
-	 itHTyrCN910cfPE2k0u4fsJkMAXE3Xz71ipS9v8xhd9h3wCIz59EJHI8SA+rw8kCPd9a8
-	 2OyeomBYtOe12MSVy/ZTK0r3hm4iuGNDXLxgzqXiMuu7Q79fY/5eJEgd1ddW0AP+yVjAs
-	 w/ENZzdWy9k3Ur4LecZQ/32X+cweakuifNRwAJxsO4TvFmJf9KA0jB5+24bFSGKUeNQgF
-	 O1Zb4eZkLk+yJgognjavJNRb5SlDho7M5QLpjaYladqAoMvjWCtS/7dUuyFgOVzLmKw==
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:Received:From:To:Date:Message-ID:X-Mailer:In-Reply-To:
+	 References:MIME-Version:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:Cc:Content-Type:Content-Transfer-Encoding:Errors-To:
+	 Sender;
+	bh=k644+e4adE77mukNkxaU7ZsWTlPWckqyXkq/e4bcAPA=;
+	b=pwBfTglchEGbqKPBz/FajWyAiDpTWJWpFFljLN7HEJKS8MUhi+Eh0/M6qWKr9PRgzhkI
+	 xKgyV+DlM632gsmRkUHpzXUl5JWZlEf/KFlarDAXGGgLEXFyfm1k5rHco3ulNfOfI+u9R
+	 0ZdcIzfHJG7G5SKDL3Lv5uCpt6HE2yg/M3ndUxCcKhaa8qxUHRvix02iYXm05JBq3jAIQ
+	 4F2ON1/KRpcm0JTHPSTAwm6D1ClLEKN0QRgIhTbP+hzb/eRQ2TKKkh10tW2rk0YnffJy1
+	 8WGLmFVsKBWxffEjZst+uElGLPo1YooJv1JVGBT7kWdFuR3wG9OftKf6bnVyqDeQnKw==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
-	dmarc=pass header.from=kuhls.net;
-	dkim=pass header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256 header.s=kas202605290044 header.b=twjvH3DQ;
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795470807;
-	bh=Mo4mVI2TOaTT/YYrUOK/sZW/IkWybwhHQ6lApqMNkyA=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=oDANUTNAJne80B2gPUjeV0Bh/0bqgaQiQl2j6N1F31WngNtCXQVdzL9DJ0WqQvLpY
-	 QPD6tLjZNDt3JZYr8Kr/rT4YvhjUgt333JR9fZ7sonQ39pvrRocQJZ6d3BTJXO6eFk
-	 f5Ikz3w4YyuQU6lMVTnCCy7NSuLHgNsUYwW8MxGxtkwCWJFH6Ys8hxyrytyct6o2gq
-	 IXii5TArlSBuCbJjIGU0lIHAFjcpeBrkKj3txu2pzNcPBhOqrfmY5+9MMsH6ZPFPIv
-	 ratOgvJ3GMPkwk1aRkrmPJAmjcAr4cT8mNLJ8X9adn5fTWZPGjF/gsdQMPeTYd8qZN
-	 rj4mjaZuKzx7g==
+	s=default; t=1795471226;
+	bh=k644+e4adE77mukNkxaU7ZsWTlPWckqyXkq/e4bcAPA=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Cc:From;
+	b=EychqxMxY1ydtZiFR3LSgFOKiQmgeZBgqyMsZZ7lnMLONXgMwsjEb4ngf/xptzDJv
+	 OgMbL12jYS0w6eaXycnRlAX5IvSmBdzszvL3tiSYvSaKXsZXVfrOqK//PxuOylir/g
+	 xcN7pnmrMI3JcLanVW30/QCnSrQ4WQfZuhI+D5UpUCqGAGUbcEpHSjGvSDO+Q396Uj
+	 /TVowGT3tOwZ6c1z3vY4o4JhnuvpLkEvU+ZswqJOD36W0P4wq+qnVZHtwTJaf4qM+o
+	 1Ot7z3tV3mO0UP4zzUOciIT2f4i5Bws5io190io06BtJogrlyfKTTuTRr6tgaD4LeC
+	 1f367nrHtYzbQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2CEBD606A5;
-	Mon, 23 Nov 2026 21:53:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
- by lists1.osuosl.org (Postfix) with ESMTP id A98E2499
- for <buildroot@buildroot.org>; Mon, 23 Nov 2026 21:53:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5F11A606A5;
+	Mon, 23 Nov 2026 22:00:26 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id C82D2260
+ for <buildroot@buildroot.org>; Mon, 23 Nov 2026 22:00:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9B677605EE
- for <buildroot@buildroot.org>; Mon, 23 Nov 2026 21:53:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B190280F3F
+ for <buildroot@buildroot.org>; Mon, 23 Nov 2026 22:00:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OL00ndQfsGTq for <buildroot@buildroot.org>;
- Mon, 23 Nov 2026 21:53:24 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 339C0606A5
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=85.13.140.57
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=kuhls.net
-Authentication-Results: smtp3.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202605290044 header.b=twjvH3DQ
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 339C0606A5
- for <buildroot@buildroot.org>; Mon, 23 Nov 2026 21:53:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kuhls.net;
- s=kas202605290044; t=1795470799;
- bh=ayUZ5wn76Qh30QN5dFxeATQvmQiNkN8ynIyJQIR6yNQ=;
- h=From:To:Cc:Subject:Date:From;
- b=twjvH3DQTHu8rj4wHSO13Npz9+Wc8WJDcBXlR+KGo4sMLN9wY2pqj/Hj6TVCvuzeV
- B6mlLuFpgLSWSxrmKH3CzJGPa4jStgC3Z7Prn3mKUgALIqUDK9MkmEkxusIDLEx0uH
- Q2saSWyBpdLrtEbIMI5mtTqt2BkGI41TzjaTa3mpPixkfGSxKgR1fdClqdVCSUW5QK
- Loogx0nauRGfzOpNPCGXjcbrg3v+TI2BMExgvOGbDETjJBjVnXkusGEaOrOeA4Kcao
- MI/YFEaFHzq30Voc+ZkMe6UVXgq7ZWbFpsFzh2U9Q1VqSzp7PRUsJY3t/dwDWVyDSh
- LSWw6TvNvZ/qg==
-X-KAS-Sym: v3:f51bdf72230551df:L6idxqYI53bDXhSkbk5+jYR8r/CVgPq1GxHrC+9MV1O4S
- QbCgCe4mHCwbLJar9DqCDBnsq5cOU7Kag7ufa93kMhTNIv1cYhVjTzC1nfBYgTZ36nK3AKvGaf7
- HvqemW3fQ7i/QXPha56YkLJV6L55SO8CmmkLjSE0zGG2YulxsjwRLxdq2JfW1HpMs08/8n6SA7m
- wEPRIZ/xK3jNjGOEa//GXWGfHFTEIriFOcdd01Xc1760v8G0Z/RlrfGz5eIRUagYM0tvlT7BlwX
- gq72Mv/BrvaS63fNpsQ4c/1MVbYshsYLDowplzX19SbTEip1jzAQa4L0sMOI1s00Nc2zz0DQ==:
- dpOVSpHW7jnjgFAxJ2FvOK43JTG1IJ0vAni485iQmSgTSbNMii5Uvkw1t41jGpQal8PNcVRnLWq
- +VQgWJ8ekSbPd8VGHwQViBSRbnm78Bk71p4Vz5LCzhvKPjTmTdEXoF6iyFSOSkzt5TiAprgkpch
- GzXOIurztWW+udzIeDOhsMG7R3LlkOmP2ejd3pbIhrteCCWEhMgOPllSoA8xbNI6qj+TeDXAmF0
- 68puSoFB47u4yAUYZJjXn+6q9Qtp/hzO9Oim4QSz39HhrhnP51Fue7c8j/9RZGJk/v4PpwhZq2o
- zPsSKYcEyqVsvxjGqntcv0q1g+3bQ8gkPAdNygUXKxv0hhnrfzv+715RH/T42BTqbI67HB9wzY2
- Z7vmONzJQCZdHETQ2F3sLc6iLN+G/Gs656JFUTeg2B7PU2Gg4okqZlKnRDc6k2TWxGXCVeDoreB
- 6ouZdb1w+xt77rloNpUSMWbPfhxuBznsSTmL1ZmNhOMT56FR8t9ye41l3kKitxl251mnoWGd/HC
- gk9WrQyyN/KRQOr6z/DYmGjqUvbPOUQ/F2FlUWclSan4dE/1ZydOhzfERGtR4EEAiRRICG7GY/a
- 2TxSE1+brDbKqf/X9bNd3xRwEZM8i6IT319+Qib69SA7DPiuoI9YnWQjub+IYOuDV7u5xme8/hO
- dgl68TRGdE1nubXrBEq5OUwmG
-Received: from fli4l.lan.fli4l (p54a1b597.dip0.t-ipconnect.de [84.161.181.151])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 431C0A4C5A5F;
- Mon, 23 Nov 2026 22:53:19 +0100 (CET)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:37926)
- by fli4l.lan.fli4l with esmtp (Exim 4.100.1)
- (envelope-from <bernd@kuhls.net>) id 1xVbyQ-000000003EP-1a1c;
- Mon, 23 Nov 2026 21:53:18 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Eh_nUTg9sCsu for <buildroot@buildroot.org>;
+ Mon, 23 Nov 2026 22:00:23 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 6926A80F3D
+Authentication-Results: smtp1.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::329"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20260707 header.b=WvoaucHX
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6926A80F3D
+ for <buildroot@buildroot.org>; Mon, 23 Nov 2026 22:00:22 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-4a2000d5fb1so21816095e9.1
+ for <buildroot@buildroot.org>; Mon, 23 Nov 2026 14:00:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20260707; t=1795471221; x=1796076021; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=326OF7qDmvDXbbV5xaqtpDCVvdGG3/vI3w3FyD3GIwQ=;
+ b=WvoaucHXqbhJ4cioCpcm6cALgGjW26VJJMFmLE3TKMeMrqieA0V28E+nlClXevO40E
+ cNm8a/6PXYAdxfcskVfkWjmB/wheX4i9NG2zG7tajUBEEnv2Ffle9TStGqFGlxe+89oL
+ p+Rd35a+UU2+TjWhmyv4hPm+vLNoZVIxwrmItQzkLR0SiCftAVt97vKGwsnYUaSQwAjj
+ KH/QrTvViPu4DxYFCswKQfSPVDXLqmeASVn5A86mHR+YPKL51IIBALEJRBMxcTzOFAUC
+ eYaUmaM/HAw18AxATv6P2pejker8PQs/LNHPcbnWKPDyCooPt654uiMnM8aQ+EyEJRjr
+ XFsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1795471221; x=1796076021;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to:content-type;
+ bh=326OF7qDmvDXbbV5xaqtpDCVvdGG3/vI3w3FyD3GIwQ=;
+ b=ep0As14dkaFj2WOs0NNmf+SWL3/SQY2zrNe1x5X7AW1aQi18RtfN0YQGusd6pq7QNz
+ UE1BO+iCPUU2tXFXEIT0hTnqsmI4c+ScoTpc0eTrxJu9nIZbZB5inr08qFHfqCxyOUcK
+ buXrYBExCcc2CUKVHNXpO5HPZNU0cgrMTIWWkoIfzdr+uA3FYJkd0L330aPXup4T09/3
+ YQ32hjuizCw2qdwlVL+bpBj6XbAmfQzW2wNWtQ5Rki9ClRWnWJVx4hmXJgKfPq4g9mww
+ tp5ewGr1avKm6pirxKUbn3JPtdmCYQgjSeJTUmBrT4y5A3dqqnonqXko8AYmK620RGK/
+ aYdQ==
+X-Gm-Message-State: APuU4Z/UDMQR+sLjQYDwKtZo3BdRx+EBMJ49PhsKONv78DA9FH351nZt
+ GPZBCNZuOVylCEdsKU+ogm65KyvX6YAiuydr1b9gzFBjr1VZlaJYvg2NrEBq2CI6
+X-Gm-Gg: AZFdTZfn9jeFZCq1aTaXt1qv/Orb+EVIkRfcfb8ezFnajUTwq/aXagwSfcDjArvHX9p
+ qTLz6ZbQYJwsAb75Yt9l9J9GeqMVZ1KnZ2d61UXd4ADCT400WCITwFtUUvsd6A78kA2DyRmuOwG
+ NzCd6wk24YxA6eyPvrQSrVoL2RD5JbIXHTq0I9XVS6GdtKFSMfSuScb0hSC/1WqylcUoVuBZu0Y
+ /yzcEUknmuyvU3hpRcWnrRGMhygsqdThiQHDjYleZlkVrMg3Re/BpK8oT5v7+NR5sfojgDiHJMQ
+ mulY0jiJc8LVo37ienLTAGx7fG6W9hlq09R10TuPCWOCdc5ZUBc932/AFu2/rV/6utHWufQcRKp
+ 3cBEvtoC39V1kgD6YZX91BoAmXJ7msP/V5DrG3nQ2dkEXkRuvJwH8obskw0+/MHcciU6e/Se3sg
+ ambZCjTvz6+yj+wLC6IFqw8NufQ7HKOsBqP6UKBRfj5GvCVr9Uw0vq3CHRStPIplBXKqt9IWuql
+ wHlLZREynomROlkLGT2S/HMLMqSGRHCH2jd2Nrc/vG8aJCS8eb4lyuxk29ppCzCuC4Sl6JRwFlg
+ 9gLWJ2u2NYUNVnWb0iirmwzBYV6pLFKX5QEA+VPgRuOc/1dXiL0=
+X-Received: by 2002:a05:600c:1c1b:b0:4bb:87be:c138 with SMTP id
+ 5b1f17b1804b1-4bb8893e021mr288565825e9.32.1795471220687; 
+ Mon, 23 Nov 2026 14:00:20 -0800 (PST)
+Received: from angelo-Precision-7550 ([2.58.136.216])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4bb906635c7sm205310275e9.2.2026.11.23.14.00.18
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 23 Nov 2026 14:00:20 -0800 (PST)
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 To: buildroot@buildroot.org
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Date: Mon, 23 Nov 2026 22:53:18 +0100
-Message-ID: <20261123215318.3796094-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.47.3
+Date: Mon, 23 Nov 2026 23:00:14 +0100
+Message-ID: <20261123220017.3955658-1-angelo.compagnucci@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20261123212022.3748880-1-angelo.compagnucci@gmail.com>
+References: <20261123212022.3748880-1-angelo.compagnucci@gmail.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-X-Spamd-Bar: +
-Subject: [Buildroot] [PATCH 1/1] package/expat: security bump version to
- 2.11.0
+Subject: [Buildroot] [PATCH v3 1/4] package/qt6: drop hashes of removed
+ license files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -132,57 +149,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
+ Baxiche Su <baxiche@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_PASS,USER_AGENT_GIT autolearn=ham
-	autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-https://github.com/libexpat/libexpat/blob/R_2_11_0/expat/Changes
-https://blog.hartwork.org/posts/expat-2-11-0-released/
+qt6mqtt, qt6opcua and qt6websockets have a hash for
+LICENSES/Qt-GPL-exception-1.0.txt. Upstream removed this file from
+these modules:
 
-Fixes CVE-2026-124317, CVE-2026-128241 & CVE-2026-134703.
+- qtwebsockets: in 6.8.1;
+- qtmqtt and qtopcua: in 6.8.2.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+None of these packages lists the file in its _LICENSE_FILES, so the
+hash is never checked. Drop it.
+
+On 2025.02.x, the qtmqtt and qtopcua hashes went stale with the bump
+to 6.8.4, which is only on that branch.
+
+Backport to: 2025.02.x, 2026.08.x
+
+Fixes: ecea4d94ac676ae9e66ce3e8799c0ba7dc14cc96 ("package/qt6: bump version to 6.8.1")
+Fixes: 5ae304d96cb7c4df040ba1bdfedfb09b3d5a3417 ("package/qt6: bump version to 6.9.1")
+Fixes: 1ef39b9196e0a5979581187f15fd665ca390c2a0 ("package/qt6: bump version to 6.8.4")
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
-Gitlab pipelines passed:
-https://gitlab.com/bkuhls/buildroot/-/commits/4963db600cf8667c318b44b2bea7ca05b09e83b2
+Changes v2 -> v3:
+  - split by backport branch: qt6languageserver moved to its own
+    patch, only 2026.08.x needs it [Thomas Petazzoni]
+  - add the "Backport to:" line
 
- package/expat/expat.hash | 4 ++--
- package/expat/expat.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Changes v1 -> v2:
+  - add Fixes: tags [Thomas Petazzoni]
+  - say in which version each module dropped the file
 
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index e8939fd38a..af431dadf8 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/libexpat/libexpat/releases/tag/R_2_10_0
--sha256  c624ba2998fc65df1163a49641ff3f9ab73138b11641d92c86bee0fb01b1bc7f  expat-2.10.0.tar.xz
-+# From https://github.com/libexpat/libexpat/releases/tag/R_2_11_0
-+sha256  61e7614b602201c28a189dafee78f5bceaee192bbde46a930752ff09cf5542fa  expat-2.11.0.tar.xz
- # Locally calculated
- sha256  31b15de82aa19a845156169a17a5488bf597e561b2c318d159ed583139b25e87  COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index 23a635e5d4..92f5d96473 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EXPAT_VERSION = 2.10.0
-+EXPAT_VERSION = 2.11.0
- EXPAT_SITE = https://github.com/libexpat/libexpat/releases/download/R_$(subst .,_,$(EXPAT_VERSION))
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
- EXPAT_INSTALL_STAGING = YES
+Supersedes v2: https://patchwork.buildroot.org/project/buildroot/patch/20261123212022.3748880-1-angelo.compagnucci@gmail.com/
+
+ package/qt6/qt6mqtt/qt6mqtt.hash             | 1 -
+ package/qt6/qt6opcua/qt6opcua.hash           | 1 -
+ package/qt6/qt6websockets/qt6websockets.hash | 1 -
+ 3 files changed, 3 deletions(-)
+
+diff --git a/package/qt6/qt6mqtt/qt6mqtt.hash b/package/qt6/qt6mqtt/qt6mqtt.hash
+index 50e63c7d51..cb345f43ee 100644
+--- a/package/qt6/qt6mqtt/qt6mqtt.hash
++++ b/package/qt6/qt6mqtt/qt6mqtt.hash
+@@ -6,4 +6,3 @@ sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENS
+ sha256  110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4  LICENSES/GFDL-1.3-no-invariants-only.txt
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
+ sha256  9b1f50aae6267f9d5e0ceb6775ee86450262c25ec7c0573e151fe5d3f18a4700  LICENSES/LicenseRef-Qt-Commercial.txt
+-sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
+diff --git a/package/qt6/qt6opcua/qt6opcua.hash b/package/qt6/qt6opcua/qt6opcua.hash
+index 1c141c162f..ed0602e407 100644
+--- a/package/qt6/qt6opcua/qt6opcua.hash
++++ b/package/qt6/qt6opcua/qt6opcua.hash
+@@ -7,4 +7,3 @@ sha256  110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4  LICENS
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-only.txt
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
+ sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSES/LGPL-3.0-only.txt
+-sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
+diff --git a/package/qt6/qt6websockets/qt6websockets.hash b/package/qt6/qt6websockets/qt6websockets.hash
+index 57c0301c7f..3387892890 100644
+--- a/package/qt6/qt6websockets/qt6websockets.hash
++++ b/package/qt6/qt6websockets/qt6websockets.hash
+@@ -8,4 +8,3 @@ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENS
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
+ sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSES/LGPL-3.0-only.txt
+ sha256  9b1f50aae6267f9d5e0ceb6775ee86450262c25ec7c0573e151fe5d3f18a4700  LICENSES/LicenseRef-Qt-Commercial.txt
+-sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
 -- 
-2.47.3
+2.53.0
 
 _______________________________________________
 buildroot mailing list
