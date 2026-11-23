@@ -1,28 +1,28 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D04E2606A321
-	for <buildroot@archiver.kernel.org>; Mon, 23 Nov 2026 09:54:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20E38606A31F
+	for <buildroot@archiver.kernel.org>; Mon, 23 Nov 2026 09:54:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=ni+xpDsd
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=MfOAFkYm
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA53E40695;
-	Mon, 23 Nov 2026 09:54:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EFBE180E16;
+	Mon, 23 Nov 2026 09:54:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hy-GKlWw0MyB; Mon, 23 Nov 2026 09:54:15 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org BB6944066D
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795427655;
-	b=Q+cGedvP+3L7KHAjo66SrsNU0eiunOIS1f6cenbf5VseOJz+/fp5qXeboyvhObjcBliW
-	 /diQcLJT7hGA3FiHyQmMu929Jt6Af1RnroHPNdCDyLBUtUNDx3LgYe48qI4MWdYcazaSx
-	 G2Bei3AC3pSnPMq6j4hNTWRHEMDHwJhbduju/R+pdE8bLkdwy3NBMid6zwE8gQrrC2Jxd
-	 NXHQBsLsGxSS0TuYlsZ3faXPJnj2dd8UoOM88hIsBwyJIUmeZzOyhEPrn28fa66E9mDYX
-	 7JcWXC+5NdzAiFVCDbH9FQKq7xOs7En3AvhRpSadkn+/RJ7ey7aY77uLiHDzZbJlfag==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oH04E9SvsgEG; Mon, 23 Nov 2026 09:54:17 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 1359280DDA
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795427657;
+	b=GLPhymTJMK+YjpQ5fx+CbucCzEfyM+zxo70/uakEIBuqFyIs4+geYmEBVgovE+eJxiJT
+	 sxcFKE4BmIYhcQxzbK3PsQHyLhRH/vJwlCgHt9TIjhCgYw6h1XGsinLhfgtD3Cjztx5G/
+	 89hcawXstREppdEcjlDpN8YJ+70IOeP75V0v5Hph2UOxUgGS8rbuI5y/vw+8ZbS+t9WQK
+	 j/gc5hBoQlxYPhM7f+wkkrYTDrjWANzp8ZCjJCJhZHkz2BH7dhzpTg+KrFha4yI0VHjK0
+	 fMMUxwmIGydm6fmE5Nfg1ojkfIGBqrHCFfPxS60YYQuO6z8jTKVjzPed0XTt809jgxA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795427655;
+	c=relaxed/relaxed; t=1795427657;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,86 +31,86 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=dQGg0RLItBnqfCr59Ms/5qyYbhy0y1XiZiyGe3hw14A=;
-	b=ZB+jXQg7l07VwLkZ14c0FElL3eORXXgodtbBxCQJcaI0779F1YtivMTFWkQlNaKL+yco
-	 TzN/nxfznagoC62dwO+HI89OjiCgWy54zXL159COYuCF9uonLO4h4juICkRuouUYI0QlF
-	 kN+v97/magHSh8b7Ql4zuykxX3jo+pQK8nC04dQU1be14BOkdQuDFVhqFpStQfRrQFv+g
-	 /eADnBA3dqq24pb+f1t91GNJJlMymZtc5N+z84ckmAJPD6d4U1oXQMUFrGJYjSPZ8ZQW4
-	 af6M9uH6KKbTbwsLEH7MC3zUzClBNet5DoZ41d38gMq7sXkbItV0/GGMz4JwBd0vmyg==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+	bh=7iClxY7MivyUg5z0+e+9vsQZb84TRPeQ4clr6pZR3yM=;
+	b=V2lBz+kVCOS5qYudWFDhoSQ7dCd2tPtFLUHRMg8iwvLi7cQRck14M6BO33U7Z3GaFNND
+	 zRQxEzoe8kDcp/QjeprNqnPV4r3QFEjTkbunpcMvzgWCwl9CjMNibnmOTqnrGMOPikvxY
+	 D8a5eulPfhMiSuVEan9yZrJjZ3rJpqnBA3x7C5Wda6vlSNLXziIEaLg9BoRdz+p7vLc7W
+	 ggx6WnYvDobjEO0w41/l/y3wIFgKSV4XVfCAhoxe6AuLa1+ki/MLltWU9NTZXxp9iXddX
+	 mY0/NyrTtxc1fmmwJWZ0shjQqoYybpo+UaBtUTpIuuYZGZVNnVX5UdOL2YGWg2OvF6A==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795427655;
-	bh=dQGg0RLItBnqfCr59Ms/5qyYbhy0y1XiZiyGe3hw14A=;
+	s=default; t=1795427657;
+	bh=7iClxY7MivyUg5z0+e+9vsQZb84TRPeQ4clr6pZR3yM=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=ni+xpDsdV9msQcZcWoKeXWoyv/ou2jb43jngLYSWPrmROa9nLirkC450LptIW/+Jr
-	 mTa8SHWWuxf1tYKKz35bB+Ri9C0+AjvGUYpIB0eVxCeIv5zY2yAsIte6GQcaTni9fQ
-	 OwztpAx9qkzq8DZjDTWFHr/mJiJVekIuJ9zX1kRkklO+7tqkpTyGloKygMfjNJOgzB
-	 b8WBQdB8VMTg36c5BWjiq9g3xdrF0V2bWbtwcO/JtdHohlQnNbq5AlNVSfQ0iKChu0
-	 KIlVO6S2CnODiXwiTmwKMltjek9NuT8AJ400wX9XEe3o6SwuDIYS5SZpFNHgGGFGBS
-	 3ugH95Llut33g==
+	b=MfOAFkYmkrqRFheEebTjhOv74aG1ZHeZnl1dNDPlsO7ZvvphPhPD38mAhiahW06oc
+	 lRtTaCWKJpgA1Pf+iwMj1KYqYVZPmgLRbEqpssxLIZGDD3LjmQKSvhYmuYHTrJvn+w
+	 F5cxf7ygVCHqO1ssVoaAeA008tDEpiWRb7rG09+ajw/SQqh5+EjLDtm3bDY4zcFYIy
+	 exHTRne/IXJSQQ4YQCR2AOamb401DshC2eUvUMRSG9GD1jrvM1yjhJ6jXwSBkkG/mm
+	 wTaxDJHo0pF2Z9pbr5Njqr1wCL6lFjWa/HP5roqYSFWS/VX18wCWmr7rlgzey5djj5
+	 FDy1Tyygm/W+Q==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BB6944066D;
-	Mon, 23 Nov 2026 09:54:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id B82A1499
- for <buildroot@buildroot.org>; Mon, 23 Nov 2026 09:54:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1359280DDA;
+	Mon, 23 Nov 2026 09:54:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [IPv6:2605:bc80:3010::136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 4CB681AB
+ for <buildroot@buildroot.org>; Mon, 23 Nov 2026 09:54:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9E31F80DDC
- for <buildroot@buildroot.org>; Mon, 23 Nov 2026 09:54:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4A49A605ED
+ for <buildroot@buildroot.org>; Mon, 23 Nov 2026 09:54:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v6p9fMg7scjR for <buildroot@buildroot.org>;
- Mon, 23 Nov 2026 09:54:04 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 6DBAE80C7E
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=209.85.128.41
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.41;
- helo=mail-wm1-f41.google.com; envelope-from=thomas.devoogdt@gmail.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KUFjbp5e2mzy for <buildroot@buildroot.org>;
+ Mon, 23 Nov 2026 09:54:05 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 35112605E3
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=209.85.128.44
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.44;
+ helo=mail-wm1-f44.google.com; envelope-from=thomas.devoogdt@gmail.com;
  receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
+Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none) header.from=devoogdt.com
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com
- [209.85.128.41])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6DBAE80C7E
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com
+ [209.85.128.44])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 35112605E3
  for <buildroot@buildroot.org>; Mon, 23 Nov 2026 09:54:04 +0000 (UTC)
-Received: by mail-wm1-f41.google.com with SMTP id
- 5b1f17b1804b1-4a214c5c4c0so27807165e9.3
+Received: by mail-wm1-f44.google.com with SMTP id
+ 5b1f17b1804b1-4bb6adaf0f1so26346155e9.0
  for <buildroot@buildroot.org>; Mon, 23 Nov 2026 01:54:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1795427642; x=1796032442;
+ d=1e100.net; s=20260707; t=1795427643; x=1796032443;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=c2J8uwfjbLsXAgzwUmG2AfgOLbW30N3PY9x8i4QWZmU=;
- b=L6SYd/fDbpcuwufNHec7xNCrqUsSxpVHOOwEtJjRPktgq5iwMzPIy0sJLiOlDKbeNV
- m26Pa13zVD9kcLXv6YGwxc+V3STquDhsT46Zup6Ga9tX6jyGZj1eB7PTnKv9ey80uXuu
- p2fkfBiDOyPPsdrvp1Woda4Ig1cdLGmKGeqtsA7um/Yby+oV4ipaantKZT2g827inOnF
- jQZn6oT3yf9adRep3Ry3EZsdjN9t/X/rl3wyYHwLSJUCyZ9TEx1LhmlhfwAvQSylCB06
- mPwCMDgo55YETtvvUU4f6gaaBTTMq5Mk6RhGPIm9PN3u34eAoJzeE0YzwVskvE/sBlt+
- LZWg==
-X-Gm-Message-State: APuU4Z8BXadzCI4Gfd2RP52WFov1PDUKyUF1m0g9hwBni/TNNFtTfvUy
- NG3y3C2Q6B7OGB+8s0yQXN5/0dLYSkxx0dC3N542fgdU1sooAyILYz2ENiUuigq7
-X-Gm-Gg: AZFdTZf1alml6rBQbNoDYeJJQhhniYw7r2XjuImFtjN7deGF8w6NRsZMlMMDEMcGrYf
- HnVu1amUaJ8jx7rrx90twOZwt8ePk3BhgHVPUnfVQwRgXGOCYUY6yhsBbLv01DiCFi3j9k0NMdG
- AGMlUy1ak3rzDkuSqaQmf92z8l2arEBbC2JYkBIm1GHtlSTBI7AYCdFeG6yOtbIB7IvmdmHu+pQ
- jiNDQvh1veG5VInyZ7b3UCvYJZ01bJLs22TZXqWWvwQ3D4P3SMbhHWdKf1fCaqldZh4yIuG2ZwJ
- NdyxRoqN/BZGjZFN/awL0Z3kSn7d1pC5RuyZd+ycF/g3dulPmsN+1vCmgbW4yTyJ0bWOI5Og6la
- GlBH13PiUk3/zoj16NrJ/nnoatJrcs7WPh1iDknvPuFg76k6mEngjOOjwVS/waeJ6lK6whOClTU
- huR1gCWxHwQexu3MV/QPpqN5YWRAExOf6Kaxv3DYgfTX/QDBS7QJShn+/HwbRLYuifPkZ+QCIdz
- BtdeXZhjiQw89GTMrRpkAl9J4J4qeq78XVKr5ydb1JrY+zomVyuR4xO8DO6mZthpDKWf2rsmezR
- wVIYiFOpUTD2aZgi/yMXVNFWgzRcSLyev0X/vATpGOPhARmFZz0C5D+OMUtgo93JgvpqhfJi0lO
- VTzX2rIUvlF/uhEFx1s/9euA3/FdZPgCLE1iF1SHtBjmDxwjL2gklUXuG1ctI4KCTtT+JhQ9TAX
- 4665c6mSRqNw==
-X-Received: by 2002:a05:600c:3ba9:b0:4a2:1050:aff with SMTP id
- 5b1f17b1804b1-4bb8881c741mr264048405e9.6.1795427642290; 
- Mon, 23 Nov 2026 01:54:02 -0800 (PST)
+ bh=UbYjYVdxwuVMIkePeGXKXZZgJbae8oz1rn0mCbBOsQo=;
+ b=S1qxxq8IRAKSF71kqoi1idKN+nA9sV6nLVXYO3w9iXgW+WKx61V8f5WV4tu1YM5QFH
+ iSyV0LoyKQU6E+iUhgTjYEGKqCxls0Vp8rmTPv9PBOtNwojTqO7KU1a86Z/1qUuFz+lW
+ FezCoHFyGJH4qEXywXMNyRoOuZ24d7OHlD96VPalPprwTouMEAXOQbnWD8RE/OgfjDSM
+ OiwOWxfe3cKaO1MWZl94Q5K1yGShRlGxw6AJESfVRQ+OefmgENPdKe5fMXD+UqoSWnHY
+ E4j3XfZwDDBLnJr3XGukrLkTYGGBWYj2doBdOEpiMWemr7l8xGvidPHuOwDu41clZAmA
+ IgPA==
+X-Gm-Message-State: APuU4Z+ix1MOSYH5INdx6yjOsmH+ecqOdvqcfaXru9itoNGJWkeu5Cr5
+ MU4U8nDvy6DWNkmaYCEzYNqK5b8n9Z6Sd+ZpvTo0R/ZBPSECLbQLCJbsrNgwt41x
+X-Gm-Gg: AZFdTZfqCDiIt+6er/RGmhhHsgiK6Y6K1wlpRDQsZHH9fJlsHIO0s82rLfNPwG6qCQO
+ TUyGvUIyt3fQGWKfeW1w90q1KKu87VlAGBwjsFB7YWlZculSLEjqR+LMsLwtS/Ar8FTv3djl5se
+ oO/J/S/nMTdmyxKJWSeVRyeV6js09dpcFZVbrs8+1W/WN6tih/hrlH3dtEjdQH5neWDzCAq2apZ
+ HH0KSlt8ljSqfFVJhat1qrfISHBv2sNkEDV22eVg9/YjR22CEWi3tyOxP1YoWyhI12UQ49KOita
+ nWRpdALiOy2jtEcS7pmKRHrpXBV73+Gal6C0i/xGd8Os2fOanu5hIZ9otNDLSiy2/U+Nr9DXfGr
+ Ymiyp8cRosaj7ZlFYbKs42sZQIwgEXaDEctvLq/wrSP3lfLO9PsyewtETQ4WbNbw97O3btxKCdG
+ kdtZJMxSeL7yddRZGKZ9r8syMu+KMF4m2XitiHjXfyDTHCHzrqiaQY6sJNEHY4H5TqzRA7NtHeP
+ B05dh+qgPoCGd2nZoujQptDOPwNvq+Fl3Kr+LlR9mE2dfXdIVT51JmUExvS4sXP7xMvD68pLzWH
+ flkpkvTAUbEirjtM0/y2FljfPX5RxnvMLNHMCvUghHu8l0YOkQaLi3BKt3031g3QfvMAnTOoGll
+ +NCIwAefHemMcA4obpTI+jJOe/UcTShk/zQ6eLvRGq6X46ioZifVKjMt88w0qhhu4AuzGJaksrR
+ YM8WKZCC9V2N/yFkWQ90W4CDXAJPEkVJo=
+X-Received: by 2002:a05:600c:46d3:b0:4bb:5c92:ce12 with SMTP id
+ 5b1f17b1804b1-4bb88812200mr240688995e9.17.1795427643012; 
+ Mon, 23 Nov 2026 01:54:03 -0800 (PST)
 Received: from KORLIN44614.barco.com (d528f5fde.static.telenet.be.
  [82.143.95.222]) by smtp.googlemail.com with ESMTPSA id
- 5b1f17b1804b1-4bb9067846esm186202105e9.4.2026.11.23.01.54.01
+ 5b1f17b1804b1-4bb9067846esm186202105e9.4.2026.11.23.01.54.02
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
  Mon, 23 Nov 2026 01:54:02 -0800 (PST)
 From: Thomas Devoogdt <thomas@devoogdt.com>
@@ -122,14 +122,15 @@ Cc: Adrian Perez de Castro <aperez@igalia.com>,
  Joseph Kogut <joseph.kogut@gmail.com>,
  Thomas Devoogdt <thomas@devoogdt.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 23 Nov 2026 10:53:37 +0100
-Message-ID: <20261123095339.1566394-9-thomas@devoogdt.com>
+Date: Mon, 23 Nov 2026 10:53:38 +0100
+Message-ID: <20261123095339.1566394-10-thomas@devoogdt.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261123095339.1566394-1-thomas@devoogdt.com>
 References: <20261123095339.1566394-1-thomas@devoogdt.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v1 09/11] package/wayland: bump to version 1.26.0
+Subject: [Buildroot] [PATCH v1 10/11] package/wayland-protocols: bump to
+ version 1.50
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -150,40 +151,38 @@ X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
 Release:
-https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.26.0
+https://gitlab.freedesktop.org/wayland/wayland-protocols/-/releases/1.50
 
 Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 ---
- package/wayland/wayland.hash | 5 ++---
- package/wayland/wayland.mk   | 2 +-
+ package/wayland-protocols/wayland-protocols.hash | 5 ++---
+ package/wayland-protocols/wayland-protocols.mk   | 2 +-
  2 files changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/package/wayland/wayland.hash b/package/wayland/wayland.hash
-index 8da9dbe745f..98754b2db4d 100644
---- a/package/wayland/wayland.hash
-+++ b/package/wayland/wayland.hash
-@@ -1,6 +1,5 @@
--# From https://lore.freedesktop.org/wayland-devel/plU5smxin5VXbiedTGtL7CNHe0t2mHtgQlQ3-xwREmSSNYaClAcZpEBV8L7JvMT8JHwdD_a_uSFkDUaP45CAWyL545iZh5gInAdToX6hgt4=@emersion.fr/T/#u
--sha256  82892487a01ad67b334eca83b54317a7c86a03a89cfadacfef5211f11a5d0536  wayland-1.24.0.tar.xz
--sha512  60216602cffd1473ae15381f9e9a6f3829e742cac83843ca65360ba78bcff8d9442f15eb6a6d5d29c8f74dd920762ca1605f51658d22a1d3c18e338505b9f974  wayland-1.24.0.tar.xz
-+# From https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.26.0/downloads/wayland-1.26.0.tar.xz.sha256sum
-+sha256  64176eaa46e4969903e286f8e5ef8331affc17fdf03ac9b58381d2b23162b7a3  wayland-1.26.0.tar.xz
- 
- # Locally calculated
- sha256  6eefcb023622a463168a5c20add95fd24a38c7482622a9254a23b99b7c153061  COPYING
-diff --git a/package/wayland/wayland.mk b/package/wayland/wayland.mk
-index 7dd88bbef5c..310e60ed766 100644
---- a/package/wayland/wayland.mk
-+++ b/package/wayland/wayland.mk
+diff --git a/package/wayland-protocols/wayland-protocols.hash b/package/wayland-protocols/wayland-protocols.hash
+index 2b29785dde7..df44e499771 100644
+--- a/package/wayland-protocols/wayland-protocols.hash
++++ b/package/wayland-protocols/wayland-protocols.hash
+@@ -1,4 +1,3 @@
+-# From https://lore.freedesktop.org/wayland-devel/ac0NAPBFafhcgzE3@gmail.com/
+-sha256  398036ac0eb6484982ddbde7ff86848d753231f9cdeeae983f06b52946625aa1  wayland-protocols-1.48.tar.xz
+-sha512  24950c6181f576f8926e2631a3f017986f809cd4fe8efe6fc8e4d872e98aacabb9eb79877371fb5def1fc78027c8e1e1e25bb98d455c22624a810707be0b2c24  wayland-protocols-1.48.tar.xz
++# From https://gitlab.freedesktop.org/wayland/wayland-protocols/-/releases/1.50/downloads/wayland-protocols-1.50.tar.xz.sha256sum
++sha256  4460c20cfcf68b994a5ee206ed15fc19ad312f16c96075186e83b0e3f4aa48a5  wayland-protocols-1.50.tar.xz
+ sha256  f1a2b233e8a9a71c40f4aa885be08a0842ac85bb8588703c1dd7e6e6502e3124  COPYING
+diff --git a/package/wayland-protocols/wayland-protocols.mk b/package/wayland-protocols/wayland-protocols.mk
+index 5ef89900660..ee7b3fff57e 100644
+--- a/package/wayland-protocols/wayland-protocols.mk
++++ b/package/wayland-protocols/wayland-protocols.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--WAYLAND_VERSION = 1.24.0
-+WAYLAND_VERSION = 1.26.0
- WAYLAND_SITE = https://gitlab.freedesktop.org/wayland/wayland/-/releases/$(WAYLAND_VERSION)/downloads
- WAYLAND_SOURCE = wayland-$(WAYLAND_VERSION).tar.xz
- WAYLAND_LICENSE = MIT
+-WAYLAND_PROTOCOLS_VERSION = 1.48
++WAYLAND_PROTOCOLS_VERSION = 1.50
+ WAYLAND_PROTOCOLS_SITE = https://gitlab.freedesktop.org/wayland/wayland-protocols/-/releases/$(WAYLAND_PROTOCOLS_VERSION)/downloads
+ WAYLAND_PROTOCOLS_SOURCE = wayland-protocols-$(WAYLAND_PROTOCOLS_VERSION).tar.xz
+ WAYLAND_PROTOCOLS_LICENSE = MIT
 -- 
 2.43.0
 
