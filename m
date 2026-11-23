@@ -1,147 +1,144 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0DBC606A31F
-	for <buildroot@archiver.kernel.org>; Mon, 23 Nov 2026 17:47:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE1D8606A31A
+	for <buildroot@archiver.kernel.org>; Mon, 23 Nov 2026 18:12:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=KgvOlpso;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=Mrkvy6w3
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=QgLnHXi2;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=gP4w3Mg4
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BFA3280E5D;
-	Mon, 23 Nov 2026 17:47:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD6904068B;
+	Mon, 23 Nov 2026 18:12:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7f13L5pvDls5; Mon, 23 Nov 2026 17:47:32 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org D7E2C80E3A
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795456052;
-	b=Bn8gbEJC/7riiFwQSbDSCA3fXCgkfnXsc3IZ1oqCokLnnTd+bWtK7AP/Y6PLcE4bTF/X
-	 g4popnNHhKFndvtI+rY1r7pkexalioHEmIWgNEW1GpJJppkzqhym+kEsiH0iMvbjXqp8f
-	 uMSny8adnsWib9DexU2OXvKsXr0YK6nscyHszpmb8k9bbcnX9FrfLKes3MJMhERI0bHdc
-	 TU8es3lVhGqMOkxZ3AC8K63qqT7VrvqRidp/BabUvxBAD5crOCYGhJah/Jsi67XFTScNa
-	 M53eivUutASmsd9agHfjTXnjBqsGCyVs13hWkLqM31JvRUDPe1rPKIBnlvFRoJ64yjA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6X4cI1j7dJXF; Mon, 23 Nov 2026 18:12:23 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org C476F406C5
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795457542;
+	b=aEtrzXoM1t6v6jfcWRtxF48GxcFpAUSp5UUBwUYvEXDGoyI4DFvH1bBMxnAgGLlvUUMo
+	 a1j5S7yXTUcZLTb4Zpahs8eINlEe+PJek30KhSOZSNw1ooaNOftp9CnAQKe5LM0NbSY80
+	 gMtmMv1CS4p610iK+T+anbNvp5m5Cl7KGFdwL5Khk17UiAks9AUtfkBoBU2JtAAWUgtgJ
+	 Jh+Z7Iy1VHgTJVGogLwaX8yteZj/OuPzqZFGXMLdZSP95DD1DO7L9LnB6fiGjD4bqgvEY
+	 35WA59Zc2QJunBIo1oCY8100mx49KW+bPZu56IEIoV/0jS9CWgZmbl1LnS/qKfNKCBA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795456052;
+	c=relaxed/relaxed; t=1795457542;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
 	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:In-Reply-To:
+	 X-Received:Received:From:To:Date:Message-ID:X-Mailer:In-Reply-To:
 	 References:MIME-Version:Subject:X-BeenThere:X-Mailman-Version:
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
+	 List-Subscribe:Cc:Content-Type:Content-Transfer-Encoding:Errors-To:
 	 Sender;
-	bh=CTfVfuOwWvPYXOMBIu9MykF84d4n1zWqAj3bPJwUEwc=;
-	b=U8TR6oDD/T/sydq/JaaBwPICqpmzgowllKbr4a0L8XQQ8jPQxNhyaB2WffXEFSD/d40+
-	 eTwFcQsO+Zrox34/VMzXiT1c3VQi9zP0AZSFnCABqiH8JkzV4BsXA6dTelVX6/2j2hMw/
-	 +IdoDKB9eJlrZ6EvfEHkfkWhNoCsShoEgPBmOIb7l3wKWAbN0y7r8mUeUwrx+c2DwwPRS
-	 mitah149yKVcYl91R1RaV1CYtoCr4FVUqeIz8zCXIIcCS0XyfC8RYVYGJoF8G8AnqEwpD
-	 aEtgFo5HxdKnI6eBXe1FqMmK5gy1jrmV1k1snlJErM+B5JBlytgesrDH6nwzBcr9dLw==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+	bh=e6i0+u49aMNUKiLx3YJeUFGqkemD6trQmd0JMWoTwSg=;
+	b=aWi1QBAN2TRP8OpaOtQc61HlkfRTJLWRWHqw/6zgwbV2Qk+5xpVTs7bKqR0CmlL3rHLk
+	 Bomzt2kLcoLPq0+ZCBmkmlmNrAz+p2nOdzjI5CTCkSNRXgYC5blbX2PduS3/rIqLtSCbr
+	 pAhaHNF9+Up1IZyhgQPUmPd5NE1IlSIiDTChlCDsLVuXEoXMmlPLY4hFAK6Iul+vv+yOO
+	 rYekVq+4lI1XREVoIdZuUK9pAJjjySsqOR00gnZ6+1FVy8IX3u8qmPUsiAuzIYgbKtGJy
+	 9qeZUCRF6qKgFlQuGQBbPq9rHuvARH8UwfJugjfN/qjrFDl3DwA63QaMmmip68JmiRg==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795456051;
-	bh=CTfVfuOwWvPYXOMBIu9MykF84d4n1zWqAj3bPJwUEwc=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	s=default; t=1795457542;
+	bh=e6i0+u49aMNUKiLx3YJeUFGqkemD6trQmd0JMWoTwSg=;
+	h=From:To:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=KgvOlpsougSygErQjlJ9s2k89/LjTUnavKdzB3ZOZHjHyNjA33yu/utFPPUGCoH/0
-	 98uI6ltODY4Q9ncJ7DHDvvEsmbrR3icEhf1Yk/G9L9T8w1ABwFhM+syj+RVqZDTHCb
-	 Tz9eXu6MB1bZ/Lzc0cZ8ZSmltFOyhPst48dz12w5BluhFlZgqHFi3FR2O93RHtS9YQ
-	 GNK+lIIMhOihc2DMn5UebYZ/U99YjE8JjmL4axhbvB0/iZUkDuAHYy3m+yWTKnYbj9
-	 XaaG86WkfYqfTzi2e63/gtmBYXpsYcepo9ukPu8j/uqvqBlTD2gi9rMKLqpoyX8Hiw
-	 Tmecz1jOEa3tA==
+	 Cc:From;
+	b=QgLnHXi2w2SuINBuIsy0G81SX+HVG7PX1ZgsalqJ1L9U4dZP6M+UwyCMsNrs0J4Dm
+	 U6us0sBuHFj4xHwv2Ztr6/w8KLIOqhoERQ9eRJulixHN6aA0LB2F/l6hZNI4z1yZcT
+	 QsR/G6hXQrvxmkJ7nNgnDw6EHqgWNO4VIHZFxMd8rD1BPdLJPfxHfVkAChEhUXhpd4
+	 TuVMib0S2ch/RINHYc588ILTjxcLGpfFIeJACLJLmpS5ITca1jv43qpaEkjdcUuSPq
+	 lUWy7XmNNr67lfu24WRrfwJUvrf1tCZgLpz9iMSwmBhW89NCRnaeJyG1zl56aV3+Sw
+	 +5CAph1rkZbCQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D7E2C80E3A;
-	Mon, 23 Nov 2026 17:47:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id 24728371
- for <buildroot@buildroot.org>; Mon, 23 Nov 2026 17:47:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C476F406C5;
+	Mon, 23 Nov 2026 18:12:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 809F215D
+ for <buildroot@buildroot.org>; Mon, 23 Nov 2026 18:12:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 162854075C
- for <buildroot@buildroot.org>; Mon, 23 Nov 2026 17:47:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7DAB740229
+ for <buildroot@buildroot.org>; Mon, 23 Nov 2026 18:12:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5ogTMrnwvPzT for <buildroot@buildroot.org>;
- Mon, 23 Nov 2026 17:47:30 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org E2B0E40738
-Authentication-Results: smtp4.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::336"
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KNtDc8QzUQMD for <buildroot@buildroot.org>;
+ Mon, 23 Nov 2026 18:12:20 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 6173640093
+Authentication-Results: smtp2.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::429"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
  envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org;
+Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp4.osuosl.org;
+Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20260707 header.b=Mrkvy6w3
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
- [IPv6:2a00:1450:4864:20::336])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E2B0E40738
- for <buildroot@buildroot.org>; Mon, 23 Nov 2026 17:47:29 +0000 (UTC)
-Received: by mail-wm1-x336.google.com with SMTP id
- 5b1f17b1804b1-4bb85e07aadso44095325e9.1
- for <buildroot@buildroot.org>; Mon, 23 Nov 2026 09:47:29 -0800 (PST)
+ header.a=rsa-sha256 header.s=20260707 header.b=gP4w3Mg4
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6173640093
+ for <buildroot@buildroot.org>; Mon, 23 Nov 2026 18:12:19 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-4a7b8abe209so2788277f8f.0
+ for <buildroot@buildroot.org>; Mon, 23 Nov 2026 10:12:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20260707; t=1795456047; x=1796060847; darn=buildroot.org;
+ d=gmail.com; s=20260707; t=1795457538; x=1796062338; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=naP7uECDOQck/a6rpC8sxZxqEErv7yvtr5U6JjCeyp0=;
- b=Mrkvy6w3Ve3lqPYprKnxwEo9qSRZ0oIvJTS36/fzbw5DgMij3uoGXZH7uotVLH5UYP
- +KMD351Crjtn2lbEK2gL/lETHcAllCSfDxBsLlU0RggGHc4g8PizBabx0acSx+c069VD
- KG/Tqisq6GweQgdWyLIIDLRBt2uK8RrtCPFs76yaQbObIWdZi1ze6bXZ1gqUpB5oFYc3
- IbruCAdtGkYEOMJPylUoakVgF0l9OIZ4ogMsb5c6ES/mWH4Lh+yj6YgujoOZDOiuykCh
- FwXCMVYFIP/uQ4ByCPADQ6CG8gZwvJTiNMfx14/rpD2xhW1YnCgQVrHSaMel/JTBmJjO
- 1ikg==
+ bh=n7S8UCJiyZqUKdb3KJzm2/KqwIqVmfCN1+TXbvGVVf8=;
+ b=gP4w3Mg4k/aIdJ1obURMFizQclbOoQ3ramVtgoW0X74bduQKQ2QBzFIebdiQCe+lmG
+ bW71oJwfk1k5XrKvXXtN0reDsX1s/POLrU8wy8MY4vL48uVi0seXzsto/YkQkvgSoQSb
+ C8fJr8hvoVMZH0bwBAfegSP+Ro1nWf7Dj3eDkMtXfnl8gUG/7dNb5sC0kfO5HFIYMWCk
+ 0fO52lIX8Fy1zktg68DQLrm463zXhcv5WYUlPuF9icV2lhhJ0tE9r7aOKfvWf9EU137S
+ Z8T3IwqtClMACZIH7RSu3UT9w2/7GbOd+au5s7xCbsZ2lykYuU4de8ymWadYRENUVOKt
+ 7YsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1795456047; x=1796060847;
+ d=1e100.net; s=20260707; t=1795457538; x=1796062338;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=naP7uECDOQck/a6rpC8sxZxqEErv7yvtr5U6JjCeyp0=;
- b=H+x5c05l6RksVByIr+E+q3/SdbI6FJc6oDORZzPMxTvcIke0k62LlxWaGsu+SZgPoF
- 59fYylekKgiW06JDFg/EEQXsEFcoMcdjPvsT5suqMF2gB21zJWZ/q38qmXsGIkSjruD3
- 41tBdC/Xols8X6kUC5VcnO+WOtO8oL62H5f08vzsFW8LxYnJU0k7yCGNsEsBUFFPKYHm
- HY8L364XhG8IwCP9z3dRP8eqlMDIiQpIwy/tamT36hRW+sDiELsalRZ7xHqAamrn/mel
- PdQ/w2optzSlKvGGEjZm6F2UIuf1hJF7++EroR/4WqHRAM77RAb8J+5hJtMyS6KnJas4
- Ow4w==
-X-Gm-Message-State: APuU4Z8f1+51EKjMk05jx/dYOkr+WEowF0J4UFabvsvklsR0DR5MGG/j
- ypPTf7828JItTPoR6mPrx1wDEzkDbCIAytWaUgMi4GMRDipRgHRQlcJzqacRYWps
-X-Gm-Gg: AZFdTZdfJJ5keBkafID6jyP5VYUiFvsX251mh8pZu8OPucw2FMFo+XB0RMIgFf4w4P7
- 0zgdEQeBaeoCV1wNX6e8lLvCvzMx+gVB/CQFfEB6optSsyRwA09swS3JqxqKoamOlm1cy3qS6hO
- u2Wk87cAC9vsAIAUNIycK6mTLbA+OLVjtE4oTHJGuEdvtX7qcQz4/23gbAC8GHFhmt/BZ6Mp6/B
- WR+GDh5ghHgRrlEICC7Y7VBPKrHtQpPYWdi5X4AB2pXqXzV8sUjglDpl17CBbKpHc25W2Z6B/D3
- S3cFgvfwF4TPkVdGX6l7lWRIgbgQT20HrFVLZeBHKuLWmxz2SxG97XQONHg6+8zWwm6CMCH4zKQ
- EZ26ObFgj13xTvJbAVyk1t/OuSpRoczqtaV0xsrWo2vWnixAmrHc/4Do3Vxkjpd8WEKILL1WC5u
- k1kD2qZASotuzCpS5J/8iYVIMeekYr30FDIiedL5bOiDgG8JSUf03cTn2mB+xp3fzYHYG+LJmjZ
- DLrnUUpxacQUnJ9pxtpDbWBKsDI8t30q7kB50E0TdiazuSGLXWN9OlD4CHiOIFp+z4s0dmZ+pyP
- 4TIBGy3xmUPlgr8A0oAqcCYBVyI4rhLcNPXs/lc3lia4kiYM7E4=
-X-Received: by 2002:a05:600c:37c9:b0:4a4:4d57:8487 with SMTP id
- 5b1f17b1804b1-4bb887fe7f7mr221182725e9.5.1795456047360; 
- Mon, 23 Nov 2026 09:47:27 -0800 (PST)
+ bh=n7S8UCJiyZqUKdb3KJzm2/KqwIqVmfCN1+TXbvGVVf8=;
+ b=yONz0h6E9yr5E5lYbUuEGyh3kykrTelGVBOjxnaTahejm3nUquSfkspYxygGJyHAmr
+ 6l/ymVathjf/+uwjibo71UeeuaIPDX7pNJrS0IvUiDf8/P7I5TWn5qWuRpakJ0J0et/f
+ HBYhpEvcc614PePi5cSdoy4ZCuoXH6SnWq4+G+WZEkfgC7TmLo29n+IuZfaC2r7CDIkh
+ cLjpTo8CLjqRUJMcv+WJ1tQWZ7uLISDtoUZb5n5RaTxNVtrR3QkDpuLEz6W06INgG2ZL
+ 0XZAYz0yJ29tnIxtC3DyuWQLkjrH5o7Li4O2d/1K+ZNfKGnLzE4kN+H+SnFdpoFDD9mo
+ T4Xw==
+X-Gm-Message-State: APuU4Z9U5OfuSpuYWVf1B/6lg1GerpoTKzSMfA5pBUlawmm2CnyvqaZ/
+ c4NseBofp5z2zqjtR2XBk2qLVU5GvfeI7IIbkOK+VuNfHhNqjISJppLk4WgWqn4l
+X-Gm-Gg: AZFdTZdoY0i2FFd6vYg2ez7m6z1krgwluIKwwA1uZ3/QiYe1IDqqhO2md2sQv8u8aBA
+ tic3xRzSCN6gLXN7Mq+/VU1I/xdw09+ussL4dgvFGzNNUwgwr/P1B+FU+kiGRY2v9Z1Y6bSJp4v
+ YKvzmBcznbFCH86eLzh4AVsFbTcteceUyexdxTfhpifqJeB/wJdIUU5ii9Xrz5GEQQ+pez2dTzD
+ O951iZAu36giu1DYjIhlyZP5DBXcGyhMYYeX79Kb1nhcLNR7L/02E4dP6RlyWJF1KDyi7wvAR2y
+ WJiGalwZUWrqmeEZlc7X7WLXTEcOK7RyE9KA1k2OaovTaQVw1z1PigBV37Z7ZQqATKylkLY4cR2
+ oKGS/udBgWhVygMW/D6674MOoZ9WZAVEqoDQuroxjPUMh1+k2xObbXRu7gAWQbkB1EEvYkcUzmI
+ JdbL3cZ84SUwQtYgCHe8EBD+A0M+qSjS2p7TGsCr7klgmT69Tc/7hEeK+pE8fmdce4uBAUuKe5F
+ hSOqLl3sIDAXJyjp6qVcQlH8mA3OsKlsG4kz4H3P9rX78gwt4FrZjU63wuSET7KpAaj0C90imE4
+ AYfk854cfO34EBvsJeyA2BNZ27Po35ig6vTUamXZ9b9OlezaIB4=
+X-Received: by 2002:a05:600c:820d:b0:4a1:dfaf:f465 with SMTP id
+ 5b1f17b1804b1-4bb887c2ca3mr267807025e9.4.1795457538025; 
+ Mon, 23 Nov 2026 10:12:18 -0800 (PST)
 Received: from angelo-Precision-7550 ([2.58.136.216])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4bb8849247asm367376555e9.7.2026.11.23.09.47.26
+ 5b1f17b1804b1-4bb853368d3sm374558435e9.1.2026.11.23.10.12.16
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 23 Nov 2026 09:47:26 -0800 (PST)
+ Mon, 23 Nov 2026 10:12:17 -0800 (PST)
 From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 To: buildroot@buildroot.org
-Cc: Corentin Labbe <clabbe@baylibre.com>,
- Arnout Vandecappelle <arnout@rnout.be>
-Date: Mon, 23 Nov 2026 18:47:25 +0100
-Message-ID: <20261123174725.2554738-1-angelo.compagnucci@gmail.com>
+Date: Mon, 23 Nov 2026 19:12:15 +0100
+Message-ID: <20261123181215.2805909-1-angelo.compagnucci@gmail.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20231106123705.311899-1-clabbe@baylibre.com>
-References: <20231106123705.311899-1-clabbe@baylibre.com>
+In-Reply-To: <20240306145531.1413586-1-fontaine.fabrice@gmail.com>
+References: <20240306145531.1413586-1-fontaine.fabrice@gmail.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2] linux: Use the choosen rootfs compression
- type when rootfs is builtin
+Subject: [Buildroot] [PATCH v2] package/capnproto: update ucontext handling
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -151,6 +148,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Arnout Vandecappelle <arnout@rnout.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
@@ -162,79 +161,90 @@ X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-From: Corentin Labbe <clabbe@baylibre.com>
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-I have built a buildroot with:
-BR2_TARGET_ROOTFS_CPIO_XZ=y
-BR2_TARGET_ROOTFS_INITRAMFS=y
-With this buildroot produces an images/rootfs.cpio.xz but the kernel still use gzip (CONFIG_INITRAMFS_COMPRESSION_GZIP)
-as compression for a plain rootfs.cpio
+musl workaround for getcontext/setcontext is not needed since commit
+eaeba56aa2d21f1d264c7e361731808e3f072d9d
 
-Setting CONFIG_INITRAMFS_COMPRESSION_XZ in a linux.fragment does not
-work as it seems the fragment is setup before buildroot set
-CONFIG_INITRAMFS_SOURCE which reset the CONFIG_INITRAMFS_COMPRESSION
-choice.
+Moreover, select libucontext if possible to get full ucontext support
 
-So buildroot have to change CONFIG_INITRAMFS_COMPRESSION after setup
-CONFIG_INITRAMFS_SOURCE.
-
-Without cpio compression, the kernel keeps its own default, as before.
-So the defconfigs with a built-in initramfs, which use no cpio
-compression and often boot an uncompressed kernel image, don't change.
-
-Signed-off-by: Corentin Labbe <clabbe@baylibre.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Co-authored-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Tested-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 ---
 Changes v1 -> v2:
-  - keep the kernel default when the cpio image is not compressed,
-    instead of CONFIG_INITRAMFS_COMPRESSION_NONE: the 20 defconfigs
-    with a built-in initramfs use no cpio compression, and most of them
-    boot an uncompressed kernel (vmlinux, linux.bin, XIP), so their
-    images would grow [Arnout Vandecappelle]
-  - only enable the chosen option, don't disable the others
-    [Arnout Vandecappelle]
-  - also enable the CONFIG_RD_* option the choice depends on
-  - add bzip2
+  - only select libucontext when the toolchain has no ucontext, with
+    the same condition as libdex [Arnout Vandecappelle]
   - rebase on master
 
-Supersedes v1: https://patchwork.buildroot.org/project/buildroot/patch/20231106123705.311899-1-clabbe@baylibre.com/
+Supersedes v1: https://patchwork.buildroot.org/project/buildroot/patch/20240306145531.1413586-1-fontaine.fabrice@gmail.com/
 
- linux/linux.mk | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ package/c-capnproto/Config.in  | 6 ++++--
+ package/capnproto/Config.in    | 8 ++++++--
+ package/capnproto/capnproto.mk | 5 ++---
+ 3 files changed, 12 insertions(+), 7 deletions(-)
 
-diff --git a/linux/linux.mk b/linux/linux.mk
-index 49325a3a07..72624fff59 100644
---- a/linux/linux.mk
-+++ b/linux/linux.mk
-@@ -420,7 +420,26 @@ define LINUX_KCONFIG_FIXUP_CMDS_ROOTFS_CPIO
- 	$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_SOURCE,"$${BR_BINARIES_DIR}/rootfs.cpio")
- 	$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_UID,0)
- 	$(call KCONFIG_SET_OPT,CONFIG_INITRAMFS_ROOT_GID,0)
-+	$(LINUX_KCONFIG_FIXUP_CMDS_INITRAMFS_COMPRESSION)
- endef
-+
-+# Compress the built-in initramfs like the cpio image. Setting
-+# CONFIG_INITRAMFS_SOURCE above resets this choice, so a kernel
-+# configuration fragment can't set it. Without cpio compression, the
-+# kernel keeps its own default.
-+LINUX_INITRAMFS_COMPRESSION_$(BR2_TARGET_ROOTFS_CPIO_BZIP2) = BZIP2
-+LINUX_INITRAMFS_COMPRESSION_$(BR2_TARGET_ROOTFS_CPIO_GZIP) = GZIP
-+LINUX_INITRAMFS_COMPRESSION_$(BR2_TARGET_ROOTFS_CPIO_LZ4) = LZ4
-+LINUX_INITRAMFS_COMPRESSION_$(BR2_TARGET_ROOTFS_CPIO_LZMA) = LZMA
-+LINUX_INITRAMFS_COMPRESSION_$(BR2_TARGET_ROOTFS_CPIO_LZO) = LZO
-+LINUX_INITRAMFS_COMPRESSION_$(BR2_TARGET_ROOTFS_CPIO_XZ) = XZ
-+LINUX_INITRAMFS_COMPRESSION_$(BR2_TARGET_ROOTFS_CPIO_ZSTD) = ZSTD
-+ifneq ($(LINUX_INITRAMFS_COMPRESSION_y),)
-+define LINUX_KCONFIG_FIXUP_CMDS_INITRAMFS_COMPRESSION
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_RD_$(LINUX_INITRAMFS_COMPRESSION_y))
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_INITRAMFS_COMPRESSION_$(LINUX_INITRAMFS_COMPRESSION_y))
-+endef
-+endif
+diff --git a/package/c-capnproto/Config.in b/package/c-capnproto/Config.in
+index c472128c3f..abe2a602ba 100644
+--- a/package/c-capnproto/Config.in
++++ b/package/c-capnproto/Config.in
+@@ -7,7 +7,8 @@ config BR2_PACKAGE_C_CAPNPROTO
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # capnproto
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC # capnproto
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # capnproto
+-	depends on BR2_TOOLCHAIN_HAS_UCONTEXT # capnproto
++	depends on BR2_TOOLCHAIN_HAS_UCONTEXT || \
++		BR2_PACKAGE_LIBUCONTEXT_ARCH_SUPPORTS # capnproto
+ 	select BR2_PACKAGE_CAPNPROTO
+ 	help
+ 	  A C plugin for Cap'n Proto. Generates the code generator
+@@ -24,4 +25,5 @@ comment "c-capnproto needs host and target gcc >= 5 w/ C++14, threads, atomic, u
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_HAS_ATOMIC || \
+ 		BR2_TOOLCHAIN_HAS_GCC_BUG_64735 || \
+-		!BR2_TOOLCHAIN_HAS_UCONTEXT
++		!(BR2_TOOLCHAIN_HAS_UCONTEXT || \
++			BR2_PACKAGE_LIBUCONTEXT_ARCH_SUPPORTS)
+diff --git a/package/capnproto/Config.in b/package/capnproto/Config.in
+index 943ba9de29..4654b5ad77 100644
+--- a/package/capnproto/Config.in
++++ b/package/capnproto/Config.in
+@@ -7,7 +7,10 @@ config BR2_PACKAGE_CAPNPROTO
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+-	depends on BR2_TOOLCHAIN_HAS_UCONTEXT
++	depends on BR2_TOOLCHAIN_HAS_UCONTEXT || \
++		BR2_PACKAGE_LIBUCONTEXT_ARCH_SUPPORTS
++	select BR2_PACKAGE_LIBUCONTEXT if \
++		BR2_PACKAGE_LIBUCONTEXT_ARCH_SUPPORTS && !BR2_TOOLCHAIN_HAS_UCONTEXT
+ 	help
+ 	  Cap'n Proto is an insanely fast data interchange format
+ 	  and capability-based RPC system. Think JSON, except
+@@ -25,4 +28,5 @@ comment "capnproto needs host and target gcc >= 5 w/ C++14, threads, atomic, uco
+ 		!BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_HAS_ATOMIC || \
+ 		BR2_TOOLCHAIN_HAS_GCC_BUG_64735 || \
+-		!BR2_TOOLCHAIN_HAS_UCONTEXT
++		!(BR2_TOOLCHAIN_HAS_UCONTEXT || \
++			BR2_PACKAGE_LIBUCONTEXT_ARCH_SUPPORTS)
+diff --git a/package/capnproto/capnproto.mk b/package/capnproto/capnproto.mk
+index f51e037532..d5be2a3d6c 100644
+--- a/package/capnproto/capnproto.mk
++++ b/package/capnproto/capnproto.mk
+@@ -33,9 +33,8 @@ else
+ CAPNPROTO_CONF_OPTS += --without-openssl
  endif
  
- # Since kernel >= 6.15.y, x86 and x86_64 kernels requires a toolchain
+-# musl doesn't support getcontext/setcontext
+-ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
+-CAPNPROTO_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -DKJ_USE_FIBERS=0"
++ifeq ($(BR2_PACKAGE_LIBUCONTEXT),y)
++CAPNPROTO_DEPENDENCIES += libucontext
+ endif
+ 
+ $(eval $(autotools-package))
 -- 
 2.53.0
 
