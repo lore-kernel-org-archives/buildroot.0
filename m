@@ -1,28 +1,28 @@
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3FE5606A31E
-	for <buildroot@archiver.kernel.org>; Mon, 23 Nov 2026 09:54:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0335606A32A
+	for <buildroot@archiver.kernel.org>; Mon, 23 Nov 2026 09:54:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=Y4Ikj4IX
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=jXdicELh
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D26DE40685;
-	Mon, 23 Nov 2026 09:54:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6BDFF80E0F;
+	Mon, 23 Nov 2026 09:54:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id irhVWWAeR-TP; Mon, 23 Nov 2026 09:54:11 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org E5C0140684
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795427651;
-	b=gzyjB6WHc1k/rBi0xWPX+aMHlqMV5YPB9nhX+wtsLOdixh9r9PDQaoe2V5scbkcuFeER
-	 OS83YsUXudjdsVgL+NDI7dnD26eN0mTaxwbRY7Jtqg6OOPMXQYj3s0zAxaLlh9xduNpls
-	 eU7fG6mQ8E/Aovj89rXHqlOvVLVlNWFlhhLpn31GkdzHGkTdcniuSUKkkyZ54neavz8PU
-	 eA8LUIBbX2XW0+qSM83Mfvr7GBfEypG8qGalZdiX4f1Kh6gsGG2U1sGbQFdk5sw3Fquo2
-	 USzaclbF88jPKg9T089PnYXBMUxjZ2XH+hzEEKdGuUfiqy4p0q56/q/SVeauHV3510w==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zLJbLELoMzJ6; Mon, 23 Nov 2026 09:54:12 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 4C3E380DE7
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795427652;
+	b=XNEj/UvZ6MFmorkQ3gPzn7P/4fQMwfYyT55ZwgkzPecxulutIoOncXKu01aYysQGjWNc
+	 XV5UQS2yOiU4k1iAJLbLFVuSpULvjIKmXd82UdBHUhz/74XSZolWeZgixFaKmHqMrisF5
+	 W3Uy71/Lsl4rmI2O7xW6v2OsctW6hdz67+1ZN22P6eJhw0IQZGh1KgfbMkS2swnTPpptO
+	 kRtJse/0qKm7+O75ZUV3CaXxorUOm17P1Te6cDQ0K7YHXDCt2phkXqUA7AFW00s34y9Am
+	 USmCgs7+ryfP2WGUFiBQYE8C69dcstYAYALwR/gACH48KdAe0d2X4dO2do41DKRR0Gg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795427651;
+	c=relaxed/relaxed; t=1795427652;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -31,89 +31,89 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 MIME-Version:Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=6EKGXoNQJtX779AMA0J9nq/4GVgygDuubMQaejNTLcs=;
-	b=YQOofOot+TiSmKFmg3fPQY4mJH7AlfNrD/PyzuUJdO+JhoAmtIj4SJ+DAyk8fLrcv2DU
-	 KPTgPpF59LrAbpcYwx0qI67i2V2hAdh74Akjsl6DQtT1It7YankKwgfZH5GSjVsMPv5Gr
-	 iS0i5/JhQpfXE8tFJ3RBYNL/B7V6/gda7j0HLTWvrd8cepZIdaAn5WmJFO6s+ulKNV1YW
-	 +qsmbo2jdkPKxu1RCkOzOH2pkLdxgsrio7jpHQAcR6HX6zkh+RgE3nhONHah2vg9eOL6m
-	 VOCohBfTx+/FGWJFYKVoQj5wRonekenZ4iPfwtIEbnbLyUs/WQri/9i3xewllxsQDWw==
-ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
+	bh=B5fHDqKTnPUDb/M0KRjL1lcr2qTgBw7HmjGHL5ptqOc=;
+	b=FpaiWhchJX911m2buQA5uCH+OZan/jz7mYIQ4mJWKWLqWvEHLgDU2WhI2qNZqfVdXgA5
+	 NjreK8XnJx2QMBFd9Mg2uQdBHdQZuL1Onwa2jAt2/0NE6c0aT5DHhHjYR0QB5cfg9FG7I
+	 M175gRDr9Vui9qwJ5Zv7wZxR09EPVslX6WaHJKmUTyLlgciSoH5Y2Uro57ToaE/1jsIp6
+	 mU4VnM5qEGJb7CcxJngwF8uf9hjGXZFOR/7YQ+ard3dmbJw7OKp/ZWMtKPFAR2Cq4o81K
+	 QlUCIO9Nllwyo/apX3YPQIhwlXUbO/RPDh+QMb6Nekdk/JwBB5Kzy90sgXK/84yIUvA==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	dmarc=none header.from=devoogdt.com;
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795427651;
-	bh=6EKGXoNQJtX779AMA0J9nq/4GVgygDuubMQaejNTLcs=;
+	s=default; t=1795427652;
+	bh=B5fHDqKTnPUDb/M0KRjL1lcr2qTgBw7HmjGHL5ptqOc=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=Y4Ikj4IX9lhc+VTfo1AksTDlHxqDI12svhSTcbJljD39c/mSX9o+86BGXpQMTexFB
-	 IskfPoKXHPvJJcb+gfMXaSTMYj18x3JQDZpLbPNFZH2ksj8PJqBsR2UP6BRF0happz
-	 LkKgtECWAh+hS8oCfReBbCqQnao+Qv1eQNvcHTqMXK4Lcea8uvM/bW3UEaXQvStcvs
-	 6xJ3p2mCtXplpV1pXmXT02EPVf6Wb/0gGntXvV9S4teqI0zhRjHPcI0S556Hh/0lHe
-	 hfpKZGNjR2J3wxq6hmgaARcc7ZhGDWeH5kZ3G3APLPW1CaupKJNigiub3aTcD4IeMY
-	 4pE6kW0tddsVA==
+	b=jXdicELhy1tWEiy3OjhaA/4FsYFws2wK1zFG12qiMeo9Iv9YCKeUcW3zzJZFEGxJB
+	 gRNdfjF/1HvtzZ/KTTqUulNvrz1qIUlnQKEd3fIjd8V/GqzvqV0P2+HujIdVQD+9P7
+	 ozBIf8vUY6BkyjDlRhhg9w2CPCheWNH3bGEKZNb2vvB7Z+tBxlYAzWVdHwzRzIV6kk
+	 xqTNBbckVlY/PjXQjAuA+C4YLHF+KG/E3Qzm3SIRS9a/gApeZSywxuzOoaljtVC5kj
+	 S7kbnzCgKyZG96pvk6B0x3elMvUAh2iOaRpLtEs1YkIJMGLUtFICbTJJe52mxCZW9I
+	 1FYQbe6w0pcwg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E5C0140684;
-	Mon, 23 Nov 2026 09:54:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 9E5F3499
- for <buildroot@buildroot.org>; Mon, 23 Nov 2026 09:54:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4C3E380DE7;
+	Mon, 23 Nov 2026 09:54:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 7A1311AB
+ for <buildroot@buildroot.org>; Mon, 23 Nov 2026 09:54:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8ADF240668
- for <buildroot@buildroot.org>; Mon, 23 Nov 2026 09:54:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 605B780C46
+ for <buildroot@buildroot.org>; Mon, 23 Nov 2026 09:54:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gigpebrdEJgO for <buildroot@buildroot.org>;
- Mon, 23 Nov 2026 09:54:02 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 6A9464066D
-Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=209.85.128.42
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.42;
- helo=mail-wm1-f42.google.com; envelope-from=thomas.devoogdt@gmail.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SZS31nei8N2c for <buildroot@buildroot.org>;
+ Mon, 23 Nov 2026 09:54:03 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 2F22080C7E
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=209.85.128.47
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.47;
+ helo=mail-wm1-f47.google.com; envelope-from=thomas.devoogdt@gmail.com;
  receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org;
+Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none) header.from=devoogdt.com
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com
- [209.85.128.42])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6A9464066D
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com
+ [209.85.128.47])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2F22080C7E
  for <buildroot@buildroot.org>; Mon, 23 Nov 2026 09:54:02 +0000 (UTC)
-Received: by mail-wm1-f42.google.com with SMTP id
- 5b1f17b1804b1-4bb6c7b6dbdso28015855e9.0
- for <buildroot@buildroot.org>; Mon, 23 Nov 2026 01:54:01 -0800 (PST)
+Received: by mail-wm1-f47.google.com with SMTP id
+ 5b1f17b1804b1-4bb64ef5a00so23471945e9.3
+ for <buildroot@buildroot.org>; Mon, 23 Nov 2026 01:54:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1795427640; x=1796032440;
+ d=1e100.net; s=20260707; t=1795427641; x=1796032441;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=wi51LakkAjpS9MsqQKfjqN2+KVUOqoJJUqP9pCo184w=;
- b=K1uRbKVgjtUWLIskkeaKqP+X3WL4ywID/wmwiDwelnqmWzli/YAKGPEpgsALJUiWFl
- 3eGspuBeC/919vmNJGMcFtvAqDykg5z+Bwqe2vhLB8qiUO7byLkKTjdBWTxENruilnyV
- EF/SASU2e7K6iiNAdEam4HWFrJ5vNdCkRazzPqkpK1NwmqIcLc25qy9sgqG1rqQrJNG7
- XFoixhFZgcGsFrvPtzSLhEINKdFfuQdKnVAj34shYrNP0JvZn3/zq5vB3ytsTsRP/aoc
- ekW8J3PmzkNjJ9xtKwzj/jNxeerDwlQSnWazJHmDMao0yxYea0N0TYG67vmdg1/a04AC
- 7k8Q==
-X-Gm-Message-State: APuU4Z93b2676d1Xns4rTC+r1OYroi+pZ7Ye2xAFxS4LqXIPtJxibFWp
- o3QIsA3Yi/0N8KeaO5jm81Qc0jwIPDGq8tDAdHLFTIIuNe4rhKaPWAMd04fQgZ37
-X-Gm-Gg: AZFdTZcFa5UBi4+TC6Yp9A85zaVeqaDQycPPpQJfRJXEF/IRf3KIjscihNNxVxdGMbk
- 3x+3FEVnzNMdKOVGW88IQyiAIPLDRPJaVzTPHKw1xt5JDybnartxBHNR7oS4+63h9l8TdxC5Ems
- O5lKB0IiAj87Ko2lNcQzxClAWsXG3bGkPlG4TsCwdtj41tjiWaP19mi0LLpnT0yBbnHprBn54+z
- t6WY3Hq8u8COUncxmg/Eko6WMVhc3c+0tquyg10Dgzeks2LhchChg5F/dzWEaBTzV7xVIhpnNJ+
- 9638Mkfrs7H9nJeaAl342QDKQMDETZ3oVEtA+3JWaY2bUX8BHfvD3nv0StB2DlrxDO03IdSqyEj
- m8+E4uxwt/OwpmvvbwkibxRs4k/9rTJBzItpH4qZQ4iCfWg8kV4YQmjJgmRzuUN+9M/OcCOdB8L
- GZlmVzLbShSGvV4MOUWTrPsgRslSU6Gor0gsHGaxjdestyL/BGdiMJRRXEgKBxbwq9ZZ/izjbI0
- DGYbrCKPHvtNEfeU7Cq/50JNndsAUk6hpz04/MvSyzYzm9jdf5sAs0e64e18hbo6cdydyVtol95
- pCR0bTszfyb3v9+3wU3r0b0UcxXbFJWK1zku2fBSZ6hJ4MUpqSPNwwLA6CG2HPTwWT4LJvibcFr
- SKiBlZjLkwMlUPvTlVw64WhdOHg/x20OQ6Au2FTH55ex6IPg9gbeB1BG28l5u3F0IRj2zSd1ZSD
- /zKOLjrBxUgw==
-X-Received: by 2002:a05:600c:34c9:b0:4a3:5d64:df91 with SMTP id
- 5b1f17b1804b1-4bb88810d28mr241672605e9.18.1795427640155; 
+ bh=AEtGhzAZG8U9RoukLC8y7AiFPfzVn1KdVHXOnS21jMY=;
+ b=q3UhBjEKqzhHbVUidTJ8xEy2NddNwGzJSpRTlQ6XaeOyy6KTxBVKeyuL96vdA2dZuS
+ fInt748yUJButLz3M5NTb/l0mYBcbN/BljiUVVowwUs1N8WHrMFQ4xr5uwaYqZlYO0/H
+ nNw91ty9Z0HhZXHwyIldvggVzh2MaZ/kC1PDN4qX3gyv4wrInBDDUqlPgfO9dT+K0zYF
+ mHGDvy/by0dzBrh1DP16L/A4Xw1CLe7RB7G4n79IT1Byeqz1w2HSNhKMPmaDlSUPpDnw
+ LGzK/mEWXnFoMAbXDPN0tbaPbLpUj5qf85eVNcWIZmDtor917eJbD1sZ5XQ8Ri+Uu5up
+ UGVA==
+X-Gm-Message-State: APuU4Z9AQmc7Qut2jC8JDZawSPFdoDfR2CguD2ifqu0wyBV8URBnpqyU
+ 0HokyC9L+bvmN7ti4SWl2zNB/gfjrXJYSkHTffVca98921/TBz/SdEcxHDRNLmHE
+X-Gm-Gg: AZFdTZcJAC7fysonDXGSnpYO/O4tDYa4krLiIHGrUE4C95NM6DTnTXO/j9Z8faSQYoY
+ FWHClTt3i0YDvcitCYvQQ793DktQxXJL2GfES/bvi+LoVn6m2UDbQ3LDbFreJ/FJFa9a3VdyNiw
+ 6Aj1EQu1zm5FMr4AaizRwaiu++Z6qofGyM7vhSiPOT7tqHnxZNo9qTwB/5XSIfQSjYUC5rXn14L
+ psBoKXMEBrwmZQBMOXPRnZXX7KZDAZXLX8mJFRqC0I7w7rBvL/Sk0ickP0SFJ2Sh+CukFDE5wPW
+ 3sIvCfbx6yyBwG5Gg2R1tkV4g2R8jMLhuN92YkrVljcKEGt6eNGBs4dB2RzZ/nUmrlc/6iOfDXX
+ 4E5WCa6kfT3zGS6ZfAS/XkdZMNAHfDW5qT8xZ5zrqhmjwVJI7kag2FeAVrkFwGrK89aCqYNgNcz
+ PfrDgvoosP4nJ0gBtZT4DJtH0doeXnoQho4zvjSdbO7liFW2Ebgpxh+Rh24lWa/vIVIRTGmfuSr
+ tojH5YRCLnky+jpBMfoZDkYwqLhzt+CEHK/Edn6ed2OoR+w/IxvBXh5LfnwZfmGlMOqOIV7af9F
+ AOv7rTu65r9n3j9eq9gedtZ16ZhPLJCW7MV+1QdG4hvPLO0B+18K1uctiHlWsh8Nj0Geo4i5DQ3
+ 6VWilozTDg42P2XtYkLR1dcu2Qgdy8lZTJgZdYfPB/l/407GEjhPNZbvoLnJ8bsQcqS5/Z8z9IA
+ u6MST8VFV14A==
+X-Received: by 2002:a05:600c:3b8a:b0:4a3:59c9:a754 with SMTP id
+ 5b1f17b1804b1-4bb8892da25mr224113715e9.22.1795427640862; 
  Mon, 23 Nov 2026 01:54:00 -0800 (PST)
 Received: from KORLIN44614.barco.com (d528f5fde.static.telenet.be.
  [82.143.95.222]) by smtp.googlemail.com with ESMTPSA id
- 5b1f17b1804b1-4bb9067846esm186202105e9.4.2026.11.23.01.53.59
+ 5b1f17b1804b1-4bb9067846esm186202105e9.4.2026.11.23.01.54.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 23 Nov 2026 01:53:59 -0800 (PST)
+ Mon, 23 Nov 2026 01:54:00 -0800 (PST)
 From: Thomas Devoogdt <thomas@devoogdt.com>
 To: buildroot@buildroot.org
 Cc: Adrian Perez de Castro <aperez@igalia.com>,
@@ -123,14 +123,14 @@ Cc: Adrian Perez de Castro <aperez@igalia.com>,
  Joseph Kogut <joseph.kogut@gmail.com>,
  Thomas Devoogdt <thomas@devoogdt.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Mon, 23 Nov 2026 10:53:34 +0100
-Message-ID: <20261123095339.1566394-6-thomas@devoogdt.com>
+Date: Mon, 23 Nov 2026 10:53:35 +0100
+Message-ID: <20261123095339.1566394-7-thomas@devoogdt.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261123095339.1566394-1-thomas@devoogdt.com>
 References: <20261123095339.1566394-1-thomas@devoogdt.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v1 06/11] package/libsrtp: bump to version 2.8.1
+Subject: [Buildroot] [PATCH v1 07/11] package/seatd: bump to version 0.9.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -143,45 +143,107 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-16.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
-	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Release:
-https://github.com/cisco/libsrtp/releases/tag/v2.8.1
+Release tag:
+https://git.sr.ht/~kennylevinsen/seatd/refs/0.9.3
+
+The new libseat backend calls fork(), so the package now needs an MMU.
 
 Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
 ---
- package/libsrtp/libsrtp.hash | 2 +-
- package/libsrtp/libsrtp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/seatd/Config.in   | 4 ++++
+ package/seatd/seatd.hash  | 2 +-
+ package/seatd/seatd.mk    | 2 +-
+ package/weston/Config.in  | 5 +++--
+ package/wlroots/Config.in | 5 +++--
+ 5 files changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/package/libsrtp/libsrtp.hash b/package/libsrtp/libsrtp.hash
-index 89a5820f496..e3b01ead59e 100644
---- a/package/libsrtp/libsrtp.hash
-+++ b/package/libsrtp/libsrtp.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  d123dcff5c56d4f1a9006f2b311ea99a85016cbf3bb24b1007885d422237db85  libsrtp-2.8.0.tar.gz
-+sha256  ef5569220749529d778013aae1178391d972570a2b4f7288dda22effa875b07c  libsrtp-2.8.1.tar.gz
- sha256  8e19d42a1eec9561f3f347253ddf2e385c55f392f025bb0fd41b88dbf38db5ae  LICENSE
-diff --git a/package/libsrtp/libsrtp.mk b/package/libsrtp/libsrtp.mk
-index 076270cbf92..7f3f91516d2 100644
---- a/package/libsrtp/libsrtp.mk
-+++ b/package/libsrtp/libsrtp.mk
+diff --git a/package/seatd/Config.in b/package/seatd/Config.in
+index 5473b237cef..c7ea750f377 100644
+--- a/package/seatd/Config.in
++++ b/package/seatd/Config.in
+@@ -1,5 +1,6 @@
+ menuconfig BR2_PACKAGE_SEATD
+ 	bool "seatd"
++	depends on BR2_USE_MMU # fork()
+ 	select BR2_PACKAGE_SEATD_BUILTIN \
+ 		if !BR2_PACKAGE_SYSTEMD_LOGIND && !BR2_PACKAGE_SEATD_DAEMON
+ 	help
+@@ -21,3 +22,6 @@ config BR2_PACKAGE_SEATD_DAEMON
+ 	  Build the seatd daemon and support for it inside libseat.
+ 
+ endif
++
++comment "seatd needs a toolchain w/ MMU"
++	depends on !BR2_USE_MMU
+diff --git a/package/seatd/seatd.hash b/package/seatd/seatd.hash
+index ce70480d502..0df25d347fd 100644
+--- a/package/seatd/seatd.hash
++++ b/package/seatd/seatd.hash
+@@ -1,5 +1,5 @@
+ # Calculated locally
+-sha256  819979c922a0be258aed133d93920bce6a3d3565a60588d6d372ce9db2712cd3  0.9.1.tar.gz
++sha256  302564d54d8e28191fadfd734f2675ecb0c9e0615a58011b89ef15dfa4dbaa96  0.9.3.tar.gz
+ 
+ # License files
+ sha256  282a494803d666616bd726e0279636b5f6a31387ae19a707459074050f2600d3  LICENSE
+diff --git a/package/seatd/seatd.mk b/package/seatd/seatd.mk
+index 69be691cf67..b9989a660ef 100644
+--- a/package/seatd/seatd.mk
++++ b/package/seatd/seatd.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSRTP_VERSION = 2.8.0
-+LIBSRTP_VERSION = 2.8.1
- LIBSRTP_SITE = $(call github,cisco,libsrtp,v$(LIBSRTP_VERSION))
- LIBSRTP_INSTALL_STAGING = YES
- LIBSRTP_LICENSE = BSD-3-Clause
+-SEATD_VERSION = 0.9.1
++SEATD_VERSION = 0.9.3
+ SEATD_SOURCE = $(SEATD_VERSION).tar.gz
+ SEATD_SITE = https://git.sr.ht/~kennylevinsen/seatd/archive
+ SEATD_LICENSE = MIT
+diff --git a/package/weston/Config.in b/package/weston/Config.in
+index decabcfc76e..126a9df4cea 100644
+--- a/package/weston/Config.in
++++ b/package/weston/Config.in
+@@ -1,10 +1,11 @@
+-comment "weston needs udev and a toolchain w/ locale, threads, dynamic library, headers >= 3.0"
++comment "weston needs udev and a toolchain w/ locale, threads, dynamic library, MMU, headers >= 3.0"
+ 	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_0 || BR2_STATIC_LIBS || \
+-		!BR2_ENABLE_LOCALE
++		!BR2_ENABLE_LOCALE || !BR2_USE_MMU
+ 
+ config BR2_PACKAGE_WESTON
+ 	bool "weston"
++	depends on BR2_USE_MMU # seatd
+ 	depends on BR2_PACKAGE_HAS_UDEV
+ 	depends on !BR2_STATIC_LIBS # wayland
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland
+diff --git a/package/wlroots/Config.in b/package/wlroots/Config.in
+index 6d2992cf2c6..302b2e2f650 100644
+--- a/package/wlroots/Config.in
++++ b/package/wlroots/Config.in
+@@ -4,12 +4,13 @@ comment "wlroots needs udev, EGL, OpenGL ES and GBM support"
+ 		!BR2_PACKAGE_HAS_LIBGLES || \
+ 		!BR2_PACKAGE_HAS_UDEV
+ 
+-comment "wlroots needs a toolchain w/ threads, dynamic library"
++comment "wlroots needs a toolchain w/ MMU, threads, dynamic library"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+-		BR2_STATIC_LIBS
++		BR2_STATIC_LIBS || !BR2_USE_MMU
+ 
+ config BR2_PACKAGE_WLROOTS
+ 	bool "wlroots"
++	depends on BR2_USE_MMU # seatd
+ 	depends on !BR2_STATIC_LIBS # wayland
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libdrm, wayland
+ 	depends on BR2_PACKAGE_HAS_UDEV # libinput
 -- 
 2.43.0
 
