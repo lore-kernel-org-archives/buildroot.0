@@ -2,137 +2,145 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B31D606A321
-	for <buildroot@archiver.kernel.org>; Wed, 25 Nov 2026 16:22:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D584B606A327
+	for <buildroot@archiver.kernel.org>; Wed, 25 Nov 2026 16:41:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=qIiYEKys;
-	dkim=fail reason="signature verification failed" (1024-bit key, unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google header.b=kOdh8fzi
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=dQfGX3x+;
+	dkim=fail reason="signature verification failed" (1024-bit key, unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google header.b=lXGIZmku
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E44184081B;
-	Wed, 25 Nov 2026 16:22:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ABED240816;
+	Wed, 25 Nov 2026 16:41:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BK85SpJ6GzWT; Wed, 25 Nov 2026 16:22:22 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org CEC7940838
+ id UyQm6hEOSXXm; Wed, 25 Nov 2026 16:41:39 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org A485B4081A
 Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795623741;
-	b=B/H4i/lC0Lyu8Iu6WrqMnRpXciTTUGfDmhuUvAaA25h+6LKT+MahJO9aqXeCATdc59Yy
-	 oEjQsf5HLBtAIPAR+VLaSNNXHpNf7nC4187UvHdQHM+IoxE6bFwU8/QszH9HmQBG36rys
-	 XS0sKbmxSxsC31IaUSllyDFx03ny44l7zecISySt3K+XsAvDnrczNRCHu3vVDrOiNazWi
-	 LSYNdrP6oZSWMOAIN5Tg8HsKINbtExmkuHEGB3CZikH/70OHS11DAOgMxUbq6CFOy9NVk
-	 uamE1FhWO22vuR7bwKRo3nPNCjI5iOuJ93PCfB7H9/d+4YB3gjk5/9CZiubBjRyJVEQ==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795624899;
+	b=dmbyqqXncZ8rWV65dSczNJmxdvO1Bauv8h95uhqUQnih8i9TENOesXg3Z8PrMF9uhD36
+	 Hqxd07UEEqrW3lB8z7w/xONzczEJN5a7b2A4itJCYO0yNBZ4dxlGtsbHUlwjWJ+ZyfcK7
+	 vNZNBj2W3ylIoDjDzaVINlrDvysNvuxg9WblT4NoEKPaY62Gu0FUXZJolmFKAxbfUTz2Q
+	 lccje6cxudBSLoD3b+jRVsWMTYRblD/X10EfGLzVj0ASCsejfsznDLL5C/5QBNVc0CReJ
+	 Ylni3iFwyBM4/Ye8S3W682vwo8UafLcTFcjjnO6kkSRPLqYnSRtELQLYP0rUxtKf9Vg==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795623741;
+	c=relaxed/relaxed; t=1795624899;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
 	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:MIME-Version:References:In-Reply-To:From:Date:
-	 X-Gm-Features:Message-ID:To:Cc:Subject:X-BeenThere:X-Mailman-Version:
-	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
-	 Sender;
-	bh=OIOuPvlektTjKOFSvE0vCkUr5ElLOeYWVTuDEbJTwh8=;
-	b=Ms1y0PczDBe6dozRSjEY4QWS7nffhLaMJLnc48TgqLLSnF+AOix3461yeeEfg+oPD8wR
-	 BMSUG0ONBIox7Q52M2EoNH/x8YHh6m6Ci3Fte8u5OYj7/Rex4ELzWjopz7yUqGOxxhJ8E
-	 b85m/z+VqcDsEK2Luh12EYgQPVWIcZJeqCf8oU4bmPLUo6hDiiJsM/8NsDdSxtTg3dgoE
-	 xo+OST5W0M8WCn4rNkjHaiklwogum+5zCJwoMRy0HqwKJ2hox/+fPg2dG0SLcRZab2ifG
-	 OFcLBoCSjwS+ufYYGyby7ZLX9LDv1UgRiowLTyR880bna4F5C9sSIHr6jBkoAonwogw==
+	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
+	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=adpYt3+PrxnFr4UFWoqVX2p7+wHDT4VG3afDn1Gx8lA=;
+	b=nTUesqx82H/H1ZH4qb+wPYmLRU+r929nesNtVgQty137VY/V1r2AfIs+sXl1yRzIce7c
+	 CJCcysGNTL2cF3V6y33KodWszfCkZp/fO7kUc7SE+pH0+sQ2KCiVNvyP2I7raAKepHOsa
+	 zDoQiZ+3/4+s9tFmo2ScczWUMk/kJlXl1dI6yhN5uruISr8EyQMuxi6+7GBQhjlrFAUJj
+	 BhdKKrWkXkPk0Tjvrk9opuDbE0CCTQQNuqzCaGG/IRn9eOYTm2PAMpFXuZJAte0uRwS/a
+	 zKQDsGCzIgeLVvu9e1IW+rSFi8JJj+l2rrtKSIEO+vRLguJka+DLywsiCpkRESLtH+w==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795623741;
-	bh=OIOuPvlektTjKOFSvE0vCkUr5ElLOeYWVTuDEbJTwh8=;
-	h=References:In-Reply-To:From:Date:To:Cc:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=qIiYEKysVcastf37S1xxqXwc1PDbLQvL2NCdRoOusel4Efi4LldAtyVBxXJKyaM2u
-	 tfspAc9OYlRYy3Ke18wdLmmxVz7i+wxvwZg4KxYQBS55SE6C4EW1bkEsNqRkigt5mv
-	 7fFOe+uzDFDxtxAaesegpwEqJXwtqLozbNBcUs54TUgh6jKao6Wxr7whZVRjJvUU/T
-	 kiZPH4ZKNk66rpP2/S8XTFwl6MVGvLQ5ScjQERRkB9tMtH14NlqI+U7B1tK8Xo0Rcl
-	 yqo0oWhtotmVAISYf73A2g45x053lvzYt+4jvEL4Tpqpt1nnhhg/H3F9DF24Yzk7Q6
-	 yE77cpsbvfk9g==
+	s=default; t=1795624899;
+	bh=adpYt3+PrxnFr4UFWoqVX2p7+wHDT4VG3afDn1Gx8lA=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=dQfGX3x+Z4l5W6vBNoBy0fsGJtqPrNYJ5VxDVkjVCfXH74DmDnoy65wcBFRJXn7fO
+	 RL2YoZqNKnBptqN6ZJu7CjIljWiWI2zSvnSexr+XYbQkWsKG8W+GcnNQrGxRhe+Clv
+	 skbiv39EnOincAChcUdK988AURN84k1hm+202pY8aFjiT72x8yyYk01eBn5zJvdolg
+	 3r75TanfcLmP8IGvqDSSPRz2GmU4bFn77h3gttxSK1JsZ/gSY1ZfBt4vcNmJ3wuMd7
+	 t5kdpHg/viOSYh/Do/OWqkVy74PUfSjGWjlR3MgoAXPPiIJ44wbAvDvrKg+GVmqPzj
+	 YxcbOySghBxiQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CEC7940838;
-	Wed, 25 Nov 2026 16:22:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id F1E2532D
- for <buildroot@buildroot.org>; Wed, 25 Nov 2026 16:22:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A485B4081A;
+	Wed, 25 Nov 2026 16:41:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 09AF232D
+ for <buildroot@buildroot.org>; Wed, 25 Nov 2026 16:41:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E394480E36
- for <buildroot@buildroot.org>; Wed, 25 Nov 2026 16:22:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E3F9340111
+ for <buildroot@buildroot.org>; Wed, 25 Nov 2026 16:41:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KBEmhrWWeuTp for <buildroot@buildroot.org>;
- Wed, 25 Nov 2026 16:22:19 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org DF22180E31
-Authentication-Results: smtp1.osuosl.org; arc=pass header.oldest-pass=0
- smtp.remote-ip="2607:f8b0:4864:20::112a"
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3OGBp4egOWbr for <buildroot@buildroot.org>;
+ Wed, 25 Nov 2026 16:41:37 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org A1EE8400CB
+Authentication-Results: smtp2.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::335"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::112a; helo=mail-yw1-x112a.google.com;
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org; dmarc=pass (p=none dis=none)
+Authentication-Results: smtp2.osuosl.org; dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-Authentication-Results: smtp1.osuosl.org; dkim=pass (1024-bit key,
+Authentication-Results: smtp2.osuosl.org; dkim=pass (1024-bit key,
  unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=kOdh8fzi
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com
- [IPv6:2607:f8b0:4864:20::112a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DF22180E31
- for <buildroot@buildroot.org>; Wed, 25 Nov 2026 16:22:18 +0000 (UTC)
-Received: by mail-yw1-x112a.google.com with SMTP id
- 00721157ae682-8b4c685c751so52853577b3.1
- for <buildroot@buildroot.org>; Wed, 25 Nov 2026 08:22:18 -0800 (PST)
+ header.a=rsa-sha256 header.s=google header.b=lXGIZmku
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A1EE8400CB
+ for <buildroot@buildroot.org>; Wed, 25 Nov 2026 16:41:36 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-4bb70074ab2so64843505e9.0
+ for <buildroot@buildroot.org>; Wed, 25 Nov 2026 08:41:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1795623737; x=1796228537;
+ d=amarulasolutions.com; s=google; t=1795624894; x=1796229694;
  darn=buildroot.org; 
- h=content-transfer-encoding:content-type:cc:to:subject:message-id
- :date:from:in-reply-to:references:mime-version:from:to:cc:subject
- :date:message-id:reply-to:content-type;
- bh=S9va1kHAy7/RT9bAEaf3ZGe3DvjolN3VHStPuNaIjUA=;
- b=kOdh8fziO+PbQQJ7UZonpaTdfk/Do6+FWr+7bz4jP/UiqE589ZbtaFic3w8Spege74
- 9CbnvbhaXz5UouL0eAhityImSOzGd4mraWjyW8oW40VcJwpXPrE11HRqvNXsq6QVA2eO
- Pm7RR1kw6WOeNkoupA8Bvt0lx08GsekDULyFc=
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=P1FtzywzG5/iyb9km2nEJSIddCA9ETD1D2vSh9gktdg=;
+ b=lXGIZmku98dT8j0wVMxqjnyCPMHRoKVse/Q9iJyUIWz8Pzq2qwa9G23w3cHIEffXIX
+ rjkcZCvCb+gI8tZMJgc4fphnGMe49cweVjgFtLF1HK5SMCewQnLe9HMaHNLNRqLplllM
+ w3fVN0RbjqOx7j5xTTbhSw/eAdwPCpccGJmUI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1795623737; x=1796228537;
- h=content-transfer-encoding:content-type:cc:to:subject:message-id
- :date:from:in-reply-to:references:mime-version:x-gm-gg
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
- :content-type;
- bh=S9va1kHAy7/RT9bAEaf3ZGe3DvjolN3VHStPuNaIjUA=;
- b=wAUt3K745Gq0prBs78HiUptL9iVaZrVcZXEe1/3QTxHuX4aan1NPDrRp8DG/0w4KV/
- Q+W6yD9CduFiH5iPehJ4PnUSlj3vCQK94HX4eNFCbmXIFY0p3wwdK2oqdeSzgz7IeoXU
- uzsHq1OeGMvYW2pasbQg/eO2DwMjdrTYoOApykO2R7qq2mxyBfrclLM54k8QbkI6MUXA
- RjccM/vaBAk4ka1/tvyolLJjdyrJenAF5z0eiJJ1Kx6SN2i1ZuDTvPuZSq2RxFrVYYjl
- /2VPxJiepyANxczyK8XnR96PQh9NJ4u3DUBxvMXfnFTQImnKhy6qCG75hAE2J9okzsXE
- HKgA==
-X-Gm-Message-State: APuU4Z/rYf3NvdayU2fVvzY2ODy1Mh6f/1OjIMLEvxXHFy/NENxC5ErN
- a2bsNT0QmciS3Ts51RKRVtorgjX9alhRD3SjTkRG9UOklwMcakmUp1YB22KXRv/FJMJS91U09RL
- 6Km1StVDda1CgfqZlYZJdRjzXXniNbvAUyhwz0tgL2vO1z1YVJjJlAj4=
-X-Gm-Gg: AZFdTZdYeTD5GHjr12XpKFBapAP0I/pgTLSdSMYT6/au69UdEyBhpErUY6sz+W1XC+M
- uEujkyMLR697/5MeK8rHIUo0Su6+EtMOuUyX0nDLRIQVLPM945uWeXfhLTJOVBzoICjVo/hvPtm
- DByxTNGjhrft5NlCukz8qR1iRCz7oEwg/3ukxgx50xw183SfkKS9AYM1Rs+DBi1VSA/2TEu3Oo9
- aQU5+7VEs9Fm+WqP8y5SoQFFPJ0vdZ2ceI+y7GllZjzzkgG9VExAmKxXr8WOURBjsI5CyUGuFaL
- kDz9SxMHgaYId9aB84TEkB+DAEF0FY4GBnJCbRs2Q3r0u1mfy6uOe+8VZ1TNjNFVF9LVDTQ6VCa
- juSZrzSg2h62n9rY6WSEky6Szv68q092IRtEWq/c6goLg5Ex+8zsIpvgSx+hQMeTDiA==
-X-Received: by 2002:a05:690c:c4e9:b0:8b4:d26a:aa7f with SMTP id
- 00721157ae682-8b520435e46mr66661507b3.34.1795623737439; Wed, 25 Nov 2026
- 08:22:17 -0800 (PST)
+ d=1e100.net; s=20260707; t=1795624894; x=1796229694;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=P1FtzywzG5/iyb9km2nEJSIddCA9ETD1D2vSh9gktdg=;
+ b=LSGFh0805/tpq4q9oaZPd1Nk+HhEZQtARARtjU/I53yW99Nij3Mexe87xsZpQPT3k3
+ +MbIEfP4DRWe/rMiU9JefQrsGHEK52zHMEi9rOIHmUR/6bDC2eRqjkD1ZNZtAjFzQ7Xi
+ vcoC7VREozWIZi9PlOoAafMH8mQnljpmhPz4QL6HX6zE1R0GiJ42vMo9Gutay+ssFY9e
+ s6TGuYepNgTU6s3Xm1D3ZCkPtJ4WrzJfaKOW3qEfYezMoyooqcSxT8QjUVkLdkxLyDf6
+ RBR9vXe04mxtp60k4QSlI8qyKZOO8V1YdgH8MEpD/z34sPZD+jykHtJrQdtc2JXdO+PD
+ i6fw==
+X-Gm-Message-State: APuU4Z81W5a6cSFG2LByWXjdMzPrpBFAiuq9raQEPsbSblht4NSheuOz
+ hCZcq0fuXktfFwZgoeiTZE9S/AQHiqdYyyUua4WhDy7yrmVzuyQG0G3EkpxNHUm5BHEDfsudzBk
+ o65qt
+X-Gm-Gg: AZFdTZfIhv49iZtQzhRwi8D2CRcL60zoqidLJTY8h7ymW1lU6BYjQOpEZSK3VUyKMGB
+ bkeEuFKjpR1mgLBOXYuaMwAit4kxMv6UeHZ/kFPi6K65obkgpzOdCFBiybufyBZEfd7v97E6Q4W
+ Y3s+VgcP341D2s4GW1NoRAf0Yalbv6EIXMduFCplnt699SzTuXB8lcxgFgSLe8nzAFdT7LSa6Le
+ kfDmV8YypunNZWN/+PHGIm42ArptTOUg5LtkO+svQ4NsidV/6D0hL2ew3qO8DgS+VxnJFoAPfFf
+ DkwFb5grHAXy9t6B/EW/26VtMX5FwbaOdEeoCuUjKYVJfTWWgKaUlHxbs9oo1nnEA2z8ixwlMR+
+ HdYlTlrKk8wR3NJAsS3X+n3/YyBjL+357L8NpjfKltBYRxSxp+wBQdrs32k7PVG0fLeYN/tRuXQ
+ UYV0d4IdlG8MhnMWXl1YzOmVGbtWQDacFQUjmeGgi8UGyhYYu+JqXbULG4Lzr+PizMzjBsWBopw
+ Ah+71qARgW3UH4VSkccds9aIrNhKJvUmSEaTgPtSXaAfqMeIAYHIEkuIoX+5ksBA7BZj21+HJb+
+ M9whA1dSjMtI7nkxvAGp3oDIwfOTkJ3oZjInl4O9VHqy0dgK7ui4Tn6t/Z2N1zeeU2Dmd4CLK1+
+ VAeQKrzNJVGY0pZYUYrGtoSoEeFZJYAVFjvtLdxSDmY3NABQftMbK1xvgS/dK8OrfaLk0WewJNP
+ gm3EOc5vh/1XuroOgAyeqQ
+X-Received: by 2002:a05:600c:674b:b0:4bb:6847:791f with SMTP id
+ 5b1f17b1804b1-4bb8880f267mr360295035e9.7.1795624894385; 
+ Wed, 25 Nov 2026 08:41:34 -0800 (PST)
+Received: from dario-ThinkPad-P14s-Gen-5.amarulasolutions.com
+ (host-79-14-29-58.business.telecomitalia.it. [79.14.29.58])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-4bb9067a0e6sm247988765e9.4.2026.11.25.08.41.31
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 25 Nov 2026 08:41:33 -0800 (PST)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To: buildroot@buildroot.org
+Cc: Dick Olsson <hi@senzilla.io>, Sergey Matyukevich <geomatsi@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Kory Maincent <kory.maincent@bootlin.com>,
+ linux-amarula@amarulasolutions.com, michael@amarulasolutions.com,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date: Wed, 25 Nov 2026 17:41:22 +0100
+Message-ID: <20261125164127.863713-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-References: <20261125161404.859000-1-dario.binacchi@amarulasolutions.com>
- <20261125161404.859000-2-dario.binacchi@amarulasolutions.com>
-In-Reply-To: <20261125161404.859000-2-dario.binacchi@amarulasolutions.com>
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Wed, 25 Nov 2026 17:22:06 +0100
-X-Gm-Features: Aa3M54r-z6_T7o3sdnqc-crnQVwyvhC4HJGP-IsoWbyZ6k9b31jJnYNXM86uAk8
-Message-ID: <CABGWkvoyHPrYFhp_U0GMeWYQ+vhd-Qo4Onink7yoUSrA+npa9A@mail.gmail.com>
-To: buildroot@buildroot.org
-Cc: linux-amarula@amarulasolutions.com, Michael Fischer <mf@go-sys.de>
-Subject: Re: [Buildroot] [PATCH v7 1/5] package/sdl3: disable m68k builds
+Subject: [Buildroot] [PATCH v2 0/5] Add support for the STM32MP257F-EV1 board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -142,60 +150,103 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS
-	autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-16.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_PATCH,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,
+	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-SGkgTWljaGFlbCwKCmFkZGluZyB5b3UgaW4gQ2MgYXMgdGhlIHNkbDMgbWFpbnRhaW5lciBpbiBE
-RVZFTE9QRVJTLCBJIG1pc3NlZCB5b3UKd2hlbiBzZW5kaW5nIHRoZSBzZXJpZXMuIFRoaXMgcGF0
-Y2ggZGlzYWJsZXMgc2RsMyBvbiBtNjhrLgoKVGhhbmtzIGFuZCByZWdhcmRzLApEYXJpbwoKT24g
-V2VkLCBOb3YgMjUsIDIwMjYgYXQgNToxNOKAr1BNIERhcmlvIEJpbmFjY2hpCjxkYXJpby5iaW5h
-Y2NoaUBhbWFydWxhc29sdXRpb25zLmNvbT4gd3JvdGU6Cj4KPiBTRExfYWxpZ25tZW50X3Rlc3Qg
-aGFzIGEgc3RhdGljIGFzc2VydGlvbiB0byBlbnN1cmUgdGhhdCBpdHMgc2l6ZSBpcwo+IDIgKiBz
-aXplb2Yodm9pZCAqKSwgYXMgU0RMIHJlbGllcyBvbiB0aGlzIGxheW91dCBmb3IgaXRzIEFCSS4K
-Pgo+IFRlc3RpbmcgdGhlIFNETDMgcGFja2FnZSBieSBydW5uaW5nOgo+Cj4gICAkIHV0aWxzL3Rl
-c3QtcGtnIC1wIHNkbDMgLVQgYm9vdGxpbi1tNjhrLTY4MDQwLXVjbGliYwo+Cj4gcmFpc2VkIHRo
-ZSBmb2xsb3dpbmcgZXJyb3I6Cj4KPiAgIEluIGZpbGUgaW5jbHVkZWQgZnJvbSBzcmMvbGlibS9r
-X3Npbi5jOjE6Cj4gICBpbmNsdWRlL1NETDMvU0RMX3N0ZGluYy5oOjIzMDo0MjogZXJyb3I6IHN0
-YXRpYyBhc3NlcnRpb24gZmFpbGVkOiAic2l6ZW9mKFNETF9hbGlnbm1lbnRfdGVzdCkgPT0gKDIg
-KiBzaXplb2Yodm9pZCAqKSkiCj4gICAgIDIzMCB8ICNkZWZpbmUgU0RMX0NPTVBJTEVfVElNRV9B
-U1NFUlQobmFtZSwgeCkgX1N0YXRpY19hc3NlcnQoeCwgI3gpCj4gICAgICAgICB8ICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXn5+fn5+fn5+fn5+fn4KPiAgIGluY2x1
-ZGUvU0RMMy9TRExfc3RkaW5jLmg6MTE4NzoxOiBub3RlOiBpbiBleHBhbnNpb24gb2YgbWFjcm8g
-J1NETF9DT01QSUxFX1RJTUVfQVNTRVJUJwo+ICAgIDExODcgfCBTRExfQ09NUElMRV9USU1FX0FT
-U0VSVChzdHJ1Y3RfYWxpZ25tZW50LCBzaXplb2YoU0RMX2FsaWdubWVudF90ZXN0KSA9PSAoMiAq
-IHNpemVvZih2b2lkICopKSk7Cj4KPiBTaW5jZSB0aGUgbTY4ayBBQkkgcmVzdWx0cyBpbiBhIGRp
-ZmZlcmVudCBzdHJ1Y3R1cmUgc2l6ZSwgZGlzYWJsZSBtNjhrCj4gYnVpbGRzLgo+Cj4gRml4ZXM6
-IDJkZDEzZTMyOGYxMSAoInBhY2thZ2Uvc2RsMzogbmV3IHBhY2thZ2UiKQo+IFNpZ25lZC1vZmYt
-Ynk6IERhcmlvIEJpbmFjY2hpIDxkYXJpby5iaW5hY2NoaUBhbWFydWxhc29sdXRpb25zLmNvbT4K
-PiAtLS0KPiAgcGFja2FnZS9zZGwzL0NvbmZpZy5pbiB8IDggKysrKysrKysKPiAgMSBmaWxlIGNo
-YW5nZWQsIDggaW5zZXJ0aW9ucygrKQo+Cj4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uvc2RsMy9Db25m
-aWcuaW4gYi9wYWNrYWdlL3NkbDMvQ29uZmlnLmluCj4gaW5kZXggN2JjZTRjZWFiYTljLi5mNWJh
-OGI2YTAxNmIgMTAwNjQ0Cj4gLS0tIGEvcGFja2FnZS9zZGwzL0NvbmZpZy5pbgo+ICsrKyBiL3Bh
-Y2thZ2Uvc2RsMy9Db25maWcuaW4KPiBAQCAtMSw1ICsxLDEyIEBACj4gK2NvbmZpZyBCUjJfUEFD
-S0FHRV9TREwzX0FSQ0hfU1VQUE9SVFMKPiArICAgICAgIGJvb2wKPiArICAgICAgIGRlZmF1bHQg
-eQo+ICsgICAgICAgIyBJbnZhbGlkIHNpemUgb2YgdGhlIFNETF9hbGlnbm1lbnRfdGVzdCBzdHJ1
-Y3Qgb24gbTY4awo+ICsgICAgICAgZGVwZW5kcyBvbiAhQlIyX202OGsKPiArCj4gIGNvbmZpZyBC
-UjJfUEFDS0FHRV9TREwzCj4gICAgICAgICBib29sICJzZGwzIgo+ICsgICAgICAgZGVwZW5kcyBv
-biBCUjJfUEFDS0FHRV9TREwzX0FSQ0hfU1VQUE9SVFMKPiAgICAgICAgIGRlcGVuZHMgb24gIUJS
-Ml9TVEFUSUNfTElCUwo+ICAgICAgICAgZGVwZW5kcyBvbiBCUjJfVVNFX1dDSEFSCj4gICAgICAg
-ICBkZXBlbmRzIG9uIEJSMl9UT09MQ0hBSU5fSEFTX1RIUkVBRFMKPiBAQCAtNzgsNCArODUsNSBA
-QCBjb21tZW50ICJPcGVuR0wgRVMgc3VwcG9ydCBuZWVkcyBhbiBPcGVuR0wgRVMgcHJvdmlkZXIi
-Cj4gIGVuZGlmCj4KPiAgY29tbWVudCAic2RsMyBuZWVkcyBhIHRvb2xjaGFpbiB3LyBkeW5hbWlj
-IGxpYnJhcnksIHRocmVhZHMsIHdjaGFyIgo+ICsgICAgICAgZGVwZW5kcyBvbiBCUjJfUEFDS0FH
-RV9TREwzX0FSQ0hfU1VQUE9SVFMKPiAgICAgICAgIGRlcGVuZHMgb24gQlIyX1NUQVRJQ19MSUJT
-IHx8ICFCUjJfVE9PTENIQUlOX0hBU19USFJFQURTIHx8ICFCUjJfVVNFX1dDSEFSCj4gLS0KPiAy
-LjQzLjAKPgoKCi0tIApEYXJpbyBCaW5hY2NoaQpTZW5pb3IgRW1iZWRkZWQgU29mdHdhcmUgRW5n
-aW5lZXIKTS4gKzM5IDMyOCAwNjI1MjQ2CmRhcmlvLmJpbmFjY2hpQGFtYXJ1bGFzb2x1dGlvbnMu
-Y29tCuKAleKAleKAleKAleKAleKAleKAleKAleKAleKAleKAleKAleKAleKAleKAlQpBbWFydWxh
-IFNvbHV0aW9ucyBTUkwKIFZpYSBGZWxpY2UgQ2F2YWxsb3R0aSAyNUQsIDQxMDEyIENhcnBpLCBN
-TywgSVQKaW5mb0BhbWFydWxhc29sdXRpb25zLmNvbQp3d3cuYW1hcnVsYXNvbHV0aW9ucy5jb20K
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
-IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
-cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+This series adds a defconfig for the STMicroelectronics STM32MP257F
+Evaluation board (EV1), built from upstream TF-A, U-Boot and Linux, with
+TF-A configured for the FWU (Firmware Update) multi bank support, as in
+the official STMicroelectronics Yocto layers.
+
+Unfortunately, it was not possible to use upstream OP-TEE OS as well,
+because it does not support yet, on STM32MP25, the STPMIC2 PMIC and the
+SCMI voltage domains, which the mainline Linux device tree requires for
+the microSD card supplies [1]. Until this is resolved, the
+STMicroelectronics downstream version has to be used.
+
+Patches 1-4 add what the defconfig needs:
+
+- the mkfwumdata host tool, to generate the FWU metadata, and the
+  fwumdata target tool, to inspect and modify it from Linux (1-2);
+- the STM32MP2 DDR PHY firmware, required by upstream TF-A (3-4).
+
+During the review of v1, Kory asked whether a defconfig with the FWU
+multi bank layout is suitable for Buildroot, since the FWU metadata is
+not required to boot the board [2]. The layout follows what OpenSTLinux
+generates by default and gives an example of the FWU multi bank boot
+and of the tools added by patches 1-2. Feedback from the maintainers
+on this point would be appreciated.
+
+The series was tested on the board, booting from the microSD card.
+
+Changes in v2:
+- Rebase on current master.
+- Drop "boot/arm-trusted-firmware: pass HOSTLD", superseded by commit
+  84bfd2ff64f9 ("boot/arm-trusted-firmware: pass HOSTLD and
+  HOSTLDFLAGS").
+- Collect Reviewed-by tags.
+
+[1] https://github.com/OP-TEE/optee_os/issues/8027
+[2] https://lore.kernel.org/buildroot/20261022151358.2260712-7-dario.binacchi@amarulasolutions.com
+
+v1: https://lore.kernel.org/buildroot/20261022151358.2260712-1-dario.binacchi@amarulasolutions.com
+
+Dario Binacchi (5):
+  package/uboot-tools: add host mkfwumdata support
+  package/uboot-tools: add fwumdata target tool
+  boot/stm32-ddr-phy-binary: new package
+  boot/arm-trusted-firmware: add stm32-ddr-phy-binary support
+  configs/stm32mp257f_ev1_defconfig: new defconfig
+
+ DEVELOPERS                                    |  3 +
+ .../stm32mp257f-ev1/genimage.cfg              | 52 ++++++++++++++
+ .../overlay/boot/extlinux/extlinux.conf       |  4 ++
+ .../overlay/etc/fwumdata.config               |  4 ++
+ .../arm-trusted-firmware.hash                 |  2 +
+ ...-arm-smc-id-of-the-SMC-watchdog-on-s.patch | 53 ++++++++++++++
+ .../stm32mp257f-ev1/patches/linux/linux.hash  |  2 +
+ ...2mp25-rename-the-PCIe-bus-SCMI-clock.patch | 44 ++++++++++++
+ .../patches/optee-os/optee-os.hash            |  2 +
+ .../stm32mp257f-ev1/patches/uboot/uboot.hash  |  2 +
+ .../stm32mp257f-ev1/post-image.sh             | 18 +++++
+ .../stm32mp257f-ev1/readme.txt                | 72 +++++++++++++++++++
+ boot/Config.in                                |  1 +
+ .../arm-trusted-firmware.mk                   |  5 ++
+ boot/stm32-ddr-phy-binary/Config.in           |  9 +++
+ .../stm32-ddr-phy-binary.hash                 |  3 +
+ .../stm32-ddr-phy-binary.mk                   | 13 ++++
+ configs/stm32mp257f_ev1_defconfig             | 66 +++++++++++++++++
+ package/uboot-tools/Config.in                 | 14 ++++
+ package/uboot-tools/Config.in.host            | 10 +++
+ package/uboot-tools/uboot-tools.mk            | 20 ++++++
+ 21 files changed, 399 insertions(+)
+ create mode 100644 board/stmicroelectronics/stm32mp257f-ev1/genimage.cfg
+ create mode 100644 board/stmicroelectronics/stm32mp257f-ev1/overlay/boot/extlinux/extlinux.conf
+ create mode 100644 board/stmicroelectronics/stm32mp257f-ev1/overlay/etc/fwumdata.config
+ create mode 100644 board/stmicroelectronics/stm32mp257f-ev1/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+ create mode 100644 board/stmicroelectronics/stm32mp257f-ev1/patches/linux/0001-arm64-dts-st-fix-arm-smc-id-of-the-SMC-watchdog-on-s.patch
+ create mode 100644 board/stmicroelectronics/stm32mp257f-ev1/patches/linux/linux.hash
+ create mode 100644 board/stmicroelectronics/stm32mp257f-ev1/patches/optee-os/0001-dts-stm32mp25-rename-the-PCIe-bus-SCMI-clock.patch
+ create mode 100644 board/stmicroelectronics/stm32mp257f-ev1/patches/optee-os/optee-os.hash
+ create mode 100644 board/stmicroelectronics/stm32mp257f-ev1/patches/uboot/uboot.hash
+ create mode 100755 board/stmicroelectronics/stm32mp257f-ev1/post-image.sh
+ create mode 100644 board/stmicroelectronics/stm32mp257f-ev1/readme.txt
+ create mode 100644 boot/stm32-ddr-phy-binary/Config.in
+ create mode 100644 boot/stm32-ddr-phy-binary/stm32-ddr-phy-binary.hash
+ create mode 100644 boot/stm32-ddr-phy-binary/stm32-ddr-phy-binary.mk
+ create mode 100644 configs/stm32mp257f_ev1_defconfig
+
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
