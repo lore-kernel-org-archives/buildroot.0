@@ -2,94 +2,143 @@ Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80294606A680
-	for <buildroot@archiver.kernel.org>; Wed, 25 Nov 2026 20:30:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 790D9606A321
+	for <buildroot@archiver.kernel.org>; Wed, 25 Nov 2026 22:36:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=ievTE1ze
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=BXB5UWNc;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=AIXgBdBl
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF86F607BE;
-	Wed, 25 Nov 2026 20:29:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 40F4D606D9;
+	Wed, 25 Nov 2026 22:36:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 558qj63M5J6x; Wed, 25 Nov 2026 20:29:57 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 921DA606BE
+ id cJk9FpCda15b; Wed, 25 Nov 2026 22:36:00 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 3C6F36070E
 Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795638597;
-	b=E9MMgEh9rNwqIGv9tKPdZpzPHqTe48tZfnkFHExjBjYtvYDXJrgR2ePj7XpQRIqKpUOS
-	 Kanm70pT0RLij+nLLmR5kqugGd58dewF/RRW/POXriDIs4fs68YddL/pLhfDspBM7Ke+A
-	 tkB7sNv4oT2NEvHcOW2F8l62zP71tMT6/O3cu8SLBNhM2ZpDr8WoNplGiYvQjpSQGrl5N
-	 4+E30aCgM/Wcj3pDrinqrI3tcN4X57h8Fru2/RDA7VWAansxzY//myQdVJ1Csbt8j1NeG
-	 zv3Vxz4AtQ23dIN6NG4fi9s1ikV2wm4ulqsQCU0g3iI5kmIlOrYqBX0t1ufkQmpyjrQ==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795646160;
+	b=IIF1mMT8sfmbKZPR3q8kO9YozniczC5dyJ7SKp0wuxomO5P0wjxAw/A1oEHGzY6fX308
+	 6C7kJ7MbwFyynfuol+cTt/jIgCLj+cCu8jgvBZ7nJoITUD9oCLx2sTtkQYhxEctCQIZ7M
+	 OlJYW//y2mVniKJs1cyJ55rT9KVSDikULjx/ool5nymPaXtiuBpdEFzJnPinp7K83VbB1
+	 qZ29lG1VHAsLdTnx/ZwRX9a3sC3fBH4Kc1pHszJSDI3vGnGb+lVUdkJqxXnHYp4dcyEJC
+	 qRBatjohZTOeyhHwYfWfzdfm7AN95AyWRj0sZCpX7D8lzZnaaZSl+rNoS58zo+wwNMA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795638597;
+	c=relaxed/relaxed; t=1795646160;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 Received:MIME-Version:Date:To:Cc:In-Reply-To:References:User-Agent:
-	 Message-ID:X-Sender:Subject:X-BeenThere:X-Mailman-Version:Precedence:
-	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:From:Reply-To:Content-Transfer-Encoding:Content-Type:
-	 Errors-To:Sender;
-	bh=r91hXyKlhClLyZaZJcK4a2KVj4KRG5pQPQbEYsv0Xfs=;
-	b=Fl++Y6Mx7xulL9yGc85GLqcSAY6OXp7xDWCFXVE1qIGPqHHGRk3jOOQj8EDP9HVrVMnq
-	 DV0J95MVAhEf4rDu7T9yzDgPSxho3J9BY4BW/T156i3gBPX1bwqSB/S3RZp6hEy4k4hPA
-	 cF0stm4Rlx8fIvLjnS5buATbb+VZU08QwPlAQQL2mpVhrOxVatSVn3y4Je4vBraoJdywX
-	 XRUbQBR9sQ6gYC4xAK8yN6UGjNK9fsrKqKJQ6TnIu2EHTHd5WDIykbQK0ZnRifkwDKi+S
-	 P5s3hb3yqDKny2gaT0gWjdlX/IYhb8Vk1Zk7jAFqSvtrdpnYAtpGxTyyGdxkKtfScNg==
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
+	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=sx4ECUvcJFGNLq31JkfaOJ9wQaWDrd+gCINe+MI2MAQ=;
+	b=oNK4xVdbfIHu+10D99PYG7xHtNsq9e1tAz/Q2TMIHEr9JSDPyCJT2wk/xo2+ffnKhpLt
+	 CXahGUiY3W4in1cD/p7qbM9jir0z0TxfXPKOV062h6o/FL23Xk8zFbw17mH2/Lpda6wY7
+	 XNSD9VJnFuATSr99nq7B5UJVqH4Xga7zMMHUXuV96cYBYVqgAbPjXel7n4TJX2R8f4wmh
+	 Ae71sg8Q6N94LqRl3vU3y+MqL339w+wdiv1BiXCyDSp6rsHH/9tpUq6R5wZnm/Wz2wZq0
+	 OY7YU83Dkvkr5rbOeGxwR76Ydpb98ILYXe2HqjlfPCAsUgH6FNP2OGXR/IZiCPM9z+A==
 ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+	dmarc=pass header.from=gmail.com;
+	dkim=pass header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256 header.s=20260707 header.b=AIXgBdBl;
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795638597;
-	bh=r91hXyKlhClLyZaZJcK4a2KVj4KRG5pQPQbEYsv0Xfs=;
-	h=Date:To:Cc:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From:Reply-To:From;
-	b=ievTE1zeIxXjFtWU1F4ayFZK3Sz+GBzSOiPYEjLJ11dtriMzHOmXnJXyTryajKA0z
-	 KJiR6/XNjZuTOk2a6LlzQ9GolU+BvQrpEL8bEnAztmXCkcbB+oEKUmZCrctQGSTbAz
-	 RL5z/kru1TVJDdml6nvBVXXIrFnRJA3wlzfuXiVYl+33jxHGiP9/W5uy2VpxVcA/Q+
-	 SZ3+5CPQ+hZn74s35NMqa1D6MMZAQ/HLOB9c0/CicuetnFzJ0aAxOw98c6FNPJ6qQ9
-	 H9izau+mEYFyNCtCiXKh6MZokeLnzBwTb2H0AuYECu76fCyasTYbQFjJNm01HXARgX
-	 /LNrcUqscyd8Q==
+	s=default; t=1795646160;
+	bh=sx4ECUvcJFGNLq31JkfaOJ9wQaWDrd+gCINe+MI2MAQ=;
+	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From;
+	b=BXB5UWNcwBnSXCmhbHU+BC3CkiJGnbQ59HsUIjfiKU7zI66MQtDgefawE92x95cvx
+	 s3Jl4pLQ/Wxz9MMZ4LWveNC5zm7HR6BOigOAFbVL3ZEcJIjF/xciFDRHfmd0+RRjPv
+	 /XPCy8xWH2bSfC0GG1l50rhdfsPhduNO63pKNZ8gcnTgNExzXWqmnUJxTPuAc8tDdx
+	 BthFmoguKi5gIllQxgjFbayK+6ER4LDfi0N2KzamjkTB4wl6KTQXCY0N0XJovm+mio
+	 N+AdOa7sF1KS7t2SXPLW6a6ItcVZxkjsIMI4G1pkCzqVMeYwZOjz+L7riNn+nLuQ+D
+	 Tx/b4Q1gZm+vg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 921DA606BE;
-	Wed, 25 Nov 2026 20:29:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [IPv6:2605:bc80:3010::137])
- by lists1.osuosl.org (Postfix) with ESMTP id C8172371
- for <buildroot@buildroot.org>; Wed, 25 Nov 2026 20:29:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3C6F36070E;
+	Wed, 25 Nov 2026 22:36:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id 794A226D
+ for <buildroot@buildroot.org>; Wed, 25 Nov 2026 22:35:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B953C4054F
- for <buildroot@buildroot.org>; Wed, 25 Nov 2026 20:29:55 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6B3306070E
+ for <buildroot@buildroot.org>; Wed, 25 Nov 2026 22:35:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A6dqGsLMy14N for <buildroot@buildroot.org>;
- Wed, 25 Nov 2026 20:29:55 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org EA83540549
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.4;
- helo=smtp4-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [212.27.42.4])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EA83540549
- for <buildroot@buildroot.org>; Wed, 25 Nov 2026 20:29:54 +0000 (UTC)
-Received: from webmail.free.fr (unknown [172.20.246.3])
- (Authenticated sender: ju.o@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPA id 61D0219F57B;
- Wed, 25 Nov 2026 21:29:50 +0100 (CET)
-Received: from 2a01:e0a:1065:2100:52d9:65fe:2df3:c492 by localhost with HTTP
- (HTTP/1.0 POST); Wed, 25 Nov 2026 21:29:50 +0100
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HSqB00NpkTfd for <buildroot@buildroot.org>;
+ Wed, 25 Nov 2026 22:35:59 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 8249B606D9
+Authentication-Results: smtp3.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::32d"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ envelope-from=angelo.compagnucci@gmail.com; receiver=<UNKNOWN> 
+Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20260707 header.b=AIXgBdBl
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8249B606D9
+ for <buildroot@buildroot.org>; Wed, 25 Nov 2026 22:35:58 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-4a2d6d01ecbso34418305e9.0
+ for <buildroot@buildroot.org>; Wed, 25 Nov 2026 14:35:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20260707; t=1795646156; x=1796250956; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=hGC+DgW1Q75ML9fyZoThU9NkyUPPeEz57JkJ9W2LZMg=;
+ b=AIXgBdBltwC1LcXQxI5dsyTbk7DH+quezbnm7KNES7fMb09fq5eBRmrRenPox4uf5a
+ rvp9QBlTy6F6djoDI1C4YTZkiTwEjEtY+/x9HkT6UG/kJaqbXhOKJogCRKBfIzsMBazc
+ 5URVMY0pOv6S1LfOzOUdTHp8+AkLazSVhe88mPCZTLUORaI2gw508sxZQCkRW3gEEEsd
+ VRhgYqUsMGK9SyyNO63EjnZiQLK6Fp7xdf33nJq9bEns/AKNSv55z6HMuKmPzVzSk174
+ GCj6zft730E3mRp6mivcbkIDCFqXpseWyay4+IoJQ8Ztk4KAG3Jg2hEcXs5ywOL2H17Z
+ P+wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1795646156; x=1796250956;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=hGC+DgW1Q75ML9fyZoThU9NkyUPPeEz57JkJ9W2LZMg=;
+ b=yGdtdo6MtJOZUsptlsmdEggZNmILgCzj4RO+zKM+pHrrhmHC99SWKWv0PDCJ3f7q7E
+ X0twhuEAQJOGMTdTm0E1TCGlWc8P6dSugCEn3UKyAqFYZMSKaqElcczytTFn8daktZv/
+ +3KotDIh8eZa/IkG+X7Rk1Lpd+BfdYyTiSUPjBvQ4LVygxS3l0kWqjksgXJpFdEBa7Mi
+ 2JKv8tkP6JRIlcdT1JA6XJmC/JOT2sZE3jjwl1azUQRiQ0zEccP/ejh/MyMdfG9AesKG
+ RSVyD2C8PI1fmKoJ9JsQpVJT1n45sZOLnxkCXgCGIMlH0uXRru6xyPAxgSTaAWt1428L
+ 7BMQ==
+X-Gm-Message-State: APuU4Z9mgQJhL4kPmXKRRnNpwTY+zMnG1GAI1kgJmCRwdm0pqn0KMwaz
+ 63woT9P5ElG/qNVGPAj0GJu4XKm8AYRxCv8QIIitGeDJUr16/SuJrvVxPQNXFg==
+X-Gm-Gg: AZFdTZdSpL9kZyhEsYXblMuitNvxJiDYVzfBnWXK2tijuZUyyHzAWdvOSCHCwy2Lfh/
+ ybqyUB8yotcEEyD3l/wcgKC6Dqr2ZsKlOeUbIbRomjyOKfYjc2RF3XO3etXuweT/AXJ8LS5H2B9
+ H8UolYrB0+4uJxyZiRTt2aUL+XzWDQITUhtq6cwqF79FjCCE9KJE+K4BqeNgGYxtrMLXPo86o0R
+ z7jMvMho3pWcgGbtnBaMwFiD+kPdWG7B/i9woE/DuJUsRLJHLy3IWK2u8lWhb2q6mG7DuqgfpxS
+ 6JaMaAfjMzzP2jWEU6omlKjxhLQhvRd+CUvYO8Nz8gXdNlcKJwB+Xdn+sJnxbcaRT8Toq3v1RnN
+ bs34MYU8sXzW1OuhzU8PfxRYoogZtFIx5WtXaERZV/JApKcud2Tx8vUOiqvCdZJ4lT7wkInMZJI
+ vZccQW/bLxDYtJlQ6pZvcbbGFMvGzrGOE0UahjHcOfra+zTtwrumcKyeEggZTfdXriohglPcEro
+ rP000NGoXh6YDappSz39271x23JlamkXIJmmqnwj9zRhFSwcoNPPD9kwGbttktqVU4gQPB0rM3n
+ Chk4BHshLgAg/Cxzj6pV/8x5kA+wzp+MoDYbv/Cq1H0hryMa+rg=
+X-Received: by 2002:a05:600c:4e0b:b0:49f:e772:6ddf with SMTP id
+ 5b1f17b1804b1-4bb8881ae90mr399692555e9.32.1795646156003; 
+ Wed, 25 Nov 2026 14:35:56 -0800 (PST)
+Received: from angelo-Precision-7550 ([2.58.136.216])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-4ab6a67fe75sm42194222f8f.24.2026.11.25.14.35.55
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 25 Nov 2026 14:35:55 -0800 (PST)
+From: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+To: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Date: Wed, 25 Nov 2026 23:35:53 +0100
+Message-ID: <20261125223554.3326338-1-angelo.compagnucci@gmail.com>
+X-Mailer: git-send-email 2.53.0
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Date: Wed, 25 Nov 2026 21:29:50 +0100
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc: buildroot@buildroot.org, linux-amarula@amarulasolutions.com
-In-Reply-To: <20261125161404.859000-2-dario.binacchi@amarulasolutions.com>
-References: <20261125161404.859000-1-dario.binacchi@amarulasolutions.com>
- <20261125161404.859000-2-dario.binacchi@amarulasolutions.com>
-User-Agent: Webmail Free/1.6.22
-Message-ID: <cb8b17f98caf1f6af1f9bd6159f5f10c@free.fr>
-X-Sender: ju.o@free.fr
-Subject: Re: [Buildroot] [PATCH v7 1/5] package/sdl3: disable m68k builds
+Subject: [Buildroot] [PATCH 1/2] package/sunxi-tools: install
+ fel-sdboot.sunxi
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -99,46 +148,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Julien Olivain via buildroot <buildroot@buildroot.org>
-Reply-To: Julien Olivain <ju.o@free.fr>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-11.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	MAILING_LIST_MULTI,SPF_HELO_PASS autolearn=ham autolearn_force=no
-	version=4.0.1
+X-Spam-Status: No, score=-13.8 required=3.0 tests=BAYES_00,
+	DKIM_ADSP_CUSTOM_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,
+	FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-On 25/11/2026 17:14, Dario Binacchi wrote:
-> SDL_alignment_test has a static assertion to ensure that its size is
-> 2 * sizeof(void *), as SDL relies on this layout for its ABI.
-> 
-> Testing the SDL3 package by running:
-> 
->   $ utils/test-pkg -p sdl3 -T bootlin-m68k-68040-uclibc
-> 
-> raised the following error:
-> 
->   In file included from src/libm/k_sin.c:1:
->   include/SDL3/SDL_stdinc.h:230:42: error: static assertion failed: 
-> "sizeof(SDL_alignment_test) == (2 * sizeof(void *))"
->     230 | #define SDL_COMPILE_TIME_ASSERT(name, x) _Static_assert(x, 
-> #x)
->         |                                          ^~~~~~~~~~~~~~
->   include/SDL3/SDL_stdinc.h:1187:1: note: in expansion of macro 
-> 'SDL_COMPILE_TIME_ASSERT'
->    1187 | SDL_COMPILE_TIME_ASSERT(struct_alignment, 
-> sizeof(SDL_alignment_test) == (2 * sizeof(void *)));
-> 
-> Since the m68k ABI results in a different structure size, disable m68k
-> builds.
-> 
-> Fixes: 2dd13e328f11 ("package/sdl3: new package")
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Some boards have neither a FEL button nor FEL pads (e.g. the NanoPi NEO
+Air). Once their eMMC holds a bootable system, the boot ROM always
+boots it. Then, without a serial console, the only way to enter FEL
+mode is a micro SD card with fel-sdboot.sunxi: the boot ROM boots the
+micro SD card first, and this small stub only jumps to its FEL entry
+point.
 
-Series applied to next, thanks.
+sunxi-tools provides it prebuilt, in bin/fel-sdboot.sunxi. Install it
+with the host tools, in the images directory, next to the bootloader to
+load over USB, so that a board readme can tell how to write it to a
+micro SD card:
+
+  dd if=output/images/fel-sdboot.sunxi of=/dev/sdX bs=1024 seek=8
+
+Signed-off-by: Angelo Compagnucci <angelo.compagnucci@gmail.com>
+---
+ package/sunxi-tools/sunxi-tools.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/sunxi-tools/sunxi-tools.mk b/package/sunxi-tools/sunxi-tools.mk
+index 97863efc13..6c12f7ad8b 100644
+--- a/package/sunxi-tools/sunxi-tools.mk
++++ b/package/sunxi-tools/sunxi-tools.mk
+@@ -40,6 +40,8 @@ define HOST_SUNXI_TOOLS_INSTALL_CMDS
+ 	$(HOST_MAKE_ENV) $(MAKE) CROSS_COMPILE="" CC="$(HOSTCC)" \
+ 		PREFIX=$(HOST_DIR) EXTRA_CFLAGS="$(HOST_CFLAGS)" \
+ 		LDFLAGS="$(HOST_LDFLAGS)" -C $(@D) install-tools install-misc
++	$(INSTALL) -D -m 0644 $(@D)/bin/fel-sdboot.sunxi \
++		$(BINARIES_DIR)/fel-sdboot.sunxi
+ endef
+ 
+ define SUNXI_TOOLS_BUILD_CMDS
+-- 
+2.53.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
