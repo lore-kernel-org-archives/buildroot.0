@@ -2,28 +2,28 @@ Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95C06606A323
-	for <buildroot@archiver.kernel.org>; Wed, 25 Nov 2026 16:41:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E10BA606A31E
+	for <buildroot@archiver.kernel.org>; Wed, 25 Nov 2026 16:41:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=sraRiMhO;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google header.b=V7fh6vOZ
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=htfRdstK;
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google header.b=lZMLYaCz
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 16C334085B;
-	Wed, 25 Nov 2026 16:41:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A3B654086C;
+	Wed, 25 Nov 2026 16:41:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NXimIz6ArGuU; Wed, 25 Nov 2026 16:41:45 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 0F17E40812
+ id N11jex5BoF8A; Wed, 25 Nov 2026 16:41:48 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 7F8634081A
 Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795624905;
-	b=bLCaDLhz+3FHanLBqkwWwMv2cyYVRNeSmhvhgPzdwnGqzcJ5Ugd7UwE/KP2J1lIfWh8H
-	 UyRTeRbHhT38+PZRbNAd2AJzSuz8Ca6tDOS1VxxkqvkF5Tfd0v9rR4U1PBNq8R1OPCiXZ
-	 Y62E5h/2rp9BujyvSevamONgs3Nvs4JM+S8X3bwghTrw+RuHsxjrSby9Wi6VkLE5qgi9U
-	 KqYGvgDEVF376BnMBgIqplhaaOR7w4kORBFrhr6+N8h7HTgqwggzxQah5Xa/MwSHnEqH1
-	 wM37ij9bVM4g3xc7j/CmAJ6+fVP9fuCTtExeLYKpaVdoFl/zKI2Mr9vtJJ5divqhYEA==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795624908;
+	b=Og1XNjfvwryfXqoYkJkXBHJA0l9nVvM/BlPirsleEqxqsAr3k/gmFsHJMpPPaOzijuCb
+	 QdZwfmKGNnVInovwwr1aX/SmaStuIsRP0EI5BKpj/a8yqj0AeNM4o7TI/rjdJnlx/Z6/y
+	 iM0yEdBnlm4s2q8Qs2azzMa3k2ee/aG4BMC7rLZP5ml18RqQZG44TmbE1oZNIAGBPFJLh
+	 u+IpiEFnIOwlMtiyTqQMiKpVfUSM44RUkgcg3mmmH+uGA+yFCcNBrzLJxDs28YpyKB7pM
+	 MK5mCLn2AWnva6YUadPQFq0zEeGJlHNnNWADjz/T0QJjia62gT+0s4tIAZ17zgQ8V7A==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795624905;
+	c=relaxed/relaxed; t=1795624908;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -33,107 +33,104 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
 	 Sender;
-	bh=WrufSlL1vY7v9LwYC+9U9PSkv7ifmoGQqpIUnIgy+6U=;
-	b=NN1HcECWyC7T63vqzyaBXwSa5/AHnPKfCTvfS8x4/7zbbepXcEgbT+Btqe8GPu9XYuBB
-	 p+xZRzLHpQvXYX7BhT7zBQoAvyUXrMV42IuM4R0cfpxNngmAKBx0LjYFFzc7Yt1Hicq53
-	 3jh75tZBbeBXYNHpDLth7ldnF7RbtY639BOoyegpXPhKbITWHMqD+SMwq/NA/CnwWBKn7
-	 nKGHZEoF6KAaotYJvLzEntWTudY1YJPMJe7xWngvmP/BbOuj+TJHpFQ57oTopp3KC7ANY
-	 uQ0ZmlSpHUv++VxoOQfJRryWtHhbwX/TTPnxJ1KIoMXKE9yGV8Z05XLPcFXVZWC3yuA==
+	bh=l20LD9n7ACEtcCwLDv8v7y5R3W3kDon5qNYrBOEqDU8=;
+	b=biKXAfhq1gMu/dzSoD6eswAO3uI7bIdVX3Pv7hxM0T4GK3eQfBDCUSZdFrTQoTW+2fsd
+	 MKNva5XnqEtfsxCB/Lh+xKhx/pL6XLOOeGBuWbkJcA1FD+NMCP1LpsNnVgqu+MYUpA3Q3
+	 4Jg1eo48qpM2s73j8GWhA3hMbztW83LZYHY2PxsIuvrTHmx2pwKlOtqg6eEX9UkjZxdnY
+	 q4KHGWdI4GqprhUQ/depGCSolVfOATAwkDDozUTyV70r+Qx0SUsAHKJWHXCjsVNpn2QCl
+	 vsSgswXKCETb3B6Fe2hkl+wBpq37t7XQNQ7+D6dPtYM57VMS1o8mW2DWNmspZBG0JyA==
 ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
-	dmarc=pass header.from=amarulasolutions.com;
-	dkim=pass header.d=amarulasolutions.com header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google header.b=V7fh6vOZ;
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795624905;
-	bh=WrufSlL1vY7v9LwYC+9U9PSkv7ifmoGQqpIUnIgy+6U=;
+	s=default; t=1795624908;
+	bh=l20LD9n7ACEtcCwLDv8v7y5R3W3kDon5qNYrBOEqDU8=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=sraRiMhO7281W3Nw2yTXlys5Ce7PRcKDzMfSvzyz6oeQDFXdCniZxHyM0hxw1feht
-	 gaobGS2O2s5nAVUocAOucEn/jnoNZQvTgPZW9+Cwn/ouJVPLJWdp2e66PBuu/JYcWN
-	 FXGWmpwuoqq7FE0skr+aQbSeXblxVVUXIlPZqes5VPkZJJaFbSi0SJTh2ujTbAU4gK
-	 R2LszQPuQAagmW1EBiRvBVFrZM20aGqipWc5Cc8EhYaFfhMXaWBbk5SgV1xJY6VzTq
-	 6DxtuNdIv99N1vlSQ88r94MSspjpAdGdWIn1iE338OfiG6FOA7Gd+Ed8Q7nxF1YeiH
-	 BHcM35+ZVQ40A==
+	b=htfRdstKG7i5nvQOiOuOhZ1gHSK9Qyyfm2QdvbAqMztB3QHin/ohZQyeoSCwp8VYi
+	 /y7GNmsd+HylWz+4/1vvdKY0jw41FYuSX5FJYnO2XmNQf5pPF/T918yiH3xFpfDNwO
+	 oiXtNVzJu/Sq676HzGiXbTs0ds85fUoFd0NuPZVL5UgFXLNyUpliWP/AmPjHt/2s5V
+	 ek06UAGXG+/Sze9AM0GgEerYpyAOergpdBGP8f32PmEi3NY/zqOlLsi+1eTKqBQwgS
+	 LssfWzGef4+z6YFRkrt9Vtjfxl6OAxoh0+XXV1c9pMtyrtXMlOIKhFezoeudschEHL
+	 P0rVVg9Q7CkQg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0F17E40812;
-	Wed, 25 Nov 2026 16:41:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by lists1.osuosl.org (Postfix) with ESMTP id 654A132D
- for <buildroot@buildroot.org>; Wed, 25 Nov 2026 16:41:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7F8634081A;
+	Wed, 25 Nov 2026 16:41:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by lists1.osuosl.org (Postfix) with ESMTP id 324BF43
+ for <buildroot@buildroot.org>; Wed, 25 Nov 2026 16:41:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 43CBD40851
- for <buildroot@buildroot.org>; Wed, 25 Nov 2026 16:41:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 24B6A80E0A
+ for <buildroot@buildroot.org>; Wed, 25 Nov 2026 16:41:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BHm_bFHxDSjM for <buildroot@buildroot.org>;
- Wed, 25 Nov 2026 16:41:42 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 3FE6C40847
-Authentication-Results: smtp4.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::335"
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id O-tqA7hONf5I for <buildroot@buildroot.org>;
+ Wed, 25 Nov 2026 16:41:45 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org CE9A880CB8
+Authentication-Results: smtp1.osuosl.org;
+ arc=none smtp.remote-ip="2a00:1450:4864:20::332"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp4.osuosl.org; dmarc=pass (p=none dis=none)
+Authentication-Results: smtp1.osuosl.org; dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=V7fh6vOZ
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
- [IPv6:2a00:1450:4864:20::335])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3FE6C40847
- for <buildroot@buildroot.org>; Wed, 25 Nov 2026 16:41:42 +0000 (UTC)
-Received: by mail-wm1-x335.google.com with SMTP id
- 5b1f17b1804b1-4a2d6d01ecbso32673305e9.0
- for <buildroot@buildroot.org>; Wed, 25 Nov 2026 08:41:41 -0800 (PST)
+Authentication-Results: smtp1.osuosl.org; dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=lZMLYaCz
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CE9A880CB8
+ for <buildroot@buildroot.org>; Wed, 25 Nov 2026 16:41:44 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-4a35ac4475dso44275895e9.2
+ for <buildroot@buildroot.org>; Wed, 25 Nov 2026 08:41:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1795624900; x=1796229700;
+ d=amarulasolutions.com; s=google; t=1795624903; x=1796229703;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=lRxKDcxWE8Agooira60Q7tQB+EikI6b1bRzFl6F9FGo=;
- b=V7fh6vOZyhiuVJ2xObpPCi4f9KJDZ4D3w9tMU6bVTMJMh6w8oTr9YIbs6/XOfBenmf
- wWuuQKXprULqjxpJPLgYCCSYRpgAGLM6ssbg+nyZIFnSw5tf082AfGhu+sE0ibooU1VB
- /nPAEWC4VvRb7iuoRn0JjP/WpIMYvIgR/pXi4=
+ bh=/jDz0SoQ0rygAjvQ7tHPBK3jhjBdEJQm9xtKXDU19Yg=;
+ b=lZMLYaCzvpimfyvLSh46NTXfSIG4e+4WIT0OIuQpmmBmwyrGJegOB9khSI3fWth/No
+ HU0F3+UYkCALRW2mKYNsxhk+0gim0rmauhxu9/2ge24oZht+JnTRlTniUsj+zLiFq9oW
+ hZyappN7X0d85H4gtBk/vYPCqkMxCaaWsqWJg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1795624900; x=1796229700;
+ d=1e100.net; s=20260707; t=1795624903; x=1796229703;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=lRxKDcxWE8Agooira60Q7tQB+EikI6b1bRzFl6F9FGo=;
- b=tRPky1grUKjDc/L9FisgGwpUQe1l9xlR+V5XMJH7UMRjgGSNZtk3AVNdXEIna3lrW/
- AkjVQh93fc53wQeJDUFqb7NXouha25l4wfA6cQf/bJ7DvbXejhsagNuxAQNseYmHsUDO
- qReXC68dlAIUoZJh1j7/yVV/8+zf6cqhfWw4s8j1zxCD0GFnyK5zBw1zMh0DEOopbEUS
- pFl6+VrwuNp1/p4inf12JdqyyFzvlNgyvnEXjFy3KsuAu9FCeltGyMvZWVRB4H6UBq7b
- YtO9UC5+vPNYpSYa1FrPQ/JLL93cy5tqK8KvLHFGmUaqs+n0HSrPzqpQOCGgoBr8Gc7X
- ZcIg==
-X-Gm-Message-State: APuU4Z+OjD62qheNSBN+ufHTw8TTuIHmTdCdFLs58xD08LjmoS/puKBP
- i1ZSQsw34xH0yFec2sqyZ+zEniYmjhBND3guOsFHFL4sRQIdvCRAf2ctzMhAOBDvG24FvnshfVo
- p6BeY
-X-Gm-Gg: AZFdTZdXBCycJfL5A5v86tyPpVQaUi05iBM3qB5h6/XF1eKQEJYWmMhpJigHU5zYT37
- N/idjuGrerHh1YKo6mh4xAJXSV817llDbLiZchhIi830ge90xbRnZ/L8jsvJkjOcnn27SJBoKPf
- bTkh3kClw5Um5vzONUJLZIFBy/Ikauo8uCIbcMsDW/J3wfh1RpiCznquWMbP/PAxF4ZlBONQoet
- rWMW5oY37CUZHz/k4CfliAH4QgTCRZ7bJEkmweOtVFjELI7EKHqx+UzTQIvHYF25kd4OIAqVBWv
- 5+y+ZbF9tnMBhOzZZwbg/eINDKSJl6bhXjCrrn3f17iGye0pu7uCCHBs4DnoqUtm2vCXoutHQSv
- rjdxA8duQt0JYTvovJoTxlqn1a2jhB/Y7sqJjHMTkXtstkthMsbNBxoi6cQNOL6mhf1Spg0IrwF
- 1S+efW8QqSvO2TCPY+w3W0J9oh3eKS7Rxn6gyIuKLGbkEwG3RqDLav9e99zlMG4tyPYm6MUcNq5
- 28VwXDdhqK8YqnDtPyEAZZYRcp31r+bSNiqS6L++ZpuQBP51CXL6YYhn6pPQG4AtkOsKWdGI6eA
- WVOZFEco4AEqULxITbZKVmNP+dv+oPNoojDccXQMorP1Kony+POTaMlnEAcLmJy8AASPRFaWIoq
- Cg9/2wAUZOC63wyG2LQt8lTsuw5vV+ykvg0nPilBVE0nSpsTcpzZtWDidusqwvVsmf7iFg901pd
- eWO8gfsGuT+IhLWvoUz+bS
-X-Received: by 2002:a05:600c:6219:b0:4a1:d087:f6ab with SMTP id
- 5b1f17b1804b1-4bb8880badfmr354845415e9.18.1795624900058; 
- Wed, 25 Nov 2026 08:41:40 -0800 (PST)
+ bh=/jDz0SoQ0rygAjvQ7tHPBK3jhjBdEJQm9xtKXDU19Yg=;
+ b=fyDq/3EsznQ/0FsNQ3uFR7kQbaS+j4pffp6O4K7uDA3DhflWJL3SRy+5SwZ84/vn29
+ AX51N6BQ72GGH3WWIvxhySgH85BoIw6mJjZMfmZ+TBCG8CsvMblxZMoKI9hDxdM6iNo6
+ 04d5cuIVFpMWu4/H8n7ZVsGnjB5N0VscN75kf+bkfPrzScotPicuE84OLRrz1KzA73YU
+ +M4MGxYHAtzNcd4i7nyhmbw+HNXUPjS/1RX2jyvKIwjrXRfK1+kMf37aIHP0rUusbqwD
+ cy0wuFT/Mc7iS7A9ZpsaVBS2YdH8dvuuipkqy7kxfy88JNVojhKHoD2A6+qHj9697zWx
+ rFBw==
+X-Gm-Message-State: APuU4Z91mqIh95RmzDQzyJ7FRAanvwxQc8ezsuf6WP8TjpSQQgYvhwsY
+ ZMEtUvRo85KG3Uflc7JoItXs2o9eHNJv2grbMTFIE1Ucn06WxoSyi2sz/epCqsE/uVnYtL19I5J
+ cGGGt
+X-Gm-Gg: AZFdTZeu9SJeEIqkIEHOBc5knjightt263+h7FeAPAhyt/hXSfqsoUGkukgEalwIELM
+ RazB3/qdZrU11BAUmtijcAT+534AhYTZEmw/nBaL2GFdLjFHjLvDN4GRgC9oAgCdvmT6RyhCeuD
+ wHF7nYBBT2Qur8Timh1diZdHM0ioW9/fvppNZRwa+aPBttKa0Y0zSOyCS9ek96BzECoCKk60eDe
+ JX0kh6ejPhEscmmzLxseQX8sa+J1CLUYJ+D2b9omHdlPyX8vjamijgREFDteIhIcUCs/1fKVA+W
+ JsBB3TD1aYRLUwiEMpqqFop95rKchZITqqGkhx688PamUhPJ3ULEvrhoU/BWsJs5i4yFNDLbri5
+ V0SAi3y7LFIp7gja7IfPmPthtifXcd8DF7M6rsKRrRr967kcX0o+SrpzZkdW5ZqQJXWbW2ZDpI6
+ tSOlFtCUf5+BHQ+SPgIuBQIfGGddE2kVumCiKoPZVUHRmDMFKxyZw0IqZ2C7IkXQ3/CDRR6bkz7
+ xzDEGrBOBHlPnwqHKySlYEeHO7RmHEYbQJPkK8AFpMnv7HbIGAQraKdJV+zn4p6WVI7LGx298v/
+ eUMx1uciDZlipBt4MkFs2IUCfGvKO2hiB4Ji5IVDnOuwx2rfQcawrYJbGp4ZEhxFESShz5NpmFy
+ QNAJG1hfluLgSxzakPS65EHhr3HwihDkE3eali5SsJLsa3klkMu+U9L1WY7tcAAOJwmZ3e5Fk/o
+ QPXAcJb90mqD+UVYEplnRg
+X-Received: by 2002:a05:600c:6749:b0:4bb:71c1:3ca6 with SMTP id
+ 5b1f17b1804b1-4bb88819d15mr358116565e9.21.1795624902889; 
+ Wed, 25 Nov 2026 08:41:42 -0800 (PST)
 Received: from dario-ThinkPad-P14s-Gen-5.amarulasolutions.com
  (host-79-14-29-58.business.telecomitalia.it. [79.14.29.58])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4bb9067a0e6sm247988765e9.4.2026.11.25.08.41.37
+ 5b1f17b1804b1-4bb9067a0e6sm247988765e9.4.2026.11.25.08.41.40
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 25 Nov 2026 08:41:39 -0800 (PST)
+ Wed, 25 Nov 2026 08:41:42 -0800 (PST)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
 Cc: Dick Olsson <hi@senzilla.io>, Sergey Matyukevich <geomatsi@gmail.com>,
@@ -141,15 +138,14 @@ Cc: Dick Olsson <hi@senzilla.io>, Sergey Matyukevich <geomatsi@gmail.com>,
  Kory Maincent <kory.maincent@bootlin.com>,
  linux-amarula@amarulasolutions.com, michael@amarulasolutions.com,
  Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Date: Wed, 25 Nov 2026 17:41:24 +0100
-Message-ID: <20261125164127.863713-3-dario.binacchi@amarulasolutions.com>
+Date: Wed, 25 Nov 2026 17:41:25 +0100
+Message-ID: <20261125164127.863713-4-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261125164127.863713-1-dario.binacchi@amarulasolutions.com>
 References: <20261125164127.863713-1-dario.binacchi@amarulasolutions.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 2/5] package/uboot-tools: add fwumdata target
- tool
+Subject: [Buildroot] [PATCH v2 3/5] boot/stm32-ddr-phy-binary: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -162,93 +158,98 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-16.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Add an option to build and install the fwumdata tool on the target.
-
-fwumdata allows to read, display and modify the FWU (Firmware Update)
-metadata from Linux userspace, similarly to what fw_printenv/fw_setenv
-do for the U-Boot environment. It can be used to change the
-active/previous bank indices, the bank states or the image acceptance
-flags, e.g. by an update agent after writing a new firmware bank.
-
-The location of the metadata is read from /etc/fwumdata.config, which
-is platform specific and is therefore not installed by the package: it
-has to be provided, for example, by a rootfs overlay.
+The DDR PHY firmware binaries of the STMicroelectronics STM32MP2 SoCs
+are not part of the upstream TF-A sources: they must be retrieved from
+a separate repository and are packed in the FIP by TF-A.
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Reviewed-by: Kory Maincent <kory.maincent@bootlin.com>
 ---
- package/uboot-tools/Config.in      | 14 ++++++++++++++
- package/uboot-tools/uboot-tools.mk | 11 +++++++++++
- 2 files changed, 25 insertions(+)
+ DEVELOPERS                                          |  1 +
+ boot/Config.in                                      |  1 +
+ boot/stm32-ddr-phy-binary/Config.in                 |  9 +++++++++
+ boot/stm32-ddr-phy-binary/stm32-ddr-phy-binary.hash |  3 +++
+ boot/stm32-ddr-phy-binary/stm32-ddr-phy-binary.mk   | 13 +++++++++++++
+ 5 files changed, 27 insertions(+)
+ create mode 100644 boot/stm32-ddr-phy-binary/Config.in
+ create mode 100644 boot/stm32-ddr-phy-binary/stm32-ddr-phy-binary.hash
+ create mode 100644 boot/stm32-ddr-phy-binary/stm32-ddr-phy-binary.mk
 
-diff --git a/package/uboot-tools/Config.in b/package/uboot-tools/Config.in
-index c99ab9825ef3..bd066fd5a50b 100644
---- a/package/uboot-tools/Config.in
-+++ b/package/uboot-tools/Config.in
-@@ -104,6 +104,20 @@ config BR2_PACKAGE_UBOOT_TOOLS_FWPRINTENV
- 	  bootloader, which allows access to the U-Boot environment
- 	  from Linux.
- 
-+config BR2_PACKAGE_UBOOT_TOOLS_FWUMDATA
-+	bool "fwumdata"
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 59fad7f26bbf..5e7312bda7af 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -816,6 +816,7 @@ F:	board/bsh/
+ F:	board/stmicroelectronics/stm32f746-disco/
+ F:	board/stmicroelectronics/stm32f769-disco/
+ F:	board/stmicroelectronics/stm32h747-disco/
++F:	boot/stm32-ddr-phy-binary/
+ F:	boot/ti-k3-boot-firmware/
+ F:	configs/imx6ulz_bsh_smm_m2_defconfig
+ F:	configs/imx8mn_bsh_smm_s2_defconfig
+diff --git a/boot/Config.in b/boot/Config.in
+index d73d221431f9..95af63ab9af1 100644
+--- a/boot/Config.in
++++ b/boot/Config.in
+@@ -22,6 +22,7 @@ source "boot/optee-os/Config.in"
+ source "boot/opensbi/Config.in"
+ source "boot/palo/Config.in"
+ source "boot/shim/Config.in"
++source "boot/stm32-ddr-phy-binary/Config.in"
+ source "boot/syslinux/Config.in"
+ source "boot/ti-k3-boot-firmware/Config.in"
+ source "boot/ti-k3-r5-loader/Config.in"
+diff --git a/boot/stm32-ddr-phy-binary/Config.in b/boot/stm32-ddr-phy-binary/Config.in
+new file mode 100644
+index 000000000000..1a8def0d22ff
+--- /dev/null
++++ b/boot/stm32-ddr-phy-binary/Config.in
+@@ -0,0 +1,9 @@
++config BR2_TARGET_STM32_DDR_PHY_BINARY
++	bool "stm32-ddr-phy-binary"
++	depends on BR2_aarch64
 +	help
-+	  Install the fwumdata tool on the target system
++	  DDR PHY firmware binaries for the STMicroelectronics STM32MP2
++	  SoCs. They are not built, they are needed as a dependency to
++	  build the TF-A firmware for these SoCs.
 +
-+	  The fwumdata tool from Das U-Boot bootloader, which allows
-+	  to read, display and modify the FWU (Firmware Update)
-+	  metadata from Linux (e.g. change the active/previous bank
-+	  indices, the bank states or the image acceptance flags).
++	  https://github.com/STMicroelectronics/stm32-ddr-phy-binary
+diff --git a/boot/stm32-ddr-phy-binary/stm32-ddr-phy-binary.hash b/boot/stm32-ddr-phy-binary/stm32-ddr-phy-binary.hash
+new file mode 100644
+index 000000000000..5826a483cbc9
+--- /dev/null
++++ b/boot/stm32-ddr-phy-binary/stm32-ddr-phy-binary.hash
+@@ -0,0 +1,3 @@
++# Locally calculated
++sha256  519595ae24b44d70b0c0ac1e776bf1b871da00b615b9bffa83573e45b806eedc  stm32-ddr-phy-binary-1.0-stm32mp.tar.gz
++sha256  6b6a3968253466c776a660e916c67c7207c42fcd5bf02895e50215f923dae29d  LICENSE.md
+diff --git a/boot/stm32-ddr-phy-binary/stm32-ddr-phy-binary.mk b/boot/stm32-ddr-phy-binary/stm32-ddr-phy-binary.mk
+new file mode 100644
+index 000000000000..d90980544a8c
+--- /dev/null
++++ b/boot/stm32-ddr-phy-binary/stm32-ddr-phy-binary.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# stm32-ddr-phy-binary
++#
++################################################################################
 +
-+	  The location of the metadata is described by the
-+	  /etc/fwumdata.config file, which must be provided (e.g. by a
-+	  rootfs overlay).
++STM32_DDR_PHY_BINARY_VERSION = 1.0-stm32mp
++STM32_DDR_PHY_BINARY_SITE = $(call github,STMicroelectronics,stm32-ddr-phy-binary,v$(STM32_DDR_PHY_BINARY_VERSION))
++STM32_DDR_PHY_BINARY_LICENSE = SLA0044
++STM32_DDR_PHY_BINARY_LICENSE_FILES = LICENSE.md
++STM32_DDR_PHY_BINARY_INSTALL_TARGET = NO
 +
- config BR2_PACKAGE_UBOOT_TOOLS_DUMPIMAGE
- 	bool "dumpimage"
- 	help
-diff --git a/package/uboot-tools/uboot-tools.mk b/package/uboot-tools/uboot-tools.mk
-index a508e61c53c8..c655095b4771 100644
---- a/package/uboot-tools/uboot-tools.mk
-+++ b/package/uboot-tools/uboot-tools.mk
-@@ -63,6 +63,10 @@ UBOOT_TOOLS_MAKE_OPTS += CONFIG_TOOLS_MKEFICAPSULE=y
- UBOOT_TOOLS_DEPENDENCIES += gnutls
- endif
- 
-+ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_FWUMDATA),y)
-+UBOOT_TOOLS_MAKE_OPTS += CONFIG_TOOLS_FWUMDATA=y
-+endif
-+
- ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_FIT_CHECK_SIGN),y)
- define UBOOT_TOOLS_INSTALL_FIT_CHECK_SIGN
- 	$(INSTALL) -m 0755 -D $(@D)/tools/fit_check_sign $(TARGET_DIR)/usr/bin/fit_check_sign
-@@ -101,6 +105,12 @@ define UBOOT_TOOLS_INSTALL_FWPRINTENV
- endef
- endif
- 
-+ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_FWUMDATA),y)
-+define UBOOT_TOOLS_INSTALL_FWUMDATA
-+	$(INSTALL) -m 0755 -D $(@D)/tools/fwumdata $(TARGET_DIR)/usr/sbin/fwumdata
-+endef
-+endif
-+
- ifeq ($(BR2_PACKAGE_UBOOT_TOOLS_DUMPIMAGE),y)
- define UBOOT_TOOLS_INSTALL_DUMPIMAGE
- 	$(INSTALL) -m 0755 -D $(@D)/tools/dumpimage $(TARGET_DIR)/usr/sbin/dumpimage
-@@ -117,6 +127,7 @@ define UBOOT_TOOLS_INSTALL_TARGET_CMDS
- 	$(UBOOT_TOOLS_INSTALL_MKEFICAPSULE)
- 	$(UBOOT_TOOLS_INSTALL_MKENVIMAGE)
- 	$(UBOOT_TOOLS_INSTALL_FWPRINTENV)
-+	$(UBOOT_TOOLS_INSTALL_FWUMDATA)
- 	$(UBOOT_TOOLS_INSTALL_DUMPIMAGE)
- 	$(UBOOT_TOOLS_INSTALL_FIT_CHECK_SIGN)
- endef
++$(eval $(generic-package))
 -- 
 2.43.0
 
