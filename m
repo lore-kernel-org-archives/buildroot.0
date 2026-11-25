@@ -1,121 +1,89 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3BA8606A31E
-	for <buildroot@archiver.kernel.org>; Wed, 25 Nov 2026 11:47:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7C46606A330
+	for <buildroot@archiver.kernel.org>; Wed, 25 Nov 2026 13:25:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=cqk7thpf
+	dkim=pass (2048-bit key, unprotected) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=nqOrxJ3R
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9AE1F60891;
-	Wed, 25 Nov 2026 11:47:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7F7A1407F2;
+	Wed, 25 Nov 2026 13:25:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7Ut28wc523lk; Wed, 25 Nov 2026 11:47:57 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 0A7F3606F0
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795607277;
-	b=n7JdcZV2NFYeva+Ow6gGRKVnOY/txREDulUlb4NKO4X1S8NL0RRUMXdRtgzGiWYe6Vmq
-	 hb6fbGwU217QypWpKlHr9yE9uJmudGfJdDDuqFDEklr2RlFt6Fy+MTLhMl792XH50fv1d
-	 dNvApNi7idkUHkvgbrKMch8dNVBk/yx7w6o72/waFUhN0S4Q6eXJuJky5r8RdYJ3yPuT4
-	 UkizGseVEhNeAxLoKc35LQpiv0+6ACPdxwvoA55lGIh7GhBDM/CbalQIoyaPfd4LABc4r
-	 Ua/W/wpKmo60pTjbYu6WnyHBecfEEb+YzcGhMYOXEJYUnvAidUsQAd5eRP+dwmUtUCA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P_5q_zFRrs11; Wed, 25 Nov 2026 13:25:39 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org 8264B4065B
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795613139;
+	b=gK+q/mgNcBmtUDzaru9MYvDjTyhyW1Rt15hfBY4Y2BSLz5WgvYAYT2SOf6C26qni2+qU
+	 DM3XUR5mUnI5Gri8TUdBj3dyYdzlvcqSNWkgL0unHNTMQ4K1tdZL1pk4y9z51hZ9motxD
+	 egHRGlLPB7Om1oLuYD9AB2Lla8XjUkqEhh4OhPJYhp0x8+hZMbDsYnA+rc6bJ+1Px4JU/
+	 ZkzgqekBdOEblbX7IfBuFq9ocJVEo8RrWrGn62IMuxYDC/ZYgtS7bAtFuiDt8QCWrkZfp
+	 pJH1phhL7AFii65+Ec5eEigiUo42ikSoWGZ9b37eFQfY+dGwCyxblNbyqrfl5XIavXw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795607277;
+	c=relaxed/relaxed; t=1795613139;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:X-Received:
-	 Received:To:Date:Message-Id:X-Mailer:MIME-Version:Subject:X-BeenThere:
+	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:To:
+	 Date:Message-ID:X-Mailer:MIME-Version:Subject:X-BeenThere:
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:Content-Type:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:Cc:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=H8Gjg89XBJxV4LDCwmUAswPCV+mhtU6ww2Y0qCHJNCo=;
-	b=ZJmfZ8hrf3lC4UTaob7Wr88wENrd1T2OIPYVI2i+g9xaP04GEy2/SB50yMYg+sHDj+4L
-	 /1Fg7SBy3VR4FXxxQJigevWY/JRx3bsq8HfeiJLI6gtCrXuB8lnaO2AZ0VXKsQPPThUDP
-	 HSi3fBO/t1CjgG7EkKVQ84qojGmFQNhgLAsaFUtbJm40ITQGAdKIewa6KWTOhKE07oEq9
-	 DpzZSKMqUaVp7ZcmQlFd9eJw8OGt/mAlPpkzMcyWqynmfAcJlWIlVUc6VrkZ4dF47BG1x
-	 fL6UOz5+Gym0SULAlFPBO0ud8BQx8Ui74YupOypqPgejzqZdsHdnuo0GxChizZh8W3g==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+	bh=LKTdsueXzM+Anrd2T2NrfiQX934VMCRi3JI9wCRn2Hs=;
+	b=nZDjMBih5h+TQ+IhwRUgsrO0KyDM0qDrnyZCZSN5sDqDft/WUTImluI4WMLD2dHLrTVg
+	 zMexvMXDwFFBOBxy20bjBkqB9FA0YXBdSPjHr3mf3/jJ/CuudnniUQkPZA4Jn4+jlVliy
+	 8/a0kunR5b45uWNOOGp1+hjrmFrz++jI1C9u4mpVqtR2aptiST2E80dQOpAFE1RfksWm2
+	 hUn1AV8ow2E0XWrRfcHF+eCQgmZDI7GPuK2LrtsSEgj6NBJPwLsugAC39BX60dnzogNyG
+	 +vnZXR3BkawIrWe8ZfZZLiEmQSlDDMu8rqgskkqLAMSVh+R7tl0lgX+dsmkxOSXVylA==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795607277;
-	bh=H8Gjg89XBJxV4LDCwmUAswPCV+mhtU6ww2Y0qCHJNCo=;
+	s=default; t=1795613139;
+	bh=LKTdsueXzM+Anrd2T2NrfiQX934VMCRi3JI9wCRn2Hs=;
 	h=To:Date:Subject:List-Id:List-Unsubscribe:List-Archive:List-Post:
-	 List-Help:List-Subscribe:From:Reply-To:From;
-	b=cqk7thpfJbe9luwMA8Tvf8inQfVOVqoj/Lyvw2I0RIhNEsvUN/6GCh7NVd5ODCOGI
-	 DC4m6wzv3U2dwQ7mLXv5esOez46sf29lSI2AH3uyFdujJw1q2wp163ZjhospvPOe6g
-	 cCKIUSBO7CQ0Bp7dLRGfRUimEEJAiE6o7d5dxsv2DS61/i6LrvpphCg90/Q6BTkYfI
-	 HyHSTBff1+LEBAYrtXMGjLaLai/hslVdqiTwSgeNRo9q4wy9HHM+EfJH+/n2inWHT+
-	 RaOXXOMrcCe2dZytt1rrFuzj4pPb+zpEQJG0gfyKRBUFEXcVkpRS32jwzVbC6leqhU
-	 Hj6HfpnpfAQ3w==
+	 List-Help:List-Subscribe:From:Reply-To:Cc:From;
+	b=nqOrxJ3Rd/l0VVt+UrEmAt1L8Dq07nmehWeb9tvgnCuRbsp/EOL2NjbDpTDGYe1v4
+	 M06+OdLlSQPa4bKDwuf++ssZUwSu3A2nLRS7UrVAyygGzQhKD4rryAzu7qcUnWZqtr
+	 9Cb8oZLnXiYMLRDYBIlJgpqMYV6+kDxNjcBygukId2KrhtrGmJBMrkScRha9lLczhS
+	 aoqM+sN6JO4azfsaR6qafBlNL4jSjTix7I4OH1p8pYXmMxhEQO2qJk6dk89WryvQpD
+	 YMHhZz6WVxmoP7dN152JCBx3VHZJoKYpVjyrydD6Hb1a3jNM7++VXZSQGNJBy851uB
+	 K5qX8yl8LtNxA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0A7F3606F0;
-	Wed, 25 Nov 2026 11:47:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [IPv6:2605:bc80:3010::138])
- by lists1.osuosl.org (Postfix) with ESMTP id 2FFC7325
- for <buildroot@buildroot.org>; Wed, 25 Nov 2026 11:47:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8264B4065B;
+	Wed, 25 Nov 2026 13:25:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by lists1.osuosl.org (Postfix) with ESMTP id A7CCC22B
+ for <buildroot@buildroot.org>; Wed, 25 Nov 2026 13:25:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1575C80CBA
- for <buildroot@buildroot.org>; Wed, 25 Nov 2026 11:47:55 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8CB236076D
+ for <buildroot@buildroot.org>; Wed, 25 Nov 2026 13:25:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tu8_5EC_2zP8 for <buildroot@buildroot.org>;
- Wed, 25 Nov 2026 11:47:54 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 0597F80D34
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::630; helo=mail-ej1-x630.google.com;
- envelope-from=yegorslists@googlemail.com; receiver=<UNKNOWN> 
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
- [IPv6:2a00:1450:4864:20::630])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0597F80D34
- for <buildroot@buildroot.org>; Wed, 25 Nov 2026 11:47:53 +0000 (UTC)
-Received: by mail-ej1-x630.google.com with SMTP id
- a640c23a62f3a-c516a1623d0so554534366b.2
- for <buildroot@buildroot.org>; Wed, 25 Nov 2026 03:47:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1795607272; x=1796212072;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to:content-type;
- bh=CsmO4wJZDQxniyCb6FhaEBzms1cjFu4Nr1vMbDVIxSE=;
- b=26po3ykvQfiynVwU2reU4MrV2ZMqnl5rHHA2Lb3qyQicH/wWJ0As5Ui+Fp7nsCATIq
- KUFGycGmajOMH/CwCmaRKopTeWJOlmF3X3fw0jjFGUbjZdCuJge5rt8RvIp+KgWRgReb
- VJ9afDfz7Qc7OHRfT3b4IUWfxlV2drs3Kxvyq1qIHVO7+GObOpwFrnSHy+lALxNhBO3B
- xFUj/5SmsHADJtuf7O8sc8+Yar7/sh6FGIGLwvuGiYsHePmgRbCXVq8EOv2ZTvuS5oC9
- gTxUBndXLXoQyNzaGd+pBsWYOaH4EQRQ6N/+jmwU9b9Cne8FuT8lkDbCENp/FA7cUsHx
- Imgw==
-X-Gm-Message-State: APuU4Z/z51W5CwetKIeArkGTvJRyqlIYzRh79u8rHFP5J01cjfTo2I4r
- 9vK51cNueOAtb/zM19iFlfUz9mXYu4Yo+nJ0XVH/ao2WqWbEsKaHOa6OKFYgcw==
-X-Gm-Gg: AZFdTZci8v/drZpLR+h+DIaeGw20ECw1ZRsXz/3GnelZ08VFSkSwpwYrAYrMcF148Um
- wx0/wSUNNM16D4a9qu2gOIeNLArjuEwIDO1oEkXUFkb9t8yZ0lzvMZ4W3yNoYctt1EuM4USuAyt
- 5LnQbjUyhc5x51i52+JI0G7zVu1XfciT4Pf/pAXGMZAuy366W9/HosIIModsPqNl56Ezqdrpanb
- fFu+pILsjZUCUydsyanvELAp4RlbvFaYnnvKnXt/4/MyfTmKrDb9lg1hBwb97w6dT7bwXTRdz4Y
- sJkTPzxNTHDRCRcV2OeorHBDIODg/1kGeUcFcSa4qx6Mc8NKJY0EF3VF/E7hEx83bTucRv1LW+y
- TWNtqH5qk44HqScP8VTIcEK40wO8Ttjyfei/cvO/B8Dwsb31gejHsJLeQ7eJYm0kc7LR1oLWFKW
- KpArzWaLSU+o9WpJj5jZw0O8CWoBCzpAK31aM0nKR55yzE+i4cr4c5wtGfjX2HsNwhvFDJLHQSD
- 2CevPq14kYUNmvnH6kK9l5mm2YS9hBeVPcWcHZeJwMI4cGcTgXw3xZ3JFdB2zqO4+DgM6kpcedC
- yEF1p+FbP6k+tKazfwbuU4V9hPNQIKr74z5S/wKTZDBlep+3odfPnbR1D4oKsXLlCry07w7h25X
- 57iuz+2/87Ry1cZFpZk/wcktcdzqCPQ==
-X-Received: by 2002:aa7:cccf:0:b0:6b7:cc0c:945e with SMTP id
- 4fb4d7f45d1cf-6ba37e84fbemr10564061a12.23.1795607271688; 
- Wed, 25 Nov 2026 03:47:51 -0800 (PST)
-Received: from development2.visionsystems.local (mail.visionsystems.de.
- [213.209.99.202]) by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-6ba37109b55sm7826646a12.32.2026.11.25.03.47.51
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 25 Nov 2026 03:47:51 -0800 (PST)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GpkUjuMojdrG for <buildroot@buildroot.org>;
+ Wed, 25 Nov 2026 13:25:36 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 5245A605E0
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5245A605E0
+ for <buildroot@buildroot.org>; Wed, 25 Nov 2026 13:25:32 +0000 (UTC)
+Received: from bubutux.fritz.box (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519MLKEM768 server-signature RSA-PSS (4096 bits) server-digest
+ SHA256) (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id A7A802C8522A;
+ Wed, 25 Nov 2026 14:25:30 +0100 (CET)
 To: buildroot@buildroot.org
-Date: Wed, 25 Nov 2026 12:47:50 +0100
-Message-Id: <20261125114750.611805-1-yegorslists@googlemail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Wed, 25 Nov 2026 14:25:01 +0100
+Message-ID: <20261125132502.1057833-1-buildroot@bubu1.eu>
+X-Mailer: git-send-email 2.56.1
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH] package/chawan: fix build with uClibc-ng
- without fenv.h
+Subject: [Buildroot] [2026.08.x] package/python-setuptools: add patch to fix
+ CVE-2026-59890
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,82 +93,169 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yegor Yefremov via buildroot <buildroot@buildroot.org>
-Reply-To: Yegor Yefremov <yegorslists@googlemail.com>
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-The bundled QuickJS includes <fenv.h>, which uClibc-ng only provides
-with UCLIBC_HAS_FENV. Buildroot enables it for hard-float targets only,
-so the build fails with soft-float uClibc-ng toolchains:
+Backport the upstream fix for CVE-2026-59890 (GHSA-h35f-9h28-mq5c)[1], a
+MANIFEST.in exclusion bypass in sdist via Unicode normalization
+collision (NFC/NFD).
 
-  lib/quickjs/quickjs.c:33:10: fatal error: fenv.h: No such file or directory
+CVE-2026-59890 affects building sdists, which the normal buildroot
+workflow doesn't do. But setuptools could also be part of our sdk
+and it can be enabled for the target, or it could be used in custom
+build steps in an external tree.
 
-Nothing in quickjs.c uses fenv.h, so add a patch dropping the include.
+The advisory mentions this is most relevant on macOS APFS/HFS+ but this
+can also be triggered by building an sdist from a source tree containing
+NFD names, e.g. a tarball or commit created on macOS.
 
-This issue has been present since commit 9ec34dc363d7 ("package/chawan:
-new package"), as chawan 0.4.4 already included fenv.h in its bundled
-QuickJS. It therefore affects 2026.11-rc1 and later; no maintenance
-branch is affected.
+[1] https://github.com/pypa/setuptools/security/advisories/GHSA-h35f-9h28-mq5c
 
-Fixes:
-https://autobuild.buildroot.org/results/2d0823849c690c6471249c066f20b9dc8460f25b
-
-Fixes: 9ec34dc363d7db8d5bc460d2607b1facf2103961 ("package/chawan: new package")
-Assisted-by: Claude:claude-opus-5-5
-Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+Fixes: CVE-2026-59890
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 ---
- ...1-quickjs-drop-unused-fenv.h-include.patch | 32 +++++++++++++++++++
- 1 file changed, 32 insertions(+)
- create mode 100644 package/chawan/0001-quickjs-drop-unused-fenv.h-include.patch
+ ...de-form-when-matching-MANIFEST.in-pa.patch | 106 ++++++++++++++++++
+ .../python-setuptools/python-setuptools.mk    |   3 +
+ 2 files changed, 109 insertions(+)
+ create mode 100644 package/python-setuptools/0002-Normalize-Unicode-form-when-matching-MANIFEST.in-pa.patch
 
-diff --git a/package/chawan/0001-quickjs-drop-unused-fenv.h-include.patch b/package/chawan/0001-quickjs-drop-unused-fenv.h-include.patch
+diff --git a/package/python-setuptools/0002-Normalize-Unicode-form-when-matching-MANIFEST.in-pa.patch b/package/python-setuptools/0002-Normalize-Unicode-form-when-matching-MANIFEST.in-pa.patch
 new file mode 100644
-index 0000000000..3ab16577f0
+index 0000000000..ce1ef12634
 --- /dev/null
-+++ b/package/chawan/0001-quickjs-drop-unused-fenv.h-include.patch
-@@ -0,0 +1,32 @@
-+From 26761d1edd103f05e677471d9a1f02c825d7149a Mon Sep 17 00:00:00 2001
-+From: Yegor Yefremov <yegorslists@googlemail.com>
-+Date: Wed, 25 Nov 2026 12:25:29 +0100
-+Subject: [PATCH] quickjs: drop unused fenv.h include
++++ b/package/python-setuptools/0002-Normalize-Unicode-form-when-matching-MANIFEST.in-pa.patch
+@@ -0,0 +1,106 @@
++From dd9f436a36486b4cb8a4c70a2321548b0be09b8f Mon Sep 17 00:00:00 2001
++From: Jason R. Coombs <jaraco@jaraco.com>
++Date: Sat, 27 Jun 2026 14:46:34 +0000
++Subject: [PATCH] Normalize Unicode form when matching MANIFEST.in patterns
 +
-+Nothing in quickjs.c uses <fenv.h>, but the include breaks the build
-+with C libraries that don't provide it, like uClibc-ng built without
-+UCLIBC_HAS_FENV (e.g. for soft-float targets):
++FileList matched MANIFEST.in patterns against on-disk names
++byte-for-byte with no Unicode normalization. On macOS APFS/HFS+, a
++file stored NFD and a pattern authored NFC denote the same file but
++differ byte-for-byte, so an exclude/global-exclude/recursive-exclude/
++prune rule could silently fail to drop a non-ASCII-named file,
++publishing it in the sdist despite the rule.
 +
-+  lib/quickjs/quickjs.c:33:10: fatal error: fenv.h: No such file or directory
++Normalize both the pattern and the candidate path to NFC before
++matching, via a new unicode_utils.normalize() helper and a
++_NormalizedMatcher wrapper around the compiled pattern in
++translate_pattern.
 +
-+Upstream: N/A, upstream rejects AI-assisted patches
-+Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
++Fixes GHSA-h35f-9h28-mq5c.
++
++CVE: CVE-2026-59890
++Upstream: https://github.com/pypa/setuptools/commit/dd9f436a36486b4cb8a4c70a2321548b0be09b8f
++[Marcus: Drop tests and newsfragment changes]
++Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 +---
-+ lib/quickjs/quickjs.c | 1 -
-+ 1 file changed, 1 deletion(-)
++ setuptools/command/egg_info.py | 28 +++++++++++++++++++++++++++-
++ setuptools/unicode_utils.py    | 14 ++++++++++++++
++ 2 files changed, 41 insertions(+), 1 deletion(-)
 +
-+diff --git a/lib/quickjs/quickjs.c b/lib/quickjs/quickjs.c
-+index 13854e90..80e9c78f 100644
-+--- a/lib/quickjs/quickjs.c
-++++ b/lib/quickjs/quickjs.c
-+@@ -30,7 +30,6 @@
-+ #include <assert.h>
-+ #include <sys/time.h>
-+ #include <time.h>
-+-#include <fenv.h>
-+ #include <math.h>
-+ #if defined(__APPLE__)
-+ #include <malloc/malloc.h>
-+-- 
-+2.34.1
++diff --git a/setuptools/command/egg_info.py b/setuptools/command/egg_info.py
++index 7e00ae2..0e31b8f 100644
++--- a/setuptools/command/egg_info.py
+++++ b/setuptools/command/egg_info.py
++@@ -35,6 +35,27 @@ from distutils.util import convert_path
++ PY_MAJOR = f'{sys.version_info.major}.{sys.version_info.minor}'
++ 
++ 
+++class _NormalizedMatcher:
+++    """
+++    Wrap a compiled pattern so that matching is insensitive to Unicode
+++    normalization form.
+++
+++    File names walked from disk (NFD on macOS APFS/HFS+) and patterns from
+++    ``MANIFEST.in`` (typically NFC) can denote the same file while differing
+++    byte-for-byte. Normalizing both sides before matching keeps an exclusion
+++    (or inclusion) from silently failing. See GHSA-h35f-9h28-mq5c.
+++    """
+++
+++    def __init__(self, pattern: re.Pattern) -> None:
+++        self._pattern = pattern
+++
+++    def match(self, path):
+++        return self._pattern.match(unicode_utils.normalize(path))
+++
+++    def search(self, path):
+++        return self._pattern.search(unicode_utils.normalize(path))
+++
+++
++ def translate_pattern(glob):  # noqa: C901  # is too complex (14)  # FIXME
++     """
++     Translate a file path glob like '*.txt' in to a regular expression.
++@@ -44,6 +65,11 @@ def translate_pattern(glob):  # noqa: C901  # is too complex (14)  # FIXME
++     """
++     pat = ''
++ 
+++    # Normalize the pattern so it matches paths regardless of the Unicode
+++    # normalization form used on disk (GHSA-h35f-9h28-mq5c). Candidate paths
+++    # are normalized to the same form by ``_NormalizedMatcher``.
+++    glob = unicode_utils.normalize(glob)
+++
++     # This will split on '/' within [character classes]. This is deliberate.
++     chunks = glob.split(os.path.sep)
++ 
++@@ -115,7 +141,7 @@ def translate_pattern(glob):  # noqa: C901  # is too complex (14)  # FIXME
++             pat += sep
++ 
++     pat += r'\Z'
++-    return re.compile(pat, flags=re.MULTILINE | re.DOTALL)
+++    return _NormalizedMatcher(re.compile(pat, flags=re.MULTILINE | re.DOTALL))
++ 
++ 
++ class InfoCommon:
++diff --git a/setuptools/unicode_utils.py b/setuptools/unicode_utils.py
++index f502f5b..dbce03e 100644
++--- a/setuptools/unicode_utils.py
+++++ b/setuptools/unicode_utils.py
++@@ -19,6 +19,20 @@ def decompose(path):
++     return path
++ 
++ 
+++def normalize(text):
+++    """
+++    Return *text* in a canonical Unicode form (NFC) so that names which are
+++    visually identical but encoded differently compare equal.
+++
+++    macOS APFS/HFS+ store file names in decomposed form (NFD), while patterns
+++    in ``MANIFEST.in`` are typically authored composed (NFC). The two denote
+++    the same file but differ byte-for-byte, so matching them directly lets an
+++    exclusion silently fail. Normalizing both the walked path and the pattern
+++    to a single form before matching avoids that (GHSA-h35f-9h28-mq5c).
+++    """
+++    return unicodedata.normalize('NFC', text) if isinstance(text, str) else text
+++
+++
++ def filesys_decode(path):
++     """
++     Ensure that the given path is decoded,
+diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
+index e013000c57..73da6b2e88 100644
+--- a/package/python-setuptools/python-setuptools.mk
++++ b/package/python-setuptools/python-setuptools.mk
+@@ -15,5 +15,8 @@ PYTHON_SETUPTOOLS_SETUP_TYPE = pep517
+ PYTHON_SETUPTOOLS_DEPENDENCIES = host-python-wheel
+ HOST_PYTHON_SETUPTOOLS_DEPENDENCIES = host-python-wheel
+ 
++# 0002-Normalize-Unicode-form-when-matching-MANIFEST.in-pa.patch
++PYTHON_SETUPTOOLS_IGNORE_CVES += CVE-2026-59890
 +
+ $(eval $(python-package))
+ $(eval $(host-python-package))
 -- 
-2.34.1
+2.56.1
 
 _______________________________________________
 buildroot mailing list
