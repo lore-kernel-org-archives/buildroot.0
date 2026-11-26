@@ -1,208 +1,221 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9B4A606A31C
-	for <buildroot@archiver.kernel.org>; Thu, 26 Nov 2026 19:25:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F42E606A31C
+	for <buildroot@archiver.kernel.org>; Thu, 26 Nov 2026 19:25:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=AJjJcS4W
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=gmbmv30j
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7896860B34;
-	Thu, 26 Nov 2026 19:25:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4EDCC409E9;
+	Thu, 26 Nov 2026 19:25:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vFn1dHZlm6_h; Thu, 26 Nov 2026 19:25:13 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 6B7B160AD4
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795721113;
-	b=eyKjTA8soIGToVH0jSVbRyA2dtl8H4Ng4X4DKrpAFK9eUJYs01zI31TAnuvnUKxSMP+T
-	 Ef//nyBAhXS1nRJa1ZLPJ68Js18ATYiXLnrEln4QTLnb0cyN4Opyia32mmF3hM/4aLgHj
-	 vRAdesnNQpdsZlcUdqnE98/ke+Ro2y7psPWRKbslg86/UR61CIvHziU4GEXKYLq7WoyS5
-	 fj92G8H0mJYNFhKudQx6Fg9923BCRVGI0uUiDvHxsMrxUEQ+ohMefvi5V8TMiaezU7JWm
-	 Rc8WiXwAFcXpl1B534wSEAzfQBsSLv6MvNVO/02Qc9k0UMvSJ9xKMy3dbcVkfDv98YA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8UK5tN8IVVYl; Thu, 26 Nov 2026 19:25:14 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org B82B140A0D
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795721114;
+	b=NIFWMzyJ3cHDxnVUSA/LjecjqCkvOZk0Ph4XJaFCDO0e+ceBrdXsZoqUNSNP+cZz1VK8
+	 7kTulH96XurIM9RwunlpbsJLJHKaga656oTGmtPVzqnXmSe1nWV41K6woYD7pjsxDrwFV
+	 18qy5quwgzRO/qbnGMa42PiS6ln8NU05joscyokNiUdv1zoe5Ca4vH1a9GHla45X/J42u
+	 2d2iGFwKHbbrKksBjskqN3HN//RfMkPXjRQbD6SBNkCc2+O9rKF3gXq7Wq2qBJQz9yDzw
+	 lD2kgtWeMv9FPLo+SWAHmuCMM7fkWkBlciHr2YlR4vZKFqZ8pe7aAlkPvHwS7auAvZQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795721113;
+	c=relaxed/relaxed; t=1795721114;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
 	 DKIM2-Signature:Message-Instance:X-UI-Sender-Class:Received:To:Cc:
-	 Date:Message-ID:X-Mailer:MIME-Version:X-Provags-ID:UI-OutboundReport:
-	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:From:
-	 Reply-To:Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=8JG3S0gtBT4SC2xmjbnncFPKDd4Fhrjt8l1sWzhI97o=;
-	b=S3i7rH6KklhxF/biIryrGuyGd/cpuSu4wqf41jakx7rnyIn+FTX+Nt9f5ZII2BDDapSV
-	 I8IXzirPvVchFIWggc6O5Yjurx8Id49Tq0QNEtILWX/OHPUk07YEg3SJh71hDAg8g5FcL
-	 6ZgIDeScjt4HrVJDGSkfLl8wXJA8V3pdSUYc3bSE5pLhSN4TKhdVd1FBgPf++aS/pxrbk
-	 UHANSKs9j/RCt1I7UY9Idi+y+/cTfmzC1iPbMw/jz6oxKGikhAwOfJxSTG0Yico5A+Hx1
-	 ckcAESY9iQt4dPPiXLBTy89fIoI3FhT/CeJ/awV+dAgZe49NwI6GSeFfi8cF51qtE/w==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+	 Date:Message-ID:X-Mailer:In-Reply-To:References:MIME-Version:
+	 X-Provags-ID:UI-OutboundReport:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:From:Reply-To:Content-Type:Content-Transfer-Encoding:
+	 Errors-To:Sender;
+	bh=jBtlSUz37+FfH0peKi9GWDtincJ2xu82uc41/kI4Dp0=;
+	b=m9BykTNX895slXV9OYG3YrFm+JxrZ/yemTCvF7n+4p59cICi2sfVwqDiX3FNefMtN5Fu
+	 sIClvoLwq1glK1I5xHjdu3Iw5GY/4sz7hnvrHnI2WTIzq5VJMVL3eLcnd2yTGYog9eSiG
+	 WnWmuJBF2MIQY28CzeIMiyfuXHD0DhM1m/zadN2uuXHGmCcHzByj5oL77t8+OwB0TIJen
+	 fwLFO2+vLzZGMiKtwgeI0jKGWVu3sQy9SiBDI++5B5DAERsgUJkWzK5ctYQpUV4w77HzV
+	 L4xFJ4PgB6MtlqcCH3ycbn5BOQ1KTh1KEc6ZcvOcS9VAkE71mMt0m/foOc5/KxsGmHQ==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795721113;
-	bh=8JG3S0gtBT4SC2xmjbnncFPKDd4Fhrjt8l1sWzhI97o=;
-	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
-	b=AJjJcS4W9TdoRjEubLhAPz6btBgropZ2tmpiHTY0ONFhUhPrFlwSD8pZtM5Swkl+V
-	 +Z+eZgegNNlh2mf8iA6jMutpoaJeZjte/xdlQFTFNvd7YvJPJB2FuoP0jgNhnSsb1p
-	 oTU0K/S5Q6L3RJmDoAXne3+dZXXbsIB3FV8qLdE5cA+JWhRBASMXPTG23Z/WB42F9l
-	 DyzhRjRmKyfyhbEwbw4xAHrTKMlPGVKJhyC3V116HK2Za9kvkY7M5zuqr902Pt1h/D
-	 HLNLfKMe5Uc+o0xZ9rcpdwDtG6N+hW96nzS+EEoEAU8XRzVwOLXT/KklyORYVsKC0M
-	 3qjo/CJEt8sGw==
+	s=default; t=1795721114;
+	bh=jBtlSUz37+FfH0peKi9GWDtincJ2xu82uc41/kI4Dp0=;
+	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From:Reply-To:From;
+	b=gmbmv30jYkmdqzL5YTQTKkxagIfVB3hzSyFcEqMIHtBrZ16ef3ogPvnpggnmhvkRC
+	 JBhKUVnhUtIveZYr+ixx/1WkeJv8ww6FTl2FqCQAFu6cJ4R5yfro5GbDMYq+72a0A/
+	 Ihg0PQBBZ8MHbJh0vbGdq+LaTj2TYDn4/11U0Gg9nMWfsYPsajVx538KGF264BSGi5
+	 zYg+RWJk9KAQhno5Cc3+c13ARkjnPd91dNPaN4QZThWsmYK3tEtcS6n5yXZ5M6O/8W
+	 GUqigrRFeUlSgqysoLl1QAM+IeyAGq8xDhQWXAlpMETC5oruTKTKbCXrK2RkSPvNxk
+	 mNm5vX2J0g9TQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6B7B160AD4;
-	Thu, 26 Nov 2026 19:25:13 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id C9D9222B
- for <buildroot@buildroot.org>; Thu, 26 Nov 2026 19:25:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B82B140A0D;
+	Thu, 26 Nov 2026 19:25:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 31A09260
+ for <buildroot@buildroot.org>; Thu, 26 Nov 2026 19:25:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B06C040549
- for <buildroot@buildroot.org>; Thu, 26 Nov 2026 19:25:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 236C340543
+ for <buildroot@buildroot.org>; Thu, 26 Nov 2026 19:25:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fxweYa58-ydW for <buildroot@buildroot.org>;
- Thu, 26 Nov 2026 19:25:07 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 26F87400E6
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
+ id HcoMZn9XjGLA for <buildroot@buildroot.org>;
+ Thu, 26 Nov 2026 19:25:08 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 7FDF540542
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 26F87400E6
- for <buildroot@buildroot.org>; Thu, 26 Nov 2026 19:25:06 +0000 (UTC)
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7FDF540542
+ for <buildroot@buildroot.org>; Thu, 26 Nov 2026 19:25:07 +0000 (UTC)
 DKIM2-Signature: i=1; m=1; t=1795721105; mf=PGZpb25hLmtsdXRlQGdteC5kZT4=;
  rt=PGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnPg==; d=gmx.de;
- s=s31663417:rsa-sha256:KfUnbMZuhURn2/I9LNJmSTHtAXjW
- okIaV71Cu091ODqlSoqKfaGKNy+4/pVZ9ZaFMWKaVTU7z7QfLAuSVXfv9C6uwozMJtymtEWB9Ys
- fU+d1e+cfok7RfRznXWC3Q61flWoG4SKvf6UwsfmJYqpbrA7XHmPsoj8xyPugD5KdgglmuUXsCr
- GT/0wibqis7Z/pKD8rVAQJHUEk0KW7m8t8cgS5bRmiBC+os6IQiupEalN0iV8oeNvhhwZOEyBhf
- AaVD7enHt628cRIDec0U771Rkt9RH/ecmfthlHfAVnnAMBAjKj8FJjIZynH1I5LkmeYPrJVq0Li
- cDi4Nt7vCK2/Ig==;
-Message-Instance: m=1; h=sha256: ln4LjCK1IY5QLEHR0JDPdTJOcjyXEPeOpJrC7ziYrTA=:
- AxRQcpRSGI+TPzQzGgWi0tWSHa8kt1/cz12K4+R+XLw=, sha512:
- GFJEMtIgYBcAVOASN9IMQgeYdZzdsYsZz3hxhh7s1+N+yae0h4GpJ6ZDjBFdQ0Acj7REMuKSC8Cpyj6Yp/VHdw==:
- 9hbqbEKmzeI14JYVn5f4Z+zIsCzruDlThwyBFnts/hJZ0TyqX0uiZhhL8rctayg1LqH8SkSl561BY7/NWjhTlA==;
+ s=s31663417:rsa-sha256:gvszR+9KN1xnQQsXHc8J9ZksXb4u
+ qWi4v9xEf9Y1X8dWJkYgTES9gNfXfA4x1G2P2D/It4TOb8BSpW0FzIuXosVWuatdMftAVZABbRD
+ sGQCNQkeq1LAOxMKw7Oe35y20ds/n4YNtCeGILXduiz8o6zs2uy8CUinJt/Y+H9BjVAL3dNogO/
+ GPD2uu9gDr4RynWBKBkZgWYmr5BswgmrynsCO5sLm/xcLVL45AtrOwsvwFAE5MwL50mXOTNreLU
+ 6fE/uTH/wB41SPnjX4qlEkYlzCjI+EqhE77LhN8U9ZOqT0rUcIiIUSGUSp0w6Zzdtgjq0iXhRIY
+ e4JBg5kYxhhK+Q==;
+Message-Instance: m=1; h=sha256: tIbTAmhnuSKwmsBf6shi7JKZgua4RGFjHT5DWIRUgIY=:
+ 10xckxAVR25vIlTgl87Bhp2Ed/YNv99cGFTYmcxUoNE=, sha512:
+ 7kYpBylUbRkWJ4xcgwnUSTeNlJA144CAP55yZKEwK29JR5vgW9KXE6mzLYvajOURGeMII6qLKboXlb8p1Pjg5g==:
+ 6LQEymG4zXZKfCp0cAOmRTgHf5SiQMbmhTiieaWwCGRhG164n8FcrwHE4H42i4WpLHpTPYR88MteT5Efnw2i3g==;
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from client.hidden.invalid by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M5wPh-1xZi1u2YqB-00CF6x; Thu, 26
- Nov 2026 20:24:53 +0100
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mj8qd-1yBVYV1qJp-00iYSL; Thu, 26
+ Nov 2026 20:24:58 +0100
 To: buildroot@buildroot.org
 Cc: Arnout Vandecappelle <arnout@rnout.be>, Thierry Bultel <tbultel@free.fr>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Fiona Klute <fiona.klute@gmx.de>
-Date: Thu, 26 Nov 2026 20:24:25 +0100
-Message-ID: <20261126192435.1826415-1-fiona.klute@gmx.de>
+ "Fiona Klute (othermo GmbH)" <fiona.klute@gmx.de>
+Date: Thu, 26 Nov 2026 20:24:31 +0100
+Message-ID: <20261126192435.1826415-7-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261126192435.1826415-1-fiona.klute@gmx.de>
+References: <20261126192435.1826415-1-fiona.klute@gmx.de>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:AvNu48T1oyGUVVQ/nkjwsgyQasyZh/qGjHJudbFSqrT6JbMxa9s
- rypqEKJlt9ZrnDnguJd9S8qyXDhgAPFI+fmzvnblhVgPPX+m6Cyf6+Nkkh78AXai5qkK3mM
- vU77+JVxRo5ObdyZYWL0X8q/dfKkO7vFwOlcfUofGxdjlJeN12hSlo7B319NBgSAEQqSd2e
- EVXgXmActgnczgdoavtlA==
-UI-OutboundReport: notjunk:1;M01:P0:3xiACkpgSEQ=;Lzc4bt5P1vVKZKIwszrJ3ZI5SQ4
- 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
- ba2fm8JRhUY8IGuWP6tHQ=
-Subject: [Buildroot] [PATCH 00/10] Update dracut to v113,
- enable proper cross-build
+X-Provags-ID: V03:K1:td9FkDw8x4LdyBOUNqr3X0SOfQrodyQBzLmXLJ4mNESIrjmwwSG
+ uuCgqPN1tukddLBjHzCGepoDmDvl+vGbk2vdPhYMUIVO/sn0lMdv1LN7ORX5hJbuAuuG/BN
+ NnlxPCaYvFiuhKixlzBSWgew9USPzb1XHbQJV2PmSDbE4An2pQNzPjO9b7UtecALRiGDnLm
+ 599Ae9JFbHCC8rluU2G3g==
+UI-OutboundReport: notjunk:1;M01:P0:iYPyS5Bn6Qo=;w8igUVLJClifuJyEPcZduQ58h0f
+ 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
+Subject: [Buildroot] [PATCH 06/10] package/dracut: add target package that
+ builds dracut-util only
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -217,87 +230,229 @@ Reply-To: Fiona Klute <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,USER_AGENT_GIT
-	autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Several parts of the dracut code expected dracut to be installed a
-sysroot, and to be able to execute binaries from sysroot. This led to
-things like the busybox module being unable to install applet
-symlinks, because it tried to run "busybox --list" to find the
-available ones. Most of these have been fixed in v113 (in no small
-part by me, see [1] and the various PRs split out of it). A few
-remain, for which this series adds patches.
+From: "Fiona Klute (othermo GmbH)" <fiona.klute@gmx.de>
 
-On the other hand, Buildroot was not building dracut-util for the
-target, which is a helper tool to be installed into the
-initrd. Missing it breaks a number of modules at runtime. Including
-the cross-built dracut-util into an initrd built using host-dracut
-still needs a patch pending upstream.
+dracut-util is a small executable that provides dracut-getarg{,s}
+commands for scripts in the initramfs. As such it must be built and
+installed for the target so it is available when building the
+initramfs.
 
-The first three patches set variables that already existed in previous
-dracut versions, so they don't depend on the update, but they aren't
-terribly useful without the futher fixes.
+Note that the target package does not run ./configure. If a full
+Dracut target install is desired at some point, running ./configure
+must be gated behind an option, so dracut-util can still be built for
+target configurations that do not fulfill all the dependencies of a
+full install.
 
-Technically most of the patches after the version bump could be
-squashed into it, but I hope they will be easier to understand and
-review this way.
+Dracut v113 assumes dracut-util is part of the same install as the
+main dracut script, which does not work for a cross-build. Add patches
+that allow overriding the location using DRACUT_RUNTIMEDIR.
 
-The result: Most modules (from basic ones like "busybox" to
-"systemd-*") now actually work, and I'm including a test to prove
-it. :-)
-
-This is quite a big change to still make it into 2026.11, but v113
-also contains security fixes (how relevant they are depends on
-selected modules), and having (most) dracut modules actually work
-seems useful. But I can live with next if I have to. ;-)
-
-Best regards,
-Fiona
-
-[1] https://github.com/dracut-ng/dracut/pull/2588
-
-Fiona Klute (othermo GmbH) (10):
-  fs/cpio: set DRACUT_ARCH to target architecture if using Dracut
-  fs/cpio: set DRACUT_INSTALL_PATH to target PATH if using Dracut
-  fs/cpio: set NM_VERSION for Dracut if network-manager is enabled
-  package/dracut: security bump to version 113
-  fs/cpio: configure Busybox applets if using Dracut
-  package/dracut: add target package that builds dracut-util only
-  fs/cpio: if using Dracut, provide target dracut-util
-  package/dracut: install and use systemd modules
-  package/dracut: install components for systemd exitrd
-  support/testing: test_cpio: add test for dracut initrd with systemd
-
- .checkpackageignore                           |   1 -
- fs/cpio/cpio.mk                               |   5 +
- package/Config.in                             |   1 +
- ...nor-DRACUT_INSTALL_PATH-in-find_bina.patch |  43 ++++++
- ...ll-allow-installing-from-dracut-dir-.patch | 138 ++++++++++++++++++
- ...low-inst-_script-_simple-from-dracut.patch |  75 ++++++++++
- ...004-feat-introduce-DRACUT_RUNTIMEDIR.patch |  69 +++++++++
- ...l-dracut-util-from-DRACUT_RUNTIMEDIR.patch |  30 ++++
- package/dracut/Config.in                      |  14 ++
- package/dracut/Config.in.host                 |   1 +
- package/dracut/dracut.hash                    |   2 +-
- package/dracut/dracut.mk                      |  39 ++++-
- package/dracut/dracut_wrapper.in              |   2 -
- package/dracut/merged-usr-module-setup.sh     |  26 ----
- support/testing/tests/fs/test_cpio.py         | 100 +++++++++++++
- .../tests/fs/test_cpio/dracut-systemd.conf    |  83 +++++++++++
- 16 files changed, 596 insertions(+), 33 deletions(-)
- create mode 100644 package/dracut/0001-fix-functions-honor-DRACUT_INSTALL_PATH-in-find_bina.patch
- create mode 100644 package/dracut/0002-fix-dracut-install-allow-installing-from-dracut-dir-.patch
- create mode 100644 package/dracut/0003-fix-functions-allow-inst-_script-_simple-from-dracut.patch
+Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
+---
+ package/Config.in                             |  1 +
+ ...004-feat-introduce-DRACUT_RUNTIMEDIR.patch | 69 +++++++++++++++++++
+ ...l-dracut-util-from-DRACUT_RUNTIMEDIR.patch | 30 ++++++++
+ package/dracut/Config.in                      | 14 ++++
+ package/dracut/Config.in.host                 |  1 +
+ package/dracut/dracut.mk                      | 15 ++++
+ 6 files changed, 130 insertions(+)
  create mode 100644 package/dracut/0004-feat-introduce-DRACUT_RUNTIMEDIR.patch
  create mode 100644 package/dracut/0005-fix-base-install-dracut-util-from-DRACUT_RUNTIMEDIR.patch
  create mode 100644 package/dracut/Config.in
- delete mode 100644 package/dracut/merged-usr-module-setup.sh
- create mode 100644 support/testing/tests/fs/test_cpio/dracut-systemd.conf
 
+diff --git a/package/Config.in b/package/Config.in
+index 49659b007e..2ed4531928 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2844,6 +2844,7 @@ menu "System tools"
+ 	source "package/docker-credential-acr-env/Config.in"
+ 	source "package/docker-credential-gcr/Config.in"
+ 	source "package/docker-engine/Config.in"
++	source "package/dracut/Config.in"
+ 	source "package/dtui/Config.in"
+ 	source "package/earlyoom/Config.in"
+ 	source "package/efibootmgr/Config.in"
+diff --git a/package/dracut/0004-feat-introduce-DRACUT_RUNTIMEDIR.patch b/package/dracut/0004-feat-introduce-DRACUT_RUNTIMEDIR.patch
+new file mode 100644
+index 0000000000..b407756fde
+--- /dev/null
++++ b/package/dracut/0004-feat-introduce-DRACUT_RUNTIMEDIR.patch
+@@ -0,0 +1,69 @@
++From 6acf280b63e019ff6dce8962e1b749034a75ad70 Mon Sep 17 00:00:00 2001
++From: Fiona Klute <fiona.klute@gmx.de>
++Date: Mon, 17 Aug 2026 18:03:02 +0200
++Subject: [PATCH] feat: introduce DRACUT_RUNTIMEDIR
++
++DRACUT_RUNTIMEDIR is to be the location of Dracut executables used at runtime
++(in the initramfs), like dracut-util. In most cases this is the same as
++dracutbasedir, except when using --sysroot, where initramfs executables must
++match the sysroot (which may be cross-compiled). With --sysroot the default is
++the equivalent location inside the sysroot.
++
++Allow inst_binary to install from DRACUT_RUNTIMEDIR, whether in the sysroot or
++not.
++
++Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
++Upstream: https://github.com/dracut-ng/dracut/pull/2588
++---
++ dracut-functions.sh | 4 ++--
++ dracut.sh           | 9 ++++++++-
++ 2 files changed, 10 insertions(+), 3 deletions(-)
++
++diff --git a/dracut-functions.sh b/dracut-functions.sh
++index 41338288..0e02a373 100755
++--- a/dracut-functions.sh
+++++ b/dracut-functions.sh
++@@ -1127,11 +1127,11 @@ inst() {
++ inst_binary() {
++     local _ret _resolve_deps
++     [[ ${DRACUT_RESOLVE_LAZY-} ]] || _resolve_deps=1
++-    if $DRACUT_INSTALL ${dracutsysrootdir:+-r "$dracutsysrootdir"} ${initdir:+-D "$initdir"} ${loginstall:+-L "$loginstall"} ${_resolve_deps:+-l} ${DRACUT_FIPS_MODE:+-f} "$@"; then
+++    if $DRACUT_INSTALL ${dracutsysrootdir:+-r "$dracutsysrootdir" ${DRACUT_RUNTIMEDIR:+-B "$DRACUT_RUNTIMEDIR"}} ${initdir:+-D "$initdir"} ${loginstall:+-L "$loginstall"} ${_resolve_deps:+-l} ${DRACUT_FIPS_MODE:+-f} "$@"; then
++         return 0
++     else
++         _ret=$?
++-        derror FAILED: "$DRACUT_INSTALL" ${dracutsysrootdir:+-r "$dracutsysrootdir"} ${initdir:+-D "$initdir"} ${loginstall:+-L "$loginstall"} ${_resolve_deps:+-l} ${DRACUT_FIPS_MODE:+-f} "$@"
+++        derror FAILED: "$DRACUT_INSTALL" ${dracutsysrootdir:+-r "$dracutsysrootdir" ${DRACUT_RUNTIMEDIR:+-B "$DRACUT_RUNTIMEDIR"}} ${initdir:+-D "$initdir"} ${loginstall:+-L "$loginstall"} ${_resolve_deps:+-l} ${DRACUT_FIPS_MODE:+-f} "$@"
++         return "$_ret"
++     fi
++ }
++diff --git a/dracut.sh b/dracut.sh
++index ab4b1954..72bd0dda 100755
++--- a/dracut.sh
+++++ b/dracut.sh
++@@ -1002,6 +1002,13 @@ if [[ ! -d $dracutbasedir ]]; then
++     printf "dracut[F]: base directory '%s' does not exist.\n" "$dracutbasedir" >&2
++     exit 1
++ fi
+++if ! [[ ${DRACUT_RUNTIMEDIR:-} ]]; then
+++    if ! [[ ${dracutsysrootdir-} ]]; then
+++        DRACUT_RUNTIMEDIR="${dracutbasedir}"
+++    else
+++        DRACUT_RUNTIMEDIR="${dracutsysrootdir-}"/usr/lib/dracut
+++    fi
+++fi
++ 
++ export DRACUT_ARCH=${DRACUT_ARCH:-$(uname -m)}
++ 
++@@ -2580,7 +2587,7 @@ for dev in "${!host_fs_types[@]}"; do
++     fi
++ done
++ 
++-export initdir dracutbasedir \
+++export initdir dracutbasedir DRACUT_RUNTIMEDIR \
++     dracutmodules force_add_dracutmodules add_dracutmodules omit_dracutmodules \
++     prefer_dracutmodules mods_to_load \
++     fw_dir drivers_dir debug no_kernel kernel_only \
++-- 
++2.55.0
++
+diff --git a/package/dracut/0005-fix-base-install-dracut-util-from-DRACUT_RUNTIMEDIR.patch b/package/dracut/0005-fix-base-install-dracut-util-from-DRACUT_RUNTIMEDIR.patch
+new file mode 100644
+index 0000000000..582b5ea90c
+--- /dev/null
++++ b/package/dracut/0005-fix-base-install-dracut-util-from-DRACUT_RUNTIMEDIR.patch
+@@ -0,0 +1,30 @@
++From eee0e05dfddcfe6b9e7ce3e12d920454889d858d Mon Sep 17 00:00:00 2001
++From: Fiona Klute <fiona.klute@gmx.de>
++Date: Thu, 13 Aug 2026 18:08:46 +0200
++Subject: [PATCH] fix(base): install dracut-util from DRACUT_RUNTIMEDIR
++
++dracut-util is used inside the initramfs, so it must match the sysroot, if
++any. DRACUT_RUNTIMEDIR is the location for such executables.
++
++Signed-off-by: Fiona Klute <fiona.klute@gmx.de>
++Upstream: https://github.com/dracut-ng/dracut/pull/2588
++---
++ modules.d/80base/module-setup.sh | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/modules.d/80base/module-setup.sh b/modules.d/80base/module-setup.sh
++index 836eb6b4..19528ff9 100755
++--- a/modules.d/80base/module-setup.sh
+++++ b/modules.d/80base/module-setup.sh
++@@ -51,7 +51,7 @@ install() {
++         reboot \
++         sysctl
++ 
++-    inst_binary "${dracutbasedir}/dracut-util" "/usr/bin/dracut-util"
+++    inst_binary "${DRACUT_RUNTIMEDIR}/dracut-util" "/usr/bin/dracut-util"
++ 
++     ln -s dracut-util "${initdir}/usr/bin/dracut-getarg"
++     ln -s dracut-util "${initdir}/usr/bin/dracut-getargs"
++-- 
++2.55.0
++
+diff --git a/package/dracut/Config.in b/package/dracut/Config.in
+new file mode 100644
+index 0000000000..59f75949b6
+--- /dev/null
++++ b/package/dracut/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_DRACUT
++	bool
++	help
++	  dracut-ng is used to create an initramfs image by
++	  copying tools and files from an installed system
++	  and combining it with the dracut framework.
++	  dracut-ng is a drop-in replacement for the legacy
++	  dracut project.
++
++	  The target package installs only the dracut-util executable,
++	  which is needed by many of the Dracut scripts installed into
++	  the initramfs.
++
++	  https://dracut-ng.github.io/dracut/
+diff --git a/package/dracut/Config.in.host b/package/dracut/Config.in.host
+index af68728457..477578583c 100644
+--- a/package/dracut/Config.in.host
++++ b/package/dracut/Config.in.host
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_HOST_DRACUT
+ 	bool
+ 	select BR2_PACKAGE_HOST_KMOD
++	select BR2_PACKAGE_DRACUT # dracut-util must be included in initramfs
+ 	help
+ 	  dracut-ng is used to create an initramfs image by
+ 	  copying tools and files from an installed system
+diff --git a/package/dracut/dracut.mk b/package/dracut/dracut.mk
+index fac29dead0..7f69b62c53 100644
+--- a/package/dracut/dracut.mk
++++ b/package/dracut/dracut.mk
+@@ -10,6 +10,20 @@ DRACUT_LICENSE = GPL-2.0
+ DRACUT_LICENSE_FILES = COPYING
+ DRACUT_CPE_ID_VALID = YES
+ 
++DRACUT_INSTALL_TARGET = NO
++DRACUT_INSTALL_STAGING = YES
++
++# dracut-util has no dependencies beyond the toolchain, and does not
++# require running ./configure first.
++define DRACUT_BUILD_CMDS
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D) dracut-util
++endef
++
++# dracut-util is only needed in initramfs
++define DRACUT_INSTALL_STAGING_CMDS
++	$(INSTALL) -D -m 0755 $(@D)/dracut-util $(STAGING_DIR)/lib/dracut/dracut-util
++endef
++
+ HOST_DRACUT_DEPENDENCIES = host-pkgconf host-kmod host-cross-ldd
+ # Dracut is not a real autotools package, and the hand-written
+ # ./configure script does not preserve LDFLAGS for make.
+@@ -58,4 +72,5 @@ endef
+ HOST_DRACUT_POST_INSTALL_HOOKS += HOST_DRACUT_POST_INSTALL_BUSYBOX_INIT_MODULE
+ endif
+ 
++$(eval $(generic-package))
+ $(eval $(host-autotools-package))
 -- 
 2.55.0
 
