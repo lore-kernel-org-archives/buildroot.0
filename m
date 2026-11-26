@@ -2,27 +2,27 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC37A606A31C
-	for <buildroot@archiver.kernel.org>; Thu, 26 Nov 2026 19:25:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB252606A31C
+	for <buildroot@archiver.kernel.org>; Thu, 26 Nov 2026 19:25:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=BEtAkzpg
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=sc9c4YZN
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C503781203;
-	Thu, 26 Nov 2026 19:25:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B5D20811E4;
+	Thu, 26 Nov 2026 19:25:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W3mQxRT5cXs8; Thu, 26 Nov 2026 19:25:17 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org C0A87811E1
+ id TE8ggyyCu01o; Thu, 26 Nov 2026 19:25:20 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org CEE6281208
 Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795721116;
-	b=K/1qiqcxx0J6qPRGsMZN4+ETS2ebRsBehGPND2PbR45WeRU6aUDP1Pg62KAz13IlO4bC
-	 vdVrEeJNuZcYiBw+wkEyPeZJNBH8GU1Rr6TwvRCIx1dkslguW4nlNicZLI9XtVV2Ryf/m
-	 e0FCI0/I3pi0PEgWNkGh11ktqha2EAIZPtuImb6bZgmgivCYf3C0HDWpjM9mXPTpO6hO3
-	 KvcwUaoi2en6MhkwW34aghfs73DvxHEkS0r9WwXlnaA3XE+bFjtf4+iqbHfT1Ypdozf6s
-	 z4ZxQBrFqr9Wlgx8lCLfnYqBQRCzbj3Y7mJgsQYBtceMVwn/zHwOw1KOIGxy+xYTxzw==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795721120;
+	b=JNH3tLrLbTWm+Za4ZEPv3wUppg8IIK7VLDy7rTSRfO/P/OMjSY7FPNIJ6AhCPu4z1YIr
+	 WMVyyLGNAsssrcgJdyDXmFgIGy1e91h6IxSTqMPTyLPQs9Re5/M4CoayuG1jFC5T61E0n
+	 ac0knKFuYjDr+fpsc/PrxfNcE8mx7eFTzfnT9b8J4UVjqZ1AxAgP5Ch8myTMq5ETDWfpx
+	 YW0wJe7R3pNsluhsIIVpnFJxiZDNQiMmNB86cxx85lyQ2pICwX03QEAi4nJ6EKnhneiii
+	 qjMRorQ1sKa4EmWqdXoLQqjq8mVNV92z6HwckPyn+rYroF2f6+PnT+GAPdttY6MS4cA==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795721116;
+	c=relaxed/relaxed; t=1795721120;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -32,182 +32,182 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:From:Reply-To:Content-Type:Content-Transfer-Encoding:
 	 Errors-To:Sender;
-	bh=ZJoK+iS4b/JaRh9tNcDzfzBdoCzk2wdirgHhvwHuib4=;
-	b=c0XOR+nXWX6evFNVqsbngyArDBVznu2BkQ/kbNCCu6DOesrfujUWsW4sKHAYfqxCoiGZ
-	 UtAkcweyQXDIO0UwhBCnZcDUqIjPbjbIrjGUtgxkT5vrQSS/mzc+PtReg25VsoIYNzI7Z
-	 nHJxJQXVy+RohiPdf6hWrcHy6gR8+kblJsauDHtcXY7wd1Y6R8UA4G+/I4ldagalSkKP4
-	 rNo0lrTr4yCr7IkJTWid3+9UVYMw4qh4m8p3hC688+YOciXHK9HgHTBOagNpKEqBiOwlB
-	 8ZA52OXbWC9v4wsA1OWl7FsKxNgGw20nRd92KIofgfKUaJmZlXSLQBeWu11QQP0gryg==
+	bh=qkqMFUY3pi4Gowg0sT+RQ9/9wJNWT+ReGmijVOrx44c=;
+	b=ZSookDx8haiMmPM0M12aw7AmZEWueXnE6ytszgxzmy1vHza92ybg6vPsrJvzNK4/89PZ
+	 sV3iHcNRAigwauImjnopwXDWOI3sjV7YSoLuMDtPMblxLBXIdxQBxfVNVzoDP0ZkHmWo0
+	 zzfdok4tW8qW79W/dUFPTq9734uS/utEKj2hoHl5rke/iUpGDOe7p4cEQ/sRP7e2IdeEF
+	 zQvyx825hq4I04I+SqykevFg3mG7UgiZ/VM5W8sgOkdeeuzDEQALGstvkr7sdefKc9E0S
+	 bpqqQZzsdVCe5d4YSJ0pDceVj4AqGJithEbCCTJki3OcqSbQxVa9IKcAxJDv1ddZO5g==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795721116;
-	bh=ZJoK+iS4b/JaRh9tNcDzfzBdoCzk2wdirgHhvwHuib4=;
+	s=default; t=1795721119;
+	bh=qkqMFUY3pi4Gowg0sT+RQ9/9wJNWT+ReGmijVOrx44c=;
 	h=To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From:Reply-To:From;
-	b=BEtAkzpg2tfKRuQ+zM+PdZ5A0m7R0p4CYK7IB3HANxYKYXr5+SIuZnCIoeAkdUhQ9
-	 D/QPP60I5Gi9iAtqVhYbfdcdQjBDIG4v2lBf+Zg5FPTe5ALzvgO8V4NETAED3QtUMa
-	 PQMsUfc9kXcAp5yCxrtI3xqp8gsE7RAmEBjnWti0y+tsXdevP/GtQHFf1RN/3KULNe
-	 BrNZCJHSk19yGGFUDcoEXdwR/iJ7soZjV3weVWCQYAhUCSMqSqRgqJjDv6X/2R24Q8
-	 lRrz9/S+UT0mXSzsFzM3I2Qzmb13LVGAuivq74yupdc6w1vLjcgk9bkzmV2jnUF9we
-	 z/AlYHYsZlsBQ==
+	b=sc9c4YZNAZ0OkwaHqpYnR11SFQ/6YDDO8ri3+JqqCIQpYYy7pzVrPVw9uHX2kKvbg
+	 lVCaGpZrZAnwLxFt8YAgmG4iptPWd+fllKPip9wDMm0hEXBlxOHsgOrOB0rSKb6nKZ
+	 xcJpR2ybluHeBzZJKdMSJOK4vBLpmuN57OjJfBBkofXfiLckdsR0rZPiDe7OtCiZLM
+	 qEateGP+xa+f3M3hjAecyyFDYWiDDaR4TziqnMiiTzrrt1Vf6zzEoAw8LiHqTmI92Y
+	 vJGTjnbRKtCFkuLz6Y9jSodFAht4Fb0sCi6ZRYJ28bPAaQSlOIHBZDxkWl1ZnzkrVd
+	 q2UYsKmPZvrsQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C0A87811E1;
-	Thu, 26 Nov 2026 19:25:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 4982F260
- for <buildroot@buildroot.org>; Thu, 26 Nov 2026 19:25:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CEE6281208;
+	Thu, 26 Nov 2026 19:25:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 8832B260
+ for <buildroot@buildroot.org>; Thu, 26 Nov 2026 19:25:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3B7FE400E6
- for <buildroot@buildroot.org>; Thu, 26 Nov 2026 19:25:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 79AE440540
+ for <buildroot@buildroot.org>; Thu, 26 Nov 2026 19:25:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kwSs33xNXyjC for <buildroot@buildroot.org>;
- Thu, 26 Nov 2026 19:25:08 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org ED81640540
+ id 0oPf7XtMbeWP for <buildroot@buildroot.org>;
+ Thu, 26 Nov 2026 19:25:12 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 2D55F400E6
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
 Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp2.osuosl.org (Postfix) with ESMTPS id ED81640540
- for <buildroot@buildroot.org>; Thu, 26 Nov 2026 19:25:07 +0000 (UTC)
-DKIM2-Signature: i=1; m=1; t=1795721105; mf=PGZpb25hLmtsdXRlQGdteC5kZT4=;
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2D55F400E6
+ for <buildroot@buildroot.org>; Thu, 26 Nov 2026 19:25:11 +0000 (UTC)
+DKIM2-Signature: i=1; m=1; t=1795721110; mf=PGZpb25hLmtsdXRlQGdteC5kZT4=;
  rt=PGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnPg==; d=gmx.de;
- s=s31663417:rsa-sha256:OY5PxKCq/HzuWT+rLmi8qqNQqRi6
- qCrpTZ1E2N+MuL49VRfsZrEYzzZHTpPa1EK0XJWiB0iADONboo1l/hXdby8CPXc1CQL/8OdHGkr
- 5POcZbBZ3L4mX2c3kFv26BdUNVu7cgqfEmWVZ9u8m6VEiLW8ybG+dQ1t0aYrxuMnGeH6IJenm/O
- rGOCHPKd4etrxHht7pAljKNcVEC1RnJhU0zWT+S+Is3nooKuY2j4xE1bMOh8D/sKjLKI+6w7iBA
- UJLEfSPhmt9rbUck3X+mq92dcVDjOlv+d2apa4DS+xS2NK8FsZYJJo+nryN6qaqRfaS2jr+fOeg
- sW/ehNvmF28DVQ==;
-Message-Instance: m=1; h=sha256: dL7cmTxpxiRGIjvDYAw404GamThvUSdzgNJglid/DT4=:
- F3QvWoiFyQbtIFclM8HKOXIoSHEui7AfBzgZT/xS/FU=, sha512:
- kSze/queH4g/Nf+x7ULtRtveuzR9hkLOZhydWhEDH60rQNNIssoLOeHrudW51UlcBCaAJUPTmKouvMd7c0vEAA==:
- wgcNK6k1Q+yKSLwhjHZ0uuo/MVuLWB5m4QaViVR+UI03cVm09HyWYO/uv/7HyjM5k5v5mftHml3UCEeqKaWVew==;
+ s=s31663417:rsa-sha256:Rwtzsn0VfDYmGgDESgCzDWrPP8ox
+ nxriuXWqqTwfh8rhAWaq/bIlWK1SrO2+ZaZd0IyG0snF+ChSaa6xBLDK1RyxflThIBG94tbrwAn
+ jvUGYd4D4nC1d1g4mwneauEUu3VUqBse57VqYVtIksoUnJih8fP29ucI0agZISlEmkneMI4kJdj
+ mGZCWCijLCgDnhlhdZJXNygirLAk05Uu22ZCj7jiksTqCHAUCPPnY2Gg81YQBmrXg7uol/Fpmw8
+ hpEP+X1U2+jd4FovQ9vCEAvn+gDZF4UjuqkCqEGw+Qz557JRdMTIsFCj0OhawMgY6MLn7WclLQG
+ ZOew5dzuexAoBw==;
+Message-Instance: m=1; h=sha256: qp4OP+EtnMF/e1bu08Sh4Njj/Qfs9OZskh5Rq3dqHZo=:
+ EBI6uGvCWmEkkttLNFwRQRIoRb/dyOl+YlisijavdkQ=, sha512:
+ I7yJqQY1eYVhikY5mOVNLdCIhJ54IhSu+A3MHtvG4tR2nMYFt21sMrV9omxXBbrtz2naj2GujRYL187q5xicVw==:
+ 2wNw1rlBHEAoTyCTmnHNEQTHsFUVdyu8KDuMFUdlNZJJsqrzovwch8J/fwd8yMsHR+41LP9tUrc0gXHyPAlr0Q==;
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from client.hidden.invalid by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M1Ygz-1xVIAx0XdL-00Gexn; Thu, 26
- Nov 2026 20:25:00 +0100
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MV63g-1xyo6008so-00MXjy; Thu, 26
+ Nov 2026 20:24:58 +0100
 To: buildroot@buildroot.org
 Cc: Arnout Vandecappelle <arnout@rnout.be>, Thierry Bultel <tbultel@free.fr>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  "Fiona Klute (othermo GmbH)" <fiona.klute@gmx.de>
-Date: Thu, 26 Nov 2026 20:24:35 +0100
-Message-ID: <20261126192435.1826415-11-fiona.klute@gmx.de>
+Date: Thu, 26 Nov 2026 20:24:30 +0100
+Message-ID: <20261126192435.1826415-6-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20261126192435.1826415-1-fiona.klute@gmx.de>
 References: <20261126192435.1826415-1-fiona.klute@gmx.de>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:k/z0brJtF0xt0qlOAkA05alAK3tiw9r+IK3fFtZTlxzKGTp5vHH
- b1JT5/syYizTaEtStlqKyONInKJhsFfRT5ZyeZuZHRn1a3w1DuTIEmHCOTQNIupCoZn8YfQ
- 7jdL8qYu7nIQHJ/UNo8rU7q1v2+EGeLDtxp8BsxGFx15RQ2vZZuzJ4GvbsHt3y4eY2h3RzI
- vllfclynSyRCHcIIYpPaw==
-UI-OutboundReport: notjunk:1;M01:P0:5j6QvB9Me24=;0COXcM3ncoyi/mNFZACrsXTOJrF
- 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
- Vaetf7CtoOgZWmgCAZUyMWUFO/v89iUbX
-Subject: [Buildroot] [PATCH 10/10] support/testing: test_cpio: add test for
- dracut initrd with systemd
+X-Provags-ID: V03:K1:0uqrqa+DQoHZwcdZMf+w9qjc+WZ4BskcJ51ZW/p/9lzFquR0XL/
+ FabHPFn6GKRBJEH3ffCUm0giMPZzJgVJ6wOsUOXmaPKfewb60i5ANZ/meN/9MekwxR0NLzb
+ ZKx+8NpDdvXbaxQIRvC/hJ0MWnfSwGkPLUyb8hX0ZeXGG1mCPa1EwVUcMPwUnJdj0zbN/T1
+ Ab1eQkDcZ6ePkOf+h42Rw==
+UI-OutboundReport: notjunk:1;M01:P0:8bUZLjqK7L8=;PDOjwhvM7AWhOtdjOuygzKXM5Bq
+ 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
+ N+v+RNx2tFss=
+Subject: [Buildroot] [PATCH 05/10] fs/cpio: configure Busybox applets if
+ using Dracut
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -222,229 +222,40 @@ Reply-To: Fiona Klute <fiona.klute@gmx.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-19.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
-	INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,SPF_PASS,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
 From: "Fiona Klute (othermo GmbH)" <fiona.klute@gmx.de>
 
-The test first checks the initrd system using the emergency shell,
-then continues the boot and expects to arrive in the regular rootfs.
+Dracut versions before v113 tried to call "busybox --list" to detect
+the links to install, which fails with a cross-compiled Busybox
+(unless Qemu user emulation or similar is set up with binfmt). Since
+v113 the list can be provided in the DRACUT_MODULE_BUSYBOX_LINKS
+environment variable instead [1].
+
+[1] https://github.com/dracut-ng/dracut/commit/ead7b349c37d4943cfa16e5e119e362a2af71940
 
 Signed-off-by: Fiona Klute (othermo GmbH) <fiona.klute@gmx.de>
 ---
- support/testing/tests/fs/test_cpio.py         | 100 ++++++++++++++++++
- .../tests/fs/test_cpio/dracut-systemd.conf    |  83 +++++++++++++++
- 2 files changed, 183 insertions(+)
- create mode 100644 support/testing/tests/fs/test_cpio/dracut-systemd.conf
+ fs/cpio/cpio.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/support/testing/tests/fs/test_cpio.py b/support/testing/tests/fs/test_cpio.py
-index 172af579bb..0624846576 100644
---- a/support/testing/tests/fs/test_cpio.py
-+++ b/support/testing/tests/fs/test_cpio.py
-@@ -1,6 +1,8 @@
- import os
- import infra.basetest
-+import pexpect
- import subprocess
-+import time
- 
- CHECK_FS_CMD = "mount | grep 'rootfs on / type rootfs'"
- 
-@@ -128,3 +130,101 @@ class TestCpioDracutMuslMergedUsr(TestCpioDracutBase):
- 
-     def test_run(self):
-         self.check_dracut()
-+
-+
-+class TestCpioDracutSystemd(infra.basetest.BRTest):
-+    config = \
-+        """
-+        BR2_arm=y
-+        BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-+        BR2_INIT_SYSTEMD=y
-+        BR2_PACKAGE_SYSTEMD_INITRD=y
-+        BR2_PACKAGE_SYSTEMD_SYSUSERS=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        BR2_TARGET_ROOTFS_CPIO_DRACUT=y
-+        BR2_TARGET_ROOTFS_CPIO_DRACUT_CONF_FILES="{}"
-+        BR2_TARGET_ROOTFS_EXT2=y
-+        BR2_TARGET_ROOTFS_EXT2_4=y
-+        BR2_TARGET_ROOTFS_EXT2_SIZE="128M"
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """.format(
-+            " ".join([
-+                "fs/cpio/dracut.conf",
-+                "support/testing/tests/fs/test_cpio/dracut-systemd.conf",
-+            ]))
-+
-+    def setUp(self):
-+        # If no kernel version is set on the command line, dracut uses
-+        # the first directory found in $sysroot/lib/modules to
-+        # determine the kernel version. Systemd requires merged-usr,
-+        # making it $sysroot/usr/lib/modules. If that directory cannot
-+        # be found, dracut fails. The test uses a pre-built test
-+        # kernel, so just create the directory with the version of
-+        # those. It could be done with a root overlay, but that seems
-+        # a little excessive.
-+        kernel_moddir = os.path.join(
-+            self.builddir, "target", "usr", "lib", "modules", "5.10.202")
-+        os.makedirs(kernel_moddir, exist_ok=True)
-+        super().setUp()
-+
-+    def test_run(self):
-+        initrd = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        img = os.path.join(self.builddir, "images", "rootfs.ext4")
-+        infra.img_round_power2(img)
-+
-+        self.emulator.boot(
-+            arch="armv7",
-+            kernel="builtin",
-+            kernel_cmdline=[
-+                "rd.break=initqueue", "SYSTEMD_SULOGIN_FORCE=1",
-+                "root=/dev/mmcblk0",
-+            ],
-+            options=[
-+                "-initrd", "{}".format(initrd),
-+                "-drive", "file={},if=sd,format=raw".format(img),
-+            ])
-+
-+        # self.emulator.login() expects a login prompt. The dracut
-+        # emergency shell doesn't provide one, just "Press Enter for
-+        # system maintenance". Handle that and then prepare the shell
-+        # the same way.
-+        index = self.emulator.qemu.expect(
-+            ["Press Enter for system maintenance", pexpect.TIMEOUT],
-+            timeout=60 * self.emulator.timeout_multiplier)
-+        if index != 0:
-+            self.emulator.logfile.write("==> System does not boot")
-+            raise SystemError("System does not boot")
-+        self.emulator.qemu.sendline("")
-+        self.emulator.connect_shell()
-+
-+        output, exit_code = self.emulator.run(f"date -s @{int(time.time())}")
-+        if exit_code:
-+            raise SystemError("Cannot set date in virtual machine")
-+
-+        self.assertRunOk("mount | grep 'none on / type rootfs'")
-+        self.assertRunOk("systemctl status")
-+
-+        # dracut-emergency.service provides the emergency shell we're
-+        # using, and it's a oneshot service that doesn't finish
-+        # starting until the shell exits.
-+        output, _ = self.emulator.run(
-+            "systemctl status dracut-emergency.service")
-+        self.assertTrue(any(
-+            line.strip().startswith('Active: activating') for line in output))
-+
-+        # check basic systemd services included in initrd are running
-+        self.assertRunOk("systemctl is-active systemd-journald.service")
-+        self.assertRunOk("systemctl is-active systemd-udevd.service")
-+
-+        # exit the emergency shell, boot must continue into rootfs
-+        self.emulator.qemu.sendline("exit")
-+        self.emulator.login()
-+        self.assertRunOk("mount | grep '/dev/mmcblk0 on / type ext4'")
-+        self.assertRunOk("systemctl is-active multi-user.target")
-+        output, exit_code = self.emulator.run("systemctl status initrd.target")
-+        self.assertEndsWith(
-+            output[-2], "Reached target Initrd Default Target.")
-+        self.assertEndsWith(
-+            output[-1], "Stopped target Initrd Default Target.")
-+        self.assertEqual(exit_code, 3)  # initrd.target is no longer active
-diff --git a/support/testing/tests/fs/test_cpio/dracut-systemd.conf b/support/testing/tests/fs/test_cpio/dracut-systemd.conf
-new file mode 100644
-index 0000000000..4039312833
---- /dev/null
-+++ b/support/testing/tests/fs/test_cpio/dracut-systemd.conf
-@@ -0,0 +1,83 @@
-+# Test uses a pre-made kernel without modules, don't try to install
-+# any.
-+no_kernel=yes
-+
-+# Dracut modules needed
-+add_dracutmodules=" \
-+base \
-+busybox \
-+dracut-systemd \
-+initqueue \
-+systemd \
-+systemd-ask-password \
-+systemd-initrd \
-+systemd-journald \
-+systemd-sysusers \
-+systemd-tmpfiles \
-+systemd-udevd \
-+udev-rules \
-+"
-+
-+# Modules to ignore. fs/cpio/dracut.conf puts all systemd modules on
-+# the list, so override omit_dracutmodules completely.
-+omit_dracutmodules=" \
-+bash \
-+biosdevname \
-+btrfs \
-+bluetooth \
-+caps \
-+cifs \
-+crypt \
-+crypt-gpg \
-+dash \
-+dbus-broker \
-+dbus-daemon \
-+dm \
-+dmraid \
-+dmsquash-live-ntfs \
-+fcoe \
-+fcoe-uefi \
-+fs-lib \
-+iscsi \
-+i18n \
-+lvmmerge \
-+lvm \
-+lunmask \
-+mdraid \
-+memstrack \
-+mksh \
-+modsign \
-+mount-root \
-+multipath \
-+nbd \
-+network-legacy \
-+network-wicked \
-+nfs \
-+nvdimm \
-+nvmf \
-+parse-lunmask \
-+qemu \
-+qemu-net \
-+resume \
-+rootfs-block \
-+rngd \
-+systemd-coredump \
-+systemd-timedated \
-+systemd-rfkill \
-+systemd-resolved \
-+systemd-hostnamed \
-+systemd-ldconfig \
-+systemd-networkd \
-+systemd-timesyncd \
-+systemd-veritysetup \
-+systemd-modules-load \
-+systemd-sysctl \
-+systemd-repart \
-+systemd-sysext \
-+squash \
-+ssh-client \
-+stratis \
-+tpm2-tss \
-+url-lib \
-+usrmount \
-+"
+diff --git a/fs/cpio/cpio.mk b/fs/cpio/cpio.mk
+index a87d4d7f9e..ce39e47d93 100644
+--- a/fs/cpio/cpio.mk
++++ b/fs/cpio/cpio.mk
+@@ -85,6 +85,7 @@ define ROOTFS_CPIO_CMD
+ 	)
+ 	export DRACUT_ARCH="$(ARCH)"
+ 	export DRACUT_INSTALL_PATH=$(BR2_SYSTEM_DEFAULT_PATH)
++	$(if $(BR2_PACKAGE_BUSYBOX),export DRACUT_MODULE_BUSYBOX_LINKS="$$(cat $(BUSYBOX_DIR)/busybox.links)")
+ 	$(if $(BR2_PACKAGE_NETWORK_MANAGER),export NM_VERSION="$(NETWORK_MANAGER_VERSION)")
+ 	$(HOST_DIR)/bin/dracut \
+ 		$(ROOTFS_CPIO_OPTS) \
 -- 
 2.55.0
 
