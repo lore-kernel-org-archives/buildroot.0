@@ -1,29 +1,29 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE2BA606A329
-	for <buildroot@archiver.kernel.org>; Fri, 27 Nov 2026 12:39:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C3BE606A31F
+	for <buildroot@archiver.kernel.org>; Fri, 27 Nov 2026 12:39:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=I8v72SlA;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b=EdtI44TM
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=pZZZWA0w;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b=j3UOPPGO
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CA90E80AC4;
-	Fri, 27 Nov 2026 12:39:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 30BD740A42;
+	Fri, 27 Nov 2026 12:39:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AEg0JqWceJzQ; Fri, 27 Nov 2026 12:39:05 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 52FC380ACC
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795783145;
-	b=nP6o9qxiSqV6s04/vTxF1t3MtO422mDUhAxwoHZ2xhDn5KzOZDrl52T75mZXLqLhMIrt
-	 X4fBOlY6tADWEbjJ92xUB/DPNCl5ZQpkEu7xwwxE6T71AFXyo12qD4VKDixt7j3uJqXM8
-	 QVZizAd0L3d92do+dnEKnFBPo2VwI3++At9+7mvvydepAATebFpVqVpUcTCEydrY5ZIRE
-	 S+0mDlL7lvMM5aZKn1e6Qi8AoCr+VQFkulIWhtxMmRPuNrtWGihexvuJziVpAIjSZqmat
-	 2eDSVcApiQbGd8/dBFMB/fDr/e26kW0Dlblmp/12tLLTXTGQ9Ii1HH4eGVn1HaF7ycA==
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id t86FTHHRRATh; Fri, 27 Nov 2026 12:39:06 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp4.osuosl.org BD43640A57
+Authentication-Results: smtp4.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795783146;
+	b=Urg8F4hH7cVTg8kW45zP5HJROosNeCtN59ytbfZUm6YtGcr4BpbQLCKZ2Gp1UihIAKLE
+	 RzqbxCOLvrN6amoUlrjUjScmMZOMqg2y/bPzW0OBsup+a04S0SHKElHeETpwKG7E3267/
+	 8VK+HiYr6cHfGgBNjokI3wf5OxRczu5V9kAdtFDVVZh2hKq76jNT+aQ8jWj8AGPEIRJGe
+	 Ho522yFZuBdoDuQHYcuPCYOFB55QaaPz8pCZLdfFBd8bOQ82qpyhtATKVLZ0p++y1Fpf3
+	 C3TX02gjPxC2KLcKSzxXjoz7IDRuQSvTapT4g8KCv8Bj3w0oBtQcexZcjZxoMQePJxw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795783145;
+	c=relaxed/relaxed; t=1795783146;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -32,42 +32,42 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=lJeJFfjQORAdwHY3gRnAzB0MvV09EkrHafGqtItMDLQ=;
-	b=EXdG9+G7OghKZyaJIvHcxcIiFjPoOHkcB5QviA7uaflJKLMQ9UjivlgAsjN6k6W8HAum
-	 JBiuTflLSkRGGxeZ2eNoAU7rLVJ6SCJ/krYDAgDRUCt4oDDq1DF8Aqb3I/Cwr3xoXtaZa
-	 jlvHal36simiRpy5x5R+jSXArW98HpB8JDj2whgVMoFaqrAryJK4NmR4IazEshpuae6WQ
-	 vKPPNX8zB9GyzJFjOqF7YJhP3EBSsw77yMrs4iJc6nCvmrFypBPB3U6VXjDGHo0ImW90q
-	 W1OYQUUpccN8oqUuMTtjatPFnwfJJ3B164/uc1QsJ7Ym072z4ah5ltX07zRgzx7Cchg==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+	bh=xHWTyiJbKUgLpAtamjJsQwoEo7YRYOxLfksEDpidgVY=;
+	b=pzEECQieiZOIEqDEqg0IEgYNfjQl3W9xOotc4fLUCHSgH7wRMcD0Fwj5ValxhD7BLvme
+	 L/hwewX/6EJRA5XtshF7W7RDzulIwuMXAcRLjbWW9123GHQ8vmaLUCvZkwhn0+HOHQLaD
+	 K8iCAItmclrZ6LdGHrP+5m1QDEmMl9yIhZcOx1U6jTBkFH8CCnPJd1iWebTUYfjbQ6Hr+
+	 +SrYyZkz+wcU0rxaYdKXB1cvcYQHwi0u5dSXCny3yfNTjAFiDH6BsRFk3JcjEvzsqdGSR
+	 7FJVeSpA31j1vRPcbFCqvZ/89pezeAaE9/0lm+epMStU6uw7NOC4YZKKttGa5qJ+BWw==
+ARC-Authentication-Results: i=1; smtp4.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795783145;
-	bh=lJeJFfjQORAdwHY3gRnAzB0MvV09EkrHafGqtItMDLQ=;
+	s=default; t=1795783146;
+	bh=xHWTyiJbKUgLpAtamjJsQwoEo7YRYOxLfksEDpidgVY=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=I8v72SlA47DBM0WL0qPzawYoZBlXoPTdcaniVDNKhZCOaW0n9/4RXXOh3cE736ceK
-	 Oa4q4lf8nLcPGPrilPeeR6+FAIEc+cfjJkP5ipBXqybKjDKEO3uuf1oqS+dsA+WNrB
-	 sfYpPoW7Nw5rxN4cV3CdoPAYj2os7XxZuS900C+2Qnl+Q11b7xisLhaLOLcXBuEfhz
-	 hBlCBFTCqvutwrw/tCttXjrU1PZd3f9wdjq67I/I1t3dLqNGGkHBJLi+iRxCNxXwvl
-	 KR5JV220cg2CYnYPBtGaQxFadvO+Y/ffrwujD3+Yj9fORXFbxvRZ0vT5w26Uv6fXQ4
-	 /t2lt3SKHw7RQ==
+	b=pZZZWA0wKeAZXu16WsVY+h8mYulIY4XF9CdHmLQEsFfUMTWwLy+bNrRLirnDWi8kF
+	 tSiDzyLBm67HzxE8Va5WezrnsZJFiLv2fzCFPgSwoq/R9t9Q5EheUN/Og4UNQCHfcu
+	 +Cr7ieJmJnHX2s2Ovxt5oDQ73xywUGa1zQOFDBMmWZbigW18kOgbb/0gKY0aIY09pL
+	 iyviuB9IAuvV65j/GY/H+rE0zSJlpjzFMl0H5caqFaBCyTxPyrD6MnR6/WkRMI7wcu
+	 hsYOk4PmrDTICgW4OX2Hq41VH9MRsYpfGGeFa2EydlqpxuE4LRe8MPhXiX2D7E34vD
+	 wFDD6Rbj36qvA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 52FC380ACC;
-	Fri, 27 Nov 2026 12:39:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C54AE2DF
- for <buildroot@buildroot.org>; Fri, 27 Nov 2026 12:38:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD43640A57;
+	Fri, 27 Nov 2026 12:39:06 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 41A91D1
+ for <buildroot@buildroot.org>; Fri, 27 Nov 2026 12:38:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C330D4004D
- for <buildroot@buildroot.org>; Fri, 27 Nov 2026 12:38:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 334704004D
+ for <buildroot@buildroot.org>; Fri, 27 Nov 2026 12:38:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g4T9qUAN9nzL for <buildroot@buildroot.org>;
+ id qHTVlRKOBiOc for <buildroot@buildroot.org>;
  Fri, 27 Nov 2026 12:38:57 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 4778740571
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 1C997401D2
 Authentication-Results: smtp2.osuosl.org;
  arc=none smtp.remote-ip=62.149.156.131
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.131;
@@ -75,24 +75,24 @@ Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.131;
  envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
 Authentication-Results: smtp2.osuosl.org; dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=EdtI44TM
+Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=j3UOPPGO
 Received: from smtpcmd12131.aruba.it (smtpcmd12131.aruba.it [62.149.156.131])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4778740571
- for <buildroot@buildroot.org>; Fri, 27 Nov 2026 12:38:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1C997401D2
+ for <buildroot@buildroot.org>; Fri, 27 Nov 2026 12:38:54 +0000 (UTC)
 Received: from localhost.localdomain ([95.249.253.35])
  by Aruba SMTP with ESMTPSA
- id WvE3xMYVxV5J9WvE4xjmcb; Fri, 27 Nov 2026 13:38:52 +0100
+ id WvE3xMYVxV5J9WvE4xjmcr; Fri, 27 Nov 2026 13:38:52 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1795783132; bh=81H4mh60rvQAx832+ZoJua0XMHrwK5hrW+pwPyb2Sh0=;
+ t=1795783132; bh=kxzaIZ2KYaGDQYxDyiv/CxBWQcrFXVkzCPxe2WTQXvg=;
  h=From:To:Subject:Date:MIME-Version;
- b=EdtI44TMFAkHk4j9uI+BI4jyCHvVoM4pc286XZ6MA9ydLlyafYn7ln6Nz5kzL0G76
- Rkjrwekr18xNgjcZo6Z6m9DDGISKladG1jEXH82eGb4YsFnmrWXPEa8KeMrboh8PwJ
- uAb5Tfn2MzJfiIdF/9opZjpTifD7V9G3jz7A8evOq+iCO2JkSh9Ylr1myBl1+JK3Qw
- UxBws04OIELiOOdotbnZKf2HlZL5xHrFa/J22RVnaKYvDyKF7AmgpOZxr2oZyM48Zk
- nYTJ42Y2DJcDvEATw94OFIFI6pjm5n66uRN6DpcnnpTQEMsyBZYHM63bAVx6koVgJb
- 4zMaUYfs8bxcg==
+ b=j3UOPPGOS/VHN4kbUOddquGymvffwiRTK9VobeA+JY1XH4gRAV8YwaM8bgbLkZvLY
+ QKEY9LXHQ0xnc3fPWuy5IM0Nje4oLNZuXUmrQnq8ZaheVr8UYtqxc2ojDqqjtvmWqs
+ 6CaiG26ivNtAfepou1na5r4vAHtLyPqQEp8LvyF13SxcJ1Teg4rsps4yK7TIXT4rnG
+ ynRts/oYscRbalyY15z7MPG8LeW4bndlTxFO++mw+/9YYUMVAQPuWxytEoICX6IxSy
+ D526Jlx0TLEt31VEsPaP5SCwfWyKFLeN5qczv+uzhDgQWQg6gYjlEGUaJM7eGxqY6y
+ 9tmEthQvp4c6Q==
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
 Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
@@ -100,8 +100,8 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  Jim Reinhart <jimr@tekvox.com>, James Autry <jautry@tekvox.com>,
  Matthew Maron <matthewm@tekvox.com>,
  Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>
-Date: Fri, 27 Nov 2026 13:38:48 +0100
-Message-ID: <20261127123851.2402756-2-giulio.benetti@benettiengineering.com>
+Date: Fri, 27 Nov 2026 13:38:50 +0100
+Message-ID: <20261127123851.2402756-4-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20261127123851.2402756-1-giulio.benetti@benettiengineering.com>
 References: <20261127123851.2402756-1-giulio.benetti@benettiengineering.com>
@@ -112,7 +112,7 @@ X-CMAE-Envelope: MS4xfEaoEdNhIYao+QtkVetUB6eEZgjoXCDcBx+fkFMv6b6dnoKqemn8xDMIbti
  0xmDXLJjXEhGn84AypUV3JGn3zbVfpaaXmUoi1h7Pu4P9QbChFNNOMf2Grx/5DOyCZojsvcycjsgVX+IVKBLYHy4LA5HtA8U4XRjAwtxsRXAqSC94JbYPaDI
  IahDN8ijk/VQljZXBisMMzlXPrQC4JY+Hcyrg4ZUaw+Wx6iSN8KfS8lLp8zJ0qDwIPTw5OV2Lr4+nuzWIVkthBC3UESAtXuWI7+mMhV8V63V72K0g1HHhb15
  XC3HjW+QfhIXiVCr
-Subject: [Buildroot] [PATCH v5 1/4] package/dotnet-runtime-bin: new package
+Subject: [Buildroot] [PATCH v5 3/4] package/dotnet-runtime-src: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -125,43 +125,70 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-16.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_PASS,USER_AGENT_GIT autolearn=ham
+	autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Add the pre-built .NET runtime provided by Microsoft, to execute .NET
-applications. The tarballs for aarch64, arm (ARMv7-A, hard-float, at
-least VFPv3-D16) and x86_64 are available for both glibc and musl.
+Add a dotnet-runtime provider that builds the .NET runtime from source,
+for the same 11.0.x version and architectures as dotnet-runtime-bin.
+Since there are now two providers, a variant choice between the
+pre-built runtime and the one built from source is added to the
+dotnet-runtime package.
 
-Only .NET 11 is supported: it is supported until November 2028, like
-the 10.0.x LTS version, and the applications built for older versions
-run on it with the Major roll forward policy, as the help text tells.
+The native parts of the runtime are built with CMake, without the
+build.sh and MSBuild scripts of dotnet/runtime, that download a .NET
+SDK and NuGet packages:
+- src/coreclr: CoreCLR, the JIT, the GC, createdump and the debugging
+  libraries
+- src/native/libs: the System.*.Native libraries
+- src/native/corehost: the dotnet host, hostfxr and hostpolicy
 
-Also add a dotnet-runtime virtual package, so that a variant built from
-source can be added later, like for rust and go. dotnet-runtime-bin is
-its only provider for now, so there is no variant choice yet. The
-architecture dependencies and the options are in the dotnet-runtime
-package, so that they are shared by all the variants.
+These are three separate CMake projects in the same source tree, so they
+are configured and built with the Buildroot toolchain file from a
+generic-package, each in its own build directory:
+- the binutils are looked up from the compiler target tuple, that the
+  Buildroot toolchain file doesn't set, so they are passed with the
+  CLR_<TOOL> environment variables
+- eng/native/tryrun.cmake provides the results of the checks that can't
+  be run when cross-compiling
+- the version files, normally generated with MSBuild, are generated
+  like build.sh does when MSBuild is not available, but with the real
+  version, that the hosts report and use
+- CLR_ARM_FPU_TYPE and CLR_ARM_FPU_CAPABILITY are set from the FPU
+  selected in Buildroot
+- -Wno-template-body is needed with gcc >= 14, that otherwise rejects
+  some unused template code
 
-The runtime is installed in /usr/share/dotnet, which is its default
-location, so neither /etc/dotnet/install_location nor environment
-variables are needed. A /usr/bin/dotnet symlink puts the dotnet host in
-the PATH. The runtime loads its native libraries from its own
-directory, so LD_LIBRARY_PATH isn't needed either.
+The managed libraries are C# code, that can only be built with MSBuild
+and a .NET SDK. They are architecture independent and built from the
+same sources, so they are taken from the official runtime tarball of
+the same version, downloaded with _EXTRA_DOWNLOADS. Each native binary
+of the tarball is replaced by the one built from source, and the
+installation fails if one of them was not built, so that the same set
+of files as the official runtime is installed.
 
-The runtime only links against the libraries of the toolchain. ICU,
-OpenSSL and libkrb5 are loaded at runtime only when an application needs
-them, so they are installed with the ICU, OpenSSL and Kerberos options
-of the dotnet-runtime package. They are enabled by default, so that
-applications work out of the box (without ICU, they even fail to start
-unless they use the invariant globalization mode), and can be disabled
-when they are not needed.
+The System.*.Native libraries are linked against OpenSSL, the tracing
+provider against lttng-libust, and ICU and libkrb5 are needed to build
+them, and are loaded at runtime. So the
+ICU, OpenSSL and Kerberos options of the dotnet-runtime package are
+selected, and host gcc >= 7 is needed, like for icu.
 
-libcoreclrtraceptprovider.so, only used for LTTng tracing, is removed,
-so that lttng-libust is not needed.
+Patch 0001 fixes building the ARM assembly with GNU as. Patch 0002
+computes the addresses of the variables used by the ARM assembly
+relative to the PC, like with clang, so that libcoreclr.so has no text
+relocations, that the musl toolchains don't allow.
+
+CMake >= 3.26 is needed, and two more CMake options:
+- FEATURE_DYNAMIC_CODE_COMPILED, that the MSBuild scripts set by
+  default, and without which tiered compilation, ReJIT and PGO are
+  disabled (and the ARM thunk templates don't build)
+- the WHOLE_ARCHIVE link feature, used for the static apphost, which
+  CMake only defines when it identifies the linker from the "gcc -v"
+  output, which fails with toolchains that only show collect2 there
 
 Cc: Jim Reinhart <jimr@tekvox.com>
 Cc: James Autry <jautry@tekvox.com>
@@ -169,87 +196,203 @@ Cc: Matthew Maron <matthewm@tekvox.com>
 Assisted-by: Claude Opus 5.5 <noreply@anthropic.com>
 Signed-off-by: Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>
 ---
-Changes v4 -> v5:
-- only support 11.0.x, and drop the version choice: 8.0.x is end of
-  life since November 2026 (zlib is not needed anymore), and 10.0.x
-  is supported until the same date as 11.0.x
-- document the Major roll forward policy for the applications built
-  for older versions
-
-Changes v3 -> v4 (addressing Arnout's review):
-- rename to dotnet-runtime-bin and add the dotnet-runtime virtual
-  package, without a variant choice since dotnet-runtime-bin is its
-  only provider
-- add a choice between the 11.0.x (STS), 10.0.x and 8.0.x (LTS)
-  versions, in the dotnet-runtime package, bump to the latest releases
-  and use the sha512 hashes published by Microsoft, drop 6.0.x
-- depend on !BR2_TOOLCHAIN_USES_UCLIBC, drop the redundant threads
-  dependency, fix the comment and add "dynamic library" to it
-- drop all selects but zlib (BR2_PACKAGE_ZLIB +
-  BR2_PACKAGE_ZLIB_FORCE_LIBZLIB, only for 8.0)
-- add ICU, OpenSSL and Kerberos options to the dotnet-runtime package,
-  enabled by default, to install the libraries loaded at runtime
-- require ARMv7-A and at least a VFPv3-D16 FPU on ARM
-- use the upstream homepage in the help text
-- add ThirdPartyNotices.txt to the license files and the licenses
-- simplify the tarball name with _LIBC and _ARCH variables, drop
-  AZURE_FEED and the copy-paste leftover, use the new download host
+Changes since the dotnet6-runtime RFC (addressing Arnout's review):
+- rename dotnet6-runtime to dotnet-runtime-src, as a provider of the
+  dotnet-runtime virtual package, next to dotnet-runtime-bin, and add
+  the variant choice to dotnet-runtime
+- build the native parts with CMake instead of build.sh, take the
+  managed libraries from the official runtime tarball: no .NET SDK or
+  NuGet packages are downloaded anymore, so an x86_64 host is not
+  needed, and x86_64 targets are also supported
+- support 11.0.0, like dotnet-runtime-bin, drop 6.0
+- drop patches 0001 and 0002, upstream since 9.0, and patches 0003
+  (-skipcrossarchnative) and 0004 (--verbosity), only needed with
+  build.sh, add a GNU as fix, merged upstream in main:
+  https://github.com/dotnet/runtime/pull/138021
+  and a fix for the text relocations of the ARM assembly with GNU as,
+  both submitted for release/11.0:
+  https://github.com/dotnet/runtime/pull/138374
+- drop the redundant threads dependency (glibc and musl always have
+  threads), the dependencies are now in the dotnet-runtime package
+- no static linking is done, so !BR2_STATIC_LIBS is enough
+- drop the select of host-cmake, use $(BR2_CMAKE_HOST_DEPENDENCY) and
+  BR2_HOST_CMAKE_AT_LEAST_3_26
+- force libopenssl, since the build with libressl has not been tested
+- select the ICU, OpenSSL and Kerberos options of dotnet-runtime
+  instead of icu, libkrb5 and openssl, and depend on host gcc >= 7
+- one dependency per line
+- use BR2_ENABLE_RUNTIME_DEBUG, through the Buildroot toolchain file
+- also handle NEON and ARMv8 FPUs, and require ARMv7-A and the
+  hard-float ABI on ARM
+- drop libcurl, not used since .NET 5
 - drop /etc/dotnet/install_location and the profile.d script, add a
-  /usr/bin/dotnet symlink instead
-- only install dotnet, host and shared (not the .stamp files)
-
-Changes v2 -> v3:
-- drop the DOTNET_RUNTIME_PREBUILT_IDENTIFIER check, that breaks the
-  whole Buildroot build when the architecture is supported but the
-  package is not selected (a testing leftover)
-
-Changes v1 -> v2:
-- add depends on BR2_INSTALL_LIBSTDCPP and drop the select of
-  BR2_PACKAGE_LTTNG_LIBUST
+  /usr/bin/dotnet symlink
+- add THIRD-PARTY-NOTICES.TXT to the license files
 ---
- DEVELOPERS                                    |  2 +
- package/Config.in                             |  1 +
- .../dotnet-runtime-bin.hash                   | 10 ++
- .../dotnet-runtime-bin/dotnet-runtime-bin.mk  | 43 ++++++++
- package/dotnet-runtime/Config.in              | 98 +++++++++++++++++++
- package/dotnet-runtime/dotnet-runtime.mk      |  7 ++
- 6 files changed, 161 insertions(+)
- create mode 100644 package/dotnet-runtime-bin/dotnet-runtime-bin.hash
- create mode 100644 package/dotnet-runtime-bin/dotnet-runtime-bin.mk
- create mode 100644 package/dotnet-runtime/Config.in
- create mode 100644 package/dotnet-runtime/dotnet-runtime.mk
+ DEVELOPERS                                    |   1 +
+ ...ix-WriteBarriers.S-build-with-GNU-as.patch |  52 +++++
+ ...m-Avoid-text-relocations-with-GNU-as.patch |  70 ++++++
+ .../dotnet-runtime-src.hash                   |  11 +
+ .../dotnet-runtime-src/dotnet-runtime-src.mk  | 204 ++++++++++++++++++
+ package/dotnet-runtime/Config.in              |  39 +++-
+ 6 files changed, 373 insertions(+), 4 deletions(-)
+ create mode 100644 package/dotnet-runtime-src/0001-CoreCLR-runtime-arm-Fix-WriteBarriers.S-build-with-GNU-as.patch
+ create mode 100644 package/dotnet-runtime-src/0002-CoreCLR-vm-arm-Avoid-text-relocations-with-GNU-as.patch
+ create mode 100644 package/dotnet-runtime-src/dotnet-runtime-src.hash
+ create mode 100644 package/dotnet-runtime-src/dotnet-runtime-src.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 59fad7f26b..73b3f6cbef 100644
+index 74fcb6482f..e838b2172a 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1331,6 +1331,8 @@ F:	package/bind/
- F:	package/binutils/
+@@ -1332,6 +1332,7 @@ F:	package/binutils/
  F:	package/cryptsetup/
  F:	package/dash/
-+F:	package/dotnet-runtime-bin/
-+F:	package/dotnet-runtime/
+ F:	package/dotnet-runtime-bin/
++F:	package/dotnet-runtime-src/
+ F:	package/dotnet-runtime/
  F:	package/erlang-jiffy/
  F:	package/esp-hosted/
- F:	package/gcc/
-diff --git a/package/Config.in b/package/Config.in
-index 49659b007e..3c4b47ff05 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -667,6 +667,7 @@ endmenu
- menu "Interpreter languages and scripting"
- 	source "package/4th/Config.in"
- 	source "package/chicken/Config.in"
-+	source "package/dotnet-runtime/Config.in"
- 	source "package/duktape/Config.in"
- 	source "package/enscript/Config.in"
- 	source "package/erlang/Config.in"
-diff --git a/package/dotnet-runtime-bin/dotnet-runtime-bin.hash b/package/dotnet-runtime-bin/dotnet-runtime-bin.hash
+diff --git a/package/dotnet-runtime-src/0001-CoreCLR-runtime-arm-Fix-WriteBarriers.S-build-with-GNU-as.patch b/package/dotnet-runtime-src/0001-CoreCLR-runtime-arm-Fix-WriteBarriers.S-build-with-GNU-as.patch
 new file mode 100644
-index 0000000000..e92973dfb0
+index 0000000000..811655dbbc
 --- /dev/null
-+++ b/package/dotnet-runtime-bin/dotnet-runtime-bin.hash
-@@ -0,0 +1,10 @@
++++ b/package/dotnet-runtime-src/0001-CoreCLR-runtime-arm-Fix-WriteBarriers.S-build-with-GNU-as.patch
+@@ -0,0 +1,52 @@
++From 6e8557db27c0d1af8f2547a16f7cda68c75046c7 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Thu, 26 Nov 2026 16:57:47 +0100
++Subject: [PATCH] CoreCLR: runtime: arm: Fix WriteBarriers.S build with GNU
++ as (#138021)
++
++GNU as doesn't concatenate a quoted string with a following macro
++argument, so it sees "RhpAssignRefAvLocation"\EXPORT_REG_NAME as two
++arguments to GLOBAL_LABEL and fails with:
++
++src/coreclr/runtime/arm/WriteBarriers.S:123: Error: too many positional
++arguments
++
++The label names don't need to be quoted, and the LEAF_ENTRY names in the
++same macros are already unquoted: drop the quotes. clang generates the
++same RhpAssignRefAvLocation<reg> and RhpCheckedAssignRefAvLocation<reg>
++symbols with both forms.
++
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Co-authored-by: Claude Opus 5.5 <noreply@anthropic.com>
++(cherry picked from commit f3075b382cd458205fe6066539084c9b1f17f190)
++Upstream: https://github.com/dotnet/runtime/commit/f3075b382cd458205fe6066539084c9b1f17f190
++Signed-off-by: Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>
++---
++ src/coreclr/runtime/arm/WriteBarriers.S | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/src/coreclr/runtime/arm/WriteBarriers.S b/src/coreclr/runtime/arm/WriteBarriers.S
++index ee906187b99..b202a3296dc 100644
++--- a/src/coreclr/runtime/arm/WriteBarriers.S
+++++ b/src/coreclr/runtime/arm/WriteBarriers.S
++@@ -120,7 +120,7 @@ ALTERNATE_ENTRY RhpAssignRef
++ 
++           // Write the reference into the location. Note that we rely on the fact that no GC can occur between here
++           // and the card table update we may perform below.
++-GLOBAL_LABEL "RhpAssignRefAvLocation"\EXPORT_REG_NAME  // WriteBarrierFunctionAvLocation
+++GLOBAL_LABEL RhpAssignRefAvLocation\EXPORT_REG_NAME  // WriteBarrierFunctionAvLocation
++ .ifc \REFREG, r1
++ GLOBAL_LABEL RhpAssignRefAVLocation
++ .endif
++@@ -190,7 +190,7 @@ ALTERNATE_ENTRY RhpCheckedAssignRef
++           dmb
++           // Write the reference into the location. Note that we rely on the fact that no GC can occur between here
++           // and the card table update we may perform below.
++-GLOBAL_LABEL "RhpCheckedAssignRefAvLocation"\EXPORT_REG_NAME // WriteBarrierFunctionAvLocation
+++GLOBAL_LABEL RhpCheckedAssignRefAvLocation\EXPORT_REG_NAME // WriteBarrierFunctionAvLocation
++ .ifc \REFREG, r1
++ GLOBAL_LABEL RhpCheckedAssignRefAVLocation
++ .endif
++-- 
++2.47.3
++
+diff --git a/package/dotnet-runtime-src/0002-CoreCLR-vm-arm-Avoid-text-relocations-with-GNU-as.patch b/package/dotnet-runtime-src/0002-CoreCLR-vm-arm-Avoid-text-relocations-with-GNU-as.patch
+new file mode 100644
+index 0000000000..fb1bd95705
+--- /dev/null
++++ b/package/dotnet-runtime-src/0002-CoreCLR-vm-arm-Avoid-text-relocations-with-GNU-as.patch
+@@ -0,0 +1,70 @@
++From 412cef445ace759b034d44a811a061fce4a8a305 Mon Sep 17 00:00:00 2001
++From: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Date: Thu, 26 Nov 2026 17:01:09 +0100
++Subject: [PATCH] CoreCLR: vm: arm: Avoid text relocations with GNU as
++
++With GNU as, the addresses of g_TrapReturningThreads and g_pPollGC are
++loaded from literal pools, as absolute addresses. In libcoreclr.so,
++these literals in .text need dynamic relocations, so the library gets
++DT_TEXTREL, and fails to link when text relocations are an error, like
++with musl toolchains:
++
++  ld: read-only segment has dynamic relocations
++
++Compute the addresses relative to the PC with movw/movt instead, like
++the clang code path does with its literal pool, so that the linker
++resolves them and no dynamic relocations are needed.
++
++Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
++Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
++Upstream: https://github.com/dotnet/runtime/pull/138374
++Signed-off-by: Giulio Benetti <giulio.benetti+tekvox@benettiengineering.com>
++---
++ src/coreclr/vm/arm/asmhelpers.S   | 8 ++++++--
++ src/coreclr/vm/arm/pinvokestubs.S | 4 +++-
++ 2 files changed, 9 insertions(+), 3 deletions(-)
++
++diff --git a/src/coreclr/vm/arm/asmhelpers.S b/src/coreclr/vm/arm/asmhelpers.S
++index d09438bf62d..275858a0bff 100644
++--- a/src/coreclr/vm/arm/asmhelpers.S
+++++ b/src/coreclr/vm/arm/asmhelpers.S
++@@ -832,7 +832,9 @@ ProbeLoop:
++ 1:
++         add     r2, pc
++ #else
++-        ldr     r2, =g_TrapReturningThreads
+++        movw    r2, #:lower16:g_TrapReturningThreads - (. + 12)
+++        movt    r2, #:upper16:g_TrapReturningThreads - (. + 8)
+++        add     r2, pc
++ #endif
++         ldr     r2, [r2]
++         cbnz    r2, LOCAL_LABEL(JIT_PollGCRarePath)
++@@ -843,7 +845,9 @@ LOCAL_LABEL(JIT_PollGCRarePath):
++ 1:
++         add     r2, pc
++ #else
++-        ldr     r2, =g_pPollGC
+++        movw    r2, #:lower16:g_pPollGC - (. + 12)
+++        movt    r2, #:upper16:g_pPollGC - (. + 8)
+++        add     r2, pc
++ #endif
++         ldr     r2, [r2]
++         EPILOG_BRANCH_REG r2
++diff --git a/src/coreclr/vm/arm/pinvokestubs.S b/src/coreclr/vm/arm/pinvokestubs.S
++index b102ae12d79..c3cafd48c74 100644
++--- a/src/coreclr/vm/arm/pinvokestubs.S
+++++ b/src/coreclr/vm/arm/pinvokestubs.S
++@@ -138,7 +138,9 @@
++ 1:
++         add     r2, pc
++ #else
++-        ldr     r2, =g_TrapReturningThreads
+++        movw    r2, #:lower16:g_TrapReturningThreads - (. + 12)
+++        movt    r2, #:upper16:g_TrapReturningThreads - (. + 8)
+++        add     r2, pc
++ #endif
++         ldr     r2, [r2]
++         cbnz    r2, LOCAL_LABEL(RarePath)
++-- 
++2.47.3
++
+diff --git a/package/dotnet-runtime-src/dotnet-runtime-src.hash b/package/dotnet-runtime-src/dotnet-runtime-src.hash
+new file mode 100644
+index 0000000000..ec5d4ff417
+--- /dev/null
++++ b/package/dotnet-runtime-src/dotnet-runtime-src.hash
+@@ -0,0 +1,11 @@
 +# From https://builds.dotnet.microsoft.com/dotnet/release-metadata/11.0/releases.json
 +sha512  4857a8f2c4ec2f21381916923b2c6a0e94d69ad0380abff9a53f7f99a80b52a00b2a2438c86500b27551047233b1d416ada85ead25b9637c80e9b822274008ee  dotnet-runtime-11.0.0-linux-arm.tar.gz
 +sha512  b624e647c72e8f62a0d186aa96aad1b113732e8c39f010be6f95ec026feb2633187e33f24c3af5168daaa1d9b4bb0bb9c396f6d172d18660b9673bb507fa9f45  dotnet-runtime-11.0.0-linux-arm64.tar.gz
@@ -257,175 +400,286 @@ index 0000000000..e92973dfb0
 +sha512  7b32d53ee1c98078f71e73b510332aeca7a70b974f38d93201857ba8b8870e0d175f1d206b15cde03fd145e130bcf86e7c5749e67efec20ff62de0132119f7e3  dotnet-runtime-11.0.0-linux-musl-arm64.tar.gz
 +sha512  85e1d28610719a44119ff706bb09f17487380a47d6d0400adad72888ba2cef55e80e2566d15b2812af442ecde469d05d272e15ded04d515f628b40a5345c7854  dotnet-runtime-11.0.0-linux-musl-x64.tar.gz
 +sha512  d0846e7ad4a6b07fe3fb7c033a381e6938ec16afbe0b7f7454ff2f9b58247cbbc35758cc785af424385c4572c801060cbd656a822ef624f4907d3cc10a16a080  dotnet-runtime-11.0.0-linux-x64.tar.gz
-+# Locally computed
-+sha256  cfc21f5e8bd655ae997eec916138b707b1d290b83272c02a95c9f821b8c87310  LICENSE.txt
-+sha256  d30078edf6426ec7ef9427b3048b407fee214d1eb7834a681a3a09290387d591  ThirdPartyNotices.txt
-diff --git a/package/dotnet-runtime-bin/dotnet-runtime-bin.mk b/package/dotnet-runtime-bin/dotnet-runtime-bin.mk
++# Locally calculated
++sha256  71fd13a699c3e440ec99cfeccdc406a4dc44fd3f93c78b46bde4755fd7945f0d  dotnet-runtime-src-11.0.0.tar.gz
++sha256  cfc21f5e8bd655ae997eec916138b707b1d290b83272c02a95c9f821b8c87310  LICENSE.TXT
++sha256  4790bb15f0edd1b105aecb05174fc6c589d4d9fad0c50616ef5f7dc365f1c8a6  THIRD-PARTY-NOTICES.TXT
+diff --git a/package/dotnet-runtime-src/dotnet-runtime-src.mk b/package/dotnet-runtime-src/dotnet-runtime-src.mk
 new file mode 100644
-index 0000000000..3da4a29d3a
+index 0000000000..76179bcd2b
 --- /dev/null
-+++ b/package/dotnet-runtime-bin/dotnet-runtime-bin.mk
-@@ -0,0 +1,43 @@
++++ b/package/dotnet-runtime-src/dotnet-runtime-src.mk
+@@ -0,0 +1,204 @@
 +################################################################################
 +#
-+# dotnet-runtime-bin
++# dotnet-runtime-src
 +#
 +################################################################################
 +
-+DOTNET_RUNTIME_BIN_VERSION = 11.0.0
++DOTNET_RUNTIME_SRC_VERSION = 11.0.0
++DOTNET_RUNTIME_SRC_SITE = $(call github,dotnet,runtime,v$(DOTNET_RUNTIME_SRC_VERSION))
++DOTNET_RUNTIME_SRC_LICENSE = MIT
++DOTNET_RUNTIME_SRC_LICENSE_FILES = LICENSE.TXT THIRD-PARTY-NOTICES.TXT
++DOTNET_RUNTIME_SRC_PROVIDES = dotnet-runtime
++DOTNET_RUNTIME_SRC_DEPENDENCIES = \
++	$(BR2_CMAKE_HOST_DEPENDENCY) \
++	host-python3 \
++	icu \
++	libkrb5 \
++	lttng-libust \
++	openssl
 +
++# The OS part of the RID, that the hosts also report and use as their
++# own RID (the fallback OS), like the dotnet/runtime build scripts do.
 +ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
-+DOTNET_RUNTIME_BIN_LIBC = musl-
++DOTNET_RUNTIME_SRC_OS = linux-musl
++else
++DOTNET_RUNTIME_SRC_OS = linux
 +endif
 +
 +ifeq ($(BR2_aarch64),y)
-+DOTNET_RUNTIME_BIN_ARCH = arm64
++DOTNET_RUNTIME_SRC_ARCH = arm64
 +else ifeq ($(BR2_arm),y)
-+DOTNET_RUNTIME_BIN_ARCH = arm
++DOTNET_RUNTIME_SRC_ARCH = arm
 +else ifeq ($(BR2_x86_64),y)
-+DOTNET_RUNTIME_BIN_ARCH = x64
++DOTNET_RUNTIME_SRC_ARCH = x64
 +endif
 +
-+DOTNET_RUNTIME_BIN_SITE = https://builds.dotnet.microsoft.com/dotnet/Runtime/$(DOTNET_RUNTIME_BIN_VERSION)
-+DOTNET_RUNTIME_BIN_SOURCE = dotnet-runtime-$(DOTNET_RUNTIME_BIN_VERSION)-linux-$(DOTNET_RUNTIME_BIN_LIBC)$(DOTNET_RUNTIME_BIN_ARCH).tar.gz
-+DOTNET_RUNTIME_BIN_STRIP_COMPONENTS = 0
-+DOTNET_RUNTIME_BIN_LICENSE = MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause, \
-+	Zlib, CC0-1.0, Unicode-DFS-2016, Public Domain
-+DOTNET_RUNTIME_BIN_LICENSE_FILES = LICENSE.txt ThirdPartyNotices.txt
-+DOTNET_RUNTIME_BIN_PROVIDES = dotnet-runtime
++DOTNET_RUNTIME_SRC_RID = $(DOTNET_RUNTIME_SRC_OS)-$(DOTNET_RUNTIME_SRC_ARCH)
++
++# Only the native parts of the runtime (CoreCLR, the native libraries
++# and the hosts) are built from source, with CMake. The managed
++# libraries are built from C# with MSBuild, which needs a .NET SDK, so
++# they are taken from the official runtime tarball: they are
++# architecture independent, and built from the same sources.
++DOTNET_RUNTIME_SRC_MANAGED_SOURCE = \
++	dotnet-runtime-$(DOTNET_RUNTIME_SRC_VERSION)-$(DOTNET_RUNTIME_SRC_RID).tar.gz
++DOTNET_RUNTIME_SRC_EXTRA_DOWNLOADS = \
++	https://builds.dotnet.microsoft.com/dotnet/Runtime/$(DOTNET_RUNTIME_SRC_VERSION)/$(DOTNET_RUNTIME_SRC_MANAGED_SOURCE)
++
++# The tools are looked up from the compiler target tuple, that the
++# Buildroot toolchain file doesn't set. tryrun.cmake provides the
++# results of the checks that can't be run when cross-compiling.
++DOTNET_RUNTIME_SRC_CMAKE_ENV = \
++	PATH=$(BR_PATH) \
++	CLR_AR="$(TARGET_AR)" \
++	CLR_NM="$(TARGET_NM)" \
++	CLR_RANLIB="$(TARGET_RANLIB)" \
++	CLR_STRINGS="$(TARGET_CROSS)strings" \
++	CLR_OBJDUMP="$(TARGET_OBJDUMP)" \
++	CLR_READELF="$(TARGET_READELF)" \
++	CLR_OBJCOPY="$(TARGET_OBJCOPY)" \
++	TARGET_BUILD_ARCH=$(DOTNET_RUNTIME_SRC_ARCH) \
++	ROOTFS_DIR=$(STAGING_DIR)
++
++DOTNET_RUNTIME_SRC_CMAKE_OPTS = \
++	-C $(@D)/eng/native/tryrun.cmake \
++	-DCMAKE_TOOLCHAIN_FILE=$(HOST_DIR)/share/buildroot/toolchainfile.cmake \
++	-DCMAKE_COLOR_MAKEFILE=OFF \
++	-DCLR_CMAKE_PGO_INSTRUMENT=0 \
++	-DCLR_CMAKE_PGO_OPTIMIZE=0 \
++	-DFEATURE_DISTRO_AGNOSTIC_SSL=0 \
++	-DCLI_CMAKE_PKG_RID=$(DOTNET_RUNTIME_SRC_RID) \
++	-DCLI_CMAKE_FALLBACK_OS=$(DOTNET_RUNTIME_SRC_OS) \
++	-DCLI_CMAKE_COMMIT_HASH=N/A
++
++ifeq ($(BR2_arm),y)
++# CLR_ARM_FPU_CAPABILITY is 0x7 with 32 double-precision registers,
++# 0x3 with only 16 of them.
++ifeq ($(BR2_ARM_FPU_VFPV3D16)$(BR2_ARM_FPU_VFPV4D16),y)
++DOTNET_RUNTIME_SRC_CMAKE_OPTS += -DCLR_ARM_FPU_CAPABILITY=0x3
++else
++DOTNET_RUNTIME_SRC_CMAKE_OPTS += -DCLR_ARM_FPU_CAPABILITY=0x7
++endif
++DOTNET_RUNTIME_SRC_CMAKE_OPTS += \
++	-DCLR_ARM_FPU_TYPE=$(call qstrip,$(BR2_GCC_TARGET_FPU))
++endif
++
++# Options that build.sh and the MSBuild scripts normally set:
++# - the JIT related features (tiered compilation, ReJIT, PGO) are only
++#   enabled with FEATURE_DYNAMIC_CODE_COMPILED, that the MSBuild scripts
++#   set by default
++# - the static apphost is linked with $<LINK_LIBRARY:WHOLE_ARCHIVE>.
++#   CMake only defines WHOLE_ARCHIVE when it can identify the linker,
++#   which it can't do from the "gcc -v" output of all the toolchains
++#   (only collect2 is shown), so define it like
++#   eng/native/configurecompiler.cmake does for Haiku.
++DOTNET_RUNTIME_SRC_CMAKE_OPTS += \
++	-DFEATURE_DYNAMIC_CODE_COMPILED=1 \
++	-DCMAKE_LINK_LIBRARY_USING_WHOLE_ARCHIVE="LINKER:--push-state,--whole-archive;<LINK_ITEM>;LINKER:--pop-state" \
++	-DCMAKE_LINK_LIBRARY_USING_WHOLE_ARCHIVE_SUPPORTED=TRUE \
++	-DCMAKE_LINK_LIBRARY_WHOLE_ARCHIVE_ATTRIBUTES="LIBRARY_TYPE=STATIC;DEDUPLICATION=YES;OVERRIDE=DEFAULT"
++
++# Some unused template code doesn't build with gcc >= 14
++ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_14),y)
++DOTNET_RUNTIME_SRC_CMAKE_OPTS += -DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) -Wno-template-body"
++endif
++
++# The version files are normally generated with MSBuild. Generate them
++# like build.sh does when MSBuild is not available, but with the real
++# version, that the hosts report and use.
++DOTNET_RUNTIME_SRC_VERSION_LIST = $(subst ., ,$(DOTNET_RUNTIME_SRC_VERSION))
++DOTNET_RUNTIME_SRC_VERSION_MAJOR = $(word 1,$(DOTNET_RUNTIME_SRC_VERSION_LIST))
++DOTNET_RUNTIME_SRC_VERSION_MINOR = $(word 2,$(DOTNET_RUNTIME_SRC_VERSION_LIST))
++DOTNET_RUNTIME_SRC_VERSION_PATCH = $(word 3,$(DOTNET_RUNTIME_SRC_VERSION_LIST))
++
++# $(1): runtime_version.h path
++define DOTNET_RUNTIME_SRC_RUNTIME_VERSION_H
++	printf '#define %s %s\n' \
++		RuntimeAssemblyMajorVersion $(DOTNET_RUNTIME_SRC_VERSION_MAJOR) \
++		RuntimeAssemblyMinorVersion $(DOTNET_RUNTIME_SRC_VERSION_MINOR) \
++		RuntimeFileMajorVersion $(DOTNET_RUNTIME_SRC_VERSION_MAJOR) \
++		RuntimeFileMinorVersion $(DOTNET_RUNTIME_SRC_VERSION_MINOR) \
++		RuntimeFileBuildVersion $(DOTNET_RUNTIME_SRC_VERSION_PATCH) \
++		RuntimeFileRevisionVersion 0 \
++		RuntimeProductMajorVersion $(DOTNET_RUNTIME_SRC_VERSION_MAJOR) \
++		RuntimeProductMinorVersion $(DOTNET_RUNTIME_SRC_VERSION_MINOR) \
++		RuntimeProductPatchVersion $(DOTNET_RUNTIME_SRC_VERSION_PATCH) \
++		RuntimeProductVersion $(DOTNET_RUNTIME_SRC_VERSION) \
++		> $(1)
++endef
++
++define DOTNET_RUNTIME_SRC_VERSION_FILES
++	mkdir -p $(@D)/artifacts/obj
++	cd $(@D) && $(SHELL) ./eng/native/version/copy_version_files.sh
++	$(call DOTNET_RUNTIME_SRC_RUNTIME_VERSION_H,$(@D)/artifacts/obj/runtime_version.h)
++endef
++DOTNET_RUNTIME_SRC_PRE_CONFIGURE_HOOKS += DOTNET_RUNTIME_SRC_VERSION_FILES
++
++# $(1): component name, $(2): CMake source directory
++define DOTNET_RUNTIME_SRC_CMAKE_CONFIGURE
++	mkdir -p $(@D)/buildroot-build/$(1)
++	cd $(@D)/buildroot-build/$(1) && rm -f CMakeCache.txt && \
++		$(DOTNET_RUNTIME_SRC_CMAKE_ENV) $(BR2_CMAKE) $(@D)/$(2) \
++		$(DOTNET_RUNTIME_SRC_CMAKE_OPTS) \
++		-DCMAKE_INSTALL_PREFIX=$(@D)/buildroot-install/$(1)
++endef
++
++define DOTNET_RUNTIME_SRC_CONFIGURE_CMDS
++	$(call DOTNET_RUNTIME_SRC_CMAKE_CONFIGURE,coreclr,src/coreclr)
++	$(call DOTNET_RUNTIME_SRC_CMAKE_CONFIGURE,libs,src/native/libs)
++	$(call DOTNET_RUNTIME_SRC_CMAKE_CONFIGURE,corehost,src/native/corehost)
++endef
++
++# $(1): component name, $(2): CMake targets
++define DOTNET_RUNTIME_SRC_CMAKE_BUILD
++	$(DOTNET_RUNTIME_SRC_CMAKE_ENV) $(BR2_CMAKE) \
++		--build $(@D)/buildroot-build/$(1) -j$(PARALLEL_JOBS) \
++		$(if $(2),--target $(2))
++endef
++
++# $(1): component name, $(2): CMake install components
++define DOTNET_RUNTIME_SRC_CMAKE_INSTALL
++	$(if $(2),$(foreach c,$(2),\
++		$(BR2_CMAKE) --install $(@D)/buildroot-build/$(1) --component $(c)$(sep)),\
++		$(BR2_CMAKE) --install $(@D)/buildroot-build/$(1))
++endef
++
++define DOTNET_RUNTIME_SRC_BUILD_CMDS
++	$(call DOTNET_RUNTIME_SRC_CMAKE_BUILD,coreclr,runtime)
++	$(call DOTNET_RUNTIME_SRC_CMAKE_INSTALL,coreclr,jit runtime debug)
++	$(call DOTNET_RUNTIME_SRC_CMAKE_BUILD,libs)
++	$(call DOTNET_RUNTIME_SRC_CMAKE_INSTALL,libs)
++	$(call DOTNET_RUNTIME_SRC_CMAKE_BUILD,corehost)
++	$(call DOTNET_RUNTIME_SRC_CMAKE_INSTALL,corehost)
++endef
++
++DOTNET_RUNTIME_SRC_INSTALL_DIRS = \
++	$(@D)/buildroot-install/coreclr/sharedFramework \
++	$(@D)/buildroot-install/libs \
++	$(@D)/buildroot-install/corehost/corehost
 +
 +# /usr/share/dotnet is the default install location, where both the
-+# dotnet host and the application hosts find the runtime. The runtime
-+# loads its native libraries from its own directory.
-+#
-+# libcoreclrtraceptprovider.so is only used for LTTng tracing and the
-+# runtime doesn't need it: remove it, so that lttng-libust, that it is
-+# linked against, is not needed.
-+define DOTNET_RUNTIME_BIN_INSTALL_TARGET_CMDS
++# dotnet host and the application hosts find the runtime. Only the
++# managed libraries and the metadata files are kept from the official
++# runtime tarball: each of its native binaries is replaced by the one
++# built from source, so that the same set of files is installed.
++define DOTNET_RUNTIME_SRC_INSTALL_TARGET_CMDS
 +	mkdir -p $(TARGET_DIR)/usr/share/dotnet $(TARGET_DIR)/usr/bin
-+	cp -a $(@D)/dotnet $(@D)/host $(@D)/shared $(TARGET_DIR)/usr/share/dotnet/
-+	rm -f $(TARGET_DIR)/usr/share/dotnet/shared/Microsoft.NETCore.App/$(DOTNET_RUNTIME_BIN_VERSION)/libcoreclrtraceptprovider.so
++	$(call suitable-extractor,$(DOTNET_RUNTIME_SRC_MANAGED_SOURCE)) \
++		$(DOTNET_RUNTIME_SRC_DL_DIR)/$(DOTNET_RUNTIME_SRC_MANAGED_SOURCE) | \
++		$(TAR) -C $(TARGET_DIR)/usr/share/dotnet $(TAR_OPTIONS) - \
++		./dotnet ./host ./shared
++	cd $(TARGET_DIR)/usr/share/dotnet && \
++	for f in dotnet $$(find host shared -type f \
++		\( -name '*.so' -o -name createdump \)); do \
++		src=$$(for d in $(DOTNET_RUNTIME_SRC_INSTALL_DIRS); do \
++			ls $$d/$${f##*/} 2>/dev/null; done | head -n 1); \
++		if [ -z "$$src" ]; then \
++			echo "$${f} was not built" >&2; exit 1; \
++		fi; \
++		$(INSTALL) -m 0755 $$src $$f || exit 1; \
++	done
 +	ln -sf ../share/dotnet/dotnet $(TARGET_DIR)/usr/bin/dotnet
 +endef
 +
 +$(eval $(generic-package))
 diff --git a/package/dotnet-runtime/Config.in b/package/dotnet-runtime/Config.in
-new file mode 100644
-index 0000000000..c79c47f5c4
---- /dev/null
+index c79c47f5c4..44c6e4308b 100644
+--- a/package/dotnet-runtime/Config.in
 +++ b/package/dotnet-runtime/Config.in
-@@ -0,0 +1,98 @@
-+config BR2_PACKAGE_DOTNET_RUNTIME_ARCH_SUPPORTS
-+	bool
-+	default y if BR2_aarch64
-+	# The official ARM binaries are built for ARMv7-A with the
-+	# hard-float ABI. The CoreCLR JIT also needs at least a VFPv3-D16
-+	# FPU.
-+	default y if BR2_arm && BR2_ARM_EABIHF && \
-+		(BR2_ARM_CPU_ARMV7A || BR2_ARM_CPU_ARMV8A) && \
-+		(BR2_ARM_FPU_VFPV3 || BR2_ARM_FPU_VFPV3D16 || \
-+		BR2_ARM_FPU_VFPV4 || BR2_ARM_FPU_VFPV4D16 || \
-+		BR2_ARM_FPU_NEON || BR2_ARM_FPU_NEON_VFPV4 || \
-+		BR2_ARM_FPU_FP_ARMV8 || BR2_ARM_FPU_NEON_FP_ARMV8)
-+	default y if BR2_x86_64
-+	depends on BR2_USE_MMU # fork()
-+
-+config BR2_PACKAGE_DOTNET_RUNTIME
-+	bool "dotnet-runtime"
-+	depends on BR2_PACKAGE_DOTNET_RUNTIME_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_USES_UCLIBC
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on !BR2_STATIC_LIBS
+@@ -1,7 +1,8 @@
+ config BR2_PACKAGE_DOTNET_RUNTIME_ARCH_SUPPORTS
+ 	bool
+ 	default y if BR2_aarch64
+-	# The official ARM binaries are built for ARMv7-A with the
++	# The official ARM binaries, whose managed libraries are also
++	# used when building from source, are built for ARMv7-A with the
+ 	# hard-float ABI. The CoreCLR JIT also needs at least a VFPv3-D16
+ 	# FPU.
+ 	default y if BR2_arm && BR2_ARM_EABIHF && \
+@@ -35,11 +36,40 @@ config BR2_PACKAGE_DOTNET_RUNTIME
+ 
+ if BR2_PACKAGE_DOTNET_RUNTIME
+ 
+-# The pre-built runtime provided by Microsoft is the only provider
++choice
++	prompt "dotnet-runtime variant"
 +	help
-+	  The .NET runtime, needed to execute .NET applications.
++	  Select the .NET runtime provider.
 +
-+	  Applications built for an older .NET version (for example
-+	  net10.0) only run on this runtime with the Major roll forward
-+	  policy: RollForward set to Major in their project, or
-+	  DOTNET_ROLL_FORWARD=Major in their environment.
-+
-+	  ICU, OpenSSL and libkrb5 are loaded by the runtime only when
-+	  an application needs them. Use the options below to install
-+	  the ones needed by your applications.
-+
-+	  https://docs.microsoft.com/dotnet/core/
-+
-+if BR2_PACKAGE_DOTNET_RUNTIME
-+
-+# The pre-built runtime provided by Microsoft is the only provider
-+config BR2_PACKAGE_DOTNET_RUNTIME_BIN
-+	bool
-+	default y
+ config BR2_PACKAGE_DOTNET_RUNTIME_BIN
+-	bool
+-	default y
++	bool "pre-built"
 +	select BR2_PACKAGE_HAS_DOTNET_RUNTIME
++	help
++	  Install the pre-built .NET runtime provided by Microsoft.
 +
-+config BR2_PACKAGE_DOTNET_RUNTIME_ICU
-+	bool "ICU support"
-+	default y
-+	depends on BR2_USE_WCHAR # icu
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # icu
++config BR2_PACKAGE_DOTNET_RUNTIME_SRC
++	bool "built from source"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # aarch64 FPU assembly
 +	depends on BR2_HOST_GCC_AT_LEAST_7 # icu
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # icu
-+	select BR2_PACKAGE_ICU
++	select BR2_HOST_CMAKE_AT_LEAST_3_26
+ 	select BR2_PACKAGE_HAS_DOTNET_RUNTIME
++	select BR2_PACKAGE_DOTNET_RUNTIME_ICU
++	select BR2_PACKAGE_DOTNET_RUNTIME_KRB5
++	select BR2_PACKAGE_DOTNET_RUNTIME_OPENSSL
++	select BR2_PACKAGE_LTTNG_LIBUST
 +	help
-+	  Install ICU, needed by the globalization features (cultures,
-+	  string comparison and casing, time zones, ...).
++	  Build the native parts of the .NET runtime (CoreCLR, the
++	  native libraries and the hosts) from source. The managed
++	  libraries, that need a .NET SDK to be built, are taken from
++	  the official runtime release.
 +
-+	  Without ICU, applications fail to start, unless they are
-+	  built with InvariantGlobalization set to true, or run with
-+	  DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1.
++	  ICU, OpenSSL and Kerberos are needed to build the native
++	  libraries, so their support is always enabled.
 +
-+comment "ICU support needs a toolchain w/ wchar, threads, gcc >= 7, host gcc >= 7"
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || !BR2_HOST_GCC_AT_LEAST_7
++comment "built from source needs a toolchain w/ gcc >= 8, host gcc >= 7"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8 || !BR2_HOST_GCC_AT_LEAST_7
 +
-+config BR2_PACKAGE_DOTNET_RUNTIME_OPENSSL
-+	bool "OpenSSL support"
-+	default y
-+	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-+	help
-+	  Install OpenSSL, needed by the cryptography and TLS features
-+	  (System.Security.Cryptography, SslStream, HTTPS with
-+	  HttpClient, ...).
-+
-+config BR2_PACKAGE_DOTNET_RUNTIME_KRB5
-+	bool "Kerberos support"
-+	default y
-+	select BR2_PACKAGE_LIBKRB5
-+	help
-+	  Install the MIT Kerberos GSSAPI library (libgssapi_krb5),
-+	  needed by the Kerberos (Negotiate) authentication
-+	  (NegotiateStream, HttpClient with default credentials, ...).
-+
-+	  NTLM authentication also needs the gss-ntlmssp plugin, which
-+	  is not available in Buildroot.
-+
-+config BR2_PACKAGE_HAS_DOTNET_RUNTIME
-+	bool
-+
-+config BR2_PACKAGE_PROVIDES_DOTNET_RUNTIME
-+	string
-+	default "dotnet-runtime-bin" if BR2_PACKAGE_DOTNET_RUNTIME_BIN
-+
-+endif
-+
-+comment "dotnet-runtime needs a glibc or musl toolchain w/ C++, dynamic library"
-+	depends on BR2_PACKAGE_DOTNET_RUNTIME_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_USES_UCLIBC || !BR2_INSTALL_LIBSTDCPP || \
-+		BR2_STATIC_LIBS
-diff --git a/package/dotnet-runtime/dotnet-runtime.mk b/package/dotnet-runtime/dotnet-runtime.mk
-new file mode 100644
-index 0000000000..4bed1f9439
---- /dev/null
-+++ b/package/dotnet-runtime/dotnet-runtime.mk
-@@ -0,0 +1,7 @@
-+################################################################################
-+#
-+# dotnet-runtime
-+#
-+################################################################################
-+
-+$(eval $(virtual-package))
++endchoice
+ 
+ config BR2_PACKAGE_DOTNET_RUNTIME_ICU
+ 	bool "ICU support"
+@@ -89,6 +119,7 @@ config BR2_PACKAGE_HAS_DOTNET_RUNTIME
+ config BR2_PACKAGE_PROVIDES_DOTNET_RUNTIME
+ 	string
+ 	default "dotnet-runtime-bin" if BR2_PACKAGE_DOTNET_RUNTIME_BIN
++	default "dotnet-runtime-src" if BR2_PACKAGE_DOTNET_RUNTIME_SRC
+ 
+ endif
+ 
 -- 
 2.47.3
 
