@@ -1,115 +1,146 @@
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E746B606A31C
-	for <buildroot@archiver.kernel.org>; Fri, 27 Nov 2026 11:09:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C93C606A31C
+	for <buildroot@archiver.kernel.org>; Fri, 27 Nov 2026 11:25:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=VkU1VtBs;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256 header.s=a1 header.b=KeRe8PAO
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=GxdAHoGx;
+	dkim=fail reason="signature verification failed" (1024-bit key, unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google header.b=pMI+8xKS
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0BA8C80E7D;
-	Fri, 27 Nov 2026 11:09:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CED3E60AAF;
+	Fri, 27 Nov 2026 11:25:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AopLOMa97iY6; Fri, 27 Nov 2026 11:09:07 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 0D3A580BE2
-Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795777747;
-	b=Uz7Dx0dLpgmDAP8Ufq6a64fnXUKM6syW/8NFZ9r5GYk9/lfrLwDhrjEVu32kr/d+E7wg
-	 dfB2xeJUtZtebaffnuizpkhduxsggkuetTr3qN/Z6cGNfwWbPYSJ+P5uAN/g+eUdWwNhY
-	 c7qI5DKsPi6mmmaR3H2eDQwjD127PGBGKkCiNPP0AxLyxIi+iNv1lsDL0uDUHyEyB3a28
-	 TQXFkNc/3XwSwM3h7SNKIpJowtcXOLeOHke+vPGvej0H8HGi+mkgbLIxQZJ4PA2WFKO1k
-	 jn+GdU/POjNNcIIkRUXXnlws59ZMtrq+YnV/f2+ptVZOl7DeKu46MuUU32H/uLDL14A==
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 610I1j4HeaGa; Fri, 27 Nov 2026 11:25:15 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 71AC260AC2
+Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795778715;
+	b=e3i2WS0JrzG6xAdNqdEl+CGU4k1janWVR2JCmfTq9+DtrZd7ZIFk2lAupWOWpKVXri30
+	 ll1/bsJ1uo3aUp42Dalo0VQNdoXrLEYVslF/H/SoXW/p26D9ZGuwadbMjvTJKhHEGB/EM
+	 2Hpox8gVFegAAxq5a7OUGqUsBCw/RaI5ZDbWxqhCNf8lyQx4PkSjCbjOjtT3v//VFPk7W
+	 UQR1dCCncEyN8JDRdHP7q50VXgQFfWmijMu/PqAZRmoqCZW2GoR0KRiu0woWpTZxK6yNP
+	 A876mO/bD1X6eBqaweHwn720vCRvCZ29C8RG1afJXz9l/Hmdmgl7Ze+O0SElBNR7fpw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795777747;
+	c=relaxed/relaxed; t=1795778715;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
-	 DKIM-Signature:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
-	 X-CMAE-Envelope:Subject:X-BeenThere:X-Mailman-Version:Precedence:
-	 List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
-	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
-	 Sender;
-	bh=OeFtAEbF3QbUJblHStogCL14CUeOaDyYU4NYmuOWPy8=;
-	b=mLFQWOuGMNLTJa9D8yr/H9y0qzQTDiuoQ53HFlp7zKu7SxmRXjZvjGaWhJT18QaQ8QAP
-	 U1NdsMDh7tMaNy10EKiFB5E/IWfumccPNNqgSwMRkMx3zY5FucKbyb8/5Lrl++UIlkPZ5
-	 TPFM7QFsKS1kumm50ZtXMaoSF+fH8swI5FYpUPMtgm9NOFQRJtD0q4albYbIqhsSPa05+
-	 V4QLOwfE1vw0wl7GUOnMAJDGwjRpYx0nrqaXkx6QdMb3qj4OdOjsym+ZQDJXz+DVeLFnJ
-	 KmL77iAZPb1LAjmO3d6QdGpHEbp+VgsAwgME72nGu7lSi+UrJDhe4geq91C8LiH5tag==
-ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
+	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
+	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=/mX/wGJgoMKQjmmcHIY/dA0Diq5IaoVD7AKY4o16Ljk=;
+	b=ZOr5j4dS2FCxkBvvRJ5gpT0MR+bgEEy9IWIdFcPn7b5/rgU/6k4NdY1PFKFAzt3V3KV5
+	 GJHjqBsEEqIuT2paCriwIK7MuQwrkw4N4d7vRgv7DBytRQuR9038WkdJGLeXThnOQLNXY
+	 BmPP9mF/eCtjqoBYsNt0tkfRcvwUPl4RYJOYttuE9RPuuqk4ASamLHvjsGywMEJOT+5gB
+	 YDOp9lyqfExQrGOtutBE9J2Ow06UWY+HzszWfqxwGm+cJllJyjtFJww+THcsTHsXWlP0p
+	 b02jk0laOtmqGCkhFNqT2pG+tOQpHCyvZ/86K/oK+6GOTXaNWV65gYeF4pO0/WSaCZg==
+ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795777747;
-	bh=OeFtAEbF3QbUJblHStogCL14CUeOaDyYU4NYmuOWPy8=;
+	s=default; t=1795778715;
+	bh=/mX/wGJgoMKQjmmcHIY/dA0Diq5IaoVD7AKY4o16Ljk=;
 	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:From;
-	b=VkU1VtBszckx7h8L0/7+Iq03wvHdWNazVrhpgWEEsHciLupU9gVKU1QVjyHEQPxCn
-	 EL5jThJTSAmOIG+gO8DNppwXxpXK7BCJzUuNbAHnwEFfKcIDY8wONZE97l+KTmxE7U
-	 YnUPEdecudXO5oiH5A05A4jz8d2xGoc72nDdqA4cL5Q74dS9uEZHaE5SbHao3acAA+
-	 fc3JfcigM6lvm+1XEwRqKSwj4ddiPc4gZKl/wcJsWbEtNTq0N+mZYnGR1iebF1h19F
-	 s2mRcaHFfFhfqaGj3CBG/lO9edQmP2JX8Fkwq3zXTZjB1nvkAYMSgaAK/CuVFyXv6R
-	 MtRh3tChr7msw==
+	b=GxdAHoGx04kx0AigywiXM2mnMQXJAk7Vnlev+5GtpX5Mftj2WRhqGqor+uG5BRK1b
+	 AtGkiclk9EiI+9i/A5h9QCf9DrvwnpPqlZpXWoWBSMTSy6tCAMq//5qW6P2KRmWcyj
+	 M8BXTHD4Ptvje+APxdGoaYhxlFKJRf52sn8MsYwFrTfTJ1VrhZB2glLVECFdzso4IU
+	 e4MdGoKWRWSVTef8cttRu53jc8wzII8CuLER3/oXRDLUszGbBjF7e9R3eGukslzKHj
+	 wDoDylRAGdDvAltdFVfSqQ59rsPYb+TJ3IuboCHpJn1GnMVnnkQ6NdcTYDDSftum4x
+	 uCNTeqF4bODGA==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0D3A580BE2;
-	Fri, 27 Nov 2026 11:09:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 71AC260AC2;
+	Fri, 27 Nov 2026 11:25:15 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id C55802BD
- for <buildroot@buildroot.org>; Fri, 27 Nov 2026 11:09:04 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 5C3EA2BD
+ for <buildroot@buildroot.org>; Fri, 27 Nov 2026 11:25:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id ABEE04008B
- for <buildroot@buildroot.org>; Fri, 27 Nov 2026 11:09:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3F89E40571
+ for <buildroot@buildroot.org>; Fri, 27 Nov 2026 11:25:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S-i5jIU__ZpL for <buildroot@buildroot.org>;
- Fri, 27 Nov 2026 11:09:02 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 084B14004D
+ id wxu9nIw73LXO for <buildroot@buildroot.org>;
+ Fri, 27 Nov 2026 11:25:12 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 739154004D
 Authentication-Results: smtp2.osuosl.org;
- arc=none smtp.remote-ip=62.149.156.132
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.132;
- helo=smtpcmd12132.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+ arc=none smtp.remote-ip="2a00:1450:4864:20::62d"
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::62d; helo=mail-ej1-x62d.google.com;
+ envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
 Authentication-Results: smtp2.osuosl.org; dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-Authentication-Results: smtp2.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=KeRe8PAO
-Received: from smtpcmd12132.aruba.it (smtpcmd12132.aruba.it [62.149.156.132])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 084B14004D
- for <buildroot@buildroot.org>; Fri, 27 Nov 2026 11:08:58 +0000 (UTC)
-Received: from localhost.localdomain ([95.249.253.35])
- by Aruba SMTP with ESMTPSA
- id Wtp2xKlmBV5J9Wtp2xiZx3; Fri, 27 Nov 2026 12:08:56 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
- t=1795777736; bh=MeNTRRKg9kvX42VEYZ/rjzcWYHLsRATMy55jo2lgtAM=;
- h=From:To:Subject:Date:MIME-Version;
- b=KeRe8PAOk4wlyicrdxToeyh0/4nrKLSr1TxuBCXY35XoH1WNwM3gZNvHlh0XDIv0m
- NzwUqyDoWy95/ViPuxOVO5Ap1fIJ4oel9jLUjFrLQEMemApX9XpxZodPzOq3Q8P7wh
- 4J/LvZolqAeU/5j9erwdqOy/ij6TPpvactJT0FFIEkwuIlQrVMiEzYCn8cFFiS6hxD
- hy0lrigFhk353JKTymBL+/pCsK1oZaH6CkpewCKxbzhryKIFK+/lOY1JbKoejueCFb
- PiAgEVs10JISPF6nBoGfjAB2c2oZkhZ+1oSE7s+z6sZyVGhwJolAcVj+Hx+ZmVlgV/
- fHp/26elQl6Ug==
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ header.from=amarulasolutions.com
+Authentication-Results: smtp2.osuosl.org; dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=pMI+8xKS
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
+ [IPv6:2a00:1450:4864:20::62d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 739154004D
+ for <buildroot@buildroot.org>; Fri, 27 Nov 2026 11:25:11 +0000 (UTC)
+Received: by mail-ej1-x62d.google.com with SMTP id
+ a640c23a62f3a-c505994e5f5so119948666b.1
+ for <buildroot@buildroot.org>; Fri, 27 Nov 2026 03:25:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1795778709; x=1796383509;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+ bh=mKn2FlUSSS2EzuOYDuMNrwnJJY8vNYwM2g4xMSze54k=;
+ b=pMI+8xKSx6Xw8T0mlhjgib2L1D2bqhgKxShTyLUAVfHGVuycUGZ5nxim6kWqhuIVyg
+ f3SrWBuywDz10FqpT/PdpzLLeM3zhPiP34pGtZ0KIW0uYIs9qk0hzVy4UUowy8bW4skU
+ oIg8504SZtPQFVi4ZGMpQNj2UFMJlBsNz91QA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1795778709; x=1796383509;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to:content-type;
+ bh=mKn2FlUSSS2EzuOYDuMNrwnJJY8vNYwM2g4xMSze54k=;
+ b=QK5vKIZUJrjnatFMm7QJGiQUcg9tR1oVFOALVSTZ8wZNT6ZV3KaL8Wv2rHxUYNsi88
+ 1fc7uupfohUmLe45ZtF6KspgIvUx5ICIqSvz52tb3dN08oo5SEFXx738FgSu+ZGTvNyn
+ bXMzL0IdQv/5+qQmN88G91dEyuAA+vGny4GoMTucGCdk3pYa5C11Kjrs2Dv5kMR27NLW
+ eVz/HxCNb9CdCTyvWL0fV858TOKQNQLIRTvM4jvkGW3OSW7k+AP1vnp5jr298umgMalw
+ iVhT7enEGIp/Gd8v8/QqBYR38q/3O1/XB185DcSfgxeI37/uVGvy3QydL5yNpSq8Jhj7
+ j3wA==
+X-Gm-Message-State: APuU4Z9cuMxz19ZcPxkfSQoE6ejgZ4k/qIRgljvugaMIMuka4kq4mULV
+ 3veo//DbkuxnESJB8aMyPqvCiDA4E02+Nmm3r6JD3HroaLQabQ0KSqMdX7ILbU6Rzl4mjhXFp5y
+ W9H3y12Q=
+X-Gm-Gg: AZFdTZcC0FasU2mRBpN+0i4UAFa1h5EUPu8K5C/Z6TfnfpIalJ/K8Md1z/yNCGdimsw
+ lNJZmD1sqfzNy9oZEVPGs6qTSAXH9B542+d4bcY8VqEydm4usFSD++bbFjmjAMqy/Nvr79IUxqO
+ cFh6gF2oQZS08Q2yelDnMmmCKNhMn5o6L1KXkfeR3STfkeubrYdwXKWd241lZSybIJlamwwl2Qd
+ iKPkqNe2xTkglkeSHiSDFyqVJZvDesppNCI7qF/dAU95jg0Dytq0kq7GZMOdzyTTsz4SGG/S7t6
+ UcVZTOeK3aLcsPH6ZFN0EYT9HPcm4fwfHaGZuaDJmVxCuqMI64ZEpxXuWQIZoxfUAl5fefIx3m+
+ Sd6aXTXn8bcrpAtFa7LJRrJ1maB4qUxx/QSZ2RsZI/V/w/iYjFJFnDVkLP76XmOMtP3ykoq3QuI
+ g7HUaVn6gylqdem7LdnY+HGbX/R8T8ctD8mpH53uZgwmh1WlNNkPqHjRtVDa2ruuivoav64XpGh
+ ypP4H79Up5wZCT2tjqPdsAStW5R/hPLekDZk52ZPDXXseCB4Zej5c8aINmui1bDGqOhHBXCU7us
+ kPOI5xeIygWuCbb8/ob06JnYKJ3kiqL/1eqldKcKR6T2i0op/710ktEXhiz4pL7B1GR837XpJQx
+ TqyhBuAs81sfgGthQFxWu4YvpAUSRpfxanGTijTBcZB7Xq6aF6MhmwnRcvhlyeV5kD4JcxRMhpS
+ vDwxIguFBpU76Oyn//AesEDYdoxnZavzvux9y4kHT9XGCuK+h8WscxG8NGxX8H6k2kf2YXVyJX9
+ lDSdpQ3TZnagRwD0zX0yQ4ey4oDDahTnJvW0TAHdzF5W5u3Q6mkdH1Ra9UFKiEKGRRPy/duEw==
+X-Received: by 2002:a17:906:26c5:b0:c51:3b84:6fb8 with SMTP id
+ a640c23a62f3a-c513b84886cmr1771840866b.4.1795778708979; 
+ Fri, 27 Nov 2026 03:25:08 -0800 (PST)
+Received: from adam-linux.arnhem.chello.nl
+ (2001-1c00-8181-e800-dc0e-c162-ac5f-4bbe.cable.dynamic.v6.ziggo.nl.
+ [2001:1c00:8181:e800:dc0e:c162:ac5f:4bbe])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-c513aea3701sm885808166b.48.2026.11.27.03.25.08
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 27 Nov 2026 03:25:08 -0800 (PST)
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "Claude Opus 5.5" <noreply@anthropic.com>
-Date: Fri, 27 Nov 2026 12:08:56 +0100
-Message-ID: <20261127110856.1895234-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.47.3
+Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Fri, 27 Nov 2026 12:25:02 +0100
+Message-ID: <20261127112507.2594905-1-adam.duskett@amarulasolutions.com>
+X-Mailer: git-send-email 2.56.1
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfFF18+5pdn+84wIQUAPCoCy+6eHlEtRncl5WTMdIHA3dMvwjh+OD7LyqFeMKKd3LRyc2zakgub7j+06mcDsKW8cGCxijABZQKkAIfXMrWZ1+3xmZz6rl
- eY6DKDsFRr+scxXMsoh8lYOlrJgZoVoAgu2rMgd047YECI4zP/lja1jH+uLVquk54yUH8nBXOhxW9pvKCNp33k7Nin5ZnGi0ug5Fr6o8L4anbUJ+YUCdNt6g
- U5+iDheyc45wAfX/HY/e/Q5co1z3dYxyxxvKIJOOZE8jSKg1/9P8N+55oH5d/vjsiznA7Ca+MOmbY195g+LMe2o2upqk+dbExI2aFSaZS1BaMRvh7zqHYbKq
- FveXVlxSs+gkBP/QOPk5uoZ7+ACWyg0U43eGQVryUwaMbl0zVsE=
-Subject: [Buildroot] [PATCH]
- toolchain/toolchain-external/toolchain-external-bootlin: exclude powerpc
- soft-float
+Subject: [Buildroot] [PATCH v2 1/6] package/depot-tools: bump to version
+ 25e7767e91a5e7f3209c947b07c52e7a45dda6b5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -122,624 +153,350 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-16.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,SPF_HELO_NONE,
-	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+	INCLUDES_CR_TRAILER,INCLUDES_PATCH,MAILING_LIST_MULTI,
+	MENTIONS_GIT_HOSTING,SPF_HELO_NONE,SPF_PASS,USER_AGENT_GIT
+	autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-All Bootlin powerpc toolchains are built for hard-float, but nothing
-prevents them from being selected with BR2_POWERPC_SOFT_FLOAT=y. In
-that case the toolchain wrapper passes -msoft-float, objects are built
-for soft-float and fail to link against the hard-float C library and
-libgcc, which lacks the soft-float helpers:
+Drop both upstream patches:
+- 0001-gerrit_util.py-fix-importing-socks.patch is no longer needed,
+  as gerrit_util.py no longer imports socks;
+- 0002-Replace-deprecated-ast-types-with-ast.Constant.patch is
+  included upstream.
 
-  ld: .../sysroot/lib64/libc.so.6 uses hard float, atd.o uses soft float
-  atd.c:(.text+0x12d8): undefined reference to `__ltdf2'
+The LICENSE hash changed due to a copyright header update:
+"Copyright (c) 2009 The Chromium Authors. All rights reserved." became
+"Copyright 2009 The Chromium Authors" and "Google Inc." became
+"Google LLC".
 
-As already done for MIPS, add !BR2_POWERPC_SOFT_FLOAT to the conditions
-of all powerpc architectures in gen-bootlin-toolchains and regenerate
-Config.in.options and the runtime tests.
-
-Fixes: https://autobuild.buildroot.org/results/b13e9474985ac64533e11ffc3fa089d1bcb0b4ee/
-
-Assisted-by: Claude Opus 5.5 <noreply@anthropic.com>
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- support/scripts/gen-bootlin-toolchains        | 14 +++---
- .../tests/toolchain/test_external_bootlin.py  | 32 +++++++++++++
- .../Config.in.options                         | 46 ++++++++++++++++---
- 3 files changed, 78 insertions(+), 14 deletions(-)
+v1 -> v2: fix new license hash [thomas]
 
-diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
-index ee64a86902..84e7e53feb 100755
---- a/support/scripts/gen-bootlin-toolchains
-+++ b/support/scripts/gen-bootlin-toolchains
-@@ -126,33 +126,33 @@ arches = {
-     },
-     'powerpc-440fp': {
-         # Not sure it could be used by other powerpc variants?
--        'conditions': ['BR2_powerpc', 'BR2_powerpc_440fp'],
-+        'conditions': ['BR2_powerpc', 'BR2_powerpc_440fp', '!BR2_POWERPC_SOFT_FLOAT'],
-         'prefix': 'powerpc',
-     },
-     'powerpc-e300c3': {
-         # Not sure it could be used by other powerpc variants?
--        'conditions': ['BR2_powerpc', 'BR2_powerpc_e300c3'],
-+        'conditions': ['BR2_powerpc', 'BR2_powerpc_e300c3', '!BR2_POWERPC_SOFT_FLOAT'],
-         'prefix': 'powerpc',
-     },
-     'powerpc-e500mc': {
-         # Not sure it could be used by other powerpc variants?
--        'conditions': ['BR2_powerpc', 'BR2_powerpc_e500mc'],
-+        'conditions': ['BR2_powerpc', 'BR2_powerpc_e500mc', '!BR2_POWERPC_SOFT_FLOAT'],
-         'prefix': 'powerpc',
-     },
-     'powerpc64-e5500': {
--        'conditions': ['BR2_powerpc64', 'BR2_powerpc_e5500'],
-+        'conditions': ['BR2_powerpc64', 'BR2_powerpc_e5500', '!BR2_POWERPC_SOFT_FLOAT'],
-         'prefix': 'powerpc64',
-     },
-     'powerpc64-e6500': {
--        'conditions': ['BR2_powerpc64', 'BR2_powerpc_e6500'],
-+        'conditions': ['BR2_powerpc64', 'BR2_powerpc_e6500', '!BR2_POWERPC_SOFT_FLOAT'],
-         'prefix': 'powerpc64',
-     },
-     'powerpc64-power8': {
--        'conditions': ['BR2_powerpc64', 'BR2_powerpc_power8'],
-+        'conditions': ['BR2_powerpc64', 'BR2_powerpc_power8', '!BR2_POWERPC_SOFT_FLOAT'],
-         'prefix': 'powerpc64',
-     },
-     'powerpc64le-power8': {
--        'conditions': ['BR2_powerpc64le', 'BR2_powerpc_power8'],
-+        'conditions': ['BR2_powerpc64le', 'BR2_powerpc_power8', '!BR2_POWERPC_SOFT_FLOAT'],
-         'prefix': 'powerpc64le',
-     },
-     'riscv32-ilp32d': {
-diff --git a/support/testing/tests/toolchain/test_external_bootlin.py b/support/testing/tests/toolchain/test_external_bootlin.py
-index ecbb364642..b84b386c1d 100644
---- a/support/testing/tests/toolchain/test_external_bootlin.py
-+++ b/support/testing/tests/toolchain/test_external_bootlin.py
-@@ -1741,6 +1741,7 @@ class TestExternalToolchainBootlinPowerpc440fpGlibcBleedingEdge(TestExternalTool
-     config = """
-         BR2_powerpc=y
-         BR2_powerpc_440fp=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_GLIBC_BLEEDING_EDGE=y
-@@ -1756,6 +1757,7 @@ class TestExternalToolchainBootlinPowerpc440fpGlibcStable(TestExternalToolchain)
-     config = """
-         BR2_powerpc=y
-         BR2_powerpc_440fp=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_GLIBC_STABLE=y
-@@ -1771,6 +1773,7 @@ class TestExternalToolchainBootlinPowerpc440fpMuslBleedingEdge(TestExternalToolc
-     config = """
-         BR2_powerpc=y
-         BR2_powerpc_440fp=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_MUSL_BLEEDING_EDGE=y
-@@ -1786,6 +1789,7 @@ class TestExternalToolchainBootlinPowerpc440fpMuslStable(TestExternalToolchain):
-     config = """
-         BR2_powerpc=y
-         BR2_powerpc_440fp=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_MUSL_STABLE=y
-@@ -1801,6 +1805,7 @@ class TestExternalToolchainBootlinPowerpc440fpUclibcBleedingEdge(TestExternalToo
-     config = """
-         BR2_powerpc=y
-         BR2_powerpc_440fp=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_UCLIBC_BLEEDING_EDGE=y
-@@ -1816,6 +1821,7 @@ class TestExternalToolchainBootlinPowerpc440fpUclibcStable(TestExternalToolchain
-     config = """
-         BR2_powerpc=y
-         BR2_powerpc_440fp=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_UCLIBC_STABLE=y
-@@ -1831,6 +1837,7 @@ class TestExternalToolchainBootlinPowerpce300c3GlibcBleedingEdge(TestExternalToo
-     config = """
-         BR2_powerpc=y
-         BR2_powerpc_e300c3=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E300C3_GLIBC_BLEEDING_EDGE=y
-@@ -1846,6 +1853,7 @@ class TestExternalToolchainBootlinPowerpce300c3GlibcStable(TestExternalToolchain
-     config = """
-         BR2_powerpc=y
-         BR2_powerpc_e300c3=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E300C3_GLIBC_STABLE=y
-@@ -1861,6 +1869,7 @@ class TestExternalToolchainBootlinPowerpce300c3MuslBleedingEdge(TestExternalTool
-     config = """
-         BR2_powerpc=y
-         BR2_powerpc_e300c3=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E300C3_MUSL_BLEEDING_EDGE=y
-@@ -1876,6 +1885,7 @@ class TestExternalToolchainBootlinPowerpce300c3MuslStable(TestExternalToolchain)
-     config = """
-         BR2_powerpc=y
-         BR2_powerpc_e300c3=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E300C3_MUSL_STABLE=y
-@@ -1891,6 +1901,7 @@ class TestExternalToolchainBootlinPowerpce300c3UclibcBleedingEdge(TestExternalTo
-     config = """
-         BR2_powerpc=y
-         BR2_powerpc_e300c3=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E300C3_UCLIBC_BLEEDING_EDGE=y
-@@ -1906,6 +1917,7 @@ class TestExternalToolchainBootlinPowerpce300c3UclibcStable(TestExternalToolchai
-     config = """
-         BR2_powerpc=y
-         BR2_powerpc_e300c3=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E300C3_UCLIBC_STABLE=y
-@@ -1921,6 +1933,7 @@ class TestExternalToolchainBootlinPowerpce500mcGlibcBleedingEdge(TestExternalToo
-     config = """
-         BR2_powerpc=y
-         BR2_powerpc_e500mc=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E500MC_GLIBC_BLEEDING_EDGE=y
-@@ -1936,6 +1949,7 @@ class TestExternalToolchainBootlinPowerpce500mcGlibcStable(TestExternalToolchain
-     config = """
-         BR2_powerpc=y
-         BR2_powerpc_e500mc=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E500MC_GLIBC_STABLE=y
-@@ -1951,6 +1965,7 @@ class TestExternalToolchainBootlinPowerpce500mcMuslBleedingEdge(TestExternalTool
-     config = """
-         BR2_powerpc=y
-         BR2_powerpc_e500mc=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E500MC_MUSL_BLEEDING_EDGE=y
-@@ -1966,6 +1981,7 @@ class TestExternalToolchainBootlinPowerpce500mcMuslStable(TestExternalToolchain)
-     config = """
-         BR2_powerpc=y
-         BR2_powerpc_e500mc=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E500MC_MUSL_STABLE=y
-@@ -1981,6 +1997,7 @@ class TestExternalToolchainBootlinPowerpce500mcUclibcBleedingEdge(TestExternalTo
-     config = """
-         BR2_powerpc=y
-         BR2_powerpc_e500mc=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E500MC_UCLIBC_BLEEDING_EDGE=y
-@@ -1996,6 +2013,7 @@ class TestExternalToolchainBootlinPowerpce500mcUclibcStable(TestExternalToolchai
-     config = """
-         BR2_powerpc=y
-         BR2_powerpc_e500mc=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E500MC_UCLIBC_STABLE=y
-@@ -2011,6 +2029,7 @@ class TestExternalToolchainBootlinPowerpc64e5500GlibcBleedingEdge(TestExternalTo
-     config = """
-         BR2_powerpc64=y
-         BR2_powerpc_e5500=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_E5500_GLIBC_BLEEDING_EDGE=y
-@@ -2026,6 +2045,7 @@ class TestExternalToolchainBootlinPowerpc64e5500GlibcStable(TestExternalToolchai
-     config = """
-         BR2_powerpc64=y
-         BR2_powerpc_e5500=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_E5500_GLIBC_STABLE=y
-@@ -2041,6 +2061,7 @@ class TestExternalToolchainBootlinPowerpc64e6500GlibcBleedingEdge(TestExternalTo
-     config = """
-         BR2_powerpc64=y
-         BR2_powerpc_e6500=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_E6500_GLIBC_BLEEDING_EDGE=y
-@@ -2056,6 +2077,7 @@ class TestExternalToolchainBootlinPowerpc64e6500GlibcStable(TestExternalToolchai
-     config = """
-         BR2_powerpc64=y
-         BR2_powerpc_e6500=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_E6500_GLIBC_STABLE=y
-@@ -2071,6 +2093,7 @@ class TestExternalToolchainBootlinPowerpc64e6500MuslBleedingEdge(TestExternalToo
-     config = """
-         BR2_powerpc64=y
-         BR2_powerpc_e6500=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_E6500_MUSL_BLEEDING_EDGE=y
-@@ -2086,6 +2109,7 @@ class TestExternalToolchainBootlinPowerpc64e6500MuslStable(TestExternalToolchain
-     config = """
-         BR2_powerpc64=y
-         BR2_powerpc_e6500=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_E6500_MUSL_STABLE=y
-@@ -2101,6 +2125,7 @@ class TestExternalToolchainBootlinPowerpc64power8GlibcBleedingEdge(TestExternalT
-     config = """
-         BR2_powerpc64=y
-         BR2_powerpc_power8=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_POWER8_GLIBC_BLEEDING_EDGE=y
-@@ -2116,6 +2141,7 @@ class TestExternalToolchainBootlinPowerpc64power8GlibcStable(TestExternalToolcha
-     config = """
-         BR2_powerpc64=y
-         BR2_powerpc_power8=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_POWER8_GLIBC_STABLE=y
-@@ -2131,6 +2157,7 @@ class TestExternalToolchainBootlinPowerpc64power8MuslBleedingEdge(TestExternalTo
-     config = """
-         BR2_powerpc64=y
-         BR2_powerpc_power8=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_POWER8_MUSL_BLEEDING_EDGE=y
-@@ -2146,6 +2173,7 @@ class TestExternalToolchainBootlinPowerpc64power8MuslStable(TestExternalToolchai
-     config = """
-         BR2_powerpc64=y
-         BR2_powerpc_power8=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_POWER8_MUSL_STABLE=y
-@@ -2161,6 +2189,7 @@ class TestExternalToolchainBootlinPowerpc64lepower8GlibcBleedingEdge(TestExterna
-     config = """
-         BR2_powerpc64le=y
-         BR2_powerpc_power8=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64LE_POWER8_GLIBC_BLEEDING_EDGE=y
-@@ -2176,6 +2205,7 @@ class TestExternalToolchainBootlinPowerpc64lepower8GlibcStable(TestExternalToolc
-     config = """
-         BR2_powerpc64le=y
-         BR2_powerpc_power8=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64LE_POWER8_GLIBC_STABLE=y
-@@ -2191,6 +2221,7 @@ class TestExternalToolchainBootlinPowerpc64lepower8MuslBleedingEdge(TestExternal
-     config = """
-         BR2_powerpc64le=y
-         BR2_powerpc_power8=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64LE_POWER8_MUSL_BLEEDING_EDGE=y
-@@ -2206,6 +2237,7 @@ class TestExternalToolchainBootlinPowerpc64lepower8MuslStable(TestExternalToolch
-     config = """
-         BR2_powerpc64le=y
-         BR2_powerpc_power8=y
-+        # BR2_POWERPC_SOFT_FLOAT is not set
-         BR2_TOOLCHAIN_EXTERNAL=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-         BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64LE_POWER8_MUSL_STABLE=y
-diff --git a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-index 81cb3f0a05..27d19be2f5 100644
---- a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-@@ -23,13 +23,13 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS
- 	default y if BR2_mips64el && BR2_mips_64 && BR2_MIPS_NABI32 && !BR2_MIPS_SOFT_FLOAT
- 	default y if BR2_mips64el && BR2_mips_64r6 && BR2_MIPS_NABI32 && !BR2_MIPS_SOFT_FLOAT
- 	default y if BR2_or1k
--	default y if BR2_powerpc && BR2_powerpc_440fp
--	default y if BR2_powerpc && BR2_powerpc_e300c3
--	default y if BR2_powerpc && BR2_powerpc_e500mc
--	default y if BR2_powerpc64 && BR2_powerpc_e5500
--	default y if BR2_powerpc64 && BR2_powerpc_e6500
--	default y if BR2_powerpc64 && BR2_powerpc_power8
--	default y if BR2_powerpc64le && BR2_powerpc_power8
-+	default y if BR2_powerpc && BR2_powerpc_440fp && !BR2_POWERPC_SOFT_FLOAT
-+	default y if BR2_powerpc && BR2_powerpc_e300c3 && !BR2_POWERPC_SOFT_FLOAT
-+	default y if BR2_powerpc && BR2_powerpc_e500mc && !BR2_POWERPC_SOFT_FLOAT
-+	default y if BR2_powerpc64 && BR2_powerpc_e5500 && !BR2_POWERPC_SOFT_FLOAT
-+	default y if BR2_powerpc64 && BR2_powerpc_e6500 && !BR2_POWERPC_SOFT_FLOAT
-+	default y if BR2_powerpc64 && BR2_powerpc_power8 && !BR2_POWERPC_SOFT_FLOAT
-+	default y if BR2_powerpc64le && BR2_powerpc_power8 && !BR2_POWERPC_SOFT_FLOAT
- 	default y if BR2_riscv && BR2_riscv_g && BR2_RISCV_32 && BR2_RISCV_ABI_ILP32D && BR2_USE_MMU
- 	default y if BR2_riscv && BR2_riscv_g && BR2_RISCV_64 && BR2_RISCV_ABI_LP64D && BR2_USE_MMU
- 	default y if BR2_s390x && BR2_s390x_z13
-@@ -2757,6 +2757,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_GLIBC_BLEEDING_EDGE
- 	bool "powerpc-440fp glibc bleeding-edge 2026.08-1"
- 	depends on BR2_powerpc
- 	depends on BR2_powerpc_440fp
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_17
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_16
-@@ -2781,6 +2782,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_GLIBC_STABLE
- 	bool "powerpc-440fp glibc stable 2026.08-1"
- 	depends on BR2_powerpc
- 	depends on BR2_powerpc_440fp
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
-@@ -2804,6 +2806,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_MUSL_BLEEDING_EDGE
- 	bool "powerpc-440fp musl bleeding-edge 2026.08-1"
- 	depends on BR2_powerpc
- 	depends on BR2_powerpc_440fp
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_17
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_16
-@@ -2827,6 +2830,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_MUSL_STABLE
- 	bool "powerpc-440fp musl stable 2026.08-1"
- 	depends on BR2_powerpc
- 	depends on BR2_powerpc_440fp
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
-@@ -2849,6 +2853,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_UCLIBC_BLEEDING_EDGE
- 	bool "powerpc-440fp uclibc bleeding-edge 2026.08-1"
- 	depends on BR2_powerpc
- 	depends on BR2_powerpc_440fp
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_17
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_16
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_12
-@@ -2874,6 +2879,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_440FP_UCLIBC_STABLE
- 	bool "powerpc-440fp uclibc stable 2026.08-1"
- 	depends on BR2_powerpc
- 	depends on BR2_powerpc_440fp
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
-@@ -2898,6 +2904,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E300C3_GLIBC_BLEEDING_EDGE
- 	bool "powerpc-e300c3 glibc bleeding-edge 2026.08-1"
- 	depends on BR2_powerpc
- 	depends on BR2_powerpc_e300c3
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_17
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_16
-@@ -2922,6 +2929,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E300C3_GLIBC_STABLE
- 	bool "powerpc-e300c3 glibc stable 2026.08-1"
- 	depends on BR2_powerpc
- 	depends on BR2_powerpc_e300c3
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
-@@ -2945,6 +2953,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E300C3_MUSL_BLEEDING_EDGE
- 	bool "powerpc-e300c3 musl bleeding-edge 2026.08-1"
- 	depends on BR2_powerpc
- 	depends on BR2_powerpc_e300c3
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_17
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_16
-@@ -2968,6 +2977,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E300C3_MUSL_STABLE
- 	bool "powerpc-e300c3 musl stable 2026.08-1"
- 	depends on BR2_powerpc
- 	depends on BR2_powerpc_e300c3
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
-@@ -2990,6 +3000,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E300C3_UCLIBC_BLEEDING_EDGE
- 	bool "powerpc-e300c3 uclibc bleeding-edge 2026.08-1"
- 	depends on BR2_powerpc
- 	depends on BR2_powerpc_e300c3
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_17
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_16
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_12
-@@ -3015,6 +3026,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E300C3_UCLIBC_STABLE
- 	bool "powerpc-e300c3 uclibc stable 2026.08-1"
- 	depends on BR2_powerpc
- 	depends on BR2_powerpc_e300c3
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
-@@ -3039,6 +3051,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E500MC_GLIBC_BLEEDING_EDGE
- 	bool "powerpc-e500mc glibc bleeding-edge 2026.08-1"
- 	depends on BR2_powerpc
- 	depends on BR2_powerpc_e500mc
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_17
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_16
-@@ -3063,6 +3076,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E500MC_GLIBC_STABLE
- 	bool "powerpc-e500mc glibc stable 2026.08-1"
- 	depends on BR2_powerpc
- 	depends on BR2_powerpc_e500mc
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
-@@ -3086,6 +3100,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E500MC_MUSL_BLEEDING_EDGE
- 	bool "powerpc-e500mc musl bleeding-edge 2026.08-1"
- 	depends on BR2_powerpc
- 	depends on BR2_powerpc_e500mc
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_17
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_16
-@@ -3109,6 +3124,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E500MC_MUSL_STABLE
- 	bool "powerpc-e500mc musl stable 2026.08-1"
- 	depends on BR2_powerpc
- 	depends on BR2_powerpc_e500mc
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
-@@ -3131,6 +3147,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E500MC_UCLIBC_BLEEDING_EDGE
- 	bool "powerpc-e500mc uclibc bleeding-edge 2026.08-1"
- 	depends on BR2_powerpc
- 	depends on BR2_powerpc_e500mc
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_17
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_16
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_12
-@@ -3156,6 +3173,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC_E500MC_UCLIBC_STABLE
- 	bool "powerpc-e500mc uclibc stable 2026.08-1"
- 	depends on BR2_powerpc
- 	depends on BR2_powerpc_e500mc
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10
-@@ -3180,6 +3198,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_E5500_GLIBC_BLEEDING_EDGE
- 	bool "powerpc64-e5500 glibc bleeding-edge 2026.08-1"
- 	depends on BR2_powerpc64
- 	depends on BR2_powerpc_e5500
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_17
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_16
-@@ -3204,6 +3223,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_E5500_GLIBC_STABLE
- 	bool "powerpc64-e5500 glibc stable 2026.08-1"
- 	depends on BR2_powerpc64
- 	depends on BR2_powerpc_e5500
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
-@@ -3227,6 +3247,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_E6500_GLIBC_BLEEDING_EDGE
- 	bool "powerpc64-e6500 glibc bleeding-edge 2026.08-1"
- 	depends on BR2_powerpc64
- 	depends on BR2_powerpc_e6500
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_17
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_16
-@@ -3251,6 +3272,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_E6500_GLIBC_STABLE
- 	bool "powerpc64-e6500 glibc stable 2026.08-1"
- 	depends on BR2_powerpc64
- 	depends on BR2_powerpc_e6500
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
-@@ -3274,6 +3296,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_E6500_MUSL_BLEEDING_EDGE
- 	bool "powerpc64-e6500 musl bleeding-edge 2026.08-1"
- 	depends on BR2_powerpc64
- 	depends on BR2_powerpc_e6500
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_17
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_16
-@@ -3298,6 +3321,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_E6500_MUSL_STABLE
- 	bool "powerpc64-e6500 musl stable 2026.08-1"
- 	depends on BR2_powerpc64
- 	depends on BR2_powerpc_e6500
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
-@@ -3321,6 +3345,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_POWER8_GLIBC_BLEEDING_EDGE
- 	bool "powerpc64-power8 glibc bleeding-edge 2026.08-1"
- 	depends on BR2_powerpc64
- 	depends on BR2_powerpc_power8
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_17
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_16
-@@ -3345,6 +3370,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_POWER8_GLIBC_STABLE
- 	bool "powerpc64-power8 glibc stable 2026.08-1"
- 	depends on BR2_powerpc64
- 	depends on BR2_powerpc_power8
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
-@@ -3368,6 +3394,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_POWER8_MUSL_BLEEDING_EDGE
- 	bool "powerpc64-power8 musl bleeding-edge 2026.08-1"
- 	depends on BR2_powerpc64
- 	depends on BR2_powerpc_power8
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_17
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_16
-@@ -3392,6 +3419,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64_POWER8_MUSL_STABLE
- 	bool "powerpc64-power8 musl stable 2026.08-1"
- 	depends on BR2_powerpc64
- 	depends on BR2_powerpc_power8
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
-@@ -3415,6 +3443,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64LE_POWER8_GLIBC_BLEEDING_EDGE
- 	bool "powerpc64le-power8 glibc bleeding-edge 2026.08-1"
- 	depends on BR2_powerpc64le
- 	depends on BR2_powerpc_power8
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_17
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_16
-@@ -3439,6 +3468,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64LE_POWER8_GLIBC_STABLE
- 	bool "powerpc64le-power8 glibc stable 2026.08-1"
- 	depends on BR2_powerpc64le
- 	depends on BR2_powerpc_power8
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
-@@ -3462,6 +3492,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64LE_POWER8_MUSL_BLEEDING_EDGE
- 	bool "powerpc64le-power8 musl bleeding-edge 2026.08-1"
- 	depends on BR2_powerpc64le
- 	depends on BR2_powerpc_power8
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_17
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_16
-@@ -3486,6 +3517,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_POWERPC64LE_POWER8_MUSL_STABLE
- 	bool "powerpc64le-power8 musl stable 2026.08-1"
- 	depends on BR2_powerpc64le
- 	depends on BR2_powerpc_power8
-+	depends on !BR2_POWERPC_SOFT_FLOAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_16
- 	depends on BR2_USE_MMU
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_15
+ ...1-gerrit_util.py-fix-importing-socks.patch |  32 ---
+ ...precated-ast-types-with-ast.Constant.patch | 244 ------------------
+ package/depot-tools/depot-tools.hash          |   4 +-
+ package/depot-tools/depot-tools.mk            |   2 +-
+ 4 files changed, 3 insertions(+), 279 deletions(-)
+ delete mode 100644 package/depot-tools/0001-gerrit_util.py-fix-importing-socks.patch
+ delete mode 100644 package/depot-tools/0002-Replace-deprecated-ast-types-with-ast.Constant.patch
+
+diff --git a/package/depot-tools/0001-gerrit_util.py-fix-importing-socks.patch b/package/depot-tools/0001-gerrit_util.py-fix-importing-socks.patch
+deleted file mode 100644
+index 46a1fe78d0..0000000000
+--- a/package/depot-tools/0001-gerrit_util.py-fix-importing-socks.patch
++++ /dev/null
+@@ -1,32 +0,0 @@
+-From e52f67026d7ce5b30887e1cfe486ed994169119d Mon Sep 17 00:00:00 2001
+-From: Adam Duskett <adam.duskett@amarulasolutions.com>
+-Date: Tue, 4 Nov 2025 11:58:37 +0100
+-Subject: [PATCH] gerrit_util.py: fix importing socks
+-
+-As of commit 1a6ff781792099e9e14d7beb610bd99112b17b07,
+-httplib2 removed the internal copy of socksipy module.
+-
+-The commit message specifically states to install pysocks.
+-
+-Upstream: unsubmitted
+-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+----
+- gerrit_util.py | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/gerrit_util.py b/gerrit_util.py
+-index eef2f5749..d866bc47a 100644
+---- a/gerrit_util.py
+-+++ b/gerrit_util.py
+-@@ -35,7 +35,7 @@ from typing import NamedTuple, List, Optional
+- from typing import Tuple, TypedDict, cast
+- 
+- import httplib2
+--import httplib2.socks
+-+import socks
+- 
+- import auth
+- import gclient_utils
+--- 
+-2.51.1
+-
+diff --git a/package/depot-tools/0002-Replace-deprecated-ast-types-with-ast.Constant.patch b/package/depot-tools/0002-Replace-deprecated-ast-types-with-ast.Constant.patch
+deleted file mode 100644
+index 09e88d04a2..0000000000
+--- a/package/depot-tools/0002-Replace-deprecated-ast-types-with-ast.Constant.patch
++++ /dev/null
+@@ -1,244 +0,0 @@
+-From 7d467257a7cd57e746885ea73ccbda903450b461 Mon Sep 17 00:00:00 2001
+-From: jj <jj@imput.net>
+-Date: Fri, 5 Dec 2025 11:47:42 -0800
+-Subject: [PATCH] Replace deprecated ast types with ast.Constant
+-
+-ast.Str et al. have been deprecated since Py3.8 and have been
+-completely removed in 3.14. Replace their usage with ast.Constant.
+-
+-This change should not have any functional impact, since
+-according to [1]:
+-> Changed in version 3.8: Class ast.Constant is now used for
+-> all constants.
+-> Deprecated since version 3.8: Old classes ast.Num, ast.Str,
+-> [...]  instantiating them will return an instance of a
+-> different class.
+-
+-[1] https://docs.python.org/3/library/ast.html
+-
+-Bug: 40283283
+-Change-Id: I0ed8ef3910f921483bff118976f516c5a935e0fc
+-Reviewed-on: https://chromium-review.googlesource.com/c/chromium/tools/depot_tools/+/7228507
+-Reviewed-by: Gavin Mak <gavinmak@google.com>
+-Reviewed-by: Yiwei Zhang <yiwzhang@google.com>
+-Commit-Queue: jj <jj@chromium.org>
+-
+-Upstream: https://chromium.googlesource.com/chromium/tools/depot_tools/+/80d6ca1b1ac55fbd9dd8f506417824591251b8eb
+-[Romain: backport to 097e2072377]
+-Signed-off-by: Romain Naour <romain.naour@smile.fr>
+----
+- gclient_eval.py                | 72 ++++++++++++++++++++--------------
+- tests/gclient_eval_unittest.py |  6 +++
+- 2 files changed, 49 insertions(+), 29 deletions(-)
+-
+-diff --git a/gclient_eval.py b/gclient_eval.py
+-index f8a05d78a..94874e3ce 100644
+---- a/gclient_eval.py
+-+++ b/gclient_eval.py
+-@@ -101,6 +101,24 @@ def _NodeDictSchema(dict_schema):
+-     return validate
+- 
+- 
+-+def _IsConstant(node):
+-+    return isinstance(node, ast.Constant)
+-+
+-+
+-+def _IsStringConstant(node):
+-+    return _IsConstant(node) and isinstance(node.value, str)
+-+
+-+
+-+def _IsNameConstant(node):
+-+    return _IsConstant(node) \
+-+        and isinstance(node.value, (bool, type(None)))
+-+
+-+
+-+def _IsNumericConstant(node):
+-+    return _IsConstant(node) \
+-+        and isinstance(node.value, (int, float, complex)) \
+-+        and not isinstance(node.value, bool)
+-+
+- # See https://github.com/keleshev/schema for docs how to configure schema.
+- _GCLIENT_DEPS_SCHEMA = _NodeDictSchema({
+-     schema.Optional(str):
+-@@ -316,18 +334,18 @@ def _gclient_eval(node_or_string, filename='<unknown>', vars_dict=None):
+-         node_or_string = node_or_string.body
+- 
+-     def _convert(node):
+--        if isinstance(node, ast.Str):
+-+        if _IsStringConstant(node):
+-             if vars_dict is None:
+--                return node.s
+-+                return node.value
+-             try:
+--                return node.s.format(**vars_dict)
+-+                return node.value.format(**vars_dict)
+-             except KeyError as e:
+-                 raise KeyError(
+-                     '%s was used as a variable, but was not declared in the vars dict '
+-                     '(file %r, line %s)' %
+-                     (e.args[0], filename, getattr(node, 'lineno', '<unknown>')))
+--        elif isinstance(node, ast.Num):
+--            return node.n
+-+        elif _IsNameConstant(node) or _IsNumericConstant(node):
+-+            return node.value
+-         elif isinstance(node, ast.Tuple):
+-             return tuple(map(_convert, node.elts))
+-         elif isinstance(node, ast.List):
+-@@ -349,9 +367,6 @@ def _gclient_eval(node_or_string, filename='<unknown>', vars_dict=None):
+-                     'invalid name %r (file %r, line %s)' %
+-                     (node.id, filename, getattr(node, 'lineno', '<unknown>')))
+-             return _allowed_names[node.id]
+--        elif not sys.version_info[:2] < (3, 4) and isinstance(
+--                node, ast.NameConstant):  # Since Python 3.4
+--            return node.value
+-         elif isinstance(node, ast.Call):
+-             if (not isinstance(node.func, ast.Name)
+-                     or (node.func.id not in ('Str', 'Var'))):
+-@@ -366,8 +381,8 @@ def _gclient_eval(node_or_string, filename='<unknown>', vars_dict=None):
+-                                                      '<unknown>')))
+- 
+-             if node.func.id == 'Str':
+--                if isinstance(node.args[0], ast.Str):
+--                    return ConstantString(node.args[0].s)
+-+                if _IsStringConstant(node.args[0]):
+-+                    return ConstantString(node.args[0].value)
+-                 raise ValueError(
+-                     'Passed a non-string to Str() (file %r, line%s)' %
+-                     (filename, getattr(node, 'lineno', '<unknown>')))
+-@@ -594,8 +609,8 @@ def EvaluateCondition(condition, variables, referenced_variables=None):
+-         main_node = main_node.body
+- 
+-     def _convert(node, allow_tuple=False):
+--        if isinstance(node, ast.Str):
+--            return node.s
+-+        if _IsStringConstant(node):
+-+            return node.value
+- 
+-         if isinstance(node, ast.Tuple) and allow_tuple:
+-             return tuple(map(_convert, node.elts))
+-@@ -627,8 +642,7 @@ def EvaluateCondition(condition, variables, referenced_variables=None):
+-             # be evaluated.
+-             return node.id
+- 
+--        if not sys.version_info[:2] < (3, 4) and isinstance(
+--                node, ast.NameConstant):  # Since Python 3.4
+-+        if _IsNameConstant(node):
+-             return node.value
+- 
+-         if isinstance(node, ast.BoolOp) and isinstance(node.op, ast.Or):
+-@@ -696,11 +710,11 @@ def _UpdateAstString(tokens, node, value):
+-         node = node.args[0]
+-     position = node.lineno, node.col_offset
+-     quote_char = ''
+--    if isinstance(node, ast.Str):
+-+    if _IsStringConstant(node):
+-         quote_char = tokens[position][1][0]
+-         value = value.encode('unicode_escape').decode('utf-8')
+-     tokens[position][1] = quote_char + value + quote_char
+--    node.s = value
+-+    node.value = value
+- 
+- 
+- def _ShiftLinesInTokens(tokens, delta, start):
+-@@ -793,11 +807,11 @@ def SetVar(gclient_dict, var_name, value):
+- 
+- def _GetVarName(node):
+-     if isinstance(node, ast.Call):
+--        return node.args[0].s
+-+        return node.args[0].value
+- 
+--    if node.s.endswith('}'):
+--        last_brace = node.s.rfind('{')
+--        return node.s[last_brace + 1:-1]
+-+    if node.value.endswith('}'):
+-+        last_brace = node.value.rfind('{')
+-+        return node.value[last_brace + 1:-1]
+-     return None
+- 
+- 
+-@@ -821,9 +835,9 @@ def SetGCS(gclient_dict, dep_name, new_objects):
+-     keys_to_update = ('object_name', 'sha256sum', 'size_bytes', 'generation')
+-     for index, object_node in enumerate(objects_node.elts):
+-         for key, value in zip(object_node.keys, object_node.values):
+--            if key.s not in keys_to_update:
+-+            if key.value not in keys_to_update:
+-                 continue
+--            _UpdateAstString(tokens, value, new_objects[index][key.s])
+-+            _UpdateAstString(tokens, value, new_objects[index][key.value])
+- 
+-     node.SetNode('objects', new_objects, objects_node)
+- 
+-@@ -855,7 +869,7 @@ def SetCIPD(gclient_dict, dep_name, package_name, new_version):
+-             "The deps entry for %s:%s has no formatting information." %
+-             (dep_name, package_name))
+- 
+--    if not isinstance(node, ast.Call) and not isinstance(node, ast.Str):
+-+    if not isinstance(node, ast.Call) and not _IsStringConstant(node):
+-         raise ValueError(
+-             "Unsupported dependency revision format. Please file a bug to the "
+-             "Infra>SDK component in crbug.com")
+-@@ -880,15 +894,15 @@ def SetRevision(gclient_dict, dep_name, new_revision):
+-         if isinstance(node, ast.BinOp):
+-             node = node.right
+- 
+--        if isinstance(node, ast.Str):
+-+        if _IsStringConstant(node):
+-             token = _gclient_eval(tokens[node.lineno, node.col_offset][1])
+--            if token != node.s:
+-+            if token != node.value:
+-                 raise ValueError(
+-                     'Can\'t update value for %s. Multiline strings and implicitly '
+-                     'concatenated strings are not supported.\n'
+-                     'Consider reformatting the DEPS file.' % dep_key)
+- 
+--        if not isinstance(node, ast.Call) and not isinstance(node, ast.Str):
+-+        if not isinstance(node, ast.Call) and not _IsStringConstant(node):
+-             raise ValueError(
+-                 "Unsupported dependency revision format. Please file a bug to the "
+-                 "Infra>SDK component in crbug.com")
+-@@ -897,15 +911,15 @@ def SetRevision(gclient_dict, dep_name, new_revision):
+-         if var_name is not None:
+-             SetVar(gclient_dict, var_name, new_revision)
+-         else:
+--            if '@' in node.s:
+-+            if '@' in node.value:
+-                 # '@' is part of the last string, which we want to modify.
+-                 # Discard whatever was after the '@' and put the new revision in
+-                 # its place.
+--                new_revision = node.s.split('@')[0] + '@' + new_revision
+-+                new_revision = node.value.split('@')[0] + '@' + new_revision
+-             elif '@' not in dep_dict[dep_key]:
+-                 # '@' is not part of the URL at all. This mean the dependency is
+-                 # unpinned and we should pin it.
+--                new_revision = node.s + '@' + new_revision
+-+                new_revision = node.value + '@' + new_revision
+-             _UpdateAstString(tokens, node, new_revision)
+-             dep_dict.SetNode(dep_key, new_revision, node)
+- 
+-diff --git a/tests/gclient_eval_unittest.py b/tests/gclient_eval_unittest.py
+-index 03decdf30..3aed06156 100755
+---- a/tests/gclient_eval_unittest.py
+-+++ b/tests/gclient_eval_unittest.py
+-@@ -30,6 +30,11 @@ class GClientEvalTest(unittest.TestCase):
+-     def test_str(self):
+-         self.assertEqual('foo', gclient_eval._gclient_eval('"foo"'))
+- 
+-+    def test_num(self):
+-+        self.assertEqual(42, gclient_eval._gclient_eval('42'))
+-+        self.assertEqual(1024.0, gclient_eval._gclient_eval('1024.0'))
+-+        self.assertEqual(42j, gclient_eval._gclient_eval('42j'))
+-+
+-     def test_tuple(self):
+-         self.assertEqual(('a', 'b'), gclient_eval._gclient_eval('("a", "b")'))
+- 
+-@@ -40,6 +45,7 @@ class GClientEvalTest(unittest.TestCase):
+-         self.assertEqual({'a': 'b'}, gclient_eval._gclient_eval('{"a": "b"}'))
+- 
+-     def test_name_safe(self):
+-+        self.assertEqual(None, gclient_eval._gclient_eval('None'))
+-         self.assertEqual(True, gclient_eval._gclient_eval('True'))
+- 
+-     def test_name_unsafe(self):
+--- 
+-2.52.0
+-
+diff --git a/package/depot-tools/depot-tools.hash b/package/depot-tools/depot-tools.hash
+index cd5e34d26e..c3b7bc2f79 100644
+--- a/package/depot-tools/depot-tools.hash
++++ b/package/depot-tools/depot-tools.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  d281138bad9dab92f3f67f5d62f8d7fe02bccd9bef1ab2dae4acf93c712967bb  depot-tools-097e20723774957f21ac6d1808fcd0a91e8c7630-git4.tar.gz
+-sha256  984523ee987f4e8b72d61df37d8f1189a7077cd4b77e41a397e35593b297a29d  LICENSE
++sha256  6c877daf63411e8378f7d44c542e624745757e90d52cbff5b35ef458a469d289  depot-tools-25e7767e91a5e7f3209c947b07c52e7a45dda6b5-git4.tar.gz
++sha256  20b1e32e55821d109bcd17e1e150cfe242b54590d3e8083648d1276f88d33d16  LICENSE
+diff --git a/package/depot-tools/depot-tools.mk b/package/depot-tools/depot-tools.mk
+index a6d57a6e3b..cc4b8638d5 100644
+--- a/package/depot-tools/depot-tools.mk
++++ b/package/depot-tools/depot-tools.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DEPOT_TOOLS_VERSION = 097e20723774957f21ac6d1808fcd0a91e8c7630
++DEPOT_TOOLS_VERSION = 25e7767e91a5e7f3209c947b07c52e7a45dda6b5
+ DEPOT_TOOLS_SITE = https://chromium.googlesource.com/chromium/tools/depot_tools
+ DEPOT_TOOLS_SITE_METHOD = git
+ DEPOT_TOOLS_LICENSE = BSD-3-Clause
 -- 
-2.47.3
+2.56.1
 
 _______________________________________________
 buildroot mailing list
