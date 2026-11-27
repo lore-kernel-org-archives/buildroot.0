@@ -2,236 +2,209 @@ Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 422DC606A326
-	for <buildroot@archiver.kernel.org>; Fri, 27 Nov 2026 15:30:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D023606A31C
+	for <buildroot@archiver.kernel.org>; Fri, 27 Nov 2026 15:31:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=FTw3Ibf5;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=WKkwGYOd
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=o2JZs9XV
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F0FC78124B;
-	Fri, 27 Nov 2026 15:30:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 46D3C8116C;
+	Fri, 27 Nov 2026 15:31:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eZJdd4KHooZG; Fri, 27 Nov 2026 15:30:10 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org BE9D38122F
+ id IzpPtLQNObUS; Fri, 27 Nov 2026 15:31:39 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 4568B81136
 Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795793410;
-	b=RxHESFH+KrUc6ndMgIdpOU3SaaPNx/h12Qbb+hqwmbw09Hu2uPXSwU6Gzx2spiNk7IVB
-	 mxB94wpZ6ANPRWXUg+OsGO7CKkFxWgfMn7rVzm1JvoMgWrtb3pPQpa4O3FZsin41h6FJo
-	 qSq/ConNgDp+Tb2xDC+6npQVjb+XkYQD6R9rERxVb39Jk3OYELDRzScO/rWiw1H6DgNTG
-	 ZGjvq574/WKSfHtKuqAW4XjUohm2ojlB4wGsX6Eq6ZpAYL2GIxTRLLmZBEGMqmTA1BPHk
-	 165YQvJviOKWnhCWjjdT+lD14ek9ASli2t0WzZWgdBtcLB5KDnVW80U0N946YSwsNMw==
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795793499;
+	b=FmC9zSNVwzGS4/vL74V3SY4jC59I/Q4bN1nf51FsXc374fbaVOArrjX73eooRifiaa4G
+	 YufUZfqiON1gLkiyBAtw67T7pcBaybbuxGqrcwk1/FTv2gaofCsUNJ2T3n7mWiUdUYXKz
+	 iUd+GADCVYiP/neczSA7Ceix4J149Lp7xFLsJPa6uNR6HNj9n0HIADbUm93pqHKGCktJm
+	 uWB7NJw/VMf9PWrOOpQP3y4bwLLDYqFOvaqTRAUVpSigjHNicxCqGrlzsmTF4Dx24+njT
+	 EMr4ZBqP3apxgq3LlAtLn/maisUypH4rm5Foiu48SwSYCNtaSqnCga9ECChPdkeKXiw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795793410;
+	c=relaxed/relaxed; t=1795793499;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
-	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
-	 DKIM-Signature:Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:
-	 In-Reply-To:References:X-Developer-Signature:X-Developer-Key:
-	 X-ClientProxiedBy:X-Microsoft-Original-Message-ID:MIME-Version:
-	 X-MS-Exchange-MessageSentRepresentingType:X-MS-PublicTrafficType:
+	 X-Spam-Status:Received:ARC-Filter:X-Greylist:Received-SPF:Received:
+	 Received:Received:Received:Received:To:Cc:Date:Message-ID:X-Mailer:
+	 X-ClientProxiedBy:MIME-Version:X-MS-PublicTrafficType:
 	 X-MS-TrafficTypeDiagnostic:X-MS-Office365-Filtering-Correlation-Id:
+	 X-MS-Exchange-SenderADCheck:X-MS-Exchange-AntiSpam-Relay:
 	 X-Microsoft-Antispam:X-Microsoft-Antispam-Message-Info:
+	 X-Forefront-Antispam-Report:
 	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-AntiSpam-MessageData-0:
+	 X-MS-Exchange-AntiSpam-MessageData-1:X-Exchange-RoutingPolicyChecked:
+	 X-OriginatorOrg:X-MS-Exchange-CrossTenant-Network-Message-Id:
 	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
 	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
 	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:
-	 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:Subject:X-BeenThere:
-	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:Content-Type:
-	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=PvcghG++zGD3Y+7b78HxZJ3BaAKdULTtTfvFSsCBd3c=;
-	b=NTYMBnW6QxFW8/XLv0Rz6XIGISbemCF9H5JoM+Qjki+2VNWlMZCUk/d9lJpoaUUrPuy/
-	 jZuTTcBoXE/mjWrzkXZ8O0wAj0JtZn6zXfR73AL7ppvzT0duO7bVOWzU0L6VBcJIYQyh9
-	 pErglKgI8LT7zndroDme+wKpSCRHkeQm3UaZolaLjfcc3AlcTmrGsoybbq7eE3IRpoEaq
-	 KCYpWP3sXdAZuGTAMK86FbKPHE4jdrzVmehQKuS2iv/ujZm+oIHKltDHDaaNijV9qaWyZ
-	 754d+gLwlKlJQh0Kcs5TYqToEQwiPbwU2en3B0whlit69JxIR7TqWhrZOcwk59WrTYQ==
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped:
+	 X-Proofpoint-Spam-Details-Enc:X-Authority-Analysis:
+	 X-Proofpoint-ORIG-GUID:X-Proofpoint-GUID:X-Proofpoint-Spam-Info:
+	 X-Proofpoint-Virus-Version:X-Proofpoint-Spam-Details:Subject:
+	 X-BeenThere:X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:
+	 List-Archive:List-Post:List-Help:List-Subscribe:From:Reply-To:
+	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
+	bh=5hWmEt0VDY7kkUY6R40Xrohh7cBxKv1FrDE7PJA50Cc=;
+	b=U92NtkaMLYrRJHr3cgPUTkE46pDJG759qc6IDwoz0H05cSNMjWVlfYJPoxpukqfzlEYr
+	 WXVWJ5FtvyvLuRRAI+4K3mR7sIsEHITNaCWUKkxy60mo8uQvYvXcUuhFXvIhYZwmbNewv
+	 7jdvNNPZLPGpSjQmQst3YjSzSgoTsZVhiFc9qkKpjwxhx9IYRY5MydCJmKOIuCMf5s8Qi
+	 0bNfB76FlZbZiyBo/ay9tWhEHtkTbXQdRpkKFQ1PLI4fzZRnNnpbG4SqgJ5tOSCyDZXr8
+	 YdKIe4Ucy2MTElfJYNk2k5i/gTTVgBTL0fYUurIMDmOU9Blma2iMJX8jZdL7oVd8CjA==
 ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
-	dmarc=pass header.from=outlook.com;
-	dkim=pass header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=WKkwGYOd;
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795793410;
-	bh=PvcghG++zGD3Y+7b78HxZJ3BaAKdULTtTfvFSsCBd3c=;
-	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 From;
-	b=FTw3Ibf5kFlZd7uhrS5RPBsDb4rQBkdHA9Rn+CE5q3O09meuK6SR/ZRbrdPP9d7/N
-	 8x+jx9lO07Mn8o4B7TDEgf10t5keG79H4XuC6/YxeoZ28yjv2mtdipN2yTm1p+A1uu
-	 H4MoGuHoLpo1D2FhjO4QwghP1mCCYI9odDpIKLwBOhn7frIeOeU0odpJnCoSW4KOMa
-	 F+ncRgd7ialBmpezPZ2MnxXB6gLlLsseeeYMSfBuzFUd2QJDl3ZJUTNWkjGHj8xI9L
-	 8NtQjIxHcrGV5P7ytStIK9ihy1HwwH9HH8zdJWQJ30ECn5tn61RzThgmVpbsP1pKsT
-	 SYcninBqS6RIg==
+	s=default; t=1795793499;
+	bh=5hWmEt0VDY7kkUY6R40Xrohh7cBxKv1FrDE7PJA50Cc=;
+	h=To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
+	 List-Post:List-Help:List-Subscribe:From:Reply-To:From;
+	b=o2JZs9XVAJmWbSdn4rj3yBZatnkswgXCCVfDf1eaKEyK/9qxK1yiDXs+VGLoAdgIZ
+	 5eV/s0SNSZk3JCGQDTSdVcuTWAw7anKuawEJ5Kc+Xv6cFp6/SyWnVNQnYzXGscRAb3
+	 PElTdYqfX/rRyQMtgzKmk5bLiwDj7tZobVsdJDMUpyJp82kMqxTn9EXCFaoMXlPsFO
+	 nIMSr3Ut6ACvHA13EHZw96Ibh/SjAPGQExhDDb/xSYY2D5tHUM6yTACuJEA6+lSTJ0
+	 aVdArWIWErO1PudUmYlj3MHmUgKy1HovDecnojUfpimuX7JtV+iuPsTDiCMCn/v2Wl
+	 UJnKNTFMHZVzg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BE9D38122F;
-	Fri, 27 Nov 2026 15:30:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 71B47373
- for <buildroot@buildroot.org>; Fri, 27 Nov 2026 15:30:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4568B81136;
+	Fri, 27 Nov 2026 15:31:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by lists1.osuosl.org (Postfix) with ESMTP id 656BE2BD
+ for <buildroot@buildroot.org>; Fri, 27 Nov 2026 15:31:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 63CFF81150
- for <buildroot@buildroot.org>; Fri, 27 Nov 2026 15:30:05 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 63020400FC
+ for <buildroot@buildroot.org>; Fri, 27 Nov 2026 15:31:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CJB1wzpcpJP4 for <buildroot@buildroot.org>;
- Fri, 27 Nov 2026 15:30:04 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 3189781129
-Authentication-Results: smtp1.osuosl.org; arc=pass header.oldest-pass=0
- smtp.remote-ip="2a01:111:f403:d40d::2"
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:d40d::2;
- helo=sy5pr01cu010.outbound.protection.outlook.com;
- envelope-from=tfx2001@outlook.com; receiver=<UNKNOWN> 
-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
- unprotected) header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256
- header.s=selector1 header.b=WKkwGYOd
-Received: from SY5PR01CU010.outbound.protection.outlook.com
- (mail-australiaeastazolkn190120002.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:d40d::2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3189781129
- for <buildroot@buildroot.org>; Fri, 27 Nov 2026 15:30:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=z/4n0l1BGgBDa6pZqr/gV2IcJkQ+jZJysZ/HLwcLB8Q=;
- b=WKkwGYOdtxtcVsjuVWxew+gpbyG27MjZb7hZ60yFEbv6Q2u1E9GLSlkzQ2q4S4NroCT6Iokew/RR17Syy7MzT/vycY7nvAwGMtcLDVkYQK8NxlHSs3hHpsdQG1gTwZXJ1h3yI5+/6UeuHH6U0uBM9anx8M8x0d0P0x2VNhiFHkCifWu0XROCdVP2onAFg0YoLEW1R/0n3Yl/TX6npP0Gftj1+ddYlcpWwICrU5TBCkoLOEanKF0gPhG2l0nqzvsiLRD8rDmXjZMvy2PipfIuQGry5yu8+HzdqptDkUwd8rNx5elkEY8gMKSVPyTkmBK3EgfsTCBbsyJ1lgdT2OCNfw==
-Received: from SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM (2603:10c6:10:261::8) by
- SY0P300MB0692.AUSP300.PROD.OUTLOOK.COM (2603:10c6:10:27d::6) with
- Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.662.11; Fri, 27 Nov 2026 15:29:59 +0000
-Received: from SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
- ([fe80::338a:60df:663b:c222]) by SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
- ([fe80::338a:60df:663b:c222%3]) with mapi id 15.21.0662.007; Fri, 27 Nov 2026
- 15:29:59 +0000
-From: Fengwei Tan <tfx2001@outlook.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4oePHKWHd1u4 for <buildroot@buildroot.org>;
+ Fri, 27 Nov 2026 15:31:36 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 6BD82400D2
+X-Greylist: delayed 1174 seconds by postgrey-1.37 at util1.osuosl.org;
+ Fri, 27 Nov 2026 15:31:36 UTC
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=148.163.135.77;
+ helo=mx0a-00128a01.pphosted.com; envelope-from=philip.molloy@analog.com;
+ receiver=<UNKNOWN> 
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com
+ [148.163.135.77])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6BD82400D2
+ for <buildroot@buildroot.org>; Fri, 27 Nov 2026 15:31:35 +0000 (UTC)
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+ by mx0a-00128a01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id
+ 6ARDxqx53739170; Fri, 27 Nov 2026 10:31:35 -0500
+Received: from ph8pr06cu001.outbound.protection.outlook.com
+ (mail-westus3azon11012071.outbound.protection.outlook.com [40.107.209.71])
+ by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 4j6a88gvqs-1
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+ Fri, 27 Nov 2026 10:31:35 -0500 (EST)
+Received: from PH0PR03MB989121.namprd03.prod.outlook.com
+ (2603:10b6:510:3ae::7) by PH7PR03MB7063.namprd03.prod.outlook.com
+ (2603:10b6:510:2a4::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.662.7; Fri, 27 Nov
+ 2026 15:31:31 +0000
+Received: from PH0PR03MB989121.namprd03.prod.outlook.com
+ ([fe80::ef52:54ee:4294:2906]) by PH0PR03MB989121.namprd03.prod.outlook.com
+ ([fe80::ef52:54ee:4294:2906%6]) with mapi id 15.21.0662.007; Fri, 27 Nov 2026
+ 15:31:30 +0000
 To: buildroot@buildroot.org
-Cc: Fabio Estevam <festevam@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Gregory Dymarek <gregd72002@gmail.com>,
- Hiroshi Kawashima <kei-k@ca2.so-net.ne.jp>,
- "Wojciech M . Zabolotny" <wzab01@gmail.com>,
- Woodrow Douglass <wdouglass@carnegierobotics.com>,
- Fengwei Tan <tfx2001@outlook.com>
-Date: Fri, 27 Nov 2026 23:29:21 +0800
-Message-ID: <SY8P300MB004140FE96B4B046F4CD57EAB5412@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
+Cc: Massimo Pegorer <massimo.pegorer+oss@gmail.com>,
+ Greg Malysa <malysagreg@gmail.com>, linux@analog.com,
+ Philip Molloy <philip.molloy@analog.com>,
+ Philip Molloy <philip@philipmolloy.com>
+Date: Fri, 27 Nov 2026 16:31:11 +0100
+Message-ID: <20261127151142.2983596-1-philip.molloy@analog.com>
 X-Mailer: git-send-email 2.56.1
-In-Reply-To: <MEUP300MB00454F7593FD1E072AB8FDABB5412@MEUP300MB0045.AUSP300.PROD.OUTLOOK.COM>
-References: <MEUP300MB00454F7593FD1E072AB8FDABB5412@MEUP300MB0045.AUSP300.PROD.OUTLOOK.COM>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7246; i=tfx2001@outlook.com;
- h=from:subject; bh=u0tE/kooGltD4qyx75d4vc8I6JWaeRxc1taOS3W6SA8=;
- b=owEBbQKS/ZANAwAKARwPraXT/AvaAcsmYgBrCaHQFsF5XOQL5LprQlQL6PbVL+yZRQ7ZHnHix
- QOP3C1CmgSJAjMEAAEKAB0WIQTM77vWq2MBMkgGqAccD62l0/wL2gUCawmh0AAKCRAcD62l0/wL
- 2slAD/9W4CEvj0t73xRcuEy/lnd8sLkzm+hBPlc9v5kPFwuE937ST8nEw+7XYxpmKlYd+ZwFmcO
- xp40UpgzbK8pQ9Js8lV1wSqSv6/9zvelb413qyxWOYPVdeRm0oP/Ph5xXYGwjGllLUp6f7T74Us
- kLg8OCPzcEKht1fbQ1/9v58LF6wtmI/OTmPFj8++nrx+DQ+4uLlNVxKl9xgw2vodlts8pHLZ627
- XTZVc41w+Drdke5Z7qLoH2EtHDe0tTDIatHFB/sAuL3kTI66hlo7woyywc/D1szv/72Cr3oC7Cq
- SGrRVX2t2zf+9FGqAwGOeWJ1HrzFiSVnhPm3RltMmd9rqMNsDmhjXtZfx/8HvYJY8YyBCPqHSEq
- +RDsQN3Eg7YDjPUtkXesNh4RxHM7Rk4ufnyA2p+YeCp3kUAJCVWXNeFFa+LM9nhp+gZg9KT9IiH
- gY3ne7AQg7KpcGhFPcXZgw4U6w92Bdj7XJpzYcAuqyCsggmEHqFBjRTVnSCzi6PXHadZdSCrWNd
- 6tU4wwl2+X/lWneCRYA2mrHgofPHbqi1nk1OotJX5R7TLCoQF/QqYStLRrUXZtcnpfDDtfEDazQ
- 7SA50YHrqjLmbIaDZmXhb0yAOclgILbHfEa+dYwB+rJtYoa8Tf28gXFO/0uIdn+KvTZLFpR1lC0
- loDpOhjurj+3rSw==
-X-Developer-Key: i=tfx2001@outlook.com; a=openpgp;
- fpr=CC1554EDEAE6C2E309538CB2EEA89BD13554CA50
-X-ClientProxiedBy: TP0P295CA0021.TWNP295.PROD.OUTLOOK.COM
- (2603:1096:910:5::12) To SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
- (2603:10c6:10:261::8)
-X-Microsoft-Original-Message-ID: <20261127152918.358381-6-tfx2001@outlook.com>
+X-ClientProxiedBy: FR3P281CA0150.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:95::19) To PH0PR03MB989121.namprd03.prod.outlook.com
+ (2603:10b6:510:3ae::7)
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SY8P300MB0041:EE_|SY0P300MB0692:EE_
-X-MS-Office365-Filtering-Correlation-Id: a1c0b910-350f-4078-2df9-08df4c9b4bf9
+X-MS-TrafficTypeDiagnostic: PH0PR03MB989121:EE_|PH7PR03MB7063:EE_
+X-MS-Office365-Filtering-Correlation-Id: be3c320f-cdb9-47b9-3066-08df4c9b82d5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
- ARA:14566002|4140399003|39105399006|25010399006|260925184616899003|16051099003|24021099003|20031999006|2604032031799003|19110799012|704163111799003|24071999003|5072599009|41001999006|24121999003|15080799012|6090799003|23021999003|22091999003|8060799015|1602099012|10035399007|40105399003|26121999007|261005200801699003|23121099006|261007181701699018|11120399003|440099028|3412199025|4302099013|26104999009|1710799026;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?ZU83bFM3WjVqN2tvdS91NElUVXM2TVJONmZoV0JLaFR4T3gvSi9FOVZPamVw?=
- =?utf-8?B?bGwxMnhoVXNUeGlUa2hTSk1tUkg5SlRiNFd3c1p4YndxSmpva2l2dndKdlVT?=
- =?utf-8?B?NXFPNUR2aXhNeWtiQTA2WFUwbzlPaFRSZlo3RzFkalE5bDB4ZlZqN3NEZ0pq?=
- =?utf-8?B?eTNhbGZVbFdpVXhEeWdhdGJjOUFIcmFpUUhESno2T2Z0QXBtS3ZOcGhENm5q?=
- =?utf-8?B?TXRSeEkwdzNrMWlxT1dGemR1QlJGLzNtNmhFOUZnMUhrbWx0UEtSaXFIcHp2?=
- =?utf-8?B?VjVibGsyNVdQNnpIMU5ZWDZ5RW11NDFNeitlTkM1U0JsUmtIemxZOEMvUnJK?=
- =?utf-8?B?Y0xVU1JsMGVmVHRvOTRCelEweWp6RisvdmMwZ01ITUhKZnAzaE9YdzFPS3RF?=
- =?utf-8?B?SjdDenBIZ1BpdHBYRkJFNjJFdy9rcDlOTThDNGpSbStoeDRQQzZHRFd1a3lz?=
- =?utf-8?B?U2tSYy9HMUZXZGdNLzg0aTNCUnIxbXNQczNneTQ3am9TU2lQeFViK0JNMFNJ?=
- =?utf-8?B?TkhLdGwvcWxlZyttSDZldC84ajFTREVIYS9uK3dvWHAyNEgvemFrSGVQa0FX?=
- =?utf-8?B?TU5YMjc4SjgyK0JqNE9CcmRPUkgyMUNMNSt4ditETGthQXpGdVBBUWNVWmYx?=
- =?utf-8?B?L29QeUJzcUxRWk84YkZ6N3JTYWYwMmhMM3FTWTZzYVBRMHNzWVNiMHNId3Yr?=
- =?utf-8?B?QjF0Q3Z3NUFRT2t2K0Fqc0JHVXZtaEZmL3lHeExJdWE1ajQ0aVVKTXJ4UWFi?=
- =?utf-8?B?V2s1VTZGTmFrUS9oNXFiUGhoamEyQ0dSR0wwQVpFTjA2L3JBeXBxYUF3SjdW?=
- =?utf-8?B?K29rc0tPSHhrdHd2RTJnWXhEZ1llNjlpRWoyS2JoK0xoV2hIYUo2M1BXcldp?=
- =?utf-8?B?d0hiV2tqT3FDODhWS3Vpd1M2S21OOGQyZmliMEFNTVdqN3lOdXZZcU5OMkFV?=
- =?utf-8?B?RnY0cTVIN3NsU2dSQVdodlRDdGJ4dlBpVy8rN2swY21EZHo4bitQek1sUEFj?=
- =?utf-8?B?MmViczFmdlRIYWI4TWEzOXV4RDNZbm9yZ1IxRTZGeFFENVpwUnFpY0dxM2ND?=
- =?utf-8?B?b1pxZitrT3luS0tnVy9DVVJnaU1hSkdydDh4L1o5K0lBem5tUE1lWXRNcW9l?=
- =?utf-8?B?Ty9HUjRUMHpvak1uOEI2bkJ1VDZ0L3RoVFF1ZVE5RzVJalVWNTlidXMyRUk0?=
- =?utf-8?B?Z2V3WDYvaldZUUhKZUwydVM0Tm1LMU5kYWhtNGMxbkQzd0dCVnlKVVltK3Fu?=
- =?utf-8?B?Z0FHUEVDd0ltMzVzc1JieWR2eGZpVUJSeUpDQW04a1p5cURnd0NnY3VOU04v?=
- =?utf-8?B?N29MdTY3Z0xRQkRJUUdHWitTdlpPbk56Z2g4clJQWFY3cEpHMFJhOENlN2Fo?=
- =?utf-8?B?aFRCZVlMdDhRa0ZDOEhmRTI0dWowNm42RzRYc3NyZkJXdm5PQnhQbHRjY2RJ?=
- =?utf-8?B?VnJOZEZoNWJud2hsNi9GU2xqNzlVUlRJM0tRTFJxR3IwWmtwS2VVUjVxRGg0?=
- =?utf-8?B?RTBYZFN2MjVtUmZDZzBpSkhGWTB5c1FPRmMwVFJxMTBUbkM2aVhvMUVzQW5T?=
- =?utf-8?B?NTdJcTdMWCtER0tId055YzRLekVBbG4zSG10dEdKSURYVGc0c3BBb3c0RWJk?=
- =?utf-8?B?dWgzUzZ3WmhvbFkwZlVTNjJMbFB2cG13SGdJWDhYVEtyVzJ1TXkrWmlEam9u?=
- =?utf-8?B?YVV3ZUpyRCtWLzltS2JWeEtHQXM3bVF4em5hMC9CcHpXOXN2UlhRY2doQVJu?=
- =?utf-8?B?NE5Rd1VUellWTWQ2T0lxcU9kNnNtZ05xMzFBWUV6V1BrTHkrZmJuTWtqcHdz?=
- =?utf-8?B?MmRIeDJWQVBRTGh6SlRCdnZaejdXL0EwNE02amFvZFVzOWMzSUZ5RkJtTVEy?=
- =?utf-8?B?QzRuMFF1MWdpc1NhNVBPK1F3ZGRkd3FkWHJRRy9XRkZjVUhzbFgrSE9iMWxM?=
- =?utf-8?Q?MkjyLFk0i/Q=3D?=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dk9iT0dIdnlSZ3hzKzl4RU9GVHBNS1N5OHoxNWZxRmYrT3d2SGdQdFNKT3Fj?=
- =?utf-8?B?N29wQmJwU1B4a3ZvOHJCUkp1V3orMWpTTXNnVTI4aEJBOGNXOXQ3MGM2T0ts?=
- =?utf-8?B?QVp1d0ROcmlUNlNxYW56ajlxeE1XOGZEOENuSFF0TGwwSWVwemFOWlQxalBI?=
- =?utf-8?B?cjBKQ0gwZ2RtSGsvWGZzMVA0NUJ1Z2RZZjcweGUxbVlQTzFpWFNQbzluRWFB?=
- =?utf-8?B?eU9oVHFVODd3MFhxL0g3Q1RtRXE3cWxhS3BDdk5wT3N3dVhBcjJNcGdrVXpt?=
- =?utf-8?B?cGpJdGFOL0pJS1ppK2dlMDkrWXV2V3JVSlJsZDRad2JXL29wZEJEWkwrSnVN?=
- =?utf-8?B?TW9xU0xuTUkvTWFHbENDWWtRUm5yaUIzVjlrSUdvMWZoUUF5TnlVcXh0NlN5?=
- =?utf-8?B?dHpMRGs1WTlicE9meUxzRXd1WVNqdUh5WjlMMy90VWtNMm51c3VaY3RrS2oy?=
- =?utf-8?B?WEFHS3p0YWN6N2EwMFVjV3ZJREh3OWdiZHFGa3oyVDN6V05OcmtyazNVRHJP?=
- =?utf-8?B?RTY3eWhwRVVCU0h3SitYRFY0ZEdjZW9lNmN1VzlyWkxVR0I1Uk1lbHB0Y1Yz?=
- =?utf-8?B?cmdBcXNEMFlZRTZqSDNoQUZRY0FDb29OSXByZW95akovQzJSLy9UWTFtdE9M?=
- =?utf-8?B?cmI1Y09tV2F1TVI0ZnM0V0doRlRBcVFLK0tvazZMTTYra3Q3U3ozUThMT092?=
- =?utf-8?B?aDVkUGpRc1BCaE1aWTNVcVhIRFZaWFJ0Vk9HYXRWRmlnNGpRZFdlWE9Da2FP?=
- =?utf-8?B?WTV0dVpoODRaRy9tZkd4QS9aNk5JT2Vpc1RjNkN3S1lkbkNGMXhPOE1Ka3py?=
- =?utf-8?B?UjF5SE8ycUtTcStvWEhhRXZvUU03VElGclVwL2tsdkZsMjZXdlVueW82Wlpz?=
- =?utf-8?B?WXNXWkdNN0FJdzc5TXlmWkNxdjAwb0dENmt3blUyYXBwTXVuZ0hkR0hRUnNq?=
- =?utf-8?B?TGRhT0h6ZHg3V1dJYms0b25OSUsxSHprbnV2ZTB2dkFHMndZQnJSSFZjYzk0?=
- =?utf-8?B?MWtWTEFHRkkyaTkyaU1KczA5Tkt5c2YzSVBnMXRWMVkrejZuS3JJUWFZZTQ2?=
- =?utf-8?B?VjNFVEJPMUtYckxLTE11T1N0RHllVmRvU252cVFVeGJvQjFsanNhbmJ4MjNr?=
- =?utf-8?B?UHFLb0ZBd08zUGROTnRKcHYyWEZrNVlRQlQxT2lJSXFacXRnSHBLeTFTMEgw?=
- =?utf-8?B?cFB5VDdvKzY1TnBYOFk2Y1hUSHoydFhoWXhWam1Ra3JvWmlTL1pTTHZyTmRD?=
- =?utf-8?B?WFVHRmxSenliQUx4ZTdsMUl5Zi9NYkRHeG9wMm9vQVEyL1oxcVlDRnZqR2g1?=
- =?utf-8?B?aG5uWHd6L3o2bHYzcVhWWEk1bXVHaWRIdUV4RlZWTVF0cGlkYjRJMm9Nd0VK?=
- =?utf-8?B?TjhWckpqbWVXK25vR1NuUS8xZytQdmVmL2llYnBrY2ZxcHN4emYrY1A5ZE1p?=
- =?utf-8?B?czVaMDYyQzBXcTNyOXh4WEgwT1hSRU5YcUtUZlZZU0pvTDJtb0wrN1czNm9W?=
- =?utf-8?B?V24rajRGeW5DTkxUSnZRSEJRY203M0dSTnZrTWtJOC9IUE5xNVNDRnhYVFk1?=
- =?utf-8?B?b0ExbG1mYklyUk82NXRjQWtTcmVvWFNBaCt2Q3dGeExYbk1hMmYrUjVrN20z?=
- =?utf-8?B?dFNJM2QvSWNoaWRnQ2orQnBLUHNjNVlPeVlXaHFHVW9vREJzemVBWWlVOGIy?=
- =?utf-8?B?OEdTdE9aS2NwczlKY1RQOFBsTEJtYVMxeGFhMWJFNy8rcm1nWUJpWWd6THFo?=
- =?utf-8?B?ZVAzVFlnQkQzZVhMVzRLNzRNUUVaWVhlZ2RxVUtyZ2lxQzdKQkgrVkVrbk5P?=
- =?utf-8?B?aXUvbjFLeXh4cVNuam9OWncyaWljbHlUWFQzMWhrMFVtR1RaRCsxVkJFdXEy?=
- =?utf-8?Q?9rTpJlj6SUA2m?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a1c0b910-350f-4078-2df9-08df4c9b4bf9
-X-MS-Exchange-CrossTenant-AuthSource: SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
+ ARA:13230040|10070799003|23010399003|1800799024|376014|366016|18002099003|56012099006|11063799006|261009223027099003|261021121427099003|261021123027099003|261102123227099003|10067099003|261026121527099003;
+X-Microsoft-Antispam-Message-Info: 4Kss7wjN5No8QEzjmaKHuZVEBVwm9L6cHVBPLV7mEMqNyjQGrP4W5YhEiMnpQnhF5K+MtOE/3H2K9qwXh+THwTaabjQzJTHzkFJwBLFyo128GQd8K1DbjvugMFu1hhIvm1M6yzpatSzpBnv2efH9zUtOlGx75rMqfHALjzu3sQcM1HBZS8GUwUHkt53d2o3YLSVjlNvhVchSFdxYXbGQdlw8llSI+qRuPFnlgG3221NrsczdenSEerUNz9C2GcQekWP1LwLUoZrcOJ0MnSEYKcdp1upoz4SB+ndJVD1hren8FSbTuysYoXAwojAIFoJVP1m5n7U0/UcB6NZiWKFg5fOCbQdfri8MSstyVxetfxiiMZvTsFtAE986zVAqzg2PggE8kQA98MOj6Iztu7iVeO6TTZ4dST7DNwIBUeR/vIuY0xzo+S7BzysAxXyv7t5QALn1a6aSDi4SBgBJ85cIwwNMtEe9k2ZkuI80mDrfmwixhG3fiC2YYe6AG5hqTNtNcYjIRok/bcCOzeuSRKWk4SU3SVtb/1ylGqKpm5NRMxjxMswc5qxO+DbBPG5/hyE8cdL+RLxE+MJeRDenNf+nY4NBp91By13Mpk7DiJnwFpLCC/wEYSzE1SVEI6fXUhJeCyJVEdFQJQ19ljthJMnRGWRyfScW2RyLlMoetml0kWM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:PH0PR03MB989121.namprd03.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230040)(10070799003)(23010399003)(1800799024)(376014)(366016)(18002099003)(56012099006)(11063799006)(261009223027099003)(261021121427099003)(261021123027099003)(261102123227099003)(10067099003)(261026121527099003);
+ DIR:OUT; SFP:1101; 
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FiXNCyBwbVLEDrobvg+5N3wyQkTxgHJUJkqKXpxl9lr1yQRadNOTEuD91YTW?=
+ =?us-ascii?Q?hA2WegGpkTpDwzh5nLJm+hrhzYtSYckXZyA48Jp+KIPlTNM32LFfQvjSFfo+?=
+ =?us-ascii?Q?zfkUMAsNpqL414BaZ/lxUESiUQKSaEqUywcYN4OwNCPF2eaDIRadjogZQXCg?=
+ =?us-ascii?Q?cJq9Bdl56mN7QyHZqh9zOS11c4DG4+C5Hk3u5UBhIVD0ECaMXFfBZ9IVWOQL?=
+ =?us-ascii?Q?/beU04DxsURb0IwTqoDnxoR2FKfIGK9fmrHtqb2xhuDSs0NZMnICiDz3iWrM?=
+ =?us-ascii?Q?4BvmyLakmzV4io+ucLKxuPMHXPiKpHGZ1YHx1PKS08cnDH/zI9Hw3WHQ630P?=
+ =?us-ascii?Q?3orJa/eNzfJblIxkH0Lx90zn7sH/k4FFGQ6B/x52taJptM0La4ZOA2HLVgPd?=
+ =?us-ascii?Q?fGGaFM95rlZcWZeHE48A+5QUcxToAO2LLKamMIkdoUjzoJONlEgDtW+yLq9C?=
+ =?us-ascii?Q?MDW3vPy8yFmYBP31o3xvHkHWBV1QWAUHC7vn8hOaZqmVgcreDvLuoJ8HDBZB?=
+ =?us-ascii?Q?eCSsubQYNjWhiAaIpDZqUMqefe5czauOpBsrAtTfgraOSwnQQFxk/nYeItNJ?=
+ =?us-ascii?Q?pmjia7Wpxiam0RZSDqrviql3Q6+k3T3XU1+MW09+QlKZMpSANSZFzrPt3nD9?=
+ =?us-ascii?Q?QstcLi0VUY6kS9Z2x7Mof0yvzmUJNWTlDm3orxxdLAwy8mxX1uN72df6T2Pd?=
+ =?us-ascii?Q?Y0IenysREgTY2DjBWLRJ8jiuU4bqctlxWlNqCyleQ9Ps8+yXBvxsWXslxLr3?=
+ =?us-ascii?Q?MzKkF4EH8oKisWbGTmMClNppNeQHFHdSJiQ6Wgq0x+2qCCTwUaTHvgFGnQ2/?=
+ =?us-ascii?Q?nXvQhlYaRvEZofWacjssbZj1E0WTH1rwx1BpAilobD0BEeckIJpGqMx3iaTy?=
+ =?us-ascii?Q?UgolAy8QYzy8ZqHd5aYdmmNAgDz1EBylFInaWLrZrGGafZJJSdTbpPGH3c2q?=
+ =?us-ascii?Q?pQwJQPXP/ejx3EQPN07nilppuQgF9HtveJkbw/+CV3x8YJhe3PLw7JLbTeTL?=
+ =?us-ascii?Q?2/KtdSnCzMppOoHi0BN1geIHsEzG8yQqae9RQiYZHC9n6YXQOwN20gffJaOe?=
+ =?us-ascii?Q?2hg3QRdo9Dbho6pVbEO1f5gBnBP7ZjEkk+zw3GuMU+7Na5csal4LycILo7ry?=
+ =?us-ascii?Q?Kbzyy4ag8wRo/nl1Zikj49elNukFwfBwGlM8l6bJ2WH2ql9SGovr0avD5+N1?=
+ =?us-ascii?Q?sMNEUmc1V6UrKJ2pB+6IOafRRtLEid2gH/DGQ9oQw7bcOh5sj0vWxIzOecRz?=
+ =?us-ascii?Q?pRWe6ggCyOti4vy5wvbs+JDgUYvjoCmlgJeDYL1bogLII85VQNNbtgLMjM/r?=
+ =?us-ascii?Q?/zxStM6SgVsm/7h6311dxgRqJMaWGP1mNBydxU/pD1oh2Lzjqb3IyYjEKPhA?=
+ =?us-ascii?Q?ULSiv+jpQte8mCpXkiOuoRr5CNS7Dvbd5HLL8WdNBNKR3megWUECe8B77eW0?=
+ =?us-ascii?Q?xp5bKPjGriHV4j571/halLppcRlQrcwfyEQ6v4q3ja87BD6wq+FCnUk0ojg0?=
+ =?us-ascii?Q?MnSiLyMU33ltuW/3mF21XIJACrGAyKCDt4287NIFypfzTXPDw4/aGLKVGpNK?=
+ =?us-ascii?Q?JOFj1ZSDI3N3239sf+a0yGbETNRMP5kKWgN1+4dZon2QRrr1iW2OldIyls6v?=
+ =?us-ascii?Q?mE3bb+1/It8TdKIYi9WbPiCCQlYbdcHTRPtf9ByoertlPOjdIRNUXO9ybMqe?=
+ =?us-ascii?Q?OPPjYk9KdMIk6O313ryPGWU9d1KUd9Jgaxlt/xISaBq7BzbNZwK+MgnfFq2H?=
+ =?us-ascii?Q?TbYuDPEL378c72wGYSBq0ZG9+a8WKOGdDyViRRupM/tM9HXQBzbf0eFkepgA?=
+X-MS-Exchange-AntiSpam-MessageData-1: MuUiJk9+PtUlKH5ZY5cVFavwpQz7uBDR+rk=
+X-Exchange-RoutingPolicyChecked: owZS57quEsdBHqV+XBS+raD0aD7UEgG7nyJKCGtcszxljcmWoeotyesmiWb6P3KCGgWIuzVFE/QPKzt/GGTnQIF8qLRwWaMxt3RdqluDBcssuqscfnYBbU6N+7pPRtEtmjv/T8kBHIBtoeXF47SNgnB17vdb5o+MhiiP/za+lstaiBRLJlEaMQivNc754MzpT69Y9zFLZ2rTRfsk5mnSPesZD0OQg7i0knwBzcAM9mR46Ik+q+jcCDycxztpDlcuqh1ekI/BUrMr6MFbLBK9AJ3lJ+TojGzz6Up5PlXHEDMxfu3ZNbn4gvIygiVURq5K0IBvSetjIYdNkn5lMaB5ag==
+X-OriginatorOrg: analog.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: be3c320f-cdb9-47b9-3066-08df4c9b82d5
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR03MB989121.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2026 15:29:59.2859 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2026 15:31:30.9291 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY0P300MB0692
-Subject: [Buildroot] [PATCH v2 14/14] package/gstreamer1/gst1-vaapi: remove
- package
+X-MS-Exchange-CrossTenant-Id: eaa689b4-8f87-40e0-9c6f-7228de4d754a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OCj2eu1KE06yyhMZIoinaivBwtvMrxsKzyIs0tQhvn538RsNAPK3fk7WYz8Q3cl0feIzt6DhrFVtKT53drA0GgI0rl8WLqEbYri8MypBjyc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR03MB7063
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYxMTI3MDA2MSBTYWx0ZWRfX3UZp6lolCut7
+ PJJAC+00hSg53DhwLueihNSO8kyyk6L1+bsedE+KolNpWtlEBHULyiWIv1Fs0ds0G3evSCWUPw8
+ Ierp4UqtNxJ/bblNJ/WzztgYVv1j/B9Seck0KKVltxVQt/vL4Lq9vDML39rlwPra+XJ7QAv7NVu
+ FgZ762wd07eBCNfoiCDQtXJTAWHN+Bybfi/H3ymtoxAHU23bjbii5kVp6iRcxgOoLMGr3tiFBce
+ P23d5Z84KkAWIrZg4iEtxPl1GJDxYR/p/M5Msn4KcO8YkhIkBasIiUeOQGa2XTtTdWHevbm4ZEB
+ yyLv7rvN6VdOqLtCQtB6M6IhgByWksVATTyxuoNkqUol6TCBZX1jMiAPrqTDWlcKKAQGyPrI4nr
+ 9Wy1RkT7R90h25d42/wT+60Dxmnkz2H1OvD90AJ1+NlxVCkG3pG41XwzC+/pLSH4KIZweKrORs2
+ 4gHsoHK9xG15cptcjFw==
+X-Authority-Analysis: v=2.4 cv=Dp/Da2/+ c=1 sm=1 tr=0 ts=6b09a257 cx=c_pps
+ a=3rvMy2ukNI5EHG76q/Bj7A==:117 a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19
+ a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19
+ a=xqWC_Br6kY4A:10 a=zJRp6_cAMcgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=0sLvza09kfJOxVLZPwjg:22 a=uXIjobp8t2wMuQ0fPvqm:22 a=4tbZXvb0AAAA:20
+ a=gAnH3GRIAAAA:8 a=bAlT6VxFnv79FshydPwA:9 a=bA3UWDv6hWIuX7UZL3qL:22
+X-Proofpoint-ORIG-GUID: _H2nDFcxoxRg5VSee7aHfBnVMOJFIerd
+X-Proofpoint-GUID: _H2nDFcxoxRg5VSee7aHfBnVMOJFIerd
+X-Proofpoint-Spam-Info: AW1haW4tMjYxMTI3MDA2MSBTYWx0ZWRfX23spdnNQQRxE
+ GJyUJPQBf0IzdVYfp/av5T9doGtgcZuxu33GSweGxS0iABL8mGkTNe/SUKe+GS5tumQe6+vBvu+
+ viMK/XUQeiAO0XNTQDhJBD6lMHyus/fbqTszmoDXvHeqN0wVHS0j
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.138,FMLib:17.12.100.49
+ definitions=2026-11-27_02,2026-11-27_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 priorityscore=1501 spamscore=0 adultscore=0 malwarescore=0
+ suspectscore=0 phishscore=0 impostorscore=0 clxscore=1015 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2611040001 definitions=main-2611270061
+Subject: [Buildroot] [PATCH 1/2] package/adsp-ldr: bump to version 1.0.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -241,213 +214,57 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Philip Molloy via buildroot <buildroot@buildroot.org>
+Reply-To: Philip Molloy <philip.molloy@analog.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-18.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
-	DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,SPF_PASS,
-	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
+X-Spam-Status: No, score=-24.1 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+	DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INCLUDES_CR_TRAILER,
+	INCLUDES_PATCH,MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_NONE,
+	SPF_PASS,USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-GStreamer 1.28 removed gstreamer-vaapi in favour of the va plugin in
-gst-plugins-bad [1].
+Notable changes since 1.0.1:
+- Add SC846 as an alias of the SC589 load method
+- Require meson >= 1.5.0
 
-Add legacy entries for the removed options and select the replacement
-va plugin. Applications must update their pipelines to use the
-replacement elements.
+For release notes, see:
+https://github.com/analogdevicesinc/adsp-ldr/releases/tag/v1.0.2
+https://github.com/analogdevicesinc/adsp-ldr/releases/tag/v1.0.3
 
-[1] https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/82a71a7739fea9d48e9c64f44bce879b86bd3df7
-
-Signed-off-by: Fengwei Tan <tfx2001@outlook.com>
+Signed-off-by: Philip Molloy <philip.molloy@analog.com>
 ---
- Config.in.legacy                              | 18 ++++++++
- package/gstreamer1/Config.in                  |  1 -
- package/gstreamer1/gst1-vaapi/Config.in       | 54 ------------------------
- package/gstreamer1/gst1-vaapi/gst1-vaapi.hash |  3 --
- package/gstreamer1/gst1-vaapi/gst1-vaapi.mk   | 59 ---------------------------
- 5 files changed, 18 insertions(+), 117 deletions(-)
+ package/adsp-ldr/adsp-ldr.hash | 2 +-
+ package/adsp-ldr/adsp-ldr.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Config.in.legacy b/Config.in.legacy
-index b170aea1c3..56c88ded46 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,24 @@ endif
+diff --git a/package/adsp-ldr/adsp-ldr.hash b/package/adsp-ldr/adsp-ldr.hash
+index d708db3d38..519f613f15 100644
+--- a/package/adsp-ldr/adsp-ldr.hash
++++ b/package/adsp-ldr/adsp-ldr.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  0f240aa5aad9300d8f4bc7ffd9cc1c53e01dfd6120de4f20f60d4d4176d99c10  adsp-ldr-v1.0.1.tar.xz
++sha256  2be8bb08fecac1bebfd51e659f745deb270686fcd8e4e4f624f66d6810b4a643  adsp-ldr-v1.0.3.tar.xz
+ sha256  c965604b194588b5799b75fcc11cc39be09220e580ae96e2a72848f042de56a7  LICENSE
+diff --git a/package/adsp-ldr/adsp-ldr.mk b/package/adsp-ldr/adsp-ldr.mk
+index d269ddb093..d46beb7ad5 100644
+--- a/package/adsp-ldr/adsp-ldr.mk
++++ b/package/adsp-ldr/adsp-ldr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "Legacy options removed in 2027.02"
- 
-+config BR2_PACKAGE_GST1_VAAPI
-+	bool "gst1-vaapi has been removed"
-+	select BR2_LEGACY
-+	select BR2_PACKAGE_GST1_PLUGINS_BAD
-+	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VA
-+	help
-+	  GStreamer removed gstreamer-vaapi in version 1.28. Use the
-+	  va plugin in gst1-plugins-bad instead. Applications must
-+	  update their pipelines to use the replacement elements.
-+
-+config BR2_PACKAGE_GST1_VAAPI_ENCODERS
-+	bool "gst1-vaapi encoders have been removed"
-+	select BR2_LEGACY
-+	help
-+	  GStreamer removed gstreamer-vaapi in version 1.28. VA-API
-+	  encoders are provided by the va plugin in gst1-plugins-bad
-+	  instead.
-+
- config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_Y4M
- 	bool "gst1-plugins-bad y4mdec moved to gst1-plugins-good"
- 	select BR2_LEGACY
-diff --git a/package/gstreamer1/Config.in b/package/gstreamer1/Config.in
-index 67c33e5d4e..f384329a30 100644
---- a/package/gstreamer1/Config.in
-+++ b/package/gstreamer1/Config.in
-@@ -14,7 +14,6 @@ source "package/gstreamer1/gst1-libav/Config.in"
- source "package/gstreamer1/gst1-python/Config.in"
- source "package/gstreamer1/gst1-rtsp-server/Config.in"
- source "package/gstreamer1/gst1-shark/Config.in"
--source "package/gstreamer1/gst1-vaapi/Config.in"
- source "package/gstreamer1/gstd/Config.in"
- source "package/gstreamer1/gstreamer1-editing-services/Config.in"
- endif
-diff --git a/package/gstreamer1/gst1-vaapi/Config.in b/package/gstreamer1/gst1-vaapi/Config.in
-deleted file mode 100644
-index d6a1542ad3..0000000000
---- a/package/gstreamer1/gst1-vaapi/Config.in
-+++ /dev/null
-@@ -1,54 +0,0 @@
--config BR2_PACKAGE_GST1_VAAPI
--	bool "gst1-vaapi"
--	depends on !BR2_STATIC_LIBS # dlopen(), libva
--	depends on BR2_TOOLCHAIN_HAS_THREADS # libva, libdrm
--	depends on BR2_INSTALL_LIBSTDCPP # gst1-plugins-bad
--	depends on BR2_PACKAGE_HAS_UDEV
--	select BR2_PACKAGE_LIBVA
--	select BR2_PACKAGE_LIBDRM
--	select BR2_PACKAGE_GST1_PLUGINS_BASE
--	select BR2_PACKAGE_GST1_PLUGINS_BAD # gstreamer-codecparsers
--	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
--	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
--	select BR2_PACKAGE_XLIB_LIBXRANDR if BR2_PACKAGE_XORG7
--	help
--	  gstreamer-vaapi consists in a collection of VA-API based
--	  plugins for GStreamer and helper libraries.
--
--	  vaapi<CODEC>dec is used to decode JPEG, MPEG-2, MPEG-4:2,
--	  H.264 AVC, H.264 MVC, VP8, VC-1, WMV3, HEVC videos to VA
--	  surfaces, depending on the actual value of <CODEC> and the
--	  underlying hardware capabilities.  This plugin is also able
--	  to implicitly download the decoded surface to raw YUV
--	  buffers.
--
--	  vaapi<CODEC>enc is used to encode into MPEG-2, H.264 AVC,
--	  H.264 MVC, JPEG, VP8, HEVC videos, depending on the actual
--	  value of <CODEC> (mpeg2, h264, etc.) and the hardware
--	  capabilities. By default, raw format bitstreams are
--	  generated, so the result may be piped to a muxer, e.g. qtmux
--	  for MP4 containers.
--
--	  vaapipostproc is used to filter VA surfaces, for
--	  e.g. scaling, deinterlacing (bob, motion-adaptive,
--	  motion-compensated), noise reduction or sharpening. This
--	  plugin is also used to upload raw YUV pixels into VA
--	  surfaces.
--
--	  vaapisink is used to render VA surfaces to an X11 or Wayland
--	  display. This plugin also features a "headless" mode (DRM)
--	  more suited to remote transcode scenarios, with faster
--	  throughput.
--
--	  https://cgit.freedesktop.org/gstreamer/gstreamer-vaapi
--
--if BR2_PACKAGE_GST1_VAAPI
--
--config BR2_PACKAGE_GST1_VAAPI_ENCODERS
--	bool "enable encoders"
--
--endif
--
--comment "gst1-vaapi needs udev /dev management and a toolchain w/ threads, dynamic library, C++"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
--		!BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP
-diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
-deleted file mode 100644
-index b01ff938af..0000000000
---- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.24.13.tar.xz.sha256sum
--sha256  b92c008841387043aec83b08b1fa8cf41e7866a106311a7d99e274e7d24ddc47  gstreamer-vaapi-1.24.13.tar.xz
--sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-deleted file mode 100644
-index 418369c38e..0000000000
---- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
-+++ /dev/null
-@@ -1,59 +0,0 @@
--################################################################################
--#
--# gst1-vaapi
--#
--################################################################################
--
--GST1_VAAPI_VERSION = 1.24.13
--GST1_VAAPI_SITE = https://gstreamer.freedesktop.org/src/gstreamer-vaapi
--GST1_VAAPI_SOURCE = gstreamer-vaapi-$(GST1_VAAPI_VERSION).tar.xz
--GST1_VAAPI_LICENSE = LGPL-2.1+
--GST1_VAAPI_LICENSE_FILES = COPYING.LIB
--
--GST1_VAAPI_DEPENDENCIES += \
--	gstreamer1 \
--	gst1-plugins-base \
--	gst1-plugins-bad \
--	libva \
--	libdrm
--
--GST1_VAAPI_CONF_OPTS += \
--	-Ddrm=enabled \
--	-Degl=enabled \
--	-Dexamples=disabled \
--	-Dtests=disabled \
--	-Ddoc=disabled
--
--ifeq ($(BR2_PACKAGE_GST1_VAAPI_ENCODERS),y)
--GST1_VAAPI_CONF_OPTS += -Dencoders=enabled
--else
--GST1_VAAPI_CONF_OPTS += -Dencoders=disabled
--endif
--
--ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
--GST1_VAAPI_CONF_OPTS += -Degl=enabled
--GST1_VAAPI_DEPENDENCIES += libegl
--else
--GST1_VAAPI_CONF_OPTS += -Degl=disabled
--endif
--
--ifeq ($(BR2_PACKAGE_WAYLAND),y)
--GST1_VAAPI_CONF_OPTS += -Dwayland=enabled
--GST1_VAAPI_DEPENDENCIES += wayland wayland-protocols
--else
--GST1_VAAPI_CONF_OPTS += -Dwayland=disabled
--endif
--
--ifeq ($(BR2_PACKAGE_XLIB_LIBX11)$(BR2_PACKAGE_XLIB_LIBXRANDR),yy)
--GST1_VAAPI_CONF_OPTS += -Dx11=enabled
--GST1_VAAPI_DEPENDENCIES += xlib_libX11 xlib_libXrandr
--ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
--GST1_VAAPI_CONF_OPTS += -Dglx=enabled
--else
--GST1_VAAPI_CONF_OPTS += -Dglx=disabled
--endif
--else
--GST1_VAAPI_CONF_OPTS += -Dx11=disabled -Dglx=disabled
--endif
--
--$(eval $(meson-package))
-
+-ADSP_LDR_VERSION = 1.0.1
++ADSP_LDR_VERSION = 1.0.3
+ ADSP_LDR_SOURCE = adsp-ldr-v$(ADSP_LDR_VERSION).tar.xz
+ ADSP_LDR_SITE = https://github.com/analogdevicesinc/adsp-ldr/releases/download/v$(ADSP_LDR_VERSION)
+ ADSP_LDR_LICENSE = BSD-3-Clause
 -- 
 2.56.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
