@@ -1,146 +1,152 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C93C606A31C
-	for <buildroot@archiver.kernel.org>; Fri, 27 Nov 2026 11:25:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 536B0606A31C
+	for <buildroot@archiver.kernel.org>; Fri, 27 Nov 2026 11:25:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=GxdAHoGx;
-	dkim=fail reason="signature verification failed" (1024-bit key, unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google header.b=pMI+8xKS
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=MZrydBZn;
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google header.b=JDaSSaUD
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CED3E60AAF;
-	Fri, 27 Nov 2026 11:25:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2F3AB81184;
+	Fri, 27 Nov 2026 11:25:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 610I1j4HeaGa; Fri, 27 Nov 2026 11:25:15 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 71AC260AC2
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795778715;
-	b=e3i2WS0JrzG6xAdNqdEl+CGU4k1janWVR2JCmfTq9+DtrZd7ZIFk2lAupWOWpKVXri30
-	 ll1/bsJ1uo3aUp42Dalo0VQNdoXrLEYVslF/H/SoXW/p26D9ZGuwadbMjvTJKhHEGB/EM
-	 2Hpox8gVFegAAxq5a7OUGqUsBCw/RaI5ZDbWxqhCNf8lyQx4PkSjCbjOjtT3v//VFPk7W
-	 UQR1dCCncEyN8JDRdHP7q50VXgQFfWmijMu/PqAZRmoqCZW2GoR0KRiu0woWpTZxK6yNP
-	 A876mO/bD1X6eBqaweHwn720vCRvCZ29C8RG1afJXz9l/Hmdmgl7Ze+O0SElBNR7fpw==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XLQfyZSuYG0X; Fri, 27 Nov 2026 11:25:17 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org CD87881179
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795778716;
+	b=eFs13629c7UVE0eXOmrVft0KYssYFvSn49C0LBldfUlYip3hGl6pyLSCP252jcvDTK8d
+	 z4T2UPakLMrIs/VqNakz1iY+uZQi4Drsppz7ehVP4EtnJXhl3balXUngkJ+kpftIwo9qD
+	 bMbvLH5hh+KlI8u1YDG6XsKTf0EsoIfIfCyKNNGSi6oKm0jWGaUAe0cMABerNLxsgX4dX
+	 I2FfAtYUpZHR8c5/DoF4Gda+sjr8DNBB34YKbU8sYrPjlbBGYUGPMPPm/ps+uShDU9rl0
+	 rhIGkjuhPwuQI+9zn66VEBW6Bn5zWYI4NC7LD+rYByc8O+fGWfMRlJ4Z+XqTTYguWhw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795778715;
+	c=relaxed/relaxed; t=1795778716;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
 	 DKIM-Signature:X-Google-DKIM-Signature:X-Gm-Message-State:X-Gm-Gg:
-	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:MIME-Version:
-	 Subject:X-BeenThere:X-Mailman-Version:Precedence:List-Id:
-	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
-	 Content-Type:Content-Transfer-Encoding:Errors-To:Sender;
-	bh=/mX/wGJgoMKQjmmcHIY/dA0Diq5IaoVD7AKY4o16Ljk=;
-	b=ZOr5j4dS2FCxkBvvRJ5gpT0MR+bgEEy9IWIdFcPn7b5/rgU/6k4NdY1PFKFAzt3V3KV5
-	 GJHjqBsEEqIuT2paCriwIK7MuQwrkw4N4d7vRgv7DBytRQuR9038WkdJGLeXThnOQLNXY
-	 BmPP9mF/eCtjqoBYsNt0tkfRcvwUPl4RYJOYttuE9RPuuqk4ASamLHvjsGywMEJOT+5gB
-	 YDOp9lyqfExQrGOtutBE9J2Ow06UWY+HzszWfqxwGm+cJllJyjtFJww+THcsTHsXWlP0p
-	 b02jk0laOtmqGCkhFNqT2pG+tOQpHCyvZ/86K/oK+6GOTXaNWV65gYeF4pO0/WSaCZg==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+	 X-Received:Received:From:To:Cc:Date:Message-ID:X-Mailer:In-Reply-To:
+	 References:MIME-Version:Subject:X-BeenThere:X-Mailman-Version:
+	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
+	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
+	 Sender;
+	bh=Z5PoosXslRI10JXBU4wb4WBBirwS/MGlzTpfnV8hh4k=;
+	b=pfcXQEB+3hwcXNh3pUH92Lv1ZcL69Kbvkpwp7PYr22GB3h8gZ8sHMTZle8YeoslYODjq
+	 EvF+oNvzTA1Te2K77Z72tPKwbA1P22XMuaO6sRyeFWenSzbj0dM3b0wWoF/yqg5SfQpl9
+	 gRpirRCm3zp8Tj2vnCmrnrEIgyyfYzQGDSbnmxIHy1Wf+/I/TFXFjTcmHvzzWLOq4U2Sd
+	 nLUYcvWrbltxP8qw2ZNWW3KbAvM36UI9g+/QfzriHSgO/uvsjX6gPVE+xU7zwk+PSZETP
+	 MHc968yHlDiN5DOWjRqKp2ZVgJ1yoqX5cUSYBzSxKawNuryKUWjaqKMVye+hldSHxzQ==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795778715;
-	bh=/mX/wGJgoMKQjmmcHIY/dA0Diq5IaoVD7AKY4o16Ljk=;
-	h=From:To:Cc:Date:Subject:List-Id:List-Unsubscribe:List-Archive:
-	 List-Post:List-Help:List-Subscribe:From;
-	b=GxdAHoGx04kx0AigywiXM2mnMQXJAk7Vnlev+5GtpX5Mftj2WRhqGqor+uG5BRK1b
-	 AtGkiclk9EiI+9i/A5h9QCf9DrvwnpPqlZpXWoWBSMTSy6tCAMq//5qW6P2KRmWcyj
-	 M8BXTHD4Ptvje+APxdGoaYhxlFKJRf52sn8MsYwFrTfTJ1VrhZB2glLVECFdzso4IU
-	 e4MdGoKWRWSVTef8cttRu53jc8wzII8CuLER3/oXRDLUszGbBjF7e9R3eGukslzKHj
-	 wDoDylRAGdDvAltdFVfSqQ59rsPYb+TJ3IuboCHpJn1GnMVnnkQ6NdcTYDDSftum4x
-	 uCNTeqF4bODGA==
+	s=default; t=1795778716;
+	bh=Z5PoosXslRI10JXBU4wb4WBBirwS/MGlzTpfnV8hh4k=;
+	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
+	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
+	 From;
+	b=MZrydBZnHGxODuSYbZb9ZhUM/wvr2CdP/MCCteeHlrmyonD8gzJWXrHuNuj1JAO4m
+	 VSoNQ6aa9A4Yc0gCMYdyOKXVM/c3rxHgA3ijKVFsuMTys+ENcQK/5fVmbxihBcfZZ+
+	 aT2OREM9LmYPiLJDZo3GoYexqli0CT1xA9KGSOTRVfN+mrvml6t8tOY2Gb/yjc79oO
+	 29UFuI+nJ5fE+bGbfD8TvGJo4yOE4JKbcOaQM/mljaLRbLnu2Visd1mV/R0E9io+8z
+	 JwDDh3Se5acl0iHVP5gsFMpZOt3fnxuij5Frpk+IG3sMSAYkWUPsasbqRb8dx3sRpP
+	 fkng5xZLsy5yQ==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 71AC260AC2;
-	Fri, 27 Nov 2026 11:25:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CD87881179;
+	Fri, 27 Nov 2026 11:25:16 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by lists1.osuosl.org (Postfix) with ESMTP id 5C3EA2BD
+ by lists1.osuosl.org (Postfix) with ESMTP id 823F8D1
  for <buildroot@buildroot.org>; Fri, 27 Nov 2026 11:25:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3F89E40571
+ by smtp2.osuosl.org (Postfix) with ESMTP id 73EFE4004D
  for <buildroot@buildroot.org>; Fri, 27 Nov 2026 11:25:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wxu9nIw73LXO for <buildroot@buildroot.org>;
+ id ADtol4G1u-ET for <buildroot@buildroot.org>;
  Fri, 27 Nov 2026 11:25:12 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 739154004D
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org E37484008B
 Authentication-Results: smtp2.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::62d"
+ arc=none smtp.remote-ip="2a00:1450:4864:20::62b"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62d; helo=mail-ej1-x62d.google.com;
+ client-ip=2a00:1450:4864:20::62b; helo=mail-ej1-x62b.google.com;
  envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
 Authentication-Results: smtp2.osuosl.org; dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-Authentication-Results: smtp2.osuosl.org; dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=pMI+8xKS
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 739154004D
+Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=JDaSSaUD
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E37484008B
  for <buildroot@buildroot.org>; Fri, 27 Nov 2026 11:25:11 +0000 (UTC)
-Received: by mail-ej1-x62d.google.com with SMTP id
- a640c23a62f3a-c505994e5f5so119948666b.1
- for <buildroot@buildroot.org>; Fri, 27 Nov 2026 03:25:10 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id
+ a640c23a62f3a-c407213696aso103992066b.0
+ for <buildroot@buildroot.org>; Fri, 27 Nov 2026 03:25:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1795778709; x=1796383509;
+ d=amarulasolutions.com; s=google; t=1795778710; x=1796383510;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
- bh=mKn2FlUSSS2EzuOYDuMNrwnJJY8vNYwM2g4xMSze54k=;
- b=pMI+8xKSx6Xw8T0mlhjgib2L1D2bqhgKxShTyLUAVfHGVuycUGZ5nxim6kWqhuIVyg
- f3SrWBuywDz10FqpT/PdpzLLeM3zhPiP34pGtZ0KIW0uYIs9qk0hzVy4UUowy8bW4skU
- oIg8504SZtPQFVi4ZGMpQNj2UFMJlBsNz91QA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1795778709; x=1796383509;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=mKn2FlUSSS2EzuOYDuMNrwnJJY8vNYwM2g4xMSze54k=;
- b=QK5vKIZUJrjnatFMm7QJGiQUcg9tR1oVFOALVSTZ8wZNT6ZV3KaL8Wv2rHxUYNsi88
- 1fc7uupfohUmLe45ZtF6KspgIvUx5ICIqSvz52tb3dN08oo5SEFXx738FgSu+ZGTvNyn
- bXMzL0IdQv/5+qQmN88G91dEyuAA+vGny4GoMTucGCdk3pYa5C11Kjrs2Dv5kMR27NLW
- eVz/HxCNb9CdCTyvWL0fV858TOKQNQLIRTvM4jvkGW3OSW7k+AP1vnp5jr298umgMalw
- iVhT7enEGIp/Gd8v8/QqBYR38q/3O1/XB185DcSfgxeI37/uVGvy3QydL5yNpSq8Jhj7
- j3wA==
-X-Gm-Message-State: APuU4Z9cuMxz19ZcPxkfSQoE6ejgZ4k/qIRgljvugaMIMuka4kq4mULV
- 3veo//DbkuxnESJB8aMyPqvCiDA4E02+Nmm3r6JD3HroaLQabQ0KSqMdX7ILbU6Rzl4mjhXFp5y
- W9H3y12Q=
-X-Gm-Gg: AZFdTZcC0FasU2mRBpN+0i4UAFa1h5EUPu8K5C/Z6TfnfpIalJ/K8Md1z/yNCGdimsw
- lNJZmD1sqfzNy9oZEVPGs6qTSAXH9B542+d4bcY8VqEydm4usFSD++bbFjmjAMqy/Nvr79IUxqO
- cFh6gF2oQZS08Q2yelDnMmmCKNhMn5o6L1KXkfeR3STfkeubrYdwXKWd241lZSybIJlamwwl2Qd
- iKPkqNe2xTkglkeSHiSDFyqVJZvDesppNCI7qF/dAU95jg0Dytq0kq7GZMOdzyTTsz4SGG/S7t6
- UcVZTOeK3aLcsPH6ZFN0EYT9HPcm4fwfHaGZuaDJmVxCuqMI64ZEpxXuWQIZoxfUAl5fefIx3m+
- Sd6aXTXn8bcrpAtFa7LJRrJ1maB4qUxx/QSZ2RsZI/V/w/iYjFJFnDVkLP76XmOMtP3ykoq3QuI
- g7HUaVn6gylqdem7LdnY+HGbX/R8T8ctD8mpH53uZgwmh1WlNNkPqHjRtVDa2ruuivoav64XpGh
- ypP4H79Up5wZCT2tjqPdsAStW5R/hPLekDZk52ZPDXXseCB4Zej5c8aINmui1bDGqOhHBXCU7us
- kPOI5xeIygWuCbb8/ob06JnYKJ3kiqL/1eqldKcKR6T2i0op/710ktEXhiz4pL7B1GR837XpJQx
- TqyhBuAs81sfgGthQFxWu4YvpAUSRpfxanGTijTBcZB7Xq6aF6MhmwnRcvhlyeV5kD4JcxRMhpS
- vDwxIguFBpU76Oyn//AesEDYdoxnZavzvux9y4kHT9XGCuK+h8WscxG8NGxX8H6k2kf2YXVyJX9
- lDSdpQ3TZnagRwD0zX0yQ4ey4oDDahTnJvW0TAHdzF5W5u3Q6mkdH1Ra9UFKiEKGRRPy/duEw==
-X-Received: by 2002:a17:906:26c5:b0:c51:3b84:6fb8 with SMTP id
- a640c23a62f3a-c513b84886cmr1771840866b.4.1795778708979; 
- Fri, 27 Nov 2026 03:25:08 -0800 (PST)
+ bh=tn2vjoHRGQ+MFOs//MTvL+kFdYN2IQ2sjMT7yg4D3ho=;
+ b=JDaSSaUDOxm96Ddc3wKp6EoJCppADWCav4S70NLt9VLzRUKi3FIfCROjde85ue3xxx
+ eNmjslde1iZr5pRfcASPFKmfwidzu7RaP87R9oxdV3w5Y+gJIgLiF8nqQcp+TzTBueoB
+ NErP6M6RifB6TGZmfxJkL8weosGhTeRjbMDBI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20260707; t=1795778710; x=1796383510;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+ :to:cc:subject:date:message-id:reply-to:content-type;
+ bh=tn2vjoHRGQ+MFOs//MTvL+kFdYN2IQ2sjMT7yg4D3ho=;
+ b=CBEsW1yy90KB3JkpJ7VTQ6D77sH40AkU+G9MX3Gu5AQ3SZYNb78vTN+oa3R50idWDW
+ avDDay/5g+yImYTLBTuXVGfhFGtpX3j5YsEAlf2EdX1BvtqyAWrj1OSvyR6m1IXdg9LG
+ Om4WO+kPvPsSsCM2eHgfCXkKyq7qR5U4wHJg/O7PyT/EyVfvjEqeBIw/HuIrT4WsCW8o
+ n5bE79cJ+sjybqRxPT+pnTfaPLnDKJbZ7NTaukLTO5I5Va0vYZXhBnAI5CHkAnsx7dDB
+ 0BVZ62vs/qq7TUUlqoK7nmCRn5lkmW8ackX11jcV+ZcivK8YJgXAaoEF+xSjnDHLkwlb
+ ig6A==
+X-Gm-Message-State: APuU4Z9nI3j/itqQKP7g1lNrWhr5VIeaE1nZ6EMIf5jrKRcr2GoFFlcB
+ UtMoU0qLMoDzWxkqGRnHJazbwR962eRYwzJXAah6DnAeIi3BKyV9jAVwq0NNcjxpzcuKwexCzAz
+ lVw58S6M=
+X-Gm-Gg: AZFdTZfm17hRmkL/gXRx2bXU1daqlJXJI2Ubo26h6INCVGzQxIqBB5e7iYL0aexr/w2
+ no0u6Y1vMWIEKnkritybe6D7RWTiY/joBeivT7ACgju2F8J3eEKGjNjKE84e/rrO3U62KVeo8i8
+ EbwbaleWp5DnWeIbn/LJn3m2lMCCtMZblHNpXx2P++1MUXDfnZp4TVh4suCotOTJTOarzA8yW12
+ wv0omFIy20FgUWyDpFEYUhH5Hd/gry6fIVO85TSof2JwSZG06DLuUihZ66+TiDoOKQw6dlZJFMa
+ eA6aaf7yAO9iNmyox34RlBKSKfshgm6ZBcMeOB2XFB0p63OW1VCRjjGKVSdAgc3Rb9gf5K+cCR2
+ OapjJOOm6klAYzCATS0GU0Yh7w3eDrMr7sYgv92eSCjCiIRBDrVEBPzBB9H23+hd8xGArExA1vf
+ 3o78HGYaHwnCLMPNX8zcJuyO09I6xs94iOoRqP3wRPID6d34wk2szhfxGb3DY27HcC7xkzAnCJX
+ WjVbzKPCbTu/R7PjBiYJyGulVLxFmZY4Cv6sxkUMcVXbpkZUL5OFpB6iSW25eUXGVxSjkAT44Kt
+ 0OjJTU0YKncnt22g/Yo+zAhj82E/c7cmV3dB51ffdv3EkY2daK4YBhSNP2wHyu8SPOLyOCCzAtV
+ Q8yiq57cOmFKWq13eXgnocnV3Qx2fikyRIqYXQ7G48aMhgFgVyUXUaMBSqVy+wc7oWDxbHGFCMA
+ JbXyckFIlB5MiLV1VGPKp64GbVXWAx0FOUW5/B50Q5eNotMpcBtN+HHQ9AeZbqCctZkKmeXdK87
+ 9PzUn+9BGQ35PdmNrlCqjMqPAqpJMiuhmjwNJhYC6EGOey0qqL6
+X-Received: by 2002:a17:907:2494:b0:c50:850d:7317 with SMTP id
+ a640c23a62f3a-c513a531115mr1747321766b.2.1795778709709; 
+ Fri, 27 Nov 2026 03:25:09 -0800 (PST)
 Received: from adam-linux.arnhem.chello.nl
  (2001-1c00-8181-e800-dc0e-c162-ac5f-4bbe.cable.dynamic.v6.ziggo.nl.
  [2001:1c00:8181:e800:dc0e:c162:ac5f:4bbe])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c513aea3701sm885808166b.48.2026.11.27.03.25.08
+ a640c23a62f3a-c513aea3701sm885808166b.48.2026.11.27.03.25.09
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 27 Nov 2026 03:25:08 -0800 (PST)
+ Fri, 27 Nov 2026 03:25:09 -0800 (PST)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
 Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 27 Nov 2026 12:25:02 +0100
-Message-ID: <20261127112507.2594905-1-adam.duskett@amarulasolutions.com>
+Date: Fri, 27 Nov 2026 12:25:03 +0100
+Message-ID: <20261127112507.2594905-2-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.56.1
+In-Reply-To: <20261127112507.2594905-1-adam.duskett@amarulasolutions.com>
+References: <20261127112507.2594905-1-adam.duskett@amarulasolutions.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 1/6] package/depot-tools: bump to version
- 25e7767e91a5e7f3209c947b07c52e7a45dda6b5
+Subject: [Buildroot] [PATCH v2 2/6] package/flutter-{engine,
+ sdk-bin}: bump to version 3.50.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -161,340 +167,261 @@ X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Drop both upstream patches:
-- 0001-gerrit_util.py-fix-importing-socks.patch is no longer needed,
-  as gerrit_util.py no longer imports socks;
-- 0002-Replace-deprecated-ast-types-with-ast.Constant.patch is
-  included upstream.
+Changes for flutter-sdk-bin:
+  - Remove --disable-analytics from HOST_FLUTTER_SDK_BIN_DART_ARGS.
+    As of version 3.50, the Dart runtime rejects unknown VM flags:
+    `Setting VM flags failed: Unrecognized flags: disable_analytics`
 
-The LICENSE hash changed due to a copyright header update:
-"Copyright (c) 2009 The Chromium Authors. All rights reserved." became
-"Copyright 2009 The Chromium Authors" and "Google Inc." became
-"Google LLC".
+    Analytics are already disabled in the HOST_FLUTTER_SDK_BIN_CONFIGURE_CMDS
+    flags.
+
+Changes for flutter-engine:
+  - Drop 0001-disable-pre-canned-sysroot.patch
+    flutter/tools/gn now passes use_default_linux_sysroot explicitly.
+    Use --no-default-linux-sysroot instead, otherwise the host toolchain
+    looks for the bundled Debian sysroot, which isn't downloaded.
+
+  - Rebase 0001-remove-explicit-x11-dependency.patch
+
+  - Rebase 0002-fix-toolchain-paths.patch
+
+  - Remove --enable-impeller-3d, which no longer exists in flutter/tools/gn
+
+  - Add --no-rbe to explicitly disable remote build execution.
+
+  - Add --gn-args=dart_include_wasm_opt=false: flutter/tools/gn only sets
+    this for host builds, and wasm-opt fails to build with the custom
+    toolchain.
+
+  - build_overrides/vulkan_headers.gni moved from engine/src/flutter to
+    engine/src
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
-v1 -> v2: fix new license hash [thomas]
+ .../0001-disable-pre-canned-sysroot.patch     | 32 -------------------
+ ...0001-remove-explicit-x11-dependency.patch} | 22 ++++++-------
+ ...s.patch => 0002-fix-toolchain-paths.patch} | 15 +++++----
+ ...nfig.py-do-not-prepend-sysroot-path.patch} |  0
+ ...> 0004-Fix-building-on-Pango-1.58.0.patch} |  0
+ package/flutter-engine/flutter-engine.mk      | 10 +++---
+ package/flutter-sdk-bin/flutter-sdk-bin.hash  |  2 +-
+ package/flutter-sdk-bin/flutter-sdk-bin.mk    |  3 +-
+ 8 files changed, 27 insertions(+), 57 deletions(-)
+ delete mode 100644 package/flutter-engine/0001-disable-pre-canned-sysroot.patch
+ rename package/flutter-engine/{0002-remove-explicit-x11-dependency.patch => 0001-remove-explicit-x11-dependency.patch} (80%)
+ rename package/flutter-engine/{0003-fix-toolchain-paths.patch => 0002-fix-toolchain-paths.patch} (82%)
+ rename package/flutter-engine/{0004-pkg-config.py-do-not-prepend-sysroot-path.patch => 0003-pkg-config.py-do-not-prepend-sysroot-path.patch} (100%)
+ rename package/flutter-engine/{0005-Fix-building-on-Pango-1.58.0.patch => 0004-Fix-building-on-Pango-1.58.0.patch} (100%)
 
- ...1-gerrit_util.py-fix-importing-socks.patch |  32 ---
- ...precated-ast-types-with-ast.Constant.patch | 244 ------------------
- package/depot-tools/depot-tools.hash          |   4 +-
- package/depot-tools/depot-tools.mk            |   2 +-
- 4 files changed, 3 insertions(+), 279 deletions(-)
- delete mode 100644 package/depot-tools/0001-gerrit_util.py-fix-importing-socks.patch
- delete mode 100644 package/depot-tools/0002-Replace-deprecated-ast-types-with-ast.Constant.patch
-
-diff --git a/package/depot-tools/0001-gerrit_util.py-fix-importing-socks.patch b/package/depot-tools/0001-gerrit_util.py-fix-importing-socks.patch
+diff --git a/package/flutter-engine/0001-disable-pre-canned-sysroot.patch b/package/flutter-engine/0001-disable-pre-canned-sysroot.patch
 deleted file mode 100644
-index 46a1fe78d0..0000000000
---- a/package/depot-tools/0001-gerrit_util.py-fix-importing-socks.patch
+index 2c02fc4948..0000000000
+--- a/package/flutter-engine/0001-disable-pre-canned-sysroot.patch
 +++ /dev/null
 @@ -1,32 +0,0 @@
--From e52f67026d7ce5b30887e1cfe486ed994169119d Mon Sep 17 00:00:00 2001
--From: Adam Duskett <adam.duskett@amarulasolutions.com>
--Date: Tue, 4 Nov 2025 11:58:37 +0100
--Subject: [PATCH] gerrit_util.py: fix importing socks
+-From 49a14e693124dc34f2cccbfb755d01a1198aa6bf Mon Sep 17 00:00:00 2001
+-From: Joel Winarske <joel.winarsk@gmail.com>
+-Date: Wed, 19 Jul 2023 15:24:22 -0700
+-Subject: [PATCH] disable pre-canned sysroot
 -
--As of commit 1a6ff781792099e9e14d7beb610bd99112b17b07,
--httplib2 removed the internal copy of socksipy module.
+-Override should be enabled if a custom sysroot using --target-sysroot is
+-specified. If --target-sysroot is not set, then it should default to the
+-pre-canned sysroot.
 -
--The commit message specifically states to install pysocks.
--
--Upstream: unsubmitted
+-Upstream: https://github.com/flutter/flutter/issues/123073
+-Signed-off-by: Joel Winarske <joel.winarsk@gmail.com>
 -Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ----
-- gerrit_util.py | 2 +-
+- engine/src/build/config/sysroot.gni | 2 +-
 - 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--diff --git a/gerrit_util.py b/gerrit_util.py
--index eef2f5749..d866bc47a 100644
----- a/gerrit_util.py
--+++ b/gerrit_util.py
--@@ -35,7 +35,7 @@ from typing import NamedTuple, List, Optional
-- from typing import Tuple, TypedDict, cast
+-diff --git a/engine/src/build/config/sysroot.gni b/engine/src/build/config/sysroot.gni
+-index 7987e519d..1de694263 100644
+---- a/engine/src/build/config/sysroot.gni
+-+++ b/engine/src/build/config/sysroot.gni
+-@@ -12,7 +12,7 @@ declare_args() {
 - 
-- import httplib2
---import httplib2.socks
--+import socks
+-   # Whether to use the default sysroot when building for Linux, if an explicit
+-   # sysroot isn't set.
+--  use_default_linux_sysroot = true
+-+  use_default_linux_sysroot = false
+- }
 - 
-- import auth
-- import gclient_utils
+- if (current_toolchain == default_toolchain && target_sysroot != "") {
 --- 
--2.51.1
+-2.41.0
 -
-diff --git a/package/depot-tools/0002-Replace-deprecated-ast-types-with-ast.Constant.patch b/package/depot-tools/0002-Replace-deprecated-ast-types-with-ast.Constant.patch
-deleted file mode 100644
-index 09e88d04a2..0000000000
---- a/package/depot-tools/0002-Replace-deprecated-ast-types-with-ast.Constant.patch
-+++ /dev/null
-@@ -1,244 +0,0 @@
--From 7d467257a7cd57e746885ea73ccbda903450b461 Mon Sep 17 00:00:00 2001
--From: jj <jj@imput.net>
--Date: Fri, 5 Dec 2025 11:47:42 -0800
--Subject: [PATCH] Replace deprecated ast types with ast.Constant
--
--ast.Str et al. have been deprecated since Py3.8 and have been
--completely removed in 3.14. Replace their usage with ast.Constant.
--
--This change should not have any functional impact, since
--according to [1]:
--> Changed in version 3.8: Class ast.Constant is now used for
--> all constants.
--> Deprecated since version 3.8: Old classes ast.Num, ast.Str,
--> [...]  instantiating them will return an instance of a
--> different class.
--
--[1] https://docs.python.org/3/library/ast.html
--
--Bug: 40283283
--Change-Id: I0ed8ef3910f921483bff118976f516c5a935e0fc
--Reviewed-on: https://chromium-review.googlesource.com/c/chromium/tools/depot_tools/+/7228507
--Reviewed-by: Gavin Mak <gavinmak@google.com>
--Reviewed-by: Yiwei Zhang <yiwzhang@google.com>
--Commit-Queue: jj <jj@chromium.org>
--
--Upstream: https://chromium.googlesource.com/chromium/tools/depot_tools/+/80d6ca1b1ac55fbd9dd8f506417824591251b8eb
--[Romain: backport to 097e2072377]
--Signed-off-by: Romain Naour <romain.naour@smile.fr>
-----
-- gclient_eval.py                | 72 ++++++++++++++++++++--------------
-- tests/gclient_eval_unittest.py |  6 +++
-- 2 files changed, 49 insertions(+), 29 deletions(-)
--
--diff --git a/gclient_eval.py b/gclient_eval.py
--index f8a05d78a..94874e3ce 100644
----- a/gclient_eval.py
--+++ b/gclient_eval.py
--@@ -101,6 +101,24 @@ def _NodeDictSchema(dict_schema):
--     return validate
-- 
-- 
--+def _IsConstant(node):
--+    return isinstance(node, ast.Constant)
--+
--+
--+def _IsStringConstant(node):
--+    return _IsConstant(node) and isinstance(node.value, str)
--+
--+
--+def _IsNameConstant(node):
--+    return _IsConstant(node) \
--+        and isinstance(node.value, (bool, type(None)))
--+
--+
--+def _IsNumericConstant(node):
--+    return _IsConstant(node) \
--+        and isinstance(node.value, (int, float, complex)) \
--+        and not isinstance(node.value, bool)
--+
-- # See https://github.com/keleshev/schema for docs how to configure schema.
-- _GCLIENT_DEPS_SCHEMA = _NodeDictSchema({
--     schema.Optional(str):
--@@ -316,18 +334,18 @@ def _gclient_eval(node_or_string, filename='<unknown>', vars_dict=None):
--         node_or_string = node_or_string.body
-- 
--     def _convert(node):
---        if isinstance(node, ast.Str):
--+        if _IsStringConstant(node):
--             if vars_dict is None:
---                return node.s
--+                return node.value
--             try:
---                return node.s.format(**vars_dict)
--+                return node.value.format(**vars_dict)
--             except KeyError as e:
--                 raise KeyError(
--                     '%s was used as a variable, but was not declared in the vars dict '
--                     '(file %r, line %s)' %
--                     (e.args[0], filename, getattr(node, 'lineno', '<unknown>')))
---        elif isinstance(node, ast.Num):
---            return node.n
--+        elif _IsNameConstant(node) or _IsNumericConstant(node):
--+            return node.value
--         elif isinstance(node, ast.Tuple):
--             return tuple(map(_convert, node.elts))
--         elif isinstance(node, ast.List):
--@@ -349,9 +367,6 @@ def _gclient_eval(node_or_string, filename='<unknown>', vars_dict=None):
--                     'invalid name %r (file %r, line %s)' %
--                     (node.id, filename, getattr(node, 'lineno', '<unknown>')))
--             return _allowed_names[node.id]
---        elif not sys.version_info[:2] < (3, 4) and isinstance(
---                node, ast.NameConstant):  # Since Python 3.4
---            return node.value
--         elif isinstance(node, ast.Call):
--             if (not isinstance(node.func, ast.Name)
--                     or (node.func.id not in ('Str', 'Var'))):
--@@ -366,8 +381,8 @@ def _gclient_eval(node_or_string, filename='<unknown>', vars_dict=None):
--                                                      '<unknown>')))
-- 
--             if node.func.id == 'Str':
---                if isinstance(node.args[0], ast.Str):
---                    return ConstantString(node.args[0].s)
--+                if _IsStringConstant(node.args[0]):
--+                    return ConstantString(node.args[0].value)
--                 raise ValueError(
--                     'Passed a non-string to Str() (file %r, line%s)' %
--                     (filename, getattr(node, 'lineno', '<unknown>')))
--@@ -594,8 +609,8 @@ def EvaluateCondition(condition, variables, referenced_variables=None):
--         main_node = main_node.body
-- 
--     def _convert(node, allow_tuple=False):
---        if isinstance(node, ast.Str):
---            return node.s
--+        if _IsStringConstant(node):
--+            return node.value
-- 
--         if isinstance(node, ast.Tuple) and allow_tuple:
--             return tuple(map(_convert, node.elts))
--@@ -627,8 +642,7 @@ def EvaluateCondition(condition, variables, referenced_variables=None):
--             # be evaluated.
--             return node.id
-- 
---        if not sys.version_info[:2] < (3, 4) and isinstance(
---                node, ast.NameConstant):  # Since Python 3.4
--+        if _IsNameConstant(node):
--             return node.value
-- 
--         if isinstance(node, ast.BoolOp) and isinstance(node.op, ast.Or):
--@@ -696,11 +710,11 @@ def _UpdateAstString(tokens, node, value):
--         node = node.args[0]
--     position = node.lineno, node.col_offset
--     quote_char = ''
---    if isinstance(node, ast.Str):
--+    if _IsStringConstant(node):
--         quote_char = tokens[position][1][0]
--         value = value.encode('unicode_escape').decode('utf-8')
--     tokens[position][1] = quote_char + value + quote_char
---    node.s = value
--+    node.value = value
-- 
-- 
-- def _ShiftLinesInTokens(tokens, delta, start):
--@@ -793,11 +807,11 @@ def SetVar(gclient_dict, var_name, value):
-- 
-- def _GetVarName(node):
--     if isinstance(node, ast.Call):
---        return node.args[0].s
--+        return node.args[0].value
-- 
---    if node.s.endswith('}'):
---        last_brace = node.s.rfind('{')
---        return node.s[last_brace + 1:-1]
--+    if node.value.endswith('}'):
--+        last_brace = node.value.rfind('{')
--+        return node.value[last_brace + 1:-1]
--     return None
-- 
-- 
--@@ -821,9 +835,9 @@ def SetGCS(gclient_dict, dep_name, new_objects):
--     keys_to_update = ('object_name', 'sha256sum', 'size_bytes', 'generation')
--     for index, object_node in enumerate(objects_node.elts):
--         for key, value in zip(object_node.keys, object_node.values):
---            if key.s not in keys_to_update:
--+            if key.value not in keys_to_update:
--                 continue
---            _UpdateAstString(tokens, value, new_objects[index][key.s])
--+            _UpdateAstString(tokens, value, new_objects[index][key.value])
-- 
--     node.SetNode('objects', new_objects, objects_node)
-- 
--@@ -855,7 +869,7 @@ def SetCIPD(gclient_dict, dep_name, package_name, new_version):
--             "The deps entry for %s:%s has no formatting information." %
--             (dep_name, package_name))
-- 
---    if not isinstance(node, ast.Call) and not isinstance(node, ast.Str):
--+    if not isinstance(node, ast.Call) and not _IsStringConstant(node):
--         raise ValueError(
--             "Unsupported dependency revision format. Please file a bug to the "
--             "Infra>SDK component in crbug.com")
--@@ -880,15 +894,15 @@ def SetRevision(gclient_dict, dep_name, new_revision):
--         if isinstance(node, ast.BinOp):
--             node = node.right
-- 
---        if isinstance(node, ast.Str):
--+        if _IsStringConstant(node):
--             token = _gclient_eval(tokens[node.lineno, node.col_offset][1])
---            if token != node.s:
--+            if token != node.value:
--                 raise ValueError(
--                     'Can\'t update value for %s. Multiline strings and implicitly '
--                     'concatenated strings are not supported.\n'
--                     'Consider reformatting the DEPS file.' % dep_key)
-- 
---        if not isinstance(node, ast.Call) and not isinstance(node, ast.Str):
--+        if not isinstance(node, ast.Call) and not _IsStringConstant(node):
--             raise ValueError(
--                 "Unsupported dependency revision format. Please file a bug to the "
--                 "Infra>SDK component in crbug.com")
--@@ -897,15 +911,15 @@ def SetRevision(gclient_dict, dep_name, new_revision):
--         if var_name is not None:
--             SetVar(gclient_dict, var_name, new_revision)
--         else:
---            if '@' in node.s:
--+            if '@' in node.value:
--                 # '@' is part of the last string, which we want to modify.
--                 # Discard whatever was after the '@' and put the new revision in
--                 # its place.
---                new_revision = node.s.split('@')[0] + '@' + new_revision
--+                new_revision = node.value.split('@')[0] + '@' + new_revision
--             elif '@' not in dep_dict[dep_key]:
--                 # '@' is not part of the URL at all. This mean the dependency is
--                 # unpinned and we should pin it.
---                new_revision = node.s + '@' + new_revision
--+                new_revision = node.value + '@' + new_revision
--             _UpdateAstString(tokens, node, new_revision)
--             dep_dict.SetNode(dep_key, new_revision, node)
-- 
--diff --git a/tests/gclient_eval_unittest.py b/tests/gclient_eval_unittest.py
--index 03decdf30..3aed06156 100755
----- a/tests/gclient_eval_unittest.py
--+++ b/tests/gclient_eval_unittest.py
--@@ -30,6 +30,11 @@ class GClientEvalTest(unittest.TestCase):
--     def test_str(self):
--         self.assertEqual('foo', gclient_eval._gclient_eval('"foo"'))
-- 
--+    def test_num(self):
--+        self.assertEqual(42, gclient_eval._gclient_eval('42'))
--+        self.assertEqual(1024.0, gclient_eval._gclient_eval('1024.0'))
--+        self.assertEqual(42j, gclient_eval._gclient_eval('42j'))
--+
--     def test_tuple(self):
--         self.assertEqual(('a', 'b'), gclient_eval._gclient_eval('("a", "b")'))
-- 
--@@ -40,6 +45,7 @@ class GClientEvalTest(unittest.TestCase):
--         self.assertEqual({'a': 'b'}, gclient_eval._gclient_eval('{"a": "b"}'))
-- 
--     def test_name_safe(self):
--+        self.assertEqual(None, gclient_eval._gclient_eval('None'))
--         self.assertEqual(True, gclient_eval._gclient_eval('True'))
-- 
--     def test_name_unsafe(self):
---- 
--2.52.0
--
-diff --git a/package/depot-tools/depot-tools.hash b/package/depot-tools/depot-tools.hash
-index cd5e34d26e..c3b7bc2f79 100644
---- a/package/depot-tools/depot-tools.hash
-+++ b/package/depot-tools/depot-tools.hash
+diff --git a/package/flutter-engine/0002-remove-explicit-x11-dependency.patch b/package/flutter-engine/0001-remove-explicit-x11-dependency.patch
+similarity index 80%
+rename from package/flutter-engine/0002-remove-explicit-x11-dependency.patch
+rename to package/flutter-engine/0001-remove-explicit-x11-dependency.patch
+index 85f6db1c38..f954f81f09 100644
+--- a/package/flutter-engine/0002-remove-explicit-x11-dependency.patch
++++ b/package/flutter-engine/0001-remove-explicit-x11-dependency.patch
+@@ -14,20 +14,20 @@ Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+  1 file changed, 4 deletions(-)
+ 
+ diff --git a/engine/src/flutter/shell/platform/linux/config/BUILD.gn b/engine/src/flutter/shell/platform/linux/config/BUILD.gn
+-index da0ac056b..70c7a0ea1 100644
++index e6f5abbe..74f2f93c 100644
+ --- a/engine/src/flutter/shell/platform/linux/config/BUILD.gn
+ +++ b/engine/src/flutter/shell/platform/linux/config/BUILD.gn
+-@@ -5,10 +5,6 @@
+- import("//build/config/linux/pkg_config.gni")
++@@ -6,10 +6,6 @@ import("//build/config/linux/pkg_config.gni")
+  import("//flutter/shell/platform/glfw/config.gni")
+  
+--pkg_config("x11") {
+--  packages = [ "x11" ]
+--}
+--
+- pkg_config("gtk") {
+-   packages = [ "gtk+-3.0" ]
+- }
++ _pkg_configs = [
++-  {
++-    name = "x11"
++-    package = "x11"
++-  },
++   {
++     name = "gtk"
++     package = "gtk+-3.0"
+ -- 
+-2.41.0
++2.54.0
+ 
+diff --git a/package/flutter-engine/0003-fix-toolchain-paths.patch b/package/flutter-engine/0002-fix-toolchain-paths.patch
+similarity index 82%
+rename from package/flutter-engine/0003-fix-toolchain-paths.patch
+rename to package/flutter-engine/0002-fix-toolchain-paths.patch
+index 93239c039f..85f9d572c1 100644
+--- a/package/flutter-engine/0003-fix-toolchain-paths.patch
++++ b/package/flutter-engine/0002-fix-toolchain-paths.patch
+@@ -13,17 +13,17 @@ Upstream: https://github.com/flutter/flutter/issues/123073
+ Signed-off-by: Joel Winarske <joel.winarsk@gmail.com>
+ Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+ ---
+- engine/src/build/toolchain/custom/BUILD.gn | 4 +++++------
+- 1 file changed, 5 insertions(+), 6 deletions(-)
++ engine/src/build/toolchain/custom/BUILD.gn | 8 ++++----
++ 1 file changed, 4 insertions(+), 4 deletions(-)
+ 
+ diff --git a/engine/src/build/toolchain/custom/BUILD.gn b/engine/src/build/toolchain/custom/BUILD.gn
+-index 65b1623..8b3f6f8 100644
++index c5d2a60..a6fe1ad 100644
+ --- a/engine/src/build/toolchain/custom/BUILD.gn
+ +++ b/engine/src/build/toolchain/custom/BUILD.gn
+-@@ -12,11 +12,11 @@ toolchain("custom") {
++@@ -17,11 +17,11 @@ toolchain("custom") {
+    # these values in our scope.
+-   cc = "${toolchain_bin}/clang"
+-   cxx = "${toolchain_bin}/clang++"
++   cc = "${compiler_prefix}${toolchain_bin}/clang"
++   cxx = "${compiler_prefix}${toolchain_bin}/clang++"
+ -  ar = "${toolchain_bin}/${custom_target_triple}-ar"
+ +  ar = "${toolchain_bin}/llvm-ar"
+    ld = "${toolchain_bin}/clang++"
+@@ -37,4 +37,5 @@ index 65b1623..8b3f6f8 100644
+    target_triple_flags = "--target=${custom_target_triple}"
+    sysroot_flags = "--sysroot ${custom_sysroot}"
+ -- 
+-2.39.2
++2.54.0
++
+diff --git a/package/flutter-engine/0004-pkg-config.py-do-not-prepend-sysroot-path.patch b/package/flutter-engine/0003-pkg-config.py-do-not-prepend-sysroot-path.patch
+similarity index 100%
+rename from package/flutter-engine/0004-pkg-config.py-do-not-prepend-sysroot-path.patch
+rename to package/flutter-engine/0003-pkg-config.py-do-not-prepend-sysroot-path.patch
+diff --git a/package/flutter-engine/0005-Fix-building-on-Pango-1.58.0.patch b/package/flutter-engine/0004-Fix-building-on-Pango-1.58.0.patch
+similarity index 100%
+rename from package/flutter-engine/0005-Fix-building-on-Pango-1.58.0.patch
+rename to package/flutter-engine/0004-Fix-building-on-Pango-1.58.0.patch
+diff --git a/package/flutter-engine/flutter-engine.mk b/package/flutter-engine/flutter-engine.mk
+index 8c0bdad667..87b88e8a1b 100644
+--- a/package/flutter-engine/flutter-engine.mk
++++ b/package/flutter-engine/flutter-engine.mk
+@@ -22,7 +22,7 @@
+ # There is no hash provided for the source tarball, as the gn binary
+ # (used for configuration) relies on the .git directories. As such, a
+ # reproducible tarball is not possible.
+-FLUTTER_ENGINE_VERSION = 3.29.2
++FLUTTER_ENGINE_VERSION = 3.50.1
+ 
+ # There is nothing for Buildroot to download. This is handled by gclient.
+ FLUTTER_ENGINE_SITE =
+@@ -73,13 +73,16 @@ FLUTTER_ENGINE_CLANG_PATH = $(@D)/engine/src/flutter/buildtools/linux-x64/clang
+ FLUTTER_ENGINE_CONF_OPTS = \
+ 	--clang \
+ 	--embedder-for-target \
++	--gn-args=dart_include_wasm_opt=false \
+ 	--linux-cpu $(FLUTTER_ENGINE_TARGET_ARCH) \
+ 	--no-build-embedder-examples \
+ 	--no-build-glfw-shell \
+ 	--no-clang-static-analyzer \
++	--no-default-linux-sysroot \
+ 	--no-enable-unittests \
+ 	--no-goma \
+ 	--no-prebuilt-dart-sdk \
++	--no-rbe \
+ 	--no-stripped \
+ 	--runtime-mode $(FLUTTER_ENGINE_RUNTIME_MODE) \
+ 	--target-os linux \
+@@ -128,7 +131,6 @@ endif
+ 
+ ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
+ FLUTTER_ENGINE_DEPENDENCIES += libgles
+-FLUTTER_ENGINE_CONF_OPTS += --enable-impeller-3d
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBGTK3),y)
+@@ -148,7 +150,7 @@ FLUTTER_ENGINE_DEPENDENCIES += libxcb
+ else
+ define FLUTTER_ENGINE_VULKAN_X11_SUPPORT_FIXUP
+ 	$(SED) "s%vulkan_use_x11.*%vulkan_use_x11 = false%g" -i \
+-		$(@D)/engine/src/flutter/build_overrides/vulkan_headers.gni
++		$(@D)/engine/src/build_overrides/vulkan_headers.gni
+ 
+ 	$(SED) "s%ozone_platform_x11.*%ozone_platform_x11 = false%g" \
+ 		$(@D)/engine/src/build/config/BUILDCONFIG.gn
+@@ -161,7 +163,7 @@ FLUTTER_ENGINE_DEPENDENCIES += wayland
+ else
+ define FLUTTER_ENGINE_VULKAN_WAYLAND_SUPPORT_FIXUP
+ 	$(SED) "s%vulkan_use_wayland.*%vulkan_use_wayland = false%g" \
+-		$(@D)/engine/src/flutter/build_overrides/vulkan_headers.gni
++		$(@D)/engine/src/build_overrides/vulkan_headers.gni
+ 
+ 	$(SED) "s%ozone_platform_wayland.*%ozone_platform_wayland = false%g" \
+ 		$(@D)/engine/src/build/config/BUILDCONFIG.gn
+diff --git a/package/flutter-sdk-bin/flutter-sdk-bin.hash b/package/flutter-sdk-bin/flutter-sdk-bin.hash
+index 3c4cdb69dc..2d734dfbff 100644
+--- a/package/flutter-sdk-bin/flutter-sdk-bin.hash
++++ b/package/flutter-sdk-bin/flutter-sdk-bin.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  d281138bad9dab92f3f67f5d62f8d7fe02bccd9bef1ab2dae4acf93c712967bb  depot-tools-097e20723774957f21ac6d1808fcd0a91e8c7630-git4.tar.gz
--sha256  984523ee987f4e8b72d61df37d8f1189a7077cd4b77e41a397e35593b297a29d  LICENSE
-+sha256  6c877daf63411e8378f7d44c542e624745757e90d52cbff5b35ef458a469d289  depot-tools-25e7767e91a5e7f3209c947b07c52e7a45dda6b5-git4.tar.gz
-+sha256  20b1e32e55821d109bcd17e1e150cfe242b54590d3e8083648d1276f88d33d16  LICENSE
-diff --git a/package/depot-tools/depot-tools.mk b/package/depot-tools/depot-tools.mk
-index a6d57a6e3b..cc4b8638d5 100644
---- a/package/depot-tools/depot-tools.mk
-+++ b/package/depot-tools/depot-tools.mk
+-sha256  6096f21370773093ec19240e133664c1c12eb8b5a85605a92d16ce462a18eac4  flutter_linux_3.29.2-stable.tar.xz
++sha256  4ad17fc8462fbcef2ba19ff4a78c0a16b7147fde1add8578e267ea62cdb92678  flutter_linux_3.50.1-stable.tar.xz
+ sha256  a598db94b6290ffbe10b5ecf911057b6a943351c727fdda9e5f2891d68700a20  LICENSE
+diff --git a/package/flutter-sdk-bin/flutter-sdk-bin.mk b/package/flutter-sdk-bin/flutter-sdk-bin.mk
+index e1d6a9fdaa..253624ab49 100644
+--- a/package/flutter-sdk-bin/flutter-sdk-bin.mk
++++ b/package/flutter-sdk-bin/flutter-sdk-bin.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--DEPOT_TOOLS_VERSION = 097e20723774957f21ac6d1808fcd0a91e8c7630
-+DEPOT_TOOLS_VERSION = 25e7767e91a5e7f3209c947b07c52e7a45dda6b5
- DEPOT_TOOLS_SITE = https://chromium.googlesource.com/chromium/tools/depot_tools
- DEPOT_TOOLS_SITE_METHOD = git
- DEPOT_TOOLS_LICENSE = BSD-3-Clause
+-FLUTTER_SDK_BIN_VERSION = 3.29.2
++FLUTTER_SDK_BIN_VERSION = 3.50.1
+ FLUTTER_SDK_BIN_SITE = https://storage.googleapis.com/flutter_infra_release/releases/stable/linux
+ FLUTTER_SDK_BIN_SOURCE = flutter_linux_$(FLUTTER_SDK_BIN_VERSION)-stable.tar.xz
+ FLUTTER_SDK_BIN_LICENSE = BSD-3-Clause
+@@ -71,7 +71,6 @@ endif
+ # https://github.com/meta-flutter/meta-flutter/blob/scarthgap/conf/include/common.inc
+ HOST_FLUTTER_SDK_BIN_DART_ARGS = \
+ 	--verbose \
+-	--disable-analytics \
+ 	--disable-dart-dev $(HOST_FLUTTER_SDK_BIN_SDK_ENGINE)/linux-x64/frontend_server_aot.dart.snapshot \
+ 	--sdk-root $(HOST_FLUTTER_SDK_BIN_SDK_ROOT) \
+ 	--target=flutter \
 -- 
 2.56.1
 
