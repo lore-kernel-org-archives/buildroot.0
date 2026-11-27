@@ -1,29 +1,29 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27526606A31C
-	for <buildroot@archiver.kernel.org>; Fri, 27 Nov 2026 11:25:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26998606A31C
+	for <buildroot@archiver.kernel.org>; Fri, 27 Nov 2026 11:25:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=VEX+Gh3O;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google header.b=POE/42px
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=iH8k3oQS;
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=amarulasolutions.com header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google header.b=VtcnyIws
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 07B1E60ACD;
-	Fri, 27 Nov 2026 11:25:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F124A81224;
+	Fri, 27 Nov 2026 11:25:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jlXsWsGr_TT4; Fri, 27 Nov 2026 11:25:21 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 3B55D60B04
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795778721;
-	b=YBcJQdLa++kv2flwFJi8g2b0F6Pz+o4WbSH2OevN+Mp4sbG8+NWtGeJScglYx0Q2Ondm
-	 jiXFBrDExZQO6xoyYj/zaSSgL5X6hYSm/lEh4vdYLmz5xXmEzRd/SUR+4R7g0227IiLMb
-	 KgUCZV3WvUDUc6baaDbkpJFfynLyS65WXcZOlV5cZyWPvs8K59p6lkB1hvMohGphBjw9S
-	 QhMMekBnpfpKshr1+/r9jOzUnR5JyyyqlReMTTKTW7h3vr3mUBywge/7NQPsQWTbgs0nO
-	 nxFr5RnsGXMKqP2rDpLiCCIVsKAIC+6zMDs3kXQUlgBLneGXFlN+lsd3Z9SO3PPwfog==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HWH_HUqOrGoL; Fri, 27 Nov 2026 11:25:22 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org A3A9A81187
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795778722;
+	b=X7/PoFS6W4dNL+DHlQjQMCDoYMQBnANPjGhaudyCig+BZJQYQWWnDkb9yHn81nzSd2A/
+	 MvvrlVlirUpFb+rlnJLKW9aM68rWaJjtUI4bipDhXqwWETnq4+CpB7RGiHo4D5Ewbzb46
+	 a1IYfEGtLIlycqHdCmPOe3BWmf1YWy4fyaPgj+0UekJEpOmWxH4lHOtlKnyURCA7R4Ok2
+	 JhVXT7DRB8mjl4aZpuRVeo/RM8u/tT8fvlNFqP45t5MrRYwR/M4Nu8tnHH5G9UiMLOUPq
+	 aPzllwz5T6+cHHMJzXSn5V0aPoC4X0I8kaoztYvZSmhOlk6OMB8mHnfDM28qiyGPrtQ==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795778721;
+	c=relaxed/relaxed; t=1795778722;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:Received:
@@ -33,120 +33,120 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 Precedence:List-Id:List-Unsubscribe:List-Archive:List-Post:List-Help:
 	 List-Subscribe:Content-Type:Content-Transfer-Encoding:Errors-To:
 	 Sender;
-	bh=IBQtFcmGdviUX9U4EbOL6LG9vuvKGqeo8jd379c1ATk=;
-	b=M2pNZ4y6WO8hpB4E69FKUmRxlt23GzEm+IujvFcGmkI2vc7iDzOCL4s+lFwj+yDz9xhI
-	 t21g09FoZxJC+YsZsxInn/uuza17xx5Zc88qgr5ZG9YMPT/DIPJZUzKonmCf2u08AYOvi
-	 Fjx4Z8kA+AxJtadAJ03uu9mtYJMfBPL/w5knYYgl/jayw0OLTy1j2TpgSYkPemHpEiggT
-	 g8rgZg/nFzmFYJPKTKTnMh4YdtwgK8EeGxROlikzDdyhhj46h1nI1VmGmSl+F6/WG3Tu8
-	 TukRrlfU5coSF42NJYj3OnNn3Ra7bfVOTmgvMmAid3ryjycXwvmoPzSegaJshX0oUEw==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+	bh=kBKhasq6Mn3k+hqUwe/+K7mWdcUASlBiE6e56c3T/qo=;
+	b=Y/ZsVnBUaf/Z3Yn/M7K+C/7KKbHNxCZACdubuTNY1dNza4hlQmDv7Oses5s+EL7a9kl1
+	 QHEGeQi4kwNFFpddOP58Hg/GXaC0IrJJwp++E3r9mpSX/JNpGtLXMR+auRzM5qsf1gFdT
+	 r9MZh2eySAjKADPcpaycaze/QbBeDAG2zGcA0rurn77YqvKb87AtjlHb28PbP1RIppEiz
+	 df5CvPiYwVePG0Ql7FJJRD24tvVG46/DbKnpPJBj7Z/mUOMjaURkFYsKSlreQfrzwJTt0
+	 h4mO9kbLggdIZUh9OUpSpbccM+qJSTi0HHEh974fb9rGa45CXxSt+4mSLBB8NPOWR5g==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795778721;
-	bh=IBQtFcmGdviUX9U4EbOL6LG9vuvKGqeo8jd379c1ATk=;
+	s=default; t=1795778722;
+	bh=kBKhasq6Mn3k+hqUwe/+K7mWdcUASlBiE6e56c3T/qo=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=VEX+Gh3O3z2D2So6Z+g8Ij2zFvuWovM8TBa24LoQYamkTQqXqDx/FUEF73uEly2ED
-	 sR41MuWYO6b1MZxma0eUvM2Zd412s7DXhynscRvWzxSwfXFfwJhGUdxHHuZTJkT+Uj
-	 MRw8nRwlJeX/SYvuTqLcJWEr8IiSoCrukVYm1+L/iWMXx51shodfv0+zM43UxCXW83
-	 9kIapOG/fIJ2DkgajAMGBodBCaEKGUBoTu02S5+pwvBB7PfBCVrsgg+gEGoyo4VUeK
-	 CQisDJNdkDKChdfFfLQEL0mHE1Yw/MJXkgoDW4ywNfB1QwYrv+GpwXGSxfXP7sULZB
-	 mys12TbZc4Exg==
+	b=iH8k3oQS9v6llViihBG9dXOn2fRtukVesyW1uf2MvqygYjS8X7I79sl+6VYTQtZ9g
+	 Tm/T6vL4LZ/5i5KJS0AZfO8K6rxLXDhZxic1cnNRM5jRLmLuacT4j+XjwYx9HsAgED
+	 YgtuImEjXrl7SxqFvalywN+qICCw0PKWxCao2HSaEF+n/xynHTBNRiD/LdvT7o3zh1
+	 yv+b3HFOHO4K3iBbvCSDIRsxXuUOjreMYbwH/xTOwsm3/OuAgrfOQmq/rRY6Aaj1a/
+	 DaBTwNpzXtP9b4PuClOUl/nh3L0t63ZqEqBAeOiS0r1gyHqolaRVriEZN85nsjTgNC
+	 l1kh5mhix5zDw==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B55D60B04;
-	Fri, 27 Nov 2026 11:25:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A3A9A81187;
+	Fri, 27 Nov 2026 11:25:22 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [IPv6:2605:bc80:3010::133])
- by lists1.osuosl.org (Postfix) with ESMTP id B325ABEC
- for <buildroot@buildroot.org>; Fri, 27 Nov 2026 11:25:14 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 18066D1
+ for <buildroot@buildroot.org>; Fri, 27 Nov 2026 11:25:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 997BB40571
- for <buildroot@buildroot.org>; Fri, 27 Nov 2026 11:25:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 07F314004D
+ for <buildroot@buildroot.org>; Fri, 27 Nov 2026 11:25:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aN8xdi5RcSsV for <buildroot@buildroot.org>;
- Fri, 27 Nov 2026 11:25:13 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 850B340249
+ id tnHUHfsr6qy2 for <buildroot@buildroot.org>;
+ Fri, 27 Nov 2026 11:25:14 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp2.osuosl.org 218A44008B
 Authentication-Results: smtp2.osuosl.org;
- arc=none smtp.remote-ip="2a00:1450:4864:20::62d"
+ arc=none smtp.remote-ip="2a00:1450:4864:20::62b"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62d; helo=mail-ej1-x62d.google.com;
+ client-ip=2a00:1450:4864:20::62b; helo=mail-ej1-x62b.google.com;
  envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
 Authentication-Results: smtp2.osuosl.org; dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
 Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=POE/42px
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 850B340249
- for <buildroot@buildroot.org>; Fri, 27 Nov 2026 11:25:12 +0000 (UTC)
-Received: by mail-ej1-x62d.google.com with SMTP id
- a640c23a62f3a-c407213696aso103992566b.0
- for <buildroot@buildroot.org>; Fri, 27 Nov 2026 03:25:12 -0800 (PST)
+ header.b=VtcnyIws
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 218A44008B
+ for <buildroot@buildroot.org>; Fri, 27 Nov 2026 11:25:13 +0000 (UTC)
+Received: by mail-ej1-x62b.google.com with SMTP id
+ a640c23a62f3a-c505a0acbc1so84792866b.2
+ for <buildroot@buildroot.org>; Fri, 27 Nov 2026 03:25:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1795778710; x=1796383510;
+ d=amarulasolutions.com; s=google; t=1795778712; x=1796383512;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to:content-type;
- bh=AD69C5nexzZh1vUF7KA08D8lPr29+rNxIEeD94k6aOo=;
- b=POE/42pxMD9y9tg0kZWMglhrcKHRkiovlxbEJHtnyW9ByCxzonOBxMkd/h9evgaIuI
- F1J7I6NklWH5YiNL6EvNQkENS8yD7QyBwZRMcEPm6WrDsTrkpdCmKfl041IjqNEWjK0k
- TYyXSH2fN709KwBK6zJxZ+00tHTk8SofovHWg=
+ bh=aehRKiqv7aXABsnmJD/RaVQYvujamPasXc+M/yP5jH0=;
+ b=VtcnyIwsGio/RG2WUOlzYOY8H1Pfqzn5SVijX3zs+JTZvPaeTl4ULaziRodM9611JA
+ rw7RYMOHDkEe0XCmupCo5x+yRRRuUmwrtiycS5cXgo5c7YdhIBZ7i/zMBGD3MglG4SxH
+ CpspJTzI+lE/jw0qOr045SwlGQtRk6LlBThxI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20260707; t=1795778710; x=1796383510;
+ d=1e100.net; s=20260707; t=1795778712; x=1796383512;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
  :to:cc:subject:date:message-id:reply-to:content-type;
- bh=AD69C5nexzZh1vUF7KA08D8lPr29+rNxIEeD94k6aOo=;
- b=x82cVALo9sCyBLOe+ZxPKLO67UhyM/nGB5vAb3b91MN3kQLS7eGmHOYXoOMm5mw5ip
- z/KPxhc7BQOafGfouvAN0UFT3n3lsY+UwiIEYgCToW6gYC2G+qe45fB1K8b4/k91/nEN
- REAN2XVMJFRr77NhWzQ0xmn3Jk//8PiTskQg8Kk9zWwUxIiAWpYlFp6hMXMGhk+LU1zA
- z6HKlIH98NzAxMdQwcgCWRtUFcSoybMHcJoGQ9sfF/rUHwpG67wL3GMc1H0CuDv3ta+Q
- wJgVNTfF1lwVc0mSF99vDJXvmIZVydgm0BI0LGAbYW4IzoeZbmmaWtUkGcxMUNScQmva
- U6OQ==
-X-Gm-Message-State: APuU4Z+2abY2gRn7w87YvTCxKaNkt00q8ydGkQiXr4s/TjHIOAmSoklx
- lUSPQyvVHh27sbjdiDAGbEQTvlm441oZvGdZvNeuFD+HBbNcevHR6V1iL0UIN5tPpwnUNZv3hiy
- yt3lXQ7w=
-X-Gm-Gg: AZFdTZc1sDWJlq3hwgr9V4tq84Rwa3Pzu9t3g/Kd+EjhlrYuQCwYbiKG/g53zTI1po9
- DzRUsHgnnJMxES5Yxooe8nWkjpvJqsSuFhkGct3xi2imsCpiX6u/SwDwIMgWkqUd8oVpvRfaY/c
- 1g3Uw06ky+3f/vel7o4f8EBHgs0NcFRxK/bK7jcAMKyTsb1mNtbyu4E+xXJOS7oQS0H8FWVizLa
- 56EPHl7V5p4WIzYxi3B0L81WUeAGRtjLnbguAKjC3L1SCDP1Ui6LkDnDPgjeLcwRma5LwfTSpnj
- MqnaQrh712dLoSbOstQq8//2HqnH8lS8xS0dD0x+OxIlFS6/5ZMaAXhzJiYxmk7oFJG+npv1ee4
- mVha0/Ib9ZI1a9LnDTHnYAyLMlf/ZX4lYlU4yT3/G6s+UGaF8m/OvFi9fxoMGezwo47oxHGE8WQ
- LWSaQbNX5Erut8vD5+K+kbDixcAAit1YJi9YRXZqjwM4Ex870jwKpMuC120BJjBsUR3SUVzYpFs
- KoAdxyq+xurvXc3Ii6+KimP11LeWKd5Ys+N8X1O8MFcBznFkZ2yLpivPqykxqt3sq8RutKzIeze
- F+ZckUIHDiTp/R+PN1ctAnoDrLq0Tdrw94mW5WLK6tbVYDl9Mq90woi6AAzvvyO5+op9amczcNl
- PVomUAoSeYJuRdn/5uCf3Lt0A2I6Z93m1yOtZKiTWMGDBKxizPhOQ3GBivBhU3Fuqa69S5szdoZ
- iJV/B7vhEQlg1EM1byHHWuYgx59hgyrIotwSAz8jAz21zcYBPrghQhX0poYxv1qj8E4XmQcLr4C
- RopPHS42BujVuELIoBVl+e9sB9P55TUeuLzTzL+LqpuyP9XD3jx
-X-Received: by 2002:a17:906:811:b0:c51:356c:2657 with SMTP id
- a640c23a62f3a-c513a567c14mr1938167966b.3.1795778710445; 
- Fri, 27 Nov 2026 03:25:10 -0800 (PST)
+ bh=aehRKiqv7aXABsnmJD/RaVQYvujamPasXc+M/yP5jH0=;
+ b=ca1VBsJPFpDQe5qLHLzGGWSwHjPX2gwctL53eUJpg8ODKi5GxLvOus8PMbtmacvydS
+ HKDqokcVPvo5O3X5eurSfRlbMEocnURgHrr88wbAbRUt84stCFuoDWpafht6/uS1JXut
+ UW9tteVAclSTehzeQ+AbOHEbk4Mvph91n7jZXj20lkRjyl9xaVv8f70BjdOnXRlqtGk3
+ t2PUlZxHh2O9ywUUvYYoE+sxeV1SPZVNMr3jyfs2o8Re3lqPND2mIyOl9FVDDDqXLb4f
+ 3X8lw1Yv5ciFKGCY0Y2L4QzV6bRVDF4GV695xamXyEWyS+FRn4zSnYLqEw39qgswMa56
+ JcMw==
+X-Gm-Message-State: APuU4Z/JRHIWrvC3eKNPbrujDqG20tjQpn5wI7iH1YXB1HwRAUpWbmKo
+ BQv4OiijgGaqA7r5VxabWAG2wrwOgs4xTtqApyXdB4NePVMjmdVGVxfDkOw4NiFHUanR2XG1K/w
+ tkYOdyXw=
+X-Gm-Gg: AZFdTZeAuH4cxoBeYj37ttYUVJWoYvToy2L7LjesadHmR8SExAfrxszqDY4+4yxBVnZ
+ 7OlRLqq3pUUXhu7uMJ/yKfB5hjpuMQX084Yc7QJHIHaeuOMr/U7Fj7YNsD5GpNWTsnHKj6FUsx5
+ tL5zXf86G15el7iExF0AmYBnrNDS1WmVD3eYi2EUcYzEaZQzDvn25dcF+CG6AvFIinBQDB3zRQu
+ f1fMPQ4433xzN1SXdnIWaOD/8jkuJytctH6+YBqJAAEP25P9lzWdMz9bzKPfDr9n+EWYCUvgvt3
+ vjbKxf1qSGdvuvXGgkJB85xEAQBxBK4Dh8uQ/ISOoFy05tCKHuwGJ+FO4XftIoz5xzzTPXMPozr
+ jn9be4c2I2eDfdLXy2naI5mx2jYuMEHbwq6qThZ+wWoAZj9TMDMPPhUnvFBnt6kMY23IDUWTKW8
+ ZD4+FOyt/GM6bvqsO0AJUOOlMj5FJPVkPcni+mlSpNVBkfpLTIdZDnB36ph0adBJFeTVvvnKQk6
+ iscbk2DPaa/+yK+Gnx2FobvzSfpCOYGNm1tTmsc9HTlx5p8LZfu4tFXZMBL93XXHsAymL3w2wBd
+ RhOAGFrz+4IZMuPFex4NY23q2MtBgs2VsB85J1p+v4ntIcyw0coxHAEFkEy4AUnJYyuxBXVu4QL
+ rup01PGKPQtAaWkNjxDs+p2J0G0YPSE3GneaHLPw3xd8a0eCnaBFQEoInPpxjIv1ICK1H43RarT
+ 8gWe5lCMY3glraN7Ip4fpz/qvHoZI8v7szjlnIBw8Y4LXLa35eJQoMWDrmJVOWrGMemm9DhYzj2
+ DbwbcTFqqFn0F3DNBezmFTCN1vqJ4VV8x7QZedg48zGUDnHBCTh
+X-Received: by 2002:a17:906:ad93:b0:c41:8e21:4d62 with SMTP id
+ a640c23a62f3a-c513a4391ffmr1727452166b.1.1795778711895; 
+ Fri, 27 Nov 2026 03:25:11 -0800 (PST)
 Received: from adam-linux.arnhem.chello.nl
  (2001-1c00-8181-e800-dc0e-c162-ac5f-4bbe.cable.dynamic.v6.ziggo.nl.
  [2001:1c00:8181:e800:dc0e:c162:ac5f:4bbe])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-c513aea3701sm885808166b.48.2026.11.27.03.25.09
+ a640c23a62f3a-c513aea3701sm885808166b.48.2026.11.27.03.25.11
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 27 Nov 2026 03:25:09 -0800 (PST)
+ Fri, 27 Nov 2026 03:25:11 -0800 (PST)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
 Cc: Adam Duskett <adam.duskett@amarulasolutions.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Fri, 27 Nov 2026 12:25:04 +0100
-Message-ID: <20261127112507.2594905-3-adam.duskett@amarulasolutions.com>
+Date: Fri, 27 Nov 2026 12:25:06 +0100
+Message-ID: <20261127112507.2594905-5-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.56.1
 In-Reply-To: <20261127112507.2594905-1-adam.duskett@amarulasolutions.com>
 References: <20261127112507.2594905-1-adam.duskett@amarulasolutions.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
-Subject: [Buildroot] [PATCH v2 3/6] package/flutter-packages: bump to
- version f455dfa6
+Subject: [Buildroot] [PATCH v2 5/6] package/ivi-homescreen: bump to version
+ 950f7a5a
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -167,453 +167,1013 @@ X-Spam-Status: No, score=-21.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-Upstream removed the following on commit 4e4cddd1:
- - flutter_adaptive_scaffold,
- - flutter_image
- - flutter_markdown
+This switches from the v1.0 branch to the v3.0 branch, which is now the
+default upstream branch and a rewrite of the embedder:
 
-Update LICENSE hash due to "All rights reserved." being dropped from the
-copyright line.
+- The plugins were moved out of tree to a separate `ivi-homescreen-plugins`
+  repository. Build with DISABLE_PLUGINS=ON for now, and add legacy
+  entries for the removed plugin options. Functionality such as text
+  input, logging, mouse cursor and platform views is now part of the
+  core embedder.
 
-As the flutter-markdown-example package is removed, switch the runtime
-test to flutter-animations-example.
+- The Dart VM logging option was removed upstream.
+
+- Third-party dependencies are now git submodules, so enable
+  IVI_HOMESCREEN_GIT_SUBMODULES and update the license files.
+
+- The Wayland bindings are generated at build time by
+  wayland-cxx-scanner, a bundled submodule that must be available as a
+  host tool when cross-compiling. Build it from the bundled sources in
+  a pre-configure hook, so that the generator always matches the
+  header-only framework the embedder is built against. It needs
+  host-pugixml, and a host gcc >= 9, as it uses std::filesystem
+  without linking with -lstdc++fs.
+
+- The Wayland EGL backend is now always built, hence the package now
+  requires EGL and OpenGL ES. The Wayland Vulkan backend is built when
+  vulkan-loader is available. The backend is selected at runtime. Both
+  backends need libdrm, and libgbm is used when available.
+
+- Add options for the agl-shell and simple-shell clients, and for the
+  xdg-shell client, which is enabled by default as before.
+
+- Add a choice for the Wayland text input protocol, which must match
+  the one supported by the compositor.
+
+- Build the internal libraries statically with BUILD_SHARED_LIBS=OFF,
+  as upstream intends: they are linked into the homescreen binary, and
+  building them shared creates a CMake dependency cycle once plugins
+  are enabled. libihs_shared is explicitly a shared library and is
+  unaffected.
+
+- wayland-utils is no longer needed.
+
+- The ihs_shared library is now built and installed alongside the
+  homescreen binary, so install to staging as well.
+
+- Drop 0001-add-missing-headers-to-the-audio-players-and-keyboar.patch,
+  as the plugins it patched are no longer in this repository.
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Co-Authored-By: Claude Opus 5.5
 ---
-v1 -> v2: fix new license hash [thomas]
-
- Config.in.legacy                              | 24 +++++++++
- DEVELOPERS                                    |  3 --
- package/flutter-packages/Config.in            |  3 --
- .../Config.in                                 |  8 ---
- .../flutter-adaptive-scaffold-example.hash    |  1 -
- .../flutter-adaptive-scaffold-example.mk      | 54 -------------------
- .../flutter-image-example/Config.in           |  8 ---
- .../flutter-image-example.hash                |  1 -
- .../flutter-image-example.mk                  | 54 -------------------
- .../flutter-markdown-example/Config.in        |  7 ---
- .../flutter-markdown-example.hash             |  1 -
- .../flutter-markdown-example.mk               | 54 -------------------
- .../flutter-packages/flutter-packages.hash    |  4 +-
- package/flutter-packages/flutter-packages.mk  |  2 +-
- support/testing/tests/package/test_flutter.py | 10 ++--
- .../system/flutter-animations-example.service |  9 ++++
- .../system/flutter-markdown-example.service   |  9 ----
- 17 files changed, 41 insertions(+), 211 deletions(-)
- delete mode 100644 package/flutter-packages/flutter-adaptive-scaffold-example/Config.in
- delete mode 120000 package/flutter-packages/flutter-adaptive-scaffold-example/flutter-adaptive-scaffold-example.hash
- delete mode 100644 package/flutter-packages/flutter-adaptive-scaffold-example/flutter-adaptive-scaffold-example.mk
- delete mode 100644 package/flutter-packages/flutter-image-example/Config.in
- delete mode 120000 package/flutter-packages/flutter-image-example/flutter-image-example.hash
- delete mode 100644 package/flutter-packages/flutter-image-example/flutter-image-example.mk
- delete mode 100644 package/flutter-packages/flutter-markdown-example/Config.in
- delete mode 120000 package/flutter-packages/flutter-markdown-example/flutter-markdown-example.hash
- delete mode 100644 package/flutter-packages/flutter-markdown-example/flutter-markdown-example.mk
- create mode 100644 support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-animations-example.service
- delete mode 100644 support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-markdown-example.service
+ Config.in.legacy                              | 227 +++++++++++++++
+ ...ers-to-the-audio-players-and-keyboar.patch | 104 -------
+ package/ivi-homescreen/Config.in              | 262 ++++--------------
+ package/ivi-homescreen/ivi-homescreen.hash    |  18 +-
+ package/ivi-homescreen/ivi-homescreen.mk      | 185 ++++++-------
+ 5 files changed, 389 insertions(+), 407 deletions(-)
+ delete mode 100644 package/ivi-homescreen/0001-add-missing-headers-to-the-audio-players-and-keyboar.patch
 
 diff --git a/Config.in.legacy b/Config.in.legacy
-index bfd03f92b6..9f15bbd4ce 100644
+index 9f15bbd4ce..d941d62b5e 100644
 --- a/Config.in.legacy
 +++ b/Config.in.legacy
-@@ -146,6 +146,30 @@ endif
+@@ -146,6 +146,233 @@ endif
  
  comment "Legacy options removed in 2027.02"
  
-+config BR2_PACKAGE_FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE
-+	bool "flutter adaptive scaffold example has been removed"
++config BR2_PACKAGE_IVI_HOMESCREEN_DART_VM_LOGGING
++	bool "ivi-homescreen Dart VM logging removed"
 +	select BR2_LEGACY
 +	help
-+	  The flutter adaptive scaffold package was discontinued and
-+	  removed from flutter-packages as of commit
-+	  4e4cddd1dcc06f03aaf9af23e7d46816ca8800c8.
++	  The Dart VM logging option was removed from ivi-homescreen
++	  3.0.
 +
-+config BR2_PACKAGE_FLUTTER_IMAGE_EXAMPLE
-+	bool "flutter image example has been removed"
++config BR2_PACKAGE_IVI_HOMESCREEN_ACCESSIBILITY_PLUGIN
++	bool "ivi-homescreen Accessibility plugin removed"
 +	select BR2_LEGACY
 +	help
-+	  The flutter image package was discontinued and
-+	  removed from flutter-packages as of commit
-+	  4e4cddd1dcc06f03aaf9af23e7d46816ca8800c8.
++	  ivi-homescreen 3.0 no longer has in-tree plugins, they have
++	  moved to the separate ivi-homescreen-plugins repository,
++	  which is not supported yet. Built-in functionality such as
++	  text input, logging, mouse cursor and platform views is now
++	  part of the core embedder.
 +
-+config BR2_PACKAGE_FLUTTER_MARKDOWN_EXAMPLE
-+	bool "flutter markdown example has been removed"
++config BR2_PACKAGE_IVI_HOMESCREEN_COMP_REGION_PLUGIN
++	bool "ivi-homescreen Compositor Region plugin removed"
 +	select BR2_LEGACY
 +	help
-+	  The flutter markdown package was discontinued and
-+	  removed from flutter-packages as of commit
-+	  4e4cddd1dcc06f03aaf9af23e7d46816ca8800c8.
++	  ivi-homescreen 3.0 no longer has in-tree plugins, they have
++	  moved to the separate ivi-homescreen-plugins repository,
++	  which is not supported yet. Built-in functionality such as
++	  text input, logging, mouse cursor and platform views is now
++	  part of the core embedder.
 +
- config BR2_PACKAGE_RTL8812AU_AIRCRACK_NG
- 	bool "rtl8812au-aircrack-ng has been renamed to rtl8812au"
++config BR2_PACKAGE_IVI_HOMESCREEN_COMP_SURF_PLUGIN
++	bool "ivi-homescreen Compositor Surface plugin removed"
++	select BR2_LEGACY
++	help
++	  ivi-homescreen 3.0 no longer has in-tree plugins, they have
++	  moved to the separate ivi-homescreen-plugins repository,
++	  which is not supported yet. Built-in functionality such as
++	  text input, logging, mouse cursor and platform views is now
++	  part of the core embedder.
++
++config BR2_PACKAGE_IVI_HOMESCREEN_DESKTOP_WINDOW_PLUGIN
++	bool "ivi-homescreen Desktop Window plugin removed"
++	select BR2_LEGACY
++	help
++	  ivi-homescreen 3.0 no longer has in-tree plugins, they have
++	  moved to the separate ivi-homescreen-plugins repository,
++	  which is not supported yet. Built-in functionality such as
++	  text input, logging, mouse cursor and platform views is now
++	  part of the core embedder.
++
++config BR2_PACKAGE_IVI_HOMESCREEN_GO_ROUTER_PLUGIN
++	bool "ivi-homescreen Go Router plugin removed"
++	select BR2_LEGACY
++	help
++	  ivi-homescreen 3.0 no longer has in-tree plugins, they have
++	  moved to the separate ivi-homescreen-plugins repository,
++	  which is not supported yet. Built-in functionality such as
++	  text input, logging, mouse cursor and platform views is now
++	  part of the core embedder.
++
++config BR2_PACKAGE_IVI_HOMESCREEN_INTEGRATION_TEST_PLUGIN
++	bool "ivi-homescreen Integration Test plugin removed"
++	select BR2_LEGACY
++	help
++	  ivi-homescreen 3.0 no longer has in-tree plugins, they have
++	  moved to the separate ivi-homescreen-plugins repository,
++	  which is not supported yet. Built-in functionality such as
++	  text input, logging, mouse cursor and platform views is now
++	  part of the core embedder.
++
++config BR2_PACKAGE_IVI_HOMESCREEN_ISOLATE_PLUGIN
++	bool "ivi-homescreen Isolate plugin removed"
++	select BR2_LEGACY
++	help
++	  ivi-homescreen 3.0 no longer has in-tree plugins, they have
++	  moved to the separate ivi-homescreen-plugins repository,
++	  which is not supported yet. Built-in functionality such as
++	  text input, logging, mouse cursor and platform views is now
++	  part of the core embedder.
++
++config BR2_PACKAGE_IVI_HOMESCREEN_KEYBOARD_MANAGER_PLUGIN
++	bool "ivi-homescreen Keyboard Manager plugin removed"
++	select BR2_LEGACY
++	help
++	  ivi-homescreen 3.0 no longer has in-tree plugins, they have
++	  moved to the separate ivi-homescreen-plugins repository,
++	  which is not supported yet. Built-in functionality such as
++	  text input, logging, mouse cursor and platform views is now
++	  part of the core embedder.
++
++config BR2_PACKAGE_IVI_HOMESCREEN_KEY_EVENT_PLUGIN
++	bool "ivi-homescreen Key Event plugin removed"
++	select BR2_LEGACY
++	help
++	  ivi-homescreen 3.0 no longer has in-tree plugins, they have
++	  moved to the separate ivi-homescreen-plugins repository,
++	  which is not supported yet. Built-in functionality such as
++	  text input, logging, mouse cursor and platform views is now
++	  part of the core embedder.
++
++config BR2_PACKAGE_IVI_HOMESCREEN_LAYER_PLAYGROUND_PLUGIN
++	bool "ivi-homescreen Layer Playground plugin removed"
++	select BR2_LEGACY
++	help
++	  ivi-homescreen 3.0 no longer has in-tree plugins, they have
++	  moved to the separate ivi-homescreen-plugins repository,
++	  which is not supported yet. Built-in functionality such as
++	  text input, logging, mouse cursor and platform views is now
++	  part of the core embedder.
++
++config BR2_PACKAGE_IVI_HOMESCREEN_LOGGING_PLUGIN
++	bool "ivi-homescreen Logging plugin removed"
++	select BR2_LEGACY
++	help
++	  ivi-homescreen 3.0 no longer has in-tree plugins, they have
++	  moved to the separate ivi-homescreen-plugins repository,
++	  which is not supported yet. Built-in functionality such as
++	  text input, logging, mouse cursor and platform views is now
++	  part of the core embedder.
++
++config BR2_PACKAGE_IVI_HOMESCREEN_MOUSE_CURSOR_PLUGIN
++	bool "ivi-homescreen Mouse Cursor plugin removed"
++	select BR2_LEGACY
++	help
++	  ivi-homescreen 3.0 no longer has in-tree plugins, they have
++	  moved to the separate ivi-homescreen-plugins repository,
++	  which is not supported yet. Built-in functionality such as
++	  text input, logging, mouse cursor and platform views is now
++	  part of the core embedder.
++
++config BR2_PACKAGE_IVI_HOMESCREEN_PACKAGE_INFO_PLUGIN
++	bool "ivi-homescreen PackageInfo plugin removed"
++	select BR2_LEGACY
++	help
++	  ivi-homescreen 3.0 no longer has in-tree plugins, they have
++	  moved to the separate ivi-homescreen-plugins repository,
++	  which is not supported yet. Built-in functionality such as
++	  text input, logging, mouse cursor and platform views is now
++	  part of the core embedder.
++
++config BR2_PACKAGE_IVI_HOMESCREEN_PLATFORM_PLUGIN
++	bool "ivi-homescreen Platform plugin removed"
++	select BR2_LEGACY
++	help
++	  ivi-homescreen 3.0 no longer has in-tree plugins, they have
++	  moved to the separate ivi-homescreen-plugins repository,
++	  which is not supported yet. Built-in functionality such as
++	  text input, logging, mouse cursor and platform views is now
++	  part of the core embedder.
++
++config BR2_PACKAGE_IVI_HOMESCREEN_PLATFORM_VIEWS_PLUGIN
++	bool "ivi-homescreen Platform Views plugin removed"
++	select BR2_LEGACY
++	help
++	  ivi-homescreen 3.0 no longer has in-tree plugins, they have
++	  moved to the separate ivi-homescreen-plugins repository,
++	  which is not supported yet. Built-in functionality such as
++	  text input, logging, mouse cursor and platform views is now
++	  part of the core embedder.
++
++config BR2_PACKAGE_IVI_HOMESCREEN_RESTORATION_PLUGIN
++	bool "ivi-homescreen Restoration plugin removed"
++	select BR2_LEGACY
++	help
++	  ivi-homescreen 3.0 no longer has in-tree plugins, they have
++	  moved to the separate ivi-homescreen-plugins repository,
++	  which is not supported yet. Built-in functionality such as
++	  text input, logging, mouse cursor and platform views is now
++	  part of the core embedder.
++
++config BR2_PACKAGE_IVI_HOMESCREEN_TEXT_INPUT_PLUGIN
++	bool "ivi-homescreen Text Input plugin removed"
++	select BR2_LEGACY
++	help
++	  ivi-homescreen 3.0 no longer has in-tree plugins, they have
++	  moved to the separate ivi-homescreen-plugins repository,
++	  which is not supported yet. Built-in functionality such as
++	  text input, logging, mouse cursor and platform views is now
++	  part of the core embedder.
++
++config BR2_PACKAGE_IVI_HOMESCREEN_AUDIO_PLAYERS
++	bool "ivi-homescreen Audio Players plugin removed"
++	select BR2_LEGACY
++	help
++	  ivi-homescreen 3.0 no longer has in-tree plugins, they have
++	  moved to the separate ivi-homescreen-plugins repository,
++	  which is not supported yet. Built-in functionality such as
++	  text input, logging, mouse cursor and platform views is now
++	  part of the core embedder.
++
++config BR2_PACKAGE_IVI_HOMESCREEN_FLUTTER_SECURE_STORAGE_PLUGIN
++	bool "ivi-homescreen Flutter Secure Storage plugin removed"
++	select BR2_LEGACY
++	help
++	  ivi-homescreen 3.0 no longer has in-tree plugins, they have
++	  moved to the separate ivi-homescreen-plugins repository,
++	  which is not supported yet. Built-in functionality such as
++	  text input, logging, mouse cursor and platform views is now
++	  part of the core embedder.
++
++config BR2_PACKAGE_IVI_HOMESCREEN_GOOGLE_SIGN_IN_PLUGIN
++	bool "ivi-homescreen Google Sign In plugin removed"
++	select BR2_LEGACY
++	help
++	  ivi-homescreen 3.0 no longer has in-tree plugins, they have
++	  moved to the separate ivi-homescreen-plugins repository,
++	  which is not supported yet. Built-in functionality such as
++	  text input, logging, mouse cursor and platform views is now
++	  part of the core embedder.
++
++config BR2_PACKAGE_IVI_HOMESCREEN_GSTREAMER_EGL_PLUGIN
++	bool "ivi-homescreen GStreamer EGL plugin removed"
++	select BR2_LEGACY
++	help
++	  ivi-homescreen 3.0 no longer has in-tree plugins, they have
++	  moved to the separate ivi-homescreen-plugins repository,
++	  which is not supported yet. Built-in functionality such as
++	  text input, logging, mouse cursor and platform views is now
++	  part of the core embedder.
++
++config BR2_PACKAGE_IVI_HOMESCREEN_OPENGL_TEXTURE_PLUGIN
++	bool "ivi-homescreen OpenGL Texture plugin removed"
++	select BR2_LEGACY
++	help
++	  ivi-homescreen 3.0 no longer has in-tree plugins, they have
++	  moved to the separate ivi-homescreen-plugins repository,
++	  which is not supported yet. Built-in functionality such as
++	  text input, logging, mouse cursor and platform views is now
++	  part of the core embedder.
++
+ config BR2_PACKAGE_FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE
+ 	bool "flutter adaptive scaffold example has been removed"
  	select BR2_LEGACY
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e0d43b4519..cc28f6f67a 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -30,11 +30,8 @@ N:	Adam Duskett <adam.duskett@amarulasolutions.com>
- F:	package/depot-tools/
- F:	package/flutter-engine/
- F:	package/flutter-packages/
--F:	package/flutter-packages/flutter-adaptive-scaffold-example/
- F:	package/flutter-packages/flutter-animations-example/
- F:	package/flutter-packages/flutter-go-router-example/
--F:	package/flutter-packages/flutter-image-example/
--F:	package/flutter-packages/flutter-markdown-example/
- F:	package/flutter-packages/flutter-rfw-local-example/
- F:	package/flutter-pi/
- F:	package/flutter-sdk-bin/
-diff --git a/package/flutter-packages/Config.in b/package/flutter-packages/Config.in
-index 88d9193608..93eaf69697 100644
---- a/package/flutter-packages/Config.in
-+++ b/package/flutter-packages/Config.in
-@@ -7,11 +7,8 @@ menuconfig BR2_PACKAGE_FLUTTER_PACKAGES
- 	  First-party Flutter package examples.
+diff --git a/package/ivi-homescreen/0001-add-missing-headers-to-the-audio-players-and-keyboar.patch b/package/ivi-homescreen/0001-add-missing-headers-to-the-audio-players-and-keyboar.patch
+deleted file mode 100644
+index 0d308b786b..0000000000
+--- a/package/ivi-homescreen/0001-add-missing-headers-to-the-audio-players-and-keyboar.patch
++++ /dev/null
+@@ -1,104 +0,0 @@
+-From 7e35ea4fbd94a1604907069bb9cc2e2dff4b43c7 Mon Sep 17 00:00:00 2001
+-From: Adam Duskett <adam.duskett@amarulasolutions.com>
+-Date: Sat, 6 Jan 2024 14:18:56 -0700
+-Subject: [PATCH] add missing headers to the audio-players and keyboard_manager
+- plugin
+-
+-Fixes flutter::StandardMethodCodec not being declared on the following lines:
+-plugins/audio_players/audio_players_registry.cc:83
+-plugins/audio_players/audio_players_registry.cc:94
+-plugins/audio_players/audio_players_registry.cc:152
+-plugins/audio_players/audio_player.cc:257
+-plugins/audio_players/audio_player.cc:623
+-plugins/keyboard_manager/keyboard_manager.cc:25
+-
+-Upstream: https://github.com/toyota-connected/ivi-homescreen/pull/133
+-
+-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+----
+- shell/plugins/audio_players/audio_player.cc           | 3 ++-
+- shell/plugins/audio_players/audio_players.cc          | 4 +++-
+- shell/plugins/audio_players/audio_players_registry.cc | 3 ++-
+- shell/plugins/keyboard_manager/keyboard_manager.h     | 3 ++-
+- 4 files changed, 9 insertions(+), 4 deletions(-)
+-
+-diff --git a/shell/plugins/audio_players/audio_player.cc b/shell/plugins/audio_players/audio_player.cc
+-index 56027eb..a85e9ae 100644
+---- a/shell/plugins/audio_players/audio_player.cc
+-+++ b/shell/plugins/audio_players/audio_player.cc
+-@@ -20,6 +20,7 @@
+- #include <map>
+- #include <sstream>
+- 
+-+#include <flutter/standard_method_codec.h>
+- #include <flutter/standard_message_codec.h>
+- 
+- #include <gst/audio/audio.h>
+-@@ -639,4 +640,4 @@ void AudioPlayer::OnPlatformMessage(const FlutterPlatformMessage* message,
+-   engine->SendPlatformMessageResponse(message->response_handle, result->data(),
+-                                       result->size());
+- }
+--}  // namespace Plugins
+-\ No newline at end of file
+-+}  // namespace Plugins
+-diff --git a/shell/plugins/audio_players/audio_players.cc b/shell/plugins/audio_players/audio_players.cc
+-index 0605576..4290f5a 100644
+---- a/shell/plugins/audio_players/audio_players.cc
+-+++ b/shell/plugins/audio_players/audio_players.cc
+-@@ -19,6 +19,8 @@
+- #include <memory>
+- #include <vector>
+- 
+-+#include <flutter/standard_method_codec.h>
+-+
+- #include "audio_player.h"
+- #include "audio_players_registry.h"
+- #include "engine.h"
+-@@ -314,4 +316,4 @@ void AudioPlayers::OnPlatformMessage(const FlutterPlatformMessage* message,
+-               : "Unknown AudioPlayersLinux error");
+-   }
+- }
+--}
+-\ No newline at end of file
+-+}
+-diff --git a/shell/plugins/audio_players/audio_players_registry.cc b/shell/plugins/audio_players/audio_players_registry.cc
+-index 6c9ef33..00c4f45 100644
+---- a/shell/plugins/audio_players/audio_players_registry.cc
+-+++ b/shell/plugins/audio_players/audio_players_registry.cc
+-@@ -19,6 +19,7 @@
+- #include <memory>
+- #include <mutex>
+- 
+-+#include <flutter/standard_method_codec.h>
+- #include <flutter/standard_message_codec.h>
+- 
+- #include "audio_player.h"
+-@@ -168,4 +169,4 @@ void AudioPlayersRegistry::OnPlatformMessageEvents(
+-   engine->SendPlatformMessageResponse(message->response_handle, result->data(),
+-                                       result->size());
+- }
+--}  // namespace Plugins
+-\ No newline at end of file
+-+}  // namespace Plugins
+-diff --git a/shell/plugins/keyboard_manager/keyboard_manager.h b/shell/plugins/keyboard_manager/keyboard_manager.h
+-index 74b4e8d..cae1954 100644
+---- a/shell/plugins/keyboard_manager/keyboard_manager.h
+-+++ b/shell/plugins/keyboard_manager/keyboard_manager.h
+-@@ -17,6 +17,7 @@
+- #pragma once
+- 
+- #include "flutter/fml/macros.h"
+-+#include <flutter/standard_method_codec.h>
+- 
+- #include <shell/platform/embedder/embedder.h>
+- 
+-@@ -45,4 +46,4 @@ class KeyboardManager {
+- 
+-  private:
+-   static constexpr char kGetKeyboardState[] = "getKeyboardState";
+--};
+-\ No newline at end of file
+-+};
+--- 
+-2.43.0
+-
+diff --git a/package/ivi-homescreen/Config.in b/package/ivi-homescreen/Config.in
+index d7cc4ce04e..ecdc15a3f0 100644
+--- a/package/ivi-homescreen/Config.in
++++ b/package/ivi-homescreen/Config.in
+@@ -2,270 +2,128 @@ menuconfig BR2_PACKAGE_IVI_HOMESCREEN
+ 	bool "ivi-homescreen"
+ 	depends on BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_FLUTTER_ENGINE_ARCH_SUPPORTS
+-	depends on BR2_HOST_GCC_AT_LEAST_5 # flutter-engine
++	depends on BR2_HOST_GCC_AT_LEAST_9 # flutter-engine, wayland-cxx-scanner
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17 filesystem
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # flutter-engine
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC # flutter-engine
+ 	depends on BR2_INSTALL_LIBSTDCPP # flutter-engine
+ 	depends on !BR2_STATIC_LIBS # flutter-engine, wayland
+ 	depends on BR2_USE_WCHAR # flutter-engine
+-	depends on BR2_PACKAGE_HAS_LIBGL || BR2_PACKAGE_HAS_LIBGLES # flutter-engine
++	depends on BR2_PACKAGE_HAS_LIBEGL # Wayland EGL backend
++	depends on BR2_PACKAGE_HAS_LIBGLES # flutter-engine, Wayland EGL backend
+ 	select BR2_PACKAGE_HOST_FLUTTER_SDK_BIN
+ 	select BR2_PACKAGE_FLUTTER_ENGINE
++	select BR2_PACKAGE_LIBDRM
+ 	select BR2_PACKAGE_LIBXKBCOMMON
+ 	select BR2_PACKAGE_WAYLAND
+ 	select BR2_PACKAGE_WAYLAND_PROTOCOLS
+-	select BR2_PACKAGE_WAYLAND_UTILS
+ 	help
+ 	  Toyota's Flutter Embedder that communicates with Wayland
+ 	  compositors.
+ 	  Features:
+ 	  - Strongly Typed (C++)
+ 	  - Lightweight
+-	  - Platform Channels enabled/disabled via CMake
+-	  - OpenGL Texture Framework
+-	  - Compositor Sub-surface/Region support
+ 	  - Vulkan / EGL backend support
  
- if BR2_PACKAGE_FLUTTER_PACKAGES
--source "package/flutter-packages/flutter-adaptive-scaffold-example/Config.in"
- source "package/flutter-packages/flutter-animations-example/Config.in"
- source "package/flutter-packages/flutter-go-router-example/Config.in"
--source "package/flutter-packages/flutter-image-example/Config.in"
--source "package/flutter-packages/flutter-markdown-example/Config.in"
- source "package/flutter-packages/flutter-rfw-local-example/Config.in"
- endif
++	  The Wayland EGL backend is always built, and the Wayland
++	  Vulkan backend is also built when vulkan-loader is enabled.
++	  The backend is chosen at runtime.
++
+ 	  https://github.com/toyota-connected/ivi-homescreen
  
-diff --git a/package/flutter-packages/flutter-adaptive-scaffold-example/Config.in b/package/flutter-packages/flutter-adaptive-scaffold-example/Config.in
-deleted file mode 100644
-index f7c448e06c..0000000000
---- a/package/flutter-packages/flutter-adaptive-scaffold-example/Config.in
-+++ /dev/null
-@@ -1,8 +0,0 @@
--config BR2_PACKAGE_FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE
--	bool "flutter adaptive scaffold example"
+ if BR2_PACKAGE_IVI_HOMESCREEN
+ 
+-config BR2_PACKAGE_IVI_HOMESCREEN_IVI_SHELL_CLIENT
+-	bool "ivi-shell client"
+-
+-comment "Logging"
+-config BR2_PACKAGE_IVI_HOMESCREEN_DART_VM_LOGGING
+-	bool "Enable Dart VM Logging"
+-
+-config BR2_PACKAGE_IVI_HOMESCREEN_DLT_LOGGING
+-	bool "DLT logging"
+-
+-comment "EGL options"
+-
+-config BR2_PACKAGE_IVI_HOMESCREEN_EGL_TRANSPARENCY
+-	bool "Transparency"
+-	depends on BR2_PACKAGE_HAS_LIBEGL
+-
+-comment "Transparency support needs an EGL backend"
+-	depends on !BR2_PACKAGE_HAS_LIBEGL
+-
+-config BR2_PACKAGE_IVI_HOMESCREEN_EGL_ENABLE_3D
+-	bool "3D support"
+-	depends on BR2_PACKAGE_HAS_LIBEGL
 -	help
--	  Adaptive Scaffold reacts to input from users, devices and
--	  screen elements and renders your Flutter application
--	  according to the Material 3 guidelines.
+-	  Build with EGL Stencil, Depth, and Stencil
 -
--	  https://github.com/flutter/packages/tree/main/packages/flutter_adaptive_scaffold/example
-diff --git a/package/flutter-packages/flutter-adaptive-scaffold-example/flutter-adaptive-scaffold-example.hash b/package/flutter-packages/flutter-adaptive-scaffold-example/flutter-adaptive-scaffold-example.hash
-deleted file mode 120000
-index 879f2adb39..0000000000
---- a/package/flutter-packages/flutter-adaptive-scaffold-example/flutter-adaptive-scaffold-example.hash
-+++ /dev/null
-@@ -1 +0,0 @@
--../flutter-packages.hash
-\ No newline at end of file
-diff --git a/package/flutter-packages/flutter-adaptive-scaffold-example/flutter-adaptive-scaffold-example.mk b/package/flutter-packages/flutter-adaptive-scaffold-example/flutter-adaptive-scaffold-example.mk
-deleted file mode 100644
-index e8e27d4383..0000000000
---- a/package/flutter-packages/flutter-adaptive-scaffold-example/flutter-adaptive-scaffold-example.mk
-+++ /dev/null
-@@ -1,54 +0,0 @@
--################################################################################
--#
--# flutter-adaptive-scaffold-example
--#
--################################################################################
+-comment "3D support needs an EGL backend"
+-	depends on !BR2_PACKAGE_HAS_LIBEGL
 -
--FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_VERSION = $(FLUTTER_PACKAGES_VERSION)
--FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_SITE = $(FLUTTER_PACKAGES_SITE)
--FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_SITE_METHOD = $(FLUTTER_PACKAGES_SITE_METHOD)
--FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_SOURCE = $(FLUTTER_PACKAGES_SOURCE)
--FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_LICENSE = $(FLUTTER_PACKAGES_LICENSE)
--FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_LICENSE_FILES = $(FLUTTER_PACKAGES_LICENSE_FILES)
--FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_DL_SUBDIR = $(FLUTTER_PACKAGES_DL_SUBDIR)
--FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_DEPENDENCIES = $(FLUTTER_PACKAGES_DEPENDENCIES)
--FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_PKG_NAME = flutter_adaptive_scaffold_example
--FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_INSTALL_DIR = $(TARGET_DIR)/usr/share/flutter/$(FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_PKG_NAME)/$(FLUTTER_ENGINE_RUNTIME_MODE)
--FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_SUBDIR = packages/flutter_adaptive_scaffold/example
--
--define FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_CONFIGURE_CMDS
--	cd $(FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_BUILDDIR) && \
--		$(HOST_FLUTTER_SDK_BIN_FLUTTER) clean && \
--		$(HOST_FLUTTER_SDK_BIN_FLUTTER) pub get && \
--		$(HOST_FLUTTER_SDK_BIN_FLUTTER) build bundle
--endef
--
--define FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_BUILD_CMDS
--	cd $(FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_BUILDDIR) && \
--		$(HOST_FLUTTER_SDK_BIN_DART_BIN) \
--			--native-assets $(FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_BUILDDIR)/.dart_tool/flutter_build/*/native_assets.json \
--			package:$(FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_PKG_NAME)/main.dart && \
--		$(HOST_FLUTTER_SDK_BIN_ENV) $(FLUTTER_ENGINE_GEN_SNAPSHOT) \
--			--deterministic \
--			--obfuscate \
--			--snapshot_kind=app-aot-elf \
--			--elf=libapp.so \
--			.dart_tool/flutter_build/*/app.dill
--endef
--
--define FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_INSTALL_TARGET_CMDS
--	mkdir -p $(FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_INSTALL_DIR)/{data,lib}
--	cp -dprf $(FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_BUILDDIR)/build/flutter_assets $(FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_INSTALL_DIR)/data/
--
--	$(INSTALL) -D -m 0755 $(FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_BUILDDIR)/libapp.so \
--		$(FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_INSTALL_DIR)/lib/libapp.so
--
--	ln -sf /usr/share/flutter/$(FLUTTER_ENGINE_RUNTIME_MODE)/data/icudtl.dat \
--	$(FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_INSTALL_DIR)/data/
--
--	ln -sf /usr/lib/libflutter_engine.so $(FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_INSTALL_DIR)/lib/
--	$(RM) $(FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_INSTALL_DIR)/data/flutter_assets/kernel_blob.bin
--	touch $(FLUTTER_ADAPTIVE_SCAFFOLD_EXAMPLE_INSTALL_DIR)/data/flutter_assets/kernel_blob.bin
--endef
--
--$(eval $(generic-package))
-diff --git a/package/flutter-packages/flutter-image-example/Config.in b/package/flutter-packages/flutter-image-example/Config.in
-deleted file mode 100644
-index 15ae20872a..0000000000
---- a/package/flutter-packages/flutter-image-example/Config.in
-+++ /dev/null
-@@ -1,8 +0,0 @@
--config BR2_PACKAGE_FLUTTER_IMAGE_EXAMPLE
--	bool "flutter image example"
--	select BR2_PACKAGE_CA_CERTIFICATES # runtime
+-config BR2_PACKAGE_IVI_HOMESCREEN_EGL_MULTISAMPLE
+-	bool "Multisample support"
+-	depends on BR2_PACKAGE_HAS_LIBEGL
 -	help
--	  Use NetworkImageWithRetry instead of Image.network to
--	  load images from the network with a retry mechanism.
+-	  Build with EGL Sample set to 4
 -
--	  https://github.com/flutter/packages/tree/main/packages/flutter_image/example
-diff --git a/package/flutter-packages/flutter-image-example/flutter-image-example.hash b/package/flutter-packages/flutter-image-example/flutter-image-example.hash
-deleted file mode 120000
-index 879f2adb39..0000000000
---- a/package/flutter-packages/flutter-image-example/flutter-image-example.hash
-+++ /dev/null
-@@ -1 +0,0 @@
--../flutter-packages.hash
-\ No newline at end of file
-diff --git a/package/flutter-packages/flutter-image-example/flutter-image-example.mk b/package/flutter-packages/flutter-image-example/flutter-image-example.mk
-deleted file mode 100644
-index 5d754c0ff6..0000000000
---- a/package/flutter-packages/flutter-image-example/flutter-image-example.mk
-+++ /dev/null
-@@ -1,54 +0,0 @@
--################################################################################
--#
--# flutter-image-example
--#
--################################################################################
+-comment "Multisample support needs an EGL backend"
+-	depends on !BR2_PACKAGE_HAS_LIBEGL
 -
--FLUTTER_IMAGE_EXAMPLE_VERSION = $(FLUTTER_PACKAGES_VERSION)
--FLUTTER_IMAGE_EXAMPLE_SITE = $(FLUTTER_PACKAGES_SITE)
--FLUTTER_IMAGE_EXAMPLE_SITE_METHOD = $(FLUTTER_PACKAGES_SITE_METHOD)
--FLUTTER_IMAGE_EXAMPLE_SOURCE = $(FLUTTER_PACKAGES_SOURCE)
--FLUTTER_IMAGE_EXAMPLE_LICENSE = $(FLUTTER_PACKAGES_LICENSE)
--FLUTTER_IMAGE_EXAMPLE_LICENSE_FILES = $(FLUTTER_PACKAGES_LICENSE_FILES)
--FLUTTER_IMAGE_EXAMPLE_DL_SUBDIR = $(FLUTTER_PACKAGES_DL_SUBDIR)
--FLUTTER_IMAGE_EXAMPLE_DEPENDENCIES = $(FLUTTER_PACKAGES_DEPENDENCIES)
--FLUTTER_IMAGE_EXAMPLE_PKG_NAME = flutter_image_example
--FLUTTER_IMAGE_EXAMPLE_INSTALL_DIR = $(TARGET_DIR)/usr/share/flutter/$(FLUTTER_IMAGE_EXAMPLE_PKG_NAME)/$(FLUTTER_ENGINE_RUNTIME_MODE)
--FLUTTER_IMAGE_EXAMPLE_SUBDIR = packages/flutter_image/example
+-comment "dependency-less plugins"
 -
--define FLUTTER_IMAGE_EXAMPLE_CONFIGURE_CMDS
--	cd $(FLUTTER_IMAGE_EXAMPLE_BUILDDIR) && \
--		$(HOST_FLUTTER_SDK_BIN_FLUTTER) clean && \
--		$(HOST_FLUTTER_SDK_BIN_FLUTTER) pub get && \
--		$(HOST_FLUTTER_SDK_BIN_FLUTTER) build bundle
--endef
+-config BR2_PACKAGE_IVI_HOMESCREEN_ACCESSIBILITY_PLUGIN
+-	bool "Accessibility"
 -
--define FLUTTER_IMAGE_EXAMPLE_BUILD_CMDS
--	cd $(FLUTTER_IMAGE_EXAMPLE_BUILDDIR) && \
--		$(HOST_FLUTTER_SDK_BIN_DART_BIN) \
--			--native-assets $(FLUTTER_IMAGE_EXAMPLE_BUILDDIR)/.dart_tool/flutter_build/*/native_assets.json \
--			package:$(FLUTTER_IMAGE_EXAMPLE_PKG_NAME)/main.dart && \
--		$(HOST_FLUTTER_SDK_BIN_ENV) $(FLUTTER_ENGINE_GEN_SNAPSHOT) \
--			--deterministic \
--			--obfuscate \
--			--snapshot_kind=app-aot-elf \
--			--elf=libapp.so \
--			.dart_tool/flutter_build/*/app.dill
--endef
+-config BR2_PACKAGE_IVI_HOMESCREEN_COMP_REGION_PLUGIN
+-	bool "Compositor Region"
 -
--define FLUTTER_IMAGE_EXAMPLE_INSTALL_TARGET_CMDS
--	mkdir -p $(FLUTTER_IMAGE_EXAMPLE_INSTALL_DIR)/{data,lib}
--	cp -dprf $(FLUTTER_IMAGE_EXAMPLE_BUILDDIR)/build/flutter_assets $(FLUTTER_IMAGE_EXAMPLE_INSTALL_DIR)/data/
+-config BR2_PACKAGE_IVI_HOMESCREEN_COMP_SURF_PLUGIN
+-	bool "Compositor Surface"
 -
--	$(INSTALL) -D -m 0755 $(FLUTTER_IMAGE_EXAMPLE_BUILDDIR)/libapp.so \
--		$(FLUTTER_IMAGE_EXAMPLE_INSTALL_DIR)/lib/libapp.so
--
--	ln -sf /usr/share/flutter/$(FLUTTER_ENGINE_RUNTIME_MODE)/data/icudtl.dat \
--	$(FLUTTER_IMAGE_EXAMPLE_INSTALL_DIR)/data/
--
--	ln -sf /usr/lib/libflutter_engine.so $(FLUTTER_IMAGE_EXAMPLE_INSTALL_DIR)/lib/
--	$(RM) $(FLUTTER_IMAGE_EXAMPLE_INSTALL_DIR)/data/flutter_assets/kernel_blob.bin
--	touch $(FLUTTER_IMAGE_EXAMPLE_INSTALL_DIR)/data/flutter_assets/kernel_blob.bin
--endef
--
--$(eval $(generic-package))
-diff --git a/package/flutter-packages/flutter-markdown-example/Config.in b/package/flutter-packages/flutter-markdown-example/Config.in
-deleted file mode 100644
-index 939b21053c..0000000000
---- a/package/flutter-packages/flutter-markdown-example/Config.in
-+++ /dev/null
-@@ -1,7 +0,0 @@
--config BR2_PACKAGE_FLUTTER_MARKDOWN_EXAMPLE
--	bool "flutter markdown example"
+-config BR2_PACKAGE_IVI_HOMESCREEN_DESKTOP_WINDOW_PLUGIN
+-	bool "Desktop Window"
 -	help
--	  A markdown renderer for Flutter. It supports the original
--	  format, but no inline HTML.
+-	  Flutter plugin to change window size.
 -
--	  https://github.com/flutter/packages/tree/main/packages/flutter_markdown
-diff --git a/package/flutter-packages/flutter-markdown-example/flutter-markdown-example.hash b/package/flutter-packages/flutter-markdown-example/flutter-markdown-example.hash
-deleted file mode 120000
-index 879f2adb39..0000000000
---- a/package/flutter-packages/flutter-markdown-example/flutter-markdown-example.hash
-+++ /dev/null
-@@ -1 +0,0 @@
--../flutter-packages.hash
-\ No newline at end of file
-diff --git a/package/flutter-packages/flutter-markdown-example/flutter-markdown-example.mk b/package/flutter-packages/flutter-markdown-example/flutter-markdown-example.mk
-deleted file mode 100644
-index 0859b947eb..0000000000
---- a/package/flutter-packages/flutter-markdown-example/flutter-markdown-example.mk
-+++ /dev/null
-@@ -1,54 +0,0 @@
--################################################################################
--#
--# flutter-markdown-example
--#
--################################################################################
+-	  https://pub.dev/packages/desktop_window
 -
--FLUTTER_MARKDOWN_EXAMPLE_VERSION = $(FLUTTER_PACKAGES_VERSION)
--FLUTTER_MARKDOWN_EXAMPLE_SITE = $(FLUTTER_PACKAGES_SITE)
--FLUTTER_MARKDOWN_EXAMPLE_SITE_METHOD = $(FLUTTER_PACKAGES_SITE_METHOD)
--FLUTTER_MARKDOWN_EXAMPLE_SOURCE = $(FLUTTER_PACKAGES_SOURCE)
--FLUTTER_MARKDOWN_EXAMPLE_LICENSE = $(FLUTTER_PACKAGES_LICENSE)
--FLUTTER_MARKDOWN_EXAMPLE_LICENSE_FILES = $(FLUTTER_PACKAGES_LICENSE_FILES)
--FLUTTER_MARKDOWN_EXAMPLE_DL_SUBDIR = $(FLUTTER_PACKAGES_DL_SUBDIR)
--FLUTTER_MARKDOWN_EXAMPLE_DEPENDENCIES = $(FLUTTER_PACKAGES_DEPENDENCIES)
--FLUTTER_MARKDOWN_EXAMPLE_PKG_NAME = flutter_markdown_example
--FLUTTER_MARKDOWN_EXAMPLE_INSTALL_DIR = $(TARGET_DIR)/usr/share/flutter/$(FLUTTER_MARKDOWN_EXAMPLE_PKG_NAME)/$(FLUTTER_ENGINE_RUNTIME_MODE)
--FLUTTER_MARKDOWN_EXAMPLE_SUBDIR = packages/flutter_markdown/example
+-config BR2_PACKAGE_IVI_HOMESCREEN_GO_ROUTER_PLUGIN
+-	bool "Go Router"
+-	help
+-	  A declarative routing package for Flutter that uses the
+-	  Router API to provide a convenient, url-based API for
+-	  navigating between different screens. You can define URL
+-	  patterns, navigate using a URL, handle deep links, and a
+-	  number of other navigation-related scenarios.
 -
--define FLUTTER_MARKDOWN_EXAMPLE_CONFIGURE_CMDS
--	cd $(FLUTTER_MARKDOWN_EXAMPLE_BUILDDIR) && \
--		$(HOST_FLUTTER_SDK_BIN_FLUTTER) clean && \
--		$(HOST_FLUTTER_SDK_BIN_FLUTTER) pub get && \
--		$(HOST_FLUTTER_SDK_BIN_FLUTTER) build bundle
--endef
+-	  https://pub.dev/packages/go_router
 -
--define FLUTTER_MARKDOWN_EXAMPLE_BUILD_CMDS
--	cd $(FLUTTER_MARKDOWN_EXAMPLE_BUILDDIR) && \
--		$(HOST_FLUTTER_SDK_BIN_DART_BIN) \
--			--native-assets $(FLUTTER_MARKDOWN_EXAMPLE_BUILDDIR)/.dart_tool/flutter_build/*/native_assets.json \
--			package:$(FLUTTER_MARKDOWN_EXAMPLE_PKG_NAME)/main.dart && \
--		$(HOST_FLUTTER_SDK_BIN_ENV) $(FLUTTER_ENGINE_GEN_SNAPSHOT) \
--			--deterministic \
--			--obfuscate \
--			--snapshot_kind=app-aot-elf \
--			--elf=libapp.so \
--			.dart_tool/flutter_build/*/app.dill
--endef
+-config BR2_PACKAGE_IVI_HOMESCREEN_INTEGRATION_TEST_PLUGIN
+-	bool "Flutter Integration Test support"
+-	help
+-	  https://docs.flutter.dev/cookbook/testing/integration/introduction
 -
--define FLUTTER_MARKDOWN_EXAMPLE_INSTALL_TARGET_CMDS
--	mkdir -p $(FLUTTER_MARKDOWN_EXAMPLE_INSTALL_DIR)/{data,lib}
--	cp -dprf $(FLUTTER_MARKDOWN_EXAMPLE_BUILDDIR)/build/flutter_assets $(FLUTTER_MARKDOWN_EXAMPLE_INSTALL_DIR)/data/
+-config BR2_PACKAGE_IVI_HOMESCREEN_ISOLATE_PLUGIN
+-	bool "Isolate"
 -
--	$(INSTALL) -D -m 0755 $(FLUTTER_MARKDOWN_EXAMPLE_BUILDDIR)/libapp.so \
--		$(FLUTTER_MARKDOWN_EXAMPLE_INSTALL_DIR)/lib/libapp.so
+-config BR2_PACKAGE_IVI_HOMESCREEN_KEYBOARD_MANAGER_PLUGIN
+-	bool "Keyboard Manager"
+-	select BR2_PACKAGE_IVI_HOMESCREEN_TEXT_INPUT_PLUGIN # runtime
+-	help
+-	  This is a wrapper for the raw keyboard listener made to
+-	  simplify intercept external keyboard button press.
 -
--	ln -sf /usr/share/flutter/$(FLUTTER_ENGINE_RUNTIME_MODE)/data/icudtl.dat \
--	$(FLUTTER_MARKDOWN_EXAMPLE_INSTALL_DIR)/data/
+-	  https://pub.dev/packages/keyboard_manager
 -
--	ln -sf /usr/lib/libflutter_engine.so $(FLUTTER_MARKDOWN_EXAMPLE_INSTALL_DIR)/lib/
--	$(RM) $(FLUTTER_MARKDOWN_EXAMPLE_INSTALL_DIR)/data/flutter_assets/kernel_blob.bin
--	touch $(FLUTTER_MARKDOWN_EXAMPLE_INSTALL_DIR)/data/flutter_assets/kernel_blob.bin
--endef
+-config BR2_PACKAGE_IVI_HOMESCREEN_KEY_EVENT_PLUGIN
+-	bool "Key Event"
+-	select BR2_PACKAGE_IVI_HOMESCREEN_TEXT_INPUT_PLUGIN # runtime
+-	help
+-	  KeyEvent plugin to support RawKeyEvent.
++comment "Wayland shell clients"
+ 
+-config BR2_PACKAGE_IVI_HOMESCREEN_LAYER_PLAYGROUND_PLUGIN
+-	bool "Layer Playground"
+-	select BR2_PACKAGE_IVI_HOMESCREEN_PLATFORM_VIEWS_PLUGIN
++config BR2_PACKAGE_IVI_HOMESCREEN_XDG_SHELL_CLIENT
++	bool "xdg-shell client"
++	default y
+ 	help
+-	  This plugin enables the platform views plugin and also
+-	  provides a simple-box-view-type option.
 -
--$(eval $(generic-package))
-diff --git a/package/flutter-packages/flutter-packages.hash b/package/flutter-packages/flutter-packages.hash
-index 00346a8a6a..5e3057e269 100644
---- a/package/flutter-packages/flutter-packages.hash
-+++ b/package/flutter-packages/flutter-packages.hash
-@@ -1,3 +1,3 @@
+-	  https://github.com/toyota-connected/ivi-homescreen/tree/main/shell/plugins/platform_views
+-
+-config BR2_PACKAGE_IVI_HOMESCREEN_LOGGING_PLUGIN
+-	bool "Logging"
++	  Support the xdg-shell protocol, used by most desktop
++	  compositors.
+ 
+-config BR2_PACKAGE_IVI_HOMESCREEN_MOUSE_CURSOR_PLUGIN
+-	bool "Mouse Cursor"
++config BR2_PACKAGE_IVI_HOMESCREEN_AGL_SHELL_CLIENT
++	bool "agl-shell client"
+ 	help
+-	  Add mouse cursor support.
++	  Support the agl-shell protocol, used by agl-compositor.
+ 
+-config BR2_PACKAGE_IVI_HOMESCREEN_PACKAGE_INFO_PLUGIN
+-	bool "PackageInfo"
++config BR2_PACKAGE_IVI_HOMESCREEN_IVI_SHELL_CLIENT
++	bool "ivi-shell client"
+ 	help
+-	  Prints the ivi-homescreen package information.
++	  Support the ivi-shell protocol, used by weston's ivi-shell.
+ 
+-config BR2_PACKAGE_IVI_HOMESCREEN_PLATFORM_PLUGIN
+-	bool "Platform"
++config BR2_PACKAGE_IVI_HOMESCREEN_SIMPLE_SHELL_CLIENT
++	bool "simple-shell client"
+ 	help
+-	  Get information about the platform the Flutter application
+-	  is running on.
++	  Support the RDK/Westeros simple_shell protocol.
+ 
+-config BR2_PACKAGE_IVI_HOMESCREEN_PLATFORM_VIEWS_PLUGIN
+-	bool "Platform Views"
++choice
++	prompt "Text input protocol"
++	default BR2_PACKAGE_IVI_HOMESCREEN_IME_TEXT_INPUT_V3
+ 	help
+-	  This plugin supports the AndroidView interface. Meaning you
+-	  can take any Platform View Dart code, change the definition
+-	  to use AndroidView, and you will have a working interface.
++	  The Wayland protocol used for text input. This must match
++	  what the compositor supports, or text input will not work.
++	  GNOME/Mutter and KDE use text-input-v3, AGL and weston use
++	  text-input-v1.
+ 
+-	  Benefits of using this interface:
+-	    - pre-defined interface that is supported in Flutter SDK
+-	    - params are easily augmented in Dart to add for given use
+-	      case
+-	    - pass touch to another process/library without additional
+-	      work
++config BR2_PACKAGE_IVI_HOMESCREEN_IME_TEXT_INPUT_V3
++	bool "text-input-v3"
+ 
+-	  For a backing implementation there are a number of approaches:
+-	    - Have a PlatformView implementation render to a Texture
+-	    - Compositor Region support
+-	      (poke a hole for another process)
+-	    - Compositor sub-surface and manage Z-order
++config BR2_PACKAGE_IVI_HOMESCREEN_IME_TEXT_INPUT_V1
++	bool "text-input-v1"
+ 
+-	  The above is already supported today using either an OpenGL
+-	  texture, or a Compositor Sub-Surface. Using Platform Views
+-	  just re-uses an existing interface.
++config BR2_PACKAGE_IVI_HOMESCREEN_IME_INPUT_METHOD_V1
++	bool "input-method-v1"
+ 
+-	  https://github.com/toyota-connected/ivi-homescreen/tree/main/shell/plugins/platform_views
++config BR2_PACKAGE_IVI_HOMESCREEN_IME_INPUT_METHOD_V2
++	bool "input-method-v2"
+ 
+-config BR2_PACKAGE_IVI_HOMESCREEN_RESTORATION_PLUGIN
+-	bool "Restoration"
+-	help
+-	  Handles the Flutter restoration callback
++config BR2_PACKAGE_IVI_HOMESCREEN_IME_VIRTUAL_KEYBOARD_V1
++	bool "virtual-keyboard-v1"
+ 
+-config BR2_PACKAGE_IVI_HOMESCREEN_TEXT_INPUT_PLUGIN
+-	bool "Text Input"
+-	help
+-	  Allow for text input
++config BR2_PACKAGE_IVI_HOMESCREEN_IME_NONE
++	bool "none"
+ 
+-comment "plugins with external dependencies"
+-config BR2_PACKAGE_IVI_HOMESCREEN_AUDIO_PLAYERS
+-	bool "Audio Players"
+-	depends on BR2_USE_MMU # gstreamer1
+-	select BR2_PACKAGE_GSTREAMER1
+-	select BR2_PACKAGE_GST1_PLUGINS_BASE
+-	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_ALSA
+-	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIOCONVERT
+-	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_AUDIORESAMPLE
+-	select BR2_PACKAGE_GST1_PLUGINS_BASE_PLUGIN_VOLUME
+-	help
+-	  A Flutter plugin to play multiple simultaneously audio files.
+-	  Based on audioplayers-v5.2.1
++endchoice
+ 
+-	  https://pub.dev/packages/audioplayers
++comment "Logging"
+ 
+-config BR2_PACKAGE_IVI_HOMESCREEN_FLUTTER_SECURE_STORAGE_PLUGIN
+-	bool "Flutter Secure Storage"
+-	depends on BR2_USE_MMU # libsecret
+-	select BR2_PACKAGE_LIBSECRET
++config BR2_PACKAGE_IVI_HOMESCREEN_DLT_LOGGING
++	bool "DLT logging"
+ 	help
+-	  Store data in secure storage
++	  Add a DLT logging sink. libdlt is loaded at runtime.
+ 
+-	  https://pub.dev/packages/flutter_secure_storage
+-
+-config BR2_PACKAGE_IVI_HOMESCREEN_GOOGLE_SIGN_IN_PLUGIN
+-	bool "Google Sign In manager"
+-	select BR2_PACKAGE_LIBCURL
+-	select BR2_PACKAGE_LIBCURL_FORCE_TLS
+-	select BR2_PACKAGE_OPENSSL
+-	help
+-	  This static plugin is to support this pub.dev package:
+-	  https://pub.dev/packages/google_sign_in
++comment "EGL options"
+ 
+-	  https://github.com/toyota-connected/ivi-homescreen/tree/main/shell/plugins/google_sign_in
++config BR2_PACKAGE_IVI_HOMESCREEN_EGL_TRANSPARENCY
++	bool "Transparency"
+ 
+-config BR2_PACKAGE_IVI_HOMESCREEN_GSTREAMER_EGL_PLUGIN
+-	bool "GStreamer EGL"
+-	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+-	depends on BR2_PACKAGE_HAS_LIBEGL
+-	depends on BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_API # GST1_PLUGINS_BASE_LIB_OPENGL_EGL
+-	select BR2_PACKAGE_FFMPEG
+-	select BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_EGL
++config BR2_PACKAGE_IVI_HOMESCREEN_EGL_ENABLE_3D
++	bool "3D support"
+ 	help
+-	  A GStreamer-powered alternative to Flutter's video_player that
+-	  support Linux, iOS and Android.
+-
+-	  https://pub.dev/packages/flutter_gstreamer_player
+-
+-comment "GStreamer plugin needs gst1-plugins-base with an EGL backend"
+-	depends on BR2_PACKAGE_FFMPEG_ARCH_SUPPORTS
+-	depends on !BR2_PACKAGE_HAS_LIBEGL \
+-		|| !BR2_PACKAGE_GST1_PLUGINS_BASE_LIB_OPENGL_HAS_API
++	  Build with EGL Stencil, Depth, and Stencil
+ 
+-config BR2_PACKAGE_IVI_HOMESCREEN_OPENGL_TEXTURE_PLUGIN
+-	bool "OpenGL Texture"
+-	depends on BR2_PACKAGE_HAS_LIBEGL
++config BR2_PACKAGE_IVI_HOMESCREEN_EGL_MULTISAMPLE
++	bool "Multisample support"
+ 	help
+-	  A Flutter OpenGL ES plugin using a Texture() widget.
+-	  Many shaders from ShaderToy.com can be copy/pasted
+-
+-	  https://pub.dev/packages/flutter_opengl
+-
+-comment "OpenGL texture plugin needs an EGL backend"
+-	depends on !BR2_PACKAGE_HAS_LIBEGL
++	  Default --msaa-samples to 4 instead of 0
+ 
+ endif # BR2_PACKAGE_IVI_HOMESCREEN
+ 
+-comment "ivi-homescreen needs a glibc toolchain w/ wchar, C++, gcc >= 8, dynamic library, host gcc >= 5"
++comment "ivi-homescreen needs a glibc toolchain w/ wchar, C++, gcc >= 8, dynamic library, host gcc >= 9"
+ 	depends on BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_FLUTTER_ENGINE_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_USES_GLIBC \
+ 		|| !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_GCC_AT_LEAST_8 \
+ 		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
+-		|| !BR2_HOST_GCC_AT_LEAST_5
++		|| !BR2_HOST_GCC_AT_LEAST_9
+ 
+ comment "ivi-homescreen needs a toolchain not affected by GCC bug 64735"
+ 	depends on BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_FLUTTER_ENGINE_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 
+-comment "ivi-homescreen needs an OpenGL or OpenGLES backend"
++comment "ivi-homescreen needs an EGL and OpenGL ES backend"
+ 	depends on BR2_PACKAGE_HOST_FLUTTER_SDK_BIN_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_FLUTTER_ENGINE_ARCH_SUPPORTS
+-	depends on !BR2_PACKAGE_HAS_LIBGL && !BR2_PACKAGE_HAS_LIBGLES
++	depends on !BR2_PACKAGE_HAS_LIBEGL || !BR2_PACKAGE_HAS_LIBGLES
+diff --git a/package/ivi-homescreen/ivi-homescreen.hash b/package/ivi-homescreen/ivi-homescreen.hash
+index 484ecfb128..c4b8a1d990 100644
+--- a/package/ivi-homescreen/ivi-homescreen.hash
++++ b/package/ivi-homescreen/ivi-homescreen.hash
+@@ -1,21 +1,23 @@
  # Locally calculated
--sha256  9b6fdc8660ac3c601887c3c7e8859662e7fca19584af56dfac9c8acb86298a01  flutter-packages-2df1c3a524131e35d6e385eb9465c47d530e341b.tar.gz
--sha256  89519eca6f7b9529b35bdddd623a58c3af06a88c458dbd6531ddb4675acf75a9  LICENSE
-+sha256  457cc5e8e9ce259c0335d3405107bf5633150c0570411ddb2f864ebb9f30bb37  flutter-packages-f455dfa67f5effa368b00050a7fe5abddcb0204c.tar.gz
-+sha256  420f7739f169097f0aad1242045169cd643c8f1d94e62866fad265ae4c369b7d  LICENSE
-diff --git a/package/flutter-packages/flutter-packages.mk b/package/flutter-packages/flutter-packages.mk
-index 40a586f7e0..d769585090 100644
---- a/package/flutter-packages/flutter-packages.mk
-+++ b/package/flutter-packages/flutter-packages.mk
-@@ -4,7 +4,7 @@
+-sha256  aba31437dd90eca1fc5723619c269394e475b3000309eda86efcfd252452a85e  ivi-homescreen-a038ce00031ed5a9a89b4d8dd7dbde5e3d7ade6e-git4.tar.gz
++sha256  0d35e23a9f13cf4a8e37d9dd7c8fc40001e7dc2f6026180d988160fd34ff7821  ivi-homescreen-950f7a5aeed1bfc1112c9757ed8588a9fc46124c-git4.tar.gz
+ 
+ # Apache-2.0
+ sha256  6b96fa0a3def85caaf466caa2bd82d4ca4f22d106ff88f97a00c537c00cc714b  LICENSE
+-sha256  943c358cb6d086e4bc0937941b8f8d766db7d4e5f06583efd45dca0ca6a645f3  third_party/filament/libs/bluevk/include/bluevk/BlueVK.h
++sha256  95ad366d23fadf701d355bc45fb8b82ae2d700239471d35d41286ac3b08ff903  third_party/Vulkan-Headers/LICENSE.md
+ 
+ # BSD-3-Clause
+-sha256  fdff25c8a4147791114584a45d56621336d294601da77656e83504a71747c8c2  third_party/flutter/shell/platform/common/client_wrapper/core_implementations.cc
++sha256  41d4f7cdb38ad3b0096d1c1444f559538d9f24b5dab48e8f326e51b4c3d5b7dd  third_party/flutter/shell/platform/common/client_wrapper/core_implementations.cc
+ 
+ # BSD-Style
+-sha256  baa98cbcc03e3e745c4ad9ac2d3fb3464424486b2e420081181013034a7e6406  third_party/flutter/third_party/dart/runtime/include/dart_api.h
++sha256  d5009bb2dfa76dcdf3ed3c5bd427a74c4c820cea29f393a5909efa377291f713  third_party/flutter/third_party/dart/runtime/include/dart_api.h
+ 
+ # BSL-1.0
+-sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  third_party/asio-1-28-1/asio/LICENSE_1_0.txt
++sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  third_party/asio/LICENSE_1_0.txt
+ 
+ # MIT
+-sha256  240f786071b64c28c0a1dae3e3b05fc3ca93fa4882b1e36e56ee49fee3037b0a  third_party/flutter/third_party/rapidjson/include/rapidjson/rapidjson.h
++sha256  aa324fbe633a96546bebca975fbbab65caa175894bd00cfa13d7335e7363400c  third_party/cxxopts/LICENSE
++sha256  07580f2a3b35709ce703d523f447b242f6dfec7582a8c0df102c7fa2849375f8  third_party/fmt/LICENSE
++sha256  a140e5d46fe734a1c78f1a3c3ef207871dd75648be71fdda8e309b23ab8b1f32  third_party/rapidjson/license.txt
+ sha256  4b67e7ae8c91e68e1a929eb1cbaa4c773c6d19aa91aaa12c390cf9560d1c9799  third_party/sanitizers-cmake/LICENSE
+-sha256  a7241a379cb98d37788f82c2fc2e484c3ae85dae881fd3406f0637644850926f  third_party/spdlog-1.12.0/LICENSE
+-sha256  8b79f17fa7cf47adeeb8277965267e3932155fdfcab81a0ed5d583438bdf9135  third_party/weston/protocol/ivi-application.xml
++sha256  529bc3900a9571e49db285b0df432397e70b881cc3bf48de6667ae74ff4b06d8  third_party/tomlplusplus/LICENSE
++sha256  97a1fb2cb59395d5131de386c963e7846fbb92b334c0468ffefdc8bb817d6400  third_party/wayland-cxx-scanner/LICENSE
+diff --git a/package/ivi-homescreen/ivi-homescreen.mk b/package/ivi-homescreen/ivi-homescreen.mk
+index 525fb4e11b..7fa971a404 100644
+--- a/package/ivi-homescreen/ivi-homescreen.mk
++++ b/package/ivi-homescreen/ivi-homescreen.mk
+@@ -4,133 +4,132 @@
  #
  ################################################################################
  
--FLUTTER_PACKAGES_VERSION = 2df1c3a524131e35d6e385eb9465c47d530e341b
-+FLUTTER_PACKAGES_VERSION = f455dfa67f5effa368b00050a7fe5abddcb0204c
- FLUTTER_PACKAGES_SITE = $(call github,flutter,packages,$(FLUTTER_PACKAGES_VERSION))
- FLUTTER_PACKAGES_LICENSE = BSD-3-Clause
- FLUTTER_PACKAGES_LICENSE_FILES = LICENSE
-diff --git a/support/testing/tests/package/test_flutter.py b/support/testing/tests/package/test_flutter.py
-index ed8837c7c5..9789a82c33 100644
---- a/support/testing/tests/package/test_flutter.py
-+++ b/support/testing/tests/package/test_flutter.py
-@@ -30,7 +30,7 @@ class TestFlutter(infra.basetest.BRTest, GraphicsBase):
-         BR2_PACKAGE_FLUTTER_PI_RAW_KEYBOARD_PLUGIN=y
-         BR2_PACKAGE_FLUTTER_PI_TEXT_INPUT_PLUGIN=y
-         BR2_PACKAGE_FLUTTER_PACKAGES=y
--        BR2_PACKAGE_FLUTTER_MARKDOWN_EXAMPLE=y
-+        BR2_PACKAGE_FLUTTER_ANIMATIONS_EXAMPLE=y
-         BR2_PACKAGE_FLUTTER_ENGINE=y
-         BR2_TARGET_ROOTFS_EXT2=y
-         BR2_TARGET_ROOTFS_EXT2_4=y
-@@ -59,19 +59,19 @@ class TestFlutter(infra.basetest.BRTest, GraphicsBase):
-         # so lets try a few times. 600 samples should cover about 10s
-         # @60Hz (although, the rendering could be much slower on slow
-         # machines)
--        self.assertRunOk("systemctl start flutter-markdown-example", timeout=10)
-+        self.assertRunOk("systemctl start flutter-animations-example", timeout=10)
-         for i in range(600):
-             gallery_crc = self.get_n_fb_crc(count=1)[0]
-             if gallery_crc != empty_crc:
-                 break
-             time.sleep(1)
--        self.assertNotEqual(gallery_crc, empty_crc, "gallery app did not render anything on screen")
-+        self.assertNotEqual(gallery_crc, empty_crc, "Animation app did not render anything on screen")
+-IVI_HOMESCREEN_VERSION = a038ce00031ed5a9a89b4d8dd7dbde5e3d7ade6e
++IVI_HOMESCREEN_VERSION = 950f7a5aeed1bfc1112c9757ed8588a9fc46124c
+ IVI_HOMESCREEN_SITE = https://github.com/toyota-connected/ivi-homescreen.git
+ IVI_HOMESCREEN_SITE_METHOD = git
++IVI_HOMESCREEN_GIT_SUBMODULES = YES
+ IVI_HOMESCREEN_LICENSE = Apache-2.0, BSD-3-Clause, BSD-Style, BSL-1.0, MIT
++IVI_HOMESCREEN_INSTALL_STAGING = YES
  
-         # Stop the application, and check it restored the framebuffer content
--        self.assertRunOk("systemctl stop flutter-markdown-example", timeout=10)
-+        self.assertRunOk("systemctl stop flutter-animations-example", timeout=10)
-         for i in range(600):
-             gallery_crc = self.get_n_fb_crc(count=1)[0]
-             if gallery_crc == empty_crc:
-                 break
-             time.sleep(1)
--        self.assertEqual(gallery_crc, empty_crc, "gallery app did not stop rendering")
-+        self.assertEqual(gallery_crc, empty_crc, "Animation app did not stop rendering")
-diff --git a/support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-animations-example.service b/support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-animations-example.service
-new file mode 100644
-index 0000000000..373d6aa50e
---- /dev/null
-+++ b/support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-animations-example.service
-@@ -0,0 +1,9 @@
-+[Unit]
-+Description=flutter-animations-example daemon
-+After=dbus.service systemd-udevd.service
+ # Keep order as listed in ivi-homescreen.hash
+ IVI_HOMESCREEN_LICENSE_FILES = \
+ 	LICENSE \
+-	third_party/filament/libs/bluevk/include/bluevk/BlueVK.h \
++	third_party/Vulkan-Headers/LICENSE.md \
+ 	third_party/flutter/shell/platform/common/client_wrapper/core_implementations.cc \
+ 	third_party/flutter/third_party/dart/runtime/include/dart_api.h \
+-	third_party/asio-1-28-1/asio/LICENSE_1_0.txt \
+-	third_party/flutter/third_party/rapidjson/include/rapidjson/rapidjson.h \
++	third_party/asio/LICENSE_1_0.txt \
++	third_party/cxxopts/LICENSE \
++	third_party/fmt/LICENSE \
++	third_party/rapidjson/license.txt \
+ 	third_party/sanitizers-cmake/LICENSE \
+-	third_party/spdlog-1.12.0/LICENSE \
+-	third_party/weston/protocol/ivi-application.xml
++	third_party/tomlplusplus/LICENSE \
++	third_party/wayland-cxx-scanner/LICENSE
+ 
+ IVI_HOMESCREEN_DEPENDENCIES = \
+ 	host-flutter-sdk-bin \
++	host-pugixml \
+ 	flutter-engine \
++	libdrm \
+ 	libxkbcommon \
+ 	wayland \
+-	wayland-protocols \
+-	wayland-utils
++	wayland-protocols
 +
-+[Service]
-+ExecStart=/usr/bin/flutter-pi --release /usr/share/flutter/animations_example/release/
-+Restart=always
-+KillMode=process
++# The Wayland C++ bindings are generated at build time by
++# wayland-cxx-scanner, which is bundled as a submodule. When cross
++# compiling, the scanner must be provided as a host tool, so build it
++# from the bundled sources to guarantee it matches the header-only
++# framework the embedder is compiled against.
++IVI_HOMESCREEN_HOST_SCANNER_BUILDDIR = $(@D)/host-wayland-cxx-scanner
 +
-diff --git a/support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-markdown-example.service b/support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-markdown-example.service
-deleted file mode 100644
-index bbea02ab0d..0000000000
---- a/support/testing/tests/package/test_flutter/overlay/usr/lib/systemd/system/flutter-markdown-example.service
-+++ /dev/null
-@@ -1,9 +0,0 @@
--[Unit]
--Description=flutter-markdown-example daemon
--After=dbus.service systemd-udevd.service
++define IVI_HOMESCREEN_BUILD_HOST_WAYLAND_CXX_SCANNER
++	$(HOST_MAKE_ENV) $(HOST_CONFIGURE_OPTS) $(BR2_CMAKE) \
++		-S $(@D)/third_party/wayland-cxx-scanner \
++		-B $(IVI_HOMESCREEN_HOST_SCANNER_BUILDDIR) \
++		-DCMAKE_BUILD_TYPE=Release \
++		-DCMAKE_PREFIX_PATH=$(HOST_DIR) \
++		-DWAYLAND_CXX_SCANNER_TOOL_ONLY=ON
++	$(HOST_MAKE_ENV) $(BR2_CMAKE) \
++		--build $(IVI_HOMESCREEN_HOST_SCANNER_BUILDDIR) \
++		-j$(PARALLEL_JOBS)
++endef
++IVI_HOMESCREEN_PRE_CONFIGURE_HOOKS += IVI_HOMESCREEN_BUILD_HOST_WAYLAND_CXX_SCANNER
++
++ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_IME_TEXT_INPUT_V1),y)
++IVI_HOMESCREEN_IME_BACKEND = text-input-v1
++else ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_IME_INPUT_METHOD_V1),y)
++IVI_HOMESCREEN_IME_BACKEND = input-method-v1
++else ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_IME_INPUT_METHOD_V2),y)
++IVI_HOMESCREEN_IME_BACKEND = input-method-v2
++else ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_IME_VIRTUAL_KEYBOARD_V1),y)
++IVI_HOMESCREEN_IME_BACKEND = virtual-keyboard-v1
++else ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_IME_NONE),y)
++IVI_HOMESCREEN_IME_BACKEND = none
++else
++IVI_HOMESCREEN_IME_BACKEND = text-input-v3
++endif
+ 
++# The internal libraries are meant to be linked statically into the
++# homescreen binary (ihs_shared is explicitly a shared library). Building
++# them shared creates a dependency cycle when plugins are enabled.
+ IVI_HOMESCREEN_CONF_OPTS = \
++	-DBUILD_SHARED_LIBS=OFF \
++	-DBUILD_ACCESSIBILITY=OFF \
++	-DBUILD_BACKEND_DRM_KMS_EGL=OFF \
++	-DBUILD_BACKEND_DRM_KMS_VULKAN=OFF \
++	-DBUILD_BACKEND_HEADLESS_EGL=OFF \
++	-DBUILD_BACKEND_HEADLESS_VULKAN=OFF \
++	-DBUILD_BACKEND_SOFTWARE=OFF \
++	-DBUILD_BACKEND_WAYLAND_LEASED_DRM=OFF \
++	-DBUILD_COMPOSITOR=OFF \
+ 	-DBUILD_CRASH_HANDLER=OFF \
+-	-DBUILD_PLUGIN_FILE_SELECTOR=OFF \
+-	-DBUILD_PLUGIN_FIREBASE_CORE=OFF \
+-	-DBUILD_PLUGIN_URL_LAUNCHER=OFF \
+-	-DBUILD_TEXTURE_NAVI_RENDER_EGL=OFF \
+-	-DBUILD_TEXTURE_TEST_EGL=OFF \
++	-DBUILD_DOCS=OFF \
++	-DBUILD_FUZZERS=OFF \
++	-DBUILD_INTEGRATION_TESTS=OFF \
++	-DBUILD_MCP=OFF \
+ 	-DBUILD_UNIT_TESTS=OFF \
+-	-DENABLE_AGL_CLIENT=OFF \
+-	-DENABLE_XDG_CLIENT=ON \
+-	-DENABLE_IVI_SHELL_CLIENT=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_IVI_SHELL_CLIENT),ON,OFF)
++	-DBUILD_WATCHDOG=OFF \
++	-DDISABLE_PLUGINS=ON \
++	-DENABLE_OSGI=OFF \
++	-DENABLE_STATIC_LINK=OFF \
++	-DWAYLAND_CXX_IME_BACKEND=$(IVI_HOMESCREEN_IME_BACKEND) \
++	-DWAYLAND_CXX_SCANNER_EXECUTABLE=$(IVI_HOMESCREEN_HOST_SCANNER_BUILDDIR)/src/wayland-cxx-scanner
++
++# Wayland shell clients
++IVI_HOMESCREEN_CONF_OPTS += \
++	-DENABLE_AGL_SHELL_CLIENT=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_AGL_SHELL_CLIENT),ON,OFF) \
++	-DENABLE_IVI_SHELL_CLIENT=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_IVI_SHELL_CLIENT),ON,OFF) \
++	-DENABLE_SIMPLE_SHELL_CLIENT=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_SIMPLE_SHELL_CLIENT),ON,OFF) \
++	-DENABLE_XDG_CLIENT=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_XDG_SHELL_CLIENT),ON,OFF)
+ 
+ # Logging
+ IVI_HOMESCREEN_CONF_OPTS += \
+-	-DENABLE_DART_VM_LOGGING=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_DART_VM_LOGGING),ON,OFF) \
+ 	-DENABLE_DLT=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_DLT_LOGGING),ON,OFF)
+ 
+-# EGL
++ifeq ($(BR2_ENABLE_LTO),y)
++IVI_HOMESCREEN_CONF_OPTS += -DENABLE_LTO=ON
++else
++IVI_HOMESCREEN_CONF_OPTS += -DENABLE_LTO=OFF
++endif
++
++# Wayland EGL backend
++IVI_HOMESCREEN_DEPENDENCIES += libegl libgles
+ IVI_HOMESCREEN_CONF_OPTS += \
++	-DBUILD_BACKEND_WAYLAND_EGL=ON \
+ 	-DBUILD_EGL_TRANSPARENCY=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_EGL_TRANSPARENCY),ON,OFF) \
+ 	-DBUILD_EGL_ENABLE_3D=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_EGL_ENABLE_3D),ON,OFF) \
+ 	-DBUILD_EGL_ENABLE_MULTISAMPLE=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_EGL_MULTISAMPLE),ON,OFF)
 -
--[Service]
--ExecStart=/usr/bin/flutter-pi --release /usr/share/flutter/flutter_markdown_example/release/
--Restart=always
--KillMode=process
+-# dependency-less plugins
+-IVI_HOMESCREEN_CONF_OPTS += \
+-	-DBUILD_PLUGIN_ACCESSIBILITY=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_ACCESSIBILITY_PLUGIN),ON,OFF) \
+-	-DBUILD_PLUGIN_COMP_REGION=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_COMP_REGION_PLUGIN),ON,OFF) \
+-	-DBUILD_PLUGIN_COMP_SURF=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_COMP_SURF_PLUGIN),ON,OFF) \
+-	-DBUILD_PLUGIN_DESKTOP_WINDOW=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_DESKTOP_WINDOW_PLUGIN),ON,OFF) \
+-	-DBUILD_PLUGIN_GO_ROUTER=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_GO_ROUTER_PLUGIN),ON,OFF) \
+-	-DBUILD_PLUGIN_INTEGRATION_TEST=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_INTEGRATION_TEST_PLUGIN),ON,OFF) \
+-	-DBUILD_PLUGIN_ISOLATE=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_ISOLATE_PLUGIN),ON,OFF) \
+-	-DBUILD_PLUGIN_KEYBOARD_MANAGER=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_KEYBOARD_MANAGER_PLUGIN),ON,OFF) \
+-	-DBUILD_PLUGIN_KEY_EVENT=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_KEY_EVENT_PLUGIN),ON,OFF) \
+-	-DBUILD_PLUGIN_LAYER_PLAYGROUND=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_LAYER_PLAYGROUND_PLUGIN),ON,OFF) \
+-	-DBUILD_PLUGIN_LOGGING=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_LOGGING_PLUGIN),ON,OFF) \
+-	-DBUILD_PLUGIN_MOUSE_CURSOR=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_MOUSE_CURSOR_PLUGIN),ON,OFF) \
+-	-DBUILD_PLUGIN_PACKAGE_INFO=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_PACKAGE_INFO_PLUGIN),ON,OFF) \
+-	-DBUILD_PLUGIN_PLATFORM=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_PLATFORM_PLUGIN),ON,OFF) \
+-	-DBUILD_PLUGIN_PLATFORM_VIEWS=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_PLATFORM_VIEWS_PLUGIN),ON,OFF) \
+-	-DBUILD_PLUGIN_RESTORATION=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_RESTORATION_PLUGIN),ON,OFF) \
+-	-DBUILD_PLUGIN_TEXT_INPUT=$(if $(BR2_PACKAGE_IVI_HOMESCREEN_TEXT_INPUT_PLUGIN),ON,OFF)
 -
+-# Wayland backend options
+-ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
+-IVI_HOMESCREEN_DEPENDENCIES += libegl
+-IVI_HOMESCREEN_CONF_OPTS += -DBUILD_BACKEND_WAYLAND_EGL=ON
+-else
+-IVI_HOMESCREEN_CONF_OPTS += -DBUILD_BACKEND_WAYLAND_EGL=OFF
++# libgbm is optional: without it, platform views fall back to GL
++# texture export.
++ifeq ($(BR2_PACKAGE_HAS_LIBGBM),y)
++IVI_HOMESCREEN_DEPENDENCIES += libgbm
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),y)
+-IVI_HOMESCREEN_DEPENDENCIES += mesa3d
++# Wayland Vulkan backend, using the bundled Vulkan headers
++ifeq ($(BR2_PACKAGE_VULKAN_LOADER),y)
++IVI_HOMESCREEN_DEPENDENCIES += vulkan-loader
+ IVI_HOMESCREEN_CONF_OPTS += -DBUILD_BACKEND_WAYLAND_VULKAN=ON
+ else
+ IVI_HOMESCREEN_CONF_OPTS += -DBUILD_BACKEND_WAYLAND_VULKAN=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBDRM),y)
+-IVI_HOMESCREEN_DEPENDENCIES += libdrm
+-IVI_HOMESCREEN_CONF_OPTS += -DBUILD_BACKEND_WAYLAND_DRM=ON
+-else
+-IVI_HOMESCREEN_CONF_OPTS += -DBUILD_BACKEND_WAYLAND_DRM=OFF
+-endif
+-
+-# "plugins with external dependencies"
+-ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_AUDIO_PLAYERS),y)
+-IVI_HOMESCREEN_DEPENDENCIES += gstreamer1 gst1-plugins-base
+-IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_AUDIO_PLAYERS=ON
+-else
+-IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_AUDIO_PLAYERS=OFF
+-endif
+-
+-ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_FLUTTER_SECURE_STORAGE_PLUGIN),y)
+-IVI_HOMESCREEN_DEPENDENCIES += libsecret
+-IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_SECURE_STORAGE=ON
+-else
+-IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_SECURE_STORAGE=OFF
+-endif
+-
+-ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_GOOGLE_SIGN_IN_PLUGIN),y)
+-IVI_HOMESCREEN_DEPENDENCIES += libcurl
+-IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_GOOGLE_SIGN_IN=ON
+-else
+-IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_GOOGLE_SIGN_IN=OFF
+-endif
+-
+-ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_GSTREAMER_EGL_PLUGIN),y)
+-IVI_HOMESCREEN_DEPENDENCIES += ffmpeg gstreamer1 gst1-plugins-base
+-IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_GSTREAMER_EGL=ON
+-else
+-IVI_HOMESCREEN_CONF_OPTS += -DBUILD_PLUGIN_GSTREAMER_EGL=OFF
+-endif
+-
+-ifeq ($(BR2_PACKAGE_IVI_HOMESCREEN_OPENGL_TEXTURE_PLUGIN),y)
+-IVI_HOMESCREEN_CONF_OPTS += \
+-	-DBUILD_PLUGIN_OPENGL_TEXTURE=ON \
+-	-DBUILD_TEXTURE_EGL=ON
+-else
+-IVI_HOMESCREEN_CONF_OPTS += \
+-	-DBUILD_PLUGIN_OPENGL_TEXTURE=OFF \
+-	-DBUILD_TEXTURE_EGL=OFF
+-endif
+-
+ $(eval $(cmake-package))
 -- 
 2.56.1
 
