@@ -1,29 +1,29 @@
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91144606A329
-	for <buildroot@archiver.kernel.org>; Fri, 27 Nov 2026 15:30:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 422DC606A326
+	for <buildroot@archiver.kernel.org>; Fri, 27 Nov 2026 15:30:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=WjhBaPCL;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=N/1hW++H
+	dkim=pass (2048-bit key) header.d=buildroot.org header.i=@buildroot.org header.a=rsa-sha256 header.s=default header.b=FTw3Ibf5;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=WKkwGYOd
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6CC13608B5;
-	Fri, 27 Nov 2026 15:30:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F0FC78124B;
+	Fri, 27 Nov 2026 15:30:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TKZMvPgVeDUA; Fri, 27 Nov 2026 15:30:09 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp3.osuosl.org 6A7826070E
-Authentication-Results: smtp3.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
-ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795793409;
-	b=XDd+3d6KGF+Bj8dGwuoglrdZCkIsHhOJQg0k9ZAiO1H2HJ+2xqM4goIDY1tj/+v+WbYj
-	 r8PMFKcADbmgKSCdxyH6cZaxOVNDIk5An7umpyAl7Aj+N6wPHueMkY9nHwfZi6eiFU6CO
-	 OfcgCKf0ktnCTxN0sXFX/XX2AevbabB0vcOH9gPfLc6P/AwtCv2y70mTeV2lYA0vW9Fel
-	 heVc1xVDcZL1v9tDj/o4LQESP6j7Vr7usJU/uwOkEGUhaKFsYWnwEMwwR+kgXkP0xSuB9
-	 /tm7i2DunRrBMCuDOlaX4v0kLkbUopRC2Nyq8mWpXjmRSHGWyh+sWWvJQpQTDsiGJ2g==
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eZJdd4KHooZG; Fri, 27 Nov 2026 15:30:10 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org BE9D38122F
+Authentication-Results: smtp1.osuosl.org; arc=none smtp.remote-ip=140.211.166.142
+ARC-Seal: i=1; d=osuosl.org; s=arc; a=rsa-sha256; cv=none; t=1795793410;
+	b=RxHESFH+KrUc6ndMgIdpOU3SaaPNx/h12Qbb+hqwmbw09Hu2uPXSwU6Gzx2spiNk7IVB
+	 mxB94wpZ6ANPRWXUg+OsGO7CKkFxWgfMn7rVzm1JvoMgWrtb3pPQpa4O3FZsin41h6FJo
+	 qSq/ConNgDp+Tb2xDC+6npQVjb+XkYQD6R9rERxVb39Jk3OYELDRzScO/rWiw1H6DgNTG
+	 ZGjvq574/WKSfHtKuqAW4XjUohm2ojlB4wGsX6Eq6ZpAYL2GIxTRLLmZBEGMqmTA1BPHk
+	 165YQvJviOKWnhCWjjdT+lD14ek9ASli2t0WzZWgdBtcLB5KDnVW80U0N946YSwsNMw==
 ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
-	c=relaxed/relaxed; t=1795793409;
+	c=relaxed/relaxed; t=1795793410;
 	h=X-Comment:DKIM-Signature:X-Original-To:Delivered-To:Received:
 	 Received:X-Virus-Scanned:X-Spam-Flag:X-Spam-Score:X-Spam-Level:
 	 X-Spam-Status:Received:ARC-Filter:Received-SPF:Received:
@@ -45,42 +45,44 @@ ARC-Message-Signature: i=1; d=osuosl.org; s=arc; a=rsa-sha256;
 	 X-Mailman-Version:Precedence:List-Id:List-Unsubscribe:List-Archive:
 	 List-Post:List-Help:List-Subscribe:Content-Type:
 	 Content-Transfer-Encoding:Errors-To:Sender;
-	bh=lLN17TkF9XBDbzgQuLeyo6wZI8MD7QXc6TLraGp8oBI=;
-	b=E74e+MbySMNJ86egMiooxFc7BPft362eMbcl8QId8FfxMsFMsf7/u3hhECaNcsIE28bo
-	 LH3Q2LJpduwPiU3D5Zq7HLmppxvvnRbvWHF7+khLwYrrHVIAw8Qcc3hrbXx8J9jX83aI8
-	 oFiW8SWR3zxfi7xJqcgcsMZnJeo3imgvIJPNJ8Refe52VtDPjqMphu3SauH83ZgnmLXGv
-	 4VctGkt71AIwG/3ZAFJcalcWmdRRIeQLKmsLl1gayaSjQP9NXXIN35M87d8lm88m+fTC0
-	 LalpjzhggcuR9lXECNssM22S80nV+TWBFsOua3CEOHGRcOQogI24/GoQ1YGk2V1/EEg==
-ARC-Authentication-Results: i=1; smtp3.osuosl.org; 
+	bh=PvcghG++zGD3Y+7b78HxZJ3BaAKdULTtTfvFSsCBd3c=;
+	b=NTYMBnW6QxFW8/XLv0Rz6XIGISbemCF9H5JoM+Qjki+2VNWlMZCUk/d9lJpoaUUrPuy/
+	 jZuTTcBoXE/mjWrzkXZ8O0wAj0JtZn6zXfR73AL7ppvzT0duO7bVOWzU0L6VBcJIYQyh9
+	 pErglKgI8LT7zndroDme+wKpSCRHkeQm3UaZolaLjfcc3AlcTmrGsoybbq7eE3IRpoEaq
+	 KCYpWP3sXdAZuGTAMK86FbKPHE4jdrzVmehQKuS2iv/ujZm+oIHKltDHDaaNijV9qaWyZ
+	 754d+gLwlKlJQh0Kcs5TYqToEQwiPbwU2en3B0whlit69JxIR7TqWhrZOcwk59WrTYQ==
+ARC-Authentication-Results: i=1; smtp1.osuosl.org; 
+	dmarc=pass header.from=outlook.com;
+	dkim=pass header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256 header.s=selector1 header.b=WKkwGYOd;
 	arc=none smtp.remote-ip=140.211.166.142
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.142; helo=lists1.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=buildroot.org;
-	s=default; t=1795793409;
-	bh=lLN17TkF9XBDbzgQuLeyo6wZI8MD7QXc6TLraGp8oBI=;
+	s=default; t=1795793410;
+	bh=PvcghG++zGD3Y+7b78HxZJ3BaAKdULTtTfvFSsCBd3c=;
 	h=From:To:Cc:Date:In-Reply-To:References:Subject:List-Id:
 	 List-Unsubscribe:List-Archive:List-Post:List-Help:List-Subscribe:
 	 From;
-	b=WjhBaPCLvMiuvSIs//nZCUJ6PPKpZUhZxX+T0ocIktmaKRMRnIOB6RRUhBj6M8djV
-	 +PubemqOb1PKBvLkbH62Kl7MFW4e1YA4cfitDMvBYGaKJgONId3ZyPRswjke2XRt8m
-	 T1SNipLpB5VgdxkJBC2lnSgq5GVK9y6+0QQBZbtmOXNJBc/sXYhUuUS33GWNmWHsnq
-	 zRP0hDC/wfxCUZN61QRpvVODGabAbygv0GNDVQVM+0a33QfxXbDmMBpZ+7fIq23kv2
-	 7U13vOOtVXUtPGYzVyi77Zx5xlX3fbatmGO7y5BVt26NAjVl9WuKvMMQnmtTsu4bYz
-	 kZoue3uKHAZPg==
+	b=FTw3Ibf5kFlZd7uhrS5RPBsDb4rQBkdHA9Rn+CE5q3O09meuK6SR/ZRbrdPP9d7/N
+	 8x+jx9lO07Mn8o4B7TDEgf10t5keG79H4XuC6/YxeoZ28yjv2mtdipN2yTm1p+A1uu
+	 H4MoGuHoLpo1D2FhjO4QwghP1mCCYI9odDpIKLwBOhn7frIeOeU0odpJnCoSW4KOMa
+	 F+ncRgd7ialBmpezPZ2MnxXB6gLlLsseeeYMSfBuzFUd2QJDl3ZJUTNWkjGHj8xI9L
+	 8NtQjIxHcrGV5P7ytStIK9ihy1HwwH9HH8zdJWQJ30ECn5tn61RzThgmVpbsP1pKsT
+	 SYcninBqS6RIg==
 Received: from lists1.osuosl.org (lists1.osuosl.org [140.211.166.142])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6A7826070E;
-	Fri, 27 Nov 2026 15:30:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE9D38122F;
+	Fri, 27 Nov 2026 15:30:10 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by lists1.osuosl.org (Postfix) with ESMTP id 88FE4373
- for <buildroot@buildroot.org>; Fri, 27 Nov 2026 15:30:04 +0000 (UTC)
+ by lists1.osuosl.org (Postfix) with ESMTP id 71B47373
+ for <buildroot@buildroot.org>; Fri, 27 Nov 2026 15:30:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7A91B81136
- for <buildroot@buildroot.org>; Fri, 27 Nov 2026 15:30:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 63CFF81150
+ for <buildroot@buildroot.org>; Fri, 27 Nov 2026 15:30:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lmbOgQ6ty_Ud for <buildroot@buildroot.org>;
- Fri, 27 Nov 2026 15:30:03 +0000 (UTC)
-ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 6F0F281121
+ id CJB1wzpcpJP4 for <buildroot@buildroot.org>;
+ Fri, 27 Nov 2026 15:30:04 +0000 (UTC)
+ARC-Filter: OpenARC Filter v1.3.2 smtp1.osuosl.org 3189781129
 Authentication-Results: smtp1.osuosl.org; arc=pass header.oldest-pass=0
  smtp.remote-ip="2a01:111:f403:d40d::2"
 Received-SPF: Pass (mailfrom) identity=mailfrom;
@@ -91,26 +93,26 @@ Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none) header.from=outlook.com
 Authentication-Results: smtp1.osuosl.org; dkim=pass (2048-bit key,
  unprotected) header.d=outlook.com header.i=@outlook.com header.a=rsa-sha256
- header.s=selector1 header.b=N/1hW++H
+ header.s=selector1 header.b=WKkwGYOd
 Received: from SY5PR01CU010.outbound.protection.outlook.com
  (mail-australiaeastazolkn190120002.outbound.protection.outlook.com
  [IPv6:2a01:111:f403:d40d::2])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6F0F281121
- for <buildroot@buildroot.org>; Fri, 27 Nov 2026 15:30:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3189781129
+ for <buildroot@buildroot.org>; Fri, 27 Nov 2026 15:30:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Su4O2zkZ45YWf34xwRzjWIlFB2LYUQlsGFczehjOjfs=;
- b=N/1hW++HypuMtdnS6zmVks1SkgTtE2Xt9bcZtkRTrUpJK7IhjAmQBdhFJ0e0Y4HjlzDmfo/SI4GfzreTNzlKDh8QHhMwq4hPxSrHI2Z9DefWCmZJLhule645geNcZryo0oRLO2mUyrWpV/SX13X5QwYAm+DtIcv2bzhDw+A1ufRg5s7GhXdKiGKV5jonUyczp0o+KRdeMV03q727Jm6DaFFcAE7STqKFuPdXN4BNQrLb4+xvsQAjvHOKf45slxdXkizdV2fhBGXN1W5pLuWc+j6uDUUZOcLA8ojUuGrMtTY8Rn47HL/DmwU4/lm2sSHhDw360DLBu72dEsbVqd6aCQ==
+ bh=z/4n0l1BGgBDa6pZqr/gV2IcJkQ+jZJysZ/HLwcLB8Q=;
+ b=WKkwGYOdtxtcVsjuVWxew+gpbyG27MjZb7hZ60yFEbv6Q2u1E9GLSlkzQ2q4S4NroCT6Iokew/RR17Syy7MzT/vycY7nvAwGMtcLDVkYQK8NxlHSs3hHpsdQG1gTwZXJ1h3yI5+/6UeuHH6U0uBM9anx8M8x0d0P0x2VNhiFHkCifWu0XROCdVP2onAFg0YoLEW1R/0n3Yl/TX6npP0Gftj1+ddYlcpWwICrU5TBCkoLOEanKF0gPhG2l0nqzvsiLRD8rDmXjZMvy2PipfIuQGry5yu8+HzdqptDkUwd8rNx5elkEY8gMKSVPyTkmBK3EgfsTCBbsyJ1lgdT2OCNfw==
 Received: from SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM (2603:10c6:10:261::8) by
  SY0P300MB0692.AUSP300.PROD.OUTLOOK.COM (2603:10c6:10:27d::6) with
  Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.662.11; Fri, 27 Nov 2026 15:29:56 +0000
+ 15.21.662.11; Fri, 27 Nov 2026 15:29:59 +0000
 Received: from SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
  ([fe80::338a:60df:663b:c222]) by SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
  ([fe80::338a:60df:663b:c222%3]) with mapi id 15.21.0662.007; Fri, 27 Nov 2026
- 15:29:56 +0000
+ 15:29:59 +0000
 From: Fengwei Tan <tfx2001@outlook.com>
 To: buildroot@buildroot.org
 Cc: Fabio Estevam <festevam@gmail.com>,
@@ -120,112 +122,116 @@ Cc: Fabio Estevam <festevam@gmail.com>,
  "Wojciech M . Zabolotny" <wzab01@gmail.com>,
  Woodrow Douglass <wdouglass@carnegierobotics.com>,
  Fengwei Tan <tfx2001@outlook.com>
-Date: Fri, 27 Nov 2026 23:29:20 +0800
-Message-ID: <SY8P300MB0041BB05678F5646534E5315B5412@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
+Date: Fri, 27 Nov 2026 23:29:21 +0800
+Message-ID: <SY8P300MB004140FE96B4B046F4CD57EAB5412@SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM>
 X-Mailer: git-send-email 2.56.1
 In-Reply-To: <MEUP300MB00454F7593FD1E072AB8FDABB5412@MEUP300MB0045.AUSP300.PROD.OUTLOOK.COM>
 References: <MEUP300MB00454F7593FD1E072AB8FDABB5412@MEUP300MB0045.AUSP300.PROD.OUTLOOK.COM>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2249; i=tfx2001@outlook.com;
- h=from:subject; bh=Ykzd3aQ/gKqvtJjVlaXgyb4lxwVQeFOcNXf0G4em7Qk=;
- b=owEBbQKS/ZANAwAKARwPraXT/AvaAcsmYgBrCaHQbSiGmxyAYv+x8ZhHNfvhDA7SUc1SUitM7
- yKGNQ54oE+JAjMEAAEKAB0WIQTM77vWq2MBMkgGqAccD62l0/wL2gUCawmh0AAKCRAcD62l0/wL
- 2gFDD/4h0rY+OyrqEwk2TyMaHaBihef7G3JBpj+J/4r69tctzLdAP2TYF/XaRBP777QQtyVzcma
- pvwzOjEHFS2atapxMpiXGOEYCz/K4fx2OteE3y8heUqV/72kvHNZF8avDUWEAD7/LccxupYZr4m
- 7W+u0/fKrlSZF9XAjKVAOWnu7uevnMohR6vpvk75XZ2euNl61bOfu9iICFqWF57xMSzz3I44gWZ
- YkhWZuo/s/JHaGuXTJ9oQFAPHM7uDjD+tc96EKkNrQPCrx1oK1fDvaZI3B/BNbiEGgbWf2pYGv9
- v7RcRCC/lD1ZqSvcTbPfIT3J+c+oIs5valYT0C+xiVGDsvJTfuMvNUCXU79T5sHqZdkdn7UC+o4
- XLH6zuB4AHbkhVwxQQmj3AdPSRjcUcwjBu0ShfMoaHM0her62Pyr1n6jVnRNPEe20s7vFRix4AL
- 1ujJeynNcMjpAb/wBbovIci/p3ui803HmQvLoSK2pWmOmqccGkgk1MjxDc4eGgCSZt2jR8SSb1N
- 6NCVCPe52EJrddRw9s5R5wYPMIzHeJ8h95VfS2IzEJmOgoge8pZKTv+Nyf7KJd6137+vOrTbt0H
- QWVF+Z5iweyy9hyFPtj+56wSFswl2eqKijXX90nMpLFmWLiRnQNGEcWzHSevBalXdCoYnCdY2hC
- xTflRdA7mnv33rQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7246; i=tfx2001@outlook.com;
+ h=from:subject; bh=u0tE/kooGltD4qyx75d4vc8I6JWaeRxc1taOS3W6SA8=;
+ b=owEBbQKS/ZANAwAKARwPraXT/AvaAcsmYgBrCaHQFsF5XOQL5LprQlQL6PbVL+yZRQ7ZHnHix
+ QOP3C1CmgSJAjMEAAEKAB0WIQTM77vWq2MBMkgGqAccD62l0/wL2gUCawmh0AAKCRAcD62l0/wL
+ 2slAD/9W4CEvj0t73xRcuEy/lnd8sLkzm+hBPlc9v5kPFwuE937ST8nEw+7XYxpmKlYd+ZwFmcO
+ xp40UpgzbK8pQ9Js8lV1wSqSv6/9zvelb413qyxWOYPVdeRm0oP/Ph5xXYGwjGllLUp6f7T74Us
+ kLg8OCPzcEKht1fbQ1/9v58LF6wtmI/OTmPFj8++nrx+DQ+4uLlNVxKl9xgw2vodlts8pHLZ627
+ XTZVc41w+Drdke5Z7qLoH2EtHDe0tTDIatHFB/sAuL3kTI66hlo7woyywc/D1szv/72Cr3oC7Cq
+ SGrRVX2t2zf+9FGqAwGOeWJ1HrzFiSVnhPm3RltMmd9rqMNsDmhjXtZfx/8HvYJY8YyBCPqHSEq
+ +RDsQN3Eg7YDjPUtkXesNh4RxHM7Rk4ufnyA2p+YeCp3kUAJCVWXNeFFa+LM9nhp+gZg9KT9IiH
+ gY3ne7AQg7KpcGhFPcXZgw4U6w92Bdj7XJpzYcAuqyCsggmEHqFBjRTVnSCzi6PXHadZdSCrWNd
+ 6tU4wwl2+X/lWneCRYA2mrHgofPHbqi1nk1OotJX5R7TLCoQF/QqYStLRrUXZtcnpfDDtfEDazQ
+ 7SA50YHrqjLmbIaDZmXhb0yAOclgILbHfEa+dYwB+rJtYoa8Tf28gXFO/0uIdn+KvTZLFpR1lC0
+ loDpOhjurj+3rSw==
 X-Developer-Key: i=tfx2001@outlook.com; a=openpgp;
  fpr=CC1554EDEAE6C2E309538CB2EEA89BD13554CA50
 X-ClientProxiedBy: TP0P295CA0021.TWNP295.PROD.OUTLOOK.COM
  (2603:1096:910:5::12) To SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
  (2603:10c6:10:261::8)
-X-Microsoft-Original-Message-ID: <20261127152918.358381-5-tfx2001@outlook.com>
+X-Microsoft-Original-Message-ID: <20261127152918.358381-6-tfx2001@outlook.com>
 X-Archived-By: <archiver.kernel.org>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SY8P300MB0041:EE_|SY0P300MB0692:EE_
-X-MS-Office365-Filtering-Correlation-Id: bfe5dc83-c2e3-46cb-8f1e-08df4c9b4a42
+X-MS-Office365-Filtering-Correlation-Id: a1c0b910-350f-4078-2df9-08df4c9b4bf9
 X-Microsoft-Antispam: BCL:0;
- ARA:14566002|25010399006|260925184616899003|16051099003|24021099003|8022599003|2604032031799003|19110799012|704163111799003|5072599009|41001999006|24121999003|15080799012|6090799003|23021999003|22091999003|8060799015|1602099012|10035399007|26121999007|3071699003|440099028|3412199025|4302099013|26104999009|1710799026;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?d2txRm9hblVsNFQ5Mm94R1QzZ0JPTlZKWVhVcVYrUjhjbmFlSEs1VWRnd0x3?=
- =?utf-8?B?RFdIWUxwU2xFb1Z4VHExQXpPTnNvdGVyTzlvY0o0My9MU0ZHMG90b0ZLK2Qy?=
- =?utf-8?B?eGhadVhydEdMOEU2K3VzWmt3ODhBZDZPblNvcWVad2x3TEZrZXkybTF3ajky?=
- =?utf-8?B?cHpwYTFMM0YyckgwS2drRnZVaGMyUWVIQnZMdzB4WENtdUVwcklTb20ySWJT?=
- =?utf-8?B?NlFXZTBGM241S1RyZ3BnVWFJSzJmZWZPNEFINWRFUEVCSUt1VVM4RjM1MUxM?=
- =?utf-8?B?VkZHUkpZWmdtSzRleFdGdzQrZThhNEtLSWhONE5TdlB6clBrWUpIVm4xN3Ux?=
- =?utf-8?B?MEZ6U0RDaHErQjNDaE1mNC9DZjVPTm45ZmpsRG1NMjcxUkNjSk0zSkFKQjlu?=
- =?utf-8?B?c1RuVVhEdk8zcDF2NXJ2MWNRaHNKMS8yL3ZkSjVYQzFrQnF1Q3g2WG1GQWND?=
- =?utf-8?B?OWE3dlgyUkkxK0dWRFpZbnB3Nm5PeWpmSndhZzZmS3NKUEVaWUwxQVVTMmxs?=
- =?utf-8?B?RHZmZTRmZGhhdG5heTU2SU5xcThaOUsyVXZoajduQ1BjUDVpMG5OSkJmL3NC?=
- =?utf-8?B?Ly9DeWtLVGJMYjVmVEhmU1VoaThpSStVblBneUR5MXMrTm81NnA2NElaVFZ6?=
- =?utf-8?B?aVY0Skk2ZStZVDRmVGpteU5va0E4VVZCK0s1a3NxaU8zRHM4c0x1N0RYOUNZ?=
- =?utf-8?B?UTd2Nk12WWR4VmRYRThqSlgvb1ZaeHJOOFRvWnZQQ3BVbXpGclFtdUpJQWN1?=
- =?utf-8?B?dTFrR09sM2ErcEVmSkEwaEZvRlF6ekpOSDdWYkxjZ1N0L3kvMldiTllXeDVl?=
- =?utf-8?B?cllUWHNOQXJPQmhZaHdmUmsza2JRalNOMG5oSjA2Ym9LVGVWeEVwSUdFbDhX?=
- =?utf-8?B?WERtU3ZYTkE0cG1renQ1MTZybnIrai9vZWpPSW9FNHFCbG1MbHhhODBmbW8r?=
- =?utf-8?B?RTlwTnJvazAzUDgxSjk4QlBGcXE3VUR1WDQraDYwaHRyVW02OGJpNWRySlJy?=
- =?utf-8?B?bUJnVXlodDQxUWJpOVViY0NYdTdlcUNxV3p3NytxSG5HcG5CMzVrTW9iaWZN?=
- =?utf-8?B?WmlQdTdSMDJUTEJSNXV5cDJKY1RHL0UxejdibXVMemo2NXVNYXNWaW9rNHoy?=
- =?utf-8?B?VnJodjZxT0hoQW02TFZEeks0YmFEM1NieVZ0VUdIdzYxdGlQL2RCL2pNdFU3?=
- =?utf-8?B?WTVLNisxbzhjVjlhTFVzdWVrVEZpem1rOWNLL0Q3RjFFQ1NnUTRORGZDbDQw?=
- =?utf-8?B?aVE5Zkg1ejZpMmswUFU2bjAyVHg1UStPTnRlUlAzb3RXd2tvUlJCZ0xYZENW?=
- =?utf-8?B?cjNuQktnUjdjV2RTYVVyM3A2YzdxREM4ZUNhdnh6Z2NDRWRYMkxua1ZkY3c4?=
- =?utf-8?B?N0pIbFh3UGdOZFFQb01SNmUwMkswVW1BMDdJNXk3NEoxOTVOdy9MditPblJj?=
- =?utf-8?B?UWJjUVM3czZpckR4VlZQOUhTZnhqNWlRM05qM0JCWTdLa1E3ZVh3TnFhbXlK?=
- =?utf-8?B?STJKUi9QcmVYdkFtRGVraThZOUh6VTZzWlpUM2twZHUxUlNaZXA3THZ4S09Y?=
- =?utf-8?B?Nld4MWtwcmhQYU5pdW9PQWVZM2NpbThqbTh2cUdQTnBpR0xjbUVrUzFLNFlL?=
- =?utf-8?B?QjFBMFpUbVlFU3BVWVk4RmlyNHo1bFAwOTBBZUljakZYUEVkWEc5cG15NG50?=
- =?utf-8?B?MVpzOVZteHpuZUwxS0srZUZRZVdpZnI0MnJVdWh0d3BFYVBzOVZzWmV3PT0=?=
+ ARA:14566002|4140399003|39105399006|25010399006|260925184616899003|16051099003|24021099003|20031999006|2604032031799003|19110799012|704163111799003|24071999003|5072599009|41001999006|24121999003|15080799012|6090799003|23021999003|22091999003|8060799015|1602099012|10035399007|40105399003|26121999007|261005200801699003|23121099006|261007181701699018|11120399003|440099028|3412199025|4302099013|26104999009|1710799026;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?ZU83bFM3WjVqN2tvdS91NElUVXM2TVJONmZoV0JLaFR4T3gvSi9FOVZPamVw?=
+ =?utf-8?B?bGwxMnhoVXNUeGlUa2hTSk1tUkg5SlRiNFd3c1p4YndxSmpva2l2dndKdlVT?=
+ =?utf-8?B?NXFPNUR2aXhNeWtiQTA2WFUwbzlPaFRSZlo3RzFkalE5bDB4ZlZqN3NEZ0pq?=
+ =?utf-8?B?eTNhbGZVbFdpVXhEeWdhdGJjOUFIcmFpUUhESno2T2Z0QXBtS3ZOcGhENm5q?=
+ =?utf-8?B?TXRSeEkwdzNrMWlxT1dGemR1QlJGLzNtNmhFOUZnMUhrbWx0UEtSaXFIcHp2?=
+ =?utf-8?B?VjVibGsyNVdQNnpIMU5ZWDZ5RW11NDFNeitlTkM1U0JsUmtIemxZOEMvUnJK?=
+ =?utf-8?B?Y0xVU1JsMGVmVHRvOTRCelEweWp6RisvdmMwZ01ITUhKZnAzaE9YdzFPS3RF?=
+ =?utf-8?B?SjdDenBIZ1BpdHBYRkJFNjJFdy9rcDlOTThDNGpSbStoeDRQQzZHRFd1a3lz?=
+ =?utf-8?B?U2tSYy9HMUZXZGdNLzg0aTNCUnIxbXNQczNneTQ3am9TU2lQeFViK0JNMFNJ?=
+ =?utf-8?B?TkhLdGwvcWxlZyttSDZldC84ajFTREVIYS9uK3dvWHAyNEgvemFrSGVQa0FX?=
+ =?utf-8?B?TU5YMjc4SjgyK0JqNE9CcmRPUkgyMUNMNSt4ditETGthQXpGdVBBUWNVWmYx?=
+ =?utf-8?B?L29QeUJzcUxRWk84YkZ6N3JTYWYwMmhMM3FTWTZzYVBRMHNzWVNiMHNId3Yr?=
+ =?utf-8?B?QjF0Q3Z3NUFRT2t2K0Fqc0JHVXZtaEZmL3lHeExJdWE1ajQ0aVVKTXJ4UWFi?=
+ =?utf-8?B?V2s1VTZGTmFrUS9oNXFiUGhoamEyQ0dSR0wwQVpFTjA2L3JBeXBxYUF3SjdW?=
+ =?utf-8?B?K29rc0tPSHhrdHd2RTJnWXhEZ1llNjlpRWoyS2JoK0xoV2hIYUo2M1BXcldp?=
+ =?utf-8?B?d0hiV2tqT3FDODhWS3Vpd1M2S21OOGQyZmliMEFNTVdqN3lOdXZZcU5OMkFV?=
+ =?utf-8?B?RnY0cTVIN3NsU2dSQVdodlRDdGJ4dlBpVy8rN2swY21EZHo4bitQek1sUEFj?=
+ =?utf-8?B?MmViczFmdlRIYWI4TWEzOXV4RDNZbm9yZ1IxRTZGeFFENVpwUnFpY0dxM2ND?=
+ =?utf-8?B?b1pxZitrT3luS0tnVy9DVVJnaU1hSkdydDh4L1o5K0lBem5tUE1lWXRNcW9l?=
+ =?utf-8?B?Ty9HUjRUMHpvak1uOEI2bkJ1VDZ0L3RoVFF1ZVE5RzVJalVWNTlidXMyRUk0?=
+ =?utf-8?B?Z2V3WDYvaldZUUhKZUwydVM0Tm1LMU5kYWhtNGMxbkQzd0dCVnlKVVltK3Fu?=
+ =?utf-8?B?Z0FHUEVDd0ltMzVzc1JieWR2eGZpVUJSeUpDQW04a1p5cURnd0NnY3VOU04v?=
+ =?utf-8?B?N29MdTY3Z0xRQkRJUUdHWitTdlpPbk56Z2g4clJQWFY3cEpHMFJhOENlN2Fo?=
+ =?utf-8?B?aFRCZVlMdDhRa0ZDOEhmRTI0dWowNm42RzRYc3NyZkJXdm5PQnhQbHRjY2RJ?=
+ =?utf-8?B?VnJOZEZoNWJud2hsNi9GU2xqNzlVUlRJM0tRTFJxR3IwWmtwS2VVUjVxRGg0?=
+ =?utf-8?B?RTBYZFN2MjVtUmZDZzBpSkhGWTB5c1FPRmMwVFJxMTBUbkM2aVhvMUVzQW5T?=
+ =?utf-8?B?NTdJcTdMWCtER0tId055YzRLekVBbG4zSG10dEdKSURYVGc0c3BBb3c0RWJk?=
+ =?utf-8?B?dWgzUzZ3WmhvbFkwZlVTNjJMbFB2cG13SGdJWDhYVEtyVzJ1TXkrWmlEam9u?=
+ =?utf-8?B?YVV3ZUpyRCtWLzltS2JWeEtHQXM3bVF4em5hMC9CcHpXOXN2UlhRY2doQVJu?=
+ =?utf-8?B?NE5Rd1VUellWTWQ2T0lxcU9kNnNtZ05xMzFBWUV6V1BrTHkrZmJuTWtqcHdz?=
+ =?utf-8?B?MmRIeDJWQVBRTGh6SlRCdnZaejdXL0EwNE02amFvZFVzOWMzSUZ5RkJtTVEy?=
+ =?utf-8?B?QzRuMFF1MWdpc1NhNVBPK1F3ZGRkd3FkWHJRRy9XRkZjVUhzbFgrSE9iMWxM?=
+ =?utf-8?Q?MkjyLFk0i/Q=3D?=
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZDBUbEtDRVVRaDhvdHRDSWFucHRiTXRjRU1DTnEzVStEVkc3WHYwNTc1Z3Fs?=
- =?utf-8?B?VC85d2t3d3cvSUc2S2dvOE00enNTdThabzBNQkt6dXU3M0d6SUtGSzNnazJx?=
- =?utf-8?B?eWk4cHZSVnZDaUV3eTVlSmw1a09ZdFB3bnZ4VzNYcmNNcE5LaFVhQzV3c3N1?=
- =?utf-8?B?MEpOUmNtRlpsUkhJRm4yNS9MdGg1UTlWU01jNXNqMjhHT1RsenFWaWc5SlhT?=
- =?utf-8?B?V29qeWtYQkcva1d1OUhwQ0xkSm0ydVA2RTFONHN2bU1rR2dEd2ZhcjZUUG53?=
- =?utf-8?B?WklicTNsLzlUZC81U3k1cFNSSUNqWWpDeEN6TStvcHQwUEJWR2hOZE1oaitu?=
- =?utf-8?B?TkRjS0lsbXV3ZHNJK0ZJdlhHK3FaT3hmc2xPR216T0Nxbm16TVQrbFdnd2JT?=
- =?utf-8?B?aWxEVUFPdnRaU1cvcVNyblBSZXB2Q25aR2lLU2dlV2R3ekVZNHp3OEIxMXRB?=
- =?utf-8?B?NWtBWlhET3JKMWxKSHQwTXgvcVVocm9OWFB1Nmc0UVEwNEZPbnliMDI2YjBM?=
- =?utf-8?B?N25vR1ZmeVlHd0dYZ0pPdytobDN5SjZocStTT2gyUUU5MlBYZ3plSnNWQWZU?=
- =?utf-8?B?c0x4aVYvV1NrRXoxcElla0ZLTENWdFYxMlNsWk80TFlNalhQbHBuVjlHQlNM?=
- =?utf-8?B?QnkrL2RhUjdiUHlidHl4SUVZbzA1ZFRCRCs2T0JmRWV4bnpqaE5oK0crZDh0?=
- =?utf-8?B?OU9xbzhiVmdQTXMxZWwvNGZpUU1LcGRsMXFEQVNJdUkwdXBUcEY0aUM0bGRo?=
- =?utf-8?B?RU5sSnU2TjFsd3VJcFU4RVFhMUgzTG1uWHJYbUNFeGFmYWRoaTFmS0Q4VjA2?=
- =?utf-8?B?T3NTd0U3TDViZ2FLVS9DWGkweUdCN0Iva0ZKSWpFYy95RWd1U0hHS0JGT3Bl?=
- =?utf-8?B?THdQZkdKSjFxTCs5cHFzVGEvVEQvNFQrbU15WWQzL3ltM2E2SjVHZzhYcy9I?=
- =?utf-8?B?Y3ZGRk5RaVprMWtWcFp1WlMzZ2RwMkphVUR0cFFmQlNQSXZvN2FNanA0SVVX?=
- =?utf-8?B?VjBrWDZyL0xhd1BHcmtBek0wRzV6dHVFNEM1TWJ4WHRKdzlLQnJpSXNpdDBZ?=
- =?utf-8?B?WDFTQUx5b2syY1J1RmdQbVV1OGZJOC9iZmJ1b0pQc3F2QUFMV290R283MWdO?=
- =?utf-8?B?VUNnVzJmc25TK2FVOXJLcmYvZEVObHFubFRGVlFpakdXbFR2WDlwT1hFNEw4?=
- =?utf-8?B?UDRVSjIxb2swelRDS1l1YUVJNG42TjV3cVlEUEJJT201NFFtK0dteFVVUytG?=
- =?utf-8?B?b2NhbVNJQ2xQZGNaNWFuc1dZOVhTRzExaWFJc1VSUnZyTlFzQlBYN3FlTjBi?=
- =?utf-8?B?aFY4UjQrSXN3YlpXWk1oMW1GSTZCK3UxMnRTUUh5LzJMY0VmYUxGeXBiS2JX?=
- =?utf-8?B?cjBKRDNzcjF2N2RYS3BWa01TSWs5dE9xaTRVbU4yblNhdkllY01FclMzZ2Ft?=
- =?utf-8?B?Q201dnVtM3d1bnNHaHp5NjdaS2JRUUxXQk8rdG9salNqZ1ZLaUNKdTZ6UlVm?=
- =?utf-8?B?R093ejNtL2Erd094TGZrZEw5WTF6UzJsWFgxVVJ5ZjdmbXl2SGdTdnBIOFox?=
- =?utf-8?B?Qk5ZeDF6QnUzeE5ycnk3SFlQVE5BUjBZVytXeVlSVGltNlVLZ1Z1dmV0RDNS?=
- =?utf-8?B?OUV2R3RxTnpiUkxzTUFmSDFuTkFEY2psUW5QUTZ4TnBRVzFiZ0dsZmFPcWRT?=
- =?utf-8?B?a2crUXlFbHUrVFVzM2RSWFpjNlF4ZTNrOUppNW96UG1mUzZwTEE5MlN4MzJT?=
- =?utf-8?B?R3ZHSFpXay9FMG4yU2tESFRuSzA0bXFGZ1ptblQ2YzRXaitNR2NKcXQ5bklC?=
- =?utf-8?B?QjNlL2JRRjhSbmNVYzlibTFrQnkrcUFwRTJhRnFnSkMvNGNHWkU1enlnN001?=
- =?utf-8?Q?6Zcsd5Cp+UF9I?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dk9iT0dIdnlSZ3hzKzl4RU9GVHBNS1N5OHoxNWZxRmYrT3d2SGdQdFNKT3Fj?=
+ =?utf-8?B?N29wQmJwU1B4a3ZvOHJCUkp1V3orMWpTTXNnVTI4aEJBOGNXOXQ3MGM2T0ts?=
+ =?utf-8?B?QVp1d0ROcmlUNlNxYW56ajlxeE1XOGZEOENuSFF0TGwwSWVwemFOWlQxalBI?=
+ =?utf-8?B?cjBKQ0gwZ2RtSGsvWGZzMVA0NUJ1Z2RZZjcweGUxbVlQTzFpWFNQbzluRWFB?=
+ =?utf-8?B?eU9oVHFVODd3MFhxL0g3Q1RtRXE3cWxhS3BDdk5wT3N3dVhBcjJNcGdrVXpt?=
+ =?utf-8?B?cGpJdGFOL0pJS1ppK2dlMDkrWXV2V3JVSlJsZDRad2JXL29wZEJEWkwrSnVN?=
+ =?utf-8?B?TW9xU0xuTUkvTWFHbENDWWtRUm5yaUIzVjlrSUdvMWZoUUF5TnlVcXh0NlN5?=
+ =?utf-8?B?dHpMRGs1WTlicE9meUxzRXd1WVNqdUh5WjlMMy90VWtNMm51c3VaY3RrS2oy?=
+ =?utf-8?B?WEFHS3p0YWN6N2EwMFVjV3ZJREh3OWdiZHFGa3oyVDN6V05OcmtyazNVRHJP?=
+ =?utf-8?B?RTY3eWhwRVVCU0h3SitYRFY0ZEdjZW9lNmN1VzlyWkxVR0I1Uk1lbHB0Y1Yz?=
+ =?utf-8?B?cmdBcXNEMFlZRTZqSDNoQUZRY0FDb29OSXByZW95akovQzJSLy9UWTFtdE9M?=
+ =?utf-8?B?cmI1Y09tV2F1TVI0ZnM0V0doRlRBcVFLK0tvazZMTTYra3Q3U3ozUThMT092?=
+ =?utf-8?B?aDVkUGpRc1BCaE1aWTNVcVhIRFZaWFJ0Vk9HYXRWRmlnNGpRZFdlWE9Da2FP?=
+ =?utf-8?B?WTV0dVpoODRaRy9tZkd4QS9aNk5JT2Vpc1RjNkN3S1lkbkNGMXhPOE1Ka3py?=
+ =?utf-8?B?UjF5SE8ycUtTcStvWEhhRXZvUU03VElGclVwL2tsdkZsMjZXdlVueW82Wlpz?=
+ =?utf-8?B?WXNXWkdNN0FJdzc5TXlmWkNxdjAwb0dENmt3blUyYXBwTXVuZ0hkR0hRUnNq?=
+ =?utf-8?B?TGRhT0h6ZHg3V1dJYms0b25OSUsxSHprbnV2ZTB2dkFHMndZQnJSSFZjYzk0?=
+ =?utf-8?B?MWtWTEFHRkkyaTkyaU1KczA5Tkt5c2YzSVBnMXRWMVkrejZuS3JJUWFZZTQ2?=
+ =?utf-8?B?VjNFVEJPMUtYckxLTE11T1N0RHllVmRvU252cVFVeGJvQjFsanNhbmJ4MjNr?=
+ =?utf-8?B?UHFLb0ZBd08zUGROTnRKcHYyWEZrNVlRQlQxT2lJSXFacXRnSHBLeTFTMEgw?=
+ =?utf-8?B?cFB5VDdvKzY1TnBYOFk2Y1hUSHoydFhoWXhWam1Ra3JvWmlTL1pTTHZyTmRD?=
+ =?utf-8?B?WFVHRmxSenliQUx4ZTdsMUl5Zi9NYkRHeG9wMm9vQVEyL1oxcVlDRnZqR2g1?=
+ =?utf-8?B?aG5uWHd6L3o2bHYzcVhWWEk1bXVHaWRIdUV4RlZWTVF0cGlkYjRJMm9Nd0VK?=
+ =?utf-8?B?TjhWckpqbWVXK25vR1NuUS8xZytQdmVmL2llYnBrY2ZxcHN4emYrY1A5ZE1p?=
+ =?utf-8?B?czVaMDYyQzBXcTNyOXh4WEgwT1hSRU5YcUtUZlZZU0pvTDJtb0wrN1czNm9W?=
+ =?utf-8?B?V24rajRGeW5DTkxUSnZRSEJRY203M0dSTnZrTWtJOC9IUE5xNVNDRnhYVFk1?=
+ =?utf-8?B?b0ExbG1mYklyUk82NXRjQWtTcmVvWFNBaCt2Q3dGeExYbk1hMmYrUjVrN20z?=
+ =?utf-8?B?dFNJM2QvSWNoaWRnQ2orQnBLUHNjNVlPeVlXaHFHVW9vREJzemVBWWlVOGIy?=
+ =?utf-8?B?OEdTdE9aS2NwczlKY1RQOFBsTEJtYVMxeGFhMWJFNy8rcm1nWUJpWWd6THFo?=
+ =?utf-8?B?ZVAzVFlnQkQzZVhMVzRLNzRNUUVaWVhlZ2RxVUtyZ2lxQzdKQkgrVkVrbk5P?=
+ =?utf-8?B?aXUvbjFLeXh4cVNuam9OWncyaWljbHlUWFQzMWhrMFVtR1RaRCsxVkJFdXEy?=
+ =?utf-8?Q?9rTpJlj6SUA2m?=
 X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bfe5dc83-c2e3-46cb-8f1e-08df4c9b4a42
+X-MS-Exchange-CrossTenant-Network-Message-Id: a1c0b910-350f-4078-2df9-08df4c9b4bf9
 X-MS-Exchange-CrossTenant-AuthSource: SY8P300MB0041.AUSP300.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2026 15:29:56.3079 (UTC)
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2026 15:29:59.2859 (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY0P300MB0692
-Subject: [Buildroot] [PATCH v2 13/14]
- package/gstreamer1/gstreamer1-editing-services: bump to version 1.28.9
+Subject: [Buildroot] [PATCH v2 14/14] package/gstreamer1/gst1-vaapi: remove
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.30
 Precedence: list
@@ -238,49 +244,207 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
-X-Spam-Status: No, score=-13.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-18.9 required=3.0 tests=BAYES_00,DKIM_SIGNED,
 	DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
 	HEADER_FROM_DIFFERENT_DOMAINS,INCLUDES_CR_TRAILER,INCLUDES_PATCH,
-	MAILING_LIST_MULTI,SPF_HELO_PASS,SPF_PASS,TVD_SPACE_RATIO,
+	MAILING_LIST_MULTI,MENTIONS_GIT_HOSTING,SPF_HELO_PASS,SPF_PASS,
 	USER_AGENT_GIT autolearn=ham autolearn_force=no version=4.0.1
 X-Spam-Checker-Version: SpamAssassin 4.0.1 (2024-03-26) on
 	aws-us-west-2-korg-listserv-alma10-1
 
-For more details, see the release notes:
-https://gstreamer.freedesktop.org/releases/1.26/
-https://gstreamer.freedesktop.org/releases/1.28/
+GStreamer 1.28 removed gstreamer-vaapi in favour of the va plugin in
+gst-plugins-bad [1].
+
+Add legacy entries for the removed options and select the replacement
+va plugin. Applications must update their pipelines to use the
+replacement elements.
+
+[1] https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/82a71a7739fea9d48e9c64f44bce879b86bd3df7
 
 Signed-off-by: Fengwei Tan <tfx2001@outlook.com>
 ---
- .../gstreamer1-editing-services/gstreamer1-editing-services.hash      | 4 ++--
- .../gstreamer1-editing-services/gstreamer1-editing-services.mk        | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ Config.in.legacy                              | 18 ++++++++
+ package/gstreamer1/Config.in                  |  1 -
+ package/gstreamer1/gst1-vaapi/Config.in       | 54 ------------------------
+ package/gstreamer1/gst1-vaapi/gst1-vaapi.hash |  3 --
+ package/gstreamer1/gst1-vaapi/gst1-vaapi.mk   | 59 ---------------------------
+ 5 files changed, 18 insertions(+), 117 deletions(-)
 
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-index 4c94cbbf07..df331bd7e4 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.hash
-@@ -1,5 +1,5 @@
--# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.24.13.tar.xz.sha256sum
--sha256  e9792ecff0df0b1dbbf90cfb271b9ce840bc048148c2d9d49fb6c6062bd18f4d  gst-editing-services-1.24.13.tar.xz
-+# From https://gstreamer.freedesktop.org/src/gstreamer-editing-services/gst-editing-services-1.28.9.tar.xz.sha256sum
-+sha256  23caf8439ba063091da226e7a1774915848105ff47ebdbe7773fffa21a094692  gst-editing-services-1.28.9.tar.xz
+diff --git a/Config.in.legacy b/Config.in.legacy
+index b170aea1c3..56c88ded46 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,24 @@ endif
  
- # Hashes for license files:
- sha256  ad2eec519ebd4b5df86ea84dff24ae3bfa2edea846a703b58902dd221ae375db  COPYING
-diff --git a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-index c59315fbc2..2a7ec992c2 100644
---- a/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-+++ b/package/gstreamer1/gstreamer1-editing-services/gstreamer1-editing-services.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+ comment "Legacy options removed in 2027.02"
  
--GSTREAMER1_EDITING_SERVICES_VERSION = 1.24.13
-+GSTREAMER1_EDITING_SERVICES_VERSION = 1.28.9
- GSTREAMER1_EDITING_SERVICES_SOURCE = gst-editing-services-$(GSTREAMER1_EDITING_SERVICES_VERSION).tar.xz
- GSTREAMER1_EDITING_SERVICES_SITE = https://gstreamer.freedesktop.org/src/gstreamer-editing-services
- GSTREAMER1_EDITING_SERVICES_LICENSE = LGPL-2.0+
++config BR2_PACKAGE_GST1_VAAPI
++	bool "gst1-vaapi has been removed"
++	select BR2_LEGACY
++	select BR2_PACKAGE_GST1_PLUGINS_BAD
++	select BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_VA
++	help
++	  GStreamer removed gstreamer-vaapi in version 1.28. Use the
++	  va plugin in gst1-plugins-bad instead. Applications must
++	  update their pipelines to use the replacement elements.
++
++config BR2_PACKAGE_GST1_VAAPI_ENCODERS
++	bool "gst1-vaapi encoders have been removed"
++	select BR2_LEGACY
++	help
++	  GStreamer removed gstreamer-vaapi in version 1.28. VA-API
++	  encoders are provided by the va plugin in gst1-plugins-bad
++	  instead.
++
+ config BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_Y4M
+ 	bool "gst1-plugins-bad y4mdec moved to gst1-plugins-good"
+ 	select BR2_LEGACY
+diff --git a/package/gstreamer1/Config.in b/package/gstreamer1/Config.in
+index 67c33e5d4e..f384329a30 100644
+--- a/package/gstreamer1/Config.in
++++ b/package/gstreamer1/Config.in
+@@ -14,7 +14,6 @@ source "package/gstreamer1/gst1-libav/Config.in"
+ source "package/gstreamer1/gst1-python/Config.in"
+ source "package/gstreamer1/gst1-rtsp-server/Config.in"
+ source "package/gstreamer1/gst1-shark/Config.in"
+-source "package/gstreamer1/gst1-vaapi/Config.in"
+ source "package/gstreamer1/gstd/Config.in"
+ source "package/gstreamer1/gstreamer1-editing-services/Config.in"
+ endif
+diff --git a/package/gstreamer1/gst1-vaapi/Config.in b/package/gstreamer1/gst1-vaapi/Config.in
+deleted file mode 100644
+index d6a1542ad3..0000000000
+--- a/package/gstreamer1/gst1-vaapi/Config.in
++++ /dev/null
+@@ -1,54 +0,0 @@
+-config BR2_PACKAGE_GST1_VAAPI
+-	bool "gst1-vaapi"
+-	depends on !BR2_STATIC_LIBS # dlopen(), libva
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libva, libdrm
+-	depends on BR2_INSTALL_LIBSTDCPP # gst1-plugins-bad
+-	depends on BR2_PACKAGE_HAS_UDEV
+-	select BR2_PACKAGE_LIBVA
+-	select BR2_PACKAGE_LIBDRM
+-	select BR2_PACKAGE_GST1_PLUGINS_BASE
+-	select BR2_PACKAGE_GST1_PLUGINS_BAD # gstreamer-codecparsers
+-	select BR2_PACKAGE_WAYLAND_PROTOCOLS if BR2_PACKAGE_WAYLAND
+-	select BR2_PACKAGE_XLIB_LIBX11 if BR2_PACKAGE_XORG7
+-	select BR2_PACKAGE_XLIB_LIBXRANDR if BR2_PACKAGE_XORG7
+-	help
+-	  gstreamer-vaapi consists in a collection of VA-API based
+-	  plugins for GStreamer and helper libraries.
+-
+-	  vaapi<CODEC>dec is used to decode JPEG, MPEG-2, MPEG-4:2,
+-	  H.264 AVC, H.264 MVC, VP8, VC-1, WMV3, HEVC videos to VA
+-	  surfaces, depending on the actual value of <CODEC> and the
+-	  underlying hardware capabilities.  This plugin is also able
+-	  to implicitly download the decoded surface to raw YUV
+-	  buffers.
+-
+-	  vaapi<CODEC>enc is used to encode into MPEG-2, H.264 AVC,
+-	  H.264 MVC, JPEG, VP8, HEVC videos, depending on the actual
+-	  value of <CODEC> (mpeg2, h264, etc.) and the hardware
+-	  capabilities. By default, raw format bitstreams are
+-	  generated, so the result may be piped to a muxer, e.g. qtmux
+-	  for MP4 containers.
+-
+-	  vaapipostproc is used to filter VA surfaces, for
+-	  e.g. scaling, deinterlacing (bob, motion-adaptive,
+-	  motion-compensated), noise reduction or sharpening. This
+-	  plugin is also used to upload raw YUV pixels into VA
+-	  surfaces.
+-
+-	  vaapisink is used to render VA surfaces to an X11 or Wayland
+-	  display. This plugin also features a "headless" mode (DRM)
+-	  more suited to remote transcode scenarios, with faster
+-	  throughput.
+-
+-	  https://cgit.freedesktop.org/gstreamer/gstreamer-vaapi
+-
+-if BR2_PACKAGE_GST1_VAAPI
+-
+-config BR2_PACKAGE_GST1_VAAPI_ENCODERS
+-	bool "enable encoders"
+-
+-endif
+-
+-comment "gst1-vaapi needs udev /dev management and a toolchain w/ threads, dynamic library, C++"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS || \
+-		!BR2_PACKAGE_HAS_UDEV || !BR2_INSTALL_LIBSTDCPP
+diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash b/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
+deleted file mode 100644
+index b01ff938af..0000000000
+--- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# From https://gstreamer.freedesktop.org/src/gstreamer-vaapi/gstreamer-vaapi-1.24.13.tar.xz.sha256sum
+-sha256  b92c008841387043aec83b08b1fa8cf41e7866a106311a7d99e274e7d24ddc47  gstreamer-vaapi-1.24.13.tar.xz
+-sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk b/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
+deleted file mode 100644
+index 418369c38e..0000000000
+--- a/package/gstreamer1/gst1-vaapi/gst1-vaapi.mk
++++ /dev/null
+@@ -1,59 +0,0 @@
+-################################################################################
+-#
+-# gst1-vaapi
+-#
+-################################################################################
+-
+-GST1_VAAPI_VERSION = 1.24.13
+-GST1_VAAPI_SITE = https://gstreamer.freedesktop.org/src/gstreamer-vaapi
+-GST1_VAAPI_SOURCE = gstreamer-vaapi-$(GST1_VAAPI_VERSION).tar.xz
+-GST1_VAAPI_LICENSE = LGPL-2.1+
+-GST1_VAAPI_LICENSE_FILES = COPYING.LIB
+-
+-GST1_VAAPI_DEPENDENCIES += \
+-	gstreamer1 \
+-	gst1-plugins-base \
+-	gst1-plugins-bad \
+-	libva \
+-	libdrm
+-
+-GST1_VAAPI_CONF_OPTS += \
+-	-Ddrm=enabled \
+-	-Degl=enabled \
+-	-Dexamples=disabled \
+-	-Dtests=disabled \
+-	-Ddoc=disabled
+-
+-ifeq ($(BR2_PACKAGE_GST1_VAAPI_ENCODERS),y)
+-GST1_VAAPI_CONF_OPTS += -Dencoders=enabled
+-else
+-GST1_VAAPI_CONF_OPTS += -Dencoders=disabled
+-endif
+-
+-ifeq ($(BR2_PACKAGE_HAS_LIBEGL),y)
+-GST1_VAAPI_CONF_OPTS += -Degl=enabled
+-GST1_VAAPI_DEPENDENCIES += libegl
+-else
+-GST1_VAAPI_CONF_OPTS += -Degl=disabled
+-endif
+-
+-ifeq ($(BR2_PACKAGE_WAYLAND),y)
+-GST1_VAAPI_CONF_OPTS += -Dwayland=enabled
+-GST1_VAAPI_DEPENDENCIES += wayland wayland-protocols
+-else
+-GST1_VAAPI_CONF_OPTS += -Dwayland=disabled
+-endif
+-
+-ifeq ($(BR2_PACKAGE_XLIB_LIBX11)$(BR2_PACKAGE_XLIB_LIBXRANDR),yy)
+-GST1_VAAPI_CONF_OPTS += -Dx11=enabled
+-GST1_VAAPI_DEPENDENCIES += xlib_libX11 xlib_libXrandr
+-ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
+-GST1_VAAPI_CONF_OPTS += -Dglx=enabled
+-else
+-GST1_VAAPI_CONF_OPTS += -Dglx=disabled
+-endif
+-else
+-GST1_VAAPI_CONF_OPTS += -Dx11=disabled -Dglx=disabled
+-endif
+-
+-$(eval $(meson-package))
 
 -- 
 2.56.1
